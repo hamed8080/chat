@@ -83,6 +83,7 @@ public enum SERVICES_PATH: String {
     case ADD_CONTACTS       = "/nzh/addContacts"
     case UPDATE_CONTACTS    = "/nzh/updateContacts"
     case REMOVE_CONTACTS    = "/nzh/removeContacts"
+    case SEARCH_CONTACTS    = "/nzh/listContacts"
     case UPLOAD_IMAGE       = "/nzh/uploadImage"
     case GET_IMAGE          = "/nzh/image/"
     case UPLOAD_FILE        = "/nzh/uploadFile"

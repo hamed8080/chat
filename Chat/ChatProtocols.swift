@@ -10,9 +10,9 @@ import Foundation
 import SwiftyJSON
 
 
-
 public typealias callbackTypeAlias = (Any) -> ()
 public typealias callbackTypeAliasString = (String) -> ()
+public typealias callbackTypeAliasFloat = (Float) -> ()
 
 protocol CallbackProtocol: class {
     func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias)
