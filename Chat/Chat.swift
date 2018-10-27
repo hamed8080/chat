@@ -239,7 +239,7 @@ extension Chat {
                         }
                     }
                     
-                    if let hasFile = isImage {
+                    if let hasFile = isFile {
                         if (hasFile == true) {
                             multipartFormData.append(dataToSend as! Data, withName: "file")
                         }
@@ -1690,9 +1690,11 @@ extension Chat {
     
     public func uploadFile(params: JSON, dataToSend: Data, uniqueId: @escaping (String) -> (), progress: @escaping (Float) -> (), completion: @escaping callbackTypeAlias) {
         
-        var fileExtension:      String  = "error"
         var fileName:           String  = ""
+        //        var fileType:           String  = ""
         var fileSize:           Int     = 0
+        var fileExtension:      String  = ""
+        
         var uploadThreadId:     Int     = 0
         var uploadUniqueId:     String  = ""
         var originalFileName:   String  = ""
@@ -1733,7 +1735,7 @@ extension Chat {
         
         uploadFileData["fileName"] = JSON(fileName)
         uploadFileData["threadId"] = JSON(uploadThreadId)
-        uploadFileData["fileSize"] = JSON(fileSize)
+        //        uploadFileData["fileSize"] = JSON(fileSize)
         uploadFileData["uniqueId"] = JSON(uploadUniqueId)
         uploadFileData["originalFileName"] = JSON(originalFileName)
         
@@ -1752,10 +1754,22 @@ extension Chat {
         let url = "\(SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.UPLOAD_FILE.rawValue)"
         let method:     HTTPMethod  = HTTPMethod.post
         let headers:    HTTPHeaders = ["_token_": token, "_token_issuer_": "1", "Content-type": "multipart/form-data"]
-        let parameters: Parameters = ["fileName": fileName, "file": dataToSend]
+        let parameters: Parameters = ["fileName": fileName]
         
         httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: dataToSend, isImage: false, isFile: true, completion: { (response) in
-            completion(response)
+            
+            let myResponse: JSON = response as! JSON
+            
+            let hasError        = myResponse["hasError"].boolValue
+            let errorMessage    = myResponse["errorMessage"].stringValue
+            let errorCode       = myResponse["errorCode"].intValue
+            
+            if (!hasError) {
+                let resultData = myResponse["result"]
+                let uploadFileModel = UploadFileModel(messageContent: resultData, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+                
+                completion(uploadFileModel)
+            }
         }) { (myProgress) in
             progress(myProgress)
         }
@@ -1765,8 +1779,10 @@ extension Chat {
     
     public func uploadImage(params: JSON, dataToSend: Data, uniqueId: @escaping (String) -> (), progress: @escaping (Float) -> (), completion: @escaping callbackTypeAlias) {
         
-        var fileExtension:      String  = "error"
         var fileName:           String  = ""
+        var fileType:           String  = ""
+        var fileSize:           Int     = 0
+        var fileExtension:      String  = ""
         
         var uploadFileData: JSON = []
         
@@ -1820,9 +1836,142 @@ extension Chat {
         let parameters: Parameters = ["fileName": fileName]
         
         httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: dataToSend, isImage: true, isFile: false, completion: { (response) in
-            completion(response)
+            
+            let myResponse: JSON = response as! JSON
+            let hasError        = myResponse["hasError"].boolValue
+            let errorMessage    = myResponse["errorMessage"].stringValue
+            let errorCode       = myResponse["errorCode"].intValue
+            
+            if (!hasError) {
+                let resultData = myResponse["result"]
+                let uploadImageModel = UploadImageModel(messageContent: resultData, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+                
+                completion(uploadImageModel)
+            }
         }) { (myProgress) in
             progress(myProgress)
+        }
+        
+    }
+    
+    
+    public func sendFileMessage(textMessagParams: JSON, fileParams: JSON, imageToSend: Data?, fileToSend: Data?, uniqueId: @escaping (String) -> (), uploadProgress: @escaping (Float) -> (), onSent: @escaping callbackTypeAlias, onDelivered: @escaping callbackTypeAlias, onSeen: @escaping callbackTypeAlias) {
+        
+        var fileName:       String  = ""
+        var fileType:       String  = ""
+        var fileSize:       Int     = 0
+        var fileExtension:  String  = ""
+        
+        if let myFileName = fileParams["fileName"].string {
+            fileName = myFileName
+        } else if let myImageName = fileParams["imageName"].string {
+            fileName = myImageName
+        }
+        
+        let uploadUniqueId: String = generateUUID()
+        
+        var metaData: JSON = []
+        
+        metaData["file"]["originalName"] = JSON(fileName)
+        metaData["file"]["mimeType"] = JSON(fileType)
+        metaData["file"]["size"] = JSON(fileSize)
+        
+        var paramsToSendToUpload: JSON = ["uniqueId": uploadUniqueId, "originalFileName": fileName]
+        
+        if let xC = fileParams["xC"].string {
+            paramsToSendToUpload["xC"] = JSON(xC)
+        }
+        if let yC = fileParams["yC"].string {
+            paramsToSendToUpload["yC"] = JSON(yC)
+        }
+        if let hC = fileParams["hC"].string {
+            paramsToSendToUpload["hC"] = JSON(hC)
+        }
+        if let wC = fileParams["wC"].string {
+            paramsToSendToUpload["wC"] = JSON(wC)
+        }
+        if let fileName = fileParams["fileName"].string {
+            paramsToSendToUpload["fileName"] = JSON(fileName)
+        } else {
+            paramsToSendToUpload["fileName"] = JSON(uploadUniqueId)
+        }
+        if let threadId = fileParams["threadId"].int {
+            paramsToSendToUpload["threadId"] = JSON(threadId)
+        }
+        
+        
+        let messageUniqueId = generateUUID()
+        uniqueId(messageUniqueId)
+        
+        var paramsToSendToSendMessage: JSON = ["uniqueId": messageUniqueId]
+        
+        if let subjectId = textMessagParams["subjectId"].int {
+            paramsToSendToSendMessage["subjectId"] = JSON(subjectId)
+        }
+        if let repliedTo = textMessagParams["repliedTo"].int {
+            paramsToSendToSendMessage["repliedTo"] = JSON(repliedTo)
+        }
+        if let content = textMessagParams["content"].string {
+            paramsToSendToSendMessage["content"] = JSON(content)
+        }
+        if let systemMetadata = textMessagParams["metadata"].string {
+            paramsToSendToSendMessage["systemMetadata"] = JSON(systemMetadata)
+        }
+        
+        
+        if let image = imageToSend {
+            uploadImage(params: paramsToSendToUpload, dataToSend: image, uniqueId: { _ in }, progress: { (progress) in
+                uploadProgress(progress)
+            }) { (response) in
+                
+                let myResponse: UploadImageModel = response as! UploadImageModel
+                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_IMAGE.rawValue)?imageId=\(myResponse.uploadImage.id ?? 0)&hashCode=\(myResponse.uploadImage.hashCode ?? "")"
+                metaData["file"]["link"]            = JSON(link)
+                metaData["file"]["id"]              = JSON(myResponse.uploadImage.id ?? 0)
+                metaData["file"]["name"]            = JSON(myResponse.uploadImage.name ?? "")
+                metaData["file"]["height"]          = JSON(myResponse.uploadImage.height ?? 0)
+                metaData["file"]["width"]           = JSON(myResponse.uploadImage.width ?? 0)
+                metaData["file"]["actualHeight"]    = JSON(myResponse.uploadImage.actualHeight ?? 0)
+                metaData["file"]["actualWidth"]     = JSON(myResponse.uploadImage.actualWidth ?? 0)
+                metaData["file"]["hashCode"]        = JSON(myResponse.uploadImage.hashCode ?? "")
+                
+                paramsToSendToSendMessage["metaData"] = JSON("\(metaData)")
+                
+                sendMessageWith(paramsToSendToSendMessage: paramsToSendToSendMessage)
+            }
+        } else if let file = fileToSend {
+            uploadFile(params: paramsToSendToUpload, dataToSend: file, uniqueId: { _ in }, progress: { (progress) in
+                uploadProgress(progress)
+            }) { (response) in
+                
+                let myResponse: UploadFileModel = response as! UploadFileModel
+                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_FILE.rawValue)?fileId=\(myResponse.uploadFile.id ?? 0)&hashCode=\(myResponse.uploadFile.hashCode ?? "")"
+                metaData["file"]["link"]            = JSON(link)
+                metaData["file"]["id"]              = JSON(myResponse.uploadFile.id ?? 0)
+                metaData["file"]["name"]            = JSON(myResponse.uploadFile.name ?? "")
+                metaData["file"]["hashCode"]        = JSON(myResponse.uploadFile.hashCode ?? "")
+                
+                paramsToSendToSendMessage["metaData"] = JSON("\(metaData)")
+                
+                sendMessageWith(paramsToSendToSendMessage: paramsToSendToSendMessage)
+            }
+        }
+        
+        // if there was no data to send, then returns an error to user
+        if (imageToSend == nil) && (fileToSend == nil) {
+            delegate?.chatError(errorCode: 6302, errorMessage: CHAT_ERRORS.err6302.rawValue, errorResult: nil)
+        }
+        
+        
+        // this will call when all data were uploaded and it will sends the textMessage
+        func sendMessageWith(paramsToSendToSendMessage: JSON) {
+            self.sendTextMessage(params: paramsToSendToSendMessage, uniqueId: { _ in}, onSent: { (sent) in
+                onSent(sent)
+            }, onDelivere: { (delivered) in
+                onDelivered(delivered)
+            }, onSeen: { (seen) in
+                onSeen(seen)
+            })
         }
         
     }
@@ -1925,12 +2074,13 @@ extension Chat {
         
         if let threadId = params["subjectId"].int {
             sendMessageParams["threadId"] = JSON(threadId)
+            sendMessageParams["subjectId"] = JSON(threadId)
+            
         } else {
             delegate?.chatError(errorCode: 999, errorMessage: "Thread ID is required for Updating thread info!", errorResult: nil)
         }
         
-        
-        var content: JSON = []
+        var content: JSON = [:]
         
         if let image = params["image"].string {
             content["image"] = JSON(image)
@@ -1946,19 +2096,21 @@ extension Chat {
         
         if let metadata = params["metadata"].string {
             content["metadata"] = JSON(metadata)
-        } else if (params["metadata"] != nil) {
+        } else if (params["metadata"] != JSON.null) {
             let metadata = params["metadata"]
             let metadataStr = "\(metadata)"
             content["metadata"] = JSON(metadataStr)
         }
         
-        sendMessageParams["content"] = content
+        sendMessageParams["content"] = JSON("\(content)")
+        
         sendMessageWithCallback(params: sendMessageParams, callback: UpdateThreadInfoCallback(), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (updateThreadInfoUniqueId) in
             uniqueId(updateThreadInfoUniqueId)
         }
         updateThreadInfoCallbackToUser = completion
         
     }
+    
     
     
     public func deliver(params: JSON) {
@@ -2188,7 +2340,11 @@ extension Chat {
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
             print("\n On Chat")
             print(":: \t UpdateThreadInfoCallback \n")
-            
+            print("++++++++++++++++++++++++++++")
+            print("++++++++++++++++++++++++++++")
+            print("\(response)")
+            print("++++++++++++++++++++++++++++")
+            print("++++++++++++++++++++++++++++")
             success(response)
         }
         
