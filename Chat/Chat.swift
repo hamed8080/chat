@@ -699,7 +699,7 @@ extension Chat {
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: nil)
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
                 callback.onResultCallback(uID: uniqueId, response: returnData, success: { (successJSON) in
-                    self.muteThreadCallbackToUser?(successJSON)
+                    self.historyCallbackToUser?(successJSON)
                 }) { _ in }
                 Chat.map.removeValue(forKey: uniqueId)
             }
@@ -1114,6 +1114,8 @@ extension Chat {
         }
         if let metadataCriteria = params["metadataCriteria"].string {
             content.appendIfDictionary(key: "metadataCriteria", json: JSON(metadataCriteria))
+        } else if (params["metadataCriteria"] != JSON.null) {
+            content["metadataCriteria"] = params["metadataCriteria"]
         }
         
         let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_HISTORY.rawValue,
