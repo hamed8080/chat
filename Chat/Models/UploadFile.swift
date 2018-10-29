@@ -11,14 +11,14 @@ import SwiftyJSON
 
 class UploadFile {
     
+    let hashCode:       String?
     let id:             Int?
     let name:           String?
-    let hashCode:       String?
     
     init(messageContent: JSON) {
+        self.hashCode       = messageContent["hashCode"].string
         self.id             = messageContent["id"].int
         self.name           = messageContent["name"].string
-        self.hashCode       = messageContent["hashCode"].string
     }
     
     func formatDataToMakeUploadImage() -> UploadFile {
@@ -26,9 +26,9 @@ class UploadFile {
     }
     
     func formatToJSON() -> JSON {
-        let result: JSON = ["id":           id ?? NSNull(),
-                            "name":         name ?? NSNull(),
-                            "hashCode":     hashCode ?? NSNull()]
+        let result: JSON = ["hashCode":     hashCode ?? NSNull(),
+                            "id":           id ?? NSNull(),
+                            "name":         name ?? NSNull()]
         return result
     }
     

@@ -70,6 +70,7 @@
 		3EBBEDFC2174C9FB00F5CDC7 /* ChatProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDFB2174C9FB00F5CDC7 /* ChatProtocols.swift */; };
 		3EBBEDFE2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDFD2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift */; };
 		3EBBEE012174CBCA00F5CDC7 /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEE002174CBCA00F5CDC7 /* Extentions.swift */; };
+		3ED22F2F2187469F00B6FE4C /* AddParticipantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED22F2E2187469F00B6FE4C /* AddParticipantModel.swift */; };
 		3EE025F721206E63001810FB /* Chat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE025ED21206E63001810FB /* Chat.framework */; };
 		3EE025FC21206E63001810FB /* ChatCreateTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE025FB21206E63001810FB /* ChatCreateTest.swift */; };
 		3EE025FE21206E63001810FB /* Chat.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EE025F021206E63001810FB /* Chat.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -163,6 +164,7 @@
 		3EBBEDFB2174C9FB00F5CDC7 /* ChatProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatProtocols.swift; sourceTree = "<group>"; };
 		3EBBEDFD2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncDelegatesImplementation.swift; sourceTree = "<group>"; };
 		3EBBEE002174CBCA00F5CDC7 /* Extentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
+		3ED22F2E2187469F00B6FE4C /* AddParticipantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddParticipantModel.swift; sourceTree = "<group>"; };
 		3EE025ED21206E63001810FB /* Chat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Chat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EE025F021206E63001810FB /* Chat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Chat.h; sourceTree = "<group>"; };
 		3EE025F121206E63001810FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -238,6 +240,7 @@
 				3EBBEDF92174C6E000F5CDC7 /* RemoveContactModel.swift */,
 				3E78AA94218479BA002A6EC0 /* UploadImageModel.swift */,
 				3E78AA98218479CB002A6EC0 /* UploadFileModel.swift */,
+				3ED22F2E2187469F00B6FE4C /* AddParticipantModel.swift */,
 			);
 			path = OutputModels;
 			sourceTree = "<group>";
@@ -483,6 +486,7 @@
 				3EBBEDFC2174C9FB00F5CDC7 /* ChatProtocols.swift in Sources */,
 				3EBBEDF62174C6AF00F5CDC7 /* CreateThreadModel.swift in Sources */,
 				3EBBEDDF2174C30800F5CDC7 /* Participant.swift in Sources */,
+				3ED22F2F2187469F00B6FE4C /* AddParticipantModel.swift in Sources */,
 				3EBBEDEE2174C5A600F5CDC7 /* GetContactsModel.swift in Sources */,
 				3EBBEDE32174C35200F5CDC7 /* ForwardInfo.swift in Sources */,
 				3EBBEDD52174C23B00F5CDC7 /* Conversation.swift in Sources */,

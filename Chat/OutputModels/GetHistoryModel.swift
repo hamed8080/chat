@@ -22,22 +22,23 @@ open class GetHistoryModel {
      *      - hasNext           Bool
      *      - nextOffset        Int
      *      + history           HistoryAsJSON
-     *          - id                Int
-     *          - threadId          Int
-     *          - ownerId           Int
-     *          - uniqueId          String
-     *          - previousId        Int
-     *          - message           String
-     *          - edited            Bool
-     *          - editable          Bool
-     *          - delivered         Bool
-     *          - seen              Bool
-     *          - metadata          String
-     *          - time              Int
-     *          + participant       Participant
-     *          + conversation      Conversation
-     *          + replyInfoVO       ReplyInfo
-     *          + forwardInfo       ForwardInfo
+     *          - delivered:      Bool?
+     *          - editable:       Bool?
+     *          - edited:         Bool?
+     *          - id:             Int?
+     *          - message:        String?
+     *          - metaData:       String?
+     *          - ownerId:        Int?
+     *          - previousId:     Int?
+     *          - seen:           Bool?
+     *          - threadId:       Int?
+     *          - time:           Int?
+     *          - uniqueId:       String?
+     
+     *          + conversation:   Conversation?
+     *          + forwardInfo:    ForwardInfo?
+     *          + participant:    Participant?
+     *          + replyInfo:      ReplyInfo?
      ---------------------------------------
      * responseAsModel:
      *  - hasError      Bool
@@ -99,3 +100,6 @@ open class GetHistoryModel {
         return finalResult
     }
 }
+
+
+

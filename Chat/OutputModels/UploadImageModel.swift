@@ -18,13 +18,13 @@ open class UploadImageModel {
      *  - errorCode         Int
      *  + result       JSON or UploadImageModel:
      *      + UploadImage   UploadImageAsJSON:
-     *          - id            Int
-     *          - name          String
-     *          - height        Int
-     *          - width         Int
-     *          - actualHeight  Int
-     *          - actualWidth   Int
-     *          - hashCode      String
+     *          - actualHeight  Int?
+     *          - actualWidth   Int?
+     *          - hashCode      String?
+     *          - height        Int?
+     *          - id            Int?
+     *          - name          String?
+     *          - width         Int?
      ---------------------------------------
      * responseAsModel:
      *  - hasError          Bool

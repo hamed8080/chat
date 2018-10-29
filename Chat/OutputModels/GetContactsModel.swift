@@ -22,17 +22,17 @@ open class GetContactsModel {
      *      - hasNext           Bool
      *      - nextOffset        Int
      *      + contacts          ContactsAsJSON
-     *          - id                Int
-     *          - userId            Int
-     *          - firstName         String
-     *          - lastName          String
-     *          - image             String
-     *          - email             String
-     *          - cellphoneNumber   String
-     *          - uniqueId          String
-     *          - notSeenDuration   Int
-     *          - hasUser           Bool
-     *          - linkedUser        LinkedUser
+     *          - cellphoneNumber     String?
+     *          - email               String?
+     *          - firstName           String?
+     *          - hasUser             Bool?
+     *          - id                  Int?
+     *          - image               String?
+     *          - lastName            String?
+     *          - linkedUser          LinkedUser?
+     *          - notSeenDuration     Int?
+     *          - uniqueId            Bool?
+     *          - userId              Int?
      ---------------------------------------
      * responseAsModel:
      *  - hasError      Bool

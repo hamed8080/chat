@@ -16,25 +16,25 @@ import SwiftyJSON
 
 class User {
     /*
-     * + User               User
-     *    - id                  Int
-     *    - name                String
-     *    - email               String
-     *    - cellphoneNumber     String
-     *    - image               String
-     *    - lastSeen            Int
-     *    - sendEnable          Bool
-     *    - receiveEnable       Bool
+     * + User               User:
+     *    - cellphoneNumber:    String?
+     *    - email:              String?
+     *    - id:                 Int?
+     *    - image:              String?
+     *    - lastSeen:           Int?
+     *    - name:               String?
+     *    - receiveEnable:      Bool?
+     *    - sendEnable:         Bool?
      */
     
-    let id:                 Int?
-    let name:               String?
-    let email:              String?
     let cellphoneNumber:    String?
+    let email:              String?
+    let id:                 Int?
     let image:              String?
     let lastSeen:           Int?
-    let sendEnable:         Bool?
+    let name:               String?
     let receiveEnable:      Bool?
+    let sendEnable:         Bool?
     
     init(messageContent: JSON) {
         

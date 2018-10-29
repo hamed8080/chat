@@ -17,87 +17,90 @@ import SwiftyJSON
 class Conversation {
     
     /*
-     * + Conversation                     {object}
-     *    - id                            {long}
-     *    - joinDate                      {long}
-     *    - title                         {string}
-     *    - time                          {long}
-     *    - lastMessage                   {string}
-     *    - lastParticipantName           {string}
-     *    - group                         {boolean}
-     *    - partner                       {long}
-     *    - lastParticipantImage          {string}
-     *    - image                         {string}
-     *    - description                   {string}
-     *    - unreadCount                   {long}
-     *    - lastSeenMessageId             {long}
-     *    - partnerLastSeenMessageId      {long}
-     *    - partnerLastDeliveredMessageId {long}
-     *    - type                          {int}
-     *    - metadata                      {string}
-     *    - mute                          {boolean}
-     *    - participantCount              {long}
-     *    - canEditInfo                   {boolean}
-     *    - canSpam                       {boolean}
+     * + Conversation       Conversation:
+     *    - admin:                          Bool?
+     *    - canEditInfo:                    Bool?
+     *    - canSpam:                        Bool?
+     *    - description:                    String?
+     *    - group:                          Bool?
+     *    - id:                             Int?
+     *    - image:                          String?
+     *    - joinDate:                       Int?
+     *    - lastMessage:                    String?
+     *    - lastParticipantImage:           String?
+     *    - lastParticipantName:            String?
+     *    - lastSeenMessageId:              Int?
+     *    - metadata:                       String?
+     *    - mute:                           Bool?
+     *    - participantCount:               Int?
+     *    - partner:                        Int?
+     *    - partnerLastDeliveredMessageId:  Int?
+     *    - partnerLastSeenMessageId:       Int?
+     *    - title:                          String?
+     *    - time:                           Int?
+     *    - type:                           Int?
+     *    - unreadCount:                    Int?
      
-     *    - inviter                       {object : ParticipantVO}
-     *    - participants                  {list : ParticipantVO}
-     *    - lastMessageVO                 {object : ChatMessageVO}
+     *    - inviter:                        Participant?
+     *    - lastMessageVO:                  Message?
+     *    - participants:                   [Participant]?
      */
     
-    let id:                             Int?
-    let joinDate:                       Int?
-    let title:                          String?
-    let time:                           Int?
-    let lastMessage:                    String?
-    let lastParticipantName:            String?
-    let group:                          Bool?
-    let partner:                        Int?
-    let lastParticipantImage:           String?
-    let image:                          String?
+    let admin:                          Bool?
+    let canEditInfo:                    Bool?
+    let canSpam:                        Bool?
     let description:                    String?
-    let unreadCount:                    Int?
+    let group:                          Bool?
+    let id:                             Int?
+    let image:                          String?
+    let joinDate:                       Int?
+    let lastMessage:                    String?
+    let lastParticipantImage:           String?
+    let lastParticipantName:            String?
     let lastSeenMessageId:              Int?
-    let partnerLastSeenMessageId:       Int?
-    let partnerLastDeliveredMessageId:  Int?
-    let type:                           Int?
     let metadata:                       String?
     let mute:                           Bool?
     let participantCount:               Int?
-    let canEditInfo:                    Bool?
-    let canSpam:                        Bool?
+    let partner:                        Int?
+    let partnerLastDeliveredMessageId:  Int?
+    let partnerLastSeenMessageId:       Int?
+    let title:                          String?
+    let time:                           Int?
+    let type:                           Int?
+    let unreadCount:                    Int?
     
-    var inviter:                        Invitee?
-    var participants:                   [Participant]?
+    var inviter:                        Participant?
     var lastMessageVO:                  Message?
+    var participants:                   [Participant]?
     
     init(messageContent: JSON) {
-        self.id                             = messageContent["id"].int
-        self.joinDate                       = messageContent["joinDate"].int
-        self.title                          = messageContent["title"].string
-        self.time                           = messageContent["time"].int
-        self.lastMessage                    = messageContent["lastMessage"].string
-        self.lastParticipantName            = messageContent["lastParticipantName"].string
-        self.group                          = messageContent["group"].bool
-        self.partner                        = messageContent["partner"].int
-        self.lastParticipantImage           = messageContent["lastParticipantImage"].string
-        self.image                          = messageContent["image"].string
+        self.admin                          = messageContent["admin"].bool
+        self.canEditInfo                    = messageContent["canEditInfo"].bool
+        self.canSpam                        = messageContent["canSpam"].bool
         self.description                    = messageContent["description"].string
-        self.unreadCount                    = messageContent["unreadCount"].int
+        self.group                          = messageContent["group"].bool
+        self.id                             = messageContent["id"].int
+        self.image                          = messageContent["image"].string
+        self.joinDate                       = messageContent["joinDate"].int
+        self.lastMessage                    = messageContent["lastMessage"].string
+        self.lastParticipantImage           = messageContent["lastParticipantImage"].string
+        self.lastParticipantName            = messageContent["lastParticipantName"].string
         self.lastSeenMessageId              = messageContent["lastSeenMessageId"].int
-        self.partnerLastSeenMessageId       = messageContent["partnerLastSeenMessageId"].int
-        self.partnerLastDeliveredMessageId  = messageContent["partnerLastDeliveredMessageId"].int
-        self.type                           = messageContent["type"].int
         self.metadata                       = messageContent["metadata"].string
         self.mute                           = messageContent["mute"].bool
         self.participantCount               = messageContent["participantCount"].int
-        self.canEditInfo                    = messageContent["canEditInfo"].bool
-        self.canSpam                        = messageContent["canSpam"].bool
+        self.partner                        = messageContent["partner"].int
+        self.partnerLastDeliveredMessageId  = messageContent["partnerLastDeliveredMessageId"].int
+        self.partnerLastSeenMessageId       = messageContent["partnerLastSeenMessageId"].int
+        self.time                           = messageContent["time"].int
+        self.title                          = messageContent["title"].string
+        self.type                           = messageContent["type"].int
+        self.unreadCount                    = messageContent["unreadCount"].int
         
-        if let myInviter = messageContent["inviter"].array {
-            let temp = Invitee(messageContent: myInviter.first!)
-            self.inviter = temp
+        if (messageContent["inviter"] != JSON.null) {
+            self.inviter = Participant(messageContent: messageContent["inviter"])
         }
+        
         if let myParticipants = messageContent["participants"].array {
             var tempParticipants = [Participant]()
             for item in myParticipants {
@@ -106,9 +109,13 @@ class Conversation {
             }
             self.participants = tempParticipants
         }
-        if let myLastMessageVO = messageContent["lastMessageVO"].array {
-            self.lastMessageVO = Message(threadId: nil, pushMessageVO: myLastMessageVO.first!)
+        
+        if (messageContent["lastMessageVO"] != JSON.null) {
+            self.lastMessageVO = Message(threadId: nil, pushMessageVO: messageContent["lastMessageVO"])
         }
+        //        if let myLastMessageVO = messageContent["lastMessageVO"].array {
+        //            self.lastMessageVO = Message(threadId: nil, pushMessageVO: myLastMessageVO.first!)
+        //        }
     }
     
     func formatDataToMakeConversation() -> Conversation {
@@ -125,30 +132,31 @@ class Conversation {
             }
         }
         
-        var result: JSON = ["id":                           id ?? NSNull(),
-                            "joinDate":                     joinDate ?? NSNull(),
-                            "title":                        title ?? NSNull(),
-                            "time":                         time ?? NSNull(),
-                            "lastMessage":                  lastMessage ?? NSNull(),
-                            "lastParticipantName":          lastParticipantName ?? NSNull(),
-                            "group":                        group ?? NSNull(),
-                            "partner":                      partner ?? NSNull(),
-                            "lastParticipantImage":         lastParticipantImage ?? NSNull(),
-                            "image":                        image ?? NSNull(),
+        var result: JSON = ["admin":                        admin ?? NSNull(),
+                            "canEditInfo":                  canEditInfo ?? NSNull(),
+                            "canSpam":                      canSpam ?? NSNull(),
                             "description":                  description ?? NSNull(),
-                            "unreadCount":                  unreadCount ?? NSNull(),
+                            "group":                        group ?? NSNull(),
+                            "id":                           id ?? NSNull(),
+                            "image":                        image ?? NSNull(),
+                            "joinDate":                     joinDate ?? NSNull(),
+                            "lastMessage":                  lastMessage ?? NSNull(),
+                            "lastParticipantImage":         lastParticipantImage ?? NSNull(),
+                            "lastParticipantName":          lastParticipantName ?? NSNull(),
                             "lastSeenMessageId":            lastSeenMessageId ?? NSNull(),
-                            "partnerLastSeenMessageId":     partnerLastSeenMessageId ?? NSNull(),
-                            "partnerLastDeliveredMessageId": partnerLastDeliveredMessageId ?? NSNull(),
-                            "type":                         type ?? NSNull(),
                             "metadata":                     metadata ?? NSNull(),
                             "mute":                         mute ?? NSNull(),
                             "participantCount":             participantCount ?? NSNull(),
-                            "canEditInfo":                  canEditInfo ?? NSNull(),
-                            "canSpam":                      canSpam ?? NSNull(),
+                            "partner":                      partner ?? NSNull(),
+                            "partnerLastDeliveredMessageId":partnerLastDeliveredMessageId ?? NSNull(),
+                            "partnerLastSeenMessageId":     partnerLastSeenMessageId ?? NSNull(),
+                            "time":                         time ?? NSNull(),
+                            "title":                        title ?? NSNull(),
+                            "type":                         type ?? NSNull(),
+                            "unreadCount":                  unreadCount ?? NSNull(),
                             "inviter":                      inviter?.formatToJSON() ?? NSNull(),
-                            "participants":                 participantsJSON,
-                            "lastMessageVO":                lastMessageVO?.formatToJSON() ?? NSNull()]
+                            "lastMessageVO":                lastMessageVO?.formatToJSON() ?? NSNull(),
+                            "participants":                 participantsJSON]
         if let lastMsgJSON = lastMessageVO {
             result["lastMessageVO"] = lastMsgJSON.formatToJSON()
         }

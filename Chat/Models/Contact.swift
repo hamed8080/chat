@@ -16,47 +16,51 @@ import SwiftyJSON
 
 class Contact {
     /*
-     * + ContactVO                        {object}
-     *    - id                            {long}
-     *    - userId                        {long}
-     *    - firstName                     {string}
-     *    - lastName                      {string}
-     *    - image                         {string}
-     *    - email                         {string}
-     *    - cellphoneNumber               {string}
-     *    - uniqueId                      {string}
-     *    - notSeenDuration               {long}
-     *    - hasUser                       {boolean}
-     *    - linkedUser                    {object : RelatedUserVO}
+     * + ContactVO          Contact:
+     *    - cellphoneNumber     String?
+     *    - email               String?
+     *    - firstName           String?
+     *    - hasUser             Bool?
+     *    - id                  Int?
+     *    - image               String?
+     *    - lastName            String?
+     *    - linkedUser          LinkedUser?
+     *    - notSeenDuration     Int?
+     *    - uniqueId            Bool?
+     *    - userId              Int?
      */
     
-    let id:                 Int?
-    let userId:             Int?
-    let firstName:          String?
-    let lastName:           String?
-    let image:              String?
-    let email:              String?
     let cellphoneNumber:    String?
-    let uniqueId:           String?
-    let notSeenDuration:    Int?
+    let email:              String?
+    let firstName:          String?
     let hasUser:            Bool?
+    let id:                 Int?
+    let image:              String?
+    let lastName:           String?
     var linkedUser:         LinkedUser?
+    let notSeenDuration:    Int?
+    let uniqueId:           String?
+    let userId:             Int?
     
     init(messageContent: JSON) {
-        self.id                 = messageContent["id"].int
-        self.userId             = messageContent["userId"].int
-        self.firstName          = messageContent["firstName"].string
-        self.lastName           = messageContent["lastName"].string
-        self.image              = messageContent["profileImage"].string
-        self.email              = messageContent["email"].string
         self.cellphoneNumber    = messageContent["cellphoneNumber"].string
-        self.uniqueId           = messageContent["uniqueId"].string
-        self.notSeenDuration    = messageContent["notSeenDuration"].int
+        self.email              = messageContent["email"].string
+        self.firstName          = messageContent["firstName"].string
         self.hasUser            = messageContent["hasUser"].bool
+        self.id                 = messageContent["id"].int
+        self.image              = messageContent["profileImage"].string
+        self.lastName           = messageContent["lastName"].string
+        self.notSeenDuration    = messageContent["notSeenDuration"].int
+        self.uniqueId           = messageContent["uniqueId"].string
+        self.userId             = messageContent["userId"].int
         
-        if let tempLinkUser = messageContent["linkedUser"].array {
-            self.linkedUser = LinkedUser(messageContent: tempLinkUser.first!)
+        if (messageContent["linkedUser"] != JSON.null) {
+            self.linkedUser = LinkedUser(messageContent: messageContent["linkedUser"])
         }
+        
+        //        if let tempLinkUser = messageContent["linkedUser"].array {
+        //            self.linkedUser = LinkedUser(messageContent: tempLinkUser.first!)
+        //        }
         
     }
     
@@ -65,17 +69,17 @@ class Contact {
     }
     
     func formatToJSON() -> JSON {
-        let result: JSON = ["id":               id ?? NSNull(),
-                            "userId":           userId ?? NSNull(),
-                            "firstName":        firstName ?? NSNull(),
-                            "lastName":         lastName ?? NSNull(),
-                            "image":            image ?? NSNull(),
+        let result: JSON = ["cellphoneNumber":  cellphoneNumber ?? NSNull(),
                             "email":            email ?? NSNull(),
-                            "cellphoneNumber":  cellphoneNumber ?? NSNull(),
-                            "uniqueId":         uniqueId ?? NSNull(),
-                            "notSeenDuration":  notSeenDuration ?? NSNull(),
+                            "firstName":        firstName ?? NSNull(),
                             "hasUser":          hasUser ?? NSNull(),
-                            "linkedUserJSON":   linkedUser?.formatToJSON() ?? NSNull()]
+                            "id":               id ?? NSNull(),
+                            "image":            image ?? NSNull(),
+                            "lastName":         lastName ?? NSNull(),
+                            "linkedUserJSON":   linkedUser?.formatToJSON() ?? NSNull(),
+                            "notSeenDuration":  notSeenDuration ?? NSNull(),
+                            "uniqueId":         uniqueId ?? NSNull(),
+                            "userId":           userId ?? NSNull()]
         return result
     }
     

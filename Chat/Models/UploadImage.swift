@@ -13,22 +13,22 @@ import SwiftyJSON
 
 class UploadImage {
     
-    let id:             Int?
-    let name:           String?
-    let height:         Int?
-    let width:          Int?
     let actualHeight:   Int?
     let actualWidth:    Int?
     let hashCode:       String?
+    let height:         Int?
+    let id:             Int?
+    let name:           String?
+    let width:          Int?
     
     init(messageContent: JSON) {
-        self.id             = messageContent["id"].int
-        self.name           = messageContent["name"].string
-        self.height         = messageContent["height"].int
-        self.width          = messageContent["width"].int
         self.actualHeight   = messageContent["actualHeight"].int
         self.actualWidth    = messageContent["actualWidth"].int
         self.hashCode       = messageContent["hashCode"].string
+        self.height         = messageContent["height"].int
+        self.id             = messageContent["id"].int
+        self.name           = messageContent["name"].string
+        self.width          = messageContent["width"].int
     }
     
     func formatDataToMakeUploadImage() -> UploadImage {
@@ -36,13 +36,13 @@ class UploadImage {
     }
     
     func formatToJSON() -> JSON {
-        let result: JSON = ["id":           id ?? NSNull(),
-                            "name":         name ?? NSNull(),
-                            "height":       height ?? NSNull(),
-                            "width":        width ?? NSNull(),
-                            "actualHeight": actualHeight ?? NSNull(),
+        let result: JSON = ["actualHeight": actualHeight ?? NSNull(),
                             "actualWidth":  actualWidth ?? NSNull(),
-                            "hashCode":     hashCode ?? NSNull()]
+                            "hashCode":     hashCode ?? NSNull(),
+                            "height":       height ?? NSNull(),
+                            "id":           id ?? NSNull(),
+                            "name":         name ?? NSNull(),
+                            "width":        width ?? NSNull()]
         return result
     }
     

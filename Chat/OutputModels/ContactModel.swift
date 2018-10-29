@@ -15,21 +15,21 @@ open class ContactModel {
      ---------------------------------------
      * responseAsJSON:
      *  - hasError      Bool
-     *  - errorMessage  String
-     *  - errorCode     Int
+     *  - errorMessage  String?
+     *  - errorCode     Int?
      *  - contentCount  Int
      *  + result            JSON:
-     *      - id                Int
-     *      - userId            Int
-     *      - firstName         String
-     *      - lastName          String
-     *      - image             String
-     *      - email             String
-     *      - cellphoneNumber   String
-     *      - uniqueId          String
-     *      - notSeenDuration   Int
-     *      - hasUser           Bool
-     *      - linkedUser        LinkedUser
+     *      - cellphoneNumber     String?
+     *      - email               String?
+     *      - firstName           String?
+     *      - hasUser             Bool?
+     *      - id                  Int?
+     *      - image               String?
+     *      - lastName            String?
+     *      - linkedUser          LinkedUser?
+     *      - notSeenDuration     Int?
+     *      - uniqueId            Bool?
+     *      - userId              Int?
      ---------------------------------------
      * responseAsModel:
      *  - hasError      Bool

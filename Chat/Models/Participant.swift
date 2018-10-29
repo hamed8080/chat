@@ -16,50 +16,50 @@ import SwiftyJSON
 
 class Participant {
     /*
-     * + ParticipantVO                   {object}
-     *    - id                           {long}
-     *    - sendEnable                   {boolean}
-     *    - receiveEnable                {boolean}
-     *    - firstName                    {string}
-     *    - lastName                     {string}
-     *    - name                         {string}
-     *    - cellphoneNumber              {string}
-     *    - email                        {string}
-     *    - myFriend                     {boolean}
-     *    - online                       {boolean}
-     *    - notSeenDuration              {long}
-     *    - userId                       {long}
-     *    - image                        {string}
+     * + ParticipantVO      Participant:
+     *    - cellphoneNumber:    String?
+     *    - contactId:          Int?
+     *    - email:              String?
+     *    - firstName:          String?
+     *    - id:                 Int?
+     *    - image:              String?
+     *    - lastName:           String?
+     *    - myFriend:           Bool?
+     *    - name:               String?
+     *    - notSeenDuration:    Int?
+     *    - online:             Bool?
+     *    - receiveEnable:      Bool?
+     *    - sendEnable:         Bool?
      */
     
-    let id:                 Int?
-    let sendEnable:         Bool?
-    let receiveEnable:      Bool?
-    let firstName:          String?
-    let lastName:           String?
-    let name:               String?
     let cellphoneNumber:    String?
-    let email:              String?
-    let myFriend:           Bool?
-    let online:             Bool?
-    let notSeenDuration:    Int?
     let contactId:          Int?
+    let email:              String?
+    let firstName:          String?
+    let id:                 Int?
     let image:              String?
+    let lastName:           String?
+    let myFriend:           Bool?
+    let name:               String?
+    let notSeenDuration:    Int?
+    let online:             Bool?
+    let receiveEnable:      Bool?
+    let sendEnable:         Bool?
     
     init(messageContent: JSON) {
-        self.id                 = messageContent["id"].int
-        self.sendEnable         = messageContent["sendEnable"].bool
-        self.receiveEnable      = messageContent["receiveEnable"].bool
-        self.firstName          = messageContent["firstName"].string
-        self.lastName           = messageContent["lastName"].string
-        self.name               = messageContent["name"].string
         self.cellphoneNumber    = messageContent["cellphoneNumber"].string
-        self.email              = messageContent["email"].string
-        self.myFriend           = messageContent["myFriend"].bool
-        self.online             = messageContent["online"].bool
-        self.notSeenDuration    = messageContent["notSeenDuration"].int
         self.contactId          = messageContent["contactId"].int
+        self.email              = messageContent["email"].string
+        self.firstName          = messageContent["firstName"].string
+        self.id                 = messageContent["id"].int
         self.image              = messageContent["image"].string
+        self.lastName           = messageContent["lastName"].string
+        self.myFriend           = messageContent["myFriend"].bool
+        self.name               = messageContent["name"].string
+        self.notSeenDuration    = messageContent["notSeenDuration"].int
+        self.online             = messageContent["online"].bool
+        self.receiveEnable      = messageContent["receiveEnable"].bool
+        self.sendEnable         = messageContent["sendEnable"].bool
     }
     
     func formatDataToMakeParticipant() -> Participant {
@@ -67,19 +67,17 @@ class Participant {
     }
     
     func formatToJSON() -> JSON {
-        let result: JSON = ["id":               id ?? NSNull(),
-                            "sendEnable":       sendEnable ?? NSNull(),
-                            "receiveEnable":    receiveEnable ?? NSNull(),
-                            "firstName":        firstName ?? NSNull(),
-                            "lastName":         lastName ?? NSNull(),
-                            "name":             name ?? NSNull(),
-                            "cellphoneNumber":  cellphoneNumber ?? NSNull(),
-                            "email":            email ?? NSNull(),
-                            "myFriend":         myFriend ?? NSNull(),
-                            "online":           online ?? NSNull(),
-                            "notSeenDuration":  notSeenDuration ?? NSNull(),
+        let result: JSON = ["cellphoneNumber":  cellphoneNumber ?? NSNull(),
                             "contactId":        contactId ?? NSNull(),
-                            "image":            image ?? NSNull()]
+                            "email":            email ?? NSNull(),
+                            "firstName":        firstName ?? NSNull(),
+                            "id":               id ?? NSNull(),
+                            "image":            image ?? NSNull(),
+                            "lastName":         lastName ?? NSNull(),
+                            "myFriend":         myFriend ?? NSNull(),
+                            "name":             name ?? NSNull(),"notSeenDuration":  notSeenDuration ?? NSNull(),
+                            "online":           online ?? NSNull(),"receiveEnable":    receiveEnable ?? NSNull(),
+                            "sendEnable":       sendEnable ?? NSNull()]
         return result
     }
     

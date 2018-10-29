@@ -18,9 +18,9 @@ open class UploadFileModel {
      *  - errorCode         Int
      *  + result       JSON or UploadFileModel:
      *      + UploadFile    UploadFileAsJSON
+     *          - hashCode      String
      *          - id            Int
      *          - name          String
-     *          - hashCode      String
      ---------------------------------------
      * responseAsModel:
      *  - hasError          Bool

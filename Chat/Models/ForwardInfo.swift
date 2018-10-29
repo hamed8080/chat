@@ -16,21 +16,31 @@ import SwiftyJSON
 
 class ForwardInfo {
     /*
-     * + forwardInfo                  {object : forwardInfoVO}
-     *   - participant                {object : ParticipantVO}
-     *   - conversation               {object : ConversationSummary}
+     * + forwardInfo        ForwardInfo:
+     *   - conversation         Conversation?
+     *   - participant          Participant?
      */
     
-    var participant:    Participant?
     var conversation:   Conversation?
+    var participant:    Participant?
     
     init(messageContent: JSON) {
-        if let myParticipant = messageContent["participant"].array {
-            self.participant = Participant(messageContent: myParticipant.first!)
+        
+        if (messageContent["conversation"] != JSON.null) {
+            self.conversation = Conversation(messageContent: messageContent["conversation"])
         }
-        if let myConversation = messageContent["conversation"].array {
-            self.conversation = Conversation(messageContent: myConversation.first!)
+        
+        if (messageContent["participant"] != JSON.null) {
+            self.participant = Participant(messageContent: messageContent["participant"])
         }
+        
+        //        if let myConversation = messageContent["conversation"].array {
+        //            self.conversation = Conversation(messageContent: myConversation.first!)
+        //        }
+        //        if let myParticipant = messageContent["participant"].array {
+        //            self.participant = Participant(messageContent: myParticipant.first!)
+        //        }
+        
     }
     
     func formatDataToMakeForwardInfo() -> ForwardInfo {
@@ -38,8 +48,8 @@ class ForwardInfo {
     }
     
     func formatToJSON() -> JSON {
-        let result: JSON = ["participant":      participant?.formatToJSON() ?? NSNull(),
-                            "conversation":     conversation?.formatToJSON() ?? NSNull()]
+        let result: JSON = ["conversation":     conversation?.formatToJSON() ?? NSNull(),
+                            "participant":      participant?.formatToJSON() ?? NSNull()]
         return result
     }
     

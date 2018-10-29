@@ -15,14 +15,14 @@ open class RemoveContactModel {
      ---------------------------------------
      * responseAsJSON:
      *  - hasError      Bool
-     *  - errorMessage  String
-     *  - errorCode     Int
+     *  - errorMessage  String?
+     *  - errorCode     Int?
      *  - result        Bool
      ---------------------------------------
      * responseAsModel:
      *  - hasError      Bool
-     *  - errorMessage  String
-     *  - errorCode     Int
+     *  - errorMessage  String?
+     *  - errorCode     Int?
      *  - result        Bool
      ---------------------------------------
      */

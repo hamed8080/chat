@@ -18,14 +18,14 @@ open class UserInfoModel {
      *  - errorCode    Int
      *  + result       JSON or UserInfoModel:
      *      + user          UserAsJSON
-     *          - id                Int
-     *          - name              String
-     *          - email             String
-     *          - cellphoneNumber   String
-     *          - image             String
-     *          - lastSeen          Int
-     *          - sendEnable        Bool
-     *          - receiveEnable     Bool
+     *          - cellphoneNumber:    String?
+     *          - email:              String?
+     *          - id:                 Int?
+     *          - image:              String?
+     *          - lastSeen:           Int?
+     *          - name:               String?
+     *          - receiveEnable:      Bool?
+     *          - sendEnable:         Bool?
      ---------------------------------------
      * responseAsModel:
      *  - hasError     Bool

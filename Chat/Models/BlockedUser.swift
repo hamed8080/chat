@@ -15,11 +15,11 @@ import SwiftyJSON
 
 class BlockedUser {
     /*
-     * + BlockedUser              {object}
-     *    - id                    {long}
-     *    - firstName             {string}
-     *    - lastName              {string}
-     *    - nickName              {string}
+     * + BlockedUser    BlockedUser:
+     *    - id              Int
+     *    - firstName       String
+     *    - lastName        String
+     *    - nickName        String
      */
     
     let id:         Int?

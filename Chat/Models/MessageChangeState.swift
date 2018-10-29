@@ -16,10 +16,10 @@ import SwiftyJSON
 
 class MessageChangeState {
     /*
-     * + MessageChangeStateVO       {object}
-     *    - messageId               {long}
-     *    - participantId           {long}
-     *    - conversationId          {long}
+     * + MessageChangeStateVO   MessageChangeState:
+     *    - messageId               Int?
+     *    - senderId                Int?
+     *    - threadId                Int?
      */
     
     let messageId:  Int?
@@ -29,7 +29,7 @@ class MessageChangeState {
     init(messageContent: JSON) {
         self.messageId  = messageContent["messageId"].int
         self.senderId   = messageContent["senderId"].int
-        self.threadId   = messageContent["messageId"].int
+        self.threadId   = messageContent["threadId"].int
     }
     
     func formatDataToMakeMessageChangeState() -> MessageChangeState {
@@ -39,7 +39,7 @@ class MessageChangeState {
     func formatToJSON() -> JSON {
         let result: JSON = ["messageId":        messageId ?? NSNull(),
                             "senderId":         senderId ?? NSNull(),
-                            "messageId":        messageId ?? NSNull()]
+                            "threadId":         threadId ?? NSNull()]
         return result
     }
     

@@ -22,30 +22,31 @@ open class GetThreadsModel {
      *      - hasNext           Bool
      *      - nextOffset        Int
      *      + threads           ThreadsAsJSON
-     *          - id                            Int
-     *          - joinDate                      Int
-     *          - title                         String
-     *          - time                          Int
-     *          - lastMessage                   String
-     *          - lastParticipantName           String
-     *          - group                         Bool
-     *          - partner                       Int
-     *          - lastParticipantImage          String
-     *          - image                         String
-     *          - description                   String
-     *          - unreadCount                   Int
-     *          - lastSeenMessageId             Int
-     *          - partnerLastSeenMessageId      Int
-     *          - partnerLastDeliveredMessageId Int
-     *          - type                          Int
-     *          - metadata                      String
-     *          - mute                          Bool
-     *          - participantCount              Int
-     *          - canEditInfo                   Bool
-     *          - canSpam                       Bool
-     *          + inviter               Invitee
-     *          + participants          [Participant]
-     *          + lastMessageVO         Message
+     *          - admin:                          Bool?
+     *          - canEditInfo:                    Bool?
+     *          - canSpam:                        Bool?
+     *          - description:                    String?
+     *          - group:                          Bool?
+     *          - id:                             Int?
+     *          - image:                          String?
+     *          - joinDate:                       Int?
+     *          - lastMessage:                    String?
+     *          - lastParticipantImage:           String?
+     *          - lastParticipantName:            String?
+     *          - lastSeenMessageId:              Int?
+     *          - metadata:                       String?
+     *          - mute:                           Bool?
+     *          - participantCount:               Int?
+     *          - partner:                        Int?
+     *          - partnerLastDeliveredMessageId:  Int?
+     *          - partnerLastSeenMessageId:       Int?
+     *          - title:                          String?
+     *          - time:                           Int?
+     *          - type:                           Int?
+     *          - unreadCount:                    Int?
+     *          + inviter:                        Participant?
+     *          + lastMessageVO:                  Message?
+     *          + participants:                   [Participant]?
      ---------------------------------------
      * responseAsModel:
      *  - hasError      Bool
@@ -107,4 +108,11 @@ open class GetThreadsModel {
     }
     
 }
+
+
+
+
+
+
+
 

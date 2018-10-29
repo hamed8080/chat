@@ -6,7 +6,6 @@
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 
-// it is  not original
 
 import Foundation
 import Alamofire
@@ -133,8 +132,8 @@ public class Chat {
     private var historyCallbackToUser: callbackTypeAlias?
     private var threadParticipantsCallbackToUser: callbackTypeAlias?
     private var createThreadCallbackToUser: callbackTypeAlias?
-    //    private var addPaticipantsCallbackToUser: callbackTypeAlias?
-    //    private var removePaticipantsCallbackToUser: callbackTypeAlias?
+    private var addParticipantsCallbackToUser: callbackTypeAlias?
+    private var removeParticipantsCallbackToUser: callbackTypeAlias?
     private var sendCallbackToUserOnSent: callbackTypeAlias?
     private var sendCallbackToUserOnDeliver: callbackTypeAlias?
     private var sendCallbackToUserOnSeen: callbackTypeAlias?
@@ -487,7 +486,9 @@ extension Chat {
         case chatMessageVOTypes.CREATE_THREAD.rawValue:
             print("\n:: On Chat:\n Message CREATE_THREAD recieved\n")
             if Chat.map[uniqueId] != nil {
-                createThreadHelp(content: messageContent, addFromService: true)
+                let threadData = Conversation(messageContent: messageContent).formatToJSON()
+                delegate?.threadEvents(type: "THREAD_NEW", result: threadData)
+                
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount)
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
                 callback.onResultCallback(uID: uniqueId, response: returnData, success: { (successJSON) in
@@ -646,27 +647,26 @@ extension Chat {
             //
             break
         case chatMessageVOTypes.ADD_PARTICIPANT.rawValue:
-            //            print("\n:: On Chat:\n Message ADD_PARTICIPANT recieved\n")
-            //            if Chat.map[uniqueId] != nil {
-            //                let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, contentCount: contentCount)
-            //                let callback: CallbackProtocol = Chat.map[uniqueId]!
-            //                callback.onResultCallback(uID: uniqueId, response: returnData, success: { (successJSON) in
-            //                    self.addPaticipantsCallbackToUser?(successJSON)
-            //                }) { (failureJSON) in
-            //                    //<#code#>
-            //                }
-            //                Chat.map.removeValue(forKey: uniqueId)
-            //            }
-            //
-            //            let threadIds = messageContent["id"].intValue
-            //            let paramsToSend: JSON = ["threadIds": threadIds]
-            //            getThreads(params: paramsToSend, uniqueId: { (uniqueIdStr) in
-            //                // print(uniqueIdStr)
-            //            }) { (responseJSON) in
-            //                let threads = responseJSON["result"]["threads"].arrayValue
-            //                self.delegate?.threadEvents(type: "THREAD_ADD_PARTICIPANTS", result: threads[0])
-            //                self.delegate?.threadEvents(type: "THREAD_LAST_ACTIVITY_TIME", result: threads[0])
-            //            }
+            print("\n:: On Chat:\n Message ADD_PARTICIPANT recieved\n")
+            if Chat.map[uniqueId] != nil {
+                let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount)
+                let callback: CallbackProtocol = Chat.map[uniqueId]!
+                callback.onResultCallback(uID: uniqueId, response: returnData, success: { (successJSON) in
+                    self.addParticipantsCallbackToUser?(successJSON)
+                }) { _ in }
+                Chat.map.removeValue(forKey: uniqueId)
+            }
+            
+            let threadIds = messageContent["id"].intValue
+            let paramsToSend: JSON = ["threadIds": threadIds]
+            getThreads(params: paramsToSend, uniqueId: { _ in }) { (response) in
+                
+                let responseModel: GetThreadsModel = response as! GetThreadsModel
+                let responseJSON: JSON = responseModel.returnDataAsJSON()
+                let threads = responseJSON["result"]["threads"].arrayValue
+                self.delegate?.threadEvents(type: "THREAD_ADD_PARTICIPANTS", result: threads[0])
+                self.delegate?.threadEvents(type: "THREAD_LAST_ACTIVITY_TIME", result: threads[0])
+            }
             break
             
         case chatMessageVOTypes.GET_CONTACTS.rawValue:
@@ -709,28 +709,27 @@ extension Chat {
             let result: JSON = ["thread": threadId]
             delegate?.threadEvents(type: "THREAD_REMOVED_FROM", result: result)
             break
+            
         case chatMessageVOTypes.REMOVE_PARTICIPANT.rawValue:
-            //            print("\n:: On Chat:\n Message REMOVE_PARTICIPANT recieved\n")
-            //            if Chat.map[uniqueId] != nil {
-            //                let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, contentCount: contentCount)
-            //                let callback: CallbackProtocol = Chat.map[uniqueId]!
-            //                callback.onResultCallback(uID: uniqueId, response: returnData, success: { (successJSON) in
-            //                    self.addPaticipantsCallbackToUser?(successJSON)
-            //                }) { (failureJSON) in
-            //                    //<#code#>
-            //                }
-            //                Chat.map.removeValue(forKey: uniqueId)
-            //            }
-            //
-            //            //            let threadIds = threadId
-            //            let paramsToSend: JSON = ["threadIds": threadId]
-            //            getThreads(params: paramsToSend, uniqueId: { (uniqueIdStr) in
-            //                // print(uniqueIdStr)
-            //            }) { (responseJSON) in
-            //                let threads = responseJSON["result"]["threads"].arrayValue
-            //                self.delegate?.threadEvents(type: "THREAD_REMOVE_PARTICIPANTS", result: threads[0])
-            //                self.delegate?.threadEvents(type: "THREAD_LAST_ACTIVITY_TIME", result: threads[0])
-            //            }
+            print("\n:: On Chat:\n Message REMOVE_PARTICIPANT recieved\n")
+            if Chat.map[uniqueId] != nil {
+                let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount)
+                let callback: CallbackProtocol = Chat.map[uniqueId]!
+                callback.onResultCallback(uID: uniqueId, response: returnData, success: { (successJSON) in
+                    self.removeParticipantsCallbackToUser?(successJSON)
+                }) { _ in }
+                Chat.map.removeValue(forKey: uniqueId)
+            }
+            //            let threadIds = threadId
+            let paramsToSend: JSON = ["threadIds": threadId]
+            getThreads(params: paramsToSend, uniqueId: { (uniqueIdStr) in
+                // print(uniqueIdStr)
+            }) { (response) in
+                let responseJSON = response as! JSON
+                let threads = responseJSON["result"]["threads"].arrayValue
+                self.delegate?.threadEvents(type: "THREAD_REMOVE_PARTICIPANTS", result: threads[0])
+                self.delegate?.threadEvents(type: "THREAD_LAST_ACTIVITY_TIME", result: threads[0])
+            }
             break
             
         case chatMessageVOTypes.MUTE_THREAD.rawValue:
@@ -780,9 +779,7 @@ extension Chat {
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
                 callback.onResultCallback(uID: uniqueId, response: returnData, success: { (successJSON) in
                     self.updateThreadInfoCallbackToUser?(successJSON)
-                }) { (failureJSON) in
-                    //<#code#>
-                }
+                }) { _ in }
                 Chat.map.removeValue(forKey: uniqueId)
                 
                 let paramsToSend: JSON = ["threadIds": messageContent["id"].intValue]
@@ -919,24 +916,6 @@ extension Chat {
     
     
     
-    func createThreadObject(messageContent: JSON, addFromService: Bool) -> Conversation {
-        let threadData = Conversation(messageContent: messageContent)
-        
-        if (addFromService) {
-            let thread: JSON = ["thread": threadData]
-            delegate?.threadEvents(type: "THREAD_NEW", result: thread)
-        }
-        
-        return threadData
-    }
-    
-    
-    func createThreadHelp(content: JSON, addFromService: Bool) {
-        if (addFromService) {
-            let result: JSON = ["result" : content]
-            delegate?.threadEvents(type: "THREAD_NEW", result: result)
-        }
-    }
     
     
     func createReturnData(hasError: Bool, errorMessage: String?, errorCode: Int?, result: JSON?, resultAsString: String?, contentCount: Int?) -> JSON {
@@ -1227,71 +1206,71 @@ extension Chat {
     }
     
     
-    //    public func addParticipants(params: JSON?, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-    //        print("\n On Chat")
-    //        print(":: \t Try to request to add participants with this parameters:")
-    //        print("\(params ?? "params is empty") \n")
-    //        /*
-    //         * + AddParticipantsRequest   {object}
-    //         *    - subjectId             {long}
-    //         *    + content               {list} List of CONTACT IDs
-    //         *       -id                  {long}
-    //         *    - uniqueId              {string}
-    //         */
-    //
-    //        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.ADD_PARTICIPANT.rawValue]
-    //
-    //        if let parameters = params {
-    //            if let threadId = parameters["threadId"].int {
-    //                if (threadId > 0) {
-    //                    sendMessageParams["subjectId"] = JSON(threadId)
-    //                }
-    //            }
-    //
-    //            if let contacts = parameters["contacts"].arrayObject {
-    //                sendMessageParams["content"] = JSON(contacts)
-    //            }
-    //        }
-    //
-    //        sendMessageWithCallback(params: sendMessageParams, callback: AddParticipantsCallback(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (addParticipantsUniqueId) in
-    //            uniqueId(addParticipantsUniqueId)
-    //        }
-    //        addPaticipantsCallbackToUser = completion
-    //    }
-    //
-    //
-    //    public func removeParticipants(params: JSON?, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-    //        print("\n On Chat")
-    //        print(":: \t Try to request to remove participants with this parameters:")
-    //        print("\(params ?? "params is empty") \n")
-    //        /*
-    //         * + RemoveParticipantsRequest    {object}
-    //         *    - subjectId                 {long}
-    //         *    + content                   {list} List of PARTICIPANT IDs from Thread's Participants object
-    //         *       -id                      {long}
-    //         *    - uniqueId                  {string}
-    //         */
-    //
-    //        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.REMOVE_PARTICIPANT.rawValue]
-    //
-    //        if let parameters = params {
-    //            if let threadId = parameters["threadId"].int {
-    //                if (threadId > 0) {
-    //                    sendMessageParams["subjectId"] = JSON(threadId)
-    //                }
-    //            }
-    //
-    //            if let participants = parameters["participants"].arrayObject {
-    //                sendMessageParams["content"] = JSON(participants)
-    //            }
-    //        }
-    //
-    //        sendMessageWithCallback(params: sendMessageParams, callback: RemoveParticipantsCallback(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (removeParticipantsUniqueId) in
-    //            uniqueId(removeParticipantsUniqueId)
-    //        }
-    //        removePaticipantsCallbackToUser = completion
-    //    }
-    //
+    public func addParticipants(params: JSON?, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+        print("\n On Chat")
+        print(":: \t Try to request to add participants with this parameters:")
+        print("\(params ?? "params is empty") \n")
+        /*
+         * + AddParticipantsRequest   {object}
+         *    - subjectId             {long}
+         *    + content               {list} List of CONTACT IDs
+         *       -id                  {long}
+         *    - uniqueId              {string}
+         */
+        
+        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.ADD_PARTICIPANT.rawValue]
+        
+        if let parameters = params {
+            if let threadId = parameters["threadId"].int {
+                if (threadId > 0) {
+                    sendMessageParams["subjectId"] = JSON(threadId)
+                }
+            }
+            
+            if let contacts = parameters["contacts"].arrayObject {
+                sendMessageParams["content"] = JSON(contacts)
+            }
+        }
+        
+        sendMessageWithCallback(params: sendMessageParams, callback: AddParticipantsCallback(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (addParticipantsUniqueId) in
+            uniqueId(addParticipantsUniqueId)
+        }
+        addParticipantsCallbackToUser = completion
+    }
+    
+    
+    public func removeParticipants(params: JSON?, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+        print("\n On Chat")
+        print(":: \t Try to request to remove participants with this parameters:")
+        print("\(params ?? "params is empty") \n")
+        /*
+         * + RemoveParticipantsRequest    {object}
+         *    - subjectId                 {long}
+         *    + content                   {list} List of PARTICIPANT IDs from Thread's Participants object
+         *       -id                      {long}
+         *    - uniqueId                  {string}
+         */
+        
+        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.REMOVE_PARTICIPANT.rawValue]
+        
+        if let parameters = params {
+            if let threadId = parameters["threadId"].int {
+                if (threadId > 0) {
+                    sendMessageParams["subjectId"] = JSON(threadId)
+                }
+            }
+            
+            if let participants = parameters["participants"].arrayObject {
+                sendMessageParams["content"] = JSON(participants)
+            }
+        }
+        
+        sendMessageWithCallback(params: sendMessageParams, callback: RemoveParticipantsCallback(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (removeParticipantsUniqueId) in
+            uniqueId(removeParticipantsUniqueId)
+        }
+        removeParticipantsCallbackToUser = completion
+    }
+    
     
     func makeCustomTextToSend(textMessage: String) -> String {
         var returnStr = ""
@@ -2250,6 +2229,7 @@ extension Chat {
                 let getThreadsModel = GetThreadsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 
                 success(getThreadsModel)
+                
             }
         }
         
@@ -2354,76 +2334,66 @@ extension Chat {
     }
     
     
-    //    private class AddParticipantsCallback: CallbackProtocol {
-    //        var sendParams: JSON
-    //        init(parameters: JSON) {
-    //            self.sendParams = parameters
-    //        }
-    //        func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
-    //            print("\n On Chat")
-    //            print(":: \t AddParticipantsCallback \n")
-    //            /*
-    //             * + AddParticipantsRequest   {object}
-    //             *    - subjectId             {long}
-    //             *    + content               {list} List of CONTACT IDs
-    //             *       -id                  {long}
-    //             *    - uniqueId              {string}
-    //             */
-    //            var returnData: JSON = [:]
-    //
-    //            let hasError = response["hasError"].boolValue
-    //            let errorMessage = response["errorMessage"].stringValue
-    //            let errorCode = response["errorCode"].intValue
-    //
-    //            returnData["hasError"] = JSON(hasError)
-    //            returnData["errorMessage"] = JSON(errorMessage)
-    //            returnData["errorCode"] = JSON(errorCode)
-    //
-    //            if (!hasError) {
-    //                let messageContent: [JSON] = response["result"].arrayValue  // send contacts as json to user
-    //
-    //                let resultData: JSON = ["threads": messageContent]
-    //                returnData["result"] = resultData
-    //                success(response)
-    //            }
-    //        }
-    //    }
-    //
-    //
-    //    private class RemoveParticipantsCallback: CallbackProtocol {
-    //        var sendParams: JSON
-    //        init(parameters: JSON) {
-    //            self.sendParams = parameters
-    //        }
-    //        func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
-    //            print("\n On Chat")
-    //            print(":: \t RemoveParticipantsCallback \n")
-    //            /*
-    //             * + RemoveParticipantsRequest    {object}
-    //             *    - subjectId                 {long}
-    //             *    + content                   {list} List of PARTICIPANT IDs from Thread's Participants object
-    //             *       -id                      {long}
-    //             *    - uniqueId                  {string}
-    //             */
-    //            var returnData: JSON = [:]
-    //
-    //            let hasError = response["hasError"].boolValue
-    //            let errorMessage = response["errorMessage"].stringValue
-    //            let errorCode = response["errorCode"].intValue
-    //
-    //            returnData["hasError"] = JSON(hasError)
-    //            returnData["errorMessage"] = JSON(errorMessage)
-    //            returnData["errorCode"] = JSON(errorCode)
-    //
-    //            if (!hasError) {
-    //                let messageContent: [JSON] = response["result"].arrayValue  // send contacts as json to user
-    //
-    //                let resultData: JSON = ["thread": messageContent]
-    //                returnData["result"] = resultData
-    //                success(returnData)
-    //            }
-    //        }
-    //    }
+    private class AddParticipantsCallback: CallbackProtocol {
+        var sendParams: JSON
+        init(parameters: JSON) {
+            self.sendParams = parameters
+        }
+        func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
+            print("\n On Chat")
+            print(":: \t AddParticipantsCallback \n")
+            /*
+             * + AddParticipantsRequest   {object}
+             *    - subjectId             {long}
+             *    + content               {list} List of CONTACT IDs
+             *       -id                  {long}
+             *    - uniqueId              {string}
+             */
+            
+            let hasError = response["hasError"].boolValue
+            let errorMessage = response["errorMessage"].stringValue
+            let errorCode = response["errorCode"].intValue
+            
+            if (!hasError) {
+                let messageContent = response["result"]
+                
+                let addParticipantModel = AddParticipantModel(messageContent: messageContent, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+                
+                success(addParticipantModel)
+            }
+        }
+    }
+    
+    
+    private class RemoveParticipantsCallback: CallbackProtocol {
+        var sendParams: JSON
+        init(parameters: JSON) {
+            self.sendParams = parameters
+        }
+        func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
+            print("\n On Chat")
+            print(":: \t RemoveParticipantsCallback \n")
+            /*
+             * + RemoveParticipantsRequest    {object}
+             *    - subjectId                 {long}
+             *    + content                   {list} List of PARTICIPANT IDs from Thread's Participants object
+             *       -id                      {long}
+             *    - uniqueId                  {string}
+             */
+            
+            let hasError = response["hasError"].boolValue
+            let errorMessage = response["errorMessage"].stringValue
+            let errorCode = response["errorCode"].intValue
+            
+            if (!hasError) {
+                let messageContent = response["result"]
+                
+                let addParticipantModel = AddParticipantModel(messageContent: messageContent, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+                
+                success(addParticipantModel)
+            }
+        }
+    }
     
     
     private class SendMessageCallbacks: CallbackProtocolWith3Calls {

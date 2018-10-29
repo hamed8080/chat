@@ -16,23 +16,23 @@ import SwiftyJSON
 
 class LinkedUser {
     /*
-     * + RelatedUserVO                 {object}
-     *   - username                    {string}
-     *   - nickname                    {string}
-     *   - name                        {string}
-     *   - image                       {string}
+     * + RelatedUserVO  LinkedUser:
+     *   - image            String?
+     *   - name             String?
+     *   - nickname         String?
+     *   - username         String?
      */
     
-    let username:   String?
-    let nickname:   String?
-    let name:       String?
     let image:      String?
+    let name:       String?
+    let nickname:   String?
+    let username:   String?
     
     init(messageContent: JSON) {
-        self.username   = messageContent["username"].string
-        self.nickname   = messageContent["nickname"].string
-        self.name       = messageContent["name"].string
         self.image      = messageContent["image"].string
+        self.name       = messageContent["name"].string
+        self.nickname   = messageContent["nickname"].string
+        self.username   = messageContent["username"].string
     }
     
     func formatdataToMakeLinkedUser() -> LinkedUser {
@@ -40,10 +40,10 @@ class LinkedUser {
     }
     
     func formatToJSON() -> JSON {
-        let result: JSON = ["username":         username ?? NSNull(),
-                            "nickname":         nickname ?? NSNull(),
+        let result: JSON = ["image":            image ?? NSNull(),
                             "name":             name ?? NSNull(),
-                            "image":            image ?? NSNull()]
+                            "nickname":         nickname ?? NSNull(),
+                            "username":         username ?? NSNull()]
         return result
     }
     

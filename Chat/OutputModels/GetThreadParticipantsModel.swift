@@ -22,19 +22,19 @@ open class GetThreadParticipantsModel {
      *      - hasNext           Bool
      *      - nextOffset        Int
      *      + participants      ParticipantsAsJSON
-     *          - id                Int
-     *          - sendEnable        Bool
-     *          - receiveEnable     Bool
-     *          - firstName         String
-     *          - lastName          String
-     *          - name              String
-     *          - cellphoneNumber   String
-     *          - email             String
-     *          - myFriend          Bool
-     *          - online            Bool
-     *          - notSeenDuration   Int
-     *          - userId            Int
-     *          - image             String
+     *          - cellphoneNumber:    String?
+     *          - contactId:          Int?
+     *          - email:              String?
+     *          - firstName:          String?
+     *          - id:                 Int?
+     *          - image:              String?
+     *          - lastName:           String?
+     *          - myFriend:           Bool?
+     *          - name:               String?
+     *          - notSeenDuration:    Int?
+     *          - online:             Bool?
+     *          - receiveEnable:      Bool?
+     *          - sendEnable:         Bool?
      ---------------------------------------
      * responseAsModel:
      *  - hasError      Bool

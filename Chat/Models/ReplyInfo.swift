@@ -16,23 +16,26 @@ import SwiftyJSON
 
 class ReplyInfo {
     /*
-     * + replyInfoVO                  {object : replyInfoVO}
-     *   - participant                {object : ParticipantVO}
-     *   - repliedToMessageId         {long}
-     *   - repliedToMessage           {string}
+     * + replyInfoVO        ReplyInfo:
+     *   - participant          Participant?
+     *   - repliedToMessage     String?
+     *   - repliedToMessageId   Int?
      */
     
-    let repliedToMessageId: Int?
-    let repliedToMessage:   String?
     var participant:        Participant?
+    let repliedToMessage:   String?
+    let repliedToMessageId: Int?
     
     init(messageContent: JSON) {
         self.repliedToMessageId     = messageContent["repliedToMessageId"].int
         self.repliedToMessage    = messageContent["repliedToMessage"].string
         
-        if let myParticipant = messageContent["participant"].array {
-            self.participant = Participant(messageContent: myParticipant.first!)
+        if (messageContent["participant"] != JSON.null) {
+            self.participant = Participant(messageContent: messageContent["participant"])
         }
+        //        if let myParticipant = messageContent["participant"].array {
+        //            self.participant = Participant(messageContent: myParticipant.first!)
+        //        }
     }
     
     func formatDataToMakeReplyInfo() -> ReplyInfo {
@@ -40,9 +43,9 @@ class ReplyInfo {
     }
     
     func formatToJSON() -> JSON {
-        let result: JSON = ["repliedToMessageId":   repliedToMessageId ?? NSNull(),
+        let result: JSON = ["participant":          participant?.formatToJSON() ?? NSNull(),
                             "repliedToMessage":     repliedToMessage ?? NSNull(),
-                            "participant":          participant?.formatToJSON() ?? NSNull()]
+                            "repliedToMessageId":   repliedToMessageId ?? NSNull(),]
         return result
     }
     
