@@ -1,15 +1,15 @@
 //
-//  UserInfoModel.swift
+//  BlockedUserModel.swift
 //  Chat
 //
-//  Created by Mahyar Zhiani on 7/23/1397 AP.
+//  Created by Mahyar Zhiani on 8/13/1397 AP.
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 
 import Foundation
 import SwiftyJSON
 
-open class UserInfoModel {
+open class BlockedUserModel {
     /*
      ---------------------------------------
      * responseAsJSON:
@@ -18,30 +18,25 @@ open class UserInfoModel {
      *  - errorCode    Int
      *  + result       JSON or UserInfoModel:
      *      + user          UserAsJSON
-     *          - cellphoneNumber:    String?
-     *          - email:              String?
-     *          - id:                 Int?
-     *          - image:              String?
-     *          - lastSeen:           Int?
-     *          - name:               String?
-     *          - receiveEnable:      Bool?
-     *          - sendEnable:         Bool?
+     *          - firstName:    String?
+     *          - nickeName:    String?
+     *          - lastName:     String?
+     *          - id:           Int?
      ---------------------------------------
      * responseAsModel:
-     *  - hasError     Bool
-     *  - errorMessage String
-     *  - errorCode    Int
-     *  + user         User
+     *  - hasError      Bool
+     *  - errorMessage  String
+     *  - errorCode     Int
+     *  + blockedUser   BlockedUserUser
      ---------------------------------------
      */
     
-    // user model properties
     let hasError:           Bool
     let errorMessage:       String
     let errorCode:          Int
-    let user:               User
+    let blockedUser:        BlockedUser
     
-    var userJSON: JSON = [:]
+    var blockedUserJSON:    JSON = [:]
     
     init(messageContent: JSON, hasError: Bool, errorMessage: String, errorCode: Int) {
         
@@ -49,12 +44,13 @@ open class UserInfoModel {
         self.errorMessage       = errorMessage
         self.errorCode          = errorCode
         
-        self.user = User(messageContent: messageContent)
-        self.userJSON = user.formatToJSON()
+        self.blockedUser = BlockedUser(messageContent: messageContent)
+        self.blockedUserJSON = blockedUser.formatToJSON()
+        
     }
     
     public func returnDataAsJSON() -> JSON {
-        let result: JSON = ["user": userJSON]
+        let result: JSON = ["blockedUser": blockedUserJSON]
         
         let resultAsJSON: JSON = ["result": result,
                                   "hasError": hasError,

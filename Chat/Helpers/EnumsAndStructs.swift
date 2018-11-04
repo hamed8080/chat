@@ -48,6 +48,7 @@ public enum chatMessageVOTypes: Int {
     case LAST_SEEN_UPDATED                  = 31
     case GET_MESSAGE_DELEVERY_PARTICIPANTS  = 32
     case GET_MESSAGE_SEEN_PARTICIPANTS      = 33
+    case BOT_MESSAGE                        = 40
     case SPAM_PV_THREAD                     = 41
     case LOGOUT                             = 100
     case ERROR                              = 999
@@ -55,19 +56,20 @@ public enum chatMessageVOTypes: Int {
 
 
 public enum inviteeVOidTypes: Int {
-    case TO_BE_USER_SSO_ID               = 1
-    case TO_BE_USER_CONTACT_ID           = 2
-    case TO_BE_USER_CELLPHONE_NUMBER     = 3
-    case TO_BE_USER_USERNAME             = 4
+    case TO_BE_USER_SSO_ID              = 1
+    case TO_BE_USER_CONTACT_ID          = 2
+    case TO_BE_USER_CELLPHONE_NUMBER    = 3
+    case TO_BE_USER_USERNAME            = 4
+    case TO_BE_USER_ID                  = 5
 }
 
 
 public enum createThreadTypes: String {
-    case NORMAL         //= 0
-    case OWNER_GROUP    //= 1
-    case PUBLIC_GROUP   //= 2
-    case CHANNEL_GROUP  //= 4
-    case CHANNEL        //= 8
+    case NORMAL         = "NORMAL"
+    case OWNER_GROUP    = "OWNER_GROUP"
+    case PUBLIC_GROUP   = "PUBLIC_GROUP"
+    case CHANNEL_GROUP  = "CHANNEL_GROUP"
+    case CHANNEL        = "CHANNEL"
 }
 
 

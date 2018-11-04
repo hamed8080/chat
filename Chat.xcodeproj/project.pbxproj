@@ -13,6 +13,15 @@
 		3E3E56872160A3280084C8C1 /* ForwardMessageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E56862160A3280084C8C1 /* ForwardMessageTest.swift */; };
 		3E3F14D12147B6570084A550 /* GetUserInfoTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3F14D02147B6570084A550 /* GetUserInfoTest.swift */; };
 		3E3F17792133D0A90029E4D4 /* EnumsAndStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3F17782133D0A90029E4D4 /* EnumsAndStructs.swift */; };
+		3E437D56218F35A50021C0ED /* RemoveParticipantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E437D55218F35A50021C0ED /* RemoveParticipantModel.swift */; };
+		3E437D5A218F36B80021C0ED /* BlockedUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E437D59218F36B80021C0ED /* BlockedUserModel.swift */; };
+		3E437D5C218F36DA0021C0ED /* GetBlockedListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E437D5B218F36DA0021C0ED /* GetBlockedListModel.swift */; };
+		3E437D5E218F389F0021C0ED /* AddParticipantsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E437D5D218F389F0021C0ED /* AddParticipantsTest.swift */; };
+		3E437D60218F3BDB0021C0ED /* RemoveParticipantsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E437D5F218F3BDB0021C0ED /* RemoveParticipantsTest.swift */; };
+		3E437D62218F48490021C0ED /* BlockUserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E437D61218F48490021C0ED /* BlockUserTest.swift */; };
+		3E437D64218F49B30021C0ED /* UnblockUserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E437D63218F49B30021C0ED /* UnblockUserTest.swift */; };
+		3E437D66218F4BCB0021C0ED /* LeaveThreadTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E437D65218F4BCB0021C0ED /* LeaveThreadTest.swift */; };
+		3E437D68218F4F780021C0ED /* SpamPvThreadTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E437D67218F4F780021C0ED /* SpamPvThreadTest.swift */; };
 		3E43D1422132B6170069DF9A /* DataFormatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E43D1412132B6170069DF9A /* DataFormatters.swift */; };
 		3E43D1562132BF700069DF9A /* SendMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E43D1552132BF700069DF9A /* SendMessage.swift */; };
 		3E43D1582132BF9C0069DF9A /* ReceiveMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E43D1572132BF9C0069DF9A /* ReceiveMessage.swift */; };
@@ -109,6 +118,15 @@
 		3E3E56862160A3280084C8C1 /* ForwardMessageTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForwardMessageTest.swift; sourceTree = "<group>"; };
 		3E3F14D02147B6570084A550 /* GetUserInfoTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetUserInfoTest.swift; sourceTree = "<group>"; };
 		3E3F17782133D0A90029E4D4 /* EnumsAndStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumsAndStructs.swift; sourceTree = "<group>"; };
+		3E437D55218F35A50021C0ED /* RemoveParticipantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveParticipantModel.swift; sourceTree = "<group>"; };
+		3E437D59218F36B80021C0ED /* BlockedUserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedUserModel.swift; sourceTree = "<group>"; };
+		3E437D5B218F36DA0021C0ED /* GetBlockedListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetBlockedListModel.swift; sourceTree = "<group>"; };
+		3E437D5D218F389F0021C0ED /* AddParticipantsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddParticipantsTest.swift; sourceTree = "<group>"; };
+		3E437D5F218F3BDB0021C0ED /* RemoveParticipantsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveParticipantsTest.swift; sourceTree = "<group>"; };
+		3E437D61218F48490021C0ED /* BlockUserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockUserTest.swift; sourceTree = "<group>"; };
+		3E437D63218F49B30021C0ED /* UnblockUserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnblockUserTest.swift; sourceTree = "<group>"; };
+		3E437D65218F4BCB0021C0ED /* LeaveThreadTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaveThreadTest.swift; sourceTree = "<group>"; };
+		3E437D67218F4F780021C0ED /* SpamPvThreadTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpamPvThreadTest.swift; sourceTree = "<group>"; };
 		3E43D1412132B6170069DF9A /* DataFormatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFormatters.swift; sourceTree = "<group>"; };
 		3E43D1552132BF700069DF9A /* SendMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMessage.swift; sourceTree = "<group>"; };
 		3E43D1572132BF9C0069DF9A /* ReceiveMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveMessage.swift; sourceTree = "<group>"; };
@@ -231,6 +249,8 @@
 			isa = PBXGroup;
 			children = (
 				3EBBEDEA2174C44400F5CDC7 /* UserInfoModel.swift */,
+				3E437D59218F36B80021C0ED /* BlockedUserModel.swift */,
+				3E437D5B218F36DA0021C0ED /* GetBlockedListModel.swift */,
 				3EBBEDED2174C5A600F5CDC7 /* GetContactsModel.swift */,
 				3EBBEDEF2174C5C800F5CDC7 /* GetThreadsModel.swift */,
 				3EBBEDF12174C5EC00F5CDC7 /* GetHistoryModel.swift */,
@@ -241,6 +261,7 @@
 				3E78AA94218479BA002A6EC0 /* UploadImageModel.swift */,
 				3E78AA98218479CB002A6EC0 /* UploadFileModel.swift */,
 				3ED22F2E2187469F00B6FE4C /* AddParticipantModel.swift */,
+				3E437D55218F35A50021C0ED /* RemoveParticipantModel.swift */,
 			);
 			path = OutputModels;
 			sourceTree = "<group>";
@@ -320,7 +341,6 @@
 				3E3E56782160A2F10084C8C1 /* ReplyMessageTest.swift */,
 				3E3E56842160A30B0084C8C1 /* EditMessageTest.swift */,
 				3E3E56862160A3280084C8C1 /* ForwardMessageTest.swift */,
-				3EE025FD21206E63001810FB /* Info.plist */,
 				3E695B98217224DA00A77120 /* AddContactTest.swift */,
 				3E695BA42172266800A77120 /* UpdateContactTest.swift */,
 				3E695BA62172275900A77120 /* RemoveContactTest.swift */,
@@ -333,6 +353,13 @@
 				3E78AAAF21849F64002A6EC0 /* UnmuteThreadTest.swift */,
 				3E78AAB12184A01A002A6EC0 /* SendFileMessageTest.swift */,
 				3E78AAC62184AB6F002A6EC0 /* SyncContactsTest.swift */,
+				3EE025FD21206E63001810FB /* Info.plist */,
+				3E437D5D218F389F0021C0ED /* AddParticipantsTest.swift */,
+				3E437D5F218F3BDB0021C0ED /* RemoveParticipantsTest.swift */,
+				3E437D61218F48490021C0ED /* BlockUserTest.swift */,
+				3E437D63218F49B30021C0ED /* UnblockUserTest.swift */,
+				3E437D65218F4BCB0021C0ED /* LeaveThreadTest.swift */,
+				3E437D67218F4F780021C0ED /* SpamPvThreadTest.swift */,
 			);
 			path = ChatTests;
 			sourceTree = "<group>";
@@ -491,6 +518,7 @@
 				3EBBEDE32174C35200F5CDC7 /* ForwardInfo.swift in Sources */,
 				3EBBEDD52174C23B00F5CDC7 /* Conversation.swift in Sources */,
 				3E78AA9B218479D7002A6EC0 /* UploadImage.swift in Sources */,
+				3E437D5A218F36B80021C0ED /* BlockedUserModel.swift in Sources */,
 				3EBBEDE92174C39B00F5CDC7 /* ThreadParticipants.swift in Sources */,
 				3EBBEDDD2174C2F000F5CDC7 /* LinkedUser.swift in Sources */,
 				3E43D1422132B6170069DF9A /* DataFormatters.swift in Sources */,
@@ -503,12 +531,14 @@
 				3E43D1562132BF700069DF9A /* SendMessage.swift in Sources */,
 				3E78AA95218479BA002A6EC0 /* UploadImageModel.swift in Sources */,
 				3E43D1582132BF9C0069DF9A /* ReceiveMessage.swift in Sources */,
+				3E437D56218F35A50021C0ED /* RemoveParticipantModel.swift in Sources */,
 				3E4B27E4212300CB001130F6 /* GCDTimer.swift in Sources */,
 				3EBBEDDB2174C2C000F5CDC7 /* Invitee.swift in Sources */,
 				3E78AA99218479CB002A6EC0 /* UploadFileModel.swift in Sources */,
 				3EBBEDF82174C6CD00F5CDC7 /* ContactModel.swift in Sources */,
 				3EBBEDD32174C20200F5CDC7 /* Contact.swift in Sources */,
 				3EE0261721206EA6001810FB /* Chat.swift in Sources */,
+				3E437D5C218F36DA0021C0ED /* GetBlockedListModel.swift in Sources */,
 				3EBBEDD72174C27B00F5CDC7 /* Message.swift in Sources */,
 				3EBBEDE72174C38000F5CDC7 /* ThreadHistory.swift in Sources */,
 				3EBBEDE52174C36700F5CDC7 /* MessageChangeState.swift in Sources */,
@@ -528,19 +558,25 @@
 			files = (
 				3E695B99217224DA00A77120 /* AddContactTest.swift in Sources */,
 				3E695BA72172275900A77120 /* RemoveContactTest.swift in Sources */,
+				3E437D62218F48490021C0ED /* BlockUserTest.swift in Sources */,
 				3E3E56792160A2F20084C8C1 /* ReplyMessageTest.swift in Sources */,
+				3E437D60218F3BDB0021C0ED /* RemoveParticipantsTest.swift in Sources */,
 				3E78AAB22184A01A002A6EC0 /* SendFileMessageTest.swift in Sources */,
 				3E730D2B214CC6F600AAE838 /* GetThreadParticipantTest.swift in Sources */,
+				3E437D64218F49B30021C0ED /* UnblockUserTest.swift in Sources */,
 				3E730D1D214CC53600AAE838 /* GetThreadTest.swift in Sources */,
+				3E437D68218F4F780021C0ED /* SpamPvThreadTest.swift in Sources */,
 				3E730D29214CC63F00AAE838 /* GetHistoryTest.swift in Sources */,
 				3E78AAAE21849EB1002A6EC0 /* MuteThreadTest.swift in Sources */,
 				3E695BA9217228F900A77120 /* UploadFileTest.swift in Sources */,
 				3E78AAC72184AB6F002A6EC0 /* SyncContactsTest.swift in Sources */,
+				3E437D66218F4BCB0021C0ED /* LeaveThreadTest.swift in Sources */,
 				3E78AAAA21849945002A6EC0 /* SearchContactTest.swift in Sources */,
 				3EE025FC21206E63001810FB /* ChatCreateTest.swift in Sources */,
 				3E78AAB021849F64002A6EC0 /* UnmuteThreadTest.swift in Sources */,
 				3E695BAB217229EB00A77120 /* UploadImageTest.swift in Sources */,
 				3E730D2F214D4D7A00AAE838 /* GetContactsTest.swift in Sources */,
+				3E437D5E218F389F0021C0ED /* AddParticipantsTest.swift in Sources */,
 				3E3F14D12147B6570084A550 /* GetUserInfoTest.swift in Sources */,
 				3E730D2D214CC75400AAE838 /* CreateThreadTest.swift in Sources */,
 				3E78AA9F21847C55002A6EC0 /* UpdateThreadInfoTest.swift in Sources */,
