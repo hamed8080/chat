@@ -36,12 +36,12 @@ open class UserInfoModel {
      */
     
     // user model properties
-    let hasError:           Bool
-    let errorMessage:       String
-    let errorCode:          Int
-    let user:               User
+    public let hasError:           Bool
+    public let errorMessage:       String
+    public let errorCode:          Int
+    public let user:               User
     
-    var userJSON: JSON = [:]
+    public var userJSON: JSON = [:]
     
     init(messageContent: JSON, hasError: Bool, errorMessage: String, errorCode: Int) {
         

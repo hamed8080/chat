@@ -31,12 +31,12 @@ open class UploadFileModel {
      */
     
     // uploadFile model properties
-    let hasError:           Bool
-    let errorMessage:       String
-    let errorCode:          Int
-    let uploadFile:         UploadFile
+    public let hasError:           Bool
+    public let errorMessage:       String
+    public let errorCode:          Int
+    public let uploadFile:         UploadFile
     
-    var uploadFileJSON: JSON = []
+    public var uploadFileJSON: JSON = []
     
     init(messageContent: JSON, hasError: Bool, errorMessage: String, errorCode: Int) {
         

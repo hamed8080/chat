@@ -9,11 +9,11 @@
 import Foundation
 import SwiftyJSON
 
-class UploadFile {
+open class UploadFile {
     
-    let hashCode:       String?
-    let id:             Int?
-    let name:           String?
+    public let hashCode:       String?
+    public let id:             Int?
+    public let name:           String?
     
     init(messageContent: JSON) {
         self.hashCode       = messageContent["hashCode"].string

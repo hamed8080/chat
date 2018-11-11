@@ -12,15 +12,15 @@ import SwiftyJSON
 open class RemoveParticipantModel {
     
     // RemoveParticipant model properties
-    let hasError:           Bool
-    let errorMessage:       String
-    let errorCode:          Int
-    let contentCount:       Int
+    public let hasError:           Bool
+    public let errorMessage:       String
+    public let errorCode:          Int
+    public let contentCount:       Int
     
     // result model
-    var contacts:           [Contact] = []
+    public var contacts:           [Participant] = []
     
-    var contactsJSON:       [JSON] = []
+    public var contactsJSON:       [JSON] = []
     
     init(messageContent: JSON, hasError: Bool, errorMessage: String, errorCode: Int) {
         
@@ -31,7 +31,7 @@ open class RemoveParticipantModel {
         
         if let result = messageContent["result"].array {
             for item in result {
-                let tempContact = Contact(messageContent: item)
+                let tempContact = Participant(messageContent: item)
                 let tempContactJSON = tempContact.formatToJSON()
                 
                 self.contacts.append(tempContact)

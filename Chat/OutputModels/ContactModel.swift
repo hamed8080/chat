@@ -17,38 +17,41 @@ open class ContactModel {
      *  - hasError      Bool
      *  - errorMessage  String?
      *  - errorCode     Int?
-     *  - contentCount  Int
      *  + result            JSON:
-     *      - cellphoneNumber     String?
-     *      - email               String?
-     *      - firstName           String?
-     *      - hasUser             Bool?
-     *      - id                  Int?
-     *      - image               String?
-     *      - lastName            String?
-     *      - linkedUser          LinkedUser?
-     *      - notSeenDuration     Int?
-     *      - uniqueId            Bool?
-     *      - userId              Int?
+     *      - contentCount      Int
+     *      + contact           [Contact]
+     *          - cellphoneNumber     String?
+     *          - email               String?
+     *          - firstName           String?
+     *          - hasUser             Bool?
+     *          - id                  Int?
+     *          - image               String?
+     *          - lastName            String?
+     *          - linkedUser          LinkedUser?
+     *          - notSeenDuration     Int?
+     *          - uniqueId            Bool?
+     *          - userId              Int?
      ---------------------------------------
      * responseAsModel:
      *  - hasError      Bool
      *  - errorMessage  String
      *  - errorCode     Int
      *  + result        [Contact]
+     *      - contentCount  Int
+     *      - contact       [Contact]
      ---------------------------------------
      */
     
     // AddContactcs model properties
-    let hasError:           Bool
-    let errorMessage:       String?
-    let errorCode:          Int?
-    var contentCount:       Int = 0
+    public let hasError:           Bool
+    public let errorMessage:       String?
+    public let errorCode:          Int?
     
     // result model
-    var contacts:           [Contact] = []
+    public var contentCount:       Int = 0
+    public var contacts:           [Contact] = []
     
-    var contactsJSON:       [JSON] = []
+    public var contactsJSON:       [JSON] = []
     
     init(messageContent: JSON) {
         
@@ -69,11 +72,13 @@ open class ContactModel {
     }
     
     public func returnDataAsJSON() -> JSON {
-        let finalResult: JSON = ["result": contactsJSON,
+        let result: JSON = ["contact": contactsJSON,
+                            "contentCount": contentCount]
+        
+        let finalResult: JSON = ["result": result,
                                  "hasError": hasError,
                                  "errorMessage": errorMessage ?? NSNull(),
-                                 "errorCode": errorCode ?? NSNull(),
-                                 "contentCount": contentCount]
+                                 "errorCode": errorCode ?? NSNull()]
         
         return finalResult
     }

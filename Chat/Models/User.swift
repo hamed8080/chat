@@ -14,7 +14,7 @@ import SwiftyJSON
 //#############################      User        (formatDataToMakeUser)
 //#######################################################################################
 
-class User {
+open class User {
     /*
      * + User               User:
      *    - cellphoneNumber:    String?
@@ -27,14 +27,14 @@ class User {
      *    - sendEnable:         Bool?
      */
     
-    let cellphoneNumber:    String?
-    let email:              String?
-    let id:                 Int?
-    let image:              String?
-    let lastSeen:           Int?
-    let name:               String?
-    let receiveEnable:      Bool?
-    let sendEnable:         Bool?
+    public let cellphoneNumber:    String?
+    public let email:              String?
+    public let id:                 Int?
+    public let image:              String?
+    public let lastSeen:           Int?
+    public let name:               String?
+    public let receiveEnable:      Bool?
+    public let sendEnable:         Bool?
     
     init(messageContent: JSON) {
         

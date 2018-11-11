@@ -14,7 +14,7 @@ import SwiftyJSON
 //#############################      Conversation        (formatDataToMakeConversation)
 //#######################################################################################
 
-class Conversation {
+open class Conversation {
     
     /*
      * + Conversation       Conversation:
@@ -46,32 +46,32 @@ class Conversation {
      *    - participants:                   [Participant]?
      */
     
-    let admin:                          Bool?
-    let canEditInfo:                    Bool?
-    let canSpam:                        Bool?
-    let description:                    String?
-    let group:                          Bool?
-    let id:                             Int?
-    let image:                          String?
-    let joinDate:                       Int?
-    let lastMessage:                    String?
-    let lastParticipantImage:           String?
-    let lastParticipantName:            String?
-    let lastSeenMessageId:              Int?
-    let metadata:                       String?
-    let mute:                           Bool?
-    let participantCount:               Int?
-    let partner:                        Int?
-    let partnerLastDeliveredMessageId:  Int?
-    let partnerLastSeenMessageId:       Int?
-    let title:                          String?
-    let time:                           Int?
-    let type:                           Int?
-    let unreadCount:                    Int?
+    public let admin:                          Bool?
+    public let canEditInfo:                    Bool?
+    public let canSpam:                        Bool?
+    public let description:                    String?
+    public let group:                          Bool?
+    public let id:                             Int?
+    public let image:                          String?
+    public let joinDate:                       Int?
+    public let lastMessage:                    String?
+    public let lastParticipantImage:           String?
+    public let lastParticipantName:            String?
+    public let lastSeenMessageId:              Int?
+    public let metadata:                       String?
+    public let mute:                           Bool?
+    public let participantCount:               Int?
+    public let partner:                        Int?
+    public let partnerLastDeliveredMessageId:  Int?
+    public let partnerLastSeenMessageId:       Int?
+    public let title:                          String?
+    public let time:                           UInt?
+    public let type:                           Int?
+    public let unreadCount:                    Int?
     
-    var inviter:                        Participant?
-    var lastMessageVO:                  Message?
-    var participants:                   [Participant]?
+    public var inviter:                        Participant?
+    public var lastMessageVO:                  Message?
+    public var participants:                   [Participant]?
     
     init(messageContent: JSON) {
         self.admin                          = messageContent["admin"].bool
@@ -92,7 +92,7 @@ class Conversation {
         self.partner                        = messageContent["partner"].int
         self.partnerLastDeliveredMessageId  = messageContent["partnerLastDeliveredMessageId"].int
         self.partnerLastSeenMessageId       = messageContent["partnerLastSeenMessageId"].int
-        self.time                           = messageContent["time"].int
+        self.time                           = messageContent["time"].uInt
         self.title                          = messageContent["title"].string
         self.type                           = messageContent["type"].int
         self.unreadCount                    = messageContent["unreadCount"].int

@@ -14,7 +14,7 @@ import SwiftyJSON
 //#############################      ReplyInfo        (formatDataToMakeReplyInfo)
 //#######################################################################################
 
-class ReplyInfo {
+open class ReplyInfo {
     /*
      * + replyInfoVO        ReplyInfo:
      *   - participant          Participant?
@@ -22,9 +22,9 @@ class ReplyInfo {
      *   - repliedToMessageId   Int?
      */
     
-    var participant:        Participant?
-    let repliedToMessage:   String?
-    let repliedToMessageId: Int?
+    public var participant:        Participant?
+    public let repliedToMessage:   String?
+    public let repliedToMessageId: Int?
     
     init(messageContent: JSON) {
         self.repliedToMessageId     = messageContent["repliedToMessageId"].int

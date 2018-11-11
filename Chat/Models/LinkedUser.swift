@@ -14,7 +14,7 @@ import SwiftyJSON
 //#############################      LinkedUser        (formatdataToMakeLinkedUser)
 //#######################################################################################
 
-class LinkedUser {
+open class LinkedUser {
     /*
      * + RelatedUserVO  LinkedUser:
      *   - image            String?
@@ -23,10 +23,10 @@ class LinkedUser {
      *   - username         String?
      */
     
-    let image:      String?
-    let name:       String?
-    let nickname:   String?
-    let username:   String?
+    public let image:      String?
+    public let name:       String?
+    public let nickname:   String?
+    public let username:   String?
     
     init(messageContent: JSON) {
         self.image      = messageContent["image"].string

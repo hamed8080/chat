@@ -14,7 +14,7 @@ import SwiftyJSON
 //#############################      Message        (formatDataToMakeMessage)
 //#######################################################################################
 
-class Message {
+open class Message {
     /*
      * + MessageVO      Message:
      *    - delivered:      Bool?
@@ -35,23 +35,23 @@ class Message {
      *    - replyInfo:      ReplyInfo?
      */
     
-    let delivered:      Bool?
-    let editable:       Bool?
-    let edited:         Bool?
-    let id:             Int?
-    let message:        String?
-    let metaData:       String?
-    var ownerId:        Int?
-    let previousId:     Int?
-    let seen:           Bool?
-    var threadId:       Int?
-    let time:           Int?
-    let uniqueId:       String?
+    public let delivered:      Bool?
+    public let editable:       Bool?
+    public let edited:         Bool?
+    public let id:             Int?
+    public let message:        String?
+    public let metaData:       String?
+    public var ownerId:        Int?
+    public let previousId:     Int?
+    public let seen:           Bool?
+    public var threadId:       Int?
+    public let time:           Int?
+    public let uniqueId:       String?
     
-    var conversation:   Conversation?
-    var forwardInfo:    ForwardInfo?
-    var participant:    Participant?
-    var replyInfo:      ReplyInfo?
+    public var conversation:   Conversation?
+    public var forwardInfo:    ForwardInfo?
+    public var participant:    Participant?
+    public var replyInfo:      ReplyInfo?
     
     init(threadId: Int?, pushMessageVO: JSON) {
         if let theThreadId = threadId {

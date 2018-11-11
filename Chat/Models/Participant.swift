@@ -14,7 +14,7 @@ import SwiftyJSON
 //#############################      Participant        (formatDataToMakeParticipant)
 //#######################################################################################
 
-class Participant {
+open class Participant {
     /*
      * + ParticipantVO      Participant:
      *    - cellphoneNumber:    String?
@@ -32,19 +32,19 @@ class Participant {
      *    - sendEnable:         Bool?
      */
     
-    let cellphoneNumber:    String?
-    let contactId:          Int?
-    let email:              String?
-    let firstName:          String?
-    let id:                 Int?
-    let image:              String?
-    let lastName:           String?
-    let myFriend:           Bool?
-    let name:               String?
-    let notSeenDuration:    Int?
-    let online:             Bool?
-    let receiveEnable:      Bool?
-    let sendEnable:         Bool?
+    public let cellphoneNumber:    String?
+    public let contactId:          Int?
+    public let email:              String?
+    public let firstName:          String?
+    public let id:                 Int?
+    public let image:              String?
+    public let lastName:           String?
+    public let myFriend:           Bool?
+    public let name:               String?
+    public let notSeenDuration:    Int?
+    public let online:             Bool?
+    public let receiveEnable:      Bool?
+    public let sendEnable:         Bool?
     
     init(messageContent: JSON) {
         self.cellphoneNumber    = messageContent["cellphoneNumber"].string

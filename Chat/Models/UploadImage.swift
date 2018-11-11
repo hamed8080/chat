@@ -11,15 +11,15 @@ import Foundation
 import SwiftyJSON
 
 
-class UploadImage {
+open class UploadImage {
     
-    let actualHeight:   Int?
-    let actualWidth:    Int?
-    let hashCode:       String?
-    let height:         Int?
-    let id:             Int?
-    let name:           String?
-    let width:          Int?
+    public let actualHeight:   Int?
+    public let actualWidth:    Int?
+    public let hashCode:       String?
+    public let height:         Int?
+    public let id:             Int?
+    public let name:           String?
+    public let width:          Int?
     
     init(messageContent: JSON) {
         self.actualHeight   = messageContent["actualHeight"].int

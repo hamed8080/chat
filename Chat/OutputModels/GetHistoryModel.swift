@@ -50,17 +50,17 @@ open class GetHistoryModel {
     
     
     // GetHistory model properties
-    let hasError:           Bool
-    let errorMessage:       String
-    let errorCode:          Int
+    public let hasError:           Bool
+    public let errorMessage:       String
+    public let errorCode:          Int
     
     // result model
-    var contentCount:       Int = 0
-    var hasNext:            Bool = false
-    var nextOffset:         Int = 0
-    var history:            [Message] = []
+    public var contentCount:       Int = 0
+    public var hasNext:            Bool = false
+    public var nextOffset:         Int = 0
+    public var history:            [Message] = []
     
-    var historyJSON:        [JSON] = []
+    public var historyJSON:        [JSON] = []
     
     init(messageContent: [JSON], contentCount: Int, count: Int, offset: Int, hasError: Bool, errorMessage: String, errorCode: Int) {
         

@@ -13,9 +13,9 @@ import SwiftyJSON
 //#############################      ThreadParticipants        (reformatThreadParticipants)
 //#######################################################################################
 
-class ThreadParticipants {
+open class ThreadParticipants {
     
-    var returnData: [Participant] = []
+    public var returnData: [Participant] = []
     
     init(participantsContent: [JSON]) {
         for item in participantsContent {

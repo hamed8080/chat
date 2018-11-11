@@ -14,15 +14,15 @@ import SwiftyJSON
 //#############################      Invitee        (formatDataToMakeInvitee)
 //#######################################################################################
 
-class Invitee {
+open class Invitee {
     /*
      * + InviteeVO       {object}
      *    - id           {string}
      *    - idType       {int}
      */
     
-    let id:     String?
-    var idType: Int = 0
+    public let id:     String?
+    public var idType: Int = 0
     
     init(messageContent: JSON) {
         self.id =       messageContent["id"].string

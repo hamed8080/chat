@@ -1,5 +1,5 @@
 //
-//  BlockedUserModel.swift
+//  BlockedContactModel.swift
 //  Chat
 //
 //  Created by Mahyar Zhiani on 8/13/1397 AP.
@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class BlockedUserModel {
+open class BlockedContactModel {
     /*
      ---------------------------------------
      * responseAsJSON:
@@ -31,12 +31,12 @@ open class BlockedUserModel {
      ---------------------------------------
      */
     
-    let hasError:           Bool
-    let errorMessage:       String
-    let errorCode:          Int
-    let blockedUser:        BlockedUser
+    public let hasError:           Bool
+    public let errorMessage:       String
+    public let errorCode:          Int
+    public let blockedContact:     BlockedContact
     
-    var blockedUserJSON:    JSON = [:]
+    public var blockedContactJSON: JSON = [:]
     
     init(messageContent: JSON, hasError: Bool, errorMessage: String, errorCode: Int) {
         
@@ -44,13 +44,13 @@ open class BlockedUserModel {
         self.errorMessage       = errorMessage
         self.errorCode          = errorCode
         
-        self.blockedUser = BlockedUser(messageContent: messageContent)
-        self.blockedUserJSON = blockedUser.formatToJSON()
+        self.blockedContact = BlockedContact(messageContent: messageContent)
+        self.blockedContactJSON = blockedContact.formatToJSON()
         
     }
     
     public func returnDataAsJSON() -> JSON {
-        let result: JSON = ["blockedUser": blockedUserJSON]
+        let result: JSON = ["blockedContact": blockedContactJSON]
         
         let resultAsJSON: JSON = ["result": result,
                                   "hasError": hasError,

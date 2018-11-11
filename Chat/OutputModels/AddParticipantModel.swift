@@ -12,14 +12,14 @@ import SwiftyJSON
 open class AddParticipantModel {
     
     // AddParticipant model properties
-    let hasError:           Bool
-    let errorMessage:       String
-    let errorCode:          Int
+    public let hasError:           Bool
+    public let errorMessage:       String
+    public let errorCode:          Int
     
     // result model
-    var thread:            Conversation?
+    public var thread:            Conversation?
     
-    var threadJSON:        JSON?
+    public var threadJSON:        JSON?
     
     init(messageContent: JSON, hasError: Bool, errorMessage: String, errorCode: Int) {
         

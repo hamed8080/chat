@@ -746,7 +746,7 @@ extension Chat {
         case chatMessageVOTypes.GET_HISTORY.rawValue:
             print("\n:: On Chat:\n Message GET_HISTORY recieved\n")
             if Chat.map[uniqueId] != nil {
-                let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: nil)
+                let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount)
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
                 callback.onResultCallback(uID: uniqueId, response: returnData, success: { (successJSON) in
                     self.historyCallbackToUser?(successJSON)
@@ -1113,16 +1113,20 @@ extension Chat {
         if let parameters = params {
             if let count = parameters["count"].int {
                 if count > 0 {
-                    content.appendIfDictionary(key: "count", json: JSON(count))
+                    content["count"] = JSON(count)
+                    content["size"] = JSON(count)
+                    //                    content.appendIfDictionary(key: "count", json: JSON(count))
                 }
             }
             if let offset = parameters["offset"].int {
                 if offset > 0 {
-                    content.appendIfDictionary(key: "offset", json: JSON(offset))
+                    content["offset"] = JSON(offset)
+                    //                    content.appendIfDictionary(key: "offset", json: JSON(offset))
                 }
             }
-            if let offset = parameters["name"].string {
-                content.appendIfDictionary(key: "name", json: JSON(offset))
+            if let name = parameters["name"].string {
+                content["name"] = JSON(name)
+                //                content.appendIfDictionary(key: "name", json: JSON(name))
             }
         }
         
@@ -1144,22 +1148,28 @@ extension Chat {
         if let parameters = params {
             if let count = parameters["count"].int {
                 if count > 0 {
-                    content.appendIfDictionary(key: "count", json: JSON(count))
+                    content["count"] = JSON(count)
+                    //                    content.appendIfDictionary(key: "count", json: JSON(count))
                 }
             }
             if let offset = parameters["offset"].int {
                 if offset > 0 {
-                    content.appendIfDictionary(key: "offset", json: JSON(offset))
+                    content["offset"] = JSON(offset)
+                    //                    content.appendIfDictionary(key: "offset", json: JSON(offset))
                 }
             }
             if let name = parameters["name"].string {
-                content.appendIfDictionary(key: "name", json: JSON(name))
+                content["name"] = JSON(name)
+                //                content.appendIfDictionary(key: "name", json: JSON(name))
+                
             }
             if let new = parameters["new"].bool {
-                content.appendIfDictionary(key: "new", json: JSON(new))
+                content["new"] = JSON(new)
+                //                content.appendIfDictionary(key: "new", json: JSON(new))
             }
             if let threadIds = parameters["threadIds"].arrayObject {
-                content.appendIfDictionary(key: "threadIds", json: JSON(threadIds))
+                content["threadIds"] = JSON(threadIds)
+                //                content.appendIfDictionary(key: "threadIds", json: JSON(threadIds))
             }
         }
         let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_THREADS.rawValue,
@@ -1180,32 +1190,39 @@ extension Chat {
         var content: JSON = ["count": 50, "offset": 0]
         if let count = params["count"].int {
             if count > 0 {
-                content.appendIfDictionary(key: "count", json: JSON(count))
+                content["count"] = JSON(count)
+                //                content.appendIfDictionary(key: "count", json: JSON(count))
             }
         }
         if let offset = params["offset"].int {
             if offset > 0 {
-                content.appendIfDictionary(key: "offset", json: JSON(offset))
+                content["offset"] = JSON(offset)
+                //                content.appendIfDictionary(key: "offset", json: JSON(offset))
             }
         }
         if let firstMessageId = params["firstMessageId"].int {
             if firstMessageId > 0 {
-                content.appendIfDictionary(key: "firstMessageId", json: JSON(firstMessageId))
+                content["firstMessageId"] = JSON(firstMessageId)
+                //                content.appendIfDictionary(key: "firstMessageId", json: JSON(firstMessageId))
             }
         }
         if let lastMessageId = params["lastMessageId"].int {
             if lastMessageId > 0 {
-                content.appendIfDictionary(key: "lastMessageId", json: JSON(lastMessageId))
+                content["lastMessageId"] = JSON(lastMessageId)
+                //                content.appendIfDictionary(key: "lastMessageId", json: JSON(lastMessageId))
             }
         }
         if let order = params["order"].string {
-            content.appendIfDictionary(key: "order", json: JSON(order))
+            content["order"] = JSON(order)
+            //            content.appendIfDictionary(key: "order", json: JSON(order))
         }
         if let query = params["query"].string {
-            content.appendIfDictionary(key: "query", json: JSON(query))
+            content["query"] = JSON(query)
+            //            content.appendIfDictionary(key: "query", json: JSON(query))
         }
         if let metadataCriteria = params["metadataCriteria"].string {
-            content.appendIfDictionary(key: "metadataCriteria", json: JSON(metadataCriteria))
+            content["metadataCriteria"] = JSON(metadataCriteria)
+            //            content.appendIfDictionary(key: "metadataCriteria", json: JSON(metadataCriteria))
         } else if (params["metadataCriteria"] != JSON.null) {
             content["metadataCriteria"] = params["metadataCriteria"]
         }
@@ -1235,26 +1252,31 @@ extension Chat {
             }
             if let count = parameters["count"].int {
                 if count > 0 {
-                    content.appendIfDictionary(key: "count", json: JSON(count))
+                    content["count"] = JSON(count)
+                    //                    content.appendIfDictionary(key: "count", json: JSON(count))
                 }
             }
             if let offset = parameters["offset"].int {
                 if offset > 0 {
-                    content.appendIfDictionary(key: "offset", json: JSON(offset))
+                    content["offset"] = JSON(offset)
+                    //                    content.appendIfDictionary(key: "offset", json: JSON(offset))
                 }
             }
             if let firstMessageId = parameters["firstMessageId"].int {
                 if firstMessageId > 0 {
-                    content.appendIfDictionary(key: "firstMessageId", json: JSON(firstMessageId))
+                    content["firstMessageId"] = JSON(firstMessageId)
+                    //                    content.appendIfDictionary(key: "firstMessageId", json: JSON(firstMessageId))
                 }
             }
             if let lastMessageId = parameters["lastMessageId"].int {
                 if lastMessageId > 0 {
-                    content.appendIfDictionary(key: "lastMessageId", json: JSON(lastMessageId))
+                    content["lastMessageId"] = JSON(lastMessageId)
+                    //                    content.appendIfDictionary(key: "lastMessageId", json: JSON(lastMessageId))
                 }
             }
             if let name = parameters["name"].string {
-                content.appendIfDictionary(key: "name", json: JSON(name))
+                content["name"] = JSON(name)
+                //                content.appendIfDictionary(key: "name", json: JSON(name))
             }
         }
         
@@ -1688,13 +1710,13 @@ extension Chat {
             delegate?.chatError(errorCode: 999, errorMessage: "lastName is required for Updating Contact!", errorResult: nil)
         }
         
-        if let cellphoneNumber = params["lastName"].string {
+        if let cellphoneNumber = params["cellphoneNumber"].string {
             data["cellphoneNumber"] = JSON(cellphoneNumber)
         } else {
             delegate?.chatError(errorCode: 999, errorMessage: "cellphoneNumber is required for Updating Contact!", errorResult: nil)
         }
         
-        if let email = params["lastName"].string {
+        if let email = params["email"].string {
             data["email"] = JSON(email)
         } else {
             delegate?.chatError(errorCode: 999, errorMessage: "email is required for Updating Contact!", errorResult: nil)
@@ -1913,6 +1935,22 @@ extension Chat {
         }
         
         uploadFileData["fileName"] = JSON(fileName)
+        
+        if let xC = params["xC"].int {
+            uploadFileData["xC"] = JSON(xC)
+        }
+        
+        if let yC = params["yC"].int {
+            uploadFileData["yC"] = JSON(yC)
+        }
+        
+        if let hC = params["hC"].int {
+            uploadFileData["hC"] = JSON(hC)
+        }
+        
+        if let wC = params["wC"].int {
+            uploadFileData["wC"] = JSON(wC)
+        }
         
         /*
          *  + data:
@@ -2205,7 +2243,7 @@ extension Chat {
     }
     
     
-    public func block(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func blockContact(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
         print("\n On Chat")
         print(":: \t Try to request to block user with this parameters:")
         print("\(params) \n")
@@ -2220,14 +2258,14 @@ extension Chat {
         
         sendMessageParams["content"] = JSON("\(content)")
         
-        sendMessageWithCallback(params: sendMessageParams, callback: BlockCallbacks(), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (blockUniqueId) in
+        sendMessageWithCallback(params: sendMessageParams, callback: BlockContactCallbacks(), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (blockUniqueId) in
             uniqueId(blockUniqueId)
         }
         blockCallbackToUser = completion
     }
     
     
-    public func unblock(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func unblockContact(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
         print("\n On Chat")
         print(":: \t Try to request to unblock user with this parameters:")
         print("\(params) \n")
@@ -2238,14 +2276,14 @@ extension Chat {
             sendMessageParams["subjectId"] = JSON(subjectId)
         }
         
-        sendMessageWithCallback(params: sendMessageParams, callback: UnblockCallbacks(), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (blockUniqueId) in
+        sendMessageWithCallback(params: sendMessageParams, callback: UnblockContactCallbacks(), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (blockUniqueId) in
             uniqueId(blockUniqueId)
         }
         unblockCallbackToUser = completion
     }
     
     
-    public func getBlocked(params: JSON?, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func getBlockedContacts(params: JSON?, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
         print("\n On Chat")
         print(":: \t Try to request to get block users with this parameters:")
         print("\(params ?? "there isn't any parameter") \n")
@@ -2266,7 +2304,7 @@ extension Chat {
         let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_BLOCKED.rawValue,
                                        "content": content]
         
-        sendMessageWithCallback(params: sendMessageParams, callback: GetBlockedCallbacks(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (getBlockedUniqueId) in
+        sendMessageWithCallback(params: sendMessageParams, callback: GetBlockedContactsCallbacks(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (getBlockedUniqueId) in
             uniqueId(getBlockedUniqueId)
         }
         getBlockedCallbackToUser = completion
@@ -2721,7 +2759,7 @@ extension Chat {
     }
     
     
-    private class BlockCallbacks: CallbackProtocol {
+    private class BlockContactCallbacks: CallbackProtocol {
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
             
             let hasError = response["hasError"].boolValue
@@ -2731,7 +2769,7 @@ extension Chat {
             if response["result"] != JSON.null {
                 let messageContent = response["result"]
                 
-                let blockUserModel = BlockedUserModel(messageContent: messageContent, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+                let blockUserModel = BlockedContactModel(messageContent: messageContent, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 
                 success(blockUserModel)
             }
@@ -2739,7 +2777,7 @@ extension Chat {
     }
     
     
-    private class UnblockCallbacks: CallbackProtocol {
+    private class UnblockContactCallbacks: CallbackProtocol {
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
             
             let hasError = response["hasError"].boolValue
@@ -2749,7 +2787,7 @@ extension Chat {
             if response["result"] != JSON.null {
                 let messageContent = response["result"]
                 
-                let unblockUserModel = BlockedUserModel(messageContent: messageContent, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+                let unblockUserModel = BlockedContactModel(messageContent: messageContent, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 
                 success(unblockUserModel)
             }
@@ -2757,7 +2795,7 @@ extension Chat {
     }
     
     
-    private class GetBlockedCallbacks: CallbackProtocol {
+    private class GetBlockedContactsCallbacks: CallbackProtocol {
         var sendParams: JSON
         init(parameters: JSON) {
             self.sendParams = parameters
@@ -2776,7 +2814,7 @@ extension Chat {
                 let messageContent: [JSON] = response["result"].arrayValue
                 let contentCount = response["contentCount"].intValue
                 
-                let getBlockedModel = GetBlockedListModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+                let getBlockedModel = GetBlockedContactListModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 
                 success(getBlockedModel)
             }

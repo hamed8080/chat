@@ -13,9 +13,9 @@ import SwiftyJSON
 //#############################      ThreadHistory        (reformatThreadHistory)
 //#######################################################################################
 
-class ThreadHistory {
+open class ThreadHistory {
     
-    var returnData: [Message] = []
+    public var returnData: [Message] = []
     
     init(threadId: Int, historyContent: [JSON]) {
         for item in historyContent {

@@ -13,7 +13,7 @@ import SwiftyJSON
 //#############################      BlockedUser        (formatDataToMakeBlockedUser)
 //#######################################################################################
 
-class BlockedUser {
+open class BlockedContact {
     /*
      * + BlockedUser    BlockedUser:
      *    - id              Int
@@ -22,10 +22,10 @@ class BlockedUser {
      *    - nickName        String
      */
     
-    let id:         Int?
-    let firstName:  String?
-    let lastName:   String?
-    let nickName:   String?
+    public let id:         Int?
+    public let firstName:  String?
+    public let lastName:   String?
+    public let nickName:   String?
     
     init(messageContent: JSON) {
         self.id         = messageContent["id"].int
@@ -34,7 +34,7 @@ class BlockedUser {
         self.nickName   = messageContent["nickName"].string
     }
     
-    func formatDataToMakeBlockedUser() -> BlockedUser {
+    func formatDataToMakeBlockedUser() -> BlockedContact {
         return self
     }
     

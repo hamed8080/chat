@@ -35,12 +35,12 @@ open class UploadImageModel {
      */
     
     // uploadImage model properties
-    let hasError:           Bool
-    let errorMessage:       String
-    let errorCode:          Int
-    let uploadImage:        UploadImage
+    public let hasError:           Bool
+    public let errorMessage:       String
+    public let errorCode:          Int
+    public let uploadImage:        UploadImage
     
-    var uploadImageJSON: JSON = []
+    public var uploadImageJSON: JSON = []
     
     init(messageContent: JSON, hasError: Bool, errorMessage: String, errorCode: Int) {
         

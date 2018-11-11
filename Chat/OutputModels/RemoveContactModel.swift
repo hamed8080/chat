@@ -28,10 +28,10 @@ open class RemoveContactModel {
      */
     
     // RemoveContactcs model properties
-    let hasError:           Bool
-    let errorMessage:       String?
-    let errorCode:          Int?
-    var result:             Bool
+    public let hasError:           Bool
+    public let errorMessage:       String?
+    public let errorCode:          Int?
+    public var result:             Bool
     
     init(messageContent: JSON) {
         self.hasError           = messageContent["hasError"].boolValue

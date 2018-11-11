@@ -58,17 +58,17 @@ open class CreateThreadModel {
      */
     
     // CreateThreads model properties
-    let hasError:           Bool
-    let errorMessage:       String
-    let errorCode:          Int
+    public let hasError:           Bool
+    public let errorMessage:       String
+    public let errorCode:          Int
     
     // result model
-    var contentCount:       Int = 0
-    var hasNext:            Bool = false
-    var nextOffset:         Int = 0
-    var thread:             Conversation?
+    public var contentCount:       Int = 0
+    public var hasNext:            Bool = false
+    public var nextOffset:         Int = 0
+    public var thread:             Conversation?
     
-    var threadJSON:         JSON?
+    public var threadJSON:         JSON?
     
     init(messageContent: JSON, hasError: Bool, errorMessage: String, errorCode: Int) {
         

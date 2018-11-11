@@ -14,7 +14,7 @@ import SwiftyJSON
 //#############################      Contact        (formatDataToMakeContact)
 //#######################################################################################
 
-class Contact {
+open class Contact {
     /*
      * + ContactVO          Contact:
      *    - cellphoneNumber     String?
@@ -30,17 +30,17 @@ class Contact {
      *    - userId              Int?
      */
     
-    let cellphoneNumber:    String?
-    let email:              String?
-    let firstName:          String?
-    let hasUser:            Bool?
-    let id:                 Int?
-    let image:              String?
-    let lastName:           String?
-    var linkedUser:         LinkedUser?
-    let notSeenDuration:    Int?
-    let uniqueId:           String?
-    let userId:             Int?
+    public let cellphoneNumber:    String?
+    public let email:              String?
+    public let firstName:          String?
+    public let hasUser:            Bool?
+    public let id:                 Int?
+    public let image:              String?
+    public let lastName:           String?
+    public var linkedUser:         LinkedUser?
+    public let notSeenDuration:    Int?
+    public let uniqueId:           String?
+    public let userId:             Int?
     
     init(messageContent: JSON) {
         self.cellphoneNumber    = messageContent["cellphoneNumber"].string

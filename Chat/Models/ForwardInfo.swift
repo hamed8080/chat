@@ -14,15 +14,15 @@ import SwiftyJSON
 //#############################      ForwardInfo        (formatDataToMakeForwardInfo)
 //#######################################################################################
 
-class ForwardInfo {
+open class ForwardInfo {
     /*
      * + forwardInfo        ForwardInfo:
      *   - conversation         Conversation?
      *   - participant          Participant?
      */
     
-    var conversation:   Conversation?
-    var participant:    Participant?
+    public var conversation:   Conversation?
+    public var participant:    Participant?
     
     init(messageContent: JSON) {
         
