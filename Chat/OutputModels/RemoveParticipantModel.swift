@@ -18,9 +18,9 @@ open class RemoveParticipantModel {
     public let contentCount:       Int
     
     // result model
-    public var contacts:           [Participant] = []
+    public var participants:        [Participant] = []
     
-    public var contactsJSON:       [JSON] = []
+    public var participantsJSON:    [JSON] = []
     
     init(messageContent: JSON, hasError: Bool, errorMessage: String, errorCode: Int) {
         
@@ -34,15 +34,15 @@ open class RemoveParticipantModel {
                 let tempContact = Participant(messageContent: item)
                 let tempContactJSON = tempContact.formatToJSON()
                 
-                self.contacts.append(tempContact)
-                self.contactsJSON.append(tempContactJSON)
+                self.participants.append(tempContact)
+                self.participantsJSON.append(tempContactJSON)
             }
         }
         
     }
     
     public func returnDataAsJSON() -> JSON {
-        let result: JSON = ["contacts": contactsJSON]
+        let result: JSON = ["participants": participantsJSON]
         
         let finalResult: JSON = ["result": result,
                                  "hasError": hasError,

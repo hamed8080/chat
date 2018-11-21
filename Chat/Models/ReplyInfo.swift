@@ -17,25 +17,40 @@ import SwiftyJSON
 open class ReplyInfo {
     /*
      * + replyInfoVO        ReplyInfo:
-     *   - participant          Participant?
-     *   - repliedToMessage     String?
-     *   - repliedToMessageId   Int?
+     *  - deleted:             Bool?            // Delete state of Replied Message
+     *  - repliedToMessageId:  Int?             // Id of Replied Message
+     *  - message:             String?          // Content of Replied Message
+     *  - messageType:         Int?             // Type of Replied Message
+     *  - metadata:            String?          // metadata of Replied Message
+     *  - systemMetadata:      String?          // systemMetadata of Replied Message
+     *  - participant          Participant?     // Sender of Replied Message
+     *  - repliedToMessage     String?
+     *  - repliedToMessageId   Int?
      */
     
+    public var deleted:             Bool?
+    public var repliedToMessageId:  Int?
+    public var message:             String?
+    public var messageType:         Int?
+    public var metadata:            String?
+    public var systemMetadata:      String?
+    
     public var participant:        Participant?
-    public let repliedToMessage:   String?
-    public let repliedToMessageId: Int?
+    //    public let repliedToMessage:    String?
     
     init(messageContent: JSON) {
-        self.repliedToMessageId     = messageContent["repliedToMessageId"].int
-        self.repliedToMessage    = messageContent["repliedToMessage"].string
+        
+        self.deleted            = messageContent["deleted"].bool
+        self.repliedToMessageId = messageContent["repliedToMessageId"].int
+        self.message            = messageContent["message"].string
+        self.messageType        = messageContent["messageType"].int
+        self.metadata           = messageContent["metadata"].string
+        self.systemMetadata     = messageContent["systemMetadata"].string
         
         if (messageContent["participant"] != JSON.null) {
             self.participant = Participant(messageContent: messageContent["participant"])
         }
-        //        if let myParticipant = messageContent["participant"].array {
-        //            self.participant = Participant(messageContent: myParticipant.first!)
-        //        }
+        
     }
     
     func formatDataToMakeReplyInfo() -> ReplyInfo {
@@ -44,8 +59,12 @@ open class ReplyInfo {
     
     func formatToJSON() -> JSON {
         let result: JSON = ["participant":          participant?.formatToJSON() ?? NSNull(),
-                            "repliedToMessage":     repliedToMessage ?? NSNull(),
-                            "repliedToMessageId":   repliedToMessageId ?? NSNull(),]
+                            "deleted":              deleted ?? NSNull(),
+                            "repliedToMessageId":   repliedToMessageId ?? NSNull(),
+                            "message":              message ?? NSNull(),
+                            "messageType":          messageType ?? NSNull(),
+                            "metadata":             metadata ?? NSNull(),
+                            "systemMetadata":       systemMetadata ?? NSNull()]
         return result
     }
     

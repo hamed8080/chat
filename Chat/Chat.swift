@@ -12,16 +12,26 @@ import Alamofire
 import Async
 import SwiftyJSON
 import Contacts
+//import SwiftyBeaver
+
 
 public class Chat {
+    
+    // the delegate property that the user class should make itself to be implment this delegat.
+    // At first, the class sould confirm to ChatDelegates, and then implement the ChatDelegates methods
     public weak var delegate: ChatDelegates?
     
-    var socketAddress: String   = ""
-    var ssoHost: String         = ""        // SERVICE_ADDRESSES.SSO_ADDRESS
-    var platformHost: String    = ""        // SERVICE_ADDRESSES.PLATFORM_ADDRESS
-    var fileServer: String      = ""        // SERVICE_ADDRESSES.FILESERVER_ADDRESS
-    var serverName: String      = ""
-    var token: String           = ""
+    
+    // MARK: - setup properties
+    
+    var socketAddress:  String  = ""        // Address of the Socket Server
+    var ssoHost:        String  = ""        // Address of the SSO Server (SERVICE_ADDRESSES.SSO_ADDRESS)
+    var platformHost:   String  = ""        // Address of the platform (SERVICE_ADDRESSES.PLATFORM_ADDRESS)
+    var fileServer:     String  = ""        // Address of the FileServer (SERVICE_ADDRESSES.FILESERVER_ADDRESS)
+    var serverName:     String  = ""        // Name of the server that we had registered on
+    var token:          String  = ""        // every user have to had a token (get it from SSO Server)
+    var generalTypeCode:    Int = 0
+    
     //    var ssoGrantDevicesAddress = params.ssoGrantDevicesAddress
     var chatFullStateObject: JSON = [:]
     
@@ -57,38 +67,47 @@ public class Chat {
     
     var SERVICE_ADDRESSES = SERVICE_ADDRESSES_ENUM()
     
-    public init(socketAddress: String, ssoHost: String, platformHost: String, fileServer: String, serverName: String, token: String, msgPriority: Int?, msgTTL: Int?, httpRequestTimeout: Int?, actualTimingLog: Bool?, wsConnectionWaitTime: Double, connectionRetryInterval: Int, connectionCheckTimeout: Int, messageTtl: Int, reconnectOnClose: Bool) {
+    // MARK: - Chat initializer
+    
+    public init(socketAddress: String, ssoHost: String, platformHost: String, fileServer: String, serverName: String, token: String, typeCode: Int, msgPriority: Int?, msgTTL: Int?, httpRequestTimeout: Int?, actualTimingLog: Bool?, wsConnectionWaitTime: Double, connectionRetryInterval: Int, connectionCheckTimeout: Int, messageTtl: Int, reconnectOnClose: Bool) {
         self.socketAddress = socketAddress
         self.ssoHost = ssoHost
         self.platformHost = platformHost
         self.fileServer = fileServer
         self.serverName = serverName
         self.token = token
+        self.generalTypeCode = typeCode
+        
         if let theMsgPriority = msgPriority {
             self.msgPriority = theMsgPriority
         } else {
             self.msgPriority = 1
         }
+        
         if let theMsgTTL = msgTTL {
             self.msgTTL = theMsgTTL
         } else {
             self.msgTTL = 10
         }
+        
         if let theMsgTTL = msgTTL {
             self.msgTTL = theMsgTTL
         } else {
             self.msgTTL = 10
         }
+        
         if let theHttpRequestTimeout = httpRequestTimeout {
             self.httpRequestTimeout = theHttpRequestTimeout
         } else {
             self.httpRequestTimeout = 20
         }
+        
         if let theActualTimingLog = actualTimingLog {
             self.actualTimingLog = theActualTimingLog
         } else {
             self.actualTimingLog = false
         }
+        
         self.wsConnectionWaitTime = wsConnectionWaitTime
         self.connectionRetryInterval = connectionRetryInterval
         self.connectionCheckTimeout = connectionCheckTimeout
@@ -101,8 +120,9 @@ public class Chat {
         
         getDeviceIdWithToken { (deviceIdStr) in
             self.deviceId = deviceIdStr
-            print("\n On Chat")
-            print(":: get deviceId successfully = \(self.deviceId ?? "error!!") \n")
+            
+            log.info("get deviceId successfully = \(self.deviceId ?? "error!!")", context: "Chat")
+            
             DispatchQueue.main.async {
                 self.CreateAsync()
             }
@@ -111,21 +131,34 @@ public class Chat {
     }
     
     
+    // MARK: - create Async with the parameters
+    
     public func CreateAsync() {
         if let dId = deviceId {
             asyncClient = Async(socketAddress: socketAddress, serverName: serverName, deviceId: dId, appId: nil, peerId: nil, messageTtl: messageTtl, connectionRetryInterval: connectionRetryInterval, reconnectOnClose: reconnectOnClose)
             asyncClient?.delegate = self
-            asyncClient?.createSucket()
+            asyncClient?.createSocket()
         }
     }
     
+    
+    // MARK: - properties that save callbacks on themselves
+    
+    // property to hold array of request that comes from client, but they have not completed yet, and response didn't come yet.
+    // the keys are uniqueIds of the requests
     static var map = [String: CallbackProtocol]()
+    
+    // property to hold array of Sent requests that comes from client, but they have not completed yet, and response didn't come yet.
+    // the keys are uniqueIds of the requests
     static var mapOnSent = [String: CallbackProtocolWith3Calls]()
-    //    static var mapOnDeliver = [String: [[String: CallbackProtocolWith3Calls]]]()
-    //                          [threadId: [[uniqueId: callback]]]
+    
+    // property to hold array of Deliver and Seen requests that comes from client, but they have not completed yet, and response didn't come yet.
+    // first keys are threadIds
+    // second keys are uniqueIds of the request
     static var mapOnDeliver = [String: [[String: CallbackProtocolWith3Calls]]]()
     static var mapOnSeen = [String: [[String: CallbackProtocolWith3Calls]]]()
     
+    // property to hold Sent callbecks to implement later, on somewhere else on the program
     private var userInfoCallbackToUser: callbackTypeAlias?
     private var getContactsCallbackToUser: callbackTypeAlias?
     private var threadsCallbackToUser: callbackTypeAlias?
@@ -147,6 +180,8 @@ public class Chat {
     private var getBlockedCallbackToUser: callbackTypeAlias?
     private var leaveThreadCallbackToUser: callbackTypeAlias?
     private var spamPvThreadCallbackToUser: callbackTypeAlias?
+    private var getMessageSeenListCallbackToUser: callbackTypeAlias?
+    private var getMessageDeliverListCallbackToUser: callbackTypeAlias?
     
     var tempSendMessageArr: [[String : JSON]] = []
     var tempReceiveMessageArr: [[String: JSON]] = []
@@ -286,8 +321,8 @@ extension Chat {
     
     
     func sendMessageWithCallback(params: JSON, callback: CallbackProtocol?, sentCallback: CallbackProtocolWith3Calls?, deliverCallback: CallbackProtocolWith3Calls?, seenCallback: CallbackProtocolWith3Calls?, uniuqueIdCallback: callbackTypeAliasString?) {
-        print("\n On Chat")
-        print(":: params (to send): \n \(params)\n")
+        log.info("params (to send): \n \(params)", context: "Chat")
+        
         /*
          * + ChatMessage        {object}
          *    - token           {string}
@@ -311,23 +346,33 @@ extension Chat {
             threadId = theSubjectId
             messageVO["threadId"] = JSON(theSubjectId)
             messageVO["subjectId"] = JSON(theSubjectId)
-            //            returnData["threadId"] = JSON(theSubjectId)
         }
+        
         if let repliedTo = params["repliedTo"].int {
             messageVO["repliedTo"] = JSON(repliedTo)
         }
+        
         if let content = params["content"].string {
             messageVO["content"] = JSON(content)
         } else {
             let content = "\(params["content"])"
             messageVO["content"] = JSON(content)
         }
+        
         if let metaData = params["metaData"].string {
             messageVO["metaData"] = JSON(metaData)
         }
+        
         if let systemMetadata = params["systemMetadata"].string {
             messageVO["systemMetadata"] = JSON(systemMetadata)
         }
+        
+        if let typeCode = params["typeCode"].int {
+            messageVO["typeCode"] = JSON(typeCode)
+        } else {
+            //            messageVO["typeCode"] = JSON(generalTypeCode)
+        }
+        
         var uniqueId: String = ""
         if let uID = params["uniqueId"].string {
             messageVO["uniqueId"] = JSON(uID)
@@ -341,8 +386,7 @@ extension Chat {
         }
         uniuqueIdCallback?(uniqueId)
         
-        print("\n On Chat")
-        print(":: MessageVO params (to send): \n \(messageVO) \n")
+        log.info("MessageVO params (to send): \n \(messageVO)", context: "Chat")
         
         if (sentCallback != nil) {
             Chat.mapOnSent[uniqueId] = sentCallback
@@ -372,11 +416,10 @@ extension Chat {
             Chat.map[uniqueId] = callback
         }
         
-        print("\n On Chat")
-        print(":: map json: \n \(Chat.map) \n")
-        print(":: map onSent json: \n \(Chat.mapOnSent) \n")
-        print(":: map onDeliver json: \n \(Chat.mapOnDeliver) \n")
-        print(":: map onSeen json: \n \(Chat.mapOnSeen) \n")
+        log.info("map json: \n \(Chat.map)", context: "Chat")
+        log.info("map onSent json: \n \(Chat.mapOnSent)", context: "Chat")
+        log.info("map onDeliver json: \n \(Chat.mapOnDeliver)", context: "Chat")
+        log.info("map onSeen json: \n \(Chat.mapOnSeen)", context: "Chat")
         
         var type: Int = 3
         if let theType = params["pushMsgType"].int {
@@ -392,8 +435,7 @@ extension Chat {
         let contentStr = "\(content)"
         
         let str2 = String(contentStr.filter { !"\n\t\r".contains($0) })
-        print("\n On Chat")
-        print(":: AsyncMessageContent of type JSON (to send to socket): \n \(str2) \n")
+        log.info("AsyncMessageContent of type JSON (to send to socket): \n \(str2)", context: "Chat")
         
         asyncClient?.pushSendData(type: type, content: str2)
         runSendMessageTimer()
@@ -424,8 +466,9 @@ extension Chat {
     
     func ping() {
         if (chatState == true && peerId != nil && peerId != 0) {
-            print("\n On Chat")
-            print(":: \t Try to send Ping \n")
+            
+            log.info("Try to send Ping", context: "Chat")
+            
             let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.PING.rawValue, "pushMsgType": 4]
             _ = sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: nil, deliverCallback: nil, seenCallback: nil, uniuqueIdCallback: nil)
         } else if (lastSentMessageTimeoutId != nil) {
@@ -436,8 +479,9 @@ extension Chat {
     
     
     func pushMessageHandler(params: JSON) {
-        print("\n On Chat")
-        print(":: receive message: \n \(params)\n")
+        
+        log.info("receive message: \n \(params)", context: "Chat")
+        
         /**
          * + Message Received From Async      {object}
          *    - id                            {long}
@@ -459,8 +503,9 @@ extension Chat {
     
     
     func receivedMessageHandler(params: JSON) {
-        print("\n On Chat")
-        print(":: content of received message: \n \(params)\n")
+        
+        log.info("content of received message: \n \(params)", context: "Chat")
+        
         /*
          * + Chat Message Received Content  {object}
          *    - threadId                    {long}
@@ -489,7 +534,7 @@ extension Chat {
         
         switch type {
         case chatMessageVOTypes.CREATE_THREAD.rawValue:
-            print("\n:: On Chat:\n Message CREATE_THREAD recieved\n")
+            log.info("Message of type 'CREATE_THREAD' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
                 let threadData = Conversation(messageContent: messageContent).formatToJSON()
                 delegate?.threadEvents(type: "THREAD_NEW", result: threadData)
@@ -504,11 +549,12 @@ extension Chat {
             break
             
         case chatMessageVOTypes.MESSAGE.rawValue:
+            log.info("Message of type 'MESSAGE' recieved", context: "Chat")
             chatMessageHandler(threadId: threadId, messageContent: messageContent)
             break
             
         case chatMessageVOTypes.SENT.rawValue:
-            print("\n:: On Chat:\n Message SENT recieved\n")
+            log.info("Message of type 'SENT' recieved", context: "Chat")
             if Chat.mapOnSent[uniqueId] != nil {
                 let callback: CallbackProtocolWith3Calls = Chat.mapOnSent[uniqueId]!
                 messageContent = ["messageId": params["content"].stringValue]
@@ -520,8 +566,7 @@ extension Chat {
             break
             
         case chatMessageVOTypes.DELIVERY.rawValue:
-            print("\n:: On Chat:\n Message DELIVERY recieved\n")
-            
+            log.info("Message of type 'DELIVERY' recieved", context: "Chat")
             let paramsToSend: JSON = ["offset": 0,
                                       "threadId": threadId,
                                       "id": messageContent["messageId"].int ?? NSNull()]
@@ -578,8 +623,7 @@ extension Chat {
             break
             
         case chatMessageVOTypes.SEEN.rawValue:
-            print("\n:: On Chat:\n Message SEEN recieved\n")
-            
+            log.info("Message of type 'SEEN' recieved", context: "Chat")
             let paramsToSend: JSON = ["offset": 0,
                                       "threadId": threadId,
                                       "id": messageContent["messageId"].int ?? NSNull()]
@@ -635,10 +679,11 @@ extension Chat {
             break
             
         case chatMessageVOTypes.PING.rawValue:
+            log.info("Message of type 'PING' recieved", context: "Chat")
             break
             
         case chatMessageVOTypes.BLOCK.rawValue:
-            print("\n:: On Chat:\n Message BLOCK recieved\n")
+            log.info("Message of type 'BLOCK' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount)
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
@@ -650,7 +695,7 @@ extension Chat {
             break
             
         case chatMessageVOTypes.UNBLOCK.rawValue:
-            print("\n:: On Chat:\n Message UNBLOCK recieved\n")
+            log.info("Message of type 'UNBLOCK' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount)
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
@@ -662,7 +707,7 @@ extension Chat {
             break
             
         case chatMessageVOTypes.LEAVE_THREAD.rawValue:
-            print("\n:: On Chat:\n Message LEAVE_THREAD recieved\n")
+            log.info("Message of type 'LEAVE_THREAD' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount)
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
@@ -696,7 +741,7 @@ extension Chat {
             //
             break
         case chatMessageVOTypes.ADD_PARTICIPANT.rawValue:
-            print("\n:: On Chat:\n Message ADD_PARTICIPANT recieved\n")
+            log.info("Message of type 'ADD_PARTICIPANT' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount)
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
@@ -720,7 +765,7 @@ extension Chat {
             break
             
         case chatMessageVOTypes.GET_CONTACTS.rawValue:
-            print("\n:: On Chat:\n Message GET_CONTACTS recieved\n")
+            log.info("Message of type 'GET_CONTACTS' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount)
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
@@ -732,7 +777,7 @@ extension Chat {
             break
             
         case chatMessageVOTypes.GET_THREADS.rawValue:
-            print("\n:: On Chat:\n Message GET_THREADS recieved\n")
+            log.info("Message of type 'GET_THREADS' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount)
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
@@ -744,7 +789,7 @@ extension Chat {
             break
             
         case chatMessageVOTypes.GET_HISTORY.rawValue:
-            print("\n:: On Chat:\n Message GET_HISTORY recieved\n")
+            log.info("Message of type 'GET_HISTORY' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount)
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
@@ -761,7 +806,7 @@ extension Chat {
             break
             
         case chatMessageVOTypes.REMOVE_PARTICIPANT.rawValue:
-            print("\n:: On Chat:\n Message REMOVE_PARTICIPANT recieved\n")
+            log.info("Message of type 'REMOVE_PARTICIPANT' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount)
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
@@ -784,7 +829,7 @@ extension Chat {
             break
             
         case chatMessageVOTypes.MUTE_THREAD.rawValue:
-            print("\n:: On Chat:\n Message MUTE_THREAD recieved\n")
+            log.info("Message of type 'MUTE_THREAD' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: nil, resultAsString: messageContentAsString, contentCount: nil)
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
@@ -806,7 +851,7 @@ extension Chat {
             break
             
         case chatMessageVOTypes.UNMUTE_THREAD.rawValue:
-            print("\n:: On Chat:\n Message MUTE_THREAD recieved\n")
+            log.info("Message of type 'UNMUTE_THREAD' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: nil, resultAsString: messageContentAsString, contentCount: nil)
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
@@ -828,7 +873,7 @@ extension Chat {
             break
             
         case chatMessageVOTypes.UPDATE_THREAD_INFO.rawValue:
-            print("\n:: On Chat:\n Message UPDATE_THREAD_INFO recieved\n")
+            log.info("Message of type 'UPDATE_THREAD_INFO' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: nil)
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
@@ -850,11 +895,12 @@ extension Chat {
             break
             
         case chatMessageVOTypes.FORWARD_MESSAGE.rawValue:
+            log.info("Message of type 'FORWARD_MESSAGE' recieved", context: "Chat")
             chatMessageHandler(threadId: threadId, messageContent: messageContent)
             break
             
         case chatMessageVOTypes.USER_INFO.rawValue:
-            print("\n:: On Chat:\n Message USER_INFO recieved\n")
+            log.info("Message of type 'USER_INFO' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: nil)
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
@@ -873,7 +919,7 @@ extension Chat {
             }
             break
         case chatMessageVOTypes.GET_BLOCKED.rawValue:
-            print("\n:: On Chat:\n Message GET_BLOCKED recieved\n")
+            log.info("Message of type 'GET_BLOCKED' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount)
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
@@ -884,7 +930,7 @@ extension Chat {
             }
             break
         case chatMessageVOTypes.THREAD_PARTICIPANTS.rawValue:
-            print("\n:: On Chat:\n Message THREAD_PARTICIPANTS recieved\n")
+            log.info("Message of type 'THREAD_PARTICIPANTS' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount)
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
@@ -896,7 +942,7 @@ extension Chat {
             break
             
         case chatMessageVOTypes.EDIT_MESSAGE.rawValue:
-            print("\n:: On Chat:\n Message EDIT_MESSAGE recieved\n")
+            log.info("Message of type 'EDIT_MESSAGE' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount)
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
@@ -909,7 +955,7 @@ extension Chat {
             break
             
         case chatMessageVOTypes.DELETE_MESSAGE.rawValue:
-            print("\n:: On Chat:\n Message DELETE_MESSAGE recieved\n")
+            log.info("Message of type 'DELETE_MESSAGE' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount)
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
@@ -921,35 +967,62 @@ extension Chat {
             break
             
         case chatMessageVOTypes.THREAD_INFO_UPDATED.rawValue:
+            log.info("Message of type 'THREAD_INFO_UPDATED' recieved", context: "Chat")
             let conversation: Conversation = Conversation(messageContent: messageContent)
             let result: JSON = ["thread": conversation]
             delegate?.threadEvents(type: "THREAD_INFO_UPDATED", result: result)
             break
             
         case chatMessageVOTypes.LAST_SEEN_UPDATED.rawValue:
+            log.info("Message of type 'LAST_SEEN_UPDATED' recieved", context: "Chat")
             let paramsToSend: JSON = ["threadIds": messageContent["conversationId"].intValue]
             getThreads(params: paramsToSend, uniqueId: { _ in }) { (myResponse) in
                 let myResponseModel: GetThreadsModel = myResponse as! GetThreadsModel
                 let myResponseJSON: JSON = myResponseModel.returnDataAsJSON()
                 let threads = myResponseJSON["result"]["threads"].arrayValue
                 
-                let result: JSON = ["thread": threads[0],
+                let result: JSON = ["thread": threads,
                                     "messageId": messageContent["messageId"].intValue,
                                     "senderId": messageContent["participantId"].intValue]
                 self.delegate?.threadEvents(type: "THREAD_UNREAD_COUNT_UPDATED", result: result)
                 
-                let result2: JSON = ["thread": threads[0]]
+                let result2: JSON = ["thread": threads]
                 self.delegate?.threadEvents(type: "THREAD_LAST_ACTIVITY_TIME", result: result2)
             }
             break
             
+        case chatMessageVOTypes.GET_MESSAGE_DELEVERY_PARTICIPANTS.rawValue:
+            log.info("Message of type 'GET_MESSAGE_DELEVERY_PARTICIPANTS' recieved", context: "Chat")
+            if Chat.map[uniqueId] != nil {
+                let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount)
+                let callback: CallbackProtocol = Chat.map[uniqueId]!
+                callback.onResultCallback(uID: uniqueId, response: returnData, success: { (successJSON) in
+                    self.getMessageDeliverListCallbackToUser?(successJSON)
+                }) { _ in }
+                Chat.map.removeValue(forKey: uniqueId)
+            }
+            break
+            
+        case chatMessageVOTypes.GET_MESSAGE_SEEN_PARTICIPANTS.rawValue:
+            log.info("Message of type 'GET_MESSAGE_SEEN_PARTICIPANTS' recieved", context: "Chat")
+            if Chat.map[uniqueId] != nil {
+                let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount)
+                let callback: CallbackProtocol = Chat.map[uniqueId]!
+                callback.onResultCallback(uID: uniqueId, response: returnData, success: { (successJSON) in
+                    self.getMessageSeenListCallbackToUser?(successJSON)
+                }) { _ in }
+                Chat.map.removeValue(forKey: uniqueId)
+            }
+            break
+            
         case chatMessageVOTypes.BOT_MESSAGE.rawValue:
+            log.info("Message of type 'BOT_MESSAGE' recieved", context: "Chat")
             //            let result: JSON = ["bot": messageContent]
             //            self.delegate?.botEvents(type: "BOT_MESSAGE", result: result)
             break
             
         case chatMessageVOTypes.SPAM_PV_THREAD.rawValue:
-            print("\n:: On Chat:\n Message SPAM_PV_THREAD recieved\n")
+            log.info("Message of type 'SPAM_PV_THREAD' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: nil)
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
@@ -961,7 +1034,7 @@ extension Chat {
             break
             
         case chatMessageVOTypes.ERROR.rawValue:
-            //            print("\n:: On Chat:\n Message Error recieved\n")
+            log.info("Message of type 'ERROR' recieved", context: "Chat")
             //            if Chat.map[uniqueId] != nil {
             //                let message: String = messageContent["message"].stringValue
             //                let code: Int = messageContent["code"].intValue
@@ -983,7 +1056,7 @@ extension Chat {
             break
             
         default:
-            //
+            log.warning("This type of message is not defined yet!!!", context: "Chat")
             break
         }
     }
@@ -1093,9 +1166,9 @@ extension Chat {
     
     
     public func getUserInfo(uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        print("\n On Chat")
-        print(":: \t Try to request to get user info \n")
-        let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.USER_INFO.rawValue]
+        log.info("Try to request to get user info", context: "Chat")
+        let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.USER_INFO.rawValue,
+                                       "typeCode": generalTypeCode]
         sendMessageWithCallback(params: sendMessageParams, callback: UserInfoCallback(), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (getUserInfoUniqueId) in
             uniqueId(getUserInfoUniqueId)
         }
@@ -1105,32 +1178,35 @@ extension Chat {
     
     
     public func getContacts(params: JSON?, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        print("\n On Chat")
-        print(":: \t Try to request to get Contacts with this parameters:")
-        print("\(params ?? "??") \n")
+        log.info("Try to request to get Contacts with this parameters: \n \(params ?? "params is empty!")", context: "Chat")
         
+        var myTypeCode: Int = generalTypeCode
         var content: JSON = ["count": 50, "offset": 0]
         if let parameters = params {
             if let count = parameters["count"].int {
                 if count > 0 {
                     content["count"] = JSON(count)
                     content["size"] = JSON(count)
-                    //                    content.appendIfDictionary(key: "count", json: JSON(count))
                 }
             }
+            
             if let offset = parameters["offset"].int {
                 if offset > 0 {
                     content["offset"] = JSON(offset)
-                    //                    content.appendIfDictionary(key: "offset", json: JSON(offset))
                 }
             }
+            
             if let name = parameters["name"].string {
                 content["name"] = JSON(name)
-                //                content.appendIfDictionary(key: "name", json: JSON(name))
+            }
+            
+            if let typeCode = parameters["typeCode"].int {
+                myTypeCode = typeCode
             }
         }
         
         let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_CONTACTS.rawValue,
+                                       "typeCode": myTypeCode,
                                        "content": content]
         sendMessageWithCallback(params: sendMessageParams, callback: GetContactsCallback(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (getContactUniqueId) in
             uniqueId(getContactUniqueId)
@@ -1140,40 +1216,52 @@ extension Chat {
     
     
     public func getThreads(params: JSON?, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        print("\n On Chat")
-        print(":: \t Try to request to get threads with this parameters:")
-        print("\(params ?? "params is empty") \n")
+        log.info("Try to request to get threads with this parameters: \n \(params ?? "params is empty!")", context: "Chat")
+        
+        var myTypeCode: Int = generalTypeCode
         
         var content: JSON = ["count": 50, "offset": 0]
+        
         if let parameters = params {
             if let count = parameters["count"].int {
                 if count > 0 {
                     content["count"] = JSON(count)
-                    //                    content.appendIfDictionary(key: "count", json: JSON(count))
                 }
             }
+            
             if let offset = parameters["offset"].int {
                 if offset > 0 {
                     content["offset"] = JSON(offset)
-                    //                    content.appendIfDictionary(key: "offset", json: JSON(offset))
                 }
             }
+            
             if let name = parameters["name"].string {
                 content["name"] = JSON(name)
-                //                content.appendIfDictionary(key: "name", json: JSON(name))
-                
             }
+            
             if let new = parameters["new"].bool {
                 content["new"] = JSON(new)
-                //                content.appendIfDictionary(key: "new", json: JSON(new))
             }
+            
             if let threadIds = parameters["threadIds"].arrayObject {
                 content["threadIds"] = JSON(threadIds)
-                //                content.appendIfDictionary(key: "threadIds", json: JSON(threadIds))
             }
+            
+            if let typeCode = parameters["typeCode"].int {
+                myTypeCode = typeCode
+            }
+            
+            if let metadataCriteria = parameters["metadataCriteria"].string {
+                content["metadataCriteria"] = JSON(metadataCriteria)
+            } else if (parameters["metadataCriteria"] != JSON.null) {
+                content["metadataCriteria"] = parameters["metadataCriteria"]
+            }
+            
         }
+        
         let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_THREADS.rawValue,
-                                       "content": content]
+                                       "content": content,
+                                       "typeCode": myTypeCode]
         
         sendMessageWithCallback(params: sendMessageParams, callback: GetThreadsCallbacks(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (getThreadUniqueId) in
             uniqueId(getThreadUniqueId)
@@ -1183,52 +1271,51 @@ extension Chat {
     
     
     public func getHistory(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        print("\n On Chat")
-        print(":: \t Try to request to get history with this parameters:")
-        print("\(params) \n")
+        log.info("Try to request to get history with this parameters: \n \(params)", context: "Chat")
         
         var content: JSON = ["count": 50, "offset": 0]
         if let count = params["count"].int {
             if count > 0 {
                 content["count"] = JSON(count)
-                //                content.appendIfDictionary(key: "count", json: JSON(count))
             }
         }
+        
         if let offset = params["offset"].int {
             if offset > 0 {
                 content["offset"] = JSON(offset)
-                //                content.appendIfDictionary(key: "offset", json: JSON(offset))
             }
         }
+        
         if let firstMessageId = params["firstMessageId"].int {
             if firstMessageId > 0 {
                 content["firstMessageId"] = JSON(firstMessageId)
-                //                content.appendIfDictionary(key: "firstMessageId", json: JSON(firstMessageId))
             }
         }
+        
         if let lastMessageId = params["lastMessageId"].int {
             if lastMessageId > 0 {
                 content["lastMessageId"] = JSON(lastMessageId)
-                //                content.appendIfDictionary(key: "lastMessageId", json: JSON(lastMessageId))
             }
         }
+        
         if let order = params["order"].string {
             content["order"] = JSON(order)
-            //            content.appendIfDictionary(key: "order", json: JSON(order))
         }
+        
         if let query = params["query"].string {
             content["query"] = JSON(query)
-            //            content.appendIfDictionary(key: "query", json: JSON(query))
         }
+        
         if let metadataCriteria = params["metadataCriteria"].string {
             content["metadataCriteria"] = JSON(metadataCriteria)
-            //            content.appendIfDictionary(key: "metadataCriteria", json: JSON(metadataCriteria))
         } else if (params["metadataCriteria"] != JSON.null) {
             content["metadataCriteria"] = params["metadataCriteria"]
         }
         
+        
         let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_HISTORY.rawValue,
                                        "content": content,
+                                       "typeCode": params["typeCode"].int ?? generalTypeCode,
                                        "subjectId": params["threadId"].intValue]
         
         sendMessageWithCallback(params: sendMessageParams, callback: GetHistoryCallbacks(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (getHistoryUniqueId) in
@@ -1239,48 +1326,54 @@ extension Chat {
     
     
     public func getThreadParticipants(params: JSON?, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        print("\n On Chat")
-        print(":: \t Try to request to get thread participants with this parameters:")
-        print("\(params ?? "params is empty") \n")
+        log.info("Try to request to get thread participants with this parameters: \n \(params ?? "params is empty")", context: "Chat")
         
+        var myTypeCode = generalTypeCode
         var content: JSON = ["count": getHistoryCount, "offset": 0]
         var subjectId: Int = 0
         
         if let parameters = params {
+            
             if let subId = parameters["threadId"].int {
                 subjectId = subId
             }
+            
             if let count = parameters["count"].int {
                 if count > 0 {
                     content["count"] = JSON(count)
-                    //                    content.appendIfDictionary(key: "count", json: JSON(count))
                 }
             }
+            
             if let offset = parameters["offset"].int {
                 if offset > 0 {
                     content["offset"] = JSON(offset)
-                    //                    content.appendIfDictionary(key: "offset", json: JSON(offset))
                 }
             }
+            
             if let firstMessageId = parameters["firstMessageId"].int {
                 if firstMessageId > 0 {
                     content["firstMessageId"] = JSON(firstMessageId)
-                    //                    content.appendIfDictionary(key: "firstMessageId", json: JSON(firstMessageId))
                 }
             }
+            
             if let lastMessageId = parameters["lastMessageId"].int {
                 if lastMessageId > 0 {
                     content["lastMessageId"] = JSON(lastMessageId)
-                    //                    content.appendIfDictionary(key: "lastMessageId", json: JSON(lastMessageId))
                 }
             }
+            
             if let name = parameters["name"].string {
                 content["name"] = JSON(name)
-                //                content.appendIfDictionary(key: "name", json: JSON(name))
             }
+            
+            if let typeCode = parameters["typeCode"].int {
+                myTypeCode = typeCode
+            }
+            
         }
         
         let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.THREAD_PARTICIPANTS.rawValue,
+                                       "typeCode": myTypeCode,
                                        "content": content,
                                        "subjectId": subjectId]
         sendMessageWithCallback(params: sendMessageParams, callback: GetThreadParticipantsCallbacks(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (getParticipantsUniqueId) in
@@ -1290,10 +1383,40 @@ extension Chat {
     }
     
     
-    public func createThread(params: JSON?, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        print("\n On Chat")
-        print(":: \t Try to request to create thread with this parameters:")
-        print("\(params ?? "params is empty") \n")
+    public func createThreadAndSendMessage(params: JSON?, sendMessageParams: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias, onSent: @escaping callbackTypeAlias, onDelivere: @escaping callbackTypeAlias, onSeen: @escaping callbackTypeAlias) {
+        log.info("Try to request to create thread and Send Message participants with this parameters: \n \(params ?? "params is empty")", context: "Chat")
+        
+        var myUniqueId: String = ""
+        createThread(params: params, uniqueId: { (createThreadUniqueId) in
+            myUniqueId = createThreadUniqueId
+            uniqueId(createThreadUniqueId)
+        }) { (myCreateThreadResponse) in
+            
+            let myResponseModel: CreateThreadModel = myCreateThreadResponse as! CreateThreadModel
+            let myResponseJSON: JSON = myResponseModel.returnDataAsJSON()
+            
+            var sendParams: JSON = sendMessageParams
+            sendParams["uniqueId"] = JSON(myUniqueId)
+            if let theId = myResponseJSON["result"]["thread"]["id"].int {
+                sendParams["subjectId"] = JSON(theId)
+            }
+            
+            self.sendTextMessage(params: sendParams, uniqueId: { _ in }, onSent: { (isSent) in
+                onSent(isSent)
+            }, onDelivere: { (isDeliver) in
+                onDelivere(isDeliver)
+            }, onSeen: { (isSeen) in
+                onSeen(isSeen)
+            })
+            
+        }
+        
+    }
+    
+    
+    func createThread(params: JSON?, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+        log.info("Try to request to create thread participants with this parameters: \n \(params ?? "params is empty")", context: "Chat")
+        
         /**
          * + CreateThreadRequest    {object}
          *    - ownerSsoId          {string}
@@ -1316,7 +1439,7 @@ extension Chat {
                 case createThreadTypes.PUBLIC_GROUP.rawValue: theType = 2
                 case createThreadTypes.CHANNEL_GROUP.rawValue: theType = 4
                 case createThreadTypes.CHANNEL.rawValue: theType = 8
-                default: print("not valid thread type on create thread")
+                default: log.error("not valid thread type on create thread", context: "Chat")
                 }
                 content.appendIfDictionary(key: "type", json: JSON(theType))
             }
@@ -1325,26 +1448,23 @@ extension Chat {
             }
             
             if let invitees = parameters["invitees"].array {
-                //                var tempInvitee = []
-                //                for item in invitees {
-                //                    tempInvitee.append(item)
-                //                }
                 content.appendIfDictionary(key: "invitees", json: JSON(invitees))
             }
         }
-        let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.CREATE_THREAD.rawValue,
-                                       "content": content]
-        sendMessageWithCallback(params: sendMessageParams, callback: CreateThreadCallback(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (createThreadUniqueId) in
+        let sendMessageCreateThreadParams: JSON = ["chatMessageVOType": chatMessageVOTypes.CREATE_THREAD.rawValue,
+                                                   "content": content]
+        sendMessageWithCallback(params: sendMessageCreateThreadParams, callback: CreateThreadCallback(parameters: sendMessageCreateThreadParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (createThreadUniqueId) in
             uniqueId(createThreadUniqueId)
         }
+        
         createThreadCallbackToUser = completion
+        
     }
     
     
     public func addParticipants(params: JSON?, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        print("\n On Chat")
-        print(":: \t Try to request to add participants with this parameters:")
-        print("\(params ?? "params is empty") \n")
+        log.info("Try to request to add participants with this parameters: \n \(params ?? "params is empty")", context: "Chat")
+        
         /*
          * + AddParticipantsRequest   {object}
          *    - subjectId             {long}
@@ -1356,6 +1476,7 @@ extension Chat {
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.ADD_PARTICIPANT.rawValue]
         
         if let parameters = params {
+            
             if let threadId = parameters["threadId"].int {
                 if (threadId > 0) {
                     sendMessageParams["subjectId"] = JSON(threadId)
@@ -1365,6 +1486,13 @@ extension Chat {
             if let contacts = parameters["contacts"].arrayObject {
                 sendMessageParams["content"] = JSON(contacts)
             }
+            
+            if let typeCode = parameters["typeCode"].int {
+                sendMessageParams["typeCode"] = JSON(typeCode)
+            } else {
+                sendMessageParams["typeCode"] = JSON(generalTypeCode)
+            }
+            
         }
         
         sendMessageWithCallback(params: sendMessageParams, callback: AddParticipantsCallback(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (addParticipantsUniqueId) in
@@ -1375,9 +1503,8 @@ extension Chat {
     
     
     public func removeParticipants(params: JSON?, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        print("\n On Chat")
-        print(":: \t Try to request to remove participants with this parameters:")
-        print("\(params ?? "params is empty") \n")
+        log.info("Try to request to remove participants with this parameters: \n \(params ?? "params is empty")", context: "Chat")
+        
         /*
          * + RemoveParticipantsRequest    {object}
          *    - subjectId                 {long}
@@ -1389,6 +1516,7 @@ extension Chat {
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.REMOVE_PARTICIPANT.rawValue]
         
         if let parameters = params {
+            
             if let threadId = parameters["threadId"].int {
                 if (threadId > 0) {
                     sendMessageParams["subjectId"] = JSON(threadId)
@@ -1398,6 +1526,13 @@ extension Chat {
             if (parameters["participants"] != JSON.null) {
                 sendMessageParams["content"] = JSON(parameters["participants"])
             }
+            
+            if let typeCode = parameters["typeCode"].int {
+                sendMessageParams["typeCode"] = JSON(typeCode)
+            } else {
+                sendMessageParams["typeCode"] = JSON(generalTypeCode)
+            }
+            
         }
         
         sendMessageWithCallback(params: sendMessageParams, callback: RemoveParticipantsCallback(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (removeParticipantsUniqueId) in
@@ -1407,7 +1542,7 @@ extension Chat {
     }
     
     
-    func makeCustomTextToSend(textMessage: String) -> String {
+    public func makeCustomTextToSend(textMessage: String) -> String {
         var returnStr = ""
         for c in textMessage {
             if (c == " ") {
@@ -1425,9 +1560,7 @@ extension Chat {
     
     
     public func sendTextMessage(params: JSON, uniqueId: @escaping (String) -> (), onSent: @escaping callbackTypeAlias, onDelivere: @escaping callbackTypeAlias, onSeen: @escaping callbackTypeAlias) {
-        print("\n On Chat")
-        print(":: \t Try to send Message with this parameters:")
-        print("\(params) \n")
+        log.info("Try to send Message with this parameters: \n \(params)", context: "Chat")
         
         //        var metaData: JSON = [:]
         //        metaData = params["metaData"]
@@ -1435,35 +1568,35 @@ extension Chat {
         
         let messageTxtContent = makeCustomTextToSend(textMessage: params["content"].stringValue)
         
-        let content: JSON = ["content": messageTxtContent]
-        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.MESSAGE.rawValue, "pushMsgType": 4,
-                                       "content": content]
+        // wrap the message in onother layer
+        //        let content: JSON = ["content": messageTxtContent]
+        //        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.MESSAGE.rawValue, "pushMsgType": 4,
+        //                                       "content": content]
+        
+        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.MESSAGE.rawValue,
+                                       "pushMsgType": 4,
+                                       "typeCode": params["typeCode"].int ?? generalTypeCode,
+                                       "content": messageTxtContent]
         //        content.appendIfDictionary(key: "metaData", json: JSON(metaDataStr))
         
         if let threadId = params["subjectId"].int {
             sendMessageParams["subjectId"] = JSON(threadId)
-            //            content.appendIfDictionary(key: "subjectId", json: JSON(threadId))
         }
         if let repliedTo = params["repliedTo"].int {
             sendMessageParams["repliedTo"] = JSON(repliedTo)
-            //            content.appendIfDictionary(key: "repliedTo", json: JSON(repliedTo))
         }
-        //        if let theContent = params["content"].string {
-        //            content["≈"] = JSON(theContent)
-        ////            content.appendIfDictionary(key: "content", json: JSON(theContent))
-        //        }
+        
         if let uniqueId = params["uniqueId"].string {
             sendMessageParams["uniqueId"] = JSON(uniqueId)
-            //            content.appendIfDictionary(key: "uniqueId", json: JSON(uniqueId))
         }
+        
         if let systemMetadata = params["systemMetadata"].arrayObject {
             sendMessageParams["systemMetadata"] = JSON(systemMetadata)
-            //            content.appendIfDictionary(key: "systemMetadata", json: JSON(systemMetadata))
         }
+        
         if let metaData = params["metaData"].arrayObject {
             let metaDataStr = "\(metaData)"
             sendMessageParams["metaData"] = JSON(metaDataStr)
-            //            content.appendIfDictionary(key: "metaData", json: JSON(metaDataStr))
         }
         
         
@@ -1479,14 +1612,13 @@ extension Chat {
     
     
     public func editMessage(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        print("\n On Chat")
-        print(":: \t Try to request to edit message with this parameters:")
-        print("\(params)\n")
+        log.info("Try to request to edit message with this parameters: \n \(params)", context: "Chat")
         
         let messageTxtContent = makeCustomTextToSend(textMessage: params["content"].stringValue)
         
         let content: JSON = ["content": messageTxtContent]
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.EDIT_MESSAGE.rawValue,
+                                       "typeCode": params["typeCode"].int ?? generalTypeCode,
                                        "pushMsgType": 4,
                                        "content": content]
         
@@ -1512,13 +1644,12 @@ extension Chat {
     
     
     public func deleteMessage(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        print("\n On Chat")
-        print(":: \t Try to request to edit message with this parameters:")
-        print("\(params)\n")
+        log.info("Try to request to edit message with this parameters: \n \(params)", context: "Chat")
         
         let deleteForAllVar = params["deleteForAll"]
         let content: JSON = ["deleteForAll": "\(deleteForAllVar)"]
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.DELETE_MESSAGE.rawValue,
+                                       "typeCode": params["typeCode"].int ?? generalTypeCode,
                                        "pushMsgType": 4,
                                        "content": content]
         if let threadId = params["subjectId"].int {
@@ -1536,14 +1667,13 @@ extension Chat {
     
     
     public func replyMessageWith3Callbacks(params: JSON, uniqueId: @escaping (String) -> (), onSent: @escaping callbackTypeAlias, onDelivere: @escaping callbackTypeAlias, onSeen: @escaping callbackTypeAlias) {
-        print("\n On Chat")
-        print(":: \t Try to reply Message with this parameters:")
-        print("\(params) \n")
+        log.info("Try to reply Message with this parameters: \n \(params)", context: "Chat")
         
         let messageTxtContent = makeCustomTextToSend(textMessage: params["content"].stringValue)
         
         let content: JSON = ["content": messageTxtContent]
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.MESSAGE.rawValue,
+                                       "typeCode": params["typeCode"].int ?? generalTypeCode,
                                        "pushMsgType": 4,
                                        "content": content]
         
@@ -1583,6 +1713,7 @@ extension Chat {
         var uniqueIdsList: [String] = []
         //            let content: JSON = ["content": "\(messageIdsList)"]
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.FORWARD_MESSAGE.rawValue,
+                                       "typeCode": params["typeCode"].int ?? generalTypeCode,
                                        "pushMsgType": 4,
                                        "content": "\(messageIdsList)"]
         
@@ -2035,7 +2166,8 @@ extension Chat {
         let messageUniqueId = generateUUID()
         uniqueId(messageUniqueId)
         
-        var paramsToSendToSendMessage: JSON = ["uniqueId": messageUniqueId]
+        var paramsToSendToSendMessage: JSON = ["uniqueId": messageUniqueId,
+                                               "typeCode": textMessagParams["typeCode"].int ?? generalTypeCode]
         
         if let subjectId = textMessagParams["subjectId"].int {
             paramsToSendToSendMessage["subjectId"] = JSON(subjectId)
@@ -2110,11 +2242,10 @@ extension Chat {
     
     
     public func muteThread(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        print("\n On Chat")
-        print(":: \t Try to request to mute threads with this parameters:")
-        print("\(params) \n")
+        log.info("Try to request to mute threads with this parameters: \n \(params)", context: "Chat")
         
         let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.MUTE_THREAD.rawValue,
+                                       "typeCode": params["typeCode"].int ?? generalTypeCode,
                                        "subjectId": params["subjectId"].intValue]
         
         sendMessageWithCallback(params: sendMessageParams, callback: MuteThreadCallbacks(), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (muteThreadUniqueId) in
@@ -2125,11 +2256,10 @@ extension Chat {
     
     
     public func unmuteThread(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        print("\n On Chat")
-        print(":: \t Try to request to mute threads with this parameters:")
-        print("\(params) \n")
+        log.info("Try to request to unmute threads with this parameters: \n \(params)", context: "Chat")
         
         let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.UNMUTE_THREAD.rawValue,
+                                       "typeCode": params["typeCode"].int ?? generalTypeCode,
                                        "subjectId": params["subjectId"].intValue]
         
         sendMessageWithCallback(params: sendMessageParams, callback: UnmuteThreadCallbacks(), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (muteThreadUniqueId) in
@@ -2183,6 +2313,12 @@ extension Chat {
             data["offset"] = JSON(offset)
         } else { data["offset"] = JSON(0) }
         
+        if let typeCode = params["typeCode"].int {
+            data["typeCode"] = JSON(typeCode)
+        } else {
+            data["typeCode"] = JSON(generalTypeCode)
+        }
+        
         
         let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.SEARCH_CONTACTS.rawValue)"
         let method: HTTPMethod = HTTPMethod.post
@@ -2198,11 +2334,10 @@ extension Chat {
     
     
     public func updateThreadInfo(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        print("\n On Chat")
-        print(":: \t Try to request to update thread info with this parameters:")
-        print("\(params) \n")
+        log.info("Try to request to update thread info with this parameters: \n \(params)", context: "Chat")
         
-        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.UPDATE_THREAD_INFO.rawValue]
+        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.UPDATE_THREAD_INFO.rawValue,
+                                       "typeCode": params["typeCode"].int ?? generalTypeCode]
         
         if let threadId = params["subjectId"].int {
             sendMessageParams["threadId"] = JSON(threadId)
@@ -2244,11 +2379,10 @@ extension Chat {
     
     
     public func blockContact(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        print("\n On Chat")
-        print(":: \t Try to request to block user with this parameters:")
-        print("\(params) \n")
+        log.info("Try to request to block user with this parameters: \n \(params)", context: "Chat")
         
-        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.BLOCK.rawValue]
+        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.BLOCK.rawValue,
+                                       "typeCode": params["typeCode"].int ?? generalTypeCode]
         
         var content: JSON = [:]
         
@@ -2266,11 +2400,10 @@ extension Chat {
     
     
     public func unblockContact(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        print("\n On Chat")
-        print(":: \t Try to request to unblock user with this parameters:")
-        print("\(params) \n")
+        log.info("Try to request to unblock user with this parameters: \n \(params)", context: "Chat")
         
-        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.UNBLOCK.rawValue]
+        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.UNBLOCK.rawValue,
+                                       "typeCode": params["typeCode"].int ?? generalTypeCode]
         
         if let subjectId = params["blockId"].int {
             sendMessageParams["subjectId"] = JSON(subjectId)
@@ -2284,24 +2417,33 @@ extension Chat {
     
     
     public func getBlockedContacts(params: JSON?, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        print("\n On Chat")
-        print(":: \t Try to request to get block users with this parameters:")
-        print("\(params ?? "there isn't any parameter") \n")
+        log.info("Try to request to get block users with this parameters: \n \(params ?? "there isn't any parameter")", context: "Chat")
+        
+        var myTypeCode = generalTypeCode
         
         var content: JSON = ["count": 50, "offset": 0]
         if let parameters = params {
+            
             if let count = parameters["count"].int {
                 if count > 0 {
                     content.appendIfDictionary(key: "count", json: JSON(count))
                 }
             }
+            
             if let offset = parameters["offset"].int {
                 if offset > 0 {
                     content.appendIfDictionary(key: "offset", json: JSON(offset))
                 }
             }
+            
+            if let typeCode = parameters["typeCode"].int {
+                myTypeCode = typeCode
+            }
+            
         }
+        
         let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_BLOCKED.rawValue,
+                                       "typeCode": myTypeCode,
                                        "content": content]
         
         sendMessageWithCallback(params: sendMessageParams, callback: GetBlockedContactsCallbacks(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (getBlockedUniqueId) in
@@ -2312,16 +2454,16 @@ extension Chat {
     
     
     public func leaveThread(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        print("\n On Chat")
-        print(":: \t Try to request to leave thread with this parameters:")
-        print("\(params) \n")
+        log.info("Try to request to leave thread with this parameters: \n \(params)", context: "Chat")
+        
         /**
          * + LeaveThreadRequest    {object}
          *    - subjectId          {long}
          *    - uniqueId           {string}
          */
         
-        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.LEAVE_THREAD.rawValue]
+        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.LEAVE_THREAD.rawValue,
+                                       "typeCode": params["typeCode"].int ?? generalTypeCode]
         
         if let subjectId = params["threadId"].int {
             sendMessageParams["subjectId"] = JSON(subjectId)
@@ -2336,7 +2478,8 @@ extension Chat {
     
     public func spamPvThread(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
         
-        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.SPAM_PV_THREAD.rawValue]
+        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.SPAM_PV_THREAD.rawValue,
+                                       "typeCode": params["typeCode"].int ?? generalTypeCode]
         
         if let subjectId = params["threadId"].int {
             sendMessageParams["subjectId"] = JSON(subjectId)
@@ -2349,12 +2492,81 @@ extension Chat {
     }
     
     
+    public func messageDeliveryList(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+        log.info("Try to request to get message deliver participants with this parameters: \n \(params)", context: "Chat")
+        
+        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_MESSAGE_DELEVERY_PARTICIPANTS.rawValue]
+        
+        var content: JSON = ["count": 50, "offset": 0]
+        
+        if let count = params["count"].int {
+            if count > 0 {
+                content["count"] = JSON(count)
+            }
+        }
+        
+        if let offset = params["offset"].int {
+            if offset > 0 {
+                content["offset"] = JSON(offset)
+            }
+        }
+        
+        if let typeCode = params["typeCode"].int {
+            sendMessageParams["typeCode"] = JSON(typeCode)
+        } else {
+            sendMessageParams["typeCode"] = JSON(generalTypeCode)
+        }
+        
+        sendMessageParams["content"] = content
+        
+        sendMessageWithCallback(params: sendMessageParams, callback: GetMessageDeliverList(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (messageDeliverListUniqueId) in
+            uniqueId(messageDeliverListUniqueId)
+        }
+        getMessageDeliverListCallbackToUser = completion
+    }
+    
+    
+    public func messageSeenList(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+        log.info("Try to request to get message seen participants with this parameters: \n \(params)", context: "Chat")
+        
+        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_MESSAGE_SEEN_PARTICIPANTS.rawValue]
+        
+        var content: JSON = ["count": 50, "offset": 0]
+        
+        if let count = params["count"].int {
+            if count > 0 {
+                content["count"] = JSON(count)
+            }
+        }
+        
+        if let offset = params["offset"].int {
+            if offset > 0 {
+                content["offset"] = JSON(offset)
+            }
+        }
+        
+        if let typeCode = params["typeCode"].int {
+            sendMessageParams["typeCode"] = JSON(typeCode)
+        } else {
+            sendMessageParams["typeCode"] = JSON(generalTypeCode)
+        }
+        
+        sendMessageParams["content"] = content
+        
+        sendMessageWithCallback(params: sendMessageParams, callback: GetMessageSeenList(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (messageSeenListUniqueId) in
+            uniqueId(messageSeenListUniqueId)
+        }
+        getMessageSeenListCallbackToUser = completion
+        
+    }
+    
     
     public func deliver(params: JSON) {
         if let theUserInfo = userInfo {
             if (params["ownerId"].intValue != theUserInfo["id"].intValue) {
                 let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.DELIVERY.rawValue,
                                                "content": params["messageId"].intValue,
+                                               "typeCode": params["typeCode"].int ?? generalTypeCode,
                                                "pushMsgType": 3]
                 sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: nil, deliverCallback: nil, seenCallback: nil, uniuqueIdCallback: nil)
             }
@@ -2406,8 +2618,7 @@ extension Chat {
     
     private class UserInfoCallback: CallbackProtocol {
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
-            print("\n On Chat")
-            print(":: \t UserInfoCallback \n")
+            log.info("UserInfoCallback", context: "Chat")
             
             let hasError = response["hasError"].boolValue
             let errorMessage = response["errorMessage"].stringValue
@@ -2432,8 +2643,7 @@ extension Chat {
             self.sendParams = parameters
         }
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
-            print("\n On Chat")
-            print(":: \t GetContacts \n")
+            log.info("GetContactsCallback", context: "Chat")
             
             var returnData: JSON = [:]
             
@@ -2467,8 +2677,7 @@ extension Chat {
             self.sendParams = parameters
         }
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
-            print("\n On Chat")
-            print(":: \t ThreadCallback \n")
+            log.info("GetThreadsCallbacks", context: "Chat")
             
             let hasError = response["hasError"].boolValue
             let errorMessage = response["errorMessage"].stringValue
@@ -2497,8 +2706,7 @@ extension Chat {
             self.sendParams = parameters
         }
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
-            print("\n On Chat")
-            print(":: \t HistoryCallback \n")
+            log.info("GetHistoryCallbacks", context: "Chat")
             
             let hasError = response["hasError"].boolValue
             let errorMessage = response["errorMessage"].stringValue
@@ -2526,8 +2734,7 @@ extension Chat {
             self.sendParams = parameters
         }
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
-            print("\n On Chat")
-            print(":: \t ThreadParticipantsCallback \n")
+            log.info("GetThreadParticipantsCallbacks", context: "Chat")
             
             let hasError = response["hasError"].boolValue
             let errorMessage = response["errorMessage"].stringValue
@@ -2550,13 +2757,12 @@ extension Chat {
     
     
     private class CreateThreadCallback: CallbackProtocol {
-        var sendParams: JSON
+        var mySendMessageParams: JSON
         init(parameters: JSON) {
-            self.sendParams = parameters
+            self.mySendMessageParams = parameters
         }
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
-            print("\n On Chat")
-            print(":: \t CreateThreads \n")
+            log.info("CreateThreadCallback", context: "Chat")
             
             let hasError = response["hasError"].boolValue
             let errorMessage = response["errorMessage"].stringValue
@@ -2568,20 +2774,16 @@ extension Chat {
                 let createThreadModel = CreateThreadModel(messageContent: resultData, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 
                 success(createThreadModel)
+                
             }
         }
+        
     }
     
     
     private class UpdateThreadInfoCallback: CallbackProtocol {
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
-            print("\n On Chat")
-            print(":: \t UpdateThreadInfoCallback \n")
-            print("++++++++++++++++++++++++++++")
-            print("++++++++++++++++++++++++++++")
-            print("\(response)")
-            print("++++++++++++++++++++++++++++")
-            print("++++++++++++++++++++++++++++")
+            log.info("UpdateThreadInfoCallback", context: "Chat")
             success(response)
         }
         
@@ -2594,8 +2796,7 @@ extension Chat {
             self.sendParams = parameters
         }
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
-            print("\n On Chat")
-            print(":: \t AddParticipantsCallback \n")
+            log.info("AddParticipantsCallback", context: "Chat")
             /*
              * + AddParticipantsRequest   {object}
              *    - subjectId             {long}
@@ -2625,8 +2826,7 @@ extension Chat {
             self.sendParams = parameters
         }
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
-            print("\n On Chat")
-            print(":: \t RemoveParticipantsCallback \n")
+            log.info("RemoveParticipantsCallback", context: "Chat")
             /*
              * + RemoveParticipantsRequest    {object}
              *    - subjectId                 {long}
@@ -2674,8 +2874,7 @@ extension Chat {
             self.sendParams = parameters
         }
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
-            print("\n On Chat")
-            print(":: \t EditMessage \n")
+            log.info("EditMessageCallbacks", context: "Chat")
             
             var returnData: JSON = [:]
             
@@ -2708,8 +2907,7 @@ extension Chat {
             self.sendParams = parameters
         }
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
-            print("\n On Chat")
-            print(":: \t EditMessage \n")
+            log.info("DeleteMessageCallbacks", context: "Chat")
             
             var returnData: JSON = [:]
             
@@ -2739,8 +2937,7 @@ extension Chat {
     
     private class MuteThreadCallbacks: CallbackProtocol {
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
-            print("\n On Chat")
-            print(":: \t MuteThreadCallback \n")
+            log.info("MuteThreadCallbacks", context: "Chat")
             
             success(response)
         }
@@ -2750,8 +2947,7 @@ extension Chat {
     
     private class UnmuteThreadCallbacks: CallbackProtocol {
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
-            print("\n On Chat")
-            print(":: \t UnmuteThreadCallback \n")
+            log.info("UnmuteThreadCallbacks", context: "Chat")
             
             success(response)
         }
@@ -2825,8 +3021,7 @@ extension Chat {
     
     private class LeaveThreadCallbacks: CallbackProtocol {
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
-            print("\n On Chat")
-            print(":: \t LeaveThreads \n")
+            log.info("LeaveThreadCallbacks", context: "Chat")
             
             let hasError = response["hasError"].boolValue
             let errorMessage = response["errorMessage"].stringValue
@@ -2845,12 +3040,72 @@ extension Chat {
     
     private class SpamPvThread: CallbackProtocol {
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
-            print("\n On Chat")
-            print(":: \t SpamPvThread \n")
+            log.info("SpamPvThread", context: "Chat")
             
             success(response)
         }
     }
+    
+    
+    
+    private class GetMessageDeliverList: CallbackProtocol {
+        var sendParams: JSON
+        init(parameters: JSON) {
+            self.sendParams = parameters
+        }
+        func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
+            
+            let hasError = response["hasError"].boolValue
+            let errorMessage = response["errorMessage"].stringValue
+            let errorCode = response["errorCode"].intValue
+            
+            if (!hasError) {
+                let content = sendParams["content"]
+                let count = content["count"].intValue
+                let offset = content["offset"].intValue
+                
+                let messageContent: [JSON] = response["result"].arrayValue
+                let contentCount = response["contentCount"].intValue
+                
+                let getBlockedModel = GetThreadParticipantsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+                
+                success(getBlockedModel)
+            }
+            
+        }
+        
+    }
+    
+    
+    
+    private class GetMessageSeenList: CallbackProtocol {
+        var sendParams: JSON
+        init(parameters: JSON) {
+            self.sendParams = parameters
+        }
+        func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
+            
+            let hasError = response["hasError"].boolValue
+            let errorMessage = response["errorMessage"].stringValue
+            let errorCode = response["errorCode"].intValue
+            
+            if (!hasError) {
+                let content = sendParams["content"]
+                let count = content["count"].intValue
+                let offset = content["offset"].intValue
+                
+                let messageContent: [JSON] = response["result"].arrayValue
+                let contentCount = response["contentCount"].intValue
+                
+                let getBlockedModel = GetThreadParticipantsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+                
+                success(getBlockedModel)
+            }
+            
+        }
+        
+    }
+    
     
     
 }

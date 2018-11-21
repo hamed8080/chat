@@ -15,34 +15,31 @@ import SwiftyJSON
 extension Chat: AsyncDelegates {
     
     public func asyncConnect(newPeerID: Int) {
-        print("\n On Chat")
-        print(":: \t DelegateComesFromAsync: Async Connected \n")
+        log.info("Async Connected", context: "Chat: DelegateComesFromAsync")
+        
         peerId = newPeerID
         delegate?.chatConnected()
     }
     
     public func asyncDisconnect() {
-        print("\n On Chat")
-        print(":: \t DelegateComesFromAsync: Async Disconnected \n")
+        log.info("Async Disconnected", context: "Chat: DelegateComesFromAsync")
+        
         oldPeerId = peerId
         peerId = nil
         delegate?.chatDisconnect()
     }
     
     public func asyncReconnect(newPeerID: Int) {
-        print("\n On Chat")
-        print(":: \t DelegateComesFromAsync: Async Reconnected \n")
+        log.info("Async Reconnected", context: "Chat: DelegateComesFromAsync")
+        
         peerId = newPeerID
         delegate?.chatReconnect()
     }
     
     public func asyncStateChanged(socketState: Int, timeUntilReconnect: Int, deviceRegister: Bool, serverRegister: Bool, peerId: Int) {
-        print("\n On Chat")
-        print(":: DelegateComesFromAsync: Chat state changed:")
-        print("socketState = \(socketState)")
-        print("timeUntilReconnect = \(timeUntilReconnect)")
-        print("deviceRegister = \(deviceRegister)")
-        print("serverRegister = \(serverRegister)\n")
+        let logMsg: String = "Chat state changed: \n|| socketState = \(socketState) \n|| timeUntilReconnect = \(timeUntilReconnect) \n|| deviceRegister = \(deviceRegister) \n|| serverRegister = \(serverRegister)"
+        log.info(logMsg, context: "Chat: DelegateComesFromAsync")
+        
         
         chatFullStateObject = ["socketState": socketState,
                                "timeUntilReconnect": timeUntilReconnect,
@@ -68,14 +65,14 @@ extension Chat: AsyncDelegates {
     }
     
     public func asyncError(errorCode: Int, errorMessage: String, errorEvent: Any?) {
-        print("\n On Chat")
-        print(":: \t DelegateComesFromAsync: Error comes from Async \n")
+        log.info("Error comes from Async", context: "Chat: DelegateComesFromAsync")
+        
         delegate?.chatError(errorCode: errorCode, errorMessage: errorMessage, errorResult: errorEvent)
     }
     
     public func asyncReady() {
-        print("\n On Chat")
-        print(":: \t DelegateComesFromAsync: Async Ready \n")
+        log.info("Async Ready", context: "Chat: DelegateComesFromAsync")
+        
         handleAsyncReady()
     }
     
@@ -92,20 +89,17 @@ extension Chat: AsyncDelegates {
     
     
     func handleAsyncReady() {
-        print("\n On Chat")
-        print(":: \t HandleAsyncReady \n")
+        log.info("HandleAsyncReady", context: "Chat")
+        
         peerId = asyncClient?.asyncGetPeerId()
         if userInfo == nil {
             if (getUserInfoRetryCount < getUserInfoRetry) {
                 getUserInfoRetryCount += 1
-                getUserInfo(uniqueId: { (uniqueIdStr) in
-                    // print(uniqueIdStr)
-                }) { (result) in
+                getUserInfo(uniqueId: { _ in }) { (result) in
                     let resultModel: UserInfoModel = result as! UserInfoModel
                     let resultJSON: JSON = resultModel.returnDataAsJSON()
                     
-                    print("\n On Chat")
-                    print(":: get info result comes, and save userInfo: \n \(resultJSON) \n")
+                    log.info("get info result comes, and save userInfo: \n \(resultJSON)", context: "Chat")
                     
                     if resultJSON["hasError"].boolValue == false {
                         self.userInfo = resultJSON["result"]["user"]

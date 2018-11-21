@@ -40,7 +40,7 @@ public protocol ChatDelegates: class {
     
     func messageEvents(type: String, result: JSON)
     func threadEvents(type: String, result: JSON)
-//    func botEvents(type: String, result: JSON)
+    //    func botEvents(type: String, result: JSON)
     func chatDeliver(messageId: Int, ownerId: Int)
 }
 

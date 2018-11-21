@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftyJSON
-
+import Async
 
 
 extension JSON {
@@ -38,10 +38,13 @@ struct formatDataFromStringToJSON {
                 let msg = try JSON(data: dataFromStringMsg)
                 return msg
             } catch {
-                print(":: error to convert income message String to JSON")
+                log.error("error to convert income message String to JSON", context: "formatStringToJSON")
                 return []
             }
-        } else { print("MyLog: error to get message from server"); return [] }
+        } else {
+            log.error("error to get message from server", context: "formatStringToJSON")
+            return []
+        }
     }
 }
 
