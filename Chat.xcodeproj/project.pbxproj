@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3E3D56FD21465BE1000A558F /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E3D56FC21465BE1000A558F /* Starscream.framework */; };
 		3E3E56792160A2F20084C8C1 /* ReplyMessageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E56782160A2F10084C8C1 /* ReplyMessageTest.swift */; };
 		3E3E56852160A30B0084C8C1 /* EditMessageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E56842160A30B0084C8C1 /* EditMessageTest.swift */; };
 		3E3E56872160A3280084C8C1 /* ForwardMessageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E56862160A3280084C8C1 /* ForwardMessageTest.swift */; };
@@ -84,6 +83,8 @@
 		3EE025FC21206E63001810FB /* ChatCreateTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE025FB21206E63001810FB /* ChatCreateTest.swift */; };
 		3EE025FE21206E63001810FB /* Chat.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EE025F021206E63001810FB /* Chat.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3EE0261721206EA6001810FB /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE0261621206EA6001810FB /* Chat.swift */; };
+		3EF2D3CC21A985BD005867C2 /* SeenMessageListTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF2D3CB21A985BD005867C2 /* SeenMessageListTest.swift */; };
+		3EF2D3D021A985D1005867C2 /* DeliverMessageListTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF2D3CF21A985D1005867C2 /* DeliverMessageListTest.swift */; };
 		3EFB24A121561F1800A498E1 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFB24A021561F1800A498E1 /* File.swift */; };
 /* End PBXBuildFile section */
 
@@ -112,7 +113,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		3E3D56FC21465BE1000A558F /* Starscream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Starscream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E3E56782160A2F10084C8C1 /* ReplyMessageTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyMessageTest.swift; sourceTree = "<group>"; };
 		3E3E56842160A30B0084C8C1 /* EditMessageTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMessageTest.swift; sourceTree = "<group>"; };
 		3E3E56862160A3280084C8C1 /* ForwardMessageTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForwardMessageTest.swift; sourceTree = "<group>"; };
@@ -190,6 +190,8 @@
 		3EE025FB21206E63001810FB /* ChatCreateTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCreateTest.swift; sourceTree = "<group>"; };
 		3EE025FD21206E63001810FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3EE0261621206EA6001810FB /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
+		3EF2D3CB21A985BD005867C2 /* SeenMessageListTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeenMessageListTest.swift; sourceTree = "<group>"; };
+		3EF2D3CF21A985D1005867C2 /* DeliverMessageListTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliverMessageListTest.swift; sourceTree = "<group>"; };
 		3EFB24A021561F1800A498E1 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -199,7 +201,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3ED1315E21A5474500149997 /* Async.framework in Frameworks */,
-				3E3D56FD21465BE1000A558F /* Starscream.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -294,8 +295,6 @@
 				3EE025EF21206E63001810FB /* Chat */,
 				3EE025FA21206E63001810FB /* ChatTests */,
 				3EE025EE21206E63001810FB /* Products */,
-				3ED1315521A5473E00149997 /* Async.xcodeproj */,
-				3ED1314F21A5473A00149997 /* Pod-Async-SDK */,
 				3EE0261421206E9E001810FB /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -360,6 +359,8 @@
 				3E437D63218F49B30021C0ED /* UnblockUserTest.swift */,
 				3E437D65218F4BCB0021C0ED /* LeaveThreadTest.swift */,
 				3E437D67218F4F780021C0ED /* SpamPvThreadTest.swift */,
+				3EF2D3CF21A985D1005867C2 /* DeliverMessageListTest.swift */,
+				3EF2D3CB21A985BD005867C2 /* SeenMessageListTest.swift */,
 			);
 			path = ChatTests;
 			sourceTree = "<group>";
@@ -367,7 +368,8 @@
 		3EE0261421206E9E001810FB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3E3D56FC21465BE1000A558F /* Starscream.framework */,
+				3ED1315521A5473E00149997 /* Async.xcodeproj */,
+				3ED1314F21A5473A00149997 /* Pod-Async-SDK */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -556,6 +558,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3EF2D3CC21A985BD005867C2 /* SeenMessageListTest.swift in Sources */,
 				3E695B99217224DA00A77120 /* AddContactTest.swift in Sources */,
 				3E695BA72172275900A77120 /* RemoveContactTest.swift in Sources */,
 				3E437D62218F48490021C0ED /* BlockUserTest.swift in Sources */,
@@ -567,6 +570,7 @@
 				3E730D1D214CC53600AAE838 /* GetThreadTest.swift in Sources */,
 				3E437D68218F4F780021C0ED /* SpamPvThreadTest.swift in Sources */,
 				3E730D29214CC63F00AAE838 /* GetHistoryTest.swift in Sources */,
+				3EF2D3D021A985D1005867C2 /* DeliverMessageListTest.swift in Sources */,
 				3E78AAAE21849EB1002A6EC0 /* MuteThreadTest.swift in Sources */,
 				3E695BA9217228F900A77120 /* UploadFileTest.swift in Sources */,
 				3E78AAC72184AB6F002A6EC0 /* SyncContactsTest.swift in Sources */,
