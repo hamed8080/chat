@@ -52,6 +52,8 @@
 		3E78AABA2184A30A002A6EC0 /* pic.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E78AAB92184A309002A6EC0 /* pic.png */; };
 		3E78AABB2184A30A002A6EC0 /* pic.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E78AAB92184A309002A6EC0 /* pic.png */; };
 		3E78AAC72184AB6F002A6EC0 /* SyncContactsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E78AAC62184AB6F002A6EC0 /* SyncContactsTest.swift */; };
+		3EA1588321AE91C300560451 /* Pod-Async-SDK in Resources */ = {isa = PBXBuildFile; fileRef = 3EA1588221AE91C200560451 /* Pod-Async-SDK */; };
+		3EA1589121AE91D000560451 /* Async.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EA1588E21AE91C700560451 /* Async.framework */; };
 		3EBBEDC62174C18F00F5CDC7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDC52174C18F00F5CDC7 /* User.swift */; };
 		3EBBEDD32174C20200F5CDC7 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDD22174C20200F5CDC7 /* Contact.swift */; };
 		3EBBEDD52174C23B00F5CDC7 /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDD42174C23B00F5CDC7 /* Conversation.swift */; };
@@ -76,8 +78,6 @@
 		3EBBEDFC2174C9FB00F5CDC7 /* ChatProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDFB2174C9FB00F5CDC7 /* ChatProtocols.swift */; };
 		3EBBEDFE2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDFD2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift */; };
 		3EBBEE012174CBCA00F5CDC7 /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEE002174CBCA00F5CDC7 /* Extentions.swift */; };
-		3ED1315021A5473A00149997 /* Pod-Async-SDK in Resources */ = {isa = PBXBuildFile; fileRef = 3ED1314F21A5473A00149997 /* Pod-Async-SDK */; };
-		3ED1315E21A5474500149997 /* Async.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3ED1315B21A5473E00149997 /* Async.framework */; };
 		3ED22F2F2187469F00B6FE4C /* AddParticipantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED22F2E2187469F00B6FE4C /* AddParticipantModel.swift */; };
 		3EE025F721206E63001810FB /* Chat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE025ED21206E63001810FB /* Chat.framework */; };
 		3EE025FC21206E63001810FB /* ChatCreateTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE025FB21206E63001810FB /* ChatCreateTest.swift */; };
@@ -89,16 +89,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		3ED1315A21A5473E00149997 /* PBXContainerItemProxy */ = {
+		3EA1588D21AE91C700560451 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 3ED1315521A5473E00149997 /* Async.xcodeproj */;
+			containerPortal = 3EA1588821AE91C700560451 /* Async.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 3ED59C0D211098400026FFF5;
 			remoteInfo = Async;
 		};
-		3ED1315C21A5473E00149997 /* PBXContainerItemProxy */ = {
+		3EA1588F21AE91C700560451 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 3ED1315521A5473E00149997 /* Async.xcodeproj */;
+			containerPortal = 3EA1588821AE91C700560451 /* Async.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 3ED59C16211098400026FFF5;
 			remoteInfo = AsyncTests;
@@ -156,6 +156,8 @@
 		3E78AAB62184A25F002A6EC0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3E78AAB92184A309002A6EC0 /* pic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pic.png; sourceTree = "<group>"; };
 		3E78AAC62184AB6F002A6EC0 /* SyncContactsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncContactsTest.swift; sourceTree = "<group>"; };
+		3EA1588221AE91C200560451 /* Pod-Async-SDK */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Pod-Async-SDK"; sourceTree = "<group>"; };
+		3EA1588821AE91C700560451 /* Async.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Async.xcodeproj; path = "Pod-Async-SDK/Async.xcodeproj"; sourceTree = "<group>"; };
 		3EBBEDC52174C18F00F5CDC7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		3EBBEDD22174C20200F5CDC7 /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
 		3EBBEDD42174C23B00F5CDC7 /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
@@ -180,8 +182,6 @@
 		3EBBEDFB2174C9FB00F5CDC7 /* ChatProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatProtocols.swift; sourceTree = "<group>"; };
 		3EBBEDFD2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncDelegatesImplementation.swift; sourceTree = "<group>"; };
 		3EBBEE002174CBCA00F5CDC7 /* Extentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
-		3ED1314F21A5473A00149997 /* Pod-Async-SDK */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Pod-Async-SDK"; sourceTree = "<group>"; };
-		3ED1315521A5473E00149997 /* Async.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Async.xcodeproj; path = "Pod-Async-SDK/Async.xcodeproj"; sourceTree = "<group>"; };
 		3ED22F2E2187469F00B6FE4C /* AddParticipantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddParticipantModel.swift; sourceTree = "<group>"; };
 		3EE025ED21206E63001810FB /* Chat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Chat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EE025F021206E63001810FB /* Chat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Chat.h; sourceTree = "<group>"; };
@@ -200,7 +200,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3ED1315E21A5474500149997 /* Async.framework in Frameworks */,
+				3EA1589121AE91D000560451 /* Async.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -215,6 +215,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3EA1588921AE91C700560451 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3EA1588E21AE91C700560451 /* Async.framework */,
+				3EA1589021AE91C700560451 /* AsyncTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		3EBBEDD12174C19B00F5CDC7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -280,21 +289,14 @@
 			path = Others;
 			sourceTree = "<group>";
 		};
-		3ED1315621A5473E00149997 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				3ED1315B21A5473E00149997 /* Async.framework */,
-				3ED1315D21A5473E00149997 /* AsyncTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		3EE025E321206E63001810FB = {
 			isa = PBXGroup;
 			children = (
 				3EE025EF21206E63001810FB /* Chat */,
 				3EE025FA21206E63001810FB /* ChatTests */,
 				3EE025EE21206E63001810FB /* Products */,
+				3EA1588821AE91C700560451 /* Async.xcodeproj */,
+				3EA1588221AE91C200560451 /* Pod-Async-SDK */,
 				3EE0261421206E9E001810FB /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -329,38 +331,38 @@
 		3EE025FA21206E63001810FB /* ChatTests */ = {
 			isa = PBXGroup;
 			children = (
+				3E695B98217224DA00A77120 /* AddContactTest.swift */,
+				3E437D5D218F389F0021C0ED /* AddParticipantsTest.swift */,
+				3E437D61218F48490021C0ED /* BlockUserTest.swift */,
 				3EE025FB21206E63001810FB /* ChatCreateTest.swift */,
-				3E3F14D02147B6570084A550 /* GetUserInfoTest.swift */,
-				3E730D1C214CC53600AAE838 /* GetThreadTest.swift */,
-				3E730D28214CC63F00AAE838 /* GetHistoryTest.swift */,
-				3E730D2A214CC6F600AAE838 /* GetThreadParticipantTest.swift */,
 				3E730D2C214CC75400AAE838 /* CreateThreadTest.swift */,
-				3E730D2E214D4D7A00AAE838 /* GetContactsTest.swift */,
-				3E6D559A215F777800333354 /* SendMessageTest.swift */,
-				3E3E56782160A2F10084C8C1 /* ReplyMessageTest.swift */,
+				3E695BAC21722A4400A77120 /* DeleteMessageTest.swift */,
+				3EF2D3CF21A985D1005867C2 /* DeliverMessageListTest.swift */,
 				3E3E56842160A30B0084C8C1 /* EditMessageTest.swift */,
 				3E3E56862160A3280084C8C1 /* ForwardMessageTest.swift */,
-				3E695B98217224DA00A77120 /* AddContactTest.swift */,
-				3E695BA42172266800A77120 /* UpdateContactTest.swift */,
+				3E730D2E214D4D7A00AAE838 /* GetContactsTest.swift */,
+				3E730D28214CC63F00AAE838 /* GetHistoryTest.swift */,
+				3E3F14D02147B6570084A550 /* GetUserInfoTest.swift */,
+				3E730D1C214CC53600AAE838 /* GetThreadTest.swift */,
+				3E730D2A214CC6F600AAE838 /* GetThreadParticipantTest.swift */,
+				3E437D65218F4BCB0021C0ED /* LeaveThreadTest.swift */,
+				3E78AAAD21849EB1002A6EC0 /* MuteThreadTest.swift */,
 				3E695BA62172275900A77120 /* RemoveContactTest.swift */,
+				3E437D5F218F3BDB0021C0ED /* RemoveParticipantsTest.swift */,
+				3E3E56782160A2F10084C8C1 /* ReplyMessageTest.swift */,
+				3E78AAA921849945002A6EC0 /* SearchContactTest.swift */,
+				3EF2D3CB21A985BD005867C2 /* SeenMessageListTest.swift */,
+				3E78AAB12184A01A002A6EC0 /* SendFileMessageTest.swift */,
+				3E6D559A215F777800333354 /* SendMessageTest.swift */,
+				3E437D67218F4F780021C0ED /* SpamPvThreadTest.swift */,
+				3E437D63218F49B30021C0ED /* UnblockUserTest.swift */,
+				3E78AAAF21849F64002A6EC0 /* UnmuteThreadTest.swift */,
+				3E695BA42172266800A77120 /* UpdateContactTest.swift */,
 				3E695BA8217228F900A77120 /* UploadFileTest.swift */,
 				3E695BAA217229EB00A77120 /* UploadImageTest.swift */,
-				3E695BAC21722A4400A77120 /* DeleteMessageTest.swift */,
 				3E78AA9E21847C55002A6EC0 /* UpdateThreadInfoTest.swift */,
-				3E78AAA921849945002A6EC0 /* SearchContactTest.swift */,
-				3E78AAAD21849EB1002A6EC0 /* MuteThreadTest.swift */,
-				3E78AAAF21849F64002A6EC0 /* UnmuteThreadTest.swift */,
-				3E78AAB12184A01A002A6EC0 /* SendFileMessageTest.swift */,
-				3E78AAC62184AB6F002A6EC0 /* SyncContactsTest.swift */,
 				3EE025FD21206E63001810FB /* Info.plist */,
-				3E437D5D218F389F0021C0ED /* AddParticipantsTest.swift */,
-				3E437D5F218F3BDB0021C0ED /* RemoveParticipantsTest.swift */,
-				3E437D61218F48490021C0ED /* BlockUserTest.swift */,
-				3E437D63218F49B30021C0ED /* UnblockUserTest.swift */,
-				3E437D65218F4BCB0021C0ED /* LeaveThreadTest.swift */,
-				3E437D67218F4F780021C0ED /* SpamPvThreadTest.swift */,
-				3EF2D3CF21A985D1005867C2 /* DeliverMessageListTest.swift */,
-				3EF2D3CB21A985BD005867C2 /* SeenMessageListTest.swift */,
+				3E78AAC62184AB6F002A6EC0 /* SyncContactsTest.swift */,
 			);
 			path = ChatTests;
 			sourceTree = "<group>";
@@ -368,8 +370,6 @@
 		3EE0261421206E9E001810FB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3ED1315521A5473E00149997 /* Async.xcodeproj */,
-				3ED1314F21A5473A00149997 /* Pod-Async-SDK */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -455,8 +455,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 3ED1315621A5473E00149997 /* Products */;
-					ProjectRef = 3ED1315521A5473E00149997 /* Async.xcodeproj */;
+					ProductGroup = 3EA1588921AE91C700560451 /* Products */;
+					ProjectRef = 3EA1588821AE91C700560451 /* Async.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -468,18 +468,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		3ED1315B21A5473E00149997 /* Async.framework */ = {
+		3EA1588E21AE91C700560451 /* Async.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = Async.framework;
-			remoteRef = 3ED1315A21A5473E00149997 /* PBXContainerItemProxy */;
+			remoteRef = 3EA1588D21AE91C700560451 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		3ED1315D21A5473E00149997 /* AsyncTests.xctest */ = {
+		3EA1589021AE91C700560451 /* AsyncTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = AsyncTests.xctest;
-			remoteRef = 3ED1315C21A5473E00149997 /* PBXContainerItemProxy */;
+			remoteRef = 3EA1588F21AE91C700560451 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -489,7 +489,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3ED1315021A5473A00149997 /* Pod-Async-SDK in Resources */,
+				3EA1588321AE91C300560451 /* Pod-Async-SDK in Resources */,
 				3E78AABA2184A30A002A6EC0 /* pic.png in Resources */,
 				3E78AAB72184A25F002A6EC0 /* Assets.xcassets in Resources */,
 			);
