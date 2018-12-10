@@ -29,10 +29,10 @@ open class ReplyInfo {
      */
     
     public var deleted:             Bool?
-    public var repliedToMessageId:  Int?
     public var message:             String?
     public var messageType:         Int?
     public var metadata:            String?
+    public var repliedToMessageId:  Int?
     public var systemMetadata:      String?
     
     public var participant:        Participant?
@@ -41,10 +41,10 @@ open class ReplyInfo {
     init(messageContent: JSON) {
         
         self.deleted            = messageContent["deleted"].bool
-        self.repliedToMessageId = messageContent["repliedToMessageId"].int
         self.message            = messageContent["message"].string
         self.messageType        = messageContent["messageType"].int
         self.metadata           = messageContent["metadata"].string
+        self.repliedToMessageId = messageContent["repliedToMessageId"].int
         self.systemMetadata     = messageContent["systemMetadata"].string
         
         if (messageContent["participant"] != JSON.null) {
@@ -60,10 +60,10 @@ open class ReplyInfo {
     func formatToJSON() -> JSON {
         let result: JSON = ["participant":          participant?.formatToJSON() ?? NSNull(),
                             "deleted":              deleted ?? NSNull(),
-                            "repliedToMessageId":   repliedToMessageId ?? NSNull(),
                             "message":              message ?? NSNull(),
                             "messageType":          messageType ?? NSNull(),
                             "metadata":             metadata ?? NSNull(),
+                            "repliedToMessageId":   repliedToMessageId ?? NSNull(),
                             "systemMetadata":       systemMetadata ?? NSNull()]
         return result
     }

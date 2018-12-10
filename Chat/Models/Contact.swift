@@ -33,7 +33,7 @@ open class Contact {
     public let cellphoneNumber:    String?
     public let email:              String?
     public let firstName:          String?
-    public let hasUser:            Bool?
+    public var hasUser:            Bool     = false
     public let id:                 Int?
     public let image:              String?
     public let lastName:           String?
@@ -46,13 +46,16 @@ open class Contact {
         self.cellphoneNumber    = messageContent["cellphoneNumber"].string
         self.email              = messageContent["email"].string
         self.firstName          = messageContent["firstName"].string
-        self.hasUser            = messageContent["hasUser"].bool
         self.id                 = messageContent["id"].int
         self.image              = messageContent["profileImage"].string
         self.lastName           = messageContent["lastName"].string
         self.notSeenDuration    = messageContent["notSeenDuration"].int
         self.uniqueId           = messageContent["uniqueId"].string
         self.userId             = messageContent["userId"].int
+        
+        if (messageContent["hasUser"] != JSON.null) {
+            self.hasUser = messageContent["hasUser"].boolValue
+        }
         
         if (messageContent["linkedUser"] != JSON.null) {
             self.linkedUser = LinkedUser(messageContent: messageContent["linkedUser"])
@@ -72,7 +75,7 @@ open class Contact {
         let result: JSON = ["cellphoneNumber":  cellphoneNumber ?? NSNull(),
                             "email":            email ?? NSNull(),
                             "firstName":        firstName ?? NSNull(),
-                            "hasUser":          hasUser ?? NSNull(),
+                            "hasUser":          hasUser,
                             "id":               id ?? NSNull(),
                             "image":            image ?? NSNull(),
                             "lastName":         lastName ?? NSNull(),
