@@ -38,15 +38,34 @@ open class User {
     
     init(messageContent: JSON) {
         
-        self.id                 = messageContent["id"].int
-        self.name               = messageContent["name"].string
-        self.email              = messageContent["email"].string
         self.cellphoneNumber    = messageContent["cellphoneNumber"].string
+        self.email              = messageContent["email"].string
+        self.id                 = messageContent["id"].int
         self.image              = messageContent["image"].string
         self.lastSeen           = messageContent["lastSeen"].int
-        self.sendEnable         = messageContent["sendEnable"].bool
+        self.name               = messageContent["name"].string
         self.receiveEnable      = messageContent["receiveEnable"].bool
+        self.sendEnable         = messageContent["sendEnable"].bool
         
+    }
+    
+    init(cellphoneNumber:   String?,
+         email:             String?,
+         id:                Int?,
+         image:             String?,
+         lastSeen:          Int?,
+         name:              String?,
+         receiveEnable:     Bool?,
+         sendEnable:        Bool?) {
+        
+        self.cellphoneNumber    = cellphoneNumber
+        self.email              = email
+        self.id                 = id
+        self.image              = image
+        self.lastSeen           = lastSeen
+        self.name               = name
+        self.receiveEnable      = receiveEnable
+        self.sendEnable         = sendEnable
     }
     
     func formatDataToMakeUser() -> User {

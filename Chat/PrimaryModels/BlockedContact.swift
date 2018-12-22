@@ -34,6 +34,17 @@ open class BlockedContact {
         self.nickName   = messageContent["nickName"].string
     }
     
+    init(id:        Int?,
+         firstName: String?,
+         lastName:  String?,
+         nickName:  String?) {
+        
+        self.id         = id
+        self.firstName  = firstName
+        self.lastName   = lastName
+        self.nickName   = nickName
+    }
+    
     func formatDataToMakeBlockedUser() -> BlockedContact {
         return self
     }

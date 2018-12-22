@@ -95,7 +95,9 @@ extension Chat: AsyncDelegates {
         if userInfo == nil {
             if (getUserInfoRetryCount < getUserInfoRetry) {
                 getUserInfoRetryCount += 1
-                getUserInfo(uniqueId: { _ in }) { (result) in
+                
+                getUserInfo(uniqueId: { _ in }, completion: { (result) in
+                    
                     let resultModel: UserInfoModel = result as! UserInfoModel
                     let resultJSON: JSON = resultModel.returnDataAsJSON()
                     
@@ -106,7 +108,8 @@ extension Chat: AsyncDelegates {
                         self.chatState = true
                         self.delegate?.chatReady()
                     }
-                }
+                }) { _ in }
+                
             }
         }
     }

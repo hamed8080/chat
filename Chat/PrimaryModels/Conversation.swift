@@ -118,6 +118,61 @@ open class Conversation {
         //        }
     }
     
+    init(admin:         Bool?,
+         canEditInfo:   Bool?,
+         canSpam:       Bool?,
+         description:   String?,
+         group:         Bool?,
+         id:            Int?,
+         image:         String?,
+         joinDate:      Int?,
+         lastMessage:   String?,
+         lastParticipantImage:  String?,
+         lastParticipantName:   String?,
+         lastSeenMessageId:     Int?,
+         metadata:              String?,
+         mute:                  Bool?,
+         participantCount:      Int?,
+         partner:               Int?,
+         partnerLastDeliveredMessageId: Int?,
+         partnerLastSeenMessageId:      Int?,
+         time:          UInt?,
+         title:         String?,
+         type:          Int?,
+         unreadCount:   Int?,
+         inviter:       Participant?,
+         lastMessageVO: Message?,
+         participants:  [Participant]?) {
+        
+        self.admin          = admin
+        self.canEditInfo    = canEditInfo
+        self.canSpam        = canSpam
+        self.description    = description
+        self.group          = group
+        self.id             = id
+        self.image          = image
+        self.joinDate       = joinDate
+        self.lastMessage    = lastMessage
+        self.lastParticipantImage   = lastParticipantImage
+        self.lastParticipantName    = lastParticipantName
+        self.lastSeenMessageId      = lastSeenMessageId
+        self.metadata               = metadata
+        self.mute                   = mute
+        self.participantCount       = participantCount
+        self.partner                = partner
+        self.partnerLastDeliveredMessageId  = partnerLastDeliveredMessageId
+        self.partnerLastSeenMessageId       = partnerLastSeenMessageId
+        self.time           = time
+        self.title          = title
+        self.type           = type
+        self.unreadCount    = unreadCount
+        
+        self.inviter        = inviter
+        self.lastMessageVO  = lastMessageVO
+        self.participants   = participants
+    }
+    
+    
     func formatDataToMakeConversation() -> Conversation {
         return self
     }

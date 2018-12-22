@@ -21,6 +21,9 @@ public class Chat {
     // At first, the class sould confirm to ChatDelegates, and then implement the ChatDelegates methods
     public weak var delegate: ChatDelegates?
     
+    // create cache instance to use cache...
+    static let cacheDB = Cache()
+    
     
     // MARK: - setup properties
     
@@ -31,6 +34,7 @@ public class Chat {
     var serverName:     String  = ""        // Name of the server that we had registered on
     var token:          String  = ""        // every user have to had a token (get it from SSO Server)
     var generalTypeCode:    String = "chattest"
+    var enableCache:        Bool = false
     
     //    var ssoGrantDevicesAddress = params.ssoGrantDevicesAddress
     var chatFullStateObject: JSON = [:]
@@ -69,14 +73,32 @@ public class Chat {
     
     // MARK: - Chat initializer
     
-    public init(socketAddress: String, ssoHost: String, platformHost: String, fileServer: String, serverName: String, token: String, typeCode: String, msgPriority: Int?, msgTTL: Int?, httpRequestTimeout: Int?, actualTimingLog: Bool?, wsConnectionWaitTime: Double, connectionRetryInterval: Int, connectionCheckTimeout: Int, messageTtl: Int, reconnectOnClose: Bool) {
-        self.socketAddress = socketAddress
-        self.ssoHost = ssoHost
-        self.platformHost = platformHost
-        self.fileServer = fileServer
-        self.serverName = serverName
-        self.token = token
-        self.generalTypeCode = typeCode
+    public init(socketAddress:              String,
+                ssoHost:                    String,
+                platformHost:               String,
+                fileServer:                 String,
+                serverName:                 String,
+                token:                      String,
+                typeCode:                   String,
+                enableCache:                Bool,
+                msgPriority:                Int?,
+                msgTTL:                     Int?,
+                httpRequestTimeout:         Int?,
+                actualTimingLog:            Bool?,
+                wsConnectionWaitTime:       Double,
+                connectionRetryInterval:    Int,
+                connectionCheckTimeout:     Int,
+                messageTtl:                 Int,
+                reconnectOnClose:           Bool) {
+        
+        self.socketAddress      = socketAddress
+        self.ssoHost            = ssoHost
+        self.platformHost       = platformHost
+        self.fileServer         = fileServer
+        self.serverName         = serverName
+        self.token              = token
+        self.generalTypeCode    = typeCode
+        self.enableCache        = enableCache
         
         if let theMsgPriority = msgPriority {
             self.msgPriority = theMsgPriority
@@ -108,11 +130,11 @@ public class Chat {
             self.actualTimingLog = false
         }
         
-        self.wsConnectionWaitTime = wsConnectionWaitTime
+        self.wsConnectionWaitTime   = wsConnectionWaitTime
         self.connectionRetryInterval = connectionRetryInterval
         self.connectionCheckTimeout = connectionCheckTimeout
-        self.messageTtl = messageTtl
-        self.reconnectOnClose = reconnectOnClose
+        self.messageTtl             = messageTtl
+        self.reconnectOnClose       = reconnectOnClose
         
         self.SERVICE_ADDRESSES.SSO_ADDRESS          = ssoHost
         self.SERVICE_ADDRESSES.PLATFORM_ADDRESS     = platformHost
@@ -159,32 +181,32 @@ public class Chat {
     static var mapOnSeen = [String: [[String: CallbackProtocolWith3Calls]]]()
     
     // property to hold Sent callbecks to implement later, on somewhere else on the program
-    private var userInfoCallbackToUser: callbackTypeAlias?
-    private var getContactsCallbackToUser: callbackTypeAlias?
-    private var threadsCallbackToUser: callbackTypeAlias?
-    private var historyCallbackToUser: callbackTypeAlias?
-    private var threadParticipantsCallbackToUser: callbackTypeAlias?
-    private var createThreadCallbackToUser: callbackTypeAlias?
-    private var addParticipantsCallbackToUser: callbackTypeAlias?
-    private var removeParticipantsCallbackToUser: callbackTypeAlias?
-    private var sendCallbackToUserOnSent: callbackTypeAlias?
-    private var sendCallbackToUserOnDeliver: callbackTypeAlias?
-    private var sendCallbackToUserOnSeen: callbackTypeAlias?
-    private var editMessageCallbackToUser: callbackTypeAlias?
-    private var deleteMessageCallbackToUser: callbackTypeAlias?
-    private var muteThreadCallbackToUser: callbackTypeAlias?
-    private var unmuteThreadCallbackToUser: callbackTypeAlias?
-    private var updateThreadInfoCallbackToUser: callbackTypeAlias?
-    private var blockCallbackToUser: callbackTypeAlias?
-    private var unblockCallbackToUser: callbackTypeAlias?
-    private var getBlockedCallbackToUser: callbackTypeAlias?
-    private var leaveThreadCallbackToUser: callbackTypeAlias?
-    private var spamPvThreadCallbackToUser: callbackTypeAlias?
-    private var getMessageSeenListCallbackToUser: callbackTypeAlias?
+    private var userInfoCallbackToUser:             callbackTypeAlias?
+    private var getContactsCallbackToUser:          callbackTypeAlias?
+    private var threadsCallbackToUser:              callbackTypeAlias?
+    private var historyCallbackToUser:              callbackTypeAlias?
+    private var threadParticipantsCallbackToUser:   callbackTypeAlias?
+    private var createThreadCallbackToUser:         callbackTypeAlias?
+    private var addParticipantsCallbackToUser:      callbackTypeAlias?
+    private var removeParticipantsCallbackToUser:   callbackTypeAlias?
+    private var sendCallbackToUserOnSent:           callbackTypeAlias?
+    private var sendCallbackToUserOnDeliver:        callbackTypeAlias?
+    private var sendCallbackToUserOnSeen:           callbackTypeAlias?
+    private var editMessageCallbackToUser:          callbackTypeAlias?
+    private var deleteMessageCallbackToUser:        callbackTypeAlias?
+    private var muteThreadCallbackToUser:           callbackTypeAlias?
+    private var unmuteThreadCallbackToUser:         callbackTypeAlias?
+    private var updateThreadInfoCallbackToUser:     callbackTypeAlias?
+    private var blockCallbackToUser:                callbackTypeAlias?
+    private var unblockCallbackToUser:              callbackTypeAlias?
+    private var getBlockedCallbackToUser:           callbackTypeAlias?
+    private var leaveThreadCallbackToUser:          callbackTypeAlias?
+    private var spamPvThreadCallbackToUser:         callbackTypeAlias?
+    private var getMessageSeenListCallbackToUser:   callbackTypeAlias?
     private var getMessageDeliverListCallbackToUser: callbackTypeAlias?
     
-    var tempSendMessageArr: [[String : JSON]] = []
-    var tempReceiveMessageArr: [[String: JSON]] = []
+    var tempSendMessageArr:     [[String : JSON]]   = []
+    var tempReceiveMessageArr:  [[String: JSON]]    = []
     
     public func setGetUserInfoRetryCount(value: Int) {
         getUserInfoRetryCount = value
@@ -199,7 +221,9 @@ public class Chat {
 }
 
 
-// - MARK: Private Methods:
+// MARK: -
+// MARK: - Private Methods:
+
 extension Chat {
     
     
@@ -553,6 +577,8 @@ extension Chat {
         }
         
         switch type {
+        
+        // a message of type 1 (CREATE_THREAD) comes from Server.
         case chatMessageVOTypes.CREATE_THREAD.rawValue:
             log.verbose("Message of type 'CREATE_THREAD' recieved", context: "Chat")
             log.debug("Message of type 'CREATE_THREAD' recieve", context: "Chat")
@@ -568,12 +594,16 @@ extension Chat {
                 Chat.map.removeValue(forKey: uniqueId)
             }
             break
-            
+        
+        // a message of type 2 (MESSAGE) comes from Server.
+        // this means that a message comes.
         case chatMessageVOTypes.MESSAGE.rawValue:
             log.verbose("Message of type 'MESSAGE' recieved", context: "Chat")
             chatMessageHandler(threadId: threadId, messageContent: messageContent)
             break
-            
+        
+        // a message of type 3 (SENT) comes from Server.
+        // it means that the message is send.
         case chatMessageVOTypes.SENT.rawValue:
             log.verbose("Message of type 'SENT' recieved", context: "Chat")
             log.debug("Message of type 'SENT' recieved", context: "Chat")
@@ -587,6 +617,8 @@ extension Chat {
             }
             break
             
+        // a message of type 4 (DELIVERY) comes from Server.
+        // it means that the message is delivered.
         case chatMessageVOTypes.DELIVERY.rawValue:
             log.verbose("Message of type 'DELIVERY' recieved", context: "Chat")
             log.debug("Message of type 'DELIVERY' recieved", context: "ChatsendMessageWithCallback")
@@ -667,7 +699,9 @@ extension Chat {
                 
             }
             break
-            
+        
+        // a message of type 5 (SEEN) comes from Server.
+        // it means that the message is seen.
         case chatMessageVOTypes.SEEN.rawValue:
             log.verbose("Message of type 'SEEN' recieved", context: "Chat")
             log.debug("Message of type 'SEEN' recieved", context: "Chat")
@@ -746,11 +780,15 @@ extension Chat {
                 }
             }
             break
-            
+        
+        // a message of type 6 (PING) comes from Server.
+        // it means that a ping message comes.
         case chatMessageVOTypes.PING.rawValue:
             log.verbose("Message of type 'PING' recieved", context: "Chat")
             break
             
+        // a message of type 7 (BLOCK) comes from Server.
+        // it means that a user has blocked.
         case chatMessageVOTypes.BLOCK.rawValue:
             log.verbose("Message of type 'BLOCK' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
@@ -763,6 +801,8 @@ extension Chat {
             }
             break
             
+        // a message of type 8 (UNBLOCK) comes from Server.
+        // it means that a user has unblocked.
         case chatMessageVOTypes.UNBLOCK.rawValue:
             log.verbose("Message of type 'UNBLOCK' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
@@ -774,7 +814,9 @@ extension Chat {
                 Chat.map.removeValue(forKey: uniqueId)
             }
             break
-            
+        
+        // a message of type 9 (LEAVE_THREAD) comes from Server.
+        // it means that a you has leaved the thread.
         case chatMessageVOTypes.LEAVE_THREAD.rawValue:
             log.verbose("Message of type 'LEAVE_THREAD' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
@@ -809,10 +851,14 @@ extension Chat {
              */
             
             break
-            
+       
+        // a message of type 10 (RENAME) comes from Server.
         case chatMessageVOTypes.RENAME.rawValue:
             //
             break
+            
+        // a message of type 11 (ADD_PARTICIPANT) comes from Server.
+        // it means some participants added to the thread.
         case chatMessageVOTypes.ADD_PARTICIPANT.rawValue:
             log.verbose("Message of type 'ADD_PARTICIPANT' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
@@ -840,7 +886,14 @@ extension Chat {
              */
             
             break
+        
+        // a message of type 12 (GET_STATUS) comes from Server.
+        case chatMessageVOTypes.GET_STATUS.rawValue:
+            //
+            break
             
+        // a message of type 13 (GET_CONTACTS) comes from Server.
+        // it means array of contacts comes
         case chatMessageVOTypes.GET_CONTACTS.rawValue:
             log.verbose("Message of type 'GET_CONTACTS' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
@@ -853,6 +906,7 @@ extension Chat {
             }
             break
             
+        // a message of type 14 (GET_THREADS) comes from Server.
         case chatMessageVOTypes.GET_THREADS.rawValue:
             log.verbose("Message of type 'GET_THREADS' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
@@ -865,6 +919,7 @@ extension Chat {
             }
             break
             
+        // a message of type 15 (GET_HISTORY) comes from Server.
         case chatMessageVOTypes.GET_HISTORY.rawValue:
             log.verbose("Message of type 'GET_HISTORY' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
@@ -876,12 +931,18 @@ extension Chat {
                 Chat.map.removeValue(forKey: uniqueId)
             }
             break
+        
+        // a message of type 16 (CHANGE_TYPE) comes from Server.
+        case chatMessageVOTypes.CHANGE_TYPE.rawValue:
+            break
             
+        // a message of type 17 (REMOVED_FROM_THREAD) comes from Server.
         case chatMessageVOTypes.REMOVED_FROM_THREAD.rawValue:
             let result: JSON = ["thread": threadId]
             delegate?.threadEvents(type: "THREAD_REMOVED_FROM", result: result)
             break
             
+        // a message of type 18 (REMOVE_PARTICIPANT) comes from Server.
         case chatMessageVOTypes.REMOVE_PARTICIPANT.rawValue:
             log.verbose("Message of type 'REMOVE_PARTICIPANT' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
@@ -905,6 +966,7 @@ extension Chat {
             }
             break
             
+        // a message of type 19 (MUTE_THREAD) comes from Server.
         case chatMessageVOTypes.MUTE_THREAD.rawValue:
             log.verbose("Message of type 'MUTE_THREAD' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
@@ -930,7 +992,8 @@ extension Chat {
                 
             }
             break
-            
+        
+        // a message of type 20 (UNMUTE_THREAD) comes from Server.
         case chatMessageVOTypes.UNMUTE_THREAD.rawValue:
             log.verbose("Message of type 'UNMUTE_THREAD' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
@@ -957,6 +1020,7 @@ extension Chat {
             }
             break
             
+        // a message of type 21 (UPDATE_THREAD_INFO) comes from Server.
         case chatMessageVOTypes.UPDATE_THREAD_INFO.rawValue:
             log.verbose("Message of type 'UPDATE_THREAD_INFO' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
@@ -983,11 +1047,13 @@ extension Chat {
             }
             break
             
+        // a message of type 22 (FORWARD_MESSAGE) comes from Server.
         case chatMessageVOTypes.FORWARD_MESSAGE.rawValue:
             log.verbose("Message of type 'FORWARD_MESSAGE' recieved", context: "Chat")
             chatMessageHandler(threadId: threadId, messageContent: messageContent)
             break
             
+        // a message of type 23 (USER_INFO) comes from Server.
         case chatMessageVOTypes.USER_INFO.rawValue:
             log.verbose("Message of type 'USER_INFO' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
@@ -1007,6 +1073,12 @@ extension Chat {
                 Chat.map.removeValue(forKey: uniqueId)
             }
             break
+            
+        // a message of type 24 (USER_STATUS) comes from Server.
+        case chatMessageVOTypes.USER_STATUS.rawValue:
+            break
+            
+        // a message of type 25 (GET_BLOCKED) comes from Server.
         case chatMessageVOTypes.GET_BLOCKED.rawValue:
             log.verbose("Message of type 'GET_BLOCKED' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
@@ -1018,6 +1090,12 @@ extension Chat {
                 Chat.map.removeValue(forKey: uniqueId)
             }
             break
+            
+        // a message of type 26 (RELATION_INFO) comes from Server.
+        case chatMessageVOTypes.RELATION_INFO.rawValue:
+            break
+            
+        // a message of type 27 (THREAD_PARTICIPANTS) comes from Server.
         case chatMessageVOTypes.THREAD_PARTICIPANTS.rawValue:
             log.verbose("Message of type 'THREAD_PARTICIPANTS' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
@@ -1030,6 +1108,7 @@ extension Chat {
             }
             break
             
+        // a message of type 28 (EDIT_MESSAGE) comes from Server.
         case chatMessageVOTypes.EDIT_MESSAGE.rawValue:
             log.verbose("Message of type 'EDIT_MESSAGE' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
@@ -1043,6 +1122,7 @@ extension Chat {
             }
             break
             
+        // a message of type 29 (DELETE_MESSAGE) comes from Server.
         case chatMessageVOTypes.DELETE_MESSAGE.rawValue:
             log.verbose("Message of type 'DELETE_MESSAGE' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
@@ -1054,14 +1134,16 @@ extension Chat {
                 Chat.map.removeValue(forKey: uniqueId)
             }
             break
-            
+        
+        // a message of type 30 (THREAD_INFO_UPDATED) comes from Server.
         case chatMessageVOTypes.THREAD_INFO_UPDATED.rawValue:
             log.verbose("Message of type 'THREAD_INFO_UPDATED' recieved", context: "Chat")
             let conversation: Conversation = Conversation(messageContent: messageContent)
             let result: JSON = ["thread": conversation]
             delegate?.threadEvents(type: "THREAD_INFO_UPDATED", result: result)
             break
-            
+        
+        // a message of type 31 (LAST_SEEN_UPDATED) comes from Server.
         case chatMessageVOTypes.LAST_SEEN_UPDATED.rawValue:
             log.verbose("Message of type 'LAST_SEEN_UPDATED' recieved", context: "Chat")
             
@@ -1085,6 +1167,7 @@ extension Chat {
             
             break
             
+        // a message of type 32 (GET_MESSAGE_DELEVERY_PARTICIPANTS) comes from Server.
         case chatMessageVOTypes.GET_MESSAGE_DELEVERY_PARTICIPANTS.rawValue:
             log.verbose("Message of type 'GET_MESSAGE_DELEVERY_PARTICIPANTS' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
@@ -1097,6 +1180,7 @@ extension Chat {
             }
             break
             
+        // a message of type 33 (GET_MESSAGE_SEEN_PARTICIPANTS) comes from Server.
         case chatMessageVOTypes.GET_MESSAGE_SEEN_PARTICIPANTS.rawValue:
             log.verbose("Message of type 'GET_MESSAGE_SEEN_PARTICIPANTS' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
@@ -1109,12 +1193,14 @@ extension Chat {
             }
             break
             
+        // a message of type 40 (BOT_MESSAGE) comes from Server.
         case chatMessageVOTypes.BOT_MESSAGE.rawValue:
             log.verbose("Message of type 'BOT_MESSAGE' recieved", context: "Chat")
             //            let result: JSON = ["bot": messageContent]
             //            self.delegate?.botEvents(type: "BOT_MESSAGE", result: result)
             break
             
+        // a message of type 41 (SPAM_PV_THREAD) comes from Server.
         case chatMessageVOTypes.SPAM_PV_THREAD.rawValue:
             log.verbose("Message of type 'SPAM_PV_THREAD' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
@@ -1127,6 +1213,11 @@ extension Chat {
             }
             break
             
+        // a message of type 100 (LOGOUT) comes from Server.
+        case chatMessageVOTypes.LOGOUT.rawValue:
+            break
+            
+        // a message of type 999 (ERROR) comes from Server.
         case chatMessageVOTypes.ERROR.rawValue:
             log.verbose("Message of type 'ERROR' recieved", context: "Chat")
             //            if Chat.map[uniqueId] != nil {
@@ -1251,7 +1342,9 @@ extension Chat {
 }
 
 
-// - MARK: Public Methods
+// MARK: -
+// MARK: - Public Methods
+
 extension Chat {
     
     // MARK: - User Management
@@ -1281,21 +1374,23 @@ extension Chat {
     
     /*
      GetUserInfo:
-     it returns UserInfo
+     it returns UserInfo.
      
      By calling this function, a request of type 23 (USER_INFO) will send throut Chat-SDK,
      then the response will come back as callbacks to client whose calls this function.
      
      + Inputs:
-     this method doesn't need any input
+        this method doesn't need any input
      
      + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:  it will returns the response that comes from server to this request.    (UserInfoModel)
+        It has 3 callbacks as response:
+        1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
+        2- completion:  it will returns the response that comes from server to this request.    (UserInfoModel)
+        3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
      */
-    public func getUserInfo(uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func getUserInfo(uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias, cacheResponse: @escaping (UserInfoModel) -> ()) {
         log.verbose("Try to request to get user info", context: "Chat")
+        
         let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.USER_INFO.rawValue,
                                        "typeCode": generalTypeCode]
         
@@ -1304,6 +1399,14 @@ extension Chat {
         }
         
         userInfoCallbackToUser = completion
+        
+        // if cache is enabled by user, first return cache result to the user
+        if enableCache {
+            if let cacheUserInfoResult = Chat.cacheDB.retrieveUserInfo() {
+                cacheResponse(cacheUserInfoResult)
+            }
+        }
+        
     }
     
     
@@ -2010,51 +2113,62 @@ extension Chat {
      then the response will come back as callbacks to client whose calls this function.
      
      + Inputs:
-     this function will get some optional prameters as an input, as JSON or Model (depends on the function that you would use) which are:
-     - count:        how many thread do you want to get with this request.           (Int)       -optional-  , if you don't set it, it would have default value of 50
-     - offset:       offset of the contact number that start to count to show.       (Int)       -optional-  , if you don't set it, it would have default value of 0
-     - name:         if you want to search on your contact, put it here.             (String)    -optional-  ,
-     - new:
-     - threadIds:    this parameter gets an array of threadId to fileter the result. ([Int])     -optional-  ,
-     - typeCode:
+        this function will get some optional prameters as an input, as JSON or Model (depends on the function that you would use) which are:
+        - count:        how many thread do you want to get with this request.           (Int)       -optional-  , if you don't set it, it would have default value of 50
+        - offset:       offset of the contact number that start to count to show.       (Int)       -optional-  , if you don't set it, it would have default value of 0
+        - name:         if you want to search on your contact, put it here.             (String)    -optional-  ,
+        - new:
+        - threadIds:    this parameter gets an array of threadId to fileter the result. ([Int])     -optional-  ,
+        - typeCode:
      
      + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:  it will returns the response that comes from server to this request.    (GetThreadsModel)
+        It has 2 callbacks as response:
+        1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
+        2- completion:  it will returns the response that comes from server to this request.    (GetThreadsModel)
+        3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
      */
-    public func getThreads(getContactsInput: GetThreadsRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        log.verbose("Try to request to get threads with this parameters: \n \(getContactsInput)", context: "Chat")
+    public func getThreads(getThreadsInput: GetThreadsRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias, cacheResponse: @escaping (GetThreadsModel) -> ()) {
+        log.verbose("Try to request to get threads with this parameters: \n \(getThreadsInput)", context: "Chat")
         
         var content: JSON = []
         
-        content["count"]    = JSON(getContactsInput.count ?? 50)
-        content["offset"]    = JSON(getContactsInput.offset ?? 0)
+        content["count"]    = JSON(getThreadsInput.count ?? 50)
+        content["offset"]    = JSON(getThreadsInput.offset ?? 0)
         
-        if let name = getContactsInput.name {
+        if let name = getThreadsInput.name {
             content["name"] = JSON(name)
         }
         
-        if let new = getContactsInput.new {
+        if let new = getThreadsInput.new {
             content["new"] = JSON(new)
         }
         
-        if let threadIds = getContactsInput.threadIds {
+        if let threadIds = getThreadsInput.threadIds {
             content["threadIds"] = JSON(threadIds)
         }
         
-        if let metadataCriteria = getContactsInput.metadataCriteria {
+        if let metadataCriteria = getThreadsInput.metadataCriteria {
             content["metadataCriteria"] = JSON(metadataCriteria)
         }
         
         let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_THREADS.rawValue,
                                        "content": content,
-                                       "typeCode": getContactsInput.typeCode ?? generalTypeCode]
+                                       "typeCode": getThreadsInput.typeCode ?? generalTypeCode]
         
         sendMessageWithCallback(params: sendMessageParams, callback: GetThreadsCallbacks(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (getThreadUniqueId) in
             uniqueId(getThreadUniqueId)
         }
         threadsCallbackToUser = completion
+        
+        
+        // if cache is enabled by user, it will return cache result to the user
+        if enableCache {
+            if let cacheThreads = Chat.cacheDB.retrieveThreads(count:       content["count"].intValue,
+                                                               offset:      content["offset"].intValue,
+                                                               ascending:   true) {
+                cacheResponse(cacheThreads)
+            }
+        }
         
     }
     
@@ -4639,12 +4753,17 @@ extension Chat {
             if (!hasError) {
                 let resultData = response["result"]
                 
+                // save data comes from server to the Cache
+                let user = User(messageContent: resultData)
+                Chat.cacheDB.createUserInfoObject(user: user)
+                
                 let userInfoModel = UserInfoModel(messageContent: resultData, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 
                 success(userInfoModel)
             } else {
                 failure(["result": false])
             }
+            
         }
     }
     
@@ -4702,6 +4821,15 @@ extension Chat {
                 
                 let messageContent: [JSON] = response["result"].arrayValue
                 let contentCount = response["contentCount"].intValue
+                
+                // save data comes from server to the Cache
+                var conversations = [Conversation]()
+                for item in messageContent {
+                    let myConversation = Conversation(messageContent: item)
+                    conversations.append(myConversation)
+                }
+                Chat.cacheDB.saveThreadObjects(threads: conversations)
+                
                 
                 let getThreadsModel = GetThreadsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 

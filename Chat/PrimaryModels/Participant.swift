@@ -62,6 +62,36 @@ open class Participant {
         self.sendEnable         = messageContent["sendEnable"].bool
     }
     
+    init(cellphoneNumber:   String?,
+         contactId:         Int?,
+         email:             String?,
+         firstName:         String?,
+         id:                Int?,
+         image:             String?,
+         lastName:          String?,
+         myFriend:          Bool?,
+         name:              String?,
+         notSeenDuration:   Int?,
+         online:            Bool?,
+         receiveEnable:     Bool?,
+         sendEnable:        Bool?) {
+        
+        self.cellphoneNumber    = cellphoneNumber
+        self.contactId          = contactId
+        self.email              = email
+        self.firstName          = firstName
+        self.id                 = id
+        self.image              = image
+        self.lastName           = lastName
+        self.myFriend           = myFriend
+        self.name               = name
+        self.notSeenDuration    = notSeenDuration
+        self.online             = online
+        self.receiveEnable      = receiveEnable
+        self.sendEnable         = sendEnable
+    }
+    
+    
     func formatDataToMakeParticipant() -> Participant {
         return self
     }

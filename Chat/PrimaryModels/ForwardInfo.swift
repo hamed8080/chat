@@ -34,14 +34,15 @@ open class ForwardInfo {
             self.participant = Participant(messageContent: messageContent["participant"])
         }
         
-        //        if let myConversation = messageContent["conversation"].array {
-        //            self.conversation = Conversation(messageContent: myConversation.first!)
-        //        }
-        //        if let myParticipant = messageContent["participant"].array {
-        //            self.participant = Participant(messageContent: myParticipant.first!)
-        //        }
-        
     }
+    
+    init(conversation:  Conversation?,
+         participant:   Participant?) {
+        
+        self.conversation   = conversation
+        self.participant    = participant
+    }
+    
     
     func formatDataToMakeForwardInfo() -> ForwardInfo {
         return self

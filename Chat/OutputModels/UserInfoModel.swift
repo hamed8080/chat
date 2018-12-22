@@ -44,13 +44,21 @@ open class UserInfoModel {
     public var userJSON: JSON = [:]
     
     init(messageContent: JSON, hasError: Bool, errorMessage: String, errorCode: Int) {
+        self.hasError       = hasError
+        self.errorMessage   = errorMessage
+        self.errorCode      = errorCode
         
-        self.hasError           = hasError
-        self.errorMessage       = errorMessage
-        self.errorCode          = errorCode
+        self.user           = User(messageContent: messageContent)
+        self.userJSON       = user.formatToJSON()
+    }
+    
+    init(userObject: User, hasError: Bool, errorMessage: String, errorCode: Int) {
+        self.hasError       = hasError
+        self.errorMessage   = errorMessage
+        self.errorCode      = errorCode
         
-        self.user = User(messageContent: messageContent)
-        self.userJSON = user.formatToJSON()
+        self.user           = userObject
+        self.userJSON       = user.formatToJSON()
     }
     
     public func returnDataAsJSON() -> JSON {

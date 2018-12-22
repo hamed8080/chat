@@ -53,6 +53,25 @@ open class ReplyInfo {
         
     }
     
+    init(deleted:           Bool?,
+         repliedToMessageId: Int?,
+         message:           String?,
+         messageType:       Int?,
+         metadata:          String?,
+         systemMetadata:    String?,
+         participant:       Participant?) {
+        
+        self.deleted            = deleted
+        self.repliedToMessageId = repliedToMessageId
+        self.message            = message
+        self.messageType        = messageType
+        self.metadata           = metadata
+        self.systemMetadata     = systemMetadata
+        self.participant        = participant
+        
+    }
+    
+    
     func formatDataToMakeReplyInfo() -> ReplyInfo {
         return self
     }

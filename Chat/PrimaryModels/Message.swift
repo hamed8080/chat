@@ -107,6 +107,41 @@ open class Message {
         
     }
     
+    init(threadId:      Int?,
+         delivered:     Bool?,
+         editable:      Bool?,
+         edited:        Bool?,
+         id:            Int?,
+         message:       String?,
+         metaData:      String?,
+         ownerId:       Int?,
+         previousId:    Int?,
+         seen:          Bool?,
+         time:          Int?,
+         uniqueId:      String?,
+         conversation:  Conversation?,
+         forwardInfo:   ForwardInfo?,
+         participant:   Participant?,
+         replyInfo:     ReplyInfo?) {
+        
+        self.threadId   = threadId
+        self.delivered  = delivered
+        self.editable   = editable
+        self.edited     = edited
+        self.id         = id
+        self.message    = message
+        self.metaData   = metaData
+        self.ownerId    = participant?.id
+        self.previousId = previousId
+        self.seen       = seen
+        self.time       = time
+        self.uniqueId   = uniqueId
+        self.conversation   = conversation
+        self.forwardInfo    = forwardInfo
+        self.participant    = participant
+        self.replyInfo      = replyInfo
+    }
+    
     func formatDataToMakeMessage() -> Message {
         return self
     }
