@@ -52,6 +52,35 @@
 		3E78AABA2184A30A002A6EC0 /* pic.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E78AAB92184A309002A6EC0 /* pic.png */; };
 		3E78AABB2184A30A002A6EC0 /* pic.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E78AAB92184A309002A6EC0 /* pic.png */; };
 		3E78AAC72184AB6F002A6EC0 /* SyncContactsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E78AAC62184AB6F002A6EC0 /* SyncContactsTest.swift */; };
+		3EA1567121CE1A92004B1346 /* GetContactsRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1567021CE1A92004B1346 /* GetContactsRequestModel.swift */; };
+		3EA1567621CE1AC9004B1346 /* AddContactsRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1567521CE1AC9004B1346 /* AddContactsRequestModel.swift */; };
+		3EA1567821CE1AF0004B1346 /* UpdateContactsRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1567721CE1AF0004B1346 /* UpdateContactsRequestModel.swift */; };
+		3EA1567A21CE1B0B004B1346 /* RemoveContactsRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1567921CE1B0B004B1346 /* RemoveContactsRequestModel.swift */; };
+		3EA1567C21CE1B1F004B1346 /* BlockContactsRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1567B21CE1B1F004B1346 /* BlockContactsRequestModel.swift */; };
+		3EA1567E21CE1B49004B1346 /* GetBlockedContactListRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1567D21CE1B49004B1346 /* GetBlockedContactListRequestModel.swift */; };
+		3EA1568021CE1B5B004B1346 /* UnblockContactsRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1567F21CE1B5B004B1346 /* UnblockContactsRequestModel.swift */; };
+		3EA1568221CE1B70004B1346 /* SearchContactsRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1568121CE1B70004B1346 /* SearchContactsRequestModel.swift */; };
+		3EA1568421CE1B86004B1346 /* GetThreadsRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1568321CE1B86004B1346 /* GetThreadsRequestModel.swift */; };
+		3EA1568621CE1BA0004B1346 /* GetHistoryRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1568521CE1BA0004B1346 /* GetHistoryRequestModel.swift */; };
+		3EA1568821CE1BB7004B1346 /* CreateThreadRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1568721CE1BB7004B1346 /* CreateThreadRequestModel.swift */; };
+		3EA1568A21CE1BCB004B1346 /* CreateThreadWithMessageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1568921CE1BCB004B1346 /* CreateThreadWithMessageRequestModel.swift */; };
+		3EA1568C21CE1BDC004B1346 /* MuteAndUnmuteThreadRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1568B21CE1BDC004B1346 /* MuteAndUnmuteThreadRequestModel.swift */; };
+		3EA1568E21CE1BEE004B1346 /* GetThreadParticipantsRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1568D21CE1BED004B1346 /* GetThreadParticipantsRequestModel.swift */; };
+		3EA1569021CE1BFC004B1346 /* AddParticipantsRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1568F21CE1BFC004B1346 /* AddParticipantsRequestModel.swift */; };
+		3EA1569221CE1C15004B1346 /* RemoveParticipantsRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1569121CE1C15004B1346 /* RemoveParticipantsRequestModel.swift */; };
+		3EA1569421CE1C2B004B1346 /* LeaveThreadRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1569321CE1C2B004B1346 /* LeaveThreadRequestModel.swift */; };
+		3EA1569621CE1C3C004B1346 /* SendTextMessageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1569521CE1C3C004B1346 /* SendTextMessageRequestModel.swift */; };
+		3EA1569821CE1C53004B1346 /* EditTextMessageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1569721CE1C53004B1346 /* EditTextMessageRequestModel.swift */; };
+		3EA1569A21CE1C68004B1346 /* ReplyTextMessageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1569921CE1C68004B1346 /* ReplyTextMessageRequestModel.swift */; };
+		3EA1569C21CE1C7C004B1346 /* ForwardMessageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1569B21CE1C7C004B1346 /* ForwardMessageRequestModel.swift */; };
+		3EA1569E21CE1C96004B1346 /* SendFileMessageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1569D21CE1C96004B1346 /* SendFileMessageRequestModel.swift */; };
+		3EA156A021CE1CAE004B1346 /* DeleteMessageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1569F21CE1CAE004B1346 /* DeleteMessageRequestModel.swift */; };
+		3EA156A221CE1CC4004B1346 /* UploadImageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA156A121CE1CC4004B1346 /* UploadImageRequestModel.swift */; };
+		3EA156A421CE1CD6004B1346 /* UploadFileRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA156A321CE1CD6004B1346 /* UploadFileRequestModel.swift */; };
+		3EA156A621CE1CE8004B1346 /* UpdateThreadInfoRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA156A521CE1CE8004B1346 /* UpdateThreadInfoRequestModel.swift */; };
+		3EA156A821CE1D02004B1346 /* SpamPvThreadRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA156A721CE1D02004B1346 /* SpamPvThreadRequestModel.swift */; };
+		3EA156AA21CE1D10004B1346 /* MessageDeliverySeenListRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA156A921CE1D10004B1346 /* MessageDeliverySeenListRequestModel.swift */; };
+		3EA156AC21CE1D1E004B1346 /* DeliverSeenRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA156AB21CE1D1E004B1346 /* DeliverSeenRequestModel.swift */; };
 		3EBBEDC62174C18F00F5CDC7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDC52174C18F00F5CDC7 /* User.swift */; };
 		3EBBEDD32174C20200F5CDC7 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDD22174C20200F5CDC7 /* Contact.swift */; };
 		3EBBEDD52174C23B00F5CDC7 /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDD42174C23B00F5CDC7 /* Conversation.swift */; };
@@ -156,6 +185,35 @@
 		3E78AAB62184A25F002A6EC0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3E78AAB92184A309002A6EC0 /* pic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pic.png; sourceTree = "<group>"; };
 		3E78AAC62184AB6F002A6EC0 /* SyncContactsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncContactsTest.swift; sourceTree = "<group>"; };
+		3EA1567021CE1A92004B1346 /* GetContactsRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetContactsRequestModel.swift; sourceTree = "<group>"; };
+		3EA1567521CE1AC9004B1346 /* AddContactsRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddContactsRequestModel.swift; sourceTree = "<group>"; };
+		3EA1567721CE1AF0004B1346 /* UpdateContactsRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateContactsRequestModel.swift; sourceTree = "<group>"; };
+		3EA1567921CE1B0B004B1346 /* RemoveContactsRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveContactsRequestModel.swift; sourceTree = "<group>"; };
+		3EA1567B21CE1B1F004B1346 /* BlockContactsRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockContactsRequestModel.swift; sourceTree = "<group>"; };
+		3EA1567D21CE1B49004B1346 /* GetBlockedContactListRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetBlockedContactListRequestModel.swift; sourceTree = "<group>"; };
+		3EA1567F21CE1B5B004B1346 /* UnblockContactsRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnblockContactsRequestModel.swift; sourceTree = "<group>"; };
+		3EA1568121CE1B70004B1346 /* SearchContactsRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContactsRequestModel.swift; sourceTree = "<group>"; };
+		3EA1568321CE1B86004B1346 /* GetThreadsRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetThreadsRequestModel.swift; sourceTree = "<group>"; };
+		3EA1568521CE1BA0004B1346 /* GetHistoryRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetHistoryRequestModel.swift; sourceTree = "<group>"; };
+		3EA1568721CE1BB7004B1346 /* CreateThreadRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateThreadRequestModel.swift; sourceTree = "<group>"; };
+		3EA1568921CE1BCB004B1346 /* CreateThreadWithMessageRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateThreadWithMessageRequestModel.swift; sourceTree = "<group>"; };
+		3EA1568B21CE1BDC004B1346 /* MuteAndUnmuteThreadRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuteAndUnmuteThreadRequestModel.swift; sourceTree = "<group>"; };
+		3EA1568D21CE1BED004B1346 /* GetThreadParticipantsRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetThreadParticipantsRequestModel.swift; sourceTree = "<group>"; };
+		3EA1568F21CE1BFC004B1346 /* AddParticipantsRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddParticipantsRequestModel.swift; sourceTree = "<group>"; };
+		3EA1569121CE1C15004B1346 /* RemoveParticipantsRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveParticipantsRequestModel.swift; sourceTree = "<group>"; };
+		3EA1569321CE1C2B004B1346 /* LeaveThreadRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaveThreadRequestModel.swift; sourceTree = "<group>"; };
+		3EA1569521CE1C3C004B1346 /* SendTextMessageRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendTextMessageRequestModel.swift; sourceTree = "<group>"; };
+		3EA1569721CE1C53004B1346 /* EditTextMessageRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTextMessageRequestModel.swift; sourceTree = "<group>"; };
+		3EA1569921CE1C68004B1346 /* ReplyTextMessageRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyTextMessageRequestModel.swift; sourceTree = "<group>"; };
+		3EA1569B21CE1C7C004B1346 /* ForwardMessageRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForwardMessageRequestModel.swift; sourceTree = "<group>"; };
+		3EA1569D21CE1C96004B1346 /* SendFileMessageRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendFileMessageRequestModel.swift; sourceTree = "<group>"; };
+		3EA1569F21CE1CAE004B1346 /* DeleteMessageRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteMessageRequestModel.swift; sourceTree = "<group>"; };
+		3EA156A121CE1CC4004B1346 /* UploadImageRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadImageRequestModel.swift; sourceTree = "<group>"; };
+		3EA156A321CE1CD6004B1346 /* UploadFileRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadFileRequestModel.swift; sourceTree = "<group>"; };
+		3EA156A521CE1CE8004B1346 /* UpdateThreadInfoRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateThreadInfoRequestModel.swift; sourceTree = "<group>"; };
+		3EA156A721CE1D02004B1346 /* SpamPvThreadRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpamPvThreadRequestModel.swift; sourceTree = "<group>"; };
+		3EA156A921CE1D10004B1346 /* MessageDeliverySeenListRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDeliverySeenListRequestModel.swift; sourceTree = "<group>"; };
+		3EA156AB21CE1D1E004B1346 /* DeliverSeenRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliverSeenRequestModel.swift; sourceTree = "<group>"; };
 		3EBBEDC52174C18F00F5CDC7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		3EBBEDD22174C20200F5CDC7 /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
 		3EBBEDD42174C23B00F5CDC7 /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
@@ -215,7 +273,43 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3EBBEDD12174C19B00F5CDC7 /* Models */ = {
+		3EA1567421CE1A99004B1346 /* InputModels */ = {
+			isa = PBXGroup;
+			children = (
+				3EA1567021CE1A92004B1346 /* GetContactsRequestModel.swift */,
+				3EA1567521CE1AC9004B1346 /* AddContactsRequestModel.swift */,
+				3EA1567721CE1AF0004B1346 /* UpdateContactsRequestModel.swift */,
+				3EA1567921CE1B0B004B1346 /* RemoveContactsRequestModel.swift */,
+				3EA1567B21CE1B1F004B1346 /* BlockContactsRequestModel.swift */,
+				3EA1567D21CE1B49004B1346 /* GetBlockedContactListRequestModel.swift */,
+				3EA1567F21CE1B5B004B1346 /* UnblockContactsRequestModel.swift */,
+				3EA1568121CE1B70004B1346 /* SearchContactsRequestModel.swift */,
+				3EA1568321CE1B86004B1346 /* GetThreadsRequestModel.swift */,
+				3EA1568521CE1BA0004B1346 /* GetHistoryRequestModel.swift */,
+				3EA1568721CE1BB7004B1346 /* CreateThreadRequestModel.swift */,
+				3EA1568921CE1BCB004B1346 /* CreateThreadWithMessageRequestModel.swift */,
+				3EA1568B21CE1BDC004B1346 /* MuteAndUnmuteThreadRequestModel.swift */,
+				3EA1568D21CE1BED004B1346 /* GetThreadParticipantsRequestModel.swift */,
+				3EA1568F21CE1BFC004B1346 /* AddParticipantsRequestModel.swift */,
+				3EA1569121CE1C15004B1346 /* RemoveParticipantsRequestModel.swift */,
+				3EA1569321CE1C2B004B1346 /* LeaveThreadRequestModel.swift */,
+				3EA1569521CE1C3C004B1346 /* SendTextMessageRequestModel.swift */,
+				3EA1569721CE1C53004B1346 /* EditTextMessageRequestModel.swift */,
+				3EA1569921CE1C68004B1346 /* ReplyTextMessageRequestModel.swift */,
+				3EA1569B21CE1C7C004B1346 /* ForwardMessageRequestModel.swift */,
+				3EA1569D21CE1C96004B1346 /* SendFileMessageRequestModel.swift */,
+				3EA1569F21CE1CAE004B1346 /* DeleteMessageRequestModel.swift */,
+				3EA156A121CE1CC4004B1346 /* UploadImageRequestModel.swift */,
+				3EA156A321CE1CD6004B1346 /* UploadFileRequestModel.swift */,
+				3EA156A521CE1CE8004B1346 /* UpdateThreadInfoRequestModel.swift */,
+				3EA156A721CE1D02004B1346 /* SpamPvThreadRequestModel.swift */,
+				3EA156A921CE1D10004B1346 /* MessageDeliverySeenListRequestModel.swift */,
+				3EA156AB21CE1D1E004B1346 /* DeliverSeenRequestModel.swift */,
+			);
+			path = InputModels;
+			sourceTree = "<group>";
+		};
+		3EBBEDD12174C19B00F5CDC7 /* PrimaryModels */ = {
 			isa = PBXGroup;
 			children = (
 				3EBBEDD82174C2A200F5CDC7 /* BlockedContact.swift */,
@@ -234,7 +328,7 @@
 				3E78AA9A218479D7002A6EC0 /* UploadImage.swift */,
 				3EBBEDC52174C18F00F5CDC7 /* User.swift */,
 			);
-			path = Models;
+			path = PrimaryModels;
 			sourceTree = "<group>";
 		};
 		3EBBEDEC2174C46B00F5CDC7 /* OutputModels */ = {
@@ -317,7 +411,8 @@
 				3EBBEDFB2174C9FB00F5CDC7 /* ChatProtocols.swift */,
 				3E78AAB62184A25F002A6EC0 /* Assets.xcassets */,
 				3EBBEDFD2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift */,
-				3EBBEDD12174C19B00F5CDC7 /* Models */,
+				3EA1567421CE1A99004B1346 /* InputModels */,
+				3EBBEDD12174C19B00F5CDC7 /* PrimaryModels */,
 				3EBBEDEC2174C46B00F5CDC7 /* OutputModels */,
 				3EBBEDFF2174CB9800F5CDC7 /* Helpers */,
 				3EE025F121206E63001810FB /* Info.plist */,
@@ -515,36 +610,65 @@
 				3EBBEDFC2174C9FB00F5CDC7 /* ChatProtocols.swift in Sources */,
 				3EBBEDF62174C6AF00F5CDC7 /* CreateThreadModel.swift in Sources */,
 				3EBBEDDF2174C30800F5CDC7 /* Participant.swift in Sources */,
+				3EA1568221CE1B70004B1346 /* SearchContactsRequestModel.swift in Sources */,
 				3ED22F2F2187469F00B6FE4C /* AddParticipantModel.swift in Sources */,
 				3EBBEDEE2174C5A600F5CDC7 /* GetContactsModel.swift in Sources */,
+				3EA1568A21CE1BCB004B1346 /* CreateThreadWithMessageRequestModel.swift in Sources */,
 				3EBBEDE32174C35200F5CDC7 /* ForwardInfo.swift in Sources */,
 				3EBBEDD52174C23B00F5CDC7 /* Conversation.swift in Sources */,
 				3E78AA9B218479D7002A6EC0 /* UploadImage.swift in Sources */,
+				3EA1568C21CE1BDC004B1346 /* MuteAndUnmuteThreadRequestModel.swift in Sources */,
 				3E437D5A218F36B80021C0ED /* BlockedUserModel.swift in Sources */,
+				3EA1567E21CE1B49004B1346 /* GetBlockedContactListRequestModel.swift in Sources */,
+				3EA156A021CE1CAE004B1346 /* DeleteMessageRequestModel.swift in Sources */,
+				3EA1569621CE1C3C004B1346 /* SendTextMessageRequestModel.swift in Sources */,
 				3EBBEDE92174C39B00F5CDC7 /* ThreadParticipants.swift in Sources */,
 				3EBBEDDD2174C2F000F5CDC7 /* LinkedUser.swift in Sources */,
+				3EA1569821CE1C53004B1346 /* EditTextMessageRequestModel.swift in Sources */,
+				3EA1568021CE1B5B004B1346 /* UnblockContactsRequestModel.swift in Sources */,
 				3E43D1422132B6170069DF9A /* DataFormatters.swift in Sources */,
 				3EBBEDF22174C5EC00F5CDC7 /* GetHistoryModel.swift in Sources */,
 				3E78AA9D218479DF002A6EC0 /* UploadFile.swift in Sources */,
 				3E3F17792133D0A90029E4D4 /* EnumsAndStructs.swift in Sources */,
+				3EA1568621CE1BA0004B1346 /* GetHistoryRequestModel.swift in Sources */,
+				3EA156A821CE1D02004B1346 /* SpamPvThreadRequestModel.swift in Sources */,
 				3EBBEDF42174C69700F5CDC7 /* GetThreadParticipantsModel.swift in Sources */,
+				3EA156A221CE1CC4004B1346 /* UploadImageRequestModel.swift in Sources */,
 				3EBBEDD92174C2A200F5CDC7 /* BlockedContact.swift in Sources */,
 				3E63A088213A618F00E4E2C2 /* ObjectTypes.swift in Sources */,
+				3EA1567821CE1AF0004B1346 /* UpdateContactsRequestModel.swift in Sources */,
 				3E43D1562132BF700069DF9A /* SendMessage.swift in Sources */,
+				3EA1569A21CE1C68004B1346 /* ReplyTextMessageRequestModel.swift in Sources */,
+				3EA1569021CE1BFC004B1346 /* AddParticipantsRequestModel.swift in Sources */,
 				3E78AA95218479BA002A6EC0 /* UploadImageModel.swift in Sources */,
 				3E43D1582132BF9C0069DF9A /* ReceiveMessage.swift in Sources */,
 				3E437D56218F35A50021C0ED /* RemoveParticipantModel.swift in Sources */,
 				3E4B27E4212300CB001130F6 /* GCDTimer.swift in Sources */,
+				3EA1568421CE1B86004B1346 /* GetThreadsRequestModel.swift in Sources */,
 				3EBBEDDB2174C2C000F5CDC7 /* Invitee.swift in Sources */,
+				3EA1568821CE1BB7004B1346 /* CreateThreadRequestModel.swift in Sources */,
 				3E78AA99218479CB002A6EC0 /* UploadFileModel.swift in Sources */,
 				3EBBEDF82174C6CD00F5CDC7 /* ContactModel.swift in Sources */,
 				3EBBEDD32174C20200F5CDC7 /* Contact.swift in Sources */,
 				3EE0261721206EA6001810FB /* Chat.swift in Sources */,
 				3E437D5C218F36DA0021C0ED /* GetBlockedContactListModel.swift in Sources */,
+				3EA156AA21CE1D10004B1346 /* MessageDeliverySeenListRequestModel.swift in Sources */,
+				3EA1569421CE1C2B004B1346 /* LeaveThreadRequestModel.swift in Sources */,
 				3EBBEDD72174C27B00F5CDC7 /* Message.swift in Sources */,
+				3EA1567A21CE1B0B004B1346 /* RemoveContactsRequestModel.swift in Sources */,
+				3EA1569C21CE1C7C004B1346 /* ForwardMessageRequestModel.swift in Sources */,
 				3EBBEDE72174C38000F5CDC7 /* ThreadHistory.swift in Sources */,
+				3EA1567C21CE1B1F004B1346 /* BlockContactsRequestModel.swift in Sources */,
 				3EBBEDE52174C36700F5CDC7 /* MessageChangeState.swift in Sources */,
+				3EA1568E21CE1BEE004B1346 /* GetThreadParticipantsRequestModel.swift in Sources */,
 				3EBBEDFE2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift in Sources */,
+				3EA1567621CE1AC9004B1346 /* AddContactsRequestModel.swift in Sources */,
+				3EA1569E21CE1C96004B1346 /* SendFileMessageRequestModel.swift in Sources */,
+				3EA1567121CE1A92004B1346 /* GetContactsRequestModel.swift in Sources */,
+				3EA1569221CE1C15004B1346 /* RemoveParticipantsRequestModel.swift in Sources */,
+				3EA156A621CE1CE8004B1346 /* UpdateThreadInfoRequestModel.swift in Sources */,
+				3EA156A421CE1CD6004B1346 /* UploadFileRequestModel.swift in Sources */,
+				3EA156AC21CE1D1E004B1346 /* DeliverSeenRequestModel.swift in Sources */,
 				3EBBEDFA2174C6E000F5CDC7 /* RemoveContactModel.swift in Sources */,
 				3EBBEDF02174C5C800F5CDC7 /* GetThreadsModel.swift in Sources */,
 				3EBBEE012174CBCA00F5CDC7 /* Extentions.swift in Sources */,
