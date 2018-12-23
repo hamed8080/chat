@@ -17,7 +17,7 @@ extension CMThreadHistory {
         return NSFetchRequest<CMThreadHistory>(entityName: "CMThreadHistory")
     }
 
-    @NSManaged public var messages: NSSet?
+    @NSManaged public var messages: [CMMessage]?
 
 }
 
@@ -31,9 +31,9 @@ extension CMThreadHistory {
     @NSManaged public func removeFromMessages(_ value: CMMessage)
 
     @objc(addMessages:)
-    @NSManaged public func addToMessages(_ values: NSSet)
+    @NSManaged public func addToMessages(_ values: [CMMessage])
 
     @objc(removeMessages:)
-    @NSManaged public func removeFromMessages(_ values: NSSet)
+    @NSManaged public func removeFromMessages(_ values: [CMMessage])
 
 }

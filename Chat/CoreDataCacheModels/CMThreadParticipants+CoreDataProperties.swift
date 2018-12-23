@@ -17,7 +17,7 @@ extension CMThreadParticipants {
         return NSFetchRequest<CMThreadParticipants>(entityName: "CMThreadParticipants")
     }
 
-    @NSManaged public var participants: NSSet?
+    @NSManaged public var participants: [CMParticipant]?
 
 }
 
@@ -31,9 +31,9 @@ extension CMThreadParticipants {
     @NSManaged public func removeFromParticipants(_ value: CMParticipant)
 
     @objc(addParticipants:)
-    @NSManaged public func addToParticipants(_ values: NSSet)
+    @NSManaged public func addToParticipants(_ values: [CMParticipant])
 
     @objc(removeParticipants:)
-    @NSManaged public func removeFromParticipants(_ values: NSSet)
+    @NSManaged public func removeFromParticipants(_ values: [CMParticipant])
 
 }

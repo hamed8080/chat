@@ -31,6 +31,24 @@ open class UploadImage {
         self.width          = messageContent["width"].int
     }
     
+    init(actualHeight:  Int?,
+         actualWidth:   Int?,
+         hashCode:      String?,
+         height:        Int?,
+         id:            Int?,
+         name:          String?,
+         width:         Int?) {
+        
+        self.actualHeight   = actualHeight
+        self.actualWidth    = actualWidth
+        self.hashCode       = hashCode
+        self.height         = height
+        self.id             = id
+        self.name           = name
+        self.width          = width
+    }
+    
+    
     func formatDataToMakeUploadImage() -> UploadImage {
         return self
     }

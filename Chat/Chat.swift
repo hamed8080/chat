@@ -1427,11 +1427,12 @@ extension Chat {
      - typeCode:
      
      + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:  it will returns the response that comes from server to this request.    (GetContactsModel)
+        It has 3 callbacks as response:
+        1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
+        2- completion:  it will returns the response that comes from server to this request.    (GetContactsModel)
+        3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
      */
-    public func getContacts(getContactsInput: GetContactsRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func getContacts(getContactsInput: GetContactsRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias, cacheResponse: @escaping (GetContactsModel) -> ()) {
         log.verbose("Try to request to get Contacts with this parameters: \n \(getContactsInput)", context: "Chat")
         
         var content: JSON = []
@@ -1451,6 +1452,17 @@ extension Chat {
             uniqueId(getContactUniqueId)
         }
         getContactsCallbackToUser = completion
+        
+        
+        // if cache is enabled by user, it will return cache result to the user
+        if enableCache {
+            if let cacheContacts = Chat.cacheDB.retrieveContacts(count: content["count"].intValue,
+                                                                offset: content["offset"].intValue,
+                                                                ascending:  true) {
+                cacheResponse(cacheContacts)
+            }
+        }
+        
     }
     
     // NOTE: This method will be deprecate soon
@@ -2713,24 +2725,23 @@ extension Chat {
      then the response will come back as callbacks to client whose calls this function.
      
      + Inputs:
-     this function will get some optional prameters as an input, as JSON or Model (depends on the function that you would use) which are:
-     - threadId:    id of the thread that you want to mute it.    (Int)
-     - count:
-     - offset:
-     - firstMessageId:
-     - lastMessageId:
-     - name:
-     - typeCode:
+        this function will get some optional prameters as an input, as JSON or Model (depends on the function that you would use) which are:
+        - threadId:    id of the thread that you want to mute it.    (Int)
+        - count:
+        - offset:
+        - firstMessageId:
+        - lastMessageId:
+        - name:
+        - typeCode:
      
      + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:  it will returns the response that comes from server to this request.    (GetThreadParticipantsModel)
+        It has 2 callbacks as response:
+        1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
+        2- completion:  it will returns the response that comes from server to this request.    (GetThreadParticipantsModel)
+        3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
      */
-    public func getThreadParticipants(getThreadParticipantsInput: GetThreadParticipantsRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func getThreadParticipants(getThreadParticipantsInput: GetThreadParticipantsRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias, cacheResponse: @escaping (GetThreadParticipantsModel) -> ()) {
         log.verbose("Try to request to get thread participants with this parameters: \n \(getThreadParticipantsInput)", context: "Chat")
-        
-        //        var subjectId: Int = 0
         
         var content: JSON = [:]
         content["threadId"] = JSON(getThreadParticipantsInput.threadId)
@@ -2756,6 +2767,16 @@ extension Chat {
             uniqueId(getParticipantsUniqueId)
         }
         threadParticipantsCallbackToUser = completion
+        
+        
+        // if cache is enabled by user, it will return cache result to the user
+        if enableCache {
+            if let cacheThreadParticipants = Chat.cacheDB.retrieveThreadParticipants(count:       content["count"].intValue,
+                                                                                     offset:      content["offset"].intValue,
+                                                                                     ascending:   true) {
+                cacheResponse(cacheThreadParticipants)
+            }
+        }
         
     }
     
@@ -4794,6 +4815,15 @@ extension Chat {
                 let messageContent: [JSON] = response["result"].arrayValue
                 let contentCount = response["contentCount"].intValue
                 
+                // save data comes from server to the Cache
+                var contacts = [Contact]()
+                for item in messageContent {
+                    let myContact = Contact(messageContent: item)
+                    contacts.append(myContact)
+                }
+                Chat.cacheDB.saveContactsObjects(contacts: contacts)
+                
+                
                 let getContactsModel = GetContactsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 
                 success(getContactsModel)
@@ -4887,6 +4917,16 @@ extension Chat {
                 
                 let messageContent: [JSON] = response["result"].arrayValue
                 let contentCount = response["contentCount"].intValue
+                
+                
+                // save data comes from server to the Cache
+                var participants = [Participant]()
+                for item in messageContent {
+                    let myParticipant = Participant(messageContent: item)
+                    participants.append(myParticipant)
+                }
+                Chat.cacheDB.saveThreadParticipantsObjects(participants: participants)
+                
                 
                 let getThreadParticipantsModel = GetThreadParticipantsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 

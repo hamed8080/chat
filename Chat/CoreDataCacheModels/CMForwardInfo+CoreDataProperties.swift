@@ -18,6 +18,6 @@ extension CMForwardInfo {
     }
 
     @NSManaged public var conversation: CMConversation?
-    @NSManaged public var participant: CMParticipant?
+    @NSManaged public var participant:  CMParticipant?
 
 }

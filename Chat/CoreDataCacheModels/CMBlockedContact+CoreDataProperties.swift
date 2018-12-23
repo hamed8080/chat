@@ -18,7 +18,7 @@ extension CMBlockedContact {
     }
 
     @NSManaged public var firstName: String?
-    @NSManaged public var id: NSNumber?
+    @NSManaged public var id:       NSNumber?
     @NSManaged public var lastName: String?
     @NSManaged public var nickName: String?
 

@@ -18,7 +18,7 @@ extension CMUploadFile {
     }
 
     @NSManaged public var hashCode: String?
-    @NSManaged public var id: NSNumber?
-    @NSManaged public var name: String?
+    @NSManaged public var id:       NSNumber?
+    @NSManaged public var name:     String?
 
 }

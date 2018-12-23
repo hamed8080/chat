@@ -32,8 +32,11 @@ open class Participant {
      *    - sendEnable:         Bool?
      */
     
+    public let admin:              Bool?
+    public let blocked:            Bool?
     public let cellphoneNumber:    String?
     public let contactId:          Int?
+    public let coreUserId:         Int?
     public let email:              String?
     public let firstName:          String?
     public let id:                 Int?
@@ -47,8 +50,11 @@ open class Participant {
     public let sendEnable:         Bool?
     
     init(messageContent: JSON) {
+        self.admin              = messageContent["admin"].bool
+        self.blocked            = messageContent["blocked"].bool
         self.cellphoneNumber    = messageContent["cellphoneNumber"].string
         self.contactId          = messageContent["contactId"].int
+        self.coreUserId         = messageContent["coreUserId"].int
         self.email              = messageContent["email"].string
         self.firstName          = messageContent["firstName"].string
         self.id                 = messageContent["id"].int
@@ -62,8 +68,11 @@ open class Participant {
         self.sendEnable         = messageContent["sendEnable"].bool
     }
     
-    init(cellphoneNumber:   String?,
+    init(admin:             Bool?,
+         blocked:           Bool?,
+         cellphoneNumber:   String?,
          contactId:         Int?,
+         coreUserId:        Int?,
          email:             String?,
          firstName:         String?,
          id:                Int?,
@@ -76,8 +85,11 @@ open class Participant {
          receiveEnable:     Bool?,
          sendEnable:        Bool?) {
         
+        self.admin              = admin
+        self.blocked            = blocked
         self.cellphoneNumber    = cellphoneNumber
         self.contactId          = contactId
+        self.coreUserId         = coreUserId
         self.email              = email
         self.firstName          = firstName
         self.id                 = id

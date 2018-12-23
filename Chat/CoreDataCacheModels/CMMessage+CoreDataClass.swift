@@ -15,8 +15,6 @@ public class CMMessage: NSManagedObject {
     
     public func convertCMMessageToMessageObject() -> Message {
         
-        
-        
         var delivered:      Bool?
         var editable:       Bool?
         var edited:         Bool?
@@ -64,6 +62,7 @@ public class CMMessage: NSManagedObject {
                                        edited: edited,
                                        id: id,
                                        message: self.message,
+                                       messageType: self.messageType,
                                        metaData: self.metaData,
                                        ownerId: ownerId,
                                        previousId: previousId,

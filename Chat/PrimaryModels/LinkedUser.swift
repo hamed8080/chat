@@ -23,24 +23,41 @@ open class LinkedUser {
      *   - username         String?
      */
     
-    public let image:      String?
-    public let name:       String?
-    public let nickname:   String?
-    public let username:   String?
+    public let coreUserId:  Int?
+    public let image:       String?
+    public let name:        String?
+    public let nickname:    String?
+    public let username:    String?
     
     init(messageContent: JSON) {
+        self.coreUserId = messageContent["coreUserId"].int
         self.image      = messageContent["image"].string
         self.name       = messageContent["name"].string
         self.nickname   = messageContent["nickname"].string
         self.username   = messageContent["username"].string
     }
     
+    init(coreUserId: Int?,
+         image:     String?,
+         name:      String?,
+         nickname:  String?,
+         username:  String?) {
+        
+        self.coreUserId = coreUserId
+        self.image      = image
+        self.name       = name
+        self.nickname   = nickname
+        self.username   = username
+    }
+    
+    
     func formatdataToMakeLinkedUser() -> LinkedUser {
         return self
     }
     
     func formatToJSON() -> JSON {
-        let result: JSON = ["image":            image ?? NSNull(),
+        let result: JSON = ["coreUserId":       coreUserId ?? NSNull(),
+                            "image":            image ?? NSNull(),
                             "name":             name ?? NSNull(),
                             "nickname":         nickname ?? NSNull(),
                             "username":         username ?? NSNull()]

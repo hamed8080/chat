@@ -81,6 +81,38 @@ open class GetContactsModel {
         
     }
     
+    init(contactsObject:    [Contact],
+         contentCount:      Int,
+         count:             Int,
+         offset:            Int,
+         hasError:          Bool,
+         errorMessage:      String,
+         errorCode:         Int) {
+        
+        self.hasError           = hasError
+        self.errorMessage       = errorMessage
+        self.errorCode          = errorCode
+        
+        let messageLength = contactsObject.count
+        self.contentCount = contentCount
+        self.hasNext = false
+        let x: Int = count + offset
+        if (x < contentCount) && (messageLength > 0) {
+            self.hasNext = true
+        }
+        self.nextOffset = offset + messageLength
+        
+        for item in contactsObject {
+            let cont = item
+            let contJSON = cont.formatToJSON()
+            
+            contacts.append(cont)
+            contacrsJSON.append(contJSON)
+        }
+        
+    }
+    
+    
     public func returnDataAsJSON() -> JSON {
         let result: JSON = ["contentCount": contentCount,
                             "hasNext":      hasNext,

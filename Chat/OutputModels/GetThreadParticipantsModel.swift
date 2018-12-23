@@ -58,7 +58,13 @@ open class GetThreadParticipantsModel {
     
     public var participantsJSON:   [JSON] = []
     
-    init(messageContent: [JSON], contentCount: Int, count: Int, offset: Int, hasError: Bool, errorMessage: String, errorCode: Int) {
+    init(messageContent: [JSON],
+         contentCount: Int,
+         count: Int,
+         offset: Int,
+         hasError: Bool,
+         errorMessage: String,
+         errorCode: Int) {
         
         self.hasError           = hasError
         self.errorMessage       = errorMessage
@@ -81,6 +87,38 @@ open class GetThreadParticipantsModel {
             participantsJSON.append(participantJSON)
         }
     }
+    
+    init(participantObjects:    [Participant],
+         contentCount:  Int,
+         count:         Int,
+         offset:        Int,
+         hasError:      Bool,
+         errorMessage:  String,
+         errorCode:     Int) {
+        
+        self.hasError           = hasError
+        self.errorMessage       = errorMessage
+        self.errorCode          = errorCode
+        
+        let messageLength = participantObjects.count
+        self.contentCount = contentCount
+        self.hasNext = false
+        let x: Int = count + offset
+        if (x < contentCount) && (messageLength > 0) {
+            self.hasNext = true
+        }
+        self.nextOffset = offset + messageLength
+        
+        for item in participantObjects {
+            let participant = item
+            let participantJSON = participant.formatToJSON()
+            
+            participants.append(participant)
+            participantsJSON.append(participantJSON)
+        }
+        
+    }
+    
     
     public func returnDataAsJSON() -> JSON {
         let result: JSON = ["contentCount": contentCount,

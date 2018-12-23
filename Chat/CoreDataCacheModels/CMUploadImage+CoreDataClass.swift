@@ -12,5 +12,49 @@ import CoreData
 
 
 public class CMUploadImage: NSManagedObject {
-
+    
+    public func convertCMUploadImageToUploadImageObject() -> UploadImage {
+        
+        var actualHeight:   Int?
+        var actualWidth:    Int?
+        var height:         Int?
+        var id:             Int?
+        var width:          Int?
+        
+        
+        func createVariables() {
+            if let actualHeight2 = self.actualHeight as? Int {
+                actualHeight = actualHeight2
+            }
+            if let actualWidth2 = self.actualWidth as? Int {
+                actualWidth = actualWidth2
+            }
+            if let height2 = self.height as? Int {
+                height = height2
+            }
+            if let id2 = self.id as? Int {
+                id = id2
+            }
+            if let width2 = self.width as? Int {
+                width = width2
+            }
+        }
+        
+        func createUploadImageModel() -> UploadImage {
+            let uploadImageModel = UploadImage(actualHeight: actualHeight,
+                                           actualWidth: actualWidth,
+                                           hashCode: self.hashCode,
+                                           height: height,
+                                           id: id,
+                                           name: self.name,
+                                           width: width)
+            return uploadImageModel
+        }
+        
+        createVariables()
+        let model = createUploadImageModel()
+        
+        return model
+    }
+    
 }

@@ -64,6 +64,33 @@ open class Contact {
         
     }
     
+    init(cellphoneNumber:   String?,
+         email:             String?,
+         firstName:         String?,
+         hasUser:           Bool?,
+         id:                Int?,
+         image:             String?,
+         lastName:          String?,
+         linkedUser:        LinkedUser?,
+         notSeenDuration:   Int?,
+         uniqueId:          String?,
+         userId:            Int?) {
+        
+        self.cellphoneNumber    = cellphoneNumber
+        self.email              = email
+        self.firstName          = firstName
+        self.hasUser            = hasUser
+        self.id                 = id
+        self.image              = image
+        self.lastName           = lastName
+        self.linkedUser         = linkedUser
+        self.notSeenDuration    = notSeenDuration
+        self.uniqueId           = uniqueId
+        self.userId             = userId
+        
+    }
+    
+    
     func formatDataToMakeContact() -> Contact {
         return self
     }

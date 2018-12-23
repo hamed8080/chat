@@ -17,8 +17,8 @@ extension CMMessageChangeState {
         return NSFetchRequest<CMMessageChangeState>(entityName: "CMMessageChangeState")
     }
 
-    @NSManaged public var messageId: NSNumber?
-    @NSManaged public var senderId: NSNumber?
-    @NSManaged public var threadId: NSNumber?
+    @NSManaged public var messageId:    NSNumber?
+    @NSManaged public var senderId:     NSNumber?
+    @NSManaged public var threadId:     NSNumber?
 
 }

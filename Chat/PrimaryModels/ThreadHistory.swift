@@ -24,6 +24,16 @@ open class ThreadHistory {
         }
     }
     
+    init(historyContent: [Message]) {
+        
+        for item in historyContent {
+            let temp = item
+            self.returnData.append(temp)
+        }
+        
+    }
+    
+    
     func reformatThreadHistory() -> ThreadHistory {
         return self
     }

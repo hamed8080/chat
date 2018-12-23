@@ -17,7 +17,7 @@ extension CMInvitee {
         return NSFetchRequest<CMInvitee>(entityName: "CMInvitee")
     }
 
-    @NSManaged public var id: String?
-    @NSManaged public var idType: NSNumber?
+    @NSManaged public var id:       String?
+    @NSManaged public var idType:   NSNumber?
 
 }

@@ -40,6 +40,7 @@ open class Message {
     public let edited:         Bool?
     public let id:             Int?
     public let message:        String?
+    public let messageType:    String?
     public let metaData:       String?
     public var ownerId:        Int?
     public let previousId:     Int?
@@ -54,15 +55,14 @@ open class Message {
     public var replyInfo:      ReplyInfo?
     
     init(threadId: Int?, pushMessageVO: JSON) {
-        if let theThreadId = threadId {
-            self.threadId = theThreadId
-        }
         
+        self.threadId   = threadId
         self.delivered  = pushMessageVO["delivered"].bool
         self.editable   = pushMessageVO["editable"].bool
         self.edited     = pushMessageVO["edited"].bool
         self.id         = pushMessageVO["id"].int
         self.message    = pushMessageVO["message"].string
+        self.messageType = pushMessageVO["messageType"].string
         self.metaData   = pushMessageVO["metaData"].string
         self.previousId = pushMessageVO["previousId"].int
         self.seen       = pushMessageVO["seen"].bool
@@ -113,6 +113,7 @@ open class Message {
          edited:        Bool?,
          id:            Int?,
          message:       String?,
+         messageType:   String?,
          metaData:      String?,
          ownerId:       Int?,
          previousId:    Int?,
@@ -130,6 +131,7 @@ open class Message {
         self.edited     = edited
         self.id         = id
         self.message    = message
+        self.messageType = messageType
         self.metaData   = metaData
         self.ownerId    = participant?.id
         self.previousId = previousId
@@ -142,6 +144,28 @@ open class Message {
         self.replyInfo      = replyInfo
     }
     
+    init(theMessage: Message) {
+        
+        self.threadId   = theMessage.threadId
+        self.delivered  = theMessage.delivered
+        self.editable   = theMessage.editable
+        self.edited     = theMessage.edited
+        self.id         = theMessage.id
+        self.message    = theMessage.message
+        self.messageType = theMessage.messageType
+        self.metaData   = theMessage.metaData
+        self.ownerId    = theMessage.participant?.id
+        self.previousId = theMessage.previousId
+        self.seen       = theMessage.seen
+        self.time       = theMessage.time
+        self.uniqueId   = theMessage.uniqueId
+        self.conversation   = theMessage.conversation
+        self.forwardInfo    = theMessage.forwardInfo
+        self.participant    = theMessage.participant
+        self.replyInfo      = theMessage.replyInfo
+    }
+    
+    
     func formatDataToMakeMessage() -> Message {
         return self
     }
@@ -152,6 +176,7 @@ open class Message {
                             "edited":           edited ?? NSNull(),
                             "id":               id ?? NSNull(),
                             "message":          message ?? NSNull(),
+                            "messageType":      messageType ?? NSNull(),
                             "metaData":         metaData ?? NSNull(),
                             "ownerId":          ownerId ?? NSNull(),
                             "previousId":       previousId ?? NSNull(),

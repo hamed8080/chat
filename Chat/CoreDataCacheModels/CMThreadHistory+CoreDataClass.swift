@@ -12,5 +12,7 @@ import CoreData
 
 
 public class CMThreadHistory: NSManagedObject {
-
+    
+    
+    
 }

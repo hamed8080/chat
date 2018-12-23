@@ -15,7 +15,10 @@ public class CMParticipant: NSManagedObject {
     
     public func convertCMParticipantToParticipantObject() -> Participant {
         
+        var admin:              Bool?
+        var blocked:            Bool?
         var contactId:          Int?
+        var coreUserId:         Int?
         var id:                 Int?
         var myFriend:           Bool?
         var notSeenDuration:    Int?
@@ -24,8 +27,17 @@ public class CMParticipant: NSManagedObject {
         var sendEnable:         Bool?
         
         func createVariables() {
+            if let admin2 = self.admin as? Bool {
+                admin = admin2
+            }
+            if let blocked2 = self.blocked as? Bool {
+                blocked = blocked2
+            }
             if let contactId2 = self.contactId as? Int {
                 contactId = contactId2
+            }
+            if let coreUserId2 = self.coreUserId as? Int {
+                coreUserId = coreUserId2
             }
             if let id2 = self.id as? Int {
                 id = id2
@@ -48,8 +60,11 @@ public class CMParticipant: NSManagedObject {
         }
         
         func createMessageModel() -> Participant {
-            let participantModel = Participant(cellphoneNumber: self.cellphoneNumber,
+            let participantModel = Participant(admin:           admin,
+                                               blocked:         blocked,
+                                               cellphoneNumber: self.cellphoneNumber,
                                                contactId:       contactId,
+                                               coreUserId:      coreUserId,
                                                email:           self.email,
                                                firstName:       self.firstName,
                                                id:              id,

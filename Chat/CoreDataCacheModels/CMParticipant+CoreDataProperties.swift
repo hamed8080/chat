@@ -17,21 +17,21 @@ extension CMParticipant {
         return NSFetchRequest<CMParticipant>(entityName: "CMParticipant")
     }
 
-    @NSManaged public var admin: NSNumber?
-    @NSManaged public var blocked: NSNumber?
-    @NSManaged public var cellphoneNumber: String?
-    @NSManaged public var contactId: NSNumber?
-    @NSManaged public var coreUserId: NSNumber?
-    @NSManaged public var email: String?
-    @NSManaged public var firstName: String?
-    @NSManaged public var id: NSNumber?
-    @NSManaged public var image: String?
-    @NSManaged public var lastName: String?
-    @NSManaged public var myFriend: NSNumber?
-    @NSManaged public var name: String?
-    @NSManaged public var notSeenDuration: NSNumber?
-    @NSManaged public var online: NSNumber?
-    @NSManaged public var receiveEnable: NSNumber?
-    @NSManaged public var sendEnable: NSNumber?
+    @NSManaged public var admin:            NSNumber?
+    @NSManaged public var blocked:          NSNumber?
+    @NSManaged public var cellphoneNumber:  String?
+    @NSManaged public var contactId:        NSNumber?
+    @NSManaged public var coreUserId:       NSNumber?
+    @NSManaged public var email:            String?
+    @NSManaged public var firstName:        String?
+    @NSManaged public var id:               NSNumber?
+    @NSManaged public var image:            String?
+    @NSManaged public var lastName:         String?
+    @NSManaged public var myFriend:         NSNumber?
+    @NSManaged public var name:             String?
+    @NSManaged public var notSeenDuration:  NSNumber?
+    @NSManaged public var online:           NSNumber?
+    @NSManaged public var receiveEnable:    NSNumber?
+    @NSManaged public var sendEnable:       NSNumber?
 
 }
