@@ -11,6 +11,8 @@ import CoreData
 import SwiftyBeaver
 import SwiftyJSON
 
+
+
 public class Cache {
     
     
@@ -18,8 +20,9 @@ public class Cache {
     public let context: NSManagedObjectContext
     
     public init() {
-        context = coreDataStack.persistentContainer.viewContext
         
+        context = coreDataStack.persistentContainer.viewContext
+        print("context created")
     }
     
     
@@ -37,18 +40,21 @@ public class Cache {
 
 
 
-// MARK: - Functions that will save data on COreData Cache
+// MARK: - Functions that will save data on CoreData Cache
 
 extension Cache {
     
-    // this function will save the UserInfo
+    // this function will save (or update) the UserInfo in the Cache.
     public func createUserInfoObject(user: User) {
         // check if there is any information about UserInfo in the cache
         // if it has some data, it we will update that data,
         // otherwise we will create an object and save data on cache
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUser")
         do {
+            
             if let result = try context.fetch(fetchRequest) as? [CMUser] {
+                // if there is a value in this fetch request, it mean that we had already saved UserInfo in the Cache.
+                // so we just have to update that information with new response that comes from server
                 if (result.count > 0) {
                     result.first!.cellphoneNumber   = user.cellphoneNumber
                     result.first!.email             = user.email
@@ -87,23 +93,34 @@ extension Cache {
     }
     
     
-    // this function will save threads that comes from server
+    // this function will save (or update) threads that comes from server, into the Cache.
     public func saveThreadObjects(threads: [Conversation]) {
         // check if there is any information about Conversations that are in the cache,
         // which are has beed there, it we will update that data,
         // otherwise we will create an object and save data on cache
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
         do {
-            if let result = try context.fetch(fetchRequest) as? [Conversation] {
-                for itemInCache in result {
-                    for item in threads {
-                        if (itemInCache.id == item.id) {
-                            // the conversation object that we are going to create, is already exist in the Cache
-                            // so we will delete them first, then we will create it again
+            if let result = try context.fetch(fetchRequest) as? [CMConversation] {
+                
+                // Part1:
+                // find data that are exist in the Cache, (and the response request is containing that). and delete them
+                for item in threads {
+                    for itemInCache in result {
+                        if let conversationId = Int(exactly: itemInCache.id ?? 0) {
+                            if (conversationId == item.id) {
+                                // the conversation object that we are going to create, is already exist in the Cache
+                                // to update information in this object:
+                                // we will delete them first, then we will create it again later
+                                context.delete(itemInCache)
+                                saveContext(subject: "Delete Object: \(itemInCache.convertCMConversationToConversationObject().formatToJSON())")
+                            }
                         }
+                        
                     }
                 }
                 
+                // Part2:
+                // save data comes from server to the Cache
                 var allThreads = [CMConversation]()
                 
                 for item in threads {
@@ -136,6 +153,7 @@ extension Cache {
                     
                     let theInviterEntity = NSEntityDescription.entity(forEntityName: "CMParticipant", in: context)
                     let theInviter = CMParticipant(entity: theInviterEntity!, insertInto: context)
+                    
                     theInviter.admin           = item.inviter?.admin as NSNumber?
                     theInviter.blocked         = item.inviter?.blocked as NSNumber?
                     theInviter.cellphoneNumber = item.inviter?.cellphoneNumber
@@ -171,12 +189,11 @@ extension Cache {
                     theMessage.threadId     = item.lastMessageVO?.threadId as NSNumber?
                     theMessage.time         = item.lastMessageVO?.time as NSNumber?
                     theMessage.uniqueId     = item.lastMessageVO?.uniqueId
-//                    theMessage.conversation = item.lastMessageVO?.conversation
-//                    theMessage.forwardInfo  = item.lastMessageVO?.forwardInfo
-//                    theMessage.participant  = item.lastMessageVO?.participant
-//                    theMessage.replyInfo    = item.lastMessageVO?.replyInfo
+                    //                    theMessage.conversation = item.lastMessageVO?.conversation
+                    //                    theMessage.forwardInfo  = item.lastMessageVO?.forwardInfo
+                    //                    theMessage.participant  = item.lastMessageVO?.participant
+                    //                    theMessage.replyInfo    = item.lastMessageVO?.replyInfo
                     conversation.lastMessageVO = theMessage
-                    
                     
                     if let messagParticipants = item.participants {
                         var participantArr = [CMParticipant]()
@@ -216,23 +233,34 @@ extension Cache {
     }
     
     
-    // this function will save contacts that comes from server
+    // this function will save (or update) contacts that comes from server, into the Cache.
     public func saveContactsObjects(contacts: [Contact]) {
         // check if there is any information about Contact that are in the cache,
         // if they has beed there, it we will update that data,
         // otherwise we will create an object and save data on cache
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMContact")
         do {
-            if let result = try context.fetch(fetchRequest) as? [Contact] {
-                for itemInCache in result {
-                    for item in contacts {
-                        if (itemInCache.id == item.id) {
-                            // the contact object that we are going to create, is already exist in the Cache
-                            // so we will delete them first, then we will create it again
+            if let result = try context.fetch(fetchRequest) as? [CMContact] {
+                
+                // Part1:
+                // find data that are exist in the Cache, (and the response request is containing that). and delete them
+                for item in contacts {
+                    for itemInCache in result {
+                        if let contactId = Int(exactly: itemInCache.id ?? 0) {
+                            if (contactId == item.id) {
+                                // the contact object that we are going to create, is already exist in the Cache
+                                // to update information in this object:
+                                // we will delete them first, then we will create it again later
+                                context.delete(itemInCache)
+                                saveContext(subject: "Delete Object: \(itemInCache.convertCMContactToContactObject().formatToJSON())")
+                            }
                         }
+                        
                     }
                 }
                 
+                // Part2:
+                // save data comes from server to the Cache
                 var allContacts = [CMContact]()
                 
                 for item in contacts {
@@ -271,23 +299,34 @@ extension Cache {
     }
     
     
-    // this function will save contacts that comes from server
+    // this function will save (or update) contacts that comes from server, in the Cache.
     public func saveThreadParticipantsObjects(participants: [Participant]) {
         // check if there is any information about Contact that are in the cache,
         // if they has beed there, it we will update that data,
         // otherwise we will create an object and save data on cache
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMParticipant")
         do {
-            if let result = try context.fetch(fetchRequest) as? [Participant] {
-                for itemInCache in result {
-                    for item in participants {
-                        if (itemInCache.id == item.id) {
-                            // the contact object that we are going to create, is already exist in the Cache
-                            // so we will delete them first, then we will create it again
+            if let result = try context.fetch(fetchRequest) as? [CMParticipant] {
+                
+                // Part1:
+                // find data that are exist in the Cache, (and the response request is containing that). and delete them
+                for item in participants {
+                    for itemInCache in result {
+                        if let participantId = Int(exactly: itemInCache.id ?? 0) {
+                            if (participantId == item.id) {
+                                // the Participant object that we are going to create, is already exist in the Cache
+                                // to update information in this object:
+                                // we will delete them first, then we will create it again later
+                                context.delete(itemInCache)
+                                saveContext(subject: "Delete Object: \(itemInCache.convertCMParticipantToParticipantObject().formatToJSON())")
+                            }
                         }
+                        
                     }
                 }
                 
+                // Part2:
+                // save data comes from server to the Cache
                 var allParticipants = [CMParticipant]()
                 
                 for item in participants {
@@ -331,14 +370,15 @@ extension Cache {
 
 
 
-// MARK: - Functions that will retrieve data from COreData Cache
+// MARK: - Functions that will retrieve data from CoreData Cache
 
 extension Cache {
     
-    
-    // retrieve userInfo data from Cache
-    // if it found any data from Cache DB, it will return that,
-    // otherwise it will return nil. (means cache has no data on itself)
+    /*
+     retrieve userInfo data from Cache
+     if it found any data from UserInfo in the Cache DB, it will return that,
+     otherwise it will return nil. (means cache has no data on itself)
+     */
     public func retrieveUserInfo() -> UserInfoModel? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUser")
         do {
@@ -363,11 +403,18 @@ extension Cache {
         } catch {
             fatalError("Error on fetching list of CMUser")
         }
+        return nil
     }
     
-    // retrieve Threads from Cache
-    // if it found any data from Cache DB, it will return that,
-    // otherwise it will return nil. (means cache has no data on itself)
+    /*
+     retrieve Threads from Cache
+     if it found any data from Threads in the Cache DB, it will return that,
+     otherwise it will return nil. (means cache has no data on itself).
+     .
+     first, it will fetch the Objects from CoreData, and sort them by time.
+     then based on the client request, it will find the objects that the client want to get,
+     and then it will return it as an array of 'Conversation' to the client.
+     */
     // TODO: - Have to implement search in threads by using 'name' and also 'threadIds' properties!
     public func retrieveThreads(count: Int, offset: Int, ascending: Bool) -> GetThreadsModel? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
@@ -378,9 +425,9 @@ extension Cache {
                 
                 var insideCount = 0
                 var cmConversationObjectArr = [CMConversation]()
-                
                 for (index, item) in result.enumerated() {
                     if (index >= offset) && (insideCount < count) {
+                        print("item added to the Array")
                         cmConversationObjectArr.append(item)
                         insideCount += 1
                     }
@@ -388,7 +435,8 @@ extension Cache {
                 
                 var conversationArr = [Conversation]()
                 for item in cmConversationObjectArr {
-                    conversationArr.append(item.convertCMConversationToConversationObject())
+                    let conversationObject = item.convertCMConversationToConversationObject()
+                    conversationArr.append(conversationObject)
                 }
                 
                 let getThreadModelResponse = GetThreadsModel(conversationObjects: conversationArr,
@@ -409,17 +457,18 @@ extension Cache {
         }
     }
     
-    
-    
-    
-    // retrieve Contacts data from Cache
-    // if it found any data from Cache DB, it will return that,
-    // otherwise it will return nil. (means cache has no data on itself)
+    /*
+     retrieve Contacts data from Cache
+     if it found any data from Cache DB, it will return that,
+     otherwise it will return nil. (means cache has no data on itself)
+     .
+     first, it will fetch the Objects from CoreData.
+     then based on the client request, it will find the objects that the client want to get,
+     and then it will return it as an array of 'Contact' to the client.
+     */
     // TODO: - Have to implement search in contacts by using 'name' property!
     public func retrieveContacts(count: Int, offset: Int, ascending: Bool) -> GetContactsModel? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMContact")
-        let sortByTime = NSSortDescriptor(key: "time", ascending: ascending)
-        fetchRequest.sortDescriptors = [sortByTime]
         do {
             if let result = try context.fetch(fetchRequest) as? [CMContact] {
                 
@@ -456,16 +505,18 @@ extension Cache {
         }
     }
     
-    
-    
-    // retrieve ThreadParticipants data from Cache
-    // if it found any data from Cache DB, it will return that,
-    // otherwise it will return nil. (means cache has no data on itself)
+    /*
+     retrieve ThreadParticipants data from Cache
+     if it found any data from Cache DB, it will return that,
+     otherwise it will return nil. (means cache has no data on itself)
+     .
+     first, it will fetch the Objects from CoreData.
+     then based on the client request, it will find the objects that the client want to get,
+     and then it will return it as an array of 'Participant' to the client.
+     */
     // TODO: - Have to implement search in contacts by using 'name' property!
     public func retrieveThreadParticipants(count: Int, offset: Int, ascending: Bool) -> GetThreadParticipantsModel? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMParticipant")
-        let sortByTime = NSSortDescriptor(key: "time", ascending: ascending)
-        fetchRequest.sortDescriptors = [sortByTime]
         do {
             if let result = try context.fetch(fetchRequest) as? [CMParticipant] {
                 
@@ -504,6 +555,7 @@ extension Cache {
     
     
 }
+
 
 
 

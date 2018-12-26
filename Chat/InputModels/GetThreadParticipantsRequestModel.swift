@@ -18,13 +18,13 @@ open class GetThreadParticipantsRequestModel {
     public let name:                String?
     public let typeCode:            String?
     
-    init(threadId:          Int,
-         count:             Int?,
-         offset:            Int?,
-         firstMessageId:    Int?,
-         lastMessageId:     Int?,
-         name:              String?,
-         typeCode:          String?) {
+    public init(threadId:          Int,
+                count:             Int?,
+                offset:            Int?,
+                firstMessageId:    Int?,
+                lastMessageId:     Int?,
+                name:              String?,
+                typeCode:          String?) {
         
         self.threadId           = threadId
         self.count              = count

@@ -36,7 +36,7 @@ open class User {
     public let receiveEnable:      Bool?
     public let sendEnable:         Bool?
     
-    init(messageContent: JSON) {
+    public init(messageContent: JSON) {
         
         self.cellphoneNumber    = messageContent["cellphoneNumber"].string
         self.email              = messageContent["email"].string
@@ -49,7 +49,7 @@ open class User {
         
     }
     
-    init(cellphoneNumber:   String?,
+    public init(cellphoneNumber:   String?,
          email:             String?,
          id:                Int?,
          image:             String?,
@@ -68,11 +68,24 @@ open class User {
         self.sendEnable         = sendEnable
     }
     
-    func formatDataToMakeUser() -> User {
+    public init(theUser: User) {
+        
+        self.cellphoneNumber    = theUser.cellphoneNumber
+        self.email              = theUser.email
+        self.id                 = theUser.id
+        self.image              = theUser.image
+        self.lastSeen           = theUser.lastSeen
+        self.name               = theUser.name
+        self.receiveEnable      = theUser.receiveEnable
+        self.sendEnable         = theUser.sendEnable
+    }
+    
+    
+    public func formatDataToMakeUser() -> User {
         return self
     }
     
-    func formatToJSON() -> JSON {
+    public func formatToJSON() -> JSON {
         let result: JSON = ["id":               id ?? NSNull(),
                             "name":             name ?? NSNull(),
                             "email":            email ?? NSNull(),

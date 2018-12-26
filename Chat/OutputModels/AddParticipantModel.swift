@@ -21,7 +21,10 @@ open class AddParticipantModel {
     
     public var threadJSON:        JSON?
     
-    init(messageContent: JSON, hasError: Bool, errorMessage: String, errorCode: Int) {
+    public init(messageContent: JSON,
+                hasError: Bool,
+                errorMessage: String,
+                errorCode: Int) {
         
         self.hasError           = hasError
         self.errorMessage       = errorMessage
@@ -33,6 +36,21 @@ open class AddParticipantModel {
         self.thread = conversation
         self.threadJSON = conversationJSON
         
+    }
+    
+    public init(conversation:   Conversation,
+                hasError:       Bool,
+                errorMessage:   String,
+                errorCode:      Int) {
+        
+        self.hasError           = hasError
+        self.errorMessage       = errorMessage
+        self.errorCode          = errorCode
+        
+        self.thread = conversation
+        
+        let conversationJSON = conversation.formatToJSON()
+        self.threadJSON = conversationJSON
     }
     
     public func returnDataAsJSON() -> JSON {

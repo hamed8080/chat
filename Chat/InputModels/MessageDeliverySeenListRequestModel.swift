@@ -15,10 +15,10 @@ open class MessageDeliverySeenListRequestModel {
     public let typeCode:    String?
     public let messageId:   Int?
     
-    init(count:     Int?,
-         offset:    Int?,
-         typeCode:  String?,
-         messageId: Int?) {
+    public init(count:     Int?,
+                offset:    Int?,
+                typeCode:  String?,
+                messageId: Int?) {
         
         self.count      = count
         self.offset     = offset

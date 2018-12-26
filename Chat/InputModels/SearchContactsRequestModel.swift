@@ -20,14 +20,14 @@ open class SearchContactsRequestModel {
     public let uniqueId:        String?
     //    public let typeCode:        String?
     
-    init(firstName:         String?,
-         lastName:          String?,
-         cellphoneNumber:   String?,
-         email:             String?,
-         id:                Int?,
-         size:              Int?,
-         offset:            Int?,
-         uniqueId:          String?) {
+    public init(firstName:         String?,
+                lastName:          String?,
+                cellphoneNumber:   String?,
+                email:             String?,
+                id:                Int?,
+                size:              Int?,
+                offset:            Int?,
+                uniqueId:          String?) {
         
         self.firstName          = firstName
         self.lastName           = lastName

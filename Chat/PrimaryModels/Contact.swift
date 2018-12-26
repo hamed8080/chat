@@ -42,7 +42,7 @@ open class Contact {
     public let uniqueId:           String?
     public let userId:             Int?
     
-    init(messageContent: JSON) {
+    public init(messageContent: JSON) {
         self.cellphoneNumber    = messageContent["cellphoneNumber"].string
         self.email              = messageContent["email"].string
         self.firstName          = messageContent["firstName"].string
@@ -64,17 +64,17 @@ open class Contact {
         
     }
     
-    init(cellphoneNumber:   String?,
-         email:             String?,
-         firstName:         String?,
-         hasUser:           Bool?,
-         id:                Int?,
-         image:             String?,
-         lastName:          String?,
-         linkedUser:        LinkedUser?,
-         notSeenDuration:   Int?,
-         uniqueId:          String?,
-         userId:            Int?) {
+    public init(cellphoneNumber:   String?,
+                email:             String?,
+                firstName:         String?,
+                hasUser:           Bool?,
+                id:                Int?,
+                image:             String?,
+                lastName:          String?,
+                linkedUser:        LinkedUser?,
+                notSeenDuration:   Int?,
+                uniqueId:          String?,
+                userId:            Int?) {
         
         self.cellphoneNumber    = cellphoneNumber
         self.email              = email
@@ -90,12 +90,27 @@ open class Contact {
         
     }
     
+    public init(theContact: Contact) {
+        
+        self.cellphoneNumber    = theContact.cellphoneNumber
+        self.email              = theContact.email
+        self.firstName          = theContact.firstName
+        self.hasUser            = theContact.hasUser
+        self.id                 = theContact.id
+        self.image              = theContact.image
+        self.lastName           = theContact.lastName
+        self.linkedUser         = theContact.linkedUser
+        self.notSeenDuration    = theContact.notSeenDuration
+        self.uniqueId           = theContact.uniqueId
+        self.userId             = theContact.userId
+    }
     
-    func formatDataToMakeContact() -> Contact {
+    
+    public func formatDataToMakeContact() -> Contact {
         return self
     }
     
-    func formatToJSON() -> JSON {
+    public func formatToJSON() -> JSON {
         let result: JSON = ["cellphoneNumber":  cellphoneNumber ?? NSNull(),
                             "email":            email ?? NSNull(),
                             "firstName":        firstName ?? NSNull(),

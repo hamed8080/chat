@@ -20,14 +20,14 @@ open class CreateThreadWithMessageRequestModel {
     public let messageMetaDataOwner:    String?
     
     
-    init(threadTitle:           String,
-         threadType:            String?,
-         threadInvitees:        [Invitee],
-         uniqueId:              String?,
-         messageContent:        String,
-         messageMetaDataId:     Int?,
-         messageMetaDataType:   String?,
-         messageMetaDataOwner:  String?) {
+    public init(threadTitle:           String,
+                threadType:            String?,
+                threadInvitees:        [Invitee],
+                uniqueId:              String?,
+                messageContent:        String,
+                messageMetaDataId:     Int?,
+                messageMetaDataType:   String?,
+                messageMetaDataOwner:  String?) {
         
         self.uniqueId       = uniqueId
         

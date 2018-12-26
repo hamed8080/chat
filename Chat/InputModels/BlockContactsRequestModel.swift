@@ -13,7 +13,7 @@ open class BlockContactsRequestModel {
     public let contactId:   Int
     public let typeCode:    String?
     
-    init(contactId: Int, typeCode: String?) {
+    public init(contactId: Int, typeCode: String?) {
         self.contactId  = contactId
         self.typeCode   = typeCode
     }

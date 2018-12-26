@@ -47,7 +47,13 @@ open class GetBlockedContactListModel {
     
     public var blockedListJSON:    [JSON] = []
     
-    init(messageContent: [JSON], contentCount: Int, count: Int, offset: Int, hasError: Bool, errorMessage: String, errorCode: Int) {
+    public init(messageContent: [JSON],
+                contentCount: Int,
+                count: Int,
+                offset: Int,
+                hasError: Bool,
+                errorMessage: String,
+                errorCode: Int) {
         
         self.hasError           = hasError
         self.errorMessage       = errorMessage
@@ -71,6 +77,39 @@ open class GetBlockedContactListModel {
         }
         
     }
+    
+    public init(messageContent: [BlockedContact]?,
+                contentCount: Int,
+                count: Int,
+                offset: Int,
+                hasError: Bool,
+                errorMessage: String,
+                errorCode: Int) {
+        
+        self.hasError           = hasError
+        self.errorMessage       = errorMessage
+        self.errorCode          = errorCode
+        
+        if let blockedList = messageContent {
+            
+            let messageLength = blockedList.count
+            self.contentCount = contentCount
+            self.hasNext = false
+            let x: Int = count + offset
+            if (x < contentCount) && (messageLength > 0) {
+                self.hasNext = true
+            }
+            self.nextOffset = offset + messageLength
+            
+            for item in blockedList {
+                self.blockedList.append(item)
+                
+                let blockedContactJSON = item.formatToJSON()
+                blockedListJSON.append(blockedContactJSON)
+            }
+        }
+    }
+    
     
     public func returnDataAsJSON() -> JSON {
         let result: JSON = ["contentCount": contentCount,

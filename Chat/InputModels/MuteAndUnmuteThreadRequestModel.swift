@@ -13,7 +13,7 @@ open class MuteAndUnmuteThreadRequestModel {
     public let subjectId:   Int
     public let typeCode:    String?
     
-    init(subjectId: Int, typeCode: String?) {
+    public init(subjectId: Int, typeCode: String?) {
         self.subjectId  = subjectId
         self.typeCode   = typeCode
     }

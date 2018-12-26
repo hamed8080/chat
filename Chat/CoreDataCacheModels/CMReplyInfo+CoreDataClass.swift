@@ -21,7 +21,7 @@ public class CMReplyInfo: NSManagedObject {
         
         
         func createVariables() {
-            if let deleted2 = self.isDeleted as? Bool {
+            if let deleted2 = self.deletedd as? Bool {
                 deleted = deleted2
             }
             if let repliedToMessageId2 = self.repliedToMessageId as? Int {

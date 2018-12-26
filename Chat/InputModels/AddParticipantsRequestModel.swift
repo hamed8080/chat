@@ -15,10 +15,10 @@ open class AddParticipantsRequestModel {
     public let uniqueId:            String?
     public let typeCode:            String?
     
-    init(threadId:  Int,
-         contacts:  [Int],
-         uniqueId:  String?,
-         typeCode:  String?) {
+    public init(threadId:  Int,
+                contacts:  [Int],
+                uniqueId:  String?,
+                typeCode:  String?) {
         
         self.threadId           = threadId
         self.contacts           = contacts

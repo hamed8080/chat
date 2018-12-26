@@ -15,8 +15,6 @@ public class CMContact: NSManagedObject {
     
     public func convertCMContactToContactObject() -> Contact {
         
-        
-        
         var hasUser:            Bool?
         var id:                 Int?
         var linkedUser:         LinkedUser?

@@ -86,5 +86,4 @@ public class CMParticipant: NSManagedObject {
         
         return model
     }
-    
 }

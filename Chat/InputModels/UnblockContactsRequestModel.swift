@@ -13,7 +13,7 @@ open class UnblockContactsRequestModel {
     public let blockId:     Int
     public let typeCode:    String?
     
-    init(blockId: Int, typeCode: String?) {
+    public init(blockId: Int, typeCode: String?) {
         self.blockId    = blockId
         self.typeCode   = typeCode
     }

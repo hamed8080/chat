@@ -14,9 +14,9 @@ open class DeliverSeenRequestModel {
     public let ownerId:     Int
     public let typeCode:    String?
     
-    init(messageId: Int,
-         ownerId:   Int,
-         typeCode:  String?) {
+    public init(messageId: Int,
+                ownerId:   Int,
+                typeCode:  String?) {
         
         self.messageId  = messageId
         self.ownerId    = ownerId

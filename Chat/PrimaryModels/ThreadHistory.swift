@@ -17,14 +17,14 @@ open class ThreadHistory {
     
     public var returnData: [Message] = []
     
-    init(threadId: Int, historyContent: [JSON]) {
+    public init(threadId: Int, historyContent: [JSON]) {
         for item in historyContent {
             let temp = Message(threadId: threadId, pushMessageVO: item)
             self.returnData.append(temp)
         }
     }
     
-    init(historyContent: [Message]) {
+    public init(historyContent: [Message]) {
         
         for item in historyContent {
             let temp = item
@@ -33,12 +33,17 @@ open class ThreadHistory {
         
     }
     
+    public init(theThreadHistory: ThreadHistory) {
+        
+        self.returnData = theThreadHistory.returnData
+    }
     
-    func reformatThreadHistory() -> ThreadHistory {
+    
+    public func reformatThreadHistory() -> ThreadHistory {
         return self
     }
     
-    func formatToJSON() -> [JSON] {
+    public func formatToJSON() -> [JSON] {
         var messageJSON: [JSON] = []
         for item in returnData {
             let json = item.formatToJSON()

@@ -14,7 +14,7 @@ import SwiftyJSON
 //#############################      MessageChangeState        (formatDataToMakeMessageChangeState)
 //#######################################################################################
 
-class MessageChangeState {
+open class MessageChangeState {
     /*
      * + MessageChangeStateVO   MessageChangeState:
      *    - messageId               Int?
@@ -22,21 +22,38 @@ class MessageChangeState {
      *    - threadId                Int?
      */
     
-    let messageId:  Int?
-    let senderId:   Int?
-    let threadId:   Int?
+    public let messageId:  Int?
+    public let senderId:   Int?
+    public let threadId:   Int?
     
-    init(messageContent: JSON) {
+    public init(messageContent: JSON) {
         self.messageId  = messageContent["messageId"].int
         self.senderId   = messageContent["senderId"].int
         self.threadId   = messageContent["threadId"].int
     }
     
-    func formatDataToMakeMessageChangeState() -> MessageChangeState {
+    public init(messageId:  Int?,
+                senderId:   Int?,
+                threadId:   Int?) {
+        
+        self.messageId  = messageId
+        self.senderId   = senderId
+        self.threadId   = threadId
+    }
+    
+    public init(theMessageChangeState: MessageChangeState) {
+        
+        self.messageId  = theMessageChangeState.messageId
+        self.senderId   = theMessageChangeState.senderId
+        self.threadId   = theMessageChangeState.threadId
+    }
+    
+    
+    public func formatDataToMakeMessageChangeState() -> MessageChangeState {
         return self
     }
     
-    func formatToJSON() -> JSON {
+    public func formatToJSON() -> JSON {
         let result: JSON = ["messageId":        messageId ?? NSNull(),
                             "senderId":         senderId ?? NSNull(),
                             "threadId":         threadId ?? NSNull()]

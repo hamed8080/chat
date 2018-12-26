@@ -70,7 +70,10 @@ open class CreateThreadModel {
     
     public var threadJSON:         JSON?
     
-    init(messageContent: JSON, hasError: Bool, errorMessage: String, errorCode: Int) {
+    public init(messageContent: JSON,
+                hasError:       Bool,
+                errorMessage:   String,
+                errorCode:      Int) {
         
         self.hasError           = hasError
         self.errorMessage       = errorMessage
@@ -88,6 +91,19 @@ open class CreateThreadModel {
         self.thread = Conversation(messageContent: messageContent)
         self.threadJSON = thread?.formatToJSON()
     }
+    
+    public init(conversation:   Conversation?,
+                hasError:       Bool,
+                errorMessage:   String,
+                errorCode:      Int) {
+        
+        self.hasError           = hasError
+        self.errorMessage       = errorMessage
+        self.errorCode          = errorCode
+        
+        self.threadJSON = conversation?.formatToJSON()
+    }
+    
     
     public func returnDataAsJSON() -> JSON {
         let result: JSON = ["contentCount": contentCount,

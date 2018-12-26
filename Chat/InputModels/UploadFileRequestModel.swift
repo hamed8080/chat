@@ -18,13 +18,13 @@ open class UploadFileRequestModel {
     public let originalFileName:    String?
     public let dataToSend:          Data
     
-    init(fileExtension:     String?,
-         fileName:          String,
-         fileSize:          Int?,
-         threadId:          Int,
-         uniqueId:          String?,
-         originalFileName:  String?,
-         dataToSend:        Data) {
+    public init(fileExtension:     String?,
+                fileName:          String,
+                fileSize:          Int?,
+                threadId:          Int,
+                uniqueId:          String?,
+                originalFileName:  String?,
+                dataToSend:        Data) {
         
         self.fileExtension      = fileExtension
         self.fileName           = fileName

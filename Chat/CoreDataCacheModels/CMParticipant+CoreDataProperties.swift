@@ -2,7 +2,7 @@
 //  CMParticipant+CoreDataProperties.swift
 //  Chat
 //
-//  Created by Mahyar Zhiani on 10/1/1397 AP.
+//  Created by Mahyar Zhiani on 10/5/1397 AP.
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 //
@@ -33,5 +33,11 @@ extension CMParticipant {
     @NSManaged public var online:           NSNumber?
     @NSManaged public var receiveEnable:    NSNumber?
     @NSManaged public var sendEnable:       NSNumber?
+    @NSManaged public var dummyConversationInviter:     CMConversation?
+    @NSManaged public var dummyConversationParticipants: CMConversation?
+    @NSManaged public var dummyForwardInfo:             CMForwardInfo?
+    @NSManaged public var dummyMessage:                 CMMessage?
+    @NSManaged public var dummyReplyInfo:               CMReplyInfo?
+    @NSManaged public var dummyThreadParticipants:      CMThreadParticipants?
 
 }

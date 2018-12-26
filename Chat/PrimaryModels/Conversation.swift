@@ -73,7 +73,7 @@ open class Conversation {
     public var lastMessageVO:                  Message?
     public var participants:                   [Participant]?
     
-    init(messageContent: JSON) {
+    public init(messageContent: JSON) {
         self.admin                          = messageContent["admin"].bool
         self.canEditInfo                    = messageContent["canEditInfo"].bool
         self.canSpam                        = messageContent["canSpam"].bool
@@ -118,31 +118,31 @@ open class Conversation {
         //        }
     }
     
-    init(admin:         Bool?,
-         canEditInfo:   Bool?,
-         canSpam:       Bool?,
-         description:   String?,
-         group:         Bool?,
-         id:            Int?,
-         image:         String?,
-         joinDate:      Int?,
-         lastMessage:   String?,
-         lastParticipantImage:  String?,
-         lastParticipantName:   String?,
-         lastSeenMessageId:     Int?,
-         metadata:              String?,
-         mute:                  Bool?,
-         participantCount:      Int?,
-         partner:               Int?,
-         partnerLastDeliveredMessageId: Int?,
-         partnerLastSeenMessageId:      Int?,
-         time:          UInt?,
-         title:         String?,
-         type:          Int?,
-         unreadCount:   Int?,
-         inviter:       Participant?,
-         lastMessageVO: Message?,
-         participants:  [Participant]?) {
+    public init(admin:         Bool?,
+                canEditInfo:   Bool?,
+                canSpam:       Bool?,
+                description:   String?,
+                group:         Bool?,
+                id:            Int?,
+                image:         String?,
+                joinDate:      Int?,
+                lastMessage:   String?,
+                lastParticipantImage:  String?,
+                lastParticipantName:   String?,
+                lastSeenMessageId:     Int?,
+                metadata:              String?,
+                mute:                  Bool?,
+                participantCount:      Int?,
+                partner:               Int?,
+                partnerLastDeliveredMessageId: Int?,
+                partnerLastSeenMessageId:      Int?,
+                time:          UInt?,
+                title:         String?,
+                type:          Int?,
+                unreadCount:   Int?,
+                inviter:       Participant?,
+                lastMessageVO: Message?,
+                participants:  [Participant]?) {
         
         self.admin          = admin
         self.canEditInfo    = canEditInfo
@@ -172,12 +172,42 @@ open class Conversation {
         self.participants   = participants
     }
     
+    public init(theConversation: Conversation) {
+        
+        self.admin          = theConversation.admin
+        self.canEditInfo    = theConversation.canEditInfo
+        self.canSpam        = theConversation.canSpam
+        self.description    = theConversation.description
+        self.group          = theConversation.group
+        self.id             = theConversation.id
+        self.image          = theConversation.image
+        self.joinDate       = theConversation.joinDate
+        self.lastMessage    = theConversation.lastMessage
+        self.lastParticipantImage   = theConversation.lastParticipantImage
+        self.lastParticipantName    = theConversation.lastParticipantName
+        self.lastSeenMessageId      = theConversation.lastSeenMessageId
+        self.metadata               = theConversation.metadata
+        self.mute                   = theConversation.mute
+        self.participantCount       = theConversation.participantCount
+        self.partner                = theConversation.partner
+        self.partnerLastDeliveredMessageId  = theConversation.partnerLastDeliveredMessageId
+        self.partnerLastSeenMessageId       = theConversation.partnerLastSeenMessageId
+        self.time           = theConversation.time
+        self.title          = theConversation.title
+        self.type           = theConversation.type
+        self.unreadCount    = theConversation.unreadCount
+        
+        self.inviter        = theConversation.inviter
+        self.lastMessageVO  = theConversation.lastMessageVO
+        self.participants   = theConversation.participants
+    }
     
-    func formatDataToMakeConversation() -> Conversation {
+    
+    public func formatDataToMakeConversation() -> Conversation {
         return self
     }
     
-    func formatToJSON() -> JSON {
+    public func formatToJSON() -> JSON {
         
         var participantsJSON: [JSON] = []
         if let participantArr = participants {

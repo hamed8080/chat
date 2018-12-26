@@ -15,10 +15,10 @@ open class CreateThreadRequestModel {
     public let invitees:            [Invitee]
     public let uniqueId:            String?
     
-    init(title:     String,
-         type:      String?,
-         invitees:  [Invitee],
-         uniqueId:  String?) {
+    public init(title:     String,
+                type:      String?,
+                invitees:  [Invitee],
+                uniqueId:  String?) {
         
         self.title      = title
         self.type       = type

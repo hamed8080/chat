@@ -42,12 +42,12 @@ public class CMUploadImage: NSManagedObject {
         
         func createUploadImageModel() -> UploadImage {
             let uploadImageModel = UploadImage(actualHeight: actualHeight,
-                                           actualWidth: actualWidth,
-                                           hashCode: self.hashCode,
-                                           height: height,
-                                           id: id,
-                                           name: self.name,
-                                           width: width)
+                                               actualWidth: actualWidth,
+                                               hashCode: self.hashCode,
+                                               height: height,
+                                               id: id,
+                                               name: self.name,
+                                               width: width)
             return uploadImageModel
         }
         

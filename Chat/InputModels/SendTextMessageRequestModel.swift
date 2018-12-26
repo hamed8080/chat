@@ -19,13 +19,13 @@ open class SendTextMessageRequestModel {
     public let metaData:            JSON?
     public let typeCode:            String?
     
-    init(threadId:          Int,
-         content:           String,
-         repliedTo:         Int?,
-         uniqueId:          String?,
-         typeCode:          String?,
-         systemMetadata:    JSON?,
-         metaData:          JSON?) {
+    public init(threadId:          Int,
+                content:           String,
+                repliedTo:         Int?,
+                uniqueId:          String?,
+                typeCode:          String?,
+                systemMetadata:    JSON?,
+                metaData:          JSON?) {
         
         self.threadId           = threadId
         self.content            = content
@@ -37,4 +37,5 @@ open class SendTextMessageRequestModel {
     }
     
 }
+
 

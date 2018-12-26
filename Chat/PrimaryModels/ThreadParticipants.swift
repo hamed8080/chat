@@ -17,18 +17,31 @@ open class ThreadParticipants {
     
     public var returnData: [Participant] = []
     
-    init(participantsContent: [JSON]) {
+    public init(participantsContent: [JSON]) {
         for item in participantsContent {
             let temp = Participant(messageContent: item)
             self.returnData.append(temp)
         }
     }
     
-    func reformatThreadParticipants() -> ThreadParticipants {
+    public init(theParticipants: [Participant]?) {
+        
+        if let participants = theParticipants {
+            for item in participants {
+                self.returnData.append(item)
+            }
+        }
+    }
+    
+    public init(theThreadParticipants: ThreadParticipants) {
+        self.returnData = theThreadParticipants.returnData
+    }
+    
+    public func reformatThreadParticipants() -> ThreadParticipants {
         return self
     }
     
-    func formatToJSON() -> [JSON] {
+    public func formatToJSON() -> [JSON] {
         var participantsJSON: [JSON] = []
         for item in returnData {
             let json = item.formatToJSON()

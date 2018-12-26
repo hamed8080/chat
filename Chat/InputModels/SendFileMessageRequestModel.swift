@@ -28,20 +28,20 @@ open class SendFileMessageRequestModel {
     public let imageToSend: Data?
     public let fileToSend: Data?
     
-    init(fileName:      String?,
-         imageName:     String?,
-         xC:            String?,
-         yC:            String?,
-         hC:            String?,
-         wC:            String?,
-         threadId:      Int?,
-         subjectId:     Int?,
-         repliedTo:     Int?,
-         content:       String?,
-         metaData:      JSON?,
-         typeCode:      String?,
-         imageToSend:   Data?,
-         fileToSend:    Data?) {
+    public init(fileName:      String?,
+                imageName:     String?,
+                xC:            String?,
+                yC:            String?,
+                hC:            String?,
+                wC:            String?,
+                threadId:      Int?,
+                subjectId:     Int?,
+                repliedTo:     Int?,
+                content:       String?,
+                metaData:      JSON?,
+                typeCode:      String?,
+                imageToSend:   Data?,
+                fileToSend:    Data?) {
         
         self.fileName       = fileName
         self.imageName      = imageName

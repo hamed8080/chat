@@ -62,7 +62,13 @@ open class GetHistoryModel {
     
     public var historyJSON:        [JSON] = []
     
-    init(messageContent: [JSON], contentCount: Int, count: Int, offset: Int, hasError: Bool, errorMessage: String, errorCode: Int) {
+    public init(messageContent: [JSON],
+                contentCount:   Int,
+                count:          Int,
+                offset:         Int,
+                hasError:       Bool,
+                errorMessage:   String,
+                errorCode:      Int) {
         
         self.hasError           = hasError
         self.errorMessage       = errorMessage
@@ -85,6 +91,40 @@ open class GetHistoryModel {
             historyJSON.append(messageJSON)
         }
     }
+    
+    public init(messageContent: [Message]?,
+                contentCount:   Int,
+                count:          Int,
+                offset:         Int,
+                hasError:       Bool,
+                errorMessage:   String,
+                errorCode:      Int) {
+        
+        self.hasError           = hasError
+        self.errorMessage       = errorMessage
+        self.errorCode          = errorCode
+        
+        self.contentCount = contentCount
+        self.hasNext = false
+        
+        if let messages = messageContent {
+            
+            let messageLength = messages.count
+            let x: Int = count + offset
+            if (x < contentCount) && (messageLength > 0) {
+                self.hasNext = true
+            }
+            self.nextOffset = offset + messageLength
+            
+            for item in messages {
+                history.append(item)
+                
+                let messageJSON = item.formatToJSON()
+                historyJSON.append(messageJSON)
+            }
+        }
+    }
+    
     
     public func returnDataAsJSON() -> JSON {
         let result: JSON = ["contentCount": contentCount,

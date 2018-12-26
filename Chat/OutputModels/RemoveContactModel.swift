@@ -33,12 +33,24 @@ open class RemoveContactModel {
     public let errorCode:          Int?
     public var result:             Bool
     
-    init(messageContent: JSON) {
+    public init(messageContent: JSON) {
         self.hasError           = messageContent["hasError"].boolValue
         self.errorMessage       = messageContent["message"].string
         self.errorCode          = messageContent["errorCode"].int
         self.result             = messageContent["result"].boolValue
     }
+    
+    public init(hasError:       Bool,
+                errorMessage:   String?,
+                errorCode:      Int?,
+                result:         Bool) {
+        
+        self.hasError           = hasError
+        self.errorMessage       = errorMessage
+        self.errorCode          = errorCode
+        self.result             = result
+    }
+    
     
     public func returnDataAsJSON() -> JSON {
         let finalResult: JSON = ["result": result,

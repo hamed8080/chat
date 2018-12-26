@@ -15,10 +15,10 @@ open class GetContactsRequestModel {
     public let name:        String?
     public let typeCode:    String?
     
-    init(count:     Int?,
-         offset:    Int?,
-         name:      String?,
-         typeCode:  String?) {
+    public init(count:     Int?,
+                offset:    Int?,
+                name:      String?,
+                typeCode:  String?) {
         
         self.count      = count
         self.offset     = offset

@@ -36,9 +36,12 @@ open class UploadFileModel {
     public let errorCode:          Int
     public let uploadFile:         UploadFile
     
-    public var uploadFileJSON: JSON = []
+    public var uploadFileJSON: JSON = [:]
     
-    init(messageContent: JSON, hasError: Bool, errorMessage: String, errorCode: Int) {
+    public init(messageContent: JSON,
+                hasError:       Bool,
+                errorMessage:   String,
+                errorCode:      Int) {
         
         self.hasError           = hasError
         self.errorMessage       = errorMessage
@@ -47,6 +50,20 @@ open class UploadFileModel {
         self.uploadFile = UploadFile(messageContent: messageContent)
         self.uploadFileJSON = uploadFile.formatToJSON()
     }
+    
+    public init(messageContent: UploadFile,
+                hasError:       Bool,
+                errorMessage:   String,
+                errorCode:      Int) {
+        
+        self.hasError           = hasError
+        self.errorMessage       = errorMessage
+        self.errorCode          = errorCode
+        
+        uploadFile          = messageContent
+        self.uploadFileJSON = messageContent.formatToJSON()
+    }
+    
     
     public func returnDataAsJSON() -> JSON {
         let result: JSON = ["uploadFile": uploadFileJSON]

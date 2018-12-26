@@ -15,10 +15,10 @@ open class AddContactsRequestModel {
     public let cellphoneNumber: String?
     public let email:           String?
     
-    init(firstName:         String?,
-         lastName:          String?,
-         cellphoneNumber:   String?,
-         email:             String?) {
+    public init(firstName:         String?,
+                lastName:          String?,
+                cellphoneNumber:   String?,
+                email:             String?) {
         
         self.firstName          = firstName
         self.lastName           = lastName

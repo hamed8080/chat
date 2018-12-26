@@ -54,7 +54,7 @@ open class Message {
     public var participant:    Participant?
     public var replyInfo:      ReplyInfo?
     
-    init(threadId: Int?, pushMessageVO: JSON) {
+    public init(threadId: Int?, pushMessageVO: JSON) {
         
         self.threadId   = threadId
         self.delivered  = pushMessageVO["delivered"].bool
@@ -107,23 +107,23 @@ open class Message {
         
     }
     
-    init(threadId:      Int?,
-         delivered:     Bool?,
-         editable:      Bool?,
-         edited:        Bool?,
-         id:            Int?,
-         message:       String?,
-         messageType:   String?,
-         metaData:      String?,
-         ownerId:       Int?,
-         previousId:    Int?,
-         seen:          Bool?,
-         time:          Int?,
-         uniqueId:      String?,
-         conversation:  Conversation?,
-         forwardInfo:   ForwardInfo?,
-         participant:   Participant?,
-         replyInfo:     ReplyInfo?) {
+    public init(threadId:      Int?,
+                delivered:     Bool?,
+                editable:      Bool?,
+                edited:        Bool?,
+                id:            Int?,
+                message:       String?,
+                messageType:   String?,
+                metaData:      String?,
+                ownerId:       Int?,
+                previousId:    Int?,
+                seen:          Bool?,
+                time:          Int?,
+                uniqueId:      String?,
+                conversation:  Conversation?,
+                forwardInfo:   ForwardInfo?,
+                participant:   Participant?,
+                replyInfo:     ReplyInfo?) {
         
         self.threadId   = threadId
         self.delivered  = delivered
@@ -144,7 +144,8 @@ open class Message {
         self.replyInfo      = replyInfo
     }
     
-    init(theMessage: Message) {
+    
+    public init(theMessage: Message) {
         
         self.threadId   = theMessage.threadId
         self.delivered  = theMessage.delivered

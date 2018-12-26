@@ -24,7 +24,7 @@ open class ForwardInfo {
     public var conversation:   Conversation?
     public var participant:    Participant?
     
-    init(messageContent: JSON) {
+    public init(messageContent: JSON) {
         
         if (messageContent["conversation"] != JSON.null) {
             self.conversation = Conversation(messageContent: messageContent["conversation"])
@@ -36,19 +36,25 @@ open class ForwardInfo {
         
     }
     
-    init(conversation:  Conversation?,
-         participant:   Participant?) {
+    public init(conversation:  Conversation?,
+                participant:   Participant?) {
         
         self.conversation   = conversation
         self.participant    = participant
     }
     
+    public init(theForwardInfo: ForwardInfo) {
+        
+        self.conversation   = theForwardInfo.conversation
+        self.participant    = theForwardInfo.participant
+    }
     
-    func formatDataToMakeForwardInfo() -> ForwardInfo {
+    
+    public func formatDataToMakeForwardInfo() -> ForwardInfo {
         return self
     }
     
-    func formatToJSON() -> JSON {
+    public func formatToJSON() -> JSON {
         let result: JSON = ["conversation":     conversation?.formatToJSON() ?? NSNull(),
                             "participant":      participant?.formatToJSON() ?? NSNull()]
         return result

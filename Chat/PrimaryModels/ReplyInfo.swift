@@ -28,17 +28,17 @@ open class ReplyInfo {
      *  - repliedToMessageId   Int?
      */
     
-    public var deleted:             Bool?
-    public var repliedToMessageId:  Int?
-    public var message:             String?
-    public var messageType:         Int?
-    public var metadata:            String?
-    public var systemMetadata:      String?
+    public let deleted:             Bool?
+    public let repliedToMessageId:  Int?
+    public let message:             String?
+    public let messageType:         Int?
+    public let metadata:            String?
+    public let systemMetadata:      String?
     
-    public var participant:        Participant?
+    public let participant:        Participant?
     //    public let repliedToMessage:    String?
     
-    init(messageContent: JSON) {
+    public init(messageContent: JSON) {
         
         self.deleted            = messageContent["deleted"].bool
         self.repliedToMessageId = messageContent["repliedToMessageId"].int
@@ -49,17 +49,19 @@ open class ReplyInfo {
         
         if (messageContent["participant"] != JSON.null) {
             self.participant = Participant(messageContent: messageContent["participant"])
+        } else {
+            self.participant = nil
         }
         
     }
     
-    init(deleted:           Bool?,
-         repliedToMessageId: Int?,
-         message:           String?,
-         messageType:       Int?,
-         metadata:          String?,
-         systemMetadata:    String?,
-         participant:       Participant?) {
+    public init(deleted:           Bool?,
+                repliedToMessageId: Int?,
+                message:           String?,
+                messageType:       Int?,
+                metadata:          String?,
+                systemMetadata:    String?,
+                participant:       Participant?) {
         
         self.deleted            = deleted
         self.repliedToMessageId = repliedToMessageId
@@ -71,12 +73,23 @@ open class ReplyInfo {
         
     }
     
+    public init(theReplyInfo: ReplyInfo) {
+        
+        self.deleted            = theReplyInfo.deleted
+        self.repliedToMessageId = theReplyInfo.repliedToMessageId
+        self.message            = theReplyInfo.message
+        self.messageType        = theReplyInfo.messageType
+        self.metadata           = theReplyInfo.metadata
+        self.systemMetadata     = theReplyInfo.systemMetadata
+        self.participant        = theReplyInfo.participant
+    }
     
-    func formatDataToMakeReplyInfo() -> ReplyInfo {
+    
+    public func formatDataToMakeReplyInfo() -> ReplyInfo {
         return self
     }
     
-    func formatToJSON() -> JSON {
+    public func formatToJSON() -> JSON {
         let result: JSON = ["participant":          participant?.formatToJSON() ?? NSNull(),
                             "deleted":              deleted ?? NSNull(),
                             "repliedToMessageId":   repliedToMessageId ?? NSNull(),

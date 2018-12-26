@@ -15,19 +15,22 @@ open class RemoveParticipantModel {
     public let hasError:           Bool
     public let errorMessage:       String
     public let errorCode:          Int
-    public let contentCount:       Int
+    public var contentCount:       Int = 0
     
     // result model
     public var participants:        [Participant] = []
     
     public var participantsJSON:    [JSON] = []
     
-    init(messageContent: JSON, hasError: Bool, errorMessage: String, errorCode: Int) {
+    public init(messageContent: JSON,
+                hasError: Bool,
+                errorMessage: String,
+                errorCode: Int) {
         
         self.hasError           = hasError
         self.errorMessage       = errorMessage
         self.errorCode          = errorCode
-        self.contentCount       = messageContent["contentCount"].intValue
+        self.contentCount       = messageContent["contentCount"].int ?? 0
         
         if let result = messageContent["result"].array {
             for item in result {
@@ -40,6 +43,27 @@ open class RemoveParticipantModel {
         }
         
     }
+    
+    public init(messageContent: [Participant]?,
+                hasError:       Bool,
+                errorMessage:   String,
+                errorCode:      Int) {
+        
+        self.hasError           = hasError
+        self.errorMessage       = errorMessage
+        self.errorCode          = errorCode
+        
+        if let result = messageContent {
+            self.contentCount = result.count
+            for item in result {
+                self.participants.append(item)
+                
+                let tempContactJSON = item.formatToJSON()
+                self.participantsJSON.append(tempContactJSON)
+            }
+        }
+    }
+    
     
     public func returnDataAsJSON() -> JSON {
         let result: JSON = ["participants": participantsJSON]

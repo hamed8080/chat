@@ -58,13 +58,13 @@ open class GetThreadParticipantsModel {
     
     public var participantsJSON:   [JSON] = []
     
-    init(messageContent: [JSON],
-         contentCount: Int,
-         count: Int,
-         offset: Int,
-         hasError: Bool,
-         errorMessage: String,
-         errorCode: Int) {
+    public init(messageContent: [JSON],
+                contentCount: Int,
+                count: Int,
+                offset: Int,
+                hasError: Bool,
+                errorMessage: String,
+                errorCode: Int) {
         
         self.hasError           = hasError
         self.errorMessage       = errorMessage
@@ -88,13 +88,13 @@ open class GetThreadParticipantsModel {
         }
     }
     
-    init(participantObjects:    [Participant],
-         contentCount:  Int,
-         count:         Int,
-         offset:        Int,
-         hasError:      Bool,
-         errorMessage:  String,
-         errorCode:     Int) {
+    public init(participantObjects:    [Participant],
+                contentCount:  Int,
+                count:         Int,
+                offset:        Int,
+                hasError:      Bool,
+                errorMessage:  String,
+                errorCode:     Int) {
         
         self.hasError           = hasError
         self.errorMessage       = errorMessage

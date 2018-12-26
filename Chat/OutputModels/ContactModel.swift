@@ -53,7 +53,7 @@ open class ContactModel {
     
     public var contactsJSON:       [JSON] = []
     
-    init(messageContent: JSON) {
+    public init(messageContent: JSON) {
         
         self.hasError           = messageContent["hasError"].boolValue
         self.errorMessage       = messageContent["message"].string
@@ -70,6 +70,28 @@ open class ContactModel {
             }
         }
     }
+    
+    public init(contentCount:   Int,
+                messageContent: [Contact]?,
+                hasError:       Bool,
+                errorMessage:   String?,
+                errorCode:      Int?) {
+        
+        self.hasError           = hasError
+        self.errorMessage       = errorMessage
+        self.errorCode          = errorCode
+        self.contentCount       = contentCount
+        if let result = messageContent {
+            for item in result {
+                self.contacts.append(item)
+                
+                let tempContactJSON = item.formatToJSON()
+                self.contactsJSON.append(tempContactJSON)
+            }
+        }
+        
+    }
+    
     
     public func returnDataAsJSON() -> JSON {
         let result: JSON = ["contact": contactsJSON,

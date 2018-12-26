@@ -12,7 +12,7 @@ open class RemoveContactsRequestModel {
     
     public let id:  Int
     
-    init(id: Int) {
+    public init(id: Int) {
         self.id = id
     }
     

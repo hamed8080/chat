@@ -19,13 +19,13 @@ open class GetThreadsRequestModel {
     public let typeCode:            String?
     public let metadataCriteria:    JSON?
     
-    init(count:             Int?,
-         offset:            Int?,
-         name:              String?,
-         new:               Bool?,
-         threadIds:         [Int]?,
-         typeCode:          String?,
-         metadataCriteria:  JSON?) {
+    public init(count:             Int?,
+                offset:            Int?,
+                name:              String?,
+                new:               Bool?,
+                threadIds:         [Int]?,
+                typeCode:          String?,
+                metadataCriteria:  JSON?) {
         
         self.count              = count
         self.offset             = offset

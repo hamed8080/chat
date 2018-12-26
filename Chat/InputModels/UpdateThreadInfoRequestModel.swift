@@ -18,12 +18,12 @@ open class UpdateThreadInfoRequestModel {
     public let metadata:    JSON?
     public let typeCode:    String?
     
-    init(subjectId:     Int?,
-         image:         String,
-         description:   String?,
-         title:         String,
-         metadata:      JSON?,
-         typeCode:      String?) {
+    public init(subjectId:     Int?,
+                image:         String,
+                description:   String?,
+                title:         String,
+                metadata:      JSON?,
+                typeCode:      String?) {
         
         self.subjectId      = subjectId
         self.image          = image

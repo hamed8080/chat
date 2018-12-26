@@ -21,7 +21,7 @@ open class UploadImage {
     public let name:           String?
     public let width:          Int?
     
-    init(messageContent: JSON) {
+    public init(messageContent: JSON) {
         self.actualHeight   = messageContent["actualHeight"].int
         self.actualWidth    = messageContent["actualWidth"].int
         self.hashCode       = messageContent["hashCode"].string
@@ -31,7 +31,7 @@ open class UploadImage {
         self.width          = messageContent["width"].int
     }
     
-    init(actualHeight:  Int?,
+    public init(actualHeight:  Int?,
          actualWidth:   Int?,
          hashCode:      String?,
          height:        Int?,
@@ -48,12 +48,23 @@ open class UploadImage {
         self.width          = width
     }
     
+    public init(theUploadImage: UploadImage) {
+        
+        self.actualHeight   = theUploadImage.actualHeight
+        self.actualWidth    = theUploadImage.actualWidth
+        self.hashCode       = theUploadImage.hashCode
+        self.height         = theUploadImage.height
+        self.id             = theUploadImage.id
+        self.name           = theUploadImage.name
+        self.width          = theUploadImage.width
+    }
     
-    func formatDataToMakeUploadImage() -> UploadImage {
+    
+    public func formatDataToMakeUploadImage() -> UploadImage {
         return self
     }
     
-    func formatToJSON() -> JSON {
+    public func formatToJSON() -> JSON {
         let result: JSON = ["actualHeight": actualHeight ?? NSNull(),
                             "actualWidth":  actualWidth ?? NSNull(),
                             "hashCode":     hashCode ?? NSNull(),

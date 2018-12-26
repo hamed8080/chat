@@ -13,6 +13,19 @@ public class CoreDataStack: NSObject {
     
     // MARK: - Core Data stack
     
+    //    public static let sharedInstance = CoreDataStack()
+    
+    //    lazy var persistentContainer: NSPersistentContainer = {
+    //        let container = NSPersistentContainer(name: "CacheDataModel")
+    //        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+    //            if let error = error {
+    //                fatalError("Unresolved error \(error), \(error)")
+    //            }
+    //        })
+    //        return container
+    //    }()
+    
+    
     lazy var persistentContainer: NSPersistentContainer = {
         /*
          The persistent container for the application. This implementation
@@ -20,12 +33,28 @@ public class CoreDataStack: NSObject {
          application to it. This property is optional since there are legitimate
          error conditions that could cause the creation of the store to fail.
          */
-        //        let container = NSPersistentContainer(name: "CacheData")
         
-        let momdName = "CacheDataModel" //pass this as a parameter
-        guard let modelURL = Bundle(for: type(of: self)).url(forResource: momdName, withExtension:"momd") else { fatalError("Error loading model from bundle") }
+        let momdName = "CoreDataModel" //pass this as a parameter
+        guard let modelURL = Bundle(for: type(of: self)).url(forResource: momdName, withExtension: "momd") else { fatalError("Error loading model from bundle") }
         guard let mom = NSManagedObjectModel(contentsOf: modelURL) else { fatalError("Error initializing mom from: \(modelURL)") }
         let container = NSPersistentContainer(name: momdName, managedObjectModel: mom)
+        
+        
+        
+        //         let momdName = "CacheDataModel" //pass this as a parameter
+        //         guard let modelURL = Bundle(for: type(of: self)).url(forResource: "NewChat/\(momdName)", withExtension: "momd") else { fatalError("Error loading model from bundle") }
+        //         guard let mom = NSManagedObjectModel(contentsOf: modelURL) else { fatalError("Error initializing mom from: \(modelURL)") }
+        //         let container = NSPersistentContainer(name: momdName, managedObjectModel: mom)
+        
+        
+        /*
+         guard let bundleURL = Bundle(for: type(of: self)).url(forResource: "NewChat", withExtension: "bundle") else { fatalError("0") }
+         
+         //        guard let bundleURL = Bundle(forClass: self).URLForResource("myFramework", withExtension: "bundle") else { fatalError("1") }
+         guard let frameworkBundle = Bundle(url: bundleURL) else { fatalError("2") }
+         guard let momURL = frameworkBundle.url(forResource: "CacheDataModel", withExtension: "momd") else { fatalError("3") }
+         */
+        
         
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
@@ -45,6 +74,7 @@ public class CoreDataStack: NSObject {
         })
         return container
     }()
+    
     
     // MARK: - Core Data Saving support
     

@@ -2,7 +2,7 @@
 //  CMReplyInfo+CoreDataProperties.swift
 //  Chat
 //
-//  Created by Mahyar Zhiani on 10/1/1397 AP.
+//  Created by Mahyar Zhiani on 10/5/1397 AP.
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 //
@@ -24,5 +24,6 @@ extension CMReplyInfo {
     @NSManaged public var repliedToMessageId: NSNumber?
     @NSManaged public var systemMetadata:   String?
     @NSManaged public var participant:      CMParticipant?
+    @NSManaged public var dummyMessage:     CMMessage?
 
 }

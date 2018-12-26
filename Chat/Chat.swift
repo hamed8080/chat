@@ -6,13 +6,14 @@
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 
-
 import Foundation
 import Alamofire
 import Async
 import SwiftyJSON
 import Contacts
-//import SwiftyBeaver
+import SwiftyBeaver
+import CoreData
+
 
 
 public class Chat {
@@ -577,7 +578,7 @@ extension Chat {
         }
         
         switch type {
-        
+            
         // a message of type 1 (CREATE_THREAD) comes from Server.
         case chatMessageVOTypes.CREATE_THREAD.rawValue:
             log.verbose("Message of type 'CREATE_THREAD' recieved", context: "Chat")
@@ -594,15 +595,15 @@ extension Chat {
                 Chat.map.removeValue(forKey: uniqueId)
             }
             break
-        
-        // a message of type 2 (MESSAGE) comes from Server.
+            
+            // a message of type 2 (MESSAGE) comes from Server.
         // this means that a message comes.
         case chatMessageVOTypes.MESSAGE.rawValue:
             log.verbose("Message of type 'MESSAGE' recieved", context: "Chat")
             chatMessageHandler(threadId: threadId, messageContent: messageContent)
             break
-        
-        // a message of type 3 (SENT) comes from Server.
+            
+            // a message of type 3 (SENT) comes from Server.
         // it means that the message is send.
         case chatMessageVOTypes.SENT.rawValue:
             log.verbose("Message of type 'SENT' recieved", context: "Chat")
@@ -617,7 +618,7 @@ extension Chat {
             }
             break
             
-        // a message of type 4 (DELIVERY) comes from Server.
+            // a message of type 4 (DELIVERY) comes from Server.
         // it means that the message is delivered.
         case chatMessageVOTypes.DELIVERY.rawValue:
             log.verbose("Message of type 'DELIVERY' recieved", context: "Chat")
@@ -699,8 +700,8 @@ extension Chat {
                 
             }
             break
-        
-        // a message of type 5 (SEEN) comes from Server.
+            
+            // a message of type 5 (SEEN) comes from Server.
         // it means that the message is seen.
         case chatMessageVOTypes.SEEN.rawValue:
             log.verbose("Message of type 'SEEN' recieved", context: "Chat")
@@ -780,14 +781,14 @@ extension Chat {
                 }
             }
             break
-        
-        // a message of type 6 (PING) comes from Server.
+            
+            // a message of type 6 (PING) comes from Server.
         // it means that a ping message comes.
         case chatMessageVOTypes.PING.rawValue:
             log.verbose("Message of type 'PING' recieved", context: "Chat")
             break
             
-        // a message of type 7 (BLOCK) comes from Server.
+            // a message of type 7 (BLOCK) comes from Server.
         // it means that a user has blocked.
         case chatMessageVOTypes.BLOCK.rawValue:
             log.verbose("Message of type 'BLOCK' recieved", context: "Chat")
@@ -801,7 +802,7 @@ extension Chat {
             }
             break
             
-        // a message of type 8 (UNBLOCK) comes from Server.
+            // a message of type 8 (UNBLOCK) comes from Server.
         // it means that a user has unblocked.
         case chatMessageVOTypes.UNBLOCK.rawValue:
             log.verbose("Message of type 'UNBLOCK' recieved", context: "Chat")
@@ -814,8 +815,8 @@ extension Chat {
                 Chat.map.removeValue(forKey: uniqueId)
             }
             break
-        
-        // a message of type 9 (LEAVE_THREAD) comes from Server.
+            
+            // a message of type 9 (LEAVE_THREAD) comes from Server.
         // it means that a you has leaved the thread.
         case chatMessageVOTypes.LEAVE_THREAD.rawValue:
             log.verbose("Message of type 'LEAVE_THREAD' recieved", context: "Chat")
@@ -851,13 +852,13 @@ extension Chat {
              */
             
             break
-       
+            
         // a message of type 10 (RENAME) comes from Server.
         case chatMessageVOTypes.RENAME.rawValue:
             //
             break
             
-        // a message of type 11 (ADD_PARTICIPANT) comes from Server.
+            // a message of type 11 (ADD_PARTICIPANT) comes from Server.
         // it means some participants added to the thread.
         case chatMessageVOTypes.ADD_PARTICIPANT.rawValue:
             log.verbose("Message of type 'ADD_PARTICIPANT' recieved", context: "Chat")
@@ -886,16 +887,16 @@ extension Chat {
              */
             
             break
-        
+            
         // a message of type 12 (GET_STATUS) comes from Server.
         case chatMessageVOTypes.GET_STATUS.rawValue:
             //
             break
             
-        // a message of type 13 (GET_CONTACTS) comes from Server.
+            // a message of type 13 (GET_CONTACTS) comes from Server.
         // it means array of contacts comes
         case chatMessageVOTypes.GET_CONTACTS.rawValue:
-            log.verbose("Message of type 'GET_CONTACTS' recieved", context: "Chat")
+            log.debug("Message of type 'GET_CONTACTS' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount)
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
@@ -931,7 +932,7 @@ extension Chat {
                 Chat.map.removeValue(forKey: uniqueId)
             }
             break
-        
+            
         // a message of type 16 (CHANGE_TYPE) comes from Server.
         case chatMessageVOTypes.CHANGE_TYPE.rawValue:
             break
@@ -992,7 +993,7 @@ extension Chat {
                 
             }
             break
-        
+            
         // a message of type 20 (UNMUTE_THREAD) comes from Server.
         case chatMessageVOTypes.UNMUTE_THREAD.rawValue:
             log.verbose("Message of type 'UNMUTE_THREAD' recieved", context: "Chat")
@@ -1134,7 +1135,7 @@ extension Chat {
                 Chat.map.removeValue(forKey: uniqueId)
             }
             break
-        
+            
         // a message of type 30 (THREAD_INFO_UPDATED) comes from Server.
         case chatMessageVOTypes.THREAD_INFO_UPDATED.rawValue:
             log.verbose("Message of type 'THREAD_INFO_UPDATED' recieved", context: "Chat")
@@ -1142,7 +1143,7 @@ extension Chat {
             let result: JSON = ["thread": conversation]
             delegate?.threadEvents(type: "THREAD_INFO_UPDATED", result: result)
             break
-        
+            
         // a message of type 31 (LAST_SEEN_UPDATED) comes from Server.
         case chatMessageVOTypes.LAST_SEEN_UPDATED.rawValue:
             log.verbose("Message of type 'LAST_SEEN_UPDATED' recieved", context: "Chat")
@@ -1380,13 +1381,13 @@ extension Chat {
      then the response will come back as callbacks to client whose calls this function.
      
      + Inputs:
-        this method doesn't need any input
+     this method doesn't need any input
      
      + Outputs:
-        It has 3 callbacks as response:
-        1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-        2- completion:  it will returns the response that comes from server to this request.    (UserInfoModel)
-        3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
+     It has 3 callbacks as response:
+     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
+     2- completion:  it will returns the response that comes from server to this request.    (UserInfoModel)
+     3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
      */
     public func getUserInfo(uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias, cacheResponse: @escaping (UserInfoModel) -> ()) {
         log.verbose("Try to request to get user info", context: "Chat")
@@ -1427,15 +1428,15 @@ extension Chat {
      - typeCode:
      
      + Outputs:
-        It has 3 callbacks as response:
-        1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-        2- completion:  it will returns the response that comes from server to this request.    (GetContactsModel)
-        3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
+     It has 3 callbacks as response:
+     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
+     2- completion:  it will returns the response that comes from server to this request.    (GetContactsModel)
+     3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
      */
     public func getContacts(getContactsInput: GetContactsRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias, cacheResponse: @escaping (GetContactsModel) -> ()) {
         log.verbose("Try to request to get Contacts with this parameters: \n \(getContactsInput)", context: "Chat")
         
-        var content: JSON = []
+        var content: JSON = [:]
         
         content["count"]    = JSON(getContactsInput.count ?? 50)
         content["size"]     = JSON(getContactsInput.count ?? 50)
@@ -1446,8 +1447,8 @@ extension Chat {
         }
         
         let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_CONTACTS.rawValue,
-                                       "typeCode": getContactsInput.typeCode ?? generalTypeCode,
-                                       "content": content]
+                                       //                                       "typeCode": getContactsInput.typeCode ?? generalTypeCode,
+            "content": content]
         sendMessageWithCallback(params: sendMessageParams, callback: GetContactsCallback(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (getContactUniqueId) in
             uniqueId(getContactUniqueId)
         }
@@ -1457,8 +1458,8 @@ extension Chat {
         // if cache is enabled by user, it will return cache result to the user
         if enableCache {
             if let cacheContacts = Chat.cacheDB.retrieveContacts(count: content["count"].intValue,
-                                                                offset: content["offset"].intValue,
-                                                                ascending:  true) {
+                                                                 offset: content["offset"].intValue,
+                                                                 ascending:  true) {
                 cacheResponse(cacheContacts)
             }
         }
@@ -1832,7 +1833,7 @@ extension Chat {
     public func getBlockedContacts(getBlockedContactsInput: GetBlockedContactListRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
         log.verbose("Try to request to get block users with this parameters: \n \(getBlockedContactsInput)", context: "Chat")
         
-        var content: JSON = []
+        var content: JSON = [:]
         content["count"]    = JSON(getBlockedContactsInput.count ?? 50)
         content["offset"]   = JSON(getBlockedContactsInput.offset ?? 0)
         
@@ -2125,24 +2126,24 @@ extension Chat {
      then the response will come back as callbacks to client whose calls this function.
      
      + Inputs:
-        this function will get some optional prameters as an input, as JSON or Model (depends on the function that you would use) which are:
-        - count:        how many thread do you want to get with this request.           (Int)       -optional-  , if you don't set it, it would have default value of 50
-        - offset:       offset of the contact number that start to count to show.       (Int)       -optional-  , if you don't set it, it would have default value of 0
-        - name:         if you want to search on your contact, put it here.             (String)    -optional-  ,
-        - new:
-        - threadIds:    this parameter gets an array of threadId to fileter the result. ([Int])     -optional-  ,
-        - typeCode:
+     this function will get some optional prameters as an input, as JSON or Model (depends on the function that you would use) which are:
+     - count:        how many thread do you want to get with this request.           (Int)       -optional-  , if you don't set it, it would have default value of 50
+     - offset:       offset of the contact number that start to count to show.       (Int)       -optional-  , if you don't set it, it would have default value of 0
+     - name:         if you want to search on your contact, put it here.             (String)    -optional-  ,
+     - new:
+     - threadIds:    this parameter gets an array of threadId to fileter the result. ([Int])     -optional-  ,
+     - typeCode:
      
      + Outputs:
-        It has 2 callbacks as response:
-        1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-        2- completion:  it will returns the response that comes from server to this request.    (GetThreadsModel)
-        3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
+     It has 2 callbacks as response:
+     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
+     2- completion:  it will returns the response that comes from server to this request.    (GetThreadsModel)
+     3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
      */
     public func getThreads(getThreadsInput: GetThreadsRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias, cacheResponse: @escaping (GetThreadsModel) -> ()) {
         log.verbose("Try to request to get threads with this parameters: \n \(getThreadsInput)", context: "Chat")
         
-        var content: JSON = []
+        var content: JSON = [:]
         
         content["count"]    = JSON(getThreadsInput.count ?? 50)
         content["offset"]    = JSON(getThreadsInput.offset ?? 0)
@@ -2268,7 +2269,7 @@ extension Chat {
     public func getHistory(getHistoryInput: GetHistoryRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
         log.verbose("Try to request to get history with this parameters: \n \(getHistoryInput)", context: "Chat")
         
-        var content: JSON = []
+        var content: JSON = [:]
         content["count"] = JSON(getHistoryInput.count ?? 50)
         content["offset"] = JSON(getHistoryInput.offset ?? 0)
         
@@ -2725,20 +2726,20 @@ extension Chat {
      then the response will come back as callbacks to client whose calls this function.
      
      + Inputs:
-        this function will get some optional prameters as an input, as JSON or Model (depends on the function that you would use) which are:
-        - threadId:    id of the thread that you want to mute it.    (Int)
-        - count:
-        - offset:
-        - firstMessageId:
-        - lastMessageId:
-        - name:
-        - typeCode:
+     this function will get some optional prameters as an input, as JSON or Model (depends on the function that you would use) which are:
+     - threadId:    id of the thread that you want to mute it.    (Int)
+     - count:
+     - offset:
+     - firstMessageId:
+     - lastMessageId:
+     - name:
+     - typeCode:
      
      + Outputs:
-        It has 2 callbacks as response:
-        1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-        2- completion:  it will returns the response that comes from server to this request.    (GetThreadParticipantsModel)
-        3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
+     It has 2 callbacks as response:
+     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
+     2- completion:  it will returns the response that comes from server to this request.    (GetThreadParticipantsModel)
+     3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
      */
     public func getThreadParticipants(getThreadParticipantsInput: GetThreadParticipantsRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias, cacheResponse: @escaping (GetThreadParticipantsModel) -> ()) {
         log.verbose("Try to request to get thread participants with this parameters: \n \(getThreadParticipantsInput)", context: "Chat")
@@ -2762,7 +2763,8 @@ extension Chat {
         
         let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.THREAD_PARTICIPANTS.rawValue,
                                        "typeCode": getThreadParticipantsInput.typeCode ?? generalTypeCode,
-                                       "content": content/*, "subjectId": subjectId*/]
+                                       "content": content,
+                                       "subjectId": content["threadId"].intValue]
         sendMessageWithCallback(params: sendMessageParams, callback: GetThreadParticipantsCallbacks(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (getParticipantsUniqueId) in
             uniqueId(getParticipantsUniqueId)
         }
@@ -3558,7 +3560,7 @@ extension Chat {
         
         let uploadUniqueId: String = generateUUID()
         
-        var metaData: JSON = []
+        var metaData: JSON = [:]
         metaData["file"]["originalName"] = JSON(fileName)
         metaData["file"]["mimeType"] = JSON(fileType)
         metaData["file"]["size"] = JSON(fileSize)
@@ -3691,7 +3693,7 @@ extension Chat {
         
         let uploadUniqueId: String = generateUUID()
         
-        var metaData: JSON = []
+        var metaData: JSON = [:]
         
         metaData["file"]["originalName"] = JSON(fileName)
         metaData["file"]["mimeType"] = JSON(fileType)
@@ -3905,7 +3907,7 @@ extension Chat {
         //        var fileSize:           Int     = 0
         var fileExtension:      String  = ""
         
-        var uploadFileData: JSON = []
+        var uploadFileData: JSON = [:]
         
         if let myFileExtension = uploadImageInput.fileExtension {
             fileExtension = myFileExtension
@@ -4001,7 +4003,7 @@ extension Chat {
         //        var fileSize:           Int     = 0
         var fileExtension:      String  = ""
         
-        var uploadFileData: JSON = []
+        var uploadFileData: JSON = [:]
         
         if let myFileExtension = params["fileExtension"].string {
             fileExtension = myFileExtension
@@ -4121,7 +4123,7 @@ extension Chat {
         var uploadUniqueId:     String  = ""
         var originalFileName:   String  = ""
         
-        var uploadFileData: JSON = []
+        var uploadFileData: JSON = [:]
         
         if let myFileExtension = uploadFileInput.fileExtension {
             fileExtension = myFileExtension
@@ -4212,7 +4214,7 @@ extension Chat {
         var uploadUniqueId:     String  = ""
         var originalFileName:   String  = ""
         
-        var uploadFileData: JSON = []
+        var uploadFileData: JSON = [:]
         
         if let myFileExtension = params["fileExtension"].string {
             fileExtension = myFileExtension
@@ -4750,15 +4752,6 @@ extension Chat {
 }
 
 
-
-
-//
-
-
-
-
-
-
 // Calbacks Classes
 extension Chat {
     
@@ -4823,7 +4816,7 @@ extension Chat {
                 }
                 Chat.cacheDB.saveContactsObjects(contacts: contacts)
                 
-                
+                print("contentCount: \(contentCount)\n content: \n \(messageContent)")
                 let getContactsModel = GetContactsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 
                 success(getContactsModel)
@@ -4919,14 +4912,15 @@ extension Chat {
                 let contentCount = response["contentCount"].intValue
                 
                 
-                // save data comes from server to the Cache
-                var participants = [Participant]()
-                for item in messageContent {
-                    let myParticipant = Participant(messageContent: item)
-                    participants.append(myParticipant)
+                // save data comes from server to the Cache, in the Back Thread
+                DispatchQueue.global().async {
+                    var participants = [Participant]()
+                    for item in messageContent {
+                        let myParticipant = Participant(messageContent: item)
+                        participants.append(myParticipant)
+                    }
+                    Chat.cacheDB.saveThreadParticipantsObjects(participants: participants)
                 }
-                Chat.cacheDB.saveThreadParticipantsObjects(participants: participants)
-                
                 
                 let getThreadParticipantsModel = GetThreadParticipantsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 
@@ -5289,36 +5283,6 @@ extension Chat {
     
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

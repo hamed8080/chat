@@ -15,17 +15,34 @@ open class UploadFile {
     public let id:             Int?
     public let name:           String?
     
-    init(messageContent: JSON) {
+    public init(messageContent: JSON) {
         self.hashCode       = messageContent["hashCode"].string
         self.id             = messageContent["id"].int
         self.name           = messageContent["name"].string
     }
     
-    func formatDataToMakeUploadImage() -> UploadFile {
+    public init(hashCode:   String?,
+                id:         Int?,
+                name:       String?) {
+        
+        self.hashCode       = hashCode
+        self.id             = id
+        self.name           = name
+    }
+    
+    public init(theUploadFile: UploadFile) {
+        
+        self.hashCode       = theUploadFile.hashCode
+        self.id             = theUploadFile.id
+        self.name           = theUploadFile.name
+    }
+    
+    
+    public func formatDataToMakeUploadImage() -> UploadFile {
         return self
     }
     
-    func formatToJSON() -> JSON {
+    public func formatToJSON() -> JSON {
         let result: JSON = ["hashCode":     hashCode ?? NSNull(),
                             "id":           id ?? NSNull(),
                             "name":         name ?? NSNull()]

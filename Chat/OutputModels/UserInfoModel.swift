@@ -43,7 +43,10 @@ open class UserInfoModel {
     
     public var userJSON: JSON = [:]
     
-    init(messageContent: JSON, hasError: Bool, errorMessage: String, errorCode: Int) {
+    public init(messageContent: JSON,
+                hasError:       Bool,
+                errorMessage:   String,
+                errorCode:      Int) {
         self.hasError       = hasError
         self.errorMessage   = errorMessage
         self.errorCode      = errorCode
@@ -52,7 +55,11 @@ open class UserInfoModel {
         self.userJSON       = user.formatToJSON()
     }
     
-    init(userObject: User, hasError: Bool, errorMessage: String, errorCode: Int) {
+    public init(userObject:     User,
+                hasError:       Bool,
+                errorMessage:   String,
+                errorCode:      Int) {
+        
         self.hasError       = hasError
         self.errorMessage   = errorMessage
         self.errorCode      = errorCode

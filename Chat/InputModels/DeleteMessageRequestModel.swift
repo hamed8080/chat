@@ -16,10 +16,10 @@ open class DeleteMessageRequestModel {
     public let uniqueId:            String?
     public let typeCode:            String?
     
-    init(subjectId:         Int?,
-         deleteForAll:      JSON,
-         uniqueId:          String?,
-         typeCode:          String?) {
+    public init(subjectId:         Int?,
+                deleteForAll:      JSON,
+                uniqueId:          String?,
+                typeCode:          String?) {
         
         self.subjectId          = subjectId
         self.deleteForAll       = deleteForAll

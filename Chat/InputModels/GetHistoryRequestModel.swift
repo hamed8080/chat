@@ -21,15 +21,15 @@ open class GetHistoryRequestModel {
     public let typeCode:            String?
     public let metadataCriteria:    JSON?
     
-    init(threadId:          Int,
-         count:             Int?,
-         offset:            Int?,
-         firstMessageId:    Int?,
-         lastMessageId:     Int?,
-         order:             String?,
-         query:             String?,
-         typeCode:          String?,
-         metadataCriteria:  JSON?) {
+    public init(threadId:          Int,
+                count:             Int?,
+                offset:            Int?,
+                firstMessageId:    Int?,
+                lastMessageId:     Int?,
+                order:             String?,
+                query:             String?,
+                typeCode:          String?,
+                metadataCriteria:  JSON?) {
         
         self.threadId           = threadId
         self.count              = count

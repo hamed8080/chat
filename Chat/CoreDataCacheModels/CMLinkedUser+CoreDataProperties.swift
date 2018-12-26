@@ -2,7 +2,7 @@
 //  CMLinkedUser+CoreDataProperties.swift
 //  Chat
 //
-//  Created by Mahyar Zhiani on 10/1/1397 AP.
+//  Created by Mahyar Zhiani on 10/5/1397 AP.
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 //
@@ -22,5 +22,6 @@ extension CMLinkedUser {
     @NSManaged public var name:         String?
     @NSManaged public var nickname:     String?
     @NSManaged public var username:     String?
+    @NSManaged public var dummyContact: CMContact?
 
 }

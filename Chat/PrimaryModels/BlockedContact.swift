@@ -27,17 +27,17 @@ open class BlockedContact {
     public let lastName:   String?
     public let nickName:   String?
     
-    init(messageContent: JSON) {
+    public init(messageContent: JSON) {
         self.id         = messageContent["id"].int
         self.firstName  = messageContent["firstName"].string
         self.lastName   = messageContent["lastName"].string
         self.nickName   = messageContent["nickName"].string
     }
     
-    init(id:        Int?,
-         firstName: String?,
-         lastName:  String?,
-         nickName:  String?) {
+    public init(id:        Int?,
+                firstName: String?,
+                lastName:  String?,
+                nickName:  String?) {
         
         self.id         = id
         self.firstName  = firstName
@@ -45,11 +45,19 @@ open class BlockedContact {
         self.nickName   = nickName
     }
     
-    func formatDataToMakeBlockedUser() -> BlockedContact {
+    public init(theBlockedContact: BlockedContact) {
+        
+        self.id         = theBlockedContact.id
+        self.firstName  = theBlockedContact.firstName
+        self.lastName   = theBlockedContact.lastName
+        self.nickName   = theBlockedContact.nickName
+    }
+    
+    public func formatDataToMakeBlockedUser() -> BlockedContact {
         return self
     }
     
-    func formatToJSON() -> JSON {
+    public func formatToJSON() -> JSON {
         let result: JSON = ["id":               id ?? NSNull(),
                             "firstName":        firstName ?? NSNull(),
                             "lastName":         lastName ?? NSNull(),

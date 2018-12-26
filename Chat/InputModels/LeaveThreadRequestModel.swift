@@ -15,10 +15,10 @@ open class LeaveThreadRequestModel {
     public let uniqueId:            String?
     public let typeCode:            String?
     
-    init(threadId:  Int,
-         content:   [Int],
-         uniqueId:  String?,
-         typeCode:  String?) {
+    public init(threadId:  Int,
+                content:   [Int],
+                uniqueId:  String?,
+                typeCode:  String?) {
         
         self.threadId           = threadId
         self.content            = content

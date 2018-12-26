@@ -56,7 +56,13 @@ open class GetContactsModel {
     
     public var contacrsJSON:       [JSON] = []
     
-    init(messageContent: [JSON], contentCount: Int, count: Int, offset: Int, hasError: Bool, errorMessage: String, errorCode: Int) {
+    public init(messageContent: [JSON],
+                contentCount:   Int,
+                count:          Int,
+                offset:         Int,
+                hasError:       Bool,
+                errorMessage:   String,
+                errorCode:      Int) {
         
         self.hasError           = hasError
         self.errorMessage       = errorMessage
@@ -81,13 +87,13 @@ open class GetContactsModel {
         
     }
     
-    init(contactsObject:    [Contact],
-         contentCount:      Int,
-         count:             Int,
-         offset:            Int,
-         hasError:          Bool,
-         errorMessage:      String,
-         errorCode:         Int) {
+    public init(contactsObject:    [Contact],
+                contentCount:      Int,
+                count:             Int,
+                offset:            Int,
+                hasError:          Bool,
+                errorMessage:      String,
+                errorCode:         Int) {
         
         self.hasError           = hasError
         self.errorMessage       = errorMessage

@@ -49,7 +49,7 @@ open class Participant {
     public let receiveEnable:      Bool?
     public let sendEnable:         Bool?
     
-    init(messageContent: JSON) {
+    public init(messageContent: JSON) {
         self.admin              = messageContent["admin"].bool
         self.blocked            = messageContent["blocked"].bool
         self.cellphoneNumber    = messageContent["cellphoneNumber"].string
@@ -68,22 +68,22 @@ open class Participant {
         self.sendEnable         = messageContent["sendEnable"].bool
     }
     
-    init(admin:             Bool?,
-         blocked:           Bool?,
-         cellphoneNumber:   String?,
-         contactId:         Int?,
-         coreUserId:        Int?,
-         email:             String?,
-         firstName:         String?,
-         id:                Int?,
-         image:             String?,
-         lastName:          String?,
-         myFriend:          Bool?,
-         name:              String?,
-         notSeenDuration:   Int?,
-         online:            Bool?,
-         receiveEnable:     Bool?,
-         sendEnable:        Bool?) {
+    public init(admin:             Bool?,
+                blocked:           Bool?,
+                cellphoneNumber:   String?,
+                contactId:         Int?,
+                coreUserId:        Int?,
+                email:             String?,
+                firstName:         String?,
+                id:                Int?,
+                image:             String?,
+                lastName:          String?,
+                myFriend:          Bool?,
+                name:              String?,
+                notSeenDuration:   Int?,
+                online:            Bool?,
+                receiveEnable:     Bool?,
+                sendEnable:        Bool?) {
         
         self.admin              = admin
         self.blocked            = blocked
@@ -103,22 +103,47 @@ open class Participant {
         self.sendEnable         = sendEnable
     }
     
+    public init(theParticipant: Participant) {
+        
+        self.admin              = theParticipant.admin
+        self.blocked            = theParticipant.blocked
+        self.cellphoneNumber    = theParticipant.cellphoneNumber
+        self.contactId          = theParticipant.contactId
+        self.coreUserId         = theParticipant.coreUserId
+        self.email              = theParticipant.email
+        self.firstName          = theParticipant.firstName
+        self.id                 = theParticipant.id
+        self.image              = theParticipant.image
+        self.lastName           = theParticipant.lastName
+        self.myFriend           = theParticipant.myFriend
+        self.name               = theParticipant.name
+        self.notSeenDuration    = theParticipant.notSeenDuration
+        self.online             = theParticipant.online
+        self.receiveEnable      = theParticipant.receiveEnable
+        self.sendEnable         = theParticipant.sendEnable
+    }
     
-    func formatDataToMakeParticipant() -> Participant {
+    
+    public func formatDataToMakeParticipant() -> Participant {
         return self
     }
     
-    func formatToJSON() -> JSON {
-        let result: JSON = ["cellphoneNumber":  cellphoneNumber ?? NSNull(),
+    public func formatToJSON() -> JSON {
+        let result: JSON = ["admin":            admin ?? NSNull(),
+                            "blocked":          blocked ?? NSNull(),
+                            "cellphoneNumber":  cellphoneNumber ?? NSNull(),
                             "contactId":        contactId ?? NSNull(),
+                            "coreUserId":       coreUserId ?? NSNull(),
                             "email":            email ?? NSNull(),
                             "firstName":        firstName ?? NSNull(),
                             "id":               id ?? NSNull(),
                             "image":            image ?? NSNull(),
                             "lastName":         lastName ?? NSNull(),
                             "myFriend":         myFriend ?? NSNull(),
-                            "name":             name ?? NSNull(),"notSeenDuration":  notSeenDuration ?? NSNull(),
-                            "online":           online ?? NSNull(),"receiveEnable":    receiveEnable ?? NSNull(),
+                            "name":             name ?? NSNull(),
+                            "notSeenDuration":  notSeenDuration ?? NSNull(),
+                            "online":           online ?? NSNull(),
+                            "receiveEnable":    receiveEnable ?? NSNull(),
                             "sendEnable":       sendEnable ?? NSNull()]
         return result
     }

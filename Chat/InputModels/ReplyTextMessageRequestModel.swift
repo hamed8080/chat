@@ -18,12 +18,12 @@ open class ReplyTextMessageRequestModel {
     public let metaData:            JSON?
     public let typeCode:            String?
     
-    init(subjectId:         Int,
-         content:           String,
-         repliedTo:         Int,
-         uniqueId:          String?,
-         typeCode:          String?,
-         metaData:          JSON?) {
+    public init(subjectId:         Int,
+                content:           String,
+                repliedTo:         Int,
+                uniqueId:          String?,
+                typeCode:          String?,
+                metaData:          JSON?) {
         
         self.subjectId          = subjectId
         self.content            = content

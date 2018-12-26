@@ -28,7 +28,6 @@ extension JSON {
 }
 
 
-
 struct formatDataFromStringToJSON {
     let stringCont: String
     

@@ -22,17 +22,17 @@ open class UploadImageRequestModel {
     public let wC:                  Int?
     public let dataToSend:          Data
     
-    init(fileExtension:     String?,
-         fileName:          String,
-         fileSize:          Int?,
-         threadId:          Int,
-         uniqueId:          String?,
-         originalFileName:  String?,
-         xC:                Int?,
-         yC:                Int?,
-         hC:                Int?,
-         wC:                Int?,
-         dataToSend:        Data) {
+    public init(fileExtension:     String?,
+                fileName:          String,
+                fileSize:          Int?,
+                threadId:          Int,
+                uniqueId:          String?,
+                originalFileName:  String?,
+                xC:                Int?,
+                yC:                Int?,
+                hC:                Int?,
+                wC:                Int?,
+                dataToSend:        Data) {
         
         self.fileExtension      = fileExtension
         self.fileName           = fileName

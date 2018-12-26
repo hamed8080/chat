@@ -13,8 +13,8 @@ open class SpamPvThreadRequestModel {
     public let threadId:   Int?
     public let typeCode:    String?
     
-    init(threadId:      Int?,
-         typeCode:      String?) {
+    public init(threadId:      Int?,
+                typeCode:      String?) {
         
         self.threadId       = threadId
         self.typeCode       = typeCode

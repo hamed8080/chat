@@ -24,8 +24,10 @@ open class Invitee {
     public let id:     String?
     public var idType: Int = 0
     
-    init(messageContent: JSON) {
-        self.id =       messageContent["id"].string
+    public init(messageContent: JSON) {
+        
+        self.id = messageContent["id"].string
+        
         if let myIdType = messageContent["idType"].string {
             let type = myIdType
             if (type == "TO_BE_USER_SSO_ID") {
@@ -38,13 +40,40 @@ open class Invitee {
                 self.idType = 4
             }
         }
+        
     }
     
-    func formatDataToMakeInvitee() -> Invitee {
+    public init(id:     String?,
+                idType: String?) {
+        
+        self.id = id
+        if let myIdType = idType {
+            let type = myIdType
+            if (type == "TO_BE_USER_SSO_ID") {
+                self.idType = 1
+            } else if (type == "TO_BE_USER_CONTACT_ID") {
+                self.idType = 2
+            } else if (type == "TO_BE_USER_CELLPHONE_NUMBER") {
+                self.idType = 3
+            } else if (type == "TO_BE_USER_USERNAME") {
+                self.idType = 4
+            }
+        }
+        
+    }
+    
+    public init(theInvitee: Invitee) {
+        
+        self.id     = theInvitee.id
+        self.idType = theInvitee.idType
+        
+    }
+    
+    public func formatDataToMakeInvitee() -> Invitee {
         return self
     }
     
-    func formatToJSON() -> JSON {
+    public func formatToJSON() -> JSON {
         let result: JSON = ["id":               id ?? NSNull(),
                             "idType":           idType]
         return result

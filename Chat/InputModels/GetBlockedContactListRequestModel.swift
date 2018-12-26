@@ -14,9 +14,9 @@ open class GetBlockedContactListRequestModel {
     public let offset:      Int?
     public let typeCode:    String?
     
-    init(count:     Int?,
-         offset:    Int?,
-         typeCode:  String?) {
+    public init(count:     Int?,
+                offset:    Int?,
+                typeCode:  String?) {
         
         self.count      = count
         self.offset     = offset
