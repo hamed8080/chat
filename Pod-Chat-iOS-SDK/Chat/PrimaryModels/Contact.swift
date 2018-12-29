@@ -70,7 +70,7 @@ open class Contact {
     public init(cellphoneNumber:   String?,
                 email:             String?,
                 firstName:         String?,
-                hasUser:           Bool?,
+                hasUser:           Bool,
                 id:                Int?,
                 image:             String?,
                 lastName:          String?,

@@ -40,7 +40,7 @@ public class CMContact: NSManagedObject {
             let messageModel = Contact(cellphoneNumber: cellphoneNumber,
                                        email:           self.email,
                                        firstName:       self.firstName,
-                                       hasUser:         hasUser,
+                                       hasUser:         hasUser ?? false,
                                        id:              id,
                                        image:           self.image,
                                        lastName:        self.lastName,

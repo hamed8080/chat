@@ -48,7 +48,6 @@ open class Message {
     public var threadId:       Int?
     public let time:           Int?
     public let uniqueId:       String?
-    public let messageType:    String?
     
     public var conversation:   Conversation?
     public var forwardInfo:    ForwardInfo?
@@ -69,7 +68,6 @@ open class Message {
         self.seen       = pushMessageVO["seen"].bool
         self.time       = pushMessageVO["time"].int
         self.uniqueId   = pushMessageVO["uniqueId"].string
-        self.messageType = pushMessageVO["messageType"].string
         
         if (pushMessageVO["conversation"] != JSON.null) {
             self.conversation = Conversation(messageContent: pushMessageVO["conversation"])
@@ -187,7 +185,6 @@ open class Message {
                             "threadId":         threadId ?? NSNull(),
                             "time":             time ?? NSNull(),
                             "uniqueId":         uniqueId ?? NSNull(),
-                            "messageType":      messageType ?? NSNull(),
                             "conversation":     conversation?.formatToJSON() ?? NSNull(),
                             "forwardInfo":      forwardInfo?.formatToJSON() ?? NSNull(),
                             "participant":      participant?.formatToJSON() ?? NSNull(),
