@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3E2590A721D6CA5300CB9D7D /* Async.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E2590A421D6CA4500CB9D7D /* Async.framework */; };
 		3E2590CD21D756C000CB9D7D /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E2590C021D756B800CB9D7D /* Alamofire.framework */; };
 		3E3E56792160A2F20084C8C1 /* ReplyMessageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E56782160A2F10084C8C1 /* ReplyMessageTest.swift */; };
 		3E3E56852160A30B0084C8C1 /* EditMessageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E56842160A30B0084C8C1 /* EditMessageTest.swift */; };
@@ -26,6 +25,7 @@
 		3E43D1422132B6170069DF9A /* DataFormatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E43D1412132B6170069DF9A /* DataFormatters.swift */; };
 		3E43D1562132BF700069DF9A /* SendMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E43D1552132BF700069DF9A /* SendMessage.swift */; };
 		3E43D1582132BF9C0069DF9A /* ReceiveMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E43D1572132BF9C0069DF9A /* ReceiveMessage.swift */; };
+		3E49635421D79BFB00A67D19 /* FanapPodAsyncSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E49635121D79BF300A67D19 /* FanapPodAsyncSDK.framework */; };
 		3E4B27E4212300CB001130F6 /* GCDTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4B27E3212300CB001130F6 /* GCDTimer.swift */; };
 		3E63A088213A618F00E4E2C2 /* ObjectTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E63A087213A618F00E4E2C2 /* ObjectTypes.swift */; };
 		3E695B99217224DA00A77120 /* AddContactTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E695B98217224DA00A77120 /* AddContactTest.swift */; };
@@ -142,7 +142,7 @@
 		3EBBEDFE2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDFD2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift */; };
 		3EBBEE012174CBCA00F5CDC7 /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEE002174CBCA00F5CDC7 /* Extentions.swift */; };
 		3ED22F2F2187469F00B6FE4C /* AddParticipantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED22F2E2187469F00B6FE4C /* AddParticipantModel.swift */; };
-		3EE025F721206E63001810FB /* Chat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE025ED21206E63001810FB /* Chat.framework */; };
+		3EE025F721206E63001810FB /* FanapPodChatSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE025ED21206E63001810FB /* FanapPodChatSDK.framework */; };
 		3EE025FC21206E63001810FB /* ChatCreateTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE025FB21206E63001810FB /* ChatCreateTest.swift */; };
 		3EE025FE21206E63001810FB /* Chat.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EE025F021206E63001810FB /* Chat.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3EE0261721206EA6001810FB /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE0261621206EA6001810FB /* Chat.swift */; };
@@ -152,20 +152,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		3E2590A321D6CA4500CB9D7D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3E25909B21D6CA4500CB9D7D /* Async.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3ED59C0D211098400026FFF5;
-			remoteInfo = Async;
-		};
-		3E2590A521D6CA4500CB9D7D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3E25909B21D6CA4500CB9D7D /* Async.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3ED59C16211098400026FFF5;
-			remoteInfo = AsyncTests;
-		};
 		3E2590BF21D756B800CB9D7D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3E2590B421D756B800CB9D7D /* Alamofire.xcodeproj */;
@@ -215,6 +201,20 @@
 			remoteGlobalIDString = E4202FE01B667AA100C997FB;
 			remoteInfo = "Alamofire watchOS";
 		};
+		3E49635021D79BF300A67D19 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E49634021D79BF300A67D19 /* FanapPodAsyncSDK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3ED59C0D211098400026FFF5;
+			remoteInfo = FanapPodAsyncSDK;
+		};
+		3E49635221D79BF300A67D19 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E49634021D79BF300A67D19 /* FanapPodAsyncSDK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3ED59C16211098400026FFF5;
+			remoteInfo = FanapPodAsyncSDKTests;
+		};
 		3EE025F821206E63001810FB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3EE025E421206E63001810FB /* Project object */;
@@ -225,7 +225,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		3E25909B21D6CA4500CB9D7D /* Async.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Async.xcodeproj; path = "../../Pod-Async-iOS-SDK/Pod-Async-iOS-SDK/Async.xcodeproj"; sourceTree = "<group>"; };
 		3E2590B421D756B800CB9D7D /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = "Alamofire-4.8.0/Alamofire.xcodeproj"; sourceTree = "<group>"; };
 		3E3E56782160A2F10084C8C1 /* ReplyMessageTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyMessageTest.swift; sourceTree = "<group>"; };
 		3E3E56842160A30B0084C8C1 /* EditMessageTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMessageTest.swift; sourceTree = "<group>"; };
@@ -244,6 +243,7 @@
 		3E43D1412132B6170069DF9A /* DataFormatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFormatters.swift; sourceTree = "<group>"; };
 		3E43D1552132BF700069DF9A /* SendMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMessage.swift; sourceTree = "<group>"; };
 		3E43D1572132BF9C0069DF9A /* ReceiveMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveMessage.swift; sourceTree = "<group>"; };
+		3E49634021D79BF300A67D19 /* FanapPodAsyncSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FanapPodAsyncSDK.xcodeproj; path = "../../Pod-Async-iOS-SDK/Pod-Async-iOS-SDK/FanapPodAsyncSDK.xcodeproj"; sourceTree = "<group>"; };
 		3E4B27E3212300CB001130F6 /* GCDTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCDTimer.swift; sourceTree = "<group>"; };
 		3E63A087213A618F00E4E2C2 /* ObjectTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectTypes.swift; sourceTree = "<group>"; };
 		3E695B98217224DA00A77120 /* AddContactTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddContactTest.swift; sourceTree = "<group>"; };
@@ -357,10 +357,10 @@
 		3EBBEDFD2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncDelegatesImplementation.swift; sourceTree = "<group>"; };
 		3EBBEE002174CBCA00F5CDC7 /* Extentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
 		3ED22F2E2187469F00B6FE4C /* AddParticipantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddParticipantModel.swift; sourceTree = "<group>"; };
-		3EE025ED21206E63001810FB /* Chat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Chat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3EE025ED21206E63001810FB /* FanapPodChatSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FanapPodChatSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EE025F021206E63001810FB /* Chat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Chat.h; sourceTree = "<group>"; };
 		3EE025F121206E63001810FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3EE025F621206E63001810FB /* ChatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3EE025F621206E63001810FB /* FanapPodChatSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FanapPodChatSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EE025FB21206E63001810FB /* ChatCreateTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCreateTest.swift; sourceTree = "<group>"; };
 		3EE025FD21206E63001810FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3EE0261621206EA6001810FB /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
@@ -374,8 +374,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E49635421D79BFB00A67D19 /* FanapPodAsyncSDK.framework in Frameworks */,
 				3E2590CD21D756C000CB9D7D /* Alamofire.framework in Frameworks */,
-				3E2590A721D6CA5300CB9D7D /* Async.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,7 +383,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3EE025F721206E63001810FB /* Chat.framework in Frameworks */,
+				3EE025F721206E63001810FB /* FanapPodChatSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,15 +397,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		3E25909C21D6CA4500CB9D7D /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				3E2590A421D6CA4500CB9D7D /* Async.framework */,
-				3E2590A621D6CA4500CB9D7D /* AsyncTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		3E2590B521D756B800CB9D7D /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -416,6 +407,15 @@
 				3E2590C821D756B800CB9D7D /* Alamofire.framework */,
 				3E2590CA21D756B800CB9D7D /* Alamofire tvOS Tests.xctest */,
 				3E2590CC21D756B800CB9D7D /* Alamofire.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3E49634121D79BF300A67D19 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3E49635121D79BF300A67D19 /* FanapPodAsyncSDK.framework */,
+				3E49635321D79BF300A67D19 /* FanapPodAsyncSDKTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -566,8 +566,8 @@
 				3EE025EF21206E63001810FB /* Chat */,
 				3EE025FA21206E63001810FB /* ChatTests */,
 				3EE025EE21206E63001810FB /* Products */,
+				3E49634021D79BF300A67D19 /* FanapPodAsyncSDK.xcodeproj */,
 				3E2590B421D756B800CB9D7D /* Alamofire.xcodeproj */,
-				3E25909B21D6CA4500CB9D7D /* Async.xcodeproj */,
 				3E25909821D6C8E000CB9D7D /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -575,8 +575,8 @@
 		3EE025EE21206E63001810FB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3EE025ED21206E63001810FB /* Chat.framework */,
-				3EE025F621206E63001810FB /* ChatTests.xctest */,
+				3EE025ED21206E63001810FB /* FanapPodChatSDK.framework */,
+				3EE025F621206E63001810FB /* FanapPodChatSDKTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -655,9 +655,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		3EE025EC21206E63001810FB /* Chat */ = {
+		3EE025EC21206E63001810FB /* FanapPodChatSDK */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3EE0260121206E63001810FB /* Build configuration list for PBXNativeTarget "Chat" */;
+			buildConfigurationList = 3EE0260121206E63001810FB /* Build configuration list for PBXNativeTarget "FanapPodChatSDK" */;
 			buildPhases = (
 				3EE025E821206E63001810FB /* Sources */,
 				3EE025E921206E63001810FB /* Frameworks */,
@@ -668,14 +668,14 @@
 			);
 			dependencies = (
 			);
-			name = Chat;
+			name = FanapPodChatSDK;
 			productName = Chat;
-			productReference = 3EE025ED21206E63001810FB /* Chat.framework */;
+			productReference = 3EE025ED21206E63001810FB /* FanapPodChatSDK.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		3EE025F521206E63001810FB /* ChatTests */ = {
+		3EE025F521206E63001810FB /* FanapPodChatSDKTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3EE0260421206E63001810FB /* Build configuration list for PBXNativeTarget "ChatTests" */;
+			buildConfigurationList = 3EE0260421206E63001810FB /* Build configuration list for PBXNativeTarget "FanapPodChatSDKTests" */;
 			buildPhases = (
 				3EE025F221206E63001810FB /* Sources */,
 				3EE025F321206E63001810FB /* Frameworks */,
@@ -686,9 +686,9 @@
 			dependencies = (
 				3EE025F921206E63001810FB /* PBXTargetDependency */,
 			);
-			name = ChatTests;
+			name = FanapPodChatSDKTests;
 			productName = ChatTests;
-			productReference = 3EE025F621206E63001810FB /* ChatTests.xctest */;
+			productReference = 3EE025F621206E63001810FB /* FanapPodChatSDKTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -710,7 +710,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 3EE025E721206E63001810FB /* Build configuration list for PBXProject "Chat" */;
+			buildConfigurationList = 3EE025E721206E63001810FB /* Build configuration list for PBXProject "FanapPodChatSDK" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -726,33 +726,19 @@
 					ProjectRef = 3E2590B421D756B800CB9D7D /* Alamofire.xcodeproj */;
 				},
 				{
-					ProductGroup = 3E25909C21D6CA4500CB9D7D /* Products */;
-					ProjectRef = 3E25909B21D6CA4500CB9D7D /* Async.xcodeproj */;
+					ProductGroup = 3E49634121D79BF300A67D19 /* Products */;
+					ProjectRef = 3E49634021D79BF300A67D19 /* FanapPodAsyncSDK.xcodeproj */;
 				},
 			);
 			projectRoot = "";
 			targets = (
-				3EE025EC21206E63001810FB /* Chat */,
-				3EE025F521206E63001810FB /* ChatTests */,
+				3EE025EC21206E63001810FB /* FanapPodChatSDK */,
+				3EE025F521206E63001810FB /* FanapPodChatSDKTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		3E2590A421D6CA4500CB9D7D /* Async.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Async.framework;
-			remoteRef = 3E2590A321D6CA4500CB9D7D /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		3E2590A621D6CA4500CB9D7D /* AsyncTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = AsyncTests.xctest;
-			remoteRef = 3E2590A521D6CA4500CB9D7D /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		3E2590C021D756B800CB9D7D /* Alamofire.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -800,6 +786,20 @@
 			fileType = wrapper.framework;
 			path = Alamofire.framework;
 			remoteRef = 3E2590CB21D756B800CB9D7D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3E49635121D79BF300A67D19 /* FanapPodAsyncSDK.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FanapPodAsyncSDK.framework;
+			remoteRef = 3E49635021D79BF300A67D19 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3E49635321D79BF300A67D19 /* FanapPodAsyncSDKTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = FanapPodAsyncSDKTests.xctest;
+			remoteRef = 3E49635221D79BF300A67D19 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -979,7 +979,7 @@
 /* Begin PBXTargetDependency section */
 		3EE025F921206E63001810FB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 3EE025EC21206E63001810FB /* Chat */;
+			target = 3EE025EC21206E63001810FB /* FanapPodChatSDK */;
 			targetProxy = 3EE025F821206E63001810FB /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1123,7 +1123,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.fanapSoft.Chat;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fanapSoft.FanapPodChatSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1150,7 +1150,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.fanapSoft.Chat;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fanapSoft.FanapPodChatSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.0;
@@ -1199,7 +1199,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		3EE025E721206E63001810FB /* Build configuration list for PBXProject "Chat" */ = {
+		3EE025E721206E63001810FB /* Build configuration list for PBXProject "FanapPodChatSDK" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3EE025FF21206E63001810FB /* Debug */,
@@ -1208,7 +1208,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3EE0260121206E63001810FB /* Build configuration list for PBXNativeTarget "Chat" */ = {
+		3EE0260121206E63001810FB /* Build configuration list for PBXNativeTarget "FanapPodChatSDK" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3EE0260221206E63001810FB /* Debug */,
@@ -1217,7 +1217,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3EE0260421206E63001810FB /* Build configuration list for PBXNativeTarget "ChatTests" */ = {
+		3EE0260421206E63001810FB /* Build configuration list for PBXNativeTarget "FanapPodChatSDKTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3EE0260521206E63001810FB /* Debug */,

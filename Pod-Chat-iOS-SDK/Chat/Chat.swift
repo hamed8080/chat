@@ -7,13 +7,14 @@
 //
 
 import Foundation
-import Alamofire
-import Async
-import SwiftyJSON
 import Contacts
-import SwiftyBeaver
 import CoreData
 
+import Alamofire
+import SwiftyJSON
+import SwiftyBeaver
+
+import FanapPodAsyncSDK
 
 
 public class Chat {

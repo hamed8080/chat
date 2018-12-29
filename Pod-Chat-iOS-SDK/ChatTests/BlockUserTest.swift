@@ -7,8 +7,10 @@
 //
 
 import SwiftyJSON
-import Async
 import SwiftyBeaver
+
+import FanapPodAsyncSDK
+
 import XCTest
 @testable import Chat
 
@@ -78,7 +80,23 @@ class BlockUserTest: XCTestCase {
     // MARK: - test with params: [contactId: 563]
     //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     func test_Block_User_uniqueId() {
-        myChatObject = Chat(socketAddress: socketAddress, ssoHost: ssoHost, platformHost: platformHost, fileServer: fileServer, serverName: serverName, token: token, typeCode: 1, msgPriority: 1, msgTTL: messageTtl, httpRequestTimeout: nil, actualTimingLog: nil, wsConnectionWaitTime: Double(wsConnectionWaitTime), connectionRetryInterval: connectionRetryInterval, connectionCheckTimeout: connectionCheckTimeout, messageTtl: messageTtl, reconnectOnClose: true)
+        myChatObject = Chat(socketAddress: socketAddress,
+                            ssoHost: ssoHost,
+                            platformHost: platformHost,
+                            fileServer: fileServer,
+                            serverName: serverName,
+                            token: token,
+                            typeCode: "chattest",
+                            enableCache: false,
+                            msgPriority: 1,
+                            msgTTL: messageTtl,
+                            httpRequestTimeout: nil,
+                            actualTimingLog: nil,
+                            wsConnectionWaitTime: Double(wsConnectionWaitTime),
+                            connectionRetryInterval: connectionRetryInterval,
+                            connectionCheckTimeout: connectionCheckTimeout,
+                            messageTtl: messageTtl,
+                            reconnectOnClose: true)
         
         let spyDelegate = SpyDelegateBlockUser()
         myChatObject?.delegate = spyDelegate
@@ -123,7 +141,23 @@ class BlockUserTest: XCTestCase {
     // MARK: - test with params: [contactId: 563]
     //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     func test_Block_User_With_contactId563() {
-        myChatObject = Chat(socketAddress: socketAddress, ssoHost: ssoHost, platformHost: platformHost, fileServer: fileServer, serverName: serverName, token: token, typeCode: 1, msgPriority: 1, msgTTL: messageTtl, httpRequestTimeout: nil, actualTimingLog: nil, wsConnectionWaitTime: Double(wsConnectionWaitTime), connectionRetryInterval: connectionRetryInterval, connectionCheckTimeout: connectionCheckTimeout, messageTtl: messageTtl, reconnectOnClose: true)
+        myChatObject = Chat(socketAddress: socketAddress,
+                            ssoHost: ssoHost,
+                            platformHost: platformHost,
+                            fileServer: fileServer,
+                            serverName: serverName,
+                            token: token,
+                            typeCode: "chattest",
+                            enableCache: false,
+                            msgPriority: 1,
+                            msgTTL: messageTtl,
+                            httpRequestTimeout: nil,
+                            actualTimingLog: nil,
+                            wsConnectionWaitTime: Double(wsConnectionWaitTime),
+                            connectionRetryInterval: connectionRetryInterval,
+                            connectionCheckTimeout: connectionCheckTimeout,
+                            messageTtl: messageTtl,
+                            reconnectOnClose: true)
         
         let spyDelegate = SpyDelegateBlockUser()
         myChatObject?.delegate = spyDelegate

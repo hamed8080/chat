@@ -8,8 +8,10 @@
 
 
 import SwiftyJSON
-import Async
 import SwiftyBeaver
+
+import FanapPodAsyncSDK
+
 import XCTest
 @testable import Chat
 
@@ -81,7 +83,23 @@ class GetThreadParticipantsTest: XCTestCase {
     // MARK: - test with params: ["threadId": 1131]
     //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     func test_Get_ThreadParticipants_With_ThreadId1131() {
-        myChatObject = Chat(socketAddress: socketAddress, ssoHost: ssoHost, platformHost: platformHost, fileServer: fileServer, serverName: serverName, token: token, typeCode: 1, msgPriority: 1, msgTTL: messageTtl, httpRequestTimeout: nil, actualTimingLog: nil, wsConnectionWaitTime: Double(wsConnectionWaitTime), connectionRetryInterval: connectionRetryInterval, connectionCheckTimeout: connectionCheckTimeout, messageTtl: messageTtl, reconnectOnClose: true)
+        myChatObject = Chat(socketAddress: socketAddress,
+                            ssoHost: ssoHost,
+                            platformHost: platformHost,
+                            fileServer: fileServer,
+                            serverName: serverName,
+                            token: token,
+                            typeCode: "chattest",
+                            enableCache: false,
+                            msgPriority: 1,
+                            msgTTL: messageTtl,
+                            httpRequestTimeout: nil,
+                            actualTimingLog: nil,
+                            wsConnectionWaitTime: Double(wsConnectionWaitTime),
+                            connectionRetryInterval: connectionRetryInterval,
+                            connectionCheckTimeout: connectionCheckTimeout,
+                            messageTtl: messageTtl,
+                            reconnectOnClose: true)
         
         let spyDelegate = SpyDelegateGetThreadParticipants()
         myChatObject?.delegate = spyDelegate
@@ -126,7 +144,23 @@ class GetThreadParticipantsTest: XCTestCase {
     // MARK: - test with params: ["count": 2, "offset": 0, "threadId": 1133]
     //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     func test_Get_ThreadParticipants_With_ThreadId1133_Count2_Offset0() {
-        myChatObject = Chat(socketAddress: socketAddress, ssoHost: ssoHost, platformHost: platformHost, fileServer: fileServer, serverName: serverName, token: token, typeCode: 1, msgPriority: 1, msgTTL: messageTtl, httpRequestTimeout: nil, actualTimingLog: nil, wsConnectionWaitTime: Double(wsConnectionWaitTime), connectionRetryInterval: connectionRetryInterval, connectionCheckTimeout: connectionCheckTimeout, messageTtl: messageTtl, reconnectOnClose: true)
+        myChatObject = Chat(socketAddress: socketAddress,
+                            ssoHost: ssoHost,
+                            platformHost: platformHost,
+                            fileServer: fileServer,
+                            serverName: serverName,
+                            token: token,
+                            typeCode: "chattest",
+                            enableCache: false,
+                            msgPriority: 1,
+                            msgTTL: messageTtl,
+                            httpRequestTimeout: nil,
+                            actualTimingLog: nil,
+                            wsConnectionWaitTime: Double(wsConnectionWaitTime),
+                            connectionRetryInterval: connectionRetryInterval,
+                            connectionCheckTimeout: connectionCheckTimeout,
+                            messageTtl: messageTtl,
+                            reconnectOnClose: true)
         
         let spyDelegate = SpyDelegateGetThreadParticipants()
         myChatObject?.delegate = spyDelegate

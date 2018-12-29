@@ -8,8 +8,10 @@
 
 
 import SwiftyJSON
-import Async
 import SwiftyBeaver
+
+import FanapPodAsyncSDK
+
 import XCTest
 @testable import Chat
 
@@ -79,7 +81,23 @@ class CreateThreadTest: XCTestCase {
     // MARK: - test with params: ["ownerSsoId": ssoHost, "title": "helooooo", "invitees": [["id": 3132, "idType": 1]]]
     //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     func test_Create_Thread_With_OwnerSsoId_Title_twoInvitees() {
-        myChatObject = Chat(socketAddress: socketAddress, ssoHost: ssoHost, platformHost: platformHost, fileServer: fileServer, serverName: serverName, token: token, typeCode: 1, msgPriority: 1, msgTTL: messageTtl, httpRequestTimeout: nil, actualTimingLog: nil, wsConnectionWaitTime: Double(wsConnectionWaitTime), connectionRetryInterval: connectionRetryInterval, connectionCheckTimeout: connectionCheckTimeout, messageTtl: messageTtl, reconnectOnClose: true)
+        myChatObject = Chat(socketAddress: socketAddress,
+                            ssoHost: ssoHost,
+                            platformHost: platformHost,
+                            fileServer: fileServer,
+                            serverName: serverName,
+                            token: token,
+                            typeCode: "chattest",
+                            enableCache: false,
+                            msgPriority: 1,
+                            msgTTL: messageTtl,
+                            httpRequestTimeout: nil,
+                            actualTimingLog: nil,
+                            wsConnectionWaitTime: Double(wsConnectionWaitTime),
+                            connectionRetryInterval: connectionRetryInterval,
+                            connectionCheckTimeout: connectionCheckTimeout,
+                            messageTtl: messageTtl,
+                            reconnectOnClose: true)
         
         let spyDelegate = SpyDelegateCreateThread()
         myChatObject?.delegate = spyDelegate
@@ -124,7 +142,23 @@ class CreateThreadTest: XCTestCase {
     // MARK: - test with params: ["ownerSsoId": ssoHost, "title": "helooooo", "invitees": [["id": 3132, "idType": 1]]]
     //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     func test_Create_Thread_With_OwnerSsoId_Title_twoInvitees341() {
-        myChatObject = Chat(socketAddress: socketAddress, ssoHost: ssoHost, platformHost: platformHost, fileServer: fileServer, serverName: serverName, token: token, typeCode: 1, msgPriority: 1, msgTTL: messageTtl, httpRequestTimeout: nil, actualTimingLog: nil, wsConnectionWaitTime: Double(wsConnectionWaitTime), connectionRetryInterval: connectionRetryInterval, connectionCheckTimeout: connectionCheckTimeout, messageTtl: messageTtl, reconnectOnClose: true)
+        myChatObject = Chat(socketAddress: socketAddress,
+                            ssoHost: ssoHost,
+                            platformHost: platformHost,
+                            fileServer: fileServer,
+                            serverName: serverName,
+                            token: token,
+                            typeCode: "chattest",
+                            enableCache: false,
+                            msgPriority: 1,
+                            msgTTL: messageTtl,
+                            httpRequestTimeout: nil,
+                            actualTimingLog: nil,
+                            wsConnectionWaitTime: Double(wsConnectionWaitTime),
+                            connectionRetryInterval: connectionRetryInterval,
+                            connectionCheckTimeout: connectionCheckTimeout,
+                            messageTtl: messageTtl,
+                            reconnectOnClose: true)
         
         let spyDelegate = SpyDelegateCreateThread()
         myChatObject?.delegate = spyDelegate

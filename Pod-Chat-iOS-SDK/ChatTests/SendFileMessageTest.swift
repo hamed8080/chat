@@ -7,8 +7,10 @@
 //
 
 import SwiftyJSON
-import Async
 import SwiftyBeaver
+
+import FanapPodAsyncSDK
+
 import XCTest
 @testable import Chat
 
@@ -79,8 +81,23 @@ class SendFileMessageTest: XCTestCase {
     // MARK: - test with params:
     //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     func test_Send_File_Message_uniqueId_response() {
-        myChatObject = Chat(socketAddress: socketAddress, ssoHost: ssoHost, platformHost: platformHost, fileServer: fileServer, serverName: serverName, token: token, typeCode: 1, msgPriority: 1, msgTTL: messageTtl, httpRequestTimeout: nil, actualTimingLog: nil, wsConnectionWaitTime: Double(wsConnectionWaitTime), connectionRetryInterval: connectionRetryInterval, connectionCheckTimeout: connectionCheckTimeout, messageTtl: messageTtl, reconnectOnClose: true)
-        
+        myChatObject = Chat(socketAddress: socketAddress,
+                            ssoHost: ssoHost,
+                            platformHost: platformHost,
+                            fileServer: fileServer,
+                            serverName: serverName,
+                            token: token,
+                            typeCode: "chattest",
+                            enableCache: false,
+                            msgPriority: 1,
+                            msgTTL: messageTtl,
+                            httpRequestTimeout: nil,
+                            actualTimingLog: nil,
+                            wsConnectionWaitTime: Double(wsConnectionWaitTime),
+                            connectionRetryInterval: connectionRetryInterval,
+                            connectionCheckTimeout: connectionCheckTimeout,
+                            messageTtl: messageTtl,
+                            reconnectOnClose: true)
         let spyDelegate = SpyDelegateSendFileMesssage()
         myChatObject?.delegate = spyDelegate
         
@@ -140,7 +157,23 @@ class SendFileMessageTest: XCTestCase {
     // MARK: - test with params:
     //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     func test_Send_File_Message_uploaded_response() {
-        myChatObject = Chat(socketAddress: socketAddress, ssoHost: ssoHost, platformHost: platformHost, fileServer: fileServer, serverName: serverName, token: token, typeCode: 1, msgPriority: 1, msgTTL: messageTtl, httpRequestTimeout: nil, actualTimingLog: nil, wsConnectionWaitTime: Double(wsConnectionWaitTime), connectionRetryInterval: connectionRetryInterval, connectionCheckTimeout: connectionCheckTimeout, messageTtl: messageTtl, reconnectOnClose: true)
+        myChatObject = Chat(socketAddress: socketAddress,
+                            ssoHost: ssoHost,
+                            platformHost: platformHost,
+                            fileServer: fileServer,
+                            serverName: serverName,
+                            token: token,
+                            typeCode: "chattest",
+                            enableCache: false,
+                            msgPriority: 1,
+                            msgTTL: messageTtl,
+                            httpRequestTimeout: nil,
+                            actualTimingLog: nil,
+                            wsConnectionWaitTime: Double(wsConnectionWaitTime),
+                            connectionRetryInterval: connectionRetryInterval,
+                            connectionCheckTimeout: connectionCheckTimeout,
+                            messageTtl: messageTtl,
+                            reconnectOnClose: true)
         
         let spyDelegate = SpyDelegateSendFileMesssage()
         myChatObject?.delegate = spyDelegate
@@ -199,7 +232,23 @@ class SendFileMessageTest: XCTestCase {
     // MARK: - test with params:
     //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     func test_Send_File_Message_isSent_response() {
-        myChatObject = Chat(socketAddress: socketAddress, ssoHost: ssoHost, platformHost: platformHost, fileServer: fileServer, serverName: serverName, token: token, typeCode: 1, msgPriority: 1, msgTTL: messageTtl, httpRequestTimeout: nil, actualTimingLog: nil, wsConnectionWaitTime: Double(wsConnectionWaitTime), connectionRetryInterval: connectionRetryInterval, connectionCheckTimeout: connectionCheckTimeout, messageTtl: messageTtl, reconnectOnClose: true)
+        myChatObject = Chat(socketAddress: socketAddress,
+                            ssoHost: ssoHost,
+                            platformHost: platformHost,
+                            fileServer: fileServer,
+                            serverName: serverName,
+                            token: token,
+                            typeCode: "chattest",
+                            enableCache: false,
+                            msgPriority: 1,
+                            msgTTL: messageTtl,
+                            httpRequestTimeout: nil,
+                            actualTimingLog: nil,
+                            wsConnectionWaitTime: Double(wsConnectionWaitTime),
+                            connectionRetryInterval: connectionRetryInterval,
+                            connectionCheckTimeout: connectionCheckTimeout,
+                            messageTtl: messageTtl,
+                            reconnectOnClose: true)
         
         let spyDelegate = SpyDelegateSendFileMesssage()
         myChatObject?.delegate = spyDelegate

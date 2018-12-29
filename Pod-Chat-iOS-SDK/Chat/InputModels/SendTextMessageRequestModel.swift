@@ -7,7 +7,9 @@
 //
 
 import Foundation
+
 import SwiftyJSON
+
 
 open class SendTextMessageRequestModel {
     

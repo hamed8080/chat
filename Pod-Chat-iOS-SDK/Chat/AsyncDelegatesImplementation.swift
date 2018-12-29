@@ -7,9 +7,9 @@
 //
 
 import Foundation
-import Async
 import SwiftyJSON
 
+import FanapPodAsyncSDK
 
 
 extension Chat: AsyncDelegates {

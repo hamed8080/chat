@@ -7,8 +7,10 @@
 //
 
 import Foundation
+
 import SwiftyJSON
-import Async
+
+import FanapPodAsyncSDK
 
 
 extension JSON {

@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3EE025EC21206E63001810FB"
-               BuildableName = "Chat.framework"
-               BlueprintName = "Chat"
-               ReferencedContainer = "container:Chat.xcodeproj">
+               BuildableName = "FanapPodChatSDK.framework"
+               BlueprintName = "FanapPodChatSDK"
+               ReferencedContainer = "container:FanapPodChatSDK.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3EE025F521206E63001810FB"
-               BuildableName = "ChatTests.xctest"
-               BlueprintName = "ChatTests"
-               ReferencedContainer = "container:Chat.xcodeproj">
+               BuildableName = "FanapPodChatSDKTests.xctest"
+               BlueprintName = "FanapPodChatSDKTests"
+               ReferencedContainer = "container:FanapPodChatSDK.xcodeproj">
             </BuildableReference>
             <SkippedTests>
                <Test
@@ -48,9 +48,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3EE025EC21206E63001810FB"
-            BuildableName = "Chat.framework"
-            BlueprintName = "Chat"
-            ReferencedContainer = "container:Chat.xcodeproj">
+            BuildableName = "FanapPodChatSDK.framework"
+            BlueprintName = "FanapPodChatSDK"
+            ReferencedContainer = "container:FanapPodChatSDK.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -70,9 +70,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3EE025EC21206E63001810FB"
-            BuildableName = "Chat.framework"
-            BlueprintName = "Chat"
-            ReferencedContainer = "container:Chat.xcodeproj">
+            BuildableName = "FanapPodChatSDK.framework"
+            BlueprintName = "FanapPodChatSDK"
+            ReferencedContainer = "container:FanapPodChatSDK.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -88,9 +88,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3EE025EC21206E63001810FB"
-            BuildableName = "Chat.framework"
-            BlueprintName = "Chat"
-            ReferencedContainer = "container:Chat.xcodeproj">
+            BuildableName = "FanapPodChatSDK.framework"
+            BlueprintName = "FanapPodChatSDK"
+            ReferencedContainer = "container:FanapPodChatSDK.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>
