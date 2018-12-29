@@ -29,6 +29,7 @@ open class LinkedUser {
     public let nickname:    String?
     public let username:    String?
     
+
     public init(messageContent: JSON) {
         self.coreUserId = messageContent["coreUserId"].int
         self.image      = messageContent["image"].string
