@@ -238,23 +238,24 @@ extension Chat {
             let responseStr: String = myResponse as! String
             if let dataFromMsgString = responseStr.data(using: .utf8, allowLossyConversion: false) {
                 // get currrent user deviceIdresponseStr
-                do {
-                    let msg = try JSON(data: dataFromMsgString)
-                    if let devices = msg["devices"].array {
-                        for device in devices {
-                            if device["current"].bool == true {
-                                completion(device["uid"].stringValue)
-                                break
-                            }
+                let msg = JSON(data: dataFromMsgString)
+                if let devices = msg["devices"].array {
+                    for device in devices {
+                        if device["current"].bool == true {
+                            completion(device["uid"].stringValue)
+                            break
                         }
-                        if (self.deviceId == nil || (self.deviceId == "")) {
-                            self.delegate?.chatError(errorCode: 6000, errorMessage: CHAT_ERRORS.err6000.rawValue, errorResult: nil)
-                        }
-                    } else {
-                        self.delegate?.chatError(errorCode: 6001, errorMessage: CHAT_ERRORS.err6001.rawValue, errorResult: nil)
                     }
-                } catch {
+                    if (self.deviceId == nil || (self.deviceId == "")) {
+                        self.delegate?.chatError(errorCode: 6000, errorMessage: CHAT_ERRORS.err6000.rawValue, errorResult: nil)
+                    }
+                } else {
+                    self.delegate?.chatError(errorCode: 6001, errorMessage: CHAT_ERRORS.err6001.rawValue, errorResult: nil)
                 }
+                
+//                do {
+//                } catch {
+//                }
             }
         }, progress: nil)
         
@@ -1458,9 +1459,10 @@ extension Chat {
         
         // if cache is enabled by user, it will return cache result to the user
         if enableCache {
-            if let cacheContacts = Chat.cacheDB.retrieveContacts(count: content["count"].intValue,
-                                                                 offset: content["offset"].intValue,
-                                                                 ascending:  true) {
+            if let cacheContacts = Chat.cacheDB.retrieveContacts(count:     content["count"].intValue,
+                                                                 offset:    content["offset"].intValue,
+                                                                 ascending: true,
+                                                                 name:      content["name"].string ?? nil) {
                 cacheResponse(cacheContacts)
             }
         }
@@ -2144,6 +2146,8 @@ extension Chat {
     public func getThreads(getThreadsInput: GetThreadsRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias, cacheResponse: @escaping (GetThreadsModel) -> ()) {
         log.verbose("Try to request to get threads with this parameters: \n \(getThreadsInput)", context: "Chat")
         
+        var threadIdArr: [Int]?
+        
         var content: JSON = [:]
         
         content["count"]    = JSON(getThreadsInput.count ?? 50)
@@ -2159,6 +2163,7 @@ extension Chat {
         
         if let threadIds = getThreadsInput.threadIds {
             content["threadIds"] = JSON(threadIds)
+            threadIdArr = threadIds
         }
         
         if let metadataCriteria = getThreadsInput.metadataCriteria {
@@ -2179,7 +2184,9 @@ extension Chat {
         if enableCache {
             if let cacheThreads = Chat.cacheDB.retrieveThreads(count:       content["count"].intValue,
                                                                offset:      content["offset"].intValue,
-                                                               ascending:   true) {
+                                                               ascending:   true,
+                                                               name:        content["name"].string ?? nil,
+                                                               threadIds:   threadIdArr) {
                 cacheResponse(cacheThreads)
             }
         }

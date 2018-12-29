@@ -417,10 +417,33 @@ extension Cache {
      and then it will return it as an array of 'Conversation' to the client.
      */
     // TODO: - Have to implement search in threads by using 'name' and also 'threadIds' properties!
-    public func retrieveThreads(count: Int, offset: Int, ascending: Bool) -> GetThreadsModel? {
+    public func retrieveThreads(count: Int, offset: Int, ascending: Bool, name: String?, threadIds: [Int]?) -> GetThreadsModel? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
+        
+        // use this array to make logical or for threads
+        var fetchPredicatArray = [NSPredicate]()
+        // put the search statement on the predicate to search throut the Conversations(Threads)
+        if let searchStatement = name {
+            let searchTitle = NSPredicate(format: "title == %@", searchStatement)
+            let searchDescriptions = NSPredicate(format: "descriptions == %@", searchStatement)
+            fetchPredicatArray.append(searchTitle)
+            fetchPredicatArray.append(searchDescriptions)
+        }
+        
+        // loop through the threadIds Arr that the user seends, and fill the 'fetchPredicatArray' property to predicate
+        if let searchThreadId = threadIds {
+            for i in searchThreadId {
+                let threadIdPredicate = NSPredicate(format: "id == %@", i)
+                fetchPredicatArray.append(threadIdPredicate)
+            }
+        }
+        
+        let predicateCompound = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.or, subpredicates: fetchPredicatArray)
+        fetchRequest.predicate = predicateCompound
+        // sort the result by the time
         let sortByTime = NSSortDescriptor(key: "time", ascending: ascending)
         fetchRequest.sortDescriptors = [sortByTime]
+        
         do {
             if let result = try context.fetch(fetchRequest) as? [CMConversation] {
                 
@@ -468,8 +491,25 @@ extension Cache {
      and then it will return it as an array of 'Contact' to the client.
      */
     // TODO: - Have to implement search in contacts by using 'name' property!
-    public func retrieveContacts(count: Int, offset: Int, ascending: Bool) -> GetContactsModel? {
+    public func retrieveContacts(count: Int, offset: Int, ascending: Bool, name: String?) -> GetContactsModel? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMContact")
+        
+        var fetchPredicatArray = [NSPredicate]()
+        if let searchStatement = name {
+            let searchCellphoneNumber = NSPredicate(format: "cellphoneNumber == %@", searchStatement)
+            let searchEmail = NSPredicate(format: "email == %@", searchStatement)
+            let searchFirstName = NSPredicate(format: "firstName == %@", searchStatement)
+            let searchLastName = NSPredicate(format: "lastName == %@", searchStatement)
+            
+            fetchPredicatArray.append(searchCellphoneNumber)
+            fetchPredicatArray.append(searchEmail)
+            fetchPredicatArray.append(searchFirstName)
+            fetchPredicatArray.append(searchLastName)
+        }
+        
+        let predicateCompound = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.or, subpredicates: fetchPredicatArray)
+        fetchRequest.predicate = predicateCompound
+        
         do {
             if let result = try context.fetch(fetchRequest) as? [CMContact] {
                 
