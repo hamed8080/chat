@@ -1459,10 +1459,16 @@ extension Chat {
         
         // if cache is enabled by user, it will return cache result to the user
         if enableCache {
-            if let cacheContacts = Chat.cacheDB.retrieveContacts(count:     content["count"].intValue,
-                                                                 offset:    content["offset"].intValue,
+            if let cacheContacts = Chat.cacheDB.retrieveContacts(count:     getContactsInput.count ?? 50,
+                                                                 offset:    getContactsInput.offset ?? 0,
                                                                  ascending: true,
-                                                                 name:      content["name"].string ?? nil) {
+                                                                 search:    getContactsInput.name,
+                                                                 firstName: nil,
+                                                                 lastName:  nil,
+                                                                 cellphoneNumber: nil,
+                                                                 email:     nil,
+                                                                 uniqueId:  nil,
+                                                                 id:        nil) {
                 cacheResponse(cacheContacts)
             }
         }
@@ -1962,7 +1968,7 @@ extension Chat {
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
      2- completion:  it will returns the response that comes from server to this request.    (ContactModel)
      */
-    public func searchContacts(searchContactsInput: SearchContactsRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func searchContacts(searchContactsInput: SearchContactsRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias, cacheResponse: @escaping (GetContactsModel) -> ()) {
         log.verbose("Try to request to search contact with this parameters: \n \(searchContactsInput)", context: "Chat")
         
         var data: Parameters = [:]
@@ -1990,12 +1996,39 @@ extension Chat {
             data["uniqueId"] = JSON(uniqueId)
         }
         
+        
+        if enableCache {
+            if let cacheContacts = Chat.cacheDB.retrieveContacts(count:     searchContactsInput.size ?? 50,
+                                                                 offset:    searchContactsInput.offset ?? 0,
+                                                                 ascending: true,
+                                                                 search:    nil,
+                                                                 firstName: searchContactsInput.firstName,
+                                                                 lastName:  searchContactsInput.lastName,
+                                                                 cellphoneNumber: searchContactsInput.cellphoneNumber,
+                                                                 email:     searchContactsInput.email,
+                                                                 uniqueId:  searchContactsInput.uniqueId,
+                                                                 id:        nil) {
+                cacheResponse(cacheContacts)
+            }
+        }
+        
+        
         let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.SEARCH_CONTACTS.rawValue)"
         let method: HTTPMethod = HTTPMethod.post
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
         
         httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, isImage: nil, isFile: nil, completion: { (response) in
             let jsonRes: JSON = response as! JSON
+            
+//            // save data comes from server to the Cache
+//            var contacts = [Contact]()
+//            for item in jsonRes {
+//                let myContact = Contact(messageContent: item)
+//                contacts.append(myContact)
+//            }
+//            Chat.cacheDB.saveContactObjects(contacts: contacts)
+            
+            
             let contactsResult = ContactModel(messageContent: jsonRes)
             completion(contactsResult)
         }, progress: nil)
@@ -2273,8 +2306,9 @@ extension Chat {
      It has 2 callbacks as response:
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
      2- completion:  it will returns the response that comes from server to this request.    (GetHistoryModel)
+     3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
      */
-    public func getHistory(getHistoryInput: GetHistoryRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func getHistory(getHistoryInput: GetHistoryRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias, cacheResponse: @escaping (GetHistoryModel) -> ()) {
         log.verbose("Try to request to get history with this parameters: \n \(getHistoryInput)", context: "Chat")
         
         var content: JSON = [:]
@@ -2289,8 +2323,12 @@ extension Chat {
             content["lastMessageId"] = JSON(lastMessageId)
         }
         
+        var asscenging = true
         if let order = getHistoryInput.order {
             content["order"] = JSON(order)
+            if (order == "DESC") {
+                asscenging = false
+            }
         }
         
         if let query = getHistoryInput.query {
@@ -2310,6 +2348,22 @@ extension Chat {
             uniqueId(getHistoryUniqueId)
         }
         historyCallbackToUser = completion
+        
+        
+        
+        // if cache is enabled by user, first return cache result to the user
+        if enableCache {
+            if let cacheHistoryResult = Chat.cacheDB.retrieveMessageHistory(count: getHistoryInput.count ?? 50,
+                                                                            offset: getHistoryInput.offset ?? 0,
+                                                                            ascending: asscenging,
+                                                                            threadId: getHistoryInput.threadId,
+                                                                            firstMessageId: getHistoryInput.firstMessageId,
+                                                                            lastMessageId: getHistoryInput.lastMessageId,
+                                                                            query: getHistoryInput.query) {
+                cacheResponse(cacheHistoryResult)
+            }
+        }
+        
         
     }
     
@@ -4822,7 +4876,7 @@ extension Chat {
                     let myContact = Contact(messageContent: item)
                     contacts.append(myContact)
                 }
-                Chat.cacheDB.saveContactsObjects(contacts: contacts)
+                Chat.cacheDB.saveContactObjects(contacts: contacts)
                 
                 print("contentCount: \(contentCount)\n content: \n \(messageContent)")
                 let getContactsModel = GetContactsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
@@ -4891,6 +4945,16 @@ extension Chat {
                 let messageContent: [JSON] = response["result"].arrayValue
                 let contentCount = response["contentCount"].intValue
                 
+                
+                // save data comes from server to the Cache
+                var messages = [Message]()
+                for item in messageContent {
+                    let myMessage = Message(threadId: content["threadId"].intValue, pushMessageVO: item)
+                    messages.append(myMessage)
+                }
+                Chat.cacheDB.saveMessageObjects(messages: messages)
+                
+                
                 let getHistoryModel = GetHistoryModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 
                 success(getHistoryModel)
@@ -4927,7 +4991,7 @@ extension Chat {
                         let myParticipant = Participant(messageContent: item)
                         participants.append(myParticipant)
                     }
-                    Chat.cacheDB.saveThreadParticipantsObjects(participants: participants)
+                    Chat.cacheDB.saveThreadParticipantObjects(participants: participants)
                 }
                 
                 let getThreadParticipantsModel = GetThreadParticipantsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
