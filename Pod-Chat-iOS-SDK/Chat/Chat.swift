@@ -233,7 +233,6 @@ extension Chat {
         let url = ssoHost + SERVICES_PATH.SSO_DEVICES.rawValue
         let method: HTTPMethod = .get
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-        
         httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: nil, dataToSend: nil, isImage: nil, isFile: nil, completion: { (myResponse) in
             let responseStr: String = myResponse as! String
             if let dataFromMsgString = responseStr.data(using: .utf8, allowLossyConversion: false) {
@@ -253,91 +252,142 @@ extension Chat {
                     self.delegate?.chatError(errorCode: 6001, errorMessage: CHAT_ERRORS.err6001.rawValue, errorResult: nil)
                 }
                 
-//                do {
-//                } catch {
-//                }
+                //                do {
+                //                } catch {
+                //                }
             }
-        }, progress: nil)
+        }, progress: nil, idDownloadRequest: false) { _,_  in }
+        
         
     }
     
     
-    func httpRequest(from urlStr: String, withMethod: HTTPMethod, withHeaders: HTTPHeaders?, withParameters: Parameters?, dataToSend: Any?, isImage: Bool?, isFile: Bool?, completion: @escaping callbackTypeAlias, progress: callbackTypeAliasFloat?) {
+    func httpRequest(from urlStr:   String,
+                     withMethod:    HTTPMethod,
+                     withHeaders:   HTTPHeaders?,
+                     withParameters: Parameters?,
+                     dataToSend:    Any?,
+                     isImage:       Bool?,
+                     isFile:        Bool?,
+                     completion:    @escaping callbackTypeAlias,
+                     progress:      callbackTypeAliasFloat?,
+                     idDownloadRequest: Bool,
+                     returnData:    @escaping (Data , JSON) -> ()) {
+        
         let url = URL(string: urlStr)!
         
-        if (withMethod == .get) {
-            Alamofire.request(url, method: withMethod, parameters: withParameters, headers: withHeaders).responseString { (response) in
-                if response.result.isSuccess {
-                    let stringToReturn: String = response.result.value!
-                    completion(stringToReturn)
+        if (idDownloadRequest) {
+            
+            Alamofire.request(url, method: withMethod, parameters: withParameters, encoding: JSONEncoding.default, headers: withHeaders).downloadProgress(closure: { (downloadProgress) in
+                
+                let myProgressFloat: Float = Float(downloadProgress.fractionCompleted)
+                progress?(myProgressFloat)
+                
+            }).responseData { (myResponse) in
+                if myResponse.result.isSuccess {
+                    if let downloadedData = myResponse.data {
+                        if let response = myResponse.response {
+                            
+                            var resJSON: JSON = [:]
+                            
+                            let headerResponse = response.allHeaderFields
+                            if let contentType = headerResponse["Content-Type"] as? String {
+                                if let fileType = contentType.components(separatedBy: "/").last {
+                                    resJSON["type"] = JSON(fileType)
+                                }
+                            }
+                            if let contentDisposition = headerResponse["Content-Disposition"] as? String {
+                                if let theFileName = contentDisposition.components(separatedBy: "=").last?.replacingOccurrences(of: "\"", with: "") {
+                                    resJSON["name"] = JSON(theFileName)
+                                }
+                            }
+                            
+                            // return the Data:
+                            returnData(downloadedData, resJSON)
+                        }
+                    }
                 } else {
-                    //                    can not get the result, and gets error
-                    //                    delegate?.error(errorCode: result.errorCode, errorMessage: result.errorMessage, errorResult: result)
+                    print("Failed!")
                 }
             }
-        } else if (withMethod == .post) {
             
-            if dataToSend == nil {
-                Alamofire.request(url, method: withMethod, parameters: withParameters, headers: withHeaders).responseJSON { (myResponse) in
-                    if myResponse.result.isSuccess {
-                        if let jsonValue = myResponse.result.value {
-                            let jsonResponse: JSON = JSON(jsonValue)
-                            completion(jsonResponse)
-                        }
+        } else {
+            
+            if (withMethod == .get) {
+                Alamofire.request(url, method: withMethod, parameters: withParameters, headers: withHeaders).responseString { (response) in
+                    if response.result.isSuccess {
+                        let stringToReturn: String = response.result.value!
+                        completion(stringToReturn)
                     } else {
-                        if let error = myResponse.error {
-                            let myJson: JSON = ["hasError": true,
-                                                "errorCode": 6200,
-                                                "errorMessage": "\(CHAT_ERRORS.err6200.rawValue) \(error)",
-                                "errorEvent": error.localizedDescription]
-                            completion(myJson)
-                        }
+                        //                    can not get the result, and gets error
+                        //                    delegate?.error(errorCode: result.errorCode, errorMessage: result.errorMessage, errorResult: result)
                     }
                 }
+            } else if (withMethod == .post) {
                 
-            } else {
-                
-                Alamofire.upload(multipartFormData: { (multipartFormData) in
-                    
-                    if let hasImage = isImage {
-                        if (hasImage == true) {
-                            multipartFormData.append(dataToSend as! Data, withName: "image")
-                        }
-                    }
-                    
-                    if let hasFile = isFile {
-                        if (hasFile == true) {
-                            multipartFormData.append(dataToSend as! Data, withName: "file")
-                        }
-                    }
-                    
-                    
-                    if let header = withHeaders {
-                        for (key, value) in header {
-                            multipartFormData.append(value.data(using: String.Encoding.utf8)!, withName: key as String)
-                        }
-                    }
-                    if let parameters = withParameters {
-                        for (key, value) in parameters {
-                            multipartFormData.append((value as AnyObject).data(using: String.Encoding.utf8.rawValue)!, withName: key as String)
-                        }
-                    }
-                }, to: urlStr) { (myResult) in
-                    switch myResult {
-                    case .success(let upload, _, _):
-                        upload.responseJSON(completionHandler: { (response) in
-                            if let jsonValue = response.result.value {
+                if dataToSend == nil {
+                    Alamofire.request(url, method: withMethod, parameters: withParameters, headers: withHeaders).responseJSON { (myResponse) in
+                        if myResponse.result.isSuccess {
+                            if let jsonValue = myResponse.result.value {
                                 let jsonResponse: JSON = JSON(jsonValue)
                                 completion(jsonResponse)
                             }
-                        })
-                        upload.uploadProgress(closure: { (myProgress) in
-                            let myProgressFloat: Float = Float(myProgress.fractionCompleted)
-                            progress?(myProgressFloat)
-                        })
-                    case .failure(let error):
-                        completion(error)
+                        } else {
+                            if let error = myResponse.error {
+                                let myJson: JSON = ["hasError": true,
+                                                    "errorCode": 6200,
+                                                    "errorMessage": "\(CHAT_ERRORS.err6200.rawValue) \(error)",
+                                    "errorEvent": error.localizedDescription]
+                                completion(myJson)
+                            }
+                        }
                     }
+                    
+                } else {
+                    
+                    Alamofire.upload(multipartFormData: { (multipartFormData) in
+                        
+                        if let hasImage = isImage {
+                            if (hasImage == true) {
+                                multipartFormData.append(dataToSend as! Data, withName: "image")
+                            }
+                        }
+                        
+                        if let hasFile = isFile {
+                            if (hasFile == true) {
+                                multipartFormData.append(dataToSend as! Data, withName: "file")
+                            }
+                        }
+                        
+                        
+                        if let header = withHeaders {
+                            for (key, value) in header {
+                                multipartFormData.append(value.data(using: String.Encoding.utf8)!, withName: key as String)
+                            }
+                        }
+                        if let parameters = withParameters {
+                            for (key, value) in parameters {
+                                multipartFormData.append((value as AnyObject).data(using: String.Encoding.utf8.rawValue)!, withName: key as String)
+                            }
+                        }
+                    }, to: urlStr) { (myResult) in
+                        switch myResult {
+                        case .success(let upload, _, _):
+                            upload.responseJSON(completionHandler: { (response) in
+                                if let jsonValue = response.result.value {
+                                    let jsonResponse: JSON = JSON(jsonValue)
+                                    completion(jsonResponse)
+                                }
+                            })
+                            upload.uploadProgress(closure: { (myProgress) in
+                                let myProgressFloat: Float = Float(myProgress.fractionCompleted)
+                                progress?(myProgressFloat)
+                            })
+                        case .failure(let error):
+                            completion(error)
+                        }
+                    }
+                    
                 }
                 
             }
@@ -1555,7 +1605,7 @@ extension Chat {
             let jsonRes: JSON = response as! JSON
             let contactsResult = ContactModel(messageContent: jsonRes)
             completion(contactsResult)
-        }, progress: nil)
+        }, progress: nil, idDownloadRequest: false) { _,_ in }
         
     }
     
@@ -1594,7 +1644,7 @@ extension Chat {
             let jsonRes: JSON = response as! JSON
             let contactsResult = ContactModel(messageContent: jsonRes)
             completion(contactsResult)
-        }, progress: nil)
+        }, progress: nil, idDownloadRequest: false) { _,_ in }
         
     }
     
@@ -1641,7 +1691,7 @@ extension Chat {
             let jsonRes: JSON = response as! JSON
             let contactsResult = ContactModel(messageContent: jsonRes)
             completion(contactsResult)
-        }, progress: nil)
+        }, progress: nil, idDownloadRequest: false) { _,_ in }
         
     }
     
@@ -1693,7 +1743,7 @@ extension Chat {
             let jsonRes: JSON = response as! JSON
             let contactsResult = ContactModel(messageContent: jsonRes)
             completion(contactsResult)
-        }, progress: nil)
+        }, progress: nil, idDownloadRequest: false) { _,_ in }
         
     }
     
@@ -1732,7 +1782,7 @@ extension Chat {
             let jsonRes: JSON = response as! JSON
             let contactsResult = RemoveContactModel(messageContent: jsonRes)
             completion(contactsResult)
-        }, progress: nil)
+        }, progress: nil, idDownloadRequest: false) { _,_ in }
         
     }
     
@@ -1760,7 +1810,7 @@ extension Chat {
             let jsonRes: JSON = response as! JSON
             let contactsResult = RemoveContactModel(messageContent: jsonRes)
             completion(contactsResult)
-        }, progress: nil)
+        }, progress: nil, idDownloadRequest: false) { _,_ in }
         
     }
     
@@ -2031,7 +2081,7 @@ extension Chat {
             
             let contactsResult = ContactModel(messageContent: jsonRes)
             completion(contactsResult)
-        }, progress: nil)
+        }, progress: nil, idDownloadRequest: false) { _,_ in }
         
     }
     
@@ -2093,7 +2143,7 @@ extension Chat {
             let jsonRes: JSON = response as! JSON
             let contactsResult = ContactModel(messageContent: jsonRes)
             completion(contactsResult)
-        }, progress: nil)
+        }, progress: nil, idDownloadRequest: false) { _,_ in }
         
     }
     
@@ -4045,13 +4095,21 @@ extension Chat {
             
             if (!hasError) {
                 let resultData = myResponse["result"]
+                
+                // save data comes from server to the Cache
+                let uploadImageFile = UploadImage(messageContent: resultData)
+                Chat.cacheDB.saveUploadImage(imageInfo: uploadImageFile, imageData: uploadImageInput.dataToSend)
+                
+                
                 let uploadImageModel = UploadImageModel(messageContent: resultData, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 
                 completion(uploadImageModel)
             }
-        }) { (myProgress) in
+            
+        }, progress: { (myProgress) in
             progress(myProgress)
-        }
+        }, idDownloadRequest: false) { _,_ in }
+        
         
     }
     
@@ -4145,9 +4203,10 @@ extension Chat {
                 
                 completion(uploadImageModel)
             }
-        }) { (myProgress) in
+            
+        }, progress: { (myProgress) in
             progress(myProgress)
-        }
+        }, idDownloadRequest: false) { _,_ in }
         
     }
     
@@ -4252,13 +4311,19 @@ extension Chat {
             
             if (!hasError) {
                 let resultData = myResponse["result"]
+                
+                // save data comes from server to the Cache
+                let uploadFileFile = UploadFile(messageContent: resultData)
+                Chat.cacheDB.saveUploadFile(fileInfo: uploadFileFile, fileData: uploadFileInput.dataToSend)
+                
+                
                 let uploadFileModel = UploadFileModel(messageContent: resultData, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 
                 completion(uploadFileModel)
             }
-        }) { (myProgress) in
+        }, progress: { (myProgress) in
             progress(myProgress)
-        }
+        }, idDownloadRequest: false) { _,_ in }
         
     }
     
@@ -4347,12 +4412,143 @@ extension Chat {
                 
                 completion(uploadFileModel)
             }
-        }) { (myProgress) in
+        }, progress: { (myProgress) in
             progress(myProgress)
+        }, idDownloadRequest: false) { _,_ in }
+        
+    }
+    
+    
+    /*
+     GetImage:
+     get specific image.
+     
+     By calling this function, HTTP request of type (GET_IMAGE) will send throut Chat-SDK,
+     then the response will come back as callbacks to client whose calls this function.
+     
+     + Inputs:
+     this function will get some optional prameters as an input, as 'GetImageRequestModel' Model which are:
+     - actual:
+     - downloadable:  
+     - hashCode:
+     - height:
+     - imageId:
+     - width:
+     
+     + Outputs:
+     It has 3 callbacks as response:
+     1- progress:       The progress of the downloading file as a number between 0 and 1.   (Float)
+     2- completion:     when the file completely downloaded, it will sent to client as 'UploadImageModel' model
+     3- cacheResponse:  If the file was already avalable on the cache, and aslso client wants to get cache result, it will send it as 'UploadImageModel' model
+     */
+    public func getImage(getImageInput: GetImageRequestModel, progress: @escaping (Float) -> (), completion: @escaping (UploadImageModel) -> (), cacheResponse: @escaping (UploadImageModel) -> ()) {
+        
+        let url = "\(SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_IMAGE.rawValue)"
+        let method:     HTTPMethod  = HTTPMethod.get
+        var parameters: Parameters = ["hashCode": getImageInput.hashCode,
+                                      "imageId": getImageInput.imageId]
+        if let theActual = getImageInput.actual {
+            parameters["actual"] = JSON(theActual)
+        }
+        if let theDownloadable = getImageInput.downloadable {
+            parameters["downloadable"] = JSON(theDownloadable)
+        }
+        if let theHeight = getImageInput.height {
+            parameters["height"] = JSON(theHeight)
+        }
+        if let theWidth = getImageInput.width {
+            parameters["width"] = JSON(theWidth)
+        }
+        
+        // if cache is enabled by user, first return cache result to the user
+        if enableCache {
+            if let cacheImageResult = Chat.cacheDB.retrieveUploadImage(hashCode: getImageInput.hashCode, imageId: getImageInput.imageId) {
+                cacheResponse(cacheImageResult)
+            }
+        }
+        
+        
+        // IMPROVMENT NEEDED:
+        // maybe if i had the answer from cache, i have to ignore the bottom code that request to server to get file again!!
+        // so this code have to only request file if it couldn't find the file on the cache
+        httpRequest(from: url, withMethod: method, withHeaders: nil, withParameters: parameters, dataToSend: nil, isImage: nil, isFile: nil, completion: { _ in }, progress: { (myProgress) in
+            progress(myProgress)
+        }, idDownloadRequest: true) { (imageDataResponse, responseHeader)  in
+            
+            // save data comes from server to the Cache
+            let fileName = responseHeader["name"].string
+            let fileType = responseHeader["type"].string
+            let theFinalFileName = "\(fileName ?? "default").\(fileType ?? "none")"
+            let uploadImage = UploadImage(actualHeight: nil, actualWidth: nil, hashCode: getImageInput.hashCode, height: getImageInput.height, id: getImageInput.imageId, name: theFinalFileName, width: getImageInput.width)
+            Chat.cacheDB.saveUploadImage(imageInfo: uploadImage, imageData: imageDataResponse)
+            
+            let uploadImageModel = UploadImageModel(messageContent: uploadImage, hasError: false, errorMessage: "", errorCode: 0)
+            
+            completion(uploadImageModel)
         }
         
     }
     
+    
+    /*
+     GetFIle:
+     get specific file.
+     
+     By calling this function, HTTP request of type (GET_FILE) will send throut Chat-SDK,
+     then the response will come back as callbacks to client whose calls this function.
+     
+     + Inputs:
+     this function will get some optional prameters as an input, as 'GetImageRequestModel' Model which are:
+     - downloadable:
+     - fileId:
+     - hashCode:
+     
+     + Outputs:
+     It has 3 callbacks as response:
+     1- progress:       The progress of the downloading file as a number between 0 and 1.   (Float)
+     2- completion:     when the file completely downloaded, it will sent to client as 'UploadFileModel' model
+     3- cacheResponse:  If the file was already avalable on the cache, and aslso client wants to get cache result, it will send it as 'UploadFileModel' model
+     */
+    public func getFile(getFileInput: GetFileRequestModel, progress: @escaping (Float) -> (), completion: @escaping (UploadFileModel) -> (), cacheResponse: @escaping (UploadFileModel) -> ()) {
+        
+        let url = "\(SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_FILE.rawValue)"
+        let method:     HTTPMethod  = HTTPMethod.get
+        var parameters: Parameters = ["hashCode": getFileInput.hashCode,
+                                      "fileId": getFileInput.fileId]
+        
+        if let theDownloadable = getFileInput.downloadable {
+            parameters["downloadable"] = JSON(theDownloadable)
+        }
+        
+        
+        // if cache is enabled by user, first return cache result to the user
+        if enableCache {
+            if let cacheFileResult = Chat.cacheDB.retrieveUploadFile(hashCode: getFileInput.hashCode, fileId: getFileInput.fileId) {
+                cacheResponse(cacheFileResult)
+            }
+        }
+        
+        
+        // IMPROVMENT NEEDED:
+        // maybe if i had the answer from cache, i have to ignore the bottom code that request to server to get file again!!
+        // so this code have to only request file if it couldn't find the file on the cache
+        httpRequest(from: url, withMethod: method, withHeaders: nil, withParameters: parameters, dataToSend: nil, isImage: nil, isFile: nil, completion: { _ in }, progress: { (myProgress) in
+            progress(myProgress)
+        }, idDownloadRequest: true) { (fileDataResponse, responseHeader) in
+            
+            // save data comes from server to the Cache
+            let fileName = responseHeader["name"].string
+            let fileType = responseHeader["type"].string
+            let theFinalFileName = "\(fileName ?? "default").\(fileType ?? "none")"
+            let uploadFile = UploadFile(hashCode: getFileInput.hashCode, id: getFileInput.fileId, name: theFinalFileName)
+            Chat.cacheDB.saveUploadFile(fileInfo: uploadFile, fileData: fileDataResponse)
+            
+            let uploadFileModel = UploadFileModel(messageContent: uploadFile, hasError: false, errorMessage: "", errorCode: 0)
+            
+            completion(uploadFileModel)
+        }
+        
+    }
     
     
     

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3E11F56121DA18D0004B3B2C /* GetImageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E11F56021DA18D0004B3B2C /* GetImageRequestModel.swift */; };
+		3E11F56D21DA1A02004B3B2C /* GetFileRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E11F56C21DA1A02004B3B2C /* GetFileRequestModel.swift */; };
 		3E2590CD21D756C000CB9D7D /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E2590C021D756B800CB9D7D /* Alamofire.framework */; };
 		3E3E56792160A2F20084C8C1 /* ReplyMessageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E56782160A2F10084C8C1 /* ReplyMessageTest.swift */; };
 		3E3E56852160A30B0084C8C1 /* EditMessageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E56842160A30B0084C8C1 /* EditMessageTest.swift */; };
@@ -225,6 +227,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3E11F56021DA18D0004B3B2C /* GetImageRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetImageRequestModel.swift; sourceTree = "<group>"; };
+		3E11F56C21DA1A02004B3B2C /* GetFileRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetFileRequestModel.swift; sourceTree = "<group>"; };
 		3E2590B421D756B800CB9D7D /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = "Alamofire-4.8.0/Alamofire.xcodeproj"; sourceTree = "<group>"; };
 		3E3E56782160A2F10084C8C1 /* ReplyMessageTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyMessageTest.swift; sourceTree = "<group>"; };
 		3E3E56842160A30B0084C8C1 /* EditMessageTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMessageTest.swift; sourceTree = "<group>"; };
@@ -434,7 +438,9 @@
 				3EA1569B21CE1C7C004B1346 /* ForwardMessageRequestModel.swift */,
 				3EA1567D21CE1B49004B1346 /* GetBlockedContactListRequestModel.swift */,
 				3EA1567021CE1A92004B1346 /* GetContactsRequestModel.swift */,
+				3E11F56C21DA1A02004B3B2C /* GetFileRequestModel.swift */,
 				3EA1568521CE1BA0004B1346 /* GetHistoryRequestModel.swift */,
+				3E11F56021DA18D0004B3B2C /* GetImageRequestModel.swift */,
 				3EA1568D21CE1BED004B1346 /* GetThreadParticipantsRequestModel.swift */,
 				3EA1568321CE1B86004B1346 /* GetThreadsRequestModel.swift */,
 				3EA1569321CE1C2B004B1346 /* LeaveThreadRequestModel.swift */,
@@ -900,6 +906,7 @@
 				3EBBEDD72174C27B00F5CDC7 /* Message.swift in Sources */,
 				3EA1567A21CE1B0B004B1346 /* RemoveContactsRequestModel.swift in Sources */,
 				3EA156EA21CE2772004B1346 /* CMParticipant+CoreDataProperties.swift in Sources */,
+				3E11F56D21DA1A02004B3B2C /* GetFileRequestModel.swift in Sources */,
 				3EA1569C21CE1C7C004B1346 /* ForwardMessageRequestModel.swift in Sources */,
 				3EA156FA21CE2772004B1346 /* CMThreadParticipants+CoreDataProperties.swift in Sources */,
 				3EBBEDE72174C38000F5CDC7 /* ThreadHistory.swift in Sources */,
@@ -911,6 +918,7 @@
 				3EA156F321CE2772004B1346 /* CMBlockedContact+CoreDataClass.swift in Sources */,
 				3EA1568E21CE1BEE004B1346 /* GetThreadParticipantsRequestModel.swift in Sources */,
 				3EBBEDFE2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift in Sources */,
+				3E11F56121DA18D0004B3B2C /* GetImageRequestModel.swift in Sources */,
 				3EA1567621CE1AC9004B1346 /* AddContactsRequestModel.swift in Sources */,
 				3EA1569E21CE1C96004B1346 /* SendFileMessageRequestModel.swift in Sources */,
 				3EA156DD21CE2772004B1346 /* CMThreadHistory+CoreDataClass.swift in Sources */,

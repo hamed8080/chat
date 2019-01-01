@@ -13,6 +13,11 @@ import SwiftyBeaver
 import SwiftyJSON
 
 
+enum fileSubPath: String {
+    case Files = "/Chat/Files/"
+    case Images = "/Chat/Images/"
+}
+
 
 public class Cache {
     
@@ -553,6 +558,149 @@ extension Cache {
     }
     
     
+    // this function will save (or update) uploaded image response that comes from server, in the Cache.
+    public func saveUploadImage(imageInfo: UploadImage, imageData: Data) {
+        // check if there is any information about This Image File in the cache
+        // if it has some data, it we will update that data,
+        // otherwise we will create an object and save data on cache
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUploadImage")
+        do {
+            
+            if let result = try context.fetch(fetchRequest) as? [CMUploadImage] {
+                // if there is a value in this fetch request, it mean that we had already saved This Image info in the Cache.
+                // so we just have to update that information with new response that comes from server
+                
+                // TODO: prevent copy one file in several places in the app - search by the Image file itself through the app bundle
+                /*
+                    if find sth, check out the information about that file:
+                        if the info of both, was the same, just delete the fileInfo from cache, and then save it later
+                        if the info was different, just save the new info in the cache and link it to this image file path
+                    */
+                
+                // Part1:
+                // find data that are exist in the Cache, (and the response request is containing that). and delete them
+                for itemInCache in result {
+                    if let imageId = Int(exactly: itemInCache.id ?? 0) {
+                        if (imageId == imageInfo.id) {
+                            // the contact object that we are going to create, is already exist in the Cache
+                            // to update information in this object:
+                            // we will delete them first, then we will create it again later
+                            context.delete(itemInCache)
+                            saveContext(subject: "Delete Object: \(itemInCache.convertCMUploadImageToUploadImageObject().formatToJSON())")
+                            
+                            // delete the original file from local storage of the app, using path of the file
+                            let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+                            let myFilePath = path + "\(fileSubPath.Images)" + "\(imageInfo.id ?? 0)\(imageInfo.name ?? "default.png")"
+                            do {
+                                try FileManager.default.removeItem(atPath: myFilePath)
+                            } catch {
+                                fatalError("can not delete the image from app bundle!")
+                            }
+                        }
+                    }
+                }
+                
+                // Part2:
+                // save data comes from server to the Cache
+                let theUploadImageEntity = NSEntityDescription.entity(forEntityName: "CMUploadImage", in: context)
+                let theUploadImage = CMUploadImage(entity: theUploadImageEntity!, insertInto: context)
+                
+                theUploadImage.actualHeight = imageInfo.actualHeight as NSNumber?
+                theUploadImage.actualWidth  = imageInfo.actualWidth as NSNumber?
+                theUploadImage.hashCode     = imageInfo.hashCode
+                theUploadImage.height       = imageInfo.height as NSNumber?
+                theUploadImage.id           = imageInfo.id as NSNumber?
+                theUploadImage.name         = imageInfo.name
+                theUploadImage.width        = imageInfo.width as NSNumber?
+                
+                // save file on app bundle
+//                guard let directory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) as NSURL else { return }
+                let directoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+                let directoryURL = URL(fileURLWithPath: directoryPath)
+                do {
+                    try imageData.write(to: directoryURL.appendingPathComponent("\(fileSubPath.Images)\(imageInfo.id ?? 0)\(imageInfo.name ?? "default.png")"))
+                } catch {
+                    print(error.localizedDescription)
+                }
+                
+                saveContext(subject: "Update UploadImage")
+            }
+        } catch {
+            fatalError("Error on fetching list of Conversations")
+        }
+        
+    }
+    
+    
+    // this function will save (or update) uploaded image response that comes from server, in the Cache.
+    public func saveUploadFile(fileInfo: UploadFile, fileData: Data) {
+        // check if there is any information about This Image File in the cache
+        // if it has some data, it we will update that data,
+        // otherwise we will create an object and save data on cache
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUploadFile")
+        do {
+            
+            if let result = try context.fetch(fetchRequest) as? [CMUploadFile] {
+                // if there is a value in this fetch request, it mean that we had already saved This Image info in the Cache.
+                // so we just have to update that information with new response that comes from server
+                
+                // TODO: prevent copy one file in several places in the app - search by the Image file itself through the app bundle
+                /*
+                 if find sth, check out the information about that file:
+                 if the info of both, was the same, just delete the fileInfo from cache, and then save it later
+                 if the info was different, just save the new info in the cache and link it to this image file path
+                 */
+                
+                // Part1:
+                // find data that are exist in the Cache, (and the response request is containing that). and delete them
+                for itemInCache in result {
+                    if let fileId = Int(exactly: itemInCache.id ?? 0) {
+                        if (fileId == fileInfo.id) {
+                            // the contact object that we are going to create, is already exist in the Cache
+                            // to update information in this object:
+                            // we will delete them first, then we will create it again later
+                            context.delete(itemInCache)
+                            saveContext(subject: "Delete Object: \(itemInCache.convertCMUploadFileToUploadFileObject().formatToJSON())")
+                            
+                            // delete the original file from local storage of the app, using path of the file
+                            let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+                            let myFilePath = path + "\(fileSubPath.Files)" + "\(fileInfo.id ?? 0)\(fileInfo.name ?? "default")"
+                            do {
+                                try FileManager.default.removeItem(atPath: myFilePath)
+                            } catch {
+                                fatalError("can not delete the image from app bundle!")
+                            }
+                        }
+                    }
+                }
+                
+                // Part2:
+                // save data comes from server to the Cache
+                let theUploadFileEntity = NSEntityDescription.entity(forEntityName: "CMUploadFile", in: context)
+                let theUploadFile = CMUploadFile(entity: theUploadFileEntity!, insertInto: context)
+                
+                theUploadFile.hashCode      = fileInfo.hashCode
+                theUploadFile.id            = fileInfo.id as NSNumber?
+                theUploadFile.name          = fileInfo.name
+                
+                // save file on app bundle
+                let directoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+                let directoryURL = URL(fileURLWithPath: directoryPath)
+                do {
+                    try fileData.write(to: directoryURL.appendingPathComponent("\(fileSubPath.Files)\(fileInfo.id ?? 0)\(fileInfo.name ?? "default")"))
+                } catch {
+                    print(error.localizedDescription)
+                }
+                
+                saveContext(subject: "Update UploadFile")
+            }
+        } catch {
+            fatalError("Error on fetching list of Conversations")
+        }
+        
+    }
+    
+    
 }
 
 
@@ -672,7 +820,7 @@ extension Cache {
                 return nil
             }
         } catch {
-            fatalError("Error on fetching list of Conversations")
+            fatalError("Error on fetching list of CMConversation")
         }
     }
     
@@ -789,7 +937,7 @@ extension Cache {
                 return nil
             }
         } catch {
-            fatalError("Error on fetching list of Conversations")
+            fatalError("Error on fetching list of CMContact")
         }
     }
     
@@ -839,7 +987,7 @@ extension Cache {
                 return nil
             }
         } catch {
-            fatalError("Error on fetching list of Conversations")
+            fatalError("Error on fetching list of CMParticipant")
         }
     }
     
@@ -937,11 +1085,91 @@ extension Cache {
                 return nil
             }
         } catch {
-            fatalError("Error on fetching list of Conversations")
+            fatalError("Error on fetching list of CMMessage")
         }
     }
     
     
+    /*
+     retrieve UploadImage data from Cache
+     if it found any data from Cache DB, it will return that,
+     otherwise it will return nil. (means cache has no relevent data on itself)
+     .
+     first, it will fetch the Objects from CoreData.
+     then based on the client request, it will find the objects that the client want to get,
+     and then it will return it as 'UploadImageModel' model to the client.
+     */
+    public func retrieveUploadImage(hashCode:   String,
+                                    imageId:    Int) -> UploadImageModel? {
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUploadImage")
+        let searchImage = NSPredicate(format: "hashCode == %@ AND imageId == %@", hashCode, imageId)
+        fetchRequest.predicate = searchImage
+        
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMUploadImage] {
+                
+                if let firstObject = result.first {
+                    let imageObject = firstObject.convertCMUploadImageToUploadImageObject()
+                    let uploadImageModel = UploadImageModel(messageContent: imageObject,
+                                                            hasError: false,
+                                                            errorMessage: "",
+                                                            errorCode: 0)
+                    return uploadImageModel
+                } else {
+                    return nil
+                }
+                
+            } else {
+                return nil
+            }
+        } catch {
+            fatalError("Error on fetching list of CMUploadImage")
+        }
+        
+        return nil
+    }
+    
+    
+    /*
+     retrieve UploadFile data from Cache
+     if it found any data from Cache DB, it will return that,
+     otherwise it will return nil. (means cache has no relevent data on itself)
+     .
+     first, it will fetch the Objects from CoreData.
+     then based on the client request, it will find the objects that the client want to get,
+     and then it will return it as 'UploadImageModel' model to the client.
+     */
+    public func retrieveUploadFile(hashCode:    String,
+                                   fileId:      Int) -> UploadFileModel? {
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUploadFile")
+        let searchFile = NSPredicate(format: "hashCode == %@ AND fileId == %@", hashCode, fileId)
+        fetchRequest.predicate = searchFile
+        
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMUploadFile] {
+                
+                if let firstObject = result.first {
+                    let fileObject = firstObject.convertCMUploadFileToUploadFileObject()
+                    let uploadFileModel = UploadFileModel(messageContent: fileObject,
+                                                          hasError: false,
+                                                          errorMessage: "",
+                                                          errorCode: 0)
+                    return uploadFileModel
+                } else {
+                    return nil
+                }
+                
+            } else {
+                return nil
+            }
+        } catch {
+            fatalError("Error on fetching list of CMUploadFile")
+        }
+        
+        return nil
+    }
     
     
 }
