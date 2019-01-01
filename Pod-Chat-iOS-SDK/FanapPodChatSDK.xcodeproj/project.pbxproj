@@ -58,6 +58,13 @@
 		3E78AABA2184A30A002A6EC0 /* pic.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E78AAB92184A309002A6EC0 /* pic.png */; };
 		3E78AABB2184A30A002A6EC0 /* pic.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E78AAB92184A309002A6EC0 /* pic.png */; };
 		3E78AAC72184AB6F002A6EC0 /* SyncContactsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E78AAC62184AB6F002A6EC0 /* SyncContactsTest.swift */; };
+		3E8D56D521DB975700B844DE /* MapReverseRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8D56D421DB975700B844DE /* MapReverseRequestModel.swift */; };
+		3E8D56D721DB9CF300B844DE /* MapReverseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8D56D621DB9CF300B844DE /* MapReverseModel.swift */; };
+		3E8D56D921DB9D6200B844DE /* MapReverse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8D56D821DB9D6200B844DE /* MapReverse.swift */; };
+		3E8D56DB21DBA83600B844DE /* MapSearchRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8D56DA21DBA83600B844DE /* MapSearchRequestModel.swift */; };
+		3E8D56DD21DBAB0B00B844DE /* MapSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8D56DC21DBAB0B00B844DE /* MapSearch.swift */; };
+		3E8D56DF21DBB55F00B844DE /* MapSearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8D56DE21DBB55F00B844DE /* MapSearchModel.swift */; };
+		3E8D56E121DBB90900B844DE /* MapRoutingRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8D56E021DBB90900B844DE /* MapRoutingRequestModel.swift */; };
 		3EA1567121CE1A92004B1346 /* GetContactsRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1567021CE1A92004B1346 /* GetContactsRequestModel.swift */; };
 		3EA1567621CE1AC9004B1346 /* AddContactsRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1567521CE1AC9004B1346 /* AddContactsRequestModel.swift */; };
 		3EA1567821CE1AF0004B1346 /* UpdateContactsRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1567721CE1AF0004B1346 /* UpdateContactsRequestModel.swift */; };
@@ -274,6 +281,13 @@
 		3E78AAB62184A25F002A6EC0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3E78AAB92184A309002A6EC0 /* pic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pic.png; sourceTree = "<group>"; };
 		3E78AAC62184AB6F002A6EC0 /* SyncContactsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncContactsTest.swift; sourceTree = "<group>"; };
+		3E8D56D421DB975700B844DE /* MapReverseRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapReverseRequestModel.swift; sourceTree = "<group>"; };
+		3E8D56D621DB9CF300B844DE /* MapReverseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapReverseModel.swift; sourceTree = "<group>"; };
+		3E8D56D821DB9D6200B844DE /* MapReverse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapReverse.swift; sourceTree = "<group>"; };
+		3E8D56DA21DBA83600B844DE /* MapSearchRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearchRequestModel.swift; sourceTree = "<group>"; };
+		3E8D56DC21DBAB0B00B844DE /* MapSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearch.swift; sourceTree = "<group>"; };
+		3E8D56DE21DBB55F00B844DE /* MapSearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearchModel.swift; sourceTree = "<group>"; };
+		3E8D56E021DBB90900B844DE /* MapRoutingRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapRoutingRequestModel.swift; sourceTree = "<group>"; };
 		3EA1567021CE1A92004B1346 /* GetContactsRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetContactsRequestModel.swift; sourceTree = "<group>"; };
 		3EA1567521CE1AC9004B1346 /* AddContactsRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddContactsRequestModel.swift; sourceTree = "<group>"; };
 		3EA1567721CE1AF0004B1346 /* UpdateContactsRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateContactsRequestModel.swift; sourceTree = "<group>"; };
@@ -444,6 +458,9 @@
 				3EA1568D21CE1BED004B1346 /* GetThreadParticipantsRequestModel.swift */,
 				3EA1568321CE1B86004B1346 /* GetThreadsRequestModel.swift */,
 				3EA1569321CE1C2B004B1346 /* LeaveThreadRequestModel.swift */,
+				3E8D56D421DB975700B844DE /* MapReverseRequestModel.swift */,
+				3E8D56E021DBB90900B844DE /* MapRoutingRequestModel.swift */,
+				3E8D56DA21DBA83600B844DE /* MapSearchRequestModel.swift */,
 				3EA156A921CE1D10004B1346 /* MessageDeliverySeenListRequestModel.swift */,
 				3EA1568B21CE1BDC004B1346 /* MuteAndUnmuteThreadRequestModel.swift */,
 				3EA1567921CE1B0B004B1346 /* RemoveContactsRequestModel.swift */,
@@ -510,6 +527,8 @@
 				3EBBEDE22174C35200F5CDC7 /* ForwardInfo.swift */,
 				3EBBEDDA2174C2C000F5CDC7 /* Invitee.swift */,
 				3EBBEDDC2174C2F000F5CDC7 /* LinkedUser.swift */,
+				3E8D56D821DB9D6200B844DE /* MapReverse.swift */,
+				3E8D56DC21DBAB0B00B844DE /* MapSearch.swift */,
 				3EBBEDD62174C27B00F5CDC7 /* Message.swift */,
 				3EBBEDE42174C36700F5CDC7 /* MessageChangeState.swift */,
 				3EBBEDDE2174C30800F5CDC7 /* Participant.swift */,
@@ -535,6 +554,8 @@
 				3EBBEDF12174C5EC00F5CDC7 /* GetHistoryModel.swift */,
 				3EBBEDF32174C69700F5CDC7 /* GetThreadParticipantsModel.swift */,
 				3EBBEDEF2174C5C800F5CDC7 /* GetThreadsModel.swift */,
+				3E8D56D621DB9CF300B844DE /* MapReverseModel.swift */,
+				3E8D56DE21DBB55F00B844DE /* MapSearchModel.swift */,
 				3EBBEDF92174C6E000F5CDC7 /* RemoveContactModel.swift */,
 				3E437D55218F35A50021C0ED /* RemoveParticipantModel.swift */,
 				3E78AA98218479CB002A6EC0 /* UploadFileModel.swift */,
@@ -844,13 +865,16 @@
 				3EBBEDF62174C6AF00F5CDC7 /* CreateThreadModel.swift in Sources */,
 				3EA156E021CE2772004B1346 /* CMUploadImage+CoreDataProperties.swift in Sources */,
 				3EA156EB21CE2772004B1346 /* CMMessageChangeState+CoreDataClass.swift in Sources */,
+				3E8D56DB21DBA83600B844DE /* MapSearchRequestModel.swift in Sources */,
 				3EBBEDDF2174C30800F5CDC7 /* Participant.swift in Sources */,
 				3EA1568221CE1B70004B1346 /* SearchContactsRequestModel.swift in Sources */,
 				3EA156E521CE2772004B1346 /* CMUser+CoreDataClass.swift in Sources */,
 				3ED22F2F2187469F00B6FE4C /* AddParticipantModel.swift in Sources */,
+				3E8D56E121DBB90900B844DE /* MapRoutingRequestModel.swift in Sources */,
 				3EBBEDEE2174C5A600F5CDC7 /* GetContactsModel.swift in Sources */,
 				3EA1568A21CE1BCB004B1346 /* CreateThreadWithMessageRequestModel.swift in Sources */,
 				3EBBEDE32174C35200F5CDC7 /* ForwardInfo.swift in Sources */,
+				3E8D56D521DB975700B844DE /* MapReverseRequestModel.swift in Sources */,
 				3EBBEDD52174C23B00F5CDC7 /* Conversation.swift in Sources */,
 				3E78AA9B218479D7002A6EC0 /* UploadImage.swift in Sources */,
 				3EA1568C21CE1BDC004B1346 /* MuteAndUnmuteThreadRequestModel.swift in Sources */,
@@ -871,6 +895,7 @@
 				3E3F17792133D0A90029E4D4 /* EnumsAndStructs.swift in Sources */,
 				3EA1568621CE1BA0004B1346 /* GetHistoryRequestModel.swift in Sources */,
 				3EA156A821CE1D02004B1346 /* SpamPvThreadRequestModel.swift in Sources */,
+				3E8D56D921DB9D6200B844DE /* MapReverse.swift in Sources */,
 				3EBBEDF42174C69700F5CDC7 /* GetThreadParticipantsModel.swift in Sources */,
 				3EA156E321CE2772004B1346 /* CMForwardInfo+CoreDataClass.swift in Sources */,
 				3EA156A221CE1CC4004B1346 /* UploadImageRequestModel.swift in Sources */,
@@ -888,6 +913,7 @@
 				3E78AA95218479BA002A6EC0 /* UploadImageModel.swift in Sources */,
 				3EA156DF21CE2772004B1346 /* CMUploadImage+CoreDataClass.swift in Sources */,
 				3E43D1582132BF9C0069DF9A /* ReceiveMessage.swift in Sources */,
+				3E8D56DD21DBAB0B00B844DE /* MapSearch.swift in Sources */,
 				3E437D56218F35A50021C0ED /* RemoveParticipantModel.swift in Sources */,
 				3EA156F021CE2772004B1346 /* CMUploadFile+CoreDataProperties.swift in Sources */,
 				3E4B27E4212300CB001130F6 /* GCDTimer.swift in Sources */,
@@ -914,6 +940,7 @@
 				3EA156BD21CE274E004B1346 /* CoreDataCache.swift in Sources */,
 				3EBBEDE52174C36700F5CDC7 /* MessageChangeState.swift in Sources */,
 				3EA156EF21CE2772004B1346 /* CMUploadFile+CoreDataClass.swift in Sources */,
+				3E8D56D721DB9CF300B844DE /* MapReverseModel.swift in Sources */,
 				3EA156F921CE2772004B1346 /* CMThreadParticipants+CoreDataClass.swift in Sources */,
 				3EA156F321CE2772004B1346 /* CMBlockedContact+CoreDataClass.swift in Sources */,
 				3EA1568E21CE1BEE004B1346 /* GetThreadParticipantsRequestModel.swift in Sources */,
@@ -929,6 +956,7 @@
 				3EA156A621CE1CE8004B1346 /* UpdateThreadInfoRequestModel.swift in Sources */,
 				3EA156A421CE1CD6004B1346 /* UploadFileRequestModel.swift in Sources */,
 				3EA156FC21CE28B4004B1346 /* TestCoreData.swift in Sources */,
+				3E8D56DF21DBB55F00B844DE /* MapSearchModel.swift in Sources */,
 				3EA156AC21CE1D1E004B1346 /* DeliverSeenRequestModel.swift in Sources */,
 				3EA156F421CE2772004B1346 /* CMBlockedContact+CoreDataProperties.swift in Sources */,
 				3EBBEDFA2174C6E000F5CDC7 /* RemoveContactModel.swift in Sources */,

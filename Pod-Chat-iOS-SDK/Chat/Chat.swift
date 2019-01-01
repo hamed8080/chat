@@ -37,6 +37,8 @@ public class Chat {
     var token:          String  = ""        // every user have to had a token (get it from SSO Server)
     var generalTypeCode:    String = "chattest"
     var enableCache:        Bool = false
+    var mapApiKey:          String = "8b77db18704aa646ee5aaea13e7370f4f88b9e8c"
+    var mapServer:          String = "https://api.neshan.org/v1"
     
     //    var ssoGrantDevicesAddress = params.ssoGrantDevicesAddress
     var chatFullStateObject: JSON = [:]
@@ -81,7 +83,9 @@ public class Chat {
                 fileServer:                 String,
                 serverName:                 String,
                 token:                      String,
-                typeCode:                   String,
+                mapApiKey:                  String?,
+                mapServer:                  String,
+                typeCode:                   String?,
                 enableCache:                Bool,
                 msgPriority:                Int?,
                 msgTTL:                     Int?,
@@ -99,8 +103,16 @@ public class Chat {
         self.fileServer         = fileServer
         self.serverName         = serverName
         self.token              = token
-        self.generalTypeCode    = typeCode
         self.enableCache        = enableCache
+        self.mapServer          = mapServer
+        
+        if let theMapApiKey = mapApiKey {
+            self.mapApiKey = theMapApiKey
+        }
+        
+        if let theTypeCode = typeCode {
+            self.generalTypeCode = theTypeCode
+        }
         
         if let theMsgPriority = msgPriority {
             self.msgPriority = theMsgPriority
@@ -141,6 +153,7 @@ public class Chat {
         self.SERVICE_ADDRESSES.SSO_ADDRESS          = ssoHost
         self.SERVICE_ADDRESSES.PLATFORM_ADDRESS     = platformHost
         self.SERVICE_ADDRESSES.FILESERVER_ADDRESS   = fileServer
+        self.SERVICE_ADDRESSES.MAP_ADDRESS          = mapServer
         
         getDeviceIdWithToken { (deviceIdStr) in
             self.deviceId = deviceIdStr
@@ -256,7 +269,7 @@ extension Chat {
                 //                } catch {
                 //                }
             }
-        }, progress: nil, idDownloadRequest: false) { _,_  in }
+        }, progress: nil, idDownloadRequest: false, isMapServiceRequst: false) { _,_  in }
         
         
     }
@@ -272,7 +285,8 @@ extension Chat {
                      completion:    @escaping callbackTypeAlias,
                      progress:      callbackTypeAliasFloat?,
                      idDownloadRequest: Bool,
-                     returnData:    @escaping (Data , JSON) -> ()) {
+                     isMapServiceRequst: Bool,
+                     downloadReturnData:    @escaping (Data , JSON) -> ()) {
         
         let url = URL(string: urlStr)!
         
@@ -303,7 +317,7 @@ extension Chat {
                             }
                             
                             // return the Data:
-                            returnData(downloadedData, resJSON)
+                            downloadReturnData(downloadedData, resJSON)
                         }
                     }
                 } else {
@@ -314,15 +328,29 @@ extension Chat {
         } else {
             
             if (withMethod == .get) {
-                Alamofire.request(url, method: withMethod, parameters: withParameters, headers: withHeaders).responseString { (response) in
-                    if response.result.isSuccess {
-                        let stringToReturn: String = response.result.value!
-                        completion(stringToReturn)
-                    } else {
-                        //                    can not get the result, and gets error
-                        //                    delegate?.error(errorCode: result.errorCode, errorMessage: result.errorMessage, errorResult: result)
+                
+                if isMapServiceRequst {
+                    Alamofire.request(url, method: withMethod, parameters: withParameters, headers: withHeaders).responseJSON { (myResponse) in
+                        if myResponse.result.isSuccess {
+                            if let jsonToReturn = myResponse.result.value as? JSON {
+                                completion(jsonToReturn)
+                            }
+                        } else {
+                            log.error("Response of GerRequest is Failed)", context: "Chat")
+                        }
+                    }
+                    
+                } else {
+                    Alamofire.request(url, method: withMethod, parameters: withParameters, headers: withHeaders).responseString { (response) in
+                        if response.result.isSuccess {
+                            let stringToReturn: String = response.result.value!
+                            completion(stringToReturn)
+                        } else {
+                            log.error("Response of GerRequest is Failed)", context: "Chat")
+                        }
                     }
                 }
+                
             } else if (withMethod == .post) {
                 
                 if dataToSend == nil {
@@ -1605,7 +1633,7 @@ extension Chat {
             let jsonRes: JSON = response as! JSON
             let contactsResult = ContactModel(messageContent: jsonRes)
             completion(contactsResult)
-        }, progress: nil, idDownloadRequest: false) { _,_ in }
+        }, progress: nil, idDownloadRequest: false, isMapServiceRequst: false) { _,_ in }
         
     }
     
@@ -1644,7 +1672,7 @@ extension Chat {
             let jsonRes: JSON = response as! JSON
             let contactsResult = ContactModel(messageContent: jsonRes)
             completion(contactsResult)
-        }, progress: nil, idDownloadRequest: false) { _,_ in }
+        }, progress: nil, idDownloadRequest: false, isMapServiceRequst: false) { _,_ in }
         
     }
     
@@ -1691,7 +1719,7 @@ extension Chat {
             let jsonRes: JSON = response as! JSON
             let contactsResult = ContactModel(messageContent: jsonRes)
             completion(contactsResult)
-        }, progress: nil, idDownloadRequest: false) { _,_ in }
+        }, progress: nil, idDownloadRequest: false, isMapServiceRequst: false) { _,_ in }
         
     }
     
@@ -1743,7 +1771,7 @@ extension Chat {
             let jsonRes: JSON = response as! JSON
             let contactsResult = ContactModel(messageContent: jsonRes)
             completion(contactsResult)
-        }, progress: nil, idDownloadRequest: false) { _,_ in }
+        }, progress: nil, idDownloadRequest: false, isMapServiceRequst: false) { _,_ in }
         
     }
     
@@ -1782,7 +1810,7 @@ extension Chat {
             let jsonRes: JSON = response as! JSON
             let contactsResult = RemoveContactModel(messageContent: jsonRes)
             completion(contactsResult)
-        }, progress: nil, idDownloadRequest: false) { _,_ in }
+        }, progress: nil, idDownloadRequest: false, isMapServiceRequst: false) { _,_ in }
         
     }
     
@@ -1810,7 +1838,7 @@ extension Chat {
             let jsonRes: JSON = response as! JSON
             let contactsResult = RemoveContactModel(messageContent: jsonRes)
             completion(contactsResult)
-        }, progress: nil, idDownloadRequest: false) { _,_ in }
+        }, progress: nil, idDownloadRequest: false, isMapServiceRequst: false) { _,_ in }
         
     }
     
@@ -2081,7 +2109,7 @@ extension Chat {
             
             let contactsResult = ContactModel(messageContent: jsonRes)
             completion(contactsResult)
-        }, progress: nil, idDownloadRequest: false) { _,_ in }
+        }, progress: nil, idDownloadRequest: false, isMapServiceRequst: false) { _,_ in }
         
     }
     
@@ -2143,7 +2171,7 @@ extension Chat {
             let jsonRes: JSON = response as! JSON
             let contactsResult = ContactModel(messageContent: jsonRes)
             completion(contactsResult)
-        }, progress: nil, idDownloadRequest: false) { _,_ in }
+        }, progress: nil, idDownloadRequest: false, isMapServiceRequst: false) { _,_ in }
         
     }
     
@@ -3915,6 +3943,145 @@ extension Chat {
     
     
     /*
+     Reply File Message:
+     
+     this function is almost the same as SendFileMessage function
+     */
+    public func replyFileMessage(replyFileMessageInput: SendFileMessageRequestModel, uniqueId: @escaping (String) -> (), uploadProgress: @escaping (Float) -> (), onSent: @escaping callbackTypeAlias, onDelivered: @escaping callbackTypeAlias, onSeen: @escaping callbackTypeAlias) {
+        log.verbose("Try to reply File Message with this parameters: \n \(replyFileMessageInput)", context: "Chat")
+        
+        var fileName:       String  = ""
+        var fileType:       String  = ""
+        var fileSize:       Int     = 0
+        var fileExtension:  String  = ""
+        
+        if let myFileName = replyFileMessageInput.fileName {
+            fileName = myFileName
+        } else if let myImageName = replyFileMessageInput.imageName {
+            fileName = myImageName
+        }
+        
+        let uploadUniqueId: String = generateUUID()
+        
+        var metaData: JSON = [:]
+        metaData["file"]["originalName"] = JSON(fileName)
+        metaData["file"]["mimeType"] = JSON(fileType)
+        metaData["file"]["size"] = JSON(fileSize)
+        
+        var paramsToSendToUpload: JSON = ["uniqueId": uploadUniqueId, "originalFileName": fileName]
+        
+        if let xC = replyFileMessageInput.xC {
+            paramsToSendToUpload["xC"] = JSON(xC)
+        }
+        if let yC = replyFileMessageInput.yC {
+            paramsToSendToUpload["yC"] = JSON(yC)
+        }
+        if let hC = replyFileMessageInput.hC {
+            paramsToSendToUpload["hC"] = JSON(hC)
+        }
+        if let wC = replyFileMessageInput.wC {
+            paramsToSendToUpload["wC"] = JSON(wC)
+        }
+        if let fileName = replyFileMessageInput.fileName {
+            paramsToSendToUpload["fileName"] = JSON(fileName)
+        } else {
+            paramsToSendToUpload["fileName"] = JSON(uploadUniqueId)
+        }
+        if let threadId = replyFileMessageInput.threadId {
+            paramsToSendToUpload["threadId"] = JSON(threadId)
+        }
+        
+        let messageUniqueId = generateUUID()
+        uniqueId(messageUniqueId)
+        
+        var paramsToSendToSendMessage: JSON = ["uniqueId": messageUniqueId,
+                                               "typeCode": replyFileMessageInput.typeCode ?? generalTypeCode]
+        
+        if let subjectId = replyFileMessageInput.subjectId {
+            paramsToSendToSendMessage["subjectId"] = JSON(subjectId)
+        }
+        if let repliedTo = replyFileMessageInput.repliedTo {
+            paramsToSendToSendMessage["repliedTo"] = JSON(repliedTo)
+        }
+        if let content = replyFileMessageInput.content {
+            paramsToSendToSendMessage["content"] = JSON("\(content)")
+        }
+        if let systemMetadata = replyFileMessageInput.metaData {
+            paramsToSendToSendMessage["systemMetadata"] = JSON("\(systemMetadata)")
+        }
+        
+        
+        if let image = replyFileMessageInput.imageToSend {
+            uploadImage(params: paramsToSendToUpload, dataToSend: image, uniqueId: { _ in }, progress: { (progress) in
+                uploadProgress(progress)
+            }) { (response) in
+                
+                let myResponse: UploadImageModel = response as! UploadImageModel
+                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_IMAGE.rawValue)?imageId=\(myResponse.uploadImage.id ?? 0)&hashCode=\(myResponse.uploadImage.hashCode ?? "")"
+                metaData["file"]["link"]            = JSON(link)
+                metaData["file"]["id"]              = JSON(myResponse.uploadImage.id ?? 0)
+                metaData["file"]["name"]            = JSON(myResponse.uploadImage.name ?? "")
+                metaData["file"]["height"]          = JSON(myResponse.uploadImage.height ?? 0)
+                metaData["file"]["width"]           = JSON(myResponse.uploadImage.width ?? 0)
+                metaData["file"]["actualHeight"]    = JSON(myResponse.uploadImage.actualHeight ?? 0)
+                metaData["file"]["actualWidth"]     = JSON(myResponse.uploadImage.actualWidth ?? 0)
+                metaData["file"]["hashCode"]        = JSON(myResponse.uploadImage.hashCode ?? "")
+                
+                paramsToSendToSendMessage["metaData"] = JSON("\(metaData)")
+                
+                sendMessageWith(paramsToSendToSendMessage: paramsToSendToSendMessage)
+            }
+        } else if let file = replyFileMessageInput.fileToSend {
+            uploadFile(params: paramsToSendToUpload, dataToSend: file, uniqueId: { _ in }, progress: { (progress) in
+                uploadProgress(progress)
+            }) { (response) in
+                
+                let myResponse: UploadFileModel = response as! UploadFileModel
+                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_FILE.rawValue)?fileId=\(myResponse.uploadFile.id ?? 0)&hashCode=\(myResponse.uploadFile.hashCode ?? "")"
+                metaData["file"]["link"]            = JSON(link)
+                metaData["file"]["id"]              = JSON(myResponse.uploadFile.id ?? 0)
+                metaData["file"]["name"]            = JSON(myResponse.uploadFile.name ?? "")
+                metaData["file"]["hashCode"]        = JSON(myResponse.uploadFile.hashCode ?? "")
+                
+                paramsToSendToSendMessage["metaData"] = JSON("\(metaData)")
+                
+                sendMessageWith(paramsToSendToSendMessage: paramsToSendToSendMessage)
+            }
+        }
+        
+        // if there was no data to send, then returns an error to user
+        if (replyFileMessageInput.imageToSend == nil) && (replyFileMessageInput.fileToSend == nil) {
+            delegate?.chatError(errorCode: 6302, errorMessage: CHAT_ERRORS.err6302.rawValue, errorResult: nil)
+        }
+        
+        
+        // this will call when all data were uploaded and it will sends the textMessage
+        func sendMessageWith(paramsToSendToSendMessage: JSON) {
+            
+            let sendMessageParamModel = SendTextMessageRequestModel(threadId:       paramsToSendToSendMessage["threadId"].intValue,
+                                                                    content:        paramsToSendToSendMessage["content"].stringValue,
+                                                                    repliedTo:      paramsToSendToSendMessage["repliedTo"].int,
+                                                                    uniqueId:       paramsToSendToSendMessage["uniqueId"].string,
+                                                                    typeCode:       paramsToSendToSendMessage["typeCode"].string,
+                                                                    systemMetadata: paramsToSendToSendMessage["systemMetadata"],
+                                                                    metaData:       paramsToSendToSendMessage["metaData"])
+            
+            self.sendTextMessage(sendTextMessageInput: sendMessageParamModel, uniqueId: { _ in }, onSent: { (sent) in
+                onSent(sent)
+            }, onDelivere: { (delivered) in
+                onDelivered(delivered)
+            }, onSeen: { (seen) in
+                onSeen(seen)
+            })
+            
+        }
+        
+    }
+    
+    
+    
+    
+    /*
      DeleteMessage:
      delete specific message by getting message id.
      
@@ -4108,7 +4275,7 @@ extension Chat {
             
         }, progress: { (myProgress) in
             progress(myProgress)
-        }, idDownloadRequest: false) { _,_ in }
+        }, idDownloadRequest: false, isMapServiceRequst: false) { _,_ in }
         
         
     }
@@ -4206,7 +4373,7 @@ extension Chat {
             
         }, progress: { (myProgress) in
             progress(myProgress)
-        }, idDownloadRequest: false) { _,_ in }
+        }, idDownloadRequest: false, isMapServiceRequst: false) { _,_ in }
         
     }
     
@@ -4323,7 +4490,7 @@ extension Chat {
             }
         }, progress: { (myProgress) in
             progress(myProgress)
-        }, idDownloadRequest: false) { _,_ in }
+        }, idDownloadRequest: false, isMapServiceRequst: false) { _,_ in }
         
     }
     
@@ -4414,7 +4581,7 @@ extension Chat {
             }
         }, progress: { (myProgress) in
             progress(myProgress)
-        }, idDownloadRequest: false) { _,_ in }
+        }, idDownloadRequest: false, isMapServiceRequst: false) { _,_ in }
         
     }
     
@@ -4429,7 +4596,7 @@ extension Chat {
      + Inputs:
      this function will get some optional prameters as an input, as 'GetImageRequestModel' Model which are:
      - actual:
-     - downloadable:  
+     - downloadable:
      - hashCode:
      - height:
      - imageId:
@@ -4441,7 +4608,9 @@ extension Chat {
      2- completion:     when the file completely downloaded, it will sent to client as 'UploadImageModel' model
      3- cacheResponse:  If the file was already avalable on the cache, and aslso client wants to get cache result, it will send it as 'UploadImageModel' model
      */
-    public func getImage(getImageInput: GetImageRequestModel, progress: @escaping (Float) -> (), completion: @escaping (UploadImageModel) -> (), cacheResponse: @escaping (UploadImageModel) -> ()) {
+    public func getImage(getImageInput: GetImageRequestModel, uniqueId: @escaping (String) -> (), progress: @escaping (Float) -> (), completion: @escaping callbackTypeAlias, cacheResponse: @escaping callbackTypeAlias) {
+        
+        let theUniqueId = generateUUID()
         
         let url = "\(SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_IMAGE.rawValue)"
         let method:     HTTPMethod  = HTTPMethod.get
@@ -4460,6 +4629,8 @@ extension Chat {
             parameters["width"] = JSON(theWidth)
         }
         
+        uniqueId(theUniqueId)
+        
         // if cache is enabled by user, first return cache result to the user
         if enableCache {
             if let cacheImageResult = Chat.cacheDB.retrieveUploadImage(hashCode: getImageInput.hashCode, imageId: getImageInput.imageId) {
@@ -4473,7 +4644,7 @@ extension Chat {
         // so this code have to only request file if it couldn't find the file on the cache
         httpRequest(from: url, withMethod: method, withHeaders: nil, withParameters: parameters, dataToSend: nil, isImage: nil, isFile: nil, completion: { _ in }, progress: { (myProgress) in
             progress(myProgress)
-        }, idDownloadRequest: true) { (imageDataResponse, responseHeader)  in
+        }, idDownloadRequest: true, isMapServiceRequst: false) { (imageDataResponse, responseHeader)  in
             
             // save data comes from server to the Cache
             let fileName = responseHeader["name"].string
@@ -4509,7 +4680,10 @@ extension Chat {
      2- completion:     when the file completely downloaded, it will sent to client as 'UploadFileModel' model
      3- cacheResponse:  If the file was already avalable on the cache, and aslso client wants to get cache result, it will send it as 'UploadFileModel' model
      */
-    public func getFile(getFileInput: GetFileRequestModel, progress: @escaping (Float) -> (), completion: @escaping (UploadFileModel) -> (), cacheResponse: @escaping (UploadFileModel) -> ()) {
+    public func getFile(getFileInput: GetFileRequestModel, uniqueId: @escaping (String) -> (), progress: @escaping (Float) -> (), completion: @escaping callbackTypeAlias, cacheResponse: @escaping callbackTypeAlias) {
+        
+        let theUniqueId = generateUUID()
+        uniqueId(theUniqueId)
         
         let url = "\(SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_FILE.rawValue)"
         let method:     HTTPMethod  = HTTPMethod.get
@@ -4534,7 +4708,7 @@ extension Chat {
         // so this code have to only request file if it couldn't find the file on the cache
         httpRequest(from: url, withMethod: method, withHeaders: nil, withParameters: parameters, dataToSend: nil, isImage: nil, isFile: nil, completion: { _ in }, progress: { (myProgress) in
             progress(myProgress)
-        }, idDownloadRequest: true) { (fileDataResponse, responseHeader) in
+        }, idDownloadRequest: true, isMapServiceRequst: false) { (fileDataResponse, responseHeader) in
             
             // save data comes from server to the Cache
             let fileName = responseHeader["name"].string
@@ -4551,8 +4725,95 @@ extension Chat {
     }
     
     
+    // MARK: - Map Management
     
     
+    public func mapReverse(mapReverseInput: MapReverseRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+        
+        let theUniqueId = generateUUID()
+        uniqueId(theUniqueId)
+        
+        let url = "\(SERVICE_ADDRESSES.MAP_ADDRESS)\(SERVICES_PATH.REVERSE.rawValue)"
+        let method:     HTTPMethod  = HTTPMethod.get
+        let headers:    HTTPHeaders = ["Api-Key": mapApiKey]
+        let parameters: Parameters  = ["lat": mapReverseInput.lat,
+                                       "lng": mapReverseInput.lng,
+                                       "uniqueId": theUniqueId]
+        
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: nil, isImage: nil, isFile: nil, completion: { (jsonResponse) in
+            
+            if let theResponse = jsonResponse as? JSON {
+                let mapReverseModel = MapReverseModel(messageContent: theResponse, hasError: false, errorMessage: "", errorCode: 0)
+                completion(mapReverseModel)
+            }
+            
+        }, progress: nil, idDownloadRequest: false, isMapServiceRequst: true) { _,_ in }
+        
+        
+    }
+    
+    
+    
+    
+    public func mapSearch(mapSearchInput: MapSearchRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+        
+        let theUniqueId = generateUUID()
+        uniqueId(theUniqueId)
+        
+        let url = "\(SERVICE_ADDRESSES.MAP_ADDRESS)\(SERVICES_PATH.SEARCH.rawValue)"
+        let method:     HTTPMethod  = HTTPMethod.get
+        let headers:    HTTPHeaders = ["Api-Key": mapApiKey]
+        let parameters: Parameters  = ["lat":   mapSearchInput.lat,
+                                       "lng":   mapSearchInput.lng,
+                                       "term":  mapSearchInput.term]
+        
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: nil, isImage: nil, isFile: nil, completion: { (jsonResponse) in
+            
+            if let theResponse = jsonResponse as? JSON {
+                let mapSearchModel = MapSearchModel(messageContent: theResponse, hasError: false, errorMessage: "", errorCode: 0)
+                completion(mapSearchModel)
+            }
+            
+        }, progress: nil, idDownloadRequest: false, isMapServiceRequst: true) { _,_ in }
+        
+    }
+    
+    
+    
+    
+//    public func mapRouting(mapRoutingInput: MapSearchRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+//        
+//        let theUniqueId = generateUUID()
+//        uniqueId(theUniqueId)
+//        
+//        let url = "\(SERVICE_ADDRESSES.MAP_ADDRESS)\(SERVICES_PATH.SEARCH.rawValue)"
+//        let method:     HTTPMethod  = HTTPMethod.get
+//        let headers:    HTTPHeaders = ["Api-Key": mapApiKey]
+//        let parameters: Parameters  = ["origin":        mapRoutingInput.origin,
+//                                       "destination":   mapRoutingInput.destination,
+//                                       "alternative":   mapRoutingInput.alternative]
+//        
+//        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: nil, isImage: nil, isFile: nil, completion: { (jsonResponse) in
+//            
+//            if let theResponse = jsonResponse as? JSON {
+//                let mapSearchModel = MapSearchModel(messageContent: theResponse, hasError: false, errorMessage: "", errorCode: 0)
+//                completion(mapSearchModel)
+//            }
+//            
+//        }, progress: nil, idDownloadRequest: false, isMapServiceRequst: true) { _,_ in }
+//        
+//    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // MARK: -
     
     /*
      UpdateThreadInfo:
