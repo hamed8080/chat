@@ -286,17 +286,15 @@ extension Chat {
                      progress:      callbackTypeAliasFloat?,
                      idDownloadRequest: Bool,
                      isMapServiceRequst: Bool,
-                     downloadReturnData:    @escaping (Data , JSON) -> ()) {
+                     downloadReturnData:    @escaping (Data?, JSON) -> ()) {
         
         let url = URL(string: urlStr)!
         
         if (idDownloadRequest) {
             
-            Alamofire.request(url, method: withMethod, parameters: withParameters, encoding: JSONEncoding.default, headers: withHeaders).downloadProgress(closure: { (downloadProgress) in
-                
+            Alamofire.request(url, method: withMethod, parameters: withParameters, headers: withHeaders).downloadProgress(closure: { (downloadProgress) in
                 let myProgressFloat: Float = Float(downloadProgress.fractionCompleted)
                 progress?(myProgressFloat)
-                
             }).responseData { (myResponse) in
                 if myResponse.result.isSuccess {
                     if let downloadedData = myResponse.data {
@@ -314,10 +312,14 @@ extension Chat {
                                 if let theFileName = contentDisposition.components(separatedBy: "=").last?.replacingOccurrences(of: "\"", with: "") {
                                     resJSON["name"] = JSON(theFileName)
                                 }
+                                // return the Data:
+                                downloadReturnData(downloadedData, resJSON)
+                            } else {
+                                // an error accured, so return the error:
+                                let returnJSON: JSON = ["hasError": true, "errorCode": 999]
+                                downloadReturnData(nil, returnJSON)
                             }
                             
-                            // return the Data:
-                            downloadReturnData(downloadedData, resJSON)
                         }
                     }
                 } else {
@@ -332,8 +334,9 @@ extension Chat {
                 if isMapServiceRequst {
                     Alamofire.request(url, method: withMethod, parameters: withParameters, headers: withHeaders).responseJSON { (myResponse) in
                         if myResponse.result.isSuccess {
-                            if let jsonToReturn = myResponse.result.value as? JSON {
-                                completion(jsonToReturn)
+                            if let jsonValue = myResponse.result.value {
+                                let jsonResponse: JSON = JSON(jsonValue)
+                                completion(jsonResponse)
                             }
                         } else {
                             log.error("Response of GerRequest is Failed)", context: "Chat")
@@ -662,7 +665,6 @@ extension Chat {
         // a message of type 1 (CREATE_THREAD) comes from Server.
         case chatMessageVOTypes.CREATE_THREAD.rawValue:
             log.verbose("Message of type 'CREATE_THREAD' recieved", context: "Chat")
-            log.debug("Message of type 'CREATE_THREAD' recieve", context: "Chat")
             if Chat.map[uniqueId] != nil {
                 let threadData = Conversation(messageContent: messageContent).formatToJSON()
                 delegate?.threadEvents(type: "THREAD_NEW", result: threadData)
@@ -687,7 +689,6 @@ extension Chat {
         // it means that the message is send.
         case chatMessageVOTypes.SENT.rawValue:
             log.verbose("Message of type 'SENT' recieved", context: "Chat")
-            log.debug("Message of type 'SENT' recieved", context: "Chat")
             if Chat.mapOnSent[uniqueId] != nil {
                 let callback: CallbackProtocolWith3Calls = Chat.mapOnSent[uniqueId]!
                 messageContent = ["messageId": params["content"].stringValue]
@@ -702,7 +703,6 @@ extension Chat {
         // it means that the message is delivered.
         case chatMessageVOTypes.DELIVERY.rawValue:
             log.verbose("Message of type 'DELIVERY' recieved", context: "Chat")
-            log.debug("Message of type 'DELIVERY' recieved", context: "ChatsendMessageWithCallback")
             
             // this functionality has beed deprecated
             /*
@@ -785,7 +785,6 @@ extension Chat {
         // it means that the message is seen.
         case chatMessageVOTypes.SEEN.rawValue:
             log.verbose("Message of type 'SEEN' recieved", context: "Chat")
-            log.debug("Message of type 'SEEN' recieved", context: "Chat")
             // this functionality has beed deprecated
             /*
              let paramsToSend: JSON = ["offset": 0,
@@ -976,7 +975,7 @@ extension Chat {
             // a message of type 13 (GET_CONTACTS) comes from Server.
         // it means array of contacts comes
         case chatMessageVOTypes.GET_CONTACTS.rawValue:
-            log.debug("Message of type 'GET_CONTACTS' recieved", context: "Chat")
+            log.verbose("Message of type 'GET_CONTACTS' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount)
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
@@ -2095,17 +2094,17 @@ extension Chat {
         let method: HTTPMethod = HTTPMethod.post
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
         
+        
         httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, isImage: nil, isFile: nil, completion: { (response) in
             let jsonRes: JSON = response as! JSON
             
-//            // save data comes from server to the Cache
-//            var contacts = [Contact]()
-//            for item in jsonRes {
-//                let myContact = Contact(messageContent: item)
-//                contacts.append(myContact)
-//            }
-//            Chat.cacheDB.saveContactObjects(contacts: contacts)
-            
+            //            // save data comes from server to the Cache
+            //            var contacts = [Contact]()
+            //            for item in jsonRes {
+            //                let myContact = Contact(messageContent: item)
+            //                contacts.append(myContact)
+            //            }
+            //            Chat.cacheDB.saveContactObjects(contacts: contacts)
             
             let contactsResult = ContactModel(messageContent: jsonRes)
             completion(contactsResult)
@@ -2257,7 +2256,7 @@ extension Chat {
     public func getThreads(getThreadsInput: GetThreadsRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias, cacheResponse: @escaping (GetThreadsModel) -> ()) {
         log.verbose("Try to request to get threads with this parameters: \n \(getThreadsInput)", context: "Chat")
         
-        var threadIdArr: [Int]?
+        //        var threadIdArr: [Int]?
         
         var content: JSON = [:]
         
@@ -2274,7 +2273,7 @@ extension Chat {
         
         if let threadIds = getThreadsInput.threadIds {
             content["threadIds"] = JSON(threadIds)
-            threadIdArr = threadIds
+            //            threadIdArr = threadIds
         }
         
         if let metadataCriteria = getThreadsInput.metadataCriteria {
@@ -2293,11 +2292,11 @@ extension Chat {
         
         // if cache is enabled by user, it will return cache result to the user
         if enableCache {
-            if let cacheThreads = Chat.cacheDB.retrieveThreads(count:       content["count"].intValue,
-                                                               offset:      content["offset"].intValue,
+            if let cacheThreads = Chat.cacheDB.retrieveThreads(count:       getThreadsInput.count ?? 50,
+                                                               offset:      getThreadsInput.offset ?? 0,
                                                                ascending:   true,
-                                                               name:        content["name"].string ?? nil,
-                                                               threadIds:   threadIdArr) {
+                                                               name:        getThreadsInput.name,
+                                                               threadIds:   getThreadsInput.threadIds) {
                 cacheResponse(cacheThreads)
             }
         }
@@ -3754,15 +3753,15 @@ extension Chat {
             }) { (response) in
                 
                 let myResponse: UploadImageModel = response as! UploadImageModel
-                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_IMAGE.rawValue)?imageId=\(myResponse.uploadImage.id ?? 0)&hashCode=\(myResponse.uploadImage.hashCode ?? "")"
+                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_IMAGE.rawValue)?imageId=\(myResponse.uploadImage!.id ?? 0)&hashCode=\(myResponse.uploadImage!.hashCode ?? "")"
                 metaData["file"]["link"]            = JSON(link)
-                metaData["file"]["id"]              = JSON(myResponse.uploadImage.id ?? 0)
-                metaData["file"]["name"]            = JSON(myResponse.uploadImage.name ?? "")
-                metaData["file"]["height"]          = JSON(myResponse.uploadImage.height ?? 0)
-                metaData["file"]["width"]           = JSON(myResponse.uploadImage.width ?? 0)
-                metaData["file"]["actualHeight"]    = JSON(myResponse.uploadImage.actualHeight ?? 0)
-                metaData["file"]["actualWidth"]     = JSON(myResponse.uploadImage.actualWidth ?? 0)
-                metaData["file"]["hashCode"]        = JSON(myResponse.uploadImage.hashCode ?? "")
+                metaData["file"]["id"]              = JSON(myResponse.uploadImage!.id ?? 0)
+                metaData["file"]["name"]            = JSON(myResponse.uploadImage!.name ?? "")
+                metaData["file"]["height"]          = JSON(myResponse.uploadImage!.height ?? 0)
+                metaData["file"]["width"]           = JSON(myResponse.uploadImage!.width ?? 0)
+                metaData["file"]["actualHeight"]    = JSON(myResponse.uploadImage!.actualHeight ?? 0)
+                metaData["file"]["actualWidth"]     = JSON(myResponse.uploadImage!.actualWidth ?? 0)
+                metaData["file"]["hashCode"]        = JSON(myResponse.uploadImage!.hashCode ?? "")
                 
                 paramsToSendToSendMessage["metaData"] = JSON("\(metaData)")
                 
@@ -3774,11 +3773,11 @@ extension Chat {
             }) { (response) in
                 
                 let myResponse: UploadFileModel = response as! UploadFileModel
-                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_FILE.rawValue)?fileId=\(myResponse.uploadFile.id ?? 0)&hashCode=\(myResponse.uploadFile.hashCode ?? "")"
+                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_FILE.rawValue)?fileId=\(myResponse.uploadFile!.id ?? 0)&hashCode=\(myResponse.uploadFile!.hashCode ?? "")"
                 metaData["file"]["link"]            = JSON(link)
-                metaData["file"]["id"]              = JSON(myResponse.uploadFile.id ?? 0)
-                metaData["file"]["name"]            = JSON(myResponse.uploadFile.name ?? "")
-                metaData["file"]["hashCode"]        = JSON(myResponse.uploadFile.hashCode ?? "")
+                metaData["file"]["id"]              = JSON(myResponse.uploadFile!.id ?? 0)
+                metaData["file"]["name"]            = JSON(myResponse.uploadFile!.name ?? "")
+                metaData["file"]["hashCode"]        = JSON(myResponse.uploadFile!.hashCode ?? "")
                 
                 paramsToSendToSendMessage["metaData"] = JSON("\(metaData)")
                 
@@ -3889,15 +3888,15 @@ extension Chat {
             }) { (response) in
                 
                 let myResponse: UploadImageModel = response as! UploadImageModel
-                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_IMAGE.rawValue)?imageId=\(myResponse.uploadImage.id ?? 0)&hashCode=\(myResponse.uploadImage.hashCode ?? "")"
+                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_IMAGE.rawValue)?imageId=\(myResponse.uploadImage!.id ?? 0)&hashCode=\(myResponse.uploadImage!.hashCode ?? "")"
                 metaData["file"]["link"]            = JSON(link)
-                metaData["file"]["id"]              = JSON(myResponse.uploadImage.id ?? 0)
-                metaData["file"]["name"]            = JSON(myResponse.uploadImage.name ?? "")
-                metaData["file"]["height"]          = JSON(myResponse.uploadImage.height ?? 0)
-                metaData["file"]["width"]           = JSON(myResponse.uploadImage.width ?? 0)
-                metaData["file"]["actualHeight"]    = JSON(myResponse.uploadImage.actualHeight ?? 0)
-                metaData["file"]["actualWidth"]     = JSON(myResponse.uploadImage.actualWidth ?? 0)
-                metaData["file"]["hashCode"]        = JSON(myResponse.uploadImage.hashCode ?? "")
+                metaData["file"]["id"]              = JSON(myResponse.uploadImage!.id ?? 0)
+                metaData["file"]["name"]            = JSON(myResponse.uploadImage!.name ?? "")
+                metaData["file"]["height"]          = JSON(myResponse.uploadImage!.height ?? 0)
+                metaData["file"]["width"]           = JSON(myResponse.uploadImage!.width ?? 0)
+                metaData["file"]["actualHeight"]    = JSON(myResponse.uploadImage!.actualHeight ?? 0)
+                metaData["file"]["actualWidth"]     = JSON(myResponse.uploadImage!.actualWidth ?? 0)
+                metaData["file"]["hashCode"]        = JSON(myResponse.uploadImage!.hashCode ?? "")
                 
                 paramsToSendToSendMessage["metaData"] = JSON("\(metaData)")
                 
@@ -3909,11 +3908,11 @@ extension Chat {
             }) { (response) in
                 
                 let myResponse: UploadFileModel = response as! UploadFileModel
-                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_FILE.rawValue)?fileId=\(myResponse.uploadFile.id ?? 0)&hashCode=\(myResponse.uploadFile.hashCode ?? "")"
+                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_FILE.rawValue)?fileId=\(myResponse.uploadFile!.id ?? 0)&hashCode=\(myResponse.uploadFile!.hashCode ?? "")"
                 metaData["file"]["link"]            = JSON(link)
-                metaData["file"]["id"]              = JSON(myResponse.uploadFile.id ?? 0)
-                metaData["file"]["name"]            = JSON(myResponse.uploadFile.name ?? "")
-                metaData["file"]["hashCode"]        = JSON(myResponse.uploadFile.hashCode ?? "")
+                metaData["file"]["id"]              = JSON(myResponse.uploadFile!.id ?? 0)
+                metaData["file"]["name"]            = JSON(myResponse.uploadFile!.name ?? "")
+                metaData["file"]["hashCode"]        = JSON(myResponse.uploadFile!.hashCode ?? "")
                 
                 paramsToSendToSendMessage["metaData"] = JSON("\(metaData)")
                 
@@ -4017,15 +4016,15 @@ extension Chat {
             }) { (response) in
                 
                 let myResponse: UploadImageModel = response as! UploadImageModel
-                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_IMAGE.rawValue)?imageId=\(myResponse.uploadImage.id ?? 0)&hashCode=\(myResponse.uploadImage.hashCode ?? "")"
+                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_IMAGE.rawValue)?imageId=\(myResponse.uploadImage!.id ?? 0)&hashCode=\(myResponse.uploadImage!.hashCode ?? "")"
                 metaData["file"]["link"]            = JSON(link)
-                metaData["file"]["id"]              = JSON(myResponse.uploadImage.id ?? 0)
-                metaData["file"]["name"]            = JSON(myResponse.uploadImage.name ?? "")
-                metaData["file"]["height"]          = JSON(myResponse.uploadImage.height ?? 0)
-                metaData["file"]["width"]           = JSON(myResponse.uploadImage.width ?? 0)
-                metaData["file"]["actualHeight"]    = JSON(myResponse.uploadImage.actualHeight ?? 0)
-                metaData["file"]["actualWidth"]     = JSON(myResponse.uploadImage.actualWidth ?? 0)
-                metaData["file"]["hashCode"]        = JSON(myResponse.uploadImage.hashCode ?? "")
+                metaData["file"]["id"]              = JSON(myResponse.uploadImage!.id ?? 0)
+                metaData["file"]["name"]            = JSON(myResponse.uploadImage!.name ?? "")
+                metaData["file"]["height"]          = JSON(myResponse.uploadImage!.height ?? 0)
+                metaData["file"]["width"]           = JSON(myResponse.uploadImage!.width ?? 0)
+                metaData["file"]["actualHeight"]    = JSON(myResponse.uploadImage!.actualHeight ?? 0)
+                metaData["file"]["actualWidth"]     = JSON(myResponse.uploadImage!.actualWidth ?? 0)
+                metaData["file"]["hashCode"]        = JSON(myResponse.uploadImage!.hashCode ?? "")
                 
                 paramsToSendToSendMessage["metaData"] = JSON("\(metaData)")
                 
@@ -4037,11 +4036,11 @@ extension Chat {
             }) { (response) in
                 
                 let myResponse: UploadFileModel = response as! UploadFileModel
-                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_FILE.rawValue)?fileId=\(myResponse.uploadFile.id ?? 0)&hashCode=\(myResponse.uploadFile.hashCode ?? "")"
+                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_FILE.rawValue)?fileId=\(myResponse.uploadFile!.id ?? 0)&hashCode=\(myResponse.uploadFile!.hashCode ?? "")"
                 metaData["file"]["link"]            = JSON(link)
-                metaData["file"]["id"]              = JSON(myResponse.uploadFile.id ?? 0)
-                metaData["file"]["name"]            = JSON(myResponse.uploadFile.name ?? "")
-                metaData["file"]["hashCode"]        = JSON(myResponse.uploadFile.hashCode ?? "")
+                metaData["file"]["id"]              = JSON(myResponse.uploadFile!.id ?? 0)
+                metaData["file"]["name"]            = JSON(myResponse.uploadFile!.name ?? "")
+                metaData["file"]["hashCode"]        = JSON(myResponse.uploadFile!.hashCode ?? "")
                 
                 paramsToSendToSendMessage["metaData"] = JSON("\(metaData)")
                 
@@ -4268,7 +4267,7 @@ extension Chat {
                 Chat.cacheDB.saveUploadImage(imageInfo: uploadImageFile, imageData: uploadImageInput.dataToSend)
                 
                 
-                let uploadImageModel = UploadImageModel(messageContent: resultData, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+                let uploadImageModel = UploadImageModel(messageContentJSON: resultData, errorCode: errorCode, errorMessage: errorMessage, hasError: hasError)
                 
                 completion(uploadImageModel)
             }
@@ -4366,7 +4365,7 @@ extension Chat {
             
             if (!hasError) {
                 let resultData = myResponse["result"]
-                let uploadImageModel = UploadImageModel(messageContent: resultData, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+                let uploadImageModel = UploadImageModel(messageContentJSON: resultData, errorCode: errorCode, errorMessage: errorMessage, hasError: hasError)
                 
                 completion(uploadImageModel)
             }
@@ -4483,8 +4482,7 @@ extension Chat {
                 let uploadFileFile = UploadFile(messageContent: resultData)
                 Chat.cacheDB.saveUploadFile(fileInfo: uploadFileFile, fileData: uploadFileInput.dataToSend)
                 
-                
-                let uploadFileModel = UploadFileModel(messageContent: resultData, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+                let uploadFileModel = UploadFileModel(messageContentJSON: resultData, errorCode: errorCode, errorMessage: errorMessage, hasError: hasError)
                 
                 completion(uploadFileModel)
             }
@@ -4575,7 +4573,7 @@ extension Chat {
             
             if (!hasError) {
                 let resultData = myResponse["result"]
-                let uploadFileModel = UploadFileModel(messageContent: resultData, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+                let uploadFileModel = UploadFileModel(messageContentJSON: resultData, errorCode: errorCode, errorMessage: errorMessage, hasError: hasError)
                 
                 completion(uploadFileModel)
             }
@@ -4608,7 +4606,7 @@ extension Chat {
      2- completion:     when the file completely downloaded, it will sent to client as 'UploadImageModel' model
      3- cacheResponse:  If the file was already avalable on the cache, and aslso client wants to get cache result, it will send it as 'UploadImageModel' model
      */
-    public func getImage(getImageInput: GetImageRequestModel, uniqueId: @escaping (String) -> (), progress: @escaping (Float) -> (), completion: @escaping callbackTypeAlias, cacheResponse: @escaping callbackTypeAlias) {
+    public func getImage(getImageInput: GetImageRequestModel, uniqueId: @escaping (String) -> (), progress: @escaping (Float) -> (), completion: @escaping (Data?, UploadImageModel) -> (), cacheResponse: @escaping (UploadImageModel, String) -> ()) {
         
         let theUniqueId = generateUUID()
         
@@ -4633,8 +4631,8 @@ extension Chat {
         
         // if cache is enabled by user, first return cache result to the user
         if enableCache {
-            if let cacheImageResult = Chat.cacheDB.retrieveUploadImage(hashCode: getImageInput.hashCode, imageId: getImageInput.imageId) {
-                cacheResponse(cacheImageResult)
+            if let (cacheImageResult, imagePath) = Chat.cacheDB.retrieveUploadImage(hashCode: getImageInput.hashCode, imageId: getImageInput.imageId) {
+                cacheResponse(cacheImageResult, imagePath)
             }
         }
         
@@ -4646,16 +4644,23 @@ extension Chat {
             progress(myProgress)
         }, idDownloadRequest: true, isMapServiceRequst: false) { (imageDataResponse, responseHeader)  in
             
-            // save data comes from server to the Cache
-            let fileName = responseHeader["name"].string
-            let fileType = responseHeader["type"].string
-            let theFinalFileName = "\(fileName ?? "default").\(fileType ?? "none")"
-            let uploadImage = UploadImage(actualHeight: nil, actualWidth: nil, hashCode: getImageInput.hashCode, height: getImageInput.height, id: getImageInput.imageId, name: theFinalFileName, width: getImageInput.width)
-            Chat.cacheDB.saveUploadImage(imageInfo: uploadImage, imageData: imageDataResponse)
-            
-            let uploadImageModel = UploadImageModel(messageContent: uploadImage, hasError: false, errorMessage: "", errorCode: 0)
-            
-            completion(uploadImageModel)
+            if let myData = imageDataResponse {
+                // save data comes from server to the Cache
+                let fileName = responseHeader["name"].string
+                let fileType = responseHeader["type"].string
+                let theFinalFileName = "\(fileName ?? "default").\(fileType ?? "none")"
+                let uploadImage = UploadImage(actualHeight: nil, actualWidth: nil, hashCode: getImageInput.hashCode, height: getImageInput.height, id: getImageInput.imageId, name: theFinalFileName, width: getImageInput.width)
+                Chat.cacheDB.saveUploadImage(imageInfo: uploadImage, imageData: myData)
+                
+                let uploadImageModel = UploadImageModel(messageContentModel: uploadImage, errorCode: 0, errorMessage: "", hasError: false)
+                completion(myData, uploadImageModel)
+            } else {
+                let hasError = responseHeader["hasError"].bool ?? false
+                let errorMessage = responseHeader["errorMessage"].string ?? ""
+                let errorCode = responseHeader["errorCode"].int ?? 999
+                let errorUploadImageModel = UploadImageModel(messageContentModel: nil, errorCode: errorCode, errorMessage: errorMessage, hasError: hasError)
+                completion(nil, errorUploadImageModel)
+            }
         }
         
     }
@@ -4680,7 +4685,7 @@ extension Chat {
      2- completion:     when the file completely downloaded, it will sent to client as 'UploadFileModel' model
      3- cacheResponse:  If the file was already avalable on the cache, and aslso client wants to get cache result, it will send it as 'UploadFileModel' model
      */
-    public func getFile(getFileInput: GetFileRequestModel, uniqueId: @escaping (String) -> (), progress: @escaping (Float) -> (), completion: @escaping callbackTypeAlias, cacheResponse: @escaping callbackTypeAlias) {
+    public func getFile(getFileInput: GetFileRequestModel, uniqueId: @escaping (String) -> (), progress: @escaping (Float) -> (), completion: @escaping (Data?, UploadFileModel) -> (), cacheResponse: @escaping (UploadFileModel, String) -> ()) {
         
         let theUniqueId = generateUUID()
         uniqueId(theUniqueId)
@@ -4697,8 +4702,8 @@ extension Chat {
         
         // if cache is enabled by user, first return cache result to the user
         if enableCache {
-            if let cacheFileResult = Chat.cacheDB.retrieveUploadFile(hashCode: getFileInput.hashCode, fileId: getFileInput.fileId) {
-                cacheResponse(cacheFileResult)
+            if let (cacheFileResult, imagePath) = Chat.cacheDB.retrieveUploadFile(hashCode: getFileInput.hashCode, fileId: getFileInput.fileId) {
+                cacheResponse(cacheFileResult, imagePath)
             }
         }
         
@@ -4710,16 +4715,25 @@ extension Chat {
             progress(myProgress)
         }, idDownloadRequest: true, isMapServiceRequst: false) { (fileDataResponse, responseHeader) in
             
-            // save data comes from server to the Cache
-            let fileName = responseHeader["name"].string
-            let fileType = responseHeader["type"].string
-            let theFinalFileName = "\(fileName ?? "default").\(fileType ?? "none")"
-            let uploadFile = UploadFile(hashCode: getFileInput.hashCode, id: getFileInput.fileId, name: theFinalFileName)
-            Chat.cacheDB.saveUploadFile(fileInfo: uploadFile, fileData: fileDataResponse)
+            if let myFile = fileDataResponse {
+                // save data comes from server to the Cache
+                let fileName = responseHeader["name"].string
+                let fileType = responseHeader["type"].string
+                let theFinalFileName = "\(fileName ?? "default").\(fileType ?? "none")"
+                let uploadFile = UploadFile(hashCode: getFileInput.hashCode, id: getFileInput.fileId, name: theFinalFileName)
+                Chat.cacheDB.saveUploadFile(fileInfo: uploadFile, fileData: myFile)
+                
+                let uploadFileModel = UploadFileModel(messageContentModel: uploadFile, errorCode: 0, errorMessage: "", hasError: false)
+                
+                completion(myFile, uploadFileModel)
+            } else {
+                let hasError = responseHeader["hasError"].bool ?? false
+                let errorMessage = responseHeader["errorMessage"].string ?? ""
+                let errorCode = responseHeader["errorCode"].int ?? 999
+                let errorUploadFileModel = UploadFileModel(messageContentModel: nil, errorCode: errorCode, errorMessage: errorMessage, hasError: hasError)
+                completion(nil, errorUploadFileModel)
+            }
             
-            let uploadFileModel = UploadFileModel(messageContent: uploadFile, hasError: false, errorMessage: "", errorCode: 0)
-            
-            completion(uploadFileModel)
         }
         
     }
@@ -4757,7 +4771,6 @@ extension Chat {
                                        "uniqueId": theUniqueId]
         
         httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: nil, isImage: nil, isFile: nil, completion: { (jsonResponse) in
-            
             if let theResponse = jsonResponse as? JSON {
                 let mapReverseModel = MapReverseModel(messageContent: theResponse, hasError: false, errorMessage: "", errorCode: 0)
                 completion(mapReverseModel)
@@ -4840,11 +4853,10 @@ extension Chat {
         let method:     HTTPMethod  = HTTPMethod.get
         let headers:    HTTPHeaders = ["Api-Key": mapApiKey]
         let parameters: Parameters  = ["origin":        "\(mapRoutingInput.originLat),\(mapRoutingInput.originLng)",
-                                       "destination":   "\(mapRoutingInput.destinationLat),\(mapRoutingInput.destinationLng)",
-                                       "alternative":   mapRoutingInput.alternative]
+            "destination":   "\(mapRoutingInput.destinationLat),\(mapRoutingInput.destinationLng)",
+            "alternative":   mapRoutingInput.alternative]
         
         httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: nil, isImage: nil, isFile: nil, completion: { (jsonResponse) in
-            
             if let theResponse = jsonResponse as? JSON {
                 let mapRoutingModel = MapRoutingModel(messageContent: theResponse, hasError: false, errorMessage: "", errorCode: 0)
                 completion(mapRoutingModel)
@@ -4887,14 +4899,34 @@ extension Chat {
                                        "type":      mapStaticImageInput.type,
                                        "zoom":      mapStaticImageInput.zoom,
                                        "center":    "\(mapStaticImageInput.centerLat),\(mapStaticImageInput.centerLng)",
-                                       "width":     mapStaticImageInput.width,
-                                       "height":    mapStaticImageInput.height]
+            "width":     mapStaticImageInput.width,
+            "height":    mapStaticImageInput.height]
         
-        httpRequest(from: url, withMethod: method, withHeaders: nil, withParameters: parameters, dataToSend: nil, isImage: nil, isFile: nil, completion: { _ in }, progress: { (myProgress) in
-            progress(myProgress)
-        }, idDownloadRequest: true, isMapServiceRequst: false) { (imageResponse, responseHeader) in
-            completion(imageResponse)
+        
+        //        Alamofire.request(url, method: method, parameters: parameters, headers: nil).responseData { (data) in
+        //            print("downloadProgress2 = \(data)")
+        //        }
+        
+        Alamofire.request(url, method: method, parameters: parameters, headers: nil).downloadProgress(closure: { (downloadProgress) in
+            print("downloadProgress = \(downloadProgress)")
+            let myProgressFloat: Float = Float(downloadProgress.fractionCompleted)
+            progress(myProgressFloat)
+        }).responseData { (myResponse) in
+            if myResponse.result.isSuccess {
+                
+                completion(myResponse)
+                
+            } else {
+                print("Failed!")
+            }
         }
+        
+        
+        //        httpRequest(from: url, withMethod: method, withHeaders: nil, withParameters: parameters, dataToSend: nil, isImage: nil, isFile: nil, completion: { _ in }, progress: { (myProgress) in
+        //            progress(myProgress)
+        //        }, idDownloadRequest: true, isMapServiceRequst: false) { (imageResponse, responseHeader) in
+        //            completion(imageResponse)
+        //        }
         
     }
     
@@ -5426,7 +5458,6 @@ extension Chat {
                 }
                 Chat.cacheDB.saveContactObjects(contacts: contacts)
                 
-                print("contentCount: \(contentCount)\n content: \n \(messageContent)")
                 let getContactsModel = GetContactsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 
                 success(getContactsModel)
@@ -5462,7 +5493,6 @@ extension Chat {
                     conversations.append(myConversation)
                 }
                 Chat.cacheDB.saveThreadObjects(threads: conversations)
-                
                 
                 let getThreadsModel = GetThreadsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 

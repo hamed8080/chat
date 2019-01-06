@@ -12,11 +12,11 @@ import CoreData
 
 
 extension CMConversation {
-
+    
     @nonobjc public class func fetchRequest() -> NSFetchRequest<CMConversation> {
         return NSFetchRequest<CMConversation>(entityName: "CMConversation")
     }
-
+    
     @NSManaged public var admin:            NSNumber?
     @NSManaged public var canEditInfo:      NSNumber?
     @NSManaged public var canSpam:          NSNumber?
@@ -44,22 +44,21 @@ extension CMConversation {
     @NSManaged public var participants:     [CMParticipant]?
     @NSManaged public var dummyForwardInfo: CMForwardInfo?
     @NSManaged public var dummyMessage:     CMMessage?
-
+    
 }
 
 // MARK: Generated accessors for participants
 extension CMConversation {
-
+    
     @objc(addParticipantsObject:)
     @NSManaged public func addToParticipants(_ value: CMParticipant)
-
+    
     @objc(removeParticipantsObject:)
     @NSManaged public func removeFromParticipants(_ value: CMParticipant)
-
+    
     @objc(addParticipants:)
-    @NSManaged public func addToParticipants(_ values: NSSet)
-
+    @NSManaged public func addToParticipants(_ values: [CMParticipant])
+    
     @objc(removeParticipants:)
-    @NSManaged public func removeFromParticipants(_ values: NSSet)
-
+    @NSManaged public func removeFromParticipants(_ values: [CMParticipant])
 }

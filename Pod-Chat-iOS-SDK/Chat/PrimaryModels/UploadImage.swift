@@ -32,12 +32,12 @@ open class UploadImage {
     }
     
     public init(actualHeight:  Int?,
-         actualWidth:   Int?,
-         hashCode:      String?,
-         height:        Int?,
-         id:            Int?,
-         name:          String?,
-         width:         Int?) {
+                actualWidth:   Int?,
+                hashCode:      String?,
+                height:        Int?,
+                id:            Int?,
+                name:          String?,
+                width:         Int?) {
         
         self.actualHeight   = actualHeight
         self.actualWidth    = actualWidth

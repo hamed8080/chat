@@ -94,7 +94,7 @@ public class CMConversation: NSManagedObject {
             let conversationModel = Conversation(admin:                 admin,
                                                  canEditInfo:            canEditInfo,
                                                  canSpam:                canSpam,
-                                                 description:            self.description,
+                                                 description:            self.descriptions,
                                                  group:                  group,
                                                  id:                     id,
                                                  image:                  self.image,

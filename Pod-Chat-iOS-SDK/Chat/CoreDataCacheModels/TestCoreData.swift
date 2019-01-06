@@ -62,6 +62,7 @@ extension Cache {
                 // if there is a value in this fetch request, it mean that we had already saved UserInfo in the Cache.
                 // so we just have to update that information with new response that comes from server
                 if (result.count > 0) {
+                    print("result.count = \(result.count)")
                     result.first!.cellphoneNumber   = user.cellphoneNumber
                     result.first!.email             = user.email
                     result.first!.id                = NSNumber(value: user.id ?? 0)
@@ -113,15 +114,20 @@ extension Cache {
                 for item in threads {
                     for itemInCache in result {
                         if let conversationId = Int(exactly: itemInCache.id ?? 0) {
+                            print("Conversation id = \(item.id ?? 99999) ; CMConversation id = \(conversationId)")
                             if (conversationId == item.id) {
                                 // the conversation object that we are going to create, is already exist in the Cache
                                 // to update information in this object:
                                 // we will delete them first, then we will create it again later
+                                
+                                itemInCache.inviter = nil
+                                itemInCache.lastMessageVO = nil
+                                itemInCache.participants = nil
                                 context.delete(itemInCache)
-                                saveContext(subject: "Delete Object: \(itemInCache.convertCMConversationToConversationObject().formatToJSON())")
+                                
+                                saveContext(subject: "Delete CMConversation Object")
                             }
                         }
-                        
                     }
                 }
                 
@@ -230,7 +236,7 @@ extension Cache {
                     allThreads.append(conversation)
                 }
                 
-                saveContext(subject: "Update Conversation")
+                saveContext(subject: "Update CMConversation")
             }
         } catch {
             fatalError("Error on fetching list of CMConversation")
@@ -256,8 +262,11 @@ extension Cache {
                                 // the contact object that we are going to create, is already exist in the Cache
                                 // to update information in this object:
                                 // we will delete them first, then we will create it again later
+                                
+                                itemInCache.linkedUser = nil
                                 context.delete(itemInCache)
-                                saveContext(subject: "Delete Object: \(itemInCache.convertCMContactToContactObject().formatToJSON())")
+                                
+                                saveContext(subject: "Delete CMContact Object")
                             }
                         }
                         
@@ -296,7 +305,7 @@ extension Cache {
                     allContacts.append(theContact)
                 }
                 
-                saveContext(subject: "Update Contact")
+                saveContext(subject: "Update CMContact")
             }
         } catch {
             fatalError("Error on fetching list of CMConversation")
@@ -322,8 +331,10 @@ extension Cache {
                                 // the Participant object that we are going to create, is already exist in the Cache
                                 // to update information in this object:
                                 // we will delete them first, then we will create it again later
+                                
                                 context.delete(itemInCache)
-                                saveContext(subject: "Delete Object: \(itemInCache.convertCMParticipantToParticipantObject().formatToJSON())")
+                                
+                                saveContext(subject: "Delete CMParticipant Object")
                             }
                         }
                         
@@ -385,13 +396,27 @@ extension Cache {
                                 // the message object that we are going to create, is already exist in the Cache
                                 // to update information in this object:
                                 // we will delete them first, then we will create it again later
+                                
+                                itemInCache.conversation = nil
+                                itemInCache.forwardInfo?.conversation = nil
+                                itemInCache.forwardInfo?.participant = nil
+                                itemInCache.forwardInfo = nil
+                                itemInCache.participant = nil
+                                itemInCache.replyInfo?.participant = nil
+                                itemInCache.replyInfo = nil
                                 context.delete(itemInCache)
-                                saveContext(subject: "Delete Object: \(itemInCache.convertCMMessageToMessageObject().formatToJSON())")
+                                
+                                saveContext(subject: "Delete CMMessage Object")
                             }
                         }
                         
                     }
                 }
+                
+                //                for item in result {
+                //                    context.delete(item)
+                //                    saveContext(subject: "Delete CMMessage Object")
+                //                }
                 
                 // Part2:
                 // save data comes from server to the Cache
@@ -572,30 +597,36 @@ extension Cache {
                 
                 // TODO: prevent copy one file in several places in the app - search by the Image file itself through the app bundle
                 /*
-                    if find sth, check out the information about that file:
-                        if the info of both, was the same, just delete the fileInfo from cache, and then save it later
-                        if the info was different, just save the new info in the cache and link it to this image file path
-                    */
+                 if find sth, check out the information about that file:
+                 if the info of both, was the same, just delete the fileInfo from cache, and then save it later
+                 if the info was different, just save the new info in the cache and link it to this image file path
+                 */
                 
                 // Part1:
                 // find data that are exist in the Cache, (and the response request is containing that). and delete them
                 for itemInCache in result {
                     if let imageId = Int(exactly: itemInCache.id ?? 0) {
                         if (imageId == imageInfo.id) {
-                            // the contact object that we are going to create, is already exist in the Cache
+                            // the uploadImage object that we are going to create, is already exist in the Cache
                             // to update information in this object:
                             // we will delete them first, then we will create it again later
-                            context.delete(itemInCache)
-                            saveContext(subject: "Delete Object: \(itemInCache.convertCMUploadImageToUploadImageObject().formatToJSON())")
                             
                             // delete the original file from local storage of the app, using path of the file
                             let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-                            let myFilePath = path + "\(fileSubPath.Images)" + "\(imageInfo.id ?? 0)\(imageInfo.name ?? "default.png")"
-                            do {
-                                try FileManager.default.removeItem(atPath: myFilePath)
-                            } catch {
-                                fatalError("can not delete the image from app bundle!")
+                            
+                            let myFilePath = path + "/\(fileSubPath.Images)/" + "\(imageInfo.id ?? 0)\(imageInfo.name ?? "default.png")"
+                            // check if this file is exixt on the app bunde, then delete it
+                            if FileManager.default.fileExists(atPath: myFilePath) {
+                                do {
+                                    try FileManager.default.removeItem(atPath: myFilePath)
+                                } catch {
+                                    fatalError("can not delete the image from app bundle!")
+                                }
                             }
+                            
+                            // delete the information from cache
+                            context.delete(itemInCache)
+                            saveContext(subject: "Delete CMUploadImage Object")
                         }
                     }
                 }
@@ -614,11 +645,11 @@ extension Cache {
                 theUploadImage.width        = imageInfo.width as NSNumber?
                 
                 // save file on app bundle
-//                guard let directory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) as NSURL else { return }
+                //                guard let directory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) as NSURL else { return }
                 let directoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
                 let directoryURL = URL(fileURLWithPath: directoryPath)
                 do {
-                    try imageData.write(to: directoryURL.appendingPathComponent("\(fileSubPath.Images)\(imageInfo.id ?? 0)\(imageInfo.name ?? "default.png")"))
+                    try imageData.write(to: directoryURL.appendingPathComponent("\(fileSubPath.Images)/\(imageInfo.id ?? 0)\(imageInfo.name ?? "default")"))
                 } catch {
                     print(error.localizedDescription)
                 }
@@ -656,20 +687,25 @@ extension Cache {
                 for itemInCache in result {
                     if let fileId = Int(exactly: itemInCache.id ?? 0) {
                         if (fileId == fileInfo.id) {
-                            // the contact object that we are going to create, is already exist in the Cache
+                            // the uploadFile object that we are going to create, is already exist in the Cache
                             // to update information in this object:
                             // we will delete them first, then we will create it again later
-                            context.delete(itemInCache)
-                            saveContext(subject: "Delete Object: \(itemInCache.convertCMUploadFileToUploadFileObject().formatToJSON())")
                             
                             // delete the original file from local storage of the app, using path of the file
                             let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-                            let myFilePath = path + "\(fileSubPath.Files)" + "\(fileInfo.id ?? 0)\(fileInfo.name ?? "default")"
-                            do {
-                                try FileManager.default.removeItem(atPath: myFilePath)
-                            } catch {
-                                fatalError("can not delete the image from app bundle!")
+                            let myFilePath = path + "/\(fileSubPath.Files)/" + "\(fileInfo.id ?? 0)\(fileInfo.name ?? "default")"
+                            
+                            if FileManager.default.fileExists(atPath: myFilePath) {
+                                do {
+                                    try FileManager.default.removeItem(atPath: myFilePath)
+                                } catch {
+                                    fatalError("can not delete the image from app bundle!")
+                                }
                             }
+                            
+                            // delete the information from cache
+                            context.delete(itemInCache)
+                            saveContext(subject: "Delete CMUploadFile Object")
                         }
                     }
                 }
@@ -687,7 +723,7 @@ extension Cache {
                 let directoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
                 let directoryURL = URL(fileURLWithPath: directoryPath)
                 do {
-                    try fileData.write(to: directoryURL.appendingPathComponent("\(fileSubPath.Files)\(fileInfo.id ?? 0)\(fileInfo.name ?? "default")"))
+                    try fileData.write(to: directoryURL.appendingPathComponent("\(fileSubPath.Files)/\(fileInfo.id ?? 0)\(fileInfo.name ?? "default")"))
                 } catch {
                     print(error.localizedDescription)
                 }
@@ -767,29 +803,34 @@ extension Cache {
         var fetchPredicatArray = [NSPredicate]()
         // put the search statement on the predicate to search throut the Conversations(Threads)
         if let searchStatement = name {
-            let searchTitle = NSPredicate(format: "title CONTAINS[cd] %@", searchStatement)
-            let searchDescriptions = NSPredicate(format: "descriptions CONTAINS[cd] %@", searchStatement)
-            fetchPredicatArray.append(searchTitle)
-            fetchPredicatArray.append(searchDescriptions)
+            if (searchStatement != "") {
+                let searchTitle = NSPredicate(format: "title CONTAINS[cd] %@", searchStatement)
+                let searchDescriptions = NSPredicate(format: "descriptions CONTAINS[cd] %@", searchStatement)
+                fetchPredicatArray.append(searchTitle)
+                fetchPredicatArray.append(searchDescriptions)
+            }
         }
         
         // loop through the threadIds Arr that the user seends, and fill the 'fetchPredicatArray' property to predicate
         if let searchThreadId = threadIds {
             for i in searchThreadId {
-                let threadIdPredicate = NSPredicate(format: "id == %@", i)
+                let threadIdPredicate = NSPredicate(format: "id == %i", i)
                 fetchPredicatArray.append(threadIdPredicate)
             }
         }
         
-        let predicateCompound = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.or, subpredicates: fetchPredicatArray)
-        fetchRequest.predicate = predicateCompound
+        if (fetchPredicatArray.count > 0) {
+            let predicateCompound = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.or, subpredicates: fetchPredicatArray)
+            fetchRequest.predicate = predicateCompound
+        }
+        
         // sort the result by the time
         let sortByTime = NSSortDescriptor(key: "time", ascending: ascending)
         fetchRequest.sortDescriptors = [sortByTime]
         
         do {
             if let result = try context.fetch(fetchRequest) as? [CMConversation] {
-                
+                print("fetch CMConversation: \(result.count)")
                 var insideCount = 0
                 var cmConversationObjectArr = [CMConversation]()
                 for (index, item) in result.enumerated() {
@@ -807,7 +848,7 @@ extension Cache {
                 }
                 
                 let getThreadModelResponse = GetThreadsModel(conversationObjects: conversationArr,
-                                                             contentCount:  0,
+                                                             contentCount:  conversationArr.count,
                                                              count:         count,
                                                              offset:        offset,
                                                              hasError:      false,
@@ -846,11 +887,11 @@ extension Cache {
                                  id:                Int?) -> GetContactsModel? {
         /*
          + if 'id' or 'uniqueId' property have been set:
-            we only have to predicate of them and answer exact response
+         we only have to predicate of them and answer exact response
          
          + in the other situation:
-            make this properties AND together: 'firstName', 'lastName', 'cellphoneNumber', 'email'
-            then with the response of the AND, make OR with 'search' property
+         make this properties AND together: 'firstName', 'lastName', 'cellphoneNumber', 'email'
+         then with the response of the AND, make OR with 'search' property
          
          then we create the output model and return it.
          */
@@ -859,7 +900,7 @@ extension Cache {
         // check if 'id' or 'uniqueId' had been set
         let theOnlyPredicate: NSPredicate?
         if let theId = id {
-            theOnlyPredicate = NSPredicate(format: "id == %@", theId)
+            theOnlyPredicate = NSPredicate(format: "id == %i", theId)
             fetchRequest.predicate = theOnlyPredicate
         } else if let theUniqueId = uniqueId {
             theOnlyPredicate = NSPredicate(format: "uniqueId == %@", theUniqueId)
@@ -868,41 +909,49 @@ extension Cache {
             
             var andPredicateArr = [NSPredicate]()
             if let theCellphoneNumber = cellphoneNumber {
-                let theCellphoneNumberPredicate = NSPredicate(format: "cellphoneNumber CONTAINS[cd] %@", theCellphoneNumber)
-                andPredicateArr.append(theCellphoneNumberPredicate)
+                if (theCellphoneNumber != "") {
+                    let theCellphoneNumberPredicate = NSPredicate(format: "cellphoneNumber CONTAINS[cd] %@", theCellphoneNumber)
+                    andPredicateArr.append(theCellphoneNumberPredicate)
+                }
             }
             if let theFirstName = firstName {
-                let theFirstNamePredicate = NSPredicate(format: "firstName CONTAINS[cd] %@", theFirstName)
-                andPredicateArr.append(theFirstNamePredicate)
+                if (theFirstName != "") {
+                    let theFirstNamePredicate = NSPredicate(format: "firstName CONTAINS[cd] %@", theFirstName)
+                    andPredicateArr.append(theFirstNamePredicate)
+                }
             }
             if let theLastName = lastName {
-                let theLastNamePredicate = NSPredicate(format: "lastName CONTAINS[cd] %@", theLastName)
-                andPredicateArr.append(theLastNamePredicate)
+                if (theLastName != "") {
+                    let theLastNamePredicate = NSPredicate(format: "lastName CONTAINS[cd] %@", theLastName)
+                    andPredicateArr.append(theLastNamePredicate)
+                }
             }
             if let theEmail = email {
-                let theEmailPredicate = NSPredicate(format: "email CONTAINS[cd] %@", theEmail)
-                andPredicateArr.append(theEmailPredicate)
+                if (theEmail != "") {
+                    let theEmailPredicate = NSPredicate(format: "email CONTAINS[cd] %@", theEmail)
+                    andPredicateArr.append(theEmailPredicate)
+                }
             }
-            let andPredicateCompound = NSCompoundPredicate(type: .and, subpredicates: andPredicateArr)
             
             var orPredicatArray = [NSPredicate]()
-            orPredicatArray.append(andPredicateCompound)
             
-            if let searchStatement = search {
-                let theSearchPredicate = NSPredicate(format: "cellphoneNumber CONTAINS[cd] %@ OR email CONTAINS[cd] %@ OR firstName CONTAINS[cd] %@ OR lastName CONTAINS[cd] %@", searchStatement, searchStatement, searchStatement, searchStatement)
-                orPredicatArray.append(theSearchPredicate)
-//                let searchCellphoneNumber = NSPredicate(format: "cellphoneNumber CONTAINS[cd] %@", searchStatement)
-//                let searchEmail = NSPredicate(format: "email CONTAINS[cd] %@", searchStatement)
-//                let searchFirstName = NSPredicate(format: "firstName CONTAINS[cd] %@", searchStatement)
-//                let searchLastName = NSPredicate(format: "lastName CONTAINS[cd] %@", searchStatement)
-//                fetchPredicatArray.append(searchCellphoneNumber)
-//                fetchPredicatArray.append(searchEmail)
-//                fetchPredicatArray.append(searchFirstName)
-//                fetchPredicatArray.append(searchLastName)
+            if (andPredicateArr.count > 0) {
+                let andPredicateCompound = NSCompoundPredicate(type: .and, subpredicates: andPredicateArr)
+                orPredicatArray.append(andPredicateCompound)
             }
             
-            let predicateCompound = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.or, subpredicates: orPredicatArray)
-            fetchRequest.predicate = predicateCompound
+            
+            if let searchStatement = search {
+                if (searchStatement != "") {
+                    let theSearchPredicate = NSPredicate(format: "cellphoneNumber CONTAINS[cd] %@ OR email CONTAINS[cd] %@ OR firstName CONTAINS[cd] %@ OR lastName CONTAINS[cd] %@", searchStatement, searchStatement, searchStatement, searchStatement)
+                    orPredicatArray.append(theSearchPredicate)
+                }
+            }
+            
+            if (orPredicatArray.count > 0) {
+                let predicateCompound = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.or, subpredicates: orPredicatArray)
+                fetchRequest.predicate = predicateCompound
+            }
         }
         
         do {
@@ -923,13 +972,13 @@ extension Cache {
                     contactsArr.append(item.convertCMContactToContactObject())
                 }
                 
-                let getContactModelResponse = GetContactsModel(contactsObject: contactsArr,
-                                                               contentCount: 0,
-                                                               count: count,
-                                                               offset: offset,
-                                                               hasError: false,
-                                                               errorMessage: "",
-                                                               errorCode: 0)
+                let getContactModelResponse = GetContactsModel(contactsObject:  contactsArr,
+                                                               contentCount:    contactsArr.count,
+                                                               count:           count,
+                                                               offset:          offset,
+                                                               hasError:        false,
+                                                               errorMessage:    "",
+                                                               errorCode:       0)
                 
                 return getContactModelResponse
                 
@@ -1022,40 +1071,54 @@ extension Cache {
         let sortByTime = NSSortDescriptor(key: "time", ascending: ascending)
         fetchRequest.sortDescriptors = [sortByTime]
         
-        // AND predicate for 'firstMessageId' AND 'lastMessageId'
-        var andPredicateArr = [NSPredicate]()
-        if let first = firstMessageId {
-            let firstPredicate = NSPredicate(format: "id >= %@", first)
-            andPredicateArr.append(firstPredicate)
-        }
-        if let last = lastMessageId {
-            let lastPredicate = NSPredicate(format: "id <= %@", last)
-            andPredicateArr.append(lastPredicate)
-        }
-        let firstANDlastCompound = NSCompoundPredicate(type: .and, subpredicates: andPredicateArr)
-        
-        // use this array to make logical OR between the result of the 'firstANDlastCompound' and 'query'
-        var searchPredicatArray = [NSPredicate]()
-        searchPredicatArray.append(firstANDlastCompound)
-        // put the search statement on the predicate to search through the Messages
-        if let searchStatement = query {
-            let searchMessages = NSPredicate(format: "message CONTAINS[cd] %@", searchStatement)
-            searchPredicatArray.append(searchMessages)
-        }
-        
-        let queryORfirstlastCompound = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.or, subpredicates: searchPredicatArray)
-        
         // this predicate used to get messages that are in the specific thread using 'threadId' property
-        let threadPredicate = NSPredicate(format: "threadId == %@", threadId)
-        let finalPredicate: [NSPredicate] = [threadPredicate, queryORfirstlastCompound]
-        let predicateCompound = NSCompoundPredicate(type: .and, subpredicates: finalPredicate)
-        
-        fetchRequest.predicate = predicateCompound
-        
+        //        let threadPredicate = NSPredicate(format: "threadId == %i", threadId)
+        //        fetchRequest.predicate = threadPredicate
+        //        var finalPredicate: [NSPredicate] = [threadPredicate]
+        //
+        //
+        //
+        //        // AND predicate for 'firstMessageId' AND 'lastMessageId'
+        //        var andPredicateArr = [NSPredicate]()
+        //        if let first = firstMessageId {
+        //            let firstPredicate = NSPredicate(format: "id >= %i", first)
+        //            andPredicateArr.append(firstPredicate)
+        //        }
+        //        if let last = lastMessageId {
+        //            let lastPredicate = NSPredicate(format: "id <= %i", last)
+        //            andPredicateArr.append(lastPredicate)
+        //        }
+        //
+        //        // use this array to make logical OR between the result of the 'firstANDlastCompound' and 'query'
+        //        var searchPredicatArray = [NSPredicate]()
+        //
+        //        if (andPredicateArr.count > 0) {
+        //            let firstANDlastCompound = NSCompoundPredicate(type: .and, subpredicates: andPredicateArr)
+        //            searchPredicatArray.append(firstANDlastCompound)
+        //        }
+        //
+        //
+        //        // put the search statement on the predicate to search through the Messages
+        //        if let searchStatement = query {
+        //            if (searchStatement != "") {
+        //                let searchMessages = NSPredicate(format: "message CONTAINS[cd] %@", searchStatement)
+        //                searchPredicatArray.append(searchMessages)
+        //            }
+        //        }
+        //
+        //
+        //
+        //        if (searchPredicatArray.count > 0) {
+        //            let queryORfirstlastCompound = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.or, subpredicates: searchPredicatArray)
+        //            finalPredicate.append(queryORfirstlastCompound)
+        //        }
+        //
+        //        let predicateCompound = NSCompoundPredicate(type: .and, subpredicates: finalPredicate)
+        //        fetchRequest.predicate = predicateCompound
         
         do {
             if let result = try context.fetch(fetchRequest) as? [CMMessage] {
-                
+                print("dsfasdvasdfsfdas: \(result.count)")
                 var insideCount = 0
                 var cmMessageObjectArr = [CMMessage]()
                 
@@ -1072,7 +1135,7 @@ extension Cache {
                 }
                 
                 let getMessageModelResponse = GetHistoryModel(messageContent: messageArr,
-                                                              contentCount: 0,
+                                                              contentCount: messageArr.count,
                                                               count: count,
                                                               offset: offset,
                                                               hasError: false,
@@ -1100,22 +1163,26 @@ extension Cache {
      and then it will return it as 'UploadImageModel' model to the client.
      */
     public func retrieveUploadImage(hashCode:   String,
-                                    imageId:    Int) -> UploadImageModel? {
+                                    imageId:    Int) -> (UploadImageModel, String)? {
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUploadImage")
-        let searchImage = NSPredicate(format: "hashCode == %@ AND imageId == %@", hashCode, imageId)
+        let searchImage = NSPredicate(format: "hashCode == %@ AND id == %i", hashCode, imageId)
         fetchRequest.predicate = searchImage
         
         do {
             if let result = try context.fetch(fetchRequest) as? [CMUploadImage] {
-                
+                print("found items = \(result.count)")
                 if let firstObject = result.first {
                     let imageObject = firstObject.convertCMUploadImageToUploadImageObject()
-                    let uploadImageModel = UploadImageModel(messageContent: imageObject,
-                                                            hasError: false,
+                    let uploadImageModel = UploadImageModel(messageContentModel: imageObject,
+                                                            errorCode: 0,
                                                             errorMessage: "",
-                                                            errorCode: 0)
-                    return uploadImageModel
+                                                            hasError: false)
+                    
+                    let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+                    let myFilePath = path + "/\(fileSubPath.Images)/" + "\(firstObject.id ?? 0)\(firstObject.name ?? "default.png")"
+                    
+                    return (uploadImageModel, myFilePath)
                 } else {
                     return nil
                 }
@@ -1141,10 +1208,10 @@ extension Cache {
      and then it will return it as 'UploadImageModel' model to the client.
      */
     public func retrieveUploadFile(hashCode:    String,
-                                   fileId:      Int) -> UploadFileModel? {
+                                   fileId:      Int) -> (UploadFileModel, String)? {
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUploadFile")
-        let searchFile = NSPredicate(format: "hashCode == %@ AND fileId == %@", hashCode, fileId)
+        let searchFile = NSPredicate(format: "hashCode == %@ AND id == %i", hashCode, fileId)
         fetchRequest.predicate = searchFile
         
         do {
@@ -1152,11 +1219,15 @@ extension Cache {
                 
                 if let firstObject = result.first {
                     let fileObject = firstObject.convertCMUploadFileToUploadFileObject()
-                    let uploadFileModel = UploadFileModel(messageContent: fileObject,
-                                                          hasError: false,
+                    let uploadFileModel = UploadFileModel(messageContentModel: fileObject,
+                                                          errorCode: 0,
                                                           errorMessage: "",
-                                                          errorCode: 0)
-                    return uploadFileModel
+                                                          hasError: false)
+                    
+                    let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+                    let myFilePath = path + "/\(fileSubPath.Files)/" + "\(firstObject.id ?? 0)\(firstObject.name ?? "default")"
+                    
+                    return (uploadFileModel, myFilePath)
                 } else {
                     return nil
                 }
