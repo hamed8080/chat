@@ -1,8 +1,8 @@
 //
 //  CMMessage+CoreDataClass.swift
-//  Chat
+//  FanapPodChatSDK
 //
-//  Created by Mahyar Zhiani on 10/1/1397 AP.
+//  Created by Mahyar Zhiani on 11/1/1397 AP.
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 //
@@ -18,12 +18,13 @@ public class CMMessage: NSManagedObject {
         var delivered:      Bool?
         var editable:       Bool?
         var edited:         Bool?
+        var deletable:      Bool?
         var id:             Int?
         var ownerId:        Int?
         var previousId:     Int?
         var seen:           Bool?
         var threadId:       Int?
-        var time:           Int?
+        var time:           UInt?
         
         func createVariables() {
             if let delivered2 = self.delivered as? Bool {
@@ -50,8 +51,11 @@ public class CMMessage: NSManagedObject {
             if let threadId2 = self.threadId as? Int {
                 threadId = threadId2
             }
-            if let time2 = self.time as? Int {
+            if let time2 = self.time as? UInt {
                 time = time2
+            }
+            if let deletable2 = self.deletable as? Bool {
+                deletable = deletable2
             }
         }
         
@@ -60,6 +64,7 @@ public class CMMessage: NSManagedObject {
                                        delivered: delivered,
                                        editable: editable,
                                        edited: edited,
+                                       deletable: deletable,
                                        id: id,
                                        message: self.message,
                                        messageType: self.messageType,

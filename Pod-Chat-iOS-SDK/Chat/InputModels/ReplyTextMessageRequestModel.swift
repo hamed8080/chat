@@ -13,26 +13,26 @@ import SwiftyJSON
 
 open class ReplyTextMessageRequestModel {
     
-    public let subjectId:           Int
     public let content:             String
-    public let repliedTo:           Int
-    public let uniqueId:            String?
     public let metaData:            JSON?
+    public let repliedTo:           Int
+    public let subjectId:           Int
     public let typeCode:            String?
+    public let uniqueId:            String?
     
-    public init(subjectId:         Int,
-                content:           String,
+    public init(content:           String,
+                metaData:          JSON?,
                 repliedTo:         Int,
-                uniqueId:          String?,
+                subjectId:         Int,
                 typeCode:          String?,
-                metaData:          JSON?) {
+                uniqueId:          String?) {
         
-        self.subjectId          = subjectId
         self.content            = content
-        self.repliedTo          = repliedTo
-        self.uniqueId           = uniqueId
-        self.typeCode           = typeCode
         self.metaData           = metaData
+        self.repliedTo          = repliedTo
+        self.subjectId          = subjectId
+        self.typeCode           = typeCode
+        self.uniqueId           = uniqueId
     }
     
 }

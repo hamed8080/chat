@@ -1,8 +1,8 @@
 //
 //  CMContact+CoreDataClass.swift
-//  Chat
+//  FanapPodChatSDK
 //
-//  Created by Mahyar Zhiani on 10/1/1397 AP.
+//  Created by Mahyar Zhiani on 11/1/1397 AP.
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 //
@@ -17,9 +17,10 @@ public class CMContact: NSManagedObject {
         
         var hasUser:            Bool?
         var id:                 Int?
-        var linkedUser:         LinkedUser?
         var notSeenDuration:    Int?
         var userId:             Int?
+        
+        var linkedUser:         LinkedUser?
         
         func createVariables() {
             if let hasUser2 = self.hasUser as? Bool {

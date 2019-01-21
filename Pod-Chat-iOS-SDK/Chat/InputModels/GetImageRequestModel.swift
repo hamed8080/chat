@@ -12,25 +12,25 @@ open class GetImageRequestModel {
     
     public let actual:          Bool?
     public let downloadable:    Bool?
-    public let hashCode:        String
     public let height:          Int?
+    public let hashCode:        String
     public let imageId:         Int
     public let width:           Int?
     
     
     public init(actual:         Bool?,
                 downloadable:   Bool?,
-                hashCode:       String,
                 height:         Int?,
+                hashCode:       String,
                 imageId:        Int,
                 width:          Int?) {
         
-        self.imageId        = imageId
-        self.width          = width
-        self.height         = height
         self.actual         = actual
         self.downloadable   = downloadable
+        self.height         = height
         self.hashCode       = hashCode
+        self.imageId        = imageId
+        self.width          = width
     }
     
 }

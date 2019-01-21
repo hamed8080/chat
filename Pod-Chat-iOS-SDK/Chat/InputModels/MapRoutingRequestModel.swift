@@ -10,28 +10,27 @@ import Foundation
 
 open class MapRoutingRequestModel {
     
-    public let originLat:       Double
-    public let originLng:       Double
+    public let alternative:     Bool
     public let destinationLat:  Double
     public let destinationLng:  Double
-    public let alternative:     Bool
+    public let originLat:       Double
+    public let originLng:       Double
     
-    public init(originLat:      Double,
-                originLng:      Double,
+    public init(alternative:    Bool?,
                 destinationLat: Double,
                 destinationLng: Double,
-                alternative:    Bool?) {
+                originLat:      Double,
+                originLng:      Double) {
         
-        self.originLat      = originLat
-        self.originLng      = originLng
-        self.destinationLat = destinationLat
-        self.destinationLng = destinationLng
         if let alter = alternative {
             self.alternative = alter
         } else {
             self.alternative = true
         }
-        
+        self.destinationLat = destinationLat
+        self.destinationLng = destinationLng
+        self.originLat      = originLat
+        self.originLng      = originLng
     }
     
 }

@@ -80,7 +80,7 @@ open class GetThreadParticipantsModel {
         self.nextOffset = offset + messageLength
         
         for item in messageContent {
-            let participant = Participant(messageContent: item)
+            let participant = Participant(messageContent: item, threadId: nil)
             let participantJSON = participant.formatToJSON()
             
             participants.append(participant)

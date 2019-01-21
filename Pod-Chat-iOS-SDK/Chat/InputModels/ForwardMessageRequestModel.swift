@@ -13,23 +13,23 @@ import SwiftyJSON
 
 open class ForwardMessageRequestModel {
     
-    public let subjectId:           Int
     public let messageIds:          [Int]
-    public let repliedTo:           Int?
     public let metaData:            JSON?
+    public let repliedTo:           Int?
+    public let subjectId:           Int
     public let typeCode:            String?
     
-    public init(subjectId:         Int,
-                messageIds:        [Int],
+    public init(messageIds:        [Int],
+                metaData:          JSON?,
                 repliedTo:         Int?,
-                typeCode:          String?,
-                metaData:          JSON?) {
+                subjectId:         Int,
+                typeCode:          String?) {
         
-        self.subjectId          = subjectId
         self.messageIds         = messageIds
-        self.repliedTo          = repliedTo
-        self.typeCode           = typeCode
         self.metaData           = metaData
+        self.repliedTo          = repliedTo
+        self.subjectId          = subjectId
+        self.typeCode           = typeCode
     }
     
 }

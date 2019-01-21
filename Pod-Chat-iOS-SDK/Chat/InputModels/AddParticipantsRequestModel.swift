@@ -10,20 +10,20 @@ import Foundation
 
 open class AddParticipantsRequestModel {
     
-    public let threadId:            Int
     public let contacts:            [Int]
-    public let uniqueId:            String?
+    public let threadId:            Int
     public let typeCode:            String?
+    public let uniqueId:            String?
     
-    public init(threadId:  Int,
-                contacts:  [Int],
-                uniqueId:  String?,
-                typeCode:  String?) {
+    public init(contacts:  [Int],
+                threadId:  Int,
+                typeCode:  String?,
+                uniqueId:  String?) {
         
-        self.threadId           = threadId
         self.contacts           = contacts
-        self.uniqueId           = uniqueId
+        self.threadId           = threadId
         self.typeCode           = typeCode
+        self.uniqueId           = uniqueId
     }
     
 }

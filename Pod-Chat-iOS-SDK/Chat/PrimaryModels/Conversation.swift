@@ -98,20 +98,20 @@ open class Conversation {
         self.unreadCount                    = messageContent["unreadCount"].int
         
         if (messageContent["inviter"] != JSON.null) {
-            self.inviter = Participant(messageContent: messageContent["inviter"])
+            self.inviter = Participant(messageContent: messageContent["inviter"], threadId: id)
         }
         
         if let myParticipants = messageContent["participants"].array {
             var tempParticipants = [Participant]()
             for item in myParticipants {
-                let participantData = Participant(messageContent: item)
+                let participantData = Participant(messageContent: item, threadId: id)
                 tempParticipants.append(participantData)
             }
             self.participants = tempParticipants
         }
         
         if (messageContent["lastMessageVO"] != JSON.null) {
-            self.lastMessageVO = Message(threadId: nil, pushMessageVO: messageContent["lastMessageVO"])
+            self.lastMessageVO = Message(threadId: id, pushMessageVO: messageContent["lastMessageVO"])
         }
         //        if let myLastMessageVO = messageContent["lastMessageVO"].array {
         //            self.lastMessageVO = Message(threadId: nil, pushMessageVO: myLastMessageVO.first!)

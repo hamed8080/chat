@@ -10,20 +10,20 @@ import Foundation
 
 open class LeaveThreadRequestModel {
     
-    public let threadId:            Int
     public let content:             [Int]
-    public let uniqueId:            String?
+    public let threadId:            Int
     public let typeCode:            String?
+    public let uniqueId:            String?
     
-    public init(threadId:  Int,
-                content:   [Int],
-                uniqueId:  String?,
-                typeCode:  String?) {
+    public init(content:   [Int],
+                threadId:  Int,
+                typeCode:  String?,
+                uniqueId:  String?) {
         
-        self.threadId           = threadId
         self.content            = content
-        self.uniqueId           = uniqueId
+        self.threadId           = threadId
         self.typeCode           = typeCode
+        self.uniqueId           = uniqueId
     }
     
 }

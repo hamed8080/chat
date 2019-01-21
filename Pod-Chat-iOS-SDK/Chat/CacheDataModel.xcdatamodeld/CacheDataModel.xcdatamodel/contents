@@ -15,6 +15,7 @@
         <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="notSeenDuration" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="uniqueId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="linkedUser" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMLinkedUser" inverseName="dummyContact" inverseEntity="CMLinkedUser" syncable="YES"/>
@@ -43,19 +44,15 @@
         <attribute name="type" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="unreadCount" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="dummyForwardInfo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMForwardInfo" inverseName="conversation" inverseEntity="CMForwardInfo" syncable="YES"/>
-        <relationship name="dummyMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="conversation" inverseEntity="CMMessage" syncable="YES"/>
+        <relationship name="dummyMessage" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="conversation" inverseEntity="CMMessage" syncable="YES"/>
         <relationship name="inviter" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMParticipant" inverseName="dummyConversationInviter" inverseEntity="CMParticipant" syncable="YES"/>
-        <relationship name="lastMessageVO" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMMessage" inverseName="dummyConversationLastMessageVO" inverseEntity="CMMessage" syncable="YES"/>
-        <relationship name="participants" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="CMParticipant" inverseName="dummyConversationParticipants" inverseEntity="CMParticipant" syncable="YES"/>
+        <relationship name="lastMessageVO" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="dummyConversationLastMessageVO" inverseEntity="CMMessage" syncable="YES"/>
+        <relationship name="participants" optional="YES" toMany="YES" deletionRule="Deny" ordered="YES" destinationEntity="CMParticipant" inverseName="dummyConversationParticipants" inverseEntity="CMParticipant" syncable="YES"/>
     </entity>
     <entity name="CMForwardInfo" representedClassName=".CMForwardInfo" syncable="YES">
-        <relationship name="conversation" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMConversation" inverseName="dummyForwardInfo" inverseEntity="CMConversation" syncable="YES"/>
+        <relationship name="conversation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="dummyForwardInfo" inverseEntity="CMConversation" syncable="YES"/>
         <relationship name="dummyMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="forwardInfo" inverseEntity="CMMessage" syncable="YES"/>
         <relationship name="participant" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMParticipant" inverseName="dummyForwardInfo" inverseEntity="CMParticipant" syncable="YES"/>
-    </entity>
-    <entity name="CMInvitee" representedClassName=".CMInvitee" syncable="YES">
-        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="idType" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
     </entity>
     <entity name="CMLinkedUser" representedClassName=".CMLinkedUser" syncable="YES">
         <attribute name="coreUserId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
@@ -79,17 +76,11 @@
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="uniqueId" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="conversation" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMConversation" inverseName="dummyMessage" inverseEntity="CMConversation" syncable="YES"/>
+        <relationship name="conversation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="dummyMessage" inverseEntity="CMConversation" syncable="YES"/>
         <relationship name="dummyConversationLastMessageVO" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="lastMessageVO" inverseEntity="CMConversation" syncable="YES"/>
-        <relationship name="dummyThreadHistory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMThreadHistory" inverseName="messages" inverseEntity="CMThreadHistory" syncable="YES"/>
         <relationship name="forwardInfo" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMForwardInfo" inverseName="dummyMessage" inverseEntity="CMForwardInfo" syncable="YES"/>
         <relationship name="participant" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMParticipant" inverseName="dummyMessage" inverseEntity="CMParticipant" syncable="YES"/>
         <relationship name="replyInfo" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMReplyInfo" inverseName="dummyMessage" inverseEntity="CMReplyInfo" syncable="YES"/>
-    </entity>
-    <entity name="CMMessageChangeState" representedClassName=".CMMessageChangeState" syncable="YES">
-        <attribute name="messageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="senderId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
     </entity>
     <entity name="CMParticipant" representedClassName=".CMParticipant" syncable="YES">
         <attribute name="admin" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
@@ -108,12 +99,11 @@
         <attribute name="online" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="receiveEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="sendEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <relationship name="dummyConversationInviter" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="inviter" inverseEntity="CMConversation" syncable="YES"/>
-        <relationship name="dummyConversationParticipants" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="participants" inverseEntity="CMConversation" syncable="YES"/>
+        <relationship name="dummyConversationInviter" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="inviter" inverseEntity="CMConversation" syncable="YES"/>
+        <relationship name="dummyConversationParticipants" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="participants" inverseEntity="CMConversation" syncable="YES"/>
         <relationship name="dummyForwardInfo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMForwardInfo" inverseName="participant" inverseEntity="CMForwardInfo" syncable="YES"/>
-        <relationship name="dummyMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="participant" inverseEntity="CMMessage" syncable="YES"/>
+        <relationship name="dummyMessage" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="participant" inverseEntity="CMMessage" syncable="YES"/>
         <relationship name="dummyReplyInfo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMReplyInfo" inverseName="participant" inverseEntity="CMReplyInfo" syncable="YES"/>
-        <relationship name="dummyThreadParticipants" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMThreadParticipants" inverseName="participants" inverseEntity="CMThreadParticipants" syncable="YES"/>
     </entity>
     <entity name="CMReplyInfo" representedClassName=".CMReplyInfo" syncable="YES">
         <attribute name="deletedd" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
@@ -125,11 +115,10 @@
         <relationship name="dummyMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="replyInfo" inverseEntity="CMMessage" syncable="YES"/>
         <relationship name="participant" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMParticipant" inverseName="dummyReplyInfo" inverseEntity="CMParticipant" syncable="YES"/>
     </entity>
-    <entity name="CMThreadHistory" representedClassName=".CMThreadHistory" syncable="YES">
-        <relationship name="messages" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="CMMessage" inverseName="dummyThreadHistory" inverseEntity="CMMessage" syncable="YES"/>
-    </entity>
     <entity name="CMThreadParticipants" representedClassName=".CMThreadParticipants" syncable="YES">
-        <relationship name="participants" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="CMParticipant" inverseName="dummyThreadParticipants" inverseEntity="CMParticipant" syncable="YES"/>
+        <attribute name="participantId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="threadId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
     </entity>
     <entity name="CMUploadFile" representedClassName=".CMUploadFile" syncable="YES">
         <attribute name="hashCode" optional="YES" attributeType="String" syncable="YES"/>
@@ -157,17 +146,14 @@
     </entity>
     <elements>
         <element name="CMBlockedContact" positionX="-461.90234375" positionY="-78.6953125" width="128" height="105"/>
-        <element name="CMContact" positionX="-307.48828125" positionY="-144.9375" width="128" height="210"/>
+        <element name="CMContact" positionX="-307.48828125" positionY="-144.9375" width="128" height="225"/>
         <element name="CMConversation" positionX="-126.5546875" positionY="-151.546875" width="128" height="450"/>
         <element name="CMForwardInfo" positionX="44.06640625" positionY="6.28515625" width="128" height="90"/>
-        <element name="CMInvitee" positionX="-463.34375" positionY="-168.5078125" width="128" height="75"/>
-        <element name="CMLinkedUser" positionX="-311.96875" positionY="95.8046875" width="128" height="135"/>
-        <element name="CMMessage" positionX="-287.66796875" positionY="271.8515625" width="128" height="330"/>
-        <element name="CMMessageChangeState" positionX="-465.2109375" positionY="438.18359375" width="128" height="90"/>
-        <element name="CMParticipant" positionX="349.671875" positionY="95.74609375" width="128" height="375"/>
+        <element name="CMLinkedUser" positionX="-319.42578125" positionY="117.296875" width="128" height="135"/>
+        <element name="CMMessage" positionX="-287.66796875" positionY="271.8515625" width="128" height="315"/>
+        <element name="CMParticipant" positionX="349.671875" positionY="95.74609375" width="128" height="360"/>
         <element name="CMReplyInfo" positionX="166.9453125" positionY="487.76171875" width="128" height="165"/>
-        <element name="CMThreadHistory" positionX="-465.765625" positionY="370.390625" width="128" height="60"/>
-        <element name="CMThreadParticipants" positionX="80.10546875" positionY="-125.96875" width="128" height="60"/>
+        <element name="CMThreadParticipants" positionX="80.10546875" positionY="-125.96875" width="128" height="90"/>
         <element name="CMUploadFile" positionX="-461.58984375" positionY="539" width="128" height="90"/>
         <element name="CMUploadImage" positionX="-460.42578125" positionY="37.66796875" width="128" height="150"/>
         <element name="CMUser" positionX="-463.83984375" positionY="196.234375" width="128" height="165"/>

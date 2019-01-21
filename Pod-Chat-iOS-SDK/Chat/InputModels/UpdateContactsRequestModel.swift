@@ -10,23 +10,23 @@ import Foundation
 
 open class UpdateContactsRequestModel {
     
-    public let id:              Int
-    public let firstName:       String
-    public let lastName:        String
     public let cellphoneNumber: String
     public let email:           String
+    public let firstName:       String
+    public let id:              Int
+    public let lastName:        String
     
-    public init(id:                Int,
+    public init(cellphoneNumber:   String,
+                email:             String,
                 firstName:         String,
-                lastName:          String,
-                cellphoneNumber:   String,
-                email:             String) {
+                id:                Int,
+                lastName:          String) {
         
-        self.id                 = id
-        self.firstName          = firstName
-        self.lastName           = lastName
         self.cellphoneNumber    = cellphoneNumber
         self.email              = email
+        self.firstName          = firstName
+        self.id                 = id
+        self.lastName           = lastName
     }
     
 }

@@ -55,7 +55,7 @@ public enum chatMessageVOTypes: Int {
 }
 
 
-public enum inviteeVOidTypes: Int {
+public enum InviteeVOidTypes: Int {
     case TO_BE_USER_SSO_ID              = 1
     case TO_BE_USER_CONTACT_ID          = 2
     case TO_BE_USER_CELLPHONE_NUMBER    = 3
@@ -64,7 +64,7 @@ public enum inviteeVOidTypes: Int {
 }
 
 
-public enum createThreadTypes: String {
+public enum ThreadTypes: String {
     case NORMAL         = "NORMAL"
     case OWNER_GROUP    = "OWNER_GROUP"
     case PUBLIC_GROUP   = "PUBLIC_GROUP"

@@ -1,8 +1,8 @@
 //
 //  CMConversation+CoreDataClass.swift
-//  Chat
+//  FanapPodChatSDK
 //
-//  Created by Mahyar Zhiani on 10/1/1397 AP.
+//  Created by Mahyar Zhiani on 11/1/1397 AP.
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 //
@@ -20,8 +20,8 @@ public class CMConversation: NSManagedObject {
         var group:                          Bool?
         var id:                             Int?
         var joinDate:                       Int?
-        var lastParticipantImage:           String?
-        var lastParticipantName:            String?
+        //        var lastParticipantImage:           String?
+        //        var lastParticipantName:            String?
         var lastSeenMessageId:              Int?
         var mute:                           Bool?
         var participantCount:               Int?

@@ -13,25 +13,25 @@ import SwiftyJSON
 
 open class UpdateThreadInfoRequestModel {
     
-    public let subjectId:   Int?
-    public let image:       String?
     public let description: String?
-    public let title:       String?
+    public let image:       String?
     public let metadata:    JSON?
+    public let subjectId:   Int?
+    public let title:       String?
     public let typeCode:    String?
     
-    public init(subjectId:     Int?,
+    public init(description:   String?,
                 image:         String,
-                description:   String?,
-                title:         String,
                 metadata:      JSON?,
+                subjectId:     Int?,
+                title:         String,
                 typeCode:      String?) {
         
-        self.subjectId      = subjectId
-        self.image          = image
         self.description    = description
-        self.title          = title
+        self.image          = image
         self.metadata       = metadata
+        self.subjectId      = subjectId
+        self.title          = title
         self.typeCode       = typeCode
     }
     

@@ -9,6 +9,10 @@
 import Foundation
 import CoreData
 
+//public class CoreDataStack {
+//    private init() {}
+//    static let shared = CoreDataStack()
+
 public class CoreDataStack: NSObject {
     
     // MARK: - Core Data stack
@@ -34,7 +38,7 @@ public class CoreDataStack: NSObject {
          error conditions that could cause the creation of the store to fail.
          */
         
-        let momdName = "CoreDataModel" //pass this as a parameter
+        let momdName = "CacheDataModel" //pass this as a parameter
         guard let modelURL = Bundle(for: type(of: self)).url(forResource: momdName, withExtension: "momd") else { fatalError("Error loading model from bundle") }
         guard let mom = NSManagedObjectModel(contentsOf: modelURL) else { fatalError("Error initializing mom from: \(modelURL)") }
         let container = NSPersistentContainer(name: momdName, managedObjectModel: mom)

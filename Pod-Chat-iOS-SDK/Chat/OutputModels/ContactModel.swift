@@ -94,7 +94,7 @@ open class ContactModel {
     
     
     public func returnDataAsJSON() -> JSON {
-        let result: JSON = ["contact": contactsJSON,
+        let result: JSON = ["contacts": contactsJSON,
                             "contentCount": contentCount]
         
         let finalResult: JSON = ["result": result,

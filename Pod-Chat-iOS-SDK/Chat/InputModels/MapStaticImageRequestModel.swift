@@ -11,26 +11,26 @@ import Foundation
 
 open class MapStaticImageRequestModel {
     
-    public let type:        String
-    public let zoom:        Int
     public let centerLat:   Double
     public let centerLng:   Double
-    public let width:       Int
     public let height:      Int
+    public let type:        String
+    public let width:       Int
+    public let zoom:        Int
     
-    public init(type:       String?,
-                zoom:       Int?,
-                centerLat:  Double,
+    public init(centerLat:  Double,
                 centerLng:  Double,
+                height:     Int?,
+                type:       String?,
                 width:      Int?,
-                height:     Int?) {
+                zoom:       Int?) {
         
-        self.type       = type ?? "standard-night"
-        self.zoom       = zoom ?? 15
         self.centerLat  = centerLat
         self.centerLng  = centerLng
-        self.width      = width ?? 800
         self.height     = height ?? 500
+        self.type       = type ?? "standard-night"
+        self.width      = width ?? 800
+        self.zoom       = zoom ?? 15
     }
     
 }

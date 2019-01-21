@@ -72,6 +72,7 @@ public class Chat {
     var lastSentMessageTime: Date?
     var lastSentMessageTimeoutId: RepeatingTimer?
     var chatState = false
+    var cacheTimeStamp = (2 * 24) * (60 * 60)
     
     var SERVICE_ADDRESSES = SERVICE_ADDRESSES_ENUM()
     
@@ -87,6 +88,7 @@ public class Chat {
                 mapServer:                  String,
                 typeCode:                   String?,
                 enableCache:                Bool,
+                cacheTimeStampInSec:        Int?,
                 msgPriority:                Int?,
                 msgTTL:                     Int?,
                 httpRequestTimeout:         Int?,
@@ -97,6 +99,8 @@ public class Chat {
                 messageTtl:                 Int,
                 reconnectOnClose:           Bool) {
         
+        //        Chat.cacheDB.deleteCacheData()
+        
         self.socketAddress      = socketAddress
         self.ssoHost            = ssoHost
         self.platformHost       = platformHost
@@ -105,6 +109,10 @@ public class Chat {
         self.token              = token
         self.enableCache        = enableCache
         self.mapServer          = mapServer
+        
+        if let timeStamp = cacheTimeStampInSec {
+            cacheTimeStamp = timeStamp
+        }
         
         if let theMapApiKey = mapApiKey {
             self.mapApiKey = theMapApiKey
@@ -1536,16 +1544,17 @@ extension Chat {
         
         // if cache is enabled by user, it will return cache result to the user
         if enableCache {
-            if let cacheContacts = Chat.cacheDB.retrieveContacts(count:     getContactsInput.count ?? 50,
-                                                                 offset:    getContactsInput.offset ?? 0,
-                                                                 ascending: true,
-                                                                 search:    getContactsInput.name,
-                                                                 firstName: nil,
-                                                                 lastName:  nil,
-                                                                 cellphoneNumber: nil,
+            if let cacheContacts = Chat.cacheDB.retrieveContacts(ascending:         true,
+                                                                 cellphoneNumber:   nil,
+                                                                 count:     getContactsInput.count ?? 50,
                                                                  email:     nil,
-                                                                 uniqueId:  nil,
-                                                                 id:        nil) {
+                                                                 firstName: nil,
+                                                                 id:        nil,
+                                                                 lastName:  nil,
+                                                                 offset:    getContactsInput.offset ?? 0,
+                                                                 search:    getContactsInput.name,
+                                                                 timeStamp: cacheTimeStamp,
+                                                                 uniqueId:  nil) {
                 cacheResponse(cacheContacts)
             }
         }
@@ -1628,8 +1637,19 @@ extension Chat {
         let method: HTTPMethod = HTTPMethod.post
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
         
+        
         httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, isImage: nil, isFile: nil, completion: { (response) in
             let jsonRes: JSON = response as! JSON
+            
+            // save data comes from server to the Cache
+            let messageContent: [JSON] = jsonRes["result"].arrayValue
+            var contactsArr = [Contact]()
+            for item in messageContent {
+                let myContact = Contact(messageContent: item)
+                contactsArr.append(myContact)
+            }
+            Chat.cacheDB.saveContactObjects(contacts: contactsArr)
+            
             let contactsResult = ContactModel(messageContent: jsonRes)
             completion(contactsResult)
         }, progress: nil, idDownloadRequest: false, isMapServiceRequst: false) { _,_ in }
@@ -1808,6 +1828,12 @@ extension Chat {
         httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, isImage: nil, isFile: nil, completion: { (response) in
             let jsonRes: JSON = response as! JSON
             let contactsResult = RemoveContactModel(messageContent: jsonRes)
+            
+            // save deleting changes on the cache
+            if (contactsResult.result) {
+                Chat.cacheDB.deleteContact(withContactIds: [removeContactsInput.id])
+            }
+            
             completion(contactsResult)
         }, progress: nil, idDownloadRequest: false, isMapServiceRequst: false) { _,_ in }
         
@@ -2075,16 +2101,17 @@ extension Chat {
         
         
         if enableCache {
-            if let cacheContacts = Chat.cacheDB.retrieveContacts(count:     searchContactsInput.size ?? 50,
-                                                                 offset:    searchContactsInput.offset ?? 0,
-                                                                 ascending: true,
-                                                                 search:    nil,
-                                                                 firstName: searchContactsInput.firstName,
-                                                                 lastName:  searchContactsInput.lastName,
+            if let cacheContacts = Chat.cacheDB.retrieveContacts(ascending: true,
                                                                  cellphoneNumber: searchContactsInput.cellphoneNumber,
+                                                                 count:     searchContactsInput.size ?? 50,
                                                                  email:     searchContactsInput.email,
-                                                                 uniqueId:  searchContactsInput.uniqueId,
-                                                                 id:        nil) {
+                                                                 firstName: searchContactsInput.firstName,
+                                                                 id:        nil,
+                                                                 lastName:  searchContactsInput.lastName,
+                                                                 offset:    searchContactsInput.offset ?? 0,
+                                                                 search:    nil,
+                                                                 timeStamp: cacheTimeStamp,
+                                                                 uniqueId:  searchContactsInput.uniqueId) {
                 cacheResponse(cacheContacts)
             }
         }
@@ -2276,6 +2303,10 @@ extension Chat {
             //            threadIdArr = threadIds
         }
         
+        if let coreUserId = getThreadsInput.coreUserId {
+            content["coreUserId"] = JSON(coreUserId)
+        }
+        
         if let metadataCriteria = getThreadsInput.metadataCriteria {
             content["metadataCriteria"] = JSON(metadataCriteria)
         }
@@ -2292,11 +2323,12 @@ extension Chat {
         
         // if cache is enabled by user, it will return cache result to the user
         if enableCache {
-            if let cacheThreads = Chat.cacheDB.retrieveThreads(count:       getThreadsInput.count ?? 50,
-                                                               offset:      getThreadsInput.offset ?? 0,
-                                                               ascending:   true,
+            if let cacheThreads = Chat.cacheDB.retrieveThreads(ascending:   true,
+                                                               count:       getThreadsInput.count ?? 50,
                                                                name:        getThreadsInput.name,
-                                                               threadIds:   getThreadsInput.threadIds) {
+                                                               offset:      getThreadsInput.offset ?? 0,
+                                                               threadIds:   getThreadsInput.threadIds,
+                                                               timeStamp:   cacheTimeStamp) {
                 cacheResponse(cacheThreads)
             }
         }
@@ -2400,12 +2432,27 @@ extension Chat {
             content["lastMessageId"] = JSON(lastMessageId)
         }
         
-        var asscenging = true
+        if let from = getHistoryInput.fromTime {
+            if let first13Digits = Int(exactly: (from / 1000000)) {
+                content["fromTime"] = JSON(first13Digits)
+                content["fromTimeNanos"] = JSON(Int(exactly: (from - UInt(first13Digits * 1000000)))!)
+            }
+        }
+        
+        if let to = getHistoryInput.toTime {
+            if let first13Digits = Int(exactly: (to / 1000000)) {
+                content["toTime"] = JSON(first13Digits)
+                content["toTimeNanos"] = JSON(Int(exactly: (to - UInt(first13Digits * 1000000)))!)
+            }
+        }
+        
+        
+        //        var asscenging = true
         if let order = getHistoryInput.order {
             content["order"] = JSON(order)
-            if (order == "DESC") {
-                asscenging = false
-            }
+            //            if (order == "DESC") {
+            //                asscenging = false
+            //            }
         }
         
         if let query = getHistoryInput.query {
@@ -2430,13 +2477,17 @@ extension Chat {
         
         // if cache is enabled by user, first return cache result to the user
         if enableCache {
-            if let cacheHistoryResult = Chat.cacheDB.retrieveMessageHistory(count: getHistoryInput.count ?? 50,
-                                                                            offset: getHistoryInput.offset ?? 0,
-                                                                            ascending: asscenging,
-                                                                            threadId: getHistoryInput.threadId,
+            if let cacheHistoryResult = Chat.cacheDB.retrieveMessageHistory(count:          getHistoryInput.count ?? 50,
                                                                             firstMessageId: getHistoryInput.firstMessageId,
-                                                                            lastMessageId: getHistoryInput.lastMessageId,
-                                                                            query: getHistoryInput.query) {
+                                                                            fromTime:       getHistoryInput.fromTime,
+                                                                            lastMessageId:  getHistoryInput.lastMessageId,
+                                                                            messageId:      getHistoryInput.messageId,
+                                                                            offset:         getHistoryInput.offset ?? 0,
+                                                                            order:          getHistoryInput.order,
+                                                                            query:          getHistoryInput.query,
+                                                                            threadId:       getHistoryInput.threadId,
+                                                                            toTime:         getHistoryInput.toTime,
+                                                                            uniqueId:       getHistoryInput.uniqueId) {
                 cacheResponse(cacheHistoryResult)
             }
         }
@@ -2528,14 +2579,26 @@ extension Chat {
         content["title"] = JSON(createThreadInput.title)
         content["invitees"] = JSON(createThreadInput.invitees)
         
+        if let image = createThreadInput.image {
+            content["image"] = JSON(image)
+        }
+        
+        if let metaData = createThreadInput.metadata {
+            content["metadata"] = JSON(metaData)
+        }
+        
+        if let description = createThreadInput.description {
+            content["description"] = JSON(description)
+        }
+        
         if let type = createThreadInput.type {
             var theType: Int = 0
             switch type {
-            case createThreadTypes.NORMAL.rawValue:         theType = 0
-            case createThreadTypes.OWNER_GROUP.rawValue:    theType = 1
-            case createThreadTypes.PUBLIC_GROUP.rawValue:   theType = 2
-            case createThreadTypes.CHANNEL_GROUP.rawValue:  theType = 4
-            case createThreadTypes.CHANNEL.rawValue:        theType = 8
+            case ThreadTypes.NORMAL.rawValue:         theType = 0
+            case ThreadTypes.OWNER_GROUP.rawValue:    theType = 1
+            case ThreadTypes.PUBLIC_GROUP.rawValue:   theType = 2
+            case ThreadTypes.CHANNEL_GROUP.rawValue:  theType = 4
+            case ThreadTypes.CHANNEL.rawValue:        theType = 8
             default: log.error("not valid thread type on create thread", context: "Chat")
             }
             content["type"] = JSON(theType)
@@ -2567,11 +2630,11 @@ extension Chat {
             if let type = parameters["type"].string {
                 var theType: Int = 0
                 switch type {
-                case createThreadTypes.NORMAL.rawValue:         theType = 0
-                case createThreadTypes.OWNER_GROUP.rawValue:    theType = 1
-                case createThreadTypes.PUBLIC_GROUP.rawValue:   theType = 2
-                case createThreadTypes.CHANNEL_GROUP.rawValue:  theType = 4
-                case createThreadTypes.CHANNEL.rawValue:        theType = 8
+                case ThreadTypes.NORMAL.rawValue:         theType = 0
+                case ThreadTypes.OWNER_GROUP.rawValue:    theType = 1
+                case ThreadTypes.PUBLIC_GROUP.rawValue:   theType = 2
+                case ThreadTypes.CHANNEL_GROUP.rawValue:  theType = 4
+                case ThreadTypes.CHANNEL.rawValue:        theType = 8
                 default: log.error("not valid thread type on create thread", context: "Chat")
                 }
                 content.appendIfDictionary(key: "type", json: JSON(theType))
@@ -2648,14 +2711,25 @@ extension Chat {
         content["uniqueId"] = JSON(myUniqueId)
         content["title"] = JSON(creatThreadWithMessageInput.threadTitle)
         content["invitees"] = JSON(creatThreadWithMessageInput.threadInvitees)
+        
+        if let image = creatThreadWithMessageInput.threadImage {
+            content["image"] = JSON(image)
+        }
+        if let metaData = creatThreadWithMessageInput.threadMetadata {
+            content["metadata"] = JSON(metaData)
+        }
+        if let description = creatThreadWithMessageInput.threadDescription {
+            content["description"] = JSON(description)
+        }
+        
         if let type = creatThreadWithMessageInput.threadType {
             var theType: Int = 0
             switch type {
-            case createThreadTypes.NORMAL.rawValue:         theType = 0
-            case createThreadTypes.OWNER_GROUP.rawValue:    theType = 1
-            case createThreadTypes.PUBLIC_GROUP.rawValue:   theType = 2
-            case createThreadTypes.CHANNEL_GROUP.rawValue:  theType = 4
-            case createThreadTypes.CHANNEL.rawValue:        theType = 8
+            case ThreadTypes.NORMAL.rawValue:         theType = 0
+            case ThreadTypes.OWNER_GROUP.rawValue:    theType = 1
+            case ThreadTypes.PUBLIC_GROUP.rawValue:   theType = 2
+            case ThreadTypes.CHANNEL_GROUP.rawValue:  theType = 4
+            case ThreadTypes.CHANNEL.rawValue:        theType = 8
             default: log.error("not valid thread type on create thread", context: "Chat")
             }
             content["type"] = JSON(theType)
@@ -2665,7 +2739,8 @@ extension Chat {
                                                    "content": content,
                                                    "uniqueId": myUniqueId]
         
-        sendMessageWithCallback(params: sendMessageCreateThreadParams, callback: CreateThreadCallback(parameters: sendMessageCreateThreadParams), sentCallback: SendMessageCallbacks(), deliverCallback: SendMessageCallbacks(), seenCallback: SendMessageCallbacks()) { (theUniqueId) in
+        messageContentParams["isCreateThreadAndSendMessage"] = JSON(true)
+        sendMessageWithCallback(params: sendMessageCreateThreadParams, callback: CreateThreadCallback(parameters: sendMessageCreateThreadParams), sentCallback: SendMessageCallbacks(parameters: messageContentParams), deliverCallback: SendMessageCallbacks(parameters: messageContentParams), seenCallback: SendMessageCallbacks(parameters: messageContentParams)) { (theUniqueId) in
             uniqueId(theUniqueId)
         }
         
@@ -2699,11 +2774,11 @@ extension Chat {
             if let type = parameters["type"].string {
                 var theType: Int = 0
                 switch type {
-                case createThreadTypes.NORMAL.rawValue: theType = 0
-                case createThreadTypes.OWNER_GROUP.rawValue: theType = 1
-                case createThreadTypes.PUBLIC_GROUP.rawValue: theType = 2
-                case createThreadTypes.CHANNEL_GROUP.rawValue: theType = 4
-                case createThreadTypes.CHANNEL.rawValue: theType = 8
+                case ThreadTypes.NORMAL.rawValue: theType = 0
+                case ThreadTypes.OWNER_GROUP.rawValue: theType = 1
+                case ThreadTypes.PUBLIC_GROUP.rawValue: theType = 2
+                case ThreadTypes.CHANNEL_GROUP.rawValue: theType = 4
+                case ThreadTypes.CHANNEL.rawValue: theType = 8
                 default: log.error("not valid thread type on create thread", context: "Chat")
                 }
                 content.appendIfDictionary(key: "type", json: JSON(theType))
@@ -2721,7 +2796,7 @@ extension Chat {
                                                    "content": content,
                                                    "uniqueId": myUniqueId]
         
-        sendMessageWithCallback(params: sendMessageCreateThreadParams, callback: CreateThreadCallback(parameters: sendMessageCreateThreadParams), sentCallback: SendMessageCallbacks(), deliverCallback: SendMessageCallbacks(), seenCallback: SendMessageCallbacks()) { (theUniqueId) in
+        sendMessageWithCallback(params: sendMessageCreateThreadParams, callback: CreateThreadCallback(parameters: sendMessageCreateThreadParams), sentCallback: SendMessageCallbacks(parameters: sendMessageCreateThreadParams), deliverCallback: SendMessageCallbacks(parameters: sendMessageCreateThreadParams), seenCallback: SendMessageCallbacks(parameters: sendMessageCreateThreadParams)) { (theUniqueId) in
             uniqueId(theUniqueId)
         }
         
@@ -2903,7 +2978,7 @@ extension Chat {
         let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.THREAD_PARTICIPANTS.rawValue,
                                        "typeCode": getThreadParticipantsInput.typeCode ?? generalTypeCode,
                                        "content": content,
-                                       "subjectId": content["threadId"].intValue]
+                                       "subjectId": getThreadParticipantsInput.threadId]
         sendMessageWithCallback(params: sendMessageParams, callback: GetThreadParticipantsCallbacks(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (getParticipantsUniqueId) in
             uniqueId(getParticipantsUniqueId)
         }
@@ -2912,9 +2987,11 @@ extension Chat {
         
         // if cache is enabled by user, it will return cache result to the user
         if enableCache {
-            if let cacheThreadParticipants = Chat.cacheDB.retrieveThreadParticipants(count:       content["count"].intValue,
-                                                                                     offset:      content["offset"].intValue,
-                                                                                     ascending:   true) {
+            if let cacheThreadParticipants = Chat.cacheDB.retrieveThreadParticipants(ascending: true,
+                                                                                     count:     content["count"].intValue,
+                                                                                     offset:    content["offset"].intValue,
+                                                                                     threadId:  getThreadParticipantsInput.threadId,
+                                                                                     timeStamp: cacheTimeStamp) {
                 cacheResponse(cacheThreadParticipants)
             }
         }
@@ -3281,7 +3358,7 @@ extension Chat {
             sendMessageParams["metaData"] = JSON(metaDataStr)
         }
         
-        sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: SendMessageCallbacks(), deliverCallback: SendMessageCallbacks(), seenCallback:  SendMessageCallbacks()) { (theUniqueId) in
+        sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: SendMessageCallbacks(parameters: sendMessageParams), deliverCallback: SendMessageCallbacks(parameters: sendMessageParams), seenCallback:  SendMessageCallbacks(parameters: sendMessageParams)) { (theUniqueId) in
             uniqueId(theUniqueId)
         }
         
@@ -3324,7 +3401,7 @@ extension Chat {
         }
         
         
-        sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: SendMessageCallbacks(), deliverCallback: SendMessageCallbacks(), seenCallback:  SendMessageCallbacks()) { (theUniqueId) in
+        sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: SendMessageCallbacks(parameters: sendMessageParams), deliverCallback: SendMessageCallbacks(parameters: sendMessageParams), seenCallback:  SendMessageCallbacks(parameters: sendMessageParams)) { (theUniqueId) in
             uniqueId(theUniqueId)
         }
         
@@ -3362,13 +3439,12 @@ extension Chat {
         log.verbose("Try to request to edit message with this parameters: \n \(editMessageInput)", context: "Chat")
         
         let messageTxtContent = makeCustomTextToSend(textMessage: editMessageInput.content)
-        
-        let content: JSON = ["content": messageTxtContent]
+        //        let content: JSON = ["content": messageTxtContent]
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.EDIT_MESSAGE.rawValue,
-                                       "pushMsgType": 4,
-                                       "subjectId": editMessageInput.subjectId,
-                                       "content": content,
-                                       "typeCode": editMessageInput.typeCode ?? generalTypeCode]
+                                       "pushMsgType":       4,
+                                       "subjectId":         editMessageInput.subjectId,
+                                       "content":           messageTxtContent,
+                                       "typeCode":          editMessageInput.typeCode ?? generalTypeCode]
         
         if let repliedTo = editMessageInput.repliedTo {
             sendMessageParams["repliedTo"] = JSON(repliedTo)
@@ -3452,11 +3528,11 @@ extension Chat {
         log.verbose("Try to reply Message with this parameters: \n \(replyMessageInput)", context: "Chat")
         
         let messageTxtContent = makeCustomTextToSend(textMessage: replyMessageInput.content)
-        let content: JSON = ["content": messageTxtContent]
+        //        let content: JSON = ["content": messageTxtContent]
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.MESSAGE.rawValue,
                                        "pushMsgType": 4,
                                        "repliedTo": replyMessageInput.repliedTo,
-                                       "content": content,
+                                       "content": messageTxtContent,
                                        "typeCode": replyMessageInput.typeCode ?? generalTypeCode]
         
         if let uniqueId = replyMessageInput.uniqueId {
@@ -3468,7 +3544,7 @@ extension Chat {
             sendMessageParams["metaData"] = JSON(metaDataStr)
         }
         
-        sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: SendMessageCallbacks(), deliverCallback: SendMessageCallbacks(), seenCallback: SendMessageCallbacks()) { (theUniqueId) in
+        sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: SendMessageCallbacks(parameters: sendMessageParams), deliverCallback: SendMessageCallbacks(parameters: sendMessageParams), seenCallback: SendMessageCallbacks(parameters: sendMessageParams)) { (theUniqueId) in
             uniqueId(theUniqueId)
         }
         
@@ -3484,12 +3560,11 @@ extension Chat {
         log.verbose("Try to reply Message with this parameters: \n \(params)", context: "Chat")
         
         let messageTxtContent = makeCustomTextToSend(textMessage: params["content"].stringValue)
-        
-        let content: JSON = ["content": messageTxtContent]
+        //        let content: JSON = ["content": messageTxtContent]
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.MESSAGE.rawValue,
                                        "typeCode": params["typeCode"].string ?? generalTypeCode,
                                        "pushMsgType": 4,
-                                       "content": content]
+                                       "content": messageTxtContent]
         
         if let threadId = params["subjectId"].int {
             sendMessageParams["subjectId"] = JSON(threadId)
@@ -3506,7 +3581,7 @@ extension Chat {
         }
         
         
-        sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: SendMessageCallbacks(), deliverCallback: SendMessageCallbacks(), seenCallback: SendMessageCallbacks()) { (theUniqueId) in
+        sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: SendMessageCallbacks(parameters: sendMessageParams), deliverCallback: SendMessageCallbacks(parameters: sendMessageParams), seenCallback: SendMessageCallbacks(parameters: sendMessageParams)) { (theUniqueId) in
             uniqueId(theUniqueId)
         }
         
@@ -3565,7 +3640,7 @@ extension Chat {
             
             sendMessageParams["uniqueId"] = JSON("\(uniqueIdsList)")
             
-            sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: SendMessageCallbacks(), deliverCallback: SendMessageCallbacks(), seenCallback: SendMessageCallbacks()) { (theUniqueId) in
+            sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: SendMessageCallbacks(parameters: sendMessageParams), deliverCallback: SendMessageCallbacks(parameters: sendMessageParams), seenCallback: SendMessageCallbacks(parameters: sendMessageParams)) { (theUniqueId) in
                 uniqueIds(theUniqueId)
             }
             
@@ -3615,7 +3690,7 @@ extension Chat {
             sendMessageParams["uniqueId"] = JSON("\(uniqueIdsList)")
         }
         
-        sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: SendMessageCallbacks(), deliverCallback: SendMessageCallbacks(), seenCallback: SendMessageCallbacks()) { (theUniqueId) in
+        sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: SendMessageCallbacks(parameters: sendMessageParams), deliverCallback: SendMessageCallbacks(parameters: sendMessageParams), seenCallback: SendMessageCallbacks(parameters: sendMessageParams)) { (theUniqueId) in
             uniqueIds(theUniqueId)
         }
         
@@ -3793,14 +3868,14 @@ extension Chat {
         
         // this will call when all data were uploaded and it will sends the textMessage
         func sendMessageWith(paramsToSendToSendMessage: JSON) {
-            
-            let sendMessageParamModel = SendTextMessageRequestModel(threadId:       paramsToSendToSendMessage["threadId"].intValue,
-                                                                    content:        paramsToSendToSendMessage["content"].stringValue,
+            let sendMessageParamModel = SendTextMessageRequestModel(content:        paramsToSendToSendMessage["content"].stringValue,
+                                                                    metaData:       paramsToSendToSendMessage["metaData"],
                                                                     repliedTo:      paramsToSendToSendMessage["repliedTo"].int,
-                                                                    uniqueId:       paramsToSendToSendMessage["uniqueId"].string,
-                                                                    typeCode:       paramsToSendToSendMessage["typeCode"].string,
                                                                     systemMetadata: paramsToSendToSendMessage["systemMetadata"],
-                                                                    metaData:       paramsToSendToSendMessage["metaData"])
+                                                                    threadId:       paramsToSendToSendMessage["threadId"].intValue,
+                                                                    typeCode:       paramsToSendToSendMessage["typeCode"].string,
+                                                                    uniqueId:       paramsToSendToSendMessage["uniqueId"].string)
+            
             
             self.sendTextMessage(sendTextMessageInput: sendMessageParamModel, uniqueId: { _ in }, onSent: { (sent) in
                 onSent(sent)
@@ -4056,14 +4131,13 @@ extension Chat {
         
         // this will call when all data were uploaded and it will sends the textMessage
         func sendMessageWith(paramsToSendToSendMessage: JSON) {
-            
-            let sendMessageParamModel = SendTextMessageRequestModel(threadId:       paramsToSendToSendMessage["threadId"].intValue,
-                                                                    content:        paramsToSendToSendMessage["content"].stringValue,
+            let sendMessageParamModel = SendTextMessageRequestModel(content:        paramsToSendToSendMessage["content"].stringValue,
+                                                                    metaData:       paramsToSendToSendMessage["metaData"],
                                                                     repliedTo:      paramsToSendToSendMessage["repliedTo"].int,
-                                                                    uniqueId:       paramsToSendToSendMessage["uniqueId"].string,
-                                                                    typeCode:       paramsToSendToSendMessage["typeCode"].string,
                                                                     systemMetadata: paramsToSendToSendMessage["systemMetadata"],
-                                                                    metaData:       paramsToSendToSendMessage["metaData"])
+                                                                    threadId:       paramsToSendToSendMessage["threadId"].intValue,
+                                                                    typeCode:       paramsToSendToSendMessage["typeCode"].string,
+                                                                    uniqueId:       paramsToSendToSendMessage["uniqueId"].string)
             
             self.sendTextMessage(sendTextMessageInput: sendMessageParamModel, uniqueId: { _ in }, onSent: { (sent) in
                 onSent(sent)
@@ -4702,7 +4776,7 @@ extension Chat {
         
         // if cache is enabled by user, first return cache result to the user
         if enableCache {
-            if let (cacheFileResult, imagePath) = Chat.cacheDB.retrieveUploadFile(hashCode: getFileInput.hashCode, fileId: getFileInput.fileId) {
+            if let (cacheFileResult, imagePath) = Chat.cacheDB.retrieveUploadFile(fileId: getFileInput.fileId, hashCode: getFileInput.hashCode) {
                 cacheResponse(cacheFileResult, imagePath)
             }
         }
@@ -5523,15 +5597,13 @@ extension Chat {
                 let messageContent: [JSON] = response["result"].arrayValue
                 let contentCount = response["contentCount"].intValue
                 
-                
                 // save data comes from server to the Cache
                 var messages = [Message]()
                 for item in messageContent {
-                    let myMessage = Message(threadId: content["threadId"].intValue, pushMessageVO: item)
+                    let myMessage = Message(threadId: sendParams["subjectId"].intValue, pushMessageVO: item)
                     messages.append(myMessage)
                 }
-                Chat.cacheDB.saveMessageObjects(messages: messages)
-                
+                Chat.cacheDB.saveMessageObjects(messages: messages, getHistoryParams: sendParams)
                 
                 let getHistoryModel = GetHistoryModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 
@@ -5563,14 +5635,15 @@ extension Chat {
                 
                 
                 // save data comes from server to the Cache, in the Back Thread
-                DispatchQueue.global().async {
-                    var participants = [Participant]()
-                    for item in messageContent {
-                        let myParticipant = Participant(messageContent: item)
-                        participants.append(myParticipant)
-                    }
-                    Chat.cacheDB.saveThreadParticipantObjects(participants: participants)
+                //                DispatchQueue.global().async {
+                
+                var participants = [Participant]()
+                for item in messageContent {
+                    let myParticipant = Participant(messageContent: item, threadId: sendParams["subjectId"].intValue)
+                    participants.append(myParticipant)
                 }
+                Chat.cacheDB.saveThreadParticipantObjects(whereThreadIdIs: sendParams["subjectId"].intValue, withParticipants: participants)
+                //                }
                 
                 let getThreadParticipantsModel = GetThreadParticipantsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 
@@ -5636,8 +5709,14 @@ extension Chat {
             if (!hasError) {
                 let messageContent = response["result"]
                 
-                let addParticipantModel = AddParticipantModel(messageContent: messageContent, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+                var participants = [Participant]()
+                for item in messageContent["participants"].arrayValue {
+                    let myParticipant = Participant(messageContent: item, threadId: messageContent["id"].intValue)
+                    participants.append(myParticipant)
+                }
+                Chat.cacheDB.saveThreadParticipantObjects(whereThreadIdIs: sendParams["subjectId"].intValue, withParticipants: participants)
                 
+                let addParticipantModel = AddParticipantModel(messageContent: messageContent, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 success(addParticipantModel)
             }
         }
@@ -5665,8 +5744,17 @@ extension Chat {
             
             if (!hasError) {
                 
-                let removeParticipantModel = RemoveParticipantModel(messageContent: response, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+                let removeParticipantResult = response["result"].arrayValue
                 
+                var removeParticipantsArray = [Participant]()
+                for item in removeParticipantResult {
+                    let myParticipant = Participant(messageContent: item, threadId: sendParams["subjectId"].int)
+                    Chat.cacheDB.deleteParticipant(inThread: sendParams["subjectId"].intValue, withParticipantIds: [myParticipant.id!])
+                    
+                    removeParticipantsArray.append(myParticipant)
+                }
+                
+                let removeParticipantModel = RemoveParticipantModel(messageObjects: removeParticipantsArray, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 success(removeParticipantModel)
             }
         }
@@ -5674,8 +5762,47 @@ extension Chat {
     
     
     private class SendMessageCallbacks: CallbackProtocolWith3Calls {
+        var sendParams: JSON
+        init(parameters: JSON) {
+            self.sendParams = parameters
+        }
         func onSent(uID: String, response: JSON, success: @escaping callbackTypeAlias) {
             //
+            
+            // save this Message on the cache
+            // first check if the sendParams threadId is the same as threadId of the Server response, then we will update the cache
+            // there is an exeption: when we create thread an send message simultanusly, at first we don't have the threadId, to in this situation we have nothing as threadId in the sendParams, so we get the respose subjectId and save the response on the cache
+            if (sendParams["subjectId"].int == response["subjectId"].int) || (sendParams["isCreateThreadAndSendMessage"].bool == true) {
+                let msg = sendParams["content"].stringValue
+                let strWithReturn = msg.replacingOccurrences(of: "Ⓝ", with: "\n")
+                let strWithSpace = strWithReturn.replacingOccurrences(of: "Ⓢ", with: " ")
+                let messageContent = strWithSpace.replacingOccurrences(of: "Ⓣ", with: "\t")
+                
+                let message = Message(threadId: response["subjectId"].int, pushMessageVO: response)
+                //                let message = Message(threadId:     response["subjectId"].intValue,
+                //                                      delivered:    response["delivered"].bool,
+                //                                      editable:     response["editable"].bool,
+                //                                      edited:       nil,
+                //                                      id:           Int(response["content"].stringValue),
+                //                                      message:      messageContent,
+                //                                      messageType:  response["messageType"].string,
+                //                                      metaData:     sendParams["metaData"].string,
+                //                                      ownerId:      response["ownerId"].int,
+                //                                      previousId:   nil,
+                //                                      seen:         response["seen"].bool,
+                //                                      time:         response["time"].int,
+                //                                      uniqueId:     response["uniqueId"].stringValue,
+                //                                      conversation: nil,
+                //                                      forwardInfo:  nil,
+                //                                      participant:  nil,
+                //                                      replyInfo:    nil)
+                message.message = messageContent
+                message.metaData = sendParams["metaData"].string
+                message.id = Int(response["content"].stringValue)
+                
+                Chat.cacheDB.saveMessageObjects(messages: [message], getHistoryParams: nil)
+            }
+            
             success(response)
         }
         
@@ -5711,9 +5838,11 @@ extension Chat {
             returnData["errorCode"] = JSON(errorCode)
             
             if (!hasError) {
-                let messageContent: String = response["result"].stringValue     // send contacts as json to user
-                //                let messageContentJSON: JSON = formatDataFromStringToJSON(stringCont: messageContent).convertStringContentToJSON() // send contacts as object to user
-                //                let messageMessageObject = Message(threadId: nil, pushMessageVO: messageContentJSON)
+                let messageContent: JSON = response["result"]     // send contacts as json to user
+                
+                // save edited data on the cache
+                let message = Message(threadId: sendParams["subjectId"].int, pushMessageVO: messageContent)
+                Chat.cacheDB.saveMessageObjects(messages: [message], getHistoryParams: nil)
                 
                 let resultData: JSON = ["editedMessage": messageContent]
                 
@@ -5752,6 +5881,10 @@ extension Chat {
                 let resultData: JSON = ["deletedMessage": deletedMessage]
                 
                 returnData["result"] = resultData
+                
+                
+                Chat.cacheDB.deleteMessage(inThread: 1328, withMessageIds: [10799])
+                
                 success(returnData)
             }
         }

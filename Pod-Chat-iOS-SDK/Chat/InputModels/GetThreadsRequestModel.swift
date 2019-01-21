@@ -14,28 +14,31 @@ import SwiftyJSON
 open class GetThreadsRequestModel {
     
     public let count:               Int?
-    public let offset:              Int?
+    public let coreUserId:          Int?
+    public let metadataCriteria:    JSON?
     public let name:                String?
     public let new:                 Bool?
+    public let offset:              Int?
     public let threadIds:           [Int]?
     public let typeCode:            String?
-    public let metadataCriteria:    JSON?
     
     public init(count:             Int?,
-                offset:            Int?,
+                coreUserId:        Int?,
+                metadataCriteria:  JSON?,
                 name:              String?,
                 new:               Bool?,
+                offset:            Int?,
                 threadIds:         [Int]?,
-                typeCode:          String?,
-                metadataCriteria:  JSON?) {
+                typeCode:          String?) {
         
         self.count              = count
-        self.offset             = offset
+        self.coreUserId     = coreUserId
+        self.metadataCriteria   = metadataCriteria
         self.name               = name
         self.new                = new
+        self.offset             = offset
         self.threadIds          = threadIds
         self.typeCode           = typeCode
-        self.metadataCriteria   = metadataCriteria
     }
     
 }

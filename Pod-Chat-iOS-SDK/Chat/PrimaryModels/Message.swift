@@ -35,19 +35,20 @@ open class Message {
      *    - replyInfo:      ReplyInfo?
      */
     
-    public let delivered:      Bool?
-    public let editable:       Bool?
-    public let edited:         Bool?
-    public let id:             Int?
-    public let message:        String?
-    public let messageType:    String?
-    public let metaData:       String?
-    public var ownerId:        Int?
-    public let previousId:     Int?
-    public let seen:           Bool?
-    public var threadId:       Int?
-    public let time:           Int?
-    public let uniqueId:       String?
+    public let delivered:   Bool?
+    public let editable:    Bool?
+    public let edited:      Bool?
+    public let deletable:  Bool?
+    public var id:          Int?
+    public var message:     String?
+    public let messageType: String?
+    public var metaData:    String?
+    public var ownerId:     Int?
+    public let previousId:  Int?
+    public let seen:        Bool?
+    public var threadId:    Int?
+    public let time:        UInt?
+    public let uniqueId:    String?
     
     public var conversation:   Conversation?
     public var forwardInfo:    ForwardInfo?
@@ -60,14 +61,19 @@ open class Message {
         self.delivered  = pushMessageVO["delivered"].bool
         self.editable   = pushMessageVO["editable"].bool
         self.edited     = pushMessageVO["edited"].bool
+        self.deletable  = pushMessageVO["deletable"].bool
         self.id         = pushMessageVO["id"].int
         self.message    = pushMessageVO["message"].string
         self.messageType = pushMessageVO["messageType"].string
         self.metaData   = pushMessageVO["metaData"].string
         self.previousId = pushMessageVO["previousId"].int
         self.seen       = pushMessageVO["seen"].bool
-        self.time       = pushMessageVO["time"].int
+        //        self.time       = pushMessageVO["time"].int
         self.uniqueId   = pushMessageVO["uniqueId"].string
+        
+        let timeNano = pushMessageVO["timeNanos"].uIntValue
+        let timeTemp = pushMessageVO["time"].uIntValue
+        self.time = ((UInt(timeTemp / 1000)) * 1000000000 ) + timeNano
         
         if (pushMessageVO["conversation"] != JSON.null) {
             self.conversation = Conversation(messageContent: pushMessageVO["conversation"])
@@ -78,7 +84,7 @@ open class Message {
         }
         
         if (pushMessageVO["participant"] != JSON.null) {
-            let tempParticipant = Participant(messageContent: pushMessageVO["participant"])
+            let tempParticipant = Participant(messageContent: pushMessageVO["participant"], threadId: threadId)
             self.participant = tempParticipant
             let tempOwnerId = tempParticipant.formatToJSON()["id"].int
             self.ownerId = tempOwnerId
@@ -111,6 +117,7 @@ open class Message {
                 delivered:     Bool?,
                 editable:      Bool?,
                 edited:        Bool?,
+                deletable:     Bool?,
                 id:            Int?,
                 message:       String?,
                 messageType:   String?,
@@ -118,7 +125,7 @@ open class Message {
                 ownerId:       Int?,
                 previousId:    Int?,
                 seen:          Bool?,
-                time:          Int?,
+                time:          UInt?,
                 uniqueId:      String?,
                 conversation:  Conversation?,
                 forwardInfo:   ForwardInfo?,
@@ -129,6 +136,7 @@ open class Message {
         self.delivered  = delivered
         self.editable   = editable
         self.edited     = edited
+        self.deletable = deletable
         self.id         = id
         self.message    = message
         self.messageType = messageType
@@ -151,6 +159,7 @@ open class Message {
         self.delivered  = theMessage.delivered
         self.editable   = theMessage.editable
         self.edited     = theMessage.edited
+        self.deletable  = theMessage.deletable
         self.id         = theMessage.id
         self.message    = theMessage.message
         self.messageType = theMessage.messageType
@@ -175,6 +184,7 @@ open class Message {
         let result: JSON = ["delivered":        delivered ?? NSNull(),
                             "editable":         editable ?? NSNull(),
                             "edited":           edited ?? NSNull(),
+                            "deletable":        deletable ?? NSNull(),
                             "id":               id ?? NSNull(),
                             "message":          message ?? NSNull(),
                             "messageType":      messageType ?? NSNull(),

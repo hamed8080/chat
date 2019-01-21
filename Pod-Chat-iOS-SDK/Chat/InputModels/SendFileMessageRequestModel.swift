@@ -21,14 +21,14 @@ open class SendFileMessageRequestModel {
     public let wC:          String?
     public let threadId:    Int?
     
-    public let subjectId:   Int?
-    public let repliedTo:   Int?
     public let content:     String?
     public let metaData:    JSON?
+    public let repliedTo:   Int?
+    public let subjectId:   Int?
     public let typeCode:    String?
     
+    public let fileToSend:  Data?
     public let imageToSend: Data?
-    public let fileToSend: Data?
     
     public init(fileName:      String?,
                 imageName:     String?,
@@ -37,13 +37,13 @@ open class SendFileMessageRequestModel {
                 hC:            String?,
                 wC:            String?,
                 threadId:      Int?,
-                subjectId:     Int?,
-                repliedTo:     Int?,
                 content:       String?,
                 metaData:      JSON?,
+                repliedTo:     Int?,
+                subjectId:     Int?,
                 typeCode:      String?,
-                imageToSend:   Data?,
-                fileToSend:    Data?) {
+                fileToSend:    Data?,
+                imageToSend:   Data?) {
         
         self.fileName       = fileName
         self.imageName      = imageName
@@ -53,14 +53,14 @@ open class SendFileMessageRequestModel {
         self.wC             = yC
         self.threadId       = threadId
         
-        self.subjectId      = subjectId
-        self.repliedTo      = repliedTo
         self.content        = content
         self.metaData       = metaData
+        self.repliedTo      = repliedTo
+        self.subjectId      = subjectId
         self.typeCode       = typeCode
         
-        self.imageToSend    = imageToSend
         self.fileToSend     = fileToSend
+        self.imageToSend    = imageToSend
     }
     
 }

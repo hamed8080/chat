@@ -31,7 +31,7 @@ open class ForwardInfo {
         }
         
         if (messageContent["participant"] != JSON.null) {
-            self.participant = Participant(messageContent: messageContent["participant"])
+            self.participant = Participant(messageContent: messageContent["participant"], threadId: nil)
         }
         
     }
