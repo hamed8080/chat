@@ -73,4 +73,3 @@ open class MapReverseModel {
     
 }
 
-

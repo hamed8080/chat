@@ -10,12 +10,12 @@ import Foundation
 
 open class LeaveThreadRequestModel {
     
-    public let content:             [Int]
+    public let content:             [Int]?
     public let threadId:            Int
     public let typeCode:            String?
     public let uniqueId:            String?
     
-    public init(content:   [Int],
+    public init(content:   [Int]?,
                 threadId:  Int,
                 typeCode:  String?,
                 uniqueId:  String?) {

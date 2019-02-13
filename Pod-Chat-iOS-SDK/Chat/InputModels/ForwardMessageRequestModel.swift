@@ -33,4 +33,3 @@ open class ForwardMessageRequestModel {
     }
     
 }
-

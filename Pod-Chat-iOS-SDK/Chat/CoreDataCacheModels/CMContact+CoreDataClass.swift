@@ -19,6 +19,7 @@ public class CMContact: NSManagedObject {
         var id:                 Int?
         var notSeenDuration:    Int?
         var userId:             Int?
+        var time:               UInt?
         
         var linkedUser:         LinkedUser?
         
@@ -35,6 +36,9 @@ public class CMContact: NSManagedObject {
             if let userId2 = self.userId as? Int {
                 userId = userId2
             }
+            if let time2 = self.time as? UInt {
+                time = time2
+            }
         }
         
         func createContactModel() -> Contact {
@@ -47,6 +51,7 @@ public class CMContact: NSManagedObject {
                                        lastName:        self.lastName,
                                        linkedUser:      self.linkedUser?.convertCMLinkedUserToLinkedUserObject(),
                                        notSeenDuration: notSeenDuration,
+                                       timeStamp:       time,
                                        uniqueId:        self.uniqueId,
                                        userId:          userId)
             

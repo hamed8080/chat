@@ -385,7 +385,7 @@ extension Cache {
                         result.first!.notSeenDuration   = myContact.notSeenDuration as NSNumber?
                         result.first!.uniqueId          = myContact.uniqueId
                         result.first!.userId            = myContact.userId as NSNumber?
-                        result.first!.time              = Int(Date().timeIntervalSince1970) as NSNumber?
+                        result.first!.time              = myContact.timeStamp as NSNumber? // Int(Date().timeIntervalSince1970) as NSNumber?
                         if let contactLinkeUser = myContact.linkedUser {
                             let linkedUserObject = updateCMLinkedUserEntity(withLinkedUser: contactLinkeUser)
                             result.first!.linkedUser = linkedUserObject
@@ -408,7 +408,7 @@ extension Cache {
                         theContact.notSeenDuration  = myContact.notSeenDuration as NSNumber?
                         theContact.uniqueId         = myContact.uniqueId
                         theContact.userId           = myContact.userId as NSNumber?
-                        theContact.time             = Int(Date().timeIntervalSince1970) as NSNumber?
+                        theContact.time             = myContact.timeStamp as NSNumber? // Int(Date().timeIntervalSince1970) as NSNumber?
                         if let contactLinkeUser = myContact.linkedUser {
                             let linkedUserObject = updateCMLinkedUserEntity(withLinkedUser: contactLinkeUser)
                             theContact.linkedUser = linkedUserObject
@@ -490,7 +490,6 @@ extension Cache {
         }
         
     }
-    
     
     
     
@@ -794,6 +793,39 @@ extension Cache {
         
     }
     
+    
+    public func savePhoneBookContact(contact myContact: AddContactsRequestModel) {
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "PhoneContact")
+        if let contactCellphoneNumber = myContact.cellphoneNumber {
+            fetchRequest.predicate = NSPredicate(format: "cellphoneNumber == %@", contactCellphoneNumber)
+            do {
+                if let result = try context.fetch(fetchRequest) as? [PhoneContact] {
+                    if (result.count > 0) {
+                        result.first!.cellphoneNumber   = myContact.cellphoneNumber
+                        result.first!.email             = myContact.email
+                        result.first!.firstName         = myContact.firstName
+                        result.first!.lastName          = myContact.lastName
+                        
+                        saveContext(subject: "Update PhoneContact -update existing object-")
+                    }
+                } else {
+                    let theContactEntity = NSEntityDescription.entity(forEntityName: "PhoneContact", in: context)
+                    let theContact = CMContact(entity: theContactEntity!, insertInto: context)
+                    
+                    theContact.cellphoneNumber  = myContact.cellphoneNumber
+                    theContact.email            = myContact.email
+                    theContact.firstName        = myContact.firstName
+                    theContact.lastName         = myContact.lastName
+                    
+                    saveContext(subject: "Update PhoneContact -create new object-")
+                }
+            } catch {
+                fatalError("Error on trying to find the contact from PhoneContact entity")
+            }
+        }
+        
+    }
     
     // this function will save (or update) contacts that comes from server, in the Cache.
     public func saveThreadParticipantObjects(whereThreadIdIs threadId: Int, withParticipants participants: [Participant]) {
@@ -1279,7 +1311,6 @@ extension Cache {
     
     
     
-    
     // this function will save (or update) uploaded image response that comes from server, in the Cache.
     public func saveUploadImage(imageInfo: UploadImage, imageData: Data) {
         // check if there is any information about This Image File in the cache
@@ -1434,7 +1465,27 @@ extension Cache {
     }
     
     
-    
+    // delete contacts thas has removed from server
+    //    public func updateCMContactEntityByDeletingRemovedContactsFromServer(allServerContacts: [Contact]) {
+    //        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMContact")
+    //        do {
+    //            if let result = try context.fetch(fetchRequest) as? [CMContact] {
+    //                for cmcontact in result {    // loop through the CMContacts (Contacts in the cache)
+    //                    var shouldDelete = false
+    //                    for contact in allServerContacts {
+    //                        if (cmcontact.id! == (contact.id! as NSNumber)) {
+    //                            shouldDelete = true
+    //                        }
+    //                    }
+    //                    if shouldDelete {
+    //                        deleteContact(withContactIds: [Int(exactly: cmcontact.id!)!])
+    //                    }
+    //                }
+    //            }
+    //        } catch {
+    //
+    //        }
+    //    }
     
     // delete contact
     public func deleteContact(withContactIds contactIds: [Int])  {
@@ -2051,6 +2102,30 @@ extension Cache {
             fatalError("Error on fetching list of CMParticipant")
         }
     }
+    
+    
+    public func retrievePhoneContacts() -> [Contact]? {
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "PhoneContact")
+        do {
+            if let result = try context.fetch(fetchRequest) as? [PhoneContact] {
+                if (result.count > 0) {
+                    
+                    var contactsArr = [Contact]()
+                    for item in result {
+                        let contact = Contact(cellphoneNumber: item.cellphoneNumber, email: item.email, firstName: item.firstName, hasUser: false, id: nil, image: nil, lastName: item.lastName, linkedUser: nil, notSeenDuration: nil, timeStamp: nil, uniqueId: nil, userId: nil)
+                        contactsArr.append(contact)
+                    }
+                    
+                    return contactsArr
+                }
+            }
+        } catch {
+            
+        }
+        return nil
+    }
+    
     
     /*
      retrieve MessageHistory data from Cache

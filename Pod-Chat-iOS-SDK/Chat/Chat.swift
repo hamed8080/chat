@@ -35,7 +35,7 @@ public class Chat {
     var fileServer:     String  = ""        // Address of the FileServer (SERVICE_ADDRESSES.FILESERVER_ADDRESS)
     var serverName:     String  = ""        // Name of the server that we had registered on
     var token:          String  = ""        // every user have to had a token (get it from SSO Server)
-    var generalTypeCode:    String = "chattest"
+    var generalTypeCode:    String = "default"
     var enableCache:        Bool = false
     var mapApiKey:          String = "8b77db18704aa646ee5aaea13e7370f4f88b9e8c"
     var mapServer:          String = "https://api.neshan.org/v1"
@@ -273,9 +273,6 @@ extension Chat {
                     self.delegate?.chatError(errorCode: 6001, errorMessage: CHAT_ERRORS.err6001.rawValue, errorResult: nil)
                 }
                 
-                //                do {
-                //                } catch {
-                //                }
             }
         }, progress: nil, idDownloadRequest: false, isMapServiceRequst: false) { _,_  in }
         
@@ -1478,7 +1475,7 @@ extension Chat {
      */
     public func getUserInfo(uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias, cacheResponse: @escaping (UserInfoModel) -> ()) {
         log.verbose("Try to request to get user info", context: "Chat")
-        
+        userInfoCallbackToUser = completion
         let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.USER_INFO.rawValue,
                                        "typeCode": generalTypeCode]
         
@@ -1486,7 +1483,7 @@ extension Chat {
             uniqueId(getUserInfoUniqueId)
         }
         
-        userInfoCallbackToUser = completion
+        
         
         // if cache is enabled by user, first return cache result to the user
         if enableCache {
@@ -1890,7 +1887,14 @@ extension Chat {
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.BLOCK.rawValue,
                                        "typeCode": blockContactsInput.typeCode ?? generalTypeCode]
         
-        let content: JSON = ["contactId": blockContactsInput.contactId]
+        var content: JSON = [:]
+        if let contactId = blockContactsInput.contactId {
+            content = ["contactId": contactId]
+        } else if let threadId = blockContactsInput.threadId {
+            content = ["threadId": threadId]
+        } else if let userId = blockContactsInput.userId {
+            content = ["userId": userId]
+        }
         
         sendMessageParams["content"] = JSON("\(content)")
         
@@ -2019,9 +2023,20 @@ extension Chat {
     public func unblockContact(unblockContactsInput: UnblockContactsRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
         log.verbose("Try to request to unblock user with this parameters: \n \(unblockContactsInput)", context: "Chat")
         
-        let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.UNBLOCK.rawValue,
+        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.UNBLOCK.rawValue,
                                        "typeCode": unblockContactsInput.typeCode ?? generalTypeCode,
                                        "subjectId": unblockContactsInput.blockId]
+        
+        var content: JSON = [:]
+        if let contactId = unblockContactsInput.contactId {
+            content = ["contactId": contactId]
+        } else if let threadId = unblockContactsInput.threadId {
+            content = ["threadId": threadId]
+        } else if let userId = unblockContactsInput.userId {
+            content = ["userId": userId]
+        }
+        
+        sendMessageParams["content"] = JSON("\(content)")
         
         sendMessageWithCallback(params: sendMessageParams, callback: UnblockContactCallbacks(), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (blockUniqueId) in
             uniqueId(blockUniqueId)
@@ -2217,11 +2232,19 @@ extension Chat {
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
      2- completion:  it will returns the response for each contact creation.                 (ContactModel)
      */
-    public func syncContacts(uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func syncContacts(uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias, cacheResponse: @escaping ([ContactModel]) -> ()) {
         log.verbose("Try to request to sync contact", context: "Chat")
         
         let myUniqueId = generateUUID()
         uniqueId(myUniqueId)
+        
+        // use this to send addcontact reqeusst as an Array
+        //        var firstNameArray = [String]()
+        //        var lastNameArray = [String]()
+        //        var cellphoneNumberArray = [String]()
+        //        var emailArray = [String]()
+        
+        var phoneContacts = [AddContactsRequestModel]()
         
         let store = CNContactStore()
         store.requestAccess(for: .contacts) { (granted, error) in
@@ -2241,20 +2264,65 @@ extension Chat {
                         let phoneNumber = contact.phoneNumbers.first?.value.stringValue
                         let emailAddress = contact.emailAddresses.first?.value
                         
-                        let contactsJSON: JSON = ["firstName": firstName,
-                                                  "lastName": lastName,
-                                                  "cellphoneNumber": phoneNumber ?? "",
-                                                  "email": emailAddress ?? ""]
-                        self.addContact(params: contactsJSON, uniqueId: { _ in }, completion: { (myResponse) in
-                            completion(myResponse)
-                        })
+                        let contact = AddContactsRequestModel(cellphoneNumber: phoneNumber, email: emailAddress as String?, firstName: firstName, lastName: lastName)
+                        phoneContacts.append(contact)
                     })
                 } catch {
                     
                 }
+            }
+            
+        }
+        
+        
+        var contactArrayToSendUpdate = [AddContactsRequestModel]()
+        if let cachePhoneContacts = Chat.cacheDB.retrievePhoneContacts() {
+            for contact in phoneContacts {
+                var findContactOnPhoneBookCache = false
+                for cacheContact in cachePhoneContacts {
+                    // if there is some number that is already exist on the both phone contact and phoneBookCache, check if there is any update, update the contact
+                    if contact.cellphoneNumber == cacheContact.cellphoneNumber {
+                        findContactOnPhoneBookCache = true
+                        if cacheContact.email != contact.email {
+                            contactArrayToSendUpdate.append(contact)
+                            Chat.cacheDB.savePhoneBookContact(contact: contact)
+                            
+                        } else if cacheContact.firstName != contact.firstName {
+                            contactArrayToSendUpdate.append(contact)
+                            Chat.cacheDB.savePhoneBookContact(contact: contact)
+                            
+                        } else if cacheContact.lastName != contact.lastName {
+                            contactArrayToSendUpdate.append(contact)
+                            Chat.cacheDB.savePhoneBookContact(contact: contact)
+                        }
+                        
+                    }
+                }
+                
+                if (!findContactOnPhoneBookCache) {
+                    contactArrayToSendUpdate.append(contact)
+                    Chat.cacheDB.savePhoneBookContact(contact: contact)
+                }
                 
             }
+        } else {
+            // if there is no data on phoneBookCache, add all contacts from phone and save them on cache
+            for contact in phoneContacts {
+                contactArrayToSendUpdate.append(contact)
+                Chat.cacheDB.savePhoneBookContact(contact: contact)
+            }
         }
+        
+        
+        for item in contactArrayToSendUpdate {
+            addContact(addContactsInput: item, uniqueId: { _ in
+            }) { (myResponse) in
+                completion(myResponse)
+            }
+        }
+        
+        
+        
     }
     
     
@@ -4976,11 +5044,6 @@ extension Chat {
             "width":     mapStaticImageInput.width,
             "height":    mapStaticImageInput.height]
         
-        
-        //        Alamofire.request(url, method: method, parameters: parameters, headers: nil).responseData { (data) in
-        //            print("downloadProgress2 = \(data)")
-        //        }
-        
         Alamofire.request(url, method: method, parameters: parameters, headers: nil).downloadProgress(closure: { (downloadProgress) in
             print("downloadProgress = \(downloadProgress)")
             let myProgressFloat: Float = Float(downloadProgress.fractionCompleted)
@@ -5921,7 +5984,7 @@ extension Chat {
             
             if response["result"] != JSON.null {
                 let messageContent = response["result"]
-                
+                print("messageContent = \n*****\n\(messageContent)\n*****")
                 let blockUserModel = BlockedContactModel(messageContent: messageContent, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 
                 success(blockUserModel)
@@ -5939,7 +6002,7 @@ extension Chat {
             
             if response["result"] != JSON.null {
                 let messageContent = response["result"]
-                
+                print("messageContent = \n*****\n\(messageContent)\n*****")
                 let unblockUserModel = BlockedContactModel(messageContent: messageContent, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 
                 success(unblockUserModel)
@@ -5967,6 +6030,8 @@ extension Chat {
                 let messageContent: [JSON] = response["result"].arrayValue
                 let contentCount = response["contentCount"].intValue
                 
+                print("messageContent = \n*****\n\(messageContent)\n*****")
+                print("content = \n*****\n\(content)\n*****")
                 let getBlockedModel = GetBlockedContactListModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 
                 success(getBlockedModel)

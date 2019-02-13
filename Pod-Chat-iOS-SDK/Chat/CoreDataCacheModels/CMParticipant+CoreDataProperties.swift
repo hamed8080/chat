@@ -2,7 +2,7 @@
 //  CMParticipant+CoreDataProperties.swift
 //  FanapPodChatSDK
 //
-//  Created by Mahyar Zhiani on 11/1/1397 AP.
+//  Created by Mahyar Zhiani on 11/23/1397 AP.
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 //
@@ -17,27 +17,27 @@ extension CMParticipant {
         return NSFetchRequest<CMParticipant>(entityName: "CMParticipant")
     }
     
-    @NSManaged public var admin: NSNumber?
-    @NSManaged public var blocked: NSNumber?
-    @NSManaged public var cellphoneNumber: String?
-    @NSManaged public var contactId: NSNumber?
-    @NSManaged public var coreUserId: NSNumber?
-    @NSManaged public var email: String?
-    @NSManaged public var firstName: String?
-    @NSManaged public var id: NSNumber?
-    @NSManaged public var image: String?
-    @NSManaged public var lastName: String?
-    @NSManaged public var myFriend: NSNumber?
-    @NSManaged public var name: String?
-    @NSManaged public var notSeenDuration: NSNumber?
-    @NSManaged public var online: NSNumber?
-    @NSManaged public var receiveEnable: NSNumber?
-    @NSManaged public var sendEnable: NSNumber?
-    @NSManaged public var dummyConversationInviter: [CMConversation]?
-    @NSManaged public var dummyConversationParticipants: [CMConversation]?
+    @NSManaged public var admin:            NSNumber?
+    @NSManaged public var blocked:          NSNumber?
+    @NSManaged public var cellphoneNumber:  String?
+    @NSManaged public var contactId:        NSNumber?
+    @NSManaged public var coreUserId:       NSNumber?
+    @NSManaged public var email:            String?
+    @NSManaged public var firstName:        String?
+    @NSManaged public var id:               NSNumber?
+    @NSManaged public var image:            String?
+    @NSManaged public var lastName:         String?
+    @NSManaged public var myFriend:         NSNumber?
+    @NSManaged public var name:             String?
+    @NSManaged public var notSeenDuration:  NSNumber?
+    @NSManaged public var online:           NSNumber?
+    @NSManaged public var receiveEnable:    NSNumber?
+    @NSManaged public var sendEnable:       NSNumber?
+    @NSManaged public var dummyConversationInviter:         [CMConversation]?
+    @NSManaged public var dummyConversationParticipants:    [CMConversation]?
     @NSManaged public var dummyForwardInfo: CMForwardInfo?
-    @NSManaged public var dummyMessage: [CMMessage]?
-    @NSManaged public var dummyReplyInfo: CMReplyInfo?
+    @NSManaged public var dummyMessage:     [CMMessage]?
+    @NSManaged public var dummyReplyInfo:   CMReplyInfo?
     
 }
 

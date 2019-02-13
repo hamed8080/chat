@@ -2,7 +2,7 @@
 //  CMUploadFile+CoreDataProperties.swift
 //  FanapPodChatSDK
 //
-//  Created by Mahyar Zhiani on 11/1/1397 AP.
+//  Created by Mahyar Zhiani on 11/23/1397 AP.
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 //
@@ -18,7 +18,7 @@ extension CMUploadFile {
     }
     
     @NSManaged public var hashCode: String?
-    @NSManaged public var id: NSNumber?
-    @NSManaged public var name: String?
+    @NSManaged public var id:       NSNumber?
+    @NSManaged public var name:     String?
     
 }

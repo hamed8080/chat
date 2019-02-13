@@ -6,7 +6,6 @@
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 
-
 import Foundation
 import SwiftyJSON
 

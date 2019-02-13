@@ -176,6 +176,10 @@
 		3EE025FC21206E63001810FB /* ChatCreateTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE025FB21206E63001810FB /* ChatCreateTest.swift */; };
 		3EE025FE21206E63001810FB /* Chat.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EE025F021206E63001810FB /* Chat.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3EE0261721206EA6001810FB /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE0261621206EA6001810FB /* Chat.swift */; };
+		3EE0694A2212A3100099068F /* PhoneContact+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE069482212A3100099068F /* PhoneContact+CoreDataClass.swift */; };
+		3EE0694B2212A3100099068F /* PhoneContact+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE069482212A3100099068F /* PhoneContact+CoreDataClass.swift */; };
+		3EE0694C2212A3100099068F /* PhoneContact+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE069492212A3100099068F /* PhoneContact+CoreDataProperties.swift */; };
+		3EE0694D2212A3100099068F /* PhoneContact+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE069492212A3100099068F /* PhoneContact+CoreDataProperties.swift */; };
 		3EF2D3CC21A985BD005867C2 /* SeenMessageListTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF2D3CB21A985BD005867C2 /* SeenMessageListTest.swift */; };
 		3EF2D3D021A985D1005867C2 /* DeliverMessageListTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF2D3CF21A985D1005867C2 /* DeliverMessageListTest.swift */; };
 		3EFB24A121561F1800A498E1 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFB24A021561F1800A498E1 /* File.swift */; };
@@ -400,6 +404,8 @@
 		3EE025FB21206E63001810FB /* ChatCreateTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCreateTest.swift; sourceTree = "<group>"; };
 		3EE025FD21206E63001810FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3EE0261621206EA6001810FB /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
+		3EE069482212A3100099068F /* PhoneContact+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhoneContact+CoreDataClass.swift"; sourceTree = "<group>"; };
+		3EE069492212A3100099068F /* PhoneContact+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhoneContact+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3EF2D3CB21A985BD005867C2 /* SeenMessageListTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeenMessageListTest.swift; sourceTree = "<group>"; };
 		3EF2D3CF21A985D1005867C2 /* DeliverMessageListTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliverMessageListTest.swift; sourceTree = "<group>"; };
 		3EFB24A021561F1800A498E1 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
@@ -527,6 +533,8 @@
 				3E24082721F5C844001F32F1 /* CMUploadImage+CoreDataProperties.swift */,
 				3E24081821F5C844001F32F1 /* CMUser+CoreDataClass.swift */,
 				3E24081921F5C844001F32F1 /* CMUser+CoreDataProperties.swift */,
+				3EE069482212A3100099068F /* PhoneContact+CoreDataClass.swift */,
+				3EE069492212A3100099068F /* PhoneContact+CoreDataProperties.swift */,
 			);
 			path = CoreDataCacheModels;
 			sourceTree = "<group>";
@@ -875,6 +883,7 @@
 				3E00CAE921DC8E5A0029B1FC /* MapRouting.swift in Sources */,
 				3E24084021F5C844001F32F1 /* CMForwardInfo+CoreDataClass.swift in Sources */,
 				3EBBEDEB2174C44400F5CDC7 /* UserInfoModel.swift in Sources */,
+				3EE0694A2212A3100099068F /* PhoneContact+CoreDataClass.swift in Sources */,
 				3EBBEDFC2174C9FB00F5CDC7 /* ChatProtocols.swift in Sources */,
 				3E24084821F5C844001F32F1 /* CMUploadFile+CoreDataClass.swift in Sources */,
 				3E24085021F5C844001F32F1 /* CMContact+CoreDataClass.swift in Sources */,
@@ -922,6 +931,7 @@
 				3E24085C21F5C844001F32F1 /* CMLinkedUser+CoreDataClass.swift in Sources */,
 				3E00CAF721DCA9030029B1FC /* MapStaticImageRequestModel.swift in Sources */,
 				3EA156A221CE1CC4004B1346 /* UploadImageRequestModel.swift in Sources */,
+				3EE0694C2212A3100099068F /* PhoneContact+CoreDataProperties.swift in Sources */,
 				3EBBEDD92174C2A200F5CDC7 /* BlockedContact.swift in Sources */,
 				3E63A088213A618F00E4E2C2 /* ObjectTypes.swift in Sources */,
 				3EA1567821CE1AF0004B1346 /* UpdateContactsRequestModel.swift in Sources */,
@@ -1024,6 +1034,7 @@
 				3E24083F21F5C844001F32F1 /* CMMessage+CoreDataProperties.swift in Sources */,
 				3E24085B21F5C844001F32F1 /* CMBlockedContact+CoreDataProperties.swift in Sources */,
 				3E730D2F214D4D7A00AAE838 /* GetContactsTest.swift in Sources */,
+				3EE0694D2212A3100099068F /* PhoneContact+CoreDataProperties.swift in Sources */,
 				3E437D5E218F389F0021C0ED /* AddParticipantsTest.swift in Sources */,
 				3E3F14D12147B6570084A550 /* GetUserInfoTest.swift in Sources */,
 				3E24083B21F5C844001F32F1 /* CMParticipant+CoreDataProperties.swift in Sources */,
@@ -1035,6 +1046,7 @@
 				3E695BAD21722A4400A77120 /* DeleteMessageTest.swift in Sources */,
 				3E24084D21F5C844001F32F1 /* CMUploadImage+CoreDataClass.swift in Sources */,
 				3E24085321F5C844001F32F1 /* CMContact+CoreDataProperties.swift in Sources */,
+				3EE0694B2212A3100099068F /* PhoneContact+CoreDataClass.swift in Sources */,
 				3E24083721F5C844001F32F1 /* CMReplyInfo+CoreDataProperties.swift in Sources */,
 				3E24085921F5C844001F32F1 /* CMBlockedContact+CoreDataClass.swift in Sources */,
 				3E3E56872160A3280084C8C1 /* ForwardMessageTest.swift in Sources */,
