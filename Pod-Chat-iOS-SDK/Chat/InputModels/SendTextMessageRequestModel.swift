@@ -13,29 +13,29 @@ import SwiftyJSON
 
 open class SendTextMessageRequestModel {
     
-    public let threadId:            Int
     public let content:             String
-    public let repliedTo:           Int?
-    public let uniqueId:            String?
-    public let systemMetadata:      JSON?
     public let metaData:            JSON?
+    public let repliedTo:           Int?
+    public let systemMetadata:      JSON?
+    public let threadId:            Int
     public let typeCode:            String?
+    public let uniqueId:            String?
     
-    public init(threadId:          Int,
-                content:           String,
+    public init(content:           String,
+                metaData:          JSON?,
                 repliedTo:         Int?,
-                uniqueId:          String?,
-                typeCode:          String?,
                 systemMetadata:    JSON?,
-                metaData:          JSON?) {
+                threadId:          Int,
+                typeCode:          String?,
+                uniqueId:          String?) {
         
-        self.threadId           = threadId
         self.content            = content
-        self.repliedTo          = repliedTo
-        self.uniqueId           = uniqueId
-        self.typeCode           = typeCode
-        self.systemMetadata     = systemMetadata
         self.metaData           = metaData
+        self.repliedTo          = repliedTo
+        self.systemMetadata     = systemMetadata
+        self.threadId           = threadId
+        self.typeCode           = typeCode
+        self.uniqueId           = uniqueId
     }
     
 }

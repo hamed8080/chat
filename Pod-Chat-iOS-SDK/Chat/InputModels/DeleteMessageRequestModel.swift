@@ -13,20 +13,20 @@ import SwiftyJSON
 
 open class DeleteMessageRequestModel {
     
+    public let deleteForAll:        JSON?
     public let subjectId:           Int?
-    public let deleteForAll:        JSON
-    public let uniqueId:            String?
     public let typeCode:            String?
+    public let uniqueId:            String?
     
-    public init(subjectId:         Int?,
-                deleteForAll:      JSON,
-                uniqueId:          String?,
-                typeCode:          String?) {
+    public init(deleteForAll:      JSON?,
+                subjectId:         Int?,
+                typeCode:          String?,
+                uniqueId:          String?) {
         
-        self.subjectId          = subjectId
         self.deleteForAll       = deleteForAll
-        self.uniqueId           = uniqueId
+        self.subjectId          = subjectId
         self.typeCode           = typeCode
+        self.uniqueId           = uniqueId
     }
     
 }

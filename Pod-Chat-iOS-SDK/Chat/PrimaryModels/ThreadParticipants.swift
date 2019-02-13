@@ -19,7 +19,7 @@ open class ThreadParticipants {
     
     public init(participantsContent: [JSON]) {
         for item in participantsContent {
-            let temp = Participant(messageContent: item)
+            let temp = Participant(messageContent: item, threadId: nil)
             self.returnData.append(temp)
         }
     }

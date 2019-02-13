@@ -28,14 +28,14 @@ open class ReplyInfo {
      *  - repliedToMessageId   Int?
      */
     
-
+    
     public let deleted:             Bool?
     public let repliedToMessageId:  Int?
     public let message:             String?
     public let messageType:         Int?
     public let metadata:            String?
     public let systemMetadata:      String?
-
+    
     
     public let participant:        Participant?
     //    public let repliedToMessage:    String?
@@ -50,7 +50,7 @@ open class ReplyInfo {
         self.systemMetadata     = messageContent["systemMetadata"].string
         
         if (messageContent["participant"] != JSON.null) {
-            self.participant = Participant(messageContent: messageContent["participant"])
+            self.participant = Participant(messageContent: messageContent["participant"], threadId: nil)
         } else {
             self.participant = nil
         }

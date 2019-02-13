@@ -55,7 +55,7 @@ public enum chatMessageVOTypes: Int {
 }
 
 
-public enum inviteeVOidTypes: Int {
+public enum InviteeVOidTypes: Int {
     case TO_BE_USER_SSO_ID              = 1
     case TO_BE_USER_CONTACT_ID          = 2
     case TO_BE_USER_CELLPHONE_NUMBER    = 3
@@ -64,7 +64,7 @@ public enum inviteeVOidTypes: Int {
 }
 
 
-public enum createThreadTypes: String {
+public enum ThreadTypes: String {
     case NORMAL         = "NORMAL"
     case OWNER_GROUP    = "OWNER_GROUP"
     case PUBLIC_GROUP   = "PUBLIC_GROUP"
@@ -74,36 +74,61 @@ public enum createThreadTypes: String {
 
 
 public struct SERVICE_ADDRESSES_ENUM {
-    public var SSO_ADDRESS         = "http://172.16.110.76"
-    public var PLATFORM_ADDRESS    = "http://172.16.106.26:8080/hamsam"
-    public var FILESERVER_ADDRESS  = "http://172.16.106.26:8080/hamsam"
+    public var SSO_ADDRESS          = "http://172.16.110.76"
+    public var PLATFORM_ADDRESS     = "http://172.16.106.26:8080/hamsam"
+    public var FILESERVER_ADDRESS   = "http://172.16.106.26:8080/hamsam"
+    public var MAP_ADDRESS          = "https://api.neshan.org/v1"
 }
 
 
 public enum SERVICES_PATH: String {
+    
+    // Devices:
     case SSO_DEVICES        = "/oauth2/grants/devices"
+    
+    // Contacts:
     case ADD_CONTACTS       = "/nzh/addContacts"
     case UPDATE_CONTACTS    = "/nzh/updateContacts"
     case REMOVE_CONTACTS    = "/nzh/removeContacts"
     case SEARCH_CONTACTS    = "/nzh/listContacts"
+    
+    // File/Image Upload and Download
     case UPLOAD_IMAGE       = "/nzh/uploadImage"
     case GET_IMAGE          = "/nzh/image/"
     case UPLOAD_FILE        = "/nzh/uploadFile"
     case GET_FILE           = "/nzh/file/"
+    
+    // Neshan Map
+    case REVERSE            = "/reverse"
+    case SEARCH             = "/search"
+    case ROUTING            = "/routing"
+    case STATIC_IMAGE       = "/static"
+    
 }
 
 
 public enum CHAT_ERRORS: String {
+    
+    // Socket Errors
     case err6000 = "No Active Device found for this Token!"
     case err6001 = "Invalid Token!"
     case err6002 = "User not found!"
+    
+    // Get User Info Errors
     case err6100 = "Cant get UserInfo!"
     case err6101 = "Getting User Info Retry Count exceeded 5 times; Connection Can Not Estabilish!"
+    
+    // Http Request Errors
     case err6200 = "Network Error"
     case err6201 = "URL is not clarified!"
+    
+    // File Uploads Errors
     case err6300 = "Error in uploading File!"
     case err6301 = "Not an image!"
     case err6302 = "No file has been selected!"
+    
+    // Map Errors
+    case err6700 = "You should Enter a Center Location like {lat: \" \", lng: \" \"}"
 }
 
 

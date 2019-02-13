@@ -10,30 +10,39 @@ import Foundation
 
 open class CreateThreadWithMessageRequestModel {
     
-    public let threadTitle:         String
-    public let threadType:          String?
-    public let threadInvitees:      [Invitee]
-    public let uniqueId:            String?
+    public let threadDescription:       String?
+    public let threadImage:             String?
+    public let threadInvitees:          [Invitee]
+    public let threadMetadata:          String?
+    public let threadTitle:             String
+    public let threadType:              String?
+    public let uniqueId:                String?
     public let messageContent:          String
     public let messageMetaDataId:       Int?
     public let messageMetaDataType:     String?
     public let messageMetaDataOwner:    String?
     
     
-    public init(threadTitle:           String,
-                threadType:            String?,
-                threadInvitees:        [Invitee],
-                uniqueId:              String?,
-                messageContent:        String,
-                messageMetaDataId:     Int?,
-                messageMetaDataType:   String?,
-                messageMetaDataOwner:  String?) {
+    public init(threadDescription:      String?,
+                threadImage:            String?,
+                threadInvitees:         [Invitee],
+                threadMetadata:         String?,
+                threadTitle:            String,
+                threadType:             String?,
+                uniqueId:               String?,
+                messageContent:         String,
+                messageMetaDataId:      Int?,
+                messageMetaDataType:    String?,
+                messageMetaDataOwner:   String?) {
         
-        self.uniqueId       = uniqueId
         
-        self.threadTitle    = threadTitle
-        self.threadType     = threadType
-        self.threadInvitees = threadInvitees
+        self.threadDescription  = threadDescription
+        self.threadImage        = threadImage
+        self.threadInvitees     = threadInvitees
+        self.threadMetadata     = threadMetadata
+        self.threadTitle        = threadTitle
+        self.threadType         = threadType
+        self.uniqueId           = uniqueId
         self.messageContent         = messageContent
         self.messageMetaDataId      = messageMetaDataId
         self.messageMetaDataType    = messageMetaDataType

@@ -11,18 +11,18 @@ import Foundation
 open class GetContactsRequestModel {
     
     public let count:       Int?
-    public let offset:      Int?
     public let name:        String?
+    public let offset:      Int?
     public let typeCode:    String?
     
     public init(count:     Int?,
-                offset:    Int?,
                 name:      String?,
+                offset:    Int?,
                 typeCode:  String?) {
         
         self.count      = count
-        self.offset     = offset
         self.name       = name
+        self.offset     = offset
         self.typeCode   = typeCode
     }
     

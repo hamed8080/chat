@@ -32,24 +32,24 @@ open class Participant {
      *    - sendEnable:         Bool?
      */
     
-    public let admin:              Bool?
-    public let blocked:            Bool?
-    public let cellphoneNumber:    String?
-    public let contactId:          Int?
-    public let coreUserId:         Int?
-    public let email:              String?
-    public let firstName:          String?
-    public let id:                 Int?
-    public let image:              String?
-    public let lastName:           String?
-    public let myFriend:           Bool?
-    public let name:               String?
-    public let notSeenDuration:    Int?
-    public let online:             Bool?
-    public let receiveEnable:      Bool?
-    public let sendEnable:         Bool?
+    public let admin:           Bool?
+    public let blocked:         Bool?
+    public let cellphoneNumber: String?
+    public let contactId:       Int?
+    public let coreUserId:      Int?
+    public let email:           String?
+    public let firstName:       String?
+    public let id:              Int?
+    public let image:           String?
+    public let lastName:        String?
+    public let myFriend:        Bool?
+    public let name:            String?
+    public let notSeenDuration: Int?
+    public let online:          Bool?
+    public let receiveEnable:   Bool?
+    public let sendEnable:      Bool?
     
-    public init(messageContent: JSON) {
+    public init(messageContent: JSON, threadId: Int?) {
         self.admin              = messageContent["admin"].bool
         self.blocked            = messageContent["blocked"].bool
         self.cellphoneNumber    = messageContent["cellphoneNumber"].string

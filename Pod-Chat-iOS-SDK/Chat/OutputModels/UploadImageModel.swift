@@ -35,37 +35,58 @@ open class UploadImageModel {
      */
     
     // uploadImage model properties
-    public let hasError:           Bool
-    public let errorMessage:       String
-    public let errorCode:          Int
-    public let uploadImage:        UploadImage
+    public let errorCode:           Int
+    public let errorMessage:        String
+    public let hasError:            Bool
+    //    public var localPath:           String = ""
+    public let uploadImage:         UploadImage?
+    
     
     public var uploadImageJSON: JSON = [:]
     
-    public init(messageContent: JSON,
-                hasError:       Bool,
+    public init(messageContentJSON: JSON?,
+                errorCode:      Int,
                 errorMessage:   String,
-                errorCode:      Int) {
+                hasError:       Bool/*,
+         localPath:      String?*/) {
         
         self.hasError           = hasError
         self.errorMessage       = errorMessage
         self.errorCode          = errorCode
         
-        self.uploadImage = UploadImage(messageContent: messageContent)
-        self.uploadImageJSON = uploadImage.formatToJSON()
+        //        if let pathString = localPath {
+        //            self.localPath = pathString
+        //        }
+        
+        if let content = messageContentJSON {
+            self.uploadImage = UploadImage(messageContent: content)
+            self.uploadImageJSON = uploadImage!.formatToJSON()
+        } else {
+            uploadImage = nil
+        }
+        
     }
     
-    public init(messageContent: UploadImage,
-                hasError:       Bool,
+    public init(messageContentModel: UploadImage?,
+                errorCode:      Int,
                 errorMessage:   String,
-                errorCode:      Int) {
+                hasError:       Bool/*,
+         localPath:      String?*/) {
         
         self.hasError           = hasError
         self.errorMessage       = errorMessage
         self.errorCode          = errorCode
         
-        self.uploadImage    = messageContent
-        self.uploadImageJSON = uploadImage.formatToJSON()
+        //        if let pathString = localPath {
+        //            self.localPath = pathString
+        //        }
+        
+        if let myImage = messageContentModel {
+            self.uploadImage    = myImage
+            self.uploadImageJSON = uploadImage!.formatToJSON()
+        } else {
+            uploadImage = nil
+        }
     }
     
     
@@ -73,9 +94,10 @@ open class UploadImageModel {
         let result: JSON = ["uploadImage": uploadImageJSON]
         
         let resultAsJSON: JSON = ["result": result,
-                                  "hasError": hasError,
+                                  "errorCode": errorCode,
                                   "errorMessage": errorMessage,
-                                  "errorCode": errorCode]
+                                  "hasError": hasError/*,
+             "localPath": localPath*/]
         
         return resultAsJSON
     }

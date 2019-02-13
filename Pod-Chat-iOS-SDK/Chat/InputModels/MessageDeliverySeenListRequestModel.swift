@@ -11,19 +11,19 @@ import Foundation
 open class MessageDeliverySeenListRequestModel {
     
     public let count:       Int?
+    public let messageId:   Int?
     public let offset:      Int?
     public let typeCode:    String?
-    public let messageId:   Int?
     
     public init(count:     Int?,
+                messageId: Int?,
                 offset:    Int?,
-                typeCode:  String?,
-                messageId: Int?) {
+                typeCode:  String?) {
         
         self.count      = count
+        self.messageId  = messageId
         self.offset     = offset
         self.typeCode   = typeCode
-        self.messageId  = messageId
     }
     
 }

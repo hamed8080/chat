@@ -10,29 +10,29 @@ import Foundation
 
 open class GetThreadParticipantsRequestModel {
     
-    public let threadId:            Int
     public let count:               Int?
-    public let offset:              Int?
     public let firstMessageId:      Int?
     public let lastMessageId:       Int?
     public let name:                String?
+    public let offset:              Int?
+    public let threadId:            Int
     public let typeCode:            String?
     
-    public init(threadId:          Int,
-                count:             Int?,
-                offset:            Int?,
-                firstMessageId:    Int?,
-                lastMessageId:     Int?,
-                name:              String?,
-                typeCode:          String?) {
+    public init(count:          Int?,
+                firstMessageId: Int?,
+                lastMessageId:  Int?,
+                name:           String?,
+                offset:         Int?,
+                threadId:       Int,
+                typeCode:       String?) {
         
-        self.threadId           = threadId
-        self.count              = count
-        self.offset             = offset
-        self.firstMessageId     = firstMessageId
-        self.lastMessageId      = lastMessageId
-        self.name               = name
-        self.typeCode           = typeCode
+        self.count          = count
+        self.firstMessageId = firstMessageId
+        self.lastMessageId  = lastMessageId
+        self.name           = name
+        self.offset         = offset
+        self.threadId       = threadId
+        self.typeCode       = typeCode
     }
     
 }

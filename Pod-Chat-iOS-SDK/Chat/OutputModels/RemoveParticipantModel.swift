@@ -34,7 +34,7 @@ open class RemoveParticipantModel {
         
         if let result = messageContent["result"].array {
             for item in result {
-                let tempContact = Participant(messageContent: item)
+                let tempContact = Participant(messageContent: item, threadId: nil)
                 let tempContactJSON = tempContact.formatToJSON()
                 
                 self.participants.append(tempContact)
@@ -44,7 +44,7 @@ open class RemoveParticipantModel {
         
     }
     
-    public init(messageContent: [Participant]?,
+    public init(messageObjects: [Participant]?,
                 hasError:       Bool,
                 errorMessage:   String,
                 errorCode:      Int) {
@@ -53,7 +53,7 @@ open class RemoveParticipantModel {
         self.errorMessage       = errorMessage
         self.errorCode          = errorCode
         
-        if let result = messageContent {
+        if let result = messageObjects {
             self.contentCount = result.count
             for item in result {
                 self.participants.append(item)

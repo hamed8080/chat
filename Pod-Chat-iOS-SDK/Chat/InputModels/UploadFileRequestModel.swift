@@ -10,29 +10,29 @@ import Foundation
 
 open class UploadFileRequestModel {
     
+    public let dataToSend:          Data
     public let fileExtension:       String?
     public let fileName:            String?
     public let fileSize:            Int?
+    public let originalFileName:    String?
     public let threadId:            Int?
     public let uniqueId:            String?
-    public let originalFileName:    String?
-    public let dataToSend:          Data
     
-    public init(fileExtension:     String?,
+    public init(dataToSend:        Data,
+                fileExtension:     String?,
                 fileName:          String,
                 fileSize:          Int?,
-                threadId:          Int,
-                uniqueId:          String?,
                 originalFileName:  String?,
-                dataToSend:        Data) {
+                threadId:          Int?,
+                uniqueId:          String?) {
         
+        self.dataToSend         = dataToSend
         self.fileExtension      = fileExtension
         self.fileName           = fileName
         self.fileSize           = fileSize
+        self.originalFileName   = originalFileName
         self.threadId           = threadId
         self.uniqueId           = uniqueId
-        self.originalFileName   = originalFileName
-        self.dataToSend         = dataToSend
     }
     
 }

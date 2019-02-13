@@ -31,37 +31,58 @@ open class UploadFileModel {
      */
     
     // uploadFile model properties
-    public let hasError:           Bool
-    public let errorMessage:       String
-    public let errorCode:          Int
-    public let uploadFile:         UploadFile
+    public let errorCode:           Int
+    public let errorMessage:        String
+    public let hasError:            Bool
+    //    public var localPath:           String = ""
+    public let uploadFile:          UploadFile?
     
     public var uploadFileJSON: JSON = [:]
     
-    public init(messageContent: JSON,
-                hasError:       Bool,
+    public init(messageContentJSON: JSON?,
+                errorCode:      Int,
                 errorMessage:   String,
-                errorCode:      Int) {
+                hasError:       Bool/*,
+         localPath:      String?*/) {
         
         self.hasError           = hasError
         self.errorMessage       = errorMessage
         self.errorCode          = errorCode
         
-        self.uploadFile = UploadFile(messageContent: messageContent)
-        self.uploadFileJSON = uploadFile.formatToJSON()
+        //        if let pathString = localPath {
+        //            self.localPath = pathString
+        //        }
+        
+        if let myFile = messageContentJSON {
+            self.uploadFile = UploadFile(messageContent: myFile)
+            self.uploadFileJSON = uploadFile!.formatToJSON()
+        } else {
+            self.uploadFile = nil
+        }
+        
     }
     
-    public init(messageContent: UploadFile,
-                hasError:       Bool,
+    public init(messageContentModel: UploadFile?,
+                errorCode:      Int,
                 errorMessage:   String,
-                errorCode:      Int) {
+                hasError:       Bool/*,
+         localPath:      String?*/) {
         
         self.hasError           = hasError
         self.errorMessage       = errorMessage
         self.errorCode          = errorCode
         
-        uploadFile          = messageContent
-        self.uploadFileJSON = messageContent.formatToJSON()
+        //        if let pathString = localPath {
+        //            self.localPath = pathString
+        //        }
+        
+        if let myFile = messageContentModel {
+            self.uploadFile = myFile
+            self.uploadFileJSON = uploadFile!.formatToJSON()
+        } else {
+            self.uploadFile = nil
+        }
+        
     }
     
     
@@ -69,9 +90,10 @@ open class UploadFileModel {
         let result: JSON = ["uploadFile": uploadFileJSON]
         
         let resultAsJSON: JSON = ["result": result,
-                                  "hasError": hasError,
+                                  "errorCode": errorCode,
                                   "errorMessage": errorMessage,
-                                  "errorCode": errorCode]
+                                  "hasError": hasError/*,
+             "localPath": localPath*/]
         
         return resultAsJSON
     }

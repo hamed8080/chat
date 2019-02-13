@@ -13,35 +13,47 @@ import SwiftyJSON
 
 open class GetHistoryRequestModel {
     
-    public let threadId:            Int
     public let count:               Int?
-    public let offset:              Int?
     public let firstMessageId:      Int?
+    public let fromTime:            UInt?
     public let lastMessageId:       Int?
+    public let messageId:           Int?
+    public let metadataCriteria:    JSON?
+    public let offset:              Int?
     public let order:               String?
     public let query:               String?
+    public let threadId:            Int
+    public let toTime:              UInt?
     public let typeCode:            String?
-    public let metadataCriteria:    JSON?
+    public let uniqueId:            String?
     
-    public init(threadId:          Int,
-                count:             Int?,
-                offset:            Int?,
-                firstMessageId:    Int?,
-                lastMessageId:     Int?,
-                order:             String?,
-                query:             String?,
-                typeCode:          String?,
-                metadataCriteria:  JSON?) {
+    public init(count:              Int?,
+                firstMessageId:     Int?,
+                fromTime:           UInt?,
+                lastMessageId:      Int?,
+                messageId:          Int?,
+                metadataCriteria:   JSON?,
+                offset:             Int?,
+                order:              String?,
+                query:              String?,
+                threadId:           Int,
+                toTime:             UInt?,
+                typeCode:           String?,
+                uniqueId:           String?) {
         
-        self.threadId           = threadId
         self.count              = count
-        self.offset             = offset
         self.firstMessageId     = firstMessageId
+        self.fromTime           = fromTime
         self.lastMessageId      = lastMessageId
+        self.messageId          = messageId
+        self.metadataCriteria   = metadataCriteria
+        self.offset             = offset
         self.order              = order
         self.query              = query
+        self.threadId           = threadId
+        self.toTime             = toTime
         self.typeCode           = typeCode
-        self.metadataCriteria   = metadataCriteria
+        self.uniqueId           = uniqueId
     }
     
 }

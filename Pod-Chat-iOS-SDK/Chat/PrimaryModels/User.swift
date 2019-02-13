@@ -50,13 +50,13 @@ open class User {
     }
     
     public init(cellphoneNumber:   String?,
-         email:             String?,
-         id:                Int?,
-         image:             String?,
-         lastSeen:          Int?,
-         name:              String?,
-         receiveEnable:     Bool?,
-         sendEnable:        Bool?) {
+                email:             String?,
+                id:                Int?,
+                image:             String?,
+                lastSeen:          Int?,
+                name:              String?,
+                receiveEnable:     Bool?,
+                sendEnable:        Bool?) {
         
         self.cellphoneNumber    = cellphoneNumber
         self.email              = email

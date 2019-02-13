@@ -39,6 +39,7 @@ open class Contact {
     public let lastName:           String?
     public var linkedUser:         LinkedUser?
     public let notSeenDuration:    Int?
+    public let timeStamp:          UInt?
     public let uniqueId:           String?
     public let userId:             Int?
     
@@ -50,6 +51,7 @@ open class Contact {
         self.image              = messageContent["profileImage"].string
         self.lastName           = messageContent["lastName"].string
         self.notSeenDuration    = messageContent["notSeenDuration"].int
+        self.timeStamp          = messageContent["timeStamp"].uInt
         self.uniqueId           = messageContent["uniqueId"].string
         self.userId             = messageContent["userId"].int
         
@@ -76,6 +78,7 @@ open class Contact {
                 lastName:          String?,
                 linkedUser:        LinkedUser?,
                 notSeenDuration:   Int?,
+                timeStamp:         UInt?,
                 uniqueId:          String?,
                 userId:            Int?) {
         
@@ -88,6 +91,7 @@ open class Contact {
         self.lastName           = lastName
         self.linkedUser         = linkedUser
         self.notSeenDuration    = notSeenDuration
+        self.timeStamp          = timeStamp
         self.uniqueId           = uniqueId
         self.userId             = userId
         
@@ -104,6 +108,7 @@ open class Contact {
         self.lastName           = theContact.lastName
         self.linkedUser         = theContact.linkedUser
         self.notSeenDuration    = theContact.notSeenDuration
+        self.timeStamp          = theContact.timeStamp
         self.uniqueId           = theContact.uniqueId
         self.userId             = theContact.userId
     }
@@ -123,6 +128,7 @@ open class Contact {
                             "lastName":         lastName ?? NSNull(),
                             "linkedUserJSON":   linkedUser?.formatToJSON() ?? NSNull(),
                             "notSeenDuration":  notSeenDuration ?? NSNull(),
+                            "timeStamp":        timeStamp ?? NSNull(),
                             "uniqueId":         uniqueId ?? NSNull(),
                             "userId":           userId ?? NSNull()]
         return result

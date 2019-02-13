@@ -1,8 +1,8 @@
 //
 //  CMConversation+CoreDataClass.swift
-//  Chat
+//  FanapPodChatSDK
 //
-//  Created by Mahyar Zhiani on 10/1/1397 AP.
+//  Created by Mahyar Zhiani on 11/1/1397 AP.
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 //
@@ -20,14 +20,20 @@ public class CMConversation: NSManagedObject {
         var group:                          Bool?
         var id:                             Int?
         var joinDate:                       Int?
-        var lastParticipantImage:           String?
-        var lastParticipantName:            String?
+        //        var lastParticipantImage:           String?
+        //        var lastParticipantName:            String?
         var lastSeenMessageId:              Int?
+        var lastSeenMessageNanos:           UInt?
+        var lastSeenMessageTime:            UInt?
         var mute:                           Bool?
         var participantCount:               Int?
         var partner:                        Int?
-        var partnerLastDeliveredMessageId:  Int?
+        var partnerLastDeliveredMessageId:      Int?
+        var partnerLastDeliveredMessageNanos:   UInt?
+        var partnerLastDeliveredMessageTime:    UInt?
         var partnerLastSeenMessageId:       Int?
+        var partnerLastSeenMessageNanos:    UInt?
+        var partnerLastSeenMessageTime:     UInt?
         var time:                           UInt?
         var type:                           Int?
         var unreadCount:                    Int?
@@ -55,6 +61,12 @@ public class CMConversation: NSManagedObject {
             if let lastSeenMessageId2 = self.lastSeenMessageId as? Int {
                 lastSeenMessageId = lastSeenMessageId2
             }
+            if let lastSeenMessageNanos2 = self.lastSeenMessageNanos as? UInt {
+                lastSeenMessageNanos = lastSeenMessageNanos2
+            }
+            if let lastSeenMessageTime2 = self.lastSeenMessageTime as? UInt {
+                lastSeenMessageTime = lastSeenMessageTime2
+            }
             if let mute2 = self.mute as? Bool {
                 mute = mute2
             }
@@ -67,8 +79,20 @@ public class CMConversation: NSManagedObject {
             if let partnerLastDeliveredMessageId2 = self.partnerLastDeliveredMessageId as? Int {
                 partnerLastDeliveredMessageId = partnerLastDeliveredMessageId2
             }
+            if let partnerLastDeliveredMessageNanos2 = self.partnerLastDeliveredMessageNanos as? UInt {
+                partnerLastDeliveredMessageNanos = partnerLastDeliveredMessageNanos2
+            }
+            if let partnerLastDeliveredMessageTime2 = self.partnerLastDeliveredMessageTime as? UInt {
+                partnerLastDeliveredMessageTime = partnerLastDeliveredMessageTime2
+            }
             if let partnerLastSeenMessageId2 = self.partnerLastSeenMessageId as? Int {
                 partnerLastSeenMessageId = partnerLastSeenMessageId2
+            }
+            if let partnerLastSeenMessageNanos2 = self.partnerLastSeenMessageNanos as? UInt {
+                partnerLastSeenMessageNanos = partnerLastSeenMessageNanos2
+            }
+            if let partnerLastSeenMessageTime2 = self.partnerLastSeenMessageTime as? UInt {
+                partnerLastSeenMessageTime = partnerLastSeenMessageTime2
             }
             if let time2 = self.time as? UInt {
                 time = time2
@@ -92,30 +116,36 @@ public class CMConversation: NSManagedObject {
         
         func createMessageModel() -> Conversation {
             let conversationModel = Conversation(admin:                 admin,
-                                                 canEditInfo:            canEditInfo,
-                                                 canSpam:                canSpam,
-                                                 description:            self.description,
-                                                 group:                  group,
-                                                 id:                     id,
-                                                 image:                  self.image,
-                                                 joinDate:               joinDate,
-                                                 lastMessage:            self.lastMessage,
-                                                 lastParticipantImage:   lastParticipantImage,
-                                                 lastParticipantName:    lastParticipantName,
-                                                 lastSeenMessageId:      lastSeenMessageId,
-                                                 metadata:               self.metadata,
-                                                 mute:                   mute,
-                                                 participantCount:       participantCount,
-                                                 partner:                partner,
-                                                 partnerLastDeliveredMessageId:    partnerLastDeliveredMessageId,
-                                                 partnerLastSeenMessageId:         partnerLastSeenMessageId,
-                                                 time:                   time,
-                                                 title:                  self.title,
-                                                 type:                   type,
-                                                 unreadCount:            unreadCount,
-                                                 inviter:                self.inviter?.convertCMParticipantToParticipantObject(),
-                                                 lastMessageVO:          self.lastMessageVO?.convertCMMessageToMessageObject(),
-                                                 participants:           participants)
+                                                 canEditInfo:           canEditInfo,
+                                                 canSpam:               canSpam,
+                                                 description:           self.descriptions,
+                                                 group:                 group,
+                                                 id:                    id,
+                                                 image:                 self.image,
+                                                 joinDate:              joinDate,
+                                                 lastMessage:           self.lastMessage,
+                                                 lastParticipantImage:  lastParticipantImage,
+                                                 lastParticipantName:   lastParticipantName,
+                                                 lastSeenMessageId:     lastSeenMessageId,
+                                                 lastSeenMessageNanos:  lastSeenMessageNanos,
+                                                 lastSeenMessageTime:   lastSeenMessageTime,
+                                                 metadata:              self.metadata,
+                                                 mute:                  mute,
+                                                 participantCount:      participantCount,
+                                                 partner:               partner,
+                                                 partnerLastDeliveredMessageId:     partnerLastDeliveredMessageId,
+                                                 partnerLastDeliveredMessageNanos:  partnerLastDeliveredMessageNanos,
+                                                 partnerLastDeliveredMessageTime:   partnerLastDeliveredMessageTime,
+                                                 partnerLastSeenMessageId:      partnerLastSeenMessageId,
+                                                 partnerLastSeenMessageNanos:   partnerLastSeenMessageNanos,
+                                                 partnerLastSeenMessageTime:    partnerLastSeenMessageTime,
+                                                 time:                  time,
+                                                 title:                 self.title,
+                                                 type:                  type,
+                                                 unreadCount:           unreadCount,
+                                                 inviter:               self.inviter?.convertCMParticipantToParticipantObject(),
+                                                 lastMessageVO:         self.lastMessageVO?.convertCMMessageToMessageObject(),
+                                                 participants:          participants)
             
             return conversationModel
         }

@@ -1,8 +1,8 @@
 //
 //  CMUser+CoreDataProperties.swift
-//  Chat
+//  FanapPodChatSDK
 //
-//  Created by Mahyar Zhiani on 10/5/1397 AP.
+//  Created by Mahyar Zhiani on 11/23/1397 AP.
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 //
@@ -12,11 +12,11 @@ import CoreData
 
 
 extension CMUser {
-
+    
     @nonobjc public class func fetchRequest() -> NSFetchRequest<CMUser> {
         return NSFetchRequest<CMUser>(entityName: "CMUser")
     }
-
+    
     @NSManaged public var cellphoneNumber:  String?
     @NSManaged public var email:            String?
     @NSManaged public var id:               NSNumber?
@@ -25,5 +25,5 @@ extension CMUser {
     @NSManaged public var name:             String?
     @NSManaged public var receiveEnable:    NSNumber?
     @NSManaged public var sendEnable:       NSNumber?
-
+    
 }
