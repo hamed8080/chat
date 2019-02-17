@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import SwiftyJSON
 
 //public class CoreDataStack {
 //    private init() {}
@@ -97,3 +98,49 @@ public class CoreDataStack: NSObject {
     }
     
 }
+
+
+
+
+
+
+extension NSObject {
+    
+    static func convertJSONtoTransformable(dataToStore: JSON, completion: (NSData?) -> Void) {
+        do {
+            let data = try JSONSerialization.data(withJSONObject: dataToStore, options: [])
+            completion(data as NSData)
+        } catch let error as NSError {
+            print("NSJSONSerialization Error: \(error)")
+            completion(nil)
+        }
+    }
+    
+//    static func convertJSONToTransformable(dataToStore: [String: AnyObject], completion: (NSData?) -> Void) {
+//        do {
+//            let data = try JSONSerialization.data(withJSONObject: dataToStore, options: [])
+//            completion(data as NSData)
+//        } catch let error as NSError {
+//            print("NSJSONSerialization Error: \(error)")
+//            completion(nil)
+//        }
+//    }
+    
+    func retrieveJSONfromTransformableData(completion: (JSON) -> Void) {
+        if let data = self as? NSData {
+            do {
+                let nsJSON = try JSONSerialization.jsonObject(with: data as Data, options: [])
+                completion(JSON(nsJSON))
+            } catch let error as NSError {
+                print("NSJSONSerialization Error: \(error)")
+                completion(nil)
+            }
+        }
+    }
+    
+}
+
+
+
+
+

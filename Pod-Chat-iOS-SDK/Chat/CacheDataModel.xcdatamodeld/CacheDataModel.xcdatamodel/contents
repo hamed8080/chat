@@ -157,6 +157,70 @@
         <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
+    <entity name="QueueOfEditMessages" representedClassName=".QueueOfEditMessages" syncable="YES">
+        <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="metaData" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="subjectId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="typeCode" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uniqueId" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="QueueOfFileMessages" representedClassName=".QueueOfFileMessages" syncable="YES">
+        <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fileName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fileToSend" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="hC" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imageName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imageToSend" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="metaData" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="subjectId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="typeCode" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uniqueId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="wC" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="xC" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="yC" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="QueueOfForwardMessages" representedClassName=".QueueOfForwardMessages" syncable="YES">
+        <attribute name="messageIds" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="metaData" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="subjectId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="typeCode" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uniqueId" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="QueueOfTextMessages" representedClassName=".QueueOfTextMessages" syncable="YES">
+        <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="metaData" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="systemMetadata" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="typeCode" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uniqueId" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="QueueOfUploadFiles" representedClassName=".QueueOfUploadFiles" syncable="YES">
+        <attribute name="dataToSend" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="fileExtension" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fileName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fileSize" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="originalFileName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="uniqueId" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="QueueOfUploadImages" representedClassName=".QueueOfUploadImages" syncable="YES">
+        <attribute name="dataToSend" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="fileExtension" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fileName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fileSize" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="hC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="originalFileName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="uniqueId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="wC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="xC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="yC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+    </entity>
     <elements>
         <element name="CMBlockedContact" positionX="-461.90234375" positionY="-78.6953125" width="128" height="105"/>
         <element name="CMContact" positionX="-307.48828125" positionY="-144.9375" width="128" height="225"/>
@@ -171,5 +235,11 @@
         <element name="CMUploadImage" positionX="-460.42578125" positionY="37.66796875" width="128" height="150"/>
         <element name="CMUser" positionX="-463.83984375" positionY="196.234375" width="128" height="165"/>
         <element name="PhoneContact" positionX="-261" positionY="0" width="128" height="105"/>
+        <element name="QueueOfEditMessages" positionX="-243" positionY="18" width="128" height="135"/>
+        <element name="QueueOfFileMessages" positionX="-261" positionY="0" width="128" height="270"/>
+        <element name="QueueOfForwardMessages" positionX="-234" positionY="36" width="128" height="135"/>
+        <element name="QueueOfTextMessages" positionX="-252" positionY="9" width="128" height="150"/>
+        <element name="QueueOfUploadImages" positionX="-261" positionY="0" width="128" height="210"/>
+        <element name="QueueOfUploadFiles" positionX="-252" positionY="9" width="128" height="150"/>
     </elements>
 </model>
