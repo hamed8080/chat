@@ -35,10 +35,10 @@ public class Chat {
     var fileServer:     String  = ""        // Address of the FileServer (SERVICE_ADDRESSES.FILESERVER_ADDRESS)
     var serverName:     String  = ""        // Name of the server that we had registered on
     var token:          String  = ""        // every user have to had a token (get it from SSO Server)
-    var generalTypeCode:    String = "default"
-    var enableCache:        Bool = false
-    var mapApiKey:          String = "8b77db18704aa646ee5aaea13e7370f4f88b9e8c"
-    var mapServer:          String = "https://api.neshan.org/v1"
+    var generalTypeCode:    String  = "default"
+    var enableCache:        Bool    = false
+    var mapApiKey:          String  = "8b77db18704aa646ee5aaea13e7370f4f88b9e8c"
+    var mapServer:          String  = "https://api.neshan.org/v1"
     
     //    var ssoGrantDevicesAddress = params.ssoGrantDevicesAddress
     var chatFullStateObject: JSON = [:]
@@ -1902,11 +1902,13 @@ extension Chat {
         
         var content: JSON = [:]
         if let contactId = blockContactsInput.contactId {
-            content = ["contactId": contactId]
-        } else if let threadId = blockContactsInput.threadId {
-            content = ["threadId": threadId]
-        } else if let userId = blockContactsInput.userId {
-            content = ["userId": userId]
+            content["contactId"] = JSON(contactId)
+        }
+        if let threadId = blockContactsInput.threadId {
+            content["threadId"] = JSON(threadId)
+        }
+        if let userId = blockContactsInput.userId {
+            content["userId"] = JSON(userId)
         }
         
         sendMessageParams["content"] = JSON("\(content)")
@@ -2041,16 +2043,20 @@ extension Chat {
         log.verbose("Try to request to unblock user with this parameters: \n \(unblockContactsInput)", context: "Chat")
         
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.UNBLOCK.rawValue,
-                                       "typeCode": unblockContactsInput.typeCode ?? generalTypeCode,
-                                       "subjectId": unblockContactsInput.blockId]
+                                       "typeCode": unblockContactsInput.typeCode ?? generalTypeCode]
+        if let subjectId = unblockContactsInput.blockId {
+            sendMessageParams["subjectId"] = JSON(subjectId)
+        }
         
         var content: JSON = [:]
         if let contactId = unblockContactsInput.contactId {
-            content = ["contactId": contactId]
-        } else if let threadId = unblockContactsInput.threadId {
-            content = ["threadId": threadId]
-        } else if let userId = unblockContactsInput.userId {
-            content = ["userId": userId]
+            content["contactId"] = JSON(contactId)
+        }
+        if let threadId = unblockContactsInput.threadId {
+            content["threadId"] = JSON(threadId)
+        }
+        if let userId = unblockContactsInput.userId {
+            content["userId"] = JSON(userId)
         }
         
         sendMessageParams["content"] = JSON("\(content)")
