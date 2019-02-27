@@ -1,3 +1,4 @@
 Pod-Chat-iOS-SDK/Alamofire-4.8.0/
-.DS_Store/
-
+.DS_Store
+xcuserdata/
+*.xcuserdata
