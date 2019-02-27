@@ -111,6 +111,9 @@ extension Chat: AsyncDelegates {
                 }) { _ in }
                 
             }
+        } else {
+            chatState = true
+            delegate?.chatReady()
         }
     }
     

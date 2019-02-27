@@ -10,13 +10,13 @@ import Foundation
 
 open class UnblockContactsRequestModel {
     
-    public let blockId:     Int
+    public let blockId:     Int?
     public let contactId:   Int?
     public let threadId:    Int?
     public let typeCode:    String?
     public let userId:      Int?
     
-    public init(blockId: Int, contactId: Int?, threadId: Int?, typeCode: String?, userId: Int?) {
+    public init(blockId: Int?, contactId: Int?, threadId: Int?, typeCode: String?, userId: Int?) {
         self.blockId    = blockId
         self.contactId  = contactId
         self.threadId   = threadId

@@ -35,42 +35,42 @@ public class Chat {
     var fileServer:     String  = ""        // Address of the FileServer (SERVICE_ADDRESSES.FILESERVER_ADDRESS)
     var serverName:     String  = ""        // Name of the server that we had registered on
     var token:          String  = ""        // every user have to had a token (get it from SSO Server)
-    var generalTypeCode:    String = "default"
-    var enableCache:        Bool = false
-    var mapApiKey:          String = "8b77db18704aa646ee5aaea13e7370f4f88b9e8c"
-    var mapServer:          String = "https://api.neshan.org/v1"
+    var generalTypeCode:    String  = "default"
+    var enableCache:        Bool    = false
+    var mapApiKey:          String  = "8b77db18704aa646ee5aaea13e7370f4f88b9e8c"
+    var mapServer:          String  = "https://api.neshan.org/v1"
     
     //    var ssoGrantDevicesAddress = params.ssoGrantDevicesAddress
     var chatFullStateObject: JSON = [:]
     
-    var msgPriority: Int
-    var msgTTL: Int
+    var msgPriority:        Int
+    var msgTTL:             Int
     var httpRequestTimeout: Int
-    var actualTimingLog: Bool
+    var actualTimingLog:    Bool
     
-    var wsConnectionWaitTime: Double
-    var connectionRetryInterval: Int
-    var connectionCheckTimeout: Int
-    var messageTtl: Int
-    var reconnectOnClose: Bool
+    var wsConnectionWaitTime:       Double
+    var connectionRetryInterval:    Int
+    var connectionCheckTimeout:     Int
+    var messageTtl:                 Int
+    var reconnectOnClose:           Bool
     
-    var imageMimeTypes = ["image/bmp", "image/png", "image/tiff", "image/gif", "image/x-icon", "image/jpeg", "image/webp"]
-    var imageExtentions = ["bmp", "png", "tiff", "tiff2", "gif", "ico", "jpg", "jpeg", "webp"]
+//    var imageMimeTypes = ["image/bmp", "image/png", "image/tiff", "image/gif", "image/x-icon", "image/jpeg", "image/webp"]
+//    var imageExtentions = ["bmp", "png", "tiff", "tiff2", "gif", "ico", "jpg", "jpeg", "webp"]
     
-    var asyncClient: Async?
-    var deviceId: String?
-    var peerId: Int?
-    var oldPeerId: Int?
-    var userInfo: User?
+    var asyncClient:    Async?
+    var deviceId:       String?
+    var peerId:         Int?
+    var oldPeerId:      Int?
+    var userInfo:       User?
     
-    var getHistoryCount: Int = 50
-    var getUserInfoRetry = 5
-    var getUserInfoRetryCount = 0
+    var getHistoryCount         = 50
+    var getUserInfoRetry        = 5
+    var getUserInfoRetryCount   = 0
     var chatPingMessageInterval = 20
-    var lastReceivedMessageTime: Date?
-    var lastReceivedMessageTimeoutId: RepeatingTimer?
-    var lastSentMessageTime: Date?
-    var lastSentMessageTimeoutId: RepeatingTimer?
+    var lastReceivedMessageTime:        Date?
+    var lastReceivedMessageTimeoutId:   RepeatingTimer?
+    var lastSentMessageTime:            Date?
+    var lastSentMessageTimeoutId:       RepeatingTimer?
     var chatState = false
     var cacheTimeStamp = (2 * 24) * (60 * 60)
     
@@ -228,8 +228,8 @@ public class Chat {
     private var getMessageSeenListCallbackToUser:   callbackTypeAlias?
     private var getMessageDeliverListCallbackToUser: callbackTypeAlias?
     
-    var tempSendMessageArr:     [[String : JSON]]   = []
-    var tempReceiveMessageArr:  [[String: JSON]]    = []
+//    var tempSendMessageArr:     [[String : JSON]]   = []
+//    var tempReceiveMessageArr:  [[String: JSON]]    = []
     
     public func setGetUserInfoRetryCount(value: Int) {
         getUserInfoRetryCount = value
@@ -280,17 +280,17 @@ extension Chat {
     }
     
     
-    func httpRequest(from urlStr:   String,
-                     withMethod:    HTTPMethod,
-                     withHeaders:   HTTPHeaders?,
-                     withParameters: Parameters?,
-                     dataToSend:    Any?,
-                     isImage:       Bool?,
-                     isFile:        Bool?,
-                     completion:    @escaping callbackTypeAlias,
-                     progress:      callbackTypeAliasFloat?,
-                     idDownloadRequest: Bool,
-                     isMapServiceRequst: Bool,
+    func httpRequest(from urlStr:           String,
+                     withMethod:            HTTPMethod,
+                     withHeaders:           HTTPHeaders?,
+                     withParameters:        Parameters?,
+                     dataToSend:            Any?,
+                     isImage:               Bool?,
+                     isFile:                Bool?,
+                     completion:            @escaping callbackTypeAlias,
+                     progress:              callbackTypeAliasFloat?,
+                     idDownloadRequest:     Bool,
+                     isMapServiceRequst:    Bool,
                      downloadReturnData:    @escaping (Data?, JSON) -> ()) {
         
         let url = URL(string: urlStr)!
@@ -1473,7 +1473,9 @@ extension Chat {
      2- completion:  it will returns the response that comes from server to this request.    (UserInfoModel)
      3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
      */
-    public func getUserInfo(uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias, cacheResponse: @escaping (UserInfoModel) -> ()) {
+    public func getUserInfo(uniqueId:       @escaping (String) -> (),
+                            completion:     @escaping callbackTypeAlias,
+                            cacheResponse:  @escaping (UserInfoModel) -> ()) {
         log.verbose("Try to request to get user info", context: "Chat")
         userInfoCallbackToUser = completion
         let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.USER_INFO.rawValue,
@@ -1517,7 +1519,10 @@ extension Chat {
      2- completion:  it will returns the response that comes from server to this request.    (GetContactsModel)
      3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
      */
-    public func getContacts(getContactsInput: GetContactsRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias, cacheResponse: @escaping (GetContactsModel) -> ()) {
+    public func getContacts(getContactsInput:   GetContactsRequestModel,
+                            uniqueId:           @escaping (String) -> (),
+                            completion:         @escaping callbackTypeAlias,
+                            cacheResponse:      @escaping (GetContactsModel) -> ()) {
         log.verbose("Try to request to get Contacts with this parameters: \n \(getContactsInput)", context: "Chat")
         
         var content: JSON = [:]
@@ -1617,7 +1622,9 @@ extension Chat {
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
      2- completion:  it will returns the response that comes from server to this request.    (ContactModel)
      */
-    public func addContact(addContactsInput: AddContactsRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func addContact(addContactsInput:    AddContactsRequestModel,
+                           uniqueId:            @escaping (String) -> (),
+                           completion:          @escaping callbackTypeAlias) {
         log.verbose("Try to request to add contact with this parameters: \n \(addContactsInput)", context: "Chat")
         
         var data: Parameters = [:]
@@ -1713,7 +1720,9 @@ extension Chat {
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
      2- completion:  it will returns the response that comes from server to this request.    (ContactModel)
      */
-    public func updateContact(updateContactsInput: UpdateContactsRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func updateContact(updateContactsInput:  UpdateContactsRequestModel,
+                              uniqueId:             @escaping (String) -> (),
+                              completion:           @escaping callbackTypeAlias) {
         log.verbose("Try to request to update contact with this parameters: \n \(updateContactsInput)", context: "Chat")
         
         var data: Parameters = [:]
@@ -1808,7 +1817,9 @@ extension Chat {
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
      2- completion:  it will returns the response that comes from server to this request.    (RemoveContactModel)
      */
-    public func removeContact(removeContactsInput: RemoveContactsRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func removeContact(removeContactsInput:  RemoveContactsRequestModel,
+                              uniqueId:             @escaping (String) -> (),
+                              completion:           @escaping callbackTypeAlias) {
         log.verbose("Try to request to remove contact with this parameters: \n \(removeContactsInput)", context: "Chat")
         
         var data: Parameters = [:]
@@ -1881,7 +1892,9 @@ extension Chat {
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
      2- completion:  it will returns the response that comes from server to this request.    (BlockedContactModel)
      */
-    public func blockContact(blockContactsInput: BlockContactsRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func blockContact(blockContactsInput:    BlockContactsRequestModel,
+                             uniqueId:              @escaping (String) -> (),
+                             completion:            @escaping callbackTypeAlias) {
         log.verbose("Try to request to block user with this parameters: \n \(blockContactsInput)", context: "Chat")
         
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.BLOCK.rawValue,
@@ -1889,11 +1902,13 @@ extension Chat {
         
         var content: JSON = [:]
         if let contactId = blockContactsInput.contactId {
-            content = ["contactId": contactId]
-        } else if let threadId = blockContactsInput.threadId {
-            content = ["threadId": threadId]
-        } else if let userId = blockContactsInput.userId {
-            content = ["userId": userId]
+            content["contactId"] = JSON(contactId)
+        }
+        if let threadId = blockContactsInput.threadId {
+            content["threadId"] = JSON(threadId)
+        }
+        if let userId = blockContactsInput.userId {
+            content["userId"] = JSON(userId)
         }
         
         sendMessageParams["content"] = JSON("\(content)")
@@ -1946,7 +1961,9 @@ extension Chat {
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
      2- completion:  it will returns the response that comes from server to this request.    (GetBlockedContactListModel)
      */
-    public func getBlockedContacts(getBlockedContactsInput: GetBlockedContactListRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func getBlockedContacts(getBlockedContactsInput: GetBlockedContactListRequestModel,
+                                   uniqueId:                @escaping (String) -> (),
+                                   completion:              @escaping callbackTypeAlias) {
         log.verbose("Try to request to get block users with this parameters: \n \(getBlockedContactsInput)", context: "Chat")
         
         var content: JSON = [:]
@@ -2020,20 +2037,26 @@ extension Chat {
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
      2- completion:  it will returns the response that comes from server to this request.    (BlockedContactModel)
      */
-    public func unblockContact(unblockContactsInput: UnblockContactsRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func unblockContact(unblockContactsInput:    UnblockContactsRequestModel,
+                               uniqueId:                @escaping (String) -> (),
+                               completion:              @escaping callbackTypeAlias) {
         log.verbose("Try to request to unblock user with this parameters: \n \(unblockContactsInput)", context: "Chat")
         
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.UNBLOCK.rawValue,
-                                       "typeCode": unblockContactsInput.typeCode ?? generalTypeCode,
-                                       "subjectId": unblockContactsInput.blockId]
+                                       "typeCode": unblockContactsInput.typeCode ?? generalTypeCode]
+        if let subjectId = unblockContactsInput.blockId {
+            sendMessageParams["subjectId"] = JSON(subjectId)
+        }
         
         var content: JSON = [:]
         if let contactId = unblockContactsInput.contactId {
-            content = ["contactId": contactId]
-        } else if let threadId = unblockContactsInput.threadId {
-            content = ["threadId": threadId]
-        } else if let userId = unblockContactsInput.userId {
-            content = ["userId": userId]
+            content["contactId"] = JSON(contactId)
+        }
+        if let threadId = unblockContactsInput.threadId {
+            content["threadId"] = JSON(threadId)
+        }
+        if let userId = unblockContactsInput.userId {
+            content["userId"] = JSON(userId)
         }
         
         sendMessageParams["content"] = JSON("\(content)")
@@ -2086,7 +2109,10 @@ extension Chat {
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
      2- completion:  it will returns the response that comes from server to this request.    (ContactModel)
      */
-    public func searchContacts(searchContactsInput: SearchContactsRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias, cacheResponse: @escaping (GetContactsModel) -> ()) {
+    public func searchContacts(searchContactsInput: SearchContactsRequestModel,
+                               uniqueId:            @escaping (String) -> (),
+                               completion:          @escaping callbackTypeAlias,
+                               cacheResponse:       @escaping (GetContactsModel) -> ()) {
         log.verbose("Try to request to search contact with this parameters: \n \(searchContactsInput)", context: "Chat")
         
         var data: Parameters = [:]
@@ -2232,7 +2258,9 @@ extension Chat {
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
      2- completion:  it will returns the response for each contact creation.                 (ContactModel)
      */
-    public func syncContacts(uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias, cacheResponse: @escaping ([ContactModel]) -> ()) {
+    public func syncContacts(uniqueId:      @escaping (String) -> (),
+                             completion:    @escaping callbackTypeAlias,
+                             cacheResponse: @escaping ([ContactModel]) -> ()) {
         log.verbose("Try to request to sync contact", context: "Chat")
         
         let myUniqueId = generateUUID()
@@ -2348,7 +2376,10 @@ extension Chat {
      2- completion:  it will returns the response that comes from server to this request.    (GetThreadsModel)
      3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
      */
-    public func getThreads(getThreadsInput: GetThreadsRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias, cacheResponse: @escaping (GetThreadsModel) -> ()) {
+    public func getThreads(getThreadsInput: GetThreadsRequestModel,
+                           uniqueId:        @escaping (String) -> (),
+                           completion:      @escaping callbackTypeAlias,
+                           cacheResponse:   @escaping (GetThreadsModel) -> ()) {
         log.verbose("Try to request to get threads with this parameters: \n \(getThreadsInput)", context: "Chat")
         
         //        var threadIdArr: [Int]?
@@ -2485,7 +2516,16 @@ extension Chat {
      2- completion:  it will returns the response that comes from server to this request.    (GetHistoryModel)
      3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
      */
-    public func getHistory(getHistoryInput: GetHistoryRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias, cacheResponse: @escaping (GetHistoryModel) -> ()) {
+    public func getHistory(getHistoryInput:         GetHistoryRequestModel,
+                           uniqueId:                @escaping (String) -> (),
+                           completion:              @escaping callbackTypeAlias,
+                           cacheResponse:           @escaping (GetHistoryModel) -> (),
+                           textMessagesNotSent:     @escaping ([QueueOfWaitTextMessagesModel]) -> (),
+                           editMessagesNotSent:     @escaping ([QueueOfWaitEditMessagesModel]) -> (),
+                           forwardMessagesNotSent:  @escaping ([QueueOfWaitForwardMessagesModel]) -> (),
+                           fileMessagesNotSent:     @escaping ([QueueOfWaitFileMessagesModel]) -> (),
+                           uploadImageNotSent:      @escaping ([QueueOfWaitUploadImagesModel]) -> (),
+                           uploadFileNotSent:       @escaping ([QueueOfWaitUploadFilesModel]) -> ()) {
         log.verbose("Try to request to get history with this parameters: \n \(getHistoryInput)", context: "Chat")
         
         var content: JSON = [:]
@@ -2541,7 +2581,24 @@ extension Chat {
         }
         historyCallbackToUser = completion
         
-        
+        if let textMessages = Chat.cacheDB.retrieveWaitTextMessages(threadId: getHistoryInput.threadId) {
+            textMessagesNotSent(textMessages)
+        }
+        if let editMessages = Chat.cacheDB.retrieveWaitEditMessages(threadId: getHistoryInput.threadId) {
+            editMessagesNotSent(editMessages)
+        }
+        if let forwardMessages = Chat.cacheDB.retrieveWaitForwardMessages(threadId: getHistoryInput.threadId) {
+            forwardMessagesNotSent(forwardMessages)
+        }
+        if let fileMessages = Chat.cacheDB.retrieveWaitFileMessages(threadId: getHistoryInput.threadId) {
+            fileMessagesNotSent(fileMessages)
+        }
+        if let uploadImages = Chat.cacheDB.retrieveWaitUploadImages(threadId: getHistoryInput.threadId) {
+            uploadImageNotSent(uploadImages)
+        }
+        if let uploadFiles = Chat.cacheDB.retrieveWaitUploadFiles(threadId: getHistoryInput.threadId) {
+            uploadFileNotSent(uploadFiles)
+        }
         
         // if cache is enabled by user, first return cache result to the user
         if enableCache {
@@ -2639,7 +2696,9 @@ extension Chat {
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
      2- completion:  it will returns the response that comes from server to this request.    (CreateThreadModel)
      */
-    public func createThread(createThreadInput: CreateThreadRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func createThread(createThreadInput: CreateThreadRequestModel,
+                             uniqueId:          @escaping (String) -> (),
+                             completion:        @escaping callbackTypeAlias) {
         log.verbose("Try to request to create thread participants with this parameters: \n \(createThreadInput)", context: "Chat")
         
         var content: JSON = [:]
@@ -2754,7 +2813,12 @@ extension Chat {
      4- onDelivere:
      5- onSeen:
      */
-    public func creatThreadWithMessage(creatThreadWithMessageInput: CreateThreadWithMessageRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias, onSent: @escaping callbackTypeAlias, onDelivere: @escaping callbackTypeAlias, onSeen: @escaping callbackTypeAlias) {
+    public func creatThreadWithMessage(creatThreadWithMessageInput: CreateThreadWithMessageRequestModel,
+                                       uniqueId:                    @escaping (String) -> (),
+                                       completion:                  @escaping callbackTypeAlias,
+                                       onSent:                      @escaping callbackTypeAlias,
+                                       onDelivere:                  @escaping callbackTypeAlias,
+                                       onSeen:                      @escaping callbackTypeAlias) {
         log.verbose("Try to request to create thread and Send Message participants with this parameters: \n \(creatThreadWithMessageInput)", context: "Chat")
         
         let myUniqueId = generateUUID()
@@ -2924,7 +2988,9 @@ extension Chat {
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
      2- completion:  it will returns the response that comes from server to this request.    (??)
      */
-    public func muteThread(muteThreadInput: MuteAndUnmuteThreadRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func muteThread(muteThreadInput: MuteAndUnmuteThreadRequestModel,
+                           uniqueId:        @escaping (String) -> (),
+                           completion:      @escaping callbackTypeAlias) {
         log.verbose("Try to request to mute threads with this parameters: \n \(muteThreadInput)", context: "Chat")
         
         let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.MUTE_THREAD.rawValue,
@@ -2971,7 +3037,9 @@ extension Chat {
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
      2- completion:  it will returns the response that comes from server to this request.    (??)
      */
-    public func unmuteThread(unmuteThreadInput: MuteAndUnmuteThreadRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func unmuteThread(unmuteThreadInput: MuteAndUnmuteThreadRequestModel,
+                             uniqueId:          @escaping (String) -> (),
+                             completion:        @escaping callbackTypeAlias) {
         log.verbose("Try to request to unmute threads with this parameters: \n \(unmuteThreadInput)", context: "Chat")
         
         let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.UNMUTE_THREAD.rawValue,
@@ -3023,7 +3091,10 @@ extension Chat {
      2- completion:  it will returns the response that comes from server to this request.    (GetThreadParticipantsModel)
      3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
      */
-    public func getThreadParticipants(getThreadParticipantsInput: GetThreadParticipantsRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias, cacheResponse: @escaping (GetThreadParticipantsModel) -> ()) {
+    public func getThreadParticipants(getThreadParticipantsInput:   GetThreadParticipantsRequestModel,
+                                      uniqueId:                     @escaping (String) -> (),
+                                      completion:                   @escaping callbackTypeAlias,
+                                      cacheResponse:                @escaping (GetThreadParticipantsModel) -> ()) {
         log.verbose("Try to request to get thread participants with this parameters: \n \(getThreadParticipantsInput)", context: "Chat")
         
         var content: JSON = [:]
@@ -3145,7 +3216,9 @@ extension Chat {
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
      2- completion:  it will returns the response that comes from server to this request.    (AddParticipantModel)
      */
-    public func addParticipants(addParticipantsInput: AddParticipantsRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func addParticipants(addParticipantsInput:   AddParticipantsRequestModel,
+                                uniqueId:               @escaping (String) -> (),
+                                completion:             @escaping callbackTypeAlias) {
         log.verbose("Try to request to add participants with this parameters: \n \(addParticipantsInput)", context: "Chat")
         
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.ADD_PARTICIPANT.rawValue]
@@ -3225,7 +3298,9 @@ extension Chat {
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
      2- completion:  it will returns the response that comes from server to this request.    (RemoveParticipantModel)
      */
-    public func removeParticipants(removeParticipantsInput: RemoveParticipantsRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func removeParticipants(removeParticipantsInput: RemoveParticipantsRequestModel,
+                                   uniqueId:                @escaping (String) -> (),
+                                   completion:              @escaping callbackTypeAlias) {
         log.verbose("Try to request to remove participants with this parameters: \n \(removeParticipantsInput)", context: "Chat")
         
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.REMOVE_PARTICIPANT.rawValue]
@@ -3305,7 +3380,9 @@ extension Chat {
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
      2- completion:  it will returns the response that comes from server to this request.    (CreateThreadModel)
      */
-    public func leaveThread(leaveThreadInput: LeaveThreadRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func leaveThread(leaveThreadInput:   LeaveThreadRequestModel,
+                            uniqueId:           @escaping (String) -> (),
+                            completion:         @escaping callbackTypeAlias) {
         log.verbose("Try to request to leave thread with this parameters: \n \(leaveThreadInput)", context: "Chat")
         
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.LEAVE_THREAD.rawValue,
@@ -3398,8 +3475,27 @@ extension Chat {
      3- onDelivere:
      4- onSeen:
      */
-    public func sendTextMessage(sendTextMessageInput: SendTextMessageRequestModel, uniqueId: @escaping (String) -> (), onSent: @escaping callbackTypeAlias, onDelivere: @escaping callbackTypeAlias, onSeen: @escaping callbackTypeAlias) {
+    public func sendTextMessage(sendTextMessageInput:   SendTextMessageRequestModel,
+                                uniqueId:               @escaping (String) -> (),
+                                onSent:                 @escaping callbackTypeAlias,
+                                onDelivere:             @escaping callbackTypeAlias,
+                                onSeen:                 @escaping callbackTypeAlias) {
         log.verbose("Try to send Message with this parameters: \n \(sendTextMessageInput)", context: "Chat")
+        let tempUniqueId = generateUUID()
+        
+        // seve this message on the Cache Wait Queue,
+        // so if there was an situation that response of the server to this message doesn't come, then we know that our message didn't sent correctly
+        // and we will send this Queue to user on the GetHistory request,
+        // now user knows which messages didn't send correctly, and can handle them
+        let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(content:      sendTextMessageInput.content,
+                                                                      metaData:     sendTextMessageInput.metaData,
+                                                                      repliedTo:    sendTextMessageInput.repliedTo,
+                                                                      systemMetadata: sendTextMessageInput.systemMetadata,
+                                                                      threadId:     sendTextMessageInput.threadId,
+                                                                      typeCode:     sendTextMessageInput.typeCode,
+                                                                      uniqueId:     sendTextMessageInput.uniqueId ?? tempUniqueId)
+        Chat.cacheDB.saveTextMessageToWaitQueue(textMessage: messageObjectToSendToQueue)
+        
         
         let messageTxtContent = makeCustomTextToSend(textMessage: sendTextMessageInput.content)
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.MESSAGE.rawValue,
@@ -3414,6 +3510,8 @@ extension Chat {
         
         if let uniqueId = sendTextMessageInput.uniqueId {
             sendMessageParams["uniqueId"] = JSON(uniqueId)
+        } else {
+            sendMessageParams["uniqueId"] = JSON(tempUniqueId)
         }
         
         if let systemMetadata = sendTextMessageInput.systemMetadata {
@@ -3503,8 +3601,23 @@ extension Chat {
      3- onDelivere:
      4- onSeen:
      */
-    public func editMessage(editMessageInput: EditTextMessageRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func editMessage(editMessageInput:   EditTextMessageRequestModel,
+                            uniqueId:           @escaping (String) -> (),
+                            completion:         @escaping callbackTypeAlias) {
         log.verbose("Try to request to edit message with this parameters: \n \(editMessageInput)", context: "Chat")
+        let tempUniqueId = generateUUID()
+        
+        // seve this message on the Cache Wait Queue,
+        // so if there was an situation that response of the server to this message doesn't come, then we know that our message didn't sent correctly
+        // and we will send this Queue to user on the GetHistory request,
+        // now user knows which messages didn't send correctly, and can handle them
+        let messageObjectToSendToQueue = QueueOfWaitEditMessagesModel(content: editMessageInput.content,
+                                                                      metaData: editMessageInput.metaData,
+                                                                      repliedTo: editMessageInput.repliedTo,
+                                                                      subjectId: editMessageInput.subjectId,
+                                                                      typeCode: editMessageInput.typeCode,
+                                                                      uniqueId: editMessageInput.uniqueId ?? tempUniqueId)
+        Chat.cacheDB.saveEditMessageToWaitQueue(editMessage: messageObjectToSendToQueue)
         
         let messageTxtContent = makeCustomTextToSend(textMessage: editMessageInput.content)
         //        let content: JSON = ["content": messageTxtContent]
@@ -3520,6 +3633,8 @@ extension Chat {
         
         if let uniqueId = editMessageInput.uniqueId {
             sendMessageParams["uniqueId"] = JSON(uniqueId)
+        } else {
+            sendMessageParams["uniqueId"] = JSON(tempUniqueId)
         }
         
         if let metaData = editMessageInput.metaData {
@@ -3592,8 +3707,26 @@ extension Chat {
      3- onDelivere:
      4- onSeen:
      */
-    public func replyMessage(replyMessageInput: ReplyTextMessageRequestModel, uniqueId: @escaping (String) -> (), onSent: @escaping callbackTypeAlias, onDelivere: @escaping callbackTypeAlias, onSeen: @escaping callbackTypeAlias) {
+    public func replyMessage(replyMessageInput: ReplyTextMessageRequestModel,
+                             uniqueId:          @escaping (String) -> (),
+                             onSent:            @escaping callbackTypeAlias,
+                             onDelivere:        @escaping callbackTypeAlias,
+                             onSeen:            @escaping callbackTypeAlias) {
         log.verbose("Try to reply Message with this parameters: \n \(replyMessageInput)", context: "Chat")
+        let tempUniqueId = generateUUID()
+        
+        // seve this message on the Cache Wait Queue,
+        // so if there was an situation that response of the server to this message doesn't come, then we know that our message didn't sent correctly
+        // and we will send this Queue to user on the GetHistory request,
+        // now user knows which messages didn't send correctly, and can handle them
+        let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(content:      replyMessageInput.content,
+                                                                      metaData:     replyMessageInput.metaData,
+                                                                      repliedTo:    replyMessageInput.repliedTo,
+                                                                      systemMetadata: nil,
+                                                                      threadId:     replyMessageInput.subjectId,
+                                                                      typeCode:     replyMessageInput.typeCode,
+                                                                      uniqueId:     replyMessageInput.uniqueId ?? tempUniqueId)
+        Chat.cacheDB.saveTextMessageToWaitQueue(textMessage: messageObjectToSendToQueue)
         
         let messageTxtContent = makeCustomTextToSend(textMessage: replyMessageInput.content)
         //        let content: JSON = ["content": messageTxtContent]
@@ -3605,6 +3738,8 @@ extension Chat {
         
         if let uniqueId = replyMessageInput.uniqueId {
             sendMessageParams["uniqueId"] = JSON(uniqueId)
+        } else {
+            sendMessageParams["uniqueId"] = JSON(tempUniqueId)
         }
         
         if let metaData = replyMessageInput.metaData {
@@ -3681,8 +3816,26 @@ extension Chat {
      3- onDelivere:
      4- onSeen:
      */
-    public func forwardMessage(forwardMessageInput: ForwardMessageRequestModel, uniqueIds: @escaping (String) -> (), onSent: @escaping callbackTypeAlias, onDelivere: @escaping callbackTypeAlias, onSeen: @escaping callbackTypeAlias) {
+    public func forwardMessage(forwardMessageInput: ForwardMessageRequestModel,
+                               uniqueIds:           @escaping (String) -> (),
+                               onSent:              @escaping callbackTypeAlias,
+                               onDelivere:          @escaping callbackTypeAlias,
+                               onSeen:              @escaping callbackTypeAlias) {
         log.verbose("Try to Forward with this parameters: \n \(forwardMessageInput)", context: "Chat")
+        let tempUniqueId = generateUUID()
+        
+        // seve this message on the Cache Wait Queue,
+        // so if there was an situation that response of the server to this message doesn't come, then we know that our message didn't sent correctly
+        // and we will send this Queue to user on the GetHistory request,
+        // now user knows which messages didn't send correctly, and can handle them
+        let messageObjectToSendToQueue = QueueOfWaitForwardMessagesModel(messageIds: forwardMessageInput.messageIds,
+                                                                         metaData:  forwardMessageInput.metaData,
+                                                                         repliedTo: forwardMessageInput.repliedTo,
+                                                                         subjectId: forwardMessageInput.subjectId,
+                                                                         typeCode:  forwardMessageInput.typeCode,
+                                                                         uniqueId:  tempUniqueId)
+        Chat.cacheDB.saveForwardMessageToWaitQueue(forwardMessage: messageObjectToSendToQueue)
+        
         
         let messageIdsList: [Int] = forwardMessageInput.messageIds
         var uniqueIdsList: [String] = []
@@ -3826,8 +3979,35 @@ extension Chat {
      3- onDelivered:
      4- onSeen:
      */
-    public func sendFileMessage(sendFileMessageInput: SendFileMessageRequestModel, uniqueId: @escaping (String) -> (), uploadProgress: @escaping (Float) -> (), onSent: @escaping callbackTypeAlias, onDelivered: @escaping callbackTypeAlias, onSeen: @escaping callbackTypeAlias) {
+    public func sendFileMessage(sendFileMessageInput:   SendFileMessageRequestModel,
+                                uniqueId:               @escaping (String) -> (),
+                                uploadProgress:         @escaping (Float) -> (),
+                                onSent:                 @escaping callbackTypeAlias,
+                                onDelivered:            @escaping callbackTypeAlias,
+                                onSeen:                 @escaping callbackTypeAlias) {
         log.verbose("Try to Send File adn Message with this parameters: \n \(sendFileMessageInput)", context: "Chat")
+        let messageUniqueId = generateUUID()
+        
+        // seve this message on the Cache Wait Queue,
+        // so if there was an situation that response of the server to this message doesn't come, then we know that our message didn't sent correctly
+        // and we will send this Queue to user on the GetHistory request,
+        // now user knows which messages didn't send correctly, and can handle them
+        let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      sendFileMessageInput.content,
+                                                                      fileName:     sendFileMessageInput.fileName,
+                                                                      imageName:    sendFileMessageInput.imageName,
+                                                                      metaData:     sendFileMessageInput.metaData,
+                                                                      repliedTo:    sendFileMessageInput.repliedTo,
+                                                                      subjectId:    sendFileMessageInput.subjectId,
+                                                                      threadId:     sendFileMessageInput.threadId,
+                                                                      typeCode:     sendFileMessageInput.typeCode,
+                                                                      uniqueId:     messageUniqueId,
+                                                                      xC:           sendFileMessageInput.xC,
+                                                                      yC:           sendFileMessageInput.yC,
+                                                                      hC:           sendFileMessageInput.hC,
+                                                                      wC:           sendFileMessageInput.wC,
+                                                                      fileToSend:   sendFileMessageInput.fileToSend,
+                                                                      imageToSend:  sendFileMessageInput.imageToSend)
+        Chat.cacheDB.saveFileMessageToWaitQueue(fileMessage: messageObjectToSendToQueue)
         
         var fileName:       String  = ""
         var fileType:       String  = ""
@@ -3840,7 +4020,7 @@ extension Chat {
             fileName = myImageName
         }
         
-        let uploadUniqueId: String = generateUUID()
+        let uploadUniqueId = generateUUID()
         
         var metaData: JSON = [:]
         metaData["file"]["originalName"] = JSON(fileName)
@@ -3870,7 +4050,6 @@ extension Chat {
             paramsToSendToUpload["threadId"] = JSON(threadId)
         }
         
-        let messageUniqueId = generateUUID()
         uniqueId(messageUniqueId)
         
         var paramsToSendToSendMessage: JSON = ["uniqueId": messageUniqueId,
@@ -4089,8 +4268,36 @@ extension Chat {
      
      this function is almost the same as SendFileMessage function
      */
-    public func replyFileMessage(replyFileMessageInput: SendFileMessageRequestModel, uniqueId: @escaping (String) -> (), uploadProgress: @escaping (Float) -> (), onSent: @escaping callbackTypeAlias, onDelivered: @escaping callbackTypeAlias, onSeen: @escaping callbackTypeAlias) {
+    public func replyFileMessage(replyFileMessageInput: SendFileMessageRequestModel,
+                                 uniqueId:              @escaping (String) -> (),
+                                 uploadProgress:        @escaping (Float) -> (),
+                                 onSent:                @escaping callbackTypeAlias,
+                                 onDelivered:           @escaping callbackTypeAlias,
+                                 onSeen:                @escaping callbackTypeAlias) {
         log.verbose("Try to reply File Message with this parameters: \n \(replyFileMessageInput)", context: "Chat")
+        let uploadUniqueId = generateUUID()
+        
+        // seve this message on the Cache Wait Queue,
+        // so if there was an situation that response of the server to this message doesn't come, then we know that our message didn't sent correctly
+        // and we will send this Queue to user on the GetHistory request,
+        // now user knows which messages didn't send correctly, and can handle them
+        let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      replyFileMessageInput.content,
+                                                                      fileName:     replyFileMessageInput.fileName,
+                                                                      imageName:    replyFileMessageInput.imageName,
+                                                                      metaData:     replyFileMessageInput.metaData,
+                                                                      repliedTo:    replyFileMessageInput.repliedTo,
+                                                                      subjectId:    replyFileMessageInput.subjectId,
+                                                                      threadId:     replyFileMessageInput.threadId,
+                                                                      typeCode:     replyFileMessageInput.typeCode,
+                                                                      uniqueId:     uploadUniqueId,
+                                                                      xC:           replyFileMessageInput.xC,
+                                                                      yC:           replyFileMessageInput.yC,
+                                                                      hC:           replyFileMessageInput.hC,
+                                                                      wC:           replyFileMessageInput.wC,
+                                                                      fileToSend:   replyFileMessageInput.fileToSend,
+                                                                      imageToSend:  replyFileMessageInput.imageToSend)
+        Chat.cacheDB.saveFileMessageToWaitQueue(fileMessage: messageObjectToSendToQueue)
+        
         
         var fileName:       String  = ""
         var fileType:       String  = ""
@@ -4102,8 +4309,6 @@ extension Chat {
         } else if let myImageName = replyFileMessageInput.imageName {
             fileName = myImageName
         }
-        
-        let uploadUniqueId: String = generateUUID()
         
         var metaData: JSON = [:]
         metaData["file"]["originalName"] = JSON(fileName)
@@ -4241,7 +4446,9 @@ extension Chat {
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
      2- completion:
      */
-    public func deleteMessage(deleteMessageInput: DeleteMessageRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func deleteMessage(deleteMessageInput:   DeleteMessageRequestModel,
+                              uniqueId:             @escaping (String) -> (),
+                              completion:           @escaping callbackTypeAlias) {
         log.verbose("Try to request to edit message with this parameters: \n \(deleteMessageInput)", context: "Chat")
         
         let content: JSON = ["deleteForAll": "\(deleteMessageInput.deleteForAll)"]
@@ -4319,8 +4526,30 @@ extension Chat {
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
      2- completion:
      */
-    public func uploadImage(uploadImageInput: UploadImageRequestModel, uniqueId: @escaping (String) -> (), progress: @escaping (Float) -> (), completion: @escaping callbackTypeAlias) {
+    public func uploadImage(uploadImageInput:   UploadImageRequestModel,
+                            uniqueId:           @escaping (String) -> (),
+                            progress:           @escaping (Float) -> (),
+                            completion:         @escaping callbackTypeAlias) {
         log.verbose("Try to upload image with this parameters: \n \(uploadImageInput)", context: "Chat")
+        let uploadUniqueId = generateUUID()
+        
+        // seve this upload image on the Cache Wait Queue,
+        // so if there was an situation that response of the server to this uploading doesn't come, then we know that our upload request didn't sent correctly
+        // and we will send this Queue to user on the GetHistory request,
+        // now user knows which upload requests didn't send correctly, and can handle them
+        let messageObjectToSendToQueue = QueueOfWaitUploadImagesModel(dataToSend:         uploadImageInput.dataToSend,
+                                                                      fileExtension:      uploadImageInput.fileExtension,
+                                                                      fileName:           uploadImageInput.fileName,
+                                                                      fileSize:           uploadImageInput.fileSize,
+                                                                      originalFileName:   uploadImageInput.originalFileName,
+                                                                      threadId:           uploadImageInput.threadId,
+                                                                      uniqueId:           uploadImageInput.uniqueId ?? uploadUniqueId,
+                                                                      xC:                 uploadImageInput.xC,
+                                                                      yC:                 uploadImageInput.yC,
+                                                                      hC:                 uploadImageInput.hC,
+                                                                      wC:                 uploadImageInput.wC)
+        Chat.cacheDB.saveUploadImageToWaitQueue(image: messageObjectToSendToQueue)
+        
         
         var fileName:           String  = ""
         //        var fileType:           String  = ""
@@ -4352,9 +4581,8 @@ extension Chat {
             uploadFileData["uniqueId"] = JSON(myUniqueId)
             uniqueId(myUniqueId)
         } else {
-            let myUniqueId = generateUUID()
-            uploadFileData["uniqueId"] = JSON(myUniqueId)
-            uniqueId(myUniqueId)
+            uploadFileData["uniqueId"] = JSON(uploadUniqueId)
+            uniqueId(uploadUniqueId)
         }
         
         if let myOriginalFileName = uploadImageInput.originalFileName {
@@ -4540,8 +4768,26 @@ extension Chat {
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
      2- completion:
      */
-    public func uploadFile(uploadFileInput: UploadFileRequestModel, uniqueId: @escaping (String) -> (), progress: @escaping (Float) -> (), completion: @escaping callbackTypeAlias) {
+    public func uploadFile(uploadFileInput: UploadFileRequestModel,
+                           uniqueId:        @escaping (String) -> (),
+                           progress:        @escaping (Float) -> (),
+                           completion:      @escaping callbackTypeAlias) {
         log.verbose("Try to upload file with this parameters: \n \(uploadFileInput)", context: "Chat")
+        let uploadUniqueId = generateUUID()
+        
+        // seve this upload image on the Cache Wait Queue,
+        // so if there was an situation that response of the server to this uploading doesn't come, then we know that our upload request didn't sent correctly
+        // and we will send this Queue to user on the GetHistory request,
+        // now user knows which upload requests didn't send correctly, and can handle them
+        let messageObjectToSendToQueue = QueueOfWaitUploadFilesModel(dataToSend: uploadFileInput.dataToSend,
+                                                                     fileExtension: uploadFileInput.fileExtension,
+                                                                     fileName: uploadFileInput.fileName,
+                                                                     fileSize: uploadFileInput.fileSize,
+                                                                     originalFileName: uploadFileInput.originalFileName,
+                                                                     threadId: uploadFileInput.threadId,
+                                                                     uniqueId: uploadFileInput.uniqueId)
+        Chat.cacheDB.saveUploadFileToWaitQueue(file: messageObjectToSendToQueue)
+        
         
         var fileName:           String  = ""
         //        var fileType:           String  = ""
@@ -4549,7 +4795,6 @@ extension Chat {
         var fileExtension:      String  = ""
         
         var uploadThreadId:     Int     = 0
-        var uploadUniqueId:     String  = ""
         var originalFileName:   String  = ""
         
         var uploadFileData: JSON = [:]
@@ -4574,10 +4819,9 @@ extension Chat {
         }
         
         if let myUniqueId = uploadFileInput.uniqueId {
-            uploadUniqueId = myUniqueId
+            uploadFileData["uniqueId"] = JSON(myUniqueId)
         } else {
-            let myUniqueId = generateUUID()
-            uploadUniqueId = myUniqueId
+            uploadFileData["uniqueId"] = JSON(uploadUniqueId)
         }
         
         if let myOriginalFileName = uploadFileInput.originalFileName {
@@ -4589,7 +4833,7 @@ extension Chat {
         uploadFileData["fileName"] = JSON(fileName)
         uploadFileData["threadId"] = JSON(uploadThreadId)
         uploadFileData["fileSize"] = JSON(fileSize)
-        uploadFileData["uniqueId"] = JSON(uploadUniqueId)
+//        uploadFileData["uniqueId"] = JSON(uploadUniqueId)
         uploadFileData["originalFileName"] = JSON(originalFileName)
         
         uniqueId(uploadUniqueId)
@@ -4623,6 +4867,8 @@ extension Chat {
                 // save data comes from server to the Cache
                 let uploadFileFile = UploadFile(messageContent: resultData)
                 Chat.cacheDB.saveUploadFile(fileInfo: uploadFileFile, fileData: uploadFileInput.dataToSend)
+                
+//                Chat.cacheDB.deleteWaitUploadFiles(uniqueId: )
                 
                 let uploadFileModel = UploadFileModel(messageContentJSON: resultData, errorCode: errorCode, errorMessage: errorMessage, hasError: hasError)
                 
@@ -4748,7 +4994,11 @@ extension Chat {
      2- completion:     when the file completely downloaded, it will sent to client as 'UploadImageModel' model
      3- cacheResponse:  If the file was already avalable on the cache, and aslso client wants to get cache result, it will send it as 'UploadImageModel' model
      */
-    public func getImage(getImageInput: GetImageRequestModel, uniqueId: @escaping (String) -> (), progress: @escaping (Float) -> (), completion: @escaping (Data?, UploadImageModel) -> (), cacheResponse: @escaping (UploadImageModel, String) -> ()) {
+    public func getImage(getImageInput: GetImageRequestModel,
+                         uniqueId:      @escaping (String) -> (),
+                         progress:      @escaping (Float) -> (),
+                         completion:    @escaping (Data?, UploadImageModel) -> (),
+                         cacheResponse: @escaping (UploadImageModel, String) -> ()) {
         
         let theUniqueId = generateUUID()
         
@@ -4827,7 +5077,11 @@ extension Chat {
      2- completion:     when the file completely downloaded, it will sent to client as 'UploadFileModel' model
      3- cacheResponse:  If the file was already avalable on the cache, and aslso client wants to get cache result, it will send it as 'UploadFileModel' model
      */
-    public func getFile(getFileInput: GetFileRequestModel, uniqueId: @escaping (String) -> (), progress: @escaping (Float) -> (), completion: @escaping (Data?, UploadFileModel) -> (), cacheResponse: @escaping (UploadFileModel, String) -> ()) {
+    public func getFile(getFileInput:   GetFileRequestModel,
+                        uniqueId:       @escaping (String) -> (),
+                        progress:       @escaping (Float) -> (),
+                        completion:     @escaping (Data?, UploadFileModel) -> (),
+                        cacheResponse:  @escaping (UploadFileModel, String) -> ()) {
         
         let theUniqueId = generateUUID()
         uniqueId(theUniqueId)
@@ -4900,7 +5154,9 @@ extension Chat {
      1- uniqueId:       the unique id of this request, that returns as a collback to client. (String)
      2- completion:     the final response of this request will sent to the client as 'MapReverseModel' model
      */
-    public func mapReverse(mapReverseInput: MapReverseRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func mapReverse(mapReverseInput: MapReverseRequestModel,
+                           uniqueId:        @escaping (String) -> (),
+                           completion:      @escaping callbackTypeAlias) {
         
         let theUniqueId = generateUUID()
         uniqueId(theUniqueId)
@@ -4942,7 +5198,9 @@ extension Chat {
      1- uniqueId:       the unique id of this request, that returns as a collback to client. (String)
      2- completion:     the final response of this request will sent to the client as 'MapSearchModel' model
      */
-    public func mapSearch(mapSearchInput: MapSearchRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func mapSearch(mapSearchInput:   MapSearchRequestModel,
+                          uniqueId:         @escaping (String) -> (),
+                          completion:       @escaping callbackTypeAlias) {
         
         let theUniqueId = generateUUID()
         uniqueId(theUniqueId)
@@ -4986,7 +5244,9 @@ extension Chat {
      1- uniqueId:       the unique id of this request, that returns as a collback to client. (String)
      2- completion:     the final response of this request will sent to the client as 'MapRoutingModel' model
      */
-    public func mapRouting(mapRoutingInput: MapRoutingRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func mapRouting(mapRoutingInput: MapRoutingRequestModel,
+                           uniqueId:        @escaping (String) -> (),
+                           completion:      @escaping callbackTypeAlias) {
         
         let theUniqueId = generateUUID()
         uniqueId(theUniqueId)
@@ -5030,7 +5290,10 @@ extension Chat {
      1- uniqueId:       the unique id of this request, that returns as a collback to client. (String)
      2- completion:     the final response of this request will sent to the client as and Image file
      */
-    public func mapStaticImage(mapStaticImageInput: MapStaticImageRequestModel, uniqueId: @escaping (String) -> (), progress: @escaping (Float) -> (), completion: @escaping callbackTypeAlias) {
+    public func mapStaticImage(mapStaticImageInput: MapStaticImageRequestModel,
+                               uniqueId:            @escaping (String) -> (),
+                               progress:            @escaping (Float) -> (),
+                               completion:          @escaping callbackTypeAlias) {
         
         let theUniqueId = generateUUID()
         uniqueId(theUniqueId)
@@ -5096,7 +5359,9 @@ extension Chat {
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
      2- completion:
      */
-    public func updateThreadInfo(updateThreadInfoInput: UpdateThreadInfoRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func updateThreadInfo(updateThreadInfoInput: UpdateThreadInfoRequestModel,
+                                 uniqueId:              @escaping (String) -> (),
+                                 completion:            @escaping callbackTypeAlias) {
         log.verbose("Try to request to update thread info with this parameters: \n \(updateThreadInfoInput)", context: "Chat")
         
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.UPDATE_THREAD_INFO.rawValue,
@@ -5201,7 +5466,9 @@ extension Chat {
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
      2- completion:
      */
-    public func spamPvThread(spamPvThreadInput: SpamPvThreadRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func spamPvThread(spamPvThreadInput: SpamPvThreadRequestModel,
+                             uniqueId:          @escaping (String) -> (),
+                             completion:        @escaping callbackTypeAlias) {
         log.verbose("Try to request to spam thread with this parameters: \n \(spamPvThreadInput)", context: "Chat")
         
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.SPAM_PV_THREAD.rawValue,
@@ -5253,7 +5520,9 @@ extension Chat {
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
      2- completion:
      */
-    public func messageDeliveryList(messageDeliveryListInput: MessageDeliverySeenListRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func messageDeliveryList(messageDeliveryListInput:   MessageDeliverySeenListRequestModel,
+                                    uniqueId:                   @escaping (String) -> (),
+                                    completion:                 @escaping callbackTypeAlias) {
         log.verbose("Try to request to get message deliver participants with this parameters: \n \(messageDeliveryListInput)", context: "Chat")
         
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_MESSAGE_DELEVERY_PARTICIPANTS.rawValue]
@@ -5337,7 +5606,9 @@ extension Chat {
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
      2- completion:
      */
-    public func messageSeenList(messageSeenListInput: MessageDeliverySeenListRequestModel, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+    public func messageSeenList(messageSeenListInput:   MessageDeliverySeenListRequestModel,
+                                uniqueId:               @escaping (String) -> (),
+                                completion:             @escaping callbackTypeAlias) {
         log.verbose("Try to request to get message seen participants with this parameters: \n \(messageSeenListInput)", context: "Chat")
         
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_MESSAGE_SEEN_PARTICIPANTS.rawValue]
@@ -5864,6 +6135,13 @@ extension Chat {
                 message.id = Int(response["content"].stringValue)
                 
                 Chat.cacheDB.saveMessageObjects(messages: [message], getHistoryParams: nil)
+                
+                // the response from server is come correctly, so this message will be removed from wait queue
+                if let uID = message.uniqueId {
+                    Chat.cacheDB.deleteWaitTextMessage(uniqueId: uID)
+                    Chat.cacheDB.deleteWaitFileMessage(uniqueId: uID)
+                    Chat.cacheDB.deleteWaitForwardMessage(uniqueId: uID)
+                }
             }
             
             success(response)
@@ -5906,6 +6184,11 @@ extension Chat {
                 // save edited data on the cache
                 let message = Message(threadId: sendParams["subjectId"].int, pushMessageVO: messageContent)
                 Chat.cacheDB.saveMessageObjects(messages: [message], getHistoryParams: nil)
+                
+                // the response from server is come correctly, so this message will be removed from wait queue
+                if let uID = message.uniqueId {
+                    Chat.cacheDB.deleteWaitEditMessage(uniqueId: uID)
+                }
                 
                 let resultData: JSON = ["editedMessage": messageContent]
                 
