@@ -672,7 +672,9 @@ extension Chat {
             log.verbose("Message of type 'CREATE_THREAD' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
                 let threadData = Conversation(messageContent: messageContent).formatToJSON()
-                delegate?.threadEvents(type: "THREAD_NEW", result: threadData)
+//                delegate?.threadEvents(type: ThreadEventTypes.new, result: threadData)
+                
+//                chatDelegateCreateThread(createThread: threadData)
                 
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount)
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
@@ -983,6 +985,9 @@ extension Chat {
             log.verbose("Message of type 'GET_CONTACTS' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount)
+                
+                
+                
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
                 callback.onResultCallback(uID: uniqueId, response: returnData, success: { (successJSON) in
                     self.getContactsCallbackToUser?(successJSON)
@@ -1024,7 +1029,7 @@ extension Chat {
         // a message of type 17 (REMOVED_FROM_THREAD) comes from Server.
         case chatMessageVOTypes.REMOVED_FROM_THREAD.rawValue:
             let result: JSON = ["thread": threadId]
-            delegate?.threadEvents(type: "THREAD_REMOVED_FROM", result: result)
+            delegate?.threadEvents(type: ThreadEventTypes.removedFrom, result: result)
             break
             
         // a message of type 18 (REMOVE_PARTICIPANT) comes from Server.
@@ -1046,8 +1051,8 @@ extension Chat {
                 let threads = myResponseJSON["result"]["threads"].arrayValue
                 
                 let result: JSON = ["thread": threads[0]]
-                self.delegate?.threadEvents(type: "THREAD_REMOVE_PARTICIPANTS", result: result)
-                self.delegate?.threadEvents(type: "THREAD_LAST_ACTIVITY_TIME", result: result)
+                self.delegate?.threadEvents(type: ThreadEventTypes.removeParticipant, result: result)
+                self.delegate?.threadEvents(type: ThreadEventTypes.lastActivityTime, result: result)
             }
             break
             
@@ -1143,6 +1148,9 @@ extension Chat {
             log.verbose("Message of type 'USER_INFO' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: nil)
+                
+                self.chatDelegateUserInfo(userInfo: returnData)
+                
                 let callback: CallbackProtocol = Chat.map[uniqueId]!
                 callback.onResultCallback(uID: uniqueId, response: returnData, success: { (myUserInfoModel) in
                     self.getUserInfoRetryCount = 0
@@ -1225,7 +1233,7 @@ extension Chat {
             log.verbose("Message of type 'THREAD_INFO_UPDATED' recieved", context: "Chat")
             let conversation: Conversation = Conversation(messageContent: messageContent)
             let result: JSON = ["thread": conversation]
-            delegate?.threadEvents(type: "THREAD_INFO_UPDATED", result: result)
+            delegate?.threadEvents(type: ThreadEventTypes.infoUpdated, result: result)
             break
             
         // a message of type 31 (LAST_SEEN_UPDATED) comes from Server.
@@ -1347,7 +1355,7 @@ extension Chat {
         
         let messageJSON = message.formatToJSON()
         let myResult: JSON = ["message": messageJSON]
-        delegate?.messageEvents(type: "MESSAGE_NEW", result: myResult)
+        delegate?.messageEvents(type: MessageEventTypes.new, result: myResult)
         
         
         // This code is deprecated
@@ -1375,7 +1383,7 @@ extension Chat {
     func chatEditMessageHandler(threadId: Int, messageContent: JSON) {
         let message = Message(threadId: threadId, pushMessageVO: messageContent)
         let result: JSON = ["message": message]
-        delegate?.messageEvents(type: "MESSAGE_EDIT", result: result)
+        delegate?.messageEvents(type: MessageEventTypes.edit, result: result)
     }
     
     
@@ -1636,6 +1644,7 @@ extension Chat {
         
         let messageUniqueId: String = generateUUID()
         data["uniqueId"] = JSON(messageUniqueId)
+        uniqueId(messageUniqueId)
         
         let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.ADD_CONTACTS.rawValue)"
         let method: HTTPMethod = HTTPMethod.post
@@ -1826,8 +1835,9 @@ extension Chat {
         
         data["id"] = JSON(removeContactsInput.id)
         
-        let uniqueId: String = generateUUID()
-        data["uniqueId"] = JSON(uniqueId)
+        let theUniqueId: String = generateUUID()
+        data["uniqueId"] = JSON(theUniqueId)
+        uniqueId(theUniqueId)
         
         let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.REMOVE_CONTACTS.rawValue)"
         let method: HTTPMethod = HTTPMethod.post
@@ -2704,7 +2714,11 @@ extension Chat {
         var content: JSON = [:]
         
         content["title"] = JSON(createThreadInput.title)
-        content["invitees"] = JSON(createThreadInput.invitees)
+        var inviteees = [JSON]()
+        for item in createThreadInput.invitees {
+            inviteees.append(item.formatToJSON())
+        }
+        content["invitees"] = JSON(inviteees)
         
         if let image = createThreadInput.image {
             content["image"] = JSON(image)
@@ -4427,6 +4441,8 @@ extension Chat {
     
     
     
+    
+    
     /*
      DeleteMessage:
      delete specific message by getting message id.
@@ -5333,7 +5349,55 @@ extension Chat {
     
     
     
-    
+    public func sendLocationMessage(sendLocationMessageRequest: SendLocationMessageRequestModel,
+                                    uniqueId:                   @escaping (String) -> (),
+                                    progress:                   @escaping (Float) -> (),
+                                    onSent:                     @escaping callbackTypeAlias,
+                                    onDelivere:                 @escaping callbackTypeAlias,
+                                    onSeen:                     @escaping callbackTypeAlias) {
+        
+        let mapStaticImageInput = MapStaticImageRequestModel(centerLat: sendLocationMessageRequest.mapStaticCenterLat,
+                                                             centerLng: sendLocationMessageRequest.mapStaticCenterLng,
+                                                             height:    sendLocationMessageRequest.mapStaticHeight,
+                                                             type:      sendLocationMessageRequest.mapStaticType,
+                                                             width:     sendLocationMessageRequest.mapStaticWidth,
+                                                             zoom:      sendLocationMessageRequest.mapStaticZoom)
+        
+        mapStaticImage(mapStaticImageInput: mapStaticImageInput, uniqueId: { _ in }, progress: { (downloadProgress) in
+            //progress(downloadProgress)
+        }) { (imageData) in
+            let fileMessageInput = SendFileMessageRequestModel(fileName: nil,
+                                                               imageName:   sendLocationMessageRequest.sendMessageImageName,
+                                                               xC:          sendLocationMessageRequest.sendMessageXC,
+                                                               yC:          sendLocationMessageRequest.sendMessageYC,
+                                                               hC:          sendLocationMessageRequest.sendMessageHC,
+                                                               wC:          sendLocationMessageRequest.sendMessageWC,
+                                                               threadId:    sendLocationMessageRequest.sendMessageThreadId,
+                                                               content:     sendLocationMessageRequest.sendMessageContent,
+                                                               metaData:    sendLocationMessageRequest.sendMessageMetaData,
+                                                               repliedTo:   sendLocationMessageRequest.sendMessageRepliedTo,
+                                                               subjectId:   sendLocationMessageRequest.sendMessageSubjectId,
+                                                               typeCode:    sendLocationMessageRequest.sendMessageTypeCode,
+                                                               fileToSend:  nil,
+                                                               imageToSend: (imageData as! Data))
+            sendTM(params: fileMessageInput)
+        }
+        
+        func sendTM(params: SendFileMessageRequestModel) {
+            sendFileMessage(sendFileMessageInput: params, uniqueId: { (requestUniqueId) in
+                uniqueId(requestUniqueId)
+            }, uploadProgress: { (uploadProgress) in
+                progress(uploadProgress)
+            }, onSent: { (sent) in
+                onSent(sent)
+            }, onDelivered: { (deliver) in
+                onDelivere(deliver)
+            }) { (seen) in
+                onSeen(seen)
+            }
+        }
+        
+    }
     
     
     // MARK: -
@@ -5805,7 +5869,24 @@ extension Chat {
 // Calbacks Classes
 extension Chat {
     
-    
+    func chatDelegateUserInfo(userInfo: JSON) {
+
+        let hasError = userInfo["hasError"].boolValue
+        let errorMessage = userInfo["errorMessage"].stringValue
+        let errorCode = userInfo["errorCode"].intValue
+
+        if (!hasError) {
+            let resultData = userInfo["result"]
+            
+            // save data comes from server to the Cache
+            let user = User(messageContent: resultData)
+            Chat.cacheDB.createUserInfoObject(user: user)
+
+            let userInfoModel = UserInfoModel(messageContent: resultData, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+            
+            delegate?.userEvents(type: UserEventTypes.userInfo, result: userInfoModel)
+        }
+    }
     private class UserInfoCallback: CallbackProtocol {
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
             log.verbose("UserInfoCallback", context: "Chat")
@@ -5817,9 +5898,9 @@ extension Chat {
             if (!hasError) {
                 let resultData = response["result"]
                 
-                // save data comes from server to the Cache
-                let user = User(messageContent: resultData)
-                Chat.cacheDB.createUserInfoObject(user: user)
+//                // save data comes from server to the Cache
+//                let user = User(messageContent: resultData)
+//                Chat.cacheDB.createUserInfoObject(user: user)
                 
                 let userInfoModel = UserInfoModel(messageContent: resultData, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 
@@ -5831,7 +5912,38 @@ extension Chat {
         }
     }
     
-    
+    func chatDelegateGetContacts(getContact: JSON) {
+        var returnData: JSON = [:]
+        
+        let hasError = getContact["hasError"].boolValue
+        let errorMessage = getContact["errorMessage"].stringValue
+        let errorCode = getContact["errorCode"].intValue
+        
+        returnData["hasError"] = JSON(hasError)
+        returnData["errorMessage"] = JSON(errorMessage)
+        returnData["errorCode"] = JSON(errorCode)
+        
+        if (!hasError) {
+            let result = getContact["result"]
+            let count = result["contentCount"].intValue
+            let offset = result["nextOffset"].intValue
+            
+            let messageContent: [JSON] = getContact["result"].arrayValue
+            let contentCount = getContact["contentCount"].intValue
+            
+            // save data comes from server to the Cache
+            var contacts = [Contact]()
+            for item in messageContent {
+                let myContact = Contact(messageContent: item)
+                contacts.append(myContact)
+            }
+            Chat.cacheDB.saveContactObjects(contacts: contacts)
+            
+            let getContactsModel = GetContactsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset - count, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+            
+            delegate?.contactEvents(type: ContactEventTypes.getContact, result: getContactsModel)
+        }
+    }
     private class GetContactsCallback: CallbackProtocol {
         var sendParams: JSON
         init(parameters: JSON) {
@@ -5858,13 +5970,13 @@ extension Chat {
                 let messageContent: [JSON] = response["result"].arrayValue
                 let contentCount = response["contentCount"].intValue
                 
-                // save data comes from server to the Cache
-                var contacts = [Contact]()
-                for item in messageContent {
-                    let myContact = Contact(messageContent: item)
-                    contacts.append(myContact)
-                }
-                Chat.cacheDB.saveContactObjects(contacts: contacts)
+//                // save data comes from server to the Cache
+//                var contacts = [Contact]()
+//                for item in messageContent {
+//                    let myContact = Contact(messageContent: item)
+//                    contacts.append(myContact)
+//                }
+//                Chat.cacheDB.saveContactObjects(contacts: contacts)
                 
                 let getContactsModel = GetContactsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 
@@ -5874,6 +5986,32 @@ extension Chat {
     }
     
     
+    func chatDelegateGetThread(getThread: JSON) {
+        let hasError = getThread["hasError"].boolValue
+        let errorMessage = getThread["errorMessage"].stringValue
+        let errorCode = getThread["errorCode"].intValue
+        
+        if (!hasError) {
+            let result = getThread["result"]
+            let count = result["contentCount"].intValue
+            let offset = result["nextOffset"].intValue
+            
+            let messageContent: [JSON] = getThread["result"].arrayValue
+            let contentCount = getThread["contentCount"].intValue
+            
+            // save data comes from server to the Cache
+            var conversations = [Conversation]()
+            for item in messageContent {
+                let myConversation = Conversation(messageContent: item)
+                conversations.append(myConversation)
+            }
+            Chat.cacheDB.saveThreadObjects(threads: conversations)
+            
+            let getThreadsModel = GetThreadsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset - count, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+            
+            delegate?.threadEvents(type: ThreadEventTypes.getThreads, result: getThreadsModel)
+        }
+    }
     private class GetThreadsCallbacks: CallbackProtocol {
         var sendParams: JSON
         init(parameters: JSON) {
@@ -5894,13 +6032,13 @@ extension Chat {
                 let messageContent: [JSON] = response["result"].arrayValue
                 let contentCount = response["contentCount"].intValue
                 
-                // save data comes from server to the Cache
-                var conversations = [Conversation]()
-                for item in messageContent {
-                    let myConversation = Conversation(messageContent: item)
-                    conversations.append(myConversation)
-                }
-                Chat.cacheDB.saveThreadObjects(threads: conversations)
+//                // save data comes from server to the Cache
+//                var conversations = [Conversation]()
+//                for item in messageContent {
+//                    let myConversation = Conversation(messageContent: item)
+//                    conversations.append(myConversation)
+//                }
+//                Chat.cacheDB.saveThreadObjects(threads: conversations)
                 
                 let getThreadsModel = GetThreadsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 
@@ -5911,6 +6049,32 @@ extension Chat {
     }
     
     
+    func chatDelegateGetHistory(getHistory: JSON) {
+        let hasError = getHistory["hasError"].boolValue
+        let errorMessage = getHistory["errorMessage"].stringValue
+        let errorCode = getHistory["errorCode"].intValue
+        
+        if (!hasError) {
+            let result = getHistory["result"]
+            let count = result["contentCount"].intValue
+            let offset = result["nextOffset"].intValue
+            
+            let messageContent: [JSON] = getHistory["result"].arrayValue
+            let contentCount = getHistory["contentCount"].intValue
+            
+//            // save data comes from server to the Cache
+//            var messages = [Message]()
+//            for item in messageContent {
+//                let myMessage = Message(threadId: sendParams["subjectId"].intValue, pushMessageVO: item)
+//                messages.append(myMessage)
+//            }
+//            Chat.cacheDB.saveMessageObjects(messages: messages, getHistoryParams: sendParams)
+            
+            let getHistoryModel = GetHistoryModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset - count, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+            
+            delegate?.threadEvents(type: ThreadEventTypes.getHistory, result: getHistoryModel)
+        }
+    }
     private class GetHistoryCallbacks: CallbackProtocol {
         var sendParams: JSON
         init(parameters: JSON) {
@@ -5947,6 +6111,31 @@ extension Chat {
     }
     
     
+    func chatDelegateGetParticipants(getParticipants: JSON) {
+        let hasError = getParticipants["hasError"].boolValue
+        let errorMessage = getParticipants["errorMessage"].stringValue
+        let errorCode = getParticipants["errorCode"].intValue
+        
+        if (!hasError) {
+            let result = getParticipants["result"]
+            let count = result["contentCount"].intValue
+            let offset = result["nextOffset"].intValue
+            
+            let messageContent: [JSON] = getParticipants["result"].arrayValue
+            let contentCount = getParticipants["contentCount"].intValue
+            
+//            var participants = [Participant]()
+//            for item in messageContent {
+//                let myParticipant = Participant(messageContent: item, threadId: sendParams["subjectId"].intValue)
+//                participants.append(myParticipant)
+//            }
+//            Chat.cacheDB.saveThreadParticipantObjects(whereThreadIdIs: sendParams["subjectId"].intValue, withParticipants: participants)
+            
+            let getThreadParticipantsModel = GetThreadParticipantsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset - count, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+            
+            delegate?.threadEvents(type: ThreadEventTypes.getThreadParticipants, result: getThreadParticipantsModel)
+        }
+    }
     private class GetThreadParticipantsCallbacks: CallbackProtocol {
         var sendParams: JSON
         init(parameters: JSON) {
@@ -5987,6 +6176,19 @@ extension Chat {
     }
     
     
+    func chatDelegateCreateThread(createThread: JSON) {
+        let hasError = createThread["hasError"].boolValue
+        let errorMessage = createThread["errorMessage"].stringValue
+        let errorCode = createThread["errorCode"].intValue
+        
+        if (!hasError) {
+            let resultData: JSON = createThread["result"]
+            
+            let createThreadModel = CreateThreadModel(messageContent: resultData, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+            
+            delegate?.threadEvents(type: ThreadEventTypes.new, result: createThreadModel)
+        }
+    }
     private class CreateThreadCallback: CallbackProtocol {
         var mySendMessageParams: JSON
         init(parameters: JSON) {
@@ -6001,7 +6203,6 @@ extension Chat {
             
             if (!hasError) {
                 let resultData: JSON = response["result"]
-                
                 let createThreadModel = CreateThreadModel(messageContent: resultData, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 
                 success(createThreadModel)
@@ -6012,6 +6213,9 @@ extension Chat {
     }
     
     
+    func chatDelegateUpdateThreadInfo(threadInfo: JSON) {
+        delegate?.threadEvents(type: ThreadEventTypes.UpdateThreadInfo, result: threadInfo)
+    }
     private class UpdateThreadInfoCallback: CallbackProtocol {
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
             log.verbose("UpdateThreadInfoCallback", context: "Chat")
@@ -6021,6 +6225,26 @@ extension Chat {
     }
     
     
+    func chatDelegateAddParticipants(addParticipant: JSON) {
+        let hasError = addParticipant["hasError"].boolValue
+        let errorMessage = addParticipant["errorMessage"].stringValue
+        let errorCode = addParticipant["errorCode"].intValue
+        
+        if (!hasError) {
+            let messageContent = addParticipant["result"]
+            
+//            var participants = [Participant]()
+//            for item in messageContent["participants"].arrayValue {
+//                let myParticipant = Participant(messageContent: item, threadId: messageContent["id"].intValue)
+//                participants.append(myParticipant)
+//            }
+//            Chat.cacheDB.saveThreadParticipantObjects(whereThreadIdIs: sendParams["subjectId"].intValue, withParticipants: participants)
+            
+            let addParticipantModel = AddParticipantModel(messageContent: messageContent, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+            
+            delegate?.threadEvents(type: ThreadEventTypes.addParticipant, result: addParticipantModel)
+        }
+    }
     private class AddParticipantsCallback: CallbackProtocol {
         var sendParams: JSON
         init(parameters: JSON) {
@@ -6057,6 +6281,28 @@ extension Chat {
     }
     
     
+    func chatDelegateRemoveParticipants(removeParticipants: JSON) {
+        let hasError = removeParticipants["hasError"].boolValue
+        let errorMessage = removeParticipants["errorMessage"].stringValue
+        let errorCode = removeParticipants["errorCode"].intValue
+        
+        if (!hasError) {
+            
+            let removeParticipantResult = removeParticipants["result"].arrayValue
+            
+            var removeParticipantsArray = [Participant]()
+            for item in removeParticipantResult {
+                let myParticipant = Participant(messageContent: item, threadId: item["thread"]["id"].int)
+                Chat.cacheDB.deleteParticipant(inThread: item["thread"]["id"].intValue, withParticipantIds: [myParticipant.id!])
+
+                removeParticipantsArray.append(myParticipant)
+            }
+            
+            let removeParticipantModel = RemoveParticipantModel(messageObjects: removeParticipantsArray, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+            
+            delegate?.threadEvents(type: ThreadEventTypes.removeParticipant, result: removeParticipantModel)
+        }
+    }
     private class RemoveParticipantsCallback: CallbackProtocol {
         var sendParams: JSON
         init(parameters: JSON) {
@@ -6083,7 +6329,7 @@ extension Chat {
                 var removeParticipantsArray = [Participant]()
                 for item in removeParticipantResult {
                     let myParticipant = Participant(messageContent: item, threadId: sendParams["subjectId"].int)
-                    Chat.cacheDB.deleteParticipant(inThread: sendParams["subjectId"].intValue, withParticipantIds: [myParticipant.id!])
+//                    Chat.cacheDB.deleteParticipant(inThread: sendParams["subjectId"].intValue, withParticipantIds: [myParticipant.id!])
                     
                     removeParticipantsArray.append(myParticipant)
                 }
