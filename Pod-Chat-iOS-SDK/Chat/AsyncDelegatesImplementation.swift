@@ -106,14 +106,14 @@ extension Chat: AsyncDelegates {
                     if resultJSON["hasError"].boolValue == false {
                         self.userInfo = User(messageContent: resultJSON["result"]["user"])
                         self.chatState = true
-                        self.delegate?.chatReady()
+                        self.delegate?.chatReady(withUserInfo: self.userInfo!)
                     }
                 }) { _ in }
                 
             }
         } else {
             chatState = true
-            delegate?.chatReady()
+            delegate?.chatReady(withUserInfo: userInfo!)
         }
     }
     

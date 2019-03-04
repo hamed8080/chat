@@ -142,6 +142,50 @@ public enum asyncStateTypes: String {
 
 
 
+
+public enum UserEventTypes {
+    case userInfo
+}
+
+
+public enum MessageEventTypes/*: String*/ {
+    case delivery   //= "Delivery"
+    case seen       //= "Seen"
+    case delete     //= "Delete"
+    case new        //= "New"
+    case edit       //= "Edit"
+}
+
+
+public enum ThreadEventTypes/*: String*/ {
+    case getThreads
+    case getHistory
+    case getThreadParticipants
+    case UpdateThreadInfo
+    case new                  //= "Thread_New"
+    case leaveParticipant     //= "Thread_Leave_Participant"
+    case addParticipant       //= "Thread_Add_Participant"
+    case removeParticipant    //= "Thread_Remove_Participant"
+    case mute                 //= "Thread_Mute"
+    case unmute               //= "Thread_Unmute"
+    case infoUpdated          //= "Thread_Info_Updated"
+    case removedFrom          //= "Thread_Removed_From"
+    case unreadCountUpdate    //= "Thread_Unread_Count_Update"
+    case lastActivityTime     //= "Thread_Last_Activity_Time"
+}
+
+public enum ContactEventTypes {
+    case getContact
+    case addContact
+    case removeContact
+    case blockContact
+    case unblockContact
+    
+}
+
+
+
+
 //let messageIdsList: [Int] = params["content"].arrayObject! as! [Int]
 //var uniqueIdsList: [String] = []
 //

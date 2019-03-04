@@ -35,14 +35,18 @@ public protocol ChatDelegates: class {
     func chatConnected()
     func chatDisconnect()
     func chatReconnect()
-    func chatReady()
-    func chatError(errorCode: Int, errorMessage: String, errorResult: Any?)
     func chatState(state: Int)
+    func chatReady(withUserInfo: User)
     
-    func messageEvents(type: String, result: JSON)
-    func threadEvents(type: String, result: JSON)
-    //    func botEvents(type: String, result: JSON)
+    func userEvents(type: UserEventTypes, result: Any)
+    func contactEvents(type: ContactEventTypes, result: Any)
     func chatDeliver(messageId: Int, ownerId: Int)
+    func messageEvents(type: MessageEventTypes, result: Any)
+    func threadEvents(type: ThreadEventTypes, result: Any)
+    
+//    func botEvents(type: String, result: JSON)
+    
+    func chatError(errorCode: Int, errorMessage: String, errorResult: Any?)
 }
 
 
