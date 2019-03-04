@@ -15,7 +15,7 @@ import SwiftyJSON
 import SwiftyBeaver
 
 import FanapPodAsyncSDK
-
+import UIKit
 
 public class Chat {
     
@@ -3501,15 +3501,15 @@ extension Chat {
         // so if there was an situation that response of the server to this message doesn't come, then we know that our message didn't sent correctly
         // and we will send this Queue to user on the GetHistory request,
         // now user knows which messages didn't send correctly, and can handle them
-        let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(content:      sendTextMessageInput.content,
-                                                                      metaData:     sendTextMessageInput.metaData,
-                                                                      repliedTo:    sendTextMessageInput.repliedTo,
-                                                                      systemMetadata: sendTextMessageInput.systemMetadata,
-                                                                      threadId:     sendTextMessageInput.threadId,
-                                                                      typeCode:     sendTextMessageInput.typeCode,
-                                                                      uniqueId:     sendTextMessageInput.uniqueId ?? tempUniqueId)
-        Chat.cacheDB.saveTextMessageToWaitQueue(textMessage: messageObjectToSendToQueue)
-        
+//        let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(content:      sendTextMessageInput.content,
+//                                                                      metaData:     sendTextMessageInput.metaData,
+//                                                                      repliedTo:    sendTextMessageInput.repliedTo,
+//                                                                      systemMetadata: sendTextMessageInput.systemMetadata,
+//                                                                      threadId:     sendTextMessageInput.threadId,
+//                                                                      typeCode:     sendTextMessageInput.typeCode,
+//                                                                      uniqueId:     sendTextMessageInput.uniqueId ?? tempUniqueId)
+        // this line causes error
+//        Chat.cacheDB.saveTextMessageToWaitQueue(textMessage: messageObjectToSendToQueue)
         
         let messageTxtContent = makeCustomTextToSend(textMessage: sendTextMessageInput.content)
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.MESSAGE.rawValue,
@@ -3537,6 +3537,7 @@ extension Chat {
             let metaDataStr = "\(metaData)"
             sendMessageParams["metaData"] = JSON(metaDataStr)
         }
+//        sendMessageParams["subjectId"] = JSON(sendTextMessageInput.threadId)
         
         sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: SendMessageCallbacks(parameters: sendMessageParams), deliverCallback: SendMessageCallbacks(parameters: sendMessageParams), seenCallback:  SendMessageCallbacks(parameters: sendMessageParams)) { (theUniqueId) in
             uniqueId(theUniqueId)
@@ -4006,22 +4007,23 @@ extension Chat {
         // so if there was an situation that response of the server to this message doesn't come, then we know that our message didn't sent correctly
         // and we will send this Queue to user on the GetHistory request,
         // now user knows which messages didn't send correctly, and can handle them
-        let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      sendFileMessageInput.content,
-                                                                      fileName:     sendFileMessageInput.fileName,
-                                                                      imageName:    sendFileMessageInput.imageName,
-                                                                      metaData:     sendFileMessageInput.metaData,
-                                                                      repliedTo:    sendFileMessageInput.repliedTo,
-                                                                      subjectId:    sendFileMessageInput.subjectId,
-                                                                      threadId:     sendFileMessageInput.threadId,
-                                                                      typeCode:     sendFileMessageInput.typeCode,
-                                                                      uniqueId:     messageUniqueId,
-                                                                      xC:           sendFileMessageInput.xC,
-                                                                      yC:           sendFileMessageInput.yC,
-                                                                      hC:           sendFileMessageInput.hC,
-                                                                      wC:           sendFileMessageInput.wC,
-                                                                      fileToSend:   sendFileMessageInput.fileToSend,
-                                                                      imageToSend:  sendFileMessageInput.imageToSend)
-        Chat.cacheDB.saveFileMessageToWaitQueue(fileMessage: messageObjectToSendToQueue)
+//        let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      sendFileMessageInput.content,
+//                                                                      fileName:     sendFileMessageInput.fileName,
+//                                                                      imageName:    sendFileMessageInput.imageName,
+//                                                                      metaData:     sendFileMessageInput.metaData,
+//                                                                      repliedTo:    sendFileMessageInput.repliedTo,
+//                                                                      subjectId:    sendFileMessageInput.subjectId,
+//                                                                      threadId:     sendFileMessageInput.threadId,
+//                                                                      typeCode:     sendFileMessageInput.typeCode,
+//                                                                      uniqueId:     messageUniqueId,
+//                                                                      xC:           sendFileMessageInput.xC,
+//                                                                      yC:           sendFileMessageInput.yC,
+//                                                                      hC:           sendFileMessageInput.hC,
+//                                                                      wC:           sendFileMessageInput.wC,
+//                                                                      fileToSend:   sendFileMessageInput.fileToSend,
+//                                                                      imageToSend:  sendFileMessageInput.imageToSend)
+        // this line couses an error!!
+//        Chat.cacheDB.saveFileMessageToWaitQueue(fileMessage: messageObjectToSendToQueue)
         
         var fileName:       String  = ""
         var fileType:       String  = ""
@@ -4071,6 +4073,7 @@ extension Chat {
         
         if let subjectId = sendFileMessageInput.subjectId {
             paramsToSendToSendMessage["subjectId"] = JSON(subjectId)
+            paramsToSendToSendMessage["threadId"] = JSON(subjectId)
         }
         if let repliedTo = sendFileMessageInput.repliedTo {
             paramsToSendToSendMessage["repliedTo"] = JSON(repliedTo)
@@ -4090,15 +4093,19 @@ extension Chat {
                 
                 let myResponse: UploadImageModel = response as! UploadImageModel
                 let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_IMAGE.rawValue)?imageId=\(myResponse.uploadImage!.id ?? 0)&hashCode=\(myResponse.uploadImage!.hashCode ?? "")"
-                metaData["file"]["link"]            = JSON(link)
-                metaData["file"]["id"]              = JSON(myResponse.uploadImage!.id ?? 0)
-                metaData["file"]["name"]            = JSON(myResponse.uploadImage!.name ?? "")
-                metaData["file"]["height"]          = JSON(myResponse.uploadImage!.height ?? 0)
-                metaData["file"]["width"]           = JSON(myResponse.uploadImage!.width ?? 0)
-                metaData["file"]["actualHeight"]    = JSON(myResponse.uploadImage!.actualHeight ?? 0)
-                metaData["file"]["actualWidth"]     = JSON(myResponse.uploadImage!.actualWidth ?? 0)
-                metaData["file"]["hashCode"]        = JSON(myResponse.uploadImage!.hashCode ?? "")
                 
+                var fileJSON : JSON = [:]
+                
+                fileJSON["link"]            = JSON(link)
+                fileJSON["id"]              = JSON(myResponse.uploadImage!.id ?? 0)
+                fileJSON["name"]            = JSON(myResponse.uploadImage!.name ?? "")
+                fileJSON["height"]          = JSON(myResponse.uploadImage!.height ?? 0)
+                fileJSON["width"]           = JSON(myResponse.uploadImage!.width ?? 0)
+                fileJSON["actualHeight"]    = JSON(myResponse.uploadImage!.actualHeight ?? 0)
+                fileJSON["actualWidth"]     = JSON(myResponse.uploadImage!.actualWidth ?? 0)
+                fileJSON["hashCode"]        = JSON(myResponse.uploadImage!.hashCode ?? "")
+                
+                metaData["file"] = fileJSON
                 paramsToSendToSendMessage["metaData"] = JSON("\(metaData)")
                 
                 sendMessageWith(paramsToSendToSendMessage: paramsToSendToSendMessage)
@@ -4110,11 +4117,15 @@ extension Chat {
                 
                 let myResponse: UploadFileModel = response as! UploadFileModel
                 let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_FILE.rawValue)?fileId=\(myResponse.uploadFile!.id ?? 0)&hashCode=\(myResponse.uploadFile!.hashCode ?? "")"
-                metaData["file"]["link"]            = JSON(link)
-                metaData["file"]["id"]              = JSON(myResponse.uploadFile!.id ?? 0)
-                metaData["file"]["name"]            = JSON(myResponse.uploadFile!.name ?? "")
-                metaData["file"]["hashCode"]        = JSON(myResponse.uploadFile!.hashCode ?? "")
                 
+                var fileJSON : JSON = [:]
+                
+                fileJSON["link"]        = JSON(link)
+                fileJSON["id"]          = JSON(myResponse.uploadFile!.id ?? 0)
+                fileJSON["name"]        = JSON(myResponse.uploadFile!.name ?? "")
+                fileJSON["hashCode"]    = JSON(myResponse.uploadFile!.hashCode ?? "")
+                
+                metaData["file"] = fileJSON
                 paramsToSendToSendMessage["metaData"] = JSON("\(metaData)")
                 
                 sendMessageWith(paramsToSendToSendMessage: paramsToSendToSendMessage)
@@ -5328,21 +5339,17 @@ extension Chat {
             let myProgressFloat: Float = Float(downloadProgress.fractionCompleted)
             progress(myProgressFloat)
         }).responseData { (myResponse) in
+            
             if myResponse.result.isSuccess {
                 
-                completion(myResponse)
-                
+                guard let image = myResponse.result.value else { print("Value is empty!!!"); return }
+                completion(image)
+
             } else {
                 print("Failed!")
             }
+            
         }
-        
-        
-        //        httpRequest(from: url, withMethod: method, withHeaders: nil, withParameters: parameters, dataToSend: nil, isImage: nil, isFile: nil, completion: { _ in }, progress: { (myProgress) in
-        //            progress(myProgress)
-        //        }, idDownloadRequest: true, isMapServiceRequst: false) { (imageResponse, responseHeader) in
-        //            completion(imageResponse)
-        //        }
         
     }
     
@@ -5351,7 +5358,8 @@ extension Chat {
     
     public func sendLocationMessage(sendLocationMessageRequest: SendLocationMessageRequestModel,
                                     uniqueId:                   @escaping (String) -> (),
-                                    progress:                   @escaping (Float) -> (),
+                                    downloadProgress:           @escaping (Float) -> (),
+                                    uploadProgress:             @escaping (Float) -> (),
                                     onSent:                     @escaping callbackTypeAlias,
                                     onDelivere:                 @escaping callbackTypeAlias,
                                     onSeen:                     @escaping callbackTypeAlias) {
@@ -5363,8 +5371,8 @@ extension Chat {
                                                              width:     sendLocationMessageRequest.mapStaticWidth,
                                                              zoom:      sendLocationMessageRequest.mapStaticZoom)
         
-        mapStaticImage(mapStaticImageInput: mapStaticImageInput, uniqueId: { _ in }, progress: { (downloadProgress) in
-            //progress(downloadProgress)
+        mapStaticImage(mapStaticImageInput: mapStaticImageInput, uniqueId: { _ in }, progress: { (myProgress) in
+            downloadProgress(myProgress)
         }) { (imageData) in
             let fileMessageInput = SendFileMessageRequestModel(fileName: nil,
                                                                imageName:   sendLocationMessageRequest.sendMessageImageName,
@@ -5386,8 +5394,8 @@ extension Chat {
         func sendTM(params: SendFileMessageRequestModel) {
             sendFileMessage(sendFileMessageInput: params, uniqueId: { (requestUniqueId) in
                 uniqueId(requestUniqueId)
-            }, uploadProgress: { (uploadProgress) in
-                progress(uploadProgress)
+            }, uploadProgress: { (myProgress) in
+                uploadProgress(myProgress)
             }, onSent: { (sent) in
                 onSent(sent)
             }, onDelivered: { (deliver) in
@@ -6513,7 +6521,7 @@ extension Chat {
             
             if response["result"] != JSON.null {
                 let messageContent = response["result"]
-                print("messageContent = \n*****\n\(messageContent)\n*****")
+                
                 let blockUserModel = BlockedContactModel(messageContent: messageContent, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 
                 success(blockUserModel)
@@ -6531,7 +6539,7 @@ extension Chat {
             
             if response["result"] != JSON.null {
                 let messageContent = response["result"]
-                print("messageContent = \n*****\n\(messageContent)\n*****")
+                
                 let unblockUserModel = BlockedContactModel(messageContent: messageContent, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 
                 success(unblockUserModel)
@@ -6559,8 +6567,6 @@ extension Chat {
                 let messageContent: [JSON] = response["result"].arrayValue
                 let contentCount = response["contentCount"].intValue
                 
-                print("messageContent = \n*****\n\(messageContent)\n*****")
-                print("content = \n*****\n\(content)\n*****")
                 let getBlockedModel = GetBlockedContactListModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
                 
                 success(getBlockedModel)
