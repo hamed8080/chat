@@ -133,7 +133,7 @@ extension NSObject {
                 completion(JSON(nsJSON))
             } catch let error as NSError {
                 print("NSJSONSerialization Error: \(error)")
-                completion(nil)
+                completion(JSON.null)
             }
         }
     }

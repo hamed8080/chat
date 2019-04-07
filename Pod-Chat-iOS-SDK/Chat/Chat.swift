@@ -258,7 +258,13 @@ extension Chat {
             let responseStr: String = myResponse as! String
             if let dataFromMsgString = responseStr.data(using: .utf8, allowLossyConversion: false) {
                 // get currrent user deviceIdresponseStr
-                let msg = JSON(data: dataFromMsgString)
+                var msg: JSON
+                do {
+                    msg = try JSON(data: dataFromMsgString)
+                } catch {
+                    fatalError()
+                }
+                
                 if let devices = msg["devices"].array {
                     for device in devices {
                         if device["current"].bool == true {
