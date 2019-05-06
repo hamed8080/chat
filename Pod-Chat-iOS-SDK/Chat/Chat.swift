@@ -310,7 +310,7 @@ extension Chat {
                 if myResponse.result.isSuccess {
                     if let downloadedData = myResponse.data {
                         if let response = myResponse.response {
-                            
+                             
                             var resJSON: JSON = [:]
                             
                             let headerResponse = response.allHeaderFields
