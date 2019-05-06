@@ -12,6 +12,9 @@
 		3E00CAF721DCA9030029B1FC /* MapStaticImageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E00CAF621DCA9030029B1FC /* MapStaticImageRequestModel.swift */; };
 		3E11F56121DA18D0004B3B2C /* GetImageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E11F56021DA18D0004B3B2C /* GetImageRequestModel.swift */; };
 		3E11F56D21DA1A02004B3B2C /* GetFileRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E11F56C21DA1A02004B3B2C /* GetFileRequestModel.swift */; };
+		3E1C357E225B5E79001A343B /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E1C357D225B5E79001A343B /* Starscream.framework */; };
+		3E1C3580225B5E7D001A343B /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E1C357F225B5E7D001A343B /* SwiftyBeaver.framework */; };
+		3E1C3582225B5E81001A343B /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E1C3581225B5E81001A343B /* SwiftyJSON.framework */; };
 		3E24083021F5C844001F32F1 /* CMUser+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E24081821F5C844001F32F1 /* CMUser+CoreDataClass.swift */; };
 		3E24083121F5C844001F32F1 /* CMUser+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E24081821F5C844001F32F1 /* CMUser+CoreDataClass.swift */; };
 		3E24083221F5C844001F32F1 /* CMUser+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E24081921F5C844001F32F1 /* CMUser+CoreDataProperties.swift */; };
@@ -302,6 +305,9 @@
 		3E00CAF621DCA9030029B1FC /* MapStaticImageRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapStaticImageRequestModel.swift; sourceTree = "<group>"; };
 		3E11F56021DA18D0004B3B2C /* GetImageRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetImageRequestModel.swift; sourceTree = "<group>"; };
 		3E11F56C21DA1A02004B3B2C /* GetFileRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetFileRequestModel.swift; sourceTree = "<group>"; };
+		3E1C357D225B5E79001A343B /* Starscream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Starscream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E1C357F225B5E7D001A343B /* SwiftyBeaver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftyBeaver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E1C3581225B5E81001A343B /* SwiftyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E24081821F5C844001F32F1 /* CMUser+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMUser+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3E24081921F5C844001F32F1 /* CMUser+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMUser+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3E24081A21F5C844001F32F1 /* CMReplyInfo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMReplyInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -473,6 +479,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E1C3582225B5E81001A343B /* SwiftyJSON.framework in Frameworks */,
+				3E1C3580225B5E7D001A343B /* SwiftyBeaver.framework in Frameworks */,
+				3E1C357E225B5E79001A343B /* Starscream.framework in Frameworks */,
 				3E8942B6225A19E2008F2C52 /* Alamofire.framework in Frameworks */,
 				3E49635421D79BFB00A67D19 /* FanapPodAsyncSDK.framework in Frameworks */,
 			);
@@ -492,6 +501,9 @@
 		3E25909821D6C8E000CB9D7D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3E1C3581225B5E81001A343B /* SwiftyJSON.framework */,
+				3E1C357F225B5E7D001A343B /* SwiftyBeaver.framework */,
+				3E1C357D225B5E79001A343B /* Starscream.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1306,11 +1318,12 @@
 		3EE0260221206E63001810FB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = GP3XLTT75N;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1324,6 +1337,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.fanapSoft.FanapPodChatSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
@@ -1334,11 +1348,12 @@
 		3EE0260321206E63001810FB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = GP3XLTT75N;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1352,6 +1367,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.fanapSoft.FanapPodChatSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
