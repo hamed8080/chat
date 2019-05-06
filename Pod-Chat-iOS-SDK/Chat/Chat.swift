@@ -2597,27 +2597,30 @@ extension Chat {
         }
         historyCallbackToUser = completion
         
-        if let textMessages = Chat.cacheDB.retrieveWaitTextMessages(threadId: getHistoryInput.threadId) {
-            textMessagesNotSent(textMessages)
-        }
-        if let editMessages = Chat.cacheDB.retrieveWaitEditMessages(threadId: getHistoryInput.threadId) {
-            editMessagesNotSent(editMessages)
-        }
-        if let forwardMessages = Chat.cacheDB.retrieveWaitForwardMessages(threadId: getHistoryInput.threadId) {
-            forwardMessagesNotSent(forwardMessages)
-        }
-        if let fileMessages = Chat.cacheDB.retrieveWaitFileMessages(threadId: getHistoryInput.threadId) {
-            fileMessagesNotSent(fileMessages)
-        }
-        if let uploadImages = Chat.cacheDB.retrieveWaitUploadImages(threadId: getHistoryInput.threadId) {
-            uploadImageNotSent(uploadImages)
-        }
-        if let uploadFiles = Chat.cacheDB.retrieveWaitUploadFiles(threadId: getHistoryInput.threadId) {
-            uploadFileNotSent(uploadFiles)
-        }
+        
         
         // if cache is enabled by user, first return cache result to the user
         if enableCache {
+            
+            if let textMessages = Chat.cacheDB.retrieveWaitTextMessages(threadId: getHistoryInput.threadId) {
+                textMessagesNotSent(textMessages)
+            }
+            if let editMessages = Chat.cacheDB.retrieveWaitEditMessages(threadId: getHistoryInput.threadId) {
+                editMessagesNotSent(editMessages)
+            }
+            if let forwardMessages = Chat.cacheDB.retrieveWaitForwardMessages(threadId: getHistoryInput.threadId) {
+                forwardMessagesNotSent(forwardMessages)
+            }
+            if let fileMessages = Chat.cacheDB.retrieveWaitFileMessages(threadId: getHistoryInput.threadId) {
+                fileMessagesNotSent(fileMessages)
+            }
+            if let uploadImages = Chat.cacheDB.retrieveWaitUploadImages(threadId: getHistoryInput.threadId) {
+                uploadImageNotSent(uploadImages)
+            }
+            if let uploadFiles = Chat.cacheDB.retrieveWaitUploadFiles(threadId: getHistoryInput.threadId) {
+                uploadFileNotSent(uploadFiles)
+            }
+            
             if let cacheHistoryResult = Chat.cacheDB.retrieveMessageHistory(count:          getHistoryInput.count ?? 50,
                                                                             firstMessageId: getHistoryInput.firstMessageId,
                                                                             fromTime:       getHistoryInput.fromTime,
