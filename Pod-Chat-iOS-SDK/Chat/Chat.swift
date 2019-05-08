@@ -1319,24 +1319,24 @@ extension Chat {
         // a message of type 999 (ERROR) comes from Server.
         case chatMessageVOTypes.ERROR.rawValue:
             log.verbose("Message of type 'ERROR' recieved", context: "Chat")
-            //            if Chat.map[uniqueId] != nil {
-            //                let message: String = messageContent["message"].stringValue
-            //                let code: Int = messageContent["code"].intValue
-            //
-            //                let returnData: JSON = createReturnData(hasError: true, errorMessage: message, errorCode: code, result: messageContent, resultAsString: nil, contentCount: 0)
-            //                let callback: CallbackProtocol = Chat.map[uniqueId]!
-            //                callback.onResultCallback(uID: uniqueId, response: returnData, success: { (successJSON) in
-            //                    self.spamPvThreadCallbackToUser?(successJSON)
-            //                }) { _ in }
-            //                Chat.map.removeValue(forKey: uniqueId)
-            //
-            //                if (messageContent["code"].intValue == 21) {
-            //                    chatState = false
-            //                    asyncClient?.asyncLogOut()
-            ////                    clearCache()
-            //                }
-            //                delegate?.chatError(errorCode: code, errorMessage: message, errorResult: messageContent)
-            //            }
+                if Chat.map[uniqueId] != nil {
+                    let message: String = messageContent["message"].stringValue
+                    let code: Int = messageContent["code"].intValue
+    
+                    let returnData: JSON = createReturnData(hasError: true, errorMessage: message, errorCode: code, result: messageContent, resultAsString: nil, contentCount: 0)
+                    let callback: CallbackProtocol = Chat.map[uniqueId]!
+                    callback.onResultCallback(uID: uniqueId, response: returnData, success: { (successJSON) in
+                        self.spamPvThreadCallbackToUser?(successJSON)
+                    }) { _ in }
+                    Chat.map.removeValue(forKey: uniqueId)
+    
+                    if (messageContent["code"].intValue == 21) {
+                        chatState = false
+                        asyncClient?.asyncLogOut()
+    //                    clearCache()
+                    }
+                    delegate?.chatError(errorCode: code, errorMessage: message, errorResult: messageContent)
+                }
             break
             
         default:
@@ -3246,7 +3246,7 @@ extension Chat {
         
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.ADD_PARTICIPANT.rawValue]
         sendMessageParams["subjectId"] = JSON(addParticipantsInput.threadId)
-        sendMessageParams["contacts"] = JSON(addParticipantsInput.contacts)
+        sendMessageParams["content"] = JSON(addParticipantsInput.contacts)
         sendMessageParams["typeCode"] = JSON(addParticipantsInput.typeCode ?? generalTypeCode)
         
         if let uniqueId = addParticipantsInput.uniqueId {

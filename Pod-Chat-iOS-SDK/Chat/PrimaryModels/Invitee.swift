@@ -48,13 +48,13 @@ open class Invitee {
         
         self.id = id
         if let myIdType = idType {
-            if (myIdType == "TO_BE_USER_SSO_ID") {
+            if (myIdType == "TO_BE_USER_SSO_ID") || (myIdType == "1") {
                 self.idType = 1
-            } else if (myIdType == "TO_BE_USER_CONTACT_ID") {
+            } else if (myIdType == "TO_BE_USER_CONTACT_ID") || (myIdType == "2") {
                 self.idType = 2
-            } else if (myIdType == "TO_BE_USER_CELLPHONE_NUMBER") {
+            } else if (myIdType == "TO_BE_USER_CELLPHONE_NUMBER") || (myIdType == "3") {
                 self.idType = 3
-            } else if (myIdType == "TO_BE_USER_USERNAME") {
+            } else if (myIdType == "TO_BE_USER_USERNAME") || (myIdType == "4") {
                 self.idType = 4
             }
         }

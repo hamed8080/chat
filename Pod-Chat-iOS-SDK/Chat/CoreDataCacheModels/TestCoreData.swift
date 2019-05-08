@@ -189,7 +189,7 @@ extension Cache {
                         result.first!.blocked         = myParticipant.blocked as NSNumber?
                         result.first!.cellphoneNumber = myParticipant.cellphoneNumber
                         result.first!.contactId       = myParticipant.contactId as NSNumber?
-                        result.first!.coreUserId      = myParticipant.coreUserId as NSNumber?
+                        result.first!.id              = myParticipant.id as NSNumber?
                         result.first!.email           = myParticipant.email
                         result.first!.firstName       = myParticipant.firstName
                         result.first!.id              = myParticipant.id as NSNumber?
@@ -211,7 +211,7 @@ extension Cache {
                         theInviter.blocked         = myParticipant.blocked as NSNumber?
                         theInviter.cellphoneNumber = myParticipant.cellphoneNumber
                         theInviter.contactId       = myParticipant.contactId as NSNumber?
-                        theInviter.coreUserId      = myParticipant.coreUserId as NSNumber?
+                        theInviter.id              = myParticipant.id as NSNumber?
                         theInviter.email           = myParticipant.email
                         theInviter.firstName       = myParticipant.firstName
                         theInviter.id              = myParticipant.id as NSNumber?
@@ -430,12 +430,12 @@ extension Cache {
     func updateCMLinkedUserEntity(withLinkedUser myLinkedUser: LinkedUser) -> CMLinkedUser? {
         var linkedUserToReturn: CMLinkedUser?
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMLinkedUser")
-        if let linkedUserId = myLinkedUser.coreUserId {
-            fetchRequest.predicate = NSPredicate(format: "coreUserId == %i", linkedUserId)
+        if let linkedUserId = myLinkedUser.id {
+            fetchRequest.predicate = NSPredicate(format: "id == %i", linkedUserId)
             do {
                 if let result = try context.fetch(fetchRequest) as? [CMLinkedUser] {
                     if (result.count > 0) {
-                        result.first!.coreUserId    = myLinkedUser.coreUserId as NSNumber?
+                        result.first!.id            = myLinkedUser.id as NSNumber?
                         result.first!.image         = myLinkedUser.image
                         result.first!.name          = myLinkedUser.name
                         result.first!.nickname      = myLinkedUser.nickname
@@ -448,7 +448,7 @@ extension Cache {
                         let theLinkedUserEntity = NSEntityDescription.entity(forEntityName: "CMLinkedUser", in: context)
                         let theLinkedUser = CMLinkedUser(entity: theLinkedUserEntity!, insertInto: context)
                         
-                        theLinkedUser.coreUserId    = myLinkedUser.coreUserId as NSNumber?
+                        theLinkedUser.id            = myLinkedUser.id as NSNumber?
                         theLinkedUser.image         = myLinkedUser.image
                         theLinkedUser.name          = myLinkedUser.name
                         theLinkedUser.nickname      = myLinkedUser.nickname
@@ -1673,7 +1673,7 @@ extension Cache {
             if let result = try context.fetch(fetchRequest) as? [CMContact] {
                 for contact in result {
                     if let lui = contact.linkedUser {
-                        print("coreUserId = \(lui)")
+                        print("id = \(lui)")
                         context.delete(contact.linkedUser!)
                     }
                     deleteAndSave(object: contact, withMessage: "CMContact Deleted.")
