@@ -76,6 +76,8 @@ public class Chat {
     
     var SERVICE_ADDRESSES = SERVICE_ADDRESSES_ENUM()
     
+    private var uploadRequest: [(upload: Request, uniqueId: String)] = []
+    
     // MARK: - Chat initializer
     
     public init(socketAddress:              String,
@@ -255,7 +257,7 @@ extension Chat {
         let url = ssoHost + SERVICES_PATH.SSO_DEVICES.rawValue
         let method: HTTPMethod = .get
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: nil, dataToSend: nil, isImage: nil, isFile: nil, completion: { (myResponse) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: nil, dataToSend: nil, requestUniqueId: nil, isImage: nil, isFile: nil, completion: { (myResponse) in
             let responseStr: String = myResponse as! String
             if let dataFromMsgString = responseStr.data(using: .utf8, allowLossyConversion: false) {
                 // get currrent user deviceIdresponseStr
@@ -292,6 +294,7 @@ extension Chat {
                      withHeaders:           HTTPHeaders?,
                      withParameters:        Parameters?,
                      dataToSend:            Any?,
+                     requestUniqueId:       String?,
                      isImage:               Bool?,
                      isFile:                Bool?,
                      completion:            @escaping callbackTypeAlias,
@@ -416,6 +419,7 @@ extension Chat {
                     }, to: urlStr) { (myResult) in
                         switch myResult {
                         case .success(let upload, _, _):
+                            self.uploadRequest.append((upload: upload, uniqueId: requestUniqueId!))
                             upload.responseJSON(completionHandler: { (response) in
                                 if let jsonValue = response.result.value {
                                     let jsonResponse: JSON = JSON(jsonValue)
@@ -426,6 +430,15 @@ extension Chat {
                                 let myProgressFloat: Float = Float(myProgress.fractionCompleted)
                                 progress?(myProgressFloat)
                             })
+                            upload.responseJSON { response in
+                                debugPrint(response)
+                                for (index, item) in self.uploadRequest.enumerated() {
+                                    if item.uniqueId == requestUniqueId {
+                                        self.uploadRequest.remove(at: index)
+                                    }
+                                }
+                                
+                            }
                         case .failure(let error):
                             completion(error)
                         }
@@ -1679,7 +1692,7 @@ extension Chat {
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
         
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, isImage: nil, isFile: nil, completion: { (response) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, requestUniqueId: messageUniqueId, isImage: nil, isFile: nil, completion: { (response) in
             let jsonRes: JSON = response as! JSON
             
             // save data comes from server to the Cache
@@ -1728,7 +1741,7 @@ extension Chat {
         let method: HTTPMethod = HTTPMethod.post
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, isImage: nil, isFile: nil, completion: { (response) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, requestUniqueId: messageUniqueId, isImage: nil, isFile: nil, completion: { (response) in
             let jsonRes: JSON = response as! JSON
             let contactsResult = ContactModel(messageContent: jsonRes)
             completion(contactsResult)
@@ -1777,7 +1790,7 @@ extension Chat {
         let method: HTTPMethod = HTTPMethod.post
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, isImage: nil, isFile: nil, completion: { (response) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, requestUniqueId: messageUniqueId, isImage: nil, isFile: nil, completion: { (response) in
             let jsonRes: JSON = response as! JSON
             let contactsResult = ContactModel(messageContent: jsonRes)
             completion(contactsResult)
@@ -1829,7 +1842,7 @@ extension Chat {
         let method: HTTPMethod = HTTPMethod.post
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, isImage: nil, isFile: nil, completion: { (response) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, requestUniqueId: uniqueId, isImage: nil, isFile: nil, completion: { (response) in
             let jsonRes: JSON = response as! JSON
             let contactsResult = ContactModel(messageContent: jsonRes)
             completion(contactsResult)
@@ -1871,7 +1884,7 @@ extension Chat {
         let method: HTTPMethod = HTTPMethod.post
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, isImage: nil, isFile: nil, completion: { (response) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, requestUniqueId: theUniqueId, isImage: nil, isFile: nil, completion: { (response) in
             let jsonRes: JSON = response as! JSON
             let contactsResult = RemoveContactModel(messageContent: jsonRes)
             
@@ -1905,7 +1918,7 @@ extension Chat {
         let method: HTTPMethod = HTTPMethod.post
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, isImage: nil, isFile: nil, completion: { (response) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, requestUniqueId: uniqueId, isImage: nil, isFile: nil, completion: { (response) in
             let jsonRes: JSON = response as! JSON
             let contactsResult = RemoveContactModel(messageContent: jsonRes)
             completion(contactsResult)
@@ -2201,7 +2214,7 @@ extension Chat {
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
         
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, isImage: nil, isFile: nil, completion: { (response) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, requestUniqueId: nil, isImage: nil, isFile: nil, completion: { (response) in
             let jsonRes: JSON = response as! JSON
             
             //            // save data comes from server to the Cache
@@ -2272,7 +2285,7 @@ extension Chat {
         let method: HTTPMethod = HTTPMethod.post
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, isImage: nil, isFile: nil, completion: { (response) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, requestUniqueId: nil, isImage: nil, isFile: nil, completion: { (response) in
             let jsonRes: JSON = response as! JSON
             let contactsResult = ContactModel(messageContent: jsonRes)
             completion(contactsResult)
@@ -4614,7 +4627,10 @@ extension Chat {
                               completion:           @escaping callbackTypeAlias) {
         log.verbose("Try to request to edit message with this parameters: \n \(deleteMessageInput)", context: "Chat")
         
-        let content: JSON = ["deleteForAll": "\(deleteMessageInput.deleteForAll)"]
+        var content: JSON = []
+        if let deleteForAll = deleteMessageInput.deleteForAll {
+            content["deleteForAll"] = JSON("\(deleteForAll)")
+        }
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.DELETE_MESSAGE.rawValue,
                                        "typeCode": deleteMessageInput.typeCode ?? generalTypeCode,
                                        "pushMsgType": 4,
@@ -4658,6 +4674,41 @@ extension Chat {
             uniqueId(deleteMessageUniqueId)
         }
         deleteMessageCallbackToUser = completion
+    }
+    
+    
+    
+    public func cancelSendMessage(cancelMessageInput: CancelMessageRequestModel) {
+        if let textUID = cancelMessageInput.textMessageUniqueId {
+            Chat.cacheDB.deleteWaitTextMessage(uniqueId: textUID)
+        }
+        if let editUID = cancelMessageInput.editMessageUniqueId {
+            Chat.cacheDB.deleteWaitEditMessage(uniqueId: editUID)
+        }
+        if let forwardUID = cancelMessageInput.forwardMessageUniqueId {
+            Chat.cacheDB.deleteWaitForwardMessage(uniqueId: forwardUID)
+        }
+        if let fileUID = cancelMessageInput.fileMessageUniqueId {
+            Chat.cacheDB.deleteWaitFileMessage(uniqueId: fileUID)
+        }
+        if let uploadImageUID = cancelMessageInput.uploadImageUniqueId {
+            for (index, item) in uploadRequest.enumerated() {
+                if item.uniqueId == uploadImageUID {
+                    item.upload.cancel()
+                    uploadRequest.remove(at: index)
+                }
+            }
+            Chat.cacheDB.deleteWaitUploadImages(uniqueId: uploadImageUID)
+        }
+        if let uploadFileUID = cancelMessageInput.uploadFileUniqueId {
+            for (index, item) in uploadRequest.enumerated() {
+                if item.uniqueId == uploadFileUID {
+                    item.upload.cancel()
+                    uploadRequest.remove(at: index)
+                }
+            }
+            Chat.cacheDB.deleteWaitUploadFiles(uniqueId: uploadFileUID)
+        }
     }
     
     
@@ -4785,7 +4836,7 @@ extension Chat {
         let headers:    HTTPHeaders = ["_token_": token, "_token_issuer_": "1", "Content-type": "multipart/form-data"]
         let parameters: Parameters = ["fileName": fileName]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: uploadImageInput.dataToSend, isImage: true, isFile: false, completion: { (response) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: uploadImageInput.dataToSend, requestUniqueId: uploadFileData["uniqueId"].stringValue, isImage: true, isFile: false, completion: { (response) in
             
             let myResponse: JSON = response as! JSON
             let hasError        = myResponse["hasError"].boolValue
@@ -4889,7 +4940,7 @@ extension Chat {
         let headers:    HTTPHeaders = ["_token_": token, "_token_issuer_": "1", "Content-type": "multipart/form-data"]
         let parameters: Parameters = ["fileName": fileName]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: dataToSend, isImage: true, isFile: false, completion: { (response) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: dataToSend, requestUniqueId: uploadFileData["uniqueId"].stringValue, isImage: true, isFile: false, completion: { (response) in
             
             let myResponse: JSON = response as! JSON
             let hasError        = myResponse["hasError"].boolValue
@@ -5016,7 +5067,7 @@ extension Chat {
         let headers:    HTTPHeaders = ["_token_": token, "_token_issuer_": "1", "Content-type": "multipart/form-data"]
         let parameters: Parameters = ["fileName": fileName]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: uploadFileInput.dataToSend, isImage: false, isFile: true, completion: { (response) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: uploadFileInput.dataToSend, requestUniqueId: uploadFileData["uniqueId"].stringValue, isImage: false, isFile: true, completion: { (response) in
             
             let myResponse: JSON = response as! JSON
             
@@ -5114,7 +5165,7 @@ extension Chat {
         let headers:    HTTPHeaders = ["_token_": token, "_token_issuer_": "1", "Content-type": "multipart/form-data"]
         let parameters: Parameters = ["fileName": fileName]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: dataToSend, isImage: false, isFile: true, completion: { (response) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: dataToSend, requestUniqueId: uploadUniqueId, isImage: false, isFile: true, completion: { (response) in
             
             let myResponse: JSON = response as! JSON
             
@@ -5195,7 +5246,7 @@ extension Chat {
         // IMPROVMENT NEEDED:
         // maybe if i had the answer from cache, i have to ignore the bottom code that request to server to get file again!!
         // so this code have to only request file if it couldn't find the file on the cache
-        httpRequest(from: url, withMethod: method, withHeaders: nil, withParameters: parameters, dataToSend: nil, isImage: nil, isFile: nil, completion: { _ in }, progress: { (myProgress) in
+        httpRequest(from: url, withMethod: method, withHeaders: nil, withParameters: parameters, dataToSend: nil, requestUniqueId: nil, isImage: nil, isFile: nil, completion: { _ in }, progress: { (myProgress) in
             progress(myProgress)
         }, idDownloadRequest: true, isMapServiceRequst: false) { (imageDataResponse, responseHeader)  in
             
@@ -5270,7 +5321,7 @@ extension Chat {
         // IMPROVMENT NEEDED:
         // maybe if i had the answer from cache, i have to ignore the bottom code that request to server to get file again!!
         // so this code have to only request file if it couldn't find the file on the cache
-        httpRequest(from: url, withMethod: method, withHeaders: nil, withParameters: parameters, dataToSend: nil, isImage: nil, isFile: nil, completion: { _ in }, progress: { (myProgress) in
+        httpRequest(from: url, withMethod: method, withHeaders: nil, withParameters: parameters, dataToSend: nil, requestUniqueId: nil, isImage: nil, isFile: nil, completion: { _ in }, progress: { (myProgress) in
             progress(myProgress)
         }, idDownloadRequest: true, isMapServiceRequst: false) { (fileDataResponse, responseHeader) in
             
@@ -5331,7 +5382,7 @@ extension Chat {
                                        "lng": mapReverseInput.lng,
                                        "uniqueId": theUniqueId]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: nil, isImage: nil, isFile: nil, completion: { (jsonResponse) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: nil, requestUniqueId: nil, isImage: nil, isFile: nil, completion: { (jsonResponse) in
             if let theResponse = jsonResponse as? JSON {
                 let mapReverseModel = MapReverseModel(messageContent: theResponse, hasError: false, errorMessage: "", errorCode: 0)
                 completion(mapReverseModel)
@@ -5375,7 +5426,7 @@ extension Chat {
                                        "lng":   mapSearchInput.lng,
                                        "term":  mapSearchInput.term]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: nil, isImage: nil, isFile: nil, completion: { (jsonResponse) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: nil, requestUniqueId: nil, isImage: nil, isFile: nil, completion: { (jsonResponse) in
             
             if let theResponse = jsonResponse as? JSON {
                 let mapSearchModel = MapSearchModel(messageContent: theResponse, hasError: false, errorMessage: "", errorCode: 0)
@@ -5421,7 +5472,7 @@ extension Chat {
             "destination":   "\(mapRoutingInput.destinationLat),\(mapRoutingInput.destinationLng)",
             "alternative":   mapRoutingInput.alternative]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: nil, isImage: nil, isFile: nil, completion: { (jsonResponse) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: nil, requestUniqueId: nil, isImage: nil, isFile: nil, completion: { (jsonResponse) in
             if let theResponse = jsonResponse as? JSON {
                 let mapRoutingModel = MapRoutingModel(messageContent: theResponse, hasError: false, errorMessage: "", errorCode: 0)
                 completion(mapRoutingModel)

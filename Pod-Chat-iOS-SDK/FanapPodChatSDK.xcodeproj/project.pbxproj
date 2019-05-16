@@ -188,6 +188,7 @@
 		3EA156AC21CE1D1E004B1346 /* DeliverSeenRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA156AB21CE1D1E004B1346 /* DeliverSeenRequestModel.swift */; };
 		3EA156BD21CE274E004B1346 /* CoreDataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA156BC21CE274E004B1346 /* CoreDataCache.swift */; };
 		3EA156FC21CE28B4004B1346 /* TestCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA156FB21CE28B4004B1346 /* TestCoreData.swift */; };
+		3EB7595C228D98FC00A48262 /* CancelMessageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB7595B228D98FC00A48262 /* CancelMessageRequestModel.swift */; };
 		3EBBEDC62174C18F00F5CDC7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDC52174C18F00F5CDC7 /* User.swift */; };
 		3EBBEDD32174C20200F5CDC7 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDD22174C20200F5CDC7 /* Contact.swift */; };
 		3EBBEDD52174C23B00F5CDC7 /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDD42174C23B00F5CDC7 /* Conversation.swift */; };
@@ -437,6 +438,7 @@
 		3EA156B821CE2419004B1346 /* CacheDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CacheDataModel.xcdatamodel; sourceTree = "<group>"; };
 		3EA156BC21CE274E004B1346 /* CoreDataCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataCache.swift; sourceTree = "<group>"; };
 		3EA156FB21CE28B4004B1346 /* TestCoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCoreData.swift; sourceTree = "<group>"; };
+		3EB7595B228D98FC00A48262 /* CancelMessageRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelMessageRequestModel.swift; sourceTree = "<group>"; };
 		3EBBEDC52174C18F00F5CDC7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		3EBBEDD22174C20200F5CDC7 /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
 		3EBBEDD42174C23B00F5CDC7 /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
@@ -542,6 +544,7 @@
 				3EA1567521CE1AC9004B1346 /* AddContactsRequestModel.swift */,
 				3EA1568F21CE1BFC004B1346 /* AddParticipantsRequestModel.swift */,
 				3EA1567B21CE1B1F004B1346 /* BlockContactsRequestModel.swift */,
+				3EB7595B228D98FC00A48262 /* CancelMessageRequestModel.swift */,
 				3EA1568721CE1BB7004B1346 /* CreateThreadRequestModel.swift */,
 				3EA1568921CE1BCB004B1346 /* CreateThreadWithMessageRequestModel.swift */,
 				3EA1569F21CE1CAE004B1346 /* DeleteMessageRequestModel.swift */,
@@ -1029,6 +1032,7 @@
 				3E3F17792133D0A90029E4D4 /* EnumsAndStructs.swift in Sources */,
 				3EA1568621CE1BA0004B1346 /* GetHistoryRequestModel.swift in Sources */,
 				3E24083A21F5C844001F32F1 /* CMParticipant+CoreDataProperties.swift in Sources */,
+				3EB7595C228D98FC00A48262 /* CancelMessageRequestModel.swift in Sources */,
 				3EA156A821CE1D02004B1346 /* SpamPvThreadRequestModel.swift in Sources */,
 				3E8D56D921DB9D6200B844DE /* MapReverse.swift in Sources */,
 				3EBBEDF42174C69700F5CDC7 /* GetThreadParticipantsModel.swift in Sources */,
