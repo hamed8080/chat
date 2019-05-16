@@ -295,17 +295,27 @@ extension Cache {
                                 result.first!.conversation = conversationObject
                             }
                         }
-                        if let messageForwardInfo = myMessage.forwardInfo {
-                            // TODO: handle ForwardInfo
-                        }
+                        
+                        // TODO: handle ForwardInfo
+                        /*
+                         if let messageForwardInfo = myMessage.forwardInfo {
+                         
+                         }
+                         */
+                        
                         if let messageParticipant = myMessage.participant {
                             if let participantObject = updateCMParticipantEntity(withParticipantsObject: messageParticipant) {
                                 result.first!.participant = participantObject
                             }
                         }
-                        if let messageReplyInfo = myMessage.replyInfo {
-                            // TODO: handle ReplyInfo
-                        }
+                        
+                        // TODO: handle ReplyInfo
+                        /*
+                         if let messageReplyInfo = myMessage.replyInfo {
+                         
+                         }
+                         */
+                        
                         messageObjectToReturn = result.first!
                         
                         saveContext(subject: "Update CMMessage -update existing object-")
@@ -330,17 +340,27 @@ extension Cache {
                                 theMessage.conversation = conversationObject
                             }
                         }
-                        if let messageForwardInfo = myMessage.forwardInfo {
-                            // TODO: handle ForwardInfo
-                        }
+                        
+                        // TODO: handle ForwardInfo
+                        /*
+                         if let messageForwardInfo = myMessage.forwardInfo {
+                         
+                         }
+                         */
+                        
                         if let messageParticipant = myMessage.participant {
                             if let participantObject = updateCMParticipantEntity(withParticipantsObject: messageParticipant) {
                                 theMessage.participant = participantObject
                             }
                         }
-                        if let messageReplyInfo = myMessage.replyInfo {
-                            // TODO: handle ReplyInfo
-                        }
+                        
+                        // TODO: handle ReplyInfo
+                        /*
+                         if let messageReplyInfo = myMessage.replyInfo {
+                         
+                         }
+                         */
+                        
                         messageObjectToReturn = theMessage
                         
                         saveContext(subject: "Update CMMessage -create a new object-")
@@ -836,15 +856,12 @@ extension Cache {
             if let result = try context.fetch(fetchRequest) as? [CMConversation] {
                 if (result.count > 0) {
                     for item in participants {
-                        print("participants.first?.id = \(participants.first!.id)")
-                        print("result.first!.id! = \(result.first!.id!)")
                         if let myCMParticipantObject = updateCMParticipantEntity(withParticipantsObject: item) {
                             
                             result.first!.addToParticipants(myCMParticipantObject)
                             //                                result.first!.participants!.append(myCMParticipantObject)
                             saveContext(subject: "Add/Update CMParticipant in a thread and Update CMConversation")
                             updateThreadParticipantEntity(inThreadId: Int(exactly: result.first!.id!)!, withParticipantId: Int(exactly: item.id!)!)
-                            
                         }
                     }
                 }
@@ -1819,7 +1836,6 @@ extension Cache {
         } catch {
             fatalError("Error on fetching list of CMUser")
         }
-        return nil
     }
     
     /*
@@ -2343,8 +2359,6 @@ extension Cache {
         } catch {
             fatalError("Error on fetching list of CMUploadImage")
         }
-        
-        return nil
     }
     
     
@@ -2388,8 +2402,6 @@ extension Cache {
         } catch {
             fatalError("Error on fetching list of CMUploadFile")
         }
-        
-        return nil
     }
     
     

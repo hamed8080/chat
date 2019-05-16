@@ -691,9 +691,8 @@ extension Chat {
         case chatMessageVOTypes.CREATE_THREAD.rawValue:
             log.verbose("Message of type 'CREATE_THREAD' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
-                let threadData = Conversation(messageContent: messageContent).formatToJSON()
+//                let threadData = Conversation(messageContent: messageContent).formatToJSON()
 //                delegate?.threadEvents(type: ThreadEventTypes.new, result: threadData)
-                
 //                chatDelegateCreateThread(createThread: threadData)
                 
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount)
