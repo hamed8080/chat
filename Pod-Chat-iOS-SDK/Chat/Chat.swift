@@ -752,13 +752,15 @@ extension Chat {
             let threadIdObject = Chat.mapOnDeliver["\(threadId)"]
             if let threadIdObj = threadIdObject {
                 let threadIdObjCount = threadIdObj.count
-                for i in 1...threadIdObjCount {
-                    let index = i - 1
-                    let uniqueIdObj: [String: CallbackProtocolWith3Calls] = threadIdObj[index]
-                    if let callback = uniqueIdObj[uniqueId] {
-                        findItAt = i
-                        callback.onDeliver(uID: uniqueId, response: messageContent) { (successJSON) in
-                            self.sendCallbackToUserOnDeliver?(successJSON)
+                if (threadIdObjCount > 0) {
+                    for i in 1...threadIdObjCount {
+                        let index = i - 1
+                        let uniqueIdObj: [String: CallbackProtocolWith3Calls] = threadIdObj[index]
+                        if let callback = uniqueIdObj[uniqueId] {
+                            findItAt = i
+                            callback.onDeliver(uID: uniqueId, response: messageContent) { (successJSON) in
+                                self.sendCallbackToUserOnDeliver?(successJSON)
+                            }
                         }
                     }
                 }
@@ -833,13 +835,15 @@ extension Chat {
             let threadIdObject = Chat.mapOnSeen["\(threadId)"]
             if let threadIdObj = threadIdObject {
                 let threadIdObjCount = threadIdObj.count
-                for i in 1...threadIdObjCount {
-                    let index = i - 1
-                    let uniqueIdObj: [String: CallbackProtocolWith3Calls] = threadIdObj[index]
-                    if let callback = uniqueIdObj[uniqueId] {
-                        findItAt = i
-                        callback.onSeen(uID: uniqueId, response: messageContent) { (successJSON) in
-                            self.sendCallbackToUserOnSeen?(successJSON)
+                if (threadIdObjCount > 0) {
+                    for i in 1...threadIdObjCount {
+                        let index = i - 1
+                        let uniqueIdObj: [String: CallbackProtocolWith3Calls] = threadIdObj[index]
+                        if let callback = uniqueIdObj[uniqueId] {
+                            findItAt = i
+                            callback.onSeen(uID: uniqueId, response: messageContent) { (successJSON) in
+                                self.sendCallbackToUserOnSeen?(successJSON)
+                            }
                         }
                     }
                 }
@@ -2925,25 +2929,35 @@ extension Chat {
         if let msgMetaOwner = creatThreadWithMessageInput.messageMetaDataOwner {
             metadata["owner"]   = JSON(msgMetaOwner)
         }
-
+        
+        print("\n\n\n\n***********\n metadata = \n\(metadata)\n*************\n\n\n\n")
+        
         var messageContentParams: JSON = [:]
         messageContentParams["content"]     = JSON(creatThreadWithMessageInput.messageContent)
         messageContentParams["uniqueId"]    = JSON(myUniqueId)
         messageContentParams["metaData"]    = metadata
-
-        var content: JSON = ["message": messageContentParams]
-        content["uniqueId"] = JSON(myUniqueId)
-        content["title"] = JSON(creatThreadWithMessageInput.threadTitle)
-        content["invitees"] = JSON(creatThreadWithMessageInput.threadInvitees)
-
+        
+        print("\n\n\n\n***********\n messageContentParams = \n\(messageContentParams)\n*************\n\n\n\n")
+        
+        var myContent: JSON = [:]
+        
+        myContent["message"]    = JSON(messageContentParams)
+        myContent["uniqueId"]   = JSON(myUniqueId)
+        myContent["title"]      = JSON(creatThreadWithMessageInput.threadTitle)
+        var inviteees = [JSON]()
+        for item in creatThreadWithMessageInput.threadInvitees {
+            inviteees.append(item.formatToJSON())
+        }
+        myContent["invitees"] = JSON(inviteees)
+        
         if let image = creatThreadWithMessageInput.threadImage {
-            content["image"] = JSON(image)
+            myContent["image"] = JSON(image)
         }
         if let metaData = creatThreadWithMessageInput.threadMetadata {
-            content["metadata"] = JSON(metaData)
+            myContent["metadata"] = JSON(metaData)
         }
         if let description = creatThreadWithMessageInput.threadDescription {
-            content["description"] = JSON(description)
+            myContent["description"] = JSON(description)
         }
 
         if let type = creatThreadWithMessageInput.threadType {
@@ -2956,10 +2970,10 @@ extension Chat {
             case ThreadTypes.CHANNEL.rawValue:        theType = 8
             default: log.error("not valid thread type on create thread", context: "Chat")
             }
-            content["type"] = JSON(theType)
+            myContent["type"] = JSON(theType)
         }
         
-        
+        print("\n\n\n\n***********\n myContent = \n\(myContent)\n*************\n\n\n\n")
 //        let myUniqueId = generateUUID()
 //
 //        var message: JSON = ["text": creatThreadWithMessageInput.messageContentText]
@@ -3018,7 +3032,7 @@ extension Chat {
 //        }
         
         let sendMessageCreateThreadParams: JSON = ["chatMessageVOType": chatMessageVOTypes.CREATE_THREAD.rawValue,
-                                                   "content": content,
+                                                   "content": myContent,
                                                    "uniqueId": myUniqueId]
         
 //        sendMessageWithCallback(params: sendMessageCreateThreadParams,
