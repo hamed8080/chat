@@ -76,7 +76,8 @@ public class Chat {
     
     var SERVICE_ADDRESSES = SERVICE_ADDRESSES_ENUM()
     
-    private var uploadRequest: [(upload: Request, uniqueId: String)] = []
+    private var uploadRequest:      [(upload: Request, uniqueId: String)]   = []
+    private var downloadRequest:    [(download: Request, uniqueId: String)] = []
     
     // MARK: - Chat initializer
     
@@ -4691,39 +4692,35 @@ extension Chat {
     
     
     
-    public func cancelSendMessage(cancelMessageInput: CancelMessageRequestModel) {
+    public func cancelSendMessage(cancelMessageInput: CancelMessageRequestModel,
+                                  completion: @escaping (Bool) -> ()) {
         if let textUID = cancelMessageInput.textMessageUniqueId {
             Chat.cacheDB.deleteWaitTextMessage(uniqueId: textUID)
+            completion(true)
         }
         if let editUID = cancelMessageInput.editMessageUniqueId {
             Chat.cacheDB.deleteWaitEditMessage(uniqueId: editUID)
+            completion(true)
         }
         if let forwardUID = cancelMessageInput.forwardMessageUniqueId {
             Chat.cacheDB.deleteWaitForwardMessage(uniqueId: forwardUID)
+            completion(true)
         }
         if let fileUID = cancelMessageInput.fileMessageUniqueId {
             Chat.cacheDB.deleteWaitFileMessage(uniqueId: fileUID)
+            completion(true)
         }
         if let uploadImageUID = cancelMessageInput.uploadImageUniqueId {
-            for (index, item) in uploadRequest.enumerated() {
-                if item.uniqueId == uploadImageUID {
-                    item.upload.cancel()
-                    uploadRequest.remove(at: index)
-                }
+            manageUpload(image: true, file: false, withUniqueId: uploadImageUID, withAction: .cancel) { (response, state) in
+                completion(state)
             }
-            Chat.cacheDB.deleteWaitUploadImages(uniqueId: uploadImageUID)
         }
         if let uploadFileUID = cancelMessageInput.uploadFileUniqueId {
-            for (index, item) in uploadRequest.enumerated() {
-                if item.uniqueId == uploadFileUID {
-                    item.upload.cancel()
-                    uploadRequest.remove(at: index)
-                }
+            manageUpload(image: false, file: true, withUniqueId: uploadFileUID, withAction: .cancel) { (response, state) in
+                completion(state)
             }
-            Chat.cacheDB.deleteWaitUploadFiles(uniqueId: uploadFileUID)
         }
     }
-    
     
     
     // MARK: - File Management
@@ -5360,6 +5357,66 @@ extension Chat {
         }
         
     }
+    
+    
+    
+    
+    public func manageUpload(image: Bool, file: Bool, withUniqueId: String, withAction action: DownloaUploadAction,
+                             completion: @escaping (String, Bool) -> ()) {
+        for (index, item) in uploadRequest.enumerated() {
+            if item.uniqueId == withUniqueId {
+                switch (action , image, file) {
+                case (.suspend, _, _):
+                    item.upload.suspend()
+                    completion("upload image/file with this uniqueId: '\(withUniqueId)' had been Suspended", true)
+                    
+                case (.resume, _, _):
+                    item.upload.resume()
+                    completion("upload image/file with this uniqueId: '\(withUniqueId)' had been Resumed", true)
+                    
+                case (.cancel, true, false):
+                    item.upload.cancel()
+                    uploadRequest.remove(at: index)
+                    Chat.cacheDB.deleteWaitUploadImages(uniqueId: withUniqueId)
+                    completion("upload image with this uniqueId: '\(withUniqueId)' had been Canceled", true)
+                    
+                case (.cancel, false, true):
+                    item.upload.cancel()
+                    uploadRequest.remove(at: index)
+                    Chat.cacheDB.deleteWaitUploadFiles(uniqueId: withUniqueId)
+                    completion("upload file with this uniqueId: '\(withUniqueId)' had been Canceled", true)
+                    
+                default:
+                    completion("Wrong situation to manage upload", false)
+                }
+            }
+        }
+    }
+    
+    
+    public func manageDownload(withUniqueId: String, withAction action: DownloaUploadAction,
+                               completion: @escaping (String, Bool) -> ()) {
+        for (index, item) in downloadRequest.enumerated() {
+            if item.uniqueId == withUniqueId {
+                switch action {
+                case .cancel:
+                    item.download.cancel()
+                    completion("download with this uniqueId '\(withUniqueId)' had been Canceled", true)
+                    
+                case .suspend:
+                    item.download.suspend()
+                    completion("download with this uniqueId '\(withUniqueId)' had been Suspended", true)
+                    
+                case .resume:
+                    item.download.resume()
+                    completion("download with this uniqueId '\(withUniqueId)' had been Resumed", true)
+                    
+                }
+                downloadRequest.remove(at: index)
+            }
+        }
+    }
+    
     
     
     // MARK: - Map Management

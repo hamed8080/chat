@@ -188,6 +188,12 @@ public enum ContactEventTypes {
 }
 
 
+public enum DownloaUploadAction {
+    case cancel
+    case suspend
+    case resume
+}
+
 
 
 //let messageIdsList: [Int] = params["content"].arrayObject! as! [Int]
