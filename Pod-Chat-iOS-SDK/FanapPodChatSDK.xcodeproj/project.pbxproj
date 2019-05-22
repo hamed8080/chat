@@ -12,9 +12,6 @@
 		3E00CAF721DCA9030029B1FC /* MapStaticImageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E00CAF621DCA9030029B1FC /* MapStaticImageRequestModel.swift */; };
 		3E11F56121DA18D0004B3B2C /* GetImageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E11F56021DA18D0004B3B2C /* GetImageRequestModel.swift */; };
 		3E11F56D21DA1A02004B3B2C /* GetFileRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E11F56C21DA1A02004B3B2C /* GetFileRequestModel.swift */; };
-		3E1C357E225B5E79001A343B /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E1C357D225B5E79001A343B /* Starscream.framework */; };
-		3E1C3580225B5E7D001A343B /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E1C357F225B5E7D001A343B /* SwiftyBeaver.framework */; };
-		3E1C3582225B5E81001A343B /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E1C3581225B5E81001A343B /* SwiftyJSON.framework */; };
 		3E24083021F5C844001F32F1 /* CMUser+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E24081821F5C844001F32F1 /* CMUser+CoreDataClass.swift */; };
 		3E24083121F5C844001F32F1 /* CMUser+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E24081821F5C844001F32F1 /* CMUser+CoreDataClass.swift */; };
 		3E24083221F5C844001F32F1 /* CMUser+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E24081921F5C844001F32F1 /* CMUser+CoreDataProperties.swift */; };
@@ -485,9 +482,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3E1C3582225B5E81001A343B /* SwiftyJSON.framework in Frameworks */,
-				3E1C3580225B5E7D001A343B /* SwiftyBeaver.framework in Frameworks */,
-				3E1C357E225B5E79001A343B /* Starscream.framework in Frameworks */,
 				3E8942B6225A19E2008F2C52 /* Alamofire.framework in Frameworks */,
 				3E49635421D79BFB00A67D19 /* FanapPodAsyncSDK.framework in Frameworks */,
 			);
@@ -1260,7 +1254,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1317,7 +1311,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;

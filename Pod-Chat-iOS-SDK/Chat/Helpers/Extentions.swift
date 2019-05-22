@@ -39,11 +39,11 @@ struct formatDataFromStringToJSON {
                 let msg = try JSON(data: dataFromStringMsg)
                 return msg
             } catch {
-                log.error("error to convert income message String to JSON", context: "formatStringToJSON")
+//                log.error("error to convert income message String to JSON", context: "formatStringToJSON")
                 return []
             }
         } else {
-            log.error("error to get message from server", context: "formatStringToJSON")
+//            log.error("error to get message from server", context: "formatStringToJSON")
             return []
         }
     }

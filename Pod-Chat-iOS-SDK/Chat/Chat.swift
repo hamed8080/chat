@@ -1379,6 +1379,7 @@ extension Chat {
             break
             
         default:
+//            print("This type of message is not defined yet!!!")
             log.warning("This type of message is not defined yet!!!", context: "Chat")
             break
         }
@@ -2823,7 +2824,9 @@ extension Chat {
             case ThreadTypes.PUBLIC_GROUP.rawValue:   theType = 2
             case ThreadTypes.CHANNEL_GROUP.rawValue:  theType = 4
             case ThreadTypes.CHANNEL.rawValue:        theType = 8
-            default: log.error("not valid thread type on create thread", context: "Chat")
+            default:
+//                print("not valid thread type on create thread")
+                log.error("not valid thread type on create thread", context: "Chat")
             }
             content["type"] = JSON(theType)
         }
@@ -2859,7 +2862,9 @@ extension Chat {
                 case ThreadTypes.PUBLIC_GROUP.rawValue:   theType = 2
                 case ThreadTypes.CHANNEL_GROUP.rawValue:  theType = 4
                 case ThreadTypes.CHANNEL.rawValue:        theType = 8
-                default: log.error("not valid thread type on create thread", context: "Chat")
+                default:
+//                    print("not valid thread type on create thread")
+                    log.error("not valid thread type on create thread", context: "Chat")
                 }
                 content.appendIfDictionary(key: "type", json: JSON(theType))
             }
@@ -2969,7 +2974,9 @@ extension Chat {
             case ThreadTypes.PUBLIC_GROUP.rawValue:   theType = 2
             case ThreadTypes.CHANNEL_GROUP.rawValue:  theType = 4
             case ThreadTypes.CHANNEL.rawValue:        theType = 8
-            default: log.error("not valid thread type on create thread", context: "Chat")
+            default:
+//                print("not valid thread type on create thread")
+                log.error("not valid thread type on create thread", context: "Chat")
             }
             myContent["type"] = JSON(theType)
         }
@@ -3088,7 +3095,9 @@ extension Chat {
                 case ThreadTypes.PUBLIC_GROUP.rawValue: theType = 2
                 case ThreadTypes.CHANNEL_GROUP.rawValue: theType = 4
                 case ThreadTypes.CHANNEL.rawValue: theType = 8
-                default: log.error("not valid thread type on create thread", context: "Chat")
+                default:
+//                    print("not valid thread type on create thread")
+                    log.error("not valid thread type on create thread", context: "Chat")
                 }
                 content.appendIfDictionary(key: "type", json: JSON(theType))
             }

@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-import SwiftyBeaver
+//import SwiftyBeaver
 import SwiftyJSON
 
 
