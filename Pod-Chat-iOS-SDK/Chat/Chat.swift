@@ -9,13 +9,12 @@
 import Foundation
 import Contacts
 import CoreData
-
 import Alamofire
 import SwiftyJSON
 import SwiftyBeaver
-
 import FanapPodAsyncSDK
 import UIKit
+
 
 public class Chat {
     
