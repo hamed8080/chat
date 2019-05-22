@@ -23,7 +23,7 @@ open class LinkedUser {
      *   - username         String?
      */
     
-    public let coreUserId:  Int?
+    public let id:          Int?
     public let image:       String?
     public let name:        String?
     public let nickname:    String?
@@ -31,20 +31,20 @@ open class LinkedUser {
     
     
     public init(messageContent: JSON) {
-        self.coreUserId = messageContent["coreUserId"].int
+        self.id         = messageContent["id"].int
         self.image      = messageContent["image"].string
         self.name       = messageContent["name"].string
         self.nickname   = messageContent["nickname"].string
         self.username   = messageContent["username"].string
     }
     
-    public init(coreUserId: Int?,
+    public init(id:        Int?,
                 image:     String?,
                 name:      String?,
                 nickname:  String?,
                 username:  String?) {
         
-        self.coreUserId = coreUserId
+        self.id         = id
         self.image      = image
         self.name       = name
         self.nickname   = nickname
@@ -54,7 +54,7 @@ open class LinkedUser {
     
     public init(theLinkedUser: LinkedUser) {
         
-        self.coreUserId = theLinkedUser.coreUserId
+        self.id         = theLinkedUser.id
         self.image      = theLinkedUser.image
         self.name       = theLinkedUser.name
         self.nickname   = theLinkedUser.nickname
@@ -66,7 +66,7 @@ open class LinkedUser {
     }
     
     public func formatToJSON() -> JSON {
-        let result: JSON = ["coreUserId":       coreUserId ?? NSNull(),
+        let result: JSON = ["id":               id ?? NSNull(),
                             "image":            image ?? NSNull(),
                             "name":             name ?? NSNull(),
                             "nickname":         nickname ?? NSNull(),

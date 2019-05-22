@@ -50,6 +50,10 @@ public enum chatMessageVOTypes: Int {
     case GET_MESSAGE_SEEN_PARTICIPANTS      = 33
     case BOT_MESSAGE                        = 40
     case SPAM_PV_THREAD                     = 41
+    case SET_RULE_TO_USER                   = 42
+    case CLEAR_HISTORY                      = 44
+    case SIGNAL_MESSAGE                     = 45
+    case GET_THREAD_ADMINS                  = 48
     case LOGOUT                             = 100
     case ERROR                              = 999
 }
@@ -183,6 +187,12 @@ public enum ContactEventTypes {
     
 }
 
+
+public enum DownloaUploadAction {
+    case cancel
+    case suspend
+    case resume
+}
 
 
 

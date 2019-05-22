@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-import SwiftyBeaver
+//import SwiftyBeaver
 import SwiftyJSON
 
 
@@ -189,7 +189,7 @@ extension Cache {
                         result.first!.blocked         = myParticipant.blocked as NSNumber?
                         result.first!.cellphoneNumber = myParticipant.cellphoneNumber
                         result.first!.contactId       = myParticipant.contactId as NSNumber?
-                        result.first!.coreUserId      = myParticipant.coreUserId as NSNumber?
+                        result.first!.id              = myParticipant.id as NSNumber?
                         result.first!.email           = myParticipant.email
                         result.first!.firstName       = myParticipant.firstName
                         result.first!.id              = myParticipant.id as NSNumber?
@@ -211,7 +211,7 @@ extension Cache {
                         theInviter.blocked         = myParticipant.blocked as NSNumber?
                         theInviter.cellphoneNumber = myParticipant.cellphoneNumber
                         theInviter.contactId       = myParticipant.contactId as NSNumber?
-                        theInviter.coreUserId      = myParticipant.coreUserId as NSNumber?
+                        theInviter.id              = myParticipant.id as NSNumber?
                         theInviter.email           = myParticipant.email
                         theInviter.firstName       = myParticipant.firstName
                         theInviter.id              = myParticipant.id as NSNumber?
@@ -295,17 +295,27 @@ extension Cache {
                                 result.first!.conversation = conversationObject
                             }
                         }
-                        if let messageForwardInfo = myMessage.forwardInfo {
-                            // TODO: handle ForwardInfo
-                        }
+                        
+                        // TODO: handle ForwardInfo
+                        /*
+                         if let messageForwardInfo = myMessage.forwardInfo {
+                         
+                         }
+                         */
+                        
                         if let messageParticipant = myMessage.participant {
                             if let participantObject = updateCMParticipantEntity(withParticipantsObject: messageParticipant) {
                                 result.first!.participant = participantObject
                             }
                         }
-                        if let messageReplyInfo = myMessage.replyInfo {
-                            // TODO: handle ReplyInfo
-                        }
+                        
+                        // TODO: handle ReplyInfo
+                        /*
+                         if let messageReplyInfo = myMessage.replyInfo {
+                         
+                         }
+                         */
+                        
                         messageObjectToReturn = result.first!
                         
                         saveContext(subject: "Update CMMessage -update existing object-")
@@ -330,17 +340,27 @@ extension Cache {
                                 theMessage.conversation = conversationObject
                             }
                         }
-                        if let messageForwardInfo = myMessage.forwardInfo {
-                            // TODO: handle ForwardInfo
-                        }
+                        
+                        // TODO: handle ForwardInfo
+                        /*
+                         if let messageForwardInfo = myMessage.forwardInfo {
+                         
+                         }
+                         */
+                        
                         if let messageParticipant = myMessage.participant {
                             if let participantObject = updateCMParticipantEntity(withParticipantsObject: messageParticipant) {
                                 theMessage.participant = participantObject
                             }
                         }
-                        if let messageReplyInfo = myMessage.replyInfo {
-                            // TODO: handle ReplyInfo
-                        }
+                        
+                        // TODO: handle ReplyInfo
+                        /*
+                         if let messageReplyInfo = myMessage.replyInfo {
+                         
+                         }
+                         */
+                        
                         messageObjectToReturn = theMessage
                         
                         saveContext(subject: "Update CMMessage -create a new object-")
@@ -430,12 +450,12 @@ extension Cache {
     func updateCMLinkedUserEntity(withLinkedUser myLinkedUser: LinkedUser) -> CMLinkedUser? {
         var linkedUserToReturn: CMLinkedUser?
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMLinkedUser")
-        if let linkedUserId = myLinkedUser.coreUserId {
-            fetchRequest.predicate = NSPredicate(format: "coreUserId == %i", linkedUserId)
+        if let linkedUserId = myLinkedUser.id {
+            fetchRequest.predicate = NSPredicate(format: "id == %i", linkedUserId)
             do {
                 if let result = try context.fetch(fetchRequest) as? [CMLinkedUser] {
                     if (result.count > 0) {
-                        result.first!.coreUserId    = myLinkedUser.coreUserId as NSNumber?
+                        result.first!.id            = myLinkedUser.id as NSNumber?
                         result.first!.image         = myLinkedUser.image
                         result.first!.name          = myLinkedUser.name
                         result.first!.nickname      = myLinkedUser.nickname
@@ -448,7 +468,7 @@ extension Cache {
                         let theLinkedUserEntity = NSEntityDescription.entity(forEntityName: "CMLinkedUser", in: context)
                         let theLinkedUser = CMLinkedUser(entity: theLinkedUserEntity!, insertInto: context)
                         
-                        theLinkedUser.coreUserId    = myLinkedUser.coreUserId as NSNumber?
+                        theLinkedUser.id            = myLinkedUser.id as NSNumber?
                         theLinkedUser.image         = myLinkedUser.image
                         theLinkedUser.name          = myLinkedUser.name
                         theLinkedUser.nickname      = myLinkedUser.nickname
@@ -836,15 +856,12 @@ extension Cache {
             if let result = try context.fetch(fetchRequest) as? [CMConversation] {
                 if (result.count > 0) {
                     for item in participants {
-                        print("participants.first?.id = \(participants.first!.id)")
-                        print("result.first!.id! = \(result.first!.id!)")
                         if let myCMParticipantObject = updateCMParticipantEntity(withParticipantsObject: item) {
                             
                             result.first!.addToParticipants(myCMParticipantObject)
                             //                                result.first!.participants!.append(myCMParticipantObject)
                             saveContext(subject: "Add/Update CMParticipant in a thread and Update CMConversation")
                             updateThreadParticipantEntity(inThreadId: Int(exactly: result.first!.id!)!, withParticipantId: Int(exactly: item.id!)!)
-                            
                         }
                     }
                 }
@@ -1673,7 +1690,7 @@ extension Cache {
             if let result = try context.fetch(fetchRequest) as? [CMContact] {
                 for contact in result {
                     if let lui = contact.linkedUser {
-                        print("coreUserId = \(lui)")
+                        print("id = \(lui)")
                         context.delete(contact.linkedUser!)
                     }
                     deleteAndSave(object: contact, withMessage: "CMContact Deleted.")
@@ -1819,7 +1836,6 @@ extension Cache {
         } catch {
             fatalError("Error on fetching list of CMUser")
         }
-        return nil
     }
     
     /*
@@ -2343,8 +2359,6 @@ extension Cache {
         } catch {
             fatalError("Error on fetching list of CMUploadImage")
         }
-        
-        return nil
     }
     
     
@@ -2388,8 +2402,6 @@ extension Cache {
         } catch {
             fatalError("Error on fetching list of CMUploadFile")
         }
-        
-        return nil
     }
     
     

@@ -17,7 +17,7 @@ extension CMLinkedUser {
         return NSFetchRequest<CMLinkedUser>(entityName: "CMLinkedUser")
     }
     
-    @NSManaged public var coreUserId:   NSNumber?
+    @NSManaged public var id:           NSNumber?
     @NSManaged public var image:        String?
     @NSManaged public var name:         String?
     @NSManaged public var nickname:     String?

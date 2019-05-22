@@ -76,6 +76,9 @@ public class Chat {
     
     var SERVICE_ADDRESSES = SERVICE_ADDRESSES_ENUM()
     
+    private var uploadRequest:      [(upload: Request, uniqueId: String)]   = []
+    private var downloadRequest:    [(download: Request, uniqueId: String)] = []
+    
     // MARK: - Chat initializer
     
     public init(socketAddress:              String,
@@ -227,6 +230,7 @@ public class Chat {
     private var spamPvThreadCallbackToUser:         callbackTypeAlias?
     private var getMessageSeenListCallbackToUser:   callbackTypeAlias?
     private var getMessageDeliverListCallbackToUser: callbackTypeAlias?
+    private var clearHistoryCallbackToUser:         callbackTypeAlias?
     
 //    var tempSendMessageArr:     [[String : JSON]]   = []
 //    var tempReceiveMessageArr:  [[String: JSON]]    = []
@@ -254,7 +258,7 @@ extension Chat {
         let url = ssoHost + SERVICES_PATH.SSO_DEVICES.rawValue
         let method: HTTPMethod = .get
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: nil, dataToSend: nil, isImage: nil, isFile: nil, completion: { (myResponse) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: nil, dataToSend: nil, requestUniqueId: nil, isImage: nil, isFile: nil, completion: { (myResponse) in
             let responseStr: String = myResponse as! String
             if let dataFromMsgString = responseStr.data(using: .utf8, allowLossyConversion: false) {
                 // get currrent user deviceIdresponseStr
@@ -291,6 +295,7 @@ extension Chat {
                      withHeaders:           HTTPHeaders?,
                      withParameters:        Parameters?,
                      dataToSend:            Any?,
+                     requestUniqueId:       String?,
                      isImage:               Bool?,
                      isFile:                Bool?,
                      completion:            @escaping callbackTypeAlias,
@@ -415,6 +420,7 @@ extension Chat {
                     }, to: urlStr) { (myResult) in
                         switch myResult {
                         case .success(let upload, _, _):
+                            self.uploadRequest.append((upload: upload, uniqueId: requestUniqueId!))
                             upload.responseJSON(completionHandler: { (response) in
                                 if let jsonValue = response.result.value {
                                     let jsonResponse: JSON = JSON(jsonValue)
@@ -425,6 +431,15 @@ extension Chat {
                                 let myProgressFloat: Float = Float(myProgress.fractionCompleted)
                                 progress?(myProgressFloat)
                             })
+                            upload.responseJSON { response in
+                                debugPrint(response)
+                                for (index, item) in self.uploadRequest.enumerated() {
+                                    if item.uniqueId == requestUniqueId {
+                                        self.uploadRequest.remove(at: index)
+                                    }
+                                }
+                                
+                            }
                         case .failure(let error):
                             completion(error)
                         }
@@ -643,7 +658,7 @@ extension Chat {
     
     func receivedMessageHandler(params: JSON) {
         
-        log.verbose("content of received message: \n \(params)", context: "Chat")
+        log.debug("content of received message: \n \(params)", context: "Chat")
         
         /*
          * + Chat Message Received Content  {object}
@@ -677,9 +692,8 @@ extension Chat {
         case chatMessageVOTypes.CREATE_THREAD.rawValue:
             log.verbose("Message of type 'CREATE_THREAD' recieved", context: "Chat")
             if Chat.map[uniqueId] != nil {
-                let threadData = Conversation(messageContent: messageContent).formatToJSON()
+//                let threadData = Conversation(messageContent: messageContent).formatToJSON()
 //                delegate?.threadEvents(type: ThreadEventTypes.new, result: threadData)
-                
 //                chatDelegateCreateThread(createThread: threadData)
                 
                 let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount)
@@ -739,13 +753,15 @@ extension Chat {
             let threadIdObject = Chat.mapOnDeliver["\(threadId)"]
             if let threadIdObj = threadIdObject {
                 let threadIdObjCount = threadIdObj.count
-                for i in 1...threadIdObjCount {
-                    let index = i - 1
-                    let uniqueIdObj: [String: CallbackProtocolWith3Calls] = threadIdObj[index]
-                    if let callback = uniqueIdObj[uniqueId] {
-                        findItAt = i
-                        callback.onDeliver(uID: uniqueId, response: messageContent) { (successJSON) in
-                            self.sendCallbackToUserOnDeliver?(successJSON)
+                if (threadIdObjCount > 0) {
+                    for i in 1...threadIdObjCount {
+                        let index = i - 1
+                        let uniqueIdObj: [String: CallbackProtocolWith3Calls] = threadIdObj[index]
+                        if let callback = uniqueIdObj[uniqueId] {
+                            findItAt = i
+                            callback.onDeliver(uID: uniqueId, response: messageContent) { (successJSON) in
+                                self.sendCallbackToUserOnDeliver?(successJSON)
+                            }
                         }
                     }
                 }
@@ -820,13 +836,15 @@ extension Chat {
             let threadIdObject = Chat.mapOnSeen["\(threadId)"]
             if let threadIdObj = threadIdObject {
                 let threadIdObjCount = threadIdObj.count
-                for i in 1...threadIdObjCount {
-                    let index = i - 1
-                    let uniqueIdObj: [String: CallbackProtocolWith3Calls] = threadIdObj[index]
-                    if let callback = uniqueIdObj[uniqueId] {
-                        findItAt = i
-                        callback.onSeen(uID: uniqueId, response: messageContent) { (successJSON) in
-                            self.sendCallbackToUserOnSeen?(successJSON)
+                if (threadIdObjCount > 0) {
+                    for i in 1...threadIdObjCount {
+                        let index = i - 1
+                        let uniqueIdObj: [String: CallbackProtocolWith3Calls] = threadIdObj[index]
+                        if let callback = uniqueIdObj[uniqueId] {
+                            findItAt = i
+                            callback.onSeen(uID: uniqueId, response: messageContent) { (successJSON) in
+                                self.sendCallbackToUserOnSeen?(successJSON)
+                            }
                         }
                     }
                 }
@@ -1312,6 +1330,27 @@ extension Chat {
             }
             break
             
+        // a message of type 42 (SET_RULE_TO_USER) comes from Server.
+        case chatMessageVOTypes.SET_RULE_TO_USER.rawValue:
+            break
+            
+        // a message of type 44 (CLEAR_HISTORY) comes from Server.
+        case chatMessageVOTypes.CLEAR_HISTORY.rawValue:
+            log.verbose("Message of type 'CLEAR_HISTORY' recieved", context: "Chat")
+            if Chat.map[uniqueId] != nil {
+                let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: nil, resultAsString: messageContentAsString, contentCount: nil)
+                let callback: CallbackProtocol = Chat.map[uniqueId]!
+                callback.onResultCallback(uID: uniqueId, response: returnData, success: { (successJSON) in
+                    self.clearHistoryCallbackToUser?(successJSON)
+                }) { _ in }
+                Chat.map.removeValue(forKey: uniqueId)
+            }
+            break
+            
+        // a message of type 48 (GET_THREAD_ADMINS) comes from Server.
+        case chatMessageVOTypes.GET_THREAD_ADMINS.rawValue:
+            break
+            
         // a message of type 100 (LOGOUT) comes from Server.
         case chatMessageVOTypes.LOGOUT.rawValue:
             break
@@ -1319,27 +1358,28 @@ extension Chat {
         // a message of type 999 (ERROR) comes from Server.
         case chatMessageVOTypes.ERROR.rawValue:
             log.verbose("Message of type 'ERROR' recieved", context: "Chat")
-            //            if Chat.map[uniqueId] != nil {
-            //                let message: String = messageContent["message"].stringValue
-            //                let code: Int = messageContent["code"].intValue
-            //
-            //                let returnData: JSON = createReturnData(hasError: true, errorMessage: message, errorCode: code, result: messageContent, resultAsString: nil, contentCount: 0)
-            //                let callback: CallbackProtocol = Chat.map[uniqueId]!
-            //                callback.onResultCallback(uID: uniqueId, response: returnData, success: { (successJSON) in
-            //                    self.spamPvThreadCallbackToUser?(successJSON)
-            //                }) { _ in }
-            //                Chat.map.removeValue(forKey: uniqueId)
-            //
-            //                if (messageContent["code"].intValue == 21) {
-            //                    chatState = false
-            //                    asyncClient?.asyncLogOut()
-            ////                    clearCache()
-            //                }
-            //                delegate?.chatError(errorCode: code, errorMessage: message, errorResult: messageContent)
-            //            }
+                if Chat.map[uniqueId] != nil {
+                    let message: String = messageContent["message"].stringValue
+                    let code: Int = messageContent["code"].intValue
+    
+                    let returnData: JSON = createReturnData(hasError: true, errorMessage: message, errorCode: code, result: messageContent, resultAsString: nil, contentCount: 0)
+                    let callback: CallbackProtocol = Chat.map[uniqueId]!
+                    callback.onResultCallback(uID: uniqueId, response: returnData, success: { (successJSON) in
+                        self.spamPvThreadCallbackToUser?(successJSON)
+                    }) { _ in }
+                    Chat.map.removeValue(forKey: uniqueId)
+    
+                    if (messageContent["code"].intValue == 21) {
+                        chatState = false
+                        asyncClient?.asyncLogOut()
+    //                    clearCache()
+                    }
+                    delegate?.chatError(errorCode: code, errorMessage: message, errorResult: messageContent)
+                }
             break
             
         default:
+//            print("This type of message is not defined yet!!!")
             log.warning("This type of message is not defined yet!!!", context: "Chat")
             break
         }
@@ -1657,7 +1697,7 @@ extension Chat {
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
         
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, isImage: nil, isFile: nil, completion: { (response) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, requestUniqueId: messageUniqueId, isImage: nil, isFile: nil, completion: { (response) in
             let jsonRes: JSON = response as! JSON
             
             // save data comes from server to the Cache
@@ -1706,7 +1746,7 @@ extension Chat {
         let method: HTTPMethod = HTTPMethod.post
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, isImage: nil, isFile: nil, completion: { (response) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, requestUniqueId: messageUniqueId, isImage: nil, isFile: nil, completion: { (response) in
             let jsonRes: JSON = response as! JSON
             let contactsResult = ContactModel(messageContent: jsonRes)
             completion(contactsResult)
@@ -1755,7 +1795,7 @@ extension Chat {
         let method: HTTPMethod = HTTPMethod.post
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, isImage: nil, isFile: nil, completion: { (response) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, requestUniqueId: messageUniqueId, isImage: nil, isFile: nil, completion: { (response) in
             let jsonRes: JSON = response as! JSON
             let contactsResult = ContactModel(messageContent: jsonRes)
             completion(contactsResult)
@@ -1807,7 +1847,7 @@ extension Chat {
         let method: HTTPMethod = HTTPMethod.post
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, isImage: nil, isFile: nil, completion: { (response) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, requestUniqueId: uniqueId, isImage: nil, isFile: nil, completion: { (response) in
             let jsonRes: JSON = response as! JSON
             let contactsResult = ContactModel(messageContent: jsonRes)
             completion(contactsResult)
@@ -1849,7 +1889,7 @@ extension Chat {
         let method: HTTPMethod = HTTPMethod.post
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, isImage: nil, isFile: nil, completion: { (response) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, requestUniqueId: theUniqueId, isImage: nil, isFile: nil, completion: { (response) in
             let jsonRes: JSON = response as! JSON
             let contactsResult = RemoveContactModel(messageContent: jsonRes)
             
@@ -1883,7 +1923,7 @@ extension Chat {
         let method: HTTPMethod = HTTPMethod.post
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, isImage: nil, isFile: nil, completion: { (response) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, requestUniqueId: uniqueId, isImage: nil, isFile: nil, completion: { (response) in
             let jsonRes: JSON = response as! JSON
             let contactsResult = RemoveContactModel(messageContent: jsonRes)
             completion(contactsResult)
@@ -2179,7 +2219,7 @@ extension Chat {
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
         
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, isImage: nil, isFile: nil, completion: { (response) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, requestUniqueId: nil, isImage: nil, isFile: nil, completion: { (response) in
             let jsonRes: JSON = response as! JSON
             
             //            // save data comes from server to the Cache
@@ -2250,7 +2290,7 @@ extension Chat {
         let method: HTTPMethod = HTTPMethod.post
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, isImage: nil, isFile: nil, completion: { (response) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, requestUniqueId: nil, isImage: nil, isFile: nil, completion: { (response) in
             let jsonRes: JSON = response as! JSON
             let contactsResult = ContactModel(messageContent: jsonRes)
             completion(contactsResult)
@@ -2696,6 +2736,41 @@ extension Chat {
     }
     
     
+    
+    /*
+     ClearHistory
+     
+     */
+    public func clearHistory(clearHistoryInput: ClearHistoryRequestModel,
+                             uniqueId:          @escaping (String) -> (),
+                             completion:        @escaping callbackTypeAlias,
+                             cacheResponse:     @escaping callbackTypeAlias) {
+        log.verbose("Try to request to create clear history with this parameters: \n \(clearHistoryInput)", context: "Chat")
+        
+        var content: JSON = [:]
+        
+//        content["subjectId"] = JSON(clearHistoryInput.threadId)
+        
+        if let requestUniqueId = clearHistoryInput.uniqueId {
+            content["uniqueId"] = JSON(requestUniqueId)
+        }
+        
+        let sendMessageClearHistoryParams: JSON = ["chatMessageVOType": chatMessageVOTypes.CLEAR_HISTORY.rawValue,
+                                                   "content": content,
+                                                   "subjectId": clearHistoryInput.threadId]
+        
+        sendMessageWithCallback(params: sendMessageClearHistoryParams,
+                                callback: ClearHistoryCallback(parameters: sendMessageClearHistoryParams),
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (clearHistoryUniqueId) in
+                                    uniqueId(clearHistoryUniqueId)
+        }
+        
+        clearHistoryCallbackToUser = completion
+    }
+    
+    
     /*
      CreateThread:
      create a thread with somebody
@@ -2749,7 +2824,9 @@ extension Chat {
             case ThreadTypes.PUBLIC_GROUP.rawValue:   theType = 2
             case ThreadTypes.CHANNEL_GROUP.rawValue:  theType = 4
             case ThreadTypes.CHANNEL.rawValue:        theType = 8
-            default: log.error("not valid thread type on create thread", context: "Chat")
+            default:
+//                print("not valid thread type on create thread")
+                log.error("not valid thread type on create thread", context: "Chat")
             }
             content["type"] = JSON(theType)
         }
@@ -2785,7 +2862,9 @@ extension Chat {
                 case ThreadTypes.PUBLIC_GROUP.rawValue:   theType = 2
                 case ThreadTypes.CHANNEL_GROUP.rawValue:  theType = 4
                 case ThreadTypes.CHANNEL.rawValue:        theType = 8
-                default: log.error("not valid thread type on create thread", context: "Chat")
+                default:
+//                    print("not valid thread type on create thread")
+                    log.error("not valid thread type on create thread", context: "Chat")
                 }
                 content.appendIfDictionary(key: "type", json: JSON(theType))
             }
@@ -2836,7 +2915,7 @@ extension Chat {
      4- onDelivere:
      5- onSeen:
      */
-    public func creatThreadWithMessage(creatThreadWithMessageInput: CreateThreadWithMessageRequestModel,
+    public func createThreadWithMessage(creatThreadWithMessageInput: CreateThreadWithMessageRequestModel,
                                        uniqueId:                    @escaping (String) -> (),
                                        completion:                  @escaping callbackTypeAlias,
                                        onSent:                      @escaping callbackTypeAlias,
@@ -2845,7 +2924,7 @@ extension Chat {
         log.verbose("Try to request to create thread and Send Message participants with this parameters: \n \(creatThreadWithMessageInput)", context: "Chat")
         
         let myUniqueId = generateUUID()
-        
+
         var metadata: JSON = [:]
         if let msgMetadata = creatThreadWithMessageInput.messageMetaDataId {
             metadata["id"] = JSON(msgMetadata)
@@ -2857,26 +2936,36 @@ extension Chat {
             metadata["owner"]   = JSON(msgMetaOwner)
         }
         
+        print("\n\n\n\n***********\n metadata = \n\(metadata)\n*************\n\n\n\n")
+        
         var messageContentParams: JSON = [:]
         messageContentParams["content"]     = JSON(creatThreadWithMessageInput.messageContent)
         messageContentParams["uniqueId"]    = JSON(myUniqueId)
         messageContentParams["metaData"]    = metadata
         
-        var content: JSON = ["message": messageContentParams]
-        content["uniqueId"] = JSON(myUniqueId)
-        content["title"] = JSON(creatThreadWithMessageInput.threadTitle)
-        content["invitees"] = JSON(creatThreadWithMessageInput.threadInvitees)
+        print("\n\n\n\n***********\n messageContentParams = \n\(messageContentParams)\n*************\n\n\n\n")
+        
+        var myContent: JSON = [:]
+        
+        myContent["message"]    = JSON(messageContentParams)
+        myContent["uniqueId"]   = JSON(myUniqueId)
+        myContent["title"]      = JSON(creatThreadWithMessageInput.threadTitle)
+        var inviteees = [JSON]()
+        for item in creatThreadWithMessageInput.threadInvitees {
+            inviteees.append(item.formatToJSON())
+        }
+        myContent["invitees"] = JSON(inviteees)
         
         if let image = creatThreadWithMessageInput.threadImage {
-            content["image"] = JSON(image)
+            myContent["image"] = JSON(image)
         }
         if let metaData = creatThreadWithMessageInput.threadMetadata {
-            content["metadata"] = JSON(metaData)
+            myContent["metadata"] = JSON(metaData)
         }
         if let description = creatThreadWithMessageInput.threadDescription {
-            content["description"] = JSON(description)
+            myContent["description"] = JSON(description)
         }
-        
+
         if let type = creatThreadWithMessageInput.threadType {
             var theType: Int = 0
             switch type {
@@ -2885,17 +2974,89 @@ extension Chat {
             case ThreadTypes.PUBLIC_GROUP.rawValue:   theType = 2
             case ThreadTypes.CHANNEL_GROUP.rawValue:  theType = 4
             case ThreadTypes.CHANNEL.rawValue:        theType = 8
-            default: log.error("not valid thread type on create thread", context: "Chat")
+            default:
+//                print("not valid thread type on create thread")
+                log.error("not valid thread type on create thread", context: "Chat")
             }
-            content["type"] = JSON(theType)
+            myContent["type"] = JSON(theType)
         }
         
+        print("\n\n\n\n***********\n myContent = \n\(myContent)\n*************\n\n\n\n")
+//        let myUniqueId = generateUUID()
+//
+//        var message: JSON = ["text": creatThreadWithMessageInput.messageContentText]
+//
+//        if let mui = creatThreadWithMessageInput.messageUniqueId {
+//            message["uniqueId"] = JSON("\(mui)")
+//        }
+//        if let mt = creatThreadWithMessageInput.messageType {
+//            message["type"] = JSON(mt)
+//        }
+//        if let mr = creatThreadWithMessageInput.messageRepliedTo {
+//            message["repliedTo"] = JSON(mr)
+//        }
+//        if let mmt = creatThreadWithMessageInput.messageMetaData {
+//            message["metadata"] = JSON("\(mmt)")
+//        }
+//        if let msmt = creatThreadWithMessageInput.messageSystemMetadata {
+//            message["systemMetadata"] = JSON("\(msmt)")
+//        }
+//        if let mfi = creatThreadWithMessageInput.messageForwardMessageIds {
+//            message["forwardedMessageIds"] = JSON(mfi)
+//            var uIds: [String] = []
+//            for _ in mfi {
+//                uIds.append(generateUUID())
+//            }
+//            message["forwardedUniqueIds"] = JSON(uIds)
+//        }
+//
+//
+//        var content: JSON = ["message": message]
+//        content["uniqueId"] = JSON(myUniqueId)
+//        content["title"] = JSON(creatThreadWithMessageInput.threadTitle)
+//        content["invitees"] = JSON(creatThreadWithMessageInput.threadInvitees)
+//
+//        if let image = creatThreadWithMessageInput.threadImage {
+//            content["image"] = JSON(image)
+//        }
+//        if let metaData = creatThreadWithMessageInput.threadMetadata {
+//            content["metadata"] = JSON(metaData)
+//        }
+//        if let description = creatThreadWithMessageInput.threadDescription {
+//            content["description"] = JSON(description)
+//        }
+//
+//        if let type = creatThreadWithMessageInput.threadType {
+//            var theType: Int = 0
+//            switch type {
+//            case ThreadTypes.NORMAL.rawValue:         theType = 0
+//            case ThreadTypes.OWNER_GROUP.rawValue:    theType = 1
+//            case ThreadTypes.PUBLIC_GROUP.rawValue:   theType = 2
+//            case ThreadTypes.CHANNEL_GROUP.rawValue:  theType = 4
+//            case ThreadTypes.CHANNEL.rawValue:        theType = 8
+//            default: log.error("not valid thread type on create thread", context: "Chat")
+//            }
+//            content["type"] = JSON(theType)
+//        }
+        
         let sendMessageCreateThreadParams: JSON = ["chatMessageVOType": chatMessageVOTypes.CREATE_THREAD.rawValue,
-                                                   "content": content,
+                                                   "content": myContent,
                                                    "uniqueId": myUniqueId]
         
+//        sendMessageWithCallback(params: sendMessageCreateThreadParams,
+//                                callback: CreateThreadCallback(parameters: sendMessageCreateThreadParams),
+//                                sentCallback: SendMessageCallbacks(parameters: content),
+//                                deliverCallback: SendMessageCallbacks(parameters: content),
+//                                seenCallback: SendMessageCallbacks(parameters: content)) { (theUniqueId) in
+//                                    uniqueId(theUniqueId)
+//        }
+        
+        
         messageContentParams["isCreateThreadAndSendMessage"] = JSON(true)
-        sendMessageWithCallback(params: sendMessageCreateThreadParams, callback: CreateThreadCallback(parameters: sendMessageCreateThreadParams), sentCallback: SendMessageCallbacks(parameters: messageContentParams), deliverCallback: SendMessageCallbacks(parameters: messageContentParams), seenCallback: SendMessageCallbacks(parameters: messageContentParams)) { (theUniqueId) in
+        sendMessageWithCallback(params: sendMessageCreateThreadParams, callback: CreateThreadCallback(parameters: sendMessageCreateThreadParams),
+                                sentCallback: SendMessageCallbacks(parameters: messageContentParams),
+                                deliverCallback: SendMessageCallbacks(parameters: messageContentParams),
+                                seenCallback: SendMessageCallbacks(parameters: messageContentParams)) { (theUniqueId) in
             uniqueId(theUniqueId)
         }
         
@@ -2908,7 +3069,7 @@ extension Chat {
     
     // NOTE: This method will be deprecate soon
     // this method will do the same as tha funciton above but instead of using 'CreateThreadWithMessageRequestModel' to get the parameters, it'll use JSON
-    public func creatThreadWithMessage(params: JSON?, sendMessageParams: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias, onSent: @escaping callbackTypeAlias, onDelivere: @escaping callbackTypeAlias, onSeen: @escaping callbackTypeAlias) {
+    public func createThreadWithMessage(params: JSON?, sendMessageParams: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias, onSent: @escaping callbackTypeAlias, onDelivere: @escaping callbackTypeAlias, onSeen: @escaping callbackTypeAlias) {
         log.verbose("Try to request to create thread and Send Message participants with this parameters: \n \(params ?? "params is empty")", context: "Chat")
         
         let myUniqueId = generateUUID()
@@ -2934,7 +3095,9 @@ extension Chat {
                 case ThreadTypes.PUBLIC_GROUP.rawValue: theType = 2
                 case ThreadTypes.CHANNEL_GROUP.rawValue: theType = 4
                 case ThreadTypes.CHANNEL.rawValue: theType = 8
-                default: log.error("not valid thread type on create thread", context: "Chat")
+                default:
+//                    print("not valid thread type on create thread")
+                    log.error("not valid thread type on create thread", context: "Chat")
                 }
                 content.appendIfDictionary(key: "type", json: JSON(theType))
             }
@@ -3246,7 +3409,7 @@ extension Chat {
         
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.ADD_PARTICIPANT.rawValue]
         sendMessageParams["subjectId"] = JSON(addParticipantsInput.threadId)
-        sendMessageParams["contacts"] = JSON(addParticipantsInput.contacts)
+        sendMessageParams["content"] = JSON(addParticipantsInput.contacts)
         sendMessageParams["typeCode"] = JSON(addParticipantsInput.typeCode ?? generalTypeCode)
         
         if let uniqueId = addParticipantsInput.uniqueId {
@@ -4487,7 +4650,10 @@ extension Chat {
                               completion:           @escaping callbackTypeAlias) {
         log.verbose("Try to request to edit message with this parameters: \n \(deleteMessageInput)", context: "Chat")
         
-        let content: JSON = ["deleteForAll": "\(deleteMessageInput.deleteForAll)"]
+        var content: JSON = []
+        if let deleteForAll = deleteMessageInput.deleteForAll {
+            content["deleteForAll"] = JSON("\(deleteForAll)")
+        }
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.DELETE_MESSAGE.rawValue,
                                        "typeCode": deleteMessageInput.typeCode ?? generalTypeCode,
                                        "pushMsgType": 4,
@@ -4533,6 +4699,37 @@ extension Chat {
         deleteMessageCallbackToUser = completion
     }
     
+    
+    
+    public func cancelSendMessage(cancelMessageInput: CancelMessageRequestModel,
+                                  completion: @escaping (Bool) -> ()) {
+        if let textUID = cancelMessageInput.textMessageUniqueId {
+            Chat.cacheDB.deleteWaitTextMessage(uniqueId: textUID)
+            completion(true)
+        }
+        if let editUID = cancelMessageInput.editMessageUniqueId {
+            Chat.cacheDB.deleteWaitEditMessage(uniqueId: editUID)
+            completion(true)
+        }
+        if let forwardUID = cancelMessageInput.forwardMessageUniqueId {
+            Chat.cacheDB.deleteWaitForwardMessage(uniqueId: forwardUID)
+            completion(true)
+        }
+        if let fileUID = cancelMessageInput.fileMessageUniqueId {
+            Chat.cacheDB.deleteWaitFileMessage(uniqueId: fileUID)
+            completion(true)
+        }
+        if let uploadImageUID = cancelMessageInput.uploadImageUniqueId {
+            manageUpload(image: true, file: false, withUniqueId: uploadImageUID, withAction: .cancel) { (response, state) in
+                completion(state)
+            }
+        }
+        if let uploadFileUID = cancelMessageInput.uploadFileUniqueId {
+            manageUpload(image: false, file: true, withUniqueId: uploadFileUID, withAction: .cancel) { (response, state) in
+                completion(state)
+            }
+        }
+    }
     
     
     // MARK: - File Management
@@ -4658,7 +4855,7 @@ extension Chat {
         let headers:    HTTPHeaders = ["_token_": token, "_token_issuer_": "1", "Content-type": "multipart/form-data"]
         let parameters: Parameters = ["fileName": fileName]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: uploadImageInput.dataToSend, isImage: true, isFile: false, completion: { (response) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: uploadImageInput.dataToSend, requestUniqueId: uploadFileData["uniqueId"].stringValue, isImage: true, isFile: false, completion: { (response) in
             
             let myResponse: JSON = response as! JSON
             let hasError        = myResponse["hasError"].boolValue
@@ -4762,7 +4959,7 @@ extension Chat {
         let headers:    HTTPHeaders = ["_token_": token, "_token_issuer_": "1", "Content-type": "multipart/form-data"]
         let parameters: Parameters = ["fileName": fileName]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: dataToSend, isImage: true, isFile: false, completion: { (response) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: dataToSend, requestUniqueId: uploadFileData["uniqueId"].stringValue, isImage: true, isFile: false, completion: { (response) in
             
             let myResponse: JSON = response as! JSON
             let hasError        = myResponse["hasError"].boolValue
@@ -4889,7 +5086,7 @@ extension Chat {
         let headers:    HTTPHeaders = ["_token_": token, "_token_issuer_": "1", "Content-type": "multipart/form-data"]
         let parameters: Parameters = ["fileName": fileName]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: uploadFileInput.dataToSend, isImage: false, isFile: true, completion: { (response) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: uploadFileInput.dataToSend, requestUniqueId: uploadFileData["uniqueId"].stringValue, isImage: false, isFile: true, completion: { (response) in
             
             let myResponse: JSON = response as! JSON
             
@@ -4987,7 +5184,7 @@ extension Chat {
         let headers:    HTTPHeaders = ["_token_": token, "_token_issuer_": "1", "Content-type": "multipart/form-data"]
         let parameters: Parameters = ["fileName": fileName]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: dataToSend, isImage: false, isFile: true, completion: { (response) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: dataToSend, requestUniqueId: uploadUniqueId, isImage: false, isFile: true, completion: { (response) in
             
             let myResponse: JSON = response as! JSON
             
@@ -5068,7 +5265,7 @@ extension Chat {
         // IMPROVMENT NEEDED:
         // maybe if i had the answer from cache, i have to ignore the bottom code that request to server to get file again!!
         // so this code have to only request file if it couldn't find the file on the cache
-        httpRequest(from: url, withMethod: method, withHeaders: nil, withParameters: parameters, dataToSend: nil, isImage: nil, isFile: nil, completion: { _ in }, progress: { (myProgress) in
+        httpRequest(from: url, withMethod: method, withHeaders: nil, withParameters: parameters, dataToSend: nil, requestUniqueId: nil, isImage: nil, isFile: nil, completion: { _ in }, progress: { (myProgress) in
             progress(myProgress)
         }, idDownloadRequest: true, isMapServiceRequst: false) { (imageDataResponse, responseHeader)  in
             
@@ -5143,7 +5340,7 @@ extension Chat {
         // IMPROVMENT NEEDED:
         // maybe if i had the answer from cache, i have to ignore the bottom code that request to server to get file again!!
         // so this code have to only request file if it couldn't find the file on the cache
-        httpRequest(from: url, withMethod: method, withHeaders: nil, withParameters: parameters, dataToSend: nil, isImage: nil, isFile: nil, completion: { _ in }, progress: { (myProgress) in
+        httpRequest(from: url, withMethod: method, withHeaders: nil, withParameters: parameters, dataToSend: nil, requestUniqueId: nil, isImage: nil, isFile: nil, completion: { _ in }, progress: { (myProgress) in
             progress(myProgress)
         }, idDownloadRequest: true, isMapServiceRequst: false) { (fileDataResponse, responseHeader) in
             
@@ -5169,6 +5366,66 @@ extension Chat {
         }
         
     }
+    
+    
+    
+    
+    public func manageUpload(image: Bool, file: Bool, withUniqueId: String, withAction action: DownloaUploadAction,
+                             completion: @escaping (String, Bool) -> ()) {
+        for (index, item) in uploadRequest.enumerated() {
+            if item.uniqueId == withUniqueId {
+                switch (action , image, file) {
+                case (.suspend, _, _):
+                    item.upload.suspend()
+                    completion("upload image/file with this uniqueId: '\(withUniqueId)' had been Suspended", true)
+                    
+                case (.resume, _, _):
+                    item.upload.resume()
+                    completion("upload image/file with this uniqueId: '\(withUniqueId)' had been Resumed", true)
+                    
+                case (.cancel, true, false):
+                    item.upload.cancel()
+                    uploadRequest.remove(at: index)
+                    Chat.cacheDB.deleteWaitUploadImages(uniqueId: withUniqueId)
+                    completion("upload image with this uniqueId: '\(withUniqueId)' had been Canceled", true)
+                    
+                case (.cancel, false, true):
+                    item.upload.cancel()
+                    uploadRequest.remove(at: index)
+                    Chat.cacheDB.deleteWaitUploadFiles(uniqueId: withUniqueId)
+                    completion("upload file with this uniqueId: '\(withUniqueId)' had been Canceled", true)
+                    
+                default:
+                    completion("Wrong situation to manage upload", false)
+                }
+            }
+        }
+    }
+    
+    
+    public func manageDownload(withUniqueId: String, withAction action: DownloaUploadAction,
+                               completion: @escaping (String, Bool) -> ()) {
+        for (index, item) in downloadRequest.enumerated() {
+            if item.uniqueId == withUniqueId {
+                switch action {
+                case .cancel:
+                    item.download.cancel()
+                    completion("download with this uniqueId '\(withUniqueId)' had been Canceled", true)
+                    
+                case .suspend:
+                    item.download.suspend()
+                    completion("download with this uniqueId '\(withUniqueId)' had been Suspended", true)
+                    
+                case .resume:
+                    item.download.resume()
+                    completion("download with this uniqueId '\(withUniqueId)' had been Resumed", true)
+                    
+                }
+                downloadRequest.remove(at: index)
+            }
+        }
+    }
+    
     
     
     // MARK: - Map Management
@@ -5204,7 +5461,7 @@ extension Chat {
                                        "lng": mapReverseInput.lng,
                                        "uniqueId": theUniqueId]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: nil, isImage: nil, isFile: nil, completion: { (jsonResponse) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: nil, requestUniqueId: nil, isImage: nil, isFile: nil, completion: { (jsonResponse) in
             if let theResponse = jsonResponse as? JSON {
                 let mapReverseModel = MapReverseModel(messageContent: theResponse, hasError: false, errorMessage: "", errorCode: 0)
                 completion(mapReverseModel)
@@ -5248,7 +5505,7 @@ extension Chat {
                                        "lng":   mapSearchInput.lng,
                                        "term":  mapSearchInput.term]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: nil, isImage: nil, isFile: nil, completion: { (jsonResponse) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: nil, requestUniqueId: nil, isImage: nil, isFile: nil, completion: { (jsonResponse) in
             
             if let theResponse = jsonResponse as? JSON {
                 let mapSearchModel = MapSearchModel(messageContent: theResponse, hasError: false, errorMessage: "", errorCode: 0)
@@ -5294,7 +5551,7 @@ extension Chat {
             "destination":   "\(mapRoutingInput.destinationLat),\(mapRoutingInput.destinationLng)",
             "alternative":   mapRoutingInput.alternative]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: nil, isImage: nil, isFile: nil, completion: { (jsonResponse) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: nil, requestUniqueId: nil, isImage: nil, isFile: nil, completion: { (jsonResponse) in
             if let theResponse = jsonResponse as? JSON {
                 let mapRoutingModel = MapRoutingModel(messageContent: theResponse, hasError: false, errorMessage: "", errorCode: 0)
                 completion(mapRoutingModel)
@@ -5606,16 +5863,20 @@ extension Chat {
                                     completion:                 @escaping callbackTypeAlias) {
         log.verbose("Try to request to get message deliver participants with this parameters: \n \(messageDeliveryListInput)", context: "Chat")
         
-        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_MESSAGE_DELEVERY_PARTICIPANTS.rawValue]
+        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_MESSAGE_DELEVERY_PARTICIPANTS.rawValue,
+                                       "typeCode": messageDeliveryListInput.typeCode ?? generalTypeCode]
         
         var content: JSON = [:]
-        content["count"] = JSON(messageDeliveryListInput.count ?? 50)
-        content["offset"] = JSON(messageDeliveryListInput.offset ?? 0)
-        content["typeCode"] = JSON(messageDeliveryListInput.typeCode ?? generalTypeCode)
-        
-        if let messageId = messageDeliveryListInput.messageId {
-            content["messageId"] = JSON(messageId)
+        if let count = messageDeliveryListInput.count {
+            content["count"] = JSON(count)
         }
+        if let offset = messageDeliveryListInput.offset {
+            content["offset"] = JSON(offset)
+        }
+        
+//        content["typeCode"] = JSON(messageDeliveryListInput.typeCode ?? generalTypeCode)
+        
+        content["messageId"] = JSON(messageDeliveryListInput.messageId)
         
         sendMessageParams["content"] = content
         
@@ -5699,9 +5960,7 @@ extension Chat {
         content["offset"] = JSON(messageSeenListInput.offset ?? 0)
         content["typeCode"] = JSON(messageSeenListInput.typeCode ?? generalTypeCode)
         
-        if let messageId = messageSeenListInput.messageId {
-            content["messageId"] = JSON(messageId)
-        }
+        content["messageId"] = JSON(messageSeenListInput.messageId)
         
         sendMessageParams["content"] = content
         
@@ -6673,6 +6932,22 @@ extension Chat {
     }
     
     
+    private class ClearHistoryCallback: CallbackProtocol {
+        var mySendMessageParams: JSON
+        init(parameters: JSON) {
+            self.mySendMessageParams = parameters
+        }
+        func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
+            log.verbose("ClearHistoryCallback", context: "Chat")
+            
+            let hasError = response["hasError"].boolValue
+            
+            if (!hasError) {
+                success(response)
+            }
+        }
+        
+    }
     
 }
 

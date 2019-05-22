@@ -7,9 +7,10 @@
 //
 
 import Foundation
+import SwiftyJSON
 
 open class CreateThreadWithMessageRequestModel {
-    
+
     public let threadDescription:       String?
     public let threadImage:             String?
     public let threadInvitees:          [Invitee]
@@ -21,8 +22,8 @@ open class CreateThreadWithMessageRequestModel {
     public let messageMetaDataId:       Int?
     public let messageMetaDataType:     String?
     public let messageMetaDataOwner:    String?
-    
-    
+
+
     public init(threadDescription:      String?,
                 threadImage:            String?,
                 threadInvitees:         [Invitee],
@@ -34,8 +35,8 @@ open class CreateThreadWithMessageRequestModel {
                 messageMetaDataId:      Int?,
                 messageMetaDataType:    String?,
                 messageMetaDataOwner:   String?) {
-        
-        
+
+
         self.threadDescription  = threadDescription
         self.threadImage        = threadImage
         self.threadInvitees     = threadInvitees
@@ -48,6 +49,56 @@ open class CreateThreadWithMessageRequestModel {
         self.messageMetaDataType    = messageMetaDataType
         self.messageMetaDataOwner   = messageMetaDataOwner
     }
-    
+
 }
+
+
+
+//open class CreateThreadWithMessageRequestModel {
+//
+//    public let threadDescription:       String?
+//    public let threadImage:             String?
+//    public let threadInvitees:          [Invitee]
+//    public let threadMetadata:          JSON?
+//    public let threadTitle:             String
+//    public let threadType:              String?
+//    public let messageContentText:      String
+//    public let messageForwardMessageIds: [Int]?
+//    public let messageMetaData:         JSON?
+//    public let messageRepliedTo:        Int?
+//    public let messageSystemMetadata:   JSON?
+//    public let messageType:             Int?
+//    public let messageUniqueId:         String?
+//
+//    public init(threadDescription:      String?,
+//                threadImage:            String?,
+//                threadInvitees:         [Invitee],
+//                threadMetadata:         JSON?,
+//                threadTitle:            String,
+//                threadType:             String?,
+//                messageContentText:     String,
+//                messageForwardMessageIds: [Int]?,
+//                messageMetaData:        JSON?,
+//                messageRepliedTo:       Int?,
+//                messageSystemMetadata:  JSON?,
+//                messageType:            Int?,
+//                messageUniqueId:        String?) {
+//
+//
+//        self.threadDescription  = threadDescription
+//        self.threadImage        = threadImage
+//        self.threadInvitees     = threadInvitees
+//        self.threadMetadata     = threadMetadata
+//        self.threadTitle        = threadTitle
+//        self.threadType         = threadType
+//        self.messageContentText     = messageContentText
+//        self.messageForwardMessageIds = messageForwardMessageIds
+//        self.messageMetaData        = messageMetaData
+//        self.messageRepliedTo       = messageRepliedTo
+//        self.messageSystemMetadata  = messageSystemMetadata
+//        self.messageType            = messageType
+//        self.messageUniqueId        = messageUniqueId
+//    }
+//
+//}
 

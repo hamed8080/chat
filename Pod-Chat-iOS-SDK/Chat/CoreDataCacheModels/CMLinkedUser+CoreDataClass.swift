@@ -15,17 +15,17 @@ public class CMLinkedUser: NSManagedObject {
     
     public func convertCMLinkedUserToLinkedUserObject() -> LinkedUser {
         
-        var coreUserId: Int?
+        var id: Int?
         
         func createVariables() {
-            if let coreUserId2 = self.coreUserId as? Int {
-                coreUserId = coreUserId2
+            if let id2 = self.id as? Int {
+                id = id2
             }
         }
         
         func createLinkedUserModel() -> LinkedUser {
             
-            let messageModel = LinkedUser(coreUserId: coreUserId,
+            let messageModel = LinkedUser(id:   id,
                                           image: self.image,
                                           name: self.name,
                                           nickname: self.nickname,

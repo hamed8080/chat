@@ -150,12 +150,15 @@ open class MapRoutLegs {
     init(messageContent: JSON) {
         
         self.summary  = messageContent["summary"].string
-        if (messageContent["distance"] != nil) {
-            self.distance  = MapRoutLegsDistanceDuration(messageContent: messageContent["distance"])
-        }
-        if (messageContent["duration"] != nil) {
-            self.duration  = MapRoutLegsDistanceDuration(messageContent: messageContent["duration"])
-        }
+        
+        self.distance  = MapRoutLegsDistanceDuration(messageContent: messageContent["distance"])
+        self.duration  = MapRoutLegsDistanceDuration(messageContent: messageContent["duration"])
+//        if (messageContent["distance"] != nil) {
+//            self.distance  = MapRoutLegsDistanceDuration(messageContent: messageContent["distance"])
+//        }
+//        if (messageContent["duration"] != nil) {
+//            self.duration  = MapRoutLegsDistanceDuration(messageContent: messageContent["duration"])
+//        }
         
         if (messageContent["steps"] != JSON.null) {
             var mySteps = [MapRoutLegsSteps]()
@@ -260,12 +263,16 @@ open class MapRoutLegsSteps {
         self.name  = messageContent["name"].string
         self.instruction   = messageContent["instruction"].string
         self.rotaryName   = messageContent["rotaryName"].string
-        if (messageContent["distance"] != nil) {
-            self.distance  = MapRoutLegsDistanceDuration(messageContent: messageContent["distance"])
-        }
-        if (messageContent["duration"] != nil) {
-            self.duration  = MapRoutLegsDistanceDuration(messageContent: messageContent["duration"])
-        }
+        
+        self.distance  = MapRoutLegsDistanceDuration(messageContent: messageContent["distance"])
+        self.duration  = MapRoutLegsDistanceDuration(messageContent: messageContent["duration"])
+//        if (messageContent["distance"] != nil) {
+//            self.distance  = MapRoutLegsDistanceDuration(messageContent: messageContent["distance"])
+//        }
+//        if (messageContent["duration"] != nil) {
+//            self.duration  = MapRoutLegsDistanceDuration(messageContent: messageContent["duration"])
+//        }
+        
         if let locationArr = messageContent["start_location"].array as? [Double]? {
             self.start_location = locationArr
         }
