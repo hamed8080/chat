@@ -152,6 +152,10 @@
 		3E8D87EA221861920092B440 /* QueueOfForwardMessages+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8D87DF221861920092B440 /* QueueOfForwardMessages+CoreDataClass.swift */; };
 		3E8D87EB221861920092B440 /* QueueOfForwardMessages+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8D87E0221861920092B440 /* QueueOfForwardMessages+CoreDataProperties.swift */; };
 		3E8D87EC221861920092B440 /* QueueOfForwardMessages+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8D87E0221861920092B440 /* QueueOfForwardMessages+CoreDataProperties.swift */; };
+		3E8E08002295628A0077C685 /* GetAdminListRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8E07FF2295628A0077C685 /* GetAdminListRequestModel.swift */; };
+		3E8E08012295628A0077C685 /* GetAdminListRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8E07FF2295628A0077C685 /* GetAdminListRequestModel.swift */; };
+		3E8E080D229567040077C685 /* SetRoleRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8E080C229567040077C685 /* SetRoleRequestModel.swift */; };
+		3E8E080E229567040077C685 /* SetRoleRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8E080C229567040077C685 /* SetRoleRequestModel.swift */; };
 		3E9853E7222C2DB900BD38D0 /* SendLocationMessageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9853E6222C2DB900BD38D0 /* SendLocationMessageRequestModel.swift */; };
 		3E9853E8222C2DB900BD38D0 /* SendLocationMessageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9853E6222C2DB900BD38D0 /* SendLocationMessageRequestModel.swift */; };
 		3EA1567121CE1A92004B1346 /* GetContactsRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA1567021CE1A92004B1346 /* GetContactsRequestModel.swift */; };
@@ -402,6 +406,8 @@
 		3E8D87DE221861920092B440 /* QueueOfTextMessages+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QueueOfTextMessages+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3E8D87DF221861920092B440 /* QueueOfForwardMessages+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QueueOfForwardMessages+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3E8D87E0221861920092B440 /* QueueOfForwardMessages+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QueueOfForwardMessages+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		3E8E07FF2295628A0077C685 /* GetAdminListRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAdminListRequestModel.swift; sourceTree = "<group>"; };
+		3E8E080C229567040077C685 /* SetRoleRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetRoleRequestModel.swift; sourceTree = "<group>"; };
 		3E9853E6222C2DB900BD38D0 /* SendLocationMessageRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendLocationMessageRequestModel.swift; sourceTree = "<group>"; };
 		3EA1567021CE1A92004B1346 /* GetContactsRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetContactsRequestModel.swift; sourceTree = "<group>"; };
 		3EA1567521CE1AC9004B1346 /* AddContactsRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddContactsRequestModel.swift; sourceTree = "<group>"; };
@@ -535,6 +541,8 @@
 			isa = PBXGroup;
 			children = (
 				3ECFCAB7228967BD00313419 /* ClearHistoryRequestModel.swift */,
+				3E8E07FF2295628A0077C685 /* GetAdminListRequestModel.swift */,
+				3E8E080C229567040077C685 /* SetRoleRequestModel.swift */,
 				3EA1567521CE1AC9004B1346 /* AddContactsRequestModel.swift */,
 				3EA1568F21CE1BFC004B1346 /* AddParticipantsRequestModel.swift */,
 				3EA1567B21CE1B1F004B1346 /* BlockContactsRequestModel.swift */,
@@ -987,6 +995,7 @@
 				3E8D56DB21DBA83600B844DE /* MapSearchRequestModel.swift in Sources */,
 				3EBBEDDF2174C30800F5CDC7 /* Participant.swift in Sources */,
 				3EA1568221CE1B70004B1346 /* SearchContactsRequestModel.swift in Sources */,
+				3E8E08002295628A0077C685 /* GetAdminListRequestModel.swift in Sources */,
 				3E5AAED0221937560085C03D /* QueueOfEditMessages+CoreDataProperties.swift in Sources */,
 				3ED22F2F2187469F00B6FE4C /* AddParticipantModel.swift in Sources */,
 				3E8D87D522185B2A0092B440 /* QueueOfWaitEditMessagesModel.swift in Sources */,
@@ -1095,6 +1104,7 @@
 				3EA156FC21CE28B4004B1346 /* TestCoreData.swift in Sources */,
 				3E8D56DF21DBB55F00B844DE /* MapSearchModel.swift in Sources */,
 				3EA156AC21CE1D1E004B1346 /* DeliverSeenRequestModel.swift in Sources */,
+				3E8E080D229567040077C685 /* SetRoleRequestModel.swift in Sources */,
 				3EBBEDFA2174C6E000F5CDC7 /* RemoveContactModel.swift in Sources */,
 				3E8D87E1221861920092B440 /* QueueOfFileMessages+CoreDataClass.swift in Sources */,
 				3EBBEDF02174C5C800F5CDC7 /* GetThreadsModel.swift in Sources */,
@@ -1123,6 +1133,7 @@
 				3E8D87EA221861920092B440 /* QueueOfForwardMessages+CoreDataClass.swift in Sources */,
 				3E437D60218F3BDB0021C0ED /* RemoveParticipantsTest.swift in Sources */,
 				3E78AAB22184A01A002A6EC0 /* SendFileMessageTest.swift in Sources */,
+				3E8E080E229567040077C685 /* SetRoleRequestModel.swift in Sources */,
 				3E5AAEEA2219509C0085C03D /* QueueOfWaitImagesModel.swift in Sources */,
 				3E730D2B214CC6F600AAE838 /* GetThreadParticipantTest.swift in Sources */,
 				3E8D87E4221861920092B440 /* QueueOfFileMessages+CoreDataProperties.swift in Sources */,
@@ -1133,6 +1144,7 @@
 				3E8D87D622185B2A0092B440 /* QueueOfWaitEditMessagesModel.swift in Sources */,
 				3E24085521F5C844001F32F1 /* CMThreadParticipants+CoreDataClass.swift in Sources */,
 				3E24085721F5C844001F32F1 /* CMThreadParticipants+CoreDataProperties.swift in Sources */,
+				3E8E08012295628A0077C685 /* GetAdminListRequestModel.swift in Sources */,
 				3E730D1D214CC53600AAE838 /* GetThreadTest.swift in Sources */,
 				3E5AAEF722195A510085C03D /* QueueOfUploadFiles+CoreDataClass.swift in Sources */,
 				3E8D87D0221856030092B440 /* QueueOfWaitTextMessagesModel.swift in Sources */,

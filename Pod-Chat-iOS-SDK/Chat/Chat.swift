@@ -230,6 +230,8 @@ public class Chat {
     private var getMessageSeenListCallbackToUser:   callbackTypeAlias?
     private var getMessageDeliverListCallbackToUser: callbackTypeAlias?
     private var clearHistoryCallbackToUser:         callbackTypeAlias?
+    private var getAdminListCallbackToUser:         callbackTypeAlias?
+    private var setRoleToUserCallbackToUser:        callbackTypeAlias?
     
 //    var tempSendMessageArr:     [[String : JSON]]   = []
 //    var tempReceiveMessageArr:  [[String: JSON]]    = []
@@ -656,7 +658,7 @@ extension Chat {
     
     
     func receivedMessageHandler(params: JSON) {
-        
+        print("\n\n &&&&&&&&&& \n recievedMessage: \n \(params) \n &&&&&&&&&& \n\n")
         log.debug("content of received message: \n \(params)", context: "Chat")
         
         /*
@@ -1331,6 +1333,15 @@ extension Chat {
             
         // a message of type 42 (SET_RULE_TO_USER) comes from Server.
         case chatMessageVOTypes.SET_RULE_TO_USER.rawValue:
+            log.verbose("Message of type 'SET_RULE_TO_USER' recieved", context: "Chat")
+            if Chat.map[uniqueId] != nil {
+                let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: nil, resultAsString: messageContentAsString, contentCount: nil)
+                let callback: CallbackProtocol = Chat.map[uniqueId]!
+                callback.onResultCallback(uID: uniqueId, response: returnData, success: { (successJSON) in
+                    self.setRoleToUserCallbackToUser?(successJSON)
+                }) { _ in }
+                Chat.map.removeValue(forKey: uniqueId)
+            }
             break
             
         // a message of type 44 (CLEAR_HISTORY) comes from Server.
@@ -1348,6 +1359,16 @@ extension Chat {
             
         // a message of type 48 (GET_THREAD_ADMINS) comes from Server.
         case chatMessageVOTypes.GET_THREAD_ADMINS.rawValue:
+            log.verbose("Message of type 'GET_THREAD_ADMINS' recieved", context: "Chat")
+            print("\n\n\n\n\n\n\n GETADMIN : \n \(messageContentAsString)\n\n\n\n")
+            if Chat.map[uniqueId] != nil {
+                let returnData: JSON = createReturnData(hasError: false, errorMessage: "", errorCode: 0, result: nil, resultAsString: messageContentAsString, contentCount: nil)
+                let callback: CallbackProtocol = Chat.map[uniqueId]!
+                callback.onResultCallback(uID: uniqueId, response: returnData, success: { (successJSON) in
+                    self.getAdminListCallbackToUser?(successJSON)
+                }) { _ in }
+                Chat.map.removeValue(forKey: uniqueId)
+            }
             break
             
         // a message of type 100 (LOGOUT) comes from Server.
@@ -2748,8 +2769,6 @@ extension Chat {
         
         var content: JSON = [:]
         
-//        content["subjectId"] = JSON(clearHistoryInput.threadId)
-        
         if let requestUniqueId = clearHistoryInput.uniqueId {
             content["uniqueId"] = JSON(requestUniqueId)
         }
@@ -2935,14 +2954,11 @@ extension Chat {
             metadata["owner"]   = JSON(msgMetaOwner)
         }
         
-        print("\n\n\n\n***********\n metadata = \n\(metadata)\n*************\n\n\n\n")
-        
         var messageContentParams: JSON = [:]
         messageContentParams["content"]     = JSON(creatThreadWithMessageInput.messageContent)
         messageContentParams["uniqueId"]    = JSON(myUniqueId)
         messageContentParams["metaData"]    = metadata
         
-        print("\n\n\n\n***********\n messageContentParams = \n\(messageContentParams)\n*************\n\n\n\n")
         
         var myContent: JSON = [:]
         
@@ -2980,7 +2996,6 @@ extension Chat {
             myContent["type"] = JSON(theType)
         }
         
-        print("\n\n\n\n***********\n myContent = \n\(myContent)\n*************\n\n\n\n")
 //        let myUniqueId = generateUUID()
 //
 //        var message: JSON = ["text": creatThreadWithMessageInput.messageContentText]
@@ -3608,6 +3623,74 @@ extension Chat {
         }
         leaveThreadCallbackToUser = completion
     }
+    
+    
+    public func getAdminList(getAdminListInput: GetAdminListRequestModel,
+                             uniqueId:          @escaping (String) -> (),
+                             completion:        @escaping callbackTypeAlias,
+                             cacheResponse:     @escaping callbackTypeAlias) {
+        var content: JSON = [:]
+        
+        if let requestUniqueId = getAdminListInput.uniqueId {
+            content["uniqueId"] = JSON(requestUniqueId)
+        }
+        
+        let sendMessageGetAdminListParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_THREAD_ADMINS.rawValue,
+                                                   "content": content,
+                                                   "subjectId": getAdminListInput.threadId]
+        
+        sendMessageWithCallback(params: sendMessageGetAdminListParams,
+                                callback: GetAdminListCallback(parameters: sendMessageGetAdminListParams),
+                                sentCallback: nil,
+                                deliverCallback: nil,
+                                seenCallback: nil) { (getAminListUniqueId) in
+                                    uniqueId(getAminListUniqueId)
+        }
+        
+        getAdminListCallbackToUser = completion
+    }
+    
+    
+    public func setRole(setRoleInput:   SetRoleRequestModel,
+                        uniqueId:       @escaping (String) -> (),
+                        completion:     @escaping callbackTypeAlias,
+                        cacheResponse:  @escaping callbackTypeAlias) {
+        
+        var content: [JSON] = []
+        
+        for item in setRoleInput.roles {
+            var json: JSON = [:]
+            json["userId"] = JSON(setRoleInput.userId)
+            json["checkThreadMembership"] = JSON(true)
+            json["roleTypes"] = JSON(item)
+            json["roleOperation"] = JSON(setRoleInput.roleOperation)
+            content.append(json)
+        }
+        
+//        content["userId"] = JSON(setAdminInput.threadId)
+//        content["checkThreadMembership"] = JSON(true)
+//        content["roleTypes"] = JSON(setAdminInput.roles)
+//        content["roleOperation"] = JSON(setAdminInput.roles)
+        
+//        if let requestUniqueId = setAdminInput.uniqueId {
+//            content["uniqueId"] = JSON(requestUniqueId)
+//        }
+        
+        let sendMessageSetRoleToUserParams: JSON = ["chatMessageVOType": chatMessageVOTypes.SET_RULE_TO_USER.rawValue,
+                                                   "content": content,
+                                                   "subjectId": setRoleInput.threadId]
+        
+        sendMessageWithCallback(params: sendMessageSetRoleToUserParams,
+                                callback: SetRoleToUserCallback(parameters: sendMessageSetRoleToUserParams),
+                                sentCallback: nil,
+                                deliverCallback: nil,
+                                seenCallback: nil) { (getAminListUniqueId) in
+                                    uniqueId(getAminListUniqueId)
+        }
+        
+        setRoleToUserCallbackToUser = completion
+    }
+    
     
     
     // MARK: - Message Management
@@ -6938,6 +7021,42 @@ extension Chat {
         }
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
             log.verbose("ClearHistoryCallback", context: "Chat")
+            
+            let hasError = response["hasError"].boolValue
+            
+            if (!hasError) {
+                success(response)
+            }
+        }
+        
+    }
+    
+    private class GetAdminListCallback: CallbackProtocol {
+        var mySendMessageParams: JSON
+        init(parameters: JSON) {
+            self.mySendMessageParams = parameters
+        }
+        func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
+            log.verbose("GetAdminListCallback", context: "Chat")
+            
+            print("\n\n\n\n\n\n\n GetAdminListCallback response = \(response)\n\n\n\n\n\n ")
+            
+            let hasError = response["hasError"].boolValue
+            
+            if (!hasError) {
+                success(response)
+            }
+        }
+        
+    }
+    
+    private class SetRoleToUserCallback: CallbackProtocol {
+        var mySendMessageParams: JSON
+        init(parameters: JSON) {
+            self.mySendMessageParams = parameters
+        }
+        func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
+            log.verbose("GetAdminListCallback", context: "Chat")
             
             let hasError = response["hasError"].boolValue
             
