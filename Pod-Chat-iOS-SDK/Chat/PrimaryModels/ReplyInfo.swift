@@ -35,7 +35,8 @@ open class ReplyInfo {
     public let messageType:         Int?
     public let metadata:            String?
     public let systemMetadata:      String?
-    
+//    public let timeNanos:           UInt?
+    public let time:                UInt?
     
     public let participant:        Participant?
     //    public let repliedToMessage:    String?
@@ -49,6 +50,10 @@ open class ReplyInfo {
         self.repliedToMessageId = messageContent["repliedToMessageId"].int
         self.systemMetadata     = messageContent["systemMetadata"].string
         
+        let timeNano = messageContent["repliedToMessageNanos"].uIntValue
+        let timeTemp = messageContent["repliedToMessageTime"].uIntValue
+        self.time = ((UInt(timeTemp / 1000)) * 1000000000 ) + timeNano
+        
         if (messageContent["participant"] != JSON.null) {
             self.participant = Participant(messageContent: messageContent["participant"], threadId: nil)
         } else {
@@ -57,13 +62,14 @@ open class ReplyInfo {
         
     }
     
-    public init(deleted:           Bool?,
+    public init(deleted:            Bool?,
                 repliedToMessageId: Int?,
-                message:           String?,
-                messageType:       Int?,
-                metadata:          String?,
-                systemMetadata:    String?,
-                participant:       Participant?) {
+                message:            String?,
+                messageType:        Int?,
+                metadata:           String?,
+                systemMetadata:     String?,
+                time:               UInt?,
+                participant:        Participant?) {
         
         self.deleted            = deleted
         self.repliedToMessageId = repliedToMessageId
@@ -71,6 +77,7 @@ open class ReplyInfo {
         self.messageType        = messageType
         self.metadata           = metadata
         self.systemMetadata     = systemMetadata
+        self.time               = time
         self.participant        = participant
         
     }
@@ -83,6 +90,7 @@ open class ReplyInfo {
         self.messageType        = theReplyInfo.messageType
         self.metadata           = theReplyInfo.metadata
         self.systemMetadata     = theReplyInfo.systemMetadata
+        self.time               = theReplyInfo.time
         self.participant        = theReplyInfo.participant
     }
     
@@ -98,7 +106,8 @@ open class ReplyInfo {
                             "messageType":          messageType ?? NSNull(),
                             "metadata":             metadata ?? NSNull(),
                             "repliedToMessageId":   repliedToMessageId ?? NSNull(),
-                            "systemMetadata":       systemMetadata ?? NSNull()]
+                            "systemMetadata":       systemMetadata ?? NSNull(),
+                            "time":                 time ?? NSNull()]
         return result
     }
     

@@ -15,10 +15,10 @@ public class CMReplyInfo: NSManagedObject {
     
     public func convertCMReplyInfoToReplyInfoObject() -> ReplyInfo {
         
-        var deleted:             Bool?
-        var repliedToMessageId:  Int?
-        var messageType:         Int?
-        
+        var deleted:            Bool?
+        var repliedToMessageId: Int?
+        var messageType:        Int?
+        var time:               UInt?
         
         func createVariables() {
             if let deleted2 = self.deletedd as? Bool {
@@ -30,16 +30,20 @@ public class CMReplyInfo: NSManagedObject {
             if let messageType2 = self.messageType as? Int {
                 messageType = messageType2
             }
+            if let time2 = self.time as? UInt {
+                time = time2
+            }
         }
         
         func createMessageModel() -> ReplyInfo {
             let replyInfoModel = ReplyInfo(deleted: deleted,
                                            repliedToMessageId: repliedToMessageId,
-                                           message: self.message,
-                                           messageType: messageType,
-                                           metadata: self.metadata,
-                                           systemMetadata: self.systemMetadata,
-                                           participant: participant?.convertCMParticipantToParticipantObject())
+                                           message:         self.message,
+                                           messageType:     messageType,
+                                           metadata:        self.metadata,
+                                           systemMetadata:  self.systemMetadata,
+                                           time:            time,
+                                           participant:     participant?.convertCMParticipantToParticipantObject())
             
             return replyInfoModel
         }

@@ -176,6 +176,16 @@ public enum ThreadEventTypes/*: String*/ {
     case removedFrom          //= "Thread_Removed_From"
     case unreadCountUpdate    //= "Thread_Unread_Count_Update"
     case lastActivityTime     //= "Thread_Last_Activity_Time"
+    case lastSeenUpdate
+}
+
+public enum SignalMessageType: Int {
+    case IS_TYPING      = 1
+    case RECORD_VOICE   = 2
+    case UPLOAD_PICTURE = 3
+    case UPLOAD_VIDEO   = 4
+    case UPLOAD_SOUND   = 5
+    case UPLOAD_FILE    = 6
 }
 
 public enum ContactEventTypes {

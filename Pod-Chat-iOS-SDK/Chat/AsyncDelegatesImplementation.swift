@@ -77,6 +77,9 @@ extension Chat: AsyncDelegates {
     
     public func asyncSendMessage(params: Any) {
         // this message is sends through Async
+        print("\n\n\n\n^^^^^^^^^^^^^^^^^\n^^^^^^^^^^^^^^^^^\nThis Message sends through Async: \n \(params)\n-------------")
+        let msg = String("\(params)".filter { !" \\".contains($0) })
+        print("Message: \n \(msg)\n________________\n^^^^^^^^^^^^^^^^\n\n\n\n")
     }
     
     public func asyncReceiveMessage(params: JSON) {

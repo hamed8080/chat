@@ -38,7 +38,7 @@ open class Message {
     public let delivered:   Bool?
     public let editable:    Bool?
     public let edited:      Bool?
-    public let deletable:  Bool?
+    public let deletable:   Bool?
     public var id:          Int?
     public var message:     String?
     public let messageType: String?
@@ -48,6 +48,7 @@ open class Message {
     public let seen:        Bool?
     public var threadId:    Int?
     public let time:        UInt?
+//    public let timeNanos:   UInt?
     public let uniqueId:    String?
     
     public var conversation:   Conversation?
@@ -68,7 +69,8 @@ open class Message {
         self.metaData   = pushMessageVO["metaData"].string
         self.previousId = pushMessageVO["previousId"].int
         self.seen       = pushMessageVO["seen"].bool
-        //        self.time       = pushMessageVO["time"].int
+//        self.time       = pushMessageVO["time"].uInt
+//        self.timeNanos  = pushMessageVO["timeNanos"].uInt
         self.uniqueId   = pushMessageVO["uniqueId"].string
         
         let timeNano = pushMessageVO["timeNanos"].uIntValue
@@ -93,23 +95,6 @@ open class Message {
         if (pushMessageVO["replyInfoVO"] != JSON.null) {
             self.replyInfo = ReplyInfo(messageContent: pushMessageVO["replyInfoVO"])
         }
-        
-        
-        //        if let myParticipant = pushMessageVO["participant"].array {
-        //            let tempParticipant = Participant(messageContent: myParticipant.first!)
-        //            self.participant = tempParticipant
-        //            let tempOwnerId = myParticipant.first!["id"].int
-        //            self.ownerId = tempOwnerId
-        //        }
-        //        if let myConversation = pushMessageVO["conversation"].array {
-        //            self.conversation = Conversation(messageContent: myConversation.first!)
-        //        }
-        //        if let myReplyInfo = pushMessageVO["replyInfoVO"].array {
-        //            self.replyInfo = ReplyInfo(messageContent: myReplyInfo.first!)
-        //        }
-        //        if let myForwardInfo = pushMessageVO["forwardInfo"].array {
-        //            self.forwardInfo = ForwardInfo(messageContent: myForwardInfo.first!)
-        //        }
         
     }
     
@@ -136,7 +121,7 @@ open class Message {
         self.delivered  = delivered
         self.editable   = editable
         self.edited     = edited
-        self.deletable = deletable
+        self.deletable  = deletable
         self.id         = id
         self.message    = message
         self.messageType = messageType

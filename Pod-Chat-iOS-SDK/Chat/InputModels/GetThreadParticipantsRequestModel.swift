@@ -10,6 +10,7 @@ import Foundation
 
 open class GetThreadParticipantsRequestModel {
     
+    public let admin:               Bool?
     public let count:               Int?
     public let firstMessageId:      Int?
     public let lastMessageId:       Int?
@@ -18,7 +19,8 @@ open class GetThreadParticipantsRequestModel {
     public let threadId:            Int
     public let typeCode:            String?
     
-    public init(count:          Int?,
+    public init(admin:          Bool?,
+                count:          Int?,
                 firstMessageId: Int?,
                 lastMessageId:  Int?,
                 name:           String?,
@@ -26,6 +28,7 @@ open class GetThreadParticipantsRequestModel {
                 threadId:       Int,
                 typeCode:       String?) {
         
+        self.admin          = admin
         self.count          = count
         self.firstMessageId = firstMessageId
         self.lastMessageId  = lastMessageId

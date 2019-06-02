@@ -232,6 +232,7 @@ public class Chat {
     private var clearHistoryCallbackToUser:         callbackTypeAlias?
     private var getAdminListCallbackToUser:         callbackTypeAlias?
     private var setRoleToUserCallbackToUser:        callbackTypeAlias?
+    private var sendSignalMessageCallbackToUser:    callbackTypeAlias?
     
 //    var tempSendMessageArr:     [[String : JSON]]   = []
 //    var tempReceiveMessageArr:  [[String: JSON]]    = []
@@ -658,7 +659,7 @@ extension Chat {
     
     
     func receivedMessageHandler(params: JSON) {
-        print("\n\n &&&&&&&&&& \n recievedMessage: \n \(params) \n &&&&&&&&&& \n\n")
+//        print("\n\n &&&&&&&&&& \n recievedMessage: \n \(params) \n &&&&&&&&&& \n\n")
         log.debug("content of received message: \n \(params)", context: "Chat")
         
         /*
@@ -1264,7 +1265,7 @@ extension Chat {
         // a message of type 31 (LAST_SEEN_UPDATED) comes from Server.
         case chatMessageVOTypes.LAST_SEEN_UPDATED.rawValue:
             log.verbose("Message of type 'LAST_SEEN_UPDATED' recieved", context: "Chat")
-            
+            delegate?.threadEvents(type: ThreadEventTypes.lastSeenUpdate, result: messageContent)
             // this functionality has beed deprecated
             /*
              let paramsToSend: JSON = ["threadIds": messageContent["conversationId"].intValue]
@@ -3314,6 +3315,10 @@ extension Chat {
             content["name"]   = JSON(name)
         }
         
+        if let admin = getThreadParticipantsInput.admin {
+            content["admin"]   = JSON(admin)
+        }
+        
         let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.THREAD_PARTICIPANTS.rawValue,
                                        "typeCode": getThreadParticipantsInput.typeCode ?? generalTypeCode,
                                        "content": content,
@@ -3651,21 +3656,29 @@ extension Chat {
     }
     
     
-    public func setRole(setRoleInput:   SetRoleRequestModel,
+    public func setRole(setRoleInput:   [SetRoleRequestModel],
                         uniqueId:       @escaping (String) -> (),
                         completion:     @escaping callbackTypeAlias,
                         cacheResponse:  @escaping callbackTypeAlias) {
         
         var content: [JSON] = []
         
-        for item in setRoleInput.roles {
+        for item in setRoleInput {
             var json: JSON = [:]
-            json["userId"] = JSON(setRoleInput.userId)
-            json["checkThreadMembership"] = JSON(true)
-            json["roleTypes"] = JSON(item)
-            json["roleOperation"] = JSON(setRoleInput.roleOperation)
+            json["userId"] = JSON(item.userId)
+            json["roles"] = JSON(item.roles)
+            json["roleOperation"] = JSON(item.roleOperation)
             content.append(json)
         }
+        
+//        for item in setRoleInput.roles {
+//            var json: JSON = [:]
+//            json["userId"] = JSON(setRoleInput.userId)
+////            json["checkThreadMembership"] = JSON(true)
+//            json["roles"] = [JSON(item)]
+//            json["roleOperation"] = JSON(setRoleInput.roleOperation)
+//            content.append(json)
+//        }
         
 //        content["userId"] = JSON(setAdminInput.threadId)
 //        content["checkThreadMembership"] = JSON(true)
@@ -3677,8 +3690,8 @@ extension Chat {
 //        }
         
         let sendMessageSetRoleToUserParams: JSON = ["chatMessageVOType": chatMessageVOTypes.SET_RULE_TO_USER.rawValue,
-                                                   "content": content,
-                                                   "subjectId": setRoleInput.threadId]
+                                                    "content": content,
+                                                    "subjectId": setRoleInput.first!.threadId]
         
         sendMessageWithCallback(params: sendMessageSetRoleToUserParams,
                                 callback: SetRoleToUserCallback(parameters: sendMessageSetRoleToUserParams),
@@ -4123,8 +4136,9 @@ extension Chat {
             sendMessageParams["metaData"] = JSON(metaDataStr)
         }
         
-        let messageIdsListCount = messageIdsList.count
-        for _ in 0...(messageIdsListCount - 1) {
+//        let messageIdsListCount = messageIdsList.count
+//        for _ in 0...(messageIdsListCount - 1) {
+        for _ in messageIdsList {
             let uID = generateUUID()
             uniqueIdsList.append(uID)
             
@@ -4741,9 +4755,7 @@ extension Chat {
                                        "pushMsgType": 4,
                                        "content": content]
         
-        if let threadId = deleteMessageInput.subjectId {
-            sendMessageParams["subjectId"] = JSON(threadId)
-        }
+        sendMessageParams["subjectId"] = JSON(deleteMessageInput.subjectId)
         
         if let uniqueId = deleteMessageInput.uniqueId {
             sendMessageParams["uniqueId"] = JSON(uniqueId)
@@ -4779,6 +4791,33 @@ extension Chat {
             uniqueId(deleteMessageUniqueId)
         }
         deleteMessageCallbackToUser = completion
+    }
+    
+    
+    public func deleteMultipleMessages(withInputModel input:  DeleteMultipleMessagesRequestModel,
+                                       uniqueId:        @escaping (String) -> (),
+                                       completion:      @escaping callbackTypeAlias) {
+        log.verbose("Try to request to delete multiple messages with this parameters: \n \(input)", context: "Chat")
+        
+        for subId in input.subjectId {
+            var content: JSON = []
+            if let deleteForAll = input.deleteForAll {
+                content["deleteForAll"] = JSON("\(deleteForAll)")
+            }
+            var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.DELETE_MESSAGE.rawValue,
+                                           "typeCode": input.typeCode ?? generalTypeCode,
+                                           "pushMsgType": 4,
+                                           "subjectId": subId,
+                                           "content": content]
+            if let uniqueId = input.uniqueId {
+                sendMessageParams["uniqueId"] = JSON(uniqueId)
+            }
+            sendMessageWithCallback(params: sendMessageParams, callback: DeleteMessageCallbacks(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (deleteMessageUniqueId) in
+                uniqueId(deleteMessageUniqueId)
+            }
+            deleteMessageCallbackToUser = completion
+        }
+        
     }
     
     
@@ -5757,6 +5796,55 @@ extension Chat {
     
     
     // MARK: -
+    
+    
+    
+    
+    public func startSignalMessage(input:        SendSignalMessageRequestModel,
+                                   uniqueId:     @escaping (String) -> (),
+                                   completion:   @escaping callbackTypeAlias) {
+        
+//        switch input.signalType {
+//        case .IS_TYPING:
+//
+//        case .RECORD_VOICE:
+//
+//        case .UPLOAD_FILE:
+//
+//        case .UPLOAD_PICTURE:
+//
+//        case .UPLOAD_SOUND:
+//
+//        case .UPLOAD_VIDEO:
+//
+//        }
+        
+        let requestUniqueId = UUID().uuidString
+        var content: JSON = [:]
+        content["uniqueId"] = JSON(requestUniqueId)
+        content["signalType"] = JSON(input.signalType.rawValue)
+        content["subjectId"] = JSON(input.threadId)
+        
+        let sendSignalMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.SIGNAL_MESSAGE.rawValue,
+                                             "content": content,
+                                             "subjectId": input.threadId]
+        sendMessageWithCallback(params: sendSignalMessageParams,
+                                callback: SendSignalMessageCallback(parameters: sendSignalMessageParams),
+                                sentCallback: nil,
+                                deliverCallback: nil,
+                                seenCallback: nil) { (signalMessageUniqueId) in
+                                    uniqueId(signalMessageUniqueId)
+        }
+        sendSignalMessageCallbackToUser = completion
+        
+    }
+    
+    public func stopSignalMessage(uniqueId: String) {
+        
+    }
+    
+    
+    
     
     /*
      UpdateThreadInfo:
@@ -7066,6 +7154,26 @@ extension Chat {
         }
         
     }
+    
+    private class SendSignalMessageCallback: CallbackProtocol {
+        var mySendMessageParams: JSON
+        init(parameters: JSON) {
+            self.mySendMessageParams = parameters
+        }
+        func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
+            log.verbose("SendSignalMessageCallback", context: "Chat")
+            
+            print("\n\n\n\n\n\n\n SendSignalMessageCallback response = \(response)\n\n\n\n\n\n ")
+            
+            let hasError = response["hasError"].boolValue
+            
+            if (!hasError) {
+                success(response)
+            }
+        }
+        
+    }
+    
     
 }
 

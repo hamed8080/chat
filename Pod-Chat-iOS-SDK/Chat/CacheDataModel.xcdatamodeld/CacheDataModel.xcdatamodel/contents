@@ -119,6 +119,7 @@
         <attribute name="metadata" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="repliedToMessageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="systemMetadata" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="dummyMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="replyInfo" inverseEntity="CMMessage" syncable="YES"/>
         <relationship name="participant" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMParticipant" inverseName="dummyReplyInfo" inverseEntity="CMParticipant" syncable="YES"/>
     </entity>
@@ -229,7 +230,7 @@
         <element name="CMLinkedUser" positionX="-319.42578125" positionY="117.296875" width="128" height="135"/>
         <element name="CMMessage" positionX="-287.66796875" positionY="271.8515625" width="128" height="330"/>
         <element name="CMParticipant" positionX="349.671875" positionY="95.74609375" width="128" height="360"/>
-        <element name="CMReplyInfo" positionX="166.9453125" positionY="487.76171875" width="128" height="165"/>
+        <element name="CMReplyInfo" positionX="166.9453125" positionY="487.76171875" width="128" height="180"/>
         <element name="CMThreadParticipants" positionX="80.10546875" positionY="-125.96875" width="128" height="90"/>
         <element name="CMUploadFile" positionX="-461.58984375" positionY="539" width="128" height="90"/>
         <element name="CMUploadImage" positionX="-460.42578125" positionY="37.66796875" width="128" height="150"/>
