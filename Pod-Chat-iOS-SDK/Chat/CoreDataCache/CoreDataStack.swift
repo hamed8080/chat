@@ -1,5 +1,5 @@
 //
-//  CoreDataCache.swift
+//  CoreDataStack.swift
 //  Chat
 //
 //  Created by Mahyar Zhiani on 10/1/1397 AP.
@@ -8,7 +8,6 @@
 
 import Foundation
 import CoreData
-import SwiftyJSON
 
 //public class CoreDataStack {
 //    private init() {}
@@ -18,18 +17,17 @@ public class CoreDataStack: NSObject {
     
     // MARK: - Core Data stack
     
-    //    public static let sharedInstance = CoreDataStack()
+//    public static let sharedInstance = CoreDataStack()
     
-    //    lazy var persistentContainer: NSPersistentContainer = {
-    //        let container = NSPersistentContainer(name: "CacheDataModel")
-    //        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-    //            if let error = error {
-    //                fatalError("Unresolved error \(error), \(error)")
-    //            }
-    //        })
-    //        return container
-    //    }()
-    
+//    lazy var persistentContainer: NSPersistentContainer = {
+//        let container = NSPersistentContainer(name: "CacheDataModel")
+//        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+//            if let error = error {
+//                fatalError("Unresolved error \(error), \(error)")
+//            }
+//        })
+//        return container
+//    }()
     
     lazy var persistentContainer: NSPersistentContainer = {
         /*
@@ -44,13 +42,10 @@ public class CoreDataStack: NSObject {
         guard let mom = NSManagedObjectModel(contentsOf: modelURL) else { fatalError("Error initializing mom from: \(modelURL)") }
         let container = NSPersistentContainer(name: momdName, managedObjectModel: mom)
         
-        
-        
-        //         let momdName = "CacheDataModel" //pass this as a parameter
-        //         guard let modelURL = Bundle(for: type(of: self)).url(forResource: "NewChat/\(momdName)", withExtension: "momd") else { fatalError("Error loading model from bundle") }
-        //         guard let mom = NSManagedObjectModel(contentsOf: modelURL) else { fatalError("Error initializing mom from: \(modelURL)") }
-        //         let container = NSPersistentContainer(name: momdName, managedObjectModel: mom)
-        
+//         let momdName = "CacheDataModel" //pass this as a parameter
+//         guard let modelURL = Bundle(for: type(of: self)).url(forResource: "NewChat/\(momdName)", withExtension: "momd") else { fatalError("Error loading model from bundle") }
+//         guard let mom = NSManagedObjectModel(contentsOf: modelURL) else { fatalError("Error initializing mom from: \(modelURL)") }
+//         let container = NSPersistentContainer(name: momdName, managedObjectModel: mom)
         
         /*
          guard let bundleURL = Bundle(for: type(of: self)).url(forResource: "NewChat", withExtension: "bundle") else { fatalError("0") }
@@ -60,11 +55,10 @@ public class CoreDataStack: NSObject {
          guard let momURL = frameworkBundle.url(forResource: "CacheDataModel", withExtension: "momd") else { fatalError("3") }
          */
         
-        
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 
                 /*
                  Typical reasons for an error here include:
@@ -98,49 +92,5 @@ public class CoreDataStack: NSObject {
     }
     
 }
-
-
-
-
-
-
-extension NSObject {
-    
-    static func convertJSONtoTransformable(dataToStore: JSON, completion: (NSData?) -> Void) {
-        do {
-            let data = try JSONSerialization.data(withJSONObject: dataToStore, options: [])
-            completion(data as NSData)
-        } catch let error as NSError {
-            print("NSJSONSerialization Error: \(error)")
-            completion(nil)
-        }
-    }
-    
-//    static func convertJSONToTransformable(dataToStore: [String: AnyObject], completion: (NSData?) -> Void) {
-//        do {
-//            let data = try JSONSerialization.data(withJSONObject: dataToStore, options: [])
-//            completion(data as NSData)
-//        } catch let error as NSError {
-//            print("NSJSONSerialization Error: \(error)")
-//            completion(nil)
-//        }
-//    }
-    
-    func retrieveJSONfromTransformableData(completion: (JSON) -> Void) {
-        if let data = self as? NSData {
-            do {
-                let nsJSON = try JSONSerialization.jsonObject(with: data as Data, options: [])
-                completion(JSON(nsJSON))
-            } catch let error as NSError {
-                print("NSJSONSerialization Error: \(error)")
-                completion(JSON.null)
-            }
-        }
-    }
-    
-}
-
-
-
 
 

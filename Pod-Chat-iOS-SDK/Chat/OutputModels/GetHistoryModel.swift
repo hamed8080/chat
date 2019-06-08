@@ -58,8 +58,9 @@ open class GetHistoryModel {
     public var contentCount:       Int = 0
     public var hasNext:            Bool = false
     public var nextOffset:         Int = 0
-    public var history:            [Message] = []
+    public var threadId:           Int?
     
+    public var history:            [Message] = []
     public var historyJSON:        [JSON] = []
     
     public init(messageContent: [JSON],
@@ -68,11 +69,16 @@ open class GetHistoryModel {
                 offset:         Int,
                 hasError:       Bool,
                 errorMessage:   String,
-                errorCode:      Int) {
+                errorCode:      Int,
+                threadId:       Int?) {
         
         self.hasError           = hasError
         self.errorMessage       = errorMessage
         self.errorCode          = errorCode
+        
+        if let tId = threadId {
+            self.threadId = tId
+        }
         
         let messageLength = messageContent.count
         self.contentCount = contentCount
@@ -98,11 +104,16 @@ open class GetHistoryModel {
                 offset:         Int,
                 hasError:       Bool,
                 errorMessage:   String,
-                errorCode:      Int) {
+                errorCode:      Int,
+                threadId:       Int?) {
         
         self.hasError           = hasError
         self.errorMessage       = errorMessage
         self.errorCode          = errorCode
+        
+        if let tId = threadId {
+            self.threadId = tId
+        }
         
         self.contentCount = contentCount
         self.hasNext = false
@@ -130,12 +141,13 @@ open class GetHistoryModel {
         let result: JSON = ["contentCount": contentCount,
                             "hasNext":      hasNext,
                             "nextOffset":   nextOffset,
+                            "threadId":     threadId ?? NSNull(),
                             "history":      historyJSON]
         
-        let finalResult: JSON = ["result": result,
-                                 "hasError": hasError,
+        let finalResult: JSON = ["result":      result,
+                                 "hasError":    hasError,
                                  "errorMessage": errorMessage,
-                                 "errorCode": errorCode]
+                                 "errorCode":   errorCode]
         
         return finalResult
     }

@@ -2,8 +2,8 @@
 //  CMConversation+CoreDataProperties.swift
 //  FanapPodChatSDK
 //
-//  Created by Mahyar Zhiani on 11/24/1397 AP.
-//  Copyright © 1397 Mahyar Zhiani. All rights reserved.
+//  Created by Mahyar Zhiani on 3/18/1398 AP.
+//  Copyright © 1398 Mahyar Zhiani. All rights reserved.
 //
 //
 
@@ -29,27 +29,28 @@ extension CMConversation {
     @NSManaged public var lastParticipantImage: String?
     @NSManaged public var lastParticipantName:  String?
     @NSManaged public var lastSeenMessageId:    NSNumber?
-    @NSManaged public var metadata:         String?
-    @NSManaged public var mute:             NSNumber?
-    @NSManaged public var participantCount: NSNumber?
-    @NSManaged public var partner:          NSNumber?
-    @NSManaged public var partnerLastDeliveredMessageId:    NSNumber?
-    @NSManaged public var partnerLastSeenMessageId:         NSNumber?
-    @NSManaged public var time:                 NSNumber?
-    @NSManaged public var title:                String?
-    @NSManaged public var type:                 NSNumber?
-    @NSManaged public var unreadCount:          NSNumber?
-    @NSManaged public var lastSeenMessageTime:  NSNumber?
     @NSManaged public var lastSeenMessageNanos: NSNumber?
-    @NSManaged public var partnerLastSeenMessageTime:       NSNumber?
-    @NSManaged public var partnerLastSeenMessageNanos:      NSNumber?
-    @NSManaged public var partnerLastDeliveredMessageTime:  NSNumber?
+    @NSManaged public var lastSeenMessageTime:  NSNumber?
+    @NSManaged public var metadata:             String?
+    @NSManaged public var mute:                 NSNumber?
+    @NSManaged public var participantCount:     NSNumber?
+    @NSManaged public var partner:              NSNumber?
+    @NSManaged public var partnerLastDeliveredMessageId:    NSNumber?
     @NSManaged public var partnerLastDeliveredMessageNanos: NSNumber?
+    @NSManaged public var partnerLastDeliveredMessageTime:  NSNumber?
+    @NSManaged public var partnerLastSeenMessageId:         NSNumber?
+    @NSManaged public var partnerLastSeenMessageNanos:      NSNumber?
+    @NSManaged public var partnerLastSeenMessageTime:       NSNumber?
+    @NSManaged public var time:         NSNumber?
+    @NSManaged public var title:        String?
+    @NSManaged public var type:         NSNumber?
+    @NSManaged public var unreadCount:  NSNumber?
     @NSManaged public var dummyForwardInfo: CMForwardInfo?
     @NSManaged public var dummyMessage:     [CMMessage]?
     @NSManaged public var inviter:          CMParticipant?
     @NSManaged public var lastMessageVO:    CMMessage?
     @NSManaged public var participants:     [CMParticipant]?
+    @NSManaged public var dummyUserRoles:   [String]?
 
 }
 
@@ -102,5 +103,22 @@ extension CMConversation {
 
     @objc(removeParticipants:)
     @NSManaged public func removeFromParticipants(_ values: NSOrderedSet)
+
+}
+
+// MARK: Generated accessors for dummyUserRoles
+extension CMConversation {
+
+    @objc(addDummyUserRolesObject:)
+    @NSManaged public func addToDummyUserRoles(_ value: CMUserRole)
+
+    @objc(removeDummyUserRolesObject:)
+    @NSManaged public func removeFromDummyUserRoles(_ value: CMUserRole)
+
+    @objc(addDummyUserRoles:)
+    @NSManaged public func addToDummyUserRoles(_ values: [CMUserRole])
+
+    @objc(removeDummyUserRoles:)
+    @NSManaged public func removeFromDummyUserRoles(_ values: [CMUserRole])
 
 }

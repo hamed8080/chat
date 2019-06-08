@@ -95,6 +95,10 @@
 		3E5AAEF722195A510085C03D /* QueueOfUploadFiles+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5AAEF022195A510085C03D /* QueueOfUploadFiles+CoreDataClass.swift */; };
 		3E5AAEF822195A510085C03D /* QueueOfUploadFiles+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5AAEF122195A510085C03D /* QueueOfUploadFiles+CoreDataProperties.swift */; };
 		3E5AAEF922195A510085C03D /* QueueOfUploadFiles+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5AAEF122195A510085C03D /* QueueOfUploadFiles+CoreDataProperties.swift */; };
+		3E6017B622AB6BB4000A2E31 /* SetRolesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6017B522AB6BB4000A2E31 /* SetRolesModel.swift */; };
+		3E6017B722AB6BB4000A2E31 /* SetRolesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6017B522AB6BB4000A2E31 /* SetRolesModel.swift */; };
+		3E6017B922AB6C12000A2E31 /* UserRole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6017B822AB6C12000A2E31 /* UserRole.swift */; };
+		3E6017BA22AB6C12000A2E31 /* UserRole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6017B822AB6C12000A2E31 /* UserRole.swift */; };
 		3E63A088213A618F00E4E2C2 /* ObjectTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E63A087213A618F00E4E2C2 /* ObjectTypes.swift */; };
 		3E695B99217224DA00A77120 /* AddContactTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E695B98217224DA00A77120 /* AddContactTest.swift */; };
 		3E695BA52172266800A77120 /* UpdateContactTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E695BA42172266800A77120 /* UpdateContactTest.swift */; };
@@ -189,8 +193,46 @@
 		3EA156A821CE1D02004B1346 /* SpamPvThreadRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA156A721CE1D02004B1346 /* SpamPvThreadRequestModel.swift */; };
 		3EA156AA21CE1D10004B1346 /* MessageDeliverySeenListRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA156A921CE1D10004B1346 /* MessageDeliverySeenListRequestModel.swift */; };
 		3EA156AC21CE1D1E004B1346 /* DeliverSeenRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA156AB21CE1D1E004B1346 /* DeliverSeenRequestModel.swift */; };
-		3EA156BD21CE274E004B1346 /* CoreDataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA156BC21CE274E004B1346 /* CoreDataCache.swift */; };
-		3EA156FC21CE28B4004B1346 /* TestCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA156FB21CE28B4004B1346 /* TestCoreData.swift */; };
+		3EA156BD21CE274E004B1346 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA156BC21CE274E004B1346 /* CoreDataStack.swift */; };
+		3EA156FC21CE28B4004B1346 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA156FB21CE28B4004B1346 /* Cache.swift */; };
+		3EB5201B22ABC1AB00B7EA45 /* CMUserRole+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5201922ABC1AB00B7EA45 /* CMUserRole+CoreDataClass.swift */; };
+		3EB5201C22ABC1AB00B7EA45 /* CMUserRole+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5201922ABC1AB00B7EA45 /* CMUserRole+CoreDataClass.swift */; };
+		3EB5201D22ABC1AB00B7EA45 /* CMUserRole+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5201A22ABC1AB00B7EA45 /* CMUserRole+CoreDataProperties.swift */; };
+		3EB5201E22ABC1AB00B7EA45 /* CMUserRole+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5201A22ABC1AB00B7EA45 /* CMUserRole+CoreDataProperties.swift */; };
+		3EB5204922ABE7E300B7EA45 /* CacheEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5204822ABE7E300B7EA45 /* CacheEnums.swift */; };
+		3EB5204B22ABE83100B7EA45 /* CacheExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5204A22ABE83100B7EA45 /* CacheExtensions.swift */; };
+		3EB5204E22ABE99A00B7EA45 /* RetrieveDataFromCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5204D22ABE99A00B7EA45 /* RetrieveDataFromCache.swift */; };
+		3EB5205022ABEA3700B7EA45 /* DeleteDataFromCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5204F22ABEA3700B7EA45 /* DeleteDataFromCache.swift */; };
+		3EB5205222ABEA4000B7EA45 /* SaveDataToCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5205122ABEA4000B7EA45 /* SaveDataToCache.swift */; };
+		3EB5205422ABED5300B7EA45 /* UpdateDataOnCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5205322ABED5300B7EA45 /* UpdateDataOnCache.swift */; };
+		3EB5205622ABEDBB00B7EA45 /* QueueOnCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5205522ABEDBB00B7EA45 /* QueueOnCache.swift */; };
+		3EB5205822ABEEB200B7EA45 /* ChatPrivateMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5205722ABEEB200B7EA45 /* ChatPrivateMethods.swift */; };
+		3EB5205A22ABEFB200B7EA45 /* ChatPublicMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5205922ABEFB200B7EA45 /* ChatPublicMethods.swift */; };
+		3EB5205C22ABF0BC00B7EA45 /* GetContactsCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5205B22ABF0BC00B7EA45 /* GetContactsCallback.swift */; };
+		3EB5205E22ABF1A400B7EA45 /* UserInfoCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5205D22ABF1A400B7EA45 /* UserInfoCallback.swift */; };
+		3EB5206122ABF20000B7EA45 /* GetThreadsCallbacks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5206022ABF20000B7EA45 /* GetThreadsCallbacks.swift */; };
+		3EB5206322ABF24900B7EA45 /* GetHistoryCallbacks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5206222ABF24900B7EA45 /* GetHistoryCallbacks.swift */; };
+		3EB5206522ABF27000B7EA45 /* GetThreadParticipantsCallbacks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5206422ABF27000B7EA45 /* GetThreadParticipantsCallbacks.swift */; };
+		3EB5206722ABF29D00B7EA45 /* CreateThreadCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5206622ABF29D00B7EA45 /* CreateThreadCallback.swift */; };
+		3EB5206922ABF2E100B7EA45 /* UpdateThreadInfoCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5206822ABF2E100B7EA45 /* UpdateThreadInfoCallback.swift */; };
+		3EB5206B22ABF31200B7EA45 /* AddParticipantsCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5206A22ABF31200B7EA45 /* AddParticipantsCallback.swift */; };
+		3EB5206D22ABF33C00B7EA45 /* RemoveParticipantsCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5206C22ABF33C00B7EA45 /* RemoveParticipantsCallback.swift */; };
+		3EB5206F22ABF36500B7EA45 /* SendMessageCallbacks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5206E22ABF36500B7EA45 /* SendMessageCallbacks.swift */; };
+		3EB5207122ABF38900B7EA45 /* EditMessageCallbacks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5207022ABF38900B7EA45 /* EditMessageCallbacks.swift */; };
+		3EB5207322ABF3BB00B7EA45 /* DeleteMessageCallbacks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5207222ABF3BB00B7EA45 /* DeleteMessageCallbacks.swift */; };
+		3EB5207522ABF3DC00B7EA45 /* MuteThreadCallbacks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5207422ABF3DC00B7EA45 /* MuteThreadCallbacks.swift */; };
+		3EB5207722ABF41100B7EA45 /* UnmuteThreadCallbacks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5207622ABF41100B7EA45 /* UnmuteThreadCallbacks.swift */; };
+		3EB5207922ABF43500B7EA45 /* BlockContactCallbacks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5207822ABF43500B7EA45 /* BlockContactCallbacks.swift */; };
+		3EB5207B22ABF45E00B7EA45 /* UnblockContactCallbacks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5207A22ABF45E00B7EA45 /* UnblockContactCallbacks.swift */; };
+		3EB5207D22ABF47D00B7EA45 /* GetBlockedContactsCallbacks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5207C22ABF47D00B7EA45 /* GetBlockedContactsCallbacks.swift */; };
+		3EB5207F22ABF4A200B7EA45 /* LeaveThreadCallbacks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5207E22ABF4A200B7EA45 /* LeaveThreadCallbacks.swift */; };
+		3EB5208122ABF4DC00B7EA45 /* SpamPvThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5208022ABF4DC00B7EA45 /* SpamPvThread.swift */; };
+		3EB5208322ABF4FB00B7EA45 /* GetMessageDeliverList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5208222ABF4FB00B7EA45 /* GetMessageDeliverList.swift */; };
+		3EB5208522ABF51D00B7EA45 /* GetMessageSeenList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5208422ABF51D00B7EA45 /* GetMessageSeenList.swift */; };
+		3EB5208722ABF53D00B7EA45 /* ClearHistoryCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5208622ABF53D00B7EA45 /* ClearHistoryCallback.swift */; };
+		3EB5208922ABF56600B7EA45 /* GetAdminListCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5208822ABF56600B7EA45 /* GetAdminListCallback.swift */; };
+		3EB5208B22ABF58C00B7EA45 /* SetRoleToUserCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5208A22ABF58C00B7EA45 /* SetRoleToUserCallback.swift */; };
+		3EB5208D22ABF5AF00B7EA45 /* SendSignalMessageCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5208C22ABF5AF00B7EA45 /* SendSignalMessageCallback.swift */; };
 		3EB7595C228D98FC00A48262 /* CancelMessageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB7595B228D98FC00A48262 /* CancelMessageRequestModel.swift */; };
 		3EBBEDC62174C18F00F5CDC7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDC52174C18F00F5CDC7 /* User.swift */; };
 		3EBBEDD32174C20200F5CDC7 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDD22174C20200F5CDC7 /* Contact.swift */; };
@@ -365,6 +407,8 @@
 		3E5AAEEF22195A510085C03D /* QueueOfUploadImages+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QueueOfUploadImages+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3E5AAEF022195A510085C03D /* QueueOfUploadFiles+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QueueOfUploadFiles+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3E5AAEF122195A510085C03D /* QueueOfUploadFiles+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QueueOfUploadFiles+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		3E6017B522AB6BB4000A2E31 /* SetRolesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetRolesModel.swift; sourceTree = "<group>"; };
+		3E6017B822AB6C12000A2E31 /* UserRole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRole.swift; sourceTree = "<group>"; };
 		3E63A087213A618F00E4E2C2 /* ObjectTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectTypes.swift; sourceTree = "<group>"; };
 		3E695B98217224DA00A77120 /* AddContactTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddContactTest.swift; sourceTree = "<group>"; };
 		3E695BA42172266800A77120 /* UpdateContactTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateContactTest.swift; sourceTree = "<group>"; };
@@ -442,8 +486,44 @@
 		3EA156A921CE1D10004B1346 /* MessageDeliverySeenListRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDeliverySeenListRequestModel.swift; sourceTree = "<group>"; };
 		3EA156AB21CE1D1E004B1346 /* DeliverSeenRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliverSeenRequestModel.swift; sourceTree = "<group>"; };
 		3EA156B821CE2419004B1346 /* CacheDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CacheDataModel.xcdatamodel; sourceTree = "<group>"; };
-		3EA156BC21CE274E004B1346 /* CoreDataCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataCache.swift; sourceTree = "<group>"; };
-		3EA156FB21CE28B4004B1346 /* TestCoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCoreData.swift; sourceTree = "<group>"; };
+		3EA156BC21CE274E004B1346 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		3EA156FB21CE28B4004B1346 /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
+		3EB5201922ABC1AB00B7EA45 /* CMUserRole+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMUserRole+CoreDataClass.swift"; sourceTree = "<group>"; };
+		3EB5201A22ABC1AB00B7EA45 /* CMUserRole+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMUserRole+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		3EB5204822ABE7E300B7EA45 /* CacheEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheEnums.swift; sourceTree = "<group>"; };
+		3EB5204A22ABE83100B7EA45 /* CacheExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheExtensions.swift; sourceTree = "<group>"; };
+		3EB5204D22ABE99A00B7EA45 /* RetrieveDataFromCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetrieveDataFromCache.swift; sourceTree = "<group>"; };
+		3EB5204F22ABEA3700B7EA45 /* DeleteDataFromCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteDataFromCache.swift; sourceTree = "<group>"; };
+		3EB5205122ABEA4000B7EA45 /* SaveDataToCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveDataToCache.swift; sourceTree = "<group>"; };
+		3EB5205322ABED5300B7EA45 /* UpdateDataOnCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateDataOnCache.swift; sourceTree = "<group>"; };
+		3EB5205522ABEDBB00B7EA45 /* QueueOnCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueOnCache.swift; sourceTree = "<group>"; };
+		3EB5205722ABEEB200B7EA45 /* ChatPrivateMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatPrivateMethods.swift; sourceTree = "<group>"; };
+		3EB5205922ABEFB200B7EA45 /* ChatPublicMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatPublicMethods.swift; sourceTree = "<group>"; };
+		3EB5205B22ABF0BC00B7EA45 /* GetContactsCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetContactsCallback.swift; sourceTree = "<group>"; };
+		3EB5205D22ABF1A400B7EA45 /* UserInfoCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoCallback.swift; sourceTree = "<group>"; };
+		3EB5206022ABF20000B7EA45 /* GetThreadsCallbacks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetThreadsCallbacks.swift; sourceTree = "<group>"; };
+		3EB5206222ABF24900B7EA45 /* GetHistoryCallbacks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetHistoryCallbacks.swift; sourceTree = "<group>"; };
+		3EB5206422ABF27000B7EA45 /* GetThreadParticipantsCallbacks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetThreadParticipantsCallbacks.swift; sourceTree = "<group>"; };
+		3EB5206622ABF29D00B7EA45 /* CreateThreadCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateThreadCallback.swift; sourceTree = "<group>"; };
+		3EB5206822ABF2E100B7EA45 /* UpdateThreadInfoCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateThreadInfoCallback.swift; sourceTree = "<group>"; };
+		3EB5206A22ABF31200B7EA45 /* AddParticipantsCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddParticipantsCallback.swift; sourceTree = "<group>"; };
+		3EB5206C22ABF33C00B7EA45 /* RemoveParticipantsCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveParticipantsCallback.swift; sourceTree = "<group>"; };
+		3EB5206E22ABF36500B7EA45 /* SendMessageCallbacks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMessageCallbacks.swift; sourceTree = "<group>"; };
+		3EB5207022ABF38900B7EA45 /* EditMessageCallbacks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMessageCallbacks.swift; sourceTree = "<group>"; };
+		3EB5207222ABF3BB00B7EA45 /* DeleteMessageCallbacks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteMessageCallbacks.swift; sourceTree = "<group>"; };
+		3EB5207422ABF3DC00B7EA45 /* MuteThreadCallbacks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuteThreadCallbacks.swift; sourceTree = "<group>"; };
+		3EB5207622ABF41100B7EA45 /* UnmuteThreadCallbacks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnmuteThreadCallbacks.swift; sourceTree = "<group>"; };
+		3EB5207822ABF43500B7EA45 /* BlockContactCallbacks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockContactCallbacks.swift; sourceTree = "<group>"; };
+		3EB5207A22ABF45E00B7EA45 /* UnblockContactCallbacks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnblockContactCallbacks.swift; sourceTree = "<group>"; };
+		3EB5207C22ABF47D00B7EA45 /* GetBlockedContactsCallbacks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetBlockedContactsCallbacks.swift; sourceTree = "<group>"; };
+		3EB5207E22ABF4A200B7EA45 /* LeaveThreadCallbacks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaveThreadCallbacks.swift; sourceTree = "<group>"; };
+		3EB5208022ABF4DC00B7EA45 /* SpamPvThread.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpamPvThread.swift; sourceTree = "<group>"; };
+		3EB5208222ABF4FB00B7EA45 /* GetMessageDeliverList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMessageDeliverList.swift; sourceTree = "<group>"; };
+		3EB5208422ABF51D00B7EA45 /* GetMessageSeenList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMessageSeenList.swift; sourceTree = "<group>"; };
+		3EB5208622ABF53D00B7EA45 /* ClearHistoryCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearHistoryCallback.swift; sourceTree = "<group>"; };
+		3EB5208822ABF56600B7EA45 /* GetAdminListCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAdminListCallback.swift; sourceTree = "<group>"; };
+		3EB5208A22ABF58C00B7EA45 /* SetRoleToUserCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetRoleToUserCallback.swift; sourceTree = "<group>"; };
+		3EB5208C22ABF5AF00B7EA45 /* SendSignalMessageCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendSignalMessageCallback.swift; sourceTree = "<group>"; };
 		3EB7595B228D98FC00A48262 /* CancelMessageRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelMessageRequestModel.swift; sourceTree = "<group>"; };
 		3EBBEDC52174C18F00F5CDC7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		3EBBEDD22174C20200F5CDC7 /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
@@ -588,11 +668,25 @@
 			path = InputModels;
 			sourceTree = "<group>";
 		};
-		3EA156BE21CE2753004B1346 /* CoreDataCacheModels */ = {
+		3EA156BE21CE2753004B1346 /* CoreDataCache */ = {
 			isa = PBXGroup;
 			children = (
-				3EA156BC21CE274E004B1346 /* CoreDataCache.swift */,
-				3EA156FB21CE28B4004B1346 /* TestCoreData.swift */,
+				3EA156BC21CE274E004B1346 /* CoreDataStack.swift */,
+				3EA156FB21CE28B4004B1346 /* Cache.swift */,
+				3EB5205522ABEDBB00B7EA45 /* QueueOnCache.swift */,
+				3EB5205322ABED5300B7EA45 /* UpdateDataOnCache.swift */,
+				3EB5204F22ABEA3700B7EA45 /* DeleteDataFromCache.swift */,
+				3EB5205122ABEA4000B7EA45 /* SaveDataToCache.swift */,
+				3EB5204D22ABE99A00B7EA45 /* RetrieveDataFromCache.swift */,
+				3EB5204722ABE7AA00B7EA45 /* CacheModels */,
+				3EB5204C22ABE89100B7EA45 /* Helpers */,
+			);
+			path = CoreDataCache;
+			sourceTree = "<group>";
+		};
+		3EB5204722ABE7AA00B7EA45 /* CacheModels */ = {
+			isa = PBXGroup;
+			children = (
 				3E24082C21F5C844001F32F1 /* CMBlockedContact+CoreDataClass.swift */,
 				3E24082D21F5C844001F32F1 /* CMBlockedContact+CoreDataProperties.swift */,
 				3E24082821F5C844001F32F1 /* CMContact+CoreDataClass.swift */,
@@ -617,6 +711,8 @@
 				3E24082721F5C844001F32F1 /* CMUploadImage+CoreDataProperties.swift */,
 				3E24081821F5C844001F32F1 /* CMUser+CoreDataClass.swift */,
 				3E24081921F5C844001F32F1 /* CMUser+CoreDataProperties.swift */,
+				3EB5201922ABC1AB00B7EA45 /* CMUserRole+CoreDataClass.swift */,
+				3EB5201A22ABC1AB00B7EA45 /* CMUserRole+CoreDataProperties.swift */,
 				3EE069482212A3100099068F /* PhoneContact+CoreDataClass.swift */,
 				3EE069492212A3100099068F /* PhoneContact+CoreDataProperties.swift */,
 				3E5AAECC221937560085C03D /* QueueOfEditMessages+CoreDataClass.swift */,
@@ -632,7 +728,60 @@
 				3E5AAEF022195A510085C03D /* QueueOfUploadFiles+CoreDataClass.swift */,
 				3E5AAEF122195A510085C03D /* QueueOfUploadFiles+CoreDataProperties.swift */,
 			);
-			path = CoreDataCacheModels;
+			path = CacheModels;
+			sourceTree = "<group>";
+		};
+		3EB5204C22ABE89100B7EA45 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				3EB5204A22ABE83100B7EA45 /* CacheExtensions.swift */,
+				3EB5204822ABE7E300B7EA45 /* CacheEnums.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		3EB5205F22ABF1E000B7EA45 /* CallbackClasses */ = {
+			isa = PBXGroup;
+			children = (
+				3EB5208C22ABF5AF00B7EA45 /* SendSignalMessageCallback.swift */,
+				3EB5208A22ABF58C00B7EA45 /* SetRoleToUserCallback.swift */,
+				3EB5208822ABF56600B7EA45 /* GetAdminListCallback.swift */,
+				3EB5208622ABF53D00B7EA45 /* ClearHistoryCallback.swift */,
+				3EB5208422ABF51D00B7EA45 /* GetMessageSeenList.swift */,
+				3EB5208222ABF4FB00B7EA45 /* GetMessageDeliverList.swift */,
+				3EB5208022ABF4DC00B7EA45 /* SpamPvThread.swift */,
+				3EB5207E22ABF4A200B7EA45 /* LeaveThreadCallbacks.swift */,
+				3EB5207C22ABF47D00B7EA45 /* GetBlockedContactsCallbacks.swift */,
+				3EB5207A22ABF45E00B7EA45 /* UnblockContactCallbacks.swift */,
+				3EB5207822ABF43500B7EA45 /* BlockContactCallbacks.swift */,
+				3EB5207622ABF41100B7EA45 /* UnmuteThreadCallbacks.swift */,
+				3EB5207422ABF3DC00B7EA45 /* MuteThreadCallbacks.swift */,
+				3EB5207222ABF3BB00B7EA45 /* DeleteMessageCallbacks.swift */,
+				3EB5207022ABF38900B7EA45 /* EditMessageCallbacks.swift */,
+				3EB5206E22ABF36500B7EA45 /* SendMessageCallbacks.swift */,
+				3EB5206C22ABF33C00B7EA45 /* RemoveParticipantsCallback.swift */,
+				3EB5206A22ABF31200B7EA45 /* AddParticipantsCallback.swift */,
+				3EB5206822ABF2E100B7EA45 /* UpdateThreadInfoCallback.swift */,
+				3EB5206622ABF29D00B7EA45 /* CreateThreadCallback.swift */,
+				3EB5206422ABF27000B7EA45 /* GetThreadParticipantsCallbacks.swift */,
+				3EB5206222ABF24900B7EA45 /* GetHistoryCallbacks.swift */,
+				3EB5206022ABF20000B7EA45 /* GetThreadsCallbacks.swift */,
+				3EB5205D22ABF1A400B7EA45 /* UserInfoCallback.swift */,
+				3EB5205B22ABF0BC00B7EA45 /* GetContactsCallback.swift */,
+			);
+			path = CallbackClasses;
+			sourceTree = "<group>";
+		};
+		3EB5208E22ABF68700B7EA45 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				3EE0261621206EA6001810FB /* Chat.swift */,
+				3EB5205922ABEFB200B7EA45 /* ChatPublicMethods.swift */,
+				3EB5205722ABEEB200B7EA45 /* ChatPrivateMethods.swift */,
+				3EBBEDFB2174C9FB00F5CDC7 /* ChatProtocols.swift */,
+				3EBBEDFD2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift */,
+			);
+			path = Main;
 			sourceTree = "<group>";
 		};
 		3EBBEDD12174C19B00F5CDC7 /* PrimaryModels */ = {
@@ -656,6 +805,7 @@
 				3E78AA9C218479DF002A6EC0 /* UploadFile.swift */,
 				3E78AA9A218479D7002A6EC0 /* UploadImage.swift */,
 				3EBBEDC52174C18F00F5CDC7 /* User.swift */,
+				3E6017B822AB6C12000A2E31 /* UserRole.swift */,
 			);
 			path = PrimaryModels;
 			sourceTree = "<group>";
@@ -681,6 +831,7 @@
 				3E78AA98218479CB002A6EC0 /* UploadFileModel.swift */,
 				3E78AA94218479BA002A6EC0 /* UploadImageModel.swift */,
 				3EBBEDEA2174C44400F5CDC7 /* UserInfoModel.swift */,
+				3E6017B522AB6BB4000A2E31 /* SetRolesModel.swift */,
 				3E8D87D422185B2A0092B440 /* QueueOfWaitEditMessagesModel.swift */,
 				3E8D87D1221858290092B440 /* QueueOfWaitFileMessagesModel.swift */,
 				3E8D87D722185C0E0092B440 /* QueueOfWaitForwardMessagesModel.swift */,
@@ -740,11 +891,10 @@
 				3EA156B721CE2419004B1346 /* CacheDataModel.xcdatamodeld */,
 				3EE025F021206E63001810FB /* Chat.h */,
 				3E78AAB92184A309002A6EC0 /* pic.png */,
-				3EE0261621206EA6001810FB /* Chat.swift */,
-				3EBBEDFB2174C9FB00F5CDC7 /* ChatProtocols.swift */,
+				3EB5208E22ABF68700B7EA45 /* Main */,
+				3EB5205F22ABF1E000B7EA45 /* CallbackClasses */,
 				3E78AAB62184A25F002A6EC0 /* Assets.xcassets */,
-				3EBBEDFD2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift */,
-				3EA156BE21CE2753004B1346 /* CoreDataCacheModels */,
+				3EA156BE21CE2753004B1346 /* CoreDataCache */,
 				3EA1567421CE1A99004B1346 /* InputModels */,
 				3EBBEDD12174C19B00F5CDC7 /* PrimaryModels */,
 				3EBBEDEC2174C46B00F5CDC7 /* OutputModels */,
@@ -988,21 +1138,28 @@
 				3E8D87E5221861920092B440 /* QueueOfTextMessages+CoreDataClass.swift in Sources */,
 				3E24084021F5C844001F32F1 /* CMForwardInfo+CoreDataClass.swift in Sources */,
 				3E5AAEF822195A510085C03D /* QueueOfUploadFiles+CoreDataProperties.swift in Sources */,
+				3EB5205422ABED5300B7EA45 /* UpdateDataOnCache.swift in Sources */,
 				3EBBEDEB2174C44400F5CDC7 /* UserInfoModel.swift in Sources */,
 				3E8D87CF221856030092B440 /* QueueOfWaitTextMessagesModel.swift in Sources */,
 				3EE0694A2212A3100099068F /* PhoneContact+CoreDataClass.swift in Sources */,
+				3EB5205822ABEEB200B7EA45 /* ChatPrivateMethods.swift in Sources */,
 				3EBBEDFC2174C9FB00F5CDC7 /* ChatProtocols.swift in Sources */,
+				3EB5206722ABF29D00B7EA45 /* CreateThreadCallback.swift in Sources */,
 				3E24084821F5C844001F32F1 /* CMUploadFile+CoreDataClass.swift in Sources */,
 				3E24085021F5C844001F32F1 /* CMContact+CoreDataClass.swift in Sources */,
 				3EBBEDF62174C6AF00F5CDC7 /* CreateThreadModel.swift in Sources */,
 				3E24083C21F5C844001F32F1 /* CMMessage+CoreDataClass.swift in Sources */,
+				3EB5206322ABF24900B7EA45 /* GetHistoryCallbacks.swift in Sources */,
 				3E8D56DB21DBA83600B844DE /* MapSearchRequestModel.swift in Sources */,
+				3EB5205C22ABF0BC00B7EA45 /* GetContactsCallback.swift in Sources */,
 				3EBBEDDF2174C30800F5CDC7 /* Participant.swift in Sources */,
 				3EA1568221CE1B70004B1346 /* SearchContactsRequestModel.swift in Sources */,
 				3E8E08002295628A0077C685 /* GetAdminListRequestModel.swift in Sources */,
 				3E5AAED0221937560085C03D /* QueueOfEditMessages+CoreDataProperties.swift in Sources */,
+				3EB5207D22ABF47D00B7EA45 /* GetBlockedContactsCallbacks.swift in Sources */,
 				3ED22F2F2187469F00B6FE4C /* AddParticipantModel.swift in Sources */,
 				3E8D87D522185B2A0092B440 /* QueueOfWaitEditMessagesModel.swift in Sources */,
+				3EB5206B22ABF31200B7EA45 /* AddParticipantsCallback.swift in Sources */,
 				3E24083021F5C844001F32F1 /* CMUser+CoreDataClass.swift in Sources */,
 				3E24085621F5C844001F32F1 /* CMThreadParticipants+CoreDataProperties.swift in Sources */,
 				3E8D56E121DBB90900B844DE /* MapRoutingRequestModel.swift in Sources */,
@@ -1016,6 +1173,7 @@
 				3E437D5A218F36B80021C0ED /* BlockedUserModel.swift in Sources */,
 				3EA1567E21CE1B49004B1346 /* GetBlockedContactListRequestModel.swift in Sources */,
 				3ECFCAB8228967BD00313419 /* ClearHistoryRequestModel.swift in Sources */,
+				3E6017B622AB6BB4000A2E31 /* SetRolesModel.swift in Sources */,
 				3E00CAF521DC9E6B0029B1FC /* MapRoutingModel.swift in Sources */,
 				3EA156A021CE1CAE004B1346 /* DeleteMessageRequestModel.swift in Sources */,
 				3E24084A21F5C844001F32F1 /* CMUploadFile+CoreDataProperties.swift in Sources */,
@@ -1027,35 +1185,47 @@
 				3E24084E21F5C844001F32F1 /* CMUploadImage+CoreDataProperties.swift in Sources */,
 				3EBBEDDD2174C2F000F5CDC7 /* LinkedUser.swift in Sources */,
 				3E5AAEEC221950B10085C03D /* QueueOfWaitFilesModel.swift in Sources */,
+				3EB5208B22ABF58C00B7EA45 /* SetRoleToUserCallback.swift in Sources */,
+				3EB5207B22ABF45E00B7EA45 /* UnblockContactCallbacks.swift in Sources */,
 				3EA1569821CE1C53004B1346 /* EditTextMessageRequestModel.swift in Sources */,
 				3EA1568021CE1B5B004B1346 /* UnblockContactsRequestModel.swift in Sources */,
 				3E24083621F5C844001F32F1 /* CMReplyInfo+CoreDataProperties.swift in Sources */,
+				3EB5207122ABF38900B7EA45 /* EditMessageCallbacks.swift in Sources */,
 				3E43D1422132B6170069DF9A /* DataFormatters.swift in Sources */,
+				3EB5205222ABEA4000B7EA45 /* SaveDataToCache.swift in Sources */,
 				3E8D87EB221861920092B440 /* QueueOfForwardMessages+CoreDataProperties.swift in Sources */,
 				3EBBEDF22174C5EC00F5CDC7 /* GetHistoryModel.swift in Sources */,
 				3E24083221F5C844001F32F1 /* CMUser+CoreDataProperties.swift in Sources */,
+				3EB5205022ABEA3700B7EA45 /* DeleteDataFromCache.swift in Sources */,
 				3E24085A21F5C844001F32F1 /* CMBlockedContact+CoreDataProperties.swift in Sources */,
 				3E78AA9D218479DF002A6EC0 /* UploadFile.swift in Sources */,
 				3E8D87D2221858290092B440 /* QueueOfWaitFileMessagesModel.swift in Sources */,
 				3E3F17792133D0A90029E4D4 /* EnumsAndStructs.swift in Sources */,
 				3EA1568621CE1BA0004B1346 /* GetHistoryRequestModel.swift in Sources */,
 				3E24083A21F5C844001F32F1 /* CMParticipant+CoreDataProperties.swift in Sources */,
+				3EB5207F22ABF4A200B7EA45 /* LeaveThreadCallbacks.swift in Sources */,
 				3EB7595C228D98FC00A48262 /* CancelMessageRequestModel.swift in Sources */,
 				3EA156A821CE1D02004B1346 /* SpamPvThreadRequestModel.swift in Sources */,
 				3E8D56D921DB9D6200B844DE /* MapReverse.swift in Sources */,
 				3EBBEDF42174C69700F5CDC7 /* GetThreadParticipantsModel.swift in Sources */,
 				3E24085C21F5C844001F32F1 /* CMLinkedUser+CoreDataClass.swift in Sources */,
+				3E6017B922AB6C12000A2E31 /* UserRole.swift in Sources */,
 				3E00CAF721DCA9030029B1FC /* MapStaticImageRequestModel.swift in Sources */,
 				3EA156A221CE1CC4004B1346 /* UploadImageRequestModel.swift in Sources */,
 				3EE0694C2212A3100099068F /* PhoneContact+CoreDataProperties.swift in Sources */,
 				3EBBEDD92174C2A200F5CDC7 /* BlockedContact.swift in Sources */,
 				3E63A088213A618F00E4E2C2 /* ObjectTypes.swift in Sources */,
+				3EB5201B22ABC1AB00B7EA45 /* CMUserRole+CoreDataClass.swift in Sources */,
+				3EB5208522ABF51D00B7EA45 /* GetMessageSeenList.swift in Sources */,
 				3EA1567821CE1AF0004B1346 /* UpdateContactsRequestModel.swift in Sources */,
 				3E43D1562132BF700069DF9A /* SendMessage.swift in Sources */,
 				3E8D87E3221861920092B440 /* QueueOfFileMessages+CoreDataProperties.swift in Sources */,
 				3EA1569A21CE1C68004B1346 /* ReplyTextMessageRequestModel.swift in Sources */,
 				3EA1569021CE1BFC004B1346 /* AddParticipantsRequestModel.swift in Sources */,
 				3E5AAEF222195A510085C03D /* QueueOfUploadImages+CoreDataClass.swift in Sources */,
+				3EB5204922ABE7E300B7EA45 /* CacheEnums.swift in Sources */,
+				3EB5205622ABEDBB00B7EA45 /* QueueOnCache.swift in Sources */,
+				3EB5206D22ABF33C00B7EA45 /* RemoveParticipantsCallback.swift in Sources */,
 				3E78AA95218479BA002A6EC0 /* UploadImageModel.swift in Sources */,
 				3E24085E21F5C844001F32F1 /* CMLinkedUser+CoreDataProperties.swift in Sources */,
 				3E43D1582132BF9C0069DF9A /* ReceiveMessage.swift in Sources */,
@@ -1065,15 +1235,19 @@
 				3EA1568421CE1B86004B1346 /* GetThreadsRequestModel.swift in Sources */,
 				3ECFCAC422896A5300313419 /* ClearHistoryModel.swift in Sources */,
 				3E8D87E9221861920092B440 /* QueueOfForwardMessages+CoreDataClass.swift in Sources */,
+				3EB5207522ABF3DC00B7EA45 /* MuteThreadCallbacks.swift in Sources */,
 				3E8D87E7221861920092B440 /* QueueOfTextMessages+CoreDataProperties.swift in Sources */,
+				3EB5207722ABF41100B7EA45 /* UnmuteThreadCallbacks.swift in Sources */,
 				3E9853E7222C2DB900BD38D0 /* SendLocationMessageRequestModel.swift in Sources */,
 				3E5AAEF622195A510085C03D /* QueueOfUploadFiles+CoreDataClass.swift in Sources */,
 				3EBBEDDB2174C2C000F5CDC7 /* Invitee.swift in Sources */,
 				3EA1568821CE1BB7004B1346 /* CreateThreadRequestModel.swift in Sources */,
+				3EB5208122ABF4DC00B7EA45 /* SpamPvThread.swift in Sources */,
 				3E78AA99218479CB002A6EC0 /* UploadFileModel.swift in Sources */,
 				3EBBEDF82174C6CD00F5CDC7 /* ContactModel.swift in Sources */,
 				3EBBEDD32174C20200F5CDC7 /* Contact.swift in Sources */,
 				3EE0261721206EA6001810FB /* Chat.swift in Sources */,
+				3EB5206F22ABF36500B7EA45 /* SendMessageCallbacks.swift in Sources */,
 				3E437D5C218F36DA0021C0ED /* GetBlockedContactListModel.swift in Sources */,
 				3EA156AA21CE1D10004B1346 /* MessageDeliverySeenListRequestModel.swift in Sources */,
 				3EA1569421CE1C2B004B1346 /* LeaveThreadRequestModel.swift in Sources */,
@@ -1082,41 +1256,55 @@
 				3EBBEDD72174C27B00F5CDC7 /* Message.swift in Sources */,
 				3EA1567A21CE1B0B004B1346 /* RemoveContactsRequestModel.swift in Sources */,
 				3E11F56D21DA1A02004B3B2C /* GetFileRequestModel.swift in Sources */,
+				3EB5208722ABF53D00B7EA45 /* ClearHistoryCallback.swift in Sources */,
 				3E5AAEE92219509C0085C03D /* QueueOfWaitImagesModel.swift in Sources */,
 				3EA1569C21CE1C7C004B1346 /* ForwardMessageRequestModel.swift in Sources */,
+				3EB5206922ABF2E100B7EA45 /* UpdateThreadInfoCallback.swift in Sources */,
 				3E24084221F5C844001F32F1 /* CMForwardInfo+CoreDataProperties.swift in Sources */,
 				3EBBEDE72174C38000F5CDC7 /* ThreadHistory.swift in Sources */,
 				3EA1567C21CE1B1F004B1346 /* BlockContactsRequestModel.swift in Sources */,
-				3EA156BD21CE274E004B1346 /* CoreDataCache.swift in Sources */,
+				3EA156BD21CE274E004B1346 /* CoreDataStack.swift in Sources */,
 				3EBBEDE52174C36700F5CDC7 /* MessageChangeState.swift in Sources */,
+				3EB5207922ABF43500B7EA45 /* BlockContactCallbacks.swift in Sources */,
 				3E24084621F5C844001F32F1 /* CMConversation+CoreDataProperties.swift in Sources */,
 				3E8D56D721DB9CF300B844DE /* MapReverseModel.swift in Sources */,
 				3EA1568E21CE1BEE004B1346 /* GetThreadParticipantsRequestModel.swift in Sources */,
 				3E8D87D822185C0E0092B440 /* QueueOfWaitForwardMessagesModel.swift in Sources */,
+				3EB5201D22ABC1AB00B7EA45 /* CMUserRole+CoreDataProperties.swift in Sources */,
 				3E24083421F5C844001F32F1 /* CMReplyInfo+CoreDataClass.swift in Sources */,
 				3EBBEDFE2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift in Sources */,
 				3E24083821F5C844001F32F1 /* CMParticipant+CoreDataClass.swift in Sources */,
 				3E11F56121DA18D0004B3B2C /* GetImageRequestModel.swift in Sources */,
 				3EA1567621CE1AC9004B1346 /* AddContactsRequestModel.swift in Sources */,
 				3E8E923122A38F2D0037CD41 /* SendSignalMessageRequestModel.swift in Sources */,
+				3EB5208922ABF56600B7EA45 /* GetAdminListCallback.swift in Sources */,
+				3EB5204B22ABE83100B7EA45 /* CacheExtensions.swift in Sources */,
+				3EB5205E22ABF1A400B7EA45 /* UserInfoCallback.swift in Sources */,
 				3EA1569E21CE1C96004B1346 /* SendFileMessageRequestModel.swift in Sources */,
+				3EB5208D22ABF5AF00B7EA45 /* SendSignalMessageCallback.swift in Sources */,
 				3E24085221F5C844001F32F1 /* CMContact+CoreDataProperties.swift in Sources */,
 				3EA1567121CE1A92004B1346 /* GetContactsRequestModel.swift in Sources */,
 				3E734CE521D11016009F4D38 /* CacheDataModel.xcdatamodeld in Sources */,
+				3EB5206122ABF20000B7EA45 /* GetThreadsCallbacks.swift in Sources */,
 				3EA1569221CE1C15004B1346 /* RemoveParticipantsRequestModel.swift in Sources */,
 				3EA156A621CE1CE8004B1346 /* UpdateThreadInfoRequestModel.swift in Sources */,
 				3EA156A421CE1CD6004B1346 /* UploadFileRequestModel.swift in Sources */,
-				3EA156FC21CE28B4004B1346 /* TestCoreData.swift in Sources */,
+				3EB5207322ABF3BB00B7EA45 /* DeleteMessageCallbacks.swift in Sources */,
+				3EA156FC21CE28B4004B1346 /* Cache.swift in Sources */,
 				3E8D56DF21DBB55F00B844DE /* MapSearchModel.swift in Sources */,
 				3EA156AC21CE1D1E004B1346 /* DeliverSeenRequestModel.swift in Sources */,
+				3EB5208322ABF4FB00B7EA45 /* GetMessageDeliverList.swift in Sources */,
 				3E8E080D229567040077C685 /* SetRoleRequestModel.swift in Sources */,
+				3EB5205A22ABEFB200B7EA45 /* ChatPublicMethods.swift in Sources */,
 				3EBBEDFA2174C6E000F5CDC7 /* RemoveContactModel.swift in Sources */,
 				3E8D87E1221861920092B440 /* QueueOfFileMessages+CoreDataClass.swift in Sources */,
+				3EB5206522ABF27000B7EA45 /* GetThreadParticipantsCallbacks.swift in Sources */,
 				3EBBEDF02174C5C800F5CDC7 /* GetThreadsModel.swift in Sources */,
 				3EBBEE012174CBCA00F5CDC7 /* Extentions.swift in Sources */,
 				3EFB24A121561F1800A498E1 /* File.swift in Sources */,
 				3EBBEDC62174C18F00F5CDC7 /* User.swift in Sources */,
 				3E24084421F5C844001F32F1 /* CMConversation+CoreDataClass.swift in Sources */,
+				3EB5204E22ABE99A00B7EA45 /* RetrieveDataFromCache.swift in Sources */,
 				3EBBEDE12174C32700F5CDC7 /* ReplyInfo.swift in Sources */,
 				3E5AAEF422195A510085C03D /* QueueOfUploadImages+CoreDataProperties.swift in Sources */,
 			);
@@ -1140,6 +1328,7 @@
 				3E78AAB22184A01A002A6EC0 /* SendFileMessageTest.swift in Sources */,
 				3E8E080E229567040077C685 /* SetRoleRequestModel.swift in Sources */,
 				3E5AAEEA2219509C0085C03D /* QueueOfWaitImagesModel.swift in Sources */,
+				3EB5201E22ABC1AB00B7EA45 /* CMUserRole+CoreDataProperties.swift in Sources */,
 				3E730D2B214CC6F600AAE838 /* GetThreadParticipantTest.swift in Sources */,
 				3E8D87E4221861920092B440 /* QueueOfFileMessages+CoreDataProperties.swift in Sources */,
 				3E24085F21F5C844001F32F1 /* CMLinkedUser+CoreDataProperties.swift in Sources */,
@@ -1189,6 +1378,8 @@
 				3E3F14D12147B6570084A550 /* GetUserInfoTest.swift in Sources */,
 				3E24083B21F5C844001F32F1 /* CMParticipant+CoreDataProperties.swift in Sources */,
 				3E9853E8222C2DB900BD38D0 /* SendLocationMessageRequestModel.swift in Sources */,
+				3E6017BA22AB6C12000A2E31 /* UserRole.swift in Sources */,
+				3EB5201C22ABC1AB00B7EA45 /* CMUserRole+CoreDataClass.swift in Sources */,
 				3E24083321F5C844001F32F1 /* CMUser+CoreDataProperties.swift in Sources */,
 				3E24084521F5C844001F32F1 /* CMConversation+CoreDataClass.swift in Sources */,
 				3E24084F21F5C844001F32F1 /* CMUploadImage+CoreDataProperties.swift in Sources */,
@@ -1206,6 +1397,7 @@
 				3E3E56852160A30B0084C8C1 /* EditMessageTest.swift in Sources */,
 				3E24083521F5C844001F32F1 /* CMReplyInfo+CoreDataClass.swift in Sources */,
 				3E695BA52172266800A77120 /* UpdateContactTest.swift in Sources */,
+				3E6017B722AB6BB4000A2E31 /* SetRolesModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

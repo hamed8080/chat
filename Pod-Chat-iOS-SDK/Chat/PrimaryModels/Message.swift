@@ -35,10 +35,10 @@ open class Message {
      *    - replyInfo:      ReplyInfo?
      */
     
+    public let deletable:   Bool?
     public let delivered:   Bool?
     public let editable:    Bool?
     public let edited:      Bool?
-    public let deletable:   Bool?
     public var id:          Int?
     public var message:     String?
     public let messageType: String?

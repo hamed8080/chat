@@ -15,10 +15,10 @@ public class CMMessage: NSManagedObject {
     
     public func convertCMMessageToMessageObject() -> Message {
         
+        var deletable:      Bool?
         var delivered:      Bool?
         var editable:       Bool?
         var edited:         Bool?
-        var deletable:      Bool?
         var id:             Int?
         var ownerId:        Int?
         var previousId:     Int?
