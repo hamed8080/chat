@@ -47,7 +47,7 @@ extension Cache {
         messageToSaveOnQueue.imageName      = fileMessage.imageName
         messageToSaveOnQueue.imageToSend    = fileMessage.imageToSend as NSData?
         messageToSaveOnQueue.repliedTo      = fileMessage.repliedTo as NSNumber?
-        messageToSaveOnQueue.subjectId      = fileMessage.subjectId as NSNumber?
+//        messageToSaveOnQueue.subjectId      = fileMessage.subjectId as NSNumber?
         messageToSaveOnQueue.threadId       = fileMessage.threadId as NSNumber?
         messageToSaveOnQueue.typeCode       = fileMessage.typeCode
         messageToSaveOnQueue.uniqueId       = fileMessage.uniqueId

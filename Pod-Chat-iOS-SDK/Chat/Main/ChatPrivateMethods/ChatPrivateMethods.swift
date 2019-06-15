@@ -360,6 +360,32 @@ extension Chat {
     }
     
     
+    /* this method is deprecated because af using a class inside Async
+    /*
+     it's all about this 3 characters: 'space' , '\n', '\t'
+     this function will put some freak characters instead of these 3 characters (inside the Message text content)
+     because later on, the Async will eliminate from all these kind of characters to reduce size of the message that goes through socket,
+     on there, we will replace them with the original one;
+     so now we don't miss any of these 3 characters on the Test Message, but also can eliminate all extra characters...
+     */
+    func makeCustomTextToSend(textMessage: String) -> String {
+        var returnStr = ""
+        for c in textMessage {
+            if (c == " ") {
+                returnStr.append("Ⓢ")
+            } else if (c == "\n") {
+                returnStr.append("Ⓝ")
+            } else if (c == "\t") {
+                returnStr.append("Ⓣ")
+            } else {
+                returnStr.append(c)
+            }
+        }
+        return returnStr
+    }
+    */
+    
+    
     func runSendMessageTimer() {
         self.lastSentMessageTimeoutId?.suspend()
         DispatchQueue.global().async {
@@ -1121,6 +1147,12 @@ extension Chat {
             }
             break
             
+        // a message of type 45 (SIGNAL_MESSAGE) comes from Server
+        case chatMessageVOTypes.SIGNAL_MESSAGE.rawValue:
+            log.verbose("Message of type 'SIGNAL_MESSAGE' revieved", context: "Chat")
+            delegate?.threadEvents(type: ThreadEventTypes.isTyping, result: "\(messageContentAsString)")
+            return
+            
         // a message of type 48 (GET_THREAD_ADMINS) comes from Server.
         case chatMessageVOTypes.GET_THREAD_ADMINS.rawValue:
             log.verbose("Message of type 'GET_THREAD_ADMINS' recieved", context: "Chat")
@@ -1220,6 +1252,7 @@ extension Chat {
     
     
     
+    // i created a class for this method to do the same exat functionality
     
     func createReturnData(hasError: Bool, errorMessage: String?, errorCode: Int?, result: JSON?, resultAsString: String?, contentCount: Int?, subjectId: Int?) -> JSON {
         

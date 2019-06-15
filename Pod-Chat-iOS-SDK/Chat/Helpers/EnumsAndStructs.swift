@@ -52,7 +52,7 @@ public enum chatMessageVOTypes: Int {
     case SPAM_PV_THREAD                     = 41
     case SET_RULE_TO_USER                   = 42
     case CLEAR_HISTORY                      = 44
-    case SIGNAL_MESSAGE                     = 45
+    case SIGNAL_MESSAGE                     = 46
     case GET_THREAD_ADMINS                  = 48
     case LOGOUT                             = 100
     case ERROR                              = 999
@@ -177,6 +177,7 @@ public enum ThreadEventTypes/*: String*/ {
     case unreadCountUpdate    //= "Thread_Unread_Count_Update"
     case lastActivityTime     //= "Thread_Last_Activity_Time"
     case lastSeenUpdate
+    case isTyping
 }
 
 public enum SignalMessageType: Int {

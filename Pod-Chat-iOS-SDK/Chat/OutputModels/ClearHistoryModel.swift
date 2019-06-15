@@ -19,8 +19,6 @@ open class ClearHistoryModel {
     // result model
     public var threadId:           Int
     
-    public var threadJSON:        JSON?
-    
     public init(messageContent: JSON,
                 hasError: Bool,
                 errorMessage: String,

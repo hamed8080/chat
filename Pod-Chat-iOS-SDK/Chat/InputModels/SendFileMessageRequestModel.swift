@@ -24,7 +24,7 @@ open class SendFileMessageRequestModel {
     public let content:     String?
     public let metaData:    JSON?
     public let repliedTo:   Int?
-    public let subjectId:   Int?
+//    public let subjectId:   Int?
     public let typeCode:    String?
     
     public let fileToSend:  Data?
@@ -40,7 +40,7 @@ open class SendFileMessageRequestModel {
                 content:       String?,
                 metaData:      JSON?,
                 repliedTo:     Int?,
-                subjectId:     Int?,
+//                subjectId:     Int?,
                 typeCode:      String?,
                 fileToSend:    Data?,
                 imageToSend:   Data?) {
@@ -56,7 +56,7 @@ open class SendFileMessageRequestModel {
         self.content        = content
         self.metaData       = metaData
         self.repliedTo      = repliedTo
-        self.subjectId      = subjectId
+//        self.subjectId      = subjectId
         self.typeCode       = typeCode
         
         self.fileToSend     = fileToSend

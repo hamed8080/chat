@@ -16,6 +16,8 @@ extension Chat: AsyncDelegates {
     public func asyncConnect(newPeerID: Int) {
         log.verbose("Async Connected", context: "Chat: DelegateComesFromAsync")
         
+        print("\n\n\n PEERID = \(newPeerID)\n\n\n ")
+        
         peerId = newPeerID
         delegate?.chatConnected()
     }
@@ -30,6 +32,8 @@ extension Chat: AsyncDelegates {
     
     public func asyncReconnect(newPeerID: Int) {
         log.verbose("Async Reconnected", context: "Chat: DelegateComesFromAsync")
+        
+        print("\n\n\n new PEERID = \(newPeerID)\n\n\n ")
         
         peerId = newPeerID
         delegate?.chatReconnect()

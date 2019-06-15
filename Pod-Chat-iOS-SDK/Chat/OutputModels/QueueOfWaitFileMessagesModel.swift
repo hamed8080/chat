@@ -16,7 +16,7 @@ open class QueueOfWaitFileMessagesModel {
     let imageName:      String?
     let metaData:       JSON?
     let repliedTo:      Int?
-    let subjectId:      Int?
+//    let subjectId:      Int?
     let threadId:       Int?
     let typeCode:       String?
     let uniqueId:       String?
@@ -32,7 +32,7 @@ open class QueueOfWaitFileMessagesModel {
          imageName:         String?,
          metaData:          JSON?,
          repliedTo:         Int?,
-         subjectId:         Int?,
+//         subjectId:         Int?,
          threadId:          Int?,
          typeCode:          String?,
          uniqueId:          String?,
@@ -48,7 +48,7 @@ open class QueueOfWaitFileMessagesModel {
         self.imageName      = imageName
         self.metaData       = metaData
         self.repliedTo      = repliedTo
-        self.subjectId      = subjectId
+//        self.subjectId      = subjectId
         self.threadId       = threadId
         self.typeCode       = typeCode
         self.uniqueId       = uniqueId
@@ -67,7 +67,7 @@ open class QueueOfWaitFileMessagesModel {
         self.imageName      = fileMessageInputModel.imageName
         self.metaData       = fileMessageInputModel.metaData
         self.repliedTo      = fileMessageInputModel.repliedTo
-        self.subjectId      = fileMessageInputModel.subjectId
+//        self.subjectId      = fileMessageInputModel.subjectId
         self.threadId       = fileMessageInputModel.threadId
         self.typeCode       = fileMessageInputModel.typeCode
         self.uniqueId       = uniqueId

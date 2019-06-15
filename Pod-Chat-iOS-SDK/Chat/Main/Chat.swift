@@ -7,13 +7,12 @@
 //
 
 import Foundation
-//import Contacts
+import FanapPodAsyncSDK
 import CoreData
 import Alamofire
 import SwiftyJSON
-import SwiftyBeaver
-import FanapPodAsyncSDK
 import UIKit
+//import Contacts
 
 
 public class Chat {
@@ -119,7 +118,7 @@ public class Chat {
     public var clearHistoryCallbackToUser:         callbackTypeAlias?
     public var getAdminListCallbackToUser:         callbackTypeAlias?
     public var setRoleToUserCallbackToUser:        callbackTypeAlias?
-    public var sendSignalMessageCallbackToUser:    callbackTypeAlias?
+//    public var sendSignalMessageCallbackToUser:    callbackTypeAlias?
     
     
     

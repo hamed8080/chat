@@ -18,7 +18,19 @@ extension Chat {
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
             log.verbose("MuteThreadCallbacks", context: "Chat")
             
-            success(response)
+//            success(response)
+            
+            let hasError = response["hasError"].boolValue
+            let errorMessage = response["errorMessage"].stringValue
+            let errorCode = response["errorCode"].intValue
+            
+            if (!hasError) {
+                let muteResult = Int(response["result"].stringValue) ?? 0
+                let muteModel = MuteUnmuteThreadModel(threadId: muteResult, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+                
+                success(muteModel)
+            }
+            
         }
         
     }
