@@ -89,6 +89,8 @@ public enum SERVICES_PATH: String {
     
     // Devices:
     case SSO_DEVICES        = "/oauth2/grants/devices"
+    case SSO_GENERATE_KEY   = "/handshake/users/"
+    case SSO_GET_KEY        = "/handshake/keys/"
     
     // Contacts:
     case ADD_CONTACTS       = "/nzh/addContacts"
@@ -101,6 +103,13 @@ public enum SERVICES_PATH: String {
     case GET_IMAGE          = "/nzh/image/"
     case UPLOAD_FILE        = "/nzh/uploadFile"
     case GET_FILE           = "/nzh/file/"
+    
+    // PodDrive
+    case DRIVE_UPLOAD_FILE          = "/nzh/drive/uploadFile"
+    case DRIVE_UPLOAD_FILE_FROM_URL = "/nzh/drive/uploadFileFromUrl"
+    case DRIVE_UPLOAD_IMAGE         = "/nzh/drive/uploadImage"
+    case DRIVE_DOWNLOAD_FILE        = "/nzh/drive/downloadFile"
+    case DRIVE_DOWNLOAD_IMAGE       = "/nzh/drive/downloadImage"
     
     // Neshan Map
     case REVERSE            = "/reverse"

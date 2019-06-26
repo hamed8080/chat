@@ -27,12 +27,15 @@ extension Chat {
             let errorCode = response["errorCode"].intValue
             
             if (!hasError) {
-                /*
-                 let messageContent: [JSON] = response["result"].arrayValue
-                 let setRoleModel = SetRolesModel(messageContent: messageContent, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
-                 
-                 success(setRoleModel)
-                 */
+                
+                let messageContentStr: String = response["result"].stringValue
+                let messageContent: [JSON] = messageContentStr.convertToJSON().arrayValue
+                let userRoleModel = UserRolesModel(threadId: mySendMessageParams["subjectId"].intValue, messageContent: messageContent, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+                print("\n\n response:\n\(response)")
+                print("\n\n\n messageContent:\n\(messageContent)")
+                print("\n\nuserRoleModel:\n\(userRoleModel.returnDataAsJSON())\n\n\n\n\n\n")
+//                success(setRoleModel)
+ 
                 
                 success(response)
             }

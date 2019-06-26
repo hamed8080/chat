@@ -16,38 +16,49 @@ open class CreateThreadWithMessageRequestModel {
     public let threadInvitees:          [Invitee]
     public let threadMetadata:          String?
     public let threadTitle:             String
-    public let threadType:              String?
+    public let threadType:              String
+    
+    public let messageForwardedMessageIds:  String?
+    public let messageForwardedUniqueIds:   String?
+    public let messageMetaData:             String?
+    public let messageRepliedTo:            Int?
+    public let messageSystemMetaData:       String?
+    public let messageText:                 String
+    public let messageType:                 String?
+
     public let uniqueId:                String?
-    public let messageContent:          String
-    public let messageMetaDataId:       Int?
-    public let messageMetaDataType:     String?
-    public let messageMetaDataOwner:    String?
-
-
+    
     public init(threadDescription:      String?,
                 threadImage:            String?,
                 threadInvitees:         [Invitee],
                 threadMetadata:         String?,
                 threadTitle:            String,
-                threadType:             String?,
-                uniqueId:               String?,
-                messageContent:         String,
-                messageMetaDataId:      Int?,
-                messageMetaDataType:    String?,
-                messageMetaDataOwner:   String?) {
-
-
+                threadType:             String,
+                messageForwardedMessageIds: String?,
+                messageForwardedUniqueIds:  String?,
+                messageMetaData:        String?,
+                messageRepliedTo:       Int?,
+                messageSystemMetaData:  String?,
+                messageText:            String,
+                messageType:            String?,
+                uniqueId:               String?) {
+        
         self.threadDescription  = threadDescription
         self.threadImage        = threadImage
         self.threadInvitees     = threadInvitees
         self.threadMetadata     = threadMetadata
         self.threadTitle        = threadTitle
         self.threadType         = threadType
+        
+        self.messageForwardedMessageIds = messageForwardedMessageIds
+        self.messageForwardedUniqueIds  = messageForwardedUniqueIds
+        self.messageMetaData            = messageMetaData
+        self.messageRepliedTo           = messageRepliedTo
+        self.messageSystemMetaData      = messageSystemMetaData
+        self.messageText                = messageText
+        self.messageType                = messageType
+        
         self.uniqueId           = uniqueId
-        self.messageContent         = messageContent
-        self.messageMetaDataId      = messageMetaDataId
-        self.messageMetaDataType    = messageMetaDataType
-        self.messageMetaDataOwner   = messageMetaDataOwner
     }
 
 }

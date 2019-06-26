@@ -37,8 +37,8 @@ public class CMUserRole: NSManagedObject {
         func createUserRoleModel() -> UserRole {
             let userRole = UserRole(userId: id ?? 0,
                                     name: self.name ?? "",
-                                    roles: roles,
-                                    threadId: threadId ?? 0)
+                                    roles: roles/*,
+                                    threadId: threadId ?? 0*/)
             return userRole
         }
         

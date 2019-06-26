@@ -402,12 +402,12 @@ extension Cache {
     func updateCMLinkedUserEntity(withLinkedUser myLinkedUser: LinkedUser) -> CMLinkedUser? {
         var linkedUserToReturn: CMLinkedUser?
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMLinkedUser")
-        if let linkedUserId = myLinkedUser.id {
+        if let linkedUserId = myLinkedUser.coreUserId {
             fetchRequest.predicate = NSPredicate(format: "id == %i", linkedUserId)
             do {
                 if let result = try context.fetch(fetchRequest) as? [CMLinkedUser] {
                     if (result.count > 0) {
-                        result.first!.id            = myLinkedUser.id as NSNumber?
+                        result.first!.id            = myLinkedUser.coreUserId as NSNumber?
                         result.first!.image         = myLinkedUser.image
                         result.first!.name          = myLinkedUser.name
                         result.first!.nickname      = myLinkedUser.nickname
@@ -420,7 +420,7 @@ extension Cache {
                         let theLinkedUserEntity = NSEntityDescription.entity(forEntityName: "CMLinkedUser", in: context)
                         let theLinkedUser = CMLinkedUser(entity: theLinkedUserEntity!, insertInto: context)
                         
-                        theLinkedUser.id            = myLinkedUser.id as NSNumber?
+                        theLinkedUser.id            = myLinkedUser.coreUserId as NSNumber?
                         theLinkedUser.image         = myLinkedUser.image
                         theLinkedUser.name          = myLinkedUser.name
                         theLinkedUser.nickname      = myLinkedUser.nickname

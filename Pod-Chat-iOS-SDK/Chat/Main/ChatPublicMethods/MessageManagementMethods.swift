@@ -1157,38 +1157,82 @@ extension Chat {
     }
     
     
-    public func deleteMultipleMessages(withInputModel input:  DeleteMultipleMessagesRequestModel,
-                                       uniqueId:        @escaping (String) -> (),
-                                       completion:      @escaping callbackTypeAlias) {
-        log.verbose("Try to request to delete multiple messages with this parameters: \n \(input)", context: "Chat")
+//    public func deleteMultipleMessages(withInputModel input:  DeleteMultipleMessagesRequestModel,
+//                                       uniqueId:        @escaping (String) -> (),
+//                                       completion:      @escaping callbackTypeAlias) {
+//        log.verbose("Try to request to delete multiple messages with this parameters: \n \(input)", context: "Chat")
+//
+//        for subId in input.subjectId {
+//            var content: JSON = []
+//            if let deleteForAll = input.deleteForAll {
+//                content["deleteForAll"] = JSON("\(deleteForAll)")
+//            }
+//            var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.DELETE_MESSAGE.rawValue,
+//                                           "typeCode": input.typeCode ?? generalTypeCode,
+//                                           "pushMsgType": 4,
+//                                           "subjectId": subId,
+//                                           "content": content]
+//            if let uniqueId = input.uniqueId {
+//                sendMessageParams["uniqueId"] = JSON(uniqueId)
+//            }
+//            sendMessageWithCallback(params: sendMessageParams,
+//                                    callback: DeleteMessageCallbacks(parameters: sendMessageParams),
+//                                    sentCallback: nil,
+//                                    deliverCallback: nil,
+//                                    seenCallback: nil)
+//            { (deleteMessageUniqueId) in
+//                uniqueId(deleteMessageUniqueId)
+//            }
+//
+//            deleteMessageCallbackToUser = completion
+//        }
+//
+//    }
+    
+    
+    public func deleteMultipleMessages(deleteMessageInput:   DeleteMultipleMessagesRequestModel,
+                                       uniqueId:             @escaping (String) -> (),
+                                       completion:           @escaping callbackTypeAlias) {
+        log.verbose("Try to request to edit message with this parameters: \n \(deleteMessageInput)", context: "Chat")
         
-        for subId in input.subjectId {
-            var content: JSON = []
-            if let deleteForAll = input.deleteForAll {
-                content["deleteForAll"] = JSON("\(deleteForAll)")
-            }
-            var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.DELETE_MESSAGE.rawValue,
-                                           "typeCode": input.typeCode ?? generalTypeCode,
-                                           "pushMsgType": 4,
-                                           "subjectId": subId,
-                                           "content": content]
-            if let uniqueId = input.uniqueId {
-                sendMessageParams["uniqueId"] = JSON(uniqueId)
-            }
-            sendMessageWithCallback(params: sendMessageParams,
-                                    callback: DeleteMessageCallbacks(parameters: sendMessageParams),
-                                    sentCallback: nil,
-                                    deliverCallback: nil,
-                                    seenCallback: nil)
-            { (deleteMessageUniqueId) in
-                uniqueId(deleteMessageUniqueId)
-            }
-            
-            deleteMessageCallbackToUser = completion
+        var content: JSON = [:]
+        if let deleteForAll = deleteMessageInput.deleteForAll {
+            content["deleteForAll"] = JSON("\(deleteForAll)")
         }
+        content["ids"] = JSON(deleteMessageInput.subjectIds)
+        
+        var uniqueIds: [String] = []
+        
+        if let uIds = deleteMessageInput.uniqueIds {
+            for item in uIds {
+                uniqueId(item)
+                uniqueIds.append(item)
+            }
+            while uIds.count >= deleteMessageInput.subjectIds.count {
+                let newUniqueId = generateUUID()
+                uniqueIds.append(newUniqueId)
+                uniqueId(newUniqueId)
+            }
+        } else {
+            for _ in deleteMessageInput.subjectIds {
+                let newUniqueId = generateUUID()
+                uniqueIds.append(newUniqueId)
+                uniqueId(newUniqueId)
+            }
+        }
+        content["uniqueIds"] = JSON(uniqueIds)
+        
+        let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.DELETE_MESSAGE.rawValue,
+                                       "typeCode": deleteMessageInput.typeCode ?? generalTypeCode,
+                                       "pushMsgType": 4,
+                                       "content": content]
+        
+        sendMessageWithCallback(params: sendMessageParams, callback: DeleteMessageCallbacks(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (deleteMessageUniqueId) in
+            uniqueId(deleteMessageUniqueId)
+        }
+        deleteMessageCallbackToUser = completion
         
     }
-    
     
     
     public func cancelSendMessage(cancelMessageInput: CancelMessageRequestModel,

@@ -43,21 +43,43 @@ extension JSON {
     }
 }
 
+/*
+ * this is deprecated because of using extention on String
+ struct FormatContentFromString {
+ let stringCont: String
+ 
+ func convertToJSON() -> JSON {
+ if let dataFromStringMsg = stringCont.data(using: .utf8, allowLossyConversion: false) {
+ do {
+ let msg = try JSON(data: dataFromStringMsg)
+ return msg
+ } catch {
+ //                log.error("error to convert income message String to JSON", context: "formatStringToJSON")
+ return []
+ }
+ } else {
+ //            log.error("error to get message from server", context: "formatStringToJSON")
+ return []
+ }
+ }
+ }
+ */
 
-struct formatDataFromStringToJSON {
-    let stringCont: String
+
+
+extension String {
     
-    func convertStringContentToJSON() -> JSON {
-        if let dataFromStringMsg = stringCont.data(using: .utf8, allowLossyConversion: false) {
+    func convertToJSON() -> JSON {
+        if let dataFromStringMsg = self.data(using: .utf8, allowLossyConversion: false) {
             do {
                 let msg = try JSON(data: dataFromStringMsg)
                 return msg
             } catch {
-//                log.error("error to convert income message String to JSON", context: "formatStringToJSON")
+                //                log.error("error to convert income message String to JSON", context: "formatStringToJSON")
                 return []
             }
         } else {
-//            log.error("error to get message from server", context: "formatStringToJSON")
+            //            log.error("error to get message from server", context: "formatStringToJSON")
             return []
         }
     }

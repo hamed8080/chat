@@ -1,15 +1,15 @@
 //
-//  SetRolesModel.swift
+//  UserRolesModel.swift
 //  FanapPodChatSDK
 //
-//  Created by Mahyar Zhiani on 3/18/1398 AP.
+//  Created by Mahyar Zhiani on 4/2/1398 AP.
 //  Copyright © 1398 Mahyar Zhiani. All rights reserved.
 //
 
 import Foundation
 import SwiftyJSON
 
-open class SetRolesModel {
+open class UserRolesModel {
     /*
      ---------------------------------------
      * SetRolesModel:
@@ -52,7 +52,7 @@ open class SetRolesModel {
         self.threadId = threadId
         
         for item in messageContent {
-            let theUserRoleModel = UserRole(threadId: threadId, messageContent: item)
+            let theUserRoleModel = UserRole(/*threadId: threadId, */messageContent: item)
             let roleJSON = theUserRoleModel.formatToJSON()
             
             userRoles.append(theUserRoleModel)

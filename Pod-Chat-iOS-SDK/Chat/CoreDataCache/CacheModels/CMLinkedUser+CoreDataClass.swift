@@ -25,7 +25,7 @@ public class CMLinkedUser: NSManagedObject {
         
         func createLinkedUserModel() -> LinkedUser {
             
-            let messageModel = LinkedUser(id:   id,
+            let messageModel = LinkedUser(coreUserId:   id,
                                           image: self.image,
                                           name: self.name,
                                           nickname: self.nickname,

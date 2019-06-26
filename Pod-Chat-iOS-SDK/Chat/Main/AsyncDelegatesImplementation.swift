@@ -146,7 +146,7 @@ extension Chat: AsyncDelegates {
             self.lastReceivedMessageTimeoutId?.resume()
         }
         
-        pushMessageHandler(params: params)
+        receivedMessageHandler(withContent: params)
     }
     
     

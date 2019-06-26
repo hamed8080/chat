@@ -304,23 +304,30 @@ extension Chat {
                                         onSeen:                      @escaping callbackTypeAlias) {
         log.verbose("Try to request to create thread and Send Message participants with this parameters: \n \(creatThreadWithMessageInput)", context: "Chat")
         
-        let myUniqueId = generateUUID()
-        
-        var metadata: JSON = [:]
-        if let msgMetadata = creatThreadWithMessageInput.messageMetaDataId {
-            metadata["id"] = JSON(msgMetadata)
-        }
-        if let msgMetaType = creatThreadWithMessageInput.messageMetaDataType {
-            metadata["type"] = JSON(msgMetaType)
-        }
-        if let msgMetaOwner = creatThreadWithMessageInput.messageMetaDataOwner {
-            metadata["owner"]   = JSON(msgMetaOwner)
-        }
+        let myUniqueId = creatThreadWithMessageInput.uniqueId ?? generateUUID()
         
         var messageContentParams: JSON = [:]
-        messageContentParams["content"]     = JSON(creatThreadWithMessageInput.messageContent)
+        messageContentParams["text"]     = JSON(creatThreadWithMessageInput.messageText)
+        
+        if let type = creatThreadWithMessageInput.messageType {
+            messageContentParams["type"]    = JSON(type)
+        }
+        if let metaData = creatThreadWithMessageInput.messageMetaData {
+            messageContentParams["metaData"]    = JSON(metaData)
+        }
+        if let systemMetadata = creatThreadWithMessageInput.messageSystemMetaData {
+            messageContentParams["systemMetadata"]    = JSON(systemMetadata)
+        }
+        if let repliedTo = creatThreadWithMessageInput.messageRepliedTo {
+            messageContentParams["repliedTo"]    = JSON(repliedTo)
+        }
+        if let forwardedMessageIds = creatThreadWithMessageInput.messageForwardedMessageIds {
+            messageContentParams["forwardedMessageIds"]    = JSON(forwardedMessageIds)
+        }
+        if let forwardedUniqueIds = creatThreadWithMessageInput.messageForwardedUniqueIds {
+            messageContentParams["forwardedUniqueIds"]    = JSON(forwardedUniqueIds)
+        }
         messageContentParams["uniqueId"]    = JSON(myUniqueId)
-        messageContentParams["metaData"]    = metadata
         
         
         var myContent: JSON = [:]
@@ -344,20 +351,20 @@ extension Chat {
             myContent["description"] = JSON(description)
         }
         
-        if let type = creatThreadWithMessageInput.threadType {
-            var theType: Int = 0
-            switch type {
-            case ThreadTypes.NORMAL.rawValue:         theType = 0
-            case ThreadTypes.OWNER_GROUP.rawValue:    theType = 1
-            case ThreadTypes.PUBLIC_GROUP.rawValue:   theType = 2
-            case ThreadTypes.CHANNEL_GROUP.rawValue:  theType = 4
-            case ThreadTypes.CHANNEL.rawValue:        theType = 8
-            default:
-                //                print("not valid thread type on create thread")
-                log.error("not valid thread type on create thread", context: "Chat")
-            }
-            myContent["type"] = JSON(theType)
+        let type = creatThreadWithMessageInput.threadType
+        var theType: Int = 0
+        switch type {
+        case ThreadTypes.NORMAL.rawValue:         theType = 0
+        case ThreadTypes.OWNER_GROUP.rawValue:    theType = 1
+        case ThreadTypes.PUBLIC_GROUP.rawValue:   theType = 2
+        case ThreadTypes.CHANNEL_GROUP.rawValue:  theType = 4
+        case ThreadTypes.CHANNEL.rawValue:        theType = 8
+        default:
+            //                print("not valid thread type on create thread")
+            log.error("not valid thread type on create thread", context: "Chat")
         }
+        myContent["type"] = JSON(theType)
+        
         
         //        let myUniqueId = generateUUID()
         //
@@ -1196,12 +1203,15 @@ extension Chat {
                         cacheResponse:  @escaping callbackTypeAlias) {
         
         var content: [JSON] = []
+//        var content: JSON = [:]
         
         for item in setRoleInput {
             var json: JSON = [:]
             json["userId"] = JSON(item.userId)
             json["roles"] = JSON(item.roles)
             json["roleOperation"] = JSON(item.roleOperation)
+            json["checkThreadMembership"] = JSON(true)
+//            content = json
             content.append(json)
         }
         
@@ -1358,7 +1368,7 @@ extension Chat {
                                                                             firstMessageId: getHistoryInput.firstMessageId,
                                                                             fromTime:       getHistoryInput.fromTime,
                                                                             lastMessageId:  getHistoryInput.lastMessageId,
-                                                                            messageId:      getHistoryInput.messageId,
+                                                                            messageId:      0,
                                                                             offset:         getHistoryInput.offset ?? 0,
                                                                             order:          getHistoryInput.order,
                                                                             query:          getHistoryInput.query,

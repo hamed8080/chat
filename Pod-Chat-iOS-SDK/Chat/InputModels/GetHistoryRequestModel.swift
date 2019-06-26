@@ -17,7 +17,7 @@ open class GetHistoryRequestModel {
     public let firstMessageId:      Int?
     public let fromTime:            UInt?
     public let lastMessageId:       Int?
-    public let messageId:           Int?
+//    public let messageId:           Int?
     public let metadataCriteria:    JSON?
     public let offset:              Int?
     public let order:               String?
@@ -31,7 +31,7 @@ open class GetHistoryRequestModel {
                 firstMessageId:     Int?,
                 fromTime:           UInt?,
                 lastMessageId:      Int?,
-                messageId:          Int?,
+//                messageId:          Int?,
                 metadataCriteria:   JSON?,
                 offset:             Int?,
                 order:              String?,
@@ -45,7 +45,7 @@ open class GetHistoryRequestModel {
         self.firstMessageId     = firstMessageId
         self.fromTime           = fromTime
         self.lastMessageId      = lastMessageId
-        self.messageId          = messageId
+//        self.messageId          = messageId
         self.metadataCriteria   = metadataCriteria
         self.offset             = offset
         self.order              = order
