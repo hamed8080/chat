@@ -14,6 +14,106 @@ import CoreData
 
 extension Cache {
     
+    /*
+     * Delete UserInfo (from Cache):
+     * by calling this method, it will delete the CMUser that had been saved on the cache
+     *
+     *  + Access:   Public
+     *  + Inputs:   _
+     *  + Outputs:  _
+     *
+     */
+    public func deleteUserInfo() {
+        /*
+         -> fetch CMUser
+         -> iterate throut all CMUser objects inside the cache, and delete them one by one.
+         (it actualy has only one CMUser object!)
+         */
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUser")
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMUser] {
+                for user in result {
+                    deleteAndSave(object: user, withMessage: "CMUser Deleted.")
+                }
+            }
+        } catch {
+            fatalError("cannot fetch CMUser, when trying to delete CMUser")
+        }
+    }
+    
+    
+// delete contacts thas has removed from server
+//    public func updateCMContactEntityByDeletingRemovedContactsFromServer(allServerContacts: [Contact]) {
+//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMContact")
+//        do {
+//            if let result = try context.fetch(fetchRequest) as? [CMContact] {
+//                for cmcontact in result {    // loop through the CMContacts (Contacts in the cache)
+//                    var shouldDelete = false
+//                    for contact in allServerContacts {
+//                        if (cmcontact.id! == (contact.id! as NSNumber)) {
+//                            shouldDelete = true
+//                        }
+//                    }
+//                    if shouldDelete {
+//                        deleteContact(withContactIds: [Int(exactly: cmcontact.id!)!])
+//                    }
+//                }
+//            }
+//        } catch {
+//
+//        }
+//    }
+    // delete contact
+    
+    /*
+     * Delete Contact (from Cache):
+     * by calling this method, it will delete the CMContact that had been saved on the cache
+     *
+     *  + Access:   Public
+     *  + Inputs:
+     *      - contactIds:   [Int]
+     *  + Outputs:  _
+     *
+     */
+    public func deleteContact(withContactIds contactIds: [Int])  {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMContact")
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMContact] {
+                for id in contactIds {
+                    for itemInCache in result {
+                        if let contactId = itemInCache.id as? Int {
+                            if (contactId == id) {
+                                if let _ = itemInCache.linkedUser {
+                                    context.delete(itemInCache.linkedUser!)
+                                    saveContext(subject: "Delete CMLinkedUser Object")
+                                }
+                                context.delete(itemInCache)
+                                saveContext(subject: "Delete CMContact Object")
+                            }
+                        }
+//                        if let contactId = Int(exactly: itemInCache.id ?? 0) {
+//                            if (contactId == id) {
+//                                if let _ = itemInCache.linkedUser {
+//                                    context.delete(itemInCache.linkedUser!)
+//                                }
+//                                context.delete(itemInCache)
+//                                saveContext(subject: "Delete CMContact Object")
+//                            }
+//                        }
+                    }
+                }
+                saveContext(subject: "Update CMContact")
+            }
+        } catch {
+            fatalError("Error on fetching list of CMContact when trying to delete contact...")
+        }
+    }
+    
+    
+    
+    
+    
+    
     
     public func deleteMessage(count: Int?, fromTime: UInt?, messageId: Int?, offset: Int, order: String, query: String?, threadId: Int?, toTime: UInt?, uniqueId: String?) {
         let fetchRequest = retrieveMessageHistoryFetchRequest(firstMessageId: nil, fromTime: fromTime, messageId: messageId, lastMessageId: nil, order: order, query: query, threadId: threadId, toTime: toTime, uniqueId: uniqueId)
@@ -43,53 +143,7 @@ extension Cache {
             fatalError("Error on fetching list of CMMessage")
         }
     }
-    
-// delete contacts thas has removed from server
-//    public func updateCMContactEntityByDeletingRemovedContactsFromServer(allServerContacts: [Contact]) {
-//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMContact")
-//        do {
-//            if let result = try context.fetch(fetchRequest) as? [CMContact] {
-//                for cmcontact in result {    // loop through the CMContacts (Contacts in the cache)
-//                    var shouldDelete = false
-//                    for contact in allServerContacts {
-//                        if (cmcontact.id! == (contact.id! as NSNumber)) {
-//                            shouldDelete = true
-//                        }
-//                    }
-//                    if shouldDelete {
-//                        deleteContact(withContactIds: [Int(exactly: cmcontact.id!)!])
-//                    }
-//                }
-//            }
-//        } catch {
-//
-//        }
-//    }
-    
-    // delete contact
-    public func deleteContact(withContactIds contactIds: [Int])  {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMContact")
-        do {
-            if let result = try context.fetch(fetchRequest) as? [CMContact] {
-                for id in contactIds {
-                    for itemInCache in result {
-                        if let contactId = Int(exactly: itemInCache.id ?? 0) {
-                            if (contactId == id) {
-                                if let _ = itemInCache.linkedUser {
-                                    context.delete(itemInCache.linkedUser!)
-                                }
-                                context.delete(itemInCache)
-                                saveContext(subject: "Delete CMContact Object")
-                            }
-                        }
-                    }
-                }
-                saveContext(subject: "Update CMContact")
-            }
-        } catch {
-            fatalError("Error on fetching list of CMContact when trying to delete contact...")
-        }
-    }
+
     
     
     // delete the participant itself
@@ -183,7 +237,35 @@ extension Cache {
     
     
     
-    
+    /*
+     * Delete Contacts by TimeStamp:
+     *
+     * -> fetch contacts that has not been updated for 'timeStamp' seconds
+     * -> then delete them!
+     *
+     *  + Access:   Private
+     *  + Inputs:
+     *      - timeStamp:    Int
+     *  + Outputs:  _
+     *
+     */
+    func deleteContacts(byTimeStamp timeStamp: Int) {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMContact")
+        let currentTime = Int(Date().timeIntervalSince1970)
+        fetchRequest.predicate = NSPredicate(format: "time <= %i", Int(currentTime - timeStamp))
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMContact] {
+                for item in result {
+//                    deleteContact(withContactIds: [Int(exactly: item.id!)!])
+                    deleteContact(withContactIds: [(item.id! as? Int)!])
+                    context.delete(item)
+                    saveContext(subject: "item Deleted from CMContact")
+                }
+            }
+        } catch {
+            fatalError("Error on fetching CMContact when trying to delete object based on timeStamp")
+        }
+    }
     
     // delete objects that has been not updated for "timeStamp" seconds
     func deleteThreadParticipants(timeStamp: Int) {
@@ -212,27 +294,21 @@ extension Cache {
     }
     
     
-    // delete objects that has been not updated for "timeStamp" seconds
-    func deleteContacts(byTimeStamp timeStamp: Int) {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMContact")
-        let currentTime = Int(Date().timeIntervalSince1970)
-        fetchRequest.predicate = NSPredicate(format: "time <= %i", Int(currentTime - timeStamp))
-        do {
-            if let result = try context.fetch(fetchRequest) as? [CMContact] {
-                for item in result {
-                    deleteContact(withContactIds: [Int(exactly: item.id!)!])
-                    context.delete(item)
-                    saveContext(subject: "item Deleted from CMContact")
-                }
-            }
-        } catch {
-            fatalError("Error on fetching CMContact when trying to delete object based on timeStamp")
-        }
-    }
     
     
     
-    public func deleteAllCMLinkedUsersFromCache() {
+    /*
+     * Delete All LinkedUsers:
+     *
+     * -> it will fetch CMLinkedUser objects from cache
+     * -> then, it will delete them one by one
+     *
+     *  + Access:   Public
+     *  + Inputs:   _
+     *  + Outputs:  _
+     *
+     */
+    public func deleteAllLinkedUsers() {
         let fetchLinkeUsers = NSFetchRequest<NSFetchRequestResult>(entityName: "CMLinkedUser")
         do {
             if let result = try context.fetch(fetchLinkeUsers) as? [CMLinkedUser] {
@@ -245,17 +321,28 @@ extension Cache {
         }
     }
     
-    public func deleteAllContactsFromCache() {
+    
+    /*
+     * Delete All Contacts:
+     *
+     * -> it will fetch CMContacts objects from cache
+     * -> then, it will delete them one by one
+     *
+     *  + Access:   Public
+     *  + Inputs:   _
+     *  + Outputs:  _
+     *
+     */
+    public func deleteAllContacts() {
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMContact")
         do {
             if let result = try context.fetch(fetchRequest) as? [CMContact] {
                 for contact in result {
-                    if let lui = contact.linkedUser {
-                        print("id = \(lui)")
+                    if let _ = contact.linkedUser {
                         context.delete(contact.linkedUser!)
                     }
-                    deleteAndSave(object: contact, withMessage: "CMContact Deleted.")
+                    deleteAndSave(object: contact, withMessage: "CMContact Deleted")
                 }
             }
         } catch {
@@ -263,7 +350,11 @@ extension Cache {
         }
     }
     
-    public func deleteAllThreadsFromCache() {
+    
+    
+    
+    
+    public func deleteAllThreads() {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
         do {
             if let result = try context.fetch(fetchRequest) as? [CMConversation] {
@@ -287,7 +378,7 @@ extension Cache {
         }
     }
     
-    public func deleteAllMessagesFromCache() {
+    public func deleteAllMessages() {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMMessage")
         do {
             if let result = try context.fetch(fetchRequest) as? [CMMessage] {
@@ -312,28 +403,15 @@ extension Cache {
         }
     }
     
-    public func deleteUserInfoFromCache() {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUser")
-        do {
-            if let result = try context.fetch(fetchRequest) as? [CMUser] {
-                for user in result {
-                    deleteAndSave(object: user, withMessage: "CMUser Deleted.")
-                }
-            }
-        } catch {
-            fatalError()
-        }
-    }
-    
-    public func deleteAllImagesFromCache() {
+    public func deleteAllImages() {
         
     }
     
-    public func deleteAllFilesFromCache() {
+    public func deleteAllFiles() {
         
     }
     
-    public func deleteThreadParticipantsTableFromCache() {
+    public func deleteThreadParticipantsTable() {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMThreadParticipants")
         do {
             if let result = try context.fetch(fetchRequest) as? [CMThreadParticipants] {
@@ -347,14 +425,14 @@ extension Cache {
     }
     
     public func deleteCacheData() {
-        deleteAllCMLinkedUsersFromCache()
-        deleteAllContactsFromCache()
-        deleteAllThreadsFromCache()
-        deleteAllMessagesFromCache()
-        deleteUserInfoFromCache()
-        deleteAllImagesFromCache()
-        deleteAllFilesFromCache()
-        deleteThreadParticipantsTableFromCache()
+        deleteAllLinkedUsers()
+        deleteAllContacts()
+        deleteAllMessages()
+        deleteAllThreads()
+        deleteUserInfo()
+        deleteAllImages()
+        deleteAllFiles()
+        deleteThreadParticipantsTable()
     }
     
 }

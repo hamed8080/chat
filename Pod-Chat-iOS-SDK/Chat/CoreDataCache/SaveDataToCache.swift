@@ -14,26 +14,37 @@ import SwiftyJSON
 
 extension Cache {
     
-    // this function will save (or update) the UserInfo in the Cache.
-    public func createUserInfoObject(user: User) {
-        // check if there is any information about UserInfo in the cache
-        // if it has some data, it we will update that data,
-        // otherwise we will create an object and save data on cache
+    /*
+     * Save UserInfo:
+     * by calling this function, it will save (or update) the UserInfo on the Cache.
+     *
+     *  + Access:   Public
+     *  + Inputs:
+     *      - user: User
+     *  + Outputs:  _
+     *
+     */
+    public func saveUserInfo(withUserObject user: User) {
+        /*
+         -> fetch CMUser on the cache (check if there is any information about UserInfo on the cache)
+         -> if it has found some data (CMUser object), it we will update that CMUser object
+         -> otherwise we will create an CMUser object and save that on the cache
+         */
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUser")
         do {
-            
             if let result = try context.fetch(fetchRequest) as? [CMUser] {
-                // if there is a value in this fetch request, it mean that we had already saved UserInfo in the Cache.
+                // if there is a value in this fetch request, it mean that we had already saved UserInfo on the Cache.
                 // so we just have to update that information with new response that comes from server
                 if (result.count > 0) {
                     result.first!.cellphoneNumber   = user.cellphoneNumber
+                    result.first!.coreUserId        = user.coreUserId as NSNumber?
                     result.first!.email             = user.email
-                    result.first!.id                = NSNumber(value: user.id ?? 0)
+                    result.first!.id                = user.id as NSNumber?
                     result.first!.image             = user.image
-                    result.first!.lastSeen          = NSNumber(value: user.lastSeen ?? 0)
+                    result.first!.lastSeen          = user.lastSeen as NSNumber?
                     result.first!.name              = user.name
-                    result.first!.receiveEnable     = NSNumber(value: user.receiveEnable ?? true)
-                    result.first!.sendEnable        = NSNumber(value: user.sendEnable ?? true)
+                    result.first!.receiveEnable     = user.receiveEnable as NSNumber?
+                    result.first!.sendEnable        = user.sendEnable as NSNumber?
                     
                     // save function that will try to save changes that made on the Cache
                     saveContext(subject: "Update UserInfo -update existing object-")
@@ -45,6 +56,7 @@ extension Cache {
                     let theUser = CMUser(entity: theUserEntity!, insertInto: context)
                     
                     theUser.cellphoneNumber    = user.cellphoneNumber
+                    theUser.coreUserId         = user.coreUserId as NSNumber?
                     theUser.email              = user.email
                     theUser.id                 = user.id as NSNumber?
                     theUser.image              = user.image
@@ -58,14 +70,162 @@ extension Cache {
                 }
             }
         } catch {
-            fatalError("Error on fetching list of Conversations")
+            fatalError("Error on fetching list of CMUser")
         }
     }
     
     
+    /*
+     * Save Contact:
+     * by calling this function, it save (or update) contacts that comes from server, into the Cache.
+     *
+     *  + Access:   Public
+     *  + Inputs:
+     *      - contacts: [Contact]
+     *  + Outputs:  _
+     *
+     */
+    public func saveContact(withContactObjects contacts: [Contact]) {
+        
+        for item in contacts {
+            _ = updateCMContactEntity(withContactObject: item)
+        }
+        
+        /*
+         // check if there is any information about Contact that are in the cache,
+         // if they has beed there, it we will update that data,
+         // otherwise we will create an object and save data on cache
+         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMContact")
+         do {
+         if let result = try context.fetch(fetchRequest) as? [CMContact] {
+         
+         // Part1:
+         // find data that are exist in the Cache, (and the response request is containing that). and delete them
+         for item in contacts {
+         for itemInCache in result {
+         if let contactId = Int(exactly: itemInCache.id ?? 0) {
+         if (contactId == item.id) {
+         // the contact object that we are going to create, is already exist in the Cache
+         // to update information in this object:
+         // we will delete them first, then we will create it again later
+         
+         itemInCache.linkedUser = nil
+         context.delete(itemInCache)
+         
+         saveContext(subject: "Delete CMContact Object")
+         }
+         }
+         
+         }
+         }
+         
+         // Part2:
+         // save data comes from server to the Cache
+         var allContacts = [CMContact]()
+         
+         for item in contacts {
+         let theContactEntity = NSEntityDescription.entity(forEntityName: "CMContact", in: context)
+         let theContact = CMContact(entity: theContactEntity!, insertInto: context)
+         
+         theContact.cellphoneNumber  = item.cellphoneNumber
+         theContact.email            = item.email
+         theContact.firstName        = item.firstName
+         theContact.hasUser          = item.hasUser as NSNumber?
+         theContact.id               = item.id as NSNumber?
+         theContact.image            = item.image
+         theContact.lastName         = item.lastName
+         theContact.notSeenDuration  = item.notSeenDuration as NSNumber?
+         theContact.uniqueId         = item.uniqueId
+         theContact.userId           = item.userId as NSNumber?
+         
+         let theLinkedUserEntity = NSEntityDescription.entity(forEntityName: "CMLinkedUser", in: context)
+         let theLinkedUser = CMLinkedUser(entity: theLinkedUserEntity!, insertInto: context)
+         theLinkedUser.coreUserId    = item.linkedUser?.coreUserId as NSNumber?
+         theLinkedUser.image         = item.linkedUser?.image
+         theLinkedUser.name          = item.linkedUser?.name
+         theLinkedUser.nickname      = item.linkedUser?.nickname
+         theLinkedUser.username      = item.linkedUser?.username
+         
+         theContact.linkedUser = theLinkedUser
+         
+         allContacts.append(theContact)
+         }
+         
+         saveContext(subject: "Update CMContact")
+         }
+         } catch {
+         fatalError("Error on fetching list of CMConversation")
+         }
+         */
+        
+    }
     
-    // this function will save (or update) threads that comes from server, into the Cache.
-    public func saveThreadObjects(threads: [Conversation]) {
+    
+    /*
+     * Save PhoneBook Contact:
+     *
+     * by calling this function, it save (or update) PhoneContact that comes from users phone, into the Cache.
+     * -> it will fetch PhoneContact
+     * -> if it found any object that has the same 'cellphoneNumber' as the input contact 'cellphoneNumber',
+     *    it will update its properties
+     * -> otherwise it will create a PhoneContact object on the cache
+     *
+     *  + Access:   Public
+     *  + Inputs:
+     *      - contact:  AddContactsRequestModel
+     *  + Outputs:  _
+     *
+     */
+    public func savePhoneBookContact(contact myContact: AddContactsRequestModel) {
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "PhoneContact")
+        if let contactCellphoneNumber = myContact.cellphoneNumber {
+            fetchRequest.predicate = NSPredicate(format: "cellphoneNumber == %@", contactCellphoneNumber)
+            do {
+                if let result = try context.fetch(fetchRequest) as? [PhoneContact] {
+                    if (result.count > 0) {
+                        result.first!.cellphoneNumber   = myContact.cellphoneNumber
+                        result.first!.email             = myContact.email
+                        result.first!.firstName         = myContact.firstName
+                        result.first!.lastName          = myContact.lastName
+                        
+                        saveContext(subject: "Update PhoneContact -update existing object-")
+                    }
+                } else {
+                    let theContactEntity = NSEntityDescription.entity(forEntityName: "PhoneContact", in: context)
+                    let theContact = CMContact(entity: theContactEntity!, insertInto: context)
+                    
+                    theContact.cellphoneNumber  = myContact.cellphoneNumber
+                    theContact.email            = myContact.email
+                    theContact.firstName        = myContact.firstName
+                    theContact.lastName         = myContact.lastName
+                    
+                    saveContext(subject: "Update PhoneContact -create new object-")
+                }
+            } catch {
+                fatalError("Error on trying to find the contact from PhoneContact entity")
+            }
+        }
+        
+    }
+    
+    
+    
+    
+    
+    
+    /*
+     * Save Thread:
+     *
+     * by calling this function, it save (or update) Threads that comes from server, into the cache
+     *
+     *  + Access:   Public
+     *  + Inputs:
+     *      - threads: [Conversation]
+     *  + Outputs:  _
+     *
+     */
+    public func saveThread(withThreadObjects threads: [Conversation]) {
         
         for item in threads {
             _ = updateCMConversationEntity(withConversationObject: item)
@@ -229,115 +389,6 @@ extension Cache {
     }
     
     
-    // this function will save (or update) contacts that comes from server, into the Cache.
-    public func saveContactObjects(contacts: [Contact]) {
-        
-        for item in contacts {
-            _ = updateCMContactEntity(withMessageObject: item)
-        }
-        
-        /*
-         // check if there is any information about Contact that are in the cache,
-         // if they has beed there, it we will update that data,
-         // otherwise we will create an object and save data on cache
-         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMContact")
-         do {
-         if let result = try context.fetch(fetchRequest) as? [CMContact] {
-         
-         // Part1:
-         // find data that are exist in the Cache, (and the response request is containing that). and delete them
-         for item in contacts {
-         for itemInCache in result {
-         if let contactId = Int(exactly: itemInCache.id ?? 0) {
-         if (contactId == item.id) {
-         // the contact object that we are going to create, is already exist in the Cache
-         // to update information in this object:
-         // we will delete them first, then we will create it again later
-         
-         itemInCache.linkedUser = nil
-         context.delete(itemInCache)
-         
-         saveContext(subject: "Delete CMContact Object")
-         }
-         }
-         
-         }
-         }
-         
-         // Part2:
-         // save data comes from server to the Cache
-         var allContacts = [CMContact]()
-         
-         for item in contacts {
-         let theContactEntity = NSEntityDescription.entity(forEntityName: "CMContact", in: context)
-         let theContact = CMContact(entity: theContactEntity!, insertInto: context)
-         
-         theContact.cellphoneNumber  = item.cellphoneNumber
-         theContact.email            = item.email
-         theContact.firstName        = item.firstName
-         theContact.hasUser          = item.hasUser as NSNumber?
-         theContact.id               = item.id as NSNumber?
-         theContact.image            = item.image
-         theContact.lastName         = item.lastName
-         theContact.notSeenDuration  = item.notSeenDuration as NSNumber?
-         theContact.uniqueId         = item.uniqueId
-         theContact.userId           = item.userId as NSNumber?
-         
-         let theLinkedUserEntity = NSEntityDescription.entity(forEntityName: "CMLinkedUser", in: context)
-         let theLinkedUser = CMLinkedUser(entity: theLinkedUserEntity!, insertInto: context)
-         theLinkedUser.coreUserId    = item.linkedUser?.coreUserId as NSNumber?
-         theLinkedUser.image         = item.linkedUser?.image
-         theLinkedUser.name          = item.linkedUser?.name
-         theLinkedUser.nickname      = item.linkedUser?.nickname
-         theLinkedUser.username      = item.linkedUser?.username
-         
-         theContact.linkedUser = theLinkedUser
-         
-         allContacts.append(theContact)
-         }
-         
-         saveContext(subject: "Update CMContact")
-         }
-         } catch {
-         fatalError("Error on fetching list of CMConversation")
-         }
-         */
-        
-    }
-    
-    
-    public func savePhoneBookContact(contact myContact: AddContactsRequestModel) {
-        
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "PhoneContact")
-        if let contactCellphoneNumber = myContact.cellphoneNumber {
-            fetchRequest.predicate = NSPredicate(format: "cellphoneNumber == %@", contactCellphoneNumber)
-            do {
-                if let result = try context.fetch(fetchRequest) as? [PhoneContact] {
-                    if (result.count > 0) {
-                        result.first!.cellphoneNumber   = myContact.cellphoneNumber
-                        result.first!.email             = myContact.email
-                        result.first!.firstName         = myContact.firstName
-                        result.first!.lastName          = myContact.lastName
-                        
-                        saveContext(subject: "Update PhoneContact -update existing object-")
-                    }
-                } else {
-                    let theContactEntity = NSEntityDescription.entity(forEntityName: "PhoneContact", in: context)
-                    let theContact = CMContact(entity: theContactEntity!, insertInto: context)
-                    
-                    theContact.cellphoneNumber  = myContact.cellphoneNumber
-                    theContact.email            = myContact.email
-                    theContact.firstName        = myContact.firstName
-                    theContact.lastName         = myContact.lastName
-                    
-                    saveContext(subject: "Update PhoneContact -create new object-")
-                }
-            } catch {
-                fatalError("Error on trying to find the contact from PhoneContact entity")
-            }
-        }
-        
-    }
     
     // this function will save (or update) contacts that comes from server, in the Cache.
     public func saveThreadParticipantObjects(whereThreadIdIs threadId: Int, withParticipants participants: [Participant]) {
@@ -450,7 +501,12 @@ extension Cache {
             //            let uniqueId    = params["uniqueId"].string
             
             switch (count, offset, id, fromTime, toTime, order, query, messages.count) {
-                
+            
+            
+                /*
+                 * 
+                 *
+                 */
             // 1- delete everything from cache
             case (count, 0, .none, .none, .none, _, .none, 0):
                 deleteMessage(count: nil, fromTime: nil, messageId: nil, offset: offset, order: order ?? Ordering.descending.rawValue, query: nil, threadId: threadId, toTime: nil, uniqueId: nil)

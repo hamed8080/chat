@@ -16,10 +16,8 @@ extension Chat: AsyncDelegates {
     public func asyncConnect(newPeerID: Int) {
         log.verbose("Async Connected", context: "Chat: DelegateComesFromAsync")
         
-        print("\n\n\n PEERID = \(newPeerID)\n\n\n ")
-        
         peerId = newPeerID
-        delegate?.chatConnected()
+        delegate?.chatConnect()
     }
     
     public func asyncDisconnect() {
@@ -33,8 +31,6 @@ extension Chat: AsyncDelegates {
     public func asyncReconnect(newPeerID: Int) {
         log.verbose("Async Reconnected", context: "Chat: DelegateComesFromAsync")
         
-        print("\n\n\n new PEERID = \(newPeerID)\n\n\n ")
-        
         peerId = newPeerID
         delegate?.chatReconnect()
     }
@@ -42,7 +38,6 @@ extension Chat: AsyncDelegates {
     public func asyncStateChanged(socketState: Int, timeUntilReconnect: Int, deviceRegister: Bool, serverRegister: Bool, peerId: Int) {
         let logMsg: String = "Chat state changed: \n|| socketState = \(socketState) \n|| timeUntilReconnect = \(timeUntilReconnect) \n|| deviceRegister = \(deviceRegister) \n|| serverRegister = \(serverRegister)"
         log.verbose(logMsg, context: "Chat: DelegateComesFromAsync")
-        
         
         chatFullStateObject = ["socketState": socketState,
                                "timeUntilReconnect": timeUntilReconnect,
@@ -81,9 +76,7 @@ extension Chat: AsyncDelegates {
     
     public func asyncSendMessage(params: Any) {
         // this message is sends through Async
-        print("\n\n\n\n^^^^^^^^^^^^^^^^^\n^^^^^^^^^^^^^^^^^\nThis Message sends through Async: \n \(params)\n-------------")
-        let msg = String("\(params)".filter { !" \\".contains($0) })
-        print("Message: \n \(msg)\n________________\n^^^^^^^^^^^^^^^^\n\n\n\n")
+        print("\n\n\n\n^^^^^^^^^^^^^^^^^\n^^^^^^^^^^^^^^^^^\nThis Message sends through Async: \n \(params)\n^^^^^^^^^^^^^^^^")
     }
     
     public func asyncReceiveMessage(params: JSON) {
@@ -99,6 +92,9 @@ extension Chat: AsyncDelegates {
         
         peerId = asyncClient?.asyncGetPeerId()
         if userInfo == nil {
+            
+            
+            
             if (getUserInfoRetryCount < getUserInfoRetry) {
                 getUserInfoRetryCount += 1
                 
@@ -116,8 +112,10 @@ extension Chat: AsyncDelegates {
                     }
                 }) { _ in }
                 
+                
             }
         } else {
+            getUserInfoRetryCount = 0
             chatState = true
             delegate?.chatReady(withUserInfo: userInfo!)
         }

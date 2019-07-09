@@ -7,6 +7,7 @@
         <attribute name="nickName" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="CMContact" representedClassName=".CMContact" syncable="YES">
+        <attribute name="blocked" optional="YES" attributeType="Boolean" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="cellphoneNumber" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
@@ -62,7 +63,7 @@
         <relationship name="participant" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMParticipant" inverseName="dummyForwardInfo" inverseEntity="CMParticipant" syncable="YES"/>
     </entity>
     <entity name="CMLinkedUser" representedClassName=".CMLinkedUser" syncable="YES">
-        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="coreUserId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="nickname" optional="YES" attributeType="String" syncable="YES"/>
@@ -145,6 +146,7 @@
     </entity>
     <entity name="CMUser" representedClassName=".CMUser" syncable="YES">
         <attribute name="cellphoneNumber" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="coreUserId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
@@ -232,7 +234,7 @@
     </entity>
     <elements>
         <element name="CMBlockedContact" positionX="-461.90234375" positionY="-78.6953125" width="128" height="105"/>
-        <element name="CMContact" positionX="-307.48828125" positionY="-144.9375" width="128" height="225"/>
+        <element name="CMContact" positionX="-307.48828125" positionY="-144.9375" width="128" height="240"/>
         <element name="CMConversation" positionX="-126.5546875" positionY="-151.546875" width="128" height="553"/>
         <element name="CMForwardInfo" positionX="44.06640625" positionY="6.28515625" width="128" height="90"/>
         <element name="CMLinkedUser" positionX="-319.42578125" positionY="117.296875" width="128" height="135"/>
@@ -242,7 +244,8 @@
         <element name="CMThreadParticipants" positionX="80.10546875" positionY="-125.96875" width="128" height="90"/>
         <element name="CMUploadFile" positionX="-461.58984375" positionY="539" width="128" height="90"/>
         <element name="CMUploadImage" positionX="-460.42578125" positionY="37.66796875" width="128" height="150"/>
-        <element name="CMUser" positionX="-463.83984375" positionY="196.234375" width="128" height="165"/>
+        <element name="CMUser" positionX="-463.83984375" positionY="196.234375" width="128" height="180"/>
+        <element name="CMUserRole" positionX="-54" positionY="243" width="128" height="120"/>
         <element name="PhoneContact" positionX="-261" positionY="0" width="128" height="105"/>
         <element name="QueueOfEditMessages" positionX="-243" positionY="18" width="128" height="135"/>
         <element name="QueueOfFileMessages" positionX="-261" positionY="0" width="128" height="270"/>
@@ -250,6 +253,5 @@
         <element name="QueueOfTextMessages" positionX="-252" positionY="9" width="128" height="150"/>
         <element name="QueueOfUploadFiles" positionX="-252" positionY="9" width="128" height="150"/>
         <element name="QueueOfUploadImages" positionX="-261" positionY="0" width="128" height="210"/>
-        <element name="CMUserRole" positionX="-54" positionY="243" width="128" height="120"/>
     </elements>
 </model>

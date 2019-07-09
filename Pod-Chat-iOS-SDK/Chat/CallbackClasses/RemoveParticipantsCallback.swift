@@ -33,7 +33,7 @@ extension Chat {
             
             let removeParticipantModel = RemoveParticipantModel(messageObjects: removeParticipantsArray, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
             
-            delegate?.threadEvents(type: ThreadEventTypes.removeParticipant, result: removeParticipantModel)
+//            delegate?.threadEvents(type: ThreadEventTypes.removeParticipant, result: removeParticipantModel)
         }
     }
     

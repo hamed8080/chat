@@ -13,9 +13,141 @@ import CoreData
 extension Cache {
     
     /*
-     This function will fetch the CMConversation objcet from the CMConversation Entity,
-     and if it, finds the object on the Entity, it will update the property values of it,
-     if not, it will create one.
+     * Update CMContact Entity:
+     *
+     * -> fetch CMContact and see if we already had this contact on the Cache or not
+     * -> if we found one, we will update it's properties
+     * -> if not, we will create an CMContact object and save it in the Cache
+     *
+     *  + Access:   Private
+     *  + Inputs:
+     *      - withContactObject:    Contact
+     *  + Outputs:
+     *      - CMContact?
+     *
+     */
+    func updateCMContactEntity(withContactObject myContact: Contact) -> CMContact? {
+        var contactToReturn: CMContact?
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMContact")
+        if let contactId = myContact.id {
+            fetchRequest.predicate = NSPredicate(format: "id == %i", contactId)
+            do {
+                if let result = try context.fetch(fetchRequest) as? [CMContact] {
+                    if (result.count > 0) {
+                        result.first!.blocked           = myContact.blocked as NSNumber?
+                        result.first!.cellphoneNumber   = myContact.cellphoneNumber
+                        result.first!.email             = myContact.email
+                        result.first!.firstName         = myContact.firstName
+                        result.first!.hasUser           = myContact.hasUser as NSNumber?
+                        result.first!.id                = myContact.id as NSNumber?
+                        result.first!.image             = myContact.image
+                        result.first!.lastName          = myContact.lastName
+                        result.first!.notSeenDuration   = myContact.notSeenDuration as NSNumber?
+                        result.first!.uniqueId          = myContact.uniqueId
+                        result.first!.userId            = myContact.userId as NSNumber?
+                        result.first!.time              = myContact.timeStamp as NSNumber? // Int(Date().timeIntervalSince1970) as NSNumber?
+                        if let contactLinkeUser = myContact.linkedUser {
+                            let linkedUserObject = updateCMLinkedUserEntity(withLinkedUser: contactLinkeUser)
+                            result.first!.linkedUser = linkedUserObject
+                        }
+                        contactToReturn = result.first!
+                        saveContext(subject: "Update CMContact -update existing object-")
+                        
+                    } else {
+                        let theContactEntity = NSEntityDescription.entity(forEntityName: "CMContact", in: context)
+                        let theContact = CMContact(entity: theContactEntity!, insertInto: context)
+                        theContact.blocked          = myContact.blocked as NSNumber?
+                        theContact.cellphoneNumber  = myContact.cellphoneNumber
+                        theContact.email            = myContact.email
+                        theContact.firstName        = myContact.firstName
+                        theContact.hasUser          = myContact.hasUser as NSNumber?
+                        theContact.id               = myContact.id as NSNumber?
+                        theContact.image            = myContact.image
+                        theContact.lastName         = myContact.lastName
+                        theContact.notSeenDuration  = myContact.notSeenDuration as NSNumber?
+                        theContact.uniqueId         = myContact.uniqueId
+                        theContact.userId           = myContact.userId as NSNumber?
+                        theContact.time             = myContact.timeStamp as NSNumber? // Int(Date().timeIntervalSince1970) as NSNumber?
+                        if let contactLinkeUser = myContact.linkedUser {
+                            let linkedUserObject = updateCMLinkedUserEntity(withLinkedUser: contactLinkeUser)
+                            theContact.linkedUser = linkedUserObject
+                        }
+                        contactToReturn = theContact
+                        saveContext(subject: "Update CMContact -create new object-")
+                    }
+                }
+            } catch {
+                fatalError("Error on trying to find the contact from CMContact entity")
+            }
+        }
+        return contactToReturn
+    }
+    
+    
+    /*
+     * Update CMLinkedUser Entity:
+     *
+     * -> fetch CMLinkedUser and see if we already had this linkedUser on the Cache or not
+     * -> if we found one, we will update it's properties
+     * -> if not, we will create an CMLinkedUser object and save it in the Cache
+     *
+     *  + Access:   Private
+     *  + Inputs:
+     *      - withLinkedUser:   LinkedUser
+     *  + Outputs:
+     *      - CMLinkedUser?
+     *
+     */
+    func updateCMLinkedUserEntity(withLinkedUser myLinkedUser: LinkedUser) -> CMLinkedUser? {
+        var linkedUserToReturn: CMLinkedUser?
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMLinkedUser")
+        if let linkedUserId = myLinkedUser.coreUserId {
+            fetchRequest.predicate = NSPredicate(format: "coreUserId == %i", linkedUserId)
+            do {
+                if let result = try context.fetch(fetchRequest) as? [CMLinkedUser] {
+                    if (result.count > 0) {
+                        result.first!.coreUserId    = myLinkedUser.coreUserId as NSNumber?
+                        result.first!.image         = myLinkedUser.image
+                        result.first!.name          = myLinkedUser.name
+                        result.first!.nickname      = myLinkedUser.nickname
+                        result.first!.username      = myLinkedUser.username
+                        linkedUserToReturn = result.first!
+                        saveContext(subject: "Update CMLinkedUser -update existing object-")
+                    } else {
+                        let theLinkedUserEntity = NSEntityDescription.entity(forEntityName: "CMLinkedUser", in: context)
+                        let theLinkedUser = CMLinkedUser(entity: theLinkedUserEntity!, insertInto: context)
+                        
+                        theLinkedUser.coreUserId    = myLinkedUser.coreUserId as NSNumber?
+                        theLinkedUser.image         = myLinkedUser.image
+                        theLinkedUser.name          = myLinkedUser.name
+                        theLinkedUser.nickname      = myLinkedUser.nickname
+                        theLinkedUser.username      = myLinkedUser.username
+                        linkedUserToReturn = theLinkedUser
+                        saveContext(subject: "Update CMLinkedUser -create new object-")
+                    }
+                }
+            } catch {
+                fatalError("Error on trying to find the linkedUser from CMLinkedUser entity")
+            }
+        }
+        return linkedUserToReturn
+    }
+    
+    
+    /*
+     * Update CMConversation Entity:
+     *
+     * -> fetch CMConversation objcets from the CMConversation Entity,
+     *    and see if we already had this Conversation on the cache or not
+     * -> if we found the object on the Entity, we will update the property values of it,
+     * -> if not, we will create CMConversation object and save it on the Cache
+     *
+     *  + Access:   Private
+     *  + Inputs:
+     *      - withConversationObject:   Conversation
+     *  + Outputs:
+     *      - CMConversation?
+     *
      */
     func updateCMConversationEntity(withConversationObject myThread: Conversation) -> CMConversation? {
         var conversationToReturn: CMConversation?
@@ -123,10 +255,21 @@ extension Cache {
         return conversationToReturn
     }
     
+    
     /*
-     This function will fetch the CMParticipant objcet from the CMParticipant Entity,
-     and if it, finds the object on the Entity, it will update the property values of it,
-     if not, it will create one.
+     * Update Participant Entity:
+     *
+     * -> fetch the CMParticipant objcet from the CMParticipant Entity,
+     *    and see if we already had this Participant object on the cache or not
+     * -> if we found the object on the Entity, we will update the property values of it
+     * -> if not, we will create CMParticipant object and save it on the Cache
+     *
+     *  + Access:   Private
+     *  + Inputs:
+     *      - withConversationObject:   Conversation
+     *  + Outputs:
+     *      - CMConversation?
+     *
      */
     func updateCMParticipantEntity(withParticipantsObject myParticipant: Participant) -> CMParticipant? {
         var participantObjectToReturn: CMParticipant?
@@ -188,38 +331,20 @@ extension Cache {
     }
     
     
-    
-    //    func updateCMThreadParticipantEntity(withParticipantsObject myParticipant: [Participant], inThreadId threadId: Int) -> CMParticipant {
-    //        var participantToReturn: CMParticipant?
-    //        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
-    //        fetchRequest.predicate = NSPredicate(format: "id == %i", threadId)
-    //        do {
-    //            if let result = try context.fetch(fetchRequest) as? [CMConversation] {
-    //                if (result.count > 0) {
-    //                        var threadParticipantsArr = [CMParticipant]()
-    //                        for item in myParticipant {
-    //                            if let threadparticipant = updateCMParticipantEntity(withParticipantsObject: item) {
-    //                                threadParticipantsArr.append(threadparticipant)
-    //                                updateThreadParticipantEntity(inThreadId: Int(exactly: result.first!.id!)!, withParticipantId: Int(exactly: threadparticipant.id!)!)
-    //                            }
-    //                        }
-    //                        result.first!.participants = threadParticipantsArr
-    //
-    //                    participantToReturn = result.first!
-    //
-    //                    saveContext(subject: "Update CMConversation -update existing object-")
-    //                }
-    //            }
-    //        } catch {
-    //            fatalError("Error on trying to find the thread from CMConversation entity")
-    //        }
-    //    }
-    
-    
     /*
-     This function will fetch the CMMessage objcet from the CMMessage Entity,
-     and if it, finds the object on the Entity, it will update the property values of it,
-     if not, it will create one.
+     * Update Message Entity:
+     *
+     * -> fetch the CMMessage objcet from the CMMessage Entity,
+     *    and see if we already had this Participant object on the cache or not
+     * -> if we found the object on the Entity, we will update the property values of it
+     * -> if not, we will create CMMessage object and save it on the Cache
+     *
+     *  + Access:   Private
+     *  + Inputs:
+     *      - withMessageObject:    Message
+     *  + Outputs:
+     *      - CMMessage?
+     *
      */
     func updateCMMessageEntity(withMessageObject myMessage: Message) -> CMMessage? {
         var messageObjectToReturn: CMMessage?
@@ -339,106 +464,18 @@ extension Cache {
     //    }
     
     
-    func updateCMContactEntity(withMessageObject myContact: Contact) -> CMContact? {
-        var contactToReturn: CMContact?
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMContact")
-        if let contactId = myContact.id {
-            fetchRequest.predicate = NSPredicate(format: "id == %i", contactId)
-            do {
-                if let result = try context.fetch(fetchRequest) as? [CMContact] {
-                    if (result.count > 0) {
-                        result.first!.cellphoneNumber   = myContact.cellphoneNumber
-                        result.first!.email             = myContact.email
-                        result.first!.firstName         = myContact.firstName
-                        result.first!.hasUser           = myContact.hasUser as NSNumber?
-                        result.first!.id                = myContact.id as NSNumber?
-                        result.first!.image             = myContact.image
-                        result.first!.lastName          = myContact.lastName
-                        result.first!.notSeenDuration   = myContact.notSeenDuration as NSNumber?
-                        result.first!.uniqueId          = myContact.uniqueId
-                        result.first!.userId            = myContact.userId as NSNumber?
-                        result.first!.time              = myContact.timeStamp as NSNumber? // Int(Date().timeIntervalSince1970) as NSNumber?
-                        if let contactLinkeUser = myContact.linkedUser {
-                            let linkedUserObject = updateCMLinkedUserEntity(withLinkedUser: contactLinkeUser)
-                            result.first!.linkedUser = linkedUserObject
-                        }
-                        
-                        contactToReturn = result.first!
-                        
-                        saveContext(subject: "Update CMContact -update existing object-")
-                    } else {
-                        let theContactEntity = NSEntityDescription.entity(forEntityName: "CMContact", in: context)
-                        let theContact = CMContact(entity: theContactEntity!, insertInto: context)
-                        
-                        theContact.cellphoneNumber  = myContact.cellphoneNumber
-                        theContact.email            = myContact.email
-                        theContact.firstName        = myContact.firstName
-                        theContact.hasUser          = myContact.hasUser as NSNumber?
-                        theContact.id               = myContact.id as NSNumber?
-                        theContact.image            = myContact.image
-                        theContact.lastName         = myContact.lastName
-                        theContact.notSeenDuration  = myContact.notSeenDuration as NSNumber?
-                        theContact.uniqueId         = myContact.uniqueId
-                        theContact.userId           = myContact.userId as NSNumber?
-                        theContact.time             = myContact.timeStamp as NSNumber? // Int(Date().timeIntervalSince1970) as NSNumber?
-                        if let contactLinkeUser = myContact.linkedUser {
-                            let linkedUserObject = updateCMLinkedUserEntity(withLinkedUser: contactLinkeUser)
-                            theContact.linkedUser = linkedUserObject
-                        }
-                        
-                        contactToReturn = theContact
-                        
-                        saveContext(subject: "Update CMContact -create new object-")
-                    }
-                }
-            } catch {
-                fatalError("Error on trying to find the contact from CMContact entity")
-            }
-        }
-        return contactToReturn
-    }
     
-    
-    func updateCMLinkedUserEntity(withLinkedUser myLinkedUser: LinkedUser) -> CMLinkedUser? {
-        var linkedUserToReturn: CMLinkedUser?
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMLinkedUser")
-        if let linkedUserId = myLinkedUser.coreUserId {
-            fetchRequest.predicate = NSPredicate(format: "id == %i", linkedUserId)
-            do {
-                if let result = try context.fetch(fetchRequest) as? [CMLinkedUser] {
-                    if (result.count > 0) {
-                        result.first!.id            = myLinkedUser.coreUserId as NSNumber?
-                        result.first!.image         = myLinkedUser.image
-                        result.first!.name          = myLinkedUser.name
-                        result.first!.nickname      = myLinkedUser.nickname
-                        result.first!.username      = myLinkedUser.username
-                        
-                        linkedUserToReturn = result.first!
-                        
-                        saveContext(subject: "Update CMLinkedUser -update existing object-")
-                    } else {
-                        let theLinkedUserEntity = NSEntityDescription.entity(forEntityName: "CMLinkedUser", in: context)
-                        let theLinkedUser = CMLinkedUser(entity: theLinkedUserEntity!, insertInto: context)
-                        
-                        theLinkedUser.id            = myLinkedUser.coreUserId as NSNumber?
-                        theLinkedUser.image         = myLinkedUser.image
-                        theLinkedUser.name          = myLinkedUser.name
-                        theLinkedUser.nickname      = myLinkedUser.nickname
-                        theLinkedUser.username      = myLinkedUser.username
-                        
-                        linkedUserToReturn = theLinkedUser
-                        
-                        saveContext(subject: "Update CMLinkedUser -create new object-")
-                    }
-                }
-            } catch {
-                fatalError("Error on trying to find the linkedUser from CMLinkedUser entity")
-            }
-        }
-        return linkedUserToReturn
-    }
-    
-    
+    /*
+     * Update ThreadParticipant Entity:
+     *
+     *
+     *  + Access:   Private
+     *  + Inputs:
+     *      - threadId:         Int
+     *      - participantId:    Int
+     *  + Outputs:  _
+     *
+     */
     // update existing object or create new one
     func updateThreadParticipantEntity(inThreadId threadId: Int, withParticipantId participantId: Int) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMThreadParticipants")

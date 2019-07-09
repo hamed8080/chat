@@ -58,7 +58,12 @@ extension Chat {
         let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_CONTACTS.rawValue,
                                        //                                       "typeCode": getContactsInput.typeCode ?? generalTypeCode,
             "content": content]
-        sendMessageWithCallback(params: sendMessageParams, callback: GetContactsCallback(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (getContactUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       GetContactsCallback(parameters: sendMessageParams),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (getContactUniqueId) in
             uniqueId(getContactUniqueId)
         }
         getContactsCallbackToUser = completion
@@ -116,7 +121,12 @@ extension Chat {
         let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_CONTACTS.rawValue,
                                        "typeCode": myTypeCode,
                                        "content": content]
-        sendMessageWithCallback(params: sendMessageParams, callback: GetContactsCallback(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (getContactUniqueId) in
+        sendMessageWithCallback(params: sendMessageParams,
+                                callback: GetContactsCallback(parameters: sendMessageParams),
+                                callbacks: nil,
+                                sentCallback: nil,
+                                deliverCallback: nil,
+                                seenCallback: nil) { (getContactUniqueId) in
             uniqueId(getContactUniqueId)
         }
         getContactsCallbackToUser = completion
@@ -330,7 +340,7 @@ extension Chat {
                 let myContact = Contact(messageContent: item)
                 contactsArr.append(myContact)
             }
-            Chat.cacheDB.saveContactObjects(contacts: contactsArr)
+            Chat.cacheDB.saveContact(withContactObjects: contactsArr)
             
             let contactsResult = ContactModel(messageContent: jsonRes)
             completion(contactsResult)
@@ -591,7 +601,12 @@ extension Chat {
         
         sendMessageParams["content"] = JSON("\(content)")
         
-        sendMessageWithCallback(params: sendMessageParams, callback: BlockContactCallbacks(), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (blockUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       BlockContactCallbacks(),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (blockUniqueId) in
             uniqueId(blockUniqueId)
         }
         blockCallbackToUser = completion
@@ -614,7 +629,12 @@ extension Chat {
         
         sendMessageParams["content"] = JSON("\(content)")
         
-        sendMessageWithCallback(params: sendMessageParams, callback: BlockContactCallbacks(), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (blockUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       BlockContactCallbacks(),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (blockUniqueId) in
             uniqueId(blockUniqueId)
         }
         blockCallbackToUser = completion
@@ -652,7 +672,12 @@ extension Chat {
                                        "typeCode": getBlockedContactsInput.typeCode ?? generalTypeCode,
                                        "content": content]
         
-        sendMessageWithCallback(params: sendMessageParams, callback: GetBlockedContactsCallbacks(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (getBlockedUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       GetBlockedContactsCallbacks(parameters: sendMessageParams),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (getBlockedUniqueId) in
             uniqueId(getBlockedUniqueId)
         }
         getBlockedCallbackToUser = completion
@@ -691,7 +716,12 @@ extension Chat {
                                        "typeCode": myTypeCode,
                                        "content": content]
         
-        sendMessageWithCallback(params: sendMessageParams, callback: GetBlockedContactsCallbacks(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (getBlockedUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       GetBlockedContactsCallbacks(parameters: sendMessageParams),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (getBlockedUniqueId) in
             uniqueId(getBlockedUniqueId)
         }
         getBlockedCallbackToUser = completion
@@ -739,7 +769,12 @@ extension Chat {
         
         sendMessageParams["content"] = JSON("\(content)")
         
-        sendMessageWithCallback(params: sendMessageParams, callback: UnblockContactCallbacks(), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (blockUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       UnblockContactCallbacks(),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (blockUniqueId) in
             uniqueId(blockUniqueId)
         }
         unblockCallbackToUser = completion
@@ -758,7 +793,12 @@ extension Chat {
             sendMessageParams["subjectId"] = JSON(subjectId)
         }
         
-        sendMessageWithCallback(params: sendMessageParams, callback: UnblockContactCallbacks(), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (blockUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       UnblockContactCallbacks(),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (blockUniqueId) in
             uniqueId(blockUniqueId)
         }
         unblockCallbackToUser = completion

@@ -39,20 +39,20 @@ extension Chat {
     
     
     /*
-     GetUserInfo:
-     it returns UserInfo.
-     
-     By calling this function, a request of type 23 (USER_INFO) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     this method doesn't need any input
-     
-     + Outputs:
-     It has 3 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:  it will returns the response that comes from server to this request.    (UserInfoModel)
-     3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
+     * GetUserInfo:
+     * it returns UserInfo.
+     *
+     * By calling this function, a request of type 23 (USER_INFO) will send throut Chat-SDK,
+     * then the response will come back as callbacks to client whose calls this function.
+     *
+     *  + Inputs:
+     *      - this method doesn't need any input
+     *  + Outputs:
+     *      It has 3 callbacks as response:
+     *      1- uniqueId:        it will returns the request 'UniqueId' that will send to server.        (String)
+     *      2- completion:      it will returns the response that comes from server to this request.    (UserInfoModel)
+     *      3- cacheResponse:   there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
+     *
      */
     public func getUserInfo(uniqueId:       @escaping (String) -> (),
                             completion:     @escaping callbackTypeAlias,
@@ -62,7 +62,12 @@ extension Chat {
         let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.USER_INFO.rawValue,
                                        "typeCode": generalTypeCode]
         
-        sendMessageWithCallback(params: sendMessageParams, callback: UserInfoCallback(), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (getUserInfoUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       UserInfoCallback(),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (getUserInfoUniqueId) in
             uniqueId(getUserInfoUniqueId)
         }
         
@@ -75,6 +80,11 @@ extension Chat {
             }
         }
         
+    }
+    
+    
+    public func deleteUserInfoFromCache() {
+        Chat.cacheDB.deleteUserInfo()
     }
     
     

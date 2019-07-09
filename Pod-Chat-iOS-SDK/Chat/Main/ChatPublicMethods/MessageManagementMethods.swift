@@ -93,7 +93,12 @@ extension Chat {
         }
         //        sendMessageParams["subjectId"] = JSON(sendTextMessageInput.threadId)
         
-        sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: SendMessageCallbacks(parameters: sendMessageParams), deliverCallback: SendMessageCallbacks(parameters: sendMessageParams), seenCallback:  SendMessageCallbacks(parameters: sendMessageParams)) { (theUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       nil,
+                                callbacks:      nil,
+                                sentCallback:   SendMessageCallbacks(parameters: sendMessageParams),
+                                deliverCallback: SendMessageCallbacks(parameters: sendMessageParams),
+                                seenCallback:   SendMessageCallbacks(parameters: sendMessageParams)) { (theUniqueId) in
             uniqueId(theUniqueId)
         }
         
@@ -137,7 +142,12 @@ extension Chat {
         }
         
         
-        sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: SendMessageCallbacks(parameters: sendMessageParams), deliverCallback: SendMessageCallbacks(parameters: sendMessageParams), seenCallback:  SendMessageCallbacks(parameters: sendMessageParams)) { (theUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       nil,
+                                callbacks:      nil,
+                                sentCallback:   SendMessageCallbacks(parameters: sendMessageParams),
+                                deliverCallback: SendMessageCallbacks(parameters: sendMessageParams),
+                                seenCallback:   SendMessageCallbacks(parameters: sendMessageParams)) { (theUniqueId) in
             uniqueId(theUniqueId)
         }
         
@@ -167,9 +177,7 @@ extension Chat {
      + Outputs:
      It has 4 callbacks as response:
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- onSent:
-     3- onDelivere:
-     4- onSeen:
+     2- completion:
      */
     public func editMessage(editMessageInput:   EditTextMessageRequestModel,
                             uniqueId:           @escaping (String) -> (),
@@ -213,7 +221,11 @@ extension Chat {
             sendMessageParams["metaData"] = JSON(metaDataStr)
         }
         
-        sendMessageWithCallback(params: sendMessageParams, callback: EditMessageCallbacks(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (editMessageUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       EditMessageCallbacks(parameters: sendMessageParams), callbacks: nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (editMessageUniqueId) in
             uniqueId(editMessageUniqueId)
         }
         editMessageCallbackToUser = completion
@@ -248,7 +260,12 @@ extension Chat {
             sendMessageParams["metaData"] = JSON(metaDataStr)
         }
         
-        sendMessageWithCallback(params: sendMessageParams, callback: EditMessageCallbacks(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (editMessageUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       EditMessageCallbacks(parameters: sendMessageParams),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (editMessageUniqueId) in
             uniqueId(editMessageUniqueId)
         }
         editMessageCallbackToUser = completion
@@ -321,7 +338,12 @@ extension Chat {
             sendMessageParams["metaData"] = JSON(metaDataStr)
         }
         
-        sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: SendMessageCallbacks(parameters: sendMessageParams), deliverCallback: SendMessageCallbacks(parameters: sendMessageParams), seenCallback: SendMessageCallbacks(parameters: sendMessageParams)) { (theUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       nil,
+                                callbacks:      nil,
+                                sentCallback:   SendMessageCallbacks(parameters: sendMessageParams),
+                                deliverCallback: SendMessageCallbacks(parameters: sendMessageParams),
+                                seenCallback:   SendMessageCallbacks(parameters: sendMessageParams)) { (theUniqueId) in
             uniqueId(theUniqueId)
         }
         
@@ -360,7 +382,12 @@ extension Chat {
         }
         
         
-        sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: SendMessageCallbacks(parameters: sendMessageParams), deliverCallback: SendMessageCallbacks(parameters: sendMessageParams), seenCallback: SendMessageCallbacks(parameters: sendMessageParams)) { (theUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       nil,
+                                callbacks:      nil,
+                                sentCallback:   SendMessageCallbacks(parameters: sendMessageParams),
+                                deliverCallback: SendMessageCallbacks(parameters: sendMessageParams),
+                                seenCallback:   SendMessageCallbacks(parameters: sendMessageParams)) { (theUniqueId) in
             uniqueId(theUniqueId)
         }
         
@@ -438,7 +465,12 @@ extension Chat {
             
             sendMessageParams["uniqueId"] = JSON("\(uniqueIdsList)")
             
-            sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: SendMessageCallbacks(parameters: sendMessageParams), deliverCallback: SendMessageCallbacks(parameters: sendMessageParams), seenCallback: SendMessageCallbacks(parameters: sendMessageParams)) { (theUniqueId) in
+            sendMessageWithCallback(params:         sendMessageParams,
+                                    callback:       nil,
+                                    callbacks:      nil,
+                                    sentCallback:   SendMessageCallbacks(parameters: sendMessageParams),
+                                    deliverCallback: SendMessageCallbacks(parameters: sendMessageParams),
+                                    seenCallback:   SendMessageCallbacks(parameters: sendMessageParams)) { (theUniqueId) in
                 uniqueIds(theUniqueId)
             }
             
@@ -488,7 +520,12 @@ extension Chat {
             sendMessageParams["uniqueId"] = JSON("\(uniqueIdsList)")
         }
         
-        sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: SendMessageCallbacks(parameters: sendMessageParams), deliverCallback: SendMessageCallbacks(parameters: sendMessageParams), seenCallback: SendMessageCallbacks(parameters: sendMessageParams)) { (theUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       nil,
+                                callbacks:      nil,
+                                sentCallback:   SendMessageCallbacks(parameters: sendMessageParams),
+                                deliverCallback: SendMessageCallbacks(parameters: sendMessageParams),
+                                seenCallback:   SendMessageCallbacks(parameters: sendMessageParams)) { (theUniqueId) in
             uniqueIds(theUniqueId)
         }
         
@@ -553,9 +590,10 @@ extension Chat {
      + Outputs:
      It has 4 callbacks as response:
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- onSent:
-     3- onDelivered:
-     4- onSeen:
+     2- uploadProgress:
+     3- onSent:
+     4- onDelivered:
+     5- onSeen:
      */
     public func sendFileMessage(sendFileMessageInput:   SendFileMessageRequestModel,
                                 uniqueId:               @escaping (String) -> (),
@@ -1124,7 +1162,12 @@ extension Chat {
             sendMessageParams["uniqueId"] = JSON(uniqueId)
         }
         
-        sendMessageWithCallback(params: sendMessageParams, callback: DeleteMessageCallbacks(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (deleteMessageUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       DeleteMessageCallbacks(parameters: sendMessageParams),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (deleteMessageUniqueId) in
             uniqueId(deleteMessageUniqueId)
         }
         deleteMessageCallbackToUser = completion
@@ -1150,7 +1193,12 @@ extension Chat {
             sendMessageParams["uniqueId"] = JSON(uniqueId)
         }
         
-        sendMessageWithCallback(params: sendMessageParams, callback: DeleteMessageCallbacks(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (deleteMessageUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       DeleteMessageCallbacks(parameters: sendMessageParams),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (deleteMessageUniqueId) in
             uniqueId(deleteMessageUniqueId)
         }
         deleteMessageCallbackToUser = completion
@@ -1227,7 +1275,17 @@ extension Chat {
                                        "pushMsgType": 4,
                                        "content": content]
         
-        sendMessageWithCallback(params: sendMessageParams, callback: DeleteMessageCallbacks(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (deleteMessageUniqueId) in
+        var myCallBacks: [DeleteMessageCallbacks] = []
+        for _ in uniqueIds {
+             myCallBacks.append(DeleteMessageCallbacks(parameters: sendMessageParams))
+        }
+        
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       nil,
+                                callbacks:      myCallBacks,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (deleteMessageUniqueId) in
             uniqueId(deleteMessageUniqueId)
         }
         deleteMessageCallbackToUser = completion
@@ -1306,7 +1364,12 @@ extension Chat {
         
         sendMessageParams["content"] = content
         
-        sendMessageWithCallback(params: sendMessageParams, callback: GetMessageDeliverList(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (messageDeliverListUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       GetMessageDeliverList(parameters: sendMessageParams),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (messageDeliverListUniqueId) in
             uniqueId(messageDeliverListUniqueId)
         }
         getMessageDeliverListCallbackToUser = completion
@@ -1350,7 +1413,12 @@ extension Chat {
         
         sendMessageParams["content"] = content
         
-        sendMessageWithCallback(params: sendMessageParams, callback: GetMessageDeliverList(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (messageDeliverListUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       GetMessageDeliverList(parameters: sendMessageParams),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (messageDeliverListUniqueId) in
             uniqueId(messageDeliverListUniqueId)
         }
         getMessageDeliverListCallbackToUser = completion
@@ -1390,7 +1458,12 @@ extension Chat {
         
         sendMessageParams["content"] = content
         
-        sendMessageWithCallback(params: sendMessageParams, callback: GetMessageSeenList(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (messageSeenListUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       GetMessageSeenList(parameters: sendMessageParams),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (messageSeenListUniqueId) in
             uniqueId(messageSeenListUniqueId)
         }
         getMessageSeenListCallbackToUser = completion
@@ -1430,7 +1503,12 @@ extension Chat {
         
         sendMessageParams["content"] = content
         
-        sendMessageWithCallback(params: sendMessageParams, callback: GetMessageSeenList(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (messageSeenListUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       GetMessageSeenList(parameters: sendMessageParams),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (messageSeenListUniqueId) in
             uniqueId(messageSeenListUniqueId)
         }
         getMessageSeenListCallbackToUser = completion
@@ -1470,10 +1548,11 @@ extension Chat {
                                              "content": content,
                                              "subjectId": input.threadId]
         sendMessageWithCallback(params: sendSignalMessageParams,
-                                callback: nil/*SendSignalMessageCallback(parameters: sendSignalMessageParams)*/,
-            sentCallback: nil,
-            deliverCallback: nil,
-            seenCallback: nil) { (/*signalMessageUniqueId*/_) in
+                                callback: nil,
+                                callbacks: nil,
+                                sentCallback: nil,
+                                deliverCallback: nil,
+                                seenCallback: nil) { (/*signalMessageUniqueId*/_) in
                 //                                    uniqueId(signalMessageUniqueId)
         }
         //        sendSignalMessageCallbackToUser = completion

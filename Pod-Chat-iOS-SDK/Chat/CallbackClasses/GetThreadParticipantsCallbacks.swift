@@ -36,7 +36,7 @@ extension Chat {
             
             let getThreadParticipantsModel = GetThreadParticipantsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset - count, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
             
-            delegate?.threadEvents(type: ThreadEventTypes.getThreadParticipants, result: getThreadParticipantsModel)
+//            delegate?.threadEvents(type: ThreadEventTypes.getThreadParticipants, result: getThreadParticipantsModel)
         }
     }
     

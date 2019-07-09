@@ -31,7 +31,7 @@ extension Chat {
             
             let addParticipantModel = AddParticipantModel(messageContent: messageContent, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
             
-            delegate?.threadEvents(type: ThreadEventTypes.addParticipant, result: addParticipantModel)
+//            delegate?.threadEvents(type: ThreadEventTypes.addParticipant, result: addParticipantModel)
         }
     }
     

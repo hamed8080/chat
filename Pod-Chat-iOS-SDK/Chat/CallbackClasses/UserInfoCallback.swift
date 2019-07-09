@@ -24,11 +24,11 @@ extension Chat {
             
             // save data comes from server to the Cache
             let user = User(messageContent: resultData)
-            Chat.cacheDB.createUserInfoObject(user: user)
+            Chat.cacheDB.saveUserInfo(withUserObject: user)
             
             let userInfoModel = UserInfoModel(messageContent: resultData, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
             
-            delegate?.userEvents(type: UserEventTypes.userInfo, result: userInfoModel)
+//            delegate?.userEvents(type: UserEventTypes.userInfo, result: userInfoModel)
         }
     }
     

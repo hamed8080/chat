@@ -13,7 +13,7 @@ import FanapPodAsyncSDK
 
 extension Chat {
     
-    func chatDelegateGetContacts(getContact: JSON) {
+    public func chatDelegateGetContacts(getContact: JSON) {
         var returnData: JSON = [:]
         
         let hasError = getContact["hasError"].boolValue
@@ -38,11 +38,11 @@ extension Chat {
                 let myContact = Contact(messageContent: item)
                 contacts.append(myContact)
             }
-            Chat.cacheDB.saveContactObjects(contacts: contacts)
+            Chat.cacheDB.saveContact(withContactObjects: contacts)
             
             let getContactsModel = GetContactsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset - count, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
             
-            delegate?.contactEvents(type: ContactEventTypes.getContact, result: getContactsModel)
+//            delegate?.contactEvents(type: ContactEventTypes.getContact, result: getContactsModel)
         }
     }
     
@@ -53,6 +53,8 @@ extension Chat {
         }
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
             log.verbose("GetContactsCallback", context: "Chat")
+            
+//            Chat.sharedInstance.chatDelegateGetContacts(getContact: sendParams)
             
             var returnData: JSON = [:]
             

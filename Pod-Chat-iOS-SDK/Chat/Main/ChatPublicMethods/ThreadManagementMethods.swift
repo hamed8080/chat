@@ -15,7 +15,7 @@ import SwiftyJSON
 
 extension Chat {
     
-    // MARK: - Get Thread
+    // MARK: - Get/Update Thread
     /*
      GetThreads:
      By calling this function, a request of type 14 (GET_THREADS) will send throut Chat-SDK,
@@ -74,7 +74,11 @@ extension Chat {
                                        "content": content,
                                        "typeCode": getThreadsInput.typeCode ?? generalTypeCode]
         
-        sendMessageWithCallback(params: sendMessageParams, callback: GetThreadsCallbacks(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (getThreadUniqueId) in
+        sendMessageWithCallback(params: sendMessageParams,
+                                callback: GetThreadsCallbacks(parameters: sendMessageParams),
+                                callbacks: nil,
+                                sentCallback: nil,
+                                deliverCallback: nil, seenCallback: nil) { (getThreadUniqueId) in
             uniqueId(getThreadUniqueId)
         }
         threadsCallbackToUser = completion
@@ -144,11 +148,138 @@ extension Chat {
                                        "content": content,
                                        "typeCode": myTypeCode]
         
-        sendMessageWithCallback(params: sendMessageParams, callback: GetThreadsCallbacks(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (getThreadUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       GetThreadsCallbacks(parameters: sendMessageParams),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (getThreadUniqueId) in
             uniqueId(getThreadUniqueId)
         }
         threadsCallbackToUser = completion
     }
+    
+    
+    /*
+     UpdateThreadInfo:
+     update information about a thread.
+     
+     By calling this function, a request of type 30 (UPDATE_THREAD_INFO) will send throut Chat-SDK,
+     then the response will come back as callbacks to client whose calls this function.
+     
+     + Inputs:
+     this function will get some optional prameters as an input, as JSON or Model (depends on the function that you would use) which are:
+     - subjectId:
+     - image:
+     - description:
+     - title:
+     - metadata:
+     - typeCode:
+     
+     + Outputs:
+     It has 2 callbacks as response:
+     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
+     2- completion:
+     */
+    public func updateThreadInfo(updateThreadInfoInput: UpdateThreadInfoRequestModel,
+                                 uniqueId:              @escaping (String) -> (),
+                                 completion:            @escaping callbackTypeAlias) {
+        log.verbose("Try to request to update thread info with this parameters: \n \(updateThreadInfoInput)", context: "Chat")
+        
+        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.UPDATE_THREAD_INFO.rawValue,
+                                       "typeCode": updateThreadInfoInput.typeCode ?? generalTypeCode]
+        
+        if let threadId = updateThreadInfoInput.subjectId {
+            sendMessageParams["threadId"] = JSON(threadId)
+            sendMessageParams["subjectId"] = JSON(threadId)
+            
+        } else {
+            delegate?.chatError(errorCode: 999, errorMessage: "Thread ID is required for Updating thread info!", errorResult: nil)
+        }
+        
+        var content: JSON = [:]
+        
+        if let image = updateThreadInfoInput.image {
+            content["image"] = JSON(image)
+        }
+        
+        if let description = updateThreadInfoInput.description {
+            content["description"] = JSON(description)
+        }
+        
+        if let name = updateThreadInfoInput.title {
+            content["name"] = JSON(name)
+        }
+        
+        if let metadata = updateThreadInfoInput.metadata {
+            let metadataStr = "\(metadata)"
+            content["metadata"] = JSON(metadataStr)
+        }
+        
+        sendMessageParams["content"] = JSON("\(content)")
+        
+        sendMessageWithCallback(params: sendMessageParams,
+                                callback: UpdateThreadInfoCallback(),
+                                callbacks: nil,
+                                sentCallback: nil,
+                                deliverCallback: nil,
+                                seenCallback: nil) { (updateThreadInfoUniqueId) in
+            uniqueId(updateThreadInfoUniqueId)
+        }
+        updateThreadInfoCallbackToUser = completion
+    }
+    
+    // NOTE: This method will be deprecate soon
+    // this method will do the same as tha funciton above but instead of using 'UpdateThreadInfoRequestModel' to get the parameters, it'll use JSON
+    public func updateThreadInfo(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
+        log.verbose("Try to request to update thread info with this parameters: \n \(params)", context: "Chat")
+        
+        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.UPDATE_THREAD_INFO.rawValue,
+                                       "typeCode": params["typeCode"].string ?? generalTypeCode]
+        
+        if let threadId = params["subjectId"].int {
+            sendMessageParams["threadId"] = JSON(threadId)
+            sendMessageParams["subjectId"] = JSON(threadId)
+            
+        } else {
+            delegate?.chatError(errorCode: 999, errorMessage: "Thread ID is required for Updating thread info!", errorResult: nil)
+        }
+        
+        var content: JSON = [:]
+        
+        if let image = params["image"].string {
+            content["image"] = JSON(image)
+        }
+        
+        if let description = params["description"].string {
+            content["description"] = JSON(description)
+        }
+        
+        if let name = params["title"].string {
+            content["name"] = JSON(name)
+        }
+        
+        if let metadata = params["metadata"].string {
+            content["metadata"] = JSON(metadata)
+        } else if (params["metadata"] != JSON.null) {
+            let metadata = params["metadata"]
+            let metadataStr = "\(metadata)"
+            content["metadata"] = JSON(metadataStr)
+        }
+        
+        sendMessageParams["content"] = JSON("\(content)")
+        
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       UpdateThreadInfoCallback(),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (updateThreadInfoUniqueId) in
+            uniqueId(updateThreadInfoUniqueId)
+        }
+        updateThreadInfoCallbackToUser = completion
+    }
+    
     
     
     // MARK: - Create Thread
@@ -214,7 +345,12 @@ extension Chat {
         
         let sendMessageCreateThreadParams: JSON = ["chatMessageVOType": chatMessageVOTypes.CREATE_THREAD.rawValue,
                                                    "content": content]
-        sendMessageWithCallback(params: sendMessageCreateThreadParams, callback: CreateThreadCallback(parameters: sendMessageCreateThreadParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (createThreadUniqueId) in
+        sendMessageWithCallback(params:         sendMessageCreateThreadParams,
+                                callback:       CreateThreadCallback(parameters: sendMessageCreateThreadParams),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (createThreadUniqueId) in
             uniqueId(createThreadUniqueId)
         }
         
@@ -261,7 +397,12 @@ extension Chat {
         
         let sendMessageCreateThreadParams: JSON = ["chatMessageVOType": chatMessageVOTypes.CREATE_THREAD.rawValue,
                                                    "content": content]
-        sendMessageWithCallback(params: sendMessageCreateThreadParams, callback: CreateThreadCallback(parameters: sendMessageCreateThreadParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (createThreadUniqueId) in
+        sendMessageWithCallback(params:         sendMessageCreateThreadParams,
+                                callback:       CreateThreadCallback(parameters: sendMessageCreateThreadParams),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (createThreadUniqueId) in
             uniqueId(createThreadUniqueId)
         }
         
@@ -437,10 +578,12 @@ extension Chat {
         
         
         messageContentParams["isCreateThreadAndSendMessage"] = JSON(true)
-        sendMessageWithCallback(params: sendMessageCreateThreadParams, callback: CreateThreadCallback(parameters: sendMessageCreateThreadParams),
-                                sentCallback: SendMessageCallbacks(parameters: messageContentParams),
-                                deliverCallback: SendMessageCallbacks(parameters: messageContentParams),
-                                seenCallback: SendMessageCallbacks(parameters: messageContentParams)) { (theUniqueId) in
+        sendMessageWithCallback(params:             sendMessageCreateThreadParams,
+                                callback:           CreateThreadCallback(parameters: sendMessageCreateThreadParams),
+                                callbacks:          nil,
+                                sentCallback:       SendMessageCallbacks(parameters: messageContentParams),
+                                deliverCallback:    SendMessageCallbacks(parameters: messageContentParams),
+                                seenCallback:       SendMessageCallbacks(parameters: messageContentParams)) { (theUniqueId) in
                                     uniqueId(theUniqueId)
         }
         
@@ -498,7 +641,12 @@ extension Chat {
                                                    "content": content,
                                                    "uniqueId": myUniqueId]
         
-        sendMessageWithCallback(params: sendMessageCreateThreadParams, callback: CreateThreadCallback(parameters: sendMessageCreateThreadParams), sentCallback: SendMessageCallbacks(parameters: sendMessageCreateThreadParams), deliverCallback: SendMessageCallbacks(parameters: sendMessageCreateThreadParams), seenCallback: SendMessageCallbacks(parameters: sendMessageCreateThreadParams)) { (theUniqueId) in
+        sendMessageWithCallback(params:         sendMessageCreateThreadParams,
+                                callback:       CreateThreadCallback(parameters: sendMessageCreateThreadParams),
+                                callbacks:      nil,
+                                sentCallback:   SendMessageCallbacks(parameters: sendMessageCreateThreadParams),
+                                deliverCallback: SendMessageCallbacks(parameters: sendMessageCreateThreadParams),
+                                seenCallback:   SendMessageCallbacks(parameters: sendMessageCreateThreadParams)) { (theUniqueId) in
             uniqueId(theUniqueId)
         }
         
@@ -574,7 +722,12 @@ extension Chat {
             sendMessageParams["uniqueId"] = JSON(uniqueId)
         }
         
-        sendMessageWithCallback(params: sendMessageParams, callback: LeaveThreadCallbacks(), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (leaveThreadUniqueId) in
+        sendMessageWithCallback(params: sendMessageParams,
+                                callback: LeaveThreadCallbacks(),
+                                callbacks: nil,
+                                sentCallback: nil,
+                                deliverCallback: nil,
+                                seenCallback: nil) { (leaveThreadUniqueId) in
             uniqueId(leaveThreadUniqueId)
         }
         leaveThreadCallbackToUser = completion
@@ -599,121 +752,15 @@ extension Chat {
             sendMessageParams["subjectId"] = JSON(subjectId)
         }
         
-        sendMessageWithCallback(params: sendMessageParams, callback: LeaveThreadCallbacks(), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (leaveThreadUniqueId) in
+        sendMessageWithCallback(params: sendMessageParams,
+                                callback: LeaveThreadCallbacks(),
+                                callbacks: nil,
+                                sentCallback: nil,
+                                deliverCallback: nil,
+                                seenCallback: nil) { (leaveThreadUniqueId) in
             uniqueId(leaveThreadUniqueId)
         }
         leaveThreadCallbackToUser = completion
-    }
-    
-    
-    /*
-     UpdateThreadInfo:
-     update information about a thread.
-     
-     By calling this function, a request of type 30 (UPDATE_THREAD_INFO) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     this function will get some optional prameters as an input, as JSON or Model (depends on the function that you would use) which are:
-     - subjectId:
-     - image:
-     - description:
-     - title:
-     - metadata:
-     - typeCode:
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:
-     */
-    public func updateThreadInfo(updateThreadInfoInput: UpdateThreadInfoRequestModel,
-                                 uniqueId:              @escaping (String) -> (),
-                                 completion:            @escaping callbackTypeAlias) {
-        log.verbose("Try to request to update thread info with this parameters: \n \(updateThreadInfoInput)", context: "Chat")
-        
-        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.UPDATE_THREAD_INFO.rawValue,
-                                       "typeCode": updateThreadInfoInput.typeCode ?? generalTypeCode]
-        
-        if let threadId = updateThreadInfoInput.subjectId {
-            sendMessageParams["threadId"] = JSON(threadId)
-            sendMessageParams["subjectId"] = JSON(threadId)
-            
-        } else {
-            delegate?.chatError(errorCode: 999, errorMessage: "Thread ID is required for Updating thread info!", errorResult: nil)
-        }
-        
-        var content: JSON = [:]
-        
-        if let image = updateThreadInfoInput.image {
-            content["image"] = JSON(image)
-        }
-        
-        if let description = updateThreadInfoInput.description {
-            content["description"] = JSON(description)
-        }
-        
-        if let name = updateThreadInfoInput.title {
-            content["name"] = JSON(name)
-        }
-        
-        if let metadata = updateThreadInfoInput.metadata {
-            let metadataStr = "\(metadata)"
-            content["metadata"] = JSON(metadataStr)
-        }
-        
-        sendMessageParams["content"] = JSON("\(content)")
-        
-        sendMessageWithCallback(params: sendMessageParams, callback: UpdateThreadInfoCallback(), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (updateThreadInfoUniqueId) in
-            uniqueId(updateThreadInfoUniqueId)
-        }
-        updateThreadInfoCallbackToUser = completion
-    }
-    
-    // NOTE: This method will be deprecate soon
-    // this method will do the same as tha funciton above but instead of using 'UpdateThreadInfoRequestModel' to get the parameters, it'll use JSON
-    public func updateThreadInfo(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        log.verbose("Try to request to update thread info with this parameters: \n \(params)", context: "Chat")
-        
-        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.UPDATE_THREAD_INFO.rawValue,
-                                       "typeCode": params["typeCode"].string ?? generalTypeCode]
-        
-        if let threadId = params["subjectId"].int {
-            sendMessageParams["threadId"] = JSON(threadId)
-            sendMessageParams["subjectId"] = JSON(threadId)
-            
-        } else {
-            delegate?.chatError(errorCode: 999, errorMessage: "Thread ID is required for Updating thread info!", errorResult: nil)
-        }
-        
-        var content: JSON = [:]
-        
-        if let image = params["image"].string {
-            content["image"] = JSON(image)
-        }
-        
-        if let description = params["description"].string {
-            content["description"] = JSON(description)
-        }
-        
-        if let name = params["title"].string {
-            content["name"] = JSON(name)
-        }
-        
-        if let metadata = params["metadata"].string {
-            content["metadata"] = JSON(metadata)
-        } else if (params["metadata"] != JSON.null) {
-            let metadata = params["metadata"]
-            let metadataStr = "\(metadata)"
-            content["metadata"] = JSON(metadataStr)
-        }
-        
-        sendMessageParams["content"] = JSON("\(content)")
-        
-        sendMessageWithCallback(params: sendMessageParams, callback: UpdateThreadInfoCallback(), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (updateThreadInfoUniqueId) in
-            uniqueId(updateThreadInfoUniqueId)
-        }
-        updateThreadInfoCallbackToUser = completion
     }
     
     
@@ -746,7 +793,12 @@ extension Chat {
             sendMessageParams["subjectId"] = JSON(subjectId)
         }
         
-        sendMessageWithCallback(params: sendMessageParams, callback: SpamPvThread(), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (spamUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       SpamPvThread(),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (spamUniqueId) in
             uniqueId(spamUniqueId)
         }
         spamPvThreadCallbackToUser = completion
@@ -764,7 +816,12 @@ extension Chat {
             sendMessageParams["subjectId"] = JSON(subjectId)
         }
         
-        sendMessageWithCallback(params: sendMessageParams, callback: SpamPvThread(), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (spamUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       SpamPvThread(),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (spamUniqueId) in
             uniqueId(spamUniqueId)
         }
         spamPvThreadCallbackToUser = completion
@@ -799,7 +856,12 @@ extension Chat {
                                        "typeCode": muteThreadInput.typeCode ?? generalTypeCode,
                                        "subjectId": muteThreadInput.subjectId]
         
-        sendMessageWithCallback(params: sendMessageParams, callback: MuteThreadCallbacks(), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (muteThreadUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       MuteThreadCallbacks(),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (muteThreadUniqueId) in
             uniqueId(muteThreadUniqueId)
         }
         muteThreadCallbackToUser = completion
@@ -815,7 +877,12 @@ extension Chat {
                                        "typeCode": params["typeCode"].string ?? generalTypeCode,
                                        "subjectId": params["subjectId"].intValue]
         
-        sendMessageWithCallback(params: sendMessageParams, callback: MuteThreadCallbacks(), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (muteThreadUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       MuteThreadCallbacks(),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (muteThreadUniqueId) in
             uniqueId(muteThreadUniqueId)
         }
         muteThreadCallbackToUser = completion
@@ -848,7 +915,12 @@ extension Chat {
                                        "typeCode": unmuteThreadInput.typeCode ?? generalTypeCode,
                                        "subjectId": unmuteThreadInput.subjectId]
         
-        sendMessageWithCallback(params: sendMessageParams, callback: UnmuteThreadCallbacks(), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (muteThreadUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       UnmuteThreadCallbacks(),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (muteThreadUniqueId) in
             uniqueId(muteThreadUniqueId)
         }
         unmuteThreadCallbackToUser = completion
@@ -863,7 +935,12 @@ extension Chat {
                                        "typeCode": params["typeCode"].string ?? generalTypeCode,
                                        "subjectId": params["subjectId"].intValue]
         
-        sendMessageWithCallback(params: sendMessageParams, callback: UnmuteThreadCallbacks(), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (muteThreadUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       UnmuteThreadCallbacks(),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (muteThreadUniqueId) in
             uniqueId(muteThreadUniqueId)
         }
         unmuteThreadCallbackToUser = completion
@@ -872,27 +949,27 @@ extension Chat {
     
     // MARK: - Get/Add/Remove ThreadParticipants
     /*
-     GetThreadParticipants:
-     get all participants in a specific thread.
-     
-     By calling this function, a request of type 27 (THREAD_PARTICIPANTS) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     this function will get some optional prameters as an input, as JSON or Model (depends on the function that you would use) which are:
-     - threadId:    id of the thread that you want to mute it.    (Int)
-     - count:
-     - offset:
-     - firstMessageId:
-     - lastMessageId:
-     - name:
-     - typeCode:
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:  it will returns the response that comes from server to this request.    (GetThreadParticipantsModel)
-     3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
+     * GetThreadParticipants:
+     * get all participants in a specific thread.
+     *
+     * By calling this function, a request of type 27 (THREAD_PARTICIPANTS) will send throut Chat-SDK,
+     * then the response will come back as callbacks to client whose calls this function.
+     *
+     * + Inputs:
+     * this function will get some optional prameters as an input, as JSON or Model (depends on the function that you would use) which are:
+     * - threadId:    id of the thread that you want to mute it.    (Int)
+     * - count:
+     * - offset:
+     * - firstMessageId:
+     * - lastMessageId:
+     * - name:
+     * - typeCode:
+     *
+     * + Outputs:
+     * It has 2 callbacks as response:
+     * 1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
+     * 2- completion:  it will returns the response that comes from server to this request.    (GetThreadParticipantsModel)
+     * 3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
      */
     public func getThreadParticipants(getThreadParticipantsInput:   GetThreadParticipantsRequestModel,
                                       uniqueId:                     @escaping (String) -> (),
@@ -925,7 +1002,12 @@ extension Chat {
                                        "typeCode": getThreadParticipantsInput.typeCode ?? generalTypeCode,
                                        "content": content,
                                        "subjectId": getThreadParticipantsInput.threadId]
-        sendMessageWithCallback(params: sendMessageParams, callback: GetThreadParticipantsCallbacks(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (getParticipantsUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       GetThreadParticipantsCallbacks(parameters: sendMessageParams),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (getParticipantsUniqueId) in
             uniqueId(getParticipantsUniqueId)
         }
         threadParticipantsCallbackToUser = completion
@@ -997,7 +1079,12 @@ extension Chat {
                                        "typeCode": myTypeCode,
                                        "content": content,
                                        "subjectId": subjectId]
-        sendMessageWithCallback(params: sendMessageParams, callback: GetThreadParticipantsCallbacks(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (getParticipantsUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       GetThreadParticipantsCallbacks(parameters: sendMessageParams),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (getParticipantsUniqueId) in
             uniqueId(getParticipantsUniqueId)
         }
         threadParticipantsCallbackToUser = completion
@@ -1037,7 +1124,12 @@ extension Chat {
             sendMessageParams["uniqueId"] = JSON(uniqueId)
         }
         
-        sendMessageWithCallback(params: sendMessageParams, callback: AddParticipantsCallback(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (addParticipantsUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       AddParticipantsCallback(parameters: sendMessageParams),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (addParticipantsUniqueId) in
             uniqueId(addParticipantsUniqueId)
         }
         addParticipantsCallbackToUser = completion
@@ -1079,7 +1171,12 @@ extension Chat {
             
         }
         
-        sendMessageWithCallback(params: sendMessageParams, callback: AddParticipantsCallback(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (addParticipantsUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       AddParticipantsCallback(parameters: sendMessageParams),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (addParticipantsUniqueId) in
             uniqueId(addParticipantsUniqueId)
         }
         addParticipantsCallbackToUser = completion
@@ -1119,7 +1216,12 @@ extension Chat {
             sendMessageParams["uniqueId"] = JSON(uniqueId)
         }
         
-        sendMessageWithCallback(params: sendMessageParams, callback: RemoveParticipantsCallback(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (removeParticipantsUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       RemoveParticipantsCallback(parameters: sendMessageParams),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (removeParticipantsUniqueId) in
             uniqueId(removeParticipantsUniqueId)
         }
         removeParticipantsCallbackToUser = completion
@@ -1161,7 +1263,12 @@ extension Chat {
             
         }
         
-        sendMessageWithCallback(params: sendMessageParams, callback: RemoveParticipantsCallback(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (removeParticipantsUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       RemoveParticipantsCallback(parameters: sendMessageParams),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (removeParticipantsUniqueId) in
             uniqueId(removeParticipantsUniqueId)
         }
         removeParticipantsCallbackToUser = completion
@@ -1186,10 +1293,11 @@ extension Chat {
                                                    "subjectId": getAdminListInput.threadId]
         
         sendMessageWithCallback(params: sendMessageGetAdminListParams,
-                                callback: GetAdminListCallback(parameters: sendMessageGetAdminListParams),
-                                sentCallback: nil,
+                                callback:       GetAdminListCallback(parameters: sendMessageGetAdminListParams),
+                                callbacks:      nil,
+                                sentCallback:   nil,
                                 deliverCallback: nil,
-                                seenCallback: nil) { (getAminListUniqueId) in
+                                seenCallback:   nil) { (getAminListUniqueId) in
                                     uniqueId(getAminListUniqueId)
         }
         
@@ -1237,11 +1345,12 @@ extension Chat {
                                                     "content": content,
                                                     "subjectId": setRoleInput.first!.threadId]
         
-        sendMessageWithCallback(params: sendMessageSetRoleToUserParams,
-                                callback: SetRoleToUserCallback(parameters: sendMessageSetRoleToUserParams),
-                                sentCallback: nil,
+        sendMessageWithCallback(params:         sendMessageSetRoleToUserParams,
+                                callback:       SetRoleToUserCallback(parameters: sendMessageSetRoleToUserParams),
+                                callbacks:      nil,
+                                sentCallback:   nil,
                                 deliverCallback: nil,
-                                seenCallback: nil) { (getAminListUniqueId) in
+                                seenCallback:   nil) { (getAminListUniqueId) in
                                     uniqueId(getAminListUniqueId)
         }
         
@@ -1335,7 +1444,12 @@ extension Chat {
                                        "typeCode": getHistoryInput.typeCode ?? generalTypeCode,
                                        "subjectId": getHistoryInput.threadId]
         
-        sendMessageWithCallback(params: sendMessageParams, callback: GetHistoryCallbacks(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (getHistoryUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       GetHistoryCallbacks(parameters: sendMessageParams),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (getHistoryUniqueId) in
             uniqueId(getHistoryUniqueId)
         }
         historyCallbackToUser = completion
@@ -1433,7 +1547,12 @@ extension Chat {
                                        "typeCode": params["typeCode"].string ?? generalTypeCode,
                                        "subjectId": params["threadId"].intValue]
         
-        sendMessageWithCallback(params: sendMessageParams, callback: GetHistoryCallbacks(parameters: sendMessageParams), sentCallback: nil, deliverCallback: nil, seenCallback: nil) { (getHistoryUniqueId) in
+        sendMessageWithCallback(params:         sendMessageParams,
+                                callback:       GetHistoryCallbacks(parameters: sendMessageParams),
+                                callbacks:      nil,
+                                sentCallback:   nil,
+                                deliverCallback: nil,
+                                seenCallback:   nil) { (getHistoryUniqueId) in
             uniqueId(getHistoryUniqueId)
         }
         historyCallbackToUser = completion
@@ -1446,8 +1565,7 @@ extension Chat {
      */
     public func clearHistory(clearHistoryInput: ClearHistoryRequestModel,
                              uniqueId:          @escaping (String) -> (),
-                             completion:        @escaping callbackTypeAlias,
-                             cacheResponse:     @escaping callbackTypeAlias) {
+                             completion:        @escaping callbackTypeAlias) {
         log.verbose("Try to request to create clear history with this parameters: \n \(clearHistoryInput)", context: "Chat")
         
         var content: JSON = [:]
@@ -1460,8 +1578,9 @@ extension Chat {
                                                    "content": content,
                                                    "subjectId": clearHistoryInput.threadId]
         
-        sendMessageWithCallback(params: sendMessageClearHistoryParams,
-                                callback: ClearHistoryCallback(parameters: sendMessageClearHistoryParams),
+        sendMessageWithCallback(params:         sendMessageClearHistoryParams,
+                                callback:       ClearHistoryCallback(parameters: sendMessageClearHistoryParams),
+                                callbacks:      nil,
                                 sentCallback:   nil,
                                 deliverCallback: nil,
                                 seenCallback:   nil) { (clearHistoryUniqueId) in

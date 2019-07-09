@@ -15,7 +15,7 @@ import FanapPodAsyncSDK
 extension Chat {
     
     func chatDelegateUpdateThreadInfo(threadInfo: JSON) {
-        delegate?.threadEvents(type: ThreadEventTypes.UpdateThreadInfo, result: threadInfo)
+//        delegate?.threadEvents(type: ThreadEventTypes.UpdateThreadInfo, result: threadInfo)
     }
     public class UpdateThreadInfoCallback: CallbackProtocol {
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {

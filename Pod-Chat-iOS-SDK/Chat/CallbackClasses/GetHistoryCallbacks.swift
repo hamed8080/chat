@@ -37,7 +37,7 @@ extension Chat {
             
             let getHistoryModel = GetHistoryModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset - count, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode, threadId: getHistory["threadId"].int)
             
-            delegate?.threadEvents(type: ThreadEventTypes.getHistory, result: getHistoryModel)
+//            delegate?.threadEvents(type: ThreadEventTypes.getHistory, result: getHistoryModel)
         }
     }
     

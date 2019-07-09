@@ -42,7 +42,13 @@ extension Chat {
                                                "content":           deliverInput.messageId,
                                                "typeCode":          deliverInput.typeCode ?? generalTypeCode,
                                                "pushMsgType":       3]
-                sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: nil, deliverCallback: nil, seenCallback: nil, uniuqueIdCallback: nil)
+                sendMessageWithCallback(params:             sendMessageParams,
+                                        callback:           nil,
+                                        callbacks:          nil,
+                                        sentCallback:       nil,
+                                        deliverCallback:    nil,
+                                        seenCallback:       nil,
+                                        uniuqueIdCallback:  nil)
             }
         }
     }
@@ -59,7 +65,13 @@ extension Chat {
                                                "content":           params["messageId"].intValue,
                                                "typeCode":          params["typeCode"].int ?? generalTypeCode,
                                                "pushMsgType":       3]
-                sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: nil, deliverCallback: nil, seenCallback: nil, uniuqueIdCallback: nil)
+                sendMessageWithCallback(params:             sendMessageParams,
+                                        callback:           nil,
+                                        callbacks:          nil,
+                                        sentCallback:       nil,
+                                        deliverCallback:    nil,
+                                        seenCallback:       nil,
+                                        uniuqueIdCallback:  nil)
             }
         }
     }
@@ -91,7 +103,13 @@ extension Chat {
                                                "content":           seenInput.messageId,
                                                "typeCode":          seenInput.typeCode ?? generalTypeCode,
                                                "pushMsgType":       3]
-                sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: nil, deliverCallback: nil, seenCallback: nil, uniuqueIdCallback: nil)
+                sendMessageWithCallback(params:             sendMessageParams,
+                                        callback:           nil,
+                                        callbacks:          nil,
+                                        sentCallback:       nil,
+                                        deliverCallback:    nil,
+                                        seenCallback:       nil,
+                                        uniuqueIdCallback: nil)
             }
         }
     }
@@ -108,7 +126,13 @@ extension Chat {
                                                "content":           params["messageId"].intValue,
                                                "typeCode":          params["typeCode"].string ?? generalTypeCode,
                                                "pushMsgType":       3]
-                sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: nil, deliverCallback: nil, seenCallback: nil, uniuqueIdCallback: nil)
+                sendMessageWithCallback(params:             sendMessageParams,
+                                        callback:           nil,
+                                        callbacks:          nil,
+                                        sentCallback:       nil,
+                                        deliverCallback:    nil,
+                                        seenCallback:       nil,
+                                        uniuqueIdCallback:  nil)
             }
         }
     }

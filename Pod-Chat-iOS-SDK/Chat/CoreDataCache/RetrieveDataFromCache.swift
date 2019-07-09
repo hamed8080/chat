@@ -15,27 +15,37 @@ import CoreData
 extension Cache {
     
     /*
-     retrieve userInfo data from Cache
-     if it found any data from UserInfo in the Cache DB, it will return that,
-     otherwise it will return nil. (means cache has no data on itself)
+     * Retrieve UserInfo:
+     *
+     * -> fetch CMUser from Cache
+     * -> if it found any data of UserInfo in the Cache DB., it will return that,
+     * -> otherwise it will return nil. (means cache has no data(CMUser object) on itself)
+     *
+     *  + Access:   Public
+     *  + Inputs:   _
+     *  + Outputs:
+     *      - UserInfoModel?
+     *
      */
     public func retrieveUserInfo() -> UserInfoModel? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUser")
         do {
             if let result = try context.fetch(fetchRequest) as? [CMUser] {
-                if (result.count > 0) {
-                    let user = User(cellphoneNumber:    result.first!.cellphoneNumber,
-                                    email:              result.first!.email,
-                                    id:                 Int(exactly: result.first!.id ?? 0),
-                                    image:              result.first!.image,
-                                    lastSeen:           Int(exactly: result.first!.lastSeen ?? 0),
-                                    name:               result.first!.name,
-                                    receiveEnable:      Bool(exactly: result.first!.receiveEnable ?? true),
-                                    sendEnable:         Bool(exactly: result.first!.sendEnable ?? true))
+                switch result.first {
+                case let (.some(first)):
+                    let user = User(cellphoneNumber: first.cellphoneNumber,
+                                    coreUserId:     first.coreUserId as? Int,
+                                    email:          first.email,
+                                    id:             first.id as? Int,
+                                    image:          first.image,
+                                    lastSeen:       first.lastSeen as? Int,
+                                    name:           first.name,
+                                    receiveEnable:  first.receiveEnable as? Bool,
+                                    sendEnable:     first.sendEnable as? Bool)
                     let userInfoModel = UserInfoModel(userObject: user, hasError: false, errorMessage: "", errorCode: 0)
                     return userInfoModel
-                } else {
-                    return nil
+                    
+                default: return nil
                 }
             } else {
                 return nil
@@ -45,14 +55,224 @@ extension Cache {
         }
     }
     
+    
     /*
-     retrieve Threads from Cache
-     if it found any data from Threads in the Cache DB, it will return that,
-     otherwise it will return nil. (means cache has no data on itself).
-     .
-     first, it will fetch the Objects from CoreData, and sort them by time.
-     then based on the client request, it will find the objects that the client want to get,
-     and then it will return it as an array of 'Conversation' to the client.
+     * Retrieve Contacts:
+     *
+     * -> fetch CMContact from Cache DB.
+     * -> if it found any object, it will return that,
+     * -> otherwise it will return nil. (means cache has no data(CMContact object) on itself)
+     *
+     * first, it will fetch the Objects from CoreData.
+     * then based on the client request, it will find the objects that the client want to get,
+     * and then it will return it as an array of 'Contact' to the client.
+     *
+     *  + Access:   Public
+     *  + Inputs:
+     *      - ascending:        Bool
+     *      - cellphoneNumber:  String?
+     *      - count:            Int
+     *      - email:            String?
+     *      - firstName:        String?
+     *      - id:               Int?
+     *      - lastName:         String?
+     *      - offset:           Int
+     *      - search:           String?
+     *      - timeStamp:        Int,
+     *      - uniqueId:         String?
+     *  + Outputs:
+     *      - GetContactsModel?
+     *
+     */
+    // TODO: - Have to implement search in contacts by using 'name' property!
+    // TODO: - it will check offset and count after fetching objects (but it has do it in the same time)
+    public func retrieveContacts(ascending:         Bool,
+                                 cellphoneNumber:   String?,
+                                 count:             Int,
+                                 email:             String?,
+                                 firstName:         String?,
+                                 id:                Int?,
+                                 lastName:          String?,
+                                 offset:            Int,
+                                 search:            String?,
+                                 timeStamp:         Int,
+                                 uniqueId:          String?) -> GetContactsModel? {
+        
+        
+        // first of all, try to delete all the Contacts that has not been updated for long time (check it from timeStamp)
+        // after that, we will fetch on the Cache
+        deleteContacts(byTimeStamp: timeStamp)
+        
+        
+        /*
+         *  + if 'id' or 'uniqueId' property have been set:
+         *      we only have to predicate of them and answer exact response
+         *
+         *  + in the other situation:
+         *      make this properties AND together: 'firstName', 'lastName', 'cellphoneNumber', 'email'
+         *      then with the response of the AND, make OR with 'search' property
+         *
+         * if { 'id' }
+         * else { 'uniqueId' }
+         * else { ('cellphoneNumber' && 'firstName' && 'lastName' && 'email') || ('search') }
+         *
+         * then we create the output model and return it.
+         */
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMContact")
+        
+        let theOnlyPredicate: NSPredicate?
+        if let theId = id {
+            theOnlyPredicate = NSPredicate(format: "id == %i", theId)
+            fetchRequest.predicate = theOnlyPredicate
+        } else if let theUniqueId = uniqueId {
+            theOnlyPredicate = NSPredicate(format: "uniqueId == %@", theUniqueId)
+            fetchRequest.predicate = theOnlyPredicate
+        } else {
+            
+            var andPredicateArr = [NSPredicate]()
+            if let theCellphoneNumber = cellphoneNumber {
+                if (theCellphoneNumber != "") {
+                    let theCellphoneNumberPredicate = NSPredicate(format: "cellphoneNumber CONTAINS[cd] %@", theCellphoneNumber)
+                    andPredicateArr.append(theCellphoneNumberPredicate)
+                }
+            }
+            if let theFirstName = firstName {
+                if (theFirstName != "") {
+                    let theFirstNamePredicate = NSPredicate(format: "firstName CONTAINS[cd] %@", theFirstName)
+                    andPredicateArr.append(theFirstNamePredicate)
+                }
+            }
+            if let theLastName = lastName {
+                if (theLastName != "") {
+                    let theLastNamePredicate = NSPredicate(format: "lastName CONTAINS[cd] %@", theLastName)
+                    andPredicateArr.append(theLastNamePredicate)
+                }
+            }
+            if let theEmail = email {
+                if (theEmail != "") {
+                    let theEmailPredicate = NSPredicate(format: "email CONTAINS[cd] %@", theEmail)
+                    andPredicateArr.append(theEmailPredicate)
+                }
+            }
+            
+            var orPredicatArray = [NSPredicate]()
+            
+            if (andPredicateArr.count > 0) {
+                let andPredicateCompound = NSCompoundPredicate(type: .and, subpredicates: andPredicateArr)
+                orPredicatArray.append(andPredicateCompound)
+            }
+            
+            if let searchStatement = search {
+                if (searchStatement != "") {
+                    let theSearchPredicate = NSPredicate(format: "cellphoneNumber CONTAINS[cd] %@ OR email CONTAINS[cd] %@ OR firstName CONTAINS[cd] %@ OR lastName CONTAINS[cd] %@", searchStatement, searchStatement, searchStatement, searchStatement)
+                    orPredicatArray.append(theSearchPredicate)
+                }
+            }
+            
+            if (orPredicatArray.count > 0) {
+                let predicateCompound = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.or, subpredicates: orPredicatArray)
+                fetchRequest.predicate = predicateCompound
+            }
+        }
+        
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMContact] {
+                
+                var insideCount = 0
+                var cmContactObjectArr = [CMContact]()
+                
+                for (index, item) in result.enumerated() {
+                    if (index >= offset) && (insideCount < count) {
+                        cmContactObjectArr.append(item)
+                        insideCount += 1
+                    }
+                }
+                
+                var contactsArr = [Contact]()
+                for item in cmContactObjectArr {
+                    contactsArr.append(item.convertCMContactToContactObject())
+                }
+                
+                let getContactModelResponse = GetContactsModel(contactsObject:  contactsArr,
+                                                               contentCount:    contactsArr.count,
+                                                               count:           count,
+                                                               offset:          offset,
+                                                               hasError:        false,
+                                                               errorMessage:    "",
+                                                               errorCode:       0)
+                
+                return getContactModelResponse
+                
+            } else {
+                return nil
+            }
+        } catch {
+            fatalError("Error on fetching list of CMContact")
+        }
+    }
+    
+    
+    /*
+     * Retrieve PhoneContacts:
+     * -> fetch PhoneContact from Cache DB.
+     * -> if it found any object, it will retur that
+     * -> otherwise it will return nill. (means there is no data(PhoneContact object) inside Cache)
+     *
+     *  + Access:   Public
+     *  + Inputs:   _
+     *  + Outputs:
+     *      - [Contact]?
+     *
+     */
+    public func retrievePhoneContacts() -> [Contact]? {
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "PhoneContact")
+        do {
+            if let result = try context.fetch(fetchRequest) as? [PhoneContact] {
+                if (result.count > 0) {
+                    
+                    var contactsArr = [Contact]()
+                    for item in result {
+                        let contact = Contact(blocked:          nil,
+                                              cellphoneNumber:  item.cellphoneNumber,
+                                              email:            item.email,
+                                              firstName:        item.firstName,
+                                              hasUser:          false,
+                                              id:               nil,
+                                              image:            nil,
+                                              lastName:         item.lastName,
+                                              linkedUser:       nil,
+                                              notSeenDuration:  nil,
+                                              timeStamp:        nil,
+                                              uniqueId:         nil,
+                                              userId:           nil)
+                        contactsArr.append(contact)
+                    }
+                    
+                    return contactsArr
+                }
+            }
+        } catch {
+            
+        }
+        return nil
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    /*
+     * retrieve Threads from Cache
+     * if it found any data from Threads in the Cache DB, it will return that,
+     * otherwise it will return nil. (means cache has no data on itself).
+     *
+     * first, it will fetch the Objects from CoreData, and sort them by time.
+     * then based on the client request, it will find the objects that the client want to get,
+     * and then it will return it as an array of 'Conversation' to the client.
      */
     // TODO: - Have to implement search in threads by using 'name' and also 'threadIds' properties!
     public func retrieveThreads(ascending:  Bool,
@@ -132,134 +352,7 @@ extension Cache {
         }
     }
     
-    /*
-     retrieve Contacts data from Cache
-     if it found any data from Cache DB, it will return that,
-     otherwise it will return nil. (means cache has no data on itself)
-     .
-     first, it will fetch the Objects from CoreData.
-     then based on the client request, it will find the objects that the client want to get,
-     and then it will return it as an array of 'Contact' to the client.
-     */
-    // TODO: - Have to implement search in contacts by using 'name' property!
-    public func retrieveContacts(ascending:         Bool,
-                                 cellphoneNumber:   String?,
-                                 count:             Int,
-                                 email:             String?,
-                                 firstName:         String?,
-                                 id:                Int?,
-                                 lastName:          String?,
-                                 offset:            Int,
-                                 search:            String?,
-                                 timeStamp:         Int,
-                                 uniqueId:          String?) -> GetContactsModel? {
-        
-        deleteContacts(byTimeStamp: timeStamp)
-        
-        /*
-         + if 'id' or 'uniqueId' property have been set:
-         we only have to predicate of them and answer exact response
-         
-         + in the other situation:
-         make this properties AND together: 'firstName', 'lastName', 'cellphoneNumber', 'email'
-         then with the response of the AND, make OR with 'search' property
-         
-         then we create the output model and return it.
-         */
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMContact")
-        
-        // check if 'id' or 'uniqueId' had been set
-        let theOnlyPredicate: NSPredicate?
-        if let theId = id {
-            theOnlyPredicate = NSPredicate(format: "id == %i", theId)
-            fetchRequest.predicate = theOnlyPredicate
-        } else if let theUniqueId = uniqueId {
-            theOnlyPredicate = NSPredicate(format: "uniqueId == %@", theUniqueId)
-            fetchRequest.predicate = theOnlyPredicate
-        } else {
-            
-            var andPredicateArr = [NSPredicate]()
-            if let theCellphoneNumber = cellphoneNumber {
-                if (theCellphoneNumber != "") {
-                    let theCellphoneNumberPredicate = NSPredicate(format: "cellphoneNumber CONTAINS[cd] %@", theCellphoneNumber)
-                    andPredicateArr.append(theCellphoneNumberPredicate)
-                }
-            }
-            if let theFirstName = firstName {
-                if (theFirstName != "") {
-                    let theFirstNamePredicate = NSPredicate(format: "firstName CONTAINS[cd] %@", theFirstName)
-                    andPredicateArr.append(theFirstNamePredicate)
-                }
-            }
-            if let theLastName = lastName {
-                if (theLastName != "") {
-                    let theLastNamePredicate = NSPredicate(format: "lastName CONTAINS[cd] %@", theLastName)
-                    andPredicateArr.append(theLastNamePredicate)
-                }
-            }
-            if let theEmail = email {
-                if (theEmail != "") {
-                    let theEmailPredicate = NSPredicate(format: "email CONTAINS[cd] %@", theEmail)
-                    andPredicateArr.append(theEmailPredicate)
-                }
-            }
-            
-            var orPredicatArray = [NSPredicate]()
-            
-            if (andPredicateArr.count > 0) {
-                let andPredicateCompound = NSCompoundPredicate(type: .and, subpredicates: andPredicateArr)
-                orPredicatArray.append(andPredicateCompound)
-            }
-            
-            
-            if let searchStatement = search {
-                if (searchStatement != "") {
-                    let theSearchPredicate = NSPredicate(format: "cellphoneNumber CONTAINS[cd] %@ OR email CONTAINS[cd] %@ OR firstName CONTAINS[cd] %@ OR lastName CONTAINS[cd] %@", searchStatement, searchStatement, searchStatement, searchStatement)
-                    orPredicatArray.append(theSearchPredicate)
-                }
-            }
-            
-            if (orPredicatArray.count > 0) {
-                let predicateCompound = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.or, subpredicates: orPredicatArray)
-                fetchRequest.predicate = predicateCompound
-            }
-        }
-        
-        do {
-            if let result = try context.fetch(fetchRequest) as? [CMContact] {
-                
-                var insideCount = 0
-                var cmContactObjectArr = [CMContact]()
-                
-                for (index, item) in result.enumerated() {
-                    if (index >= offset) && (insideCount < count) {
-                        cmContactObjectArr.append(item)
-                        insideCount += 1
-                    }
-                }
-                
-                var contactsArr = [Contact]()
-                for item in cmContactObjectArr {
-                    contactsArr.append(item.convertCMContactToContactObject())
-                }
-                
-                let getContactModelResponse = GetContactsModel(contactsObject:  contactsArr,
-                                                               contentCount:    contactsArr.count,
-                                                               count:           count,
-                                                               offset:          offset,
-                                                               hasError:        false,
-                                                               errorMessage:    "",
-                                                               errorCode:       0)
-                
-                return getContactModelResponse
-                
-            } else {
-                return nil
-            }
-        } catch {
-            fatalError("Error on fetching list of CMContact")
-        }
-    }
+   
     
     /*
      retrieve ThreadParticipants data from Cache
@@ -324,29 +417,6 @@ extension Cache {
         } catch {
             fatalError("Error on fetching list of CMParticipant")
         }
-    }
-    
-    
-    public func retrievePhoneContacts() -> [Contact]? {
-        
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "PhoneContact")
-        do {
-            if let result = try context.fetch(fetchRequest) as? [PhoneContact] {
-                if (result.count > 0) {
-                    
-                    var contactsArr = [Contact]()
-                    for item in result {
-                        let contact = Contact(cellphoneNumber: item.cellphoneNumber, email: item.email, firstName: item.firstName, hasUser: false, id: nil, image: nil, lastName: item.lastName, linkedUser: nil, notSeenDuration: nil, timeStamp: nil, uniqueId: nil, userId: nil)
-                        contactsArr.append(contact)
-                    }
-                    
-                    return contactsArr
-                }
-            }
-        } catch {
-            
-        }
-        return nil
     }
     
     

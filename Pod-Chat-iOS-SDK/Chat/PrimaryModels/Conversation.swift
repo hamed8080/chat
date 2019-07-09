@@ -70,8 +70,8 @@ open class Conversation {
     public let partnerLastSeenMessageId:        Int?
     public let partnerLastSeenMessageNanos:     UInt?
     public let partnerLastSeenMessageTime:      UInt?
-    public let title:                           String?
     public let time:                            UInt?
+    public let title:                           String?
     public let type:                            Int?
     public let unreadCount:                     Int?
     

@@ -24,7 +24,7 @@ extension Chat {
             
             let createThreadModel = CreateThreadModel(messageContent: resultData, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
             
-            delegate?.threadEvents(type: ThreadEventTypes.new, result: createThreadModel)
+            delegate?.threadEvents(type: ThreadEventTypes.THREAD_NEW, result: createThreadModel)
         }
     }
     

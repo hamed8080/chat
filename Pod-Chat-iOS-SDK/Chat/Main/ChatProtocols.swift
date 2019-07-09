@@ -31,21 +31,21 @@ protocol CallbackProtocolWith3Calls: class {
 
 public protocol ChatDelegates: class {
     
-    func chatConnected()
+    func chatConnect()
     func chatDisconnect()
     func chatReconnect()
-    func chatState(state: Int)
     func chatReady(withUserInfo: User)
-    
-    func userEvents(type: UserEventTypes, result: Any)
-    func contactEvents(type: ContactEventTypes, result: Any)
-    func chatDeliver(messageId: Int, ownerId: Int)
-    func messageEvents(type: MessageEventTypes, result: Any)
-    func threadEvents(type: ThreadEventTypes, result: Any)
-    
-//    func botEvents(type: String, result: JSON)
+    func chatState(state: Int)
     
     func chatError(errorCode: Int, errorMessage: String, errorResult: Any?)
+    
+    func contactEvents(type: ContactEventTypes, result: Any)
+    func threadEvents(type: ThreadEventTypes, result: Any)
+    func messageEvents(type: MessageEventTypes, result: Any)
+    func botEvents(type: BotEventTypes, result: Any)
+    func fileUploadEvents(type: FileUploadEventTypes, result: Any)
+    func systemEvents(type: SystemEventTypes, result: Any)
+    
 }
 
 

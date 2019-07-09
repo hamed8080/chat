@@ -25,9 +25,9 @@ public class Cache {
     func saveContext(subject: String) {
         do {
             try context.save()
-            print("\(subject); has Saved Successfully on CoreData Cache")
+            print("\(subject), has Saved Successfully on CoreData Cache")
         } catch {
-            fatalError("\(subject); Error to save data on CoreData Cache")
+            fatalError("\(subject), Error to save data on CoreData Cache")
         }
     }
     

@@ -31,18 +31,99 @@ extension Chat {
      */
     func getDeviceIdWithToken(completion: @escaping (String) -> ()) {
         /*
-         *  send a .get request to ssoHost server to get all registered devices of the user
-         *  response is a String value that has array of objects (that contains user devices)
-         *  there is one of them that has "current" = true
-         *  that means this device is the current device,
-         *  so we get the "uid" value from it and save it on "deviceId" variable
+         *  -> send a .get request to ssoHost server to get all user registered devices
+         *
+         *  -> get response as String
+         *  -> convert String to Data
+         *  -> convert Data to JSON
+         *      + JSON contains array of objects:
+         *          - total:    Int
+         *          - size:     Int
+         *          - offset:   Int
+         *          + devices:
+         *              [
+         *                  - agent:            String  (conrains user device details)
+         *                  - browserVersion:   String  (ex: "Chrome")
+         *                  - current:          Bool    (ex: false)
+         *                  - deviceType:       String  (ex: "Desktop")
+         *                  - id:               Int     (ex: 12209)
+         *                  - ip:               String  (ex: "172.16.107.106")
+         *                  - language:         String  (ex: "fa")
+         *                  - lastAccessTime:   Int     (ex: 1548070459111)
+         *                  + location:         {}
+         *                  - os:               String  (ex: "Win10")
+         *                  - osVersion:        String  (ex: "10.0")
+         *                  - uid:              String  (ex: "a4c812ba4cea8b01bef58ac65c3a6094")
+         *              ]
+         *
+         *  -> loop throuth the "devices" to find an object which its "current" value is equal to "true"
+         *      (which means this is the current device that user is using right now)
+         *      (actualy we have to find one object that has this condition)
+         *  -> get the "uid" value from this object and pass it to the caller as completion
+         *      (its the user deviceId)
+         *
          *
          */
+        
         let url = ssoHost + SERVICES_PATH.SSO_DEVICES.rawValue
         let method: HTTPMethod = .get
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
+        
+        Alamofire.request(url, method: method, parameters: nil, headers: headers).responseString { (response) in
+            
+            // check if the result respons is success
+            if response.result.isSuccess {
+                let responseStr: String = response.result.value!
+                // convert String to Data
+                if let dataFromMsgString = responseStr.data(using: .utf8, allowLossyConversion: false) {
+                    
+                    var msg: JSON
+                    do {
+                        // convert Data to JSON
+                        msg = try JSON(data: dataFromMsgString)
+                    } catch {
+                        fatalError("Cannot convert Data to JSON")
+                    }
+                    
+                    // loop through devices
+                    if let devices = msg["devices"].array {
+                        for device in devices {
+                            // check if we can found user current device
+                            if device["current"].bool == true {
+                                completion(device["uid"].stringValue)
+                                break
+                            }
+                        }
+                        if (self.deviceId == nil || (self.deviceId == "")) {
+                            // if deviceId is nil, we will send an Error Event to client
+                            self.delegate?.chatError(errorCode:     6000,
+                                                     errorMessage:  CHAT_ERRORS.err6000.rawValue,
+                                                     errorResult:   nil)
+                        }
+                    } else {
+                        // if server response has no array value of devices, we will send an Error Event to client
+                        self.delegate?.chatError(errorCode:     6001,
+                                                 errorMessage:  CHAT_ERRORS.err6001.rawValue,
+                                                 errorResult:   nil)
+                    }
+                    
+                }
+                
+                
+            } else if let error = response.error {
+                log.error("Response of getDeviceIdWithToken is Failed)", context: "Chat")
+                self.delegate?.chatError(errorCode:     6200,
+                                         errorMessage:  "\(CHAT_ERRORS.err6200.rawValue): \(error)",
+                                         errorResult:   error.localizedDescription)
+            }
+            
+        }
+        
+        // last implementation of this function was using the httpRequest function that will deprecate because of complexity that comes with it over time.
+        /*
         httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: nil, dataToSend: nil, requestUniqueId: nil, isImage: nil, isFile: nil, completion: { (myResponse) in
             let responseStr: String = myResponse as! String
+         
             if let dataFromMsgString = responseStr.data(using: .utf8, allowLossyConversion: false) {
                 // get currrent user deviceIdresponseStr
                 var msg: JSON
@@ -68,41 +149,222 @@ extension Chat {
                 
             }
         }, progress: nil, idDownloadRequest: false, isMapServiceRequst: false) { _,_  in }
-        
+        */
         
     }
     
-//
-//    /**
-//     * Handshake with SSO to get user's keys
-//     *
-//     * In order to Encrypt and Decrypt cache we need a key.
-//     * We can retrieve encryption keys from SSO, all we
-//     * need to do is to do a handshake with SSO and
-//     * get the keys.
-//     *
-//     * @access private
-//     *
-//     * @param {function}  callback    The callback function to run after Generating Keys
-//     *
-//     * @return {undefined}
-//     */
-//    func generateEncryptionKey(completion: @escaping (JSON)->()) {
-//
-//        let url = SERVICE_ADDRESSES.SSO_ADDRESS + SERVICES_PATH.SSO_GENERATE_KEY.rawValue
-//        let method: HTTPMethod = .post
-//        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-//        var params: Parameters = ["validity": 10 * 365 * 24 * 60 * 60,
-//                                  "renew": false,
-//                                  "keyAlgorithm": "aes",
-//                                  "keySize": 256]
-////        if let keyVal = keyAlgorithm {
-////            params["keyAlgorithm"] = keyVal
-////        }
-////        if let kSize = keySize {
-////            params["keySize"] = kSize
-////        }
-//
+
+    /*
+     *  Handshake with SSO to get user's keys:
+     *
+     * get the key (for Encrypt and Decrypt the Cache) by handshaking with SSO
+     *
+     *  + Access:
+     *      - private
+     *
+     *  + Inputs:
+     *      - keyAlgorithm: String?
+     *      - keySize:      Int?
+     *
+     *  + Outputs:
+     *      - JSON (as completion handler)
+     *
+     */
+    // TODO: save the new key into the Cache
+    func generateEncryptionKey(keyAlgorithm: String?, keySize: Int?, completion: @escaping (JSON)->()) {
+        /*
+         *  -> send a .post request to the SSO server to generate and then get the key
+         *
+         *  -> get response as String
+         *  -> convert String to Data
+         *  -> convert Data to JSON
+         *      + JSON contains this object:
+         *          - algorithm:            String  (ex: "AES")
+         *          - expires_in:           Int     (ex: 315360000)
+         *          - keyFormat:            String  (ex: "base64")
+         *          - keyId:                String  (ex: "18294d3013f61562669359")
+         *          - secretKey:            String  (ex: "8nBxSBvghRaBpwPH8ZbA1bqUa7K\/Hbr5EH5Ab1WSJJY=")
+         *          + device:
+         *              - agent:            String  (ex: "Mozilla\/5.0 (X11; Linux x86_64) Appl ....")
+         *              - browser:          String  (ex: "Chrome")
+         *              - browserVersion:   String  (ex: "59")
+         *              - current:          Bool    (ex: false)
+         *              - deviceType:       String  (ex: "Desktop")
+         *              - id:               Int     (ex: 10368)
+         *              - ip:               String  (ex: "172.16.106.42")
+         *              - lastAccessTime:   Int     (ex: 1551613854000)
+         *              + location:         {}
+         *              - os:               String  (ex: "Linux")
+         *              - uid:              String  (ex: "94af0c8f381deeb7aa28a85c473641c1-Reza")
+         *          + user:
+         *              - family_name:          String  (ex: "Reza")
+         *              - given_name:           String  (ex: "Irani")
+         *              - id:                   Int     (ex: 5098)
+         *              - preferred_username:   String  (ex: "Reza")
+         *
+         */
+        
+        let url = SERVICE_ADDRESSES.SSO_ADDRESS + SERVICES_PATH.SSO_GENERATE_KEY.rawValue
+        let method: HTTPMethod = .post
+        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
+        let params: Parameters = ["validity":       10 * 365 * 24 * 60 * 60,      // 10 years
+                                  "renew":          "true",
+                                  "keyAlgorithm":   keyAlgorithm ?? "aes",
+                                  "keySize":        keySize ?? 256]
+        
+        Alamofire.request(url, method: method, parameters: params, headers: headers).responseString { (response) in
+            
+            if response.result.isSuccess {
+                let responseStr: String = response.result.value!
+                // convert String to Data
+                if let dataFromMsgString = responseStr.data(using: .utf8, allowLossyConversion: false) {
+                    
+                    var msg: JSON
+                    do {
+                        // convert Data to JSON
+                        msg = try JSON(data: dataFromMsgString)
+                    } catch {
+                        fatalError("Cannot convert Data to JSON")
+                    }
+                    print("***********2: \(msg)")
+                    let myJson: JSON = ["hasError":     false,
+                                        "errorCode":    0,
+                                        "errorMessage": "",
+                                        "result":       msg]
+                    
+                    // TODO: here we have to save the new KeyId in the Cache and update the cahceSecret
+                    
+                    completion(myJson)
+                }
+                
+            } else if let error = response.error {
+                self.delegate?.chatError(errorCode:     6200,
+                                         errorMessage:  "\(CHAT_ERRORS.err6200.rawValue): \(error)",
+                    errorResult:   error.localizedDescription)
+                
+                let myJson: JSON = ["hasError":     true,
+                                    "errorCode":    6200,
+                                    "errorMessage": "\(CHAT_ERRORS.err6200.rawValue) \(error)",
+                                    "errorEvent":   error.localizedDescription]
+                completion(myJson)
+            }
+        
+        }
+
+    }
+    
+    
+    /*
+     * Get Encryption Keys by KeyId:
+     *
+     * get the key (for Encrypt and Decrypt the Cache) from SSO by sending KeyId
+     *
+     *  + Access:
+     *      - private
+     *
+     *  + Inputs:
+     *      - keyAlgorithm: String?
+     *      - keySize:      Int?
+     *      - keyId:        String
+     *
+     *  + Outputs:
+     *      - JSON (as completion handler)
+     *
+     */
+    func getEncryptionKey(keyAlgorithm: String?, keySize: String?, keyId: String, completion: @escaping (JSON)->()) {
+        /*
+         *  -> send a .get request to the SSO server to get the secretKey with keyId
+         *
+         *  -> get response as String
+         *  -> convert String to Data
+         *  -> convert Data to JSON
+         *      + JSON contains this object:
+         *          - algorithm:            String  (ex: "AES")
+         *          - expires_in:           Int     (ex: 315360000)
+         *          - keyFormat:            String  (ex: "base64")
+         *          - keyId:                String  (ex: "18294d3013f61562669359")
+         *          - secretKey:            String  (ex: "8nBxSBvghRaBpwPH8ZbA1bqUa7K\/Hbr5EH5Ab1WSJJY=")
+         *          + device:
+         *              - agent:            String  (ex: "Mozilla\/5.0 (X11; Linux x86_64) Appl ....")
+         *              - browser:          String  (ex: "Chrome")
+         *              - browserVersion:   String  (ex: "59")
+         *              - current:          Bool    (ex: false)
+         *              - deviceType:       String  (ex: "Desktop")
+         *              - id:               Int     (ex: 10368)
+         *              - ip:               String  (ex: "172.16.106.42")
+         *              - lastAccessTime:   Int     (ex: 1551613854000)
+         *              + location:         {}
+         *              - os:               String  (ex: "Linux")
+         *              - uid:              String  (ex: "94af0c8f381deeb7aa28a85c473641c1-Reza")
+         *          + user:
+         *              - family_name:          String  (ex: "Reza")
+         *              - given_name:           String  (ex: "Irani")
+         *              - id:                   Int     (ex: 5098)
+         *              - preferred_username:   String  (ex: "Reza")
+         *          + client:
+         *              + allowedGrantTypes:    []      (ex: ["authorization_code", "refresh_token", "implicit"])
+         *              + allowedScopes:        []      (ex: ["phone", "legal_nationalcode", "activity", ...])
+         *              + allowedRedirectUris:  []      (ex: ["*"])
+         *              + allowedUserIPs:       []      (ex: ["*"])
+         *              - captchaEnabled:       Bool    (ex: false)
+         *              - client_id:            String  (ex: "dd5c454bb756c6de92c7cb15")
+         *              - description:          String  (ex: "Keylead Root Client")
+         *              - id:                   Int     (ex: 1)
+         *              - loginUrl:             String  (ex: "http:\/\/podtest.fanapsoft.ir:8008\/oauth2\....")
+         *              - name:                 String  (ex: "KeyleadFather")
+         *              - signupEnabled:        Bool    (ex: true)
+         *              - supportNumber:        String  (ex: "021-33255")
+         *              - url:                  String  (ex: "http:\/\/keylead.fanapium.com")
+         *              - userId:               Int     (ex: 1)
+         *
+         */
+        // TODO: save the new keyId into the Cache
+        let url = SERVICE_ADDRESSES.SSO_ADDRESS + SERVICES_PATH.SSO_GET_KEY.rawValue + "\(keyId)"
+        let method: HTTPMethod = .get
+        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
+        let params: Parameters = ["validity":       10 * 365 * 24 * 60 * 60,  // 10 years
+                                  "renew":          false,
+                                  "keyAlgorithm":   keyAlgorithm ?? "aes",
+                                  "keySize":        keySize ?? 256]
+        
+        Alamofire.request(url, method: method, parameters: params, headers: headers).responseString { (response) in
+            
+            if response.result.isSuccess {
+                let responseStr: String = response.result.value!
+                // convert String to Data
+                if let dataFromMsgString = responseStr.data(using: .utf8, allowLossyConversion: false) {
+                    
+                    var msg: JSON
+                    do {
+                        // convert Data to JSON
+                        msg = try JSON(data: dataFromMsgString)
+                    } catch {
+                        fatalError("Cannot convert Data to JSON")
+                    }
+                    let myJson: JSON = ["hasError":     false,
+                                        "errorCode":    0,
+                                        "errorMessage": "",
+                                        "result":       msg]
+                    
+                    // TODO: here we have to save the new KeyId in the Cache and update the cahceSecret
+                    
+                    completion(myJson)
+                }
+                
+            } else if let error = response.error {
+                self.delegate?.chatError(errorCode:     6200,
+                                         errorMessage:  "\(CHAT_ERRORS.err6200.rawValue): \(error)",
+                    errorResult:   error.localizedDescription)
+                
+                let myJson: JSON = ["hasError":     true,
+                                    "errorCode":    6200,
+                                    "errorMessage": "\(CHAT_ERRORS.err6200.rawValue) \(error)",
+                                    "errorEvent":   error.localizedDescription]
+                completion(myJson)
+            }
+            
+        }
+        
 //        Alamofire.request(url, method: method, parameters: params, headers: headers).responseJSON { (myResponse) in
 //
 //            if myResponse.result.isSuccess {
@@ -116,70 +378,6 @@ extension Chat {
 //                            myJson["result"] = JSON(jsonResponse["responseText"].stringValue)
 //                        }
 //                        completion(myJson)
-//                    } else {
-//                        let myJson: JSON = ["hasError": true,
-//                                            "errorCode": 6200,
-//                                            "errorMessage": "\(CHAT_ERRORS.err6200.rawValue)"]
-//                        completion(myJson)
-//                    }
-//
-//                }
-//            } else {
-//                if let error = myResponse.error {
-//                    let myJson: JSON = ["hasError": true,
-//                                        "errorCode": 6200,
-//                                        "errorMessage": "\(CHAT_ERRORS.err6200.rawValue) \(error)",
-//                        "errorEvent": error.localizedDescription]
-//                    completion(myJson)
-//                }
-//            }
-//        }
-//
-//    }
-//
-//
-//    /**
-//     * Get Encryption Keys by KeyId
-//     *
-//     * In order to Encrypt and Decrypt cache we need a key.
-//     * We can retrieve encryption keys from SSO by sending
-//     * KeyId to SSO and get related keys
-//     *
-//     * @access private
-//     *
-//     * @param {function}  callback    The callback function to run after getting Keys
-//     *
-//     * @return {undefined}
-//     */
-//    func getEncryptionKey(completion: @escaping (JSON)->()) {
-//
-//        let url = SERVICE_ADDRESSES.SSO_ADDRESS + SERVICES_PATH.SSO_GET_KEY.rawValue + "\(keyId)"
-//        let method: HTTPMethod = .get
-//        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-//        var params: Parameters = ["validity": 10 * 365 * 24 * 60 * 60,
-//                                  "renew": false,
-//                                  "keyAlgorithm": "aes",
-//                                  "keySize": 256]
-////        if let keyVal = keyAlgorithm {
-////            params["keyAlgorithm"] = keyVal
-////        }
-////        if let kSize = keySize {
-////            params["keySize"] = kSize
-////        }
-//
-//        Alamofire.request(url, method: method, parameters: params, headers: headers).responseJSON { (myResponse) in
-//
-//            if myResponse.result.isSuccess {
-//                if let jsonValue = myResponse.result.value {
-//                    let jsonResponse: JSON = JSON(jsonValue)
-//                    if let error = jsonResponse["hasError"].bool {
-//                        var myJson: JSON = ["hasError": error,
-//                                            "errorCode": jsonResponse["error"].int ??  0,
-//                                            "errorMessage": jsonResponse["error_description"].string ?? 0]
-//                        if !error {
-//                            myJson["result"] = JSON(jsonResponse["responseText"].stringValue)
-//                        }
-//                        completion(myJson)
 //                    }
 //                }
 //            } else {
@@ -192,10 +390,10 @@ extension Chat {
 //                }
 //            }
 //        }
-//
-//    }
-//
-//
+
+    }
+
+
     
     
     /*
@@ -376,7 +574,13 @@ extension Chat {
     }
     
     
-    func sendMessageWithCallback(params: JSON, callback: CallbackProtocol?, sentCallback: CallbackProtocolWith3Calls?, deliverCallback: CallbackProtocolWith3Calls?, seenCallback: CallbackProtocolWith3Calls?, uniuqueIdCallback: callbackTypeAliasString?) {
+    func sendMessageWithCallback(params:            JSON,
+                                 callback:          CallbackProtocol?,
+                                 callbacks:         [CallbackProtocol]?,
+                                 sentCallback:      CallbackProtocolWith3Calls?,
+                                 deliverCallback:   CallbackProtocolWith3Calls?,
+                                 seenCallback:      CallbackProtocolWith3Calls?,
+                                 uniuqueIdCallback: callbackTypeAliasString?) {
         log.verbose("params (to send): \n \(params)", context: "Chat")
         
         /*
@@ -434,18 +638,42 @@ extension Chat {
             messageVO["uniqueId"] = JSON(uID)
             //            returnData["uniqueId"] = JSON(uID)
             uniqueId = uID
-        } else if params["chatMessageVOType"].intValue != chatMessageVOTypes.PING.rawValue {
+        } else if (params["chatMessageVOType"].intValue == chatMessageVOTypes.DELETE_MESSAGE.rawValue) {
+            if let x = params["content"]["ids"].arrayObject {
+                if x.count <= 1 {
+                    let uID = generateUUID()
+                    messageVO["uniqueId"] = JSON(uID)
+                    uniqueId = uID
+                }
+            } else {
+                let uID = generateUUID()
+                messageVO["uniqueId"] = JSON(uID)
+                uniqueId = uID
+            }
+        } else if (params["chatMessageVOType"].intValue != chatMessageVOTypes.PING.rawValue) {
             let uID = generateUUID()
             messageVO["uniqueId"] = JSON(uID)
             //            returnData["uniqueId"] = JSON(uID)
             uniqueId = uID
         }
-        uniuqueIdCallback?(uniqueId)
+        if (uniqueId != "") {
+            uniuqueIdCallback?(uniqueId)
+        }
+        
         
         log.verbose("MessageVO params (to send): \n \(messageVO)", context: "Chat")
         
         if (callback != nil) {
             Chat.map[uniqueId] = callback
+        }
+        
+        if let myCallbacks = callbacks {
+            for (index, item) in myCallbacks.enumerated() {
+                if let uIds = params["content"]["uniqueIds"].arrayObject as? [String] {
+                    let uId = uIds[index]
+                    Chat.map[uId] = item
+                }
+            }
         }
         
         if (sentCallback != nil) {
@@ -589,19 +817,22 @@ extension Chat {
     /*
      * Ping
      *
-     * This Function sends ping message to keep user connected to
-     * chat server and updates its status
+     * This Function sends ping message to keep the user connected to the chat server
      *
      * + Access:    private
-     * + Inputs:    nothing
-     * + Outputs:   nothing
+     * + Inputs:    _
+     * + Outputs:   _
      *
      */
     func ping() {
         /*
-         * if chat is connected and we also have peerId
-         * then send a message of type PING
-         * then reset the value of the timer ("lastSentMessageTimeoutId")
+         *
+         *  -> if chat is connected and we also have the peerId
+         *  -> then send a message of type PING
+         *      (Ping messages should be sent ASAP,
+         *       because we don't want to wait for send queue,
+         *       so we send them right through the async from here)
+         *  -> then reset the value of the timer ("lastSentMessageTimeoutId")
          *
          */
         if (chatState == true && peerId != nil && peerId != 0) {
@@ -609,7 +840,13 @@ extension Chat {
             log.verbose("Try to send Ping", context: "Chat")
             
             let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.PING.rawValue, "pushMsgType": 5]
-            _ = sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: nil, deliverCallback: nil, seenCallback: nil, uniuqueIdCallback: nil)
+            sendMessageWithCallback(params:             sendMessageParams,
+                                    callback:           nil,
+                                    callbacks:          nil,
+                                    sentCallback:       nil,
+                                    deliverCallback:    nil,
+                                    seenCallback:       nil,
+                                    uniuqueIdCallback:  nil)
         } else if (lastSentMessageTimeoutId != nil) {
             lastSentMessageTimeoutId?.suspend()
         }
@@ -1059,7 +1296,7 @@ extension Chat {
         // a message of type 17 (REMOVED_FROM_THREAD) comes from Server.
         case chatMessageVOTypes.REMOVED_FROM_THREAD.rawValue:
             let result: JSON = ["thread": threadId]
-            delegate?.threadEvents(type: ThreadEventTypes.removedFrom, result: result)
+//            delegate?.threadEvents(type: ThreadEventTypes.removedFrom, result: result)
             break
             
         // a message of type 18 (REMOVE_PARTICIPANT) comes from Server.
@@ -1082,8 +1319,8 @@ extension Chat {
                 let threads = myResponseJSON["result"]["threads"].arrayValue
                 
                 let result: JSON = ["thread": threads[0]]
-                self.delegate?.threadEvents(type: ThreadEventTypes.removeParticipant, result: result)
-                self.delegate?.threadEvents(type: ThreadEventTypes.lastActivityTime, result: result)
+//                self.delegate?.threadEvents(type: ThreadEventTypes.removeParticipant, result: result)
+//                self.delegate?.threadEvents(type: ThreadEventTypes.lastActivityTime, result: result)
             }
             break
             
@@ -1271,13 +1508,13 @@ extension Chat {
             log.verbose("Message of type 'THREAD_INFO_UPDATED' recieved", context: "Chat")
             let conversation: Conversation = Conversation(messageContent: messageContent)
             let result: JSON = ["thread": conversation]
-            delegate?.threadEvents(type: ThreadEventTypes.infoUpdated, result: result)
+//            delegate?.threadEvents(type: ThreadEventTypes.infoUpdated, result: result)
             break
             
         // a message of type 31 (LAST_SEEN_UPDATED) comes from Server.
         case chatMessageVOTypes.LAST_SEEN_UPDATED.rawValue:
             log.verbose("Message of type 'LAST_SEEN_UPDATED' recieved", context: "Chat")
-            delegate?.threadEvents(type: ThreadEventTypes.lastSeenUpdate, result: messageContent)
+//            delegate?.threadEvents(type: ThreadEventTypes.lastSeenUpdate, result: messageContent)
             // this functionality has beed deprecated
             /*
              let paramsToSend: JSON = ["threadIds": messageContent["conversationId"].intValue]
@@ -1379,7 +1616,7 @@ extension Chat {
         // a message of type 45 (SIGNAL_MESSAGE) comes from Server
         case chatMessageVOTypes.SIGNAL_MESSAGE.rawValue:
             log.verbose("Message of type 'SIGNAL_MESSAGE' revieved", context: "Chat")
-            delegate?.threadEvents(type: ThreadEventTypes.isTyping, result: "\(messageContentAsString)")
+//            delegate?.threadEvents(type: ThreadEventTypes.isTyping, result: "\(messageContentAsString)")
             return
             
         // a message of type 48 (GET_THREAD_ADMINS) comes from Server.
@@ -1443,12 +1680,12 @@ extension Chat {
         deliver(params: parameterToSent)
         
         if let messageParticipants = message.participant {
-            delegate?.chatDeliver(messageId: message.id!, ownerId: messageParticipants.id!)
+//            delegate?.chatDeliver(messageId: message.id!, ownerId: messageParticipants.id!)
         }
         
         let messageJSON = message.formatToJSON()
         let myResult: JSON = ["message": messageJSON]
-        delegate?.messageEvents(type: MessageEventTypes.new, result: myResult)
+//        delegate?.messageEvents(type: MessageEventTypes.new, result: myResult)
         
         
         // This code is deprecated
@@ -1476,7 +1713,7 @@ extension Chat {
     func chatEditMessageHandler(threadId: Int, messageContent: JSON) {
         let message = Message(threadId: threadId, pushMessageVO: messageContent)
         let result: JSON = ["message": message]
-        delegate?.messageEvents(type: MessageEventTypes.edit, result: result)
+//        delegate?.messageEvents(type: MessageEventTypes.edit, result: result)
     }
     
     

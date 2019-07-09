@@ -17,6 +17,110 @@ import UIKit
 
 public class Chat {
     
+    // MARK: - Chat initializer
+    public init() {
+
+    }
+    
+    public static let sharedInstance = Chat()
+    
+    public func createChatObject(socketAddress:              String,
+                                 ssoHost:                    String,
+                                 platformHost:               String,
+                                 fileServer:                 String,
+                                 serverName:                 String,
+                                 token:                      String,
+                                 mapApiKey:                  String?,
+                                 mapServer:                  String,
+                                 typeCode:                   String?,
+                                 enableCache:                Bool,
+                                 cacheTimeStampInSec:        Int?,
+                                 msgPriority:                Int?,
+                                 msgTTL:                     Int?,
+                                 httpRequestTimeout:         Int?,
+                                 actualTimingLog:            Bool?,
+                                 wsConnectionWaitTime:       Double,
+                                 connectionRetryInterval:    Int,
+                                 connectionCheckTimeout:     Int,
+                                 messageTtl:                 Int,
+                                 reconnectOnClose:           Bool) {
+        
+            //        Chat.cacheDB.deleteCacheData()
+        
+            self.socketAddress      = socketAddress
+            self.ssoHost            = ssoHost
+            self.platformHost       = platformHost
+            self.fileServer         = fileServer
+            self.serverName         = serverName
+            self.token              = token
+            self.enableCache        = enableCache
+            self.mapServer          = mapServer
+        
+            if let timeStamp = cacheTimeStampInSec {
+                cacheTimeStamp = timeStamp
+            }
+        
+            if let theMapApiKey = mapApiKey {
+                self.mapApiKey = theMapApiKey
+            }
+        
+            if let theTypeCode = typeCode {
+                self.generalTypeCode = theTypeCode
+            }
+        
+            if let theMsgPriority = msgPriority {
+                self.msgPriority = theMsgPriority
+            } else {
+                self.msgPriority = 1
+            }
+        
+            if let theMsgTTL = msgTTL {
+                self.msgTTL = theMsgTTL
+            } else {
+                self.msgTTL = 10
+            }
+        
+            if let theMsgTTL = msgTTL {
+                self.msgTTL = theMsgTTL
+            } else {
+                self.msgTTL = 10
+            }
+        
+            if let theHttpRequestTimeout = httpRequestTimeout {
+                self.httpRequestTimeout = theHttpRequestTimeout
+            } else {
+                self.httpRequestTimeout = 20
+            }
+        
+            if let theActualTimingLog = actualTimingLog {
+                self.actualTimingLog = theActualTimingLog
+            } else {
+                self.actualTimingLog = false
+            }
+        
+            self.wsConnectionWaitTime   = wsConnectionWaitTime
+            self.connectionRetryInterval = connectionRetryInterval
+            self.connectionCheckTimeout = connectionCheckTimeout
+            self.messageTtl             = messageTtl
+            self.reconnectOnClose       = reconnectOnClose
+        
+            self.SERVICE_ADDRESSES.SSO_ADDRESS          = ssoHost
+            self.SERVICE_ADDRESSES.PLATFORM_ADDRESS     = platformHost
+            self.SERVICE_ADDRESSES.FILESERVER_ADDRESS   = fileServer
+            self.SERVICE_ADDRESSES.MAP_ADDRESS          = mapServer
+        
+            getDeviceIdWithToken { (deviceIdStr) in
+                self.deviceId = deviceIdStr
+                
+                log.verbose("get deviceId successfully = \(self.deviceId ?? "error!!")", context: "Chat")
+                
+                DispatchQueue.main.async {
+                    self.CreateAsync()
+                }
+            }
+        
+        }
+    
     // the delegate property that the user class should make itself to be implment this delegat.
     // At first, the class sould confirm to ChatDelegates, and then implement the ChatDelegates methods
     public weak var delegate: ChatDelegates?
@@ -41,16 +145,16 @@ public class Chat {
     //    var ssoGrantDevicesAddress = params.ssoGrantDevicesAddress
     var chatFullStateObject: JSON = [:]
     
-    var msgPriority:        Int
-    var msgTTL:             Int
-    var httpRequestTimeout: Int
-    var actualTimingLog:    Bool
+    var msgPriority:        Int     = 0
+    var msgTTL:             Int     = 0
+    var httpRequestTimeout: Int     = 0
+    var actualTimingLog:    Bool    = false
     
-    var wsConnectionWaitTime:       Double
-    var connectionRetryInterval:    Int
-    var connectionCheckTimeout:     Int
-    var messageTtl:                 Int
-    var reconnectOnClose:           Bool
+    var wsConnectionWaitTime:       Double = 0.0
+    var connectionRetryInterval:    Int = 10000
+    var connectionCheckTimeout:     Int = 10000
+    var messageTtl:                 Int = 10000
+    var reconnectOnClose:           Bool = false
     
 //    var imageMimeTypes = ["image/bmp", "image/png", "image/tiff", "image/gif", "image/x-icon", "image/jpeg", "image/webp"]
 //    var imageExtentions = ["bmp", "png", "tiff", "tiff2", "gif", "ico", "jpg", "jpeg", "webp"]
@@ -121,107 +225,6 @@ public class Chat {
 //    public var sendSignalMessageCallbackToUser:    callbackTypeAlias?
     
     
-    
-    // MARK: - Chat initializer
-    
-    public init(socketAddress:              String,
-                ssoHost:                    String,
-                platformHost:               String,
-                fileServer:                 String,
-                serverName:                 String,
-                token:                      String,
-                mapApiKey:                  String?,
-                mapServer:                  String,
-                typeCode:                   String?,
-                enableCache:                Bool,
-                cacheTimeStampInSec:        Int?,
-                msgPriority:                Int?,
-                msgTTL:                     Int?,
-                httpRequestTimeout:         Int?,
-                actualTimingLog:            Bool?,
-                wsConnectionWaitTime:       Double,
-                connectionRetryInterval:    Int,
-                connectionCheckTimeout:     Int,
-                messageTtl:                 Int,
-                reconnectOnClose:           Bool) {
-        
-        //        Chat.cacheDB.deleteCacheData()
-        
-        self.socketAddress      = socketAddress
-        self.ssoHost            = ssoHost
-        self.platformHost       = platformHost
-        self.fileServer         = fileServer
-        self.serverName         = serverName
-        self.token              = token
-        self.enableCache        = enableCache
-        self.mapServer          = mapServer
-        
-        if let timeStamp = cacheTimeStampInSec {
-            cacheTimeStamp = timeStamp
-        }
-        
-        if let theMapApiKey = mapApiKey {
-            self.mapApiKey = theMapApiKey
-        }
-        
-        if let theTypeCode = typeCode {
-            self.generalTypeCode = theTypeCode
-        }
-        
-        if let theMsgPriority = msgPriority {
-            self.msgPriority = theMsgPriority
-        } else {
-            self.msgPriority = 1
-        }
-        
-        if let theMsgTTL = msgTTL {
-            self.msgTTL = theMsgTTL
-        } else {
-            self.msgTTL = 10
-        }
-        
-        if let theMsgTTL = msgTTL {
-            self.msgTTL = theMsgTTL
-        } else {
-            self.msgTTL = 10
-        }
-        
-        if let theHttpRequestTimeout = httpRequestTimeout {
-            self.httpRequestTimeout = theHttpRequestTimeout
-        } else {
-            self.httpRequestTimeout = 20
-        }
-        
-        if let theActualTimingLog = actualTimingLog {
-            self.actualTimingLog = theActualTimingLog
-        } else {
-            self.actualTimingLog = false
-        }
-        
-        self.wsConnectionWaitTime   = wsConnectionWaitTime
-        self.connectionRetryInterval = connectionRetryInterval
-        self.connectionCheckTimeout = connectionCheckTimeout
-        self.messageTtl             = messageTtl
-        self.reconnectOnClose       = reconnectOnClose
-        
-        self.SERVICE_ADDRESSES.SSO_ADDRESS          = ssoHost
-        self.SERVICE_ADDRESSES.PLATFORM_ADDRESS     = platformHost
-        self.SERVICE_ADDRESSES.FILESERVER_ADDRESS   = fileServer
-        self.SERVICE_ADDRESSES.MAP_ADDRESS          = mapServer
-        
-        getDeviceIdWithToken { (deviceIdStr) in
-            self.deviceId = deviceIdStr
-            
-            log.verbose("get deviceId successfully = \(self.deviceId ?? "error!!")", context: "Chat")
-            
-            DispatchQueue.main.async {
-                self.CreateAsync()
-            }
-        }
-        
-    }
-    
-    
     // MARK: - create Async with the parameters
     
     public func CreateAsync() {
@@ -243,53 +246,6 @@ public class Chat {
     }
     
 }
-
-
-    // ChatPrivateMethods
-    // ChatPublicMethods
-
-
-// Calbacks Classes:
-    // UserInfoCallback
-    // GetContactsCallback
-    // GetThreadsCallbacks
-    // GetHistoryCallbacks
-    // GetThreadParticipantsCallbacks
-    // CreateThreadCallback
-    // UpdateThreadInfoCallback
-    // AddParticipantsCallback
-    // RemoveParticipantsCallback
-    // SendMessageCallbacks
-    // EditMessageCallbacks
-    // DeleteMessageCallbacks
-    // MuteThreadCallbacks
-    // UnmuteThreadCallbacks
-    // BlockContactCallbacks
-    // UnblockContactCallbacks
-    // GetBlockedContactsCallbacks
-    // LeaveThreadCallbacks
-    // SpamPvThread
-    // GetMessageDeliverList
-    // GetMessageSeenList
-    // ClearHistoryCallback
-    // GetAdminListCallback
-    // SetRoleToUserCallback
-    // SendSignalMessageCallback    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

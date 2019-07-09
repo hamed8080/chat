@@ -11,6 +11,7 @@ import SwiftyJSON
 
 
 open class CreateThreadModel {
+//open class ThreadModel {
     /*
      ---------------------------------------
      * responseAsJSON:

@@ -15,6 +15,7 @@ public class CMContact: NSManagedObject {
     
     public func convertCMContactToContactObject() -> Contact {
         
+        var blocked:            Bool?
         var hasUser:            Bool?
         var id:                 Int?
         var notSeenDuration:    Int?
@@ -24,6 +25,10 @@ public class CMContact: NSManagedObject {
         var linkedUser:         LinkedUser?
         
         func createVariables() {
+            
+            if let blocked2 = self.blocked as? Bool {
+                blocked = blocked2
+            }
             if let hasUser2 = self.hasUser as? Bool {
                 hasUser = hasUser2
             }
@@ -42,7 +47,8 @@ public class CMContact: NSManagedObject {
         }
         
         func createContactModel() -> Contact {
-            let messageModel = Contact(cellphoneNumber: cellphoneNumber,
+            let messageModel = Contact(blocked:         blocked,
+                                       cellphoneNumber: self.cellphoneNumber,
                                        email:           self.email,
                                        firstName:       self.firstName,
                                        hasUser:         hasUser ?? false,
@@ -54,7 +60,6 @@ public class CMContact: NSManagedObject {
                                        timeStamp:       time,
                                        uniqueId:        self.uniqueId,
                                        userId:          userId)
-            
             return messageModel
         }
         

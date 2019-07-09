@@ -33,11 +33,11 @@ extension Chat {
                 let myConversation = Conversation(messageContent: item)
                 conversations.append(myConversation)
             }
-            Chat.cacheDB.saveThreadObjects(threads: conversations)
+            Chat.cacheDB.saveThread(withThreadObjects: conversations)
             
             let getThreadsModel = GetThreadsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset - count, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
             
-            delegate?.threadEvents(type: ThreadEventTypes.getThreads, result: getThreadsModel)
+//            delegate?.threadEvents(type: ThreadEventTypes.getThreads, result: getThreadsModel)
         }
     }
     

@@ -10,18 +10,14 @@ import Foundation
 import SwiftyJSON
 
 
-//#######################################################################################
-//#############################      LinkedUser        (formatdataToMakeLinkedUser)
-//#######################################################################################
-
 open class LinkedUser {
     /*
      * + RelatedUserVO  LinkedUser:
+     *   - coreUserId:      Int?
      *   - image            String?
      *   - name             String?
      *   - nickname         String?
      *   - username         String?
-     *   - coreUserId:      Int?
      */
     
     public let coreUserId:  Int?
