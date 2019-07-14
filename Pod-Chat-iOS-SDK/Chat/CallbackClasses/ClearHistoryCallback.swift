@@ -15,8 +15,8 @@ import FanapPodAsyncSDK
 extension Chat {
     
     public class ClearHistoryCallback: CallbackProtocol {
-        var mySendMessageParams: JSON
-        init(parameters: JSON) {
+        var mySendMessageParams: SendChatMessageVO
+        init(parameters: SendChatMessageVO) {
             self.mySendMessageParams = parameters
         }
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {

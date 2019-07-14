@@ -64,7 +64,7 @@ extension Cache {
      * -> otherwise it will return nil. (means cache has no data(CMContact object) on itself)
      *
      * first, it will fetch the Objects from CoreData.
-     * then based on the client request, it will find the objects that the client want to get,
+     * then based on the client request, it will find the objects that the client wants to get,
      * and then it will return it as an array of 'Contact' to the client.
      *
      *  + Access:   Public
@@ -97,26 +97,28 @@ extension Cache {
                                  search:            String?,
                                  timeStamp:         Int,
                                  uniqueId:          String?) -> GetContactsModel? {
-        
-        
-        // first of all, try to delete all the Contacts that has not been updated for long time (check it from timeStamp)
-        // after that, we will fetch on the Cache
+        /*
+         * first of all, try to delete all the Contacts that has not been updated for long time (check it from timeStamp)
+         * after that, we will fetch on the Cache
+         *
+         */
         deleteContacts(byTimeStamp: timeStamp)
         
         
         /*
-         *  + if 'id' or 'uniqueId' property have been set:
+         *  -> if 'id' or 'uniqueId' property have been set:
          *      we only have to predicate of them and answer exact response
          *
-         *  + in the other situation:
-         *      make this properties AND together: 'firstName', 'lastName', 'cellphoneNumber', 'email'
-         *      then with the response of the AND, make OR with 'search' property
+         *  -> in the other situation:
+         *      -> make this properties AND together: 'firstName', 'lastName', 'cellphoneNumber', 'email'
+         *      -> then with the response of the AND, make OR with 'search' property
          *
-         * if { 'id' }
-         * else { 'uniqueId' }
-         * else { ('cellphoneNumber' && 'firstName' && 'lastName' && 'email') || ('search') }
+         *  -> if { 'id' }
+         *  -> else { 'uniqueId' }
+         *  -> else { ('cellphoneNumber' && 'firstName' && 'lastName' && 'email') || ('search') }
          *
-         * then we create the output model and return it.
+         *  -> then we create the output model and return it.
+         *
          */
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMContact")
         
@@ -266,13 +268,27 @@ extension Cache {
     
     
     /*
-     * retrieve Threads from Cache
-     * if it found any data from Threads in the Cache DB, it will return that,
-     * otherwise it will return nil. (means cache has no data on itself).
+     * Retrieve Threads:
+     *
+     *  -> fetch CMConversation from Cahce DB
+     *  -> if it found any object, it will return that,
+     *  -> otherwise it will return nil. (means cache has no data(CMConversation) on itself).
      *
      * first, it will fetch the Objects from CoreData, and sort them by time.
-     * then based on the client request, it will find the objects that the client want to get,
+     * then based on the client request, it will find the objects that the client wants to get,
      * and then it will return it as an array of 'Conversation' to the client.
+     *
+     *  + Access:   Public
+     *  + Inputs:
+     *      - ascending:    Bool
+     *      - count:        Int
+     *      - name:         String?
+     *      - offset:       Int
+     *      - threadIds:    [Int]?
+     *      - timeStamp:    Int
+     *  + Outputs:
+     *      - GetThreadsModel?
+     *
      */
     // TODO: - Have to implement search in threads by using 'name' and also 'threadIds' properties!
     public func retrieveThreads(ascending:  Bool,
@@ -281,12 +297,26 @@ extension Cache {
                                 offset:     Int,
                                 threadIds:  [Int]?,
                                 timeStamp:  Int) -> GetThreadsModel? {
-        
+        /*
+         * first of all, try to delete all the Participants that has not been updated for a long time (check it from timeStamp)
+         * because we don't want to send invalid Participants inside the Conversation Model
+         * after that, we will fetch on the Cache
+         *
+         */
         deleteThreadParticipants(timeStamp: timeStamp)
         
+        /*
+         *  -> make this propertues OR toghether: 'title', 'descriptions', 'id'(for every id inside 'threadIds input'
+         *  -> sort the result by the 'time' as 'ascending input'
+         *
+         *  -> ('title' || 'descriptions' || 'id'(for every id inside 'threadIds input'))
+         *
+         *  -> then we create the output model and return it.
+         *
+         */
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
         
-        // use this array to make logical or for threads
+        // use this array to make "logical OR" for threads
         var fetchPredicatArray = [NSPredicate]()
         // put the search statement on the predicate to search throut the Conversations(Threads)
         if let searchStatement = name {
@@ -317,12 +347,10 @@ extension Cache {
         
         do {
             if let result = try context.fetch(fetchRequest) as? [CMConversation] {
-                print("fetch CMConversation: \(result.count)")
                 var insideCount = 0
                 var cmConversationObjectArr = [CMConversation]()
                 for (index, item) in result.enumerated() {
                     if (index >= offset) && (insideCount < count) {
-                        print("item added to the response Array")
                         cmConversationObjectArr.append(item)
                         insideCount += 1
                     }
@@ -334,13 +362,13 @@ extension Cache {
                     conversationArr.append(conversationObject)
                 }
                 
-                let getThreadModelResponse = GetThreadsModel(conversationObjects: conversationArr,
-                                                             contentCount:  conversationArr.count,
-                                                             count:         count,
-                                                             offset:        offset,
-                                                             hasError:      false,
-                                                             errorMessage:  "",
-                                                             errorCode:     0)
+                let getThreadModelResponse = GetThreadsModel(conversationObjects:   conversationArr,
+                                                             contentCount:          conversationArr.count,
+                                                             count:                 count,
+                                                             offset:                offset,
+                                                             hasError:              false,
+                                                             errorMessage:          "",
+                                                             errorCode:             0)
                 
                 return getThreadModelResponse
                 
@@ -355,21 +383,45 @@ extension Cache {
    
     
     /*
-     retrieve ThreadParticipants data from Cache
-     if it found any data from Cache DB, it will return that,
-     otherwise it will return nil. (means cache has no data on itself)
-     .
-     first, it will fetch the Objects from CoreData.
-     then based on the client request, it will find the objects that the client want to get,
-     and then it will return it as an array of 'Participant' to the client.
+     * Retrieve ThreadParticipants:
+     *
+     *  -> fetch CMConversation from Cahce DB
+     *  -> if it found any object, it will get its Participants and return them,
+     *  -> otherwise it will return nil. (means cache has no data(CMConversation) on itself).
+     *
+     * first, it will fetch the Objects from CoreData.
+     * then based on the client request, it will find the objects that the client want to get,
+     * and then it will return it as an array of 'Participant' to the client.
+     *
+     *  + Access:   Public
+     *  + Inputs:
+     *      - ascending:    Bool
+     *      - count:        Int
+     *      - offset:       Int
+     *      - threadId:     Int
+     *      - timeStamp:    Int
+     *  + Outputs:
+     *      - GetThreadParticipantsModel?
+     *
      */
     public func retrieveThreadParticipants(ascending:   Bool,
                                            count:       Int,
                                            offset:      Int,
                                            threadId:    Int,
                                            timeStamp:   Int) -> GetThreadParticipantsModel? {
-        
+        /*
+         * first of all, try to delete all the Participants that has not been updated for a long time (check it from timeStamp)
+         * after that, we will fetch on the Cache
+         *
+         */
         deleteThreadParticipants(timeStamp: timeStamp)
+        
+        /*
+         *  -> search through the CMConversation with the 'threadId'
+         *  -> loop through its Participants and add them to the final result
+         *  -> make the final result and pass it as GetThreadParticipantsModel
+         *
+         */
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
         
@@ -396,13 +448,13 @@ extension Cache {
                         for item in cmParticipantObjectArr {
                             participantsArr.append(item.convertCMParticipantToParticipantObject())
                         }
-                        let getThreadParticipantModelResponse = GetThreadParticipantsModel(participantObjects: participantsArr,
-                                                                                           contentCount: 0,
-                                                                                           count: count,
-                                                                                           offset: offset,
-                                                                                           hasError: false,
-                                                                                           errorMessage: "",
-                                                                                           errorCode: 0)
+                        let getThreadParticipantModelResponse = GetThreadParticipantsModel(participantObjects:  participantsArr,
+                                                                                           contentCount:        0,
+                                                                                           count:               count,
+                                                                                           offset:              offset,
+                                                                                           hasError:            false,
+                                                                                           errorMessage:        "",
+                                                                                           errorCode:           0)
                         
                         return getThreadParticipantModelResponse
                     } else {
@@ -606,16 +658,37 @@ extension Cache {
     
     
     /*
-     retrieve UploadImage data from Cache
-     if it found any data from Cache DB, it will return that,
-     otherwise it will return nil. (means cache has no relevent data on itself)
-     .
-     first, it will fetch the Objects from CoreData.
-     then based on the client request, it will find the objects that the client want to get,
-     and then it will return it as 'UploadImageModel' model to the client.
+     * retrieve UploadImage
+     *
+     *  -> fetch CMUploadImage from Cahce DB
+     *  -> if it found any object, it will return that,
+     *  -> otherwise it will return nil. (means cache has no relevent data(CMUploadImage) on itself based on the input).
+     *
+     * first, it will fetch the Objects from CoreData.
+     * then based on the client request, it will find the objects that the client want to get,
+     * and then it will return it as 'UploadImageModel' model and its path (as String) to the client.
+     *
+     *  + Access:   Public
+     *  + Inputs:
+     *      - hashCode:     String
+     *      - imageId:      Int
+     *  + Outputs:
+     *      - (uploadImageMpdel: UploadImageModel, imagePath: String)
+     *
      */
     public func retrieveUploadImage(hashCode:   String,
-                                    imageId:    Int) -> (UploadImageModel, String)? {
+                                    imageId:    Int) -> (uploadImageMpdel: UploadImageModel, imagePath: String)? {
+        /*
+         *
+         *  -> make this properties AND together: 'hashCode', 'id'
+         *
+         *  -> ('hashCode' && 'id')
+         *
+         *  -> create the UploadImageModel model
+         *  -> get the imagePath
+         *  -> return the UploadImageModel and imagePath as a tuple
+         *
+         */
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUploadImage")
         let searchImage = NSPredicate(format: "hashCode == %@ AND id == %i", hashCode, imageId)
@@ -649,16 +722,37 @@ extension Cache {
     
     
     /*
-     retrieve UploadFile data from Cache
-     if it found any data from Cache DB, it will return that,
-     otherwise it will return nil. (means cache has no relevent data on itself)
-     .
-     first, it will fetch the Objects from CoreData.
-     then based on the client request, it will find the objects that the client want to get,
-     and then it will return it as 'UploadImageModel' model to the client.
+     * retrieve UploadFile:
+     *
+     *  -> fetch CMUploadImage from Cahce DB
+     *  -> if it found any object, it will return that,
+     *  -> otherwise it will return nil. (means cache has no relevent data(CMUploadFile) on itself based on the input).
+     *
+     * first, it will fetch the Objects from CoreData.
+     * then based on the client request, it will find the objects that the client want to get,
+     * and then it will return it as 'UploadFileModel' model and its path (as String) to the client.
+     *
+     *  + Access:   Public
+     *  + Inputs:
+     *      - hashCode:     String
+     *      - fileId:       Int
+     *  + Outputs:
+     *      - (uploadFileModel: UploadFileModel, filePath: String)
+     *
      */
     public func retrieveUploadFile(fileId:      Int,
-                                   hashCode:    String) -> (UploadFileModel, String)? {
+                                   hashCode:    String) -> (uploadFileModel: UploadFileModel, filePath: String)? {
+        /*
+         *
+         *  -> make this properties AND together: 'hashCode', 'id'
+         *
+         *  -> ('hashCode' && 'id')
+         *
+         *  -> create the UploadFileModel model
+         *  -> get the filePath
+         *  -> return the UploadFileModel and filePath as a tuple
+         *
+         */
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUploadFile")
         let searchFile = NSPredicate(format: "hashCode == %@ AND id == %i", hashCode, fileId)

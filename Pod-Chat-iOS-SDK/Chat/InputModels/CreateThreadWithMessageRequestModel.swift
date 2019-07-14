@@ -16,7 +16,7 @@ open class CreateThreadWithMessageRequestModel {
     public let threadInvitees:          [Invitee]
     public let threadMetadata:          String?
     public let threadTitle:             String
-    public let threadType:              String
+    public let threadType:              ThreadTypes
     
     public let messageForwardedMessageIds:  String?
     public let messageForwardedUniqueIds:   String?
@@ -33,7 +33,7 @@ open class CreateThreadWithMessageRequestModel {
                 threadInvitees:         [Invitee],
                 threadMetadata:         String?,
                 threadTitle:            String,
-                threadType:             String,
+                threadType:             ThreadTypes,
                 messageForwardedMessageIds: String?,
                 messageForwardedUniqueIds:  String?,
                 messageMetaData:        String?,

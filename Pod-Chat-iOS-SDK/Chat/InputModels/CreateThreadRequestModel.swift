@@ -15,7 +15,7 @@ open class CreateThreadRequestModel {
     public let invitees:        [Invitee]
     public let metadata:        String?
     public let title:           String
-    public let type:            String?
+    public let type:            ThreadTypes?
     public let uniqueId:        String?
     
     public init(description:    String?,
@@ -23,7 +23,7 @@ open class CreateThreadRequestModel {
                 invitees:       [Invitee],
                 metadata:       String?,
                 title:          String,
-                type:           String?,
+                type:           ThreadTypes?,
                 uniqueId:       String?) {
         
         self.description    = description

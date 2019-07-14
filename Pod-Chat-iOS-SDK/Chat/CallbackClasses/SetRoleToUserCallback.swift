@@ -15,8 +15,8 @@ import FanapPodAsyncSDK
 extension Chat {
     
     public class SetRoleToUserCallback: CallbackProtocol {
-        var mySendMessageParams: JSON
-        init(parameters: JSON) {
+        var mySendMessageParams: SendChatMessageVO
+        init(parameters: SendChatMessageVO) {
             self.mySendMessageParams = parameters
         }
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
@@ -30,10 +30,10 @@ extension Chat {
                 
                 let messageContentStr: String = response["result"].stringValue
                 let messageContent: [JSON] = messageContentStr.convertToJSON().arrayValue
-                let userRoleModel = UserRolesModel(threadId: mySendMessageParams["subjectId"].intValue, messageContent: messageContent, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
-                print("\n\n response:\n\(response)")
-                print("\n\n\n messageContent:\n\(messageContent)")
-                print("\n\nuserRoleModel:\n\(userRoleModel.returnDataAsJSON())\n\n\n\n\n\n")
+                let userRoleModel = UserRolesModel(threadId: mySendMessageParams.subjectId!, messageContent: messageContent, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+//                print("\n\n response:\n\(response)")
+//                print("\n\n\n messageContent:\n\(messageContent)")
+//                print("\n\nuserRoleModel:\n\(userRoleModel.returnDataAsJSON())\n\n\n\n\n\n")
 //                success(setRoleModel)
  
                 

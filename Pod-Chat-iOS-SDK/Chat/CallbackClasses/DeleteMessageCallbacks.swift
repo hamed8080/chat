@@ -15,8 +15,8 @@ import FanapPodAsyncSDK
 extension Chat {
     
     public class DeleteMessageCallbacks: CallbackProtocol {
-        var sendParams: JSON
-        init(parameters: JSON) {
+        var sendParams: SendChatMessageVO
+        init(parameters: SendChatMessageVO) {
             self.sendParams = parameters
         }
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
@@ -43,7 +43,7 @@ extension Chat {
                 returnData["result"] = resultData
                 
                 
-                Chat.cacheDB.deleteMessage(inThread: 1328, withMessageIds: [10799])
+//                Chat.cacheDB.deleteMessage(inThread: 1328, withMessageIds: [10799])
                 
                 success(returnData)
             }

@@ -15,8 +15,8 @@ import FanapPodAsyncSDK
 extension Chat {
     
     public class EditMessageCallbacks: CallbackProtocol {
-        var sendParams: JSON
-        init(parameters: JSON) {
+        var sendParams: SendChatMessageVO
+        init(parameters: SendChatMessageVO) {
             self.sendParams = parameters
         }
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
@@ -36,7 +36,7 @@ extension Chat {
                 let messageContent: JSON = response["result"]     // send contacts as json to user
                 
                 // save edited data on the cache
-                let message = Message(threadId: sendParams["subjectId"].int, pushMessageVO: messageContent)
+                let message = Message(threadId: sendParams.subjectId, pushMessageVO: messageContent)
                 Chat.cacheDB.saveMessageObjects(messages: [message], getHistoryParams: nil)
                 
                 // the response from server is come correctly, so this message will be removed from wait queue

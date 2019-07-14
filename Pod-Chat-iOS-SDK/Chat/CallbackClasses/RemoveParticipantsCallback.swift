@@ -38,8 +38,8 @@ extension Chat {
     }
     
     public class RemoveParticipantsCallback: CallbackProtocol {
-        var sendParams: JSON
-        init(parameters: JSON) {
+        var sendParams: SendChatMessageVO
+        init(parameters: SendChatMessageVO) {
             self.sendParams = parameters
         }
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
@@ -62,7 +62,7 @@ extension Chat {
                 
                 var removeParticipantsArray = [Participant]()
                 for item in removeParticipantResult {
-                    let myParticipant = Participant(messageContent: item, threadId: sendParams["subjectId"].int)
+                    let myParticipant = Participant(messageContent: item, threadId: sendParams.subjectId)
                     //                    Chat.cacheDB.deleteParticipant(inThread: sendParams["subjectId"].intValue, withParticipantIds: [myParticipant.id!])
                     
                     removeParticipantsArray.append(myParticipant)

@@ -38,11 +38,33 @@ extension Chat {
         if let theUserInfo = userInfo {
             let userInfoJSON = theUserInfo.formatToJSON()
             if (deliverInput.ownerId != userInfoJSON["id"].intValue) {
+                /*
                 let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.DELIVERY.rawValue,
                                                "content":           deliverInput.messageId,
                                                "typeCode":          deliverInput.typeCode ?? generalTypeCode,
                                                "pushMsgType":       3]
-                sendMessageWithCallback(params:             sendMessageParams,
+                */
+                
+                let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.DELIVERY.rawValue,
+                                                    contentAsString:    "\(deliverInput.messageId)",
+                                                    contentAsJSON:      nil,
+                                                    metaData:           nil,
+                                                    repliedTo:          nil,
+                                                    systemMetadata:     nil,
+                                                    subjectId:          nil,
+                                                    token:              token,
+                                                    tokenIssuer:        nil,
+                                                    typeCode:           deliverInput.typeCode ?? generalTypeCode,
+                                                    uniqueId:           nil,
+                                                    isCreateThreadAndSendMessage: nil)
+                
+                let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                                      msgTTL:       msgTTL,
+                                                      peerName:     serverName,
+                                                      priority:     msgPriority,
+                                                      pushMsgType:  3)
+                
+                sendMessageWithCallback(asyncMessageVO:     asyncMessage,
                                         callback:           nil,
                                         callbacks:          nil,
                                         sentCallback:       nil,
@@ -55,6 +77,7 @@ extension Chat {
     
     // NOTE: This method will be deprecate soon
     // this method will do the same as tha funciton above but instead of using 'DeliverSeenRequestModel' to get the parameters, it'll use JSON
+    /*
     public func deliver(params: JSON) {
         log.verbose("Try to send deliver message for a message id with this parameters: \n \(params)", context: "Chat")
         
@@ -75,6 +98,7 @@ extension Chat {
             }
         }
     }
+    */
     
     
     /*
@@ -99,23 +123,46 @@ extension Chat {
         if let theUserInfo = userInfo {
             let userInfoJSON = theUserInfo.formatToJSON()
             if (seenInput.ownerId != userInfoJSON["id"].intValue) {
+                /*
                 let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.SEEN.rawValue,
                                                "content":           seenInput.messageId,
                                                "typeCode":          seenInput.typeCode ?? generalTypeCode,
                                                "pushMsgType":       3]
-                sendMessageWithCallback(params:             sendMessageParams,
+                */
+                
+                let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.SEEN.rawValue,
+                                                    contentAsString:    "\(seenInput.messageId)",
+                                                    contentAsJSON:      nil,
+                                                    metaData:           nil,
+                                                    repliedTo:          nil,
+                                                    systemMetadata:     nil,
+                                                    subjectId:          nil,
+                                                    token:              token,
+                                                    tokenIssuer:        nil,
+                                                    typeCode:           seenInput.typeCode ?? generalTypeCode,
+                                                    uniqueId:           nil,
+                                                    isCreateThreadAndSendMessage: nil)
+                
+                let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                                      msgTTL:       msgTTL,
+                                                      peerName:     serverName,
+                                                      priority:     msgPriority,
+                                                      pushMsgType:  3)
+                
+                sendMessageWithCallback(asyncMessageVO:     asyncMessage,
                                         callback:           nil,
                                         callbacks:          nil,
                                         sentCallback:       nil,
                                         deliverCallback:    nil,
                                         seenCallback:       nil,
-                                        uniuqueIdCallback: nil)
+                                        uniuqueIdCallback:  nil)
             }
         }
     }
     
     // NOTE: This method will be deprecate soon
     // this method will do the same as tha funciton above but instead of using 'DeliverSeenRequestModel' to get the parameters, it'll use JSON
+    /*
     public func seen(params: JSON) {
         log.verbose("Try to send deliver message for a message id with this parameters: \n \(params)", context: "Chat")
         
@@ -136,7 +183,7 @@ extension Chat {
             }
         }
     }
-    
+    */
     
     
     

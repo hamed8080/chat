@@ -58,16 +58,44 @@ extension Chat {
                             completion:     @escaping callbackTypeAlias,
                             cacheResponse:  @escaping (UserInfoModel) -> ()) {
         log.verbose("Try to request to get user info", context: "Chat")
-        userInfoCallbackToUser = completion
-        let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.USER_INFO.rawValue,
-                                       "typeCode": generalTypeCode]
+        /*
+         *  -> set the "completion" to the "userInfoCallbackToUser" variable
+         *      (when the expected answer comes from server, userInfocallbackToUser will call, and the "complition of this func will execute")
+         *  -> create "SendChatMessageVO"
+         *  -> create "SendAsyncMessageVO" and put "SendChatMessageVO" inside its content
+         *  -> send the "SendAsyncMessageVO" to Async
+         *  -> configure that when answer comes from server, "UserInfoCallback()" is the responsable func to do the rest
+         *  -> if the cache is enabled by the user, go and retrieve UserInfo content and pass it to the user
+         *
+         */
         
-        sendMessageWithCallback(params:         sendMessageParams,
-                                callback:       UserInfoCallback(),
-                                callbacks:      nil,
-                                sentCallback:   nil,
-                                deliverCallback: nil,
-                                seenCallback:   nil) { (getUserInfoUniqueId) in
+        userInfoCallbackToUser = completion
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.USER_INFO.rawValue,
+                                            contentAsString:    nil,
+                                            contentAsJSON:      nil,
+                                            metaData:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          nil,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           generalTypeCode,
+                                            uniqueId:           generateUUID(),
+                                            isCreateThreadAndSendMessage: nil)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callback:           UserInfoCallback(),
+                                callbacks:          nil,
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil) { (getUserInfoUniqueId) in
             uniqueId(getUserInfoUniqueId)
         }
         

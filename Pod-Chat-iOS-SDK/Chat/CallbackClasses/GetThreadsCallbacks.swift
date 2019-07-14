@@ -42,8 +42,8 @@ extension Chat {
     }
     
     public class GetThreadsCallbacks: CallbackProtocol {
-        var sendParams: JSON
-        init(parameters: JSON) {
+        var sendParams: SendChatMessageVO
+        init(parameters: SendChatMessageVO) {
             self.sendParams = parameters
         }
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
@@ -54,7 +54,8 @@ extension Chat {
             let errorCode = response["errorCode"].intValue
             
             if (!hasError) {
-                let content = sendParams["content"]
+//                let content = sendParams["content"]
+                let content = sendParams.content.convertToJSON()
                 let count = content["count"].intValue
                 let offset = content["offset"].intValue
                 

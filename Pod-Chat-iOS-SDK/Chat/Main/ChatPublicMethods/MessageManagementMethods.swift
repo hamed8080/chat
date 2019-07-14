@@ -64,8 +64,11 @@ extension Chat {
         //        Chat.cacheDB.saveTextMessageToWaitQueue(textMessage: messageObjectToSendToQueue)
         
 //        let messageTxtContent = makeCustomTextToSend(textMessage: sendTextMessageInput.content)
+        
+        
         let messageTxtContent = MakeCustomTextToSend(message: sendTextMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         
+        /*
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.MESSAGE.rawValue,
                                        "pushMsgType": 4,
                                        "subjectId": sendTextMessageInput.threadId,
@@ -92,13 +95,33 @@ extension Chat {
             sendMessageParams["metaData"] = JSON(metaDataStr)
         }
         //        sendMessageParams["subjectId"] = JSON(sendTextMessageInput.threadId)
+        */
         
-        sendMessageWithCallback(params:         sendMessageParams,
-                                callback:       nil,
-                                callbacks:      nil,
-                                sentCallback:   SendMessageCallbacks(parameters: sendMessageParams),
-                                deliverCallback: SendMessageCallbacks(parameters: sendMessageParams),
-                                seenCallback:   SendMessageCallbacks(parameters: sendMessageParams)) { (theUniqueId) in
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.MESSAGE.rawValue,
+                                            contentAsString:    messageTxtContent,
+                                            contentAsJSON:      nil,
+                                            metaData:           (sendTextMessageInput.metaData != nil) ? "\(sendTextMessageInput.metaData!)" : nil,
+                                            repliedTo:          sendTextMessageInput.repliedTo,
+                                            systemMetadata:     (sendTextMessageInput.systemMetadata != nil) ? "\(sendTextMessageInput.systemMetadata!)" : nil,
+                                            subjectId:          sendTextMessageInput.threadId,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           sendTextMessageInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           sendTextMessageInput.uniqueId ?? tempUniqueId,
+                                            isCreateThreadAndSendMessage: nil)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  4)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callback:           nil,
+                                callbacks:          nil,
+                                sentCallback:       SendMessageCallbacks(parameters: chatMessage),
+                                deliverCallback:    SendMessageCallbacks(parameters: chatMessage),
+                                seenCallback:       SendMessageCallbacks(parameters: chatMessage)) { (theUniqueId) in
             uniqueId(theUniqueId)
         }
         
@@ -110,6 +133,7 @@ extension Chat {
     
     // NOTE: This method will be deprecate soon
     // this method will do the same as tha funciton above but instead of using 'SendTextMessageRequestModel' to get the parameters, it'll use JSON
+    /*
     public func sendTextMessage(params: JSON, uniqueId: @escaping (String) -> (), onSent: @escaping callbackTypeAlias, onDelivere: @escaping callbackTypeAlias, onSeen: @escaping callbackTypeAlias) {
         log.verbose("Try to send Message with this parameters: \n \(params)", context: "Chat")
         
@@ -155,6 +179,8 @@ extension Chat {
         sendCallbackToUserOnDeliver = onDelivere
         sendCallbackToUserOnSeen = onSeen
     }
+    */
+    
     
     
     /*
@@ -200,6 +226,8 @@ extension Chat {
 //        let messageTxtContent = makeCustomTextToSend(textMessage: editMessageInput.content)
         let messageTxtContent = MakeCustomTextToSend(message: editMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         //        let content: JSON = ["content": messageTxtContent]
+        
+        /*
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.EDIT_MESSAGE.rawValue,
                                        "pushMsgType":       4,
                                        "subjectId":         editMessageInput.subjectId,
@@ -220,12 +248,32 @@ extension Chat {
             let metaDataStr = "\(metaData)"
             sendMessageParams["metaData"] = JSON(metaDataStr)
         }
+        */
         
-        sendMessageWithCallback(params:         sendMessageParams,
-                                callback:       EditMessageCallbacks(parameters: sendMessageParams), callbacks: nil,
-                                sentCallback:   nil,
-                                deliverCallback: nil,
-                                seenCallback:   nil) { (editMessageUniqueId) in
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.EDIT_MESSAGE.rawValue,
+                                            contentAsString:    messageTxtContent,
+                                            contentAsJSON:      nil,
+                                            metaData:           (editMessageInput.metaData != nil) ? "\(editMessageInput.metaData!)" : nil,
+                                            repliedTo:          editMessageInput.repliedTo,
+                                            systemMetadata:     nil,
+                                            subjectId:          editMessageInput.subjectId,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           editMessageInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           editMessageInput.uniqueId ?? tempUniqueId,
+                                            isCreateThreadAndSendMessage: nil)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  4)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callback:           EditMessageCallbacks(parameters: chatMessage), callbacks: nil,
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil) { (editMessageUniqueId) in
             uniqueId(editMessageUniqueId)
         }
         editMessageCallbackToUser = completion
@@ -234,6 +282,7 @@ extension Chat {
     
     // NOTE: This method will be deprecate soon
     // this method will do the same as tha funciton above but instead of using 'EditTextMessageRequestModel' to get the parameters, it'll use JSON
+    /*
     public func editMessage(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
         log.verbose("Try to request to edit message with this parameters: \n \(params)", context: "Chat")
         
@@ -270,6 +319,8 @@ extension Chat {
         }
         editMessageCallbackToUser = completion
     }
+    */
+    
     
     
     /*
@@ -320,6 +371,7 @@ extension Chat {
 //        let messageTxtContent = makeCustomTextToSend(textMessage: replyMessageInput.content)
         let messageTxtContent = MakeCustomTextToSend(message: replyMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         
+        /*
         //        let content: JSON = ["content": messageTxtContent]
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.MESSAGE.rawValue,
                                        "pushMsgType": 4,
@@ -337,13 +389,33 @@ extension Chat {
             let metaDataStr = "\(metaData)"
             sendMessageParams["metaData"] = JSON(metaDataStr)
         }
+        */
         
-        sendMessageWithCallback(params:         sendMessageParams,
-                                callback:       nil,
-                                callbacks:      nil,
-                                sentCallback:   SendMessageCallbacks(parameters: sendMessageParams),
-                                deliverCallback: SendMessageCallbacks(parameters: sendMessageParams),
-                                seenCallback:   SendMessageCallbacks(parameters: sendMessageParams)) { (theUniqueId) in
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.MESSAGE.rawValue,
+                                            contentAsString:    messageTxtContent,
+                                            contentAsJSON:      nil,
+                                            metaData:           (replyMessageInput.metaData != nil) ? "\(replyMessageInput.metaData!)" : nil,
+                                            repliedTo:          replyMessageInput.repliedTo,
+                                            systemMetadata:     nil,
+                                            subjectId:          replyMessageInput.subjectId,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           replyMessageInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           replyMessageInput.uniqueId ?? tempUniqueId,
+                                            isCreateThreadAndSendMessage: nil)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  4)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callback:           nil,
+                                callbacks:          nil,
+                                sentCallback:       SendMessageCallbacks(parameters: chatMessage),
+                                deliverCallback:    SendMessageCallbacks(parameters: chatMessage),
+                                seenCallback:       SendMessageCallbacks(parameters: chatMessage)) { (theUniqueId) in
             uniqueId(theUniqueId)
         }
         
@@ -355,6 +427,7 @@ extension Chat {
     
     // NOTE: This method will be deprecate soon
     // this method will do the same as tha funciton above but instead of using 'ReplyTextMessageRequestModel' to get the parameters, it'll use JSON
+    /*
     public func replyMessageWith3Callbacks(params: JSON, uniqueId: @escaping (String) -> (), onSent: @escaping callbackTypeAlias, onDelivere: @escaping callbackTypeAlias, onSeen: @escaping callbackTypeAlias) {
         log.verbose("Try to reply Message with this parameters: \n \(params)", context: "Chat")
         
@@ -395,6 +468,7 @@ extension Chat {
         sendCallbackToUserOnDeliver = onDelivere
         sendCallbackToUserOnSeen = onSeen
     }
+    */
     
     
     /*
@@ -443,6 +517,7 @@ extension Chat {
         let messageIdsList: [Int] = forwardMessageInput.messageIds
         var uniqueIdsList: [String] = []
         
+        /*
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.FORWARD_MESSAGE.rawValue,
                                        "pushMsgType": 4,
                                        "content": "\(messageIdsList)",
@@ -456,6 +531,7 @@ extension Chat {
             let metaDataStr = "\(metaData)"
             sendMessageParams["metaData"] = JSON(metaDataStr)
         }
+        */
         
         //        let messageIdsListCount = messageIdsList.count
         //        for _ in 0...(messageIdsListCount - 1) {
@@ -463,14 +539,34 @@ extension Chat {
             let uID = generateUUID()
             uniqueIdsList.append(uID)
             
-            sendMessageParams["uniqueId"] = JSON("\(uniqueIdsList)")
+//            sendMessageParams["uniqueId"] = JSON("\(uniqueIdsList)")
             
-            sendMessageWithCallback(params:         sendMessageParams,
-                                    callback:       nil,
-                                    callbacks:      nil,
-                                    sentCallback:   SendMessageCallbacks(parameters: sendMessageParams),
-                                    deliverCallback: SendMessageCallbacks(parameters: sendMessageParams),
-                                    seenCallback:   SendMessageCallbacks(parameters: sendMessageParams)) { (theUniqueId) in
+            
+            let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.FORWARD_MESSAGE.rawValue,
+                                                contentAsString:    "\(messageIdsList)",
+                                                contentAsJSON:      nil,
+                                                metaData:           (forwardMessageInput.metaData != nil) ? "\(forwardMessageInput.metaData!)" : nil,
+                                                repliedTo:          forwardMessageInput.repliedTo,
+                                                systemMetadata:     nil,
+                                                subjectId:          forwardMessageInput.subjectId,
+                                                token:              token,
+                                                tokenIssuer:        nil,
+                                                typeCode:           forwardMessageInput.typeCode ?? generalTypeCode,
+                                                uniqueId:           uID,
+                                                isCreateThreadAndSendMessage: nil)
+            
+            let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                                  msgTTL:       msgTTL,
+                                                  peerName:     serverName,
+                                                  priority:     msgPriority,
+                                                  pushMsgType:  4)
+            
+            sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                    callback:           nil,
+                                    callbacks:          nil,
+                                    sentCallback:       SendMessageCallbacks(parameters: chatMessage),
+                                    deliverCallback:    SendMessageCallbacks(parameters: chatMessage),
+                                    seenCallback:       SendMessageCallbacks(parameters: chatMessage)) { (theUniqueId) in
                 uniqueIds(theUniqueId)
             }
             
@@ -484,6 +580,7 @@ extension Chat {
     
     // NOTE: This method will be deprecate soon
     // this method will do the same as tha funciton above but instead of using 'ForwardMessageRequestModel' to get the parameters, it'll use JSON
+    /*
     public func forwardMessageWith3Callbacks(params: JSON, uniqueIds: @escaping (String) -> (), onSent: @escaping callbackTypeAlias, onDelivere: @escaping callbackTypeAlias, onSeen: @escaping callbackTypeAlias) {
         log.verbose("Try to Forward with this parameters: \n \(params)", context: "Chat")
         /*
@@ -562,6 +659,8 @@ extension Chat {
         //        }
         //        uniqueIds(uniqueIdsList)
     }
+    */
+    
     
     
     // MARK: - Send/Reply File Message
@@ -773,6 +872,7 @@ extension Chat {
     
     // NOTE: This method will be deprecate soon
     // this method will do the same as tha funciton above but instead of using 'SendFileMessageRequestModel' to get the parameters, it'll use JSON
+    /*
     public func sendFileMessage(textMessagParams: JSON, fileParams: JSON, imageToSend: Data?, fileToSend: Data?, uniqueId: @escaping (String) -> (), uploadProgress: @escaping (Float) -> (), onSent: @escaping callbackTypeAlias, onDelivered: @escaping callbackTypeAlias, onSeen: @escaping callbackTypeAlias) {
         log.verbose("Try to Send File adn Message with this parameters: \n \(textMessagParams)", context: "Chat")
         
@@ -893,6 +993,7 @@ extension Chat {
         }
         
     }
+    */
     
     
     
@@ -1147,10 +1248,14 @@ extension Chat {
                               completion:           @escaping callbackTypeAlias) {
         log.verbose("Try to request to edit message with this parameters: \n \(deleteMessageInput)", context: "Chat")
         
+        let tempUniqueId = generateUUID()
+        
         var content: JSON = []
         if let deleteForAll = deleteMessageInput.deleteForAll {
             content["deleteForAll"] = JSON("\(deleteForAll)")
         }
+        
+        /*
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.DELETE_MESSAGE.rawValue,
                                        "typeCode": deleteMessageInput.typeCode ?? generalTypeCode,
                                        "pushMsgType": 4,
@@ -1161,13 +1266,33 @@ extension Chat {
         if let uniqueId = deleteMessageInput.uniqueId {
             sendMessageParams["uniqueId"] = JSON(uniqueId)
         }
+        */
         
-        sendMessageWithCallback(params:         sendMessageParams,
-                                callback:       DeleteMessageCallbacks(parameters: sendMessageParams),
-                                callbacks:      nil,
-                                sentCallback:   nil,
-                                deliverCallback: nil,
-                                seenCallback:   nil) { (deleteMessageUniqueId) in
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.DELETE_MESSAGE.rawValue,
+                                            contentAsString:    nil,
+                                            contentAsJSON:      content,
+                                            metaData:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          deleteMessageInput.subjectId,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           deleteMessageInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           deleteMessageInput.uniqueId ?? tempUniqueId,
+                                            isCreateThreadAndSendMessage: nil)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  4)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callback:           DeleteMessageCallbacks(parameters: chatMessage),
+                                callbacks:          nil,
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil) { (deleteMessageUniqueId) in
             uniqueId(deleteMessageUniqueId)
         }
         deleteMessageCallbackToUser = completion
@@ -1176,6 +1301,7 @@ extension Chat {
     
     // NOTE: This method will be deprecate soon
     // this method will do the same as tha funciton above but instead of using 'DeleteMessageRequestModel' to get the parameters, it'll use JSON
+    /*
     public func deleteMessage(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
         log.verbose("Try to request to edit message with this parameters: \n \(params)", context: "Chat")
         
@@ -1203,6 +1329,7 @@ extension Chat {
         }
         deleteMessageCallbackToUser = completion
     }
+    */
     
     
 //    public func deleteMultipleMessages(withInputModel input:  DeleteMultipleMessagesRequestModel,
@@ -1269,23 +1396,43 @@ extension Chat {
             }
         }
         content["uniqueIds"] = JSON(uniqueIds)
-        
+        /*
         let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.DELETE_MESSAGE.rawValue,
                                        "typeCode": deleteMessageInput.typeCode ?? generalTypeCode,
                                        "pushMsgType": 4,
                                        "content": content]
+        */
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.DELETE_MESSAGE.rawValue,
+                                            contentAsString:    nil,
+                                            contentAsJSON:      content,
+                                            metaData:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          nil,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           deleteMessageInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           nil,
+                                            isCreateThreadAndSendMessage: nil)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  4)
         
         var myCallBacks: [DeleteMessageCallbacks] = []
         for _ in uniqueIds {
-             myCallBacks.append(DeleteMessageCallbacks(parameters: sendMessageParams))
+            myCallBacks.append(DeleteMessageCallbacks(parameters: chatMessage))
         }
         
-        sendMessageWithCallback(params:         sendMessageParams,
-                                callback:       nil,
-                                callbacks:      myCallBacks,
-                                sentCallback:   nil,
-                                deliverCallback: nil,
-                                seenCallback:   nil) { (deleteMessageUniqueId) in
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callback:           nil,
+                                callbacks:          myCallBacks,
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil) { (deleteMessageUniqueId) in
             uniqueId(deleteMessageUniqueId)
         }
         deleteMessageCallbackToUser = completion
@@ -1347,8 +1494,10 @@ extension Chat {
                                     completion:                 @escaping callbackTypeAlias) {
         log.verbose("Try to request to get message deliver participants with this parameters: \n \(messageDeliveryListInput)", context: "Chat")
         
+        /*
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_MESSAGE_DELEVERY_PARTICIPANTS.rawValue,
                                        "typeCode": messageDeliveryListInput.typeCode ?? generalTypeCode]
+        */
         
         var content: JSON = [:]
         if let count = messageDeliveryListInput.count {
@@ -1362,14 +1511,35 @@ extension Chat {
         
         content["messageId"] = JSON(messageDeliveryListInput.messageId)
         
-        sendMessageParams["content"] = content
+//        sendMessageParams["content"] = content
         
-        sendMessageWithCallback(params:         sendMessageParams,
-                                callback:       GetMessageDeliverList(parameters: sendMessageParams),
-                                callbacks:      nil,
-                                sentCallback:   nil,
-                                deliverCallback: nil,
-                                seenCallback:   nil) { (messageDeliverListUniqueId) in
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_MESSAGE_DELEVERY_PARTICIPANTS.rawValue,
+                                            contentAsString:    nil,
+                                            contentAsJSON:      content,
+                                            metaData:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          nil,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           messageDeliveryListInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           nil,
+                                            isCreateThreadAndSendMessage: nil)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  4)
+        
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callback:           GetMessageDeliverList(parameters: chatMessage),
+                                callbacks:          nil,
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil) { (messageDeliverListUniqueId) in
             uniqueId(messageDeliverListUniqueId)
         }
         getMessageDeliverListCallbackToUser = completion
@@ -1378,6 +1548,7 @@ extension Chat {
     
     // NOTE: This method will be deprecate soon
     // this method will do the same as tha funciton above but instead of using 'MessageDeliverySeenListRequestModel' to get the parameters, it'll use JSON
+    /*
     public func messageDeliveryList(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
         log.verbose("Try to request to get message deliver participants with this parameters: \n \(params)", context: "Chat")
         
@@ -1423,6 +1594,7 @@ extension Chat {
         }
         getMessageDeliverListCallbackToUser = completion
     }
+    */
     
     
     /*
@@ -1447,8 +1619,10 @@ extension Chat {
                                 completion:             @escaping callbackTypeAlias) {
         log.verbose("Try to request to get message seen participants with this parameters: \n \(messageSeenListInput)", context: "Chat")
         
+        /*
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_MESSAGE_SEEN_PARTICIPANTS.rawValue]
-        
+        */
+ 
         var content: JSON = [:]
         content["count"] = JSON(messageSeenListInput.count ?? 50)
         content["offset"] = JSON(messageSeenListInput.offset ?? 0)
@@ -1456,14 +1630,33 @@ extension Chat {
         
         content["messageId"] = JSON(messageSeenListInput.messageId)
         
-        sendMessageParams["content"] = content
+//        sendMessageParams["content"] = content
         
-        sendMessageWithCallback(params:         sendMessageParams,
-                                callback:       GetMessageSeenList(parameters: sendMessageParams),
-                                callbacks:      nil,
-                                sentCallback:   nil,
-                                deliverCallback: nil,
-                                seenCallback:   nil) { (messageSeenListUniqueId) in
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_MESSAGE_SEEN_PARTICIPANTS.rawValue,
+                                            contentAsString:    nil,
+                                            contentAsJSON:      content,
+                                            metaData:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          nil,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           messageSeenListInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           nil,
+                                            isCreateThreadAndSendMessage: nil)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  4)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callback:           GetMessageSeenList(parameters: chatMessage),
+                                callbacks:          nil,
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil) { (messageSeenListUniqueId) in
             uniqueId(messageSeenListUniqueId)
         }
         getMessageSeenListCallbackToUser = completion
@@ -1472,6 +1665,7 @@ extension Chat {
     
     // NOTE: This method will be deprecate soon
     // this method will do the same as tha funciton above but instead of using 'MessageDeliverySeenListRequestModel' to get the parameters, it'll use JSON
+    /*
     public func messageSeenList(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
         log.verbose("Try to request to get message seen participants with this parameters: \n \(params)", context: "Chat")
         
@@ -1514,52 +1708,124 @@ extension Chat {
         getMessageSeenListCallbackToUser = completion
         
     }
+    */
     
     
     
     // MARK: - Send Signal Messages
     
-    public func startSignalMessage(input:        SendSignalMessageRequestModel/*,
-         uniqueId:     @escaping (String) -> (),
-         completion:   @escaping callbackTypeAlias*/) {
+    /*
+     * Start Typing:
+     *
+     *  by calling this method, message of type "IS_TYPING" is sends to the server on every specific seconds
+     *  if you want to stop it, you should call "stopTyping" method with it's "uniqueId"
+     *
+     *  + Access:   - Public
+     *  + Inputs:
+     *      - threadId:     Int
+     *  + Outputs:  It has a callbacks as response:
+     *      - uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
+     *
+     */
+    // TODO: create a timer and mechanism that send SignalMessage every specific seconds
+    public func startTyping(threadId:   Int,
+                            uniqueId:   @escaping (String) -> ()) {
         
-        //        switch input.signalType {
-        //        case .IS_TYPING:
-        //
-        //        case .RECORD_VOICE:
-        //
-        //        case .UPLOAD_FILE:
-        //
-        //        case .UPLOAD_PICTURE:
-        //
-        //        case .UPLOAD_SOUND:
-        //
-        //        case .UPLOAD_VIDEO:
-        //
-        //        }
+        let requestUniqueId = generateUUID()
+        uniqueId(requestUniqueId)
+        let signalMessageInput = SendSignalMessageRequestModel(signalType:  SignalMessageType.IS_TYPING,
+                                                               threadId:    threadId,
+                                                               uniqueId:    requestUniqueId)
         
-        //        let requestUniqueId = UUID().uuidString
-        var content: JSON = [:]
-        //        content["uniqueId"] = JSON(requestUniqueId)
-        content["type"] = JSON("\(input.signalType.rawValue)")
-        //        content["subjectId"] = JSON(input.threadId)
-        
-        let sendSignalMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.SIGNAL_MESSAGE.rawValue,
-                                             "content": content,
-                                             "subjectId": input.threadId]
-        sendMessageWithCallback(params: sendSignalMessageParams,
-                                callback: nil,
-                                callbacks: nil,
-                                sentCallback: nil,
-                                deliverCallback: nil,
-                                seenCallback: nil) { (/*signalMessageUniqueId*/_) in
-                //                                    uniqueId(signalMessageUniqueId)
-        }
-        //        sendSignalMessageCallbackToUser = completion
+        // for every x seconds, call this function:
+        startSignalMessage(input: signalMessageInput)
+    }
+    
+    /*
+     * Stop Typing:
+     *
+     * by calling this method, sending isTyping message will stop
+     *
+     *  + Access:   - Public
+     *  + Inputs:
+     *      - uniqueId:     String
+     *  + Outputs:  _
+     *
+     */
+    // TODO: create a mechanism that can stop sending SignalMessage by using its "uniqueId"
+    public func stopTyping(uniqueId: String) {
         
     }
     
-    public func stopSignalMessage(uniqueId: String) {
+    
+    
+    /*
+     * start Signal Message:
+     *
+     *  calling this method, will start to send SignalMessage to the server
+     *
+     *  + Access:   Private
+     *  + Inputs:   SendSignalMessageRequestModel
+     *  + Outputs:  _
+     *
+     */
+    func startSignalMessage(input:        SendSignalMessageRequestModel) {
+        
+//        switch input.signalType {
+//        case .IS_TYPING:
+//
+//        case .RECORD_VOICE:
+//
+//        case .UPLOAD_FILE:
+//
+//        case .UPLOAD_PICTURE:
+//
+//        case .UPLOAD_SOUND:
+//
+//        case .UPLOAD_VIDEO:
+//
+//        }
+        
+        var content: JSON = [:]
+        content["type"] = JSON("\(input.signalType.rawValue)")
+        
+        /*
+         let sendSignalMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.SIGNAL_MESSAGE.rawValue,
+         "content": content,
+         "subjectId": input.threadId]
+         */
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.SYSTEM_MESSAGE.rawValue,
+                                            contentAsString:    nil,
+                                            contentAsJSON:      content,
+                                            metaData:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          input.threadId,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           nil,
+                                            uniqueId:           input.uniqueId ?? generateUUID(),
+                                            isCreateThreadAndSendMessage: nil)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  4)
+        
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callback:           nil,
+                                callbacks:          nil,
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil,
+                                uniuqueIdCallback:  nil)
+        
+    }
+    
+    func stopSignalMessage(uniqueId: String) {
         
     }
     

@@ -42,8 +42,8 @@ extension Chat {
     }
     
     public class GetHistoryCallbacks: CallbackProtocol {
-        var sendParams: JSON
-        init(parameters: JSON) {
+        var sendParams: SendChatMessageVO
+        init(parameters: SendChatMessageVO) {
             self.sendParams = parameters
         }
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
@@ -54,7 +54,8 @@ extension Chat {
             let errorCode = response["errorCode"].intValue
             
             if (!hasError) {
-                let content = sendParams["content"]
+//                let content = sendParams["content"]
+                let content = sendParams.content.convertToJSON()
                 let count = content["count"].intValue
                 let offset = content["offset"].intValue
                 
@@ -64,10 +65,10 @@ extension Chat {
                 // save data comes from server to the Cache
                 var messages = [Message]()
                 for item in messageContent {
-                    let myMessage = Message(threadId: sendParams["subjectId"].intValue, pushMessageVO: item)
+                    let myMessage = Message(threadId: sendParams.subjectId!, pushMessageVO: item)
                     messages.append(myMessage)
                 }
-                Chat.cacheDB.saveMessageObjects(messages: messages, getHistoryParams: sendParams)
+                Chat.cacheDB.saveMessageObjects(messages: messages, getHistoryParams: sendParams.convertModelToJSON())
                 
                 let getHistoryModel = GetHistoryModel(messageContent: messageContent,
                                                       contentCount: contentCount,

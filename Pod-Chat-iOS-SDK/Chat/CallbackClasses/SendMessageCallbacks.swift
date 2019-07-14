@@ -15,8 +15,8 @@ import FanapPodAsyncSDK
 extension Chat {
     
     public class SendMessageCallbacks: CallbackProtocolWith3Calls {
-        var sendParams: JSON
-        init(parameters: JSON) {
+        var sendParams: SendChatMessageVO
+        init(parameters: SendChatMessageVO) {
             self.sendParams = parameters
         }
         func onSent(uID: String, response: JSON, success: @escaping callbackTypeAlias) {
@@ -25,8 +25,8 @@ extension Chat {
             // save this Message on the cache
             // first check if the sendParams threadId is the same as threadId of the Server response, then we will update the cache
             // there is an exeption: when we create thread an send message simultanusly, at first we don't have the threadId, to in this situation we have nothing as threadId in the sendParams, so we get the respose subjectId and save the response on the cache
-            if (sendParams["subjectId"].int == response["subjectId"].int) || (sendParams["isCreateThreadAndSendMessage"].bool == true) {
-                let msg = sendParams["content"].stringValue
+            if (sendParams.subjectId == response["subjectId"].int) || (sendParams.isCreateThreadAndSendMessage == true) {
+                let msg = sendParams.content
                 let strWithReturn = msg.replacingOccurrences(of: "Ⓝ", with: "\n")
                 let strWithSpace = strWithReturn.replacingOccurrences(of: "Ⓢ", with: " ")
                 let messageContent = strWithSpace.replacingOccurrences(of: "Ⓣ", with: "\t")
@@ -50,7 +50,7 @@ extension Chat {
                 //                                      participant:  nil,
                 //                                      replyInfo:    nil)
                 message.message = messageContent
-                message.metaData = sendParams["metaData"].string
+                message.metaData = sendParams.metaData
                 message.id = Int(response["content"].stringValue)
                 
                 Chat.cacheDB.saveMessageObjects(messages: [message], getHistoryParams: nil)

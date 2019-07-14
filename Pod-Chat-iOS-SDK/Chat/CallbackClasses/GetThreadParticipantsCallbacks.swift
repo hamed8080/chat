@@ -41,8 +41,8 @@ extension Chat {
     }
     
     public class GetThreadParticipantsCallbacks: CallbackProtocol {
-        var sendParams: JSON
-        init(parameters: JSON) {
+        var sendParams: SendChatMessageVO
+        init(parameters: SendChatMessageVO) {
             self.sendParams = parameters
         }
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
@@ -53,7 +53,8 @@ extension Chat {
             let errorCode = response["errorCode"].intValue
             
             if (!hasError) {
-                let content = sendParams["content"]
+//                let content = sendParams["content"]
+                let content = sendParams.content.convertToJSON()
                 let count = content["count"].intValue
                 let offset = content["offset"].intValue
                 
@@ -66,10 +67,10 @@ extension Chat {
                 
                 var participants = [Participant]()
                 for item in messageContent {
-                    let myParticipant = Participant(messageContent: item, threadId: sendParams["subjectId"].intValue)
+                    let myParticipant = Participant(messageContent: item, threadId: sendParams.subjectId!)
                     participants.append(myParticipant)
                 }
-                Chat.cacheDB.saveThreadParticipantObjects(whereThreadIdIs: sendParams["subjectId"].intValue, withParticipants: participants)
+                Chat.cacheDB.saveThreadParticipantObjects(whereThreadIdIs: sendParams.subjectId!, withParticipants: participants)
                 //                }
                 
                 let getThreadParticipantsModel = GetThreadParticipantsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)

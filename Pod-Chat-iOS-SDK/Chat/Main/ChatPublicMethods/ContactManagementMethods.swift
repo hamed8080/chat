@@ -20,30 +20,39 @@ extension Chat {
     // MARK: - Get/Search Contacts
     
     /*
-     GetContacts:
-     it returns list of contacts
-     
-     By calling this function, a request of type 13 (GET_CONTACTS) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     this function will get some optional prameters as an input, as JSON or Model (depends on the function that you would use) which are:
-     - count:    how many contact do you want to get with this request.      (Int)       -optional-  , if you don't set it, it would have default value of 50
-     - offset:   offset of the contact number that start to count to show.   (Int)       -optional-  , if you don't set it, it would have default value of 0
-     - name:     if you want to search on your contact, put it here.         (String)    -optional-  ,
-     - typeCode:
-     
-     + Outputs:
-     It has 3 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:  it will returns the response that comes from server to this request.    (GetContactsModel)
-     3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
+     * GetContacts:
+     * it returns list of contacts
+     *
+     * By calling this function, a request of type 13 (GET_CONTACTS) will send throut Chat-SDK,
+     * then the response will come back as callbacks to client whose calls this function.
+     *
+     *  + Access:   - Public
+     *  + Inputs:
+     *      this function will get some optional prameters as an input, as JSON or Model (depends on the function that you would use) which are:
+     *      - count:    how many contact do you want to get with this request.      (Int)       -optional-  , if you don't set it, it would have default value of 50
+     *      - offset:   offset of the contact number that start to count to show.   (Int)       -optional-  , if you don't set it, it would have default value of 0
+     *      - name:     if you want to search on your contact, put it here.         (String)    -optional-  ,
+     *      - typeCode:
+     *
+     *  + Outputs:
+     *      It has 3 callbacks as response:
+     *      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
+     *      2- completion:  it will returns the response that comes from server to this request.    (GetContactsModel)
+     *      3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
+     *
      */
     public func getContacts(getContactsInput:   GetContactsRequestModel,
                             uniqueId:           @escaping (String) -> (),
                             completion:         @escaping callbackTypeAlias,
                             cacheResponse:      @escaping (GetContactsModel) -> ()) {
+        /*
+         *
+         *
+         */
+        
         log.verbose("Try to request to get Contacts with this parameters: \n \(getContactsInput)", context: "Chat")
+        
+        getContactsCallbackToUser = completion
         
         var content: JSON = [:]
         
@@ -55,33 +64,47 @@ extension Chat {
             content["name"] = JSON(name)
         }
         
-        let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_CONTACTS.rawValue,
-                                       //                                       "typeCode": getContactsInput.typeCode ?? generalTypeCode,
-            "content": content]
-        sendMessageWithCallback(params:         sendMessageParams,
-                                callback:       GetContactsCallback(parameters: sendMessageParams),
-                                callbacks:      nil,
-                                sentCallback:   nil,
-                                deliverCallback: nil,
-                                seenCallback:   nil) { (getContactUniqueId) in
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_CONTACTS.rawValue,
+                                            contentAsString:    "\(content)",
+                                            contentAsJSON:      nil,
+                                            metaData:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          nil,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           nil,
+                                            uniqueId:           generateUUID(),
+                                            isCreateThreadAndSendMessage: true)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callback:           GetContactsCallback(parameters: chatMessage),
+                                callbacks:          nil,
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil) { (getContactUniqueId) in
             uniqueId(getContactUniqueId)
         }
-        getContactsCallbackToUser = completion
-        
         
         // if cache is enabled by user, it will return cache result to the user
         if enableCache {
             if let cacheContacts = Chat.cacheDB.retrieveContacts(ascending:         true,
                                                                  cellphoneNumber:   nil,
-                                                                 count:     getContactsInput.count ?? 50,
-                                                                 email:     nil,
-                                                                 firstName: nil,
-                                                                 id:        nil,
-                                                                 lastName:  nil,
-                                                                 offset:    getContactsInput.offset ?? 0,
-                                                                 search:    getContactsInput.name,
-                                                                 timeStamp: cacheTimeStamp,
-                                                                 uniqueId:  nil) {
+                                                                 count:             getContactsInput.count ?? 50,
+                                                                 email:             nil,
+                                                                 firstName:         nil,
+                                                                 id:                nil,
+                                                                 lastName:          nil,
+                                                                 offset:            getContactsInput.offset ?? 0,
+                                                                 search:            getContactsInput.name,
+                                                                 timeStamp:         cacheTimeStamp,
+                                                                 uniqueId:          nil) {
                 cacheResponse(cacheContacts)
             }
         }
@@ -90,6 +113,7 @@ extension Chat {
     
     // NOTE: This method will be deprecate soon
     // this method will do the same as tha funciton above but instead of using 'GetContactsRequestModel' to get the parameters, it'll use JSON
+    /*
     public func getContacts(params: JSON?, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
         log.verbose("Try to request to get Contacts with this parameters: \n \(params ?? "params is empty!")", context: "Chat")
         
@@ -131,6 +155,7 @@ extension Chat {
         }
         getContactsCallbackToUser = completion
     }
+    */
     
     
     /*
@@ -585,8 +610,10 @@ extension Chat {
                              completion:            @escaping callbackTypeAlias) {
         log.verbose("Try to request to block user with this parameters: \n \(blockContactsInput)", context: "Chat")
         
+        /*
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.BLOCK.rawValue,
                                        "typeCode": blockContactsInput.typeCode ?? generalTypeCode]
+        */
         
         var content: JSON = [:]
         if let contactId = blockContactsInput.contactId {
@@ -599,14 +626,33 @@ extension Chat {
             content["userId"] = JSON(userId)
         }
         
-        sendMessageParams["content"] = JSON("\(content)")
+//        sendMessageParams["content"] = JSON("\(content)")
         
-        sendMessageWithCallback(params:         sendMessageParams,
-                                callback:       BlockContactCallbacks(),
-                                callbacks:      nil,
-                                sentCallback:   nil,
-                                deliverCallback: nil,
-                                seenCallback:   nil) { (blockUniqueId) in
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.BLOCK.rawValue,
+                                            contentAsString:    "\(content)",
+                                            contentAsJSON:      nil,
+                                            metaData:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          nil,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           blockContactsInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           nil,
+                                            isCreateThreadAndSendMessage: true)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callback:           BlockContactCallbacks(),
+                                callbacks:          nil,
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil) { (blockUniqueId) in
             uniqueId(blockUniqueId)
         }
         blockCallbackToUser = completion
@@ -615,6 +661,7 @@ extension Chat {
     
     // NOTE: This method will be deprecate soon
     // this method will do the same as tha funciton above but instead of using 'BlockContactsRequestModel' to get the parameters, it'll use JSON
+    /*
     public func blockContact(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
         log.verbose("Try to request to block user with this parameters: \n \(params)", context: "Chat")
         
@@ -639,6 +686,7 @@ extension Chat {
         }
         blockCallbackToUser = completion
     }
+    */
     
     
     /*
@@ -668,16 +716,37 @@ extension Chat {
         content["count"]    = JSON(getBlockedContactsInput.count ?? 50)
         content["offset"]   = JSON(getBlockedContactsInput.offset ?? 0)
         
+        /*
         let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_BLOCKED.rawValue,
                                        "typeCode": getBlockedContactsInput.typeCode ?? generalTypeCode,
                                        "content": content]
+        */
         
-        sendMessageWithCallback(params:         sendMessageParams,
-                                callback:       GetBlockedContactsCallbacks(parameters: sendMessageParams),
-                                callbacks:      nil,
-                                sentCallback:   nil,
-                                deliverCallback: nil,
-                                seenCallback:   nil) { (getBlockedUniqueId) in
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_BLOCKED.rawValue,
+                                            contentAsString:    "\(content)",
+                                            contentAsJSON:      nil,
+                                            metaData:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          nil,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           getBlockedContactsInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           nil,
+                                            isCreateThreadAndSendMessage: true)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callback:           GetBlockedContactsCallbacks(parameters: chatMessage),
+                                callbacks:          nil,
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil) { (getBlockedUniqueId) in
             uniqueId(getBlockedUniqueId)
         }
         getBlockedCallbackToUser = completion
@@ -686,6 +755,7 @@ extension Chat {
     
     // NOTE: This method will be deprecate soon
     // this method will do the same as tha funciton above but instead of using 'GetBlockedContactListRequestModel' to get the parameters, it'll use JSON
+    /*
     public func getBlockedContacts(params: JSON?, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
         log.verbose("Try to request to get block users with this parameters: \n \(params ?? "there isn't any parameter")", context: "Chat")
         
@@ -726,6 +796,7 @@ extension Chat {
         }
         getBlockedCallbackToUser = completion
     }
+    */
     
     
     /*
@@ -750,11 +821,13 @@ extension Chat {
                                completion:              @escaping callbackTypeAlias) {
         log.verbose("Try to request to unblock user with this parameters: \n \(unblockContactsInput)", context: "Chat")
         
+        /*
         var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.UNBLOCK.rawValue,
                                        "typeCode": unblockContactsInput.typeCode ?? generalTypeCode]
         if let subjectId = unblockContactsInput.blockId {
             sendMessageParams["subjectId"] = JSON(subjectId)
         }
+        */
         
         var content: JSON = [:]
         if let contactId = unblockContactsInput.contactId {
@@ -767,14 +840,33 @@ extension Chat {
             content["userId"] = JSON(userId)
         }
         
-        sendMessageParams["content"] = JSON("\(content)")
+//        sendMessageParams["content"] = JSON("\(content)")
         
-        sendMessageWithCallback(params:         sendMessageParams,
-                                callback:       UnblockContactCallbacks(),
-                                callbacks:      nil,
-                                sentCallback:   nil,
-                                deliverCallback: nil,
-                                seenCallback:   nil) { (blockUniqueId) in
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.UNBLOCK.rawValue,
+                                            contentAsString:    "\(content)",
+                                            contentAsJSON:      nil,
+                                            metaData:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          unblockContactsInput.blockId,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           unblockContactsInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           nil,
+                                            isCreateThreadAndSendMessage: true)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callback:           UnblockContactCallbacks(),
+                                callbacks:          nil,
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil) { (blockUniqueId) in
             uniqueId(blockUniqueId)
         }
         unblockCallbackToUser = completion
@@ -783,6 +875,7 @@ extension Chat {
     
     // NOTE: This method will be deprecate soon
     // this method will do the same as tha funciton above but instead of using 'UnblockContactsRequestModel' to get the parameters, it'll use JSON
+    /*
     public func unblockContact(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
         log.verbose("Try to request to unblock user with this parameters: \n \(params)", context: "Chat")
         
@@ -803,7 +896,7 @@ extension Chat {
         }
         unblockCallbackToUser = completion
     }
-    
+    */
     
     // MARK: Sync Contact
     /*

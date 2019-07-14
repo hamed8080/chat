@@ -13,42 +13,88 @@ import FanapPodAsyncSDK
 
 extension Chat {
     
-    func chatDelegateUserInfo(userInfo: JSON) {
+    /*
+     * UserInfo Response comes from server
+     *
+     *  save data comes from server to the Cache if needed
+     *  send Event to client if needed!
+     *  call the "onResultCallback"
+     *
+     *  + Access:   - private
+     *  + Inputs:
+     *      - message:      ChatMessage
+     *  + Outputs:
+     *      - it doesn't have direct output,
+     *          but on the situation where the response is valid,
+     *          it will call the "onResultCallback" callback to getUserInfo function (by using "userInfoCallbackToUser")
+     *
+     */
+    // TODO: complete the comments
+    // TODO: take a look at the failure state (and check if all things is right)
+    func responseOfUserInfo(withMessage message: ChatMessage) {
+        /*
+         *  -> check if we have saves the message uniqueId on the "map" property
+         *      -> if yes: (means we send this request and waiting for the response of it)
+         *          -> create the "CreateReturnData" variable
+         *          -> check if Cache is enabled by the user
+         *              -> if yes, save the income Data to the Cache
+         *          -> call the "onResultCallback" which will send callback to getUserInfo function (by using "userInfoCallbackToUser")
+         *
+         */
+        log.verbose("Message of type 'USER_INFO' recieved", context: "Chat")
         
-        let hasError = userInfo["hasError"].boolValue
-        let errorMessage = userInfo["errorMessage"].stringValue
-        let errorCode = userInfo["errorCode"].intValue
-        
-        if (!hasError) {
-            let resultData = userInfo["result"]
+        if Chat.map[message.uniqueId] != nil {
+            let returnData: JSON = CreateReturnData(hasError:       false,
+                                                    errorMessage:   "",
+                                                    errorCode:      0,
+                                                    result:         message.content?.convertToJSON() ?? [:],
+                                                    resultAsString: nil,
+                                                    contentCount:   nil,
+                                                    subjectId:      message.subjectId)
+                .returnJSON()
             
-            // save data comes from server to the Cache
-            let user = User(messageContent: resultData)
-            Chat.cacheDB.saveUserInfo(withUserObject: user)
+            if enableCache {
+                let user = User(messageContent: message.content?.convertToJSON() ?? [:])
+                Chat.cacheDB.saveUserInfo(withUserObject: user)
+            }
+//            delegate?.userEvents(type: UserEventTypes.userInfo, result: userInfo)
             
-            let userInfoModel = UserInfoModel(messageContent: resultData, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
-            
-//            delegate?.userEvents(type: UserEventTypes.userInfo, result: userInfoModel)
+            let callback: CallbackProtocol = Chat.map[message.uniqueId]!
+            callback.onResultCallback(uID: message.uniqueId,
+                                      response: returnData,
+                                      success: { (myUserInfoModel) in
+                self.getUserInfoRetryCount = 0
+                // here has to send callback to getuserInfo function
+                self.userInfoCallbackToUser?(myUserInfoModel)
+            }) { (failureJSON) in
+                if (self.getUserInfoRetryCount > self.getUserInfoRetry) {
+                    self.delegate?.chatError(errorCode:     6101,
+                                             errorMessage:  CHAT_ERRORS.err6001.rawValue,
+                                             errorResult:   nil)
+                } else {
+                    self.handleAsyncReady()
+                }
+            }
+            Chat.map.removeValue(forKey: message.uniqueId)
         }
+        
     }
     
     public class UserInfoCallback: CallbackProtocol {
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
             log.verbose("UserInfoCallback", context: "Chat")
+            /*
+             *  -> check if response hasError or not
+             *      -> if not, create the "UserInfoModel"
+             *          -> send the "UserInfoModel" as a callback
+             *
+             */
             
-            let hasError = response["hasError"].boolValue
-            let errorMessage = response["errorMessage"].stringValue
-            let errorCode = response["errorCode"].intValue
-            
-            if (!hasError) {
-                let resultData = response["result"]
-                
-                //                // save data comes from server to the Cache
-                //                let user = User(messageContent: resultData)
-                //                Chat.cacheDB.createUserInfoObject(user: user)
-                
-                let userInfoModel = UserInfoModel(messageContent: resultData, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
-                
+            if (!response["hasError"].boolValue) {
+                let userInfoModel = UserInfoModel(messageContent:   response["result"],
+                                                  hasError:         response["hasError"].boolValue,
+                                                  errorMessage:     response["errorMessage"].stringValue,
+                                                  errorCode:        response["errorCode"].intValue)
                 success(userInfoModel)
             } else {
                 failure(["result": false])

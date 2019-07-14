@@ -52,7 +52,8 @@ public enum chatMessageVOTypes: Int {
     case SPAM_PV_THREAD                     = 41
     case SET_RULE_TO_USER                   = 42
     case CLEAR_HISTORY                      = 44
-    case SIGNAL_MESSAGE                     = 46
+    case SYSTEM_MESSAGE                     = 46
+    case GET_NOT_SEEN_DURATION              = 47
     case GET_THREAD_ADMINS                  = 48    // it has been deprecated! (actualy has not been implemented yet! and won't be!!)
     case LOGOUT                             = 100
     case ERROR                              = 999
@@ -68,11 +69,12 @@ public enum InviteeVOidTypes: Int {
 }
 
 public enum ThreadTypes: String {
-    case NORMAL         = "NORMAL"
-    case OWNER_GROUP    = "OWNER_GROUP"
-    case PUBLIC_GROUP   = "PUBLIC_GROUP"
-    case CHANNEL_GROUP  = "CHANNEL_GROUP"
-    case CHANNEL        = "CHANNEL"
+    case NORMAL                 = "NORMAL"
+    case OWNER_GROUP            = "OWNER_GROUP"
+    case PUBLIC_GROUP           = "PUBLIC_GROUP"
+    case CHANNEL_GROUP          = "CHANNEL_GROUP"
+    case CHANNEL                = "CHANNEL"
+    case NOTIFICATION_CHANNEL   = "NOTIFICATION_CHANNEL"
 }
 
 public struct SERVICE_ADDRESSES_ENUM {
