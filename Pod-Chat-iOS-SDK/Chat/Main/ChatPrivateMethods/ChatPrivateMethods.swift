@@ -1215,45 +1215,13 @@ extension Chat {
             // a message of type 7 (BLOCK) comes from Server.
         // it means that a user has blocked.
         case chatMessageVOTypes.BLOCK.rawValue:
-            log.verbose("Message of type 'BLOCK' recieved", context: "Chat")
-            if Chat.map[message.uniqueId] != nil {
-                let returnData: JSON = CreateReturnData(hasError:       false,
-                                                        errorMessage:   "",
-                                                        errorCode:      0,
-                                                        result:         messageContentAsJSON,
-                                                        resultAsString: nil,
-                                                        contentCount:   message.contentCount,
-                                                        subjectId:      message.subjectId)
-                    .returnJSON()
-                
-                let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-                callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
-                    self.blockCallbackToUser?(successJSON)
-                }) { _ in }
-                Chat.map.removeValue(forKey: message.uniqueId)
-            }
+            responseOfBlockContact(withMessage: message)
             break
             
             // a message of type 8 (UNBLOCK) comes from Server.
         // it means that a user has unblocked.
         case chatMessageVOTypes.UNBLOCK.rawValue:
-            log.verbose("Message of type 'UNBLOCK' recieved", context: "Chat")
-            if Chat.map[message.uniqueId] != nil {
-                let returnData: JSON = CreateReturnData(hasError:       false,
-                                                        errorMessage:   "",
-                                                        errorCode:      0,
-                                                        result:         messageContentAsJSON,
-                                                        resultAsString: nil,
-                                                        contentCount:   message.contentCount,
-                                                        subjectId:      message.subjectId)
-                    .returnJSON()
-                
-                let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-                callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
-                    self.unblockCallbackToUser?(successJSON)
-                }) { _ in }
-                Chat.map.removeValue(forKey: message.uniqueId)
-            }
+            responseOfUnblockContact(withMessage: message)
             break
             
             // a message of type 9 (LEAVE_THREAD) comes from Server.
@@ -1348,26 +1316,9 @@ extension Chat {
             //
             break
             
-            // a message of type 13 (GET_CONTACTS) comes from Server.
-        // it means array of contacts comes
+        // a message of type 13 (GET_CONTACTS) comes from Server.
         case chatMessageVOTypes.GET_CONTACTS.rawValue:
-            log.verbose("Message of type 'GET_CONTACTS' recieved", context: "Chat")
-            if Chat.map[message.uniqueId] != nil {
-                let returnData: JSON = CreateReturnData(hasError:       false,
-                                                        errorMessage:   "",
-                                                        errorCode:      0,
-                                                        result:         messageContentAsJSON,
-                                                        resultAsString: nil,
-                                                        contentCount:   message.contentCount,
-                                                        subjectId:      message.subjectId)
-                    .returnJSON()
-                
-                let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-                callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
-                    self.getContactsCallbackToUser?(successJSON)
-                }) { _ in }
-                Chat.map.removeValue(forKey: message.uniqueId)
-            }
+            responseOfGetContacts(withMessage: message)
             break
             
         // a message of type 14 (GET_THREADS) comes from Server.
@@ -1575,23 +1526,7 @@ extension Chat {
             
         // a message of type 25 (GET_BLOCKED) comes from Server.
         case chatMessageVOTypes.GET_BLOCKED.rawValue:
-            log.verbose("Message of type 'GET_BLOCKED' recieved", context: "Chat")
-            if Chat.map[message.uniqueId] != nil {
-                let returnData: JSON = CreateReturnData(hasError:       false,
-                                                        errorMessage:   "",
-                                                        errorCode:      0,
-                                                        result:         messageContentAsJSON,
-                                                        resultAsString: nil,
-                                                        contentCount:   message.contentCount,
-                                                        subjectId:      message.subjectId)
-                    .returnJSON()
-                
-                let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-                callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
-                    self.getBlockedCallbackToUser?(successJSON)
-                }) { _ in }
-                Chat.map.removeValue(forKey: message.uniqueId)
-            }
+            responseOfGetBlockContact(withMessage: message)
             break
             
         // a message of type 26 (RELATION_INFO) comes from Server.

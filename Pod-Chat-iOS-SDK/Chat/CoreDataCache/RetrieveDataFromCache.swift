@@ -84,7 +84,6 @@ extension Cache {
      *      - GetContactsModel?
      *
      */
-    // TODO: - Have to implement search in contacts by using 'name' property!
     // TODO: - it will check offset and count after fetching objects (but it has do it in the same time)
     public func retrieveContacts(ascending:         Bool,
                                  cellphoneNumber:   String?,

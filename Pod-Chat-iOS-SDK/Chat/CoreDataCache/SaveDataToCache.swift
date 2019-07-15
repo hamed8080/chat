@@ -217,7 +217,7 @@ extension Cache {
     /*
      * Save Thread:
      *
-     * by calling this function, it save (or update) Threads that comes from server, into the cache
+     * by calling this function, save (or update) Threads that comes from server, into the cache
      *
      *  + Access:   Public
      *  + Inputs:
@@ -389,10 +389,27 @@ extension Cache {
     }
     
     
-    
-    // this function will save (or update) contacts that comes from server, in the Cache.
+    /*
+     * Save ThreadParticipant:
+     *
+     * by calling this function, save (or update) threadParticipants that comes from server into the cache
+     *
+     *  + Access:   Public
+     *  + Inputs:
+     *      - threadId:     Int
+     *      - participants: [Participant]
+     *  + Outputs:  -
+     *
+     */
     public func saveThreadParticipantObjects(whereThreadIdIs threadId: Int, withParticipants participants: [Participant]) {
-        
+        /*
+         *  -> fetch CMConversation objects from CMConversation entity
+         *  -> filter it by threadId
+         *  -> if we found any
+         *      -> loop through its Participants
+         *          -> update or save all participants with the cache data
+         *
+         */
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
         fetchRequest.predicate = NSPredicate(format: "id == %i", threadId)
         do {
@@ -400,9 +417,7 @@ extension Cache {
                 if (result.count > 0) {
                     for item in participants {
                         if let myCMParticipantObject = updateCMParticipantEntity(withParticipantsObject: item) {
-                            
                             result.first!.addToParticipants(myCMParticipantObject)
-                            //                                result.first!.participants!.append(myCMParticipantObject)
                             saveContext(subject: "Add/Update CMParticipant in a thread and Update CMConversation")
                             updateThreadParticipantEntity(inThreadId: Int(exactly: result.first!.id!)!, withParticipantId: Int(exactly: item.id!)!)
                         }

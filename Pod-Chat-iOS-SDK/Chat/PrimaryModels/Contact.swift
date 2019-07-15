@@ -130,7 +130,7 @@ open class Contact {
                             "id":               id ?? NSNull(),
                             "image":            image ?? NSNull(),
                             "lastName":         lastName ?? NSNull(),
-                            "linkedUserJSON":   linkedUser?.formatToJSON() ?? NSNull(),
+                            "linkedUser":       linkedUser?.formatToJSON() ?? NSNull(),
                             "notSeenDuration":  notSeenDuration ?? NSNull(),
                             "timeStamp":        timeStamp ?? NSNull(),
                             "uniqueId":         uniqueId ?? NSNull(),

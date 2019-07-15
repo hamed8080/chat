@@ -13,14 +13,17 @@ open class GetBlockedContactListRequestModel {
     public let count:       Int?
     public let offset:      Int?
     public let typeCode:    String?
+    public let uniqueId:    String?
     
     public init(count:     Int?,
                 offset:    Int?,
-                typeCode:  String?) {
+                typeCode:  String?,
+                uniqueId:  String?) {
         
         self.count      = count
         self.offset     = offset
         self.typeCode   = typeCode
+        self.uniqueId   = uniqueId
     }
     
 }

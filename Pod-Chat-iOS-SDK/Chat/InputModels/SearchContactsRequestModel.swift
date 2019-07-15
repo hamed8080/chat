@@ -18,7 +18,7 @@ open class SearchContactsRequestModel {
     public let offset:          Int?
     public let size:            Int?
     public let uniqueId:        String?
-    //    public let typeCode:        String?
+//    public let typeCode:        String?
     
     public init(cellphoneNumber:   String?,
                 email:             String?,

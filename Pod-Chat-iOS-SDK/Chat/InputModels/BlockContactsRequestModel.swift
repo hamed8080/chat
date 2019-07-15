@@ -14,12 +14,18 @@ open class BlockContactsRequestModel {
     public let threadId:    Int?
     public let typeCode:    String?
     public let userId:      Int?
+    public let uniqueId:    String?
     
-    public init(contactId: Int?, threadId: Int?, typeCode: String?, userId: Int?) {
+    public init(contactId:  Int?,
+                threadId:   Int?,
+                typeCode:   String?,
+                userId:     Int?,
+                uniqueId:   String?) {
         self.contactId  = contactId
         self.threadId   = threadId
         self.typeCode   = typeCode
         self.userId     = userId
+        self.uniqueId   = uniqueId
     }
     
 }

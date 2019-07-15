@@ -60,9 +60,9 @@ extension Chat {
 //            delegate?.userEvents(type: UserEventTypes.userInfo, result: userInfo)
             
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-            callback.onResultCallback(uID: message.uniqueId,
+            callback.onResultCallback(uID:      message.uniqueId,
                                       response: returnData,
-                                      success: { (myUserInfoModel) in
+                                      success:  { (myUserInfoModel) in
                 self.getUserInfoRetryCount = 0
                 // here has to send callback to getuserInfo function
                 self.userInfoCallbackToUser?(myUserInfoModel)
@@ -81,15 +81,18 @@ extension Chat {
     }
     
     public class UserInfoCallback: CallbackProtocol {
-        func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
-            log.verbose("UserInfoCallback", context: "Chat")
+        
+        func onResultCallback(uID:      String,
+                              response: JSON,
+                              success:  @escaping callbackTypeAlias,
+                              failure:  @escaping callbackTypeAlias) {
             /*
              *  -> check if response hasError or not
              *      -> if not, create the "UserInfoModel"
              *          -> send the "UserInfoModel" as a callback
              *
              */
-            
+            log.verbose("UserInfoCallback", context: "Chat")
             if (!response["hasError"].boolValue) {
                 let userInfoModel = UserInfoModel(messageContent:   response["result"],
                                                   hasError:         response["hasError"].boolValue,
@@ -99,8 +102,8 @@ extension Chat {
             } else {
                 failure(["result": false])
             }
-            
         }
+        
     }
     
 }

@@ -13,81 +13,95 @@ import FanapPodAsyncSDK
 
 extension Chat {
     
-    public func chatDelegateGetContacts(getContact: JSON) {
-        var returnData: JSON = [:]
-        
-        let hasError = getContact["hasError"].boolValue
-        let errorMessage = getContact["errorMessage"].stringValue
-        let errorCode = getContact["errorCode"].intValue
-        
-        returnData["hasError"] = JSON(hasError)
-        returnData["errorMessage"] = JSON(errorMessage)
-        returnData["errorCode"] = JSON(errorCode)
-        
-        if (!hasError) {
-            let result = getContact["result"]
-            let count = result["contentCount"].intValue
-            let offset = result["nextOffset"].intValue
+    /*
+     * GetContact Response comes from server
+     *
+     *  save data comes from server to the Cache if needed
+     *  send Event to client if needed!
+     *  call the "onResultCallback"
+     *
+     *  + Access:   - private
+     *  + Inputs:
+     *      - message:      ChatMessage
+     *  + Outputs:
+     *      - it doesn't have direct output,
+     *          but on the situation where the response is valid,
+     *          it will call the "onResultCallback" callback to getContacts function (by using "getContactsCallbackToUser")
+     *
+     */
+    func responseOfGetContacts(withMessage message: ChatMessage) {
+        /*
+         *  -> check if we have saves the message uniqueId on the "map" property
+         *      -> if yes: (means we send this request and waiting for the response of it)
+         *          -> create the "CreateReturnData" variable
+         *          -> check if Cache is enabled by the user
+         *              -> if yes, save the income Data to the Cache
+         *          -> call the "onResultCallback" which will send callback to getContacts function (by using "getContactsCallbackToUser")
+         *
+         */
+        log.verbose("Message of type 'GET_CONTACTS' recieved", context: "Chat")
+        if Chat.map[message.uniqueId] != nil {
+            let returnData: JSON = CreateReturnData(hasError:       false,
+                                                    errorMessage:   "",
+                                                    errorCode:      0,
+                                                    result:         message.content?.convertToJSON() ?? [:],
+                                                    resultAsString: nil,
+                                                    contentCount:   message.contentCount,
+                                                    subjectId:      message.subjectId)
+                .returnJSON()
             
-            let messageContent: [JSON] = getContact["result"].arrayValue
-            let contentCount = getContact["contentCount"].intValue
-            
-            // save data comes from server to the Cache
-            var contacts = [Contact]()
-            for item in messageContent {
-                let myContact = Contact(messageContent: item)
-                contacts.append(myContact)
+            if enableCache {
+                var contacts = [Contact]()
+                for item in message.content?.convertToJSON() ?? [:] {
+                    let myContact = Contact(messageContent: item.1)
+                    contacts.append(myContact)
+                }
+                Chat.cacheDB.saveContact(withContactObjects: contacts)
             }
-            Chat.cacheDB.saveContact(withContactObjects: contacts)
             
-            let getContactsModel = GetContactsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset - count, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
-            
-//            delegate?.contactEvents(type: ContactEventTypes.getContact, result: getContactsModel)
+            let callback: CallbackProtocol = Chat.map[message.uniqueId]!
+            callback.onResultCallback(uID:      message.uniqueId,
+                                      response: returnData,
+                                      success:  { (successJSON) in
+                self.getContactsCallbackToUser?(successJSON)
+            }) { _ in }
+            Chat.map.removeValue(forKey: message.uniqueId)
         }
+        
     }
     
+    
     public class GetContactsCallback: CallbackProtocol {
+        
         var sendParams: SendChatMessageVO
         init(parameters: SendChatMessageVO) {
             self.sendParams = parameters
         }
-        func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
+        
+        func onResultCallback(uID:      String,
+                              response: JSON,
+                              success:  @escaping callbackTypeAlias,
+                              failure:  @escaping callbackTypeAlias) {
+            /*
+             *  -> check if response hasError or not
+             *      -> if yes, create the "GetContactsModel"
+             *      -> send the "GetContactsModel" as a callback
+             *
+             */
             log.verbose("GetContactsCallback", context: "Chat")
-            
-//            Chat.sharedInstance.chatDelegateGetContacts(getContact: sendParams)
-            
-            var returnData: JSON = [:]
-            
-            let hasError = response["hasError"].boolValue
-            let errorMessage = response["errorMessage"].stringValue
-            let errorCode = response["errorCode"].intValue
-            
-            returnData["hasError"] = JSON(hasError)
-            returnData["errorMessage"] = JSON(errorMessage)
-            returnData["errorCode"] = JSON(errorCode)
-            
-            if (!hasError) {
-//                let content = sendParams["content"]
+            if (!response["hasError"].boolValue) {
                 let content = sendParams.content.convertToJSON()
-                let count = content["count"].intValue
-                let offset = content["offset"].intValue
-                
-                let messageContent: [JSON] = response["result"].arrayValue
-                let contentCount = response["contentCount"].intValue
-                
-                //                // save data comes from server to the Cache
-                //                var contacts = [Contact]()
-                //                for item in messageContent {
-                //                    let myContact = Contact(messageContent: item)
-                //                    contacts.append(myContact)
-                //                }
-                //                Chat.cacheDB.saveContactObjects(contacts: contacts)
-                
-                let getContactsModel = GetContactsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
-                
+                let getContactsModel = GetContactsModel(messageContent: response["result"].arrayValue,
+                                                        contentCount:   response["contentCount"].intValue,
+                                                        count:          content["count"].intValue,
+                                                        offset:         content["offset"].intValue,
+                                                        hasError:       response["hasError"].boolValue,
+                                                        errorMessage:   response["errorMessage"].stringValue,
+                                                        errorCode:      response["errorCode"].intValue)
                 success(getContactsModel)
             }
         }
+        
     }
     
 }

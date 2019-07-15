@@ -15,13 +15,15 @@ open class UnblockContactsRequestModel {
     public let threadId:    Int?
     public let typeCode:    String?
     public let userId:      Int?
+    public let uniqueId:    String?
     
-    public init(blockId: Int?, contactId: Int?, threadId: Int?, typeCode: String?, userId: Int?) {
+    public init(blockId: Int?, contactId: Int?, threadId: Int?, typeCode: String?, userId: Int?, uniqueId: String?) {
         self.blockId    = blockId
         self.contactId  = contactId
         self.threadId   = threadId
         self.typeCode   = typeCode
         self.userId     = userId
+        self.uniqueId   = uniqueId
     }
     
 }
