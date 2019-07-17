@@ -111,12 +111,82 @@ extension Cache {
     
     
     
+    /*
+     *
+     *
+     */
+    public func deleteThreads(withThreadIds threadIds: [Int]) {
+        /*
+         *  -> fetch all CMConversation
+         *  -> for each input threadId
+         *      -> check all items inside cache fetch result
+         *          -> if we found input threadId, inside cache, do this:
+         *              -> delete all messages inside this thread
+         *              -> delete all threadParticipants inside this thread
+         *              -> delete all participants inside this thread
+         *              -> delete the inviter inside this thread
+         *              -> delete the lastMessageVO inside this thread
+         *              -> delete the CMConversation input itselfe
+         *
+         */
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMConversation] {
+                for id in threadIds {
+                    for itemInCache in result {
+                        if let threadId = itemInCache.id as? Int {
+                            if (threadId == id) {
+                                deleteMessage(inThread: id, allMessages: true, withMessageIds: [])
+                                deleteThreadParticipants(withThreadId: id)
+                                
+                                if let participants = itemInCache.participants {
+                                    for (index, _) in participants.enumerated() {
+                                        context.delete((itemInCache.participants?[index])!)
+                                        saveContext(subject: "Delete CMParticipant Object")
+                                    }
+                                }
+                                if let _ = itemInCache.inviter {
+                                    context.delete(itemInCache.inviter!)
+                                    saveContext(subject: "Delete CMParticipant Object")
+                                }
+                                if let _ = itemInCache.lastMessageVO {
+                                    context.delete(itemInCache.lastMessageVO!)
+                                    saveContext(subject: "Delete CMMessage Object")
+                                }
+                                context.delete(itemInCache)
+                                saveContext(subject: "Delete CMConversation Object")
+                            }
+                        }
+                    }
+                }
+                saveContext(subject: "Update CMConversation")
+            }
+        } catch {
+            fatalError("Error on fetching list of CMConversation when trying to delete Threads...")
+        }
+    }
     
     
     
     
-    public func deleteMessage(count: Int?, fromTime: UInt?, messageId: Int?, offset: Int, order: String, query: String?, threadId: Int?, toTime: UInt?, uniqueId: String?) {
-        let fetchRequest = retrieveMessageHistoryFetchRequest(firstMessageId: nil, fromTime: fromTime, messageId: messageId, lastMessageId: nil, order: order, query: query, threadId: threadId, toTime: toTime, uniqueId: uniqueId)
+    public func deleteMessage(count:    Int?,
+                              fromTime: UInt?,
+                              messageId: Int?,
+                              offset:   Int,
+                              order:    String,
+                              query:    String?,
+                              threadId: Int?,
+                              toTime:   UInt?,
+                              uniqueId: String?) {
+        let fetchRequest = retrieveMessageHistoryFetchRequest(firstMessageId:   nil,
+                                                              fromTime:         fromTime,
+                                                              messageId:        messageId,
+                                                              lastMessageId:    nil,
+                                                              order:            order,
+                                                              query:            query,
+                                                              threadId:         threadId,
+                                                              toTime:           toTime,
+                                                              uniqueId:         uniqueId)
         do {
             if let result = try context.fetch(fetchRequest) as? [CMMessage] {
                 
@@ -126,13 +196,13 @@ extension Cache {
                     for (index, item) in result.enumerated() {
                         if (index >= offset) && (insideCount < count) {
                             
-                            deleteMessage(inThread: Int(exactly: item.threadId ?? 0) ?? 0, withMessageIds: [Int(exactly: item.id ?? 0) ?? 0])
+                            deleteMessage(inThread: Int(exactly: item.threadId ?? 0) ?? 0, allMessages: false, withMessageIds: [Int(exactly: item.id ?? 0) ?? 0])
                             insideCount += 1
                         }
                     }
                 case .none:
                     for item in result {
-                        deleteMessage(inThread: Int(exactly: item.threadId ?? 0) ?? 0, withMessageIds: [Int(exactly: item.id ?? 0) ?? 0])
+                        deleteMessage(inThread: Int(exactly: item.threadId ?? 0) ?? 0, allMessages: false, withMessageIds: [Int(exactly: item.id ?? 0) ?? 0])
                     }
                     
                     //                default: break
@@ -198,40 +268,59 @@ extension Cache {
     
     
     // delete messages from specific thread
-    public func deleteMessage(inThread: Int, withMessageIds messageIds: [Int]) {
+    public func deleteMessage(inThread: Int, allMessages: Bool, withMessageIds messageIds: [Int]) {
+        /*
+         *
+         *
+         *
+         */
+        
+        func deleteCMMessage(message: CMMessage) {
+            if let _ = message.participant {
+                context.delete(message.participant!)
+                saveContext(subject: "Delete participant from CMMessage Object")
+            }
+            if let _ = message.conversation {
+                context.delete(message.conversation!)
+                saveContext(subject: "Delete conversation from CMMessage Object")
+            }
+            if let _ = message.replyInfo {
+                context.delete(message.replyInfo!)
+                saveContext(subject: "Delete replyInfo from CMMessage Object")
+            }
+            if let _ = message.forwardInfo {
+                context.delete(message.forwardInfo!)
+                saveContext(subject: "Delete forwardInfo from CMMessage Object")
+            }
+            context.delete(message)
+            saveContext(subject: "Delete CMMessage Object")
+        }
+        
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMMessage")
         fetchRequest.predicate = NSPredicate(format: "threadId == %i", inThread)
         do {
             if let result = try context.fetch(fetchRequest) as? [CMMessage] {
                 for message in result {
-                    for msgId in messageIds {
-                        if (Int(exactly: message.id ?? 0) == msgId) {
-                            if let _ = message.participant {
-                                context.delete(message.participant!)
-                                saveContext(subject: "Delete participant from CMMessage Object")
+                    
+                    if allMessages {
+                        deleteCMMessage(message: message)
+                    } else {
+                        for msgId in messageIds {
+                            if (Int(exactly: message.id ?? 0) == msgId) {
+                                deleteCMMessage(message: message)
                             }
-                            if let _ = message.conversation {
-                                context.delete(message.conversation!)
-                                saveContext(subject: "Delete conversation from CMMessage Object")
-                            }
-                            if let _ = message.replyInfo {
-                                context.delete(message.replyInfo!)
-                                saveContext(subject: "Delete replyInfo from CMMessage Object")
-                            }
-                            if let _ = message.forwardInfo {
-                                context.delete(message.forwardInfo!)
-                                saveContext(subject: "Delete forwardInfo from CMMessage Object")
-                            }
-                            context.delete(message)
-                            saveContext(subject: "Delete CMMessage Object")
                         }
                     }
+                    
                 }
                 saveContext(subject: "Update CMMessage")
             }
         } catch {
             fatalError("Error on fetching list of CMMessage when trying to delete")
         }
+        
+        
+        
     }
     
     
@@ -293,7 +382,21 @@ extension Cache {
         }
     }
     
-    
+    func deleteThreadParticipants(withThreadId: Int) {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMThreadParticipants")
+        fetchRequest.predicate = NSPredicate(format: "id <= %i", withThreadId)
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMThreadParticipants] {
+                for item in result {
+                    deleteParticipant(inThread: Int(exactly: item.threadId!)!, withParticipantIds: [Int(exactly: item.participantId!)!])
+                    context.delete(item)
+                    saveContext(subject: "item Deleted from CMThreadParticipants")
+                }
+            }
+        } catch {
+            fatalError("Error on fetching CMThreadParticipants when trying to delete object based on timeStamp")
+        }
+    }
     
     
     

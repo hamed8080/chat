@@ -90,11 +90,11 @@ extension Chat {
              */
             log.verbose("GetContactsCallback", context: "Chat")
             if (!response["hasError"].boolValue) {
-                let content = sendParams.content.convertToJSON()
+                let content = sendParams.content?.convertToJSON()
                 let getContactsModel = GetContactsModel(messageContent: response["result"].arrayValue,
                                                         contentCount:   response["contentCount"].intValue,
-                                                        count:          content["count"].intValue,
-                                                        offset:         content["offset"].intValue,
+                                                        count:          content?["count"].intValue ?? 0,
+                                                        offset:         content?["offset"].intValue ?? 0,
                                                         hasError:       response["hasError"].boolValue,
                                                         errorMessage:   response["errorMessage"].stringValue,
                                                         errorCode:      response["errorCode"].intValue)

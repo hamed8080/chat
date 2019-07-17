@@ -28,8 +28,7 @@ open class LinkedUser {
     
     
     public init(messageContent: JSON) {
-//        self.coreUserId = messageContent["id"].int
-        self.coreUserId = messageContent["coreUserId"].int
+        self.coreUserId = messageContent["coreUserId"].int ?? messageContent["id"].int
         self.image      = messageContent["image"].string
         self.name       = messageContent["name"].string
         self.nickname   = messageContent["nickname"].string

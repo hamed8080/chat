@@ -191,9 +191,9 @@ public class Chat {
     
     // property to hold array of Sent, Deliver and Seen requests that comes from client, but they have not completed yet, and response didn't come yet.
     // the keys are uniqueIds of the requests
-    static var mapOnSent = [String: CallbackProtocolWith3Calls]()
+    static var mapOnSent    = [String: CallbackProtocolWith3Calls]()
     static var mapOnDeliver = [String: [[String: CallbackProtocolWith3Calls]]]()
-    static var mapOnSeen = [String: [[String: CallbackProtocolWith3Calls]]]()
+    static var mapOnSeen    = [String: [[String: CallbackProtocolWith3Calls]]]()
     
     // property to hold Sent callbecks to implement later, on somewhere else on the program
     public var userInfoCallbackToUser:             callbackTypeAlias?
@@ -229,7 +229,14 @@ public class Chat {
     
     public func CreateAsync() {
         if let dId = deviceId {
-            asyncClient = Async(socketAddress: socketAddress, serverName: serverName, deviceId: dId, appId: nil, peerId: nil, messageTtl: messageTtl, connectionRetryInterval: connectionRetryInterval, reconnectOnClose: reconnectOnClose)
+            asyncClient = Async(socketAddress:              socketAddress,
+                                serverName:                 serverName,
+                                deviceId:                   dId,
+                                appId:                      nil,
+                                peerId:                     nil,
+                                messageTtl:                 messageTtl,
+                                connectionRetryInterval:    connectionRetryInterval,
+                                reconnectOnClose:           reconnectOnClose)
             asyncClient?.delegate = self
             asyncClient?.createSocket()
         }

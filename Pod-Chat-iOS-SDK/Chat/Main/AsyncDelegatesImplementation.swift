@@ -210,6 +210,9 @@ extension Chat: AsyncDelegates {
                         self.userInfo = User(withUserObject: resultModel.user)
                         self.chatState = true
                         self.delegate?.chatReady(withUserInfo: self.userInfo!)
+                        if self.enableCache {
+                            self.getAllThreads(withInputModel: GetAllThreadsRequestModel(summary: true, typeCode: nil))
+                        }
                     }
                 }) { _ in }
                 
@@ -356,7 +359,7 @@ class ChatMessage {
 class SendChatMessageVO {
     
     let chatMessageVOType:  Int
-    let content:            String
+    var content:            String? = nil
     var metaData:           String? = nil
     var repliedTo:          Int?    = nil
     var systemMetadata:     String? = nil
@@ -369,8 +372,7 @@ class SendChatMessageVO {
     var isCreateThreadAndSendMessage: Bool
     
     init(chatMessageVOType: Int,
-         contentAsString:   String?,
-         contentAsJSON:     JSON?,
+         content:           String?,
          metaData:          String?,
          repliedTo:         Int?,
          systemMetadata:    String?,
@@ -381,7 +383,7 @@ class SendChatMessageVO {
          uniqueId:          String?,
          isCreateThreadAndSendMessage: Bool?) {
         
-        self.content            = contentAsString ?? "\(contentAsJSON ?? "")"
+        self.content            = content
         self.metaData           = metaData
         self.repliedTo          = repliedTo
         self.systemMetadata     = systemMetadata
@@ -402,7 +404,7 @@ class SendChatMessageVO {
         if let uID = uniqueId {
             self.uniqueId = uID
         } else if (chatMessageVOType == chatMessageVOTypes.DELETE_MESSAGE.rawValue) {
-            if let contentJSON = contentAsJSON {
+            if let contentJSON = content?.convertToJSON() {
                 if let x = contentJSON["ids"].arrayObject {
                     if (x.count <= 1) {
                         self.uniqueId = generateUUID()
@@ -423,10 +425,8 @@ class SendChatMessageVO {
         self.tokenIssuer        = content["tokenIssuer"].int ?? 1
         self.chatMessageVOType  = content["chatMessageVOType"].intValue
         
-        if let myContent = content["contentAsString"].string {
+        if let myContent = content["content"].string {
             self.content = myContent
-        } else {
-            self.content = "\(content["content"])"
         }
         if let myMetaData = content["metaData"].string {
             self.metaData = myMetaData
@@ -470,10 +470,12 @@ class SendChatMessageVO {
     
     
     func convertModelToJSON() -> JSON {
-        var messageVO: JSON = ["content":       content,
-                               "token":         token,
+        var messageVO: JSON = ["token":         token,
                                "tokenIssuer":   tokenIssuer ?? 1,
                                "type":          chatMessageVOType]
+        if let theMessage = content {
+            messageVO["content"] = JSON(theMessage)
+        }
         if let theMetaData = metaData {
             messageVO["metaData"] = JSON(theMetaData)
         }
@@ -540,7 +542,7 @@ class SendAsyncMessageVO {
     func convertModelToString() -> String {
         let model = convertModelToJSON()
         let stringModel = "\(model)"
-        let str = String(stringModel.filter { !"\n\t\r".contains($0) })
+        let str = String(stringModel.filter { !" \n\t\r".contains($0) })
         return str
     }
     

@@ -14,32 +14,31 @@ import FanapPodAsyncSDK
 
 extension Chat {
     
-    func chatDelegateGetHistory(getHistory: JSON) {
-        let hasError = getHistory["hasError"].boolValue
-        let errorMessage = getHistory["errorMessage"].stringValue
-        let errorCode = getHistory["errorCode"].intValue
-        
-        if (!hasError) {
-            let result = getHistory["result"]
-            let count = result["contentCount"].intValue
-            let offset = result["nextOffset"].intValue
+    func responseOfGetHistory(withMessage message: ChatMessage) {
+        /*
+         *
+         *
+         *
+         */
+        log.verbose("Message of type 'GET_HISTORY' recieved", context: "Chat")
+        if Chat.map[message.uniqueId] != nil {
+            let returnData: JSON = CreateReturnData(hasError:       false,
+                                                    errorMessage:   "",
+                                                    errorCode:      0,
+                                                    result:         message.content?.convertToJSON() ?? [:],
+                                                    resultAsString: nil,
+                                                    contentCount:   message.contentCount,
+                                                    subjectId:      message.subjectId)
+                .returnJSON()
             
-            let messageContent: [JSON] = getHistory["result"].arrayValue
-            let contentCount = getHistory["contentCount"].intValue
-            
-            //            // save data comes from server to the Cache
-            //            var messages = [Message]()
-            //            for item in messageContent {
-            //                let myMessage = Message(threadId: sendParams["subjectId"].intValue, pushMessageVO: item)
-            //                messages.append(myMessage)
-            //            }
-            //            Chat.cacheDB.saveMessageObjects(messages: messages, getHistoryParams: sendParams)
-            
-            let getHistoryModel = GetHistoryModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset - count, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode, threadId: getHistory["threadId"].int)
-            
-//            delegate?.threadEvents(type: ThreadEventTypes.getHistory, result: getHistoryModel)
+            let callback: CallbackProtocol = Chat.map[message.uniqueId]!
+            callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
+                self.historyCallbackToUser?(successJSON)
+            }) { _ in }
+            Chat.map.removeValue(forKey: message.uniqueId)
         }
     }
+    
     
     public class GetHistoryCallbacks: CallbackProtocol {
         var sendParams: SendChatMessageVO
@@ -49,35 +48,25 @@ extension Chat {
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
             log.verbose("GetHistoryCallbacks", context: "Chat")
             
-            let hasError = response["hasError"].boolValue
-            let errorMessage = response["errorMessage"].stringValue
-            let errorCode = response["errorCode"].intValue
-            
-            if (!hasError) {
-//                let content = sendParams["content"]
-                let content = sendParams.content.convertToJSON()
-                let count = content["count"].intValue
-                let offset = content["offset"].intValue
-                
-                let messageContent: [JSON] = response["result"].arrayValue
-                let contentCount = response["contentCount"].intValue
+            if (!response["hasError"].boolValue) {
+                let content = sendParams.content?.convertToJSON()
                 
                 // save data comes from server to the Cache
                 var messages = [Message]()
-                for item in messageContent {
+                for item in response["result"].arrayValue {
                     let myMessage = Message(threadId: sendParams.subjectId!, pushMessageVO: item)
                     messages.append(myMessage)
                 }
                 Chat.cacheDB.saveMessageObjects(messages: messages, getHistoryParams: sendParams.convertModelToJSON())
                 
-                let getHistoryModel = GetHistoryModel(messageContent: messageContent,
-                                                      contentCount: contentCount,
-                                                      count: count,
-                                                      offset: offset,
-                                                      hasError: hasError,
-                                                      errorMessage: errorMessage,
-                                                      errorCode: errorCode,
-                                                      threadId: response["threadId"].int)
+                let getHistoryModel = GetHistoryModel(messageContent: response["result"].arrayValue,
+                                                      contentCount: response["contentCount"].intValue,
+                                                      count:        content?["count"].intValue ?? 0,
+                                                      offset:       content?["offset"].intValue ?? 0,
+                                                      hasError:     response["hasError"].boolValue,
+                                                      errorMessage: response["errorMessage"].stringValue,
+                                                      errorCode:    response["errorCode"].intValue,
+                                                      threadId:     response["threadId"].int)
                 
                 success(getHistoryModel)
             }

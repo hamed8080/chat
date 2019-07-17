@@ -72,8 +72,7 @@ extension Chat {
         userInfoCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.USER_INFO.rawValue,
-                                            contentAsString:    nil,
-                                            contentAsJSON:      nil,
+                                            content:            nil,
                                             metaData:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,

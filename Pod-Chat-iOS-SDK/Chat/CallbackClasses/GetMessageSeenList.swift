@@ -14,28 +14,58 @@ import FanapPodAsyncSDK
 
 extension Chat {
     
+    func responseOfMessageSeenList(withMessage message: ChatMessage) {
+        /*
+         *
+         *
+         *
+         */
+        log.verbose("Message of type 'GET_MESSAGE_SEEN_PARTICIPANTS' recieved", context: "Chat")
+        if Chat.map[message.uniqueId] != nil {
+            let returnData: JSON = CreateReturnData(hasError:       false,
+                                                    errorMessage:   "",
+                                                    errorCode:      0,
+                                                    result:         message.content?.convertToJSON() ?? [:],
+                                                    resultAsString: nil,
+                                                    contentCount:   message.contentCount,
+                                                    subjectId:      message.subjectId)
+                .returnJSON()
+            
+            let callback: CallbackProtocol = Chat.map[message.uniqueId]!
+            callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
+                self.getMessageSeenListCallbackToUser?(successJSON)
+            }) { _ in }
+            Chat.map.removeValue(forKey: message.uniqueId)
+        }
+    }
+    
+    
     public class GetMessageSeenList: CallbackProtocol {
+        
         var sendParams: SendChatMessageVO
         init(parameters: SendChatMessageVO) {
             self.sendParams = parameters
         }
-        func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
-            
-            let hasError = response["hasError"].boolValue
-            let errorMessage = response["errorMessage"].stringValue
-            let errorCode = response["errorCode"].intValue
-            
-            if (!hasError) {
-//                let content = sendParams["content"]
-                let content = sendParams.content.convertToJSON()
-                let count = content["count"].intValue
-                let offset = content["offset"].intValue
+        
+        func onResultCallback(uID:      String,
+                              response: JSON,
+                              success:  @escaping callbackTypeAlias,
+                              failure:  @escaping callbackTypeAlias) {
+            /*
+             *
+             *
+             *
+             */
+            if (!response["hasError"].boolValue) {
+                let content = sendParams.content?.convertToJSON()
                 
-                let messageContent: [JSON] = response["result"].arrayValue
-                let contentCount = response["contentCount"].intValue
-                
-                let getBlockedModel = GetThreadParticipantsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
-                
+                let getBlockedModel = GetThreadParticipantsModel(messageContent: response["result"].arrayValue,
+                                                                 contentCount:  response["contentCount"].intValue,
+                                                                 count:         content?["count"].intValue ?? 0,
+                                                                 offset:        content?["offset"].intValue ?? 0,
+                                                                 hasError:      response["hasError"].boolValue,
+                                                                 errorMessage:  response["errorMessage"].stringValue,
+                                                                 errorCode:     response["errorCode"].intValue)
                 success(getBlockedModel)
             }
             

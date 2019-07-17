@@ -14,67 +14,66 @@ import FanapPodAsyncSDK
 
 extension Chat {
     
-    func chatDelegateGetParticipants(getParticipants: JSON) {
-        let hasError = getParticipants["hasError"].boolValue
-        let errorMessage = getParticipants["errorMessage"].stringValue
-        let errorCode = getParticipants["errorCode"].intValue
-        
-        if (!hasError) {
-            let result = getParticipants["result"]
-            let count = result["contentCount"].intValue
-            let offset = result["nextOffset"].intValue
+    func responseOfThreadParticipants(withMessage message: ChatMessage) {
+        /*
+         *
+         *
+         *
+         */
+        log.verbose("Message of type 'THREAD_PARTICIPANTS' recieved", context: "Chat")
+        if Chat.map[message.uniqueId] != nil {
+            let returnData: JSON = CreateReturnData(hasError:       false,
+                                                    errorMessage:   "",
+                                                    errorCode:      0,
+                                                    result:         message.content?.convertToJSON() ?? [:],
+                                                    resultAsString: nil,
+                                                    contentCount:   message.contentCount,
+                                                    subjectId:      message.subjectId)
+                .returnJSON()
             
-            let messageContent: [JSON] = getParticipants["result"].arrayValue
-            let contentCount = getParticipants["contentCount"].intValue
+            if enableCache {
+                
+            }
             
-            //            var participants = [Participant]()
-            //            for item in messageContent {
-            //                let myParticipant = Participant(messageContent: item, threadId: sendParams["subjectId"].intValue)
-            //                participants.append(myParticipant)
-            //            }
-            //            Chat.cacheDB.saveThreadParticipantObjects(whereThreadIdIs: sendParams["subjectId"].intValue, withParticipants: participants)
-            
-            let getThreadParticipantsModel = GetThreadParticipantsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset - count, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
-            
-//            delegate?.threadEvents(type: ThreadEventTypes.getThreadParticipants, result: getThreadParticipantsModel)
+            let callback: CallbackProtocol = Chat.map[message.uniqueId]!
+            callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
+                self.threadParticipantsCallbackToUser?(successJSON)
+            }) { _ in }
+            Chat.map.removeValue(forKey: message.uniqueId)
         }
     }
     
+    // ToDo: put the update cache to the upward function
     public class GetThreadParticipantsCallbacks: CallbackProtocol {
         var sendParams: SendChatMessageVO
         init(parameters: SendChatMessageVO) {
             self.sendParams = parameters
         }
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
+            /*
+             *
+             *
+             *
+             */
             log.verbose("GetThreadParticipantsCallbacks", context: "Chat")
             
-            let hasError = response["hasError"].boolValue
-            let errorMessage = response["errorMessage"].stringValue
-            let errorCode = response["errorCode"].intValue
-            
-            if (!hasError) {
-//                let content = sendParams["content"]
-                let content = sendParams.content.convertToJSON()
-                let count = content["count"].intValue
-                let offset = content["offset"].intValue
-                
-                let messageContent: [JSON] = response["result"].arrayValue
-                let contentCount = response["contentCount"].intValue
-                
-                
-                // save data comes from server to the Cache, in the Back Thread
-                //                DispatchQueue.global().async {
+            if (!response["hasError"].boolValue) {
+                let content = sendParams.content?.convertToJSON()
                 
                 var participants = [Participant]()
-                for item in messageContent {
+                for item in response["result"].arrayValue {
                     let myParticipant = Participant(messageContent: item, threadId: sendParams.subjectId!)
                     participants.append(myParticipant)
                 }
                 Chat.cacheDB.saveThreadParticipantObjects(whereThreadIdIs: sendParams.subjectId!, withParticipants: participants)
-                //                }
                 
-                let getThreadParticipantsModel = GetThreadParticipantsModel(messageContent: messageContent, contentCount: contentCount, count: count, offset: offset, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
-                
+                let getThreadParticipantsModel = GetThreadParticipantsModel(messageContent: response["result"].arrayValue,
+                                                                            contentCount:   response["contentCount"].intValue,
+                                                                            count:          content?["count"].intValue ?? 0,
+                                                                            offset:         content?["offset"].intValue ?? 0,
+                                                                            hasError:       response["hasError"].boolValue,
+                                                                            errorMessage:   response["errorMessage"].stringValue,
+                                                                            errorCode:      response["errorCode"].intValue)
                 success(getThreadParticipantsModel)
             }
         }

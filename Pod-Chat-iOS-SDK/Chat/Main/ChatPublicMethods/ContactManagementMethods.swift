@@ -59,6 +59,7 @@ extension Chat {
          *  -> create "SendAsyncMessageVO" and put "SendChatMessageVO" inside its content
          *  -> send the "SendAsyncMessageVO" to Async
          *  -> configure that when answer comes from server, "GetContactsCallback()" is the responsable func to do the rest
+         *  -> send a request to Cache and return the Cahce response on the "cacheResponse" callback
          *
          */
         
@@ -76,8 +77,7 @@ extension Chat {
         }
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_CONTACTS.rawValue,
-                                            contentAsString:    "\(content)",
-                                            contentAsJSON:      nil,
+                                            content:            "\(content)",
                                             metaData:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -432,7 +432,6 @@ extension Chat {
                         }
                         Chat.cacheDB.saveContact(withContactObjects: contactsArr)
                     }
-                    
                     let contactsResult = ContactModel(messageContent: jsonResponse)
                     completion(contactsResult)
                 }
@@ -789,8 +788,7 @@ extension Chat {
         }
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.BLOCK.rawValue,
-                                            contentAsString:    "\(content)",
-                                            contentAsJSON:      nil,
+                                            content:            "\(content)",
                                             metaData:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -892,8 +890,7 @@ extension Chat {
         content["offset"]   = JSON(getBlockedContactsInput.offset ?? 0)
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_BLOCKED.rawValue,
-                                            contentAsString:    "\(content)",
-                                            contentAsJSON:      nil,
+                                            content:            "\(content)",
                                             metaData:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -1018,8 +1015,7 @@ extension Chat {
         }
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.UNBLOCK.rawValue,
-                                            contentAsString:    "\(content)",
-                                            contentAsJSON:      nil,
+                                            content:            "\(content)",
                                             metaData:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,

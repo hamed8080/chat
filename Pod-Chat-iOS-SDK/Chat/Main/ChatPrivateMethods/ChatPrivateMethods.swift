@@ -579,8 +579,8 @@ extension Chat {
         
         if let myCallbacks = callbacks {
             for (index, item) in myCallbacks.enumerated() {
-                let uIdJSON = chatMessageVO.content.convertToJSON()
-                if let uIds = uIdJSON["uniqueIds"].arrayObject as? [String] {
+                let uIdJSON = chatMessageVO.content?.convertToJSON()
+                if let uIds = uIdJSON?["uniqueIds"].arrayObject as? [String] {
                     let uId = uIds[index]
                     Chat.map[uId] = item
                 }
@@ -591,18 +591,18 @@ extension Chat {
         }
         if (deliverCallback != nil) {
             let uniqueIdDic: [String: CallbackProtocolWith3Calls] = [uniqueId: deliverCallback!]
-            if Chat.mapOnDeliver["\(chatMessageVO.subjectId!)"] != nil {
-                Chat.mapOnDeliver["\(chatMessageVO.subjectId!)"]!.append(uniqueIdDic)
+            if Chat.mapOnDeliver["\(chatMessageVO.subjectId ?? 0)"] != nil {
+                Chat.mapOnDeliver["\(chatMessageVO.subjectId ?? 0)"]!.append(uniqueIdDic)
             } else {
-                Chat.mapOnDeliver["\(chatMessageVO.subjectId!)"] = [uniqueIdDic]
+                Chat.mapOnDeliver["\(chatMessageVO.subjectId ?? 0)"] = [uniqueIdDic]
             }
         }
         if (seenCallback != nil) {
             let uniqueIdDic: [String: CallbackProtocolWith3Calls] = [uniqueId: deliverCallback!]
-            if Chat.mapOnSeen["\(chatMessageVO.subjectId!)"] != nil {
-                Chat.mapOnSeen["\(chatMessageVO.subjectId!)"]!.append(uniqueIdDic)
+            if Chat.mapOnSeen["\(chatMessageVO.subjectId ?? 0)"] != nil {
+                Chat.mapOnSeen["\(chatMessageVO.subjectId ?? 0)"]!.append(uniqueIdDic)
             } else {
-                Chat.mapOnSeen["\(chatMessageVO.subjectId!)"] = [uniqueIdDic]
+                Chat.mapOnSeen["\(chatMessageVO.subjectId ?? 0)"] = [uniqueIdDic]
             }
         }
         
@@ -872,8 +872,7 @@ extension Chat {
             
 //            let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.PING.rawValue, "pushMsgType": 5]
             let chatMessage = SendChatMessageVO(chatMessageVOType: chatMessageVOTypes.PING.rawValue,
-                                                contentAsString:    nil,
-                                                contentAsJSON:      nil,
+                                                content:            nil,
                                                 metaData:           nil,
                                                 repliedTo:          nil,
                                                 systemMetadata:     nil,
@@ -989,28 +988,7 @@ extension Chat {
             
         // a message of type 1 (CREATE_THREAD) comes from Server.
         case chatMessageVOTypes.CREATE_THREAD.rawValue:
-            log.verbose("Message of type 'CREATE_THREAD' recieved", context: "Chat")
-//            if Chat.map[uniqueId] != nil {
-                //                let threadData = Conversation(messageContent: messageContent).formatToJSON()
-                //                delegate?.threadEvents(type: ThreadEventTypes.new, result: threadData)
-                //                chatDelegateCreateThread(createThread: threadData)
-//                let returnData: JSON = CreateReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount, subjectId: chatContent["subjectId"].int).returnJSON()
-            if Chat.map[message.uniqueId] != nil {
-                let returnData: JSON = CreateReturnData(hasError:       false,
-                                                        errorMessage:   "",
-                                                        errorCode:      0,
-                                                        result:         messageContentAsJSON,
-                                                        resultAsString: nil,
-                                                        contentCount:   message.contentCount,
-                                                        subjectId:      message.subjectId)
-                    .returnJSON()
-                
-                let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-                callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
-                    self.createThreadCallbackToUser?(successJSON)
-                }) { _ in }
-                Chat.map.removeValue(forKey: message.uniqueId)
-            }
+            responseOfCreateThread(withMessage: message)
             break
             
             // a message of type 2 (MESSAGE) comes from Server.
@@ -1024,186 +1002,19 @@ extension Chat {
             // a message of type 3 (SENT) comes from Server.
         // it means that the message is send.
         case chatMessageVOTypes.SENT.rawValue:
-            log.verbose("Message of type 'SENT' recieved", context: "Chat")
-            if Chat.mapOnSent[message.uniqueId] != nil {
-                let callback: CallbackProtocolWith3Calls = Chat.mapOnSent[message.uniqueId]!
-//                messageContent = ["messageId": chatContent["content"].stringValue]
-//                callback.onSent(uID: uniqueId, response: chatContent) { (successJSON) in
-//                    self.sendCallbackToUserOnSent?(successJSON)
-//                }
-                callback.onSent(uID: message.uniqueId, response: message.returnToJSON()) { (successJSON) in
-                    self.sendCallbackToUserOnSent?(successJSON)
-                }
-                Chat.mapOnSent.removeValue(forKey: message.uniqueId)
-            }
+            responseOfOnSendMessage(withMessage: message)
             break
             
             // a message of type 4 (DELIVERY) comes from Server.
         // it means that the message is delivered.
         case chatMessageVOTypes.DELIVERY.rawValue:
-            log.verbose("Message of type 'DELIVERY' recieved", context: "Chat")
-            
-            // this functionality has beed deprecated
-            /*
-             let paramsToSend: JSON = ["offset": 0,
-             "threadId": threadId,
-             "id": messageContent["messageId"].int ?? NSNull()]
-             getHistory(params: paramsToSend, uniqueId: { _ in }) { (myResponse) in
-             let myResponseModel: GetHistoryModel = myResponse as! GetHistoryModel
-             let myResponseJSON: JSON = myResponseModel.returnDataAsJSON()
-             if !(myResponseJSON["hasError"].boolValue) {
-             let history = myResponseJSON["history"].arrayObject
-             let result: JSON = ["threadId": threadId,
-             "senderId": messageContent["participantId"].int ?? NSNull(),
-             "message": history?.first ?? NSNull()]
-             self.delegate?.messageEvents(type: "MESSAGE_DELIVERY", result: result)
-             }
-             }
-             */
-            
-            var findItAt: Int?
-            let threadIdObject = Chat.mapOnDeliver["\(message.subjectId ?? 0)"]
-            if let threadIdObj = threadIdObject {
-                let threadIdObjCount = threadIdObj.count
-                if (threadIdObjCount > 0) {
-                    for i in 1...threadIdObjCount {
-                        let index = i - 1
-                        let uniqueIdObj: [String: CallbackProtocolWith3Calls] = threadIdObj[index]
-                        if let callback = uniqueIdObj[message.uniqueId] {
-                            findItAt = i
-//                            callback.onDeliver(uID: uniqueId, response: messageContent) { (successJSON) in
-//                                self.sendCallbackToUserOnDeliver?(successJSON)
-                            callback.onDeliver(uID: message.uniqueId, response: messageContentAsJSON) { (successJSON) in
-                                self.sendCallbackToUserOnDeliver?(successJSON)
-                            }
-                        }
-                    }
-                }
-            } else {
-                /*
-                 in situation that Create Thread with send Message, this part will execute,
-                 because at the beginnig of creating the thread, we don't have the ThreadID
-                 that we are creating,
-                 so all messages that sends by creating a thread simultanously, exeute from here:
-                 */
-                let threadIdObject = Chat.mapOnDeliver["\(0)"]
-                if let threadIdObj = threadIdObject {
-                    for (index, item) in threadIdObj.enumerated() {
-                        if let callback = item[message.uniqueId] {
-                            callback.onDeliver(uID: message.uniqueId, response: messageContentAsJSON) { (successJSON) in
-                                self.sendCallbackToUserOnDeliver?(successJSON)
-                            }
-                            Chat.mapOnDeliver["\(0)"]?.remove(at: index)
-                            break
-                        }
-                    }
-                }
-            }
-            
-            if let itemAt = findItAt {
-                // unique ids that i have to send them that they delivery comes
-                var uniqueIdsWithDelivery: [String] = []
-                
-                // find objects form first to index that delivery comes
-                for i in 1...itemAt {
-                    if let threadIdObj = threadIdObject {
-                        let index = i - 1
-                        let uniqueIdObj = threadIdObj[index]
-                        for key in uniqueIdObj.keys {
-                            uniqueIdsWithDelivery.append(key)
-                        }
-                    }
-                }
-                
-                // remove items from array and update array
-                for i in 0...(itemAt - 1) {
-                    let index = i
-                    Chat.mapOnDeliver["\(message.subjectId ?? 0)"]?.remove(at: index)
-                }
-                
-            }
+            responseOfOnDeliveredMessage(withMessage: message)
             break
             
             // a message of type 5 (SEEN) comes from Server.
         // it means that the message is seen.
         case chatMessageVOTypes.SEEN.rawValue:
-            log.verbose("Message of type 'SEEN' recieved", context: "Chat")
-            // this functionality has beed deprecated
-            /*
-             let paramsToSend: JSON = ["offset": 0,
-             "threadId": threadId,
-             "id": messageContent["messageId"].int ?? NSNull()]
-             getHistory(params: paramsToSend, uniqueId: { _ in }) { (myResponse) in
-             let myResponseModel: GetHistoryModel = myResponse as! GetHistoryModel
-             let myResponseJSON: JSON = myResponseModel.returnDataAsJSON()
-             if !(myResponseJSON["hasError"].boolValue) {
-             let history = myResponseJSON["history"].arrayObject
-             let result: JSON = ["threadId": threadId,
-             "senderId": messageContent["participantId"].int ?? NSNull(),
-             "message": history?.first ?? NSNull()]
-             self.delegate?.messageEvents(type: "MESSAGE_SEEN", result: result)
-             }
-             }
-             */
-            
-            var findItAt: Int?
-            let threadIdObject = Chat.mapOnSeen["\(message.subjectId ?? 0)"]
-            if let threadIdObj = threadIdObject {
-                let threadIdObjCount = threadIdObj.count
-                if (threadIdObjCount > 0) {
-                    for i in 1...threadIdObjCount {
-                        let index = i - 1
-                        let uniqueIdObj: [String: CallbackProtocolWith3Calls] = threadIdObj[index]
-                        if let callback = uniqueIdObj[message.uniqueId] {
-                            findItAt = i
-                            callback.onSeen(uID: message.uniqueId, response: messageContentAsJSON) { (successJSON) in
-                                self.sendCallbackToUserOnSeen?(successJSON)
-                            }
-                        }
-                    }
-                }
-            } else {
-                /*
-                 in situation that Create Thread with send Message, this part will execute,
-                 because at the beginnig of creating the thread, we don't have the ThreadID
-                 that we are creating,
-                 so all messages that sends by creating a thread simultanously, exeute from here:
-                 */
-                let threadIdObject = Chat.mapOnSeen["\(0)"]
-                if let threadIdObj = threadIdObject {
-                    for (index, item) in threadIdObj.enumerated() {
-                        if let callback = item[message.uniqueId] {
-                            callback.onSeen(uID: message.uniqueId, response: messageContentAsJSON) { (successJSON) in
-                                self.sendCallbackToUserOnSeen?(successJSON)
-                            }
-                            Chat.mapOnSeen["\(0)"]?.remove(at: index)
-                            break
-                        }
-                    }
-                }
-            }
-            
-            if let itemAt = findItAt {
-                // unique ids that i have to send them that they delivery comes
-                var uniqueIdsWithDelivery: [String] = []
-                
-                // find objects form first to index that delivery comes
-                for i in 1...itemAt {
-                    if let threadIdObj = threadIdObject {
-                        let index = i - 1
-                        let uniqueIdObj = threadIdObj[index]
-                        for key in uniqueIdObj.keys {
-                            uniqueIdsWithDelivery.append(key)
-                        }
-                    }
-                }
-                
-                // remove items from array and update array
-                for i in 1...itemAt {
-                    let index = i - 1
-                    Chat.mapOnSeen["\(message.subjectId ?? 0)"]?.remove(at: index)
-                }
-            }
+            responseOfOnSeenMessage(withMessage: message)
             break
             
             // a message of type 6 (PING) comes from Server.
@@ -1227,45 +1038,7 @@ extension Chat {
             // a message of type 9 (LEAVE_THREAD) comes from Server.
         // it means that a you has leaved the thread.
         case chatMessageVOTypes.LEAVE_THREAD.rawValue:
-            log.verbose("Message of type 'LEAVE_THREAD' recieved", context: "Chat")
-            if Chat.map[message.uniqueId] != nil {
-                let returnData: JSON = CreateReturnData(hasError:       false,
-                                                        errorMessage:   "",
-                                                        errorCode: 0,   result: messageContentAsJSON,
-                                                        resultAsString: nil,
-                                                        contentCount:   message.contentCount,
-                                                        subjectId:      message.subjectId)
-                    .returnJSON()
-                
-                let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-                callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
-                    self.leaveThreadCallbackToUser?(successJSON)
-                }) { _ in }
-                Chat.map.removeValue(forKey: message.uniqueId)
-            }
-            
-            // this functionality has beed deprecated
-            /*
-             let threadIds = messageContent["id"].intValue
-             let paramsToSend: JSON = ["threadIds": threadIds]
-             getThreads(params: paramsToSend, uniqueId: { _ in }) { (response) in
-             
-             let responseModel: GetThreadsModel = response as! GetThreadsModel
-             let responseJSON: JSON = responseModel.returnDataAsJSON()
-             let threads = responseJSON["result"]["threads"].array
-             
-             if let myThreads = threads {
-             let result: JSON = ["thread": myThreads[0]]
-             self.delegate?.threadEvents(type: "THREAD_LEAVE_PARTICIPANT", result: result)
-             self.delegate?.threadEvents(type: "THREAD_LAST_ACTIVITY_TIME", result: result)
-             } else {
-             let result: JSON = ["threadId": threadId]
-             self.delegate?.threadEvents(type: "THREAD_LEAVE_PARTICIPANT", result: result)
-             }
-             
-             }
-             */
-            
+            responseOfLeaveThread(withMessage: message)
             break
             
         // a message of type 10 (RENAME) comes from Server.
@@ -1276,39 +1049,7 @@ extension Chat {
             // a message of type 11 (ADD_PARTICIPANT) comes from Server.
         // it means some participants added to the thread.
         case chatMessageVOTypes.ADD_PARTICIPANT.rawValue:
-            log.verbose("Message of type 'ADD_PARTICIPANT' recieved", context: "Chat")
-            if Chat.map[message.uniqueId] != nil {
-                let returnData: JSON = CreateReturnData(hasError:       false,
-                                                        errorMessage:   "",
-                                                        errorCode:      0,
-                                                        result:         messageContentAsJSON,
-                                                        resultAsString: nil,
-                                                        contentCount:   message.contentCount,
-                                                        subjectId:      message.subjectId)
-                    .returnJSON()
-                
-                let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-                callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
-                    self.addParticipantsCallbackToUser?(successJSON)
-                }) { _ in }
-                Chat.map.removeValue(forKey: message.uniqueId)
-            }
-            
-            // this functionality has beed deprecated
-            /*
-             let threadIds = messageContent["id"].intValue
-             let paramsToSend: JSON = ["threadIds": threadIds]
-             getThreads(params: paramsToSend, uniqueId: { _ in }) { (response) in
-             let responseModel: GetThreadsModel = response as! GetThreadsModel
-             let responseJSON: JSON = responseModel.returnDataAsJSON()
-             let threads = responseJSON["result"]["threads"].arrayValue
-             
-             let result: JSON = ["thread": threads[0]]
-             self.delegate?.threadEvents(type: "THREAD_ADD_PARTICIPANTS", result: result)
-             self.delegate?.threadEvents(type: "THREAD_LAST_ACTIVITY_TIME", result: result)
-             }
-             */
-            
+            responseOfAddParticipant(withMessage: message)
             break
             
         // a message of type 12 (GET_STATUS) comes from Server.
@@ -1323,44 +1064,12 @@ extension Chat {
             
         // a message of type 14 (GET_THREADS) comes from Server.
         case chatMessageVOTypes.GET_THREADS.rawValue:
-            log.verbose("Message of type 'GET_THREADS' recieved", context: "Chat")
-            if Chat.map[message.uniqueId] != nil {
-                let returnData: JSON = CreateReturnData(hasError:       false,
-                                                        errorMessage:   "",
-                                                        errorCode:      0,
-                                                        result:         messageContentAsJSON,
-                                                        resultAsString: nil,
-                                                        contentCount:   message.contentCount,
-                                                        subjectId:      message.subjectId)
-                    .returnJSON()
-                
-                let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-                callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
-                    self.threadsCallbackToUser?(successJSON)
-                }) { _ in }
-                Chat.map.removeValue(forKey: message.uniqueId)
-            }
+            responseOfGetThreads(withMessage: message)
             break
             
         // a message of type 15 (GET_HISTORY) comes from Server.
         case chatMessageVOTypes.GET_HISTORY.rawValue:
-            log.verbose("Message of type 'GET_HISTORY' recieved", context: "Chat")
-            if Chat.map[message.uniqueId] != nil {
-                let returnData: JSON = CreateReturnData(hasError:       false,
-                                                        errorMessage:   "",
-                                                        errorCode:      0,
-                                                        result:         messageContentAsJSON,
-                                                        resultAsString: nil,
-                                                        contentCount:   message.contentCount,
-                                                        subjectId:      message.subjectId)
-                    .returnJSON()
-                
-                let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-                callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
-                    self.historyCallbackToUser?(successJSON)
-                }) { _ in }
-                Chat.map.removeValue(forKey: message.uniqueId)
-            }
+            responseOfGetHistory(withMessage: message)
             break
             
         // a message of type 16 (CHANGE_TYPE) comes from Server.
@@ -1375,138 +1084,22 @@ extension Chat {
             
         // a message of type 18 (REMOVE_PARTICIPANT) comes from Server.
         case chatMessageVOTypes.REMOVE_PARTICIPANT.rawValue:
-            log.verbose("Message of type 'REMOVE_PARTICIPANT' recieved", context: "Chat")
-            if Chat.map[message.uniqueId] != nil {
-                let returnData: JSON = CreateReturnData(hasError:       false,
-                                                        errorMessage:   "",
-                                                        errorCode:      0,
-                                                        result:         messageContentAsJSON,
-                                                        resultAsString: nil,
-                                                        contentCount:   message.contentCount,
-                                                        subjectId:      message.subjectId)
-                    .returnJSON()
-                
-                let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-                callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
-                    self.removeParticipantsCallbackToUser?(successJSON)
-                }) { _ in }
-                Chat.map.removeValue(forKey: message.uniqueId)
-            }
-            //            let threadIds = threadId
-//            let paramsToSend: JSON = ["threadIds": message.subjectId ?? 0]
-//            getThreads(params: paramsToSend, uniqueId: { _ in }) { (myResponse) in
-//                let myResponseModel: GetThreadsModel = myResponse as! GetThreadsModel
-//                let myResponseJSON: JSON = myResponseModel.returnDataAsJSON()
-//                let threads = myResponseJSON["result"]["threads"].arrayValue
-//                
-//                let result: JSON = ["thread": threads[0]]
-////                self.delegate?.threadEvents(type: ThreadEventTypes.removeParticipant, result: result)
-////                self.delegate?.threadEvents(type: ThreadEventTypes.lastActivityTime, result: result)
-//            }
+            responseOfRemoveParticipant(withMessage: message)
             break
             
         // a message of type 19 (MUTE_THREAD) comes from Server.
         case chatMessageVOTypes.MUTE_THREAD.rawValue:
-            log.verbose("Message of type 'MUTE_THREAD' recieved", context: "Chat")
-            if Chat.map[message.uniqueId] != nil {
-                let returnData: JSON = CreateReturnData(hasError:       false,
-                                                        errorMessage:   "",
-                                                        errorCode:      0,
-                                                        result:         nil,
-                                                        resultAsString: messageContentAsString,
-                                                        contentCount:   nil,
-                                                        subjectId:      message.subjectId).returnJSON()
-                
-                let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-                callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
-                    self.muteThreadCallbackToUser?(successJSON)
-                }) { _ in }
-                Chat.map.removeValue(forKey: message.uniqueId)
-                
-                // this functionality has beed deprecated
-                /*
-                 let paramsToSend: JSON = ["threadIds": [threadId]]
-                 getThreads(params: paramsToSend, uniqueId: { _ in }) { (myResponse) in
-                 let myResponseModel: GetThreadsModel = myResponse as! GetThreadsModel
-                 let myResponseJSON: JSON = myResponseModel.returnDataAsJSON()
-                 let threads = myResponseJSON["result"]["threads"].arrayValue
-                 
-                 let result: JSON = ["thread": threads.first!]
-                 self.delegate?.threadEvents(type: "THREAD_MUTE", result: result)
-                 }
-                 */
-                
-            }
+            responseOfMuteThread(withMessage: message)
             break
             
         // a message of type 20 (UNMUTE_THREAD) comes from Server.
         case chatMessageVOTypes.UNMUTE_THREAD.rawValue:
-            log.verbose("Message of type 'UNMUTE_THREAD' recieved", context: "Chat")
-            if Chat.map[message.uniqueId] != nil {
-                let returnData: JSON = CreateReturnData(hasError:       false,
-                                                        errorMessage:   "",
-                                                        errorCode:      0,
-                                                        result:         nil,
-                                                        resultAsString: messageContentAsString,
-                                                        contentCount:   nil,
-                                                        subjectId:      message.subjectId)
-                    .returnJSON()
-                
-                let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-                callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
-                    self.unmuteThreadCallbackToUser?(successJSON)
-                }) { _ in }
-                Chat.map.removeValue(forKey: message.uniqueId)
-                
-                // this functionality has beed deprecated
-                /*
-                 let paramsToSend: JSON = ["threadIds": [threadId]]
-                 getThreads(params: paramsToSend, uniqueId: { _ in }) { (myResponse) in
-                 let myResponseModel: GetThreadsModel = myResponse as! GetThreadsModel
-                 let myResponseJSON: JSON = myResponseModel.returnDataAsJSON()
-                 let threads = myResponseJSON["result"]["threads"].arrayValue
-                 
-                 let result: JSON = ["thread": threads.first!]
-                 self.delegate?.threadEvents(type: "THREAD_UNMUTE", result: result)
-                 }
-                 */
-                
-            }
+            responseOfUnmuteThread(withMessage: message)
             break
             
         // a message of type 21 (UPDATE_THREAD_INFO) comes from Server.
         case chatMessageVOTypes.UPDATE_THREAD_INFO.rawValue:
-            log.verbose("Message of type 'UPDATE_THREAD_INFO' recieved", context: "Chat")
-            if Chat.map[message.uniqueId] != nil {
-                let returnData: JSON = CreateReturnData(hasError:       false,
-                                                        errorMessage:   "",
-                                                        errorCode:      0,
-                                                        result:         messageContentAsJSON,
-                                                        resultAsString: nil,
-                                                        contentCount:   nil,
-                                                        subjectId:      message.subjectId)
-                    .returnJSON()
-                
-                let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-                callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
-                    self.updateThreadInfoCallbackToUser?(successJSON)
-                }) { _ in }
-                Chat.map.removeValue(forKey: message.uniqueId)
-                
-                // this functionality has beed deprecated
-                /*
-                 let paramsToSend: JSON = ["threadIds": messageContent["id"].intValue]
-                 getThreads(params: paramsToSend, uniqueId: { _ in }) { (myResponse) in
-                 let myResponseModel: GetThreadsModel = myResponse as! GetThreadsModel
-                 let myResponseJSON: JSON = myResponseModel.returnDataAsJSON()
-                 let threads = myResponseJSON["result"]["threads"].arrayValue
-                 let thread: JSON = ["thread": threads.first!]
-                 let result: JSON = ["result": thread]
-                 self.delegate?.threadEvents(type: "THREAD_INFO_UPDATED", result: result)
-                 }
-                 */
-                
-            }
+            responseOfUpdateThreadInfo(withMessage: message)
             break
             
         // a message of type 22 (FORWARD_MESSAGE) comes from Server.
@@ -1535,66 +1128,17 @@ extension Chat {
             
         // a message of type 27 (THREAD_PARTICIPANTS) comes from Server.
         case chatMessageVOTypes.THREAD_PARTICIPANTS.rawValue:
-            log.verbose("Message of type 'THREAD_PARTICIPANTS' recieved", context: "Chat")
-            if Chat.map[message.uniqueId] != nil {
-                let returnData: JSON = CreateReturnData(hasError:       false,
-                                                        errorMessage:   "",
-                                                        errorCode:      0,
-                                                        result:         messageContentAsJSON,
-                                                        resultAsString: nil,
-                                                        contentCount:   message.contentCount,
-                                                        subjectId:      message.subjectId)
-                    .returnJSON()
-                
-                let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-                callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
-                    self.threadParticipantsCallbackToUser?(successJSON)
-                }) { _ in }
-                Chat.map.removeValue(forKey: message.uniqueId)
-            }
+            responseOfThreadParticipants(withMessage: message)
             break
             
         // a message of type 28 (EDIT_MESSAGE) comes from Server.
         case chatMessageVOTypes.EDIT_MESSAGE.rawValue:
-            log.verbose("Message of type 'EDIT_MESSAGE' recieved", context: "Chat")
-            if Chat.map[message.uniqueId] != nil {
-                let returnData: JSON = CreateReturnData(hasError:   false,
-                                                        errorMessage:   "",
-                                                        errorCode:      0,
-                                                        result:         messageContentAsJSON,
-                                                        resultAsString: nil,
-                                                        contentCount:   message.contentCount,
-                                                        subjectId:      message.subjectId)
-                    .returnJSON()
-                
-                let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-                callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
-                    self.editMessageCallbackToUser?(successJSON)
-                }) { _ in }
-                chatEditMessageHandler(threadId: message.subjectId ?? 0, messageContent: messageContentAsJSON)
-                Chat.map.removeValue(forKey: message.uniqueId)
-            }
+            responseOfEditMessage(withMessage: message)
             break
             
         // a message of type 29 (DELETE_MESSAGE) comes from Server.
         case chatMessageVOTypes.DELETE_MESSAGE.rawValue:
-            log.verbose("Message of type 'DELETE_MESSAGE' recieved", context: "Chat")
-            if Chat.map[message.uniqueId] != nil {
-                let returnData: JSON = CreateReturnData(hasError:       false,
-                                                        errorMessage:   "",
-                                                        errorCode:      0,
-                                                        result:         messageContentAsJSON,
-                                                        resultAsString: nil,
-                                                        contentCount:   message.contentCount,
-                                                        subjectId:      message.subjectId)
-                    .returnJSON()
-                
-                let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-                callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
-                    self.deleteMessageCallbackToUser?(successJSON)
-                }) { _ in }
-                Chat.map.removeValue(forKey: message.uniqueId)
-            }
+            responseOfDeleteMessage(withMessage: message)
             break
             
         // a message of type 30 (THREAD_INFO_UPDATED) comes from Server.
@@ -1631,44 +1175,12 @@ extension Chat {
             
         // a message of type 32 (GET_MESSAGE_DELEVERY_PARTICIPANTS) comes from Server.
         case chatMessageVOTypes.GET_MESSAGE_DELEVERY_PARTICIPANTS.rawValue:
-            log.verbose("Message of type 'GET_MESSAGE_DELEVERY_PARTICIPANTS' recieved", context: "Chat")
-            if Chat.map[message.uniqueId] != nil {
-                let returnData: JSON = CreateReturnData(hasError:       false,
-                                                        errorMessage:   "",
-                                                        errorCode:      0,
-                                                        result:         messageContentAsJSON,
-                                                        resultAsString: nil,
-                                                        contentCount:   message.contentCount,
-                                                        subjectId:      message.subjectId)
-                    .returnJSON()
-                
-                let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-                callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
-                    self.getMessageDeliverListCallbackToUser?(successJSON)
-                }) { _ in }
-                Chat.map.removeValue(forKey: message.uniqueId)
-            }
+            responseOfMessageDeliveryList(withMessage: message)
             break
             
         // a message of type 33 (GET_MESSAGE_SEEN_PARTICIPANTS) comes from Server.
         case chatMessageVOTypes.GET_MESSAGE_SEEN_PARTICIPANTS.rawValue:
-            log.verbose("Message of type 'GET_MESSAGE_SEEN_PARTICIPANTS' recieved", context: "Chat")
-            if Chat.map[message.uniqueId] != nil {
-                let returnData: JSON = CreateReturnData(hasError:       false,
-                                                        errorMessage:   "",
-                                                        errorCode:      0,
-                                                        result:         messageContentAsJSON,
-                                                        resultAsString: nil,
-                                                        contentCount:   message.contentCount,
-                                                        subjectId:      message.subjectId)
-                    .returnJSON()
-                
-                let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-                callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
-                    self.getMessageSeenListCallbackToUser?(successJSON)
-                }) { _ in }
-                Chat.map.removeValue(forKey: message.uniqueId)
-            }
+            responseOfMessageSeenList(withMessage: message)
             break
             
         // a message of type 40 (BOT_MESSAGE) comes from Server.
@@ -1680,66 +1192,17 @@ extension Chat {
             
         // a message of type 41 (SPAM_PV_THREAD) comes from Server.
         case chatMessageVOTypes.SPAM_PV_THREAD.rawValue:
-            log.verbose("Message of type 'SPAM_PV_THREAD' recieved", context: "Chat")
-            if Chat.map[message.uniqueId] != nil {
-                let returnData: JSON = CreateReturnData(hasError:       false,
-                                                        errorMessage:   "",
-                                                        errorCode:      0,
-                                                        result:         messageContentAsJSON,
-                                                        resultAsString: nil,
-                                                        contentCount:   nil,
-                                                        subjectId:      message.subjectId)
-                    .returnJSON()
-                
-                let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-                callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
-                    self.spamPvThreadCallbackToUser?(successJSON)
-                }) { _ in }
-                Chat.map.removeValue(forKey: message.uniqueId)
-            }
+            responseOfSpamPvThread(withMessage: message)
             break
             
         // a message of type 42 (SET_RULE_TO_USER) comes from Server.
         case chatMessageVOTypes.SET_RULE_TO_USER.rawValue:
-            log.verbose("Message of type 'SET_RULE_TO_USER' recieved", context: "Chat")
-            if Chat.map[message.uniqueId] != nil {
-                //                var result: JSON = messageContentAsString
-                let returnData: JSON = CreateReturnData(hasError:       false,
-                                                        errorMessage:   "",
-                                                        errorCode:      0,
-                                                        result:         nil,
-                                                        resultAsString: messageContentAsString,
-                                                        contentCount:   nil,
-                                                        subjectId:      message.subjectId)
-                    .returnJSON()
-                
-                let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-                callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
-                    self.setRoleToUserCallbackToUser?(successJSON)
-                }) { _ in }
-                Chat.map.removeValue(forKey: message.uniqueId)
-            }
+            responseOfSetRoleToUser(withMessage: message)
             break
             
         // a message of type 44 (CLEAR_HISTORY) comes from Server.
         case chatMessageVOTypes.CLEAR_HISTORY.rawValue:
-            log.verbose("Message of type 'CLEAR_HISTORY' recieved", context: "Chat")
-            if Chat.map[message.uniqueId] != nil {
-                let returnData: JSON = CreateReturnData(hasError:       false,
-                                                        errorMessage:   "",
-                                                        errorCode:      0,
-                                                        result:         nil,
-                                                        resultAsString: messageContentAsString,
-                                                        contentCount:   nil,
-                                                        subjectId:      message.subjectId)
-                    .returnJSON()
-                
-                let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-                callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
-                    self.clearHistoryCallbackToUser?(successJSON)
-                }) { _ in }
-                Chat.map.removeValue(forKey: message.uniqueId)
-            }
+            responseOfClearHistory(withMessage: message)
             break
             
         // a message of type 45 (SIGNAL_MESSAGE) comes from Server
@@ -1747,28 +1210,6 @@ extension Chat {
             log.verbose("Message of type 'SIGNAL_MESSAGE' revieved", context: "Chat")
 //            delegate?.threadEvents(type: ThreadEventTypes.isTyping, result: "\(messageContentAsString)")
             return
-            
-        // a message of type 48 (GET_THREAD_ADMINS) comes from Server.
-        // this type is not valid on the server (it has deprecated on the server)
-        case chatMessageVOTypes.GET_THREAD_ADMINS.rawValue:
-//            log.verbose("Message of type 'GET_THREAD_ADMINS' recieved", context: "Chat")
-//            if Chat.map[message.uniqueId] != nil {
-//                let returnData: JSON = CreateReturnData(hasError:       false,
-//                                                        errorMessage:   "",
-//                                                        errorCode:      0,
-//                                                        result:         nil,
-//                                                        resultAsString: messageContentAsString,
-//                                                        contentCount:   nil,
-//                                                        subjectId:      message.subjectId)
-//                    .returnJSON()
-//
-//                let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-//                callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
-//                    self.getAdminListCallbackToUser?(successJSON)
-//                }) { _ in }
-//                Chat.map.removeValue(forKey: message.uniqueId)
-//            }
-            break
             
         // a message of type 100 (LOGOUT) comes from Server.
         case chatMessageVOTypes.LOGOUT.rawValue:

@@ -14,6 +14,36 @@ import FanapPodAsyncSDK
 
 extension Chat {
     
+    func responseOfDeleteMessage(withMessage message: ChatMessage) {
+        /*
+         *
+         *
+         *
+         */
+        log.verbose("Message of type 'DELETE_MESSAGE' recieved", context: "Chat")
+        if Chat.map[message.uniqueId] != nil {
+            let returnData: JSON = CreateReturnData(hasError:       false,
+                                                    errorMessage:   "",
+                                                    errorCode:      0,
+                                                    result:         message.content?.convertToJSON() ?? [:],
+                                                    resultAsString: nil,
+                                                    contentCount:   message.contentCount,
+                                                    subjectId:      message.subjectId)
+                .returnJSON()
+            
+            if enableCache {
+                
+            }
+            
+            let callback: CallbackProtocol = Chat.map[message.uniqueId]!
+            callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
+                self.deleteMessageCallbackToUser?(successJSON)
+            }) { _ in }
+            Chat.map.removeValue(forKey: message.uniqueId)
+        }
+    }
+    
+    
     public class DeleteMessageCallbacks: CallbackProtocol {
         var sendParams: SendChatMessageVO
         init(parameters: SendChatMessageVO) {

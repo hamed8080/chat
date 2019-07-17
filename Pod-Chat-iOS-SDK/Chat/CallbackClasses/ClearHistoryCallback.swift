@@ -14,12 +14,51 @@ import FanapPodAsyncSDK
 
 extension Chat {
     
+    func responseOfClearHistory(withMessage message: ChatMessage) {
+        /*
+         *
+         *
+         *
+         */
+        log.verbose("Message of type 'CLEAR_HISTORY' recieved", context: "Chat")
+        if Chat.map[message.uniqueId] != nil {
+            let returnData: JSON = CreateReturnData(hasError:       false,
+                                                    errorMessage:   "",
+                                                    errorCode:      0,
+                                                    result:         nil,
+                                                    resultAsString: message.content,
+                                                    contentCount:   nil,
+                                                    subjectId:      message.subjectId)
+                .returnJSON()
+            
+            if enableCache {
+                
+            }
+            
+            let callback: CallbackProtocol = Chat.map[message.uniqueId]!
+            callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
+                self.clearHistoryCallbackToUser?(successJSON)
+            }) { _ in }
+            Chat.map.removeValue(forKey: message.uniqueId)
+        }
+        
+    }
+    
+    
     public class ClearHistoryCallback: CallbackProtocol {
         var mySendMessageParams: SendChatMessageVO
         init(parameters: SendChatMessageVO) {
             self.mySendMessageParams = parameters
         }
-        func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
+        func onResultCallback(uID:      String,
+                              response: JSON,
+                              success:  @escaping callbackTypeAlias,
+                              failure:  @escaping callbackTypeAlias) {
+            /*
+             *
+             *
+             *
+             */
             log.verbose("ClearHistoryCallback", context: "Chat")
             
             let hasError = response["hasError"].boolValue

@@ -16,6 +16,37 @@ import SwiftyJSON
 extension Chat {
     
     // MARK: - Get/Update Thread
+    
+    func getAllThreads(withInputModel input:   GetAllThreadsRequestModel) {
+        
+        let content: JSON = ["summary": input.summary]
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_THREADS.rawValue,
+                                            content:            "\(content)",
+                                            metaData:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          nil,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           input.typeCode ?? generalTypeCode,
+                                            uniqueId:           nil,
+                                            isCreateThreadAndSendMessage: nil)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callback:           GetThreadsCallbacks(parameters: chatMessage),
+                                callbacks:          nil,
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil,
+                                uniuqueIdCallback:  nil)
+    }
+    
     /*
      GetThreads:
      By calling this function, a request of type 14 (GET_THREADS) will send throut Chat-SDK,
@@ -40,45 +71,59 @@ extension Chat {
                            uniqueId:        @escaping (String) -> (),
                            completion:      @escaping callbackTypeAlias,
                            cacheResponse:   @escaping (GetThreadsModel) -> ()) {
+        /*
+         *  -> set the "completion" to the "threadsCallbackToUser" variable
+         *      (when the expected answer comes from server, threadsCallbackToUser will call, and the "complition" of this func will execute)
+         *  -> get getThreadsInput and create the content JSON of it:
+         *      + content:
+         *          - count:                Int
+         *          - creatorCoreUserId:    Int?
+         *          - metadataCriteria:     JSON?
+         *          - name:                 String?
+         *          - new:                  Bool?
+         *          - offset:               Int
+         *          - partnerCoreContactId: Int?
+         *          - partnerCoreUserId:    Int??
+         *          - threadIds             [Int]?
+         *  -> convert the JSON content to String
+         *  -> create "SendChatMessageVO" and put the String content inside its content
+         *  -> create "SendAsyncMessageVO" and put "SendChatMessageVO" inside its content
+         *  -> send the "SendAsyncMessageVO" to Async
+         *  -> configure that when answer comes from server, "GetThreadsCallbacks()" is the responsable func to do the rest
+         *  -> send a request to Cache and return the Cahce response on the "cacheResponse" callback
+         *
+         */
         log.verbose("Try to request to get threads with this parameters: \n \(getThreadsInput)", context: "Chat")
         
-        //        var threadIdArr: [Int]?
+        threadsCallbackToUser = completion
         
         var content: JSON = [:]
-        
         content["count"]    = JSON(getThreadsInput.count ?? 50)
         content["offset"]    = JSON(getThreadsInput.offset ?? 0)
-        
         if let name = getThreadsInput.name {
             content["name"] = JSON(name)
         }
-        
         if let new = getThreadsInput.new {
             content["new"] = JSON(new)
         }
-        
         if let threadIds = getThreadsInput.threadIds {
             content["threadIds"] = JSON(threadIds)
-            //            threadIdArr = threadIds
         }
-        
-        if let coreUserId = getThreadsInput.coreUserId {
-            content["coreUserId"] = JSON(coreUserId)
+        if let coreUserId = getThreadsInput.creatorCoreUserId {
+            content["creatorCoreUserId"] = JSON(coreUserId)
         }
-        
+        if let coreUserId = getThreadsInput.partnerCoreUserId {
+            content["partnerCoreUserId"] = JSON(coreUserId)
+        }
+        if let coreUserId = getThreadsInput.partnerCoreContactId {
+            content["partnerCoreContactId"] = JSON(coreUserId)
+        }
         if let metadataCriteria = getThreadsInput.metadataCriteria {
             content["metadataCriteria"] = JSON(metadataCriteria)
         }
         
-        /*
-        let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_THREADS.rawValue,
-                                       "content": content,
-                                       "typeCode": getThreadsInput.typeCode ?? generalTypeCode]
-        */
-        
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_THREADS.rawValue,
-                                            contentAsString:    nil,
-                                            contentAsJSON:      content,
+                                            content:            "\(content)",
                                             metaData:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -86,7 +131,7 @@ extension Chat {
                                             token:              token,
                                             tokenIssuer:        nil,
                                             typeCode:           getThreadsInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           nil,
+                                            uniqueId:           getThreadsInput.uniqueId ?? generateUUID(),
                                             isCreateThreadAndSendMessage: nil)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -103,8 +148,6 @@ extension Chat {
                                 seenCallback:       nil) { (getThreadUniqueId) in
             uniqueId(getThreadUniqueId)
         }
-        threadsCallbackToUser = completion
-        
         
         // if cache is enabled by user, it will return cache result to the user
         if enableCache {
@@ -209,53 +252,55 @@ extension Chat {
     public func updateThreadInfo(updateThreadInfoInput: UpdateThreadInfoRequestModel,
                                  uniqueId:              @escaping (String) -> (),
                                  completion:            @escaping callbackTypeAlias) {
+        /*
+         *  -> set the "completion" to the "updateThreadInfoCallbackToUser" variable
+         *      (when the expected answer comes from server, updateThreadInfoCallbackToUser will call, and the "complition" of this func will execute)
+         *  -> get updateThreadInfoInput and create the content JSON of it:
+         *      + content:
+         *          - image:        String?
+         *          - description:  String?
+         *          - name:         String?
+         *          - metadata:     String?
+         *          - title:        String?
+         *  -> convert the JSON content to String
+         *  -> create "SendChatMessageVO" and put the String content inside its content
+         *  -> create "SendAsyncMessageVO" and put "SendChatMessageVO" inside its content
+         *  -> send the "SendAsyncMessageVO" to Async
+         *  -> configure that when answer comes from server, "UpdateThreadInfoCallback()" is the responsable func to do the rest
+         *
+         */
         log.verbose("Try to request to update thread info with this parameters: \n \(updateThreadInfoInput)", context: "Chat")
         
-        /*
-        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.UPDATE_THREAD_INFO.rawValue,
-                                       "typeCode": updateThreadInfoInput.typeCode ?? generalTypeCode]
- 
-        if let threadId = updateThreadInfoInput.subjectId {
-            sendMessageParams["threadId"] = JSON(threadId)
-            sendMessageParams["subjectId"] = JSON(threadId)
-            
-        } else {
-            delegate?.chatError(errorCode: 999, errorMessage: "Thread ID is required for Updating thread info!", errorResult: nil)
-        }
-        */
+        updateThreadInfoCallbackToUser = completion
         
         var content: JSON = [:]
-        
         if let image = updateThreadInfoInput.image {
             content["image"] = JSON(image)
         }
-        
         if let description = updateThreadInfoInput.description {
             content["description"] = JSON(description)
         }
-        
         if let name = updateThreadInfoInput.title {
             content["name"] = JSON(name)
         }
-        
         if let metadata = updateThreadInfoInput.metadata {
             let metadataStr = "\(metadata)"
             content["metadata"] = JSON(metadataStr)
         }
-        
-//        sendMessageParams["content"] = JSON("\(content)")
+        if let title = updateThreadInfoInput.title {
+            content["title"] = JSON(title)
+        }
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.UPDATE_THREAD_INFO.rawValue,
-                                            contentAsString:    "\(content)",
-                                            contentAsJSON:      nil,
+                                            content:            "\(content)",
                                             metaData:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
-                                            subjectId:          updateThreadInfoInput.subjectId,
+                                            subjectId:          updateThreadInfoInput.threadId,
                                             token:              token,
                                             tokenIssuer:        nil,
                                             typeCode:           updateThreadInfoInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           nil,
+                                            uniqueId:           updateThreadInfoInput.uniqueId ?? generateUUID(),
                                             isCreateThreadAndSendMessage: nil)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -272,7 +317,7 @@ extension Chat {
                                 seenCallback:       nil) { (updateThreadInfoUniqueId) in
             uniqueId(updateThreadInfoUniqueId)
         }
-        updateThreadInfoCallbackToUser = completion
+        
     }
     
     // NOTE: This method will be deprecate soon
@@ -376,26 +421,21 @@ extension Chat {
         createThreadCallbackToUser = completion
         
         var content: JSON = [:]
-        
         content["title"] = JSON(createThreadInput.title)
         var inviteees = [JSON]()
         for item in createThreadInput.invitees {
             inviteees.append(item.formatToJSON())
         }
         content["invitees"] = JSON(inviteees)
-        
         if let image = createThreadInput.image {
             content["image"] = JSON(image)
         }
-        
         if let metaData = createThreadInput.metadata {
             content["metadata"] = JSON(metaData)
         }
-        
         if let description = createThreadInput.description {
             content["description"] = JSON(description)
         }
-        
         if let type = createThreadInput.type {
             var theType: Int = 0
             switch type {
@@ -405,15 +445,13 @@ extension Chat {
             case ThreadTypes.CHANNEL_GROUP: theType = 4
             case ThreadTypes.CHANNEL:       theType = 8
             default:
-                //                print("not valid thread type on create thread")
                 log.error("not valid thread type on create thread", context: "Chat")
             }
             content["type"] = JSON(theType)
         }
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.CREATE_THREAD.rawValue,
-                                            contentAsString:    nil,
-                                            contentAsJSON:      content,
+                                            content:            "\(content)",
                                             metaData:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -421,7 +459,7 @@ extension Chat {
                                             token:              token,
                                             tokenIssuer:        nil,
                                             typeCode:           nil,
-                                            uniqueId:           generateUUID(),
+                                            uniqueId:           createThreadInput.uniqueId ?? generateUUID(),
                                             isCreateThreadAndSendMessage: nil)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -581,7 +619,6 @@ extension Chat {
         
         var messageContentParams: JSON = [:]
         messageContentParams["text"] = JSON(creatThreadWithMessageInput.messageText)
-        
         if let type = creatThreadWithMessageInput.messageType {
             messageContentParams["type"] = JSON(type)
         }
@@ -602,9 +639,7 @@ extension Chat {
         }
         messageContentParams["uniqueId"] = JSON(myUniqueId)
         
-        
         var myContent: JSON = [:]
-        
         myContent["message"]    = JSON(messageContentParams)
         myContent["uniqueId"]   = JSON(myUniqueId)
         myContent["title"]      = JSON(creatThreadWithMessageInput.threadTitle)
@@ -613,7 +648,6 @@ extension Chat {
             inviteees.append(item.formatToJSON())
         }
         myContent["invitees"] = JSON(inviteees)
-        
         if let image = creatThreadWithMessageInput.threadImage {
             myContent["image"] = JSON(image)
         }
@@ -623,7 +657,6 @@ extension Chat {
         if let description = creatThreadWithMessageInput.threadDescription {
             myContent["description"] = JSON(description)
         }
-        
         let type = creatThreadWithMessageInput.threadType
         var theType: Int = 0
         switch type {
@@ -638,8 +671,7 @@ extension Chat {
         myContent["type"] = JSON(theType)
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.CREATE_THREAD.rawValue,
-                                            contentAsString:    nil,
-                                            contentAsJSON:      myContent,
+                                            content:            "\(myContent)",
                                             metaData:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -656,7 +688,6 @@ extension Chat {
                                               priority:     msgPriority,
                                               pushMsgType:  nil)
         
-//        messageContentParams["isCreateThreadAndSendMessage"] = JSON(true)
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
                                 callback:           CreateThreadCallback(parameters: chatMessage),
                                 callbacks:          nil,
@@ -790,20 +821,17 @@ extension Chat {
     public func leaveThread(leaveThreadInput:   LeaveThreadRequestModel,
                             uniqueId:           @escaping (String) -> (),
                             completion:         @escaping callbackTypeAlias) {
-        log.verbose("Try to request to leave thread with this parameters: \n \(leaveThreadInput)", context: "Chat")
         /*
-        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.LEAVE_THREAD.rawValue,
-                                       "typeCode": leaveThreadInput.typeCode ?? generalTypeCode,
-                                       "subjectId": leaveThreadInput.threadId]
- 
-        if let uniqueId = leaveThreadInput.uniqueId {
-            sendMessageParams["uniqueId"] = JSON(uniqueId)
-        }
-        */
+         *
+         *
+         *
+         */
+        log.verbose("Try to request to leave thread with this parameters: \n \(leaveThreadInput)", context: "Chat")
+        
+        leaveThreadCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.LEAVE_THREAD.rawValue,
-                                            contentAsString:    nil,
-                                            contentAsJSON:      nil,
+                                            content:            nil,
                                             metaData:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -828,7 +856,6 @@ extension Chat {
                                 seenCallback:       nil) { (leaveThreadUniqueId) in
             uniqueId(leaveThreadUniqueId)
         }
-        leaveThreadCallbackToUser = completion
         
     }
     
@@ -884,20 +911,16 @@ extension Chat {
     public func spamPvThread(spamPvThreadInput: SpamPvThreadRequestModel,
                              uniqueId:          @escaping (String) -> (),
                              completion:        @escaping callbackTypeAlias) {
+        /*
+         *
+         *
+         */
         log.verbose("Try to request to spam thread with this parameters: \n \(spamPvThreadInput)", context: "Chat")
         
-        /*
-        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.SPAM_PV_THREAD.rawValue,
-                                       "typeCode": spamPvThreadInput.typeCode ?? generalTypeCode]
-        
-        if let subjectId = spamPvThreadInput.threadId {
-            sendMessageParams["subjectId"] = JSON(subjectId)
-        }
-        */
+        spamPvThreadCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.SPAM_PV_THREAD.rawValue,
-                                            contentAsString:    nil,
-                                            contentAsJSON:      nil,
+                                            content:            nil,
                                             metaData:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -922,7 +945,7 @@ extension Chat {
                                 seenCallback:       nil) { (spamUniqueId) in
             uniqueId(spamUniqueId)
         }
-        spamPvThreadCallbackToUser = completion
+        
     }
     
     // NOTE: This method will be deprecate soon
@@ -972,17 +995,17 @@ extension Chat {
     public func muteThread(muteThreadInput: MuteAndUnmuteThreadRequestModel,
                            uniqueId:        @escaping (String) -> (),
                            completion:      @escaping callbackTypeAlias) {
+        /*
+         *
+         *
+         *
+         */
         log.verbose("Try to request to mute threads with this parameters: \n \(muteThreadInput)", context: "Chat")
         
-        /*
-        let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.MUTE_THREAD.rawValue,
-                                       "typeCode": muteThreadInput.typeCode ?? generalTypeCode,
-                                       "subjectId": muteThreadInput.subjectId]
-        */
+        muteThreadCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.MUTE_THREAD.rawValue,
-                                            contentAsString:    nil,
-                                            contentAsJSON:      nil,
+                                            content:            nil,
                                             metaData:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -1007,7 +1030,6 @@ extension Chat {
                                 seenCallback:       nil) { (muteThreadUniqueId) in
             uniqueId(muteThreadUniqueId)
         }
-        muteThreadCallbackToUser = completion
         
     }
     
@@ -1054,17 +1076,17 @@ extension Chat {
     public func unmuteThread(unmuteThreadInput: MuteAndUnmuteThreadRequestModel,
                              uniqueId:          @escaping (String) -> (),
                              completion:        @escaping callbackTypeAlias) {
+        /*
+         *
+         *
+         *
+         */
         log.verbose("Try to request to unmute threads with this parameters: \n \(unmuteThreadInput)", context: "Chat")
         
-        /*
-        let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.UNMUTE_THREAD.rawValue,
-                                       "typeCode": unmuteThreadInput.typeCode ?? generalTypeCode,
-                                       "subjectId": unmuteThreadInput.subjectId]
-        */
+        unmuteThreadCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.UNMUTE_THREAD.rawValue,
-                                            contentAsString:    nil,
-                                            contentAsJSON:      nil,
+                                            content:            nil,
                                             metaData:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -1089,7 +1111,7 @@ extension Chat {
                                 seenCallback:       nil) { (muteThreadUniqueId) in
             uniqueId(muteThreadUniqueId)
         }
-        unmuteThreadCallbackToUser = completion
+        
     }
     
     // NOTE: This method will be deprecate soon
@@ -1145,8 +1167,9 @@ extension Chat {
                                       cacheResponse:                @escaping (GetThreadParticipantsModel) -> ()) {
         log.verbose("Try to request to get thread participants with this parameters: \n \(getThreadParticipantsInput)", context: "Chat")
         
+        threadParticipantsCallbackToUser = completion
+        
         var content: JSON = [:]
-//        content["threadId"] = JSON(getThreadParticipantsInput.threadId)
         content["count"]    = JSON(getThreadParticipantsInput.count ?? getHistoryCount)
         content["offset"]   = JSON(getThreadParticipantsInput.offset ?? 0)
         
@@ -1165,16 +1188,9 @@ extension Chat {
         if let admin = getThreadParticipantsInput.admin {
             content["admin"]   = JSON(admin)
         }
-        /*
-        let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.THREAD_PARTICIPANTS.rawValue,
-                                       "typeCode": getThreadParticipantsInput.typeCode ?? generalTypeCode,
-                                       "content": content,
-                                       "subjectId": getThreadParticipantsInput.threadId]
-        */
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.THREAD_PARTICIPANTS.rawValue,
-                                            contentAsString:    nil,
-                                            contentAsJSON:      content,
+                                            content:            "\(content)",
                                             metaData:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -1199,8 +1215,6 @@ extension Chat {
                                 seenCallback:       nil) { (getParticipantsUniqueId) in
             uniqueId(getParticipantsUniqueId)
         }
-        threadParticipantsCallbackToUser = completion
-        
         
         // if cache is enabled by user, it will return cache result to the user
         if enableCache {
@@ -1304,22 +1318,17 @@ extension Chat {
     public func addParticipants(addParticipantsInput:   AddParticipantsRequestModel,
                                 uniqueId:               @escaping (String) -> (),
                                 completion:             @escaping callbackTypeAlias) {
+        /*
+         *
+         *
+         *
+         */
         log.verbose("Try to request to add participants with this parameters: \n \(addParticipantsInput)", context: "Chat")
         
-        /*
-        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.ADD_PARTICIPANT.rawValue]
-        sendMessageParams["subjectId"] = JSON(addParticipantsInput.threadId)
-        sendMessageParams["content"] = JSON(addParticipantsInput.contacts)
-        sendMessageParams["typeCode"] = JSON(addParticipantsInput.typeCode ?? generalTypeCode)
-        
-        if let uniqueId = addParticipantsInput.uniqueId {
-            sendMessageParams["uniqueId"] = JSON(uniqueId)
-        }
-        */
+        addParticipantsCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.ADD_PARTICIPANT.rawValue,
-                                            contentAsString:    "\(addParticipantsInput.contacts)",
-                                            contentAsJSON:      nil,
+                                            content:            "\(addParticipantsInput.contacts)",
                                             metaData:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -1344,7 +1353,6 @@ extension Chat {
                                 seenCallback:       nil) { (addParticipantsUniqueId) in
             uniqueId(addParticipantsUniqueId)
         }
-        addParticipantsCallbackToUser = completion
         
     }
     
@@ -1419,22 +1427,17 @@ extension Chat {
     public func removeParticipants(removeParticipantsInput: RemoveParticipantsRequestModel,
                                    uniqueId:                @escaping (String) -> (),
                                    completion:              @escaping callbackTypeAlias) {
+        /*
+         *
+         *
+         *
+         */
         log.verbose("Try to request to remove participants with this parameters: \n \(removeParticipantsInput)", context: "Chat")
         
-        /*
-        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.REMOVE_PARTICIPANT.rawValue]
-        sendMessageParams["subjectId"] = JSON(removeParticipantsInput.threadId)
-        sendMessageParams["content"] = JSON(removeParticipantsInput.content)
-        sendMessageParams["typeCode"] = JSON(removeParticipantsInput.typeCode ?? generalTypeCode)
-        
-        if let uniqueId = removeParticipantsInput.uniqueId {
-            sendMessageParams["uniqueId"] = JSON(uniqueId)
-        }
-         */
+        removeParticipantsCallbackToUser = completion
  
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.REMOVE_PARTICIPANT.rawValue,
-                                            contentAsString:    "\(removeParticipantsInput.content)",
-                                            contentAsJSON:      nil,
+                                            content:            "\(removeParticipantsInput.content)",
                                             metaData:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -1459,7 +1462,6 @@ extension Chat {
                                 seenCallback:       nil) { (removeParticipantsUniqueId) in
             uniqueId(removeParticipantsUniqueId)
         }
-        removeParticipantsCallbackToUser = completion
         
     }
     
@@ -1548,9 +1550,14 @@ extension Chat {
                         uniqueId:       @escaping (String) -> (),
                         completion:     @escaping callbackTypeAlias,
                         cacheResponse:  @escaping callbackTypeAlias) {
+        /*
+         *
+         *
+         *
+         */
+        setRoleToUserCallbackToUser = completion
         
         var content: [JSON] = []
-//        var content: JSON = [:]
         
         for item in setRoleInput {
             var json: JSON = [:]
@@ -1558,38 +1565,11 @@ extension Chat {
             json["roles"] = JSON(item.roles)
             json["roleOperation"] = JSON(item.roleOperation)
             json["checkThreadMembership"] = JSON(true)
-//            content = json
             content.append(json)
         }
         
-        //        for item in setRoleInput.roles {
-        //            var json: JSON = [:]
-        //            json["userId"] = JSON(setRoleInput.userId)
-        ////            json["checkThreadMembership"] = JSON(true)
-        //            json["roles"] = [JSON(item)]
-        //            json["roleOperation"] = JSON(setRoleInput.roleOperation)
-        //            content.append(json)
-        //        }
-        
-        //        content["userId"] = JSON(setAdminInput.threadId)
-        //        content["checkThreadMembership"] = JSON(true)
-        //        content["roleTypes"] = JSON(setAdminInput.roles)
-        //        content["roleOperation"] = JSON(setAdminInput.roles)
-        
-        //        if let requestUniqueId = setAdminInput.uniqueId {
-        //            content["uniqueId"] = JSON(requestUniqueId)
-        //        }
-        
-        /*
-        let sendMessageSetRoleToUserParams: JSON = ["chatMessageVOType": chatMessageVOTypes.SET_RULE_TO_USER.rawValue,
-                                                    "content": content,
-                                                    "subjectId": setRoleInput.first!.threadId,
-                                                    "typeCode": setRoleInput.first?.typeCode ?? generalTypeCode]
-        */
-        
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.SET_RULE_TO_USER.rawValue,
-                                            contentAsString:    "\(content)",
-                                            contentAsJSON:      nil,
+                                            content:            "\(content)",
                                             metaData:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -1615,7 +1595,6 @@ extension Chat {
                                     uniqueId(getAminListUniqueId)
         }
         
-        setRoleToUserCallbackToUser = completion
     }
     
     
@@ -1655,61 +1634,48 @@ extension Chat {
                            fileMessagesNotSent:     @escaping ([QueueOfWaitFileMessagesModel]) -> (),
                            uploadImageNotSent:      @escaping ([QueueOfWaitUploadImagesModel]) -> (),
                            uploadFileNotSent:       @escaping ([QueueOfWaitUploadFilesModel]) -> ()) {
+        /*
+         *
+         *
+         *
+         */
         log.verbose("Try to request to get history with this parameters: \n \(getHistoryInput)", context: "Chat")
+        
+        historyCallbackToUser = completion
         
         var content: JSON = [:]
         content["count"] = JSON(getHistoryInput.count ?? 50)
         content["offset"] = JSON(getHistoryInput.offset ?? 0)
-        
         if let firstMessageId = getHistoryInput.firstMessageId {
             content["firstMessageId"] = JSON(firstMessageId)
         }
-        
         if let lastMessageId = getHistoryInput.lastMessageId {
             content["lastMessageId"] = JSON(lastMessageId)
         }
-        
         if let from = getHistoryInput.fromTime {
             if let first13Digits = Int(exactly: (from / 1000000)) {
                 content["fromTime"] = JSON(first13Digits)
                 content["fromTimeNanos"] = JSON(Int(exactly: (from - UInt(first13Digits * 1000000)))!)
             }
         }
-        
         if let to = getHistoryInput.toTime {
             if let first13Digits = Int(exactly: (to / 1000000)) {
                 content["toTime"] = JSON(first13Digits)
                 content["toTimeNanos"] = JSON(Int(exactly: (to - UInt(first13Digits * 1000000)))!)
             }
         }
-        
-        
-        //        var asscenging = true
         if let order = getHistoryInput.order {
             content["order"] = JSON(order)
-            //            if (order == "DESC") {
-            //                asscenging = false
-            //            }
         }
-        
         if let query = getHistoryInput.query {
             content["query"] = JSON(query)
         }
-        
         if let metadataCriteria = getHistoryInput.metadataCriteria {
             content["metadataCriteria"] = JSON(metadataCriteria)
         }
         
-        /*
-        let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_HISTORY.rawValue,
-                                       "content": content,
-                                       "typeCode": getHistoryInput.typeCode ?? generalTypeCode,
-                                       "subjectId": getHistoryInput.threadId]
-        */
-        
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_HISTORY.rawValue,
-                                            contentAsString:    "\(content)",
-                                            contentAsJSON:      nil,
+                                            content:            "\(content)",
                                             metaData:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -1734,9 +1700,6 @@ extension Chat {
                                 seenCallback:       nil) { (getHistoryUniqueId) in
             uniqueId(getHistoryUniqueId)
         }
-        historyCallbackToUser = completion
-        
-        
         
         // if cache is enabled by user, first return cache result to the user
         if enableCache {
@@ -1774,7 +1737,6 @@ extension Chat {
                 cacheResponse(cacheHistoryResult)
             }
         }
-        
         
     }
     
@@ -1850,23 +1812,23 @@ extension Chat {
     public func clearHistory(clearHistoryInput: ClearHistoryRequestModel,
                              uniqueId:          @escaping (String) -> (),
                              completion:        @escaping callbackTypeAlias) {
+        /*
+         *
+         *
+         *
+         */
         log.verbose("Try to request to create clear history with this parameters: \n \(clearHistoryInput)", context: "Chat")
+        
+        clearHistoryCallbackToUser = completion
         
         var content: JSON = [:]
         
         if let requestUniqueId = clearHistoryInput.uniqueId {
             content["uniqueId"] = JSON(requestUniqueId)
         }
-        
-        /*
-        let sendMessageClearHistoryParams: JSON = ["chatMessageVOType": chatMessageVOTypes.CLEAR_HISTORY.rawValue,
-                                                   "content": content,
-                                                   "subjectId": clearHistoryInput.threadId]
-        */
  
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.CLEAR_HISTORY.rawValue,
-                                            contentAsString:    "\(content)",
-                                            contentAsJSON:      nil,
+                                            content:            "\(content)",
                                             metaData:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -1892,7 +1854,6 @@ extension Chat {
                                     uniqueId(clearHistoryUniqueId)
         }
         
-        clearHistoryCallbackToUser = completion
     }
     
     

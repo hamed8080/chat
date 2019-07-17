@@ -14,57 +14,79 @@ import FanapPodAsyncSDK
 
 extension Chat {
     
-    func chatDelegateAddParticipants(addParticipant: JSON) {
-        let hasError = addParticipant["hasError"].boolValue
-        let errorMessage = addParticipant["errorMessage"].stringValue
-        let errorCode = addParticipant["errorCode"].intValue
-        
-        if (!hasError) {
-            let messageContent = addParticipant["result"]
+    func responseOfAddParticipant(withMessage message: ChatMessage) {
+        /*
+         *
+         *
+         *
+         */
+        log.verbose("Message of type 'ADD_PARTICIPANT' recieved", context: "Chat")
+        if Chat.map[message.uniqueId] != nil {
+            let returnData: JSON = CreateReturnData(hasError:       false,
+                                                    errorMessage:   "",
+                                                    errorCode:      0,
+                                                    result:         message.content?.convertToJSON() ?? [:],
+                                                    resultAsString: nil,
+                                                    contentCount:   message.contentCount,
+                                                    subjectId:      message.subjectId)
+                .returnJSON()
             
-            //            var participants = [Participant]()
-            //            for item in messageContent["participants"].arrayValue {
-            //                let myParticipant = Participant(messageContent: item, threadId: messageContent["id"].intValue)
-            //                participants.append(myParticipant)
-            //            }
-            //            Chat.cacheDB.saveThreadParticipantObjects(whereThreadIdIs: sendParams["subjectId"].intValue, withParticipants: participants)
+            if enableCache {
+                
+            }
             
-            let addParticipantModel = AddParticipantModel(messageContent: messageContent, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
-            
-//            delegate?.threadEvents(type: ThreadEventTypes.addParticipant, result: addParticipantModel)
+            let callback: CallbackProtocol = Chat.map[message.uniqueId]!
+            callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
+                self.addParticipantsCallbackToUser?(successJSON)
+            }) { _ in }
+            Chat.map.removeValue(forKey: message.uniqueId)
         }
+        
+        // this functionality has beed deprecated
+        /*
+         let threadIds = messageContent["id"].intValue
+         let paramsToSend: JSON = ["threadIds": threadIds]
+         getThreads(params: paramsToSend, uniqueId: { _ in }) { (response) in
+         let responseModel: GetThreadsModel = response as! GetThreadsModel
+         let responseJSON: JSON = responseModel.returnDataAsJSON()
+         let threads = responseJSON["result"]["threads"].arrayValue
+         
+         let result: JSON = ["thread": threads[0]]
+         self.delegate?.threadEvents(type: "THREAD_ADD_PARTICIPANTS", result: result)
+         self.delegate?.threadEvents(type: "THREAD_LAST_ACTIVITY_TIME", result: result)
+         }
+         */
     }
     
+    // ToDo: put the update cache to the upward function
     public class AddParticipantsCallback: CallbackProtocol {
+        
         var sendParams: SendChatMessageVO
         init(parameters: SendChatMessageVO) {
             self.sendParams = parameters
         }
+        
         func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
-            log.verbose("AddParticipantsCallback", context: "Chat")
             /*
-             * + AddParticipantsRequest   {object}
-             *    - subjectId             {long}
-             *    + content               {list} List of CONTACT IDs
-             *       -id                  {long}
-             *    - uniqueId              {string}
+             *
+             *
+             *
              */
+            log.verbose("AddParticipantsCallback", context: "Chat")
             
-            let hasError = response["hasError"].boolValue
-            let errorMessage = response["errorMessage"].stringValue
-            let errorCode = response["errorCode"].intValue
-            
-            if (!hasError) {
-                let messageContent = response["result"]
+            if (!response["hasError"].boolValue) {
                 
                 var participants = [Participant]()
-                for item in messageContent["participants"].arrayValue {
-                    let myParticipant = Participant(messageContent: item, threadId: messageContent["id"].intValue)
+                for item in response["result"]["participants"].arrayValue {
+                    let myParticipant = Participant(messageContent: item, threadId: response["result"]["id"].intValue)
                     participants.append(myParticipant)
                 }
                 Chat.cacheDB.saveThreadParticipantObjects(whereThreadIdIs: sendParams.subjectId!, withParticipants: participants)
                 
-                let addParticipantModel = AddParticipantModel(messageContent: messageContent, hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+                let addParticipantModel = AddParticipantModel(messageContent:   response["result"],
+                                                              hasError:         response["hasError"].boolValue,
+                                                              errorMessage:     response["errorMessage"].stringValue,
+                                                              errorCode:        response["errorCode"].intValue)
                 success(addParticipantModel)
             }
         }
