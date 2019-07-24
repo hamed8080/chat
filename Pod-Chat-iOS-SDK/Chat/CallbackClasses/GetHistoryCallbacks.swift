@@ -31,6 +31,8 @@ extension Chat {
                                                     subjectId:      message.subjectId)
                 .returnJSON()
             
+            // ToDo: get cache result and compare it with server result
+            
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
             callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
                 self.historyCallbackToUser?(successJSON)

@@ -2,14 +2,13 @@
 //  CMParticipant+CoreDataProperties.swift
 //  FanapPodChatSDK
 //
-//  Created by Mahyar Zhiani on 11/23/1397 AP.
-//  Copyright © 1397 Mahyar Zhiani. All rights reserved.
+//  Created by Mahyar Zhiani on 5/2/1398 AP.
+//  Copyright © 1398 Mahyar Zhiani. All rights reserved.
 //
 //
 
 import Foundation
 import CoreData
-
 
 extension CMParticipant {
     
@@ -32,6 +31,7 @@ extension CMParticipant {
     @NSManaged public var notSeenDuration:  NSNumber?
     @NSManaged public var online:           NSNumber?
     @NSManaged public var receiveEnable:    NSNumber?
+    @NSManaged public var roles:            [String]?
     @NSManaged public var sendEnable:       NSNumber?
     @NSManaged public var dummyConversationInviter:         [CMConversation]?
     @NSManaged public var dummyConversationParticipants:    [CMConversation]?

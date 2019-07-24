@@ -1218,7 +1218,8 @@ extension Chat {
         
         // if cache is enabled by user, it will return cache result to the user
         if enableCache {
-            if let cacheThreadParticipants = Chat.cacheDB.retrieveThreadParticipants(ascending: true,
+            if let cacheThreadParticipants = Chat.cacheDB.retrieveThreadParticipants(admin:     getThreadParticipantsInput.admin,
+                                                                                     ascending: true,
                                                                                      count:     content["count"].intValue,
                                                                                      offset:    content["offset"].intValue,
                                                                                      threadId:  getThreadParticipantsInput.threadId,

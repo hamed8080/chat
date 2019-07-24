@@ -10,10 +10,6 @@ import Foundation
 import SwiftyJSON
 
 
-//#######################################################################################
-//#############################      ReplyInfo        (formatDataToMakeReplyInfo)
-//#######################################################################################
-
 open class ReplyInfo {
     /*
      * + replyInfoVO        ReplyInfo:

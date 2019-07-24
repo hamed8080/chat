@@ -19,7 +19,7 @@ public class Cache {
     public init() {
         
         context = coreDataStack.persistentContainer.viewContext
-        print("context created")
+        print("create context of cache")
     }
     
     func saveContext(subject: String) {

@@ -25,16 +25,6 @@ extension NSObject {
         }
     }
     
-//    static func convertJSONToTransformable(dataToStore: [String: AnyObject], completion: (NSData?) -> Void) {
-//        do {
-//            let data = try JSONSerialization.data(withJSONObject: dataToStore, options: [])
-//            completion(data as NSData)
-//        } catch let error as NSError {
-//            print("NSJSONSerialization Error: \(error)")
-//            completion(nil)
-//        }
-//    }
-    
     func retrieveJSONfromTransformableData(completion: (JSON) -> Void) {
         if let data = self as? NSData {
             do {

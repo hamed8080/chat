@@ -24,6 +24,7 @@ public class CMParticipant: NSManagedObject {
         var notSeenDuration:    Int?
         var online:             Bool?
         var receiveEnable:      Bool?
+        var roles:              [String]?
         var sendEnable:         Bool?
         
         func createVariables() {
@@ -54,6 +55,9 @@ public class CMParticipant: NSManagedObject {
             if let receiveEnable2 = self.receiveEnable as? Bool {
                 receiveEnable = receiveEnable2
             }
+            if let roles2 = self.roles {
+                roles = roles2
+            }
             if let sendEnable2 = self.sendEnable as? Bool {
                 sendEnable = sendEnable2
             }
@@ -75,6 +79,7 @@ public class CMParticipant: NSManagedObject {
                                                notSeenDuration: notSeenDuration,
                                                online:          online,
                                                receiveEnable:   receiveEnable,
+                                               roles:           roles,
                                                sendEnable:      sendEnable)
             
             return participantModel

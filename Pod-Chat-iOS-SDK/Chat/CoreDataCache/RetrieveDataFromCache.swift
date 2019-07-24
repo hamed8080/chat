@@ -302,7 +302,7 @@ extension Cache {
          * after that, we will fetch on the Cache
          *
          */
-        deleteThreadParticipants(timeStamp: timeStamp)
+        deleteThreadParticipants(byTimeStamp: timeStamp)
         
         /*
          *  -> make this propertues OR toghether: 'title', 'descriptions', 'id'(for every id inside 'threadIds input'
@@ -403,7 +403,8 @@ extension Cache {
      *      - GetThreadParticipantsModel?
      *
      */
-    public func retrieveThreadParticipants(ascending:   Bool,
+    public func retrieveThreadParticipants(admin:       Bool?,
+                                           ascending:   Bool,
                                            count:       Int,
                                            offset:      Int,
                                            threadId:    Int,
@@ -413,7 +414,7 @@ extension Cache {
          * after that, we will fetch on the Cache
          *
          */
-        deleteThreadParticipants(timeStamp: timeStamp)
+        deleteThreadParticipants(byTimeStamp: timeStamp)
         
         /*
          *  -> search through the CMConversation with the 'threadId'
@@ -431,12 +432,16 @@ extension Cache {
         do {
             if let result = try context.fetch(fetchRequest) as? [CMConversation] {
                 if (result.count > 0) {
+                    
                     let thread = result.first!
                     if let threadParticipants = thread.participants {
+                        
+                        
                         var insideCount = 0
                         var cmParticipantObjectArr = [CMParticipant]()
                         
                         for (index, item) in threadParticipants.enumerated() {
+                            
                             if (index >= offset) && (insideCount < count) {
                                 cmParticipantObjectArr.append(item)
                                 insideCount += 1
@@ -454,11 +459,12 @@ extension Cache {
                                                                                            hasError:            false,
                                                                                            errorMessage:        "",
                                                                                            errorCode:           0)
-                        
                         return getThreadParticipantModelResponse
+                        
                     } else {
                         return nil
                     }
+                    
                 } else {
                     return nil
                 }
@@ -469,6 +475,35 @@ extension Cache {
             fatalError("Error on fetching list of CMParticipant")
         }
     }
+    
+    
+    
+    func retrieveThreadAdmins(threadId: Int) -> [ThreadAdmins]? {
+        /*
+         *  -> fetch
+         *
+         *
+         */
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "ThreadAdmins")
+        // if i found the ThreadAdmins onject, update its values
+        fetchRequest.predicate = NSPredicate(format: "threadId == %i", threadId)
+        do {
+            if let result = try context.fetch(fetchRequest) as? [ThreadAdmins] {
+
+                var adminArr = [ThreadAdmins]()
+                for admin in result {
+                    adminArr.append(admin)
+                }
+                return adminArr
+                
+            } else {
+                return nil
+            }
+        } catch {
+            fatalError("Error on trying to find the object from ThreadAdmins entity")
+        }
+    }
+    
     
     
     /*
@@ -500,43 +535,58 @@ extension Cache {
          after all we only have to show messages that blongs to the 'threadId' property,
          so we AND the result of last operation with 'threadId' property.
          */
-        let fetchRequest = retrieveMessageHistoryFetchRequest(firstMessageId: firstMessageId, fromTime: fromTime, messageId: messageId, lastMessageId: lastMessageId, order: order, query: query, threadId: threadId, toTime: toTime, uniqueId: uniqueId)
+        let fetchRequest = retrieveMessageHistoryFetchRequest(firstMessageId:   firstMessageId,
+                                                              fromTime:         fromTime,
+                                                              messageId:        messageId,
+                                                              lastMessageId:    lastMessageId,
+                                                              order:            order,
+                                                              query:            query,
+                                                              threadId:         threadId,
+                                                              toTime:           toTime,
+                                                              uniqueId:         uniqueId)
         
         do {
             if let result = try context.fetch(fetchRequest) as? [CMMessage] {
-                var insideCount = 0
-                var cmMessageObjectArr = [CMMessage]()
                 
-                for (index, item) in result.enumerated() {
-                    if (index >= offset) && (insideCount < count) {
-                        cmMessageObjectArr.append(item)
-                        insideCount += 1
+                var foundGap = false
+                if let gaps = retrieveMessageGaps(threadId: threadId) {
+                    for gapItem in gaps {
+                        for message in result {
+                            if (gapItem == message.id as! Int) {
+                                foundGap = true
+                            }
+                        }
                     }
                 }
                 
-                var messageArr = [Message]()
-                for item in cmMessageObjectArr {
-                    messageArr.append(item.convertCMMessageToMessageObject())
+                if (!foundGap) {
+                    var insideCount = 0
+                    var cmMessageObjectArr = [CMMessage]()
+                    
+                    for (index, item) in result.enumerated() {
+                        if (index >= offset) && (insideCount < count) {
+                            cmMessageObjectArr.append(item)
+                            insideCount += 1
+                        }
+                    }
+                    
+                    var messageArr = [Message]()
+                    for item in cmMessageObjectArr {
+                        messageArr.append(item.convertCMMessageToMessageObject())
+                    }
+                    
+                    let getMessageModelResponse = GetHistoryModel(messageContent:   messageArr,
+                                                                  contentCount:     messageArr.count,
+                                                                  count:            count,
+                                                                  offset:           offset,
+                                                                  hasError:         false,
+                                                                  errorMessage:     "",
+                                                                  errorCode:        0,
+                                                                  threadId:         nil)
+                    return getMessageModelResponse
+                } else {
+                    return nil
                 }
-                
-                let getMessageModelResponse = GetHistoryModel(messageContent: messageArr,
-                                                              contentCount: messageArr.count,
-                                                              count: count,
-                                                              offset: offset,
-                                                              hasError: false,
-                                                              errorMessage: "",
-                                                              errorCode: 0,
-                                                              threadId: nil)
-                
-                //                let getMessageModelResponse = GetHistoryModel(messageContent: messageArr,
-                //                                                              contentCount: messageArr.count,
-                //                                                              count: count,
-                //                                                              offset: offset,
-                //                                                              hasError: false,
-                //                                                              errorMessage: "",
-                //                                                              errorCode: 0)
-                
-                return getMessageModelResponse
                 
             } else {
                 return nil
@@ -547,7 +597,15 @@ extension Cache {
     }
     
     
-    func retrieveMessageHistoryFetchRequest(firstMessageId: Int?, fromTime: UInt?, messageId: Int?, lastMessageId: Int?, order: String?, query: String?, threadId: Int?, toTime: UInt?, uniqueId: String?) -> NSFetchRequest<NSFetchRequestResult> {
+    func retrieveMessageHistoryFetchRequest(firstMessageId: Int?,
+                                            fromTime:       UInt?,
+                                            messageId:      Int?,
+                                            lastMessageId:  Int?,
+                                            order:          String?,
+                                            query:          String?,
+                                            threadId:       Int?,
+                                            toTime:         UInt?,
+                                            uniqueId:       String?) -> NSFetchRequest<NSFetchRequestResult> {
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMMessage")
         
@@ -655,6 +713,37 @@ extension Cache {
     }
     
     
+    /**
+     *
+     *
+     */
+    func retrieveMessageGaps(threadId: Int) -> [Int]? {
+        /*
+         *  -> search through the MessageGaps with the 'threadId'
+         *  -> make the final result as array of MessageIds and pass it to the caller
+         *
+         */
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "MessageGaps")
+        
+        // this predicate used to get gap messages that are in the specific thread using 'threadId' property
+        let threadPredicate = NSPredicate(format: "messageId == %i", threadId)
+        fetchRequest.predicate = threadPredicate
+        
+        do {
+            if let result = try context.fetch(fetchRequest) as? [MessageGaps] {
+                var msgIds: [Int] = []
+                for msg in result {
+                    msgIds.append((msg.messageId as? Int)!)
+                }
+                return msgIds
+            } else {
+                return nil
+            }
+        } catch {
+            fatalError("Error on fetching list of MessageGaps")
+        }
+    }
     
     /*
      * retrieve UploadImage

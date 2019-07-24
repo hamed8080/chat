@@ -11,12 +11,12 @@ import SwiftyJSON
 
 open class DeleteMultipleMessagesRequestModel {
     
-    public let deleteForAll:        JSON?
+    public let deleteForAll:        Bool?
     public let subjectIds:          [Int]
     public let typeCode:            String?
     public let uniqueIds:           [String]?
     
-    public init(deleteForAll:      JSON?,
+    public init(deleteForAll:      Bool?,
                 subjectIds:        [Int],
                 typeCode:          String?,
                 uniqueIds:         [String]?) {

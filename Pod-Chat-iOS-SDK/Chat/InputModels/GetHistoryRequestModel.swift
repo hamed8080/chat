@@ -13,19 +13,23 @@ import SwiftyJSON
 
 open class GetHistoryRequestModel {
     
-    public let count:               Int?
+    public let count:               Int?    //
     public let firstMessageId:      Int?
-    public let fromTime:            UInt?
+    public let fromTime:            UInt?   //
     public let lastMessageId:       Int?
-    public let messageId:           Int?
-    public let metadataCriteria:    JSON?
-    public let offset:              Int?
-    public let order:               String?
-    public let query:               String?
-    public let threadId:            Int
-    public let toTime:              UInt?
+    public let messageId:           Int?    // id
+    public let metadataCriteria:    JSON?   //
+    public let offset:              Int?    //
+    public let order:               String? //
+    public let query:               String? //
+    public let threadId:            Int     //
+    public let toTime:              UInt?   //
     public let typeCode:            String?
-    public let uniqueId:            String?
+    public let uniqueId:            String? //
+
+//    public let uniqueIds: [String]?
+//    public let fromTimeNanos:            UInt?   //
+//    public let toTimeNanos:              UInt?   //
     
     public init(count:              Int?,
                 firstMessageId:     Int?,

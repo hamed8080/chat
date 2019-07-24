@@ -26,9 +26,10 @@ extension Cache {
      */
     public func saveUserInfo(withUserObject user: User) {
         /*
-         -> fetch CMUser on the cache (check if there is any information about UserInfo on the cache)
-         -> if it has found some data (CMUser object), it we will update that CMUser object
-         -> otherwise we will create an CMUser object and save that on the cache
+         *  -> fetch CMUser on the cache (check if there is any information about UserInfo on the cache)
+         *  -> if we found some data (CMUser object), we will update that CMUser object
+         *  -> otherwise we will create an CMUser object and save that on the cache
+         *
          */
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUser")
         do {
@@ -45,16 +46,13 @@ extension Cache {
                     result.first!.name              = user.name
                     result.first!.receiveEnable     = user.receiveEnable as NSNumber?
                     result.first!.sendEnable        = user.sendEnable as NSNumber?
-                    
                     // save function that will try to save changes that made on the Cache
                     saveContext(subject: "Update UserInfo -update existing object-")
-                    
                 } else {
                     // if there wasn't any CMUser object (means there is no information about UserInfo on the Cache)
                     // this part will execute, which will create an object of User and save it on the Cache
                     let theUserEntity = NSEntityDescription.entity(forEntityName: "CMUser", in: context)
                     let theUser = CMUser(entity: theUserEntity!, insertInto: context)
-                    
                     theUser.cellphoneNumber    = user.cellphoneNumber
                     theUser.coreUserId         = user.coreUserId as NSNumber?
                     theUser.email              = user.email
@@ -64,7 +62,6 @@ extension Cache {
                     theUser.name               = user.name
                     theUser.receiveEnable      = user.receiveEnable as NSNumber?
                     theUser.sendEnable         = user.sendEnable as NSNumber?
-                    
                     // save function that will try to save changes that made on the Cache
                     saveContext(subject: "Update UserInfo -create a new object-")
                 }
@@ -86,77 +83,15 @@ extension Cache {
      *
      */
     public func saveContact(withContactObjects contacts: [Contact]) {
-        
+        /*
+         *  -> for every Contact object on 'contacts' Input
+         *      -> send the Contact object to 'updateCMContactEntity(withContactObject:_)' method
+         *          -> this function will create the Contact object on the cache, of if it was exist, it will update its values
+         *
+         */
         for item in contacts {
             _ = updateCMContactEntity(withContactObject: item)
         }
-        
-        /*
-         // check if there is any information about Contact that are in the cache,
-         // if they has beed there, it we will update that data,
-         // otherwise we will create an object and save data on cache
-         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMContact")
-         do {
-         if let result = try context.fetch(fetchRequest) as? [CMContact] {
-         
-         // Part1:
-         // find data that are exist in the Cache, (and the response request is containing that). and delete them
-         for item in contacts {
-         for itemInCache in result {
-         if let contactId = Int(exactly: itemInCache.id ?? 0) {
-         if (contactId == item.id) {
-         // the contact object that we are going to create, is already exist in the Cache
-         // to update information in this object:
-         // we will delete them first, then we will create it again later
-         
-         itemInCache.linkedUser = nil
-         context.delete(itemInCache)
-         
-         saveContext(subject: "Delete CMContact Object")
-         }
-         }
-         
-         }
-         }
-         
-         // Part2:
-         // save data comes from server to the Cache
-         var allContacts = [CMContact]()
-         
-         for item in contacts {
-         let theContactEntity = NSEntityDescription.entity(forEntityName: "CMContact", in: context)
-         let theContact = CMContact(entity: theContactEntity!, insertInto: context)
-         
-         theContact.cellphoneNumber  = item.cellphoneNumber
-         theContact.email            = item.email
-         theContact.firstName        = item.firstName
-         theContact.hasUser          = item.hasUser as NSNumber?
-         theContact.id               = item.id as NSNumber?
-         theContact.image            = item.image
-         theContact.lastName         = item.lastName
-         theContact.notSeenDuration  = item.notSeenDuration as NSNumber?
-         theContact.uniqueId         = item.uniqueId
-         theContact.userId           = item.userId as NSNumber?
-         
-         let theLinkedUserEntity = NSEntityDescription.entity(forEntityName: "CMLinkedUser", in: context)
-         let theLinkedUser = CMLinkedUser(entity: theLinkedUserEntity!, insertInto: context)
-         theLinkedUser.coreUserId    = item.linkedUser?.coreUserId as NSNumber?
-         theLinkedUser.image         = item.linkedUser?.image
-         theLinkedUser.name          = item.linkedUser?.name
-         theLinkedUser.nickname      = item.linkedUser?.nickname
-         theLinkedUser.username      = item.linkedUser?.username
-         
-         theContact.linkedUser = theLinkedUser
-         
-         allContacts.append(theContact)
-         }
-         
-         saveContext(subject: "Update CMContact")
-         }
-         } catch {
-         fatalError("Error on fetching list of CMConversation")
-         }
-         */
         
     }
     
@@ -177,7 +112,13 @@ extension Cache {
      *
      */
     public func savePhoneBookContact(contact myContact: AddContactsRequestModel) {
-        
+        /*
+         *  -> fetch PhoneContact objects from 'PhoneContact' Entity
+         *  -> filter it by cellphoneNumber
+         *  -> if we found any PhoneContact object, we will update its values on the Cache
+         *  -> otherwise we will create new CMContact
+         *
+         */
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "PhoneContact")
         if let contactCellphoneNumber = myContact.cellphoneNumber {
             fetchRequest.predicate = NSPredicate(format: "cellphoneNumber == %@", contactCellphoneNumber)
@@ -192,13 +133,13 @@ extension Cache {
                         saveContext(subject: "Update PhoneContact -update existing object-")
                     }
                 } else {
-                    let theContactEntity = NSEntityDescription.entity(forEntityName: "PhoneContact", in: context)
-                    let theContact = CMContact(entity: theContactEntity!, insertInto: context)
-                    
-                    theContact.cellphoneNumber  = myContact.cellphoneNumber
-                    theContact.email            = myContact.email
-                    theContact.firstName        = myContact.firstName
-                    theContact.lastName         = myContact.lastName
+                    let thePhoneContactEntity = NSEntityDescription.entity(forEntityName: "PhoneContact", in: context)
+                    let thePhoneContact = PhoneContact(entity: thePhoneContactEntity!, insertInto: context)
+//                    let theContact = CMContact(entity: thePhoneContactEntity!, insertInto: context)
+                    thePhoneContact.cellphoneNumber  = myContact.cellphoneNumber
+                    thePhoneContact.email            = myContact.email
+                    thePhoneContact.firstName        = myContact.firstName
+                    thePhoneContact.lastName         = myContact.lastName
                     
                     saveContext(subject: "Update PhoneContact -create new object-")
                 }
@@ -208,8 +149,6 @@ extension Cache {
         }
         
     }
-    
-    
     
     
     
@@ -226,165 +165,15 @@ extension Cache {
      *
      */
     public func saveThread(withThreadObjects threads: [Conversation]) {
-        
+        /*
+         *  -> for every Conversation object on 'threads' Input
+         *      -> send the Conversation object to 'updateCMConversationEntity(withConversationObject:_)' method
+         *          -> this function will create the Conversation object on the cache, of if it was exist, it will update its values
+         *
+         */
         for item in threads {
             _ = updateCMConversationEntity(withConversationObject: item)
         }
-        
-        /*
-         // check if there is any information about Conversations that are in the cache,
-         // which if it has been there, it we will update that data,
-         // otherwise we will create an object and save data on cache
-         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
-         do {
-         if let result = try context.fetch(fetchRequest) as? [CMConversation] {
-         
-         // Part1:
-         // find data that are exist in the Cache, (and the response request is containing that). and delete them
-         for item in threads {
-         for itemInCache in result {
-         if let conversationId = Int(exactly: itemInCache.id ?? 0) {
-         print("Conversation id = \(item.id ?? 99999) ; CMConversation id = \(conversationId)")
-         if (conversationId == item.id) {
-         // the conversation object that we are going to create, is already exist in the Cache
-         // to update information in this object:
-         // we will delete them first, then we will create it again later
-         
-         if let _ = itemInCache.inviter {
-         context.delete(itemInCache.inviter!)
-         saveContext(subject: "Delete CMParticipant Object as inviter")
-         }
-         if let _ = itemInCache.lastMessageVO {
-         context.delete(itemInCache.lastMessageVO!)
-         saveContext(subject: "Delete CMMessage Object as lastMessageVO")
-         }
-         if let _ = itemInCache.participants {
-         for item in itemInCache.participants! {
-         context.delete(item)
-         saveContext(subject: "Delete CMParticipant Object as object in participants")
-         }
-         }
-         
-         //                                itemInCache.inviter = nil
-         //                                itemInCache.lastMessageVO = nil
-         //                                itemInCache.participants = nil
-         context.delete(itemInCache)
-         
-         saveContext(subject: "Delete CMConversation Object")
-         }
-         }
-         }
-         }
-         
-         // Part2:
-         // save data comes from server to the Cache
-         var allThreads = [CMConversation]()
-         
-         for item in threads {
-         let conversationEntity = NSEntityDescription.entity(forEntityName: "CMConversation", in: context)
-         let conversation = CMConversation(entity: conversationEntity!, insertInto: context)
-         
-         conversation.admin                  = item.admin as NSNumber?
-         conversation.canEditInfo            = item.canEditInfo as NSNumber?
-         conversation.canSpam                = item.canSpam as NSNumber?
-         conversation.descriptions           = item.description
-         conversation.group                  = item.group as NSNumber?
-         conversation.id                     = item.id as NSNumber?
-         conversation.image                  = item.image
-         conversation.joinDate               = item.joinDate as NSNumber?
-         conversation.lastMessage            = item.lastMessage
-         conversation.lastParticipantImage   = item.lastParticipantImage
-         conversation.lastParticipantName    = item.lastParticipantName
-         conversation.lastSeenMessageId      = item.lastSeenMessageId as NSNumber?
-         conversation.metadata               = item.metadata
-         conversation.mute                   = item.mute as NSNumber?
-         conversation.participantCount       = item.participantCount as NSNumber?
-         conversation.partner                = item.partner as NSNumber?
-         conversation.partnerLastDeliveredMessageId  = item.partnerLastDeliveredMessageId as NSNumber?
-         conversation.partnerLastSeenMessageId       = item.partnerLastSeenMessageId as NSNumber?
-         conversation.title                  = item.title
-         conversation.time                   = item.time as NSNumber?
-         conversation.type                   = item.time as NSNumber?
-         conversation.unreadCount            = item.unreadCount as NSNumber?
-         
-         
-         let theInviterEntity = NSEntityDescription.entity(forEntityName: "CMParticipant", in: context)
-         let theInviter = CMParticipant(entity: theInviterEntity!, insertInto: context)
-         theInviter.admin           = item.inviter?.admin as NSNumber?
-         theInviter.blocked         = item.inviter?.blocked as NSNumber?
-         theInviter.cellphoneNumber = item.inviter?.cellphoneNumber
-         theInviter.contactId       = item.inviter?.contactId as NSNumber?
-         theInviter.coreUserId      = item.inviter?.coreUserId as NSNumber?
-         theInviter.email           = item.inviter?.email
-         theInviter.firstName       = item.inviter?.firstName
-         theInviter.id              = item.inviter?.id as NSNumber?
-         theInviter.image           = item.inviter?.image
-         theInviter.lastName        = item.inviter?.lastName
-         theInviter.myFriend        = item.inviter?.myFriend as NSNumber?
-         theInviter.name            = item.inviter?.name
-         theInviter.notSeenDuration = item.inviter?.notSeenDuration as NSNumber?
-         theInviter.online          = item.inviter?.online as NSNumber?
-         theInviter.receiveEnable   = item.inviter?.receiveEnable as NSNumber?
-         theInviter.sendEnable      = item.inviter?.sendEnable as NSNumber?
-         conversation.inviter = theInviter
-         
-         
-         let theMessageEntity = NSEntityDescription.entity(forEntityName: "CMMessage", in: context)
-         let theMessage = CMMessage(entity: theMessageEntity!, insertInto: context)
-         theMessage.delivered    = item.lastMessageVO?.delivered as NSNumber?
-         theMessage.editable     = item.lastMessageVO?.editable as NSNumber?
-         theMessage.edited       = item.lastMessageVO?.edited as NSNumber?
-         theMessage.id           = item.lastMessageVO?.id as NSNumber?
-         theMessage.message      = item.lastMessageVO?.message
-         theMessage.messageType  = item.lastMessageVO?.messageType
-         theMessage.metaData     = item.lastMessageVO?.metaData
-         theMessage.ownerId      = item.lastMessageVO?.ownerId as NSNumber?
-         theMessage.previousId   = item.lastMessageVO?.previousId as NSNumber?
-         theMessage.seen         = item.lastMessageVO?.seen as NSNumber?
-         theMessage.threadId     = item.lastMessageVO?.threadId as NSNumber?
-         theMessage.time         = item.lastMessageVO?.time as NSNumber?
-         theMessage.uniqueId     = item.lastMessageVO?.uniqueId
-         //                    theMessage.conversation = item.lastMessageVO?.conversation
-         //                    theMessage.forwardInfo  = item.lastMessageVO?.forwardInfo
-         //                    theMessage.participant  = item.lastMessageVO?.participant
-         //                    theMessage.replyInfo    = item.lastMessageVO?.replyInfo
-         conversation.lastMessageVO = theMessage
-         
-         if let messagParticipants = item.participants {
-         var participantArr = [CMParticipant]()
-         for part in messagParticipants {
-         let theParticipantEntity = NSEntityDescription.entity(forEntityName: "CMParticipant", in: context)
-         let theParticipant = CMParticipant(entity: theParticipantEntity!, insertInto: context)
-         theParticipant.admin           = part.admin as NSNumber?
-         theParticipant.blocked         = part.blocked as NSNumber?
-         theParticipant.cellphoneNumber = part.cellphoneNumber
-         theParticipant.contactId       = part.contactId as NSNumber?
-         theParticipant.coreUserId      = part.coreUserId as NSNumber?
-         theParticipant.email           = part.email
-         theParticipant.firstName       = part.firstName
-         theParticipant.id              = part.id as NSNumber?
-         theParticipant.image           = part.image
-         theParticipant.lastName        = part.lastName
-         theParticipant.myFriend        = part.myFriend as NSNumber?
-         theParticipant.name            = part.name
-         theParticipant.notSeenDuration = part.notSeenDuration as NSNumber?
-         theParticipant.online          = part.online as NSNumber?
-         theParticipant.receiveEnable   = part.receiveEnable as NSNumber?
-         theParticipant.sendEnable      = part.sendEnable as NSNumber?
-         participantArr.append(theParticipant)
-         }
-         conversation.participants = participantArr
-         }
-         
-         allThreads.append(conversation)
-         }
-         
-         saveContext(subject: "Update CMConversation")
-         }
-         } catch {
-         fatalError("Error on fetching list of CMConversation")
-         }
-         */
         
     }
     
@@ -405,9 +194,11 @@ extension Cache {
         /*
          *  -> fetch CMConversation objects from CMConversation entity
          *  -> filter it by threadId
-         *  -> if we found any
+         *  -> if we found any CMConversation object
          *      -> loop through its Participants
          *          -> update or save all participants with the cache data
+         *          -> if any user had roles, update 'ThreadAdmin' Entity
+         *          -> then update the 'ThreadParticipant' Entity
          *
          */
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
@@ -419,6 +210,11 @@ extension Cache {
                         if let myCMParticipantObject = updateCMParticipantEntity(withParticipantsObject: item) {
                             result.first!.addToParticipants(myCMParticipantObject)
                             saveContext(subject: "Add/Update CMParticipant in a thread and Update CMConversation")
+                            
+                            if let roles = item.roles {
+                                let userRoles = UserRole(userId: item.id!, name: item.name!, roles: roles)
+                                _ = updateThreadAdminEntity(inThreadId: threadId, roles: userRoles)
+                            }
                             updateThreadParticipantEntity(inThreadId: Int(exactly: result.first!.id!)!, withParticipantId: Int(exactly: item.id!)!)
                         }
                     }
@@ -429,82 +225,143 @@ extension Cache {
             fatalError("Error on getting CMConversation when trying to add/update thread participants")
         }
         
-        
-        //        for item in participants {
-        //            _ = updateCMParticipantEntity(withParticipantsObject: item)
-        //        }
-        
-        /*
-         // check if there is any information about Contact that are in the cache,
-         // if they has beed there, it we will update that data,
-         // otherwise we will create an object and save data on cache
-         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMParticipant")
-         do {
-         if let result = try context.fetch(fetchRequest) as? [CMParticipant] {
-         
-         // Part1:
-         // find data that are exist in the Cache, (and the response request is containing that). and delete them
-         for item in participants {
-         for itemInCache in result {
-         if let participantId = Int(exactly: itemInCache.id ?? 0) {
-         if (participantId == item.id) {
-         // the Participant object that we are going to create, is already exist in the Cache
-         // to update information in this object:
-         // we will delete them first, then we will create it again later
-         
-         context.delete(itemInCache)
-         
-         saveContext(subject: "Delete CMParticipant Object")
-         }
-         }
-         
-         }
-         }
-         
-         
-         // Part2:
-         // save data comes from server to the Cache
-         var allParticipants = [CMParticipant]()
-         
-         for item in participants {
-         let theParticipantEntity = NSEntityDescription.entity(forEntityName: "CMParticipant", in: context)
-         let theParticipant = CMParticipant(entity: theParticipantEntity!, insertInto: context)
-         
-         theParticipant.admin           = item.admin as NSNumber?
-         theParticipant.blocked         = item.blocked as NSNumber?
-         theParticipant.cellphoneNumber = item.cellphoneNumber
-         theParticipant.contactId       = item.contactId as NSNumber?
-         theParticipant.coreUserId      = item.coreUserId as NSNumber?
-         theParticipant.email           = item.email
-         theParticipant.firstName       = item.firstName
-         theParticipant.id              = item.id as NSNumber?
-         theParticipant.image           = item.image
-         theParticipant.lastName        = item.lastName
-         theParticipant.myFriend        = item.myFriend as NSNumber?
-         theParticipant.name            = item.name
-         theParticipant.notSeenDuration = item.notSeenDuration as NSNumber?
-         theParticipant.online          = item.online as NSNumber?
-         theParticipant.receiveEnable   = item.receiveEnable as NSNumber?
-         theParticipant.sendEnable      = item.sendEnable as NSNumber?
-         
-         allParticipants.append(theParticipant)
-         }
-         
-         saveContext(subject: "Update ThreadParticipants")
-         
-         }
-         } catch {
-         fatalError("Error on fetching list of CMConversation")
-         }
-         */
-        
     }
     
     
     // this function will save (or update) messages that comes from server, in the Cache.
     public func saveMessageObjects(messages: [Message], getHistoryParams: JSON?) {
+        /*
+         *  -> check if we have 'getHistoryParams' Input or not
+         *      -> check if user request contains 'metadataCriteria' or not
+         *      -> if yes, don't update or delete anything on the cache, just insert newThings
+         *      -> if no, we have to update and delete item on the cache, then insert new objects
+         *
+         *      -> based on the users input request, check every possible conditions:
+         *
+         *          1-
+         *              input:
+         *                  count   = Int
+         *                  offset  = 0
+         *                  order is not important
+         *                  all the other conditions = nil
+         *              server response:
+         *                  messages = nil
+         *              means we request to get ('count' number of messages) from offset 0, and the server response was empty,
+         *              means we have no message on this thread.
+         *              -> delete all of the message from cache
+         *
+         *          2-
+         *              input:
+         *                  count   = Int
+         *                  offset  = Int
+         *                  order   = ascending
+         *                  all the other conditions = nil
+         *              server response:
+         *                  messages = nil
+         *              means we request to get messages with ASCENDING order , and the server response was empty,
+         *              means we have no message after this offset on this thread.
+         *              -> delete all of the messages from cache which has bigger time than the first item on the cache result
+         *
+         *          3-
+         *              input:
+         *                  count   = Int
+         *                  offset  = Int
+         *                  order   = descending
+         *                  all the other conditions = nil
+         *              server response:
+         *                  messages = nil
+         *              means we request to get messages with DESCENDING order , and the server response was empty,
+         *              means we have no message befor this offset on this thread.
+         *              -> delete all of the messages from cache which has smaller time than the first item on the cache result
+         *
+         *          4-
+         *              input:
+         *                  count   = Int
+         *                  offset  = 0
+         *                  order   = ascending
+         *                  all the other conditions = nil
+         *              server response:
+         *                  messages = [MessageObject]
+         *              means we request to get messages with ASCENDING order, and the server response was not empty,
+         *              so the first Messasge of this result is the first Message of the thread
+         *              -> delete everything from cache which has smaller time than this one
+         *              -> delete all of the messages between firstMessage and lastMessage of this result from cache database
+         *
+         *          5-
+         *              input:
+         *                  count   = Int
+         *                  offset  = 0
+         *                  order   = descending
+         *                  all the other conditions = nil
+         *              server response:
+         *                  messages = [MessageObject]
+         *              means we request to get messages with DESCENDING order, and the server response was not empty,
+         *              so the first Message of this result is the first Message of the thread,
+         *              -> delete everything from cache which has bigger time than this one
+         *              -> delete all of the messages between firstMessage and lastMessage of this result from cache database
+         *
+         *          6-
+         *              input:
+         *                  count   = Int
+         *                  offset  = Int
+         *                  order   = ascending
+         *                  all the other conditions = nil
+         *              server response:
+         *                  messages = [MessageObject]
+         *              means we request to get messages with ASCENDING order, and the server response was not empty,
+         *              check if last message's previouseId = nil, so it is the first message of thread
+         *              -> delete everything before the lastMessage
+         *              -> delete all of the messages between firstMessage and lastMessage of this result from cache database
+         *
+         *          7-
+         *              input:
+         *                  count   = Int
+         *                  offset  = Int
+         *                  order   = desscending
+         *                  all the other conditions = nil
+         *              server response:
+         *                  messages = [MessageObject]
+         *              means we request to get messages with DESCENDING order, and the server response was not empty,
+         *              check if first message's previouseId = nil, so it is the last message of thread
+         *              -> delete everything after the firtMessage
+         *              -> delete all of the messages between firstMessage and lastMessage of this result from cache database
+         *
+         *          8-
+         *              input:
+         *                  messageId   = Int
+         *                  all the other conditions = Any
+         *              server response:
+         *                  messages = [nil]
+         *              means we request to get messages with specific messagreId, and the server response was empty,
+         *              means we don't have this message on the server anymore
+         *              -> delete specific message with its messageId
+         *
+         *          9-
+         *              input:
+         *                  query   = String
+         *                  all the other conditions = Any
+         *              server response:
+         *                  messages = Any
+         *              means we request to get messages with query
+         *              we have to delete all messages that we have on the cache (afterward we will save server answers into it)
+         *              -> delete all messages with this query input
+         *
+         *          10-
+         *              input:
+         *                  fromTime    = UInt
+         *                  toTime      = UInt
+         *                  all the other conditions = Any
+         *              server response:
+         *                  messages = Any
+         *              means both fromTime and toTime has been set
+         *              we should delete all messages from cache in this boundry
+         *              -> delete all messages with this fromTime, toTime inputs
+         *
+         *
+         */
         
-        if let params       = getHistoryParams {
+        
+        if let params   = getHistoryParams {
             let count       = params["count"].intValue
             let offset      = params["offset"].intValue
             let id          = params["id"].int
@@ -513,144 +370,316 @@ extension Cache {
             let order       = params["order"].string
             let query       = params["query"].string
             let threadId    = params["threadId"].int
-            //            let uniqueId    = params["uniqueId"].string
+//            let uniqueId    = params["uniqueId"].string
             
-            switch (count, offset, id, fromTime, toTime, order, query, messages.count) {
-            
-            
-                /*
-                 * 
-                 *
-                 */
-            // 1- delete everything from cache
-            case (count, 0, .none, .none, .none, _, .none, 0):
-                deleteMessage(count: nil, fromTime: nil, messageId: nil, offset: offset, order: order ?? Ordering.descending.rawValue, query: nil, threadId: threadId, toTime: nil, uniqueId: nil)
+            if let _ = params["metadataCriteria"] as JSON? {
                 
-            // 2- delete all records that:     'time' > 'time' (first cache result)
-            case (count, offset, .none, .none, .none, Ordering.ascending.rawValue, .none, 0):
-                var firstObject: Message?
-                let fetchRequest = retrieveMessageHistoryFetchRequest(firstMessageId: nil, fromTime: nil, messageId: nil, lastMessageId: nil, order: nil, query: nil, threadId: threadId, toTime: nil, uniqueId: nil)
-                do {
-                    if let result = try context.fetch(fetchRequest) as? [Message] {
-                        if result.count > 0 {
-                            firstObject = result.first!
-                        }
-                    }
-                } catch {
-                    fatalError()
-                }
-                if let fObject = firstObject {
-                    if let firstObjectTime = fObject.time {
-                        deleteMessage(count: nil, fromTime: firstObjectTime, messageId: nil, offset: offset, order: Ordering.ascending.rawValue, query: nil, threadId: threadId, toTime: nil, uniqueId: nil)
-                    }
-                }
+            } else {
                 
-                
-            // 3- delete all records that:     'time' < 'time' (first cache result)
-            case (count, offset, .none, .none, .none, Ordering.descending.rawValue, .none, 0):
-                var lastObject: Message?
-                let fetchRequest = retrieveMessageHistoryFetchRequest(firstMessageId: nil, fromTime: nil, messageId: nil, lastMessageId: nil, order: nil, query: nil, threadId: threadId, toTime: nil, uniqueId: nil)
-                do {
-                    if let result = try context.fetch(fetchRequest) as? [Message] {
-                        if result.count > 0 {
-                            lastObject = result.last!
-                        }
-                    }
-                } catch {
-                    fatalError()
-                }
-                if let lObject = lastObject {
-                    if let lastObjectTime = lObject.time {
-                        deleteMessage(count: nil, fromTime: nil, messageId: nil, offset: offset, order: Ordering.descending.rawValue, query: nil, threadId: threadId, toTime: lastObjectTime, uniqueId: nil)
-                    }
-                }
-                
-                
-                //Server result is not Empty, so we should remove everything which are between firstMessage and lastMessage of this result from cache database and insert the new result into cache, so the deleted ones would be deleted
-                
-                
-                // Offset has been set as 0 so this result is either the very beggining part of thread or the very last Depending on the sort order.
-                // 6: Results are sorted ASC, and the offet is 0, so the first Messasge of this result is first Message of thread, everything in cache database which has smaller time than this one should be removed
-                //  delete all records that::   'time' < result.first.time
-            // delete every message between result.first and result.last from cache + then add new messages to the database
-            case (count, 0, .none, .none, .none, Ordering.ascending.rawValue, .none, _):
-                deleteMessage(count: nil, fromTime: nil, messageId: nil, offset: 0, order: Ordering.ascending.rawValue, query: nil, threadId: threadId, toTime: messages.first!.time!, uniqueId: nil)
-                deleteMessage(count: nil, fromTime: messages.first!.time!, messageId: nil, offset: 0, order: Ordering.ascending.rawValue, query: nil, threadId: threadId, toTime: messages.last!.time!, uniqueId: nil)
-                
-                // 7: Results are sorted DESC and the offset is 0, so the last Message of this result is the last Message of the thread, everything in cache database which has bigger time than this one should be removed from cache
-                //  delete all records that::   'time' > result.last.time
-            // delete every message between result.first and result.last from cache + then add new messages to the database
-            case (count, 0, .none, .none, .none, Ordering.descending.rawValue, .none, _):
-                deleteMessage(count: nil, fromTime: messages.last!.time!, messageId: nil, offset: 0, order: Ordering.descending.rawValue, query: nil, threadId: threadId, toTime: nil, uniqueId: nil)
-                deleteMessage(count: nil, fromTime: messages.first!.time!, messageId: nil, offset: 0, order: Ordering.descending.rawValue, query: nil, threadId: threadId, toTime: messages.last!.time!, uniqueId: nil)
-                
-                
-                // 4- (result.last.previousId = nil) => delete all recored befor the result.last
-            // delete every message between result.first and result.last from cache + then add new messages to the database
-            case (count, offset, .none, .none, .none, Ordering.ascending.rawValue, .none, _):
-                if (messages.last!.previousId == nil) {
-                    deleteMessage(count: nil, fromTime: nil, messageId: nil, offset: 0, order: Ordering.ascending.rawValue, query: nil, threadId: threadId, toTime: messages.last!.time!, uniqueId: nil)
-                }
-                deleteMessage(count: nil, fromTime: messages.first!.time!, messageId: nil, offset: 0, order: Ordering.ascending.rawValue, query: nil, threadId: threadId, toTime: messages.last!.time!, uniqueId: nil)
-                
-                // 5- if (result.first.previousId = nil) => delete all recored befor the result.first
-            // delete every message between result.first and result.last from cache + then add new messages to the database
-            case (count, offset, .none, .none, .none, Ordering.descending.rawValue, .none, _):
-                if (messages.last!.previousId == nil) {
-                    deleteMessage(count: nil, fromTime: nil, messageId: nil, offset: 0, order: Ordering.descending.rawValue, query: nil, threadId: threadId, toTime: messages.last!.time!, uniqueId: nil)
-                }
-                deleteMessage(count: nil, fromTime: messages.first!.time!, messageId: nil, offset: 0, order: Ordering.descending.rawValue, query: nil, threadId: threadId, toTime: messages.last!.time!, uniqueId: nil)
-                
-                
-            // whereClasue is not empty and we should check for every single one of the conditions to update the cache properly
-            case let (count, offset, id, from, to, order, query, result):
-                // When user ordered a message with exact ID and server returns [] but there is something in cache database, we should delete that row from cache, because it has been deleted
-                if let myId = id {
-                    if result == 0 {
-                        // delete the message with 'id' from cache
-                        deleteMessage(count: nil, fromTime: nil, messageId: myId, offset: 0, order: order ?? Ordering.descending.rawValue, query: nil, threadId: threadId, toTime: nil, uniqueId: nil)
-                    }
-                }
-                
-                // When user sets a query to search on messages we should delete all the results came from cache and insert new results instead, because those messages would be either removed or updated
-                if let myQuery = query {
-                    // delete result of the cache + then add new result to the cache
-                    deleteMessage(count: nil, fromTime: nil, messageId: nil, offset: 0, order: order ?? Ordering.descending.rawValue, query: myQuery, threadId: threadId, toTime: nil, uniqueId: nil)
-                }
-                
-                /*
-                 User set both fromTime and toTime, so we have a boundry restriction in this case.
-                 if server result is empty, we should delete all messages from cache which are between fromTime and toTime.
-                 if there are any messages on server in this boundry, we should delete all messages which are between time of first and last message of the server result, from cache and insert new result into cache.
-                 */
-                if (from != nil) || (to != nil) {
+                switch (count, offset, id, fromTime, toTime, order, query, messages.count) {
                     
-                    // Server response is Empty []
-                    if result == 0 {
+                // 1- delete everything from cache
+                case (count, 0, .none, .none, .none, _, .none, 0):
+                    deleteMessage(count:        nil,
+                                  fromTime:     nil,
+                                  messageId:    nil,
+                                  offset:       offset,
+                                  order:        order ?? Ordering.descending.rawValue,
+                                  query:        nil,
+                                  threadId:     threadId,
+                                  toTime:       nil,
+                                  uniqueId:     nil)
+                    return
+                    
+                // 2- delete all records that:     'time' > 'time' (first item on the cache result)
+                case (count, offset, .none, .none, .none, Ordering.ascending.rawValue, .none, 0):
+                    var firstObject: Message?
+                    let fetchRequest = retrieveMessageHistoryFetchRequest(firstMessageId:   nil,
+                                                                          fromTime:         nil,
+                                                                          messageId:        nil,
+                                                                          lastMessageId:    nil,
+                                                                          order:            nil,
+                                                                          query:            nil,
+                                                                          threadId:         threadId,
+                                                                          toTime:           nil,
+                                                                          uniqueId:         nil)
+                    do {
+                        if let result = try context.fetch(fetchRequest) as? [Message] {
+                            if result.count > 0 {
+                                firstObject = result.first!
+                            }
+                        }
+                    } catch {
+                        fatalError()
+                    }
+                    if let fObject = firstObject {
+                        if let firstObjectTime = fObject.time {
+                            deleteMessage(count:        nil,
+                                          fromTime:     firstObjectTime,
+                                          messageId:    nil,
+                                          offset:       offset,
+                                          order:        order ?? Ordering.ascending.rawValue,
+                                          query:        nil,
+                                          threadId:     threadId,
+                                          toTime:       nil,
+                                          uniqueId:     nil)
+                        }
+                    }
+                    return
+                    
+                // 3- delete all records that:     'time' < 'time' (first item on the cache result)
+                case (count, offset, .none, .none, .none, Ordering.descending.rawValue, .none, 0):
+                    var lastObject: Message?
+                    let fetchRequest = retrieveMessageHistoryFetchRequest(firstMessageId:   nil,
+                                                                          fromTime:         nil,
+                                                                          messageId:        nil,
+                                                                          lastMessageId:    nil,
+                                                                          order:            nil,
+                                                                          query:            nil,
+                                                                          threadId:         threadId,
+                                                                          toTime:           nil,
+                                                                          uniqueId:         nil)
+                    do {
+                        if let result = try context.fetch(fetchRequest) as? [Message] {
+                            if result.count > 0 {
+                                lastObject = result.first!
+                            }
+                        }
+                    } catch {
+                        fatalError()
+                    }
+                    if let lObject = lastObject {
+                        if let lastObjectTime = lObject.time {
+                            deleteMessage(count:        nil,
+                                          fromTime:     nil,
+                                          messageId:    nil,
+                                          offset:       offset,
+                                          order:        order ?? Ordering.ascending.rawValue,
+                                          query:        nil,
+                                          threadId:     threadId,
+                                          toTime:       lastObjectTime,
+                                          uniqueId:     nil)
+                        }
+                    }
+                    return
+                    
+                    
+                
+                // 4- delete all records that:   'time' < result.first.time
+                // delete every message between result.first and result.last from cache
+                case (count, 0, .none, .none, .none, Ordering.ascending.rawValue, .none, _):
+                    deleteMessage(count:        nil,
+                                  fromTime:     nil,
+                                  messageId:    nil,
+                                  offset:       0,
+                                  order:        Ordering.ascending.rawValue,
+                                  query:        nil,
+                                  threadId:     threadId,
+                                  toTime:       messages.first!.time!,
+                                  uniqueId:     nil)
+                    
+                    deleteMessage(count:        nil,
+                                  fromTime:     messages.first!.time!,
+                                  messageId:    nil,
+                                  offset:       0,
+                                  order:        Ordering.ascending.rawValue,
+                                  query:        nil,
+                                  threadId:     threadId,
+                                  toTime:       messages.last!.time!,
+                                  uniqueId:     nil)
+                    return
+                    
+                // 5- delete all records that:   'time' > result.first.time
+                // delete every message between result.first and result.last from cache
+                case (count, 0, .none, .none, .none, Ordering.descending.rawValue, .none, _):
+                    deleteMessage(count:        nil,
+                                  fromTime:     messages.first!.time!, messageId: nil,
+                                  offset:       0,
+                                  order:        Ordering.descending.rawValue,
+                                  query:        nil,
+                                  threadId:     threadId,
+                                  toTime:       nil,
+                                  uniqueId:     nil)
+                    
+                    deleteMessage(count:        nil,
+                                  fromTime:     messages.first!.time!,
+                                  messageId:    nil,
+                                  offset:       0,
+                                  order:        Ordering.descending.rawValue,
+                                  query:        nil,
+                                  threadId:     threadId,
+                                  toTime:       messages.last!.time!,
+                                  uniqueId:     nil)
+                    return
+                    
+                // 6- if (result.last.previousId = nil) => delete all recored befor the result.last
+                // delete every message between result.first and result.last from cache
+                case (count, offset, .none, .none, .none, Ordering.ascending.rawValue, .none, _):
+                    if (messages.last!.previousId == nil) {
+                        deleteMessage(count:        nil,
+                                      fromTime:     nil,
+                                      messageId:    nil,
+                                      offset:       0,
+                                      order:        Ordering.ascending.rawValue,
+                                      query:        nil,
+                                      threadId:     threadId,
+                                      toTime:       messages.last!.time!,
+                                      uniqueId:     nil)
+                    }
+                    deleteMessage(count:        nil,
+                                  fromTime:     messages.first!.time!,
+                                  messageId:    nil,
+                                  offset:       0,
+                                  order:        Ordering.ascending.rawValue,
+                                  query:        nil,
+                                  threadId:     threadId,
+                                  toTime:       messages.last!.time!,
+                                  uniqueId:     nil)
+                    return
+                    
+                // 7- if (result.first.previousId = nil) => delete all recored befor the result.first
+                // delete every message between result.first and result.last from cache
+                case (count, offset, .none, .none, .none, Ordering.descending.rawValue, .none, _):
+                    if (messages.first!.previousId == nil) {
+                        deleteMessage(count:        nil,
+                                      fromTime:     nil,
+                                      messageId:    nil,
+                                      offset:       0,
+                                      order:        Ordering.descending.rawValue,
+                                      query:        nil,
+                                      threadId:     threadId,
+                                      toTime:       messages.last!.time!,
+                                      uniqueId:     nil)
+                    }
+                    deleteMessage(count:        nil,
+                                  fromTime:     messages.first!.time!,
+                                  messageId:    nil,
+                                  offset:       0,
+                                  order:        Ordering.descending.rawValue,
+                                  query:        nil,
+                                  threadId:     threadId,
+                                  toTime:       messages.last!.time!,
+                                  uniqueId:     nil)
+                    return
+                    
+//                // 8- delete the exact message with messageId
+//                case let (_, _, .some(theId), _, _, order, _, 0):
+//                    deleteMessage(count:        nil,
+//                                  fromTime:     nil,
+//                                  messageId:    theId,
+//                                  offset:       0,
+//                                  order:        order ?? Ordering.descending.rawValue,
+//                                  query:        nil,
+//                                  threadId:     threadId,
+//                                  toTime:       nil,
+//                                  uniqueId:     nil)
+//                    return
+//
+//                // 9- delete all result from cache
+//                case let (_, _, .none, _, _, _, .some(myQuery), _):
+//                    deleteMessage(count:        nil,
+//                                  fromTime:     nil,
+//                                  messageId:    nil,
+//                                  offset:       0,
+//                                  order:        order ?? Ordering.descending.rawValue,
+//                                  query:        myQuery,
+//                                  threadId:     threadId,
+//                                  toTime:       nil,
+//                                  uniqueId:     nil)
+//                    return
+                    
+                case let (count, offset, id, from, to, order, query, result):
+                    
+                    // 8- delete the exact message with messageId
+                    if let myId = id {
+                        if result == 0 {
+                            // delete the message with 'id' from cache
+                            deleteMessage(count:        nil,
+                                          fromTime:     nil,
+                                          messageId:    myId,
+                                          offset:       0,
+                                          order:        order ?? Ordering.descending.rawValue,
+                                          query:        nil,
+                                          threadId:     threadId,
+                                          toTime:       nil,
+                                          uniqueId:     nil)
+                        }
+                    }
+                    
+                    // 9- delete all result from cache with this query
+                    if let myQuery = query {
+                        // delete result of the cache + then add new result to the cache
+                        deleteMessage(count:        nil,
+                                      fromTime:     nil,
+                                      messageId:    nil,
+                                      offset:       0,
+                                      order:        order ?? Ordering.descending.rawValue,
+                                      query:        myQuery,
+                                      threadId:     threadId,
+                                      toTime:       nil,
+                                      uniqueId:     nil)
+                    }
+                    
+                    // 10- delete all result from cache in ftomTime, toTime boundry
+                    if (from != nil) || (to != nil) {
                         
-                        if (from != nil) && (to != nil) {
-                            deleteMessage(count: nil, fromTime: from, messageId: nil, offset: 0, order: order ?? Ordering.descending.rawValue, query: nil, threadId: threadId, toTime: to, uniqueId: nil)
+                        // Server response is empty
+                        if result == 0 {
                             
-                        } else if let fromTime = from {
-                            deleteMessage(count: nil, fromTime: fromTime, messageId: nil, offset: 0, order: order ?? Ordering.descending.rawValue, query: nil, threadId: threadId, toTime: nil, uniqueId: nil)
+                            if (from != nil) && (to != nil) {
+                                deleteMessage(count:        nil,
+                                              fromTime:     from,
+                                              messageId:    nil,
+                                              offset:       0,
+                                              order:        order ?? Ordering.descending.rawValue,
+                                              query:        nil,
+                                              threadId:     threadId,
+                                              toTime:       to,
+                                              uniqueId:     nil)
+                                
+                            } else if let fromTime = from {
+                                deleteMessage(count:        nil,
+                                              fromTime:     fromTime,
+                                              messageId:    nil,
+                                              offset:       0,
+                                              order:        order ?? Ordering.descending.rawValue,
+                                              query:        nil,
+                                              threadId:     threadId,
+                                              toTime:       nil,
+                                              uniqueId:     nil)
+                                
+                            } else if let toTime = to {
+                                deleteMessage(count:        nil,
+                                              fromTime:     nil,
+                                              messageId:    nil,
+                                              offset:       0,
+                                              order:        order ?? Ordering.descending.rawValue,
+                                              query:        nil,
+                                              threadId:     threadId,
+                                              toTime:       toTime,
+                                              uniqueId:     nil)
+                            }
                             
-                        } else if let toTime = to {
-                            deleteMessage(count: nil, fromTime: nil, messageId: nil, offset: 0, order: order ?? Ordering.descending.rawValue, query: nil, threadId: threadId, toTime: toTime, uniqueId: nil)
+                        }
+                            
+                        // Server response is not empty
+                        else {
+                            deleteMessage(count:        count,
+                                          fromTime:     from,
+                                          messageId:    nil,
+                                          offset:       offset,
+                                          order:        order ?? Ordering.descending.rawValue,
+                                          query:        nil,
+                                          threadId:     threadId,
+                                          toTime:       to,
+                                          uniqueId:     nil)
                         }
                         
                     }
-                        
-                        // Server response is not Empty [..., n-1, n, n+1, ...]
-                    else {
-                        deleteMessage(count: count, fromTime: from, messageId: nil, offset: offset, order: order ?? Ordering.descending.rawValue, query: nil, threadId: threadId, toTime: to, uniqueId: nil)
-                    }
                     
+                    return
                 }
-                
-                
             }
-            
-            
             
         }
         
@@ -659,206 +688,14 @@ extension Cache {
             _ = updateCMMessageEntity(withMessageObject: item)
         }
         
-        
-        
-        /*
-         // check if there is any information about Messages that are in the cache,
-         // which if it has been there, it we will update that data,
-         // otherwise we will create an object and save data on cache
-         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMMessage")
-         do {
-         if let result = try context.fetch(fetchRequest) as? [CMMessage] {
-         
-         // Part1:
-         // find data that are exist in the Cache, (and the response request is containing that). and delete them
-         for item in messages {
-         for itemInCache in result {
-         if let messageId = Int(exactly: itemInCache.id ?? 0) {
-         if (messageId == item.id) {
-         // the message object that we are going to create, is already exist in the Cache
-         // to update information in this object:
-         // we will delete them first, then we will create it again later
-         
-         itemInCache.conversation = nil
-         itemInCache.forwardInfo?.conversation = nil
-         itemInCache.forwardInfo?.participant = nil
-         itemInCache.forwardInfo = nil
-         itemInCache.participant = nil
-         itemInCache.replyInfo?.participant = nil
-         itemInCache.replyInfo = nil
-         context.delete(itemInCache)
-         
-         saveContext(subject: "Delete CMMessage Object")
-         }
-         }
-         
-         }
-         }
-         
-         // Part2:
-         // save data comes from server to the Cache
-         var allMessages = [CMMessage]()
-         
-         for item in messages {
-         let messageEntity = NSEntityDescription.entity(forEntityName: "CMMessage", in: context)
-         let message = CMMessage(entity: messageEntity!, insertInto: context)
-         
-         message.delivered   = item.delivered as NSNumber?
-         message.edited      = item.edited as NSNumber?
-         message.id          = item.id as NSNumber?
-         message.message     = item.message
-         message.messageType = item.messageType
-         message.metaData    = item.metaData
-         message.ownerId     = item.ownerId as NSNumber?
-         message.previousId  = item.previousId as NSNumber?
-         message.seen        = item.seen as NSNumber?
-         message.threadId    = item.threadId as NSNumber?
-         message.time        = item.time as NSNumber?
-         message.uniqueId    = item.uniqueId
-         
-         
-         let theConversationEntity = NSEntityDescription.entity(forEntityName: "CMConversation", in: context)
-         let theConversation = CMConversation(entity: theConversationEntity!, insertInto: context)
-         theConversation.admin                   = item.conversation?.admin as NSNumber?
-         theConversation.canEditInfo             = item.conversation?.canEditInfo as NSNumber?
-         theConversation.canSpam                 = item.conversation?.canSpam as NSNumber?
-         theConversation.descriptions            = item.conversation?.description
-         theConversation.group                   = item.conversation?.group as NSNumber?
-         theConversation.id                      = item.conversation?.id as NSNumber?
-         theConversation.image                   = item.conversation?.image
-         theConversation.joinDate                = item.conversation?.joinDate as NSNumber?
-         theConversation.lastMessage             = item.conversation?.lastMessage
-         theConversation.lastParticipantImage    = item.conversation?.lastParticipantImage
-         theConversation.lastParticipantName     = item.conversation?.lastParticipantName
-         theConversation.lastSeenMessageId       = item.conversation?.lastSeenMessageId as NSNumber?
-         theConversation.metadata                = item.conversation?.metadata
-         theConversation.mute                    = item.conversation?.mute as NSNumber?
-         theConversation.participantCount        = item.conversation?.participantCount as NSNumber?
-         theConversation.partner                 = item.conversation?.partner as NSNumber?
-         theConversation.partnerLastDeliveredMessageId   = item.conversation?.partnerLastDeliveredMessageId as NSNumber?
-         theConversation.partnerLastSeenMessageId        = item.conversation?.partnerLastSeenMessageId as NSNumber?
-         theConversation.title                   = item.conversation?.title
-         theConversation.time                    = item.conversation?.time as NSNumber?
-         theConversation.type                    = item.conversation?.time as NSNumber?
-         theConversation.unreadCount             = item.conversation?.unreadCount as NSNumber?
-         
-         message.conversation = theConversation
-         
-         
-         let theForwardInfoEntity = NSEntityDescription.entity(forEntityName: "CMForwardInfo", in: context)
-         let theForwardInfo = CMForwardInfo(entity: theForwardInfoEntity!, insertInto: context)
-         let theForwardInfoParticipantEntity = NSEntityDescription.entity(forEntityName: "CMParticipant", in: context)
-         let theForwardInfoParticipant = CMParticipant(entity: theForwardInfoParticipantEntity!, insertInto: context)
-         theForwardInfoParticipant.admin             = item.forwardInfo?.participant?.admin as NSNumber?
-         theForwardInfoParticipant.blocked           = item.forwardInfo?.participant?.blocked as NSNumber?
-         theForwardInfoParticipant.cellphoneNumber   = item.forwardInfo?.participant?.cellphoneNumber
-         theForwardInfoParticipant.contactId         = item.forwardInfo?.participant?.contactId as NSNumber?
-         theForwardInfoParticipant.coreUserId        = item.forwardInfo?.participant?.coreUserId as NSNumber?
-         theForwardInfoParticipant.email             = item.forwardInfo?.participant?.email
-         theForwardInfoParticipant.firstName         = item.forwardInfo?.participant?.firstName
-         theForwardInfoParticipant.id                = item.forwardInfo?.participant?.id as NSNumber?
-         theForwardInfoParticipant.image             = item.forwardInfo?.participant?.image
-         theForwardInfoParticipant.lastName          = item.forwardInfo?.participant?.lastName
-         theForwardInfoParticipant.myFriend          = item.forwardInfo?.participant?.myFriend as NSNumber?
-         theForwardInfoParticipant.name              = item.forwardInfo?.participant?.name
-         theForwardInfoParticipant.notSeenDuration   = item.forwardInfo?.participant?.notSeenDuration as NSNumber?
-         theForwardInfoParticipant.online            = item.forwardInfo?.participant?.online as NSNumber?
-         theForwardInfoParticipant.receiveEnable     = item.forwardInfo?.participant?.receiveEnable as NSNumber?
-         theForwardInfoParticipant.sendEnable        = item.forwardInfo?.participant?.sendEnable as NSNumber?
-         let theForwardInfoConversationEntity = NSEntityDescription.entity(forEntityName: "CMConversation", in: context)
-         let theForwardInfoConversation = CMConversation(entity: theForwardInfoConversationEntity!, insertInto: context)
-         theForwardInfoConversation.admin                   = item.forwardInfo?.conversation?.admin as NSNumber?
-         theForwardInfoConversation.canEditInfo             = item.forwardInfo?.conversation?.canEditInfo as NSNumber?
-         theForwardInfoConversation.canSpam                 = item.forwardInfo?.conversation?.canSpam as NSNumber?
-         theForwardInfoConversation.descriptions            = item.forwardInfo?.conversation?.description
-         theForwardInfoConversation.group                   = item.forwardInfo?.conversation?.group as NSNumber?
-         theForwardInfoConversation.id                      = item.forwardInfo?.conversation?.id as NSNumber?
-         theForwardInfoConversation.image                   = item.forwardInfo?.conversation?.image
-         theForwardInfoConversation.joinDate                = item.forwardInfo?.conversation?.joinDate as NSNumber?
-         theForwardInfoConversation.lastMessage             = item.forwardInfo?.conversation?.lastMessage
-         theForwardInfoConversation.lastParticipantImage    = item.forwardInfo?.conversation?.lastParticipantImage
-         theForwardInfoConversation.lastParticipantName     = item.forwardInfo?.conversation?.lastParticipantName
-         theForwardInfoConversation.lastSeenMessageId       = item.forwardInfo?.conversation?.lastSeenMessageId as NSNumber?
-         theForwardInfoConversation.metadata                = item.forwardInfo?.conversation?.metadata
-         theForwardInfoConversation.mute                    = item.forwardInfo?.conversation?.mute as NSNumber?
-         theForwardInfoConversation.participantCount        = item.forwardInfo?.conversation?.participantCount as NSNumber?
-         theForwardInfoConversation.partner                 = item.forwardInfo?.conversation?.partner as NSNumber?
-         theForwardInfoConversation.partnerLastDeliveredMessageId   = item.forwardInfo?.conversation?.partnerLastDeliveredMessageId as NSNumber?
-         theForwardInfoConversation.partnerLastSeenMessageId        = item.forwardInfo?.conversation?.partnerLastSeenMessageId as NSNumber?
-         theForwardInfoConversation.title                   = item.forwardInfo?.conversation?.title
-         theForwardInfoConversation.time                    = item.forwardInfo?.conversation?.time as NSNumber?
-         theForwardInfoConversation.type                    = item.forwardInfo?.conversation?.time as NSNumber?
-         theForwardInfoConversation.unreadCount             = item.forwardInfo?.conversation?.unreadCount as NSNumber?
-         
-         theForwardInfo.participant = theForwardInfoParticipant
-         theForwardInfo.conversation = theForwardInfoConversation
-         
-         message.forwardInfo = theForwardInfo
-         
-         
-         let theParticipantEntity = NSEntityDescription.entity(forEntityName: "CMParticipant", in: context)
-         let theParticipant = CMParticipant(entity: theParticipantEntity!, insertInto: context)
-         theParticipant.admin            = item.participant?.admin as NSNumber?
-         theParticipant.blocked          = item.participant?.blocked as NSNumber?
-         theParticipant.cellphoneNumber  = item.participant?.cellphoneNumber
-         theParticipant.contactId        = item.participant?.contactId as NSNumber?
-         theParticipant.coreUserId       = item.participant?.coreUserId as NSNumber?
-         theParticipant.email            = item.participant?.email
-         theParticipant.firstName        = item.participant?.firstName
-         theParticipant.id               = item.participant?.id as NSNumber?
-         theParticipant.image            = item.participant?.image
-         theParticipant.lastName         = item.participant?.lastName
-         theParticipant.myFriend         = item.participant?.myFriend as NSNumber?
-         theParticipant.name             = item.participant?.name
-         theParticipant.notSeenDuration  = item.participant?.notSeenDuration as NSNumber?
-         theParticipant.online           = item.participant?.online as NSNumber?
-         theParticipant.receiveEnable    = item.participant?.receiveEnable as NSNumber?
-         theParticipant.sendEnable       = item.participant?.sendEnable as NSNumber?
-         message.participant = theParticipant
-         
-         
-         let theReplyInfoEntity = NSEntityDescription.entity(forEntityName: "CMReplyInfo", in: context)
-         let theReplyInfo = CMReplyInfo(entity: theReplyInfoEntity!, insertInto: context)
-         theReplyInfo.deletedd           = item.replyInfo?.deleted as NSNumber?
-         theReplyInfo.repliedToMessageId = item.replyInfo?.repliedToMessageId as NSNumber?
-         theReplyInfo.message            = item.replyInfo?.message
-         theReplyInfo.messageType        = item.replyInfo?.messageType as NSNumber?
-         theReplyInfo.metadata           = item.replyInfo?.metadata
-         theReplyInfo.systemMetadata     = item.replyInfo?.systemMetadata
-         let theReplyInfoParticipantEntity = NSEntityDescription.entity(forEntityName: "CMParticipant", in: context)
-         let theReplyInfoParticipant = CMParticipant(entity: theReplyInfoParticipantEntity!, insertInto: context)
-         theReplyInfoParticipant.admin            = item.replyInfo?.participant?.admin as NSNumber?
-         theReplyInfoParticipant.blocked          = item.replyInfo?.participant?.blocked as NSNumber?
-         theReplyInfoParticipant.cellphoneNumber  = item.replyInfo?.participant?.cellphoneNumber
-         theReplyInfoParticipant.contactId        = item.replyInfo?.participant?.contactId as NSNumber?
-         theReplyInfoParticipant.coreUserId       = item.replyInfo?.participant?.coreUserId as NSNumber?
-         theReplyInfoParticipant.email            = item.replyInfo?.participant?.email
-         theReplyInfoParticipant.firstName        = item.replyInfo?.participant?.firstName
-         theReplyInfoParticipant.id               = item.replyInfo?.participant?.id as NSNumber?
-         theReplyInfoParticipant.image            = item.replyInfo?.participant?.image
-         theReplyInfoParticipant.lastName         = item.replyInfo?.participant?.lastName
-         theReplyInfoParticipant.myFriend         = item.replyInfo?.participant?.myFriend as NSNumber?
-         theReplyInfoParticipant.name             = item.replyInfo?.participant?.name
-         theReplyInfoParticipant.notSeenDuration  = item.replyInfo?.participant?.notSeenDuration as NSNumber?
-         theReplyInfoParticipant.online           = item.replyInfo?.participant?.online as NSNumber?
-         theReplyInfoParticipant.receiveEnable    = item.replyInfo?.participant?.receiveEnable as NSNumber?
-         theReplyInfoParticipant.sendEnable       = item.replyInfo?.participant?.sendEnable as NSNumber?
-         theReplyInfo.participant = theReplyInfoParticipant
-         
-         message.replyInfo = theReplyInfo
-         
-         allMessages.append(message)
-         }
-         
-         saveContext(subject: "Update Messages")
-         }
-         } catch {
-         fatalError("Error on fetching list of CMConversation")
-         }
-         */
-        
     }
     
+    
+    public func saveMessageGap(threadId: Int, messageIds: [Int], messagePreviousIds: [Int]) {
+        for (index, msgId) in messageIds.enumerated() {
+            updateMessageGapEntity(inThreadId: threadId, withMessageId: msgId, withPreviousId: messagePreviousIds[index])
+        }
+    }
     
     
     // this function will save (or update) uploaded image response that comes from server, in the Cache.

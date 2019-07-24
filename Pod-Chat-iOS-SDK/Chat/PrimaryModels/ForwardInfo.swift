@@ -10,10 +10,6 @@ import Foundation
 import SwiftyJSON
 
 
-//#######################################################################################
-//#############################      ForwardInfo        (formatDataToMakeForwardInfo)
-//#######################################################################################
-
 open class ForwardInfo {
     /*
      * + forwardInfo        ForwardInfo:

@@ -107,6 +107,7 @@
         <attribute name="notSeenDuration" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="online" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="receiveEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="roles" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="sendEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="dummyConversationInviter" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="inviter" inverseEntity="CMConversation" syncable="YES"/>
         <relationship name="dummyConversationParticipants" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="participants" inverseEntity="CMConversation" syncable="YES"/>
@@ -161,6 +162,11 @@
         <attribute name="roles" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="conversation" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="dummyUserRoles" inverseEntity="CMConversation" syncable="YES"/>
+    </entity>
+    <entity name="MessageGaps" representedClassName=".MessageGaps" syncable="YES">
+        <attribute name="messageId" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="previousId" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="threadId" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
     </entity>
     <entity name="PhoneContact" representedClassName=".PhoneContact" syncable="YES">
         <attribute name="cellphoneNumber" optional="YES" attributeType="String" syncable="YES"/>
@@ -232,6 +238,12 @@
         <attribute name="xC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="yC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
     </entity>
+    <entity name="ThreadAdmins" representedClassName=".ThreadAdmins" syncable="YES">
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="roles" attributeType="Transformable" syncable="YES"/>
+        <attribute name="threadId" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="userId" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+    </entity>
     <elements>
         <element name="CMBlockedContact" positionX="-461.90234375" positionY="-78.6953125" width="128" height="105"/>
         <element name="CMContact" positionX="-307.48828125" positionY="-144.9375" width="128" height="240"/>
@@ -239,13 +251,14 @@
         <element name="CMForwardInfo" positionX="44.06640625" positionY="6.28515625" width="128" height="90"/>
         <element name="CMLinkedUser" positionX="-319.42578125" positionY="117.296875" width="128" height="135"/>
         <element name="CMMessage" positionX="-287.66796875" positionY="271.8515625" width="128" height="330"/>
-        <element name="CMParticipant" positionX="349.671875" positionY="95.74609375" width="128" height="360"/>
+        <element name="CMParticipant" positionX="349.671875" positionY="95.74609375" width="128" height="375"/>
         <element name="CMReplyInfo" positionX="166.9453125" positionY="487.76171875" width="128" height="180"/>
         <element name="CMThreadParticipants" positionX="80.10546875" positionY="-125.96875" width="128" height="90"/>
         <element name="CMUploadFile" positionX="-461.58984375" positionY="539" width="128" height="90"/>
         <element name="CMUploadImage" positionX="-460.42578125" positionY="37.66796875" width="128" height="150"/>
         <element name="CMUser" positionX="-463.83984375" positionY="196.234375" width="128" height="180"/>
         <element name="CMUserRole" positionX="-54" positionY="243" width="128" height="120"/>
+        <element name="MessageGaps" positionX="293.2421875" positionY="-115.6953125" width="128" height="90"/>
         <element name="PhoneContact" positionX="-261" positionY="0" width="128" height="105"/>
         <element name="QueueOfEditMessages" positionX="-243" positionY="18" width="128" height="135"/>
         <element name="QueueOfFileMessages" positionX="-261" positionY="0" width="128" height="270"/>
@@ -253,5 +266,6 @@
         <element name="QueueOfTextMessages" positionX="-252" positionY="9" width="128" height="150"/>
         <element name="QueueOfUploadFiles" positionX="-252" positionY="9" width="128" height="150"/>
         <element name="QueueOfUploadImages" positionX="-261" positionY="0" width="128" height="210"/>
+        <element name="ThreadAdmins" positionX="-261" positionY="0" width="128" height="105"/>
     </elements>
 </model>

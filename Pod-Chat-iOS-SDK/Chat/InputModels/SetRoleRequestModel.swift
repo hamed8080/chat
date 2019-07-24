@@ -17,7 +17,12 @@ open class SetRoleRequestModel {
     public let uniqueId:        String?
     public let userId:          Int
     
-    public init(roles: [Roles], roleOperation: RoleOperations, threadId: Int, typeCode: String?, uniqueId: String?, userId: Int) {
+    public init(roles:          [Roles],
+                roleOperation:  RoleOperations,
+                threadId:       Int,
+                typeCode:       String?,
+                uniqueId:       String?,
+                userId:         Int) {
         for item in roles {
             self.roles.append(item.rawValue)
         }

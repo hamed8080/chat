@@ -10,10 +10,6 @@ import Foundation
 import SwiftyJSON
 
 
-//#######################################################################################
-//#############################      Participant        (formatDataToMakeParticipant)
-//#######################################################################################
-
 open class Participant {
     /*
      * + ParticipantVO      Participant:
@@ -47,6 +43,7 @@ open class Participant {
     public let notSeenDuration: Int?
     public let online:          Bool?
     public let receiveEnable:   Bool?
+    public let roles:           [String]?
     public let sendEnable:      Bool?
     
     public init(messageContent: JSON, threadId: Int?) {
@@ -65,25 +62,35 @@ open class Participant {
         self.notSeenDuration    = messageContent["notSeenDuration"].int
         self.online             = messageContent["online"].bool
         self.receiveEnable      = messageContent["receiveEnable"].bool
+        
+        var adminRoles = [String]()
+        if let myRoles = messageContent["roles"].arrayObject as! [String]? {
+            for role in myRoles {
+                adminRoles.append(role)
+            }
+        }
+        (adminRoles.count > 0) ? (self.roles = adminRoles) : (self.roles = nil)
+        
         self.sendEnable         = messageContent["sendEnable"].bool
     }
     
-    public init(admin:             Bool?,
-                blocked:           Bool?,
-                cellphoneNumber:   String?,
-                contactId:         Int?,
-                coreUserId:        Int?,
-                email:             String?,
-                firstName:         String?,
-                id:                Int?,
-                image:             String?,
-                lastName:          String?,
-                myFriend:          Bool?,
-                name:              String?,
-                notSeenDuration:   Int?,
-                online:            Bool?,
-                receiveEnable:     Bool?,
-                sendEnable:        Bool?) {
+    public init(admin:              Bool?,
+                blocked:            Bool?,
+                cellphoneNumber:    String?,
+                contactId:          Int?,
+                coreUserId:         Int?,
+                email:              String?,
+                firstName:          String?,
+                id:                 Int?,
+                image:              String?,
+                lastName:           String?,
+                myFriend:           Bool?,
+                name:               String?,
+                notSeenDuration:    Int?,
+                online:             Bool?,
+                receiveEnable:      Bool?,
+                roles:              [String]?,
+                sendEnable:         Bool?) {
         
         self.admin              = admin
         self.blocked            = blocked
@@ -100,6 +107,7 @@ open class Participant {
         self.notSeenDuration    = notSeenDuration
         self.online             = online
         self.receiveEnable      = receiveEnable
+        self.roles              = roles
         self.sendEnable         = sendEnable
     }
     
@@ -120,6 +128,7 @@ open class Participant {
         self.notSeenDuration    = theParticipant.notSeenDuration
         self.online             = theParticipant.online
         self.receiveEnable      = theParticipant.receiveEnable
+        self.roles              = theParticipant.roles
         self.sendEnable         = theParticipant.sendEnable
     }
     
@@ -144,6 +153,7 @@ open class Participant {
                             "notSeenDuration":  notSeenDuration ?? NSNull(),
                             "online":           online ?? NSNull(),
                             "receiveEnable":    receiveEnable ?? NSNull(),
+                            "roles":            roles ?? NSNull(),
                             "sendEnable":       sendEnable ?? NSNull()]
         return result
     }
