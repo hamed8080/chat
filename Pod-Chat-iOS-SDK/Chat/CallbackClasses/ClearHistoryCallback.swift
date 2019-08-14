@@ -21,25 +21,41 @@ extension Chat {
          *
          */
         log.verbose("Message of type 'CLEAR_HISTORY' recieved", context: "Chat")
+        
+        let returnData = CreateReturnData(hasError:       false,
+                                          errorMessage:   "",
+                                          errorCode:      0,
+                                          result:         nil,
+                                          resultAsArray:  nil,
+                                          resultAsString: message.content,
+                                          contentCount:   nil,
+                                          subjectId:      message.subjectId)
+        //                .returnJSON()
+        
+        if enableCache {
+            
+        }
+        
         if Chat.map[message.uniqueId] != nil {
-            let returnData: JSON = CreateReturnData(hasError:       false,
-                                                    errorMessage:   "",
-                                                    errorCode:      0,
-                                                    result:         nil,
-                                                    resultAsString: message.content,
-                                                    contentCount:   nil,
-                                                    subjectId:      message.subjectId)
-                .returnJSON()
-            
-            if enableCache {
-                
-            }
-            
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-            callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
+            callback.onResultCallback(uID:      message.uniqueId,
+                                      response: returnData,
+                                      success:  { (successJSON) in
                 self.clearHistoryCallbackToUser?(successJSON)
             }) { _ in }
             Chat.map.removeValue(forKey: message.uniqueId)
+            
+        } else if (Chat.spamMap[message.uniqueId] != nil) {
+            let callback: CallbackProtocol = Chat.spamMap[message.uniqueId]!.first!
+            callback.onResultCallback(uID:      message.uniqueId,
+                                      response: returnData,
+                                      success:  { (successJSON) in
+                                        self.spamPvThreadCallbackToUser?(successJSON)
+            }) { _ in }
+            Chat.spamMap[message.uniqueId]?.removeFirst()
+            if (Chat.spamMap[message.uniqueId]!.count < 1) {
+                Chat.spamMap.removeValue(forKey: message.uniqueId)
+            }
         }
         
     }
@@ -51,7 +67,7 @@ extension Chat {
             self.mySendMessageParams = parameters
         }
         func onResultCallback(uID:      String,
-                              response: JSON,
+                              response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
             /*
@@ -61,11 +77,15 @@ extension Chat {
              */
             log.verbose("ClearHistoryCallback", context: "Chat")
             
-            let hasError = response["hasError"].boolValue
-            
-            if (!hasError) {
-                success(response)
+            if let content = response.resultAsString {
+                let clearHistoryModel = ClearHistoryModel(threadId:     Int(content) ?? 0,
+                                                          hasError:     response.hasError,
+                                                          errorMessage: response.errorMessage,
+                                                          errorCode:    response.errorCode)
+                
+                success(clearHistoryModel)
             }
+            
         }
         
     }

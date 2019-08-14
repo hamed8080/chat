@@ -15,13 +15,16 @@ public typealias callbackTypeAliasString = (String) -> ()
 public typealias callbackTypeAliasFloat = (Float) -> ()
 
 protocol CallbackProtocol: class {
-    func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias)
+    func onResultCallback(uID:      String,
+                          response: CreateReturnData,
+                          success:  @escaping callbackTypeAlias,
+                          failure:  @escaping callbackTypeAlias)
 }
 
 protocol CallbackProtocolWith3Calls: class {
-    func onSent(uID: String, response: JSON, success: @escaping callbackTypeAlias)
-    func onDeliver(uID: String, response: JSON, success: @escaping callbackTypeAlias)
-    func onSeen(uID: String, response: JSON, success: @escaping callbackTypeAlias)
+    func onSent(uID: String,    response: CreateReturnData, success: @escaping callbackTypeAlias)
+    func onDeliver(uID: String, response: CreateReturnData, success: @escaping callbackTypeAlias)
+    func onSeen(uID: String,    response: CreateReturnData, success: @escaping callbackTypeAlias)
 }
 
 

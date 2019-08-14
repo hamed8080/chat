@@ -1,23 +1,23 @@
 //
-//  ClearHistoryModel.swift
+//  EditMessageModel.swift
 //  FanapPodChatSDK
 //
-//  Created by Mahyar Zhiani on 2/23/1398 AP.
+//  Created by Mahyar Zhiani on 5/7/1398 AP.
 //  Copyright © 1398 Mahyar Zhiani. All rights reserved.
 //
 
 import Foundation
 import SwiftyJSON
 
-open class ClearHistoryModel {
+open class EditMessageModel {
     
-    // AddParticipant model properties
+    // EditMessageModel model properties
     public let hasError:           Bool
     public let errorMessage:       String
     public let errorCode:          Int
     
     // result model
-    public var threadId:           Int
+    public var editedMessage:       Message?
     
     public init(messageContent: JSON,
                 hasError:       Bool,
@@ -28,10 +28,10 @@ open class ClearHistoryModel {
         self.errorMessage       = errorMessage
         self.errorCode          = errorCode
         
-        self.threadId = messageContent["threadId"].intValue
+        self.editedMessage = Message(threadId: messageContent["conversation"]["id"].int, pushMessageVO: messageContent)
     }
     
-    public init(threadId:       Int,
+    public init(message:        Message?,
                 hasError:       Bool,
                 errorMessage:   String,
                 errorCode:      Int) {
@@ -39,12 +39,11 @@ open class ClearHistoryModel {
         self.hasError           = hasError
         self.errorMessage       = errorMessage
         self.errorCode          = errorCode
-        
-        self.threadId = threadId
     }
     
+    
     public func returnDataAsJSON() -> JSON {
-        let result: JSON = ["threadId":     threadId]
+        let result: JSON = ["editedMessage":    editedMessage?.formatToJSON() ?? NSNull()]
         let finalResult: JSON = ["result":      result,
                                  "hasError":    hasError,
                                  "errorMessage": errorMessage,
@@ -52,4 +51,5 @@ open class ClearHistoryModel {
         
         return finalResult
     }
+    
 }

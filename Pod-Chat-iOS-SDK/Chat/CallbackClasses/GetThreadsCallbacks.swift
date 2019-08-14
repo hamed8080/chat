@@ -43,17 +43,18 @@ extension Chat {
          *
          */
         log.verbose("Message of type 'GET_THREADS' recieved", context: "Chat")
+        
+        let returnData = CreateReturnData(hasError:         false,
+                                          errorMessage:     "",
+                                          errorCode:        0,
+                                          result:           nil,
+                                          resultAsArray:    message.content?.convertToJSON().array,
+                                          resultAsString:   nil,
+                                          contentCount:     message.contentCount,
+                                          subjectId:        message.subjectId)
+        
         if (Chat.map[message.uniqueId] != nil) {
             if (message.uniqueId != "") {
-                let returnData: JSON = CreateReturnData(hasError:       false,
-                                                        errorMessage:   "",
-                                                        errorCode:      0,
-                                                        result:         message.content?.convertToJSON(),
-                                                        resultAsString: nil,
-                                                        contentCount:   message.contentCount,
-                                                        subjectId:      message.subjectId)
-                    .returnJSON()
-                
                 if enableCache {
                     var conversations = [Conversation]()
                     for item in message.content?.convertToJSON() ?? [:] {
@@ -64,7 +65,9 @@ extension Chat {
                 }
                 
                 let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-                callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
+                callback.onResultCallback(uID:      message.uniqueId,
+                                          response: returnData,
+                                          success:  { (successJSON) in
                     self.threadsCallbackToUser?(successJSON)
                 }) { _ in }
                 Chat.map.removeValue(forKey: message.uniqueId)
@@ -78,7 +81,7 @@ extension Chat {
                         }
                     }
                     var cacheThreadIds: [Int] = []
-                    let cacheThreadModel = Chat.cacheDB.retrieveThreads(ascending: true, count: 100000, name: nil, offset: 0, threadIds: nil, timeStamp: cacheTimeStamp)
+                    let cacheThreadModel = Chat.cacheDB.retrieveThreads(ascending: false, count: 100000, name: nil, offset: 0, threadIds: nil, timeStamp: cacheTimeStamp)
                     for thread in cacheThreadModel?.threads ?? [] {
                         if let thID = thread.id {
                             cacheThreadIds.append(thID)
@@ -105,7 +108,7 @@ extension Chat {
         }
         
         func onResultCallback(uID:      String,
-                              response: JSON,
+                              response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
             /*
@@ -116,15 +119,15 @@ extension Chat {
              */
             log.verbose("GetThreadsCallbacks", context: "Chat")
             
-            if (!response["hasError"].boolValue) {
+            if let arrayContent = response.resultAsArray {
                 let content = sendParams.content?.convertToJSON()
-                let getThreadsModel = GetThreadsModel(messageContent:   response["result"].arrayValue,
-                                                      contentCount:     response["contentCount"].intValue,
+                let getThreadsModel = GetThreadsModel(messageContent:   arrayContent,
+                                                      contentCount:     response.contentCount,
                                                       count:            content?["count"].intValue ?? 0,
                                                       offset:           content?["offset"].intValue ?? 0,
-                                                      hasError:         response["hasError"].boolValue,
-                                                      errorMessage:     response["errorMessage"].stringValue,
-                                                      errorCode:        response["errorCode"].intValue)
+                                                      hasError:         response.hasError,
+                                                      errorMessage:     response.errorMessage,
+                                                      errorCode:        response.errorCode)
                 success(getThreadsModel)
             }
         }

@@ -21,18 +21,21 @@ extension Chat {
          *
          */
         log.verbose("Message of type 'GET_MESSAGE_DELEVERY_PARTICIPANTS' recieved", context: "Chat")
+        
+        let returnData = CreateReturnData(hasError:         false,
+                                          errorMessage:     "",
+                                          errorCode:        0,
+                                          result:           nil,
+                                          resultAsArray:    message.content?.convertToJSON().array,
+                                          resultAsString:   nil,
+                                          contentCount:     message.contentCount,
+                                          subjectId:        message.subjectId)
+        
         if Chat.map[message.uniqueId] != nil {
-            let returnData: JSON = CreateReturnData(hasError:       false,
-                                                    errorMessage:   "",
-                                                    errorCode:      0,
-                                                    result:         message.content?.convertToJSON() ?? [:],
-                                                    resultAsString: nil,
-                                                    contentCount:   message.contentCount,
-                                                    subjectId:      message.subjectId)
-                .returnJSON()
-            
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-            callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
+            callback.onResultCallback(uID:      message.uniqueId,
+                                      response: returnData,
+                                      success:  { (successJSON) in
                 self.getMessageDeliverListCallbackToUser?(successJSON)
             }) { _ in }
             Chat.map.removeValue(forKey: message.uniqueId)
@@ -48,18 +51,21 @@ extension Chat {
             self.sendParams = parameters
         }
         
-        func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
+        func onResultCallback(uID:      String,
+                              response: CreateReturnData,
+                              success:  @escaping callbackTypeAlias,
+                              failure:  @escaping callbackTypeAlias) {
             
-            if (!response["hasError"].boolValue) {
+            if let arrayContent = response.resultAsArray {
                 let content = sendParams.content?.convertToJSON()
                 
-                let getBlockedModel = GetThreadParticipantsModel(messageContent: response["result"].arrayValue,
-                                                                 contentCount:  response["contentCount"].intValue,
+                let getBlockedModel = GetThreadParticipantsModel(messageContent: arrayContent,
+                                                                 contentCount:  response.contentCount,
                                                                  count:         content?["count"].intValue ?? 0,
                                                                  offset:        content?["offset"].intValue ?? 0,
-                                                                 hasError:      response["hasError"].boolValue,
-                                                                 errorMessage:  response["errorMessage"].stringValue,
-                                                                 errorCode:     response["errorCode"].intValue)
+                                                                 hasError:      response.hasError,
+                                                                 errorMessage:  response.errorMessage,
+                                                                 errorCode:     response.errorCode)
                 success(getBlockedModel)
             }
         }

@@ -40,25 +40,26 @@ extension Chat {
          *
          */
         log.verbose("Message of type 'GET_CONTACTS' recieved", context: "Chat")
-        if Chat.map[message.uniqueId] != nil {
-            let returnData: JSON = CreateReturnData(hasError:       false,
-                                                    errorMessage:   "",
-                                                    errorCode:      0,
-                                                    result:         message.content?.convertToJSON() ?? [:],
-                                                    resultAsString: nil,
-                                                    contentCount:   message.contentCount,
-                                                    subjectId:      message.subjectId)
-                .returnJSON()
-            
-            if enableCache {
-                var contacts = [Contact]()
-                for item in message.content?.convertToJSON() ?? [:] {
-                    let myContact = Contact(messageContent: item.1)
-                    contacts.append(myContact)
-                }
-                Chat.cacheDB.saveContact(withContactObjects: contacts)
+        
+        let returnData = CreateReturnData(hasError:         false,
+                                          errorMessage:     "",
+                                          errorCode:        0,
+                                          result:           nil,
+                                          resultAsArray:    message.content?.convertToJSON().array,
+                                          resultAsString:   nil,
+                                          contentCount:     message.contentCount,
+                                          subjectId:        message.subjectId)
+        
+        if enableCache {
+            var contacts = [Contact]()
+            for item in message.content?.convertToJSON() ?? [:] {
+                let myContact = Contact(messageContent: item.1)
+                contacts.append(myContact)
             }
-            
+            Chat.cacheDB.saveContact(withContactObjects: contacts)
+        }
+        
+        if Chat.map[message.uniqueId] != nil {
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
             callback.onResultCallback(uID:      message.uniqueId,
                                       response: returnData,
@@ -79,7 +80,7 @@ extension Chat {
         }
         
         func onResultCallback(uID:      String,
-                              response: JSON,
+                              response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
             /*
@@ -89,15 +90,15 @@ extension Chat {
              *
              */
             log.verbose("GetContactsCallback", context: "Chat")
-            if (!response["hasError"].boolValue) {
+            if let arrayContent = response.resultAsArray {
                 let content = sendParams.content?.convertToJSON()
-                let getContactsModel = GetContactsModel(messageContent: response["result"].arrayValue,
-                                                        contentCount:   response["contentCount"].intValue,
+                let getContactsModel = GetContactsModel(messageContent: arrayContent,
+                                                        contentCount:   response.contentCount,
                                                         count:          content?["count"].intValue ?? 0,
                                                         offset:         content?["offset"].intValue ?? 0,
-                                                        hasError:       response["hasError"].boolValue,
-                                                        errorMessage:   response["errorMessage"].stringValue,
-                                                        errorCode:      response["errorCode"].intValue)
+                                                        hasError:       response.hasError,
+                                                        errorMessage:   response.errorMessage,
+                                                        errorCode:      response.errorCode)
                 success(getContactsModel)
             }
         }

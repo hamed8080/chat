@@ -41,12 +41,3 @@ public class Cache {
 }
 
 
-    // UpdateDataOnCache
-
-    // SaveDataToCache + DeleteDataFromCache
-
-    // RetrieveData
-
-    // QueueOnCache
-
-

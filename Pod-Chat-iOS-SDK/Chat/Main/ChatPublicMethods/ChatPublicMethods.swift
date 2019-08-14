@@ -16,6 +16,12 @@ import SwiftyJSON
 extension Chat {
     
     
+    
+    public func deleteCache() {
+        Chat.cacheDB.deleteCacheData()
+    }
+    
+    
     /*
      Deliver:
      send deliver for some message.

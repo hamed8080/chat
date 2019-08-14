@@ -39,9 +39,8 @@ open class UserInfoModel {
     public let hasError:           Bool
     public let errorMessage:       String
     public let errorCode:          Int
-    public let user:               User
     
-    public var userJSON: JSON = [:]
+    public let user:               User
     
     public init(messageContent: JSON,
                 hasError:       Bool,
@@ -52,7 +51,6 @@ open class UserInfoModel {
         self.errorCode      = errorCode
         
         self.user           = User(messageContent: messageContent)
-        self.userJSON       = user.formatToJSON()
     }
     
     public init(userObject:     User,
@@ -65,16 +63,15 @@ open class UserInfoModel {
         self.errorCode      = errorCode
         
         self.user           = userObject
-        self.userJSON       = user.formatToJSON()
     }
     
     public func returnDataAsJSON() -> JSON {
-        let result: JSON = ["user": userJSON]
+        let result: JSON = ["user":     user.formatToJSON()]
         
-        let resultAsJSON: JSON = ["result": result,
-                                  "hasError": hasError,
+        let resultAsJSON: JSON = ["result":     result,
+                                  "hasError":   hasError,
                                   "errorMessage": errorMessage,
-                                  "errorCode": errorCode]
+                                  "errorCode":  errorCode]
         
         return resultAsJSON
     }

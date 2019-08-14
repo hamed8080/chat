@@ -180,7 +180,7 @@ extension Cache {
                         result.first!.type                   = myThread.time as NSNumber?
                         result.first!.unreadCount            = myThread.unreadCount as NSNumber?
                         if let threadInviter = myThread.inviter {
-                            let inviterObject = updateCMParticipantEntity(withParticipantsObject: threadInviter)
+                            let inviterObject = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: threadInviter)
                             result.first!.inviter = inviterObject
                         }
                         if let threadLastMessageVO = myThread.lastMessageVO {
@@ -190,12 +190,14 @@ extension Cache {
                         if let threadParticipants = myThread.participants {
                             var threadParticipantsArr = [CMParticipant]()
                             for item in threadParticipants {
-                                if let threadparticipant = updateCMParticipantEntity(withParticipantsObject: item) {
+                                if let threadparticipant = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: item) {
                                     threadParticipantsArr.append(threadparticipant)
-                                    updateThreadParticipantEntity(inThreadId: Int(exactly: result.first!.id!)!, withParticipantId: Int(exactly: threadparticipant.id!)!)
+//                                    updateThreadParticipantEntity(inThreadId: Int(exactly: result.first!.id!)!, withParticipantId: Int(exactly: threadparticipant.id!)!)
+//                                    result.first!.participants?.append(threadparticipant)
+                                    
                                 }
                             }
-                            result.first!.participants = threadParticipantsArr
+                            result.first!.addToParticipants(threadParticipantsArr)
                         }
                         conversationToReturn = result.first!
                         
@@ -226,7 +228,7 @@ extension Cache {
                         conversation.type                   = myThread.time as NSNumber?
                         conversation.unreadCount            = myThread.unreadCount as NSNumber?
                         if let threadInviter = myThread.inviter {
-                            let inviterObject = updateCMParticipantEntity(withParticipantsObject: threadInviter)
+                            let inviterObject = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: threadInviter)
                             conversation.inviter = inviterObject
                         }
                         if let threadLastMessageVO = myThread.lastMessageVO {
@@ -236,12 +238,13 @@ extension Cache {
                         if let threadParticipants = myThread.participants {
                             var threadParticipantsArr = [CMParticipant]()
                             for item in threadParticipants {
-                                if let threadparticipant = updateCMParticipantEntity(withParticipantsObject: item) {
+                                if let threadparticipant = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: item) {
                                     threadParticipantsArr.append(threadparticipant)
-                                    updateThreadParticipantEntity(inThreadId: Int(exactly: conversation.id!)!, withParticipantId: Int(exactly: threadparticipant.id!)!)
+//                                    updateThreadParticipantEntity(inThreadId: Int(exactly: conversation.id!)!, withParticipantId: Int(exactly: threadparticipant.id!)!)
+                                    conversation.participants?.append(threadparticipant)
                                 }
                             }
-                            conversation.participants = threadParticipantsArr
+                            conversation.addToParticipants(threadParticipantsArr)
                         }
                         conversationToReturn = conversation
                         
@@ -271,12 +274,12 @@ extension Cache {
      *      - CMConversation?
      *
      */
-    func updateCMParticipantEntity(withParticipantsObject myParticipant: Participant) -> CMParticipant? {
+    func updateCMParticipantEntity(inThreadId threadId: Int, withParticipantsObject myParticipant: Participant) -> CMParticipant? {
         var participantObjectToReturn: CMParticipant?
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMParticipant")
         // if i found the CMParticipant onject, update its values
         if let participantId = myParticipant.id {
-            fetchRequest.predicate = NSPredicate(format: "id == %i", participantId)
+            fetchRequest.predicate = NSPredicate(format: "id == %i AND threadId == %i", participantId, threadId)
             do {
                 if let result = try context.fetch(fetchRequest) as? [CMParticipant] {
                     if (result.count > 0) {
@@ -284,7 +287,6 @@ extension Cache {
                         result.first!.blocked           = myParticipant.blocked as NSNumber?
                         result.first!.cellphoneNumber   = myParticipant.cellphoneNumber
                         result.first!.contactId         = myParticipant.contactId as NSNumber?
-                        result.first!.id                = myParticipant.id as NSNumber?
                         result.first!.email             = myParticipant.email
                         result.first!.firstName         = myParticipant.firstName
                         result.first!.id                = myParticipant.id as NSNumber?
@@ -295,32 +297,35 @@ extension Cache {
                         result.first!.notSeenDuration   = myParticipant.notSeenDuration as NSNumber?
                         result.first!.online            = myParticipant.online as NSNumber?
                         result.first!.receiveEnable     = myParticipant.receiveEnable as NSNumber?
-                        result.first?.roles             = myParticipant.roles
+                        result.first!.roles             = (myParticipant.roles != []) ? myParticipant.roles : nil
                         result.first!.sendEnable        = myParticipant.sendEnable as NSNumber?
+                        result.first!.threadId          = threadId as NSNumber?
+                        result.first!.time              = Int(Date().timeIntervalSince1970) as NSNumber?
                         participantObjectToReturn = result.first!
                         
                         saveContext(subject: "Update CMParticipant -update existing object-")
                     } else {    // it means that we couldn't find the CMParticipant object on the cache, so we will create one
-                        let theInviterEntity = NSEntityDescription.entity(forEntityName: "CMParticipant", in: context)
-                        let theInviter = CMParticipant(entity: theInviterEntity!, insertInto: context)
-                        theInviter.admin            = myParticipant.admin as NSNumber?
-                        theInviter.blocked          = myParticipant.blocked as NSNumber?
-                        theInviter.cellphoneNumber  = myParticipant.cellphoneNumber
-                        theInviter.contactId        = myParticipant.contactId as NSNumber?
-                        theInviter.id               = myParticipant.id as NSNumber?
-                        theInviter.email            = myParticipant.email
-                        theInviter.firstName        = myParticipant.firstName
-                        theInviter.id               = myParticipant.id as NSNumber?
-                        theInviter.image            = myParticipant.image
-                        theInviter.lastName         = myParticipant.lastName
-                        theInviter.myFriend         = myParticipant.myFriend as NSNumber?
-                        theInviter.name             = myParticipant.name
-                        theInviter.notSeenDuration  = myParticipant.notSeenDuration as NSNumber?
-                        theInviter.online           = myParticipant.online as NSNumber?
-                        theInviter.receiveEnable    = myParticipant.receiveEnable as NSNumber?
-                        theInviter.roles            = myParticipant.roles
-                        theInviter.sendEnable       = myParticipant.sendEnable as NSNumber?
-                        participantObjectToReturn = theInviter
+                        let theParticipantEntity = NSEntityDescription.entity(forEntityName: "CMParticipant", in: context)
+                        let theParticipant = CMParticipant(entity: theParticipantEntity!, insertInto: context)
+                        theParticipant.admin            = myParticipant.admin as NSNumber?
+                        theParticipant.blocked          = myParticipant.blocked as NSNumber?
+                        theParticipant.cellphoneNumber  = myParticipant.cellphoneNumber
+                        theParticipant.contactId        = myParticipant.contactId as NSNumber?
+                        theParticipant.email            = myParticipant.email
+                        theParticipant.firstName        = myParticipant.firstName
+                        theParticipant.id               = myParticipant.id as NSNumber?
+                        theParticipant.image            = myParticipant.image
+                        theParticipant.lastName         = myParticipant.lastName
+                        theParticipant.myFriend         = myParticipant.myFriend as NSNumber?
+                        theParticipant.name             = myParticipant.name
+                        theParticipant.notSeenDuration  = myParticipant.notSeenDuration as NSNumber?
+                        theParticipant.online           = myParticipant.online as NSNumber?
+                        theParticipant.receiveEnable    = myParticipant.receiveEnable as NSNumber?
+                        theParticipant.roles            = (myParticipant.roles != []) ? myParticipant.roles : nil
+                        theParticipant.sendEnable       = myParticipant.sendEnable as NSNumber?
+                        theParticipant.threadId         = threadId as NSNumber?
+                        theParticipant.time             = Int(Date().timeIntervalSince1970) as NSNumber?
+                        participantObjectToReturn = theParticipant
                         
                         saveContext(subject: "Update CMParticipant -create a new object-")
                     }
@@ -333,6 +338,8 @@ extension Cache {
     }
     
     
+    
+    /*
     
     func updateThreadAdminEntity(inThreadId threadId: Int, roles: UserRole) -> ThreadAdmins? {
         /*
@@ -389,7 +396,7 @@ extension Cache {
         return threadAdminObjectToReturn
     }
     
-    
+    */
     
     
     /*
@@ -435,25 +442,29 @@ extension Cache {
                         }
                         
                         if let messageForwardInfo = myMessage.forwardInfo {
-                            let forward = updateCMForwardInfoEntity(withObject: messageForwardInfo)
-                            result.first?.forwardInfo = forward
+                            if let conversation = messageForwardInfo.conversation {
+                                if let thId = conversation.id {
+                                    let forward = updateCMForwardInfoEntity(inThreadId: thId, withObject: messageForwardInfo)
+                                    result.first?.forwardInfo = forward
+                                }
+                            }
                         }
                         
                         if let messageParticipant = myMessage.participant {
-                            if let participantObject = updateCMParticipantEntity(withParticipantsObject: messageParticipant) {
+                            if let participantObject = updateCMParticipantEntity(inThreadId: myMessage.threadId!, withParticipantsObject: messageParticipant) {
                                 result.first!.participant = participantObject
                             }
                         }
                         
                         if let messageReplyInfo = myMessage.replyInfo {
-                            if let reply = updateCMReplyInfoEntity(withObject: messageReplyInfo) {
+                            if let reply = updateCMReplyInfoEntity(inThreadId: myMessage.threadId!, withObject: messageReplyInfo) {
                                 result.first?.replyInfo = reply
                             }
                         }
                         
-                        saveMessageGap(threadId:            result.first?.threadId as! Int,
-                                       messageIds:          [result.first?.id as! Int],
-                                       messagePreviousIds:  [result.first?.previousId as! Int])
+//                        saveMessageGap(threadId:            result.first?.threadId as! Int,
+//                                       messageIds:          [result.first?.id as! Int],
+//                                       messagePreviousIds:  [result.first?.previousId as! Int])
                         messageObjectToReturn = result.first!
                         
                         saveContext(subject: "Update CMMessage -update existing object-")
@@ -480,25 +491,29 @@ extension Cache {
                         }
                         
                         if let messageForwardInfo = myMessage.forwardInfo {
-                            let forward = updateCMForwardInfoEntity(withObject: messageForwardInfo)
-                            theMessage.forwardInfo = forward
+                            if let conversation = messageForwardInfo.conversation {
+                                if let thId = conversation.id {
+                                    let forward = updateCMForwardInfoEntity(inThreadId: thId, withObject: messageForwardInfo)
+                                    theMessage.forwardInfo = forward
+                                }
+                            }
                         }
                         
                         if let messageParticipant = myMessage.participant {
-                            if let participantObject = updateCMParticipantEntity(withParticipantsObject: messageParticipant) {
+                            if let participantObject = updateCMParticipantEntity(inThreadId: myMessage.threadId!, withParticipantsObject: messageParticipant) {
                                 theMessage.participant = participantObject
                             }
                         }
                         
                         if let messageReplyInfo = myMessage.replyInfo {
-                            if let reply = updateCMReplyInfoEntity(withObject: messageReplyInfo) {
+                            if let reply = updateCMReplyInfoEntity(inThreadId: myMessage.threadId!, withObject: messageReplyInfo) {
                                 theMessage.replyInfo = reply
                             }
                         }
                         
-                        saveMessageGap(threadId:            theMessage.threadId as! Int,
-                                       messageIds:          [theMessage.id as! Int],
-                                       messagePreviousIds:  [theMessage.previousId as! Int])
+//                        saveMessageGap(threadId:            theMessage.threadId as! Int,
+//                                       messageIds:          [theMessage.id as! Int],
+//                                       messagePreviousIds:  [theMessage.previousId as! Int])
                         messageObjectToReturn = theMessage
                         
                         saveContext(subject: "Update CMMessage -create a new object-")
@@ -513,7 +528,7 @@ extension Cache {
     
     
     
-    func updateCMReplyInfoEntity(withObject myReplyInfo: ReplyInfo) -> CMReplyInfo? {
+    func updateCMReplyInfoEntity(inThreadId threadId: Int, withObject myReplyInfo: ReplyInfo) -> CMReplyInfo? {
         var replyInfoObjectToReturn: CMReplyInfo?
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMReplyInfo")
         do {
@@ -527,7 +542,7 @@ extension Cache {
                     result.first?.systemMetadata    = myReplyInfo.systemMetadata
                     result.first?.time              = myReplyInfo.time as NSNumber?
                     if let participantObject = myReplyInfo.participant {
-                        if let participantObject = updateCMParticipantEntity(withParticipantsObject: participantObject) {
+                        if let participantObject = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: participantObject) {
                             result.first?.participant = participantObject
                         }
                     }
@@ -544,7 +559,7 @@ extension Cache {
                     theReplyInfo.systemMetadata     = myReplyInfo.systemMetadata
                     theReplyInfo.time               = myReplyInfo.time as NSNumber?
                     if let participantObject = myReplyInfo.participant {
-                        if let participantObject = updateCMParticipantEntity(withParticipantsObject: participantObject) {
+                        if let participantObject = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: participantObject) {
                             result.first?.participant = participantObject
                         }
                     }
@@ -558,14 +573,14 @@ extension Cache {
         return replyInfoObjectToReturn
     }
     
-    func updateCMForwardInfoEntity(withObject myForwardInfo: ForwardInfo) -> CMForwardInfo? {
+    func updateCMForwardInfoEntity(inThreadId threadId: Int, withObject myForwardInfo: ForwardInfo) -> CMForwardInfo? {
         var forwardInfoObjectToReturn: CMForwardInfo?
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMForwardInfo")
         do {
             if let result = try context.fetch(fetchRequest) as? [CMForwardInfo] {
                 if (result.count > 0) {
                     if let theParticipantObject = myForwardInfo.participant {
-                        if let participantObject = updateCMParticipantEntity(withParticipantsObject: theParticipantObject) {
+                        if let participantObject = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: theParticipantObject) {
                             result.first?.participant = participantObject
                         }
                     }
@@ -581,7 +596,7 @@ extension Cache {
                     let theForwardInfo = CMForwardInfo(entity: theCMForwardInfo!, insertInto: context)
                     
                     if let theParticipantObject = myForwardInfo.participant {
-                        if let participantObject = updateCMParticipantEntity(withParticipantsObject: theParticipantObject) {
+                        if let participantObject = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: theParticipantObject) {
                             theForwardInfo.participant = participantObject
                         }
                     }
@@ -601,6 +616,8 @@ extension Cache {
     }
     
     
+    
+    /*
     
     /*
      * Update ThreadParticipant Entity:
@@ -637,11 +654,23 @@ extension Cache {
         
     }
     
+    */
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     func updateMessageGapEntity(inThreadId threadId: Int, withMessageId messageId: Int, withPreviousId previousId: Int) {
         /*
          * -> fetch MessageGaps where their threadId is equal to input 'threadId'
-         *      -> check if we found any object on the MessageGaps, that is waiting for a messageId (its previousId property) that we have here on 'messageId'
+         *      -> check if we found any object on the MessageGaps that is waiting for a messageId (its previousId property) that we have here on 'messageId'
          *          -> delete this object from MessageGaps Entity
+         *      -> check if we have previouse message of this message on the gap or not
          *      -> check if we found the message on the MessageGaps, we will update its values
          *      -> otherwise we will create a MessageGaps object and assing input values to this object
          *
@@ -676,6 +705,46 @@ extension Cache {
         
     }
     
+    
+    func updateAllMessageGapEntity(inThreadId threadId: Int) {
+        /*
+         *  -> fetch all messages with 'threadId' Input
+         *  -> lopp through it messages,
+         *      -> if we found any message that it's previousId is not in the array, add it to the "gaps" array, to sendIt to 'saveMessageGap'
+         *
+         */
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMMessage")
+        fetchRequest.predicate = NSPredicate(format: "threadId == %i", threadId)
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMMessage] {
+                
+                var gaps: (msgIds: [Int], prevIds: [Int]) = ([], [])
+                
+                for message in result {
+                    for item in result {
+                        var foundPrevious = false
+                        if (message.previousId == item.id) {
+                            foundPrevious = true
+                        }
+                        if !foundPrevious {
+                            gaps.msgIds.append(message.id as! Int)
+                            gaps.prevIds.append(message.previousId as! Int)
+                        }
+                    }
+                }
+                
+                for (index, _) in gaps.msgIds.enumerated() {
+                    updateMessageGapEntity(inThreadId: threadId, withMessageId: gaps.msgIds[index], withPreviousId: gaps.prevIds[index])
+                }
+//                saveMessageGap(threadId: threadId, messageIds: gaps.msgIds, messagePreviousIds: gaps.prevIds)
+                
+            }
+        } catch {
+            fatalError("Error on trying to find CMMessage")
+        }
+            
+    }
+ 
     
 }
 

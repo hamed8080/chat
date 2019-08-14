@@ -24,31 +24,33 @@ extension Chat {
          *
          */
         log.verbose("Message of type 'SENT' recieved", context: "Chat")
-        if Chat.mapOnSent[message.uniqueId] != nil {
-            let returnData: JSON = CreateReturnData(hasError:       false,
-                                                    errorMessage:   "",
-                                                    errorCode:      0,
-                                                    result:         message.content?.convertToJSON() ?? [:],
-                                                    resultAsString: nil,
-                                                    contentCount:   nil,
-                                                    subjectId:      message.content?.convertToJSON()["conversation"]["id"].int)
-                .returnJSON()
-            
-            if enableCache {
-                if let msg = message.content?.convertToJSON() {
-                    if let tId = msg["conversation"]["id"].int {
-                        let theMessage = Message(threadId: tId, pushMessageVO: msg)
-                        Chat.cacheDB.saveMessageObjects(messages: [theMessage], getHistoryParams: nil)
-                        
-                        // the response from server is come correctly, so this message will be removed from wait queue
-                        Chat.cacheDB.deleteWaitTextMessage(uniqueId: message.uniqueId)
-                        Chat.cacheDB.deleteWaitFileMessage(uniqueId: message.uniqueId)
-                        Chat.cacheDB.deleteWaitForwardMessage(uniqueId: message.uniqueId)
-                        
-                    }
-                }
+        
+        let returnData = CreateReturnData(hasError:         false,
+                                          errorMessage:     "",
+                                          errorCode:        0,
+                                          result:           nil,
+                                          resultAsArray:    nil,
+                                          resultAsString:   message.content,
+                                          contentCount:     nil,
+                                          subjectId:        message.subjectId)
+        //                .returnJSON()
+        
+        
+        if enableCache {
+            if let _ = message.subjectId {
+                //                    let theMessage = Message(threadId: msg, pushMessageVO: msg)
+                //                    Chat.cacheDB.saveMessageObjects(messages: [theMessage], getHistoryParams: nil)
+                
+                // ToDo: update cache that this message was sent
+                
+                // the response from server is come correctly, so this message will be removed from wait queue
+                Chat.cacheDB.deleteWaitTextMessage(uniqueId: message.uniqueId)
+                Chat.cacheDB.deleteWaitFileMessage(uniqueId: message.uniqueId)
+                Chat.cacheDB.deleteWaitForwardMessage(uniqueId: message.uniqueId)
             }
-            
+        }
+        
+        if Chat.mapOnSent[message.uniqueId] != nil {
             let callback: CallbackProtocolWith3Calls = Chat.mapOnSent[message.uniqueId]!
             callback.onSent(uID:        message.uniqueId,
                             response:   returnData) { (successJSON) in
@@ -74,6 +76,15 @@ extension Chat {
          */
         log.verbose("Message of type 'DELIVERY' recieved", context: "Chat")
         
+        let returnData = CreateReturnData(hasError:         false,
+                                          errorMessage:     "",
+                                          errorCode:        0,
+                                          result:           nil,
+                                          resultAsArray:    nil,
+                                          resultAsString:   message.content,
+                                          contentCount:     nil,
+                                          subjectId:        message.subjectId)
+        
         var findItAt: Int?
         let threadIdObject = Chat.mapOnDeliver["\(message.subjectId ?? 0)"]
         if let threadIdObj = threadIdObject {
@@ -81,16 +92,6 @@ extension Chat {
             if (threadIdObjCount > 0) {
                 for i in 1...threadIdObjCount {
                     let uniqueIdObj: [String: CallbackProtocolWith3Calls] = threadIdObj[i - 1]
-                    
-                    let returnData: JSON = CreateReturnData(hasError:       false,
-                                                            errorMessage:   "",
-                                                            errorCode:      0,
-                                                            result:         message.content?.convertToJSON() ?? [:],
-                                                            resultAsString: nil,
-                                                            contentCount:   nil,
-                                                            subjectId:      message.content?.convertToJSON()["conversation"]["id"].int)
-                        .returnJSON()
-                    
                     if let callback = uniqueIdObj[message.uniqueId] {
                         findItAt = i
                         callback.onDeliver(uID:         message.uniqueId,
@@ -110,15 +111,6 @@ extension Chat {
             let threadIdObject = Chat.mapOnDeliver["\(0)"]
             if let threadIdObj = threadIdObject {
                 for (index, item) in threadIdObj.enumerated() {
-                    let returnData: JSON = CreateReturnData(hasError:       false,
-                                                            errorMessage:   "",
-                                                            errorCode:      0,
-                                                            result:         message.content?.convertToJSON() ?? [:],
-                                                            resultAsString: nil,
-                                                            contentCount:   nil,
-                                                            subjectId:      message.content?.convertToJSON()["conversation"]["id"].int)
-                        .returnJSON()
-                    
                     if let callback = item[message.uniqueId] {
                         callback.onDeliver(uID:         message.uniqueId,
                                            response:    returnData) { (successJSON) in
@@ -170,6 +162,15 @@ extension Chat {
          */
         log.verbose("Message of type 'SEEN' recieved", context: "Chat")
         
+        let returnData = CreateReturnData(hasError:         false,
+                                          errorMessage:     "",
+                                          errorCode:        0,
+                                          result:           nil,
+                                          resultAsArray:    nil,
+                                          resultAsString:   message.content,
+                                          contentCount:     nil,
+                                          subjectId:        message.subjectId)
+        
         var findItAt: Int?
         let threadIdObject = Chat.mapOnSeen["\(message.subjectId ?? 0)"]
         if let threadIdObj = threadIdObject {
@@ -178,15 +179,6 @@ extension Chat {
                     let index = i - 1
                     let uniqueIdObj: [String: CallbackProtocolWith3Calls] = threadIdObj[index]
                     if let callback = uniqueIdObj[message.uniqueId] {
-                        let returnData: JSON = CreateReturnData(hasError:       false,
-                                                                errorMessage:   "",
-                                                                errorCode:      0,
-                                                                result:         message.content?.convertToJSON() ?? [:],
-                                                                resultAsString: nil,
-                                                                contentCount:   nil,
-                                                                subjectId:      message.content?.convertToJSON()["conversation"]["id"].int)
-                            .returnJSON()
-                        
                         findItAt = i
                         callback.onSeen(uID:        message.uniqueId,
                                         response:   returnData) { (successJSON) in
@@ -206,15 +198,6 @@ extension Chat {
             if let threadIdObj = threadIdObject {
                 for (index, item) in threadIdObj.enumerated() {
                     if let callback = item[message.uniqueId] {
-                        let returnData: JSON = CreateReturnData(hasError:       false,
-                                                                errorMessage:   "",
-                                                                errorCode:      0,
-                                                                result:         message.content?.convertToJSON() ?? [:],
-                                                                resultAsString: nil,
-                                                                contentCount:   nil,
-                                                                subjectId:      message.content?.convertToJSON()["conversation"]["id"].int)
-                            .returnJSON()
-                        
                         callback.onSeen(uID:        message.uniqueId,
                                         response:   returnData) { (successJSON) in
                             self.sendCallbackToUserOnSeen?(successJSON)
@@ -255,7 +238,7 @@ extension Chat {
             self.sendParams = parameters
         }
         func onSent(uID:        String,
-                    response:   JSON,
+                    response:   CreateReturnData,
                     success:    @escaping callbackTypeAlias) {
             /*
              *  -> check if response hasError or not
@@ -263,18 +246,20 @@ extension Chat {
              *      -> send the "SendMessageModel" as a callback
              *
              */
+            
             log.verbose("SendMessage Sent Callback", context: "Chat")
-            if (!response["hasError"].boolValue) {
-                let message = SendMessageModel(messageContent:  response["result"],
-                                               messageId:       response["result"]["id"].intValue,
+            if let stringContent = response.resultAsString {
+                let message = SendMessageModel(messageContent:  response.result,
+                                               messageId:       Int(stringContent) ?? 0,
                                                isSent:          true,
                                                isDelivered:     false,
                                                isSeen:          false,
-                                               hasError:        response["hasError"].boolValue,
-                                               errorMessage:    response["errorMessage"].stringValue,
-                                               errorCode:       response["errorCode"].intValue,
-                                               threadId:        response["result"]["conversation"]["id"].int,
-                                               participantId:   response["result"]["participantId"].int)
+                                               hasError:        response.hasError,
+                                               errorMessage:    response.errorMessage,
+                                               errorCode:       response.errorCode,
+                                               threadId:        response.subjectId,
+                                               participantId:   response.result?["participantId"].int)
+                
                 success(message)
             }
             
@@ -309,7 +294,7 @@ extension Chat {
         }
         
         func onDeliver(uID:         String,
-                       response:    JSON,
+                       response:    CreateReturnData,
                        success:     @escaping callbackTypeAlias) {
             /*
              *  -> check if response hasError or not
@@ -318,17 +303,17 @@ extension Chat {
              *
              */
             log.verbose("SendMessage Deliver Callback", context: "Chat")
-            if (!response["hasError"].boolValue) {
-                let message = SendMessageModel(messageContent:  response["result"],
-                                               messageId:       response["result"]["id"].intValue,
+            if let stringContent = response.resultAsString {
+                let message = SendMessageModel(messageContent:  response.result,
+                                               messageId:       Int(stringContent) ?? 0,
                                                isSent:          false,
                                                isDelivered:     true,
                                                isSeen:          false,
-                                               hasError:        response["hasError"].boolValue,
-                                               errorMessage:    response["errorMessage"].stringValue,
-                                               errorCode:       response["errorCode"].intValue,
-                                               threadId:        response["result"]["threadId"].int,
-                                               participantId:   response["result"]["participantId"].int)
+                                               hasError:        response.hasError,
+                                               errorMessage:    response.errorMessage,
+                                               errorCode:       response.errorCode,
+                                               threadId:        response.subjectId,
+                                               participantId:   response.result?["participantId"].int)
                 success(message)
             }
             
@@ -336,7 +321,7 @@ extension Chat {
         }
         
         func onSeen(uID:        String,
-                    response:   JSON,
+                    response:   CreateReturnData,
                     success:    @escaping callbackTypeAlias) {
             /*
              *  -> check if response hasError or not
@@ -345,17 +330,17 @@ extension Chat {
              *
              */
             log.verbose("SendMessage Seen Callback", context: "Chat")
-            if (!response["hasError"].boolValue) {
-                let message = SendMessageModel(messageContent:  response["result"],
-                                               messageId:       response["result"]["id"].intValue,
+            if let stringContent = response.resultAsString {
+                let message = SendMessageModel(messageContent:  response.result,
+                                               messageId:       Int(stringContent) ?? 0,
                                                isSent:          false,
                                                isDelivered:     false,
                                                isSeen:          true,
-                                               hasError:        response["hasError"].boolValue,
-                                               errorMessage:    response["errorMessage"].stringValue,
-                                               errorCode:       response["errorCode"].intValue,
-                                               threadId:        response["result"]["threadId"].int,
-                                               participantId:   response["result"]["participantId"].int)
+                                               hasError:        response.hasError,
+                                               errorMessage:    response.errorMessage,
+                                               errorCode:       response.errorCode,
+                                               threadId:        response.subjectId,
+                                               participantId:   response.result?["participantId"].int)
                 success(message)
             }
             

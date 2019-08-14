@@ -266,32 +266,50 @@ extension Chat {
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
         
         
-        Alamofire.request(url, method: method, parameters: params, headers: headers).responseJSON { (response) in
-            if response.result.isSuccess {
-                if let jsonValue = response.result.value {
-                    let jsonResponse: JSON = JSON(jsonValue)
-                    let contactsResult = ContactModel(messageContent: jsonResponse)
-                    
-                    if self.enableCache {
-                        var contacts = [Contact]()
-                        for contact in contactsResult.contacts {
-                            contacts.append(contact)
-                        }
-                        Chat.cacheDB.saveContact(withContactObjects: contacts)
-                    }
-                    
-                    completion(contactsResult)
-                }
-            } else {
-                if let error = response.error {
-                    let myJson: JSON = ["hasError":     true,
-                                        "errorCode":    6200,
-                                        "errorMessage": "\(CHAT_ERRORS.err6200.rawValue) \(error)",
-                                        "errorEvent":   error.localizedDescription]
-                    completion(myJson)
-                }
-            }
+        Networking.sharedInstance.requesttWithJSONresponse(from:            url,
+                                                           withMethod:      method,
+                                                           withHeaders:     headers,
+                                                           withParameters:  params) { (response) in
+                                                            let contactsResult = ContactModel(messageContent: response as! JSON)
+                                                            
+                                                            if self.enableCache {
+                                                                var contacts = [Contact]()
+                                                                for contact in contactsResult.contacts {
+                                                                    contacts.append(contact)
+                                                                }
+                                                                Chat.cacheDB.saveContact(withContactObjects: contacts)
+                                                            }
+                                                            
+                                                            completion(contactsResult)
         }
+        
+        
+//        Alamofire.request(url, method: method, parameters: params, headers: headers).responseJSON { (response) in
+//            if response.result.isSuccess {
+//                if let jsonValue = response.result.value {
+//                    let jsonResponse: JSON = JSON(jsonValue)
+//                    let contactsResult = ContactModel(messageContent: jsonResponse)
+//
+//                    if self.enableCache {
+//                        var contacts = [Contact]()
+//                        for contact in contactsResult.contacts {
+//                            contacts.append(contact)
+//                        }
+//                        Chat.cacheDB.saveContact(withContactObjects: contacts)
+//                    }
+//
+//                    completion(contactsResult)
+//                }
+//            } else {
+//                if let error = response.error {
+//                    let myJson: JSON = ["hasError":     true,
+//                                        "errorCode":    6200,
+//                                        "errorMessage": "\(CHAT_ERRORS.err6200.rawValue) \(error)",
+//                                        "errorEvent":   error.localizedDescription]
+//                    completion(myJson)
+//                }
+//            }
+//        }
         
     }
     
@@ -419,32 +437,51 @@ extension Chat {
         let method: HTTPMethod = HTTPMethod.post
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
         
-        Alamofire.request(url, method: method, parameters: params, headers: headers).responseJSON { (response) in
-            if response.result.isSuccess {
-                if let jsonValue = response.result.value {
-                    let jsonResponse: JSON = JSON(jsonValue)
-                    let messageContent: [JSON] = jsonResponse["result"].arrayValue
-                    
-                    if self.enableCache {
-                        var contactsArr = [Contact]()
-                        for item in messageContent {
-                            contactsArr.append(Contact(messageContent: item))
-                        }
-                        Chat.cacheDB.saveContact(withContactObjects: contactsArr)
-                    }
-                    let contactsResult = ContactModel(messageContent: jsonResponse)
-                    completion(contactsResult)
-                }
-            } else {
-                if let error = response.error {
-                    let myJson: JSON = ["hasError":     true,
-                                        "errorCode":    6200,
-                                        "errorMessage": "\(CHAT_ERRORS.err6200.rawValue) \(error)",
-                                        "errorEvent":   error.localizedDescription]
-                    completion(myJson)
-                }
-            }
+        Networking.sharedInstance.requesttWithJSONresponse(from:            url,
+                                                           withMethod:      method,
+                                                           withHeaders:     headers,
+                                                           withParameters:  params) { (response) in
+                                                            let jsonResponse: JSON = JSON(response)
+                                                            let messageContent: [JSON] = jsonResponse["result"].arrayValue
+                                                            
+                                                            if self.enableCache {
+                                                                var contactsArr = [Contact]()
+                                                                for item in messageContent {
+                                                                    contactsArr.append(Contact(messageContent: item))
+                                                                }
+                                                                Chat.cacheDB.saveContact(withContactObjects: contactsArr)
+                                                            }
+                                                            let contactsResult = ContactModel(messageContent: jsonResponse)
+                                                            completion(contactsResult)
         }
+        
+        
+//        Alamofire.request(url, method: method, parameters: params, headers: headers).responseJSON { (response) in
+//            if response.result.isSuccess {
+//                if let jsonValue = response.result.value {
+//                    let jsonResponse: JSON = JSON(jsonValue)
+//                    let messageContent: [JSON] = jsonResponse["result"].arrayValue
+//
+//                    if self.enableCache {
+//                        var contactsArr = [Contact]()
+//                        for item in messageContent {
+//                            contactsArr.append(Contact(messageContent: item))
+//                        }
+//                        Chat.cacheDB.saveContact(withContactObjects: contactsArr)
+//                    }
+//                    let contactsResult = ContactModel(messageContent: jsonResponse)
+//                    completion(contactsResult)
+//                }
+//            } else {
+//                if let error = response.error {
+//                    let myJson: JSON = ["hasError":     true,
+//                                        "errorCode":    6200,
+//                                        "errorMessage": "\(CHAT_ERRORS.err6200.rawValue) \(error)",
+//                                        "errorEvent":   error.localizedDescription]
+//                    completion(myJson)
+//                }
+//            }
+//        }
         
     }
     
@@ -550,28 +587,41 @@ extension Chat {
         let method: HTTPMethod = HTTPMethod.post
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
         
-        Alamofire.request(url, method: method, parameters: params, headers: headers).responseJSON { (response) in
-            if response.result.isSuccess {
-                if let jsonValue = response.result.value {
-                    let jsonResponse: JSON = JSON(jsonValue)
-                    let contactsResult = ContactModel(messageContent: jsonResponse)
-                    
-                    if self.enableCache {
-                        Chat.cacheDB.saveContact(withContactObjects: contactsResult.contacts)
-                    }
-                    
-                    completion(contactsResult)
-                }
-            } else {
-                if let error = response.error {
-                    let myJson: JSON = ["hasError":     true,
-                                        "errorCode":    6200,
-                                        "errorMessage": "\(CHAT_ERRORS.err6200.rawValue) \(error)",
-                                        "errorEvent":   error.localizedDescription]
-                    completion(myJson)
-                }
-            }
+        Networking.sharedInstance.requesttWithJSONresponse(from:            url,
+                                                           withMethod:      method,
+                                                           withHeaders:     headers,
+                                                           withParameters:  params) { (response) in
+                                                            let contactsResult = ContactModel(messageContent: response as! JSON)
+                                                            
+                                                            if self.enableCache {
+                                                                Chat.cacheDB.saveContact(withContactObjects: contactsResult.contacts)
+                                                            }
+                                                            
+                                                            completion(contactsResult)
         }
+        
+//        Alamofire.request(url, method: method, parameters: params, headers: headers).responseJSON { (response) in
+//            if response.result.isSuccess {
+//                if let jsonValue = response.result.value {
+//                    let jsonResponse: JSON = JSON(jsonValue)
+//                    let contactsResult = ContactModel(messageContent: jsonResponse)
+//
+//                    if self.enableCache {
+//                        Chat.cacheDB.saveContact(withContactObjects: contactsResult.contacts)
+//                    }
+//
+//                    completion(contactsResult)
+//                }
+//            } else {
+//                if let error = response.error {
+//                    let myJson: JSON = ["hasError":     true,
+//                                        "errorCode":    6200,
+//                                        "errorMessage": "\(CHAT_ERRORS.err6200.rawValue) \(error)",
+//                                        "errorEvent":   error.localizedDescription]
+//                    completion(myJson)
+//                }
+//            }
+//        }
         
     }
     
@@ -679,30 +729,45 @@ extension Chat {
         let method: HTTPMethod = HTTPMethod.post
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
         
-        Alamofire.request(url, method: method, parameters: params, headers: headers).responseJSON { (response) in
-            if response.result.isSuccess {
-                if let jsonValue = response.result.value {
-                    let jsonResponse: JSON = JSON(jsonValue)
-                    let contactsResult = RemoveContactModel(messageContent: jsonResponse)
-                    
-                    if self.enableCache {
-                        if (contactsResult.result) {
-                            Chat.cacheDB.deleteContact(withContactIds: [removeContactsInput.id])
-                        }
-                    }
-                    
-                    completion(contactsResult)
-                }
-            } else {
-                if let error = response.error {
-                    let myJson: JSON = ["hasError":     true,
-                                        "errorCode":    6200,
-                                        "errorMessage": "\(CHAT_ERRORS.err6200.rawValue) \(error)",
-                                        "errorEvent":   error.localizedDescription]
-                    completion(myJson)
-                }
-            }
+        Networking.sharedInstance.requesttWithJSONresponse(from:            url,
+                                                           withMethod:      method,
+                                                           withHeaders:     headers,
+                                                           withParameters:  params) { (response) in
+                                                            let contactsResult = RemoveContactModel(messageContent: response as! JSON)
+                                                            
+                                                            if self.enableCache {
+                                                                if (contactsResult.result) {
+                                                                    Chat.cacheDB.deleteContact(withContactIds: [removeContactsInput.id])
+                                                                }
+                                                            }
+                                                            
+                                                            completion(contactsResult)
         }
+        
+//        Alamofire.request(url, method: method, parameters: params, headers: headers).responseJSON { (response) in
+//            if response.result.isSuccess {
+//                if let jsonValue = response.result.value {
+//                    let jsonResponse: JSON = JSON(jsonValue)
+//                    let contactsResult = RemoveContactModel(messageContent: jsonResponse)
+//
+//                    if self.enableCache {
+//                        if (contactsResult.result) {
+//                            Chat.cacheDB.deleteContact(withContactIds: [removeContactsInput.id])
+//                        }
+//                    }
+//
+//                    completion(contactsResult)
+//                }
+//            } else {
+//                if let error = response.error {
+//                    let myJson: JSON = ["hasError":     true,
+//                                        "errorCode":    6200,
+//                                        "errorMessage": "\(CHAT_ERRORS.err6200.rawValue) \(error)",
+//                                        "errorEvent":   error.localizedDescription]
+//                    completion(myJson)
+//                }
+//            }
+//        }
         
     }
     
@@ -1118,7 +1183,11 @@ extension Chat {
                         let phoneNumber = contact.phoneNumbers.first?.value.stringValue
                         let emailAddress = contact.emailAddresses.first?.value
                         
-                        let contact = AddContactsRequestModel(cellphoneNumber: phoneNumber, email: emailAddress as String?, firstName: firstName, lastName: lastName)
+                        let contact = AddContactsRequestModel(cellphoneNumber:  phoneNumber,
+                                                              email:            emailAddress as String?,
+                                                              firstName:        firstName,
+                                                              lastName:         lastName,
+                                                              uniqueId:         nil)
                         phoneContacts.append(contact)
                     })
                 } catch {
@@ -1139,15 +1208,22 @@ extension Chat {
                         findContactOnPhoneBookCache = true
                         if cacheContact.email != contact.email {
                             contactArrayToSendUpdate.append(contact)
-                            Chat.cacheDB.savePhoneBookContact(contact: contact)
+                            if enableCache {
+                                Chat.cacheDB.savePhoneBookContact(contact: contact)
+                            }
                             
                         } else if cacheContact.firstName != contact.firstName {
                             contactArrayToSendUpdate.append(contact)
-                            Chat.cacheDB.savePhoneBookContact(contact: contact)
+                            if enableCache {
+                                Chat.cacheDB.savePhoneBookContact(contact: contact)
+                            }
                             
                         } else if cacheContact.lastName != contact.lastName {
                             contactArrayToSendUpdate.append(contact)
-                            Chat.cacheDB.savePhoneBookContact(contact: contact)
+                            if enableCache {
+                                Chat.cacheDB.savePhoneBookContact(contact: contact)
+                            }
+                            
                         }
                         
                     }
@@ -1155,7 +1231,10 @@ extension Chat {
                 
                 if (!findContactOnPhoneBookCache) {
                     contactArrayToSendUpdate.append(contact)
-                    Chat.cacheDB.savePhoneBookContact(contact: contact)
+                    if enableCache {
+                        Chat.cacheDB.savePhoneBookContact(contact: contact)
+                    }
+                    
                 }
                 
             }
@@ -1163,7 +1242,9 @@ extension Chat {
             // if there is no data on phoneBookCache, add all contacts from phone and save them on cache
             for contact in phoneContacts {
                 contactArrayToSendUpdate.append(contact)
-                Chat.cacheDB.savePhoneBookContact(contact: contact)
+                if enableCache {
+                    Chat.cacheDB.savePhoneBookContact(contact: contact)
+                }
             }
         }
         

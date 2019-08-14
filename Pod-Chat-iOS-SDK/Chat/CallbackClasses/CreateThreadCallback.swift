@@ -25,16 +25,24 @@ extension Chat {
          *
          */
         log.verbose("Message of type 'CREATE_THREAD' recieved", context: "Chat")
+        
+        let returnData = CreateReturnData(hasError:         false,
+                                          errorMessage:     "",
+                                          errorCode:        0,
+                                          result:           message.content?.convertToJSON(),
+                                          resultAsArray:    nil,
+                                          resultAsString:   nil,
+                                          contentCount:     message.contentCount,
+                                          subjectId:        message.subjectId)
+        
+        if enableCache {
+            if let threadJSON = message.content?.convertToJSON() {
+                let myThread = Conversation(messageContent: threadJSON)
+                Chat.cacheDB.saveThread(withThreadObjects: [myThread])
+            }
+        }
+        
         if Chat.map[message.uniqueId] != nil {
-            let returnData: JSON = CreateReturnData(hasError:       false,
-                                                    errorMessage:   "",
-                                                    errorCode:      0,
-                                                    result:         message.content?.convertToJSON(),
-                                                    resultAsString: nil,
-                                                    contentCount:   message.contentCount,
-                                                    subjectId:      message.subjectId)
-                .returnJSON()
-            
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
             callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
                 self.createThreadCallbackToUser?(successJSON)
@@ -50,22 +58,22 @@ extension Chat {
             self.mySendMessageParams = parameters
         }
         func onResultCallback(uID:      String,
-                              response: JSON,
+                              response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
             /*
              *  -> check if response hasError or not
-             *      -> if no, create the "CreateThreadModel"
-             *      -> send the "CreateThreadModel" as a callback
+             *      -> if no, create the "ThreadModel"
+             *      -> send the "ThreadModel" as a callback
              *
              */
             log.verbose("CreateThreadCallback", context: "Chat")
-            if (!response["hasError"].boolValue) {
-                let resultData: JSON = response["result"]
-                let createThreadModel = CreateThreadModel(messageContent:   resultData,
-                                                          hasError:         response["hasError"].boolValue,
-                                                          errorMessage:     response["errorMessage"].stringValue,
-                                                          errorCode:        response["errorCode"].intValue)
+            if let content = response.result {
+                
+                let createThreadModel = ThreadModel(messageContent:   content,
+                                                    hasError:         response.hasError,
+                                                    errorMessage:     response.errorMessage,
+                                                    errorCode:        response.errorCode)
                 success(createThreadModel)
                 
             }

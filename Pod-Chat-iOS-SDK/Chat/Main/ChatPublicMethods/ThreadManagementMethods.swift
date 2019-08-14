@@ -151,7 +151,7 @@ extension Chat {
         
         // if cache is enabled by user, it will return cache result to the user
         if enableCache {
-            if let cacheThreads = Chat.cacheDB.retrieveThreads(ascending:   true,
+            if let cacheThreads = Chat.cacheDB.retrieveThreads(ascending:   false,
                                                                count:       getThreadsInput.count ?? 50,
                                                                name:        getThreadsInput.name,
                                                                offset:      getThreadsInput.offset ?? 0,
@@ -400,7 +400,7 @@ extension Chat {
      *  + Outputs:
      *      It has 2 callbacks as response:
      *      - uniqueId:     it will returns the request 'UniqueId' that will send to server.        (String)
-     *      - completion:   it will returns the response that comes from server to this request.    (CreateThreadModel)
+     *      - completion:   it will returns the response that comes from server to this request.    (ThreadModel)
      *
      */
     public func createThread(createThreadInput: CreateThreadRequestModel,
@@ -565,7 +565,7 @@ extension Chat {
      *  + Outputs:
      *      It has 5 callbacks as response:
      *      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     *      2- completion:  it will returns the response that comes from server to this request.    (CreateThreadModel)
+     *      2- completion:  it will returns the response that comes from server to this request.    (ThreadModel)
      *      3- onSent:      when this message has sent to the server, this response will come.
      *      4- onDelivere:  when this message has delivered to the user, this response will come.
      *      5- onSeen:      when the user has seen this message, this response will come.
@@ -775,7 +775,7 @@ extension Chat {
             myUniqueId = createThreadUniqueId
             uniqueId(createThreadUniqueId)
         }) { (myCreateThreadResponse) in
-            
+     
             let myResponseModel: CreateThreadModel = myCreateThreadResponse as! CreateThreadModel
             let myResponseJSON: JSON = myResponseModel.returnDataAsJSON()
             
@@ -816,7 +816,7 @@ extension Chat {
      + Outputs:
      It has 2 callbacks as response:
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:  it will returns the response that comes from server to this request.    (CreateThreadModel)
+     2- completion:  it will returns the response that comes from server to this request.    (ThreadModel)
      */
     public func leaveThread(leaveThreadInput:   LeaveThreadRequestModel,
                             uniqueId:           @escaping (String) -> (),

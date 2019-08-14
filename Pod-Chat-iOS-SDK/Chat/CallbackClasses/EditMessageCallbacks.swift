@@ -21,22 +21,30 @@ extension Chat {
          *
          */
         log.verbose("Message of type 'EDIT_MESSAGE' recieved", context: "Chat")
+        
+        let returnData = CreateReturnData(hasError:         false,
+                                          errorMessage:     "",
+                                          errorCode:        0,
+                                          result:           message.content?.convertToJSON() ?? [:],
+                                          resultAsArray:    nil,
+                                          resultAsString:   nil,
+                                          contentCount:     message.contentCount,
+                                          subjectId:        message.subjectId)
+        //                .returnJSON()
+        
+        // save edited data on the cache
+        // remove this message from wait edit queue
+        if enableCache {
+            let myMessage = Message(threadId: message.subjectId, pushMessageVO: message.content?.convertToJSON() ?? [:])
+            Chat.cacheDB.saveMessageObjects(messages: [myMessage], getHistoryParams: nil)
+            Chat.cacheDB.deleteWaitEditMessage(uniqueId: message.uniqueId)
+        }
+        
         if Chat.map[message.uniqueId] != nil {
-            let returnData: JSON = CreateReturnData(hasError:   false,
-                                                    errorMessage:   "",
-                                                    errorCode:      0,
-                                                    result:         message.content?.convertToJSON() ?? [:],
-                                                    resultAsString: nil,
-                                                    contentCount:   message.contentCount,
-                                                    subjectId:      message.subjectId)
-                .returnJSON()
-            
-            if enableCache {
-                
-            }
-            
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-            callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
+            callback.onResultCallback(uID:      message.uniqueId,
+                                      response: returnData,
+                                      success: { (successJSON) in
                 self.editMessageCallbackToUser?(successJSON)
             }) { _ in }
             chatEditMessageHandler(threadId: message.subjectId ?? 0, messageContent: message.content?.convertToJSON() ?? [:])
@@ -50,35 +58,19 @@ extension Chat {
         init(parameters: SendChatMessageVO) {
             self.sendParams = parameters
         }
-        func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
+        func onResultCallback(uID:      String,
+                              response: CreateReturnData,
+                              success:  @escaping callbackTypeAlias,
+                              failure:  @escaping callbackTypeAlias) {
             log.verbose("EditMessageCallbacks", context: "Chat")
             
-            var returnData: JSON = [:]
-            
-            let hasError = response["hasError"].boolValue
-            let errorMessage = response["errorMessage"].stringValue
-            let errorCode = response["errorCode"].intValue
-            
-            returnData["hasError"] = JSON(hasError)
-            returnData["errorMessage"] = JSON(errorMessage)
-            returnData["errorCode"] = JSON(errorCode)
-            
-            if (!hasError) {
-                let messageContent: JSON = response["result"]     // send contacts as json to user
+            if let content = response.result {
+                let editedMessageModel = EditMessageModel(message:      Message(threadId: content["conversation"]["id"].int, pushMessageVO: response.result!),
+                                                          hasError:     response.hasError,
+                                                          errorMessage: response.errorMessage,
+                                                          errorCode:    response.errorCode)
                 
-                // save edited data on the cache
-                let message = Message(threadId: sendParams.subjectId, pushMessageVO: messageContent)
-                Chat.cacheDB.saveMessageObjects(messages: [message], getHistoryParams: nil)
-                
-                // the response from server is come correctly, so this message will be removed from wait queue
-                if let uID = message.uniqueId {
-                    Chat.cacheDB.deleteWaitEditMessage(uniqueId: uID)
-                }
-                
-                let resultData: JSON = ["editedMessage": messageContent]
-                
-                returnData["result"] = resultData
-                success(returnData)
+                success(editedMessageModel)
             }
         }
         

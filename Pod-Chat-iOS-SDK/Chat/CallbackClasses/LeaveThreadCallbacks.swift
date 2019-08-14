@@ -16,20 +16,43 @@ extension Chat {
     
     func responseOfLeaveThread(withMessage message: ChatMessage) {
         log.verbose("Message of type 'LEAVE_THREAD' recieved", context: "Chat")
+        
+        let returnData = CreateReturnData(hasError:         false,
+                                          errorMessage:     "",
+                                          errorCode:        0,
+                                          result:           message.content?.convertToJSON() ?? [:],
+                                          resultAsArray:    nil,
+                                          resultAsString:   nil,
+                                          contentCount:     message.contentCount,
+                                          subjectId:        message.subjectId)
+        
+        if enableCache {
+            if let threadJSON = message.content?.convertToJSON() {
+                let myThread = Conversation(messageContent: threadJSON)
+                Chat.cacheDB.deleteThreads(withThreadIds: [myThread.id!])
+            }
+        }
+        
         if Chat.map[message.uniqueId] != nil {
-            let returnData: JSON = CreateReturnData(hasError:       false,
-                                                    errorMessage:   "",
-                                                    errorCode: 0,   result: message.content?.convertToJSON() ?? [:],
-                                                    resultAsString: nil,
-                                                    contentCount:   message.contentCount,
-                                                    subjectId:      message.subjectId)
-                .returnJSON()
-            
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-            callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
+            callback.onResultCallback(uID:      message.uniqueId,
+                                      response: returnData,
+                                      success:  { (successJSON) in
                 self.leaveThreadCallbackToUser?(successJSON)
             }) { _ in }
             Chat.map.removeValue(forKey: message.uniqueId)
+            
+        } else if (Chat.spamMap[message.uniqueId] != nil) {
+            let callback: CallbackProtocol = Chat.spamMap[message.uniqueId]!.first!
+            callback.onResultCallback(uID:      message.uniqueId,
+                                      response: returnData,
+                                      success:  { (successJSON) in
+                                        self.spamPvThreadCallbackToUser?(successJSON)
+            }) { _ in }
+            Chat.spamMap[message.uniqueId]?.removeFirst()
+            if (Chat.spamMap[message.uniqueId]!.count < 1) {
+                Chat.spamMap.removeValue(forKey: message.uniqueId)
+            }
         }
         
         // this functionality has beed deprecated
@@ -56,18 +79,21 @@ extension Chat {
     }
     
     public class LeaveThreadCallbacks: CallbackProtocol {
-        func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
+        func onResultCallback(uID:      String,
+                              response: CreateReturnData,
+                              success:  @escaping callbackTypeAlias,
+                              failure:  @escaping callbackTypeAlias) {
             /*
              *
              *
              */
             log.verbose("LeaveThreadCallbacks", context: "Chat")
             
-            if (!response["hasError"].boolValue) {
-                let leaveThreadModel = CreateThreadModel(messageContent:    response["result"],
-                                                         hasError:          response["hasError"].boolValue,
-                                                         errorMessage:      response["errorMessage"].stringValue,
-                                                         errorCode:         response["errorCode"].intValue)
+            if let content = response.result {
+                let leaveThreadModel = ThreadModel(messageContent:    content,
+                                                   hasError:          response.hasError,
+                                                   errorMessage:      response.errorMessage,
+                                                   errorCode:         response.errorCode)
                 
                 success(leaveThreadModel)
             }

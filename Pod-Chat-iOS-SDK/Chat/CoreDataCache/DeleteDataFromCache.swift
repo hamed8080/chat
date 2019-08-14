@@ -162,9 +162,10 @@ extension Cache {
             if let result = try context.fetch(fetchRequest) as? [CMConversation] {
                 if (result.count > 0) {
                     if let _ = result.first!.participants {
-                        for participant in result.first!.participants! {
+                        for (index, participant) in result.first!.participants!.enumerated() {
                             for id in participantIds {
                                 if (Int(exactly: participant.id ?? 0) == id) {
+                                    result.first?.removeFromParticipants(at: index)
                                     deleteAndSave(object: participant, withMessage: "Delete CMParticipant Object from Thread")
                                 }
                             }
@@ -221,8 +222,20 @@ extension Cache {
     */
     
     
+    
     // delete objects that has been not updated for "timeStamp" seconds
-    func deleteThreadParticipants(byTimeStamp: Int) {
+    func deleteThreadParticipants(inThread: Int, byTimeStamp: Int) {
+        /*
+         *  -> get the current time
+         *  -> decrease it with the timeStamp input and create a new time
+         *  -> fetch CMConversation Entity with its threadId
+         *  -> loop through the participants of the thread (result) and
+         *      -> remove this particiapnt from the thread
+         *      -> delete the particiapnt object itself
+         *
+         */
+        
+        
         /*
          *  -> get the current time
          *  -> decrease it with the timeStamp input and create a new time
@@ -232,16 +245,33 @@ extension Cache {
          *      -> delete the threadParticipant itself
          *
          */
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMThreadParticipants")
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
         let currentTime = Int(Date().timeIntervalSince1970)
-        fetchRequest.predicate = NSPredicate(format: "time <= %i", Int(currentTime - byTimeStamp))
+        let xTime = Int(currentTime - byTimeStamp)
+        fetchRequest.predicate = NSPredicate(format: "id == %i", inThread)
         do {
-            if let result = try context.fetch(fetchRequest) as? [CMThreadParticipants] {
+            if let result = try context.fetch(fetchRequest) as? [CMConversation] {
+                
+                if result.count > 0 {
+                    
+                    for (index, participant) in result.first!.participants!.enumerated() {
+                        if ((participant.time as! Int) <= xTime) {
+                            result.first?.removeFromParticipants(at: index)
+                            deleteAndSave(object: participant, withMessage: "Delete CMParticipant Object from Thread")
+                        }
+                    }
+                    
+                }
+                
+                /*
                 for threadParticipant in result {
                     deleteParticipant(inThread: Int(exactly: threadParticipant.threadId!)!, withParticipantIds: [Int(exactly: threadParticipant.participantId!)!])
                     context.delete(threadParticipant)
                     saveContext(subject: "item Deleted from CMThreadParticipants")
                 }
+                */
+                
             }
         } catch {
             fatalError("Error on fetching CMThreadParticipants when trying to delete object based on timeStamp")
@@ -302,13 +332,15 @@ extension Cache {
         fetchRequest.predicate = predicateCompound
         do {
             if let result = try context.fetch(fetchRequest) as? [CMConversation] {
-                for thread in result {
+                for (threadIndex, thread) in result.enumerated() {
                     if let participants = thread.participants {
                         for (index, _) in participants.enumerated() {
+                            result[threadIndex].removeFromParticipants(at: index)
                             deleteAndSave(object: (thread.participants?[index])!, withMessage: "Delete CMParticipant Object")
                         }
                     }
                     if let _ = thread.inviter {
+                        result[threadIndex].removeFromParticipants(thread.inviter!)
                         deleteAndSave(object: thread.inviter!, withMessage: "Delete CMParticipant Object")
                     }
                     if let _ = thread.lastMessageVO {
@@ -355,7 +387,7 @@ extension Cache {
     
     
     
-    // ToDo:
+    // ToDo: make it better, because it calls another function t delete messages (one more query on the cache)
     public func deleteMessage(count:    Int?,
                               fromTime: UInt?,
                               messageId: Int?,
@@ -383,7 +415,7 @@ extension Cache {
                     for (index, item) in result.enumerated() {
                         if (index >= offset) && (insideCount < count) {
                             
-                            deleteMessage(inThread:         Int(exactly: item.threadId ?? 0) ?? 0,
+                            deleteMessage(inThread:         Int(exactly: threadId ?? 0) ?? 0,
                                           allMessages:      false,
                                           withMessageIds:   [Int(exactly: item.id ?? 0) ?? 0])
                             insideCount += 1
@@ -391,12 +423,11 @@ extension Cache {
                     }
                 case .none:
                     for item in result {
-                        deleteMessage(inThread:         Int(exactly: item.threadId ?? 0) ?? 0,
+                        deleteMessage(inThread:         Int(exactly: threadId ?? 0) ?? 0,
                                       allMessages:      false,
                                       withMessageIds:   [Int(exactly: item.id ?? 0) ?? 0])
                     }
                     
-                    //                default: break
                 }
             }
             
@@ -422,6 +453,8 @@ extension Cache {
          *  -> fetch through al CMMessage that its threadId is equal to 'inThread' input
          *      -> if user wants to delete all messages ('allMessages' = 'true'), call the method to delete all messages
          *      -> else, get the 'messageIds' input, and delete them from cache
+         *
+         *  -> delete this messages from MessageGap Entity (if exists)
          *
          */
         
@@ -464,6 +497,13 @@ extension Cache {
             fatalError("Error on fetching list of CMMessage when trying to delete")
         }
         
+        if allMessages {
+            deleteMessageGaps(inThreadId: inThread)
+        } else {
+            updateAllMessageGapEntity(inThreadId: inThread)
+        }
+        
+        
     }
     
     
@@ -473,7 +513,7 @@ extension Cache {
      *
      *
      */
-    func deleteGap(threadId: Int, messageIds: [Int]) {
+    func deleteMessageGaps(inThreadId threadId: Int) {
         /*
          *  -> fetch from 'MessageGaps' Entity with 'threadId' and 'messageId' Inputs
          *  -> if we found any object, we will delete it
@@ -483,13 +523,16 @@ extension Cache {
         fetchRequest.predicate = NSPredicate(format: "threadId == %i", threadId)
         do {
             if let result = try context.fetch(fetchRequest) as? [MessageGaps] {
-                for msgId in messageIds {
-                    for item in result {
-                        if ((item.messageId as? Int) == msgId) {
-                            deleteAndSave(object: item, withMessage: "Delete gap from MessageGap Object")
-                        }
-                    }
+                for gap in result {
+                    deleteAndSave(object: gap, withMessage: "Delete gap from MessageGap Object")
                 }
+//                for msgId in messageIds {
+//                    for item in result {
+//                        if ((item.messageId as? Int) == msgId) {
+//                            deleteAndSave(object: item, withMessage: "Delete gap from MessageGap Object")
+//                        }
+//                    }
+//                }
             }
         } catch {
             fatalError("Error on trying to find MessageGaps")
@@ -581,7 +624,7 @@ extension Cache {
         deleteThreads()
         deleteAllMessage()
         deleteParticipants()
-        deleteThreadParticipants()
+//        deleteThreadParticipants()
     }
     
     func deleteThreads() {
@@ -601,9 +644,9 @@ extension Cache {
                     if (thread.inviter != nil) {
                         deleteAndSave(object: thread.inviter!, withMessage: "inviter from CMConversation Deleted.")
                     }
-                    if (thread.lastMessageVO != nil) {
-                        deleteAndSave(object: thread.lastMessageVO!, withMessage: "lastMessageVO from CMConversation Deleted.")
-                    }
+//                    if (thread.lastMessageVO != nil) {
+//                        deleteAndSave(object: thread.lastMessageVO!, withMessage: "lastMessageVO from CMConversation Deleted.")
+//                    }
                     if let threadParticipants = thread.participants {
                         for participant in threadParticipants {
                             deleteAndSave(object: participant, withMessage: "participant from CMConversation Deleted.")
@@ -635,6 +678,7 @@ extension Cache {
     }
 }
     
+    /*
     func deleteThreadParticipants() {
         /*
          *  -> fetch 'CMThreadParticipants' Entity
@@ -652,6 +696,7 @@ extension Cache {
             fatalError()
         }
     }
+    */
     
     
     // MARK: Delete All Messages
@@ -733,24 +778,24 @@ extension Cache {
         }
     }
     
-    func deleteMessageGap(wihtMessageId messageId: Int) {
-        /*
-         *  -> fetch 'MessageGaps' Entity with messageId
-         *  -> delete that specific messageGap object
-         *
-         */
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "MessageGaps")
-        fetchRequest.predicate = NSPredicate(format: "messageId == %i", messageId)
-        do {
-            if let result = try context.fetch(fetchRequest) as? [MessageGaps] {
-                for row in result {
-                    deleteAndSave(object: row, withMessage: "Delete row from MessageGaps table")
-                }
-            }
-        } catch {
-            fatalError()
-        }
-    }
+//    func deleteMessageGap(wihtMessageId messageId: Int) {
+//        /*
+//         *  -> fetch 'MessageGaps' Entity with messageId
+//         *  -> delete that specific messageGap object
+//         *
+//         */
+//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "MessageGaps")
+//        fetchRequest.predicate = NSPredicate(format: "messageId == %i", messageId)
+//        do {
+//            if let result = try context.fetch(fetchRequest) as? [MessageGaps] {
+//                for row in result {
+//                    deleteAndSave(object: row, withMessage: "Delete gap from MessageGaps Object")
+//                }
+//            }
+//        } catch {
+//            fatalError()
+//        }
+//    }
     
     func deleteMessageGaps() {
         /*
@@ -790,6 +835,8 @@ extension Cache {
         
         deleteAllImages()
         deleteAllFiles()
+        
+        deleteAllWaitQueues()
     }
     
 }

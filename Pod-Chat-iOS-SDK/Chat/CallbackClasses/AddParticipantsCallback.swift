@@ -21,20 +21,29 @@ extension Chat {
          *
          */
         log.verbose("Message of type 'ADD_PARTICIPANT' recieved", context: "Chat")
-        if Chat.map[message.uniqueId] != nil {
-            let returnData: JSON = CreateReturnData(hasError:       false,
-                                                    errorMessage:   "",
-                                                    errorCode:      0,
-                                                    result:         message.content?.convertToJSON() ?? [:],
-                                                    resultAsString: nil,
-                                                    contentCount:   message.contentCount,
-                                                    subjectId:      message.subjectId)
-                .returnJSON()
-            
-            if enableCache {
-                
+        
+        let returnData = CreateReturnData(hasError:         false,
+                                          errorMessage:     "",
+                                          errorCode:        0,
+                                          result:           message.content?.convertToJSON() ?? [:],
+                                          resultAsArray:    nil,
+                                          resultAsString:   nil,
+                                          contentCount:     message.contentCount,
+                                          subjectId:        message.subjectId)
+        
+        if enableCache {
+            var participants = [Participant]()
+            if let res = message.content?.convertToJSON() {
+                let conversation = Conversation(messageContent: res)
+                for participant in conversation.participants ?? [] {
+                    let myParticipant = Participant(messageContent: participant.formatToJSON(), threadId: message.subjectId)
+                    participants.append(myParticipant)
+                }
+                Chat.cacheDB.saveThreadParticipantObjects(whereThreadIdIs: message.subjectId!, withParticipants: participants)
             }
-            
+        }
+        
+        if Chat.map[message.uniqueId] != nil {
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
             callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
                 self.addParticipantsCallbackToUser?(successJSON)
@@ -66,7 +75,10 @@ extension Chat {
             self.sendParams = parameters
         }
         
-        func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
+        func onResultCallback(uID:      String,
+                              response: CreateReturnData,
+                              success:  @escaping callbackTypeAlias,
+                              failure:  @escaping callbackTypeAlias) {
             /*
              *
              *
@@ -74,19 +86,19 @@ extension Chat {
              */
             log.verbose("AddParticipantsCallback", context: "Chat")
             
-            if (!response["hasError"].boolValue) {
+            if let content = response.result {
                 
-                var participants = [Participant]()
-                for item in response["result"]["participants"].arrayValue {
-                    let myParticipant = Participant(messageContent: item, threadId: response["result"]["id"].intValue)
-                    participants.append(myParticipant)
-                }
-                Chat.cacheDB.saveThreadParticipantObjects(whereThreadIdIs: sendParams.subjectId!, withParticipants: participants)
+//                var participants = [Participant]()
+//                for item in response["result"]["participants"].arrayValue {
+//                    let myParticipant = Participant(messageContent: item, threadId: response["result"]["id"].intValue)
+//                    participants.append(myParticipant)
+//                }
+//                Chat.cacheDB.saveThreadParticipantObjects(whereThreadIdIs: sendParams.subjectId!, withParticipants: participants)
                 
-                let addParticipantModel = AddParticipantModel(messageContent:   response["result"],
-                                                              hasError:         response["hasError"].boolValue,
-                                                              errorMessage:     response["errorMessage"].stringValue,
-                                                              errorCode:        response["errorCode"].intValue)
+                let addParticipantModel = AddParticipantModel(messageContent:   content,
+                                                              hasError:         response.hasError,
+                                                              errorMessage:     response.errorMessage,
+                                                              errorCode:        response.errorCode)
                 success(addParticipantModel)
             }
         }

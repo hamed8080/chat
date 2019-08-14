@@ -43,22 +43,23 @@ extension Chat {
          */
         log.verbose("Message of type 'USER_INFO' recieved", context: "Chat")
         
-        if Chat.map[message.uniqueId] != nil {
-            let returnData: JSON = CreateReturnData(hasError:       false,
-                                                    errorMessage:   "",
-                                                    errorCode:      0,
-                                                    result:         message.content?.convertToJSON() ?? [:],
-                                                    resultAsString: nil,
-                                                    contentCount:   nil,
-                                                    subjectId:      message.subjectId)
-                .returnJSON()
-            
-            if enableCache {
-                let user = User(messageContent: message.content?.convertToJSON() ?? [:])
-                Chat.cacheDB.saveUserInfo(withUserObject: user)
-            }
+        let returnData = CreateReturnData(hasError:         false,
+                                          errorMessage:     "",
+                                          errorCode:        0,
+                                          result:           message.content?.convertToJSON() ?? [:],
+                                          resultAsArray:    nil,
+                                          resultAsString:   nil,
+                                          contentCount:     nil,
+                                          subjectId:        message.subjectId)
+        //                .returnJSON()
+        
+        if enableCache {
+            let user = User(messageContent: message.content?.convertToJSON() ?? [:])
+            Chat.cacheDB.saveUserInfo(withUserObject: user)
+        }
 //            delegate?.userEvents(type: UserEventTypes.userInfo, result: userInfo)
-            
+        
+        if Chat.map[message.uniqueId] != nil {    
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
             callback.onResultCallback(uID:      message.uniqueId,
                                       response: returnData,
@@ -83,7 +84,7 @@ extension Chat {
     public class UserInfoCallback: CallbackProtocol {
         
         func onResultCallback(uID:      String,
-                              response: JSON,
+                              response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
             /*
@@ -93,11 +94,11 @@ extension Chat {
              *
              */
             log.verbose("UserInfoCallback", context: "Chat")
-            if (!response["hasError"].boolValue) {
-                let userInfoModel = UserInfoModel(messageContent:   response["result"],
-                                                  hasError:         response["hasError"].boolValue,
-                                                  errorMessage:     response["errorMessage"].stringValue,
-                                                  errorCode:        response["errorCode"].intValue)
+            if let content = response.result {
+                let userInfoModel = UserInfoModel(messageContent:   content,
+                                                  hasError:         response.hasError,
+                                                  errorMessage:     response.errorMessage,
+                                                  errorCode:        response.errorCode)
                 success(userInfoModel)
             } else {
                 failure(["result": false])

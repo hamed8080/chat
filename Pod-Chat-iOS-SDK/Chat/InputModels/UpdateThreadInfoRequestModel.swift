@@ -22,7 +22,7 @@ open class UpdateThreadInfoRequestModel {
     public let uniqueId:    String?
     
     public init(description:    String?,
-                image:          String,
+                image:          String?,
                 metadata:       JSON?,
                 threadId:       Int,
                 title:          String,

@@ -39,6 +39,10 @@ public class CoreDataStack: NSObject {
         
         let momdName = "CacheDataModel" //pass this as a parameter
         guard let modelURL = Bundle(for: type(of: self)).url(forResource: momdName, withExtension: "momd") else { fatalError("Error loading model from bundle") }
+        /*
+         The managed object model for the application.
+         It is a fatal error for the application not to be able to find and load its model.
+         */
         guard let mom = NSManagedObjectModel(contentsOf: modelURL) else { fatalError("Error initializing mom from: \(modelURL)") }
         let container = NSPersistentContainer(name: momdName, managedObjectModel: mom)
         

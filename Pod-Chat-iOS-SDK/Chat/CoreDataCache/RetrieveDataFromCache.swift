@@ -302,7 +302,9 @@ extension Cache {
          * after that, we will fetch on the Cache
          *
          */
-        deleteThreadParticipants(byTimeStamp: timeStamp)
+        for thread in threadIds ?? [] {
+            deleteThreadParticipants(inThread: thread, byTimeStamp: timeStamp)
+        }
         
         /*
          *  -> make this propertues OR toghether: 'title', 'descriptions', 'id'(for every id inside 'threadIds input'
@@ -414,7 +416,7 @@ extension Cache {
          * after that, we will fetch on the Cache
          *
          */
-        deleteThreadParticipants(byTimeStamp: timeStamp)
+        deleteThreadParticipants(inThread: threadId, byTimeStamp: timeStamp)
         
         /*
          *  -> search through the CMConversation with the 'threadId'
@@ -422,6 +424,8 @@ extension Cache {
          *  -> make the final result and pass it as GetThreadParticipantsModel
          *
          */
+        
+        var getThreadParticipantModelResponse: GetThreadParticipantsModel?
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
         
@@ -435,7 +439,6 @@ extension Cache {
                     
                     let thread = result.first!
                     if let threadParticipants = thread.participants {
-                        
                         
                         var insideCount = 0
                         var cmParticipantObjectArr = [CMParticipant]()
@@ -452,38 +455,65 @@ extension Cache {
                         for item in cmParticipantObjectArr {
                             participantsArr.append(item.convertCMParticipantToParticipantObject())
                         }
-                        let getThreadParticipantModelResponse = GetThreadParticipantsModel(participantObjects:  participantsArr,
-                                                                                           contentCount:        0,
-                                                                                           count:               count,
-                                                                                           offset:              offset,
-                                                                                           hasError:            false,
-                                                                                           errorMessage:        "",
-                                                                                           errorCode:           0)
-                        return getThreadParticipantModelResponse
-                        
-                    } else {
-                        return nil
+                        getThreadParticipantModelResponse = GetThreadParticipantsModel(participantObjects:  participantsArr,
+                                                                                       contentCount:        0,
+                                                                                       count:               count,
+                                                                                       offset:              offset,
+                                                                                       hasError:            false,
+                                                                                       errorMessage:        "",
+                                                                                       errorCode:           0)
                     }
-                    
-                } else {
-                    return nil
                 }
-            } else {
-                return nil
             }
         } catch {
             fatalError("Error on fetching list of CMParticipant")
         }
+        
+        return getThreadParticipantModelResponse
     }
     
     
     
-    func retrieveThreadAdmins(threadId: Int) -> [ThreadAdmins]? {
+    func retrieveThreadAdmins(threadId: Int) -> UserRolesModel? {
         /*
-         *  -> fetch
-         *
+         *  -> fetch 'CMConversation' Entity where threadId is equal to 'threadId' Input
+         *  -> loop throught its participants
+         *      -> if any participant had roles, means that this participant is admin
+         *      -> so return it back to the user as Array of Participant Model
          *
          */
+        var userAdmin: UserRolesModel?
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
+        fetchRequest.predicate = NSPredicate(format: "id == %i", threadId)
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMConversation] {
+                
+                var admins = [UserRole]()
+                for thread in result {
+                    for participant in thread.participants ?? [] {
+                        if let roles = participant.roles {
+                            admins.append(UserRole(userId:  participant.id as! Int,
+                                                   name:    participant.name!,
+                                                   roles:   roles))
+                        }
+                    }
+                }
+                
+                userAdmin = UserRolesModel(threadId:        threadId,
+                                           userRolesObject: admins,
+                                           hasError:        false,
+                                           errorMessage:    "",
+                                           errorCode:       0)
+                
+            }
+        } catch {
+            fatalError("Error on trying to find the object from CMConversation entity")
+        }
+        
+        return userAdmin
+        
+        /*
+        
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "ThreadAdmins")
         // if i found the ThreadAdmins onject, update its values
         fetchRequest.predicate = NSPredicate(format: "threadId == %i", threadId)
@@ -502,6 +532,8 @@ extension Cache {
         } catch {
             fatalError("Error on trying to find the object from ThreadAdmins entity")
         }
+        */
+        
     }
     
     
@@ -727,7 +759,7 @@ extension Cache {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "MessageGaps")
         
         // this predicate used to get gap messages that are in the specific thread using 'threadId' property
-        let threadPredicate = NSPredicate(format: "messageId == %i", threadId)
+        let threadPredicate = NSPredicate(format: "threadId == %i", threadId)
         fetchRequest.predicate = threadPredicate
         
         do {

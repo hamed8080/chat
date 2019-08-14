@@ -1,5 +1,5 @@
 //
-//  CreateThreadModel.swift
+//  ThreadModel.swift
 //  Chat
 //
 //  Created by Mahyar Zhiani on 7/23/1397 AP.
@@ -10,8 +10,8 @@ import Foundation
 import SwiftyJSON
 
 
-open class CreateThreadModel {
-//open class ThreadModel {
+//open class CreateThreadModel {
+open class ThreadModel {
     /*
      ---------------------------------------
      * responseAsJSON:
@@ -69,8 +69,6 @@ open class CreateThreadModel {
     public var nextOffset:         Int = 0
     public var thread:             Conversation?
     
-    public var threadJSON:         JSON?
-    
     public init(messageContent: JSON,
                 hasError:       Bool,
                 errorMessage:   String,
@@ -90,7 +88,6 @@ open class CreateThreadModel {
         //        self.nextOffset = offset + messageLength
         
         self.thread = Conversation(messageContent: messageContent)
-        self.threadJSON = thread?.formatToJSON()
     }
     
     public init(conversation:   Conversation?,
@@ -101,8 +98,6 @@ open class CreateThreadModel {
         self.hasError           = hasError
         self.errorMessage       = errorMessage
         self.errorCode          = errorCode
-        
-        self.threadJSON = conversation?.formatToJSON()
     }
     
     
@@ -110,12 +105,12 @@ open class CreateThreadModel {
         let result: JSON = ["contentCount": contentCount,
                             "hasNext":      hasNext,
                             "nextOffset":   nextOffset,
-                            "thread":       threadJSON ?? NSNull()]
+                            "thread":       thread?.formatToJSON() ?? NSNull()]
         
-        let finalResult: JSON = ["result": result,
-                                 "hasError": hasError,
+        let finalResult: JSON = ["result":      result,
+                                 "hasError":    hasError,
                                  "errorMessage": errorMessage,
-                                 "errorCode": errorCode]
+                                 "errorCode":   errorCode]
         
         return finalResult
     }

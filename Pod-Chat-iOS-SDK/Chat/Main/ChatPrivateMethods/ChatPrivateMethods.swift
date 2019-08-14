@@ -384,6 +384,7 @@ extension Chat {
      *
      *
      */
+    /*
     func httpRequest(from urlStr:           String,
                      withMethod:            HTTPMethod,
                      withHeaders:           HTTPHeaders?,
@@ -546,7 +547,7 @@ extension Chat {
         }
         
     }
-    
+    */
     
     
     /*
@@ -574,7 +575,11 @@ extension Chat {
         }
         
         if (callback != nil) {
-            Chat.map[uniqueId] = callback
+            if (asyncMessageVO.content.convertToJSON()["chatMessageVOType"].intValue == 41) {
+                Chat.spamMap[uniqueId] = [callback, callback, callback] as? [CallbackProtocol]
+            } else {
+                Chat.map[uniqueId] = callback
+            }
         }
         
         if let myCallbacks = callbacks {
@@ -952,7 +957,7 @@ extension Chat {
      *
      */
     func receivedMessageHandler(withContent message: ChatMessage) {
-        log.debug("content of received message: \n \(message.returnToJSON())", context: "Chat")
+//        log.debug("content of received message: \n \(message.returnToJSON())", context: "Chat")
         
         lastReceivedMessageTime = Date()
         
@@ -1192,7 +1197,7 @@ extension Chat {
             
         // a message of type 41 (SPAM_PV_THREAD) comes from Server.
         case chatMessageVOTypes.SPAM_PV_THREAD.rawValue:
-            responseOfSpamPvThread(withMessage: message)
+//            responseOfSpamPvThread(withMessage: message)
             break
             
         // a message of type 42 (SET_RULE_TO_USER) comes from Server.
@@ -1222,17 +1227,20 @@ extension Chat {
 //                let message: String = messageContentAsJSON["message"].stringValue
 //                let code: Int = messageContentAsJSON["code"].intValue
                 
-                let returnData: JSON = CreateReturnData(hasError:       true,
-                                                        errorMessage:   message.message,
-                                                        errorCode:      message.code,
-                                                        result:         messageContentAsJSON,
-                                                        resultAsString: nil,
-                                                        contentCount:   0,
-                                                        subjectId:      message.subjectId)
-                    .returnJSON()
+                let returnData = CreateReturnData(hasError:       true,
+                                                  errorMessage:   message.message,
+                                                  errorCode:      message.code,
+                                                  result:         messageContentAsJSON,
+                                                  resultAsArray: nil,
+                                                  resultAsString: nil,
+                                                  contentCount:   0,
+                                                  subjectId:      message.subjectId)
+//                    .returnJSON()
                 
                 let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-                callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
+                callback.onResultCallback(uID:      message.uniqueId,
+                                          response: returnData,
+                                          success:  { (successJSON) in
                     self.spamPvThreadCallbackToUser?(successJSON)
                 }) { _ in }
                 Chat.map.removeValue(forKey: message.uniqueId)
@@ -1354,18 +1362,32 @@ extension Chat {
     
     
     
-    func x(chatContent: JSON, messageContent: JSON, contentCount: Int, uniqueId: String) {
-        
-        if Chat.map[uniqueId] != nil {
-            let returnData: JSON = CreateReturnData(hasError: false, errorMessage: "", errorCode: 0, result: messageContent, resultAsString: nil, contentCount: contentCount, subjectId: chatContent["subjectId"].int).returnJSON()
-            
-            let callback: CallbackProtocol = Chat.map[uniqueId]!
-            callback.onResultCallback(uID: uniqueId, response: returnData, success: { (successJSON) in
-                self.blockCallbackToUser?(successJSON)
-            }) { _ in }
-            Chat.map.removeValue(forKey: uniqueId)
-        }
-    }
+    
+    
+    
+    
+//    func x(chatContent: JSON, messageContent: JSON, contentCount: Int, uniqueId: String) {
+//
+//        if Chat.map[uniqueId] != nil {
+//            let returnData = CreateReturnData(hasError:         false,
+//                                              errorMessage:     "",
+//                                              errorCode:        0,
+//                                              result:           messageContent,
+//                                              resultAsArray:    nil,
+//                                              resultAsString:   nil,
+//                                              contentCount:     contentCount,
+//                                              subjectId:        chatContent["subjectId"].int)
+////                .returnJSON()
+//
+//            let callback: CallbackProtocol = Chat.map[uniqueId]!
+//            callback.onResultCallback(uID:      uniqueId,
+//                                      response: returnData,
+//                                      success: { (successJSON) in
+//                self.blockCallbackToUser?(successJSON)
+//            }) { _ in }
+//            Chat.map.removeValue(forKey: uniqueId)
+//        }
+//    }
     
     
 }

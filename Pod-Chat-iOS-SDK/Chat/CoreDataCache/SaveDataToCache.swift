@@ -207,15 +207,16 @@ extension Cache {
             if let result = try context.fetch(fetchRequest) as? [CMConversation] {
                 if (result.count > 0) {
                     for item in participants {
-                        if let myCMParticipantObject = updateCMParticipantEntity(withParticipantsObject: item) {
+                        if let myCMParticipantObject = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: item) {
                             result.first!.addToParticipants(myCMParticipantObject)
                             saveContext(subject: "Add/Update CMParticipant in a thread and Update CMConversation")
-                            
+                            /*
                             if let roles = item.roles {
                                 let userRoles = UserRole(userId: item.id!, name: item.name!, roles: roles)
                                 _ = updateThreadAdminEntity(inThreadId: threadId, roles: userRoles)
                             }
                             updateThreadParticipantEntity(inThreadId: Int(exactly: result.first!.id!)!, withParticipantId: Int(exactly: item.id!)!)
+                            */
                         }
                     }
                 }
@@ -227,6 +228,31 @@ extension Cache {
         
     }
     
+    
+    public func updateAdminRoles(inThreadId threadId: Int, withUserRoles myUserRole: UserRole) {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMParticipant")
+        fetchRequest.predicate = NSPredicate(format: "id == %i AND threadId == %i", myUserRole.userId, threadId)
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMParticipant] {
+                if (result.count > 0) {
+                    result.first!.id        = myUserRole.userId as NSNumber?
+                    result.first!.name      = myUserRole.name
+                    result.first!.roles     = (myUserRole.roles != []) ? myUserRole.roles : nil
+                    saveContext(subject: "Update CMParticipant -update existing object-")
+                } else {    // it means that we couldn't find the CMParticipant object on the cache, so we will create one
+                    let theParticipantEntity = NSEntityDescription.entity(forEntityName: "CMParticipant", in: context)
+                    let theParticipant = CMParticipant(entity: theParticipantEntity!, insertInto: context)
+                    theParticipant.id       = myUserRole.userId as NSNumber?
+                    theParticipant.name     = myUserRole.name
+                    theParticipant.roles    = (myUserRole.roles != []) ? myUserRole.roles : nil
+                    saveContext(subject: "Update CMParticipant -create a new object-")
+                }
+            }
+        } catch {
+            fatalError("Error on trying to find the participant from CMParticipant entity")
+        }
+        
+    }
     
     // this function will save (or update) messages that comes from server, in the Cache.
     public func saveMessageObjects(messages: [Message], getHistoryParams: JSON?) {
@@ -357,6 +383,8 @@ extension Cache {
          *              we should delete all messages from cache in this boundry
          *              -> delete all messages with this fromTime, toTime inputs
          *
+         *  -> for all messages, update the CMMessageEntity
+         *  -> Update the MessageGapEntity inside this specific thread
          *
          */
         
@@ -688,14 +716,22 @@ extension Cache {
             _ = updateCMMessageEntity(withMessageObject: item)
         }
         
+        if let params = getHistoryParams {
+            if let threadId = params["threadId"].int {
+                updateAllMessageGapEntity(inThreadId: threadId)
+            }
+        }
+        
     }
     
     
+    /*
     public func saveMessageGap(threadId: Int, messageIds: [Int], messagePreviousIds: [Int]) {
-        for (index, msgId) in messageIds.enumerated() {
-            updateMessageGapEntity(inThreadId: threadId, withMessageId: msgId, withPreviousId: messagePreviousIds[index])
+        for (index, _) in messageIds.enumerated() {
+            updateMessageGapEntity(inThreadId: threadId, withMessageId: messageIds[index], withPreviousId: messagePreviousIds[index])
         }
     }
+    */
     
     
     // this function will save (or update) uploaded image response that comes from server, in the Cache.

@@ -99,10 +99,10 @@ extension CMConversation {
     @NSManaged public func removeFromParticipants(_ value: CMParticipant)
 
     @objc(addParticipants:)
-    @NSManaged public func addToParticipants(_ values: NSOrderedSet)
+    @NSManaged public func addToParticipants(_ values: [CMParticipant])
 
     @objc(removeParticipants:)
-    @NSManaged public func removeFromParticipants(_ values: NSOrderedSet)
+    @NSManaged public func removeFromParticipants(_ values: [CMParticipant])
 
 }
 

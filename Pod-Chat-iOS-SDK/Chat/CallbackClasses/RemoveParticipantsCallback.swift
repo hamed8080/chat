@@ -21,20 +21,29 @@ extension Chat {
          *
          */
         log.verbose("Message of type 'REMOVE_PARTICIPANT' recieved", context: "Chat")
-        if Chat.map[message.uniqueId] != nil {
-            let returnData: JSON = CreateReturnData(hasError:       false,
-                                                    errorMessage:   "",
-                                                    errorCode:      0,
-                                                    result:         message.content?.convertToJSON() ?? [:],
-                                                    resultAsString: nil,
-                                                    contentCount:   message.contentCount,
-                                                    subjectId:      message.subjectId)
-                .returnJSON()
-            
-            if enableCache {
-                
+        
+        let returnData = CreateReturnData(hasError:         false,
+                                          errorMessage:     "",
+                                          errorCode:        0,
+                                          result:           message.content?.convertToJSON() ?? [:],
+                                          resultAsArray:    nil,
+                                          resultAsString:   nil,
+                                          contentCount:     message.contentCount,
+                                          subjectId:        message.subjectId)
+        
+        if enableCache {
+            var participantIds = [Int]()
+            if let res = message.content?.convertToJSON() {
+                let conversation = Conversation(messageContent: res)
+                for participant in conversation.participants ?? [] {
+                    let myParticipant = Participant(messageContent: participant.formatToJSON(), threadId: message.subjectId)
+                    participantIds.append(myParticipant.id!)
+                }
+                Chat.cacheDB.deleteParticipant(inThread: message.subjectId!, withParticipantIds: participantIds)
             }
-            
+        }
+        
+        if Chat.map[message.uniqueId] != nil {
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
             callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
                 self.removeParticipantsCallbackToUser?(successJSON)
@@ -63,10 +72,10 @@ extension Chat {
             self.sendParams = parameters
         }
         
-        func onResultCallback(uID: String,
-                              response: JSON,
-                              success: @escaping callbackTypeAlias,
-                              failure: @escaping callbackTypeAlias) {
+        func onResultCallback(uID:      String,
+                              response: CreateReturnData,
+                              success:  @escaping callbackTypeAlias,
+                              failure:  @escaping callbackTypeAlias) {
             /*
              *
              *
@@ -74,20 +83,19 @@ extension Chat {
              */
             log.verbose("RemoveParticipantsCallback", context: "Chat")
             
-            if (!response["hasError"].boolValue) {
+            if let arrayContent = response.resultAsArray {
                 
                 var removeParticipantsArray = [Participant]()
-                for item in response["result"].arrayValue {
+                for item in arrayContent {
                     let myParticipant = Participant(messageContent: item, threadId: sendParams.subjectId)
 //                    Chat.cacheDB.deleteParticipant(inThread: sendParams["subjectId"].intValue, withParticipantIds: [myParticipant.id!])
-                    
                     removeParticipantsArray.append(myParticipant)
                 }
                 
                 let removeParticipantModel = RemoveParticipantModel(messageObjects: removeParticipantsArray,
-                                                                    hasError: response["hasError"].boolValue,
-                                                                    errorMessage: response["errorMessage"].stringValue,
-                                                                    errorCode: response["errorCode"].intValue)
+                                                                    hasError:       response.hasError,
+                                                                    errorMessage:   response.errorMessage,
+                                                                    errorCode:      response.errorCode)
                 success(removeParticipantModel)
             }
         }

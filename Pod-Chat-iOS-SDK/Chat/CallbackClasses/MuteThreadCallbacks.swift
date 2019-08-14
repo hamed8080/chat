@@ -21,17 +21,21 @@ extension Chat {
          *
          */
         log.verbose("Message of type 'MUTE_THREAD' recieved", context: "Chat")
-        if Chat.map[message.uniqueId] != nil {
-            let returnData: JSON = CreateReturnData(hasError:       false,
-                                                    errorMessage:   "",
-                                                    errorCode:      0,
-                                                    result:         nil,
-                                                    resultAsString: message.content,
-                                                    contentCount:   nil,
-                                                    subjectId:      message.subjectId).returnJSON()
-            
+        
+        let returnData = CreateReturnData(hasError:         false,
+                                          errorMessage:     "",
+                                          errorCode:        0,
+                                          result:           nil,
+                                          resultAsArray:    nil,
+                                          resultAsString:   message.content,
+                                          contentCount:     nil,
+                                          subjectId:        message.subjectId)
+        
+        if Chat.map[message.uniqueId] != nil {            
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-            callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
+            callback.onResultCallback(uID:      message.uniqueId,
+                                      response: returnData,
+                                      success:  { (successJSON) in
                 self.muteThreadCallbackToUser?(successJSON)
             }) { _ in }
             Chat.map.removeValue(forKey: message.uniqueId)
@@ -52,18 +56,21 @@ extension Chat {
     }
     
     public class MuteThreadCallbacks: CallbackProtocol {
-        func onResultCallback(uID: String, response: JSON, success: @escaping callbackTypeAlias, failure: @escaping callbackTypeAlias) {
+        func onResultCallback(uID:      String,
+                              response: CreateReturnData,
+                              success:  @escaping callbackTypeAlias,
+                              failure:  @escaping callbackTypeAlias) {
             /*
              *
              *
              */
             log.verbose("MuteThreadCallbacks", context: "Chat")
             
-            if (!response["hasError"].boolValue) {
-                let muteModel = MuteUnmuteThreadModel(threadId:     Int(response["result"].stringValue) ?? 0,
-                                                      hasError:     response["hasError"].boolValue,
-                                                      errorMessage: response["errorMessage"].stringValue,
-                                                      errorCode:    response["errorCode"].intValue)
+            if let stringContent = response.resultAsString {
+                let muteModel = MuteUnmuteThreadModel(threadId:     Int(stringContent) ?? 0,
+                                                      hasError:     response.hasError,
+                                                      errorMessage: response.errorMessage,
+                                                      errorCode:    response.errorCode)
                 
                 success(muteModel)
             }

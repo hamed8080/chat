@@ -41,9 +41,6 @@ open class UploadImageModel {
     //    public var localPath:           String = ""
     public let uploadImage:         UploadImage?
     
-    
-    public var uploadImageJSON: JSON = [:]
-    
     public init(messageContentJSON: JSON?,
                 errorCode:      Int,
                 errorMessage:   String,
@@ -60,7 +57,6 @@ open class UploadImageModel {
         
         if let content = messageContentJSON {
             self.uploadImage = UploadImage(messageContent: content)
-            self.uploadImageJSON = uploadImage!.formatToJSON()
         } else {
             uploadImage = nil
         }
@@ -83,7 +79,6 @@ open class UploadImageModel {
         
         if let myImage = messageContentModel {
             self.uploadImage    = myImage
-            self.uploadImageJSON = uploadImage!.formatToJSON()
         } else {
             uploadImage = nil
         }
@@ -91,12 +86,12 @@ open class UploadImageModel {
     
     
     public func returnDataAsJSON() -> JSON {
-        let result: JSON = ["uploadImage": uploadImageJSON]
+        let result: JSON = ["uploadImage":      uploadImage?.formatToJSON() ?? NSNull()]
         
-        let resultAsJSON: JSON = ["result": result,
-                                  "errorCode": errorCode,
+        let resultAsJSON: JSON = ["result":     result,
+                                  "errorCode":  errorCode,
                                   "errorMessage": errorMessage,
-                                  "hasError": hasError/*,
+                                  "hasError":   hasError/*,
              "localPath": localPath*/]
         
         return resultAsJSON

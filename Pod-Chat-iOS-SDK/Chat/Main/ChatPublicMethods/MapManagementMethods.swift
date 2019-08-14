@@ -48,13 +48,58 @@ extension Chat {
                                        "lng": mapReverseInput.lng,
                                        "uniqueId": theUniqueId]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: nil, requestUniqueId: nil, isImage: nil, isFile: nil, completion: { (jsonResponse) in
-            if let theResponse = jsonResponse as? JSON {
-                let mapReverseModel = MapReverseModel(messageContent: theResponse, hasError: false, errorMessage: "", errorCode: 0)
-                completion(mapReverseModel)
-            }
-            
-        }, progress: nil, idDownloadRequest: false, isMapServiceRequst: true) { _,_ in }
+        Networking.sharedInstance.requesttWithJSONresponse(from:            url,
+                                                           withMethod:      method,
+                                                           withHeaders:     headers,
+                                                           withParameters:  parameters) { (jsonResponse) in
+                                                            if let theResponse = jsonResponse as? JSON {
+                                                                let mapReverseModel = MapReverseModel(messageContent:   theResponse,
+                                                                                                      hasError:         false,
+                                                                                                      errorMessage:     "",
+                                                                                                      errorCode:        0)
+                                                                completion(mapReverseModel)
+                                                            }
+        }
+        
+//        Alamofire.request(url,
+//                          method:       method,
+//                          parameters:   parameters,
+//                          headers:      headers)
+//            .responseJSON { (myResponse) in
+//                if myResponse.result.isSuccess {
+//                    if let jsonValue = myResponse.result.value {
+//                        let jsonResponse: JSON = JSON(jsonValue)
+//                        let mapReverseModel = MapReverseModel(messageContent:   jsonResponse,
+//                                                              hasError:         false,
+//                                                              errorMessage:     "",
+//                                                              errorCode:        0)
+//                        completion(mapReverseModel)
+//                    }
+//                } else {
+//                    log.error("Response of GetRequest is Failed)", context: "Chat")
+//                }
+//        }
+        
+//        httpRequest(from:           url,
+//                    withMethod:     method,
+//                    withHeaders:    headers,
+//                    withParameters: parameters,
+//                    dataToSend:     nil,
+//                    requestUniqueId: nil,
+//                    isImage:        nil,
+//                    isFile:         nil,
+//                    completion: { (jsonResponse) in
+//            if let theResponse = jsonResponse as? JSON {
+//                let mapReverseModel = MapReverseModel(messageContent:   theResponse,
+//                                                      hasError:         false,
+//                                                      errorMessage:     "",
+//                                                      errorCode:        0)
+//                completion(mapReverseModel)
+//            }
+//
+//        }, progress:            nil,
+//           idDownloadRequest:   false,
+//           isMapServiceRequst:  true) { _,_ in }
         
         
     }
@@ -92,14 +137,59 @@ extension Chat {
                                        "lng":   mapSearchInput.lng,
                                        "term":  mapSearchInput.term]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: nil, requestUniqueId: nil, isImage: nil, isFile: nil, completion: { (jsonResponse) in
-            
-            if let theResponse = jsonResponse as? JSON {
-                let mapSearchModel = MapSearchModel(messageContent: theResponse, hasError: false, errorMessage: "", errorCode: 0)
-                completion(mapSearchModel)
-            }
-            
-        }, progress: nil, idDownloadRequest: false, isMapServiceRequst: true) { _,_ in }
+        Networking.sharedInstance.requesttWithJSONresponse(from:            url,
+                                                           withMethod:      method,
+                                                           withHeaders:     headers,
+                                                           withParameters:  parameters) { (jsonResponse) in
+                                                            if let theResponse = jsonResponse as? JSON {
+                                                                let mapSearchModel = MapSearchModel(messageContent: theResponse,
+                                                                                                    hasError:       false,
+                                                                                                    errorMessage:   "",
+                                                                                                    errorCode:      0)
+                                                                completion(mapSearchModel)
+                                                            }
+        }
+        
+//        Alamofire.request(url,
+//                          method:       method,
+//                          parameters:   parameters,
+//                          headers:      headers)
+//            .responseJSON { (myResponse) in
+//                if myResponse.result.isSuccess {
+//                    if let jsonValue = myResponse.result.value {
+//                        let jsonResponse: JSON = JSON(jsonValue)
+//                        let mapSearchModel = MapSearchModel(messageContent: jsonResponse,
+//                                                            hasError:       false,
+//                                                            errorMessage:   "",
+//                                                            errorCode:      0)
+//                        completion(mapSearchModel)
+//                    }
+//                } else {
+//                    log.error("Response of GetRequest is Failed)", context: "Chat")
+//                }
+//        }
+        
+//        httpRequest(from:           url,
+//                    withMethod:     method,
+//                    withHeaders:    headers,
+//                    withParameters: parameters,
+//                    dataToSend:     nil,
+//                    requestUniqueId: nil,
+//                    isImage:        nil,
+//                    isFile:         nil,
+//                    completion: { (jsonResponse) in
+//
+//            if let theResponse = jsonResponse as? JSON {
+//                let mapSearchModel = MapSearchModel(messageContent: theResponse,
+//                                                    hasError:       false,
+//                                                    errorMessage:   "",
+//                                                    errorCode:      0)
+//                completion(mapSearchModel)
+//            }
+//
+//        }, progress:            nil,
+//           idDownloadRequest:   false,
+//           isMapServiceRequst:  true) { _,_ in }
         
     }
     
@@ -138,13 +228,58 @@ extension Chat {
             "destination":   "\(mapRoutingInput.destinationLat),\(mapRoutingInput.destinationLng)",
             "alternative":   mapRoutingInput.alternative]
         
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: parameters, dataToSend: nil, requestUniqueId: nil, isImage: nil, isFile: nil, completion: { (jsonResponse) in
-            if let theResponse = jsonResponse as? JSON {
-                let mapRoutingModel = MapRoutingModel(messageContent: theResponse, hasError: false, errorMessage: "", errorCode: 0)
-                completion(mapRoutingModel)
-            }
-            
-        }, progress: nil, idDownloadRequest: false, isMapServiceRequst: true) { _,_ in }
+        Networking.sharedInstance.requesttWithJSONresponse(from:            url,
+                                                           withMethod:      method,
+                                                           withHeaders:     headers,
+                                                           withParameters:  parameters) { (jsonResponse) in
+                                                            if let theResponse = jsonResponse as? JSON {
+                                                                let mapRoutingModel = MapRoutingModel(messageContent:   theResponse,
+                                                                                                      hasError:         false,
+                                                                                                      errorMessage:     "",
+                                                                                                      errorCode:        0)
+                                                                completion(mapRoutingModel)
+                                                            }
+        }
+        
+//        Alamofire.request(url,
+//                          method:       method,
+//                          parameters:   parameters,
+//                          headers:      headers)
+//            .responseJSON { (myResponse) in
+//                if myResponse.result.isSuccess {
+//                    if let jsonValue = myResponse.result.value {
+//                        let jsonResponse: JSON = JSON(jsonValue)
+//                        let mapRoutingModel = MapRoutingModel(messageContent:   jsonResponse,
+//                                                              hasError:         false,
+//                                                              errorMessage:     "",
+//                                                              errorCode:        0)
+//                        completion(mapRoutingModel)
+//                    }
+//                } else {
+//                    log.error("Response of GetRequest is Failed)", context: "Chat")
+//                }
+//        }
+        
+//        httpRequest(from:           url,
+//                    withMethod:     method,
+//                    withHeaders:    headers,
+//                    withParameters: parameters,
+//                    dataToSend:     nil,
+//                    requestUniqueId: nil,
+//                    isImage:        nil,
+//                    isFile:         nil,
+//                    completion: { (jsonResponse) in
+//            if let theResponse = jsonResponse as? JSON {
+//                let mapRoutingModel = MapRoutingModel(messageContent:   theResponse,
+//                                                      hasError:         false,
+//                                                      errorMessage:     "",
+//                                                      errorCode:        0)
+//                completion(mapRoutingModel)
+//            }
+//
+//        }, progress:            nil,
+//           idDownloadRequest:   false,
+//           isMapServiceRequst:  true) { _,_ in }
         
     }
     
@@ -187,23 +322,34 @@ extension Chat {
                                        "width":     mapStaticImageInput.width,
                                        "height":    mapStaticImageInput.height]
         
-        Alamofire.request(url, method: method, parameters: parameters, headers: nil).downloadProgress(closure: { (downloadProgress) in
-            
-            print("downloadProgress = \(downloadProgress)")
-            let myProgressFloat: Float = Float(downloadProgress.fractionCompleted)
-            progress(myProgressFloat)
-        }).responseData { (myResponse) in
-            
-            if myResponse.result.isSuccess {
-                
-                guard let image = myResponse.result.value else { print("Value is empty!!!"); return }
-                completion(image)
-                
-            } else {
-                print("Failed!")
-            }
-            
+        Networking.sharedInstance.download(toUrl: url,
+                                           withMethod: method,
+                                           withHeaders: nil,
+                                           withParameters: parameters,
+                                           progress: { (downloadProgress) in
+                                            progress(downloadProgress)
+        }) { (myResponse, jsonResponse) in
+            guard let image = myResponse else { print("Value is empty!!!"); return }
+            completion(image)
         }
+        
+//        Alamofire.request(url,
+//                          method:       method,
+//                          parameters:   parameters,
+//                          headers:      nil)
+//            .downloadProgress(closure: { (downloadProgress) in
+//            let myProgressFloat: Float = Float(downloadProgress.fractionCompleted)
+//            progress(myProgressFloat)
+//
+//        }).responseData { (myResponse) in
+//            if myResponse.result.isSuccess {
+//                guard let image = myResponse.result.value else { print("Value is empty!!!"); return }
+//                completion(image)
+//            } else {
+//                print("Failed!")
+//            }
+//
+//        }
         
     }
     

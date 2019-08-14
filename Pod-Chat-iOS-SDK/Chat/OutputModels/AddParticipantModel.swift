@@ -19,8 +19,6 @@ open class AddParticipantModel {
     // result model
     public var thread:            Conversation?
     
-    public var threadJSON:        JSON?
-    
     public init(messageContent: JSON,
                 hasError: Bool,
                 errorMessage: String,
@@ -30,12 +28,7 @@ open class AddParticipantModel {
         self.errorMessage       = errorMessage
         self.errorCode          = errorCode
         
-        let conversation = Conversation(messageContent: messageContent)
-        let conversationJSON = conversation.formatToJSON()
-        
-        self.thread = conversation
-        self.threadJSON = conversationJSON
-        
+        self.thread = Conversation(messageContent: messageContent)
     }
     
     public init(conversation:   Conversation,
@@ -48,18 +41,14 @@ open class AddParticipantModel {
         self.errorCode          = errorCode
         
         self.thread = conversation
-        
-        let conversationJSON = conversation.formatToJSON()
-        self.threadJSON = conversationJSON
     }
     
     public func returnDataAsJSON() -> JSON {
-        let result: JSON = ["thread": threadJSON ?? NSNull()]
-        
-        let finalResult: JSON = ["result": result,
-                                 "hasError": hasError,
+        let result: JSON = ["thread":       thread?.formatToJSON() ?? NSNull()]
+        let finalResult: JSON = ["result":      result,
+                                 "hasError":    hasError,
                                  "errorMessage": errorMessage,
-                                 "errorCode": errorCode]
+                                 "errorCode":   errorCode]
         
         return finalResult
     }

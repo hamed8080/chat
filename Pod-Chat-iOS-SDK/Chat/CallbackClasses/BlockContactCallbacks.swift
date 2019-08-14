@@ -40,16 +40,17 @@ extension Chat {
          *
          */
         log.verbose("Message of type 'BLOCK' recieved", context: "Chat")
-        if Chat.map[message.uniqueId] != nil {
-            let returnData: JSON = CreateReturnData(hasError:       false,
-                                                    errorMessage:   "",
-                                                    errorCode:      0,
-                                                    result:         message.content?.convertToJSON() ?? [:],
-                                                    resultAsString: nil,
-                                                    contentCount:   message.contentCount,
-                                                    subjectId:      message.subjectId)
-                .returnJSON()
-            
+        
+        let returnData = CreateReturnData(hasError:         false,
+                                          errorMessage:     "",
+                                          errorCode:        0,
+                                          result:           message.content?.convertToJSON() ?? [:],
+                                          resultAsArray:    nil,
+                                          resultAsString:   nil,
+                                          contentCount:     message.contentCount,
+                                          subjectId:        message.subjectId)
+        
+        if (Chat.map[message.uniqueId] != nil) {
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
             callback.onResultCallback(uID:      message.uniqueId,
                                       response: returnData,
@@ -57,6 +58,18 @@ extension Chat {
                 self.blockCallbackToUser?(successJSON)
             }) { _ in }
             Chat.map.removeValue(forKey: message.uniqueId)
+            
+        } else if (Chat.spamMap[message.uniqueId] != nil) {
+            let callback: CallbackProtocol = Chat.spamMap[message.uniqueId]!.first!
+            callback.onResultCallback(uID:      message.uniqueId,
+                                      response: returnData,
+                                      success:  { (successJSON) in
+                                        self.spamPvThreadCallbackToUser?(successJSON)
+            }) { _ in }
+            Chat.spamMap[message.uniqueId]?.removeFirst()
+            if (Chat.spamMap[message.uniqueId]!.count < 1) {
+                Chat.spamMap.removeValue(forKey: message.uniqueId)
+            }
         }
         
     }
@@ -64,7 +77,7 @@ extension Chat {
     public class BlockContactCallbacks: CallbackProtocol {
         
         func onResultCallback(uID:      String,
-                              response: JSON,
+                              response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
             /*
@@ -73,11 +86,11 @@ extension Chat {
              *      -> send the "BlockedContactModel" as a callback
              *
              */
-            if (response["result"] != JSON.null) {
-                let blockUserModel = BlockedContactModel(messageContent:    response["result"],
-                                                         hasError:          response["hasError"].boolValue,
-                                                         errorMessage:      response["errorMessage"].stringValue,
-                                                         errorCode:         response["errorCode"].intValue)
+            if let content = response.result {
+                let blockUserModel = BlockedContactModel(messageContent:    content,
+                                                         hasError:          response.hasError,
+                                                         errorMessage:      response.errorMessage,
+                                                         errorCode:         response.errorCode)
                 success(blockUserModel)
             }
         }

@@ -138,7 +138,7 @@ public class Chat {
     var serverName:     String  = ""        // Name of the server that we had registered on
     var token:          String  = ""        // every user have to had a token (get it from SSO Server)
     var generalTypeCode:    String  = "default"
-    var enableCache:        Bool    = false
+    public var enableCache:        Bool    = false
     var mapApiKey:          String  = "8b77db18704aa646ee5aaea13e7370f4f88b9e8c"
     var mapServer:          String  = "https://api.neshan.org/v1"
     
@@ -188,6 +188,7 @@ public class Chat {
     // property to hold array of request that comes from client, but they have not completed yet, and response didn't come yet.
     // the keys are uniqueIds of the requests
     static var map = [String: CallbackProtocol]()
+    static var spamMap = [String: [CallbackProtocol]]()
     
     // property to hold array of Sent, Deliver and Seen requests that comes from client, but they have not completed yet, and response didn't come yet.
     // the keys are uniqueIds of the requests

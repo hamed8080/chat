@@ -14,16 +14,19 @@ open class MessageDeliverySeenListRequestModel {
     public let messageId:   Int
     public let offset:      Int?
     public let typeCode:    String?
+    public let uniqueId:    String?
     
-    public init(count:     Int?,
-                messageId: Int,
-                offset:    Int?,
-                typeCode:  String?) {
+    public init(count:      Int?,
+                messageId:  Int,
+                offset:     Int?,
+                typeCode:   String?,
+                uniqueId:   String?) {
         
         self.count      = count
         self.messageId  = messageId
         self.offset     = offset
         self.typeCode   = typeCode
+        self.uniqueId   = uniqueId
     }
     
 }

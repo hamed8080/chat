@@ -43,18 +43,21 @@ extension Chat {
          *
          */
         log.verbose("Message of type 'UPDATE_THREAD_INFO' recieved", context: "Chat")
+        
+        let returnData = CreateReturnData(hasError:         false,
+                                          errorMessage:     "",
+                                          errorCode:        0,
+                                          result:           message.content?.convertToJSON(),
+                                          resultAsArray:    nil,
+                                          resultAsString:   nil,
+                                          contentCount:     nil,
+                                          subjectId:        message.subjectId)
+        
         if Chat.map[message.uniqueId] != nil {
-            let returnData: JSON = CreateReturnData(hasError:       false,
-                                                    errorMessage:   "",
-                                                    errorCode:      0,
-                                                    result:         message.content?.convertToJSON(),
-                                                    resultAsString: nil,
-                                                    contentCount:   nil,
-                                                    subjectId:      message.subjectId)
-                .returnJSON()
-            
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-            callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
+            callback.onResultCallback(uID:      message.uniqueId,
+                                      response: returnData,
+                                      success:  { (successJSON) in
                 Chat.map.removeValue(forKey: message.uniqueId)
                 self.updateThreadInfoCallbackToUser?(successJSON)
             }) { _ in }
@@ -65,7 +68,7 @@ extension Chat {
     
     public class UpdateThreadInfoCallback: CallbackProtocol {
         func onResultCallback(uID:      String,
-                              response: JSON,
+                              response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
             /*
@@ -76,8 +79,8 @@ extension Chat {
              */
             log.verbose("UpdateThreadInfoCallback", context: "Chat")
             
-            if (!response["hasError"].boolValue) {
-                if let threadId = response["result"]["id"].int {
+            if let content = response.result {
+                if let threadId = content["id"].int {
                     let getthreadRequestInput = GetThreadsRequestModel(count:               nil,
                                                                        creatorCoreUserId:   nil,
                                                                        metadataCriteria:    nil,

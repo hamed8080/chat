@@ -318,6 +318,19 @@ extension Cache {
         }
     }
     
+    func deleteWaitTextMessage() {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfTextMessages")
+        do {
+            if let result = try context.fetch(fetchRequest) as? [QueueOfTextMessages] {
+                for (index, _) in result.enumerated() {
+                    deleteAndSave(object: result[index], withMessage: "QueueOfTextMessages object Deleted from cache")
+                }
+            }
+        } catch {
+            fatalError("Error on fetching list of QueueOfTextMessages with uniqueId")
+        }
+    }
+    
     func deleteWaitFileMessage(uniqueId: String) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfFileMessages")
         
@@ -329,6 +342,19 @@ extension Cache {
             if let result = try context.fetch(fetchRequest) as? [QueueOfFileMessages] {
                 if (result.count > 0) {
                     deleteAndSave(object: result.first!, withMessage: "QueueOfFileMessages object Deleted from cache")
+                }
+            }
+        } catch {
+            fatalError("Error on fetching list of QueueOfFileMessages with uniqueId")
+        }
+    }
+    
+    func deleteWaitFileMessage() {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfFileMessages")
+        do {
+            if let result = try context.fetch(fetchRequest) as? [QueueOfFileMessages] {
+                for (index, _) in result.enumerated() {
+                    deleteAndSave(object: result[index], withMessage: "QueueOfFileMessages object Deleted from cache")
                 }
             }
         } catch {
@@ -354,6 +380,19 @@ extension Cache {
         }
     }
     
+    func deleteWaitUploadImages() {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfUploadImages")
+        do {
+            if let result = try context.fetch(fetchRequest) as? [QueueOfUploadImages] {
+                for (index, _) in result.enumerated() {
+                    deleteAndSave(object: result[index], withMessage: "QueueOfUploadImages object Deleted from cache")
+                }
+            }
+        } catch {
+            fatalError("Error on fetching list of QueueOfFileMessages with uniqueId")
+        }
+    }
+    
     func deleteWaitUploadFiles(uniqueId: String) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfUploadFiles")
         
@@ -365,6 +404,19 @@ extension Cache {
             if let result = try context.fetch(fetchRequest) as? [QueueOfUploadFiles] {
                 if (result.count > 0) {
                     deleteAndSave(object: result.first!, withMessage: "QueueOfUploadFiles object Deleted from cache")
+                }
+            }
+        } catch {
+            fatalError("Error on fetching list of QueueOfUploadFiles with uniqueId")
+        }
+    }
+    
+    func deleteWaitUploadFiles() {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfUploadFiles")
+        do {
+            if let result = try context.fetch(fetchRequest) as? [QueueOfUploadFiles] {
+                for (index, _) in result.enumerated() {
+                    deleteAndSave(object: result[index], withMessage: "QueueOfUploadFiles object Deleted from cache")
                 }
             }
         } catch {
@@ -390,6 +442,19 @@ extension Cache {
         }
     }
     
+    func deleteWaitEditMessage() {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfEditMessages")
+        do {
+            if let result = try context.fetch(fetchRequest) as? [QueueOfEditMessages] {
+                for (index, _) in result.enumerated() {
+                    deleteAndSave(object: result[index], withMessage: "QueueOfEditMessages object Deleted from cache")
+                }
+            }
+        } catch {
+            fatalError("Error on fetching list of QueueOfEditMessages with uniqueId")
+        }
+    }
+    
     func deleteWaitForwardMessage(uniqueId: String) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfForwardMessages")
         
@@ -406,6 +471,29 @@ extension Cache {
         } catch {
             fatalError("Error on fetching list of QueueOfForwardMessages with uniqueId")
         }
+    }
+    
+    func deleteWaitForwardMessage() {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfForwardMessages")
+        do {
+            if let result = try context.fetch(fetchRequest) as? [QueueOfForwardMessages] {
+                for (index, _) in result.enumerated() {
+                    deleteAndSave(object: result[index], withMessage: "QueueOfForwardMessages object Deleted from cache")
+                }
+            }
+        } catch {
+            fatalError("Error on fetching list of QueueOfForwardMessages with uniqueId")
+        }
+    }
+    
+    
+    func deleteAllWaitQueues() {
+        deleteWaitTextMessage()
+        deleteWaitFileMessage()
+        deleteWaitUploadImages()
+        deleteWaitUploadFiles()
+        deleteWaitEditMessage()
+        deleteWaitForwardMessage()
     }
     
     

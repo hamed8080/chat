@@ -10,14 +10,15 @@ import Foundation
 
 open class GetThreadParticipantsRequestModel {
     
-    public let admin:               Bool?
-    public let count:               Int?
-    public let firstMessageId:      Int?
-    public let lastMessageId:       Int?
-    public let name:                String?
-    public let offset:              Int?
-    public let threadId:            Int
-    public let typeCode:            String?
+    public let admin:           Bool?
+    public let count:           Int?
+    public let firstMessageId:  Int?
+    public let lastMessageId:   Int?
+    public let name:            String?
+    public let offset:          Int?
+    public let threadId:        Int
+    public let typeCode:        String?
+    public let uniqueId:        String?
     
     public init(admin:          Bool?,
                 count:          Int?,
@@ -26,7 +27,8 @@ open class GetThreadParticipantsRequestModel {
                 name:           String?,
                 offset:         Int?,
                 threadId:       Int,
-                typeCode:       String?) {
+                typeCode:       String?,
+                uniqueId:       String?) {
         
         self.admin          = admin
         self.count          = count
@@ -36,6 +38,7 @@ open class GetThreadParticipantsRequestModel {
         self.offset         = offset
         self.threadId       = threadId
         self.typeCode       = typeCode
+        self.uniqueId       = uniqueId
     }
     
 }

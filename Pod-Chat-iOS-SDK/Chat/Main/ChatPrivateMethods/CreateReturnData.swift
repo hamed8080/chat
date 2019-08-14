@@ -18,12 +18,14 @@ class CreateReturnData {
     let contentCount:   Int
     let result:         JSON?
     let resultAsString: String?
+    let resultAsArray:  [JSON]?
     let subjectId:      Int?
     
     init(hasError:      Bool,
          errorMessage:  String?,
          errorCode:     Int?,
          result:        JSON?,
+         resultAsArray: [JSON]?,
          resultAsString: String?,
          contentCount:  Int?,
          subjectId:     Int?) {
@@ -33,6 +35,7 @@ class CreateReturnData {
         self.errorCode      = errorCode ?? 0
         self.contentCount   = contentCount ?? 0
         self.result         = result
+        self.resultAsArray  = resultAsArray
         self.resultAsString = resultAsString
         self.subjectId      = subjectId
     }
@@ -49,6 +52,8 @@ class CreateReturnData {
         
         if let myResult = result {
             obj["result"] = myResult
+        } else if let myResult = resultAsArray {
+            obj["result"] = JSON(myResult)
         } else if let myResult = resultAsString {
             obj["result"] = JSON(myResult)
         }

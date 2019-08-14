@@ -15,18 +15,21 @@ open class UpdateContactsRequestModel {
     public let firstName:       String
     public let id:              Int
     public let lastName:        String
+    public let uniqueId:        String?
     
-    public init(cellphoneNumber:   String,
-                email:             String,
-                firstName:         String,
-                id:                Int,
-                lastName:          String) {
+    public init(cellphoneNumber:    String,
+                email:              String,
+                firstName:          String,
+                id:                 Int,
+                lastName:           String,
+                uniqueId:           String?) {
         
         self.cellphoneNumber    = cellphoneNumber
         self.email              = email
         self.firstName          = firstName
         self.id                 = id
         self.lastName           = lastName
+        self.uniqueId           = uniqueId
     }
     
 }

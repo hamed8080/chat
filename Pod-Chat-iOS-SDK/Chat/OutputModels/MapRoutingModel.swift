@@ -32,8 +32,6 @@ open class MapRoutingModel {
     public let errorCode:          Int?
     public var result:             MapRouting
     
-    public var resultJSON: JSON = [:]
-    
     public init(messageContent: JSON,
                 hasError:       Bool,
                 errorMessage:   String,
@@ -44,7 +42,6 @@ open class MapRoutingModel {
         self.errorCode          = errorCode
         
         self.result             = MapRouting(messageContent: messageContent)
-        self.resultJSON         = result.formatToJSON()
     }
     
     public init(routsObject:    MapRouting,
@@ -57,12 +54,11 @@ open class MapRoutingModel {
         self.errorCode          = errorCode
         
         self.result           = routsObject
-        self.resultJSON       = result.formatToJSON()
     }
     
     
     public func returnDataAsJSON() -> JSON {
-        let finalResult: JSON = ["result":          resultJSON,
+        let finalResult: JSON = ["result":          result.formatToJSON(),
                                  "hasError":        hasError,
                                  "errorMessage":    errorMessage ?? NSNull(),
                                  "errorCode":       errorCode ?? NSNull()]
