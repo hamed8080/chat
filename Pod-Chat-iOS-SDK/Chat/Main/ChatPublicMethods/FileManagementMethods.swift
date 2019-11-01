@@ -136,14 +136,13 @@ extension Chat {
         let parameters: Parameters = ["fileName": fileName]
         
         
-        
-        Networking.sharedInstance.upload(toUrl: url,
-                                         withHeaders: headers,
-                                         withParameters: parameters,
-                                         isImage: true,
-                                         isFile: false,
-                                         dataToSend: uploadImageInput.dataToSend,
-                                         requestUniqueId: uploadFileData["uniqueId"].stringValue,
+        Networking.sharedInstance.upload(toUrl:             url,
+                                         withHeaders:       headers,
+                                         withParameters:    parameters,
+                                         isImage:           true,
+                                         isFile:            false,
+                                         dataToSend:        uploadImageInput.dataToSend,
+                                         requestUniqueId:   uploadFileData["uniqueId"].stringValue,
                                          progress: { (myProgress) in
                                             progress(myProgress)
         }) { (response) in

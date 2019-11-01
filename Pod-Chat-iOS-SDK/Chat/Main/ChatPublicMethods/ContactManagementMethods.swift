@@ -242,7 +242,7 @@ extension Chat {
 //            params["uniqueId"] = JSON(uniqueId)
 //        }
         let requestUniqueId = searchContactsInput.uniqueId ?? generateUUID()
-        params["uniqueId"] = JSON(requestUniqueId)
+//        params["uniqueId"] = JSON(requestUniqueId)
         uniqueId(requestUniqueId)
         
         if enableCache {
