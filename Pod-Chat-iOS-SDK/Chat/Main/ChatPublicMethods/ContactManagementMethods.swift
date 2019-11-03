@@ -84,8 +84,8 @@ extension Chat {
                                             subjectId:          nil,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           getContactsInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           getContactsInput.uniqueId ?? generateUUID(),
+                                            typeCode:           getContactsInput.requestTypeCode ?? generalTypeCode,
+                                            uniqueId:           getContactsInput.requestUniqueId ?? generateUUID(),
                                             isCreateThreadAndSendMessage: true)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -191,8 +191,6 @@ extension Chat {
      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
      2- completion:  it will returns the response that comes from server to this request.    (ContactModel)
      */
-    // ToDo: remove or put uniqueId, typeCode
-    // ToDo: server response is invalid
     public func searchContacts(searchContactsInput: SearchContactsRequestModel,
                                uniqueId:            @escaping (String) -> (),
                                completion:          @escaping callbackTypeAlias,
@@ -241,7 +239,7 @@ extension Chat {
 //        } else {
 //            params["uniqueId"] = JSON(uniqueId)
 //        }
-        let requestUniqueId = searchContactsInput.uniqueId ?? generateUUID()
+        let requestUniqueId = searchContactsInput.requestUniqueId ?? generateUUID()
 //        params["uniqueId"] = JSON(requestUniqueId)
         uniqueId(requestUniqueId)
         
@@ -256,7 +254,7 @@ extension Chat {
                                                                  offset:            searchContactsInput.offset ?? 0,
                                                                  search:            nil,
                                                                  timeStamp:         cacheTimeStamp,
-                                                                 uniqueId:          requestUniqueId) {
+                                                                 uniqueId:          nil) {
                 cacheResponse(cacheContacts)
             }
         }
@@ -429,7 +427,7 @@ extension Chat {
         params["cellphoneNumber"] = JSON(addContactsInput.cellphoneNumber ?? "")
         params["email"]           = JSON(addContactsInput.email ?? "")
         
-        let messageUniqueId: String = generateUUID()
+        let messageUniqueId: String = addContactsInput.requestUniqueId ?? generateUUID()
         params["uniqueId"] = JSON(messageUniqueId)
         uniqueId(messageUniqueId)
         
@@ -580,8 +578,9 @@ extension Chat {
         params["cellphoneNumber"] = JSON(updateContactsInput.cellphoneNumber)
         params["email"]           = JSON(updateContactsInput.email)
         
-        let messageUniqueId: String = generateUUID()
-        params["uniqueId"] = JSON(messageUniqueId)
+        let messageUniqueId: String = updateContactsInput.requestUniqueId ?? generateUUID()
+//        params["uniqueId"] = JSON(messageUniqueId)
+        uniqueId(messageUniqueId)
         
         let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.UPDATE_CONTACTS.rawValue)"
         let method: HTTPMethod = HTTPMethod.post
@@ -706,8 +705,8 @@ extension Chat {
          *  + headers:
          *      - _token_:          String
          *      - _token_issuer_:   "1"
-         *  + params:  (get searchContactsInput and create the parameters from it)
-         *      - id:               Int
+         *  + params:  (get removeContactInput and create the parameters from it)
+         *      - contactId:        Int
          *      - uniqueId:         String?
          *
          *  -> send the HTTP request to server to get the response from it
@@ -719,11 +718,11 @@ extension Chat {
         
         var params: Parameters = [:]
         
-        params["id"] = JSON(removeContactsInput.id)
+        params["id"] = JSON(removeContactsInput.contactId)
         
-        let theUniqueId: String = generateUUID()
-        params["uniqueId"] = JSON(theUniqueId)
-        uniqueId(theUniqueId)
+        let requestUniqueId: String = removeContactsInput.requestUniqueId ?? generateUUID()
+//        params["uniqueId"] = JSON(theUniqueId)
+        uniqueId(requestUniqueId)
         
         let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.REMOVE_CONTACTS.rawValue)"
         let method: HTTPMethod = HTTPMethod.post
@@ -737,7 +736,7 @@ extension Chat {
                                                             
                                                             if self.enableCache {
                                                                 if (contactsResult.result) {
-                                                                    Chat.cacheDB.deleteContact(withContactIds: [removeContactsInput.id])
+                                                                    Chat.cacheDB.deleteContact(withContactIds: [removeContactsInput.contactId])
                                                                 }
                                                             }
                                                             
@@ -860,8 +859,8 @@ extension Chat {
                                             subjectId:          nil,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           blockContactsInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           blockContactsInput.uniqueId ?? generateUUID(),
+                                            typeCode:           blockContactsInput.requestTypeCode ?? generalTypeCode,
+                                            uniqueId:           blockContactsInput.requestUniqueId ?? generateUUID(),
                                             isCreateThreadAndSendMessage: true)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -962,8 +961,8 @@ extension Chat {
                                             subjectId:          nil,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           getBlockedContactsInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           getBlockedContactsInput.uniqueId ?? generateUUID(),
+                                            typeCode:           getBlockedContactsInput.requestTypeCode ?? generalTypeCode,
+                                            uniqueId:           getBlockedContactsInput.requestUniqueId ?? generateUUID(),
                                             isCreateThreadAndSendMessage: true)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -1087,8 +1086,8 @@ extension Chat {
                                             subjectId:          unblockContactsInput.blockId,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           unblockContactsInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           unblockContactsInput.uniqueId ?? generateUUID(),
+                                            typeCode:           unblockContactsInput.requestTypeCode ?? generalTypeCode,
+                                            uniqueId:           unblockContactsInput.requestUniqueId ?? generateUUID(),
                                             isCreateThreadAndSendMessage: true)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -1187,7 +1186,7 @@ extension Chat {
                                                               email:            emailAddress as String?,
                                                               firstName:        firstName,
                                                               lastName:         lastName,
-                                                              uniqueId:         nil)
+                                                              requestUniqueId:  nil)
                         phoneContacts.append(contact)
                     })
                 } catch {

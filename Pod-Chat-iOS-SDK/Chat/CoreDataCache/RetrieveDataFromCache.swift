@@ -245,7 +245,7 @@ extension Cache {
                                               linkedUser:       nil,
                                               notSeenDuration:  nil,
                                               timeStamp:        nil,
-                                              uniqueId:         nil,
+//                                              uniqueId:         nil,
                                               userId:           nil)
                         contactsArr.append(contact)
                     }

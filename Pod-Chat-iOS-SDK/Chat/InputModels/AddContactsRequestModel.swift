@@ -14,19 +14,19 @@ open class AddContactsRequestModel {
     public let email:           String?
     public let firstName:       String?
     public let lastName:        String?
-    public let uniqueId:        String?
+    public let requestUniqueId: String?
     
     public init(cellphoneNumber:    String?,
                 email:              String?,
                 firstName:          String?,
                 lastName:           String?,
-                uniqueId:           String?) {
+                requestUniqueId:    String?) {
         
         self.cellphoneNumber    = cellphoneNumber
         self.email              = email
         self.firstName          = firstName
         self.lastName           = lastName
-        self.uniqueId           = uniqueId
+        self.requestUniqueId    = requestUniqueId
     }
     
 }

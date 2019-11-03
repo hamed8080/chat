@@ -39,7 +39,7 @@ open class Contact {
     public var linkedUser:      LinkedUser?
     public let notSeenDuration: Int?
     public let timeStamp:       UInt?
-    public let uniqueId:        String?
+//    public let uniqueId:        String?
     public let userId:          Int?
     
     public init(messageContent: JSON) {
@@ -52,7 +52,7 @@ open class Contact {
         self.lastName           = messageContent["lastName"].string
         self.notSeenDuration    = messageContent["notSeenDuration"].int
         self.timeStamp          = messageContent["timeStamp"].uInt
-        self.uniqueId           = messageContent["uniqueId"].string
+//        self.uniqueId           = messageContent["uniqueId"].string
         self.userId             = messageContent["userId"].int
         
         if (messageContent["hasUser"] != JSON.null) {
@@ -80,7 +80,7 @@ open class Contact {
                 linkedUser:         LinkedUser?,
                 notSeenDuration:    Int?,
                 timeStamp:          UInt?,
-                uniqueId:           String?,
+//                uniqueId:           String?,
                 userId:             Int?) {
         
         self.blocked            = blocked
@@ -94,7 +94,7 @@ open class Contact {
         self.linkedUser         = linkedUser
         self.notSeenDuration    = notSeenDuration
         self.timeStamp          = timeStamp
-        self.uniqueId           = uniqueId
+//        self.uniqueId           = uniqueId
         self.userId             = userId
         
     }
@@ -112,7 +112,7 @@ open class Contact {
         self.linkedUser         = theContact.linkedUser
         self.notSeenDuration    = theContact.notSeenDuration
         self.timeStamp          = theContact.timeStamp
-        self.uniqueId           = theContact.uniqueId
+//        self.uniqueId           = theContact.uniqueId
         self.userId             = theContact.userId
     }
     
@@ -133,7 +133,7 @@ open class Contact {
                             "linkedUser":       linkedUser?.formatToJSON() ?? NSNull(),
                             "notSeenDuration":  notSeenDuration ?? NSNull(),
                             "timeStamp":        timeStamp ?? NSNull(),
-                            "uniqueId":         uniqueId ?? NSNull(),
+//                            "uniqueId":         uniqueId ?? NSNull(),
                             "userId":           userId ?? NSNull()]
         return result
     }

@@ -157,7 +157,7 @@ extension Chat {
     /*
      *  Handshake with SSO to get user's keys:
      *
-     * get the key (for Encrypt and Decrypt the Cache) by handshaking with SSO
+     * get the key (for Encrypt and Decrypt the Cache) from SSO
      *
      *  + Access:
      *      - private

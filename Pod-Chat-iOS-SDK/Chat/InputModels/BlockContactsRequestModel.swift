@@ -10,23 +10,23 @@ import Foundation
 
 open class BlockContactsRequestModel {
     
-    public let contactId:   Int?
-    public let threadId:    Int?
-    public let typeCode:    String?
-    public let userId:      Int?
-    public let uniqueId:    String?
+    public let contactId:       Int?
+    public let threadId:        Int?
+    public let userId:          Int?
+    public let requestTypeCode: String?
+    public let requestUniqueId: String?
     
-    public init(contactId:  Int?,
-                threadId:   Int?,
-                typeCode:   String?,
-                userId:     Int?,
-                uniqueId:   String?) {
+    public init(contactId:          Int?,
+                threadId:           Int?,
+                userId:             Int?,
+                requestTypeCode:    String?,
+                requestUniqueId:    String?) {
         
-        self.contactId  = contactId
-        self.threadId   = threadId
-        self.typeCode   = typeCode
-        self.userId     = userId
-        self.uniqueId   = uniqueId
+        self.contactId          = contactId
+        self.threadId           = threadId
+        self.userId             = userId
+        self.requestTypeCode    = requestTypeCode
+        self.requestUniqueId    = requestUniqueId
     }
     
 }

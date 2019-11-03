@@ -43,7 +43,7 @@ extension Cache {
                         result.first!.image             = myContact.image
                         result.first!.lastName          = myContact.lastName
                         result.first!.notSeenDuration   = myContact.notSeenDuration as NSNumber?
-                        result.first!.uniqueId          = myContact.uniqueId
+//                        result.first!.uniqueId          = myContact.uniqueId
                         result.first!.userId            = myContact.userId as NSNumber?
                         result.first!.time              = myContact.timeStamp as NSNumber? // Int(Date().timeIntervalSince1970) as NSNumber?
                         if let contactLinkeUser = myContact.linkedUser {
@@ -65,7 +65,7 @@ extension Cache {
                         theContact.image            = myContact.image
                         theContact.lastName         = myContact.lastName
                         theContact.notSeenDuration  = myContact.notSeenDuration as NSNumber?
-                        theContact.uniqueId         = myContact.uniqueId
+//                        theContact.uniqueId         = myContact.uniqueId
                         theContact.userId           = myContact.userId as NSNumber?
                         theContact.time             = myContact.timeStamp as NSNumber? // Int(Date().timeIntervalSince1970) as NSNumber?
                         if let contactLinkeUser = myContact.linkedUser {

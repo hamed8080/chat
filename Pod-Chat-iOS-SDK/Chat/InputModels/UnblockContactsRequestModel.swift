@@ -10,26 +10,26 @@ import Foundation
 
 open class UnblockContactsRequestModel {
     
-    public let blockId:     Int?
-    public let contactId:   Int?
-    public let threadId:    Int?
-    public let typeCode:    String?
-    public let userId:      Int?
-    public let uniqueId:    String?
+    public let blockId:         Int?
+    public let contactId:       Int?
+    public let threadId:        Int?
+    public let userId:          Int?
+    public let requestTypeCode: String?
+    public let requestUniqueId: String?
     
-    public init(blockId:    Int?,
-                contactId:  Int?,
-                threadId:   Int?,
-                typeCode:   String?,
-                userId:     Int?,
-                uniqueId:   String?) {
+    public init(blockId:            Int?,
+                contactId:          Int?,
+                threadId:           Int?,
+                userId:             Int?,
+                requestTypeCode:    String?,
+                requestUniqueId:    String?) {
         
-        self.blockId    = blockId
-        self.contactId  = contactId
-        self.threadId   = threadId
-        self.typeCode   = typeCode
-        self.userId     = userId
-        self.uniqueId   = uniqueId
+        self.blockId            = blockId
+        self.contactId          = contactId
+        self.threadId           = threadId
+        self.userId             = userId
+        self.requestTypeCode    = requestTypeCode
+        self.requestUniqueId    = requestUniqueId
     }
     
 }

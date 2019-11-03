@@ -58,7 +58,7 @@ public class CMContact: NSManagedObject {
                                        linkedUser:      self.linkedUser?.convertCMLinkedUserToLinkedUserObject(),
                                        notSeenDuration: notSeenDuration,
                                        timeStamp:       time,
-                                       uniqueId:        self.uniqueId,
+//                                       uniqueId:        self.uniqueId,
                                        userId:          userId)
             return messageModel
         }
