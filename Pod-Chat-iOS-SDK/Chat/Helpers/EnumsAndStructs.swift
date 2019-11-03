@@ -60,12 +60,34 @@ public enum chatMessageVOTypes: Int {
 }
 
 
-public enum InviteeVOidTypes: Int {
-    case TO_BE_USER_SSO_ID              = 1
-    case TO_BE_USER_CONTACT_ID          = 2
-    case TO_BE_USER_CELLPHONE_NUMBER    = 3
-    case TO_BE_USER_USERNAME            = 4
-    case TO_BE_USER_ID                  = 5
+public enum INVITEE_VO_ID_TYPES {
+    
+    case TO_BE_USER_SSO_ID
+    case TO_BE_USER_CONTACT_ID
+    case TO_BE_USER_CELLPHONE_NUMBER
+    case TO_BE_USER_USERNAME
+    case TO_BE_USER_ID
+    
+    public func stringValue() -> String {
+        switch self {
+        case .TO_BE_USER_SSO_ID:            return "TO_BE_USER_SSO_ID"
+        case .TO_BE_USER_CONTACT_ID:        return "TO_BE_USER_CONTACT_ID"
+        case .TO_BE_USER_CELLPHONE_NUMBER:  return "TO_BE_USER_CELLPHONE_NUMBER"
+        case .TO_BE_USER_USERNAME:          return "TO_BE_USER_USERNAME"
+        case .TO_BE_USER_ID:                return "TO_BE_USER_ID"
+        }
+    }
+    
+    public func intValue() -> Int {
+        switch self {
+        case .TO_BE_USER_SSO_ID:            return 1
+        case .TO_BE_USER_CONTACT_ID:        return 2
+        case .TO_BE_USER_CELLPHONE_NUMBER:  return 3
+        case .TO_BE_USER_USERNAME:          return 4
+        case .TO_BE_USER_ID:                return 5
+        }
+    }
+    
 }
 
 public enum ThreadTypes: String {

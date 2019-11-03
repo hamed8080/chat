@@ -21,22 +21,17 @@ open class Invitee {
     public var idType: Int?
     
     public init(messageContent: JSON) {
-        
         self.id = messageContent["id"].string
-        
         if let myIdType = messageContent["idType"].string {
-            let type = myIdType
-            if (type == "TO_BE_USER_SSO_ID") {
-                self.idType = 1
-            } else if (type == "TO_BE_USER_CONTACT_ID") {
-                self.idType = 2
-            } else if (type == "TO_BE_USER_CELLPHONE_NUMBER") {
-                self.idType = 3
-            } else if (type == "TO_BE_USER_USERNAME") {
-                self.idType = 4
+            switch myIdType {
+            case INVITEE_VO_ID_TYPES.TO_BE_USER_SSO_ID.stringValue():           self.idType = 1
+            case INVITEE_VO_ID_TYPES.TO_BE_USER_CONTACT_ID.stringValue():       self.idType = 2
+            case INVITEE_VO_ID_TYPES.TO_BE_USER_CELLPHONE_NUMBER.stringValue(): self.idType = 3
+            case INVITEE_VO_ID_TYPES.TO_BE_USER_USERNAME.stringValue():         self.idType = 4
+            case INVITEE_VO_ID_TYPES.TO_BE_USER_ID.stringValue():               self.idType = 5
+            default: break
             }
         }
-        
     }
     
     public init(id:     String?,
@@ -44,14 +39,38 @@ open class Invitee {
         
         self.id = id
         if let myIdType = idType {
-            if (myIdType == "TO_BE_USER_SSO_ID") || (myIdType == "1") {
-                self.idType = 1
-            } else if (myIdType == "TO_BE_USER_CONTACT_ID") || (myIdType == "2") {
-                self.idType = 2
-            } else if (myIdType == "TO_BE_USER_CELLPHONE_NUMBER") || (myIdType == "3") {
-                self.idType = 3
-            } else if (myIdType == "TO_BE_USER_USERNAME") || (myIdType == "4") {
-                self.idType = 4
+            switch myIdType {
+            case INVITEE_VO_ID_TYPES.TO_BE_USER_SSO_ID.stringValue(),
+                 "\(INVITEE_VO_ID_TYPES.TO_BE_USER_SSO_ID.intValue())":                 self.idType = 1
+                
+            case INVITEE_VO_ID_TYPES.TO_BE_USER_CONTACT_ID.stringValue(),
+                 "\(INVITEE_VO_ID_TYPES.TO_BE_USER_CONTACT_ID.stringValue())":          self.idType = 2
+                
+            case INVITEE_VO_ID_TYPES.TO_BE_USER_CELLPHONE_NUMBER.stringValue(),
+                 "\(INVITEE_VO_ID_TYPES.TO_BE_USER_CELLPHONE_NUMBER.stringValue())":    self.idType = 3
+                
+            case INVITEE_VO_ID_TYPES.TO_BE_USER_USERNAME.stringValue(),
+                 "\(INVITEE_VO_ID_TYPES.TO_BE_USER_USERNAME.stringValue())":            self.idType = 4
+                
+            case INVITEE_VO_ID_TYPES.TO_BE_USER_ID.stringValue(),
+                 "\(INVITEE_VO_ID_TYPES.TO_BE_USER_ID.stringValue())":                  self.idType = 5
+            default: break
+            }
+        }
+        
+    }
+    
+    public init(id:     String?,
+                idType: INVITEE_VO_ID_TYPES?) {
+        
+        self.id = id
+        if let myIdType = idType {
+            switch myIdType {
+            case INVITEE_VO_ID_TYPES.TO_BE_USER_SSO_ID:             self.idType = 1
+            case INVITEE_VO_ID_TYPES.TO_BE_USER_CONTACT_ID:         self.idType = 2
+            case INVITEE_VO_ID_TYPES.TO_BE_USER_CELLPHONE_NUMBER:   self.idType = 3
+            case INVITEE_VO_ID_TYPES.TO_BE_USER_USERNAME:           self.idType = 4
+            case INVITEE_VO_ID_TYPES.TO_BE_USER_ID:                 self.idType = 5
             }
         }
         

@@ -391,7 +391,7 @@ extension Chat {
      *          + invitees:     [Invitee]   (this is also an Array that contains "Invitee" Model)
      *              [
      *              - id:       String?
-     *              - idType:   Int?        (InviteeVOidTypes)
+     *              - idType:   Int?        (INVITEE_VO_ID_TYPES)
      *              ]
      *          - metadata:     String?
      *          - title:        String      (give a title to the thread that you are going to create)
@@ -548,7 +548,7 @@ extension Chat {
      *          + threadInvitees:               [Invitee]       (this is also an Array that contains "Invitee" Model)
      *              [
      *              - id:       String?
-     *              - idType:   Int?                            (InviteeVOidTypes)
+     *              - idType:   Int?                            (INVITEE_VO_ID_TYPES)
      *              ]
      *          - threadMetadata:               String?
      *          - threadTitle:                  String          (give a title to the thread that you are going to create)
