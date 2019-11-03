@@ -1156,11 +1156,11 @@ extension Chat {
         let myUniqueId = generateUUID()
         uniqueId(myUniqueId)
         
-        // use this to send addcontact reqeusst as an Array
-        //        var firstNameArray = [String]()
-        //        var lastNameArray = [String]()
-        //        var cellphoneNumberArray = [String]()
-        //        var emailArray = [String]()
+// use this to send addcontact reqeusst as an Array
+//        var firstNameArray = [String]()
+//        var lastNameArray = [String]()
+//        var cellphoneNumberArray = [String]()
+//        var emailArray = [String]()
         
         var phoneContacts = [AddContactsRequestModel]()
         
@@ -1198,6 +1198,13 @@ extension Chat {
         
         
         var contactArrayToSendUpdate = [AddContactsRequestModel]()
+        func appendContactToArrayToUpdate(withContact contact: AddContactsRequestModel) {
+            contactArrayToSendUpdate.append(contact)
+            if enableCache {
+                Chat.cacheDB.savePhoneBookContact(contact: contact)
+            }
+        }
+        
         if let cachePhoneContacts = Chat.cacheDB.retrievePhoneContacts() {
             for contact in phoneContacts {
                 var findContactOnPhoneBookCache = false
@@ -1205,45 +1212,21 @@ extension Chat {
                     // if there is some number that is already exist on the both phone contact and phoneBookCache, check if there is any update, update the contact
                     if contact.cellphoneNumber == cacheContact.cellphoneNumber {
                         findContactOnPhoneBookCache = true
-                        if cacheContact.email != contact.email {
-                            contactArrayToSendUpdate.append(contact)
-                            if enableCache {
-                                Chat.cacheDB.savePhoneBookContact(contact: contact)
-                            }
-                            
-                        } else if cacheContact.firstName != contact.firstName {
-                            contactArrayToSendUpdate.append(contact)
-                            if enableCache {
-                                Chat.cacheDB.savePhoneBookContact(contact: contact)
-                            }
-                            
-                        } else if cacheContact.lastName != contact.lastName {
-                            contactArrayToSendUpdate.append(contact)
-                            if enableCache {
-                                Chat.cacheDB.savePhoneBookContact(contact: contact)
-                            }
-                            
+                        if (cacheContact.email != contact.email) || (cacheContact.firstName != contact.firstName) || cacheContact.lastName != contact.lastName {
+                            appendContactToArrayToUpdate(withContact: contact)
                         }
-                        
                     }
                 }
                 
                 if (!findContactOnPhoneBookCache) {
-                    contactArrayToSendUpdate.append(contact)
-                    if enableCache {
-                        Chat.cacheDB.savePhoneBookContact(contact: contact)
-                    }
-                    
+                    appendContactToArrayToUpdate(withContact: contact)
                 }
                 
             }
         } else {
             // if there is no data on phoneBookCache, add all contacts from phone and save them on cache
             for contact in phoneContacts {
-                contactArrayToSendUpdate.append(contact)
-                if enableCache {
-                    Chat.cacheDB.savePhoneBookContact(contact: contact)
-                }
+                appendContactToArrayToUpdate(withContact: contact)
             }
         }
         
@@ -1254,8 +1237,6 @@ extension Chat {
                 completion(myResponse)
             }
         }
-        
-        
         
     }
     
