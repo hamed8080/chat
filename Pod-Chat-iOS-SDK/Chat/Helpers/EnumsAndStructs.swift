@@ -238,21 +238,12 @@ public enum ThreadEventTypes {
 }
 
 public enum MessageEventTypes {
+    case MESSAGE_NEW        // type 2
+    case MESSAGE_SEND       // type 3
     case MESSAGE_DELIVERY   // type 4
     case MESSAGE_SEEN       // type 5
-    case MESSAGE_DELETE     // type 29
-    case MESSAGE_NEW        // type 2
     case MESSAGE_EDIT       // type 28
-    
-    /*
-//    case New        // type 2
-//    case Edit       // type 28
-    case Forward    // type 22
-//    case Delete     // type 29
-    case Sent       // type 3
-//    case Delivery   // type 4
-//    case Seen       // type 5
-    */
+    case MESSAGE_DELETE     // type 29
 }
 
 public enum FileUploadEventTypes {

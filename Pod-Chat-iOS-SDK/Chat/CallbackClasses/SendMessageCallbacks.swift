@@ -35,6 +35,7 @@ extension Chat {
                                           subjectId:        message.subjectId)
         //                .returnJSON()
         
+        delegate?.messageEvents(type: MessageEventTypes.MESSAGE_SEND, result: returnData)
         
         if enableCache {
             if let _ = message.subjectId {
@@ -84,6 +85,8 @@ extension Chat {
                                           resultAsString:   message.content,
                                           contentCount:     nil,
                                           subjectId:        message.subjectId)
+        
+        delegate?.messageEvents(type: MessageEventTypes.MESSAGE_DELIVERY, result: returnData)
         
         var findItAt: Int?
         let threadIdObject = Chat.mapOnDeliver["\(message.subjectId ?? 0)"]
@@ -170,6 +173,8 @@ extension Chat {
                                           resultAsString:   message.content,
                                           contentCount:     nil,
                                           subjectId:        message.subjectId)
+        
+        delegate?.messageEvents(type: MessageEventTypes.MESSAGE_SEEN, result: returnData)
         
         var findItAt: Int?
         let threadIdObject = Chat.mapOnSeen["\(message.subjectId ?? 0)"]

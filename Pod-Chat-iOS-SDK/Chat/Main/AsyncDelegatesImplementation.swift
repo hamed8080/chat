@@ -123,7 +123,9 @@ extension Chat: AsyncDelegates {
          *
          */
         log.verbose("Error comes from Async", context: "Chat: DelegateComesFromAsync")
-        delegate?.chatError(errorCode: errorCode, errorMessage: errorMessage, errorResult: errorEvent)
+        delegate?.chatError(errorCode:      errorCode,
+                            errorMessage:   errorMessage,
+                            errorResult:    errorEvent)
     }
     
     /*

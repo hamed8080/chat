@@ -195,22 +195,7 @@ extension Chat {
                                uniqueId:            @escaping (String) -> (),
                                completion:          @escaping callbackTypeAlias,
                                cacheResponse:       @escaping (GetContactsModel) -> ()) {
-        /*
-         *  -> create parameters to send HTTP request:
-         *
-         *  + method:   POST
-         *  + headers:
-         *      - _token_:          String
-         *      - _token_issuer_:   "1"
-         *  + params:  (get searchContactsInput and create the parameters from it)
-         *      - size:             Int
-         *      - offset:           Int
-         *      - firstName:        String?
-         *      - lastName:         String?
-         *      - cellphoneNumber:  String?
-         *      - email:            String?
-         *      - uniqueId:         String?
-         *
+        /**
          *  -> if Cache was enabled, get the data from Cache and send it to client as "cacheResponse" callback
          *  -> send the HTTP request to server to get the response from it
          *      -> send the server respons to Cache and update it's values
@@ -219,29 +204,32 @@ extension Chat {
          */
         log.verbose("Try to request to search contact with this parameters: \n \(searchContactsInput)", context: "Chat")
         
-        var params: Parameters = [:]
-        params["size"] = JSON(searchContactsInput.size ?? 50)
-        params["offset"] = JSON(searchContactsInput.offset ?? 0)
-        if let firstName = searchContactsInput.firstName {
-            params["firstName"] = JSON(firstName)
-        }
-        if let lastName = searchContactsInput.lastName {
-            params["lastName"] = JSON(lastName)
-        }
-        if let cellphoneNumber = searchContactsInput.cellphoneNumber {
-            params["cellphoneNumber"] = JSON(cellphoneNumber)
-        }
-        if let email = searchContactsInput.email {
-            params["email"] = JSON(email)
-        }
+        let requestUniqueId = searchContactsInput.requestUniqueId ?? generateUUID()
+        uniqueId(requestUniqueId)
+        
+//        var params: Parameters = [:]
+//        params["size"] = JSON(searchContactsInput.size ?? 50)
+//        params["offset"] = JSON(searchContactsInput.offset ?? 0)
+//        if let firstName = searchContactsInput.firstName {
+//            params["firstName"] = JSON(firstName)
+//        }
+//        if let lastName = searchContactsInput.lastName {
+//            params["lastName"] = JSON(lastName)
+//        }
+//        if let cellphoneNumber = searchContactsInput.cellphoneNumber {
+//            params["cellphoneNumber"] = JSON(cellphoneNumber)
+//        }
+//        if let email = searchContactsInput.email {
+//            params["email"] = JSON(email)
+//        }
 //        if let uniqueId = searchContactsInput.uniqueId {
 //            params["uniqueId"] = JSON(uniqueId)
 //        } else {
 //            params["uniqueId"] = JSON(uniqueId)
 //        }
-        let requestUniqueId = searchContactsInput.requestUniqueId ?? generateUUID()
+//        let requestUniqueId = searchContactsInput.requestUniqueId ?? generateUUID()
 //        params["uniqueId"] = JSON(requestUniqueId)
-        uniqueId(requestUniqueId)
+//        uniqueId(requestUniqueId)
         
         if enableCache {
             if let cacheContacts = Chat.cacheDB.retrieveContacts(ascending:         true,
@@ -259,57 +247,107 @@ extension Chat {
             }
         }
         
+        sendSearchContactRequest(searchContactsInput: searchContactsInput)
+        { (contactModel) in
+            self.addContactOnCache(withContactModel: contactModel as! ContactModel)
+            completion(contactModel)
+        }
+        
+//        let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.SEARCH_CONTACTS.rawValue)"
+//        let method: HTTPMethod = HTTPMethod.post
+//        let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
+//        var params: Parameters = [:]
+//        params["size"] = JSON(searchContactsInput.size ?? 50)
+//        params["offset"] = JSON(searchContactsInput.offset ?? 0)
+//        if let firstName = searchContactsInput.firstName {
+//            params["firstName"] = JSON(firstName)
+//        }
+//        if let lastName = searchContactsInput.lastName {
+//            params["lastName"] = JSON(lastName)
+//        }
+//        if let cellphoneNumber = searchContactsInput.cellphoneNumber {
+//            params["cellphoneNumber"] = JSON(cellphoneNumber)
+//        }
+//        if let email = searchContactsInput.email {
+//            params["email"] = JSON(email)
+//        }
+//
+//
+//        Networking.sharedInstance.requesttWithJSONresponse(from:            url,
+//                                                           withMethod:      method,
+//                                                           withHeaders:     headers,
+//                                                           withParameters:  params) { (response) in
+//                                                            let contactsResult = ContactModel(messageContent: response as! JSON)
+//
+//                                                            if self.enableCache {
+//                                                                var contacts = [Contact]()
+//                                                                for contact in contactsResult.contacts {
+//                                                                    contacts.append(contact)
+//                                                                }
+//                                                                Chat.cacheDB.saveContact(withContactObjects: contacts)
+//                                                            }
+//
+//                                                            completion(contactsResult)
+//        }
+        
+    }
+    
+    private func sendSearchContactRequest(searchContactsInput:  SearchContactsRequestModel,
+                                          completion:           @escaping callbackTypeAlias) {
+        /**
+         *  -> create parameters to send HTTP request:
+         *
+         *  + method:   POST
+         *  + headers:
+         *      - _token_:          String
+         *      - _token_issuer_:   "1"
+         *  + params:  (get searchContactsInput and create the parameters from it)
+         *      - size:                        Int
+         *      - offset:                      Int
+         *      - firstName:               String?
+         *      - lastName:               String?
+         *      - cellphoneNumber:  String?
+         *      - email:                      String?
+         *      - uniqueId:                 String?
+         *
+         */
+        
         let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.SEARCH_CONTACTS.rawValue)"
         let method: HTTPMethod = HTTPMethod.post
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
-        
+        var params: Parameters = [:]
+        params["size"] = JSON(searchContactsInput.size ?? 50)
+        params["offset"] = JSON(searchContactsInput.offset ?? 0)
+        if let firstName = searchContactsInput.firstName {
+            params["firstName"] = JSON(firstName)
+        }
+        if let lastName = searchContactsInput.lastName {
+            params["lastName"] = JSON(lastName)
+        }
+        if let cellphoneNumber = searchContactsInput.cellphoneNumber {
+            params["cellphoneNumber"] = JSON(cellphoneNumber)
+        }
+        if let email = searchContactsInput.email {
+            params["email"] = JSON(email)
+        }
         
         Networking.sharedInstance.requesttWithJSONresponse(from:            url,
                                                            withMethod:      method,
                                                            withHeaders:     headers,
-                                                           withParameters:  params) { (response) in
-                                                            let contactsResult = ContactModel(messageContent: response as! JSON)
-                                                            
-                                                            if self.enableCache {
-                                                                var contacts = [Contact]()
-                                                                for contact in contactsResult.contacts {
-                                                                    contacts.append(contact)
-                                                                }
-                                                                Chat.cacheDB.saveContact(withContactObjects: contacts)
-                                                            }
-                                                            
-                                                            completion(contactsResult)
+                                                           withParameters:  params)
+        { (response) in
+            let contactModel = ContactModel(messageContent: response as! JSON)
+            completion(contactModel)
         }
         
-        
-//        Alamofire.request(url, method: method, parameters: params, headers: headers).responseJSON { (response) in
-//            if response.result.isSuccess {
-//                if let jsonValue = response.result.value {
-//                    let jsonResponse: JSON = JSON(jsonValue)
-//                    let contactsResult = ContactModel(messageContent: jsonResponse)
-//
-//                    if self.enableCache {
-//                        var contacts = [Contact]()
-//                        for contact in contactsResult.contacts {
-//                            contacts.append(contact)
-//                        }
-//                        Chat.cacheDB.saveContact(withContactObjects: contacts)
-//                    }
-//
-//                    completion(contactsResult)
-//                }
-//            } else {
-//                if let error = response.error {
-//                    let myJson: JSON = ["hasError":     true,
-//                                        "errorCode":    6200,
-//                                        "errorMessage": "\(CHAT_ERRORS.err6200.rawValue) \(error)",
-//                                        "errorEvent":   error.localizedDescription]
-//                    completion(myJson)
-//                }
-//            }
-//        }
-        
     }
+    
+    private func addContactOnCache(withContactModel contactModel: ContactModel) {
+        if self.enableCache {
+            Chat.cacheDB.saveContact(withContactObjects: contactModel.contacts)
+        }
+    }
+    
     
     // NOTE: This method will be deprecate soon
     // this method will do the same as tha funciton above but instead of using 'SearchContactsRequestModel' to get the parameters, it'll use JSON
@@ -399,7 +437,31 @@ extension Chat {
     public func addContact(addContactsInput:    AddContactsRequestModel,
                            uniqueId:            @escaping (String) -> (),
                            completion:          @escaping callbackTypeAlias) {
-        /*
+        /**
+         *  -> send the HTTP request to server to get the response from it
+         *      -> send the server respons to Cache and update it's values
+         *      -> send the server answer to client by using "completion" callback
+         *
+         */
+        log.verbose("Try to request to add contact with this parameters: \n \(addContactsInput)", context: "Chat")
+        
+        let messageUniqueId: String = addContactsInput.requestUniqueId ?? generateUUID()
+        uniqueId(messageUniqueId)
+        
+        sendAddContactRequest(addContactsInput: addContactsInput,
+                              messageUniqueId:  messageUniqueId)
+        { (addContactModel) in
+            self.addContactOnCache(withContactModel: addContactModel as! ContactModel)
+            completion(addContactModel)
+        }
+        
+    }
+    
+    private func sendAddContactRequest(addContactsInput:    AddContactsRequestModel,
+                                       messageUniqueId:     String,
+                                       completion:          @escaping callbackTypeAlias) {
+        /**
+         *
          *  -> create parameters to send HTTP request:
          *
          *  + method:   POST
@@ -413,74 +475,38 @@ extension Chat {
          *      - email:            String?
          *      - uniqueId:         String?
          *
-         *  -> send the HTTP request to server to get the response from it
-         *      -> send the server respons to Cache and update it's values
-         *      -> send the server answer to client by using "completion" callback
-         *
          */
-        log.verbose("Try to request to add contact with this parameters: \n \(addContactsInput)", context: "Chat")
-        
-        var params: Parameters = [:]
-        
-        params["firstName"]       = JSON(addContactsInput.firstName ?? "")
-        params["lastName"]        = JSON(addContactsInput.lastName ?? "")
-        params["cellphoneNumber"] = JSON(addContactsInput.cellphoneNumber ?? "")
-        params["email"]           = JSON(addContactsInput.email ?? "")
-        
-        let messageUniqueId: String = addContactsInput.requestUniqueId ?? generateUUID()
-        params["uniqueId"] = JSON(messageUniqueId)
-        uniqueId(messageUniqueId)
         
         let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.ADD_CONTACTS.rawValue)"
-        let method: HTTPMethod = HTTPMethod.post
-        let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
+        let method: HTTPMethod      = HTTPMethod.post
+        let headers: HTTPHeaders    = ["_token_": token, "_token_issuer_": "1"]
+        
+        var params: Parameters      = [:]
+        params["firstName"]         = JSON(addContactsInput.firstName ?? "")
+        params["lastName"]          = JSON(addContactsInput.lastName ?? "")
+        params["cellphoneNumber"]   = JSON(addContactsInput.cellphoneNumber ?? "")
+        params["email"]             = JSON(addContactsInput.email ?? "")
+        params["uniqueId"]          = JSON(messageUniqueId)
         
         Networking.sharedInstance.requesttWithJSONresponse(from:            url,
                                                            withMethod:      method,
                                                            withHeaders:     headers,
-                                                           withParameters:  params) { (response) in
-                                                            let jsonResponse: JSON = JSON(response)
-                                                            let messageContent: [JSON] = jsonResponse["result"].arrayValue
-                                                            
-                                                            if self.enableCache {
-                                                                var contactsArr = [Contact]()
-                                                                for item in messageContent {
-                                                                    contactsArr.append(Contact(messageContent: item))
-                                                                }
-                                                                Chat.cacheDB.saveContact(withContactObjects: contactsArr)
-                                                            }
-                                                            let contactsResult = ContactModel(messageContent: jsonResponse)
-                                                            completion(contactsResult)
-        }
-        
-        
-//        Alamofire.request(url, method: method, parameters: params, headers: headers).responseJSON { (response) in
-//            if response.result.isSuccess {
-//                if let jsonValue = response.result.value {
-//                    let jsonResponse: JSON = JSON(jsonValue)
-//                    let messageContent: [JSON] = jsonResponse["result"].arrayValue
+                                                           withParameters:  params)
+        { (jsonResponse) in
+//            let jsonResponse: JSON = JSON(response)
+//            let messageContent: [JSON] = jsonResponse["result"].arrayValue
 //
-//                    if self.enableCache {
-//                        var contactsArr = [Contact]()
-//                        for item in messageContent {
-//                            contactsArr.append(Contact(messageContent: item))
-//                        }
-//                        Chat.cacheDB.saveContact(withContactObjects: contactsArr)
-//                    }
-//                    let contactsResult = ContactModel(messageContent: jsonResponse)
-//                    completion(contactsResult)
+//            if self.enableCache {
+//                var contactsArr = [Contact]()
+//                for item in messageContent {
+//                    contactsArr.append(Contact(messageContent: item))
 //                }
-//            } else {
-//                if let error = response.error {
-//                    let myJson: JSON = ["hasError":     true,
-//                                        "errorCode":    6200,
-//                                        "errorMessage": "\(CHAT_ERRORS.err6200.rawValue) \(error)",
-//                                        "errorEvent":   error.localizedDescription]
-//                    completion(myJson)
-//                }
+//                Chat.cacheDB.saveContact(withContactObjects: contactsArr)
 //            }
-//        }
-        
+            
+            let contactsModel = ContactModel(messageContent: jsonResponse as! JSON)
+            completion(contactsModel)
+        }
     }
     
     // NOTE: This method will be deprecate soon
@@ -548,7 +574,7 @@ extension Chat {
     public func updateContact(updateContactsInput:  UpdateContactsRequestModel,
                               uniqueId:             @escaping (String) -> (),
                               completion:           @escaping callbackTypeAlias) {
-        /*
+        /**
          *  -> create parameters to send HTTP request:
          *
          *  + method:   POST
@@ -570,58 +596,40 @@ extension Chat {
          */
         log.verbose("Try to request to update contact with this parameters: \n \(updateContactsInput)", context: "Chat")
         
-        var params: Parameters = [:]
         
+        let messageUniqueId: String = updateContactsInput.requestUniqueId ?? generateUUID()
+        uniqueId(messageUniqueId)
+        
+        sendUpdateContactRequest(updateContactsInput: updateContactsInput)
+        { (contactModel) in
+            self.addContactOnCache(withContactModel: contactModel as! ContactModel)
+            completion(contactModel)
+        }
+        
+    }
+    
+    private func sendUpdateContactRequest(updateContactsInput:  UpdateContactsRequestModel,
+                                          completion:           @escaping callbackTypeAlias) {
+        
+        let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.UPDATE_CONTACTS.rawValue)"
+        let method: HTTPMethod = HTTPMethod.post
+        let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
+        
+        var params: Parameters = [:]
         params["id"]              = JSON(updateContactsInput.id)
         params["firstName"]       = JSON(updateContactsInput.firstName)
         params["lastName"]        = JSON(updateContactsInput.lastName)
         params["cellphoneNumber"] = JSON(updateContactsInput.cellphoneNumber)
         params["email"]           = JSON(updateContactsInput.email)
         
-        let messageUniqueId: String = updateContactsInput.requestUniqueId ?? generateUUID()
-//        params["uniqueId"] = JSON(messageUniqueId)
-        uniqueId(messageUniqueId)
-        
-        let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.UPDATE_CONTACTS.rawValue)"
-        let method: HTTPMethod = HTTPMethod.post
-        let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
-        
         Networking.sharedInstance.requesttWithJSONresponse(from:            url,
                                                            withMethod:      method,
                                                            withHeaders:     headers,
-                                                           withParameters:  params) { (response) in
-                                                            let contactsResult = ContactModel(messageContent: response as! JSON)
-                                                            
-                                                            if self.enableCache {
-                                                                Chat.cacheDB.saveContact(withContactObjects: contactsResult.contacts)
-                                                            }
-                                                            
-                                                            completion(contactsResult)
+                                                           withParameters:  params)
+        { (response) in
+            let contactModel = ContactModel(messageContent: response as! JSON)
+            completion(contactModel)
         }
-        
-//        Alamofire.request(url, method: method, parameters: params, headers: headers).responseJSON { (response) in
-//            if response.result.isSuccess {
-//                if let jsonValue = response.result.value {
-//                    let jsonResponse: JSON = JSON(jsonValue)
-//                    let contactsResult = ContactModel(messageContent: jsonResponse)
-//
-//                    if self.enableCache {
-//                        Chat.cacheDB.saveContact(withContactObjects: contactsResult.contacts)
-//                    }
-//
-//                    completion(contactsResult)
-//                }
-//            } else {
-//                if let error = response.error {
-//                    let myJson: JSON = ["hasError":     true,
-//                                        "errorCode":    6200,
-//                                        "errorMessage": "\(CHAT_ERRORS.err6200.rawValue) \(error)",
-//                                        "errorEvent":   error.localizedDescription]
-//                    completion(myJson)
-//                }
-//            }
-//        }
-        
     }
     
     // NOTE: This method will be deprecate soon
@@ -698,7 +706,29 @@ extension Chat {
     public func removeContact(removeContactsInput:  RemoveContactsRequestModel,
                               uniqueId:             @escaping (String) -> (),
                               completion:           @escaping callbackTypeAlias) {
-        /*
+        /**
+         *  -> send the HTTP request to server to get the response from it
+         *      -> send the server respons to Cache and update it's values
+         *      -> send the server answer to client by using "completion" callback
+         *
+         */
+        log.verbose("Try to request to remove contact with this parameters: \n \(removeContactsInput)", context: "Chat")
+        
+        let requestUniqueId: String = removeContactsInput.requestUniqueId ?? generateUUID()
+        uniqueId(requestUniqueId)
+        
+        sendRemoveContactRequest(removeContactsInput: removeContactsInput)
+        { (removeContactModel) in
+            self.removeContactFromCache(removeContact:  removeContactModel as! RemoveContactModel,
+                                        withContactId:  [removeContactsInput.contactId])
+            completion(removeContactModel)
+        }
+        
+    }
+    
+    private func sendRemoveContactRequest(removeContactsInput:  RemoveContactsRequestModel,
+                                          completion:           @escaping callbackTypeAlias) {
+        /**
          *  -> create parameters to send HTTP request:
          *
          *  + method:   POST
@@ -709,65 +739,30 @@ extension Chat {
          *      - contactId:        Int
          *      - uniqueId:         String?
          *
-         *  -> send the HTTP request to server to get the response from it
-         *      -> send the server respons to Cache and update it's values
-         *      -> send the server answer to client by using "completion" callback
-         *
-         */
-        log.verbose("Try to request to remove contact with this parameters: \n \(removeContactsInput)", context: "Chat")
-        
-        var params: Parameters = [:]
-        
-        params["id"] = JSON(removeContactsInput.contactId)
-        
-        let requestUniqueId: String = removeContactsInput.requestUniqueId ?? generateUUID()
-//        params["uniqueId"] = JSON(theUniqueId)
-        uniqueId(requestUniqueId)
-        
+         **/
         let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.REMOVE_CONTACTS.rawValue)"
         let method: HTTPMethod = HTTPMethod.post
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
         
+        var params: Parameters = [:]
+        params["id"] = JSON(removeContactsInput.contactId)
+        
         Networking.sharedInstance.requesttWithJSONresponse(from:            url,
                                                            withMethod:      method,
                                                            withHeaders:     headers,
-                                                           withParameters:  params) { (response) in
-                                                            let contactsResult = RemoveContactModel(messageContent: response as! JSON)
-                                                            
-                                                            if self.enableCache {
-                                                                if (contactsResult.result) {
-                                                                    Chat.cacheDB.deleteContact(withContactIds: [removeContactsInput.contactId])
-                                                                }
-                                                            }
-                                                            
-                                                            completion(contactsResult)
+                                                           withParameters:  params)
+        { (response) in
+            let contactModel = RemoveContactModel(messageContent: response as! JSON)
+            completion(contactModel)
         }
-        
-//        Alamofire.request(url, method: method, parameters: params, headers: headers).responseJSON { (response) in
-//            if response.result.isSuccess {
-//                if let jsonValue = response.result.value {
-//                    let jsonResponse: JSON = JSON(jsonValue)
-//                    let contactsResult = RemoveContactModel(messageContent: jsonResponse)
-//
-//                    if self.enableCache {
-//                        if (contactsResult.result) {
-//                            Chat.cacheDB.deleteContact(withContactIds: [removeContactsInput.id])
-//                        }
-//                    }
-//
-//                    completion(contactsResult)
-//                }
-//            } else {
-//                if let error = response.error {
-//                    let myJson: JSON = ["hasError":     true,
-//                                        "errorCode":    6200,
-//                                        "errorMessage": "\(CHAT_ERRORS.err6200.rawValue) \(error)",
-//                                        "errorEvent":   error.localizedDescription]
-//                    completion(myJson)
-//                }
-//            }
-//        }
-        
+    }
+    
+    private func removeContactFromCache(removeContact: RemoveContactModel, withContactId: [Int]) {
+        if self.enableCache {
+            if (removeContact.result) {
+                Chat.cacheDB.deleteContact(withContactIds: withContactId)
+            }
+        }
     }
     
     // NOTE: This method will be deprecate soon

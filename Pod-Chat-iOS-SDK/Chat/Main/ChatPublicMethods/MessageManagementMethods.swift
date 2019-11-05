@@ -1185,7 +1185,9 @@ extension Chat {
         
         // if there was no data to send, then returns an error to user
         if (sendFileMessageInput.imageToSend == nil) && (sendFileMessageInput.fileToSend == nil) {
-            delegate?.chatError(errorCode: 6302, errorMessage: CHAT_ERRORS.err6302.rawValue, errorResult: nil)
+            delegate?.chatError(errorCode:      6302,
+                                errorMessage:   CHAT_ERRORS.err6302.rawValue,
+                                errorResult:    nil)
         }
         
         
@@ -1551,7 +1553,9 @@ extension Chat {
         
         // if there was no data to send, then returns an error to user
         if (replyFileMessageInput.imageToSend == nil) && (replyFileMessageInput.fileToSend == nil) {
-            delegate?.chatError(errorCode: 6302, errorMessage: CHAT_ERRORS.err6302.rawValue, errorResult: nil)
+            delegate?.chatError(errorCode:      6302,
+                                errorMessage:   CHAT_ERRORS.err6302.rawValue,
+                                errorResult:    nil)
         }
         
         

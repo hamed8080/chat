@@ -1267,49 +1267,15 @@ extension Chat {
     func chatMessageHandler(threadId: Int, messageContent: JSON) {
         let message = Message(threadId: threadId, pushMessageVO: messageContent)
         
-        let parameterToSent: JSON = ["messageId":   message.id ?? NSNull(),
-                                     "participant": message.participant?.id ?? NSNull()]
-        
-        // TODO: make this line correct
-//        deliver(deliverInput: parameterToSent)
-        
-        if let messageParticipants = message.participant {
-//            delegate?.chatDeliver(messageId: message.id!, ownerId: messageParticipants.id!)
+        if let messageOwner = message.participant?.id {
+            if messageOwner != userInfo?.id {
+                let deliveryModel = DeliverSeenRequestModel(messageId: message.id, ownerId: messageOwner, typeCode: nil)
+                deliver(deliverInput: deliveryModel)
+            }
         }
         
-        let messageJSON = message.formatToJSON()
-        let myResult: JSON = ["message": messageJSON]
-//        delegate?.messageEvents(type: MessageEventTypes.new, result: myResult)
-        
-        
-        // This code is deprecated
-        //        let myThreadId: JSON = ["threadIds": threadId]
-        //        getThreads(params: myThreadId, uniqueId: { _ in }) { (threadsResult) in
-        //            let threadsResultModel: GetThreadsModel = threadsResult as! GetThreadsModel
-        //            let threadsResultJSON: JSON = threadsResultModel.returnDataAsJSON()
-        //
-        //            let threads = threadsResultJSON["result"]["threads"].arrayValue
-        //
-        //            if (messageContent["participant"]["id"].intValue != self.userInfo!["id"].intValue) {
-        //                let result: JSON = ["thread": threads[0].intValue,
-        //                                    "messageId": messageContent["id"].intValue,
-        //                                    "senderId": messageContent["participant"]["id"].intValue]
-        //                self.delegate?.threadEvents(type: "THREAD_UNREAD_COUNT_UPDATED", result: result)
-        //            }
-        //
-        //            let result: JSON = ["thread": threads[0].intValue]
-        //            self.delegate?.threadEvents(type: "THREAD_LAST_ACTIVITY_TIME", result: result)
-        //        }
-        
+        delegate?.messageEvents(type: MessageEventTypes.MESSAGE_NEW, result: message)
     }
-    
-    
-    func chatEditMessageHandler(threadId: Int, messageContent: JSON) {
-        let message = Message(threadId: threadId, pushMessageVO: messageContent)
-        let result: JSON = ["message": message]
-//        delegate?.messageEvents(type: MessageEventTypes.edit, result: result)
-    }
-    
     
     
     
