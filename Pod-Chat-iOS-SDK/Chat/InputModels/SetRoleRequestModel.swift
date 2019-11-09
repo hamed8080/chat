@@ -13,24 +13,24 @@ open class SetRoleRequestModel {
     public var roles:           [String] = []
     public let roleOperation:   String
     public let threadId:        Int
-    public let typeCode:        String?
-    public let uniqueId:        String?
     public let userId:          Int
+    public let requestTypeCode: String?
+    public let requestUniqueId: String?
     
-    public init(roles:          [Roles],
-                roleOperation:  RoleOperations,
-                threadId:       Int,
-                typeCode:       String?,
-                uniqueId:       String?,
-                userId:         Int) {
+    public init(roles:              [Roles],
+                roleOperation:      RoleOperations,
+                threadId:           Int,
+                userId:             Int,
+                requestTypeCode:    String?,
+                requestUniqueId:    String?) {
         for item in roles {
             self.roles.append(item.rawValue)
         }
-        self.roleOperation  = roleOperation.rawValue
-        self.threadId       = threadId
-        self.typeCode       = typeCode
-        self.uniqueId       = uniqueId
-        self.userId         = userId
+        self.roleOperation      = roleOperation.rawValue
+        self.threadId           = threadId
+        self.userId             = userId
+        self.requestTypeCode    = requestTypeCode
+        self.requestUniqueId    = requestUniqueId
     }
     
 }

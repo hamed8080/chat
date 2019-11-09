@@ -13,21 +13,21 @@ import SwiftyJSON
 
 open class GetHistoryRequestModel {
     
-    public let count:               Int?    //
+    public let count:               Int?    
     public let firstMessageId:      Int?
-    public let fromTime:            UInt?   //
+    public let fromTime:            UInt?
     public let lastMessageId:       Int?
-    public let messageId:           Int?    // id
-    public let metadataCriteria:    JSON?   //
-    public let offset:              Int?    //
-    public let order:               String? //
-    public let query:               String? //
-    public let threadId:            Int     //
-    public let toTime:              UInt?   //
-    public let typeCode:            String?
-    public let uniqueId:            String? //
-
-//    public let uniqueIds: [String]?
+    public let messageId:           Int?
+    public let metadataCriteria:    JSON?
+    public let offset:              Int?
+    public let order:               String?
+    public let query:               String?
+    public let threadId:            Int
+    public let toTime:              UInt?
+    public let uniqueIds:           [String]?
+    public let requestTypeCode:     String?
+    public let requestUniqueId:     String?
+    
 //    public let fromTimeNanos:            UInt?   //
 //    public let toTimeNanos:              UInt?   //
     
@@ -42,8 +42,9 @@ open class GetHistoryRequestModel {
                 query:              String?,
                 threadId:           Int,
                 toTime:             UInt?,
-                typeCode:           String?,
-                uniqueId:           String?) {
+                uniqueIds:          [String]?,
+                requestTypeCode:    String?,
+                requestUniqueId:    String?) {
         
         self.count              = count
         self.firstMessageId     = firstMessageId
@@ -56,8 +57,9 @@ open class GetHistoryRequestModel {
         self.query              = query
         self.threadId           = threadId
         self.toTime             = toTime
-        self.typeCode           = typeCode
-        self.uniqueId           = uniqueId
+        self.uniqueIds          = uniqueIds
+        self.requestTypeCode    = requestTypeCode
+        self.requestUniqueId    = requestUniqueId
     }
     
 }

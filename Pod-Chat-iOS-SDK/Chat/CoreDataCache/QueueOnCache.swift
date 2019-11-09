@@ -16,11 +16,11 @@ extension Cache {
     func saveTextMessageToWaitQueue(textMessage: QueueOfWaitTextMessagesModel) {
         let theWaitQueueEntity = NSEntityDescription.entity(forEntityName: "QueueOfTextMessages", in: context)
         let messageToSaveOnQueue = QueueOfTextMessages(entity: theWaitQueueEntity!, insertInto: context)
-        messageToSaveOnQueue.content        = textMessage.content
-        messageToSaveOnQueue.repliedTo      = textMessage.repliedTo as NSNumber?
-        messageToSaveOnQueue.threadId       = textMessage.threadId as NSNumber?
-        messageToSaveOnQueue.typeCode       = textMessage.typeCode
-        messageToSaveOnQueue.uniqueId       = textMessage.uniqueId
+        messageToSaveOnQueue.content    = textMessage.content
+        messageToSaveOnQueue.repliedTo  = textMessage.repliedTo as NSNumber?
+        messageToSaveOnQueue.threadId   = textMessage.threadId as NSNumber?
+        messageToSaveOnQueue.typeCode   = textMessage.requestTypeCode
+        messageToSaveOnQueue.uniqueId   = textMessage.requestUniqueId
         
         if let metaData2 = textMessage.metaData {
             NSObject.convertJSONtoTransformable(dataToStore: metaData2) { (data) in
@@ -48,13 +48,13 @@ extension Cache {
         messageToSaveOnQueue.imageToSend    = fileMessage.imageToSend as NSData?
         messageToSaveOnQueue.repliedTo      = fileMessage.repliedTo as NSNumber?
 //        messageToSaveOnQueue.subjectId      = fileMessage.subjectId as NSNumber?
-        messageToSaveOnQueue.threadId       = fileMessage.threadId as NSNumber?
-        messageToSaveOnQueue.typeCode       = fileMessage.typeCode
-        messageToSaveOnQueue.uniqueId       = fileMessage.uniqueId
-        messageToSaveOnQueue.hC             = fileMessage.hC
-        messageToSaveOnQueue.wC             = fileMessage.wC
-        messageToSaveOnQueue.xC             = fileMessage.xC
-        messageToSaveOnQueue.yC             = fileMessage.yC
+        messageToSaveOnQueue.threadId           = fileMessage.threadId as NSNumber?
+        messageToSaveOnQueue.hC                 = fileMessage.hC
+        messageToSaveOnQueue.wC                 = fileMessage.wC
+        messageToSaveOnQueue.xC                 = fileMessage.xC
+        messageToSaveOnQueue.yC                 = fileMessage.yC
+        messageToSaveOnQueue.typeCode    = fileMessage.requestTypeCode
+        messageToSaveOnQueue.uniqueId    = fileMessage.requestUniqueId
         
         if let metaData2 = fileMessage.metaData {
             NSObject.convertJSONtoTransformable(dataToStore: metaData2) { (data) in
@@ -94,7 +94,7 @@ extension Cache {
         messageToSaveOnQueue.fileSize       = file.fileSize as NSNumber?
         messageToSaveOnQueue.originalFileName = file.originalFileName
         messageToSaveOnQueue.threadId       = file.threadId as NSNumber?
-        messageToSaveOnQueue.uniqueId       = file.uniqueId
+        messageToSaveOnQueue.uniqueId       = file.requestUniqueId
         
         // save function that will try to save changes that made on the Cache
         saveContext(subject: "Create QueueOfUploadFiles -create a new object-")
@@ -106,8 +106,8 @@ extension Cache {
         messageToSaveOnQueue.content    = editMessage.content
         messageToSaveOnQueue.repliedTo  = editMessage.repliedTo as NSNumber?
         messageToSaveOnQueue.subjectId  = editMessage.subjectId as NSNumber?
-        messageToSaveOnQueue.typeCode   = editMessage.typeCode
-        messageToSaveOnQueue.uniqueId   = editMessage.uniqueId
+        messageToSaveOnQueue.typeCode   = editMessage.requestTypeCode
+        messageToSaveOnQueue.uniqueId   = editMessage.requestUniqueId
         
         if let metaData2 = editMessage.metaData {
             NSObject.convertJSONtoTransformable(dataToStore: metaData2) { (data) in
@@ -125,8 +125,8 @@ extension Cache {
         messageToSaveOnQueue.messageIds = forwardMessage.messageIds as [NSNumber]?
         messageToSaveOnQueue.repliedTo  = forwardMessage.repliedTo as NSNumber?
         messageToSaveOnQueue.subjectId  = forwardMessage.subjectId as NSNumber?
-        messageToSaveOnQueue.typeCode   = forwardMessage.typeCode
-        messageToSaveOnQueue.uniqueId   = forwardMessage.uniqueId
+        messageToSaveOnQueue.typeCode   = forwardMessage.requestTypeCode
+        messageToSaveOnQueue.uniqueId   = forwardMessage.requestUniqueId
         
         if let metaData2 = forwardMessage.metaData {
             NSObject.convertJSONtoTransformable(dataToStore: metaData2) { (data) in

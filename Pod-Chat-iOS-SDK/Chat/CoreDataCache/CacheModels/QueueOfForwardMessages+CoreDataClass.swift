@@ -41,12 +41,12 @@ public class QueueOfForwardMessages: NSManagedObject {
         }
         
         func createQueueOfWaitForwardtMessagesModel() -> QueueOfWaitForwardMessagesModel {
-            let queueOfWaitForwardMessagesModel = QueueOfWaitForwardMessagesModel(messageIds:   messageIds,
-                                                                                  metaData:     metaData,
-                                                                                  repliedTo:    repliedTo,
-                                                                                  subjectId:    subjectId,
-                                                                                  typeCode:     self.typeCode,
-                                                                                  uniqueId:     self.uniqueId)
+            let queueOfWaitForwardMessagesModel = QueueOfWaitForwardMessagesModel(messageIds:       messageIds,
+                                                                                  metaData:         metaData,
+                                                                                  repliedTo:        repliedTo,
+                                                                                  subjectId:        subjectId,
+                                                                                  requestTypeCode:  self.typeCode,
+                                                                                  requestUniqueId:  self.uniqueId)
             return queueOfWaitForwardMessagesModel
         }
         

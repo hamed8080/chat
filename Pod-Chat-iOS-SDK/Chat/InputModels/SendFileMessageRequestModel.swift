@@ -24,26 +24,27 @@ open class SendFileMessageRequestModel {
     public let content:     String?
     public let metaData:    JSON?
     public let repliedTo:   Int?
-    public let typeCode:    String?
     
-    public let fileToSend:  Data?
-    public let imageToSend: Data?
-    public let uniqueId:    String?
+    public let fileToSend:      Data?
+    public let imageToSend:     Data?
     
-    public init(fileName:      String?,
-                imageName:     String?,
-                xC:            String?,
-                yC:            String?,
-                hC:            String?,
-                wC:            String?,
-                threadId:      Int,
-                content:       String?,
-                metaData:      JSON?,
-                repliedTo:     Int?,
-                typeCode:      String?,
-                fileToSend:    Data?,
-                imageToSend:   Data?,
-                uniqueId:      String?) {
+    public let requestTypeCode: String?
+    public let requestUniqueId: String?
+    
+    public init(fileName:           String?,
+                imageName:          String?,
+                xC:                 String?,
+                yC:                 String?,
+                hC:                 String?,
+                wC:                 String?,
+                threadId:           Int,
+                content:            String?,
+                metaData:           JSON?,
+                repliedTo:          Int?,
+                fileToSend:         Data?,
+                imageToSend:        Data?,
+                requestTypeCode:    String?,
+                requestUniqueId:    String?) {
         
         self.fileName       = fileName
         self.imageName      = imageName
@@ -56,12 +57,12 @@ open class SendFileMessageRequestModel {
         self.content        = content
         self.metaData       = metaData
         self.repliedTo      = repliedTo
-        self.typeCode       = typeCode
         
         self.fileToSend     = fileToSend
         self.imageToSend    = imageToSend
         
-        self.uniqueId       = uniqueId
+        self.requestTypeCode    = requestTypeCode
+        self.requestUniqueId    = requestUniqueId
     }
     
 }

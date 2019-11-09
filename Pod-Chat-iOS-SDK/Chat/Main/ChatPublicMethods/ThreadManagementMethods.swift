@@ -28,7 +28,7 @@ extension Chat {
                                             subjectId:          nil,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           input.typeCode ?? generalTypeCode,
+                                            typeCode:           input.requestTypeCode ?? generalTypeCode,
                                             uniqueId:           nil,
                                             isCreateThreadAndSendMessage: nil)
         
@@ -130,8 +130,8 @@ extension Chat {
                                             subjectId:          nil,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           getThreadsInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           getThreadsInput.uniqueId ?? generateUUID(),
+                                            typeCode:           getThreadsInput.requestTypeCode ?? generalTypeCode,
+                                            uniqueId:           getThreadsInput.requestUniqueId ?? generateUUID(),
                                             isCreateThreadAndSendMessage: nil)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -299,8 +299,8 @@ extension Chat {
                                             subjectId:          updateThreadInfoInput.threadId,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           updateThreadInfoInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           updateThreadInfoInput.uniqueId ?? generateUUID(),
+                                            typeCode:           updateThreadInfoInput.requestTypeCode ?? generalTypeCode,
+                                            uniqueId:           updateThreadInfoInput.requestUniqueId ?? generateUUID(),
                                             isCreateThreadAndSendMessage: nil)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -459,7 +459,7 @@ extension Chat {
                                             token:              token,
                                             tokenIssuer:        nil,
                                             typeCode:           nil,
-                                            uniqueId:           createThreadInput.uniqueId ?? generateUUID(),
+                                            uniqueId:           createThreadInput.requestUniqueId ?? generateUUID(),
                                             isCreateThreadAndSendMessage: nil)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -615,7 +615,7 @@ extension Chat {
         sendCallbackToUserOnDeliver = onDelivere
         sendCallbackToUserOnSeen    = onSeen
         
-        let myUniqueId = creatThreadWithMessageInput.uniqueId ?? generateUUID()
+        let myUniqueId = creatThreadWithMessageInput.requestUniqueId ?? generateUUID()
         
         var messageContentParams: JSON = [:]
         messageContentParams["text"] = JSON(creatThreadWithMessageInput.messageText)
@@ -838,8 +838,8 @@ extension Chat {
                                             subjectId:          leaveThreadInput.threadId,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           leaveThreadInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           leaveThreadInput.uniqueId ?? generateUUID(),
+                                            typeCode:           leaveThreadInput.requestTypeCode ?? generalTypeCode,
+                                            uniqueId:           leaveThreadInput.requestUniqueId ?? generateUUID(),
                                             isCreateThreadAndSendMessage: true)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -927,7 +927,7 @@ extension Chat {
                                             subjectId:          spamPvThreadInput.threadId,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           spamPvThreadInput.typeCode ?? generalTypeCode,
+                                            typeCode:           spamPvThreadInput.requestTypeCode ?? generalTypeCode,
                                             uniqueId:           nil,
                                             isCreateThreadAndSendMessage: true)
         
@@ -1012,7 +1012,7 @@ extension Chat {
                                             subjectId:          muteThreadInput.subjectId,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           muteThreadInput.typeCode ?? generalTypeCode,
+                                            typeCode:           muteThreadInput.requestTypeCode ?? generalTypeCode,
                                             uniqueId:           nil,
                                             isCreateThreadAndSendMessage: true)
         
@@ -1093,7 +1093,7 @@ extension Chat {
                                             subjectId:          unmuteThreadInput.subjectId,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           unmuteThreadInput.typeCode ?? generalTypeCode,
+                                            typeCode:           unmuteThreadInput.requestTypeCode ?? generalTypeCode,
                                             uniqueId:           nil,
                                             isCreateThreadAndSendMessage: true)
         
@@ -1197,7 +1197,7 @@ extension Chat {
                                             subjectId:          getThreadParticipantsInput.threadId,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           getThreadParticipantsInput.typeCode ?? generalTypeCode,
+                                            typeCode:           getThreadParticipantsInput.requestTypeCode ?? generalTypeCode,
                                             uniqueId:           nil,
                                             isCreateThreadAndSendMessage: true)
         
@@ -1336,8 +1336,8 @@ extension Chat {
                                             subjectId:          addParticipantsInput.threadId,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           addParticipantsInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           addParticipantsInput.uniqueId,
+                                            typeCode:           addParticipantsInput.requestTypeCode ?? generalTypeCode,
+                                            uniqueId:           addParticipantsInput.requestUniqueId,
                                             isCreateThreadAndSendMessage: true)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -1445,8 +1445,8 @@ extension Chat {
                                             subjectId:          removeParticipantsInput.threadId,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           removeParticipantsInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           removeParticipantsInput.uniqueId,
+                                            typeCode:           removeParticipantsInput.requestTypeCode ?? generalTypeCode,
+                                            uniqueId:           removeParticipantsInput.requestUniqueId,
                                             isCreateThreadAndSendMessage: true)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -1577,7 +1577,7 @@ extension Chat {
                                             subjectId:          setRoleInput.first!.threadId,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           setRoleInput.first?.typeCode ?? generalTypeCode,
+                                            typeCode:           setRoleInput.first?.requestTypeCode ?? generalTypeCode,
                                             uniqueId:           nil,
                                             isCreateThreadAndSendMessage: true)
         

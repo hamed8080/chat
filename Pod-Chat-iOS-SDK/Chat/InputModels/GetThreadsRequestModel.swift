@@ -22,8 +22,8 @@ open class GetThreadsRequestModel {
     public let partnerCoreContactId:    Int?
     public let partnerCoreUserId:       Int?
     public let threadIds:               [Int]?
-    public let typeCode:                String?
-    public let uniqueId:                String?
+    public let requestTypeCode:         String?
+    public let requestUniqueId:         String?
     
     public init(count:                  Int?,
                 creatorCoreUserId:      Int?,
@@ -34,8 +34,8 @@ open class GetThreadsRequestModel {
                 partnerCoreContactId:   Int?,
                 partnerCoreUserId:      Int?,
                 threadIds:              [Int]?,
-                typeCode:               String?,
-                uniqueId:               String?) {
+                requestTypeCode:        String?,
+                requestUniqueId:        String?) {
         
         self.count                  = count
         self.creatorCoreUserId      = creatorCoreUserId
@@ -46,8 +46,8 @@ open class GetThreadsRequestModel {
         self.partnerCoreContactId   = partnerCoreContactId
         self.partnerCoreUserId      = partnerCoreUserId
         self.threadIds              = threadIds
-        self.typeCode               = typeCode
-        self.uniqueId               = uniqueId
+        self.requestTypeCode        = requestTypeCode
+        self.requestUniqueId        = requestUniqueId
     }
     
 }
@@ -55,13 +55,13 @@ open class GetThreadsRequestModel {
 
 class GetAllThreadsRequestModel {
     
-    public let summary:     Bool
-    public let typeCode:    String?
+    public let summary:         Bool
+    public let requestTypeCode: String?
     
-    init(summary:   Bool,
-         typeCode:  String?) {
-        self.summary    = summary
-        self.typeCode   = typeCode
+    init(summary:           Bool,
+         requestTypeCode:   String?) {
+        self.summary            = summary
+        self.requestTypeCode    = requestTypeCode
     }
     
 }

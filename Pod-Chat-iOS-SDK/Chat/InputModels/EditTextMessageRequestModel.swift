@@ -17,22 +17,22 @@ open class EditTextMessageRequestModel {
     public let metaData:            JSON?
     public let repliedTo:           Int?
     public let subjectId:           Int
-    public let typeCode:            String?
-    public let uniqueId:            String?
+    public let requestTypeCode:     String?
+    public let requestUniqueId:     String?
     
-    public init(content:           String,
-                metaData:          JSON?,
-                repliedTo:         Int?,
-                subjectId:         Int,
-                typeCode:          String?,
-                uniqueId:          String?) {
+    public init(content:            String,
+                metaData:           JSON?,
+                repliedTo:          Int?,
+                subjectId:          Int,
+                requestTypeCode:    String?,
+                requestUniqueId:    String?) {
         
         self.content            = content
         self.metaData           = metaData
         self.repliedTo          = repliedTo
         self.subjectId          = subjectId
-        self.typeCode           = typeCode
-        self.uniqueId           = uniqueId
+        self.requestTypeCode    = requestTypeCode
+        self.requestUniqueId    = requestUniqueId
     }
     
 }

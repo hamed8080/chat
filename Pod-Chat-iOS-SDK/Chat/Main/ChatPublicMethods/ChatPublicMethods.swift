@@ -52,14 +52,14 @@ extension Chat {
                 */
                 
                 let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.DELIVERY.rawValue,
-                                                    content:            "\(deliverInput.messageId)",
+                                                    content:            "\(deliverInput.messageId ?? 0)",
                                                     metaData:           nil,
                                                     repliedTo:          nil,
                                                     systemMetadata:     nil,
                                                     subjectId:          nil,
                                                     token:              token,
                                                     tokenIssuer:        nil,
-                                                    typeCode:           deliverInput.typeCode ?? generalTypeCode,
+                                                    typeCode:           deliverInput.requestTypeCode ?? generalTypeCode,
                                                     uniqueId:           nil,
                                                     isCreateThreadAndSendMessage: nil)
                 
@@ -136,14 +136,14 @@ extension Chat {
                 */
                 
                 let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.SEEN.rawValue,
-                                                    content:            "\(seenInput.messageId)",
+                                                    content:            "\(seenInput.messageId ?? 0)",
                                                     metaData:           nil,
                                                     repliedTo:          nil,
                                                     systemMetadata:     nil,
                                                     subjectId:          nil,
                                                     token:              token,
                                                     tokenIssuer:        nil,
-                                                    typeCode:           seenInput.typeCode ?? generalTypeCode,
+                                                    typeCode:           seenInput.requestTypeCode ?? generalTypeCode,
                                                     uniqueId:           nil,
                                                     isCreateThreadAndSendMessage: nil)
                 

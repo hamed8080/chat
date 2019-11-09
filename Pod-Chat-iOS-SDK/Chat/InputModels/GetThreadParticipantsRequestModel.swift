@@ -17,28 +17,28 @@ open class GetThreadParticipantsRequestModel {
     public let name:            String?
     public let offset:          Int?
     public let threadId:        Int
-    public let typeCode:        String?
-    public let uniqueId:        String?
+    public let requestTypeCode: String?
+    public let requestUniqueId: String?
     
-    public init(admin:          Bool?,
-                count:          Int?,
-                firstMessageId: Int?,
-                lastMessageId:  Int?,
-                name:           String?,
-                offset:         Int?,
-                threadId:       Int,
-                typeCode:       String?,
-                uniqueId:       String?) {
+    public init(admin:              Bool?,
+                count:              Int?,
+                firstMessageId:     Int?,
+                lastMessageId:      Int?,
+                name:               String?,
+                offset:             Int?,
+                threadId:           Int,
+                requestTypeCode:    String?,
+                requestUniqueId:    String?) {
         
-        self.admin          = admin
-        self.count          = count
-        self.firstMessageId = firstMessageId
-        self.lastMessageId  = lastMessageId
-        self.name           = name
-        self.offset         = offset
-        self.threadId       = threadId
-        self.typeCode       = typeCode
-        self.uniqueId       = uniqueId
+        self.admin              = admin
+        self.count              = count
+        self.firstMessageId     = firstMessageId
+        self.lastMessageId      = lastMessageId
+        self.name               = name
+        self.offset             = offset
+        self.threadId           = threadId
+        self.requestTypeCode    = requestTypeCode
+        self.requestUniqueId    = requestUniqueId
     }
     
 }

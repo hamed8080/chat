@@ -36,12 +36,12 @@ public class QueueOfEditMessages: NSManagedObject {
         }
         
         func createQueueOfWaitEditMessagesModel() -> QueueOfWaitEditMessagesModel {
-            let queueOfWaitEditMessagesModel = QueueOfWaitEditMessagesModel(content: self.content,
-                                                                            metaData: metaData,
-                                                                            repliedTo: repliedTo,
-                                                                            subjectId: subjectId,
-                                                                            typeCode: self.typeCode,
-                                                                            uniqueId: self.uniqueId)
+            let queueOfWaitEditMessagesModel = QueueOfWaitEditMessagesModel(content:            self.content,
+                                                                            metaData:           metaData,
+                                                                            repliedTo:          repliedTo,
+                                                                            subjectId:          subjectId,
+                                                                            requestTypeCode:    self.typeCode,
+                                                                            requestUniqueId:    self.uniqueId)
             return queueOfWaitEditMessagesModel
         }
         

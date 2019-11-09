@@ -13,7 +13,9 @@ open class RemoveContactsRequestModel {
     public let contactId:  Int
     public let requestUniqueId: String?
     
-    public init(contactId: Int, requestUniqueId: String?) {
+    public init(contactId:          Int,
+                requestUniqueId:    String?) {
+        
         self.contactId          = contactId
         self.requestUniqueId    = requestUniqueId
     }

@@ -48,7 +48,7 @@ extension Chat {
                             completion:         @escaping callbackTypeAlias) {
         log.verbose("Try to upload image with this parameters: \n \(uploadImageInput)", context: "Chat")
         
-        let uploadUniqueId = uploadImageInput.uniqueId ?? generateUUID()
+        let uploadUniqueId = uploadImageInput.requestUniqueId ?? generateUUID()
         
         if enableCache {
             // seve this upload image on the Cache Wait Queue,
@@ -332,20 +332,20 @@ extension Chat {
                            completion:      @escaping callbackTypeAlias) {
         log.verbose("Try to upload file with this parameters: \n \(uploadFileInput)", context: "Chat")
         
-        let uploadUniqueId = uploadFileInput.uniqueId ?? generateUUID()
+        let uploadUniqueId = uploadFileInput.requestUniqueId ?? generateUUID()
         
         if enableCache {
             // seve this upload image on the Cache Wait Queue,
             // so if there was an situation that response of the server to this uploading doesn't come, then we know that our upload request didn't sent correctly
             // and we will send this Queue to user on the GetHistory request,
             // now user knows which upload requests didn't send correctly, and can handle them
-            let messageObjectToSendToQueue = QueueOfWaitUploadFilesModel(dataToSend: uploadFileInput.dataToSend,
-                                                                         fileExtension: uploadFileInput.fileExtension,
-                                                                         fileName: uploadFileInput.fileName,
-                                                                         fileSize: uploadFileInput.fileSize,
-                                                                         originalFileName: uploadFileInput.originalFileName,
-                                                                         threadId: uploadFileInput.threadId,
-                                                                         uniqueId: uploadUniqueId)
+            let messageObjectToSendToQueue = QueueOfWaitUploadFilesModel(dataToSend:        uploadFileInput.dataToSend,
+                                                                         fileExtension:     uploadFileInput.fileExtension,
+                                                                         fileName:          uploadFileInput.fileName,
+                                                                         fileSize:          uploadFileInput.fileSize,
+                                                                         originalFileName:  uploadFileInput.originalFileName,
+                                                                         threadId:          uploadFileInput.threadId,
+                                                                         requestUniqueId:   uploadUniqueId)
             Chat.cacheDB.saveUploadFileToWaitQueue(file: messageObjectToSendToQueue)
         }
         

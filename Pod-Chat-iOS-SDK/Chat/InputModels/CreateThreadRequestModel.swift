@@ -16,23 +16,23 @@ open class CreateThreadRequestModel {
     public let metadata:        String?
     public let title:           String
     public let type:            ThreadTypes?
-    public let uniqueId:        String?
+    public let requestUniqueId: String?
     
-    public init(description:    String?,
-                image:          String?,
-                invitees:       [Invitee],
-                metadata:       String?,
-                title:          String,
-                type:           ThreadTypes?,
-                uniqueId:       String?) {
+    public init(description:        String?,
+                image:              String?,
+                invitees:           [Invitee],
+                metadata:           String?,
+                title:              String,
+                type:               ThreadTypes?,
+                requestUniqueId:    String?) {
         
-        self.description    = description
-        self.image          = image
-        self.invitees   = invitees
-        self.metadata       = metadata
-        self.title          = title
-        self.type       = type
-        self.uniqueId   = uniqueId
+        self.description        = description
+        self.image              = image
+        self.invitees           = invitees
+        self.metadata           = metadata
+        self.title              = title
+        self.type               = type
+        self.requestUniqueId    = requestUniqueId
     }
     
 }

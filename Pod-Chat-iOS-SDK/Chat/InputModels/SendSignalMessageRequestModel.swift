@@ -10,17 +10,17 @@ import Foundation
 
 open class SendSignalMessageRequestModel {
     
-    public let signalType:  SignalMessageType
-    public let threadId:    Int
-    public let uniqueId:    String?
+    public let signalType:      SignalMessageType
+    public let threadId:        Int
+    public let requestUniqueId: String?
     
-    public init(signalType: SignalMessageType,
-                threadId:   Int,
-                uniqueId:   String?) {
+    public init(signalType:         SignalMessageType,
+                threadId:           Int,
+                requestUniqueId:    String?) {
         
-        self.signalType = signalType
-        self.threadId   = threadId
-        self.uniqueId   = uniqueId
+        self.signalType         = signalType
+        self.threadId           = threadId
+        self.requestUniqueId    = requestUniqueId
     }
     
 }

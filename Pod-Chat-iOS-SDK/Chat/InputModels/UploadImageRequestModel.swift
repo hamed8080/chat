@@ -16,24 +16,23 @@ open class UploadImageRequestModel {
     public let fileSize:            Int?
     public let originalFileName:    String?
     public let threadId:            Int?
-    public let uniqueId:            String?
     public let xC:                  Int?
     public let yC:                  Int?
     public let hC:                  Int?
     public let wC:                  Int?
+    public let requestUniqueId:     String?
     
-    
-    public init(dataToSend:        Data,
-                fileExtension:     String?,
-                fileName:          String,
-                fileSize:          Int?,
-                originalFileName:  String?,
-                threadId:          Int?,
-                uniqueId:          String?,
-                xC:                Int?,
-                yC:                Int?,
-                hC:                Int?,
-                wC:                Int?) {
+    public init(dataToSend:         Data,
+                fileExtension:      String?,
+                fileName:           String,
+                fileSize:           Int?,
+                originalFileName:   String?,
+                threadId:           Int?,
+                xC:                 Int?,
+                yC:                 Int?,
+                hC:                 Int?,
+                wC:                 Int?,
+                requestUniqueId:    String?) {
         
         self.dataToSend         = dataToSend
         self.fileExtension      = fileExtension
@@ -41,11 +40,11 @@ open class UploadImageRequestModel {
         self.fileSize           = fileSize
         self.originalFileName   = originalFileName
         self.threadId           = threadId
-        self.uniqueId           = uniqueId
         self.xC                 = xC
         self.yC                 = yC
         self.hC                 = hC
         self.wC                 = wC
+        self.requestUniqueId    = requestUniqueId
     }
     
 }

@@ -26,7 +26,7 @@ open class CreateThreadWithMessageRequestModel {
     public let messageText:                 String
     public let messageType:                 String?
 
-    public let uniqueId:                String?
+    public let requestUniqueId:             String?
     
     public init(threadDescription:      String?,
                 threadImage:            String?,
@@ -41,7 +41,7 @@ open class CreateThreadWithMessageRequestModel {
                 messageSystemMetaData:  String?,
                 messageText:            String,
                 messageType:            String?,
-                uniqueId:               String?) {
+                requestUniqueId:        String?) {
         
         self.threadDescription  = threadDescription
         self.threadImage        = threadImage
@@ -58,7 +58,7 @@ open class CreateThreadWithMessageRequestModel {
         self.messageText                = messageText
         self.messageType                = messageType
         
-        self.uniqueId           = uniqueId
+        self.requestUniqueId            = requestUniqueId
     }
 
 }

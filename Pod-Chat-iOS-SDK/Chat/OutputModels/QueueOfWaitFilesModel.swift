@@ -11,13 +11,13 @@ import SwiftyJSON
 
 open class QueueOfWaitUploadFilesModel {
     
-    let dataToSend:       Data?
-    let fileExtension:    String?
-    let fileName:         String?
-    let fileSize:         Int?
-    let originalFileName: String?
-    let threadId:         Int?
-    let uniqueId:         String?
+    let dataToSend:         Data?
+    let fileExtension:      String?
+    let fileName:           String?
+    let fileSize:           Int?
+    let originalFileName:   String?
+    let threadId:           Int?
+    let requestUniqueId:    String?
     
     init(dataToSend:        Data?,
          fileExtension:     String?,
@@ -25,7 +25,7 @@ open class QueueOfWaitUploadFilesModel {
          fileSize:          Int?,
          originalFileName:  String?,
          threadId:          Int?,
-         uniqueId:          String?) {
+         requestUniqueId:          String?) {
         
         self.dataToSend         = dataToSend
         self.fileExtension      = fileExtension
@@ -33,7 +33,7 @@ open class QueueOfWaitUploadFilesModel {
         self.fileSize           = fileSize
         self.originalFileName   = originalFileName
         self.threadId           = threadId
-        self.uniqueId           = uniqueId
+        self.requestUniqueId    = requestUniqueId
         
     }
     
@@ -44,7 +44,7 @@ open class QueueOfWaitUploadFilesModel {
         self.fileSize           = fileInputModel.fileSize
         self.originalFileName   = fileInputModel.originalFileName
         self.threadId           = fileInputModel.threadId
-        self.uniqueId           = fileInputModel.uniqueId
+        self.requestUniqueId    = fileInputModel.requestUniqueId
     }
     
 }

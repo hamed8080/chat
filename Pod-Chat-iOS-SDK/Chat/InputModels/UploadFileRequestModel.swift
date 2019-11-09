@@ -16,15 +16,15 @@ open class UploadFileRequestModel {
     public let fileSize:            Int?
     public let originalFileName:    String?
     public let threadId:            Int?
-    public let uniqueId:            String?
+    public let requestUniqueId:     String?
     
-    public init(dataToSend:        Data,
-                fileExtension:     String?,
-                fileName:          String,
-                fileSize:          Int?,
-                originalFileName:  String?,
-                threadId:          Int?,
-                uniqueId:          String?) {
+    public init(dataToSend:         Data,
+                fileExtension:      String?,
+                fileName:           String,
+                fileSize:           Int?,
+                originalFileName:   String?,
+                threadId:           Int?,
+                requestUniqueId:    String?) {
         
         self.dataToSend         = dataToSend
         self.fileExtension      = fileExtension
@@ -32,7 +32,7 @@ open class UploadFileRequestModel {
         self.fileSize           = fileSize
         self.originalFileName   = originalFileName
         self.threadId           = threadId
-        self.uniqueId           = uniqueId
+        self.requestUniqueId    = requestUniqueId
     }
     
 }

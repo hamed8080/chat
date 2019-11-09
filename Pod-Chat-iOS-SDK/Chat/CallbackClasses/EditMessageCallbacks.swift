@@ -54,8 +54,7 @@ extension Chat {
     
     func chatEditMessageHandler(threadId: Int, messageContent: JSON) {
         let message = Message(threadId: threadId, pushMessageVO: messageContent)
-        let result: JSON = ["message": message]
-//        delegate?.messageEvents(type: MessageEventTypes.edit, result: result)
+        delegate?.messageEvents(type: MessageEventTypes.MESSAGE_EDIT, result: message)
     }
     
     

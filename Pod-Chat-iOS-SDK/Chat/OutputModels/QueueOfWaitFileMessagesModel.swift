@@ -18,14 +18,15 @@ open class QueueOfWaitFileMessagesModel {
     let repliedTo:      Int?
 //    let subjectId:      Int?
     let threadId:       Int?
-    let typeCode:       String?
-    let uniqueId:       String?
     let xC:             String?
     let yC:             String?
     let hC:             String?
     let wC:             String?
     let fileToSend:     Data?
     let imageToSend:    Data?
+    
+    let requestTypeCode:    String?
+    let requestUniqueId:    String?
     
     init(content:           String?,
          fileName:          String?,
@@ -34,31 +35,31 @@ open class QueueOfWaitFileMessagesModel {
          repliedTo:         Int?,
 //         subjectId:         Int?,
          threadId:          Int?,
-         typeCode:          String?,
-         uniqueId:          String?,
          xC:                String?,
          yC:                String?,
          hC:                String?,
          wC:                String?,
          fileToSend:        Data?,
-         imageToSend:       Data?) {
+         imageToSend:       Data?,
+         requestTypeCode:   String?,
+         requestUniqueId:   String?) {
         
-        self.content        = content
-        self.fileName       = fileName
-        self.imageName      = imageName
-        self.metaData       = metaData
-        self.repliedTo      = repliedTo
+        self.content            = content
+        self.fileName           = fileName
+        self.imageName          = imageName
+        self.metaData           = metaData
+        self.repliedTo          = repliedTo
 //        self.subjectId      = subjectId
-        self.threadId       = threadId
-        self.typeCode       = typeCode
-        self.uniqueId       = uniqueId
-        self.xC             = xC
-        self.yC             = yC
-        self.hC             = hC
-        self.wC             = wC
-        self.fileToSend     = fileToSend
-        self.imageToSend    = imageToSend
+        self.threadId           = threadId
+        self.xC                 = xC
+        self.yC                 = yC
+        self.hC                 = hC
+        self.wC                 = wC
+        self.fileToSend         = fileToSend
+        self.imageToSend        = imageToSend
         
+        self.requestTypeCode    = requestTypeCode
+        self.requestUniqueId    = requestUniqueId
     }
     
     init(fileMessageInputModel: SendFileMessageRequestModel, uniqueId: String) {
@@ -69,14 +70,15 @@ open class QueueOfWaitFileMessagesModel {
         self.repliedTo      = fileMessageInputModel.repliedTo
 //        self.subjectId      = fileMessageInputModel.subjectId
         self.threadId       = fileMessageInputModel.threadId
-        self.typeCode       = fileMessageInputModel.typeCode
-        self.uniqueId       = uniqueId
         self.xC             = fileMessageInputModel.xC
         self.yC             = fileMessageInputModel.yC
         self.hC             = fileMessageInputModel.hC
         self.wC             = fileMessageInputModel.wC
         self.fileToSend     = fileMessageInputModel.fileToSend
         self.imageToSend    = fileMessageInputModel.imageToSend
+        
+        self.requestTypeCode    = fileMessageInputModel.requestTypeCode
+        self.requestUniqueId    = uniqueId
     }
     
 }

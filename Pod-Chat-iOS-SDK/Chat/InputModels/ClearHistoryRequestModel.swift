@@ -10,12 +10,14 @@ import Foundation
 
 open class ClearHistoryRequestModel {
     
-    public let threadId:    Int
-    public let uniqueId:    String?
+    public let threadId:        Int
+    public let requestUniqueId: String?
     
-    public init(threadId: Int, uniqueId: String?) {
-        self.threadId   = threadId
-        self.uniqueId   = uniqueId
+    public init(threadId:           Int,
+                requestUniqueId:    String?) {
+        
+        self.threadId           = threadId
+        self.requestUniqueId    = requestUniqueId
     }
     
 }

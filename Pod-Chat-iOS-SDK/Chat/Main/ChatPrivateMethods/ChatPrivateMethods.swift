@@ -986,8 +986,9 @@ extension Chat {
 //        let uniqueId                = withContent.uniqueId
 //        let threadId                = withContent.subjectId ?? 0
 //        let contentCount            = withContent.contentCount ?? 0
-        let messageContentAsString      = message.content
-        var messageContentAsJSON: JSON  = message.content?.convertToJSON() ?? [:]
+        
+//        let messageContentAsString      = message.content
+        let messageContentAsJSON: JSON  = message.content?.convertToJSON() ?? [:]
         
         switch message.type {
             
@@ -1083,7 +1084,7 @@ extension Chat {
             
         // a message of type 17 (REMOVED_FROM_THREAD) comes from Server.
         case chatMessageVOTypes.REMOVED_FROM_THREAD.rawValue:
-            let result: JSON = ["thread": message.subjectId ?? 0]
+//            let result: JSON = ["thread": message.subjectId ?? 0]
 //            delegate?.threadEvents(type: ThreadEventTypes.removedFrom, result: result)
             break
             
@@ -1149,8 +1150,8 @@ extension Chat {
         // a message of type 30 (THREAD_INFO_UPDATED) comes from Server.
         case chatMessageVOTypes.THREAD_INFO_UPDATED.rawValue:
             log.verbose("Message of type 'THREAD_INFO_UPDATED' recieved", context: "Chat")
-            let conversation: Conversation = Conversation(messageContent: messageContentAsJSON)
-            let result: JSON = ["thread": conversation]
+//            let conversation: Conversation = Conversation(messageContent: messageContentAsJSON)
+//            let result: JSON = ["thread": conversation]
 //            delegate?.threadEvents(type: ThreadEventTypes.infoUpdated, result: result)
             break
             
@@ -1269,7 +1270,7 @@ extension Chat {
         
         if let messageOwner = message.participant?.id {
             if messageOwner != userInfo?.id {
-                let deliveryModel = DeliverSeenRequestModel(messageId: message.id, ownerId: messageOwner, typeCode: nil)
+                let deliveryModel = DeliverSeenRequestModel(messageId: message.id, ownerId: messageOwner, requestTypeCode: nil)
                 deliver(deliverInput: deliveryModel)
             }
         }

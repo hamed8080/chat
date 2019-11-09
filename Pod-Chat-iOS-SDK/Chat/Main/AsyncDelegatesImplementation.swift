@@ -213,7 +213,7 @@ extension Chat: AsyncDelegates {
                         self.chatState = true
                         self.delegate?.chatReady(withUserInfo: self.userInfo!)
                         if self.enableCache {
-                            self.getAllThreads(withInputModel: GetAllThreadsRequestModel(summary: true, typeCode: nil))
+                            self.getAllThreads(withInputModel: GetAllThreadsRequestModel(summary: true, requestTypeCode: nil))
                         }
                     }
                 }) { _ in }

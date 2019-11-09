@@ -10,17 +10,17 @@ import Foundation
 
 open class SpamPvThreadRequestModel {
     
-    public let threadId:    Int?
-    public let typeCode:    String?
-    public let uniqueId:    String?
+    public let threadId:        Int?
+    public let requestTypeCode: String?
+    public let requestUniqueId: String?
     
-    public init(threadId:   Int?,
-                typeCode:   String?,
-                uniqueId:   String?) {
+    public init(threadId:           Int?,
+                requestTypeCode:    String?,
+                requestUniqueId:    String?) {
         
-        self.threadId   = threadId
-        self.typeCode   = typeCode
-        self.uniqueId   = uniqueId
+        self.threadId           = threadId
+        self.requestTypeCode    = requestTypeCode
+        self.requestUniqueId    = requestUniqueId
     }
     
 }

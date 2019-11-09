@@ -46,21 +46,21 @@ public class QueueOfFileMessages: NSManagedObject {
         }
         
         func createQueueOfWaitFileMessagesModel() -> QueueOfWaitFileMessagesModel {
-            let queueOfWaitFileMessagesModel = QueueOfWaitFileMessagesModel(content:    self.content,
-                                                                            fileName:   self.fileName,
-                                                                            imageName:  self.imageName,
-                                                                            metaData:   metaData,
-                                                                            repliedTo:  repliedTo,
+            let queueOfWaitFileMessagesModel = QueueOfWaitFileMessagesModel(content:            self.content,
+                                                                            fileName:           self.fileName,
+                                                                            imageName:          self.imageName,
+                                                                            metaData:           metaData,
+                                                                            repliedTo:          repliedTo,
 //                                                                            subjectId:  subjectId,
-                                                                            threadId:   threadId,
-                                                                            typeCode:   self.typeCode,
-                                                                            uniqueId:   self.uniqueId,
-                                                                            xC:         self.xC,
-                                                                            yC:         self.yC,
-                                                                            hC:         self.hC,
-                                                                            wC:         self.wC,
-                                                                            fileToSend: fileToSend,
-                                                                            imageToSend: imageToSend)
+                                                                            threadId:           threadId,
+                                                                            xC:                 self.xC,
+                                                                            yC:                 self.yC,
+                                                                            hC:                 self.hC,
+                                                                            wC:                 self.wC,
+                                                                            fileToSend:         fileToSend,
+                                                                            imageToSend:        imageToSend,
+                                                                            requestTypeCode:    self.typeCode,
+                                                                            requestUniqueId:    self.uniqueId)
             return queueOfWaitFileMessagesModel
         }
         
