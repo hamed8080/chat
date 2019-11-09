@@ -185,7 +185,7 @@ public class Chat {
     
     // MARK: - properties that save callbacks on themselves
     
-    // property to hold array of request that comes from client, but they have not completed yet, and response didn't come yet.
+    // property to hold array of request that comes from client, but they have not completed yet (response didn't come yet)
     // the keys are uniqueIds of the requests
     static var map = [String: CallbackProtocol]()
     static var spamMap = [String: [CallbackProtocol]]()

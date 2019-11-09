@@ -310,7 +310,7 @@ extension Chat {
                                 onSeen:                 @escaping callbackTypeAlias) {
         log.verbose("Try to send Message with this parameters: \n \(sendTextMessageInput)", context: "Chat")
         
-        let tempUniqueId = generateUUID()
+        let tempUniqueId = sendTextMessageInput.uniqueId ?? generateUUID()
         
         /*
          * seve this message on the Cache Wait Queue,
@@ -327,7 +327,7 @@ extension Chat {
                                                                           systemMetadata: sendTextMessageInput.systemMetadata,
                                                                           threadId:     sendTextMessageInput.threadId,
                                                                           typeCode:     sendTextMessageInput.typeCode,
-                                                                          uniqueId:     sendTextMessageInput.uniqueId ?? tempUniqueId)
+                                                                          uniqueId:     tempUniqueId)
             Chat.cacheDB.saveTextMessageToWaitQueue(textMessage: messageObjectToSendToQueue)
         }
         
@@ -371,7 +371,7 @@ extension Chat {
                                             token:              token,
                                             tokenIssuer:        nil,
                                             typeCode:           sendTextMessageInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           sendTextMessageInput.uniqueId ?? tempUniqueId,
+                                            uniqueId:           tempUniqueId,
                                             isCreateThreadAndSendMessage: nil)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),

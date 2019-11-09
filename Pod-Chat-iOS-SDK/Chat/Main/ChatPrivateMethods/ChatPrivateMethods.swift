@@ -1274,6 +1274,12 @@ extension Chat {
             }
         }
         
+        if enableCache {
+            // save data comes from server to the Cache
+            let theMessage = Message(threadId: threadId, pushMessageVO: messageContent)
+            Chat.cacheDB.saveMessageObjects(messages: [theMessage], getHistoryParams: nil)
+        }
+        
         delegate?.messageEvents(type: MessageEventTypes.MESSAGE_NEW, result: message)
     }
     
