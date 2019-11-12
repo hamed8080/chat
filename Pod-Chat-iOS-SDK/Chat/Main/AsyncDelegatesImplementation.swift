@@ -307,17 +307,17 @@ class AsyncMessage {
 
 class ChatMessage {
 
-    let code:           Int?
+    var code:           Int?
     let content:        String? // String of JSON
     let contentCount:   Int?
-    let message:        String?
+    var message:        String?
     let messageType:    Int
     let subjectId:      Int?
     let time:           Int
     let type:           Int
     let uniqueId:       String
     
-    init(code: Int? ,content: String?, contentCount: Int?, message: String?, messageType: Int, subjectId: Int?, time: Int, type: Int, uniqueId: String) {
+    init(code: Int?, content: String?, contentCount: Int?, message: String?, messageType: Int, subjectId: Int?, time: Int, type: Int, uniqueId: String) {
         self.code           = code
         self.content        = content
         self.contentCount   = contentCount

@@ -1228,14 +1228,14 @@ extension Chat {
 //                let message: String = messageContentAsJSON["message"].stringValue
 //                let code: Int = messageContentAsJSON["code"].intValue
                 
-                let returnData = CreateReturnData(hasError:       true,
-                                                  errorMessage:   message.message,
-                                                  errorCode:      message.code,
-                                                  result:         messageContentAsJSON,
-                                                  resultAsArray: nil,
-                                                  resultAsString: nil,
-                                                  contentCount:   0,
-                                                  subjectId:      message.subjectId)
+                let returnData = CreateReturnData(hasError:         true,
+                                                  errorMessage:     message.message,
+                                                  errorCode:        message.code,
+                                                  result:           messageContentAsJSON,
+                                                  resultAsArray:    nil,
+                                                  resultAsString:   nil,
+                                                  contentCount:     0,
+                                                  subjectId:        message.subjectId)
 //                    .returnJSON()
                 
                 let callback: CallbackProtocol = Chat.map[message.uniqueId]!
@@ -1251,7 +1251,9 @@ extension Chat {
                     asyncClient?.asyncLogOut()
                     //                    clearCache()
                 }
-                delegate?.chatError(errorCode: message.code ?? 0, errorMessage: message.message ?? "", errorResult: messageContentAsJSON)
+                delegate?.chatError(errorCode:      message.code    ?? messageContentAsJSON["code"].int         ?? 0,
+                                    errorMessage:   message.message ?? messageContentAsJSON["message"].string   ?? "",
+                                    errorResult:    messageContentAsJSON)
             }
             break
             
