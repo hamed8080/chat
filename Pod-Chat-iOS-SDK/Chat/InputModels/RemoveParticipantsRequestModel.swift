@@ -10,17 +10,17 @@ import Foundation
 
 open class RemoveParticipantsRequestModel {
     
-    public let content:         [Int]
+    public let participantIds:  [Int]
     public let threadId:        Int
     public let requestTypeCode: String?
     public let requestUniqueId: String?
     
-    public init(content:            [Int],
+    public init(participantIds:     [Int],
                 threadId:           Int,
                 requestTypeCode:    String?,
                 requestUniqueId:    String?) {
         
-        self.content            = content
+        self.participantIds     = participantIds
         self.threadId           = threadId
         self.requestTypeCode    = requestTypeCode
         self.requestUniqueId    = requestUniqueId

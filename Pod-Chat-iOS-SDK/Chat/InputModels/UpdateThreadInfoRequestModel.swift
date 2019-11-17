@@ -18,6 +18,7 @@ open class UpdateThreadInfoRequestModel {
     public let metadata:        JSON?
     public let threadId:        Int
     public let title:           String?
+    
     public let requestTypeCode: String?
     public let requestUniqueId: String?
     
@@ -36,6 +37,28 @@ open class UpdateThreadInfoRequestModel {
         self.title              = title
         self.requestTypeCode    = requestTypeCode
         self.requestUniqueId    = requestUniqueId
+    }
+    
+    func convertContentToJSON() -> JSON {
+        var content: JSON = [:]
+        if let image = self.image {
+            content["image"] = JSON(image)
+        }
+        if let description = self.description {
+            content["description"] = JSON(description)
+        }
+        if let name = self.title {
+            content["name"] = JSON(name)
+        }
+        if let metadata = self.metadata {
+            let metadataStr = "\(metadata)"
+            content["metadata"] = JSON(metadataStr)
+        }
+        if let title = self.title {
+            content["title"] = JSON(title)
+        }
+        
+        return content
     }
     
 }

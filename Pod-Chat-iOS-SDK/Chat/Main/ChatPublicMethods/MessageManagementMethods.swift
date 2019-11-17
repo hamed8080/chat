@@ -62,45 +62,8 @@ extension Chat {
         
         historyCallbackToUser = completion
         
-        var content: JSON = [:]
-        content["count"] = JSON(getHistoryInput.count ?? 50)
-        content["offset"] = JSON(getHistoryInput.offset ?? 0)
-        if let firstMessageId = getHistoryInput.firstMessageId {
-            content["firstMessageId"] = JSON(firstMessageId)
-        }
-        if let lastMessageId = getHistoryInput.lastMessageId {
-            content["lastMessageId"] = JSON(lastMessageId)
-        }
-        if let from = getHistoryInput.fromTime {
-            if let first13Digits = Int(exactly: (from / 1000000)) {
-                content["fromTime"] = JSON(first13Digits)
-                content["fromTimeNanos"] = JSON(Int(exactly: (from - UInt(first13Digits * 1000000)))!)
-            }
-        }
-        if let to = getHistoryInput.toTime {
-            if let first13Digits = Int(exactly: (to / 1000000)) {
-                content["toTime"] = JSON(first13Digits)
-                content["toTimeNanos"] = JSON(Int(exactly: (to - UInt(first13Digits * 1000000)))!)
-            }
-        }
-        if let order = getHistoryInput.order {
-            content["order"] = JSON(order)
-        }
-        if let query = getHistoryInput.query {
-            content["query"] = JSON(query)
-        }
-        if let metadataCriteria = getHistoryInput.metadataCriteria {
-            content["metadataCriteria"] = JSON(metadataCriteria)
-        }
-        if let uniqueIds = getHistoryInput.uniqueIds {
-            content["uniqueIds"] = JSON(uniqueIds)
-        }
-//        if let uniqueId = getHistoryInput.uniqueId {
-//            content["uniqueId"] = JSON(uniqueId)
-//        }
-      
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_HISTORY.rawValue,
-                                            content:            "\(content)",
+                                            content:            "\(getHistoryInput.convertContentToJSON())",
                                             metaData:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -166,70 +129,6 @@ extension Chat {
     }
     
     
-   
-    // NOTE: This method will be deprecate soon
-    // this method will do the same as tha funciton above but instead of using 'GetHistoryRequestModel' to get the parameters, it'll use JSON
-    /*
-    public func getHistory(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        log.verbose("Try to request to get history with this parameters: \n \(params)", context: "Chat")
-       
-        var content: JSON = ["count": 50, "offset": 0]
-        if let count = params["count"].int {
-            if count > 0 {
-                content["count"] = JSON(count)
-            }
-        }
-       
-        if let offset = params["offset"].int {
-            if offset > 0 {
-                content["offset"] = JSON(offset)
-            }
-        }
-       
-        if let firstMessageId = params["firstMessageId"].int {
-            if firstMessageId > 0 {
-                content["firstMessageId"] = JSON(firstMessageId)
-            }
-        }
-       
-        if let lastMessageId = params["lastMessageId"].int {
-            if lastMessageId > 0 {
-                content["lastMessageId"] = JSON(lastMessageId)
-            }
-        }
-       
-        if let order = params["order"].string {
-            content["order"] = JSON(order)
-        }
-       
-        if let query = params["query"].string {
-            content["query"] = JSON(query)
-        }
-       
-        if let metadataCriteria = params["metadataCriteria"].string {
-            content["metadataCriteria"] = JSON(metadataCriteria)
-        } else if (params["metadataCriteria"] != JSON.null) {
-            content["metadataCriteria"] = params["metadataCriteria"]
-        }
-       
-        let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_HISTORY.rawValue,
-                                       "content": content,
-                                       "typeCode": params["typeCode"].string ?? generalTypeCode,
-                                       "subjectId": params["threadId"].intValue]
-     
-        sendMessageWithCallback(params:         sendMessageParams,
-                                callback:       GetHistoryCallbacks(parameters: sendMessageParams),
-                                callbacks:      nil,
-                                sentCallback:   nil,
-                                deliverCallback: nil,
-                                seenCallback:   nil) { (getHistoryUniqueId) in
-            uniqueId(getHistoryUniqueId)
-        }
-        historyCallbackToUser = completion
-     }
-     */
-   
-   
     /*
      ClearHistory
     
@@ -245,22 +144,16 @@ extension Chat {
         log.verbose("Try to request to create clear history with this parameters: \n \(clearHistoryInput)", context: "Chat")
   
         clearHistoryCallbackToUser = completion
-    
-        var content: JSON = [:]
-      
-        if let requestUniqueId = clearHistoryInput.requestUniqueId {
-            content["uniqueId"] = JSON(requestUniqueId)
-        }
- 
+        
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.CLEAR_HISTORY.rawValue,
-                                            content:            "\(content)",
+                                            content:            "\(clearHistoryInput.convertContentToJSON())",
                                             metaData:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
                                             subjectId:          clearHistoryInput.threadId,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           nil,
+                                            typeCode:           clearHistoryInput.requestTypeCode ?? generalTypeCode,
                                             uniqueId:           nil,
                                             isCreateThreadAndSendMessage: true)
         
@@ -314,6 +207,10 @@ extension Chat {
                                 onSeen:                 @escaping callbackTypeAlias) {
         log.verbose("Try to send Message with this parameters: \n \(sendTextMessageInput)", context: "Chat")
         
+        sendCallbackToUserOnSent = onSent
+        sendCallbackToUserOnDeliver = onDelivere
+        sendCallbackToUserOnSeen = onSeen
+        
         let tempUniqueId = sendTextMessageInput.requestUniqueId ?? generateUUID()
         
         /*
@@ -336,35 +233,6 @@ extension Chat {
         }
         
         let messageTxtContent = MakeCustomTextToSend(message: sendTextMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
-        
-        /*
-        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.MESSAGE.rawValue,
-                                       "pushMsgType": 4,
-                                       "subjectId": sendTextMessageInput.threadId,
-                                       "content": messageTxtContent,
-                                       "typeCode": sendTextMessageInput.typeCode ?? generalTypeCode]
-        
-        if let repliedTo = sendTextMessageInput.repliedTo {
-            sendMessageParams["repliedTo"] = JSON(repliedTo)
-        }
-        
-        if let uniqueId = sendTextMessageInput.uniqueId {
-            sendMessageParams["uniqueId"] = JSON(uniqueId)
-        } else {
-            sendMessageParams["uniqueId"] = JSON(tempUniqueId)
-        }
-        
-        if let systemMetadata = sendTextMessageInput.systemMetadata {
-            let systemMetadataStr = "\(systemMetadata)"
-            sendMessageParams["systemMetadata"] = JSON(systemMetadataStr)
-        }
-        
-        if let metaData = sendTextMessageInput.metaData {
-            let metaDataStr = "\(metaData)"
-            sendMessageParams["metaData"] = JSON(metaDataStr)
-        }
-        //        sendMessageParams["subjectId"] = JSON(sendTextMessageInput.threadId)
-        */
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.MESSAGE.rawValue,
                                             content:            messageTxtContent,
@@ -393,62 +261,7 @@ extension Chat {
             uniqueId(theUniqueId)
         }
         
-        sendCallbackToUserOnSent = onSent
-        sendCallbackToUserOnDeliver = onDelivere
-        sendCallbackToUserOnSeen = onSeen
-        
     }
-    
-    // NOTE: This method will be deprecate soon
-    // this method will do the same as tha funciton above but instead of using 'SendTextMessageRequestModel' to get the parameters, it'll use JSON
-    /*
-    public func sendTextMessage(params: JSON, uniqueId: @escaping (String) -> (), onSent: @escaping callbackTypeAlias, onDelivere: @escaping callbackTypeAlias, onSeen: @escaping callbackTypeAlias) {
-        log.verbose("Try to send Message with this parameters: \n \(params)", context: "Chat")
-        
-//        let messageTxtContent = makeCustomTextToSend(textMessage: params["content"].stringValue)
-        let messageTxtContent = MakeCustomTextToSend(message: params["content"].stringValue).replaceSpaceEnterWithSpecificCharecters()
-        
-        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.MESSAGE.rawValue,
-                                       "pushMsgType": 4,
-                                       "typeCode": params["typeCode"].string ?? generalTypeCode,
-                                       "content": messageTxtContent]
-        
-        if let threadId = params["subjectId"].int {
-            sendMessageParams["subjectId"] = JSON(threadId)
-        }
-        if let repliedTo = params["repliedTo"].int {
-            sendMessageParams["repliedTo"] = JSON(repliedTo)
-        }
-        
-        if let uniqueId = params["uniqueId"].string {
-            sendMessageParams["uniqueId"] = JSON(uniqueId)
-        }
-        
-        if let systemMetadata = params["systemMetadata"].arrayObject {
-            sendMessageParams["systemMetadata"] = JSON(systemMetadata)
-        }
-        
-        if let metaData = params["metaData"].arrayObject {
-            let metaDataStr = "\(metaData)"
-            sendMessageParams["metaData"] = JSON(metaDataStr)
-        }
-        
-        
-        sendMessageWithCallback(params:         sendMessageParams,
-                                callback:       nil,
-                                callbacks:      nil,
-                                sentCallback:   SendMessageCallbacks(parameters: sendMessageParams),
-                                deliverCallback: SendMessageCallbacks(parameters: sendMessageParams),
-                                seenCallback:   SendMessageCallbacks(parameters: sendMessageParams)) { (theUniqueId) in
-            uniqueId(theUniqueId)
-        }
-        
-        sendCallbackToUserOnSent = onSent
-        sendCallbackToUserOnDeliver = onDelivere
-        sendCallbackToUserOnSeen = onSeen
-    }
-    */
-    
     
     
     /*
@@ -477,6 +290,9 @@ extension Chat {
                             uniqueId:           @escaping (String) -> (),
                             completion:         @escaping callbackTypeAlias) {
         log.verbose("Try to request to edit message with this parameters: \n \(editMessageInput)", context: "Chat")
+        
+        editMessageCallbackToUser = completion
+        
         let tempUniqueId = generateUUID()
         
         // seve this message on the Cache Wait Queue,
@@ -494,29 +310,6 @@ extension Chat {
         }
         
         let messageTxtContent = MakeCustomTextToSend(message: editMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
-        
-        /*
-        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.EDIT_MESSAGE.rawValue,
-                                       "pushMsgType":       4,
-                                       "subjectId":         editMessageInput.subjectId,
-                                       "content":           messageTxtContent,
-                                       "typeCode":          editMessageInput.typeCode ?? generalTypeCode]
-        
-        if let repliedTo = editMessageInput.repliedTo {
-            sendMessageParams["repliedTo"] = JSON(repliedTo)
-        }
-        
-        if let uniqueId = editMessageInput.uniqueId {
-            sendMessageParams["uniqueId"] = JSON(uniqueId)
-        } else {
-            sendMessageParams["uniqueId"] = JSON(tempUniqueId)
-        }
-        
-        if let metaData = editMessageInput.metaData {
-            let metaDataStr = "\(metaData)"
-            sendMessageParams["metaData"] = JSON(metaDataStr)
-        }
-        */
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.EDIT_MESSAGE.rawValue,
                                             content:            messageTxtContent,
@@ -543,52 +336,9 @@ extension Chat {
                                 seenCallback:       nil) { (editMessageUniqueId) in
             uniqueId(editMessageUniqueId)
         }
-        editMessageCallbackToUser = completion
         
     }
-    
-    // NOTE: This method will be deprecate soon
-    // this method will do the same as tha funciton above but instead of using 'EditTextMessageRequestModel' to get the parameters, it'll use JSON
-    /*
-    public func editMessage(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        log.verbose("Try to request to edit message with this parameters: \n \(params)", context: "Chat")
-        
-//        let messageTxtContent = makeCustomTextToSend(textMessage: params["content"].stringValue)
-        let messageTxtContent = MakeCustomTextToSend(message: params["content"].stringValue).replaceSpaceEnterWithSpecificCharecters()
-        
-        let content: JSON = ["content": messageTxtContent]
-        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.EDIT_MESSAGE.rawValue,
-                                       "typeCode": params["typeCode"].string ?? generalTypeCode,
-                                       "pushMsgType": 4,
-                                       "content": content]
-        
-        if let threadId = params["subjectId"].int {
-            sendMessageParams["subjectId"] = JSON(threadId)
-        }
-        if let repliedTo = params["repliedTo"].int {
-            sendMessageParams["repliedTo"] = JSON(repliedTo)
-        }
-        if let uniqueId = params["uniqueId"].string {
-            sendMessageParams["uniqueId"] = JSON(uniqueId)
-        }
-        if let metaData = params["metaData"].arrayObject {
-            let metaDataStr = "\(metaData)"
-            sendMessageParams["metaData"] = JSON(metaDataStr)
-        }
-        
-        sendMessageWithCallback(params:         sendMessageParams,
-                                callback:       EditMessageCallbacks(parameters: sendMessageParams),
-                                callbacks:      nil,
-                                sentCallback:   nil,
-                                deliverCallback: nil,
-                                seenCallback:   nil) { (editMessageUniqueId) in
-            uniqueId(editMessageUniqueId)
-        }
-        editMessageCallbackToUser = completion
-    }
-    */
-    
-    
+     
     
     /*
      ReplyTextMessage:
@@ -620,6 +370,11 @@ extension Chat {
                              onDelivere:        @escaping callbackTypeAlias,
                              onSeen:            @escaping callbackTypeAlias) {
         log.verbose("Try to reply Message with this parameters: \n \(replyMessageInput)", context: "Chat")
+        
+        sendCallbackToUserOnSent = onSent
+        sendCallbackToUserOnDeliver = onDelivere
+        sendCallbackToUserOnSeen = onSeen
+        
         let tempUniqueId = generateUUID()
         
         // seve this message on the Cache Wait Queue,
@@ -638,26 +393,6 @@ extension Chat {
         }
         
         let messageTxtContent = MakeCustomTextToSend(message: replyMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
-        
-        /*
-        //        let content: JSON = ["content": messageTxtContent]
-        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.MESSAGE.rawValue,
-                                       "pushMsgType": 4,
-                                       "repliedTo": replyMessageInput.repliedTo,
-                                       "content": messageTxtContent,
-                                       "typeCode": replyMessageInput.typeCode ?? generalTypeCode]
-        
-        if let uniqueId = replyMessageInput.uniqueId {
-            sendMessageParams["uniqueId"] = JSON(uniqueId)
-        } else {
-            sendMessageParams["uniqueId"] = JSON(tempUniqueId)
-        }
-        
-        if let metaData = replyMessageInput.metaData {
-            let metaDataStr = "\(metaData)"
-            sendMessageParams["metaData"] = JSON(metaDataStr)
-        }
-        */
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.MESSAGE.rawValue,
                                             content:            messageTxtContent,
@@ -686,56 +421,7 @@ extension Chat {
             uniqueId(theUniqueId)
         }
         
-        sendCallbackToUserOnSent = onSent
-        sendCallbackToUserOnDeliver = onDelivere
-        sendCallbackToUserOnSeen = onSeen
-        
     }
-    
-    // NOTE: This method will be deprecate soon
-    // this method will do the same as tha funciton above but instead of using 'ReplyTextMessageRequestModel' to get the parameters, it'll use JSON
-    /*
-    public func replyMessageWith3Callbacks(params: JSON, uniqueId: @escaping (String) -> (), onSent: @escaping callbackTypeAlias, onDelivere: @escaping callbackTypeAlias, onSeen: @escaping callbackTypeAlias) {
-        log.verbose("Try to reply Message with this parameters: \n \(params)", context: "Chat")
-        
-//        let messageTxtContent = makeCustomTextToSend(textMessage: params["content"].stringValue)
-        let messageTxtContent = MakeCustomTextToSend(message: params["content"].stringValue).replaceSpaceEnterWithSpecificCharecters()
-        
-        //        let content: JSON = ["content": messageTxtContent]
-        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.MESSAGE.rawValue,
-                                       "typeCode": params["typeCode"].string ?? generalTypeCode,
-                                       "pushMsgType": 4,
-                                       "content": messageTxtContent]
-        
-        if let threadId = params["subjectId"].int {
-            sendMessageParams["subjectId"] = JSON(threadId)
-        }
-        if let repliedTo = params["repliedTo"].int {
-            sendMessageParams["repliedTo"] = JSON(repliedTo)
-        }
-        if let uniqueId = params["uniqueId"].string {
-            sendMessageParams["uniqueId"] = JSON(uniqueId)
-        }
-        if let metaData = params["metaData"].arrayObject {
-            let metaDataStr = "\(metaData)"
-            sendMessageParams["metaData"] = JSON(metaDataStr)
-        }
-        
-        
-        sendMessageWithCallback(params:         sendMessageParams,
-                                callback:       nil,
-                                callbacks:      nil,
-                                sentCallback:   SendMessageCallbacks(parameters: sendMessageParams),
-                                deliverCallback: SendMessageCallbacks(parameters: sendMessageParams),
-                                seenCallback:   SendMessageCallbacks(parameters: sendMessageParams)) { (theUniqueId) in
-            uniqueId(theUniqueId)
-        }
-        
-        sendCallbackToUserOnSent = onSent
-        sendCallbackToUserOnDeliver = onDelivere
-        sendCallbackToUserOnSeen = onSeen
-    }
-    */
     
     
     /*
@@ -843,90 +529,6 @@ extension Chat {
         
     }
     
-    // NOTE: This method will be deprecate soon
-    // this method will do the same as tha funciton above but instead of using 'ForwardMessageRequestModel' to get the parameters, it'll use JSON
-    /*
-    public func forwardMessageWith3Callbacks(params: JSON, uniqueIds: @escaping (String) -> (), onSent: @escaping callbackTypeAlias, onDelivere: @escaping callbackTypeAlias, onSeen: @escaping callbackTypeAlias) {
-        log.verbose("Try to Forward with this parameters: \n \(params)", context: "Chat")
-        /*
-         subjectId(destination):    Int
-         content:                   "[Arr]"
-         */
-        
-        //        let threadId = params["subjectId"].intValue
-        let messageIdsList: [Int] = params["content"].arrayObject! as! [Int]
-        var uniqueIdsList: [String] = []
-        //            let content: JSON = ["content": "\(messageIdsList)"]
-        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.FORWARD_MESSAGE.rawValue,
-                                       "typeCode": params["typeCode"].string ?? generalTypeCode,
-                                       "pushMsgType": 4,
-                                       "content": "\(messageIdsList)"]
-        
-        
-        if let threadId = params["subjectId"].int {
-            sendMessageParams["subjectId"] = JSON(threadId)
-        }
-        if let repliedTo = params["repliedTo"].int {
-            sendMessageParams["repliedTo"] = JSON(repliedTo)
-        }
-        if let metaData = params["metaData"].arrayObject {
-            let metaDataStr = "\(metaData)"
-            sendMessageParams["metaData"] = JSON(metaDataStr)
-        }
-        
-        let messageIdsListCount = messageIdsList.count
-        for _ in 0...(messageIdsListCount - 1) {
-            let uID = generateUUID()
-            uniqueIdsList.append(uID)
-            
-            sendMessageParams["uniqueId"] = JSON("\(uniqueIdsList)")
-        }
-        
-        sendMessageWithCallback(params:         sendMessageParams,
-                                callback:       nil,
-                                callbacks:      nil,
-                                sentCallback:   SendMessageCallbacks(parameters: sendMessageParams),
-                                deliverCallback: SendMessageCallbacks(parameters: sendMessageParams),
-                                seenCallback:   SendMessageCallbacks(parameters: sendMessageParams)) { (theUniqueId) in
-            uniqueIds(theUniqueId)
-        }
-        
-        sendCallbackToUserOnSent = onSent
-        sendCallbackToUserOnDeliver = onDelivere
-        sendCallbackToUserOnSeen = onSeen
-        
-        //        for _ in messageIdsList {
-        //            let content: JSON = ["content": "\(messageIdsList)"]
-        //            var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.FORWARD_MESSAGE.rawValue,
-        //                                           "pushMsgType": 4,
-        //                                           "content": content]
-        //
-        //            if let threadId = params["subjectId"].int {
-        //                sendMessageParams["subjectId"] = JSON(threadId)
-        //            }
-        //            if let repliedTo = params["repliedTo"].int {
-        //                sendMessageParams["repliedTo"] = JSON(repliedTo)
-        //            }
-        //            if let uniqueId = params["uniqueId"].string {
-        //                sendMessageParams["uniqueId"] = JSON(uniqueId)
-        //            }
-        //            if let metaData = params["metaData"].arrayObject {
-        //                let metaDataStr = "\(metaData)"
-        //                sendMessageParams["metaData"] = JSON(metaDataStr)
-        //            }
-        //            sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: SendMessageCallbacks(), deliverCallback: SendMessageCallbacks(), seenCallback: SendMessageCallbacks()) { (theUniqueId) in
-        //                uniqueIdsList.append(theUniqueId)
-        //            }
-        //
-        //            sendCallbackToUserOnSent = onSent
-        //            sendCallbackToUserOnDeliver = onDelivere
-        //            sendCallbackToUserOnSeen = onSeen
-        //        }
-        //        uniqueIds(uniqueIdsList)
-    }
-    */
-    
-    
     
     // MARK: - Send/Reply File Message
     /*
@@ -970,27 +572,12 @@ extension Chat {
         let messageUniqueId = sendFileMessageInput.requestUniqueId ?? generateUUID()
         uniqueId(messageUniqueId)
         
-        // seve this message on the Cache Wait Queue,
-        // so if there was an situation that response of the server to this message doesn't come, then we know that our message didn't sent correctly
-        // and we will send this Queue to user on the GetHistory request,
-        // now user knows which messages didn't send correctly, and can handle them
-        //        let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      sendFileMessageInput.content,
-        //                                                                      fileName:     sendFileMessageInput.fileName,
-        //                                                                      imageName:    sendFileMessageInput.imageName,
-        //                                                                      metaData:     sendFileMessageInput.metaData,
-        //                                                                      repliedTo:    sendFileMessageInput.repliedTo,
-        //                                                                      subjectId:    sendFileMessageInput.subjectId,
-        //                                                                      threadId:     sendFileMessageInput.threadId,
-        //                                                                      typeCode:     sendFileMessageInput.typeCode,
-        //                                                                      uniqueId:     messageUniqueId,
-        //                                                                      xC:           sendFileMessageInput.xC,
-        //                                                                      yC:           sendFileMessageInput.yC,
-        //                                                                      hC:           sendFileMessageInput.hC,
-        //                                                                      wC:           sendFileMessageInput.wC,
-        //                                                                      fileToSend:   sendFileMessageInput.fileToSend,
-        //                                                                      imageToSend:  sendFileMessageInput.imageToSend)
-        // this line couses an error!!
-        //        Chat.cacheDB.saveFileMessageToWaitQueue(fileMessage: messageObjectToSendToQueue)
+        /*
+         seve this message on the Cache Wait Queue,
+         so if there was an situation that response of the server to this message doesn't come, then we know that our message didn't sent correctly
+         and we will send this Queue to user on the GetHistory request,
+         now user knows which messages didn't send correctly, and can handle them
+         */
         if enableCache {
             let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:          sendFileMessageInput.content,
                                                                           fileName:         sendFileMessageInput.fileName,
@@ -1028,48 +615,6 @@ extension Chat {
         metaData["file"]["mimeType"]    = JSON("")
         metaData["file"]["size"]        = JSON(fileSize)
         
-//        var paramsToSendToUpload: JSON = ["uniqueId": uploadUniqueId, "originalFileName": fileName]
-//        if let xC = sendFileMessageInput.xC {
-//            paramsToSendToUpload["xC"] = JSON(xC)
-//        }
-//        if let yC = sendFileMessageInput.yC {
-//            paramsToSendToUpload["yC"] = JSON(yC)
-//        }
-//        if let hC = sendFileMessageInput.hC {
-//            paramsToSendToUpload["hC"] = JSON(hC)
-//        }
-//        if let wC = sendFileMessageInput.wC {
-//            paramsToSendToUpload["wC"] = JSON(wC)
-//        }
-//        if let fileName = sendFileMessageInput.fileName {
-//            paramsToSendToUpload["fileName"] = JSON(fileName)
-//        } else {
-//            paramsToSendToUpload["fileName"] = JSON(uploadUniqueId)
-//        }
-        //        if let threadId = sendFileMessageInput.threadId {
-        //            paramsToSendToUpload["threadId"] = JSON(threadId)
-        //        }
-//        var paramsToSendToSendMessage: JSON = ["uniqueId": messageUniqueId,
-//                                               "typeCode": sendFileMessageInput.typeCode ?? generalTypeCode]
-        //        if let subjectId = sendFileMessageInput.subjectId {
-        //            paramsToSendToSendMessage["subjectId"] = JSON(subjectId)
-        //            paramsToSendToSendMessage["threadId"] = JSON(subjectId)
-        //        }
-//        if let threadId = sendFileMessageInput.threadId {
-//            paramsToSendToSendMessage["subjectId"] = JSON(threadId)
-//            paramsToSendToSendMessage["threadId"] = JSON(threadId)
-//        }
-//        if let repliedTo = sendFileMessageInput.repliedTo {
-//            paramsToSendToSendMessage["repliedTo"] = JSON(repliedTo)
-//        }
-//        if let content = sendFileMessageInput.content {
-//            paramsToSendToSendMessage["content"] = JSON("\(content)")
-//        }
-//        if let systemMetadata = sendFileMessageInput.metaData {
-//            paramsToSendToSendMessage["systemMetadata"] = JSON("\(systemMetadata)")
-//        }
-        
-        
         if let image = sendFileMessageInput.imageToSend {
             let uploadRequest = UploadImageRequestModel(dataToSend:         image,
                                                         fileExtension:      fileExtension,
@@ -1081,6 +626,7 @@ extension Chat {
                                                         yC:                 Int(sendFileMessageInput.yC ?? ""),
                                                         hC:                 Int(sendFileMessageInput.hC ?? ""),
                                                         wC:                 Int(sendFileMessageInput.wC ?? ""),
+                                                        requestTypeCode:    nil,
                                                         requestUniqueId:    uploadUniqueId)
             uploadImage(uploadImageInput: uploadRequest,
                         uniqueId: { _ in },
@@ -1107,33 +653,6 @@ extension Chat {
                 
                 sendMessageWith(withMetaData: metaData)
             }
-            
-            
-//            uploadImage(params:     paramsToSendToUpload,
-//                        dataToSend: image,
-//                        uniqueId:   { _ in },
-//                        progress:   { (progress) in
-//                uploadProgress(progress)
-//            }) { (response) in
-//                let myResponse: UploadImageModel = response as! UploadImageModel
-//                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_IMAGE.rawValue)?imageId=\(myResponse.uploadImage!.id ?? 0)&hashCode=\(myResponse.uploadImage!.hashCode ?? "")"
-//
-//                var fileJSON : JSON = [:]
-//
-//                fileJSON["link"]            = JSON(link)
-//                fileJSON["id"]              = JSON(myResponse.uploadImage!.id ?? 0)
-//                fileJSON["name"]            = JSON(myResponse.uploadImage!.name ?? "")
-//                fileJSON["height"]          = JSON(myResponse.uploadImage!.height ?? 0)
-//                fileJSON["width"]           = JSON(myResponse.uploadImage!.width ?? 0)
-//                fileJSON["actualHeight"]    = JSON(myResponse.uploadImage!.actualHeight ?? 0)
-//                fileJSON["actualWidth"]     = JSON(myResponse.uploadImage!.actualWidth ?? 0)
-//                fileJSON["hashCode"]        = JSON(myResponse.uploadImage!.hashCode ?? "")
-//
-//                metaData["file"] = fileJSON
-//                paramsToSendToSendMessage["metaData"] = JSON("\(metaData)")
-//
-//                sendMessageWith(paramsToSendToSendMessage: paramsToSendToSendMessage)
-//            }
             
         } else if let file = sendFileMessageInput.fileToSend {
             let uploadRequest = UploadFileRequestModel(dataToSend:      file,
@@ -1164,27 +683,6 @@ extension Chat {
                 sendMessageWith(withMetaData: metaData)
             }
             
-//            uploadFile(params:      paramsToSendToUpload,
-//                       dataToSend:  file,
-//                       uniqueId:    { _ in },
-//                       progress:    { (progress) in
-//                uploadProgress(progress)
-//            }) { (response) in
-//                let myResponse: UploadFileModel = response as! UploadFileModel
-//                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_FILE.rawValue)?fileId=\(myResponse.uploadFile!.id ?? 0)&hashCode=\(myResponse.uploadFile!.hashCode ?? "")"
-//
-//                var fileJSON : JSON = [:]
-//
-//                fileJSON["link"]        = JSON(link)
-//                fileJSON["id"]          = JSON(myResponse.uploadFile!.id ?? 0)
-//                fileJSON["name"]        = JSON(myResponse.uploadFile!.name ?? "")
-//                fileJSON["hashCode"]    = JSON(myResponse.uploadFile!.hashCode ?? "")
-//
-//                metaData["file"] = fileJSON
-//                paramsToSendToSendMessage["metaData"] = JSON("\(metaData)")
-//
-//                sendMessageWith(paramsToSendToSendMessage: paramsToSendToSendMessage)
-//            }
         }
         
         // if there was no data to send, then returns an error to user
@@ -1213,151 +711,9 @@ extension Chat {
                 onSeen(seen)
             }
             
-            
-//            let sendMessageParamModel = SendTextMessageRequestModel(content:        paramsToSendToSendMessage["content"].stringValue,
-//                                                                    metaData:       paramsToSendToSendMessage["metaData"],
-//                                                                    repliedTo:      paramsToSendToSendMessage["repliedTo"].int,
-//                                                                    systemMetadata: paramsToSendToSendMessage["systemMetadata"],
-//                                                                    threadId:       paramsToSendToSendMessage["threadId"].intValue,
-//                                                                    typeCode:       paramsToSendToSendMessage["typeCode"].string,
-//                                                                    uniqueId:       paramsToSendToSendMessage["uniqueId"].string)
-//            self.sendTextMessage(sendTextMessageInput: sendMessageParamModel, uniqueId: { _ in }, onSent: { (sent) in
-//                onSent(sent)
-//            }, onDelivere: { (delivered) in
-//                onDelivered(delivered)
-//            }, onSeen: { (seen) in
-//                onSeen(seen)
-//            })
-            
         }
         
     }
-    
-    // NOTE: This method will be deprecate soon
-    // this method will do the same as tha funciton above but instead of using 'SendFileMessageRequestModel' to get the parameters, it'll use JSON
-    /*
-    public func sendFileMessage(textMessagParams: JSON, fileParams: JSON, imageToSend: Data?, fileToSend: Data?, uniqueId: @escaping (String) -> (), uploadProgress: @escaping (Float) -> (), onSent: @escaping callbackTypeAlias, onDelivered: @escaping callbackTypeAlias, onSeen: @escaping callbackTypeAlias) {
-        log.verbose("Try to Send File adn Message with this parameters: \n \(textMessagParams)", context: "Chat")
-        
-        var fileName:       String  = ""
-        var fileType:       String  = ""
-        var fileSize:       Int     = 0
-        var fileExtension:  String  = ""
-        
-        if let myFileName = fileParams["fileName"].string {
-            fileName = myFileName
-        } else if let myImageName = fileParams["imageName"].string {
-            fileName = myImageName
-        }
-        
-        let uploadUniqueId: String = generateUUID()
-        
-        var metaData: JSON = [:]
-        
-        metaData["file"]["originalName"] = JSON(fileName)
-        metaData["file"]["mimeType"] = JSON(fileType)
-        metaData["file"]["size"] = JSON(fileSize)
-        
-        var paramsToSendToUpload: JSON = ["uniqueId": uploadUniqueId, "originalFileName": fileName]
-        
-        if let xC = fileParams["xC"].string {
-            paramsToSendToUpload["xC"] = JSON(xC)
-        }
-        if let yC = fileParams["yC"].string {
-            paramsToSendToUpload["yC"] = JSON(yC)
-        }
-        if let hC = fileParams["hC"].string {
-            paramsToSendToUpload["hC"] = JSON(hC)
-        }
-        if let wC = fileParams["wC"].string {
-            paramsToSendToUpload["wC"] = JSON(wC)
-        }
-        if let fileName = fileParams["fileName"].string {
-            paramsToSendToUpload["fileName"] = JSON(fileName)
-        } else {
-            paramsToSendToUpload["fileName"] = JSON(uploadUniqueId)
-        }
-        if let threadId = fileParams["threadId"].int {
-            paramsToSendToUpload["threadId"] = JSON(threadId)
-        }
-        
-        
-        let messageUniqueId = generateUUID()
-        uniqueId(messageUniqueId)
-        
-        var paramsToSendToSendMessage: JSON = ["uniqueId": messageUniqueId,
-                                               "typeCode": textMessagParams["typeCode"].string ?? generalTypeCode]
-        
-        if let subjectId = textMessagParams["subjectId"].int {
-            paramsToSendToSendMessage["subjectId"] = JSON(subjectId)
-        }
-        if let repliedTo = textMessagParams["repliedTo"].int {
-            paramsToSendToSendMessage["repliedTo"] = JSON(repliedTo)
-        }
-        if let content = textMessagParams["content"].string {
-            paramsToSendToSendMessage["content"] = JSON(content)
-        }
-        if let systemMetadata = textMessagParams["metadata"].string {
-            paramsToSendToSendMessage["systemMetadata"] = JSON(systemMetadata)
-        }
-        
-        
-        if let image = imageToSend {
-            uploadImage(params: paramsToSendToUpload, dataToSend: image, uniqueId: { _ in }, progress: { (progress) in
-                uploadProgress(progress)
-            }) { (response) in
-                let myResponse: UploadImageModel = response as! UploadImageModel
-                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_IMAGE.rawValue)?imageId=\(myResponse.uploadImage!.id ?? 0)&hashCode=\(myResponse.uploadImage!.hashCode ?? "")"
-                metaData["file"]["link"]            = JSON(link)
-                metaData["file"]["id"]              = JSON(myResponse.uploadImage!.id ?? 0)
-                metaData["file"]["name"]            = JSON(myResponse.uploadImage!.name ?? "")
-                metaData["file"]["height"]          = JSON(myResponse.uploadImage!.height ?? 0)
-                metaData["file"]["width"]           = JSON(myResponse.uploadImage!.width ?? 0)
-                metaData["file"]["actualHeight"]    = JSON(myResponse.uploadImage!.actualHeight ?? 0)
-                metaData["file"]["actualWidth"]     = JSON(myResponse.uploadImage!.actualWidth ?? 0)
-                metaData["file"]["hashCode"]        = JSON(myResponse.uploadImage!.hashCode ?? "")
-                
-                paramsToSendToSendMessage["metaData"] = JSON("\(metaData)")
-                
-                sendMessageWith(paramsToSendToSendMessage: paramsToSendToSendMessage)
-            }
-        } else if let file = fileToSend {
-            uploadFile(params: paramsToSendToUpload, dataToSend: file, uniqueId: { _ in }, progress: { (progress) in
-                uploadProgress(progress)
-            }) { (response) in
-                let myResponse: UploadFileModel = response as! UploadFileModel
-                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_FILE.rawValue)?fileId=\(myResponse.uploadFile!.id ?? 0)&hashCode=\(myResponse.uploadFile!.hashCode ?? "")"
-                metaData["file"]["link"]            = JSON(link)
-                metaData["file"]["id"]              = JSON(myResponse.uploadFile!.id ?? 0)
-                metaData["file"]["name"]            = JSON(myResponse.uploadFile!.name ?? "")
-                metaData["file"]["hashCode"]        = JSON(myResponse.uploadFile!.hashCode ?? "")
-                
-                paramsToSendToSendMessage["metaData"] = JSON("\(metaData)")
-                
-                sendMessageWith(paramsToSendToSendMessage: paramsToSendToSendMessage)
-            }
-        }
-        
-        // if there was no data to send, then returns an error to user
-        if (imageToSend == nil) && (fileToSend == nil) {
-            delegate?.chatError(errorCode: 6302, errorMessage: CHAT_ERRORS.err6302.rawValue, errorResult: nil)
-        }
-        
-        
-        // this will call when all data were uploaded and it will sends the textMessage
-        func sendMessageWith(paramsToSendToSendMessage: JSON) {
-            self.sendTextMessage(params: paramsToSendToSendMessage, uniqueId: { _ in}, onSent: { (sent) in
-                onSent(sent)
-            }, onDelivere: { (delivered) in
-                onDelivered(delivered)
-            }, onSeen: { (seen) in
-                onSeen(seen)
-            })
-        }
-        
-    }
-    */
-    
     
     
     /*
@@ -1468,6 +824,7 @@ extension Chat {
                                                         yC:                 Int(replyFileMessageInput.yC ?? ""),
                                                         hC:                 Int(replyFileMessageInput.hC ?? ""),
                                                         wC:                 Int(replyFileMessageInput.wC ?? ""),
+                                                        requestTypeCode:    nil,
                                                         requestUniqueId:    uploadUniqueId)
             uploadImage(uploadImageInput: uploadRequest,
                         uniqueId: { _ in },

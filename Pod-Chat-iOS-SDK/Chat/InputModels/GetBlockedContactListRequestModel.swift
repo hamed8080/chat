@@ -6,12 +6,13 @@
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 
-import Foundation
+import SwiftyJSON
 
 open class GetBlockedContactListRequestModel {
     
     public let count:           Int?
     public let offset:          Int?
+    
     public let requestTypeCode: String?
     public let requestUniqueId: String?
     
@@ -24,6 +25,14 @@ open class GetBlockedContactListRequestModel {
         self.offset             = offset
         self.requestTypeCode    = requestTypeCode
         self.requestUniqueId    = requestUniqueId
+    }
+    
+    func convertContentToJSON() -> JSON {
+        var content: JSON = [:]
+        content["count"]    = JSON(self.count ?? 50)
+        content["offset"]   = JSON(self.offset ?? 0)
+        
+        return content
     }
     
 }

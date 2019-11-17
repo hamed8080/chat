@@ -6,13 +6,14 @@
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 
-import Foundation
+import SwiftyJSON
 
 open class BlockContactsRequestModel {
     
     public let contactId:       Int?
     public let threadId:        Int?
     public let userId:          Int?
+    
     public let requestTypeCode: String?
     public let requestUniqueId: String?
     
@@ -27,6 +28,21 @@ open class BlockContactsRequestModel {
         self.userId             = userId
         self.requestTypeCode    = requestTypeCode
         self.requestUniqueId    = requestUniqueId
+    }
+    
+    func convertContentToJSON() -> JSON {
+        var content: JSON = [:]
+        if let contactId = self.contactId {
+            content["contactId"] = JSON(contactId)
+        }
+        if let threadId = self.threadId {
+            content["threadId"] = JSON(threadId)
+        }
+        if let userId = self.userId {
+            content["userId"] = JSON(userId)
+        }
+        
+        return content
     }
     
 }

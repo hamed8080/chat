@@ -7,7 +7,6 @@
 //
 
 import Foundation
-
 import SwiftyJSON
 
 
@@ -60,6 +59,47 @@ open class GetHistoryRequestModel {
         self.uniqueIds          = uniqueIds
         self.requestTypeCode    = requestTypeCode
         self.requestUniqueId    = requestUniqueId
+    }
+    
+    func convertContentToJSON() -> JSON {
+        var content: JSON = [:]
+        content["count"] = JSON(self.count ?? 50)
+        content["offset"] = JSON(self.offset ?? 0)
+        if let firstMessageId = self.firstMessageId {
+            content["firstMessageId"] = JSON(firstMessageId)
+        }
+        if let lastMessageId = self.lastMessageId {
+            content["lastMessageId"] = JSON(lastMessageId)
+        }
+        if let from = self.fromTime {
+            if let first13Digits = Int(exactly: (from / 1000000)) {
+                content["fromTime"] = JSON(first13Digits)
+                content["fromTimeNanos"] = JSON(Int(exactly: (from - UInt(first13Digits * 1000000)))!)
+            }
+        }
+        if let to = self.toTime {
+            if let first13Digits = Int(exactly: (to / 1000000)) {
+                content["toTime"] = JSON(first13Digits)
+                content["toTimeNanos"] = JSON(Int(exactly: (to - UInt(first13Digits * 1000000)))!)
+            }
+        }
+        if let order = self.order {
+            content["order"] = JSON(order)
+        }
+        if let query = self.query {
+            content["query"] = JSON(query)
+        }
+        if let metadataCriteria = self.metadataCriteria {
+            content["metadataCriteria"] = JSON(metadataCriteria)
+        }
+        if let uniqueIds = self.uniqueIds {
+            content["uniqueIds"] = JSON(uniqueIds)
+        }
+//        if let uniqueId = getHistoryInput.uniqueId {
+//            content["uniqueId"] = JSON(uniqueId)
+//        }
+        
+        return content
     }
     
 }

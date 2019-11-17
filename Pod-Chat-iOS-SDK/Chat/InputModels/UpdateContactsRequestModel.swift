@@ -15,6 +15,8 @@ open class UpdateContactsRequestModel {
     public let firstName:       String
     public let id:              Int
     public let lastName:        String
+    
+    public let requestTypeCode: String?
     public let requestUniqueId: String?
     
     public init(cellphoneNumber:    String,
@@ -22,6 +24,7 @@ open class UpdateContactsRequestModel {
                 firstName:          String,
                 id:                 Int,
                 lastName:           String,
+                requestTypeCode:    String?,
                 requestUniqueId:    String?) {
         
         self.cellphoneNumber    = cellphoneNumber
@@ -29,6 +32,7 @@ open class UpdateContactsRequestModel {
         self.firstName          = firstName
         self.id                 = id
         self.lastName           = lastName
+        self.requestTypeCode    = requestTypeCode
         self.requestUniqueId    = requestUniqueId
     }
     

@@ -22,6 +22,7 @@ open class GetThreadsRequestModel {
     public let partnerCoreContactId:    Int?
     public let partnerCoreUserId:       Int?
     public let threadIds:               [Int]?
+    
     public let requestTypeCode:         String?
     public let requestUniqueId:         String?
     
@@ -50,6 +51,35 @@ open class GetThreadsRequestModel {
         self.requestUniqueId        = requestUniqueId
     }
     
+    func convertContentToJSON() -> JSON {
+        var content: JSON = [:]
+        content["count"]    = JSON(self.count ?? 50)
+        content["offset"]    = JSON(self.offset ?? 0)
+        if let name = self.name {
+            content["name"] = JSON(name)
+        }
+        if let new = self.new {
+            content["new"] = JSON(new)
+        }
+        if let threadIds = self.threadIds {
+            content["threadIds"] = JSON(threadIds)
+        }
+        if let coreUserId = self.creatorCoreUserId {
+            content["creatorCoreUserId"] = JSON(coreUserId)
+        }
+        if let coreUserId = self.partnerCoreUserId {
+            content["partnerCoreUserId"] = JSON(coreUserId)
+        }
+        if let coreUserId = self.partnerCoreContactId {
+            content["partnerCoreContactId"] = JSON(coreUserId)
+        }
+        if let metadataCriteria = self.metadataCriteria {
+            content["metadataCriteria"] = JSON(metadataCriteria)
+        }
+        
+        return content
+    }
+    
 }
 
 
@@ -62,6 +92,11 @@ class GetAllThreadsRequestModel {
          requestTypeCode:   String?) {
         self.summary            = summary
         self.requestTypeCode    = requestTypeCode
+    }
+    
+    func convertContentToJSON() -> JSON {
+        let content: JSON = ["summary": self.summary]
+        return content
     }
     
 }

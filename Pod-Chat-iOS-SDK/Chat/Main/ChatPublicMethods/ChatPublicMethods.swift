@@ -80,31 +80,6 @@ extension Chat {
         }
     }
     
-    // NOTE: This method will be deprecate soon
-    // this method will do the same as tha funciton above but instead of using 'DeliverSeenRequestModel' to get the parameters, it'll use JSON
-    /*
-    public func deliver(params: JSON) {
-        log.verbose("Try to send deliver message for a message id with this parameters: \n \(params)", context: "Chat")
-        
-        if let theUserInfo = userInfo {
-            let userInfoJSON = theUserInfo.formatToJSON()
-            if (params["ownerId"].intValue != userInfoJSON["id"].intValue) {
-                let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.DELIVERY.rawValue,
-                                               "content":           params["messageId"].intValue,
-                                               "typeCode":          params["typeCode"].int ?? generalTypeCode,
-                                               "pushMsgType":       3]
-                sendMessageWithCallback(params:             sendMessageParams,
-                                        callback:           nil,
-                                        callbacks:          nil,
-                                        sentCallback:       nil,
-                                        deliverCallback:    nil,
-                                        seenCallback:       nil,
-                                        uniuqueIdCallback:  nil)
-            }
-        }
-    }
-    */
-    
     
     /*
      Seen:
@@ -163,32 +138,5 @@ extension Chat {
             }
         }
     }
-    
-    // NOTE: This method will be deprecate soon
-    // this method will do the same as tha funciton above but instead of using 'DeliverSeenRequestModel' to get the parameters, it'll use JSON
-    /*
-    public func seen(params: JSON) {
-        log.verbose("Try to send deliver message for a message id with this parameters: \n \(params)", context: "Chat")
-        
-        if let theUserInfo = userInfo {
-            let userInfoJSON = theUserInfo.formatToJSON()
-            if (params["ownerId"].intValue != userInfoJSON["id"].intValue) {
-                let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.SEEN.rawValue,
-                                               "content":           params["messageId"].intValue,
-                                               "typeCode":          params["typeCode"].string ?? generalTypeCode,
-                                               "pushMsgType":       3]
-                sendMessageWithCallback(params:             sendMessageParams,
-                                        callback:           nil,
-                                        callbacks:          nil,
-                                        sentCallback:       nil,
-                                        deliverCallback:    nil,
-                                        seenCallback:       nil,
-                                        uniuqueIdCallback:  nil)
-            }
-        }
-    }
-    */
-    
-    
     
 }

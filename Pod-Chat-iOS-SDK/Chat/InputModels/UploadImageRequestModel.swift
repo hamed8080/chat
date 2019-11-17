@@ -20,6 +20,8 @@ open class UploadImageRequestModel {
     public let yC:                  Int?
     public let hC:                  Int?
     public let wC:                  Int?
+    
+    public let requestTypeCode:     String?
     public let requestUniqueId:     String?
     
     public init(dataToSend:         Data,
@@ -32,6 +34,7 @@ open class UploadImageRequestModel {
                 yC:                 Int?,
                 hC:                 Int?,
                 wC:                 Int?,
+                requestTypeCode:    String?,
                 requestUniqueId:    String?) {
         
         self.dataToSend         = dataToSend
@@ -44,6 +47,7 @@ open class UploadImageRequestModel {
         self.yC                 = yC
         self.hC                 = hC
         self.wC                 = wC
+        self.requestTypeCode    = requestTypeCode
         self.requestUniqueId    = requestUniqueId
     }
     

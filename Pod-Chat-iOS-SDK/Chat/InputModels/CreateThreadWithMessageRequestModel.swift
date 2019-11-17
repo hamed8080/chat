@@ -25,8 +25,9 @@ open class CreateThreadWithMessageRequestModel {
     public let messageSystemMetaData:       String?
     public let messageText:                 String
     public let messageType:                 String?
-
-    public let requestUniqueId:             String?
+    
+    public let requestTypeCode:             String?
+    public let requestUniqueId:             String
     
     public init(threadDescription:      String?,
                 threadImage:            String?,
@@ -41,6 +42,7 @@ open class CreateThreadWithMessageRequestModel {
                 messageSystemMetaData:  String?,
                 messageText:            String,
                 messageType:            String?,
+                requestTypeCode:        String?,
                 requestUniqueId:        String?) {
         
         self.threadDescription  = threadDescription
@@ -58,9 +60,67 @@ open class CreateThreadWithMessageRequestModel {
         self.messageText                = messageText
         self.messageType                = messageType
         
-        self.requestUniqueId            = requestUniqueId
+        self.requestTypeCode            = requestTypeCode
+        self.requestUniqueId            = requestUniqueId ?? NSUUID().uuidString
     }
-
+    
+    func convertContentToJSON() -> JSON {
+        
+        var messageContentParams: JSON = [:]
+        messageContentParams["text"] = JSON(self.messageText)
+        if let type = self.messageType {
+            messageContentParams["type"] = JSON(type)
+        }
+        if let metaData = self.messageMetaData {
+            messageContentParams["metaData"] = JSON(metaData)
+        }
+        if let systemMetadata = self.messageSystemMetaData {
+            messageContentParams["systemMetadata"] = JSON(systemMetadata)
+        }
+        if let repliedTo = self.messageRepliedTo {
+            messageContentParams["repliedTo"] = JSON(repliedTo)
+        }
+        if let forwardedMessageIds = self.messageForwardedMessageIds {
+            messageContentParams["forwardedMessageIds"] = JSON(forwardedMessageIds)
+        }
+        if let forwardedUniqueIds = self.messageForwardedUniqueIds {
+            messageContentParams["forwardedUniqueIds"] = JSON(forwardedUniqueIds)
+        }
+        messageContentParams["uniqueId"] = JSON(self.requestUniqueId)
+        
+        var myContent: JSON = [:]
+        myContent["message"]    = JSON(messageContentParams)
+        myContent["uniqueId"]   = JSON(self.requestUniqueId)
+        myContent["title"]      = JSON(self.threadTitle)
+        var inviteees = [JSON]()
+        for item in self.threadInvitees {
+            inviteees.append(item.formatToJSON())
+        }
+        myContent["invitees"] = JSON(inviteees)
+        if let image = self.threadImage {
+            myContent["image"] = JSON(image)
+        }
+        if let metaData = self.threadMetadata {
+            myContent["metadata"] = JSON(metaData)
+        }
+        if let description = self.threadDescription {
+            myContent["description"] = JSON(description)
+        }
+        let type = self.threadType
+        var theType: Int = 0
+        switch type {
+        case ThreadTypes.NORMAL:        theType = 0
+        case ThreadTypes.OWNER_GROUP:   theType = 1
+        case ThreadTypes.PUBLIC_GROUP:  theType = 2
+        case ThreadTypes.CHANNEL_GROUP: theType = 4
+        case ThreadTypes.CHANNEL:       theType = 8
+        default: break
+        }
+        myContent["type"] = JSON(theType)
+        
+        return myContent
+    }
+    
 }
 
 

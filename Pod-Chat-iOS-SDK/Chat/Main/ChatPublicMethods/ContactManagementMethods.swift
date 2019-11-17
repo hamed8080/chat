@@ -67,17 +67,8 @@ extension Chat {
         
         getContactsCallbackToUser = completion
         
-        var content: JSON = [:]
-        
-        content["size"]     = JSON(getContactsInput.count ?? 50)
-        content["offset"]   = JSON(getContactsInput.offset ?? 0)
-        
-        if let query = getContactsInput.query {
-            content["query"] = JSON(query)
-        }
-        
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_CONTACTS.rawValue,
-                                            content:            "\(content)",
+                                            content:            "\(getContactsInput.convertContentToJSON())",
                                             metaData:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -122,52 +113,6 @@ extension Chat {
         
     }
     
-    // NOTE: This method will be deprecate soon
-    // this method will do the same as tha funciton above but instead of using 'GetContactsRequestModel' to get the parameters, it'll use JSON
-    /*
-    public func getContacts(params: JSON?, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        log.verbose("Try to request to get Contacts with this parameters: \n \(params ?? "params is empty!")", context: "Chat")
-        
-        var myTypeCode: String = generalTypeCode
-        var content: JSON = ["count": 50, "offset": 0]
-        if let parameters = params {
-            if let count = parameters["count"].int {
-                if count > 0 {
-                    content["count"] = JSON(count)
-                    content["size"] = JSON(count)
-                }
-            }
-            
-            if let offset = parameters["offset"].int {
-                if offset > 0 {
-                    content["offset"] = JSON(offset)
-                }
-            }
-            
-            if let name = parameters["name"].string {
-                content["name"] = JSON(name)
-            }
-            
-            if let typeCode = parameters["typeCode"].string {
-                myTypeCode = typeCode
-            }
-        }
-        
-        let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_CONTACTS.rawValue,
-                                       "typeCode": myTypeCode,
-                                       "content": content]
-        sendMessageWithCallback(params: sendMessageParams,
-                                callback: GetContactsCallback(parameters: sendMessageParams),
-                                callbacks: nil,
-                                sentCallback: nil,
-                                deliverCallback: nil,
-                                seenCallback: nil) { (getContactUniqueId) in
-            uniqueId(getContactUniqueId)
-        }
-        getContactsCallbackToUser = completion
-    }
-    */
-    
     
     /*
      SearchContact:
@@ -207,30 +152,6 @@ extension Chat {
         let requestUniqueId = searchContactsInput.requestUniqueId ?? generateUUID()
         uniqueId(requestUniqueId)
         
-//        var params: Parameters = [:]
-//        params["size"] = JSON(searchContactsInput.size ?? 50)
-//        params["offset"] = JSON(searchContactsInput.offset ?? 0)
-//        if let firstName = searchContactsInput.firstName {
-//            params["firstName"] = JSON(firstName)
-//        }
-//        if let lastName = searchContactsInput.lastName {
-//            params["lastName"] = JSON(lastName)
-//        }
-//        if let cellphoneNumber = searchContactsInput.cellphoneNumber {
-//            params["cellphoneNumber"] = JSON(cellphoneNumber)
-//        }
-//        if let email = searchContactsInput.email {
-//            params["email"] = JSON(email)
-//        }
-//        if let uniqueId = searchContactsInput.uniqueId {
-//            params["uniqueId"] = JSON(uniqueId)
-//        } else {
-//            params["uniqueId"] = JSON(uniqueId)
-//        }
-//        let requestUniqueId = searchContactsInput.requestUniqueId ?? generateUUID()
-//        params["uniqueId"] = JSON(requestUniqueId)
-//        uniqueId(requestUniqueId)
-        
         if enableCache {
             if let cacheContacts = Chat.cacheDB.retrieveContacts(ascending:         true,
                                                                  cellphoneNumber:   searchContactsInput.cellphoneNumber,
@@ -252,43 +173,6 @@ extension Chat {
             self.addContactOnCache(withContactModel: contactModel as! ContactModel)
             completion(contactModel)
         }
-        
-//        let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.SEARCH_CONTACTS.rawValue)"
-//        let method: HTTPMethod = HTTPMethod.post
-//        let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
-//        var params: Parameters = [:]
-//        params["size"] = JSON(searchContactsInput.size ?? 50)
-//        params["offset"] = JSON(searchContactsInput.offset ?? 0)
-//        if let firstName = searchContactsInput.firstName {
-//            params["firstName"] = JSON(firstName)
-//        }
-//        if let lastName = searchContactsInput.lastName {
-//            params["lastName"] = JSON(lastName)
-//        }
-//        if let cellphoneNumber = searchContactsInput.cellphoneNumber {
-//            params["cellphoneNumber"] = JSON(cellphoneNumber)
-//        }
-//        if let email = searchContactsInput.email {
-//            params["email"] = JSON(email)
-//        }
-//
-//
-//        Networking.sharedInstance.requesttWithJSONresponse(from:            url,
-//                                                           withMethod:      method,
-//                                                           withHeaders:     headers,
-//                                                           withParameters:  params) { (response) in
-//                                                            let contactsResult = ContactModel(messageContent: response as! JSON)
-//
-//                                                            if self.enableCache {
-//                                                                var contacts = [Contact]()
-//                                                                for contact in contactsResult.contacts {
-//                                                                    contacts.append(contact)
-//                                                                }
-//                                                                Chat.cacheDB.saveContact(withContactObjects: contacts)
-//                                                            }
-//
-//                                                            completion(contactsResult)
-//        }
         
     }
     
@@ -330,6 +214,9 @@ extension Chat {
         if let email = searchContactsInput.email {
             params["email"] = JSON(email)
         }
+//        if let typeCode_ = searchContactsInput.requestTypeCode {
+//            params["typeCode"] = JSON(typeCode_)
+//        }
         
         Networking.sharedInstance.requesttWithJSONresponse(from:            url,
                                                            withMethod:      method,
@@ -347,71 +234,6 @@ extension Chat {
             Chat.cacheDB.saveContact(withContactObjects: contactModel.contacts)
         }
     }
-    
-    
-    // NOTE: This method will be deprecate soon
-    // this method will do the same as tha funciton above but instead of using 'SearchContactsRequestModel' to get the parameters, it'll use JSON
-    /*
-    public func searchContacts(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        log.verbose("Try to request to search contact with this parameters: \n \(params)", context: "Chat")
-        
-        var data: Parameters = [:]
-        
-        if let firstName = params["firstName"].string {
-            data["firstName"] = JSON(firstName)
-        }
-        
-        if let lastName = params["lastName"].string {
-            data["lastName"] = JSON(lastName)
-        }
-        
-        if let cellphoneNumber = params["cellphoneNumber"].string {
-            data["cellphoneNumber"] = JSON(cellphoneNumber)
-        }
-        
-        if let email = params["email"].string {
-            data["email"] = JSON(email)
-        }
-        
-        if let id = params["id"].int {
-            data["id"] = JSON(id)
-        }
-        
-        if let q = params["q"].string {
-            data["q"] = JSON(q)
-        }
-        
-        if let uniqueId = params["uniqueId"].string {
-            data["uniqueId"] = JSON(uniqueId)
-        }
-        
-        if let size = params["size"].int {
-            data["size"] = JSON(size)
-        } else { data["size"] = JSON(50) }
-        
-        if let offset = params["offset"].int {
-            data["offset"] = JSON(offset)
-        } else { data["offset"] = JSON(0) }
-        
-        if let typeCode = params["typeCode"].string {
-            data["typeCode"] = JSON(typeCode)
-        } else {
-            data["typeCode"] = JSON(generalTypeCode)
-        }
-        
-        
-        let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.SEARCH_CONTACTS.rawValue)"
-        let method: HTTPMethod = HTTPMethod.post
-        let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
-        
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, requestUniqueId: nil, isImage: nil, isFile: nil, completion: { (response) in
-            let jsonRes: JSON = response as! JSON
-            let contactsResult = ContactModel(messageContent: jsonRes)
-            completion(contactsResult)
-        }, progress: nil, idDownloadRequest: false, isMapServiceRequst: false) { _,_ in }
-        
-    }
-    */
     
     
     // MARK: - Add/Update/Remove Contact
@@ -487,68 +309,19 @@ extension Chat {
         params["cellphoneNumber"]   = JSON(addContactsInput.cellphoneNumber ?? "")
         params["email"]             = JSON(addContactsInput.email ?? "")
         params["uniqueId"]          = JSON(messageUniqueId)
+//        if let typeCode_ = addContactsInput.requestTypeCode {
+//            params["typeCode"] = JSON(typeCode_)
+//        }
         
         Networking.sharedInstance.requesttWithJSONresponse(from:            url,
                                                            withMethod:      method,
                                                            withHeaders:     headers,
                                                            withParameters:  params)
         { (jsonResponse) in
-//            let jsonResponse: JSON = JSON(response)
-//            let messageContent: [JSON] = jsonResponse["result"].arrayValue
-//
-//            if self.enableCache {
-//                var contactsArr = [Contact]()
-//                for item in messageContent {
-//                    contactsArr.append(Contact(messageContent: item))
-//                }
-//                Chat.cacheDB.saveContact(withContactObjects: contactsArr)
-//            }
-            
             let contactsModel = ContactModel(messageContent: jsonResponse as! JSON)
             completion(contactsModel)
         }
     }
-    
-    // NOTE: This method will be deprecate soon
-    // this method will do the same as tha funciton above but instead of using 'AddContactsRequestModel' to get the parameters, it'll use JSON
-    /*
-    public func addContact(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        log.verbose("Try to request to add contact with this parameters: \n \(params)", context: "Chat")
-        
-        var data: Parameters = [:]
-        
-        if let firstName = params["firstName"].string {
-            data["firstName"] = JSON(firstName)
-        } else { data["firstName"] = JSON("") }
-        
-        if let lastName = params["lastName"].string {
-            data["lastName"] = JSON(lastName)
-        } else { data["lastName"] = JSON("") }
-        
-        if let cellphoneNumber = params["cellphoneNumber"].string {
-            data["cellphoneNumber"] = JSON(cellphoneNumber)
-        } else { data["cellphoneNumber"] = JSON("") }
-        
-        if let email = params["email"].string {
-            data["email"] = JSON(email)
-        } else { data["email"] = JSON("") }
-        
-        let messageUniqueId: String = generateUUID()
-        data["uniqueId"] = JSON(messageUniqueId)
-        uniqueId(messageUniqueId)
-        
-        let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.ADD_CONTACTS.rawValue)"
-        let method: HTTPMethod = HTTPMethod.post
-        let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
-        
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, requestUniqueId: messageUniqueId, isImage: nil, isFile: nil, completion: { (response) in
-            let jsonRes: JSON = response as! JSON
-            let contactsResult = ContactModel(messageContent: jsonRes)
-            completion(contactsResult)
-        }, progress: nil, idDownloadRequest: false, isMapServiceRequst: false) { _,_ in }
-        
-    }
-    */
     
     
     /*
@@ -621,6 +394,9 @@ extension Chat {
         params["lastName"]        = JSON(updateContactsInput.lastName)
         params["cellphoneNumber"] = JSON(updateContactsInput.cellphoneNumber)
         params["email"]           = JSON(updateContactsInput.email)
+//        if let typeCode_ = updateContactsInput.requestTypeCode {
+//            params["typeCode"] = JSON(typeCode_)
+//        }
         
         Networking.sharedInstance.requesttWithJSONresponse(from:            url,
                                                            withMethod:      method,
@@ -631,60 +407,6 @@ extension Chat {
             completion(contactModel)
         }
     }
-    
-    // NOTE: This method will be deprecate soon
-    // this method will do the same as tha funciton above but instead of using 'UpdateContactsRequestModel' to get the parameters, it'll use JSON
-    /*
-    public func updateContact(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        log.verbose("Try to request to update contact with this parameters: \n \(params)", context: "Chat")
-        
-        var data: Parameters = [:]
-        
-        if let id = params["id"].int {
-            data["id"] = JSON(id)
-        } else {
-            delegate?.chatError(errorCode: 999, errorMessage: "ID is required for Updating Contact!", errorResult: nil)
-        }
-        
-        if let firstName = params["firstName"].string {
-            data["firstName"] = JSON(firstName)
-        } else {
-            delegate?.chatError(errorCode: 999, errorMessage: "firstName is required for Updating Contact!", errorResult: nil)
-        }
-        
-        if let lastName = params["lastName"].string {
-            data["lastName"] = JSON(lastName)
-        } else {
-            delegate?.chatError(errorCode: 999, errorMessage: "lastName is required for Updating Contact!", errorResult: nil)
-        }
-        
-        if let cellphoneNumber = params["cellphoneNumber"].string {
-            data["cellphoneNumber"] = JSON(cellphoneNumber)
-        } else {
-            delegate?.chatError(errorCode: 999, errorMessage: "cellphoneNumber is required for Updating Contact!", errorResult: nil)
-        }
-        
-        if let email = params["email"].string {
-            data["email"] = JSON(email)
-        } else {
-            delegate?.chatError(errorCode: 999, errorMessage: "email is required for Updating Contact!", errorResult: nil)
-        }
-        
-        let uniqueId: String = generateUUID()
-        data["uniqueId"] = JSON(uniqueId)
-        
-        let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.UPDATE_CONTACTS.rawValue)"
-        let method: HTTPMethod = HTTPMethod.post
-        let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
-        
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, requestUniqueId: uniqueId, isImage: nil, isFile: nil, completion: { (response) in
-            let jsonRes: JSON = response as! JSON
-            let contactsResult = ContactModel(messageContent: jsonRes)
-            completion(contactsResult)
-        }, progress: nil, idDownloadRequest: false, isMapServiceRequst: false) { _,_ in }
-        
-    }
-    */
     
     
     /*
@@ -746,6 +468,9 @@ extension Chat {
         
         var params: Parameters = [:]
         params["id"] = JSON(removeContactsInput.contactId)
+//        if let typeCode_ = removeContactsInput.requestTypeCode {
+//            params["typeCode"] = JSON(typeCode_)
+//        }
         
         Networking.sharedInstance.requesttWithJSONresponse(from:            url,
                                                            withMethod:      method,
@@ -764,36 +489,6 @@ extension Chat {
             }
         }
     }
-    
-    // NOTE: This method will be deprecate soon
-    // this method will do the same as tha funciton above but instead of using 'RemoveContactsRequestModel' to get the parameters, it'll use JSON
-    /*
-    public func removeContact(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        log.verbose("Try to request to remove contact with this parameters: \n \(params)", context: "Chat")
-        
-        var data: Parameters = [:]
-        
-        if let id = params["id"].int {
-            data["id"] = JSON(id)
-        } else {
-            delegate?.chatError(errorCode: 999, errorMessage: "ID is required for Deleting Contact!", errorResult: nil)
-        }
-        
-        let uniqueId: String = generateUUID()
-        data["uniqueId"] = JSON(uniqueId)
-        
-        let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.REMOVE_CONTACTS.rawValue)"
-        let method: HTTPMethod = HTTPMethod.post
-        let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
-        
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: data, dataToSend: nil, requestUniqueId: uniqueId, isImage: nil, isFile: nil, completion: { (response) in
-            let jsonRes: JSON = response as! JSON
-            let contactsResult = RemoveContactModel(messageContent: jsonRes)
-            completion(contactsResult)
-        }, progress: nil, idDownloadRequest: false, isMapServiceRequst: false) { _,_ in }
-        
-    }
-    */
     
     
     // MARK: - Block/Unblock/GetBlockList Contact
@@ -835,19 +530,8 @@ extension Chat {
         
         blockCallbackToUser = completion
         
-        var content: JSON = [:]
-        if let contactId = blockContactsInput.contactId {
-            content["contactId"] = JSON(contactId)
-        }
-        if let threadId = blockContactsInput.threadId {
-            content["threadId"] = JSON(threadId)
-        }
-        if let userId = blockContactsInput.userId {
-            content["userId"] = JSON(userId)
-        }
-        
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.BLOCK.rawValue,
-                                            content:            "\(content)",
+                                            content:            "\(blockContactsInput.convertContentToJSON())",
                                             metaData:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -874,35 +558,6 @@ extension Chat {
         }
         
     }
-    
-    // NOTE: This method will be deprecate soon
-    // this method will do the same as tha funciton above but instead of using 'BlockContactsRequestModel' to get the parameters, it'll use JSON
-    /*
-    public func blockContact(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        log.verbose("Try to request to block user with this parameters: \n \(params)", context: "Chat")
-        
-        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.BLOCK.rawValue,
-                                       "typeCode": params["typeCode"].string ?? generalTypeCode]
-        
-        var content: JSON = [:]
-        
-        if let contactId = params["contactId"].int {
-            content["contactId"] = JSON(contactId)
-        }
-        
-        sendMessageParams["content"] = JSON("\(content)")
-        
-        sendMessageWithCallback(params:         sendMessageParams,
-                                callback:       BlockContactCallbacks(),
-                                callbacks:      nil,
-                                sentCallback:   nil,
-                                deliverCallback: nil,
-                                seenCallback:   nil) { (blockUniqueId) in
-            uniqueId(blockUniqueId)
-        }
-        blockCallbackToUser = completion
-    }
-    */
     
     
     /*
@@ -944,12 +599,8 @@ extension Chat {
         
         getBlockedCallbackToUser = completion
         
-        var content: JSON = [:]
-        content["count"]    = JSON(getBlockedContactsInput.count ?? 50)
-        content["offset"]   = JSON(getBlockedContactsInput.offset ?? 0)
-        
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_BLOCKED.rawValue,
-                                            content:            "\(content)",
+                                            content:            "\(getBlockedContactsInput.convertContentToJSON())",
                                             metaData:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -976,51 +627,6 @@ extension Chat {
         }
         
     }
-    
-    // NOTE: This method will be deprecate soon
-    // this method will do the same as tha funciton above but instead of using 'GetBlockedContactListRequestModel' to get the parameters, it'll use JSON
-    /*
-    public func getBlockedContacts(params: JSON?, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        log.verbose("Try to request to get block users with this parameters: \n \(params ?? "there isn't any parameter")", context: "Chat")
-        
-        var myTypeCode = generalTypeCode
-        
-        var content: JSON = ["count": 50, "offset": 0]
-        if let parameters = params {
-            
-            if let count = parameters["count"].int {
-                if count > 0 {
-                    content.appendIfDictionary(key: "count", json: JSON(count))
-                }
-            }
-            
-            if let offset = parameters["offset"].int {
-                if offset > 0 {
-                    content.appendIfDictionary(key: "offset", json: JSON(offset))
-                }
-            }
-            
-            if let typeCode = parameters["typeCode"].string {
-                myTypeCode = typeCode
-            }
-            
-        }
-        
-        let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.GET_BLOCKED.rawValue,
-                                       "typeCode": myTypeCode,
-                                       "content": content]
-        
-        sendMessageWithCallback(params:         sendMessageParams,
-                                callback:       GetBlockedContactsCallbacks(parameters: sendMessageParams),
-                                callbacks:      nil,
-                                sentCallback:   nil,
-                                deliverCallback: nil,
-                                seenCallback:   nil) { (getBlockedUniqueId) in
-            uniqueId(getBlockedUniqueId)
-        }
-        getBlockedCallbackToUser = completion
-    }
-    */
     
     
     /*
@@ -1062,19 +668,8 @@ extension Chat {
         
         unblockCallbackToUser = completion
         
-        var content: JSON = [:]
-        if let contactId = unblockContactsInput.contactId {
-            content["contactId"] = JSON(contactId)
-        }
-        if let threadId = unblockContactsInput.threadId {
-            content["threadId"] = JSON(threadId)
-        }
-        if let userId = unblockContactsInput.userId {
-            content["userId"] = JSON(userId)
-        }
-        
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.UNBLOCK.rawValue,
-                                            content:            "\(content)",
+                                            content:            "\(unblockContactsInput.convertContentToJSON())",
                                             metaData:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -1102,30 +697,6 @@ extension Chat {
         
     }
     
-    // NOTE: This method will be deprecate soon
-    // this method will do the same as tha funciton above but instead of using 'UnblockContactsRequestModel' to get the parameters, it'll use JSON
-    /*
-    public func unblockContact(params: JSON, uniqueId: @escaping (String) -> (), completion: @escaping callbackTypeAlias) {
-        log.verbose("Try to request to unblock user with this parameters: \n \(params)", context: "Chat")
-        
-        var sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.UNBLOCK.rawValue,
-                                       "typeCode": params["typeCode"].string ?? generalTypeCode]
-        
-        if let subjectId = params["blockId"].int {
-            sendMessageParams["subjectId"] = JSON(subjectId)
-        }
-        
-        sendMessageWithCallback(params:         sendMessageParams,
-                                callback:       UnblockContactCallbacks(),
-                                callbacks:      nil,
-                                sentCallback:   nil,
-                                deliverCallback: nil,
-                                seenCallback:   nil) { (blockUniqueId) in
-            uniqueId(blockUniqueId)
-        }
-        unblockCallbackToUser = completion
-    }
-    */
     
     // MARK: Sync Contact
     /*
@@ -1181,6 +752,7 @@ extension Chat {
                                                               email:            emailAddress as String?,
                                                               firstName:        firstName,
                                                               lastName:         lastName,
+                                                              requestTypeCode:  nil,
                                                               requestUniqueId:  nil)
                         phoneContacts.append(contact)
                     })

@@ -43,64 +43,24 @@ extension Chat {
         
         let url = "\(SERVICE_ADDRESSES.MAP_ADDRESS)\(SERVICES_PATH.REVERSE.rawValue)"
         let method:     HTTPMethod  = HTTPMethod.get
-        let headers:    HTTPHeaders = ["Api-Key": mapApiKey]
-        let parameters: Parameters  = ["lat": mapReverseInput.lat,
-                                       "lng": mapReverseInput.lng,
-                                       "uniqueId": theUniqueId]
+        let headers:    HTTPHeaders = ["Api-Key":   mapApiKey]
+        let parameters: Parameters  = ["lat":       mapReverseInput.lat,
+                                       "lng":       mapReverseInput.lng,
+                                       "uniqueId":  theUniqueId]
         
         Networking.sharedInstance.requesttWithJSONresponse(from:            url,
                                                            withMethod:      method,
                                                            withHeaders:     headers,
-                                                           withParameters:  parameters) { (jsonResponse) in
-                                                            if let theResponse = jsonResponse as? JSON {
-                                                                let mapReverseModel = MapReverseModel(messageContent:   theResponse,
-                                                                                                      hasError:         false,
-                                                                                                      errorMessage:     "",
-                                                                                                      errorCode:        0)
-                                                                completion(mapReverseModel)
-                                                            }
+                                                           withParameters:  parameters)
+        { (jsonResponse) in
+            if let theResponse = jsonResponse as? JSON {
+                let mapReverseModel = MapReverseModel(messageContent:   theResponse,
+                                                      hasError:         false,
+                                                      errorMessage:     "",
+                                                      errorCode:        0)
+                completion(mapReverseModel)
+            }
         }
-        
-//        Alamofire.request(url,
-//                          method:       method,
-//                          parameters:   parameters,
-//                          headers:      headers)
-//            .responseJSON { (myResponse) in
-//                if myResponse.result.isSuccess {
-//                    if let jsonValue = myResponse.result.value {
-//                        let jsonResponse: JSON = JSON(jsonValue)
-//                        let mapReverseModel = MapReverseModel(messageContent:   jsonResponse,
-//                                                              hasError:         false,
-//                                                              errorMessage:     "",
-//                                                              errorCode:        0)
-//                        completion(mapReverseModel)
-//                    }
-//                } else {
-//                    log.error("Response of GetRequest is Failed)", context: "Chat")
-//                }
-//        }
-        
-//        httpRequest(from:           url,
-//                    withMethod:     method,
-//                    withHeaders:    headers,
-//                    withParameters: parameters,
-//                    dataToSend:     nil,
-//                    requestUniqueId: nil,
-//                    isImage:        nil,
-//                    isFile:         nil,
-//                    completion: { (jsonResponse) in
-//            if let theResponse = jsonResponse as? JSON {
-//                let mapReverseModel = MapReverseModel(messageContent:   theResponse,
-//                                                      hasError:         false,
-//                                                      errorMessage:     "",
-//                                                      errorCode:        0)
-//                completion(mapReverseModel)
-//            }
-//
-//        }, progress:            nil,
-//           idDownloadRequest:   false,
-//           isMapServiceRequst:  true) { _,_ in }
-        
         
     }
     
@@ -140,56 +100,16 @@ extension Chat {
         Networking.sharedInstance.requesttWithJSONresponse(from:            url,
                                                            withMethod:      method,
                                                            withHeaders:     headers,
-                                                           withParameters:  parameters) { (jsonResponse) in
-                                                            if let theResponse = jsonResponse as? JSON {
-                                                                let mapSearchModel = MapSearchModel(messageContent: theResponse,
-                                                                                                    hasError:       false,
-                                                                                                    errorMessage:   "",
-                                                                                                    errorCode:      0)
-                                                                completion(mapSearchModel)
-                                                            }
+                                                           withParameters:  parameters)
+        { (jsonResponse) in
+            if let theResponse = jsonResponse as? JSON {
+                let mapSearchModel = MapSearchModel(messageContent: theResponse,
+                                                    hasError:       false,
+                                                    errorMessage:   "",
+                                                    errorCode:      0)
+                completion(mapSearchModel)
+            }
         }
-        
-//        Alamofire.request(url,
-//                          method:       method,
-//                          parameters:   parameters,
-//                          headers:      headers)
-//            .responseJSON { (myResponse) in
-//                if myResponse.result.isSuccess {
-//                    if let jsonValue = myResponse.result.value {
-//                        let jsonResponse: JSON = JSON(jsonValue)
-//                        let mapSearchModel = MapSearchModel(messageContent: jsonResponse,
-//                                                            hasError:       false,
-//                                                            errorMessage:   "",
-//                                                            errorCode:      0)
-//                        completion(mapSearchModel)
-//                    }
-//                } else {
-//                    log.error("Response of GetRequest is Failed)", context: "Chat")
-//                }
-//        }
-        
-//        httpRequest(from:           url,
-//                    withMethod:     method,
-//                    withHeaders:    headers,
-//                    withParameters: parameters,
-//                    dataToSend:     nil,
-//                    requestUniqueId: nil,
-//                    isImage:        nil,
-//                    isFile:         nil,
-//                    completion: { (jsonResponse) in
-//
-//            if let theResponse = jsonResponse as? JSON {
-//                let mapSearchModel = MapSearchModel(messageContent: theResponse,
-//                                                    hasError:       false,
-//                                                    errorMessage:   "",
-//                                                    errorCode:      0)
-//                completion(mapSearchModel)
-//            }
-//
-//        }, progress:            nil,
-//           idDownloadRequest:   false,
-//           isMapServiceRequst:  true) { _,_ in }
         
     }
     
@@ -225,61 +145,22 @@ extension Chat {
         let method:     HTTPMethod  = HTTPMethod.get
         let headers:    HTTPHeaders = ["Api-Key": mapApiKey]
         let parameters: Parameters  = ["origin":        "\(mapRoutingInput.originLat),\(mapRoutingInput.originLng)",
-            "destination":   "\(mapRoutingInput.destinationLat),\(mapRoutingInput.destinationLng)",
-            "alternative":   mapRoutingInput.alternative]
+                                       "destination":   "\(mapRoutingInput.destinationLat),\(mapRoutingInput.destinationLng)",
+                                       "alternative":   mapRoutingInput.alternative]
         
         Networking.sharedInstance.requesttWithJSONresponse(from:            url,
                                                            withMethod:      method,
                                                            withHeaders:     headers,
-                                                           withParameters:  parameters) { (jsonResponse) in
-                                                            if let theResponse = jsonResponse as? JSON {
-                                                                let mapRoutingModel = MapRoutingModel(messageContent:   theResponse,
-                                                                                                      hasError:         false,
-                                                                                                      errorMessage:     "",
-                                                                                                      errorCode:        0)
-                                                                completion(mapRoutingModel)
-                                                            }
+                                                           withParameters:  parameters)
+        { (jsonResponse) in
+            if let theResponse = jsonResponse as? JSON {
+                let mapRoutingModel = MapRoutingModel(messageContent:   theResponse,
+                                                      hasError:         false,
+                                                      errorMessage:     "",
+                                                      errorCode:        0)
+                completion(mapRoutingModel)
+            }
         }
-        
-//        Alamofire.request(url,
-//                          method:       method,
-//                          parameters:   parameters,
-//                          headers:      headers)
-//            .responseJSON { (myResponse) in
-//                if myResponse.result.isSuccess {
-//                    if let jsonValue = myResponse.result.value {
-//                        let jsonResponse: JSON = JSON(jsonValue)
-//                        let mapRoutingModel = MapRoutingModel(messageContent:   jsonResponse,
-//                                                              hasError:         false,
-//                                                              errorMessage:     "",
-//                                                              errorCode:        0)
-//                        completion(mapRoutingModel)
-//                    }
-//                } else {
-//                    log.error("Response of GetRequest is Failed)", context: "Chat")
-//                }
-//        }
-        
-//        httpRequest(from:           url,
-//                    withMethod:     method,
-//                    withHeaders:    headers,
-//                    withParameters: parameters,
-//                    dataToSend:     nil,
-//                    requestUniqueId: nil,
-//                    isImage:        nil,
-//                    isFile:         nil,
-//                    completion: { (jsonResponse) in
-//            if let theResponse = jsonResponse as? JSON {
-//                let mapRoutingModel = MapRoutingModel(messageContent:   theResponse,
-//                                                      hasError:         false,
-//                                                      errorMessage:     "",
-//                                                      errorCode:        0)
-//                completion(mapRoutingModel)
-//            }
-//
-//        }, progress:            nil,
-//           idDownloadRequest:   false,
-//           isMapServiceRequst:  true) { _,_ in }
         
     }
     
@@ -332,24 +213,6 @@ extension Chat {
             guard let image = myResponse else { print("Value is empty!!!"); return }
             completion(image)
         }
-        
-//        Alamofire.request(url,
-//                          method:       method,
-//                          parameters:   parameters,
-//                          headers:      nil)
-//            .downloadProgress(closure: { (downloadProgress) in
-//            let myProgressFloat: Float = Float(downloadProgress.fractionCompleted)
-//            progress(myProgressFloat)
-//
-//        }).responseData { (myResponse) in
-//            if myResponse.result.isSuccess {
-//                guard let image = myResponse.result.value else { print("Value is empty!!!"); return }
-//                completion(image)
-//            } else {
-//                print("Failed!")
-//            }
-//
-//        }
         
     }
     

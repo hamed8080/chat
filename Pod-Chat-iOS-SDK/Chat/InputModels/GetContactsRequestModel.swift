@@ -6,7 +6,7 @@
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 
-import Foundation
+import SwiftyJSON
 
 open class GetContactsRequestModel {
     
@@ -27,6 +27,18 @@ open class GetContactsRequestModel {
         self.query              = query
         self.requestTypeCode    = requestTypeCode
         self.requestUniqueId    = requestUniqueId
+    }
+    
+    func convertContentToJSON() -> JSON {
+        var content: JSON = [:]
+        
+        content["size"]     = JSON(self.count ?? 50)
+        content["offset"]   = JSON(self.offset ?? 0)
+        if let query = self.query {
+            content["query"] = JSON(query)
+        }
+        
+        return content
     }
     
 }

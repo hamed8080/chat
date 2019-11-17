@@ -6,7 +6,7 @@
 //  Copyright © 1398 Mahyar Zhiani. All rights reserved.
 //
 
-import Foundation
+import SwiftyJSON
 
 open class SetRoleRequestModel {
     
@@ -31,6 +31,16 @@ open class SetRoleRequestModel {
         self.userId             = userId
         self.requestTypeCode    = requestTypeCode
         self.requestUniqueId    = requestUniqueId
+    }
+    
+    func convertContentToJSON() -> JSON {
+        var content: JSON = [:]
+        content["userId"]           = JSON(self.userId)
+        content["roles"]            = JSON(self.roles)
+        content["roleOperation"]    = JSON(self.roleOperation)
+        content["checkThreadMembership"] = JSON(true)
+        
+        return content
     }
     
 }

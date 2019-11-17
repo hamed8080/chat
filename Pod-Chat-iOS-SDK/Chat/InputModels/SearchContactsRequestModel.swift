@@ -17,6 +17,8 @@ open class SearchContactsRequestModel {
     public let lastName:        String?
     public let offset:          Int?
     public let size:            Int?
+    
+    public let requestTypeCode: String?
     public let requestUniqueId: String?
 //    public let typeCode:        String?
     
@@ -27,6 +29,7 @@ open class SearchContactsRequestModel {
                 lastName:           String?,
                 offset:             Int?,
                 size:               Int?,
+                requestTypeCode:    String?,
                 requestUniqueId:    String?) {
         
         self.cellphoneNumber    = cellphoneNumber
@@ -36,6 +39,7 @@ open class SearchContactsRequestModel {
         self.lastName           = lastName
         self.offset             = offset
         self.size               = size
+        self.requestTypeCode    = requestTypeCode
         self.requestUniqueId    = requestUniqueId
     }
     
