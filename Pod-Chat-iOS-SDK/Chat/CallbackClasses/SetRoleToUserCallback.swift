@@ -15,9 +15,7 @@ import FanapPodAsyncSDK
 extension Chat {
     
     func responseOfSetRoleToUser(withMessage message: ChatMessage) {
-        /*
-         *
-         *
+        /**
          *
          */
         log.verbose("Message of type 'SET_RULE_TO_USER' recieved", context: "Chat")
@@ -40,7 +38,6 @@ extension Chat {
         }
     }
     
-    // ToDo: convert the JSON output to Model
     // ToDo: put the data on the Cache if needed
     public class SetRoleToUserCallback: CallbackProtocol {
         

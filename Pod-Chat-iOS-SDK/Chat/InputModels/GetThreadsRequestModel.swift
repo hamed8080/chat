@@ -13,15 +13,15 @@ import SwiftyJSON
 
 open class GetThreadsRequestModel {
     
-    public let count:                   Int?
-    public let creatorCoreUserId:       Int?
-    public let metadataCriteria:        JSON?
-    public let name:                    String?
-    public let new:                     Bool?
-    public let offset:                  Int?
-    public let partnerCoreContactId:    Int?
-    public let partnerCoreUserId:       Int?
-    public let threadIds:               [Int]?
+    public let count:                   Int?    // count of threads to be received (default value is 50)
+    public let creatorCoreUserId:       Int?    // SSO User Id of thread creator
+    public let metadataCriteria:        JSON?   //
+    public let name:                    String? // Search term to look up in thread Titles
+    public let new:                     Bool?   //
+    public let offset:                  Int?    // offset of select query (default value is 0)
+    public let partnerCoreContactId:    Int?    // Contact Id of thread partner
+    public let partnerCoreUserId:       Int?    // SSO User Id of thread partner
+    public let threadIds:               [Int]?  // An array of thread ids to be received
     
     public let requestTypeCode:         String?
     public let requestUniqueId:         String?

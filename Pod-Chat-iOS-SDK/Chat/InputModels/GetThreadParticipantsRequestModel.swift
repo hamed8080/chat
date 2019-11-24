@@ -10,13 +10,13 @@ import SwiftyJSON
 
 open class GetThreadParticipantsRequestModel {
     
-    public let admin:           Bool?
-    public let count:           Int?
+    public let admin:           Bool?   // if we want to only get admins, we'll send this parameter as "true"
+    public let count:           Int?    // Count of objects to get
     public let firstMessageId:  Int?
     public let lastMessageId:   Int?
-    public let name:            String?
-    public let offset:          Int?
-    public let threadId:        Int
+    public let name:            String? // Search in Participants list (LIKE in name, contactName, email)
+    public let offset:          Int?    // Offset of select Query
+    public let threadId:        Int     // Id of thread which you want to get participants of
     public let requestTypeCode: String?
     public let requestUniqueId: String?
     

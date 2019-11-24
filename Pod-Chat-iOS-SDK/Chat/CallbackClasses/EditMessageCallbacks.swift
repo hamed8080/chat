@@ -15,9 +15,7 @@ import FanapPodAsyncSDK
 extension Chat {
     
     func responseOfEditMessage(withMessage message: ChatMessage) {
-        /*
-         *
-         *
+        /**
          *
          */
         log.verbose("Message of type 'EDIT_MESSAGE' recieved", context: "Chat")
@@ -30,12 +28,15 @@ extension Chat {
                                           resultAsString:   nil,
                                           contentCount:     message.contentCount,
                                           subjectId:        message.subjectId)
-        //                .returnJSON()
+        
+        let myMessage = Message(threadId:       message.subjectId,
+                                pushMessageVO:  message.content?.convertToJSON() ?? [:])
+        
+        delegate?.messageEvents(type: MessageEventTypes.MESSAGE_EDIT, result: myMessage)
         
         // save edited data on the cache
         // remove this message from wait edit queue
         if enableCache {
-            let myMessage = Message(threadId: message.subjectId, pushMessageVO: message.content?.convertToJSON() ?? [:])
             Chat.cacheDB.saveMessageObjects(messages: [myMessage], getHistoryParams: nil)
             Chat.cacheDB.deleteWaitEditMessage(uniqueId: message.uniqueId)
         }
@@ -70,7 +71,8 @@ extension Chat {
             log.verbose("EditMessageCallbacks", context: "Chat")
             
             if let content = response.result {
-                let editedMessageModel = EditMessageModel(message:      Message(threadId: content["conversation"]["id"].int, pushMessageVO: response.result!),
+                let editedMessageModel = EditMessageModel(message:      Message(threadId:       content["conversation"]["id"].int,
+                                                                                pushMessageVO:  response.result!),
                                                           hasError:     response.hasError,
                                                           errorMessage: response.errorMessage,
                                                           errorCode:    response.errorCode)

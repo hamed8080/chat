@@ -15,9 +15,7 @@ import FanapPodAsyncSDK
 extension Chat {
     
     func responseOfThreadParticipants(withMessage message: ChatMessage) {
-        /*
-         *
-         *
+        /**
          *
          */
         log.verbose("Message of type 'THREAD_PARTICIPANTS' recieved", context: "Chat")
@@ -51,7 +49,7 @@ extension Chat {
         }
     }
     
-    // ToDo: put the update cache to the upward function
+    
     public class GetThreadParticipantsCallbacks: CallbackProtocol {
         var sendParams: SendChatMessageVO
         init(parameters: SendChatMessageVO) {
@@ -61,23 +59,13 @@ extension Chat {
                               response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
-            /*
-             *
-             *
+            /**
              *
              */
             log.verbose("GetThreadParticipantsCallbacks", context: "Chat")
             
             if let arrayContent = response.resultAsArray {
                 let content = sendParams.content?.convertToJSON()
-                
-//                var participants = [Participant]()
-//                for item in response["result"].arrayValue {
-//                    let myParticipant = Participant(messageContent: item, threadId: sendParams.subjectId!)
-//                    participants.append(myParticipant)
-//                }
-//                Chat.cacheDB.saveThreadParticipantObjects(whereThreadIdIs: sendParams.subjectId!, withParticipants: participants)
-                
                 let getThreadParticipantsModel = GetThreadParticipantsModel(messageContent: arrayContent,
                                                                             contentCount:   response.contentCount,
                                                                             count:          content?["count"].intValue ?? 0,

@@ -366,188 +366,6 @@ extension Chat {
         }
 
     }
-
-
-    
-    
-    /*
-     *  HTTP Request:
-     *      Manages all HTTP Requests
-     *
-     *  + Access:
-     *      - private
-     *
-     *  + Inputs:
-     *
-     *
-     *  + Outputs:
-     *
-     *
-     */
-    /*
-    func httpRequest(from urlStr:           String,
-                     withMethod:            HTTPMethod,
-                     withHeaders:           HTTPHeaders?,
-                     withParameters:        Parameters?,
-                     dataToSend:            Any?,
-                     requestUniqueId:       String?,
-                     isImage:               Bool?,
-                     isFile:                Bool?,
-                     completion:            @escaping callbackTypeAlias,
-                     progress:              callbackTypeAliasFloat?,
-                     idDownloadRequest:     Bool,
-                     isMapServiceRequst:    Bool,
-                     downloadReturnData:    @escaping (Data?, JSON) -> ()) {
-        
-        let url = URL(string: urlStr)!
-        
-        if (idDownloadRequest) {
-            
-            Alamofire.request(url, method: withMethod, parameters: withParameters, headers: withHeaders).downloadProgress(closure: { (downloadProgress) in
-                let myProgressFloat: Float = Float(downloadProgress.fractionCompleted)
-                progress?(myProgressFloat)
-            }).responseData { (myResponse) in
-                if myResponse.result.isSuccess {
-                    if let downloadedData = myResponse.data {
-                        if let response = myResponse.response {
-                            
-                            var resJSON: JSON = [:]
-                            
-                            let headerResponse = response.allHeaderFields
-                            if let contentType = headerResponse["Content-Type"] as? String {
-                                if let fileType = contentType.components(separatedBy: "/").last {
-                                    resJSON["type"] = JSON(fileType)
-                                }
-                            }
-                            if let contentDisposition = headerResponse["Content-Disposition"] as? String {
-                                if let theFileName = contentDisposition.components(separatedBy: "=").last?.replacingOccurrences(of: "\"", with: "") {
-                                    resJSON["name"] = JSON(theFileName)
-                                }
-                                // return the Data:
-                                downloadReturnData(downloadedData, resJSON)
-                            } else {
-                                // an error accured, so return the error:
-                                let returnJSON: JSON = ["hasError": true, "errorCode": 999]
-                                downloadReturnData(nil, returnJSON)
-                            }
-                            
-                        }
-                    }
-                } else {
-                    print("Failed!")
-                }
-            }
-            
-        } else {
-            
-            if (withMethod == .get) {
-                
-                if isMapServiceRequst {
-                    Alamofire.request(url, method: withMethod, parameters: withParameters, headers: withHeaders).responseJSON { (myResponse) in
-                        if myResponse.result.isSuccess {
-                            if let jsonValue = myResponse.result.value {
-                                let jsonResponse: JSON = JSON(jsonValue)
-                                completion(jsonResponse)
-                            }
-                        } else {
-                            log.error("Response of GerRequest is Failed)", context: "Chat")
-                        }
-                    }
-                    
-                } else {
-                    Alamofire.request(url, method: withMethod, parameters: withParameters, headers: withHeaders).responseString { (response) in
-                        if response.result.isSuccess {
-                            let stringToReturn: String = response.result.value!
-                            completion(stringToReturn)
-                        } else {
-                            log.error("Response of GerRequest is Failed)", context: "Chat")
-                        }
-                    }
-                }
-                
-            } else if (withMethod == .post) {
-                
-                if dataToSend == nil {
-                    Alamofire.request(url, method: withMethod, parameters: withParameters, headers: withHeaders).responseJSON { (myResponse) in
-                        if myResponse.result.isSuccess {
-                            if let jsonValue = myResponse.result.value {
-                                let jsonResponse: JSON = JSON(jsonValue)
-                                completion(jsonResponse)
-                            }
-                        } else {
-                            if let error = myResponse.error {
-                                let myJson: JSON = ["hasError": true,
-                                                    "errorCode": 6200,
-                                                    "errorMessage": "\(CHAT_ERRORS.err6200.rawValue) \(error)",
-                                    "errorEvent": error.localizedDescription]
-                                completion(myJson)
-                            }
-                        }
-                    }
-                    
-                } else {
-                    
-                    Alamofire.upload(multipartFormData: { (multipartFormData) in
-                        
-                        if let hasImage = isImage {
-                            if (hasImage == true) {
-                                multipartFormData.append(dataToSend as! Data, withName: "image")
-                            }
-                        }
-                        
-                        if let hasFile = isFile {
-                            if (hasFile == true) {
-                                multipartFormData.append(dataToSend as! Data, withName: "file")
-                            }
-                        }
-                        
-                        
-                        if let header = withHeaders {
-                            for (key, value) in header {
-                                multipartFormData.append(value.data(using: String.Encoding.utf8)!, withName: key as String)
-                            }
-                        }
-                        if let parameters = withParameters {
-                            for (key, value) in parameters {
-                                multipartFormData.append((value as AnyObject).data(using: String.Encoding.utf8.rawValue)!, withName: key as String)
-                            }
-                        }
-                    }, to: urlStr) { (myResult) in
-                        switch myResult {
-                        case .success(let upload, _, _):
-                            self.uploadRequest.append((upload: upload, uniqueId: requestUniqueId!))
-                            upload.responseJSON(completionHandler: { (response) in
-                                if let jsonValue = response.result.value {
-                                    let jsonResponse: JSON = JSON(jsonValue)
-                                    completion(jsonResponse)
-                                }
-                            })
-                            upload.uploadProgress(closure: { (myProgress) in
-                                let myProgressFloat: Float = Float(myProgress.fractionCompleted)
-                                progress?(myProgressFloat)
-                            })
-                            upload.responseJSON { response in
-                                debugPrint(response)
-                                for (index, item) in self.uploadRequest.enumerated() {
-                                    if item.uniqueId == requestUniqueId {
-                                        self.uploadRequest.remove(at: index)
-                                    }
-                                }
-                                
-                            }
-                        case .failure(let error):
-                            completion(error)
-                        }
-                    }
-                    
-                }
-                
-            }
-            
-        }
-        
-    }
-    */
     
     
     /*
@@ -625,189 +443,6 @@ extension Chat {
         
     }
     
-    /*
-     *
-     *
-     *
-     
-    func sendMessageWithCallback(params:            JSON,
-                                 callback:          CallbackProtocol?,
-                                 callbacks:         [CallbackProtocol]?,
-                                 sentCallback:      CallbackProtocolWith3Calls?,
-                                 deliverCallback:   CallbackProtocolWith3Calls?,
-                                 seenCallback:      CallbackProtocolWith3Calls?,
-                                 uniuqueIdCallback: callbackTypeAliasString?) {
-        log.verbose("params (to send): \n \(params)", context: "Chat")
-        
-        /*
-         * + ChatMessage        {object}
-         *    - token           {string}
-         *    - tokenIssuer     {string}
-         *    - type            {int}
-         *    - subjectId       {long}
-         *    - uniqueId        {string}
-         *    - content         {string}
-         *    - time            {long}
-         *    - medadata        {string}
-         *    - systemMedadata  {string}
-         *    - repliedTo       {long}
-         */
-        //        var returnData: JSON = ["uniqueId": "", "threadId": 0, "participant": userInfo as Any, "content": params["content"]]
-        
-        var messageVO: JSON = ["type": params["chatMessageVOType"].intValue,
-                               "token": token,
-                               "tokenIssuer": 1]
-        var threadId: Int = 0
-        if let theSubjectId = params["subjectId"].int {
-            threadId = theSubjectId
-//            messageVO["threadId"] = JSON(theSubjectId)
-            messageVO["subjectId"] = JSON(theSubjectId)
-        }
-        
-        if let repliedTo = params["repliedTo"].int {
-            messageVO["repliedTo"] = JSON(repliedTo)
-        }
-        
-        if let content = params["content"].string {
-            messageVO["content"] = JSON(content)
-        } else {
-            let content = "\(params["content"])"
-            messageVO["content"] = JSON(content)
-        }
-        
-        if let metaData = params["metaData"].string {
-            messageVO["metaData"] = JSON(metaData)
-        }
-        
-        if let systemMetadata = params["systemMetadata"].string {
-            messageVO["systemMetadata"] = JSON(systemMetadata)
-        }
-        
-        if let typeCode = params["typeCode"].string {
-            messageVO["typeCode"] = JSON(typeCode)
-        } else {
-            //            messageVO["typeCode"] = JSON(generalTypeCode)
-        }
-        
-        var uniqueId: String = ""
-        if let uID = params["uniqueId"].string {
-            messageVO["uniqueId"] = JSON(uID)
-            //            returnData["uniqueId"] = JSON(uID)
-            uniqueId = uID
-        } else if (params["chatMessageVOType"].intValue == chatMessageVOTypes.DELETE_MESSAGE.rawValue) {
-            if let x = params["content"]["ids"].arrayObject {
-                if x.count <= 1 {
-                    let uID = generateUUID()
-                    messageVO["uniqueId"] = JSON(uID)
-                    uniqueId = uID
-                }
-            } else {
-                let uID = generateUUID()
-                messageVO["uniqueId"] = JSON(uID)
-                uniqueId = uID
-            }
-        } else if (params["chatMessageVOType"].intValue != chatMessageVOTypes.PING.rawValue) {
-            let uID = generateUUID()
-            messageVO["uniqueId"] = JSON(uID)
-            //            returnData["uniqueId"] = JSON(uID)
-            uniqueId = uID
-        }
-        if (uniqueId != "") {
-            uniuqueIdCallback?(uniqueId)
-        }
-        
-        
-        log.verbose("MessageVO params (to send): \n \(messageVO)", context: "Chat")
-        
-        if (callback != nil) {
-            Chat.map[uniqueId] = callback
-        }
-        
-        if let myCallbacks = callbacks {
-            for (index, item) in myCallbacks.enumerated() {
-                if let uIds = params["content"]["uniqueIds"].arrayObject as? [String] {
-                    let uId = uIds[index]
-                    Chat.map[uId] = item
-                }
-            }
-        }
-        
-        if (sentCallback != nil) {
-            Chat.mapOnSent[uniqueId] = sentCallback
-        }
-        
-        if (deliverCallback != nil) {
-            let uniqueIdDic: [String: CallbackProtocolWith3Calls] = [uniqueId: deliverCallback!]
-            if Chat.mapOnDeliver["\(threadId)"] != nil {
-                Chat.mapOnDeliver["\(threadId)"]!.append(uniqueIdDic)
-            } else {
-                Chat.mapOnDeliver["\(threadId)"] = [uniqueIdDic]
-            }
-        }
-        
-        if (seenCallback != nil) {
-            let uniqueIdDic: [String: CallbackProtocolWith3Calls] = [uniqueId: deliverCallback!]
-            if Chat.mapOnSeen["\(threadId)"] != nil {
-                Chat.mapOnSeen["\(threadId)"]!.append(uniqueIdDic)
-            } else {
-                Chat.mapOnSeen["\(threadId)"] = [uniqueIdDic]
-            }
-        }
-        
-        log.verbose("map json: \n \(Chat.map)", context: "Chat")
-        log.verbose("map onSent json: \n \(Chat.mapOnSent)", context: "Chat")
-        log.verbose("map onDeliver json: \n \(Chat.mapOnDeliver)", context: "Chat")
-        log.verbose("map onSeen json: \n \(Chat.mapOnSeen)", context: "Chat")
-        
-        
-        var type: Int = 3
-        if let theType = params["pushMsgType"].int {
-            type = theType
-        }
-        var content: JSON = [:]
-        let messageVOStr = "\(messageVO)"
-        let str = String(messageVOStr.filter { !"\n\t\r".contains($0) })
-        content["content"] = JSON("\(str)")
-        content["peerName"] = JSON(serverName)
-        content["priority"] = JSON(msgPriority)
-        content["ttl"] = JSON(msgTTL)
-        let contentStr = "\(content)"
-        
-        let str2 = String(contentStr.filter { !"\n\t\r".contains($0) })
-        log.verbose("AsyncMessageContent of type JSON (to send to socket): \n \(str2)", context: "Chat")
-        
-        asyncClient?.pushSendData(type: type, content: str2)
-        runSendMessageTimer()
-    }
-    
-    */
-    
-    
-    /* this method is deprecated because af using a class inside Async
-    /*
-     it's all about this 3 characters: 'space' , '\n', '\t'
-     this function will put some freak characters instead of these 3 characters (inside the Message text content)
-     because later on, the Async will eliminate from all these kind of characters to reduce size of the message that goes through socket,
-     on there, we will replace them with the original one;
-     so now we don't miss any of these 3 characters on the Test Message, but also can eliminate all extra characters...
-     */
-    func makeCustomTextToSend(textMessage: String) -> String {
-        var returnStr = ""
-        for c in textMessage {
-            if (c == " ") {
-                returnStr.append("Ⓢ")
-            } else if (c == "\n") {
-                returnStr.append("Ⓝ")
-            } else if (c == "\t") {
-                returnStr.append("Ⓣ")
-            } else {
-                returnStr.append(c)
-            }
-        }
-        return returnStr
-    }
-    */
-    
     
     /*
      * Run timer
@@ -875,7 +510,6 @@ extension Chat {
             
             log.verbose("Try to send Ping", context: "Chat")
             
-//            let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.PING.rawValue, "pushMsgType": 5]
             let chatMessage = SendChatMessageVO(chatMessageVOType: chatMessageVOTypes.PING.rawValue,
                                                 content:            nil,
                                                 metaData:           nil,
@@ -908,35 +542,6 @@ extension Chat {
     
     
     /*
-     * this method is not usable anymore,
-     * bacause I moved it's functionalities to the "receivedMessageHandler" method
-     *
-     func pushMessageHandler(params: JSON) {
-     
-     log.verbose("receive message: \n \(params)", context: "Chat")
-     
-     /*
-     * + Message Received From Async      {object}
-     *    - id                            {long}
-     *    - senderMessageId               {long}
-     *    - senderName                    {string}
-     *    - senderId                      {long}
-     *    - type                          {int}
-     *    - content                       {string}
-     */
-     
-     lastReceivedMessageTime = Date()
-     
-     let content = params["content"].stringValue
-     
-     // convert my parameters data from string to JSON
-     let msgJSON: JSON = content.convertToJSON()
-     receivedMessageHandler(params: msgJSON)
-     }
-     */
-    
-    
-    /*
      * Received Message Handler:
      *
      * Handle recieve message from Async
@@ -958,35 +563,8 @@ extension Chat {
      */
     func receivedMessageHandler(withContent message: ChatMessage) {
 //        log.debug("content of received message: \n \(message.returnToJSON())", context: "Chat")
-        
         lastReceivedMessageTime = Date()
-        
-//        let messageStringContent = withContent["content"].stringValue
-//        let chatContent: JSON = messageStringContent.convertToJSON()
-//
-//        let type        = chatContent["type"].intValue
-//        let uniqueId    = chatContent["uniqueId"].stringValue
-//        var threadId = 0
-//        if let theThreadId = chatContent["subjectId"].int {
-//            threadId = theThreadId
-//        }
-//        var contentCount = 0
-//        if let theContentCount = chatContent["contentCount"].int {
-//            contentCount = theContentCount
-//        }
-//        var messageContent: JSON = [:]
-//        var messageContentAsString = ""
-//        if let msgCont = chatContent["content"].string {
-//            messageContentAsString = msgCont
-//            messageContent = msgCont.convertToJSON()
-//        }
-        
-        
-//        let type                    = withContent.type
-//        let uniqueId                = withContent.uniqueId
-//        let threadId                = withContent.subjectId ?? 0
-//        let contentCount            = withContent.contentCount ?? 0
-        
+                
 //        let messageContentAsString      = message.content
         let messageContentAsJSON: JSON  = message.content?.convertToJSON() ?? [:]
         
@@ -1084,8 +662,7 @@ extension Chat {
             
         // a message of type 17 (REMOVED_FROM_THREAD) comes from Server.
         case chatMessageVOTypes.REMOVED_FROM_THREAD.rawValue:
-//            let result: JSON = ["thread": message.subjectId ?? 0]
-//            delegate?.threadEvents(type: ThreadEventTypes.removedFrom, result: result)
+            userRemovedFromThread(id: message.subjectId)
             break
             
         // a message of type 18 (REMOVE_PARTICIPANT) comes from Server.
@@ -1149,15 +726,13 @@ extension Chat {
             
         // a message of type 30 (THREAD_INFO_UPDATED) comes from Server.
         case chatMessageVOTypes.THREAD_INFO_UPDATED.rawValue:
-            log.verbose("Message of type 'THREAD_INFO_UPDATED' recieved", context: "Chat")
-//            let conversation: Conversation = Conversation(messageContent: messageContentAsJSON)
-//            let result: JSON = ["thread": conversation]
-//            delegate?.threadEvents(type: ThreadEventTypes.infoUpdated, result: result)
+            threadInfoUpdated(withMessage: message)
             break
             
         // a message of type 31 (LAST_SEEN_UPDATED) comes from Server.
         case chatMessageVOTypes.LAST_SEEN_UPDATED.rawValue:
             log.verbose("Message of type 'LAST_SEEN_UPDATED' recieved", context: "Chat")
+            delegate?.threadEvents(type: ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME, result: message.subjectId ?? 0)
 //            delegate?.threadEvents(type: ThreadEventTypes.lastSeenUpdate, result: messageContent)
             // this functionality has beed deprecated
             /*
@@ -1236,7 +811,6 @@ extension Chat {
                                                   resultAsString:   nil,
                                                   contentCount:     0,
                                                   subjectId:        message.subjectId)
-//                    .returnJSON()
                 
                 let callback: CallbackProtocol = Chat.map[message.uniqueId]!
                 callback.onResultCallback(uID:      message.uniqueId,
@@ -1249,7 +823,6 @@ extension Chat {
                 if (messageContentAsJSON["code"].intValue == 21) {
                     chatState = false
                     asyncClient?.asyncLogOut()
-                    //                    clearCache()
                 }
                 delegate?.chatError(errorCode:      message.code    ?? messageContentAsJSON["code"].int         ?? 0,
                                     errorMessage:   message.message ?? messageContentAsJSON["message"].string   ?? "",
@@ -1265,14 +838,14 @@ extension Chat {
     }
     
     
-    
-    
     func chatMessageHandler(threadId: Int, messageContent: JSON) {
         let message = Message(threadId: threadId, pushMessageVO: messageContent)
         
         if let messageOwner = message.participant?.id {
             if messageOwner != userInfo?.id {
-                let deliveryModel = DeliverSeenRequestModel(messageId: message.id, ownerId: messageOwner, requestTypeCode: nil)
+                let deliveryModel = DeliverSeenRequestModel(messageId:          message.id,
+                                                            ownerId:            messageOwner,
+                                                            requestTypeCode:    nil)
                 deliver(deliverInput: deliveryModel)
             }
         }
@@ -1284,86 +857,27 @@ extension Chat {
         }
         
         delegate?.messageEvents(type: MessageEventTypes.MESSAGE_NEW, result: message)
+        delegate?.threadEvents(type: ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME, result: threadId)
+        delegate?.threadEvents(type: ThreadEventTypes.THREAD_UNREAD_COUNT_UPDATED, result: threadId)
     }
     
     
+    func userRemovedFromThread(id: Int?) {
+        if let threadId = id {
+            delegate?.threadEvents(type: ThreadEventTypes.THREAD_REMOVED_FROM, result: threadId)
+            
+            if enableCache {
+                Chat.cacheDB.deleteThreads(withThreadIds: [threadId])
+            }
+        }
+    }
     
     
-    /*
-     * i created a class for this method to do the same exact functionality
-     * so this method is deprecated
-     *
-     func createReturnData(hasError: Bool, errorMessage: String?, errorCode: Int?, result: JSON?, resultAsString: String?, contentCount: Int?, subjectId: Int?) -> JSON {
-     
-     
-     let hasErr = hasError
-     
-     let errMsg: String
-     var errCode: Int
-     var contCount: Int
-     if let theErrMsg = errorMessage {
-     errMsg = theErrMsg
-     } else {
-     errMsg = ""
-     }
-     if let errC = errorCode {
-     errCode = errC
-     } else {
-     errCode = 0
-     }
-     if let theCount = contentCount {
-     contCount = theCount
-     } else {
-     contCount = 0
-     }
-     
-     var obj: JSON = ["hasError": hasErr,
-     "errorMessage": errMsg,
-     "errorCode": errCode,
-     "result": NSNull(),
-     "contentCount": contCount,
-     "subjectId": subjectId ?? NSNull()]
-     
-     if let myResult = result {
-     obj["result"] = myResult
-     } else if let myResult = resultAsString {
-     obj["result"] = JSON(myResult)
-     }
-     
-     return obj
-     }
-     *
-     */
-    
-    
-    
-    
-    
-    
-    
-//    func x(chatContent: JSON, messageContent: JSON, contentCount: Int, uniqueId: String) {
-//
-//        if Chat.map[uniqueId] != nil {
-//            let returnData = CreateReturnData(hasError:         false,
-//                                              errorMessage:     "",
-//                                              errorCode:        0,
-//                                              result:           messageContent,
-//                                              resultAsArray:    nil,
-//                                              resultAsString:   nil,
-//                                              contentCount:     contentCount,
-//                                              subjectId:        chatContent["subjectId"].int)
-////                .returnJSON()
-//
-//            let callback: CallbackProtocol = Chat.map[uniqueId]!
-//            callback.onResultCallback(uID:      uniqueId,
-//                                      response: returnData,
-//                                      success: { (successJSON) in
-//                self.blockCallbackToUser?(successJSON)
-//            }) { _ in }
-//            Chat.map.removeValue(forKey: uniqueId)
-//        }
-//    }
-    
+    func threadInfoUpdated(withMessage message: ChatMessage) {
+        log.verbose("Message of type 'THREAD_INFO_UPDATED' recieved", context: "Chat")
+        let conversation = Conversation(messageContent: message.content?.convertToJSON() ?? [:])
+        delegate?.threadEvents(type: ThreadEventTypes.THREAD_INFO_UPDATED, result: conversation)
+    }
     
 }
 

@@ -23,9 +23,9 @@ open class RemoveParticipantModel {
     public var participantsJSON:    [JSON] = []
     
     public init(messageContent: JSON,
-                hasError: Bool,
-                errorMessage: String,
-                errorCode: Int) {
+                hasError:       Bool,
+                errorMessage:   String,
+                errorCode:      Int) {
         
         self.hasError           = hasError
         self.errorMessage       = errorMessage

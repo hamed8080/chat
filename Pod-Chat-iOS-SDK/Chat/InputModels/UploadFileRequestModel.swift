@@ -6,7 +6,8 @@
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 
-import Foundation
+import Alamofire
+import SwiftyJSON
 
 open class UploadFileRequestModel {
     
@@ -16,7 +17,9 @@ open class UploadFileRequestModel {
     public let fileSize:            Int?
     public let originalFileName:    String?
     public let threadId:            Int?
-    public let requestUniqueId:     String?
+    
+    public let requestTypeCode:     String?
+    public let requestUniqueId:     String
     
     public init(dataToSend:         Data,
                 fileExtension:      String?,
@@ -24,6 +27,7 @@ open class UploadFileRequestModel {
                 fileSize:           Int?,
                 originalFileName:   String?,
                 threadId:           Int?,
+                requestTypeCode:    String?,
                 requestUniqueId:    String?) {
         
         self.dataToSend         = dataToSend
@@ -32,7 +36,26 @@ open class UploadFileRequestModel {
         self.fileSize           = fileSize
         self.originalFileName   = originalFileName
         self.threadId           = threadId
-        self.requestUniqueId    = requestUniqueId
+        self.requestTypeCode    = requestTypeCode
+        self.requestUniqueId    = requestUniqueId ?? NSUUID().uuidString
+    }
+    
+    
+    func convertContentToParameters() -> Parameters {
+        
+        var content: Parameters = [:]
+        let theFileName = JSON(self.fileName ?? "\(NSUUID().uuidString))")
+        content["fileName"] = JSON(theFileName)
+        content["uniqueId"] = JSON(self.requestUniqueId)
+        content["originalFileName"] = JSON(self.originalFileName ?? theFileName)
+        if let myFileSize_ = self.fileSize {
+            content["fileSize"] = JSON(myFileSize_)
+        }
+        if let threadId_ = self.threadId {
+            content["threadId"] = JSON(threadId_)
+        }
+
+        return content
     }
     
 }

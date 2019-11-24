@@ -15,12 +15,14 @@ import FanapPodAsyncSDK
 extension Chat {
     
     func responseOfMuteThread(withMessage message: ChatMessage) {
-        /*
-         *
-         *
+        /**
          *
          */
         log.verbose("Message of type 'MUTE_THREAD' recieved", context: "Chat")
+        
+        if let threadId = message.subjectId {
+            delegate?.threadEvents(type: ThreadEventTypes.THREAD_MUTE, result: threadId)
+        }
         
         let returnData = CreateReturnData(hasError:         false,
                                           errorMessage:     "",
@@ -39,19 +41,6 @@ extension Chat {
                 self.muteThreadCallbackToUser?(successJSON)
             }) { _ in }
             Chat.map.removeValue(forKey: message.uniqueId)
-            
-            // this functionality has beed deprecated
-            /*
-             let paramsToSend: JSON = ["threadIds": [threadId]]
-             getThreads(params: paramsToSend, uniqueId: { _ in }) { (myResponse) in
-             let myResponseModel: GetThreadsModel = myResponse as! GetThreadsModel
-             let myResponseJSON: JSON = myResponseModel.returnDataAsJSON()
-             let threads = myResponseJSON["result"]["threads"].arrayValue
-             
-             let result: JSON = ["thread": threads.first!]
-             self.delegate?.threadEvents(type: "THREAD_MUTE", result: result)
-             }
-             */
         }
     }
     
@@ -60,8 +49,7 @@ extension Chat {
                               response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
-            /*
-             *
+            /**
              *
              */
             log.verbose("MuteThreadCallbacks", context: "Chat")

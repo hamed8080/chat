@@ -13,11 +13,11 @@ import SwiftyJSON
 
 open class UpdateThreadInfoRequestModel {
     
-    public let description:     String?
-    public let image:           String?
-    public let metadata:        JSON?
-    public let threadId:        Int
-    public let title:           String?
+    public let description:     String? // Description for thread
+    public let image:           String? // URL og thread image to be set
+    public let metadata:        JSON?   // New Metadata to be set on thread
+    public let threadId:        Int     // Id of thread
+    public let title:           String? // New Title for thread
     
     public let requestTypeCode: String?
     public let requestUniqueId: String?

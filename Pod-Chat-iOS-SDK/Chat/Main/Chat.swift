@@ -181,7 +181,7 @@ public class Chat {
     public var uploadRequest:      [(upload: Request, uniqueId: String)]   = []
     public var downloadRequest:    [(download: Request, uniqueId: String)] = []
     
-    
+    var isTypingArray: [String] = []
     
     // MARK: - properties that save callbacks on themselves
     

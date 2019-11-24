@@ -15,9 +15,7 @@ import FanapPodAsyncSDK
 extension Chat {
     
     func responseOfDeleteMessage(withMessage message: ChatMessage) {
-        /*
-         *
-         *
+        /**
          *
          */
         log.verbose("Message of type 'DELETE_MESSAGE' recieved", context: "Chat")
@@ -30,7 +28,29 @@ extension Chat {
                                           resultAsString:   message.content,
                                           contentCount:     message.contentCount,
                                           subjectId:        message.subjectId)
-        //                .returnJSON()
+        
+        if let content = message.content {
+            let myMessage = Message(threadId:       message.subjectId,
+                                    delivered:      nil,
+                                    editable:       nil,
+                                    edited:         nil,
+                                    deletable:      nil,
+                                    id:             Int(content) ?? 0,
+                                    message:        nil,
+                                    messageType:    nil,
+                                    metaData:       nil,
+                                    ownerId:        nil,
+                                    previousId:     nil,
+                                    seen:           nil,
+                                    time:           nil,
+                                    uniqueId:       nil,
+                                    conversation:   nil,
+                                    forwardInfo:    nil,
+                                    participant:    nil,
+                                    replyInfo:      nil)
+            
+            delegate?.messageEvents(type: MessageEventTypes.MESSAGE_DELETE, result: myMessage)
+        }
         
         if enableCache {
             Chat.cacheDB.deleteMessage(inThread: message.subjectId!, allMessages: false, withMessageIds: [Int(message.content ?? "") ?? 0])

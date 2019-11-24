@@ -193,29 +193,4 @@ class Networking {
     }
     
     
-//    func postRequestWithJSONresponse(from urlStr:           String,
-//                     withHeaders:           HTTPHeaders?,
-//                     withParameters:        Parameters?,
-//                     completion:            @escaping callbackTypeAlias) {
-//
-//        let url = URL(string: urlStr)!
-//
-//        Alamofire.request(url,
-//                          method:       .post,
-//                          parameters:   withParameters,
-//                          headers:      withHeaders)
-//            .responseJSON { (myResponse) in
-//
-//            if myResponse.result.isSuccess {
-//                if let jsonValue = myResponse.result.value {
-//                    let jsonResponse: JSON = JSON(jsonValue)
-//                    completion(jsonResponse)
-//                }
-//            } else {
-//
-//            }
-//        }
-//
-//    }
-    
 }

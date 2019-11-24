@@ -17,6 +17,7 @@ open class ReplyTextMessageRequestModel {
     public let metaData:        JSON?
     public let repliedTo:       Int
     public let subjectId:       Int
+    
     public let requestTypeCode: String?
     public let requestUniqueId: String?
     

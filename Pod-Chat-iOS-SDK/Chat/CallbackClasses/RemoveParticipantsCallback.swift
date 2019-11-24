@@ -15,9 +15,7 @@ import FanapPodAsyncSDK
 extension Chat {
     
     func responseOfRemoveParticipant(withMessage message: ChatMessage) {
-        /*
-         *
-         *
+        /**
          *
          */
         log.verbose("Message of type 'REMOVE_PARTICIPANT' recieved", context: "Chat")
@@ -30,6 +28,14 @@ extension Chat {
                                           resultAsString:   nil,
                                           contentCount:     message.contentCount,
                                           subjectId:        message.subjectId)
+        
+        if let threadId = message.subjectId {
+            delegate?.threadEvents(type: ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME, result: threadId)
+            if let conAsJSON = message.content?.convertToJSON() {
+                let conversation = Conversation(messageContent: conAsJSON)
+                delegate?.threadEvents(type: ThreadEventTypes.THREAD_REMOVE_PARTICIPANTS, result: conversation)
+            }
+        }
         
         if enableCache {
             var participantIds = [Int]()
@@ -50,21 +56,10 @@ extension Chat {
             }) { _ in }
             Chat.map.removeValue(forKey: message.uniqueId)
         }
-        //            let threadIds = threadId
-        //            let paramsToSend: JSON = ["threadIds": message.subjectId ?? 0]
-        //            getThreads(params: paramsToSend, uniqueId: { _ in }) { (myResponse) in
-        //                let myResponseModel: GetThreadsModel = myResponse as! GetThreadsModel
-        //                let myResponseJSON: JSON = myResponseModel.returnDataAsJSON()
-        //                let threads = myResponseJSON["result"]["threads"].arrayValue
-        //
-        //                let result: JSON = ["thread": threads[0]]
-        ////                self.delegate?.threadEvents(type: ThreadEventTypes.removeParticipant, result: result)
-        ////                self.delegate?.threadEvents(type: ThreadEventTypes.lastActivityTime, result: result)
-        //            }
         
     }
     
-    // ToDo: put the update cache to the upward function
+    
     public class RemoveParticipantsCallback: CallbackProtocol {
         
         var sendParams: SendChatMessageVO
@@ -76,9 +71,7 @@ extension Chat {
                               response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
-            /*
-             *
-             *
+            /**
              *
              */
             log.verbose("RemoveParticipantsCallback", context: "Chat")
@@ -88,7 +81,6 @@ extension Chat {
                 var removeParticipantsArray = [Participant]()
                 for item in arrayContent {
                     let myParticipant = Participant(messageContent: item, threadId: sendParams.subjectId)
-//                    Chat.cacheDB.deleteParticipant(inThread: sendParams["subjectId"].intValue, withParticipantIds: [myParticipant.id!])
                     removeParticipantsArray.append(myParticipant)
                 }
                 

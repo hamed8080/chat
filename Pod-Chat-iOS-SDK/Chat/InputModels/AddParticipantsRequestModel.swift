@@ -10,8 +10,9 @@ import Foundation
 
 open class AddParticipantsRequestModel {
     
-    public let contacts:            [Int]
-    public let threadId:            Int
+    public let contacts:            [Int]   //
+    public let threadId:            Int     // 
+    
     public let requestTypeCode:     String?
     public let requestUniqueId:     String?
     

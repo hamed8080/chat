@@ -15,7 +15,8 @@ import FanapPodAsyncSDK
 extension Chat {
     
     func responseOfOnSendMessage(withMessage message: ChatMessage) {
-        /*
+        /**
+         *
          *  -> check if we have saves the message uniqueId on the "mapOnSent" property
          *  -> if yes: (means we send this request and waiting for the response of it)
          *      -> check if Cache is enabled by the user
@@ -33,17 +34,11 @@ extension Chat {
                                           resultAsString:   message.content,
                                           contentCount:     nil,
                                           subjectId:        message.subjectId)
-        //                .returnJSON()
         
         delegate?.messageEvents(type: MessageEventTypes.MESSAGE_SEND, result: returnData)
         
         if enableCache {
             if let _ = message.subjectId {
-                //                    let theMessage = Message(threadId: msg, pushMessageVO: msg)
-                //                    Chat.cacheDB.saveMessageObjects(messages: [theMessage], getHistoryParams: nil)
-                
-                // ToDo: update cache that this message was sent
-                
                 // the response from server is come correctly, so this message will be removed from wait queue
                 Chat.cacheDB.deleteWaitTextMessage(uniqueId: message.uniqueId)
                 Chat.cacheDB.deleteWaitFileMessage(uniqueId: message.uniqueId)
@@ -63,7 +58,8 @@ extension Chat {
     }
     
     func responseOfOnDeliveredMessage(withMessage message: ChatMessage) {
-        /*
+        /**
+         *
          *  -> check if we have saves the message uniqueId on the "mapOnDeliver" property
          *  -> check if we can find the threadId inside the "mapOnDeliver" array
          *      -> yes:
@@ -72,7 +68,6 @@ extension Chat {
          *          call the "onDeliver", which will send callback to creatThreadWithMessage function (by using "sendCallbackToUserOnDeliver")
          *
          *  -> check the messages that are inside the mapOnDeliver threadId, and send mapOnDeliver for all of them that have been send befor this message
-         *
          *
          */
         log.verbose("Message of type 'DELIVERY' recieved", context: "Chat")
@@ -105,7 +100,7 @@ extension Chat {
                 }
             }
         } else {
-            /*
+            /**
              in situation that Create Thread with send Message, this part will execute,
              because at the beginnig of creating the thread, we don't have the ThreadID
              that we are creating,
@@ -151,7 +146,8 @@ extension Chat {
     }
     
     func responseOfOnSeenMessage(withMessage message: ChatMessage) {
-        /*
+        /**
+         *
          *  -> check if we have saves the message uniqueId on the "mapOnSeen" property
          *  -> check if we can find the threadId inside the "mapOnSeen" array
          *      -> yes:
@@ -160,7 +156,6 @@ extension Chat {
          *          call the "onSeen", which will send callback to creatThreadWithMessage function (by using "sendCallbackToUserOnSeen")
          *
          *  -> check the messages that are inside the mapOnSeen threadId, and send mapSeen for all of them that have been send befor this message
-         *
          *
          */
         log.verbose("Message of type 'SEEN' recieved", context: "Chat")
@@ -193,7 +188,7 @@ extension Chat {
                 }
             }
         } else {
-            /*
+            /**
              in situation that Create Thread with send Message, this part will execute,
              because at the beginnig of creating the thread, we don't have the ThreadId
              that we are creating,
@@ -245,7 +240,8 @@ extension Chat {
         func onSent(uID:        String,
                     response:   CreateReturnData,
                     success:    @escaping callbackTypeAlias) {
-            /*
+            /**
+             *
              *  -> check if response hasError or not
              *      -> if yes, create the "SendMessageModel"
              *      -> send the "SendMessageModel" as a callback
@@ -267,41 +263,13 @@ extension Chat {
                 
                 success(message)
             }
-            
-            /*
-            // save this Message on the cache
-            // first check if the sendParams threadId is the same as threadId of the Server response, then we will update the cache
-            // there is an exeption: when we create thread an send message simultanusly, at first we don't have the threadId, to in this situation we have nothing as threadId in the sendParams, so we get the respose subjectId and save the response on the cache
-            if (sendParams.subjectId == response["subjectId"].int) || (sendParams.isCreateThreadAndSendMessage == true) {
-                let msg = sendParams.content
-                let strWithReturn = msg?.replacingOccurrences(of: "Ⓝ", with: "\n")
-                let strWithSpace = strWithReturn?.replacingOccurrences(of: "Ⓢ", with: " ")
-                let messageContent = strWithSpace?.replacingOccurrences(of: "Ⓣ", with: "\t")
-                
-                let message = Message(threadId: response["subjectId"].int, pushMessageVO: response)
-                message.message = messageContent
-                message.metaData = sendParams.metaData
-                message.id = Int(response["content"].stringValue)
-                
-                Chat.cacheDB.saveMessageObjects(messages: [message], getHistoryParams: nil)
-                
-                // the response from server is come correctly, so this message will be removed from wait queue
-                if let uID = message.uniqueId {
-                    Chat.cacheDB.deleteWaitTextMessage(uniqueId: uID)
-                    Chat.cacheDB.deleteWaitFileMessage(uniqueId: uID)
-                    Chat.cacheDB.deleteWaitForwardMessage(uniqueId: uID)
-                }
-            }
-            
-            success(response)
-            */
-            
         }
         
         func onDeliver(uID:         String,
                        response:    CreateReturnData,
                        success:     @escaping callbackTypeAlias) {
-            /*
+            /**
+             *
              *  -> check if response hasError or not
              *      -> if yes, create the "SendMessageModel"
              *      -> send the "SendMessageModel" as a callback
@@ -321,14 +289,13 @@ extension Chat {
                                                participantId:   response.result?["participantId"].int)
                 success(message)
             }
-            
-//            success(response)
         }
         
         func onSeen(uID:        String,
                     response:   CreateReturnData,
                     success:    @escaping callbackTypeAlias) {
-            /*
+            /**
+             *
              *  -> check if response hasError or not
              *      -> if yes, create the "SendMessageModel"
              *      -> send the "SendMessageModel" as a callback
@@ -348,8 +315,6 @@ extension Chat {
                                                participantId:   response.result?["participantId"].int)
                 success(message)
             }
-            
-//            success(response)
         }
         
     }

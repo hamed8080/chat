@@ -7,7 +7,6 @@
 //
 
 import Foundation
-
 import SwiftyJSON
 
 
@@ -17,6 +16,7 @@ open class EditTextMessageRequestModel {
     public let metaData:            JSON?
     public let repliedTo:           Int?
     public let subjectId:           Int
+    
     public let requestTypeCode:     String?
     public let requestUniqueId:     String?
     

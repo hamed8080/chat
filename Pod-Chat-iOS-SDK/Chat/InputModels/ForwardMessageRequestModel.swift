@@ -16,6 +16,7 @@ open class ForwardMessageRequestModel {
     public let metaData:        JSON?
     public let repliedTo:       Int?
     public let subjectId:       Int
+    
     public let requestTypeCode: String?
     
     public init(messageIds:         [Int],

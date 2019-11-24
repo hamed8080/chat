@@ -15,16 +15,32 @@ import FanapPodAsyncSDK
 extension Chat {
     
     func responseOfCreateThread(withMessage message: ChatMessage) {
-        /*
-         *  -> check if we have saves the message uniqueId on the "map" property
+        /**
+         *
+         *  -> send "THREAD_NEW" event to user
+         *
+         *  -> check if Cache is enabled by the user
+         *      -> if yes, save the income Data to the Cache
+         *
+         *  -> check if we have saved the message uniqueId on the "map" property
          *      -> if yes: (means we send this request and waiting for the response of it)
          *          -> create the "CreateReturnData" variable
-         *          -> check if Cache is enabled by the user
-         *              -> if yes, save the income Data to the Cache
          *          -> call the "onResultCallback" which will send callback to createThread function (by using "createThreadCallbackToUser")
          *
          */
         log.verbose("Message of type 'CREATE_THREAD' recieved", context: "Chat")
+        
+        if let contentAsJSON = message.content?.convertToJSON() {
+            let conversationModel = Conversation(messageContent: contentAsJSON)
+            delegate?.threadEvents(type: ThreadEventTypes.THREAD_NEW, result: conversationModel)
+        }
+        
+        if enableCache {
+            if let threadJSON = message.content?.convertToJSON() {
+                let myThread = Conversation(messageContent: threadJSON)
+                Chat.cacheDB.saveThread(withThreadObjects: [myThread])
+            }
+        }
         
         let returnData = CreateReturnData(hasError:         false,
                                           errorMessage:     "",
@@ -34,13 +50,6 @@ extension Chat {
                                           resultAsString:   nil,
                                           contentCount:     message.contentCount,
                                           subjectId:        message.subjectId)
-        
-        if enableCache {
-            if let threadJSON = message.content?.convertToJSON() {
-                let myThread = Conversation(messageContent: threadJSON)
-                Chat.cacheDB.saveThread(withThreadObjects: [myThread])
-            }
-        }
         
         if Chat.map[message.uniqueId] != nil {
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
@@ -61,7 +70,7 @@ extension Chat {
                               response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
-            /*
+            /**
              *  -> check if response hasError or not
              *      -> if no, create the "ThreadModel"
              *      -> send the "ThreadModel" as a callback

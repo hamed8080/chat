@@ -18,6 +18,7 @@ open class SendTextMessageRequestModel {
     public let repliedTo:       Int?
     public let systemMetadata:  JSON?
     public let threadId:        Int
+    
     public let requestTypeCode: String?
     public let requestUniqueId: String?
     
@@ -34,6 +35,37 @@ open class SendTextMessageRequestModel {
         self.repliedTo          = repliedTo
         self.systemMetadata     = systemMetadata
         self.threadId           = threadId
+        self.requestTypeCode    = requestTypeCode
+        self.requestUniqueId    = requestUniqueId
+    }
+    
+}
+
+
+open class SendBotMessageRequestModel {
+    
+    public let content:         String
+    public let metaData:        JSON
+    public let repliedTo:       Int?
+    public let systemMetadata:  JSON?
+    public let receiver:        Int
+    
+    public let requestTypeCode: String?
+    public let requestUniqueId: String?
+    
+    public init(content:            String,
+                metaData:           JSON,
+                repliedTo:          Int?,
+                systemMetadata:     JSON?,
+                receiver:           Int,
+                requestTypeCode:    String?,
+                requestUniqueId:    String?) {
+        
+        self.content            = content
+        self.metaData           = metaData
+        self.repliedTo          = repliedTo
+        self.systemMetadata     = systemMetadata
+        self.receiver           = receiver
         self.requestTypeCode    = requestTypeCode
         self.requestUniqueId    = requestUniqueId
     }

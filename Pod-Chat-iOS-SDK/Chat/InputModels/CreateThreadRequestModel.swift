@@ -16,6 +16,8 @@ open class CreateThreadRequestModel {
     public let metadata:        String?
     public let title:           String
     public let type:            ThreadTypes?
+    
+    public let requestTypeCode: String?
     public let requestUniqueId: String?
     
     public init(description:        String?,
@@ -24,6 +26,7 @@ open class CreateThreadRequestModel {
                 metadata:           String?,
                 title:              String,
                 type:               ThreadTypes?,
+                requestTypeCode:    String?,
                 requestUniqueId:    String?) {
         
         self.description        = description
@@ -32,6 +35,7 @@ open class CreateThreadRequestModel {
         self.metadata           = metadata
         self.title              = title
         self.type               = type
+        self.requestTypeCode    = requestTypeCode
         self.requestUniqueId    = requestUniqueId
     }
     

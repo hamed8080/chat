@@ -26,10 +26,28 @@ extension Chat {
                                           contentCount:     message.contentCount,
                                           subjectId:        message.subjectId)
         
+        if let conAsJSON = message.content?.convertToJSON() {
+            let conversation = Conversation(messageContent: conAsJSON)
+            if let _ = conversation.title {
+                delegate?.threadEvents(type: ThreadEventTypes.THREAD_LEAVE_PARTICIPANT, result: conversation)
+            } else {
+                delegate?.threadEvents(type: ThreadEventTypes.THREAD_LEAVE_PARTICIPANT, result: conversation.id!)
+            }
+        }
+        
         if enableCache {
             if let threadJSON = message.content?.convertToJSON() {
-                let myThread = Conversation(messageContent: threadJSON)
-                Chat.cacheDB.deleteThreads(withThreadIds: [myThread.id!])
+                let conversation = Conversation(messageContent: threadJSON)
+                if let _ = conversation.title {
+                    var participantIds = [Int]()
+                    for participant in conversation.participants ?? [] {
+                        let myParticipant = Participant(messageContent: participant.formatToJSON(), threadId: message.subjectId)
+                        participantIds.append(myParticipant.id!)
+                    }
+                    Chat.cacheDB.deleteParticipant(inThread: message.subjectId!, withParticipantIds: participantIds)
+                } else {
+                    Chat.cacheDB.deleteThreads(withThreadIds: [conversation.id!])
+                }
             }
         }
         
@@ -55,27 +73,6 @@ extension Chat {
             }
         }
         
-        // this functionality has beed deprecated
-        /*
-         let threadIds = messageContent["id"].intValue
-         let paramsToSend: JSON = ["threadIds": threadIds]
-         getThreads(params: paramsToSend, uniqueId: { _ in }) { (response) in
-         
-         let responseModel: GetThreadsModel = response as! GetThreadsModel
-         let responseJSON: JSON = responseModel.returnDataAsJSON()
-         let threads = responseJSON["result"]["threads"].array
-         
-         if let myThreads = threads {
-         let result: JSON = ["thread": myThreads[0]]
-         self.delegate?.threadEvents(type: "THREAD_LEAVE_PARTICIPANT", result: result)
-         self.delegate?.threadEvents(type: "THREAD_LAST_ACTIVITY_TIME", result: result)
-         } else {
-         let result: JSON = ["threadId": threadId]
-         self.delegate?.threadEvents(type: "THREAD_LEAVE_PARTICIPANT", result: result)
-         }
-         
-         }
-         */
     }
     
     public class LeaveThreadCallbacks: CallbackProtocol {
@@ -83,8 +80,7 @@ extension Chat {
                               response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
-            /*
-             *
+            /**
              *
              */
             log.verbose("LeaveThreadCallbacks", context: "Chat")
@@ -94,7 +90,6 @@ extension Chat {
                                                    hasError:          response.hasError,
                                                    errorMessage:      response.errorMessage,
                                                    errorCode:         response.errorCode)
-                
                 success(leaveThreadModel)
             }
         }

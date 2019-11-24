@@ -11,6 +11,7 @@ import Foundation
 open class MuteAndUnmuteThreadRequestModel {
     
     public let subjectId:       Int
+    
     public let requestTypeCode: String?
     public let requestUniqueId: String?
     

@@ -12,6 +12,7 @@ open class RemoveParticipantsRequestModel {
     
     public let participantIds:  [Int]
     public let threadId:        Int
+    
     public let requestTypeCode: String?
     public let requestUniqueId: String?
     

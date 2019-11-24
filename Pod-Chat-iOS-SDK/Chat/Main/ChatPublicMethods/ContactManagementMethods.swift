@@ -214,9 +214,9 @@ extension Chat {
         if let email = searchContactsInput.email {
             params["email"] = JSON(email)
         }
-//        if let typeCode_ = searchContactsInput.requestTypeCode {
-//            params["typeCode"] = JSON(typeCode_)
-//        }
+        if let typeCode_ = searchContactsInput.requestTypeCode {
+            params["typeCode"] = JSON(typeCode_)
+        }
         
         Networking.sharedInstance.requesttWithJSONresponse(from:            url,
                                                            withMethod:      method,
@@ -309,9 +309,9 @@ extension Chat {
         params["cellphoneNumber"]   = JSON(addContactsInput.cellphoneNumber ?? "")
         params["email"]             = JSON(addContactsInput.email ?? "")
         params["uniqueId"]          = JSON(messageUniqueId)
-//        if let typeCode_ = addContactsInput.requestTypeCode {
-//            params["typeCode"] = JSON(typeCode_)
-//        }
+        if let typeCode_ = addContactsInput.requestTypeCode {
+            params["typeCode"] = JSON(typeCode_)
+        }
         
         Networking.sharedInstance.requesttWithJSONresponse(from:            url,
                                                            withMethod:      method,
@@ -394,9 +394,9 @@ extension Chat {
         params["lastName"]        = JSON(updateContactsInput.lastName)
         params["cellphoneNumber"] = JSON(updateContactsInput.cellphoneNumber)
         params["email"]           = JSON(updateContactsInput.email)
-//        if let typeCode_ = updateContactsInput.requestTypeCode {
-//            params["typeCode"] = JSON(typeCode_)
-//        }
+        if let typeCode_ = updateContactsInput.requestTypeCode {
+            params["typeCode"] = JSON(typeCode_)
+        }
         
         Networking.sharedInstance.requesttWithJSONresponse(from:            url,
                                                            withMethod:      method,
@@ -468,9 +468,9 @@ extension Chat {
         
         var params: Parameters = [:]
         params["id"] = JSON(removeContactsInput.contactId)
-//        if let typeCode_ = removeContactsInput.requestTypeCode {
-//            params["typeCode"] = JSON(typeCode_)
-//        }
+        if let typeCode_ = removeContactsInput.requestTypeCode {
+            params["typeCode"] = JSON(typeCode_)
+        }
         
         Networking.sharedInstance.requesttWithJSONresponse(from:            url,
                                                            withMethod:      method,
