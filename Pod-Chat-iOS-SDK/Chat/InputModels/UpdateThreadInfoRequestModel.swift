@@ -19,24 +19,24 @@ open class UpdateThreadInfoRequestModel {
     public let threadId:        Int     // Id of thread
     public let title:           String? // New Title for thread
     
-    public let requestTypeCode: String?
-    public let requestUniqueId: String?
+    public let typeCode:        String?
+    public let uniqueId:        String?
     
     public init(description:        String?,
                 image:              String?,
                 metadata:           JSON?,
                 threadId:           Int,
                 title:              String,
-                requestTypeCode:    String?,
-                requestUniqueId:    String?) {
+                typeCode:           String?,
+                uniqueId:           String?) {
         
-        self.description        = description
-        self.image              = image
-        self.metadata           = metadata
-        self.threadId           = threadId
-        self.title              = title
-        self.requestTypeCode    = requestTypeCode
-        self.requestUniqueId    = requestUniqueId
+        self.description    = description
+        self.image          = image
+        self.metadata       = metadata
+        self.threadId       = threadId
+        self.title          = title
+        self.typeCode       = typeCode
+        self.uniqueId       = uniqueId
     }
     
     func convertContentToJSON() -> JSON {

@@ -10,27 +10,27 @@ import SwiftyJSON
 
 open class UnblockContactsRequestModel {
     
-    public let blockId:         Int?
-    public let contactId:       Int?
-    public let threadId:        Int?
-    public let userId:          Int?
+    public let blockId:     Int?
+    public let contactId:   Int?
+    public let threadId:    Int?
+    public let userId:      Int?
     
-    public let requestTypeCode: String?
-    public let requestUniqueId: String?
+    public let typeCode:    String?
+    public let uniqueId:    String?
     
-    public init(blockId:            Int?,
-                contactId:          Int?,
-                threadId:           Int?,
-                userId:             Int?,
-                requestTypeCode:    String?,
-                requestUniqueId:    String?) {
+    public init(blockId:    Int?,
+                contactId:  Int?,
+                threadId:   Int?,
+                userId:     Int?,
+                typeCode:   String?,
+                uniqueId:   String?) {
         
-        self.blockId            = blockId
-        self.contactId          = contactId
-        self.threadId           = threadId
-        self.userId             = userId
-        self.requestTypeCode    = requestTypeCode
-        self.requestUniqueId    = requestUniqueId
+        self.blockId    = blockId
+        self.contactId  = contactId
+        self.threadId   = threadId
+        self.userId     = userId
+        self.typeCode   = typeCode
+        self.uniqueId   = uniqueId
     }
     
     func convertContentToJSON() -> JSON {

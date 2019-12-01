@@ -28,8 +28,8 @@ open class GetHistoryRequestModel {
     public let uniqueIds:           [String]?   // Array of unique ids to retrieve
     public let userId:              Int?        // Messages of this SSO User
     
-    public let requestTypeCode:     String?
-    public let requestUniqueId:     String?
+    public let typeCode:            String?
+    public let uniqueId:            String?
     
 //    public let fromTimeNanos:            UInt?   //
 //    public let toTimeNanos:              UInt?   //
@@ -49,8 +49,8 @@ open class GetHistoryRequestModel {
                 toTime:             UInt?,
                 uniqueIds:          [String]?,
                 userId:             Int?,
-                requestTypeCode:    String?,
-                requestUniqueId:    String?) {
+                typeCode:           String?,
+                uniqueId:           String?) {
         
         self.count              = count
 //        self.firstMessageId     = firstMessageId
@@ -67,8 +67,8 @@ open class GetHistoryRequestModel {
         self.toTime             = toTime
         self.uniqueIds          = uniqueIds
         self.userId             = userId
-        self.requestTypeCode    = requestTypeCode
-        self.requestUniqueId    = requestUniqueId
+        self.typeCode           = typeCode
+        self.uniqueId           = uniqueId
     }
     
     func convertContentToJSON() -> JSON {

@@ -75,8 +75,8 @@ extension Chat {
                                             subjectId:          nil,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           getContactsInput.requestTypeCode ?? generalTypeCode,
-                                            uniqueId:           getContactsInput.requestUniqueId ?? generateUUID(),
+                                            typeCode:           getContactsInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           getContactsInput.typeCode ?? generateUUID(),
                                             isCreateThreadAndSendMessage: true)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -149,7 +149,7 @@ extension Chat {
          */
         log.verbose("Try to request to search contact with this parameters: \n \(searchContactsInput)", context: "Chat")
         
-        let requestUniqueId = searchContactsInput.requestUniqueId ?? generateUUID()
+        let requestUniqueId = searchContactsInput.uniqueId ?? generateUUID()
         uniqueId(requestUniqueId)
         
         if enableCache {
@@ -214,7 +214,7 @@ extension Chat {
         if let email = searchContactsInput.email {
             params["email"] = JSON(email)
         }
-        if let typeCode_ = searchContactsInput.requestTypeCode {
+        if let typeCode_ = searchContactsInput.typeCode {
             params["typeCode"] = JSON(typeCode_)
         }
         
@@ -267,7 +267,7 @@ extension Chat {
          */
         log.verbose("Try to request to add contact with this parameters: \n \(addContactsInput)", context: "Chat")
         
-        let messageUniqueId: String = addContactsInput.requestUniqueId ?? generateUUID()
+        let messageUniqueId: String = addContactsInput.uniqueId ?? generateUUID()
         uniqueId(messageUniqueId)
         
         sendAddContactRequest(addContactsInput: addContactsInput,
@@ -309,7 +309,7 @@ extension Chat {
         params["cellphoneNumber"]   = JSON(addContactsInput.cellphoneNumber ?? "")
         params["email"]             = JSON(addContactsInput.email ?? "")
         params["uniqueId"]          = JSON(messageUniqueId)
-        if let typeCode_ = addContactsInput.requestTypeCode {
+        if let typeCode_ = addContactsInput.typeCode {
             params["typeCode"] = JSON(typeCode_)
         }
         
@@ -370,7 +370,7 @@ extension Chat {
         log.verbose("Try to request to update contact with this parameters: \n \(updateContactsInput)", context: "Chat")
         
         
-        let messageUniqueId: String = updateContactsInput.requestUniqueId ?? generateUUID()
+        let messageUniqueId: String = updateContactsInput.uniqueId ?? generateUUID()
         uniqueId(messageUniqueId)
         
         sendUpdateContactRequest(updateContactsInput: updateContactsInput)
@@ -394,7 +394,7 @@ extension Chat {
         params["lastName"]        = JSON(updateContactsInput.lastName)
         params["cellphoneNumber"] = JSON(updateContactsInput.cellphoneNumber)
         params["email"]           = JSON(updateContactsInput.email)
-        if let typeCode_ = updateContactsInput.requestTypeCode {
+        if let typeCode_ = updateContactsInput.typeCode {
             params["typeCode"] = JSON(typeCode_)
         }
         
@@ -436,7 +436,7 @@ extension Chat {
          */
         log.verbose("Try to request to remove contact with this parameters: \n \(removeContactsInput)", context: "Chat")
         
-        let requestUniqueId: String = removeContactsInput.requestUniqueId ?? generateUUID()
+        let requestUniqueId: String = removeContactsInput.uniqueId ?? generateUUID()
         uniqueId(requestUniqueId)
         
         sendRemoveContactRequest(removeContactsInput: removeContactsInput)
@@ -468,7 +468,7 @@ extension Chat {
         
         var params: Parameters = [:]
         params["id"] = JSON(removeContactsInput.contactId)
-        if let typeCode_ = removeContactsInput.requestTypeCode {
+        if let typeCode_ = removeContactsInput.typeCode {
             params["typeCode"] = JSON(typeCode_)
         }
         
@@ -538,8 +538,8 @@ extension Chat {
                                             subjectId:          nil,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           blockContactsInput.requestTypeCode ?? generalTypeCode,
-                                            uniqueId:           blockContactsInput.requestUniqueId ?? generateUUID(),
+                                            typeCode:           blockContactsInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           blockContactsInput.uniqueId ?? generateUUID(),
                                             isCreateThreadAndSendMessage: true)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -607,8 +607,8 @@ extension Chat {
                                             subjectId:          nil,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           getBlockedContactsInput.requestTypeCode ?? generalTypeCode,
-                                            uniqueId:           getBlockedContactsInput.requestUniqueId ?? generateUUID(),
+                                            typeCode:           getBlockedContactsInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           getBlockedContactsInput.uniqueId ?? generateUUID(),
                                             isCreateThreadAndSendMessage: true)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -676,8 +676,8 @@ extension Chat {
                                             subjectId:          unblockContactsInput.blockId,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           unblockContactsInput.requestTypeCode ?? generalTypeCode,
-                                            uniqueId:           unblockContactsInput.requestUniqueId ?? generateUUID(),
+                                            typeCode:           unblockContactsInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           unblockContactsInput.uniqueId ?? generateUUID(),
                                             isCreateThreadAndSendMessage: true)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -752,8 +752,8 @@ extension Chat {
                                                               email:            emailAddress as String?,
                                                               firstName:        firstName,
                                                               lastName:         lastName,
-                                                              requestTypeCode:  nil,
-                                                              requestUniqueId:  nil)
+                                                              typeCode:         nil,
+                                                              uniqueId:         nil)
                         phoneContacts.append(contact)
                     })
                 } catch {

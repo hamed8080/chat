@@ -19,24 +19,24 @@ open class SendTextMessageRequestModel {
     public let systemMetadata:  JSON?
     public let threadId:        Int
     
-    public let requestTypeCode: String?
-    public let requestUniqueId: String?
+    public let typeCode: String?
+    public let uniqueId: String?
     
-    public init(content:            String,
-                metaData:           JSON?,
-                repliedTo:          Int?,
-                systemMetadata:     JSON?,
-                threadId:           Int,
-                requestTypeCode:    String?,
-                requestUniqueId:    String?) {
+    public init(content:        String,
+                metaData:       JSON?,
+                repliedTo:      Int?,
+                systemMetadata: JSON?,
+                threadId:       Int,
+                typeCode:       String?,
+                uniqueId:       String?) {
         
-        self.content            = content
-        self.metaData           = metaData
-        self.repliedTo          = repliedTo
-        self.systemMetadata     = systemMetadata
-        self.threadId           = threadId
-        self.requestTypeCode    = requestTypeCode
-        self.requestUniqueId    = requestUniqueId
+        self.content        = content
+        self.metaData       = metaData
+        self.repliedTo      = repliedTo
+        self.systemMetadata = systemMetadata
+        self.threadId       = threadId
+        self.typeCode       = typeCode
+        self.uniqueId       = uniqueId
     }
     
 }
@@ -50,24 +50,24 @@ open class SendBotMessageRequestModel {
     public let systemMetadata:  JSON?
     public let receiver:        Int
     
-    public let requestTypeCode: String?
-    public let requestUniqueId: String?
+    public let typeCode:        String?
+    public let uniqueId:        String?
     
-    public init(content:            String,
-                metaData:           JSON,
-                repliedTo:          Int?,
-                systemMetadata:     JSON?,
-                receiver:           Int,
-                requestTypeCode:    String?,
-                requestUniqueId:    String?) {
+    public init(content:        String,
+                metaData:       JSON,
+                repliedTo:      Int?,
+                systemMetadata: JSON?,
+                receiver:       Int,
+                typeCode:       String?,
+                uniqueId:       String?) {
         
-        self.content            = content
-        self.metaData           = metaData
-        self.repliedTo          = repliedTo
-        self.systemMetadata     = systemMetadata
-        self.receiver           = receiver
-        self.requestTypeCode    = requestTypeCode
-        self.requestUniqueId    = requestUniqueId
+        self.content        = content
+        self.metaData       = metaData
+        self.repliedTo      = repliedTo
+        self.systemMetadata = systemMetadata
+        self.receiver       = receiver
+        self.typeCode       = typeCode
+        self.uniqueId       = uniqueId
     }
     
 }

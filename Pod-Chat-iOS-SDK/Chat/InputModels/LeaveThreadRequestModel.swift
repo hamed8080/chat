@@ -11,20 +11,21 @@ import Foundation
 open class LeaveThreadRequestModel {
     
 //    public let content:         [Int]?
-    public let threadId:        Int
-    public let requestTypeCode: String?
-    public let requestUniqueId: String?
+    public let threadId:    Int
+    
+    public let typeCode:    String?
+    public let uniqueId:    String?
     
     public init(
 //                content:            [Int]?,
-                threadId:           Int,
-                requestTypeCode:    String?,
-                requestUniqueId:    String?) {
+                threadId:   Int,
+                typeCode:   String?,
+                uniqueId:   String?) {
         
 //        self.content            = content
-        self.threadId           = threadId
-        self.requestTypeCode    = requestTypeCode
-        self.requestUniqueId    = requestUniqueId
+        self.threadId   = threadId
+        self.typeCode   = typeCode
+        self.uniqueId   = uniqueId
     }
     
 }

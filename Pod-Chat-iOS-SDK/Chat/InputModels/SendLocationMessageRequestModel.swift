@@ -33,8 +33,8 @@ open class SendLocationMessageRequestModel {
     public let sendMessageRepliedTo:   Int?
     public let sendMessageTypeCode:    String?
     
-    public let requestTypeCode:         String?
-    public let requestUniqueId:         String?
+    public let typeCode:         String?
+    public let uniqueId:         String?
     
     public init(mapStaticCenterLat:     Double,
                 mapStaticCenterLng:     Double,
@@ -52,8 +52,8 @@ open class SendLocationMessageRequestModel {
                 sendMessageMetaData:    JSON?,
                 sendMessageRepliedTo:   Int?,
                 sendMessageTypeCode:    String?,
-                requestTypeCode:        String?,
-                requestUniqueId:        String?) {
+                typeCode:               String?,
+                uniqueId:               String?) {
         
         self.mapStaticCenterLat     = mapStaticCenterLat
         self.mapStaticCenterLng     = mapStaticCenterLng
@@ -73,8 +73,8 @@ open class SendLocationMessageRequestModel {
         self.sendMessageMetaData    = sendMessageMetaData
         self.sendMessageRepliedTo   = sendMessageRepliedTo
         self.sendMessageTypeCode    = sendMessageTypeCode
-        self.requestTypeCode        = requestTypeCode
-        self.requestUniqueId        = requestUniqueId
+        self.typeCode               = typeCode
+        self.uniqueId               = uniqueId
     }
     
 }

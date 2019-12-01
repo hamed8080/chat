@@ -40,7 +40,7 @@ extension Chat {
                             completion:         @escaping callbackTypeAlias) {
         log.verbose("Try to upload image with this parameters: \n \(uploadImageInput)", context: "Chat")
         
-        uniqueId(uploadImageInput.requestUniqueId)
+        uniqueId(uploadImageInput.uniqueId)
         
         if enableCache {
             /**
@@ -55,7 +55,7 @@ extension Chat {
                                                                           fileSize:           uploadImageInput.fileSize,
                                                                           originalFileName:   uploadImageInput.originalFileName,
                                                                           threadId:           uploadImageInput.threadId,
-                                                                          uniqueId:           uploadImageInput.requestUniqueId,
+                                                                          uniqueId:           uploadImageInput.uniqueId,
                                                                           xC:                 uploadImageInput.xC,
                                                                           yC:                 uploadImageInput.yC,
                                                                           hC:                 uploadImageInput.hC,
@@ -99,7 +99,7 @@ extension Chat {
                                          isImage:           true,
                                          isFile:            false,
                                          dataToSend:        uploadImageInput.dataToSend,
-                                         requestUniqueId:   uploadImageInput.requestUniqueId,
+                                         uniqueId:          uploadImageInput.uniqueId,
                                          progress: { (myProgress) in
                                             progress(myProgress)
         }) { (response) in
@@ -115,7 +115,7 @@ extension Chat {
                     // save data comes from server to the Cache
                     let uploadImageFile = UploadImage(messageContent: resultData)
                     Chat.cacheDB.saveUploadImage(imageInfo: uploadImageFile, imageData: uploadImageInput.dataToSend)
-                    Chat.cacheDB.deleteWaitUploadImages(uniqueId: uploadImageInput.requestUniqueId)
+                    Chat.cacheDB.deleteWaitUploadImages(uniqueId: uploadImageInput.uniqueId)
                 }
                 
                 let uploadImageModel = UploadImageModel(messageContentJSON: resultData,
@@ -151,7 +151,7 @@ extension Chat {
                            completion:      @escaping callbackTypeAlias) {
         log.verbose("Try to upload file with this parameters: \n \(uploadFileInput)", context: "Chat")
         
-        uniqueId(uploadFileInput.requestUniqueId)
+        uniqueId(uploadFileInput.uniqueId)
         
         if enableCache {
             /*
@@ -166,7 +166,7 @@ extension Chat {
                                                                          fileSize:          uploadFileInput.fileSize,
                                                                          originalFileName:  uploadFileInput.originalFileName,
                                                                          threadId:          uploadFileInput.threadId,
-                                                                         requestUniqueId:   uploadFileInput.requestUniqueId)
+                                                                         uniqueId:          uploadFileInput.uniqueId)
             Chat.cacheDB.saveUploadFileToWaitQueue(file: messageObjectToSendToQueue)
         }
         
@@ -242,7 +242,7 @@ extension Chat {
                                          isImage:           false,
                                          isFile:            true,
                                          dataToSend:        uploadFileInput.dataToSend,
-                                         requestUniqueId:   uploadFileInput.requestUniqueId,
+                                         uniqueId:          uploadFileInput.uniqueId,
                                          progress: { (myProgress) in
                                             progress(myProgress)
         }) { (response) in
@@ -259,7 +259,7 @@ extension Chat {
                     // save data comes from server to the Cache
                     let uploadFileFile = UploadFile(messageContent: resultData)
                     Chat.cacheDB.saveUploadFile(fileInfo: uploadFileFile, fileData: uploadFileInput.dataToSend)
-                    Chat.cacheDB.deleteWaitUploadFiles(uniqueId: uploadFileInput.requestUniqueId)
+                    Chat.cacheDB.deleteWaitUploadFiles(uniqueId: uploadFileInput.uniqueId)
                 }
                 
                 let uploadFileModel = UploadFileModel(messageContentJSON:   resultData,

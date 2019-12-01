@@ -63,8 +63,8 @@ extension Chat {
                                             subjectId:          getHistoryInput.threadId,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           getHistoryInput.requestTypeCode ?? generalTypeCode,
-                                            uniqueId:           getHistoryInput.requestUniqueId ?? generateUUID(),
+                                            typeCode:           getHistoryInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           getHistoryInput.uniqueId ?? generateUUID(),
                                             isCreateThreadAndSendMessage: true)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -114,7 +114,7 @@ extension Chat {
                                                                             query:          getHistoryInput.query,
                                                                             threadId:       getHistoryInput.threadId,
                                                                             toTime:         getHistoryInput.toTime,
-                                                                            uniqueId:       getHistoryInput.requestUniqueId) {
+                                                                            uniqueId:       getHistoryInput.uniqueId) {
                 cacheResponse(cacheHistoryResult)
             }
         }
@@ -152,8 +152,8 @@ extension Chat {
                                             subjectId:          clearHistoryInput.threadId,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           clearHistoryInput.requestTypeCode ?? generalTypeCode,
-                                            uniqueId:           clearHistoryInput.requestUniqueId ?? generateUUID(),
+                                            typeCode:           clearHistoryInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           clearHistoryInput.uniqueId ?? generateUUID(),
                                             isCreateThreadAndSendMessage: true)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -204,7 +204,7 @@ extension Chat {
         sendCallbackToUserOnDeliver = onDelivere
         sendCallbackToUserOnSeen = onSeen
         
-        let tempUniqueId = sendTextMessageInput.requestUniqueId ?? generateUUID()
+        let tempUniqueId = sendTextMessageInput.uniqueId ?? generateUUID()
         
         /**
          seve this message on the Cache Wait Queue,
@@ -219,8 +219,8 @@ extension Chat {
                                                                           repliedTo:        sendTextMessageInput.repliedTo,
                                                                           systemMetadata:   sendTextMessageInput.systemMetadata,
                                                                           threadId:         sendTextMessageInput.threadId,
-                                                                          requestTypeCode:  sendTextMessageInput.requestTypeCode,
-                                                                          requestUniqueId:  tempUniqueId)
+                                                                          typeCode:         sendTextMessageInput.typeCode,
+                                                                          uniqueId:         tempUniqueId)
             Chat.cacheDB.saveTextMessageToWaitQueue(textMessage: messageObjectToSendToQueue)
         }
         
@@ -234,7 +234,7 @@ extension Chat {
                                             subjectId:          sendTextMessageInput.threadId,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           sendTextMessageInput.requestTypeCode ?? generalTypeCode,
+                                            typeCode:           sendTextMessageInput.typeCode ?? generalTypeCode,
                                             uniqueId:           tempUniqueId,
                                             isCreateThreadAndSendMessage: nil)
         
@@ -284,7 +284,7 @@ extension Chat {
         sendCallbackToUserOnDeliver = onDelivere
         sendCallbackToUserOnSeen = onSeen
         
-        let tempUniqueId = sendBotMessageInput.requestUniqueId ?? generateUUID()
+        let tempUniqueId = sendBotMessageInput.uniqueId ?? generateUUID()
         
         if enableCache {
             let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(content:          sendBotMessageInput.content,
@@ -292,8 +292,8 @@ extension Chat {
                                                                           repliedTo:        sendBotMessageInput.repliedTo,
                                                                           systemMetadata:   sendBotMessageInput.systemMetadata,
                                                                           threadId:         sendBotMessageInput.receiver,
-                                                                          requestTypeCode:  sendBotMessageInput.requestTypeCode,
-                                                                          requestUniqueId:  tempUniqueId)
+                                                                          typeCode:         sendBotMessageInput.typeCode,
+                                                                          uniqueId:         tempUniqueId)
             Chat.cacheDB.saveTextMessageToWaitQueue(textMessage: messageObjectToSendToQueue)
         }
         
@@ -307,7 +307,7 @@ extension Chat {
                                             subjectId:          sendBotMessageInput.receiver,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           sendBotMessageInput.requestTypeCode ?? generalTypeCode,
+                                            typeCode:           sendBotMessageInput.typeCode ?? generalTypeCode,
                                             uniqueId:           tempUniqueId,
                                             isCreateThreadAndSendMessage: nil)
         
@@ -351,7 +351,7 @@ extension Chat {
         
         editMessageCallbackToUser = completion
         
-        let requestUniqueId = editMessageInput.requestUniqueId ?? generateUUID()
+        let requestUniqueId = editMessageInput.uniqueId ?? generateUUID()
         
         /**
          seve this message on the Cache Wait Queue,
@@ -360,12 +360,12 @@ extension Chat {
          now user knows which messages didn't send correctly, and can handle them
          */
         if enableCache {
-            let messageObjectToSendToQueue = QueueOfWaitEditMessagesModel(content:          editMessageInput.content,
-                                                                          metaData:         editMessageInput.metaData,
-                                                                          repliedTo:        editMessageInput.repliedTo,
-                                                                          subjectId:        editMessageInput.subjectId,
-                                                                          requestTypeCode:  editMessageInput.requestTypeCode,
-                                                                          requestUniqueId:  requestUniqueId)
+            let messageObjectToSendToQueue = QueueOfWaitEditMessagesModel(content:      editMessageInput.content,
+                                                                          metaData:     editMessageInput.metaData,
+                                                                          repliedTo:    editMessageInput.repliedTo,
+                                                                          subjectId:    editMessageInput.subjectId,
+                                                                          typeCode:     editMessageInput.typeCode,
+                                                                          uniqueId:     requestUniqueId)
             Chat.cacheDB.saveEditMessageToWaitQueue(editMessage: messageObjectToSendToQueue)
         }
         
@@ -379,7 +379,7 @@ extension Chat {
                                             subjectId:          editMessageInput.subjectId,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           editMessageInput.requestTypeCode ?? generalTypeCode,
+                                            typeCode:           editMessageInput.typeCode ?? generalTypeCode,
                                             uniqueId:           requestUniqueId,
                                             isCreateThreadAndSendMessage: nil)
         
@@ -442,8 +442,8 @@ extension Chat {
                                                                           repliedTo:        replyMessageInput.repliedTo,
                                                                           systemMetadata:   nil,
                                                                           threadId:         replyMessageInput.subjectId,
-                                                                          requestTypeCode:  replyMessageInput.requestTypeCode,
-                                                                          requestUniqueId:  replyMessageInput.requestUniqueId ?? tempUniqueId)
+                                                                          typeCode:         replyMessageInput.typeCode,
+                                                                          uniqueId:         replyMessageInput.uniqueId ?? tempUniqueId)
             Chat.cacheDB.saveTextMessageToWaitQueue(textMessage: messageObjectToSendToQueue)
         }
         
@@ -457,8 +457,8 @@ extension Chat {
                                             subjectId:          replyMessageInput.subjectId,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           replyMessageInput.requestTypeCode ?? generalTypeCode,
-                                            uniqueId:           replyMessageInput.requestUniqueId ?? tempUniqueId,
+                                            typeCode:           replyMessageInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           replyMessageInput.uniqueId ?? tempUniqueId,
                                             isCreateThreadAndSendMessage: nil)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -511,12 +511,12 @@ extension Chat {
          now user knows which messages didn't send correctly, and can handle them
          */
         if enableCache {
-            let messageObjectToSendToQueue = QueueOfWaitForwardMessagesModel(messageIds:        forwardMessageInput.messageIds,
-                                                                             metaData:          forwardMessageInput.metaData,
-                                                                             repliedTo:         forwardMessageInput.repliedTo,
-                                                                             subjectId:         forwardMessageInput.subjectId,
-                                                                             requestTypeCode:   forwardMessageInput.requestTypeCode,
-                                                                             requestUniqueId:   tempUniqueId)
+            let messageObjectToSendToQueue = QueueOfWaitForwardMessagesModel(messageIds:    forwardMessageInput.messageIds,
+                                                                             metaData:      forwardMessageInput.metaData,
+                                                                             repliedTo:     forwardMessageInput.repliedTo,
+                                                                             subjectId:     forwardMessageInput.subjectId,
+                                                                             typeCode:      forwardMessageInput.typeCode,
+                                                                             uniqueId:      tempUniqueId)
             Chat.cacheDB.saveForwardMessageToWaitQueue(forwardMessage: messageObjectToSendToQueue)
         }
         
@@ -540,7 +540,7 @@ extension Chat {
                                                 subjectId:          forwardMessageInput.subjectId,
                                                 token:              token,
                                                 tokenIssuer:        nil,
-                                                typeCode:           forwardMessageInput.requestTypeCode ?? generalTypeCode,
+                                                typeCode:           forwardMessageInput.typeCode ?? generalTypeCode,
                                                 uniqueId:           uID,
                                                 isCreateThreadAndSendMessage: nil)
 
@@ -569,7 +569,7 @@ extension Chat {
 //                                            subjectId:          forwardMessageInput.subjectId,
 //                                            token:              token,
 //                                            tokenIssuer:        nil,
-//                                            typeCode:           forwardMessageInput.requestTypeCode ?? generalTypeCode,
+//                                            typeCode:           forwardMessageInput.typeCode ?? generalTypeCode,
 //                                            uniqueId:           uniqueIdsList.first,
 //                                            isCreateThreadAndSendMessage: nil)
 //
@@ -619,7 +619,7 @@ extension Chat {
                                 onSeen:                 @escaping callbackTypeAlias) {
         log.verbose("Try to Send File adn Message with this parameters: \n \(sendFileMessageInput)", context: "Chat")
         
-        let messageUniqueId = sendFileMessageInput.requestUniqueId ?? generateUUID()
+        let messageUniqueId = sendFileMessageInput.uniqueId ?? generateUUID()
         uniqueId(messageUniqueId)
         
         /**
@@ -629,20 +629,20 @@ extension Chat {
          now user knows which messages didn't send correctly, and can handle them
          */
         if enableCache {
-            let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:          sendFileMessageInput.content,
-                                                                          fileName:         sendFileMessageInput.fileName,
-                                                                          imageName:        sendFileMessageInput.imageName,
-                                                                          metaData:         sendFileMessageInput.metaData,
-                                                                          repliedTo:        sendFileMessageInput.repliedTo,
-                                                                          threadId:         sendFileMessageInput.threadId,
-                                                                          xC:               sendFileMessageInput.xC,
-                                                                          yC:               sendFileMessageInput.yC,
-                                                                          hC:               sendFileMessageInput.hC,
-                                                                          wC:               sendFileMessageInput.wC,
-                                                                          fileToSend:       sendFileMessageInput.fileToSend,
-                                                                          imageToSend:      sendFileMessageInput.imageToSend,
-                                                                          requestTypeCode:  sendFileMessageInput.requestTypeCode,
-                                                                          requestUniqueId:  messageUniqueId)
+            let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      sendFileMessageInput.content,
+                                                                          fileName:     sendFileMessageInput.fileName,
+                                                                          imageName:    sendFileMessageInput.imageName,
+                                                                          metaData:     sendFileMessageInput.metaData,
+                                                                          repliedTo:    sendFileMessageInput.repliedTo,
+                                                                          threadId:     sendFileMessageInput.threadId,
+                                                                          xC:           sendFileMessageInput.xC,
+                                                                          yC:           sendFileMessageInput.yC,
+                                                                          hC:           sendFileMessageInput.hC,
+                                                                          wC:           sendFileMessageInput.wC,
+                                                                          fileToSend:   sendFileMessageInput.fileToSend,
+                                                                          imageToSend:  sendFileMessageInput.imageToSend,
+                                                                          typeCode:     sendFileMessageInput.typeCode,
+                                                                          uniqueId:     messageUniqueId)
             Chat.cacheDB.saveFileMessageToWaitQueue(fileMessage: messageObjectToSendToQueue)
         }
         
@@ -667,8 +667,8 @@ extension Chat {
                                                         yC:                 Int(sendFileMessageInput.yC ?? ""),
                                                         hC:                 Int(sendFileMessageInput.hC ?? ""),
                                                         wC:                 Int(sendFileMessageInput.wC ?? ""),
-                                                        requestTypeCode:    nil,
-                                                        requestUniqueId:    uploadUniqueId)
+                                                        typeCode:           nil,
+                                                        uniqueId:           uploadUniqueId)
             uploadImage(uploadImageInput: uploadRequest,
                         uniqueId: { _ in },
                         progress: { (progress) in
@@ -698,8 +698,8 @@ extension Chat {
                                                        fileSize:        fileSize,
                                                        originalFileName: sendFileMessageInput.fileName ?? uploadUniqueId,
                                                        threadId:        sendFileMessageInput.threadId,
-                                                       requestTypeCode: nil,
-                                                       requestUniqueId: uploadUniqueId)
+                                                       typeCode:        nil,
+                                                       uniqueId:        uploadUniqueId)
             uploadFile(uploadFileInput: uploadRequest,
                        uniqueId: { _ in }, progress: { (progress) in
                 uploadProgress(progress)
@@ -729,13 +729,13 @@ extension Chat {
         
         // this will call when all data were uploaded and it will sends the textMessage
         func sendMessage(withMetaData: JSON) {
-            let sendMessageParamModel = SendTextMessageRequestModel(content:            sendFileMessageInput.content ?? "",
-                                                                    metaData:           withMetaData,
-                                                                    repliedTo:          sendFileMessageInput.repliedTo,
-                                                                    systemMetadata:     sendFileMessageInput.metaData,
-                                                                    threadId:           sendFileMessageInput.threadId,
-                                                                    requestTypeCode:    sendFileMessageInput.requestTypeCode ?? generalTypeCode,
-                                                                    requestUniqueId:    messageUniqueId)
+            let sendMessageParamModel = SendTextMessageRequestModel(content:        sendFileMessageInput.content ?? "",
+                                                                    metaData:       withMetaData,
+                                                                    repliedTo:      sendFileMessageInput.repliedTo,
+                                                                    systemMetadata: sendFileMessageInput.metaData,
+                                                                    threadId:       sendFileMessageInput.threadId,
+                                                                    typeCode:       sendFileMessageInput.typeCode ?? generalTypeCode,
+                                                                    uniqueId:       messageUniqueId)
             self.sendTextMessage(sendTextMessageInput: sendMessageParamModel, uniqueId: { _ in }, onSent: { (sent) in
                 onSent(sent)
             }, onDelivere: { (delivered) in
@@ -760,7 +760,7 @@ extension Chat {
                                  onSeen:                @escaping callbackTypeAlias) {
         log.verbose("Try to reply File Message with this parameters: \n \(replyFileMessageInput)", context: "Chat")
         
-        let messageUniqueId = replyFileMessageInput.requestUniqueId ?? generateUUID()
+        let messageUniqueId = replyFileMessageInput.uniqueId ?? generateUUID()
         uniqueId(messageUniqueId)
         
         let uploadUniqueId = generateUUID()
@@ -772,20 +772,20 @@ extension Chat {
          now user knows which messages didn't send correctly, and can handle them
          */
         if enableCache {
-            let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:          replyFileMessageInput.content,
-                                                                          fileName:         replyFileMessageInput.fileName,
-                                                                          imageName:        replyFileMessageInput.imageName,
-                                                                          metaData:         replyFileMessageInput.metaData,
-                                                                          repliedTo:        replyFileMessageInput.repliedTo,
-                                                                          threadId:         replyFileMessageInput.threadId,
-                                                                          xC:               replyFileMessageInput.xC,
-                                                                          yC:               replyFileMessageInput.yC,
-                                                                          hC:               replyFileMessageInput.hC,
-                                                                          wC:               replyFileMessageInput.wC,
-                                                                          fileToSend:       replyFileMessageInput.fileToSend,
-                                                                          imageToSend:      replyFileMessageInput.imageToSend,
-                                                                          requestTypeCode:  replyFileMessageInput.requestTypeCode,
-                                                                          requestUniqueId:  messageUniqueId)
+            let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      replyFileMessageInput.content,
+                                                                          fileName:     replyFileMessageInput.fileName,
+                                                                          imageName:    replyFileMessageInput.imageName,
+                                                                          metaData:     replyFileMessageInput.metaData,
+                                                                          repliedTo:    replyFileMessageInput.repliedTo,
+                                                                          threadId:     replyFileMessageInput.threadId,
+                                                                          xC:           replyFileMessageInput.xC,
+                                                                          yC:           replyFileMessageInput.yC,
+                                                                          hC:           replyFileMessageInput.hC,
+                                                                          wC:           replyFileMessageInput.wC,
+                                                                          fileToSend:   replyFileMessageInput.fileToSend,
+                                                                          imageToSend:  replyFileMessageInput.imageToSend,
+                                                                          typeCode:     replyFileMessageInput.typeCode,
+                                                                          uniqueId:     messageUniqueId)
             Chat.cacheDB.saveFileMessageToWaitQueue(fileMessage: messageObjectToSendToQueue)
         }
         
@@ -809,8 +809,8 @@ extension Chat {
                                                         yC:                 Int(replyFileMessageInput.yC ?? ""),
                                                         hC:                 Int(replyFileMessageInput.hC ?? ""),
                                                         wC:                 Int(replyFileMessageInput.wC ?? ""),
-                                                        requestTypeCode:    nil,
-                                                        requestUniqueId:    uploadUniqueId)
+                                                        typeCode:           nil,
+                                                        uniqueId:           uploadUniqueId)
             uploadImage(uploadImageInput: uploadRequest,
                         uniqueId: { _ in },
                         progress: { (progress) in
@@ -837,8 +837,8 @@ extension Chat {
                                                        fileSize:        fileSize,
                                                        originalFileName: replyFileMessageInput.fileName ?? uploadUniqueId,
                                                        threadId:        replyFileMessageInput.threadId,
-                                                       requestTypeCode: nil,
-                                                       requestUniqueId: uploadUniqueId)
+                                                       typeCode:        nil,
+                                                       uniqueId:        uploadUniqueId)
             uploadFile(uploadFileInput: uploadRequest,
                        uniqueId: { _ in },
                        progress: { (progress) in
@@ -865,13 +865,13 @@ extension Chat {
         
         // this will call when all data were uploaded and it will sends the textMessage
         func sendMessage(withMetaData: JSON) {
-            let sendMessageParamModel = SendTextMessageRequestModel(content:            replyFileMessageInput.content ?? "",
-                                                                    metaData:           withMetaData,
-                                                                    repliedTo:          replyFileMessageInput.repliedTo,
-                                                                    systemMetadata:     replyFileMessageInput.metaData,
-                                                                    threadId:           replyFileMessageInput.threadId,
-                                                                    requestTypeCode:    replyFileMessageInput.requestTypeCode ?? generalTypeCode,
-                                                                    requestUniqueId:    messageUniqueId)
+            let sendMessageParamModel = SendTextMessageRequestModel(content:        replyFileMessageInput.content ?? "",
+                                                                    metaData:       withMetaData,
+                                                                    repliedTo:      replyFileMessageInput.repliedTo,
+                                                                    systemMetadata: replyFileMessageInput.metaData,
+                                                                    threadId:       replyFileMessageInput.threadId,
+                                                                    typeCode:       replyFileMessageInput.typeCode ?? generalTypeCode,
+                                                                    uniqueId:       messageUniqueId)
             self.sendTextMessage(sendTextMessageInput: sendMessageParamModel, uniqueId: { _ in }, onSent: { (sent) in
                 onSent(sent)
             }, onDelivere: { (delivered) in
@@ -922,20 +922,20 @@ extension Chat {
                        progress: { (myProgress) in
             downloadProgress(myProgress)
         }) { (imageData) in
-            let fileMessageInput = SendFileMessageRequestModel(fileName:        nil,
-                                                               imageName:       sendLocationMessageRequest.sendMessageImageName,
-                                                               xC:              sendLocationMessageRequest.sendMessageXC,
-                                                               yC:              sendLocationMessageRequest.sendMessageYC,
-                                                               hC:              sendLocationMessageRequest.sendMessageHC,
-                                                               wC:              sendLocationMessageRequest.sendMessageWC,
-                                                               threadId:        sendLocationMessageRequest.sendMessageThreadId,
-                                                               content:         sendLocationMessageRequest.sendMessageContent,
-                                                               metaData:        sendLocationMessageRequest.sendMessageMetaData,
-                                                               repliedTo:       sendLocationMessageRequest.sendMessageRepliedTo,
-                                                               fileToSend:      nil,
-                                                               imageToSend:     (imageData as! Data),
-                                                               requestTypeCode: sendLocationMessageRequest.requestTypeCode ?? self.generalTypeCode,
-                                                               requestUniqueId: sendLocationMessageRequest.requestUniqueId ?? self.generateUUID())
+            let fileMessageInput = SendFileMessageRequestModel(fileName:    nil,
+                                                               imageName:   sendLocationMessageRequest.sendMessageImageName,
+                                                               xC:          sendLocationMessageRequest.sendMessageXC,
+                                                               yC:          sendLocationMessageRequest.sendMessageYC,
+                                                               hC:          sendLocationMessageRequest.sendMessageHC,
+                                                               wC:          sendLocationMessageRequest.sendMessageWC,
+                                                               threadId:    sendLocationMessageRequest.sendMessageThreadId,
+                                                               content:     sendLocationMessageRequest.sendMessageContent,
+                                                               metaData:    sendLocationMessageRequest.sendMessageMetaData,
+                                                               repliedTo:   sendLocationMessageRequest.sendMessageRepliedTo,
+                                                               fileToSend:  nil,
+                                                               imageToSend: (imageData as! Data),
+                                                               typeCode:    sendLocationMessageRequest.typeCode ?? self.generalTypeCode,
+                                                               uniqueId:    sendLocationMessageRequest.uniqueId ?? self.generateUUID())
             
             sendTM(params: fileMessageInput)
         }
@@ -992,8 +992,8 @@ extension Chat {
                                             subjectId:          deleteMessageInput.subjectId,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           deleteMessageInput.requestTypeCode ?? generalTypeCode,
-                                            uniqueId:           deleteMessageInput.requestUniqueId ?? generateUUID(),
+                                            typeCode:           deleteMessageInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           deleteMessageInput.uniqueId ?? generateUUID(),
                                             isCreateThreadAndSendMessage: nil)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -1069,7 +1069,7 @@ extension Chat {
                                             subjectId:          nil,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           deleteMessageInput.requestTypeCode ?? generalTypeCode,
+                                            typeCode:           deleteMessageInput.typeCode ?? generalTypeCode,
                                             uniqueId:           nil,
                                             isCreateThreadAndSendMessage: nil)
         
@@ -1174,8 +1174,8 @@ extension Chat {
                                             subjectId:          nil,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           messageDeliveryListInput.requestTypeCode ?? generalTypeCode,
-                                            uniqueId:           messageDeliveryListInput.requestUniqueId ?? generateUUID(),
+                                            typeCode:           messageDeliveryListInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           messageDeliveryListInput.uniqueId ?? generateUUID(),
                                             isCreateThreadAndSendMessage: nil)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -1225,8 +1225,8 @@ extension Chat {
                                             subjectId:          nil,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           messageSeenListInput.requestTypeCode ?? generalTypeCode,
-                                            uniqueId:           messageSeenListInput.requestUniqueId ?? generateUUID(),
+                                            typeCode:           messageSeenListInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           messageSeenListInput.uniqueId ?? generateUUID(),
                                             isCreateThreadAndSendMessage: nil)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -1268,9 +1268,9 @@ extension Chat {
         
         let requestUniqueId = generateUUID()
         uniqueId(requestUniqueId)
-        let signalMessageInput = SendSignalMessageRequestModel(signalType:      SignalMessageType.IS_TYPING,
-                                                               threadId:        threadId,
-                                                               requestUniqueId: requestUniqueId)
+        let signalMessageInput = SendSignalMessageRequestModel(signalType:  SignalMessageType.IS_TYPING,
+                                                               threadId:    threadId,
+                                                               uniqueId:    requestUniqueId)
         
         // for every x seconds, call this function:
         isTypingArray.append(requestUniqueId)
@@ -1335,7 +1335,7 @@ extension Chat {
                                             token:              token,
                                             tokenIssuer:        nil,
                                             typeCode:           nil,
-                                            uniqueId:           input.requestUniqueId ?? generateUUID(),
+                                            uniqueId:           input.uniqueId ?? generateUUID(),
                                             isCreateThreadAndSendMessage: nil)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),

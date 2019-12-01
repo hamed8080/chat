@@ -17,7 +17,7 @@ open class QueueOfWaitUploadFilesModel {
     let fileSize:           Int?
     let originalFileName:   String?
     let threadId:           Int?
-    let requestUniqueId:    String?
+    let uniqueId:           String?
     
     init(dataToSend:        Data?,
          fileExtension:     String?,
@@ -25,7 +25,7 @@ open class QueueOfWaitUploadFilesModel {
          fileSize:          Int?,
          originalFileName:  String?,
          threadId:          Int?,
-         requestUniqueId:          String?) {
+         uniqueId:          String?) {
         
         self.dataToSend         = dataToSend
         self.fileExtension      = fileExtension
@@ -33,7 +33,7 @@ open class QueueOfWaitUploadFilesModel {
         self.fileSize           = fileSize
         self.originalFileName   = originalFileName
         self.threadId           = threadId
-        self.requestUniqueId    = requestUniqueId
+        self.uniqueId           = uniqueId
         
     }
     
@@ -44,7 +44,7 @@ open class QueueOfWaitUploadFilesModel {
         self.fileSize           = fileInputModel.fileSize
         self.originalFileName   = fileInputModel.originalFileName
         self.threadId           = fileInputModel.threadId
-        self.requestUniqueId    = fileInputModel.requestUniqueId
+        self.uniqueId           = fileInputModel.uniqueId
     }
     
 }

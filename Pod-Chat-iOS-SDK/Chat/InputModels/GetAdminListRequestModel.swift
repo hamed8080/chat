@@ -10,13 +10,14 @@ import Foundation
 
 open class GetAdminListRequestModel {
     
-    public let threadId:        Int
-    public let requestUniqueId: String?
+    public let threadId:    Int
     
-    public init(threadId:           Int,
-                requestUniqueId:    String?) {
-        self.threadId           = threadId
-        self.requestUniqueId    = requestUniqueId
+    public let uniqueId:    String?
+    
+    public init(threadId:   Int,
+                uniqueId:   String?) {
+        self.threadId   = threadId
+        self.uniqueId   = uniqueId
     }
     
 }

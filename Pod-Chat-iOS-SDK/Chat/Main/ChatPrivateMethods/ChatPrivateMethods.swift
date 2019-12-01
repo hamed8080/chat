@@ -121,7 +121,7 @@ extension Chat {
         
         // last implementation of this function was using the httpRequest function that will deprecate because of complexity that comes with it over time.
         /*
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: nil, dataToSend: nil, requestUniqueId: nil, isImage: nil, isFile: nil, completion: { (myResponse) in
+        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: nil, dataToSend: nil, uniqueId: nil, isImage: nil, isFile: nil, completion: { (myResponse) in
             let responseStr: String = myResponse as! String
          
             if let dataFromMsgString = responseStr.data(using: .utf8, allowLossyConversion: false) {
@@ -843,9 +843,9 @@ extension Chat {
         
         if let messageOwner = message.participant?.id {
             if messageOwner != userInfo?.id {
-                let deliveryModel = DeliverSeenRequestModel(messageId:          message.id,
-                                                            ownerId:            messageOwner,
-                                                            requestTypeCode:    nil)
+                let deliveryModel = DeliverSeenRequestModel(messageId:  message.id,
+                                                            ownerId:    messageOwner,
+                                                            typeCode:   nil)
                 deliver(deliverInput: deliveryModel)
             }
         }

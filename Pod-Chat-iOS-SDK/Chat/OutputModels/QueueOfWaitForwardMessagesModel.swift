@@ -11,35 +11,36 @@ import SwiftyJSON
 
 open class QueueOfWaitForwardMessagesModel {
     
-    let messageIds:         [Int]?
-    let metaData:           JSON?
-    let repliedTo:          Int?
-    let subjectId:          Int?
-    let requestTypeCode:    String?
-    let requestUniqueId:    String?
+    let messageIds: [Int]?
+    let metaData:   JSON?
+    let repliedTo:  Int?
+    let subjectId:  Int?
     
-    init(messageIds:        [Int]?,
-         metaData:          JSON?,
-         repliedTo:         Int?,
-         subjectId:         Int?,
-         requestTypeCode:   String?,
-         requestUniqueId:   String?) {
+    let typeCode:   String?
+    let uniqueId:   String?
+    
+    init(messageIds:    [Int]?,
+         metaData:      JSON?,
+         repliedTo:     Int?,
+         subjectId:     Int?,
+         typeCode:      String?,
+         uniqueId:      String?) {
         
-        self.messageIds         = messageIds
-        self.metaData           = metaData
-        self.repliedTo          = repliedTo
-        self.subjectId          = subjectId
-        self.requestTypeCode    = requestTypeCode
-        self.requestUniqueId    = requestUniqueId
+        self.messageIds = messageIds
+        self.metaData   = metaData
+        self.repliedTo  = repliedTo
+        self.subjectId  = subjectId
+        self.typeCode   = typeCode
+        self.uniqueId   = uniqueId
     }
     
     init(forwardMessageInputModel: ForwardMessageRequestModel, uniqueId: String) {
-        self.messageIds         = forwardMessageInputModel.messageIds
-        self.metaData           = forwardMessageInputModel.metaData
-        self.repliedTo          = forwardMessageInputModel.repliedTo
-        self.subjectId          = forwardMessageInputModel.subjectId
-        self.requestTypeCode    = forwardMessageInputModel.requestTypeCode
-        self.requestUniqueId    = uniqueId
+        self.messageIds = forwardMessageInputModel.messageIds
+        self.metaData   = forwardMessageInputModel.metaData
+        self.repliedTo  = forwardMessageInputModel.repliedTo
+        self.subjectId  = forwardMessageInputModel.subjectId
+        self.typeCode   = forwardMessageInputModel.typeCode
+        self.uniqueId   = uniqueId
     }
     
 }

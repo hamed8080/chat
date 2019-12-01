@@ -59,7 +59,7 @@ extension Chat {
                                                     subjectId:          nil,
                                                     token:              token,
                                                     tokenIssuer:        nil,
-                                                    typeCode:           deliverInput.requestTypeCode ?? generalTypeCode,
+                                                    typeCode:           deliverInput.typeCode ?? generalTypeCode,
                                                     uniqueId:           nil,
                                                     isCreateThreadAndSendMessage: nil)
                 
@@ -118,7 +118,7 @@ extension Chat {
                                                     subjectId:          nil,
                                                     token:              token,
                                                     tokenIssuer:        nil,
-                                                    typeCode:           seenInput.requestTypeCode ?? generalTypeCode,
+                                                    typeCode:           seenInput.typeCode ?? generalTypeCode,
                                                     uniqueId:           nil,
                                                     isCreateThreadAndSendMessage: nil)
                 

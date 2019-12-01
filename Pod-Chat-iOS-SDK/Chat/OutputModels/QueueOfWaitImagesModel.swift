@@ -56,7 +56,7 @@ open class QueueOfWaitUploadImagesModel {
         self.fileSize           = imageInputModel.fileSize
         self.originalFileName   = imageInputModel.originalFileName
         self.threadId           = imageInputModel.threadId
-        self.uniqueId           = imageInputModel.requestUniqueId
+        self.uniqueId           = imageInputModel.uniqueId
         self.xC                 = imageInputModel.xC
         self.yC                 = imageInputModel.yC
         self.hC                 = imageInputModel.hC

@@ -26,8 +26,8 @@ open class CreateThreadWithMessageRequestModel {
     public let messageText:                 String
     public let messageType:                 String?
     
-    public let requestTypeCode:             String?
-    public let requestUniqueId:             String
+    public let typeCode:                    String?
+    public let uniqueId:                    String
     
     public init(threadDescription:      String?,
                 threadImage:            String?,
@@ -42,8 +42,8 @@ open class CreateThreadWithMessageRequestModel {
                 messageSystemMetaData:  String?,
                 messageText:            String,
                 messageType:            String?,
-                requestTypeCode:        String?,
-                requestUniqueId:        String?) {
+                typeCode:               String?,
+                uniqueId:               String?) {
         
         self.threadDescription  = threadDescription
         self.threadImage        = threadImage
@@ -60,8 +60,8 @@ open class CreateThreadWithMessageRequestModel {
         self.messageText                = messageText
         self.messageType                = messageType
         
-        self.requestTypeCode            = requestTypeCode
-        self.requestUniqueId            = requestUniqueId ?? NSUUID().uuidString
+        self.typeCode                   = typeCode
+        self.uniqueId                   = uniqueId ?? NSUUID().uuidString
     }
     
     func convertContentToJSON() -> JSON {
@@ -86,11 +86,11 @@ open class CreateThreadWithMessageRequestModel {
         if let forwardedUniqueIds = self.messageForwardedUniqueIds {
             messageContentParams["forwardedUniqueIds"] = JSON(forwardedUniqueIds)
         }
-        messageContentParams["uniqueId"] = JSON(self.requestUniqueId)
+        messageContentParams["uniqueId"] = JSON(self.uniqueId)
         
         var myContent: JSON = [:]
         myContent["message"]    = JSON(messageContentParams)
-        myContent["uniqueId"]   = JSON(self.requestUniqueId)
+        myContent["uniqueId"]   = JSON(self.uniqueId)
         myContent["title"]      = JSON(self.threadTitle)
         var inviteees = [JSON]()
         for item in self.threadInvitees {

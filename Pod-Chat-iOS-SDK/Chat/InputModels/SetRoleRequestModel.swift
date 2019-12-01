@@ -14,23 +14,23 @@ open class SetRoleRequestModel {
     public let roleOperation:   String
     public let threadId:        Int
     public let userId:          Int
-    public let requestTypeCode: String?
-    public let requestUniqueId: String?
+    public let typeCode:        String?
+    public let uniqueId:        String?
     
     public init(roles:              [Roles],
                 roleOperation:      RoleOperations,
                 threadId:           Int,
                 userId:             Int,
-                requestTypeCode:    String?,
-                requestUniqueId:    String?) {
+                typeCode:           String?,
+                uniqueId:           String?) {
         for item in roles {
             self.roles.append(item.rawValue)
         }
-        self.roleOperation      = roleOperation.rawValue
-        self.threadId           = threadId
-        self.userId             = userId
-        self.requestTypeCode    = requestTypeCode
-        self.requestUniqueId    = requestUniqueId
+        self.roleOperation  = roleOperation.rawValue
+        self.threadId       = threadId
+        self.userId         = userId
+        self.typeCode       = typeCode
+        self.uniqueId       = uniqueId
     }
     
     func convertContentToJSON() -> JSON {

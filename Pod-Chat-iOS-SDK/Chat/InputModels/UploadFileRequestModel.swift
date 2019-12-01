@@ -18,8 +18,8 @@ open class UploadFileRequestModel {
     public let originalFileName:    String?
     public let threadId:            Int?
     
-    public let requestTypeCode:     String?
-    public let requestUniqueId:     String
+    public let typeCode:            String?
+    public let uniqueId:            String
     
     public init(dataToSend:         Data,
                 fileExtension:      String?,
@@ -27,8 +27,8 @@ open class UploadFileRequestModel {
                 fileSize:           Int?,
                 originalFileName:   String?,
                 threadId:           Int?,
-                requestTypeCode:    String?,
-                requestUniqueId:    String?) {
+                typeCode:           String?,
+                uniqueId:           String?) {
         
         self.dataToSend         = dataToSend
         self.fileExtension      = fileExtension
@@ -36,8 +36,8 @@ open class UploadFileRequestModel {
         self.fileSize           = fileSize
         self.originalFileName   = originalFileName
         self.threadId           = threadId
-        self.requestTypeCode    = requestTypeCode
-        self.requestUniqueId    = requestUniqueId ?? NSUUID().uuidString
+        self.typeCode           = typeCode
+        self.uniqueId           = uniqueId ?? NSUUID().uuidString
     }
     
     
@@ -46,7 +46,7 @@ open class UploadFileRequestModel {
         var content: Parameters = [:]
         let theFileName = JSON(self.fileName ?? "\(NSUUID().uuidString))")
         content["fileName"] = JSON(theFileName)
-        content["uniqueId"] = JSON(self.requestUniqueId)
+        content["uniqueId"] = JSON(self.uniqueId)
         content["originalFileName"] = JSON(self.originalFileName ?? theFileName)
         if let myFileSize_ = self.fileSize {
             content["fileSize"] = JSON(myFileSize_)

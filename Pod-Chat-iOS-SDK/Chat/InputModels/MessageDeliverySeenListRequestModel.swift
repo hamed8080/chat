@@ -10,24 +10,24 @@ import SwiftyJSON
 
 open class MessageDeliverySeenListRequestModel {
     
-    public let count:           Int?
-    public let messageId:       Int
-    public let offset:          Int?
+    public let count:       Int?
+    public let messageId:   Int
+    public let offset:      Int?
     
-    public let requestTypeCode: String?
-    public let requestUniqueId: String?
+    public let typeCode:    String?
+    public let uniqueId:    String?
     
-    public init(count:              Int?,
-                messageId:          Int,
-                offset:             Int?,
-                requestTypeCode:    String?,
-                requestUniqueId:    String?) {
+    public init(count:      Int?,
+                messageId:  Int,
+                offset:     Int?,
+                typeCode:   String?,
+                uniqueId:   String?) {
         
-        self.count              = count
-        self.messageId          = messageId
-        self.offset             = offset
-        self.requestTypeCode    = requestTypeCode
-        self.requestUniqueId    = requestUniqueId
+        self.count      = count
+        self.messageId  = messageId
+        self.offset     = offset
+        self.typeCode   = typeCode
+        self.uniqueId   = uniqueId
     }
     
     func convertContentToJSON() -> JSON {        

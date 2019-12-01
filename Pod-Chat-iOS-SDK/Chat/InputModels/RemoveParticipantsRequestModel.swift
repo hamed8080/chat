@@ -13,18 +13,18 @@ open class RemoveParticipantsRequestModel {
     public let participantIds:  [Int]
     public let threadId:        Int
     
-    public let requestTypeCode: String?
-    public let requestUniqueId: String?
+    public let typeCode:    String?
+    public let uniqueId:    String?
     
-    public init(participantIds:     [Int],
-                threadId:           Int,
-                requestTypeCode:    String?,
-                requestUniqueId:    String?) {
+    public init(participantIds: [Int],
+                threadId:       Int,
+                typeCode:       String?,
+                uniqueId:       String?) {
         
-        self.participantIds     = participantIds
-        self.threadId           = threadId
-        self.requestTypeCode    = requestTypeCode
-        self.requestUniqueId    = requestUniqueId
+        self.participantIds = participantIds
+        self.threadId       = threadId
+        self.typeCode       = typeCode
+        self.uniqueId       = uniqueId
     }
     
 }

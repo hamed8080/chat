@@ -22,8 +22,8 @@ open class UploadImageRequestModel {
     public let hC:                  Int?
     public let wC:                  Int?
     
-    public let requestTypeCode:     String?
-    public let requestUniqueId:     String
+    public let typeCode:            String?
+    public let uniqueId:            String
     
     public init(dataToSend:         Data,
                 fileExtension:      String?,
@@ -35,8 +35,8 @@ open class UploadImageRequestModel {
                 yC:                 Int?,
                 hC:                 Int?,
                 wC:                 Int?,
-                requestTypeCode:    String?,
-                requestUniqueId:    String?) {
+                typeCode:           String?,
+                uniqueId:           String?) {
         
         self.dataToSend         = dataToSend
         self.fileExtension      = fileExtension
@@ -48,8 +48,8 @@ open class UploadImageRequestModel {
         self.yC                 = yC
         self.hC                 = hC
         self.wC                 = wC
-        self.requestTypeCode    = requestTypeCode
-        self.requestUniqueId    = requestUniqueId ?? NSUUID().uuidString
+        self.typeCode           = typeCode
+        self.uniqueId           = uniqueId ?? NSUUID().uuidString
     }
     
     func convertContentToParameters() -> Parameters {
@@ -61,7 +61,7 @@ open class UploadImageRequestModel {
         
         var content: Parameters = [:]
         content["fileName"] = JSON(self.fileName ?? "\(NSUUID().uuidString))")
-        content["uniqueId"] = JSON(self.requestUniqueId)
+        content["uniqueId"] = JSON(self.uniqueId)
         if let myFileSize_ = self.fileSize {
             content["fileSize"] = JSON(myFileSize_)
         }

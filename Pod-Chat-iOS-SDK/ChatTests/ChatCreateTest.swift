@@ -53,7 +53,7 @@ class ChatCreateTest: XCTestCase {
     let ssoHost                 = "https://accounts.pod.land"
     let platformHost            = "https://sandbox.pod.land:8043/srv/basic-platform"    // {**REQUIRED**} Platform Core Address
     let fileServer              = "http://sandbox.fanapium.com:8080"                    // {**REQUIRED**} File Server Address
-    let token                   = "67e17adb2a264764a99d5ab72e3f517d"
+    let token                   = "1ea23e857bc24884a2a0b156cbfa4e4c"
     
     
 //    let socketAddress           = "ws://172.16.106.26:8003/ws"

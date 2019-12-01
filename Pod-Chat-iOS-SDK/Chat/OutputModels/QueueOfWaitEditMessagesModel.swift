@@ -11,35 +11,36 @@ import SwiftyJSON
 
 open class QueueOfWaitEditMessagesModel {
     
-    let content:            String?
-    let metaData:           JSON?
-    let repliedTo:          Int?
-    let subjectId:          Int?
-    let requestTypeCode:    String?
-    let requestUniqueId:    String?
+    let content:    String?
+    let metaData:   JSON?
+    let repliedTo:  Int?
+    let subjectId:  Int?
     
-    init(content:           String?,
-         metaData:          JSON?,
-         repliedTo:         Int?,
-         subjectId:         Int?,
-         requestTypeCode:   String?,
-         requestUniqueId:   String?) {
+    let typeCode:   String?
+    let uniqueId:   String?
+    
+    init(content:   String?,
+         metaData:  JSON?,
+         repliedTo: Int?,
+         subjectId: Int?,
+         typeCode:  String?,
+         uniqueId:  String?) {
         
-        self.content            = content
-        self.metaData           = metaData
-        self.repliedTo          = repliedTo
-        self.subjectId          = subjectId
-        self.requestTypeCode    = requestTypeCode
-        self.requestUniqueId    = requestUniqueId
+        self.content    = content
+        self.metaData   = metaData
+        self.repliedTo  = repliedTo
+        self.subjectId  = subjectId
+        self.typeCode   = typeCode
+        self.uniqueId   = uniqueId
     }
     
     init(editMessageInputModel: EditTextMessageRequestModel) {
-        self.content            = editMessageInputModel.content
-        self.metaData           = editMessageInputModel.metaData
-        self.repliedTo          = editMessageInputModel.repliedTo
-        self.subjectId          = editMessageInputModel.subjectId
-        self.requestTypeCode    = editMessageInputModel.requestTypeCode
-        self.requestUniqueId    = editMessageInputModel.requestUniqueId
+        self.content    = editMessageInputModel.content
+        self.metaData   = editMessageInputModel.metaData
+        self.repliedTo  = editMessageInputModel.repliedTo
+        self.subjectId  = editMessageInputModel.subjectId
+        self.typeCode   = editMessageInputModel.typeCode
+        self.uniqueId   = editMessageInputModel.uniqueId
     }
     
 }

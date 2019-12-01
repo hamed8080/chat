@@ -23,7 +23,7 @@ class Networking {
                 isImage:            Bool?,
                 isFile:             Bool?,
                 dataToSend:         Any?,
-                requestUniqueId:    String?,
+                uniqueId:           String?,
                 progress:           callbackTypeAliasFloat?,
                 completion:         @escaping callbackTypeAlias) {
         
@@ -54,7 +54,7 @@ class Networking {
         }, to: url) { (myResult) in
             switch myResult {
             case .success(let upload, _, _):
-                Chat.sharedInstance.uploadRequest.append((upload: upload, uniqueId: requestUniqueId!))
+                Chat.sharedInstance.uploadRequest.append((upload: upload, uniqueId: uniqueId!))
                 upload.responseJSON(completionHandler: { (response) in
                     if let jsonValue = response.result.value {
                         let jsonResponse: JSON = JSON(jsonValue)
@@ -68,7 +68,7 @@ class Networking {
                 upload.responseJSON { response in
                     debugPrint(response)
                     for (index, item) in Chat.sharedInstance.uploadRequest.enumerated() {
-                        if item.uniqueId == requestUniqueId {
+                        if item.uniqueId == uniqueId {
                             Chat.sharedInstance.uploadRequest.remove(at: index)
                         }
                     }

@@ -17,19 +17,19 @@ open class ForwardMessageRequestModel {
     public let repliedTo:       Int?
     public let subjectId:       Int
     
-    public let requestTypeCode: String?
+    public let typeCode: String?
     
-    public init(messageIds:         [Int],
-                metaData:           JSON?,
-                repliedTo:          Int?,
-                subjectId:          Int,
-                requestTypeCode:    String?) {
+    public init(messageIds: [Int],
+                metaData:   JSON?,
+                repliedTo:  Int?,
+                subjectId:  Int,
+                typeCode:   String?) {
         
-        self.messageIds         = messageIds
-        self.metaData           = metaData
-        self.repliedTo          = repliedTo
-        self.subjectId          = subjectId
-        self.requestTypeCode    = requestTypeCode
+        self.messageIds = messageIds
+        self.metaData   = metaData
+        self.repliedTo  = repliedTo
+        self.subjectId  = subjectId
+        self.typeCode   = typeCode
     }
     
 }

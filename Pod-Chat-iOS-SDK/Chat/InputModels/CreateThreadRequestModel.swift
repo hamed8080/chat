@@ -10,33 +10,33 @@ import SwiftyJSON
 
 open class CreateThreadRequestModel {
     
-    public let description:     String?
-    public let image:           String?
-    public let invitees:        [Invitee]
-    public let metadata:        String?
-    public let title:           String
-    public let type:            ThreadTypes?
+    public let description: String?
+    public let image:       String?
+    public let invitees:    [Invitee]
+    public let metadata:    String?
+    public let title:       String
+    public let type:        ThreadTypes?
     
-    public let requestTypeCode: String?
-    public let requestUniqueId: String?
+    public let typeCode:    String?
+    public let uniqueId:    String?
     
-    public init(description:        String?,
-                image:              String?,
-                invitees:           [Invitee],
-                metadata:           String?,
-                title:              String,
-                type:               ThreadTypes?,
-                requestTypeCode:    String?,
-                requestUniqueId:    String?) {
+    public init(description:    String?,
+                image:          String?,
+                invitees:       [Invitee],
+                metadata:       String?,
+                title:          String,
+                type:           ThreadTypes?,
+                typeCode:       String?,
+                uniqueId:       String?) {
         
-        self.description        = description
-        self.image              = image
-        self.invitees           = invitees
-        self.metadata           = metadata
-        self.title              = title
-        self.type               = type
-        self.requestTypeCode    = requestTypeCode
-        self.requestUniqueId    = requestUniqueId
+        self.description    = description
+        self.image          = image
+        self.invitees       = invitees
+        self.metadata       = metadata
+        self.title          = title
+        self.type           = type
+        self.typeCode       = typeCode
+        self.uniqueId       = uniqueId
     }
     
     func convertContentToJSON() -> JSON {

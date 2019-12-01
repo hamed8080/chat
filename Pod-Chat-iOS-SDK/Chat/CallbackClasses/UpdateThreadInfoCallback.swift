@@ -104,8 +104,8 @@ extension Chat {
                                                                        partnerCoreContactId: nil,
                                                                        partnerCoreUserId:   nil,
                                                                        threadIds:           [threadId],
-                                                                       requestTypeCode:     nil,
-                                                                       requestUniqueId:     uID)
+                                                                       typeCode:            nil,
+                                                                       uniqueId:            uID)
                     Chat.sharedInstance.getThreads(getThreadsInput: getthreadRequestInput, uniqueId: { (_) in }, completion: { (myResponse) in
                         success(myResponse as! GetThreadsModel)
                     }, cacheResponse: { (_) in })

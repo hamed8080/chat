@@ -23,8 +23,8 @@ open class GetThreadsRequestModel {
     public let partnerCoreUserId:       Int?    // SSO User Id of thread partner
     public let threadIds:               [Int]?  // An array of thread ids to be received
     
-    public let requestTypeCode:         String?
-    public let requestUniqueId:         String?
+    public let typeCode:                String?
+    public let uniqueId:                String?
     
     public init(count:                  Int?,
                 creatorCoreUserId:      Int?,
@@ -35,8 +35,8 @@ open class GetThreadsRequestModel {
                 partnerCoreContactId:   Int?,
                 partnerCoreUserId:      Int?,
                 threadIds:              [Int]?,
-                requestTypeCode:        String?,
-                requestUniqueId:        String?) {
+                typeCode:               String?,
+                uniqueId:               String?) {
         
         self.count                  = count
         self.creatorCoreUserId      = creatorCoreUserId
@@ -47,8 +47,8 @@ open class GetThreadsRequestModel {
         self.partnerCoreContactId   = partnerCoreContactId
         self.partnerCoreUserId      = partnerCoreUserId
         self.threadIds              = threadIds
-        self.requestTypeCode        = requestTypeCode
-        self.requestUniqueId        = requestUniqueId
+        self.typeCode               = typeCode
+        self.uniqueId               = uniqueId
     }
     
     func convertContentToJSON() -> JSON {
@@ -86,12 +86,13 @@ open class GetThreadsRequestModel {
 class GetAllThreadsRequestModel {
     
     public let summary:         Bool
-    public let requestTypeCode: String?
     
-    init(summary:           Bool,
-         requestTypeCode:   String?) {
-        self.summary            = summary
-        self.requestTypeCode    = requestTypeCode
+    public let typeCode: String?
+    
+    init(summary:   Bool,
+         typeCode:  String?) {
+        self.summary    = summary
+        self.typeCode   = typeCode
     }
     
     func convertContentToJSON() -> JSON {

@@ -17,28 +17,28 @@ open class GetThreadParticipantsRequestModel {
     public let name:            String? // Search in Participants list (LIKE in name, contactName, email)
     public let offset:          Int?    // Offset of select Query
     public let threadId:        Int     // Id of thread which you want to get participants of
-    public let requestTypeCode: String?
-    public let requestUniqueId: String?
+    public let typeCode:        String?
+    public let uniqueId:        String?
     
-    public init(admin:              Bool?,
-                count:              Int?,
-                firstMessageId:     Int?,
-                lastMessageId:      Int?,
-                name:               String?,
-                offset:             Int?,
-                threadId:           Int,
-                requestTypeCode:    String?,
-                requestUniqueId:    String?) {
+    public init(admin:          Bool?,
+                count:          Int?,
+                firstMessageId: Int?,
+                lastMessageId:  Int?,
+                name:           String?,
+                offset:         Int?,
+                threadId:       Int,
+                typeCode:       String?,
+                uniqueId:       String?) {
         
-        self.admin              = admin
-        self.count              = count
-        self.firstMessageId     = firstMessageId
-        self.lastMessageId      = lastMessageId
-        self.name               = name
-        self.offset             = offset
-        self.threadId           = threadId
-        self.requestTypeCode    = requestTypeCode
-        self.requestUniqueId    = requestUniqueId
+        self.admin          = admin
+        self.count          = count
+        self.firstMessageId = firstMessageId
+        self.lastMessageId  = lastMessageId
+        self.name           = name
+        self.offset         = offset
+        self.threadId       = threadId
+        self.typeCode       = typeCode
+        self.uniqueId       = uniqueId
     }
     
     func convertContentToJSON() -> JSON {

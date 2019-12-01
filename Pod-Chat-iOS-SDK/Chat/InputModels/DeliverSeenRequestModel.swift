@@ -10,17 +10,18 @@ import Foundation
 
 open class DeliverSeenRequestModel {
     
-    public let messageId:       Int?
-    public let ownerId:         Int
-    public let requestTypeCode: String?
+    public let messageId:   Int?
+    public let ownerId:     Int
     
-    public init(messageId:          Int?,
-                ownerId:            Int,
-                requestTypeCode:    String?) {
+    public let typeCode:    String?
+    
+    public init(messageId:  Int?,
+                ownerId:    Int,
+                typeCode:   String?) {
         
-        self.messageId          = messageId
-        self.ownerId            = ownerId
-        self.requestTypeCode    = requestTypeCode
+        self.messageId  = messageId
+        self.ownerId    = ownerId
+        self.typeCode   = typeCode
     }
     
 }

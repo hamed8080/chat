@@ -41,13 +41,13 @@ public class QueueOfTextMessages: NSManagedObject {
         }
         
         func createQueueOfWaitTextMessagesModel() -> QueueOfWaitTextMessagesModel {
-            let queueOfWaitTextMessagesModel = QueueOfWaitTextMessagesModel(content:            self.content,
-                                                                            metaData:           metaData,
-                                                                            repliedTo:          repliedTo,
-                                                                            systemMetadata:     systemMetadata,
-                                                                            threadId:           threadId,
-                                                                            requestTypeCode:    self.typeCode,
-                                                                            requestUniqueId:    self.uniqueId)
+            let queueOfWaitTextMessagesModel = QueueOfWaitTextMessagesModel(content:        self.content,
+                                                                            metaData:       metaData,
+                                                                            repliedTo:      repliedTo,
+                                                                            systemMetadata: systemMetadata,
+                                                                            threadId:       threadId,
+                                                                            typeCode:       self.typeCode,
+                                                                            uniqueId:       self.uniqueId)
             return queueOfWaitTextMessagesModel
         }
         
