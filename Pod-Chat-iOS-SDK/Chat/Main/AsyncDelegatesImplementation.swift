@@ -370,6 +370,7 @@ class SendChatMessageVO {
     var tokenIssuer:        Int?    = nil
     var typeCode:           String? = nil
     var uniqueId:           String? = nil
+    var uniqueIds:          [String]? = nil
     
     var isCreateThreadAndSendMessage: Bool
     
@@ -383,6 +384,7 @@ class SendChatMessageVO {
          tokenIssuer:       Int?,
          typeCode:          String?,
          uniqueId:          String?,
+         uniqueIds:         [String]?,
          isCreateThreadAndSendMessage: Bool?) {
         
         self.content            = content
@@ -395,6 +397,7 @@ class SendChatMessageVO {
         self.chatMessageVOType  = chatMessageVOType
         self.typeCode           = typeCode
         self.uniqueId           = uniqueId
+        self.uniqueIds          = uniqueIds
         
         self.isCreateThreadAndSendMessage   = isCreateThreadAndSendMessage ?? false
         
@@ -454,7 +457,9 @@ class SendChatMessageVO {
         }
         
         self.uniqueId = ""
-        if let uID = content["uniqueId"].string {
+        if let uIds = content["uniqueId"].string?.convertToJSON().arrayObject as? [String], (uIds.count > 0) {
+            self.uniqueIds = uIds
+        } else if let uID = content["uniqueId"].string {
             self.uniqueId = uID
         } else if (content["chatMessageVOType"].intValue == chatMessageVOTypes.DELETE_MESSAGE.rawValue) {
             if let x = content["content"]["ids"].arrayObject {
@@ -493,7 +498,10 @@ class SendChatMessageVO {
         if let theTypeCode = typeCode {
             messageVO["typeCode"] = JSON(theTypeCode)
         }
-        if let theUniqueId = uniqueId {
+        
+        if let theUniqueIds = uniqueIds {
+            messageVO["uniqueId"] = JSON("\(theUniqueIds)")
+        } else if let theUniqueId = uniqueId {
             messageVO["uniqueId"] = JSON(theUniqueId)
         }
         

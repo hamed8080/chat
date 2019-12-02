@@ -77,6 +77,7 @@ extension Chat {
                                             tokenIssuer:        nil,
                                             typeCode:           getContactsInput.typeCode ?? generalTypeCode,
                                             uniqueId:           getContactsInput.typeCode ?? generateUUID(),
+                                            uniqueIds:          nil,
                                             isCreateThreadAndSendMessage: true)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -540,6 +541,7 @@ extension Chat {
                                             tokenIssuer:        nil,
                                             typeCode:           blockContactsInput.typeCode ?? generalTypeCode,
                                             uniqueId:           blockContactsInput.uniqueId ?? generateUUID(),
+                                            uniqueIds:          nil,
                                             isCreateThreadAndSendMessage: true)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -609,6 +611,7 @@ extension Chat {
                                             tokenIssuer:        nil,
                                             typeCode:           getBlockedContactsInput.typeCode ?? generalTypeCode,
                                             uniqueId:           getBlockedContactsInput.uniqueId ?? generateUUID(),
+                                            uniqueIds:          nil,
                                             isCreateThreadAndSendMessage: true)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -678,6 +681,7 @@ extension Chat {
                                             tokenIssuer:        nil,
                                             typeCode:           unblockContactsInput.typeCode ?? generalTypeCode,
                                             uniqueId:           unblockContactsInput.uniqueId ?? generateUUID(),
+                                            uniqueIds:          nil,
                                             isCreateThreadAndSendMessage: true)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),

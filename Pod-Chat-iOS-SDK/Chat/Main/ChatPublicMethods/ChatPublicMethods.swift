@@ -61,6 +61,7 @@ extension Chat {
                                                     tokenIssuer:        nil,
                                                     typeCode:           deliverInput.typeCode ?? generalTypeCode,
                                                     uniqueId:           nil,
+                                                    uniqueIds:          nil,
                                                     isCreateThreadAndSendMessage: nil)
                 
                 let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
@@ -120,6 +121,7 @@ extension Chat {
                                                     tokenIssuer:        nil,
                                                     typeCode:           seenInput.typeCode ?? generalTypeCode,
                                                     uniqueId:           nil,
+                                                    uniqueIds:          nil,
                                                     isCreateThreadAndSendMessage: nil)
                 
                 let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
