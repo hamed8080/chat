@@ -19,31 +19,26 @@ extension Chat {
     
     // MARK: - Get/Search Contacts
     
-    /*
-     * GetContacts:
-     * it returns list of contacts
-     *
-     * By calling this function, a request of type 13 (GET_CONTACTS) will send throut Chat-SDK,
-     * then the response will come back as callbacks to client whose calls this function.
-     *
-     *  + Access:   - Public
-     *  + Inputs:
-     *      this function will get some optional prameters as an input, as JSON or Model (depends on the function that you would use) which are:
-     *      - count:    how many contact do you want to get with this request.      (Int)       -optional-  , if you don't set it, it would have default value of 50
-     *      - offset:   offset of the contact number that start to count to show.   (Int)       -optional-  , if you don't set it, it would have default value of 0
-     *      - name:     if you want to search on your contact, put it here.         (String)    -optional-  ,
-     *      - typeCode:
-     *
-     *  + Outputs:
-     *      It has 3 callbacks as response:
-     *      1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     *      2- completion:  it will returns the response that comes from server to this request.    (GetContactsModel)
-     *      3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
-     *
-     */
     // ToDo: filtering by "name" works well on the Cache but not by the Server!!!
+    
+    /// GetContacts:
+    /// it returns list of contacts
+    ///
+    /// By calling this function, a request of type 13 (GET_CONTACTS) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "GetContactsRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 3 callbacks as responses.
+    ///
+    /// - parameter getContactsInput:   (input) you have to send your parameters insid this model. (GetContactsRequestModel)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! GetContactsModel)
+    /// - parameter cacheResponse:      (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetContactsModel)
     public func getContacts(getContactsInput:   GetContactsRequestModel,
-                            uniqueId:           @escaping (String) -> (),
+                            uniqueId:           @escaping ((String) -> ()),
                             completion:         @escaping callbackTypeAlias,
                             cacheResponse:      @escaping (GetContactsModel) -> ()) {
         /*
@@ -115,30 +110,24 @@ extension Chat {
     }
     
     
-    /*
-     SearchContact:
-     search contact and returns a list of contact.
-     
-     By calling this function, HTTP request of type (SEARCH_CONTACTS) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     this function will get some prameters as inputs, in the format of JSON or Model (depends on the function that you would use) which are:
-     - firstName:        firstName of the contacts that match with this parameter.       (String)    -optional-
-     - lastName:         lastName of the contacts that match with this parameter.        (String)    -optional-
-     - cellphoneNumber:  cellphoneNumber of the contacts that match with this parameter. (String)    -optional-
-     - email:            email of the contacts that match with this parameter.           (String)    -optional-
-     - uniqueId:         if you want, you can set the unique id of your request here     (String)    -optional-
-     - size:             how many contact do you want to give with this request.         (Int)       -optional-  , if you don't set it, it would have default value of 50
-     - offset:           offset of the contact number that start to count to show.       (Int)       -optional-  , if you don't set it, it would have default value of 0
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:  it will returns the response that comes from server to this request.    (ContactModel)
-     */
+    /// SearchContact:
+    /// search contact and returns a list of contact.
+    ///
+    /// By calling this function, HTTP request of type (SEARCH_CONTACTS) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "SearchContactsRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 3 callbacks as responses.
+    ///
+    /// - parameter searchContactsInput:    (input) you have to send your parameters insid this model. (SearchContactsRequestModel)
+    /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:             (response) it will returns the response that comes from server to this request. (Any as! GetContactsModel)
+    /// - parameter cacheResponse:          (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetContactsModel)
     public func searchContacts(searchContactsInput: SearchContactsRequestModel,
-                               uniqueId:            @escaping (String) -> (),
+                               uniqueId:            @escaping ((String) -> ()),
                                completion:          @escaping callbackTypeAlias,
                                cacheResponse:       @escaping (GetContactsModel) -> ()) {
         /**
@@ -238,25 +227,22 @@ extension Chat {
     
     
     // MARK: - Add/Update/Remove Contact
-    /*
-     AddContact:
-     it will add a contact
-     
-     By calling this function, HTTP request of type (ADD_CONTACTS) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     this function will get some prameters as inputs, in the format of JSON or Model (depends on the function that you would use) which are:
-     - firstName:       first name of the contact.      (String)    , at least one of 'firstName' or 'lastName' is necessery, the other one is optional.
-     - lastName:        last name of the contact.       (String)    , at least one of 'firstName' or 'lastName' is necessery, the other one is optional.
-     - cellphoneNumber: phone number of the contact.    (String)    , at least one of 'cellphoneNumber' or 'email' is necessery, the other one is optional.
-     - email:           email of the contact.           (String)    , at least one of 'cellphoneNumber' or 'email' is necessery, the other one is optional.
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:  it will returns the response that comes from server to this request.    (ContactModel)
-     */
+    
+    /// AddContact:
+    /// it will add a contact
+    ///
+    /// By calling this function, HTTP request of type (ADD_CONTACTS) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "AddContactsRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 3 callbacks as responses.
+    ///
+    /// - parameter addContactsInput:   (input) you have to send your parameters insid this model. (AddContactsRequestModel)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! ContactModel)
     public func addContact(addContactsInput:    AddContactsRequestModel,
                            uniqueId:            @escaping (String) -> (),
                            completion:          @escaping callbackTypeAlias) {
@@ -325,26 +311,21 @@ extension Chat {
     }
     
     
-    /*
-     UpdateContact:
-     it will update an existing contact
-     
-     By calling this function, HTTP request of type (UPDATE_CONTACTS) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     this function will get some prameters as inputs, in the format of JSON or Model (depends on the function that you would use) which are:
-     - id:              id of the contact that you want to update its data.  (Int)
-     - firstName:       first name of the contact.                           (String)
-     - lastName:        last name of the contact.                            (String)
-     - cellphoneNumber: phone number of the contact.                         (String)
-     - email:           email of the contact.                                (String)
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:  it will returns the response that comes from server to this request.    (ContactModel)
-     */
+    /// UpdateContact:
+    /// it will update an existing contact
+    ///
+    /// By calling this function, HTTP request of type (UPDATE_CONTACTS) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "UpdateContactsRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 3 callbacks as responses.
+    ///
+    /// - parameter updateContactsInput:    (input) you have to send your parameters insid this model. (UpdateContactsRequestModel)
+    /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:             (response) it will returns the response that comes from server to this request. (Any as! ContactModel)
     public func updateContact(updateContactsInput:  UpdateContactsRequestModel,
                               uniqueId:             @escaping (String) -> (),
                               completion:           @escaping callbackTypeAlias) {
@@ -410,22 +391,21 @@ extension Chat {
     }
     
     
-    /*
-     RemoveContact:
-     remove a contact
-     
-     By calling this function, HTTP request of type (REMOVE_CONTACTS) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     this function will get one prameter as inputs, in the format of JSON or Model (depends on the function that you would use) which is:
-     - id:              id of the contact that you want to remove it.   (Int)
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:  it will returns the response that comes from server to this request.    (RemoveContactModel)
-     */
+    /// RemoveContact:
+    /// it will remove a contact
+    ///
+    /// By calling this function, HTTP request of type (REMOVE_CONTACTS) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "RemoveContactsRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 3 callbacks as responses.
+    ///
+    /// - parameter removeContactsInput:    (input) you have to send your parameters insid this model. (RemoveContactsRequestModel)
+    /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:             (response) it will returns the response that comes from server to this request. (Any as! RemoveContactModel)
     public func removeContact(removeContactsInput:  RemoveContactsRequestModel,
                               uniqueId:             @escaping (String) -> (),
                               completion:           @escaping callbackTypeAlias) {
@@ -493,22 +473,22 @@ extension Chat {
     
     
     // MARK: - Block/Unblock/GetBlockList Contact
-    /*
-     BlockContact:
-     block a contact by its contactId.
-     
-     By calling this function, a request of type 7 (BLOCK) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     this function will get some prameters as inputs, in the format of JSON or Model (depends on the function that you would use) which are:
-     - contactId:    id of your contact that you want to remove it.      (Int)
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:  it will returns the response that comes from server to this request.    (BlockedContactModel)
-     */
+    
+    /// BlockContact:
+    /// block a contact by its contactId.
+    ///
+    /// By calling this function, a request of type 7 (BLOCK) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "BlockContactsRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 3 callbacks as responses.
+    ///
+    /// - parameter blockContactsInput: (input) you have to send your parameters insid this model. (BlockContactsRequestModel)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! BlockedContactModel)
     public func blockContact(blockContactsInput:    BlockContactsRequestModel,
                              uniqueId:              @escaping (String) -> (),
                              completion:            @escaping callbackTypeAlias) {
@@ -562,24 +542,21 @@ extension Chat {
     }
     
     
-    /*
-     GetBlockContactsList:
-     it returns a list of the blocked contacts.
-     
-     By calling this function, a request of type 25 (GET_BLOCKED) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     this function will get some prameters as inputs, in the format of JSON or Model (depends on the function that you would use) which are:
-     - count:        how many contact do you want to give with this request.   (Int)
-     - offset:       offset of the contact number that start to count to show.   (Int)
-     - typeCode:
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:  it will returns the response that comes from server to this request.    (GetBlockedContactListModel)
-     */
+    /// GetBlockContactsList:
+    /// it returns a list of the blocked contacts.
+    ///
+    /// By calling this function, a request of type 25 (GET_BLOCKED) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "GetBlockedContactListRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 3 callbacks as responses.
+    ///
+    /// - parameter getBlockedContactsInput:    (input) you have to send your parameters insid this model. (GetBlockedContactListRequestModel)
+    /// - parameter uniqueId:                   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:                 (response) it will returns the response that comes from server to this request. (Any as! GetBlockedContactListModel)
     public func getBlockedContacts(getBlockedContactsInput: GetBlockedContactListRequestModel,
                                    uniqueId:                @escaping (String) -> (),
                                    completion:              @escaping callbackTypeAlias) {
@@ -632,23 +609,21 @@ extension Chat {
     }
     
     
-    /*
-     UnblockContact:
-     unblock a contact from blocked list.
-     
-     By calling this function, a request of type 8 (UNBLOCK) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     this function will get some prameters as inputs, in the format of JSON or Model (depends on the function that you would use) which are:
-     - blockId:    id of your contact that you want to unblock it (remove this id from blocked list).  (Int)
-     - typeCode:
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:  it will returns the response that comes from server to this request.    (BlockedContactModel)
-     */
+    /// UnblockContact:
+    /// unblock a contact from blocked list.
+    ///
+    /// By calling this function, a request of type 8 (UNBLOCK) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "UnblockContactsRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 3 callbacks as responses.
+    ///
+    /// - parameter unblockContactsInput:   (input) you have to send your parameters insid this model. (UnblockContactsRequestModel)
+    /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:             (response) it will returns the response that comes from server to this request. (Any as! BlockedContactModel)
     public func unblockContact(unblockContactsInput:    UnblockContactsRequestModel,
                                uniqueId:                @escaping (String) -> (),
                                completion:              @escaping callbackTypeAlias) {
@@ -703,21 +678,22 @@ extension Chat {
     
     
     // MARK: Sync Contact
-    /*
-     SyncContact:
-     sync contacts from the client contact with Chat contact.
-     
-     By calling this function, HTTP request of type (SEARCH_CONTACTS) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     this function doesn't give any parameters as input
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:  it will returns the response for each contact creation.                 (ContactModel)
-     */
+    
+    /// SyncContact:
+    /// sync contacts from the client contact with Chat contact.
+    ///
+    /// By calling this function, HTTP request of type (SEARCH_CONTACTS) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - this method does not have any input parameters, it actualy gets the device contact automatically
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as responses.
+    ///
+    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! [ContactModel])
+    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. ([ContactModel])
     public func syncContacts(uniqueId:      @escaping (String) -> (),
                              completion:    @escaping callbackTypeAlias,
                              cacheResponse: @escaping ([ContactModel]) -> ()) {

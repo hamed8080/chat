@@ -18,38 +18,38 @@ extension Chat {
     
     // MARK: - Get/Clear History
     
-    /**
-     GetHistory:
-     get messages in a thread
-    
-     By calling this function, a request of type 15 (GET_HISTORY) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-    
-     + Inputs:
-     GetHistoryRequestModel
-    
-     + Outputs:
-     It has 9 callbacks as response:
-     1- uniqueId:            it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:         it will returns the response that comes from server to this request.    (GetHistoryModel)
-     3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
-     4- textMessagesNotSent:
-     5- editMessagesNotSent:
-     6- forwardMessagesNotSent:
-     7- fileMessagesNotSent:
-     8- uploadImageNotSent:
-     9- uploadFileNotSent:
-     */
+    /// GetHistory:
+    /// get messages in a specific thread
+    ///
+    /// By calling this function, a request of type 15 (GET_HISTORY) will send throut Chat-SDK,
+    /// then the responses will come back as callbacks to the client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "GetHistoryRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 9 callbacks as responses
+    ///
+    /// - parameter getHistoryInput:        (input) you have to send your parameters insid this model. (GetHistoryRequestModel)
+    /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:             (response) it will returns the response that comes from server to this request. (Any as! GetHistoryModel)
+    /// - parameter cacheResponse:          (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetHistoryModel)
+    /// - parameter textMessagesNotSent:    (response) it will returns the Test Messages that has not been Sent yet! ([QueueOfWaitTextMessagesModel])
+    /// - parameter editMessagesNotSent:    (response) it will returns the Edit Messages requests that has not been Sent yet! ([QueueOfWaitEditMessagesModel])
+    /// - parameter forwardMessagesNotSent: (response) it will returns the Forward Messages requests that has not been Sent yet! ([QueueOfWaitForwardMessagesModel])
+    /// - parameter fileMessagesNotSent:    (response) it will returns the File Messages requests that has not been Sent yet! ([QueueOfWaitFileMessagesModel])
+    /// - parameter uploadImageNotSent:     (response) it will returns the Upload Image requests that has not been Sent yet! ([QueueOfWaitUploadImagesModel])
+    /// - parameter uploadFileNotSent:      (response) it will returns the Upload File requests that has not been Sent yet! ([QueueOfWaitUploadFilesModel])
     public func getHistory(getHistoryInput:         GetHistoryRequestModel,
-                           uniqueId:                @escaping (String) -> (),
+                           uniqueId:                @escaping ((String) -> ()),
                            completion:              @escaping callbackTypeAlias,
-                           cacheResponse:           @escaping (GetHistoryModel) -> (),
-                           textMessagesNotSent:     @escaping ([QueueOfWaitTextMessagesModel]) -> (),
-                           editMessagesNotSent:     @escaping ([QueueOfWaitEditMessagesModel]) -> (),
-                           forwardMessagesNotSent:  @escaping ([QueueOfWaitForwardMessagesModel]) -> (),
-                           fileMessagesNotSent:     @escaping ([QueueOfWaitFileMessagesModel]) -> (),
-                           uploadImageNotSent:      @escaping ([QueueOfWaitUploadImagesModel]) -> (),
-                           uploadFileNotSent:       @escaping ([QueueOfWaitUploadFilesModel]) -> ()) {
+                           cacheResponse:           @escaping ((GetHistoryModel) -> ()),
+                           textMessagesNotSent:     @escaping (([QueueOfWaitTextMessagesModel]) -> ()),
+                           editMessagesNotSent:     @escaping (([QueueOfWaitEditMessagesModel]) -> ()),
+                           forwardMessagesNotSent:  @escaping (([QueueOfWaitForwardMessagesModel]) -> ()),
+                           fileMessagesNotSent:     @escaping (([QueueOfWaitFileMessagesModel]) -> ()),
+                           uploadImageNotSent:      @escaping (([QueueOfWaitUploadImagesModel]) -> ()),
+                           uploadFileNotSent:       @escaping (([QueueOfWaitUploadFilesModel]) -> ())) {
         
         log.verbose("Try to request to get history with this parameters: \n \(getHistoryInput)", context: "Chat")
         
@@ -122,23 +122,23 @@ extension Chat {
       
     }
     
-    
-    /**
-     ClearHistory
-    
-     By calling this function, a request of type 44 (CLEAR_HISTORY) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     ClearHistoryRequestModel
-    
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:            it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:         it will returns the response that comes from server to this request.    (GetHistoryModel)
-     */
+    /// ClearHistory:
+    /// clear all messeages inside a specifi thread
+    ///
+    /// By calling this function, a request of type 44 (CLEAR_HISTORY) will send throut Chat-SDK,
+    /// then the responses will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "ClearHistoryRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as responses
+    ///
+    /// - parameter clearHistoryInput:  (input) you have to send your parameters insid this model. (ClearHistoryRequestModel)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! ClearHistoryModel)
     public func clearHistory(clearHistoryInput: ClearHistoryRequestModel,
-                             uniqueId:          @escaping (String) -> (),
+                             uniqueId:          @escaping ((String) -> ()),
                              completion:        @escaping callbackTypeAlias) {
         
         log.verbose("Try to request to create clear history with this parameters: \n \(clearHistoryInput)", context: "Chat")
@@ -178,25 +178,25 @@ extension Chat {
     
     // MARK: - Send/Edit/Reply/Forward Text Message
     
-    /**
-     SendTextMessage:
-     send a text to somebody.
-     
-     By calling this function, a request of type 2 (MESSAGE) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     SendTextMessageRequestModel
-     
-     + Outputs:
-     It has 4 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- onSent:
-     3- onDelivere:
-     4- onSeen:
-     */
+    /// SendTextMessage:
+    /// send a text to somebody.
+    ///
+    /// By calling this function, a request of type 2 (MESSAGE) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "SendTextMessageRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 4 callbacks as response:
+    ///
+    /// - parameter sendTextMessageInput:   (input) you have to send your parameters insid this model. (SendTextMessageRequestModel)
+    /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter onSent:                 (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
+    /// - parameter onDelivere:             (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
+    /// - parameter onSeen:                 (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
     public func sendTextMessage(sendTextMessageInput:   SendTextMessageRequestModel,
-                                uniqueId:               @escaping (String) -> (),
+                                uniqueId:               @escaping ((String) -> ()),
                                 onSent:                 @escaping callbackTypeAlias,
                                 onDelivere:             @escaping callbackTypeAlias,
                                 onSeen:                 @escaping callbackTypeAlias) {
@@ -259,25 +259,25 @@ extension Chat {
     }
     
     
-    /**
-    SendBotMessage:
-    send a botMessage.
-    
-    By calling this function, a request of type 40 (BOT_MESSAGE) will send throut Chat-SDK,
-    then the response will come back as callbacks to client whose calls this function.
-    
-    + Inputs:
-    SendBotMessageRequestModel
-    
-    + Outputs:
-    It has 4 callbacks as response:
-    1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-    2- onSent:
-    3- onDelivere:
-    4- onSeen:
-    */
+    /// SendBotMessage:
+    /// send a botMessage.
+    ///
+    /// By calling this function, a request of type 40 (BOT_MESSAGE) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "SendBotMessageRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 4 callbacks as response:
+    ///
+    /// - parameter sendBotMessageInput:    (input) you have to send your parameters insid this model. (SendBotMessageRequestModel)
+    /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter onSent:                 (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
+    /// - parameter onDelivere:             (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
+    /// - parameter onSeen:                 (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
     public func sendBotMessage(sendBotMessageInput: SendBotMessageRequestModel,
-                               uniqueId:            @escaping (String) -> (),
+                               uniqueId:            @escaping ((String) -> ()),
                                onSent:              @escaping callbackTypeAlias,
                                onDelivere:          @escaping callbackTypeAlias,
                                onSeen:              @escaping callbackTypeAlias) {
@@ -289,25 +289,14 @@ extension Chat {
         
         let tempUniqueId = sendBotMessageInput.uniqueId ?? generateUUID()
         
-        if enableCache {
-            let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(content:          sendBotMessageInput.content,
-                                                                          metaData:         sendBotMessageInput.metaData,
-                                                                          repliedTo:        sendBotMessageInput.repliedTo,
-                                                                          systemMetadata:   sendBotMessageInput.systemMetadata,
-                                                                          threadId:         sendBotMessageInput.receiver,
-                                                                          typeCode:         sendBotMessageInput.typeCode,
-                                                                          uniqueId:         tempUniqueId)
-            Chat.cacheDB.saveTextMessageToWaitQueue(textMessage: messageObjectToSendToQueue)
-        }
-        
         let messageTxtContent = MakeCustomTextToSend(message: sendBotMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.BOT_MESSAGE.rawValue,
                                             content:            messageTxtContent,
                                             metaData:           "\(sendBotMessageInput.metaData)",
-                                            repliedTo:          sendBotMessageInput.repliedTo,
+                                            repliedTo:          nil,
                                             systemMetadata:     (sendBotMessageInput.systemMetadata != nil) ? "\(sendBotMessageInput.systemMetadata!)" : nil,
-                                            subjectId:          sendBotMessageInput.receiver,
+                                            subjectId:          sendBotMessageInput.messageId,
                                             token:              token,
                                             tokenIssuer:        nil,
                                             typeCode:           sendBotMessageInput.typeCode ?? generalTypeCode,
@@ -333,23 +322,23 @@ extension Chat {
     }
     
     
-    /*
-     EditTextMessage:
-     edit text of a messae.
-     
-     By calling this function, a request of type 28 (EDIT_MESSAGE) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     EditTextMessageRequestModel
-     
-     + Outputs:
-     It has 4 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:
-     */
+    /// EditTextMessage:
+    /// edit text of a messae.
+    ///
+    /// By calling this function, a request of type 28 (EDIT_MESSAGE) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "EditTextMessageRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as response:
+    ///
+    /// - parameter editMessageInput:   (input) you have to send your parameters insid this model. (EditTextMessageRequestModel)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! EditMessageModel)
     public func editMessage(editMessageInput:   EditTextMessageRequestModel,
-                            uniqueId:           @escaping (String) -> (),
+                            uniqueId:           @escaping ((String) -> ()),
                             completion:         @escaping callbackTypeAlias) {
         log.verbose("Try to request to edit message with this parameters: \n \(editMessageInput)", context: "Chat")
         
@@ -405,25 +394,25 @@ extension Chat {
     }
      
     
-    /**
-     ReplyTextMessage:
-     send reply message to a messsage.
-     
-     By calling this function, a request of type 2 (FORWARD_MESSAGE) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     ReplyTextMessageRequestModel
-     
-     + Outputs:
-     It has 4 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- onSent:
-     3- onDelivere:
-     4- onSeen:
-     */
+    /// ReplyTextMessage:
+    /// send reply message to a messsage.
+    ///
+    /// By calling this function, a request of type 2 (FORWARD_MESSAGE) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "ReplyTextMessageRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 4 callbacks as response:
+    ///
+    /// - parameter replyMessageInput:  (input) you have to send your parameters insid this model. (ReplyTextMessageRequestModel)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter onSent:             (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
+    /// - parameter onDelivere:         (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
+    /// - parameter onSeen:             (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
     public func replyMessage(replyMessageInput: ReplyTextMessageRequestModel,
-                             uniqueId:          @escaping (String) -> (),
+                             uniqueId:          @escaping ((String) -> ()),
                              onSent:            @escaping callbackTypeAlias,
                              onDelivere:        @escaping callbackTypeAlias,
                              onSeen:            @escaping callbackTypeAlias) {
@@ -485,25 +474,25 @@ extension Chat {
     }
     
     
-    /**
-     ForwardTextMessage:
-     forwar some messages to a thread.
-     
-     By calling this function, a request of type 22 (FORWARD_MESSAGE) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     ForwardMessageRequestModel
-     
-     + Outputs:
-     It has 4 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- onSent:
-     3- onDelivere:
-     4- onSeen:
-     */
+    /// ForwardTextMessage:
+    /// forwar some messages to a thread.
+    ///
+    /// By calling this function, a request of type 22 (FORWARD_MESSAGE) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "ForwardMessageRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 4 callbacks as response:
+    ///
+    /// - parameter forwardMessageInput:    (input) you have to send your parameters insid this model. (ForwardMessageRequestModel)
+    /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server.        (String)
+    /// - parameter onSent:                 (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
+    /// - parameter onDelivere:             (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
+    /// - parameter onSeen:                 (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
     public func forwardMessage(forwardMessageInput: ForwardMessageRequestModel,
-                               uniqueIds:           @escaping (String) -> (),
+                               uniqueIds:           @escaping ((String) -> ()),
                                onSent:              @escaping callbackTypeAlias,
                                onDelivere:          @escaping callbackTypeAlias,
                                onSeen:              @escaping callbackTypeAlias) {
@@ -564,27 +553,27 @@ extension Chat {
     
     // MARK: - Send/Reply File Message
     
-    /**
-     SendFileMessage:
-     send some file and also send some message too with it.
-     
-     By calling this function, first an HTTP request of type (GET_IMAGE or GET_FILE), and then send message request of type 2 (MESSAGE) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     SendFileMessageRequestModel
-     
-     + Outputs:
-     It has 4 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- uploadProgress:
-     3- onSent:
-     4- onDelivered:
-     5- onSeen:
-     */
+    /// SendFileMessage:
+    /// send some file and also send some message too with it.
+    ///
+    /// By calling this function, first an HTTP request of type (GET_IMAGE or GET_FILE), and then send message request of type 2 (MESSAGE) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "SendFileMessageRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 5 callbacks as response:
+    ///
+    /// - parameter sendFileMessageInput:   (input) you have to send your parameters insid this model. (SendFileMessageRequestModel)
+    /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter uploadProgress:         (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
+    /// - parameter onSent:                 (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
+    /// - parameter onDelivere:             (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
+    /// - parameter onSeen:                 (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
     public func sendFileMessage(sendFileMessageInput:   SendFileMessageRequestModel,
-                                uniqueId:               @escaping (String) -> (),
-                                uploadProgress:         @escaping (Float) -> (),
+                                uniqueId:               @escaping ((String) -> ()),
+                                uploadProgress:         @escaping ((Float) -> ()),
                                 onSent:                 @escaping callbackTypeAlias,
                                 onDelivered:            @escaping callbackTypeAlias,
                                 onSeen:                 @escaping callbackTypeAlias) {
@@ -719,13 +708,27 @@ extension Chat {
     }
     
     
-    /**
-     Reply File Message:
-     this function is almost the same as SendFileMessage function
-     */
+    /// ReplyFileMessage:
+    /// this function is almost the same as SendFileMessage function
+    ///
+    /// By calling this function, first an HTTP request of type (GET_IMAGE or GET_FILE), and then send message request of type 2 (MESSAGE) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "SendFileMessageRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 5 callbacks as response:
+    ///
+    /// - parameter replyFileMessageInput:  (input) you have to send your parameters insid this model. (SendFileMessageRequestModel)
+    /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter uploadProgress:         (response) it will returns the progress of the uploading request by a value between 0 and 1. (Float)
+    /// - parameter onSent:                 (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
+    /// - parameter onDelivere:             (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
+    /// - parameter onSeen:                 (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
     public func replyFileMessage(replyFileMessageInput: SendFileMessageRequestModel,
-                                 uniqueId:              @escaping (String) -> (),
-                                 uploadProgress:        @escaping (Float) -> (),
+                                 uniqueId:              @escaping ((String) -> ()),
+                                 uploadProgress:        @escaping ((Float) -> ()),
                                  onSent:                @escaping callbackTypeAlias,
                                  onDelivered:           @escaping callbackTypeAlias,
                                  onSeen:                @escaping callbackTypeAlias) {
@@ -858,25 +861,29 @@ extension Chat {
     
     // MARK: - Send Location Message
     
-    /**
-     SendLocationMessage:
-     send user location StaticImage by getting user location detail
-     
-     by calling this function, a request will send to Map ServiceCall to get user StaticImage based on its location,
-     then send a FileMessage with this StaticImage
-     
-     + Inputs:
-     DeleteMessageRequestModel
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:
-     */
+    /// SendLocationMessage:
+    /// send user location StaticImage by getting user location detail
+    ///
+    /// by calling this function, a request will send to Map ServiceCall to get user StaticImage based on its location,
+    /// then send a FileMessage with this StaticImage
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "DeleteMessageRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 6 callbacks as response:
+    ///
+    /// - parameter sendLocationMessageRequest: (input) you have to send your parameters insid this model. (SendLocationMessageRequestModel)
+    /// - parameter uniqueId:                   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter downloadProgress:           (response)  it will returns the progress of the downloading image from MapServices by a value between 0 and 1. (Float)
+    /// - parameter uploadProgress:             (response)  it will returns the progress of the uploading image by a value between 0 and 1. (Float)
+    /// - parameter onSent:                     (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
+    /// - parameter onDelivere:                 (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
+    /// - parameter onSeen:                     (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
     public func sendLocationMessage(sendLocationMessageRequest: SendLocationMessageRequestModel,
-                                    uniqueId:                   @escaping (String) -> (),
-                                    downloadProgress:           @escaping (Float) -> (),
-                                    uploadProgress:             @escaping (Float) -> (),
+                                    uniqueId:                   @escaping ((String) -> ()),
+                                    downloadProgress:           @escaping ((Float) -> ()),
+                                    uploadProgress:             @escaping ((Float) -> ()),
                                     onSent:                     @escaping callbackTypeAlias,
                                     onDelivere:                 @escaping callbackTypeAlias,
                                     onSeen:                     @escaping callbackTypeAlias) {
@@ -930,23 +937,23 @@ extension Chat {
     
     // MARK: - Delete/Cancle Message
     
-    /**
-     DeleteMessage:
-     delete specific message by getting message id.
-     
-     By calling this function, a request of type 29 (DELETE_MESSAGE) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     DeleteMessageRequestModel
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:
-     */
+    /// DeleteMessage:
+    /// delete specific message by getting message id.
+    ///
+    /// By calling this function, a request of type 29 (DELETE_MESSAGE) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "DeleteMessageRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as response:
+    ///
+    /// - parameter deleteMessageInput: (input) you have to send your parameters insid this model. (DeleteMessageRequestModel)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! DeleteMessageModel)
     public func deleteMessage(deleteMessageInput:   DeleteMessageRequestModel,
-                              uniqueId:             @escaping (String) -> (),
+                              uniqueId:             @escaping ((String) -> ()),
                               completion:           @escaping callbackTypeAlias) {
         log.verbose("Try to request to edit message with this parameters: \n \(deleteMessageInput)", context: "Chat")
         
@@ -986,23 +993,23 @@ extension Chat {
     }
     
     
-    /**
-    DeleteMultipleMessages:
-    delete specific messages by getting their message ids.
-    
-    By calling this function, a request of type 29 (DELETE_MESSAGE) will send throut Chat-SDK,
-    then the response will come back as callbacks to client whose calls this function.
-    
-    + Inputs:
-    DeleteMultipleMessagesRequestModel
-    
-    + Outputs:
-    It has 2 callbacks as response:
-    1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-    2- completion:
-    */
+    /// DeleteMultipleMessages:
+    /// delete specific messages by getting their message ids.
+    ///
+    /// By calling this function, a request of type 29 (DELETE_MESSAGE) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "DeleteMultipleMessagesRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as response:
+    ///
+    /// - parameter deleteMessageInput: (input) you have to send your parameters insid this model. (DeleteMultipleMessagesRequestModel)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server.        (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! DeleteMessageModel)
     public func deleteMultipleMessages(deleteMessageInput:   DeleteMultipleMessagesRequestModel,
-                                       uniqueId:             @escaping (String) -> (),
+                                       uniqueId:             @escaping ((String) -> ()),
                                        completion:           @escaping callbackTypeAlias) {
         log.verbose("Try to request to edit message with this parameters: \n \(deleteMessageInput)", context: "Chat")
         
@@ -1044,21 +1051,21 @@ extension Chat {
     }
     
     
-    /**
-    CancelSendMessage:
-    cancel sending messages that has not been sent yet!
-    
-    By calling this function, we will delete the wait queue cache based on the request input
-    
-    + Inputs:
-    DeleteMultipleMessagesRequestModel
-    
-    + Outputs:
-    It has 1 callback as response:
-    1- completion: the state of the response
-    */
+    /// CancelSendMessage:
+    /// cancel sending messages that has not been sent yet!
+    ///
+    /// By calling this function, we will delete the wait queue cache based on the request input
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "CancelMessageRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 1 callbacks as response:
+    ///
+    /// - parameter cancelMessageInput: (input) you have to send your parameters insid this model. (CancelMessageRequestModel)
+    /// - parameter completion:         (response) it will returns a boolean value that if this request was successfull or not! (Bool)
     public func cancelSendMessage(cancelMessageInput:   CancelMessageRequestModel,
-                                  completion:           @escaping (Bool) -> ()) {
+                                  completion:           @escaping ((Bool) -> ())) {
         if enableCache {
             if let textUID = cancelMessageInput.textMessageUniqueId {
                 Chat.cacheDB.deleteWaitTextMessage(uniqueId: textUID)
@@ -1093,23 +1100,23 @@ extension Chat {
     
     // MARK: - Get Delivery/Seen List
     
-    /**
-     MessageDeliveryList:
-     list of participants that send deliver for some message id.
-     
-     By calling this function, a request of type 32 (GET_MESSAGE_DELEVERY_PARTICIPANTS) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     MessageDeliverySeenListRequestModel
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:
-     */
+    /// MessageDeliveryList:
+    /// list of participants that send deliver for some message id.
+    ///
+    /// By calling this function, a request of type 32 (GET_MESSAGE_DELEVERY_PARTICIPANTS) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "MessageDeliverySeenListRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as response:
+    ///
+    /// - parameter messageDeliveryListInput:   (input) you have to send your parameters insid this model. (MessageDeliverySeenListRequestModel)
+    /// - parameter uniqueId:                   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:                 (response) it will returns the response that comes from server to this request. (Any as! GetMessageDeliverList)
     public func messageDeliveryList(messageDeliveryListInput:   MessageDeliverySeenListRequestModel,
-                                    uniqueId:                   @escaping (String) -> (),
+                                    uniqueId:                   @escaping ((String) -> ()),
                                     completion:                 @escaping callbackTypeAlias) {
         log.verbose("Try to request to get message deliver participants with this parameters: \n \(messageDeliveryListInput)", context: "Chat")
         
@@ -1145,23 +1152,23 @@ extension Chat {
     }
     
     
-    /**
-     MessageSeenList:
-     list of participants that send seen for some message id.
-     
-     By calling this function, a request of type 33 (GET_MESSAGE_SEEN_PARTICIPANTS) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     MessageDeliverySeenListRequestModel
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:
-     */
+    /// MessageSeenList:
+    /// list of participants that send seen for some message id.
+    ///
+    /// By calling this function, a request of type 33 (GET_MESSAGE_SEEN_PARTICIPANTS) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "MessageDeliverySeenListRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as response:
+    ///
+    /// - parameter messageSeenListInput:   (input) you have to send your parameters insid this model. (MessageDeliverySeenListRequestModel)
+    /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:             (response) it will returns the response that comes from server to this request. (Any as! GetMessageSeenList)
     public func messageSeenList(messageSeenListInput:   MessageDeliverySeenListRequestModel,
-                                uniqueId:               @escaping (String) -> (),
+                                uniqueId:               @escaping ((String) -> ()),
                                 completion:             @escaping callbackTypeAlias) {
         log.verbose("Try to request to get message seen participants with this parameters: \n \(messageSeenListInput)", context: "Chat")
         
@@ -1199,21 +1206,22 @@ extension Chat {
     
     // MARK: - Send Signal Messages
     
-    /**
-     * Start Typing:
-     *
-     *  by calling this method, message of type "IS_TYPING" is sends to the server on every specific seconds
-     *  if you want to stop it, you should call "stopTyping" method with it's "uniqueId"
-     *
-     *  + Access:   - Public
-     *  + Inputs:
-     *      - threadId:     Int
-     *  + Outputs:  It has a callbacks as response:
-     *      - uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     *
-     */
+    /// StartTyping:
+    /// sends a message to other clients on the thread that i'm start typing
+    ///
+    /// by calling this method, message of type "IS_TYPING" is sends to the server on every specific seconds
+    /// if you want to stop it, you should call "stopTyping" method with it's "uniqueId"
+    ///
+    /// Inputs:
+    /// - you have to send the "threadId" that you are typing on
+    ///
+    /// Outputs:
+    /// - It has 1 callbacks as response:
+    ///
+    /// - parameter threadId:   (input) the thread id that you are typing. (Int)
+    /// - parameter uniqueId:   (response) it will returns a 'UniqueId' to you, that if you finished with typing you have to call "StopTyping" method with this "uniqueId" (String)
     public func startTyping(threadId:   Int,
-                            uniqueId:   @escaping (String) -> ()) {
+                            uniqueId:   @escaping ((String) -> ())) {
         
         let requestUniqueId = generateUUID()
         uniqueId(requestUniqueId)
@@ -1230,17 +1238,19 @@ extension Chat {
         }
     }
     
-    /**
-     * Stop Typing:
-     *
-     * by calling this method, sending isTyping message will stop
-     *
-     *  + Access:   - Public
-     *  + Inputs:
-     *      - uniqueId:     String
-     *  + Outputs:  _
-     *
-     */
+    
+    /// StopTyping:
+    /// sends a message to other clients on the thread that i'm start typing
+    ///
+    /// by calling this method, sending isTyping message will stop
+    ///
+    /// Inputs:
+    /// - you have to send the "uniqueId" that  "StartTyping" method that gives to you
+    ///
+    /// Outputs:
+    /// - It has no output
+    ///
+    /// - parameter uniqueId:   (input) the uniqueId that "StartTyping" gives to you (String)
     public func stopTyping(uniqueId: String) {
         for (index, item) in isTypingArray.enumerated() {
             if (item == uniqueId) {

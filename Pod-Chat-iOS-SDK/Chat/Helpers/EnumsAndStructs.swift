@@ -292,6 +292,8 @@ public enum Roles: String {
     case ADD_RULE_TO_USER           = "add_rule_to_user"
     case REMOVE_ROLE_FROM_USER      = "remove_role_from_user"
     case READ_THREAD                = "read_thread"
+    case EDIT_THREAD                = "edit_thread"
+    case THREAD_ADMIN               = "thread_admin"
 }
 
 public enum RoleOperations: String {

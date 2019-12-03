@@ -45,27 +45,24 @@ open class SendTextMessageRequestModel {
 open class SendBotMessageRequestModel {
     
     public let content:         String
+    public let messageId:       Int
     public let metaData:        JSON
-    public let repliedTo:       Int?
     public let systemMetadata:  JSON?
-    public let receiver:        Int
     
     public let typeCode:        String?
     public let uniqueId:        String?
     
     public init(content:        String,
+                messageId:      Int,
                 metaData:       JSON,
-                repliedTo:      Int?,
                 systemMetadata: JSON?,
-                receiver:       Int,
                 typeCode:       String?,
                 uniqueId:       String?) {
         
         self.content        = content
+        self.messageId      = messageId
         self.metaData       = metaData
-        self.repliedTo      = repliedTo
         self.systemMetadata = systemMetadata
-        self.receiver       = receiver
         self.typeCode       = typeCode
         self.uniqueId       = uniqueId
     }

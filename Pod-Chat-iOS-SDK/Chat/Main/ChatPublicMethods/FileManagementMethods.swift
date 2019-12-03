@@ -18,22 +18,22 @@ extension Chat {
     
     // MARK: - Upload Image/File
     
-    /**
-     UploadImage:
-     upload some image.
-     
-     By calling this function, HTTP request of type (UPLOAD_IMAGE) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     UploadImageRequestModel
-     
-     + Outputs:
-     It has 3 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- progress:
-     3- completion:
-     */
+    /// UploadImage:
+    /// upload some image.
+    ///
+    /// By calling this function, HTTP request of type (UPLOAD_IMAGE) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "UploadImageRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 3 callbacks as response:
+    ///
+    /// - parameter uploadImageInput:   (input) you have to send your parameters insid this model. (UploadImageRequestModel)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter progress:           (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (UploadImageModel)
     public func uploadImage(uploadImageInput:   UploadImageRequestModel,
                             uniqueId:           @escaping (String) -> (),
                             progress:           @escaping (Float) -> (),
@@ -130,21 +130,22 @@ extension Chat {
     }
     
     
-    /**
-     UploadFile:
-     upload some file.
-     
-     By calling this function, HTTP request of type (UPLOAD_FILE) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     UploadFileRequestModel
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:
-     */
+    /// UploadFile:
+    /// upload some file.
+    ///
+    /// By calling this function, HTTP request of type (UPLOAD_FILE) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "UploadFileRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 3 callbacks as response:
+    ///
+    /// - parameter uploadFileInput:    (input) you have to send your parameters insid this model. (UploadFileRequestModel)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter progress:           (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (UploadFileModel)
     public func uploadFile(uploadFileInput: UploadFileRequestModel,
                            uniqueId:        @escaping (String) -> (),
                            progress:        @escaping (Float) -> (),
@@ -275,22 +276,24 @@ extension Chat {
     
     
     // MARK: - Get Image/File
-    /*
-     GetImage:
-     get specific image.
-     
-     By calling this function, HTTP request of type (GET_IMAGE) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     GetImageRequestModel
-     
-     + Outputs:
-     It has 3 callbacks as response:
-     1- progress:       The progress of the downloading file as a number between 0 and 1.   (Float)
-     2- completion:     when the file completely downloaded, it will sent to client as 'UploadImageModel' model
-     3- cacheResponse:  If the file was already avalable on the cache, and aslso client wants to get cache result, it will send it as 'UploadImageModel' model
-     */
+    
+    /// GetImage:
+    /// get specific image.
+    ///
+    /// By calling this function, HTTP request of type (GET_IMAGE) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "GetImageRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 4 callbacks as response:
+    ///
+    /// - parameter getImageInput:  (input) you have to send your parameters insid this model. (GetImageRequestModel)
+    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter progress:       (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
+    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Data?, UploadImageModel)
+    /// - parameter cacheResponse:  (response) it will returns the response from CacheDB if user has enabled it. (UploadImageModel, String)
     public func getImage(getImageInput: GetImageRequestModel,
                          uniqueId:      @escaping (String) -> (),
                          progress:      @escaping (Float) -> (),
@@ -354,22 +357,23 @@ extension Chat {
     }
     
     
-    /*
-     GetFIle:
-     get specific file.
-     
-     By calling this function, HTTP request of type (GET_FILE) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     GetFileRequestModel
-     
-     + Outputs:
-     It has 3 callbacks as response:
-     1- progress:       The progress of the downloading file as a number between 0 and 1.   (Float)
-     2- completion:     when the file completely downloaded, it will sent to client as 'UploadFileModel' model
-     3- cacheResponse:  If the file was already avalable on the cache, and aslso client wants to get cache result, it will send it as 'UploadFileModel' model
-     */
+    /// GetFIle:
+    /// get specific file.
+    ///
+    /// By calling this function, HTTP request of type (GET_FILE) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "GetFileRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 4 callbacks as response:
+    ///
+    /// - parameter getFileInput:   (input) you have to send your parameters insid this model. (GetFileRequestModel)
+    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter progress:       (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
+    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Data?, UploadFileModel)
+    /// - parameter cacheResponse:  (response) it will returns the response from CacheDB if user has enabled it. (UploadFileModel, String)
     public func getFile(getFileInput:   GetFileRequestModel,
                         uniqueId:       @escaping (String) -> (),
                         progress:       @escaping (Float) -> (),

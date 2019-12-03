@@ -47,20 +47,23 @@ extension Chat {
                                 uniuqueIdCallback:  nil)
     }
     
-    /**
-     GetThreads:
-     By calling this function, a request of type 14 (GET_THREADS) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     - GetThreadsRequestModel
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:  it will returns the response that comes from server to this request.    (GetThreadsModel)
-     3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
-     */
+    
+    /// GetThreads:
+    /// this function will get threads of the user
+    ///
+    /// By calling this function, a request of type 14 (GET_THREADS) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "GetThreadsRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 3 callbacks as responses
+    ///
+    /// - parameter getThreadsInput:    (input) you have to send your parameters insid this model. (GetThreadsRequestModel)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! GetThreadsModel)
+    /// - parameter cacheResponse:      (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetThreadsModel)
     public func getThreads(getThreadsInput: GetThreadsRequestModel,
                            uniqueId:        @escaping (String) -> (),
                            completion:      @escaping callbackTypeAlias,
@@ -113,21 +116,21 @@ extension Chat {
     }
     
     
-    /**
-     UpdateThreadInfo:
-     update information about a thread.
-     
-     By calling this function, a request of type 30 (UPDATE_THREAD_INFO) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     - UpdateThreadInfoRequestModel
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:
-     */
+    /// UpdateThreadInfo:
+    /// update information about a thread.
+    ///
+    /// By calling this function, a request of type 30 (UPDATE_THREAD_INFO) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "UpdateThreadInfoRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as responses
+    ///
+    /// - parameter updateThreadInfoInput:  (input) you have to send your parameters insid this model. (UpdateThreadInfoRequestModel)
+    /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:             (response) it will returns the response that comes from server to this request. (Any as! GetThreadsModel)
     public func updateThreadInfo(updateThreadInfoInput: UpdateThreadInfoRequestModel,
                                  uniqueId:              @escaping (String) -> (),
                                  completion:            @escaping callbackTypeAlias) {
@@ -169,22 +172,21 @@ extension Chat {
     
     // MARK: - Create Thread
     
-    /**
-     CreateThread:
-     create a thread with somebody
-    
-     By calling this function, a request of type 1 (CREATE_THREAD) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-    
-     + Access:   - Public
-     + Inputs:
-     - CreateThreadRequestModel
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:     it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:   it will returns the response that comes from server to this request.    (ThreadModel)
-     */
+    /// CreateThread:
+    /// create a thread with somebody
+    ///
+    /// By calling this function, a request of type 1 (CREATE_THREAD) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "CreateThreadRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 3 callbacks as responses
+    ///
+    /// - parameter createThreadInput:  (input) you have to send your parameters insid this model. (CreateThreadRequestModel)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! ThreadModel)
     public func createThread(createThreadInput: CreateThreadRequestModel,
                              uniqueId:          @escaping (String) -> (),
                              completion:        @escaping callbackTypeAlias) {
@@ -224,25 +226,24 @@ extension Chat {
     }
     
     
-    /**
-     CreateThreadAndSendMessage:
-     create a thread with somebody and simultaneously send a message on this thread.
-     
-     By calling this function, a request of type 1 (CREATE_THREAD) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-
-     + Access:   - Public
-     + Inputs:
-     - CreateThreadWithMessageRequestModel
-     
-     + Outputs:
-     It has 5 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:  it will returns the response that comes from server to this request.    (ThreadModel)
-     3- onSent:      when this message has sent to the server, this response will come.
-     4- onDelivere:  when this message has delivered to the user, this response will come.
-     5- onSeen:      when the user has seen this message, this response will come.
-     */
+    /// CreateThreadAndSendMessage:
+    /// create a thread with somebody and simultaneously send a message on this thread.
+    ///
+    /// By calling this function, a request of type 1 (CREATE_THREAD) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "CreateThreadWithMessageRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 5 callbacks as responses
+    ///
+    /// - parameter creatThreadWithMessageInput:    (input) you have to send your parameters insid this model. (CreateThreadWithMessageRequestModel)
+    /// - parameter uniqueId:                       (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:                     (response) it will returns the response that comes from server to this request. (Any as! ThreadModel)
+    /// - parameter onSent:                         (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
+    /// - parameter onDelivere:                     (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
+    /// - parameter onSeen:                         (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
     public func createThreadWithMessage(creatThreadWithMessageInput: CreateThreadWithMessageRequestModel,
                                         uniqueId:                    @escaping (String) -> (),
                                         completion:                  @escaping callbackTypeAlias,
@@ -290,21 +291,21 @@ extension Chat {
     
     // MARK: - Leave/Spam Thread
     
-    /**
-     LeaveThread:
-     leave from a specific thread.
-     
-     By calling this function, a request of type 9 (LEAVE_THREAD) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     LeaveThreadRequestModel
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:  it will returns the response that comes from server to this request.    (ThreadModel)
-     */
+    /// LeaveThread:
+    /// leave from a specific thread.
+    ///
+    /// By calling this function, a request of type 9 (LEAVE_THREAD) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "LeaveThreadRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as responses
+    ///
+    /// - parameter leaveThreadInput:   (input) you have to send your parameters insid this model. (LeaveThreadRequestModel)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! ThreadModel)
     public func leaveThread(leaveThreadInput:   LeaveThreadRequestModel,
                             uniqueId:           @escaping (String) -> (),
                             completion:         @escaping callbackTypeAlias) {
@@ -344,28 +345,28 @@ extension Chat {
     }
     
     
-    /**
-     SpamPVThread:
-     spam a thread.
-     
-     By calling this function, a request of type 41 (SPAM_PV_THREAD) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     SpamPvThreadRequestModel
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:
-     */
+    /// SpamPVThread:
+    /// spam a thread.
+    ///
+    /// By calling this function, a request of type 41 (SPAM_PV_THREAD) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "SpamPvThreadRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as responses. the las callback will come 3 times : for LeaveThread response, for BlockContact response, for ClearHistory response
+    ///
+    /// - parameter spamPvThreadInput:  (input) you have to send your parameters insid this model. (SpamPvThreadRequestModel)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request for 3 times!. (Any as! ThreadModel) (Any as! BlockedContactModel) (Any as! ClearHistoryModel)
     public func spamPvThread(spamPvThreadInput: SpamPvThreadRequestModel,
                              uniqueId:          @escaping (String) -> (),
-                             completion:        @escaping callbackTypeAlias) {
+                             completions:       @escaping callbackTypeAlias) {
         
         log.verbose("Try to request to spam thread with this parameters: \n \(spamPvThreadInput)", context: "Chat")
         
-        spamPvThreadCallbackToUser = completion
+        spamPvThreadCallbackToUser = completions
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.SPAM_PV_THREAD.rawValue,
                                             content:            nil,
@@ -400,21 +401,21 @@ extension Chat {
     
     // MARK: - Mute/Unmute Thread
     
-    /**
-     MuteThread:
-     mute a thread
-     
-     By calling this function, a request of type 19 (MUTE_THREAD) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     MuteAndUnmuteThreadRequestModel
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:  it will returns the response that comes from server to this request.    (??)
-     */
+    /// MuteThread:
+    /// mute a thread
+    ///
+    /// By calling this function, a request of type 19 (MUTE_THREAD) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "MuteAndUnmuteThreadRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as responses.
+    ///
+    /// - parameter muteThreadInput:    (input) you have to send your parameters insid this model. (MuteAndUnmuteThreadRequestModel)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! MuteUnmuteThreadModel)
     public func muteThread(muteThreadInput: MuteAndUnmuteThreadRequestModel,
                            uniqueId:        @escaping (String) -> (),
                            completion:      @escaping callbackTypeAlias) {
@@ -454,21 +455,21 @@ extension Chat {
     }
     
     
-    /**
-     UnmuteThread:
-     mute a thread
-     
-     By calling this function, a request of type 20 (UNMUTE_THREAD) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     MuteAndUnmuteThreadRequestModel
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:  it will returns the response that comes from server to this request.    (??)
-     */
+    /// UnmuteThread:
+    /// unmute a thread
+    ///
+    /// By calling this function, a request of type 20 (UNMUTE_THREAD) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "MuteAndUnmuteThreadRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as responses.
+    ///
+    /// - parameter unmuteThreadInput:  (input) you have to send your parameters insid this model. (MuteAndUnmuteThreadRequestModel)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! MuteUnmuteThreadModel)
     public func unmuteThread(unmuteThreadInput: MuteAndUnmuteThreadRequestModel,
                              uniqueId:          @escaping (String) -> (),
                              completion:        @escaping callbackTypeAlias) {
@@ -510,22 +511,22 @@ extension Chat {
     
     // MARK: - Get/Add/Remove ThreadParticipants
     
-    /**
-     GetThreadParticipants:
-     get all participants in a specific thread.
-     
-     By calling this function, a request of type 27 (THREAD_PARTICIPANTS) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     GetThreadParticipantsRequestModel
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:  it will returns the response that comes from server to this request.    (GetThreadParticipantsModel)
-     3- cacheResponse:  there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true
-     */
+    /// GetThreadParticipants:
+    /// get all participants in a specific thread.
+    ///
+    /// By calling this function, a request of type 27 (THREAD_PARTICIPANTS) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "GetThreadParticipantsRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 3 callbacks as responses.
+    ///
+    /// - parameter getThreadParticipantsInput: (input) you have to send your parameters insid this model. (GetThreadParticipantsRequestModel)
+    /// - parameter uniqueId:                   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:                 (response) it will returns the response that comes from server to this request. (Any as! GetThreadParticipantsModel)
+    /// - parameter cacheResponse:              (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetThreadParticipantsModel)
     public func getThreadParticipants(getThreadParticipantsInput:   GetThreadParticipantsRequestModel,
                                       uniqueId:                     @escaping (String) -> (),
                                       completion:                   @escaping callbackTypeAlias,
@@ -577,21 +578,21 @@ extension Chat {
     }
     
     
-    /**
-     AddParticipants:
-     add participant to a specific thread.
-     
-     By calling this function, a request of type 11 (ADD_PARTICIPANT) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     AddParticipantsRequestModel
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:  it will returns the response that comes from server to this request.    (AddParticipantModel)
-     */
+    /// AddParticipants:
+    /// add participant to a specific thread.
+    ///
+    /// By calling this function, a request of type 11 (ADD_PARTICIPANT) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "AddParticipantsRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as responses.
+    ///
+    /// - parameter addParticipantsInput:   (input) you have to send your parameters insid this model. (AddParticipantsRequestModel)
+    /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:             (response) it will returns the response that comes from server to this request. (Any as! AddParticipantModel)
     public func addParticipants(addParticipantsInput:   AddParticipantsRequestModel,
                                 uniqueId:               @escaping (String) -> (),
                                 completion:             @escaping callbackTypeAlias) {
@@ -633,21 +634,21 @@ extension Chat {
     }
     
     
-    /**
-     RemoveParticipants:
-     remove participants from a specific thread.
-     
-     By calling this function, a request of type 18 (REMOVE_PARTICIPANT) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     RemoveParticipantsRequestModel
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:    it will returns the request 'UniqueId' that will send to server.        (String)
-     2- completion:  it will returns the response that comes from server to this request.    (RemoveParticipantModel)
-     */
+    /// RemoveParticipants:
+    /// remove participants from a specific thread.
+    ///
+    /// By calling this function, a request of type 18 (REMOVE_PARTICIPANT) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "RemoveParticipantsRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as responses.
+    ///
+    /// - parameter removeParticipantsInput:    (input) you have to send your parameters insid this model. (RemoveParticipantsRequestModel)
+    /// - parameter uniqueId:                   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:                 (response) it will returns the response that comes from server to this request. (Any as! RemoveParticipantModel)
     public func removeParticipants(removeParticipantsInput: RemoveParticipantsRequestModel,
                                    uniqueId:                @escaping (String) -> (),
                                    completion:              @escaping callbackTypeAlias) {
@@ -691,22 +692,22 @@ extension Chat {
     
     // MARK: - Get/Set/Remove AdminRole
     
-    /**
-     SetRole:
-     setRoleTo or removeRoleFrom User
-     
-     By calling this function, a request of type 42 (SET_RULE_TO_USER) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     [SetRoleRequestModel]
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:                it will returns the request 'UniqueId' that will send to server.              (String)
-     2- completion:             it will returns the response that comes from server to this request.   (RemoveParticipantModel)
-     3- cacheResponse:    it will returns the response from Cache to this request.                      (RemoveParticipantModel)
-     */
+    /// SetRole:
+    /// setRoleTo or removeRoleFrom User
+    ///
+    /// By calling this function, a request of type 42 (SET_RULE_TO_USER) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "[SetRoleRequestModel]" to this function
+    ///
+    /// Outputs:
+    /// - It has 3 callbacks as responses.
+    ///
+    /// - parameter setRoleInput:   (input) you have to send your parameters insid this model. ([SetRoleRequestModel])
+    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! UserRolesModel)
+    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (UserRolesModel)
     public func setRole(setRoleInput:   [SetRoleRequestModel],
                         uniqueId:       @escaping (String) -> (),
                         completion:     @escaping callbackTypeAlias,

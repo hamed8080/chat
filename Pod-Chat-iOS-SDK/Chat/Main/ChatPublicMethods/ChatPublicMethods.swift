@@ -22,22 +22,19 @@ extension Chat {
     }
     
     
-    /*
-     Deliver:
-     send deliver for some message.
-     
-     By calling this function, a request of type 4 (DELIVERY) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     this function will get some optional prameters as an input, as JSON or Model (depends on the function that you would use) which are:
-     - messageId:
-     - ownerId:
-     - typeCode:
-     
-     + Outputs:
-     this function has no output!
-     */
+    /// Deliver:
+    /// send deliver for some message.
+    ///
+    /// By calling this function, a request of type 4 (DELIVERY) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "DeliverSeenRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - this method does not have any output
+    ///
+    /// - parameter getContactsInput:   (input) you have to send your parameters insid this model. (DeliverSeenRequestModel)
     public func deliver(deliverInput: DeliverSeenRequestModel) {
         log.verbose("Try to send deliver message for a message id with this parameters: \n \(deliverInput)", context: "Chat")
         
@@ -82,22 +79,19 @@ extension Chat {
     }
     
     
-    /*
-     Seen:
-     send seen for some message.
-     
-     By calling this function, a request of type 5 (SEEN) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     this function will get some optional prameters as an input, as JSON or Model (depends on the function that you would use) which are:
-     - messageId:
-     - ownerId:
-     - typeCode:
-     
-     + Outputs:
-     this function has no output!
-     */
+    /// Seen:
+    /// send seen for some message.
+    ///
+    /// By calling this function, a request of type 5 (SEEN) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "DeliverSeenRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - this method does not have any output
+    ///
+    /// - parameter getContactsInput:   (input) you have to send your parameters insid this model. (DeliverSeenRequestModel)
     public func seen(seenInput: DeliverSeenRequestModel) {
         log.verbose("Try to send deliver message for a message id with this parameters: \n \(seenInput)", context: "Chat")
         

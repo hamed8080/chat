@@ -17,23 +17,21 @@ import Alamofire
 
 extension Chat {
     
-    /*
-     Map Revers:
-     get location details from client location.
-     
-     By calling this function, HTTP request of type (REVERSE to the MAP_ADDRESS) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     this function will get some optional prameters as an input, as 'MapReverseRequestModel' Model which are:
-     - lat:
-     - lng:
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:       the unique id of this request, that returns as a collback to client. (String)
-     2- completion:     the final response of this request will sent to the client as 'MapReverseModel' model
-     */
+    /// MapRevers:
+    /// get location details from client location.
+    ///
+    /// By calling this function, HTTP request of type (REVERSE to the MAP_ADDRESS) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "MapReverseRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as responses.
+    ///
+    /// - parameter mapReverseInput:    (input) you have to send your parameters insid this model. (MapReverseRequestModel)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! MapReverseModel)
     public func mapReverse(mapReverseInput: MapReverseRequestModel,
                            uniqueId:        @escaping (String) -> (),
                            completion:      @escaping callbackTypeAlias) {
@@ -65,24 +63,21 @@ extension Chat {
     }
     
     
-    /*
-     Map Search:
-     search near thing inside the map, whoes where close to the client location.
-     
-     By calling this function, HTTP request of type (SEARCH to the MAP_ADDRESS) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     this function will get some optional prameters as an input, as 'MapSearchRequestModel' Model which are:
-     - lat:
-     - lng:
-     - term: the search term
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:       the unique id of this request, that returns as a collback to client. (String)
-     2- completion:     the final response of this request will sent to the client as 'MapSearchModel' model
-     */
+    /// MapSearch:
+    /// search near thing inside the map, whoes where close to the client location.
+    ///
+    /// By calling this function, HTTP request of type (SEARCH to the MAP_ADDRESS) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "MapSearchRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as responses.
+    ///
+    /// - parameter mapSearchInput: (input) you have to send your parameters insid this model. (MapSearchRequestModel)
+    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! MapSearchModel)
     public func mapSearch(mapSearchInput:   MapSearchRequestModel,
                           uniqueId:         @escaping (String) -> (),
                           completion:       @escaping callbackTypeAlias) {
@@ -114,26 +109,21 @@ extension Chat {
     }
     
     
-    /*
-     Map Routing:
-     send 2 locations, and then give routing suggesston.
-     
-     By calling this function, HTTP request of type (SEARCH to the MAP_ADDRESS) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     this function will get some optional prameters as an input, as 'MapRoutingRequestModel' Model which are:
-     - originLat:
-     - originLng:
-     - destinationLat:
-     - destinationLng:
-     - alternative:
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:       the unique id of this request, that returns as a collback to client. (String)
-     2- completion:     the final response of this request will sent to the client as 'MapRoutingModel' model
-     */
+    /// MapRouting:
+    /// send 2 locations, and then give routing suggesston.
+    ///
+    /// By calling this function, HTTP request of type (SEARCH to the MAP_ADDRESS) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "MapRoutingRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as responses.
+    ///
+    /// - parameter mapRoutingInput:    (input) you have to send your parameters insid this model. (MapRoutingRequestModel)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! MapRoutingModel)
     public func mapRouting(mapRoutingInput: MapRoutingRequestModel,
                            uniqueId:        @escaping (String) -> (),
                            completion:      @escaping callbackTypeAlias) {
@@ -165,27 +155,22 @@ extension Chat {
     }
     
     
-    /*
-     Map Static Image:
-     get a static image from the map based on the location that user wants.
-     
-     By calling this function, HTTP request of type (STATIC_IMAGE to the MAP_ADDRESS) will send throut Chat-SDK,
-     then the response will come back as callbacks to client whose calls this function.
-     
-     + Inputs:
-     this function will get some optional prameters as an input, as 'MapStaticImageRequestModel' Model which are:
-     - type:
-     - zoom:
-     - centerLat:
-     - centerLng:
-     - width:
-     - height:
-     
-     + Outputs:
-     It has 2 callbacks as response:
-     1- uniqueId:       the unique id of this request, that returns as a collback to client. (String)
-     2- completion:     the final response of this request will sent to the client as and Image file
-     */
+    /// MapStaticImage:
+    /// get a static image from the map based on the location that user wants.
+    ///
+    /// By calling this function, HTTP request of type (STATIC_IMAGE to the MAP_ADDRESS) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "MapStaticImageRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as responses.
+    ///
+    /// - parameter mapStaticImageInput:    (input) you have to send your parameters insid this model. (MapStaticImageRequestModel)
+    /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter progress:               (response)  it will returns the progress of the downloading request by a value between 0 and 1. (Float)
+    /// - parameter completion:             (response) it will returns the response that comes from server to this request. (Any as! Data)
     public func mapStaticImage(mapStaticImageInput: MapStaticImageRequestModel,
                                uniqueId:            @escaping (String) -> (),
                                progress:            @escaping (Float) -> (),
