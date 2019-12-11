@@ -14,15 +14,14 @@ import CoreData
 
 extension Cache {
     
-    /*
-     * Delete UserInfo (from Cache):
-     * by calling this method, it will delete the CMUser that had been saved on the cache
-     *
-     *  + Access:   Public
-     *  + Inputs:   _
-     *  + Outputs:  _
-     *
-     */
+    /// Delete UserInfo:
+    /// by calling this method, it will delete the CMUser that had been saved on the cache
+    ///
+    /// Inputs:
+    /// - it has no params as input
+    ///
+    /// Outputs:
+    /// - it returns no output
     public func deleteUserInfo() {
         /*
          -> fetch CMUser
@@ -42,16 +41,17 @@ extension Cache {
     }
     
     
-    /*
-     * Delete Contacts by ContactIds (from Cache):
-     * by calling this method, it will delete the CMContact that had been saved on the cache
-     *
-     *  + Access:   Public
-     *  + Inputs:
-     *      - contactIds:   [Int]
-     *  + Outputs:  _
-     *
-     */
+    
+    /// Delete Contacts by ContactIds:
+    /// by calling this method, it will delete the CMContact that had been saved on the cache
+    ///
+    /// Inputs:
+    /// - it gets an array of contactIds to delete them
+    ///
+    /// Outputs:
+    /// - it returns no output
+    ///
+    /// - parameter contactIds:     contactId to delete them. ([Int])
     public func deleteContact(withContactIds contactIds: [Int])  {
         /*
          *  -> loop through the items inside the contactIs input
@@ -102,18 +102,16 @@ extension Cache {
     
     
     
-    /*
-     * Delete Contacts by TimeStamp:
-     *
-     * -> fetch contacts that has not been updated for 'timeStamp' seconds
-     * -> then delete them!
-     *
-     *  + Access:   Private
-     *  + Inputs:
-     *      - timeStamp:    Int
-     *  + Outputs:  _
-     *
-     */
+    /// Delete Contacts by TimeStamp:
+    /// by calling this method, it will delete the CMContact that had not been updated for specific timeStamp.
+    ///
+    /// Inputs:
+    /// - it gets the timeStamp as "Int" to delete Contacts that has not been updated for this amount of time
+    ///
+    /// Outputs:
+    /// - it returns no output
+    ///
+    /// - parameter byTimeStamp: declear the seconds to delete contacts that has not updated for this amount of time. (Int)
     func deleteContacts(byTimeStamp timeStamp: Int) {
         /*
          *  -> get the current time
@@ -146,7 +144,18 @@ extension Cache {
     }
     
     
-    // delete participants from specific thread
+    
+    /// Delete Participants by their ParticipantsIds on a specific thread:
+    /// by calling this method, it will delete the CMParticipant that had not been updated for specific timeStamp.
+    ///
+    /// Inputs:
+    /// - it gets the threadId as "Int" and an array of 'participantsId' to delete them
+    ///
+    /// Outputs:
+    /// - it returns no output
+    ///
+    /// - parameter inThread:       specify the threadId that want to delete participants from it. (Int)
+    /// - parameter participantIds: participantIds to delete them. ([Int])
     public func deleteParticipant(inThread: Int, withParticipantIds participantIds: [Int]) {
         /*
          *  -> fetch all the CMConversation where its is is equal to 'inThread' threadId
@@ -223,7 +232,22 @@ extension Cache {
     
     
     
+    // ToDo:
+    // this function should be deleted because another service that gives all threads, can handel deletion the threads
+    // so there is no longer needs to this function!!!!!
     // delete objects that has been not updated for "timeStamp" seconds
+    
+    /// Delete Participants by TimeStamp on a specific thread:
+    /// by calling this method, it will delete the CMParticipant that had not been updated for specific timeStamp.
+    ///
+    /// Inputs:
+    /// - it gets the threadId as "Int" and timeStamp as "Int" to delete Participats that has not been updated for this amount of time
+    ///
+    /// Outputs:
+    /// - it returns no output
+    ///
+    /// - parameter inThread:       specify the threadId that want to delete participants from it. (Int)
+    /// - parameter byTimeStamp:    declear the seconds to delete participants that has not updated for this amount of time. (Int)
     func deleteThreadParticipants(inThread: Int, byTimeStamp: Int) {
         /*
          *  -> get the current time
@@ -279,6 +303,7 @@ extension Cache {
     }
     
     
+    
     /*
     func deleteAllThreadParticipants(inThreadId: Int) {
         /*
@@ -306,10 +331,16 @@ extension Cache {
     
     
     
-    /*
-     *
-     *
-     */
+    /// Delete Threads by their ThreadIds:
+    /// by calling this method, we will delete specific CMConversation
+    ///
+    /// Inputs:
+    /// - it gets the threadIds as "[Int]" to delete them
+    ///
+    /// Outputs:
+    /// - it returns no output
+    ///
+    /// - parameter withThreadIds:  specify the threadIds that want to delete them. ([Int])
     public func deleteThreads(withThreadIds threadIds: [Int]) {
         /*
          *  -> loop through the items inside the 'threadIds' input
@@ -388,6 +419,24 @@ extension Cache {
     
     
     // ToDo: make it better, because it calls another function t delete messages (one more query on the cache)
+    /// Delete Message:
+    /// by calling this method, we will delete specific CMMessages
+    ///
+    /// Inputs:
+    /// - it gets some parameters to retireave Messages from Cache based on this params, and then delete them
+    ///
+    /// Outputs:
+    /// - it returns no output
+    ///
+    /// - parameter count:      how many Messages do you spect to delete (Int)
+    /// - parameter fromTime:   filter the messages that sends after this time.
+    /// - parameter messageId:  if you want to search specific message with its messageId, fill this parameter
+    /// - parameter offset:     from what offset do you want to get the Cache response (Int)
+    /// - parameter order:      on what order do you want to get the response? "asc" or "desc". (String?)
+    /// - parameter query:      if you want to search a specific term on the messages, fill this parameter. (String?)
+    /// - parameter threadIds:  do you want to search messages on what threadId. (Int)
+    /// - parameter fromTime:   filter the messages that sends before this time
+    /// - parameter uniqueId:   if you want to search specific message with its uniqueId, fill this parameter
     public func deleteMessage(count:    Int?,
                               fromTime: UInt?,
                               messageId: Int?,
@@ -397,10 +446,8 @@ extension Cache {
                               threadId: Int?,
                               toTime:   UInt?,
                               uniqueId: String?) {
-        let fetchRequest = retrieveMessageHistoryFetchRequest(firstMessageId:   nil,
-                                                              fromTime:         fromTime,
+        let fetchRequest = retrieveMessageHistoryFetchRequest(fromTime:         fromTime,
                                                               messageId:        messageId,
-                                                              lastMessageId:    nil,
                                                               order:            order,
                                                               query:            query,
                                                               threadId:         threadId,
@@ -435,13 +482,21 @@ extension Cache {
             fatalError("Error on fetching list of CMMessage")
         }
     }
-
     
     
     
-    
-    
-    // delete messages from specific thread
+    /// Delete Message on specific thread:
+    /// by calling this method, we will delete CMMessages on specific Thread
+    ///
+    /// Inputs:
+    /// - it gets some parameters to retireave Messages from Cache based on this params, and then delete them
+    ///
+    /// Outputs:
+    /// - it returns no output
+    ///
+    /// - parameter inThread:       the threadId that you want to delete messages from it. (Int)
+    /// - parameter allMessages:    if you want to delete all messages on this thread, send this param as "true". (Bool)
+    /// - parameter withMessageIds: if you want to delete specifice messages with their Ids, send them to this param. ([Int])
     public func deleteMessage(inThread: Int, allMessages: Bool, withMessageIds messageIds: [Int]) {
         /*
          *  -> define a method that will handle of deletion of messages
@@ -498,7 +553,7 @@ extension Cache {
         }
         
         if allMessages {
-            deleteMessageGaps(inThreadId: inThread)
+            deleteAllMessageGaps(inThreadId: inThread)
         } else {
             updateAllMessageGapEntity(inThreadId: inThread)
         }
@@ -508,12 +563,17 @@ extension Cache {
     
     
     
-    
-    /**
-     *
-     *
-     */
-    func deleteMessageGaps(inThreadId threadId: Int) {
+    /// Delete MessageGaps:
+    /// by calling this method, we will delete MessageGaps
+    ///
+    /// Inputs:
+    /// - it gets some the threadId that we want to delete all its MessageGaps
+    ///
+    /// Outputs:
+    /// - it returns no output
+    ///
+    /// - parameter inThread:       the threadId that you want to delete messageGapes from it. (Int)
+    func deleteAllMessageGaps(inThreadId threadId: Int) {
         /*
          *  -> fetch from 'MessageGaps' Entity with 'threadId' and 'messageId' Inputs
          *  -> if we found any object, we will delete it
@@ -542,28 +602,30 @@ extension Cache {
     
     
     
-    
-    
-    
-    
-    
     // MARK: Delete All Contacts
+    
+    /// Delete All Contacts:
+    /// by calling this method, it will Remove all Contacts and LinkeUsers From CacheDB.
+    ///
+    /// Inputs:
+    /// - it gets no parameters as input
+    ///
+    /// Outputs:
+    /// - it returns no output
     public func deleteAllContacts() {
         deleteContacts()
         deleteLinkedUsers()
     }
     
-    /*
-     * Delete All Contacts:
-     *
-     * -> it will fetch CMContacts objects from cache
-     * -> then, it will delete them one by one
-     *
-     *  + Access:   Private
-     *  + Inputs:   _
-     *  + Outputs:  _
-     *
-     */
+    
+    /// Delete Contacts:
+    /// by calling this method, it will just Remove Contacts From CacheDB.
+    ///
+    /// Inputs:
+    /// - it gets no parameters as input
+    ///
+    /// Outputs:
+    /// - it returns no output
     func deleteContacts() {
         /*
          *  -> fetch all CMContact
@@ -588,17 +650,15 @@ extension Cache {
         }
     }
     
-    /*
-     * Delete All LinkedUsers:
-     *
-     * -> it will fetch CMLinkedUser objects from cache
-     * -> then, it will delete them one by one
-     *
-     *  + Access:   Private
-     *  + Inputs:   _
-     *  + Outputs:  _
-     *
-     */
+    
+    /// Delete LinkedUsers:
+    /// by calling this method, it will just Remove LinkedUsers From CacheDB.
+    ///
+    /// Inputs:
+    /// - it gets no parameters as input
+    ///
+    /// Outputs:
+    /// - it returns no output
     func deleteLinkedUsers() {
         /*
          *  -> fetch all CMLinkedUser
@@ -620,6 +680,15 @@ extension Cache {
     
     
     // MARK: Delete All Threads
+    
+    /// Delete All Threads:
+    /// by calling this method, it will Remove all Threads and Participants and Messages From CacheDB.
+    ///
+    /// Inputs:
+    /// - it gets no parameters as input
+    ///
+    /// Outputs:
+    /// - it returns no output
     public func deleteAllThreads() {
         deleteThreads()
         deleteAllMessage()
@@ -627,6 +696,14 @@ extension Cache {
 //        deleteThreadParticipants()
     }
     
+    /// Delete Threads:
+    /// by calling this method, it will just Remove Threads From CacheDB.
+    ///
+    /// Inputs:
+    /// - it gets no parameters as input
+    ///
+    /// Outputs:
+    /// - it returns no output
     func deleteThreads() {
         /*
          *  -> fetch 'CMConversation' Entity
@@ -660,6 +737,14 @@ extension Cache {
         }
     }
     
+    /// Delete ThreadParticipants:
+    /// by calling this method, it will just Remove ThreadParticipants From CacheDB.
+    ///
+    /// Inputs:
+    /// - it gets no parameters as input
+    ///
+    /// Outputs:
+    /// - it returns no output
     func deleteParticipants() {
     /*
         *  -> fetch 'CMParticipant' Entity
@@ -699,7 +784,17 @@ extension Cache {
     */
     
     
+    
     // MARK: Delete All Messages
+    
+    /// Delete All Messages:
+    /// by calling this method, it will Remove all Messages and ReplyInfo and ForwardInfo and MessageGaps From CacheDB.
+    ///
+    /// Inputs:
+    /// - it gets no parameters as input
+    ///
+    /// Outputs:
+    /// - it returns no output
     public func deleteAllMessage() {
         deleteMessages()
         deleteReplyInfo()
@@ -707,6 +802,14 @@ extension Cache {
         deleteMessageGaps()
     }
     
+    /// Delete Messages:
+    /// by calling this method, it will just Remove Messages From CacheDB.
+    ///
+    /// Inputs:
+    /// - it gets no parameters as input
+    ///
+    /// Outputs:
+    /// - it returns no output
     func deleteMessages() {
         /*
          *  -> fetch 'CMMessage' Entity
@@ -742,6 +845,14 @@ extension Cache {
         }
     }
     
+    /// Delete ForwardInfo:
+    /// by calling this method, it will just Remove ForwardInfo From CacheDB.
+    ///
+    /// Inputs:
+    /// - it gets no parameters as input
+    ///
+    /// Outputs:
+    /// - it returns no output
     func deleteForwardInfo() {
         /*
          *  -> fetch 'CMForwardInfo' Entity
@@ -760,6 +871,14 @@ extension Cache {
         }
     }
     
+    /// Delete ReplyInfo:
+    /// by calling this method, it will just Remove ReplyInfo From CacheDB.
+    ///
+    /// Inputs:
+    /// - it gets no parameters as input
+    ///
+    /// Outputs:
+    /// - it returns no output
     func deleteReplyInfo() {
         /*
          *  -> fetch 'CMReplyInfo' Entity
@@ -797,6 +916,14 @@ extension Cache {
 //        }
 //    }
     
+    /// Delete MessageGaps:
+    /// by calling this method, it will just Remove MessageGaps From CacheDB.
+    ///
+    /// Inputs:
+    /// - it gets no parameters as input
+    ///
+    /// Outputs:
+    /// - it returns no output
     func deleteMessageGaps() {
         /*
          *  -> fetch 'MessageGaps' Entity
@@ -828,6 +955,14 @@ extension Cache {
     
     
     
+    /// Delete Everything fromCache:
+    /// by calling this method, it will just Remove everything From CacheDB.
+    ///
+    /// Inputs:
+    /// - it gets no parameters as input
+    ///
+    /// Outputs:
+    /// - it returns no output
     public func deleteCacheData() {
         deleteUserInfo()
         deleteContacts()    // it will delete the LinkedUsers too

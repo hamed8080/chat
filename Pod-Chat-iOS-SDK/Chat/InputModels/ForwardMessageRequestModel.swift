@@ -15,7 +15,7 @@ open class ForwardMessageRequestModel {
     public let messageIds:      [Int]
     public let metaData:        JSON?
     public let repliedTo:       Int?
-    public let subjectId:       Int
+    public let threadId:        Int
     public let uniqueIds:       [String]
     
     public let typeCode: String?
@@ -23,13 +23,13 @@ open class ForwardMessageRequestModel {
     public init(messageIds: [Int],
                 metaData:   JSON?,
                 repliedTo:  Int?,
-                subjectId:  Int,
+                threadId:   Int,
                 typeCode:   String?) {
         
         self.messageIds = messageIds
         self.metaData   = metaData
         self.repliedTo  = repliedTo
-        self.subjectId  = subjectId
+        self.threadId   = threadId
         self.typeCode   = typeCode
         
         var uniqueIdArr : [String] = []

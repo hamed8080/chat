@@ -83,33 +83,33 @@ extension Chat {
             uniqueId(getHistoryUniqueId)
         }
        
-        // if cache is enabled by user, first return cache result to the user
+//         if cache is enabled by user, first return cache result to the user
         if enableCache {
-    
+
             if let textMessages = Chat.cacheDB.retrieveWaitTextMessages(threadId: getHistoryInput.threadId) {
                 textMessagesNotSent(textMessages)
             }
-            if let editMessages = Chat.cacheDB.retrieveWaitEditMessages(threadId: getHistoryInput.threadId) {
-                editMessagesNotSent(editMessages)
-            }
-            if let forwardMessages = Chat.cacheDB.retrieveWaitForwardMessages(threadId: getHistoryInput.threadId) {
-                forwardMessagesNotSent(forwardMessages)
-            }
+//            if let editMessages = Chat.cacheDB.retrieveWaitEditMessages(threadId: getHistoryInput.threadId) {
+//                editMessagesNotSent(editMessages)
+//            }
+//            if let forwardMessages = Chat.cacheDB.retrieveWaitForwardMessages(threadId: getHistoryInput.threadId) {
+//                forwardMessagesNotSent(forwardMessages)
+//            }
             if let fileMessages = Chat.cacheDB.retrieveWaitFileMessages(threadId: getHistoryInput.threadId) {
                 fileMessagesNotSent(fileMessages)
             }
-            if let uploadImages = Chat.cacheDB.retrieveWaitUploadImages(threadId: getHistoryInput.threadId) {
-                uploadImageNotSent(uploadImages)
-            }
+//            if let uploadImages = Chat.cacheDB.retrieveWaitUploadImages(threadId: getHistoryInput.threadId) {
+//                uploadImageNotSent(uploadImages)
+//            }
             if let uploadFiles = Chat.cacheDB.retrieveWaitUploadFiles(threadId: getHistoryInput.threadId) {
                 uploadFileNotSent(uploadFiles)
             }
-           
+
             if let cacheHistoryResult = Chat.cacheDB.retrieveMessageHistory(count:          getHistoryInput.count ?? 50,
                                                                             firstMessageId: nil,
                                                                             fromTime:       getHistoryInput.fromTime,
                                                                             lastMessageId:  nil,
-                                                                            messageId:      0,
+                                                                            messageId:      getHistoryInput.messageId,
                                                                             offset:         getHistoryInput.offset ?? 0,
                                                                             order:          getHistoryInput.order,
                                                                             query:          getHistoryInput.query,
@@ -279,12 +279,12 @@ extension Chat {
     public func sendBotMessage(sendBotMessageInput: SendBotMessageRequestModel,
                                uniqueId:            @escaping ((String) -> ()),
                                onSent:              @escaping callbackTypeAlias,
-                               onDelivere:          @escaping callbackTypeAlias,
+                               onDelivered:         @escaping callbackTypeAlias,
                                onSeen:              @escaping callbackTypeAlias) {
         log.verbose("Try to send BotMessage with this parameters: \n \(sendBotMessageInput)", context: "Chat")
         
         sendCallbackToUserOnSent = onSent
-        sendCallbackToUserOnDeliver = onDelivere
+        sendCallbackToUserOnDeliver = onDelivered
         sendCallbackToUserOnSeen = onSeen
         
         let tempUniqueId = sendBotMessageInput.uniqueId ?? generateUUID()
@@ -356,7 +356,8 @@ extension Chat {
             let messageObjectToSendToQueue = QueueOfWaitEditMessagesModel(content:      editMessageInput.content,
                                                                           metaData:     editMessageInput.metaData,
                                                                           repliedTo:    editMessageInput.repliedTo,
-                                                                          subjectId:    editMessageInput.subjectId,
+                                                                          messageId:    editMessageInput.messageId,
+                                                                          threadId:     nil,
                                                                           typeCode:     editMessageInput.typeCode,
                                                                           uniqueId:     requestUniqueId)
             Chat.cacheDB.saveEditMessageToWaitQueue(editMessage: messageObjectToSendToQueue)
@@ -369,7 +370,7 @@ extension Chat {
                                             metaData:           (editMessageInput.metaData != nil) ? "\(editMessageInput.metaData!)" : nil,
                                             repliedTo:          editMessageInput.repliedTo,
                                             systemMetadata:     nil,
-                                            subjectId:          editMessageInput.subjectId,
+                                            subjectId:          editMessageInput.messageId,
                                             token:              token,
                                             tokenIssuer:        nil,
                                             typeCode:           editMessageInput.typeCode ?? generalTypeCode,
@@ -509,7 +510,7 @@ extension Chat {
             let messageObjectToSendToQueue = QueueOfWaitForwardMessagesModel(messageIds:    forwardMessageInput.messageIds,
                                                                              metaData:      forwardMessageInput.metaData,
                                                                              repliedTo:     forwardMessageInput.repliedTo,
-                                                                             subjectId:     forwardMessageInput.subjectId,
+                                                                             threadId:      forwardMessageInput.threadId,
                                                                              typeCode:      forwardMessageInput.typeCode,
                                                                              uniqueId:      tempUniqueId)
             Chat.cacheDB.saveForwardMessageToWaitQueue(forwardMessage: messageObjectToSendToQueue)
@@ -525,7 +526,7 @@ extension Chat {
                                             metaData:           (forwardMessageInput.metaData != nil) ? "\(forwardMessageInput.metaData!)" : nil,
                                             repliedTo:          forwardMessageInput.repliedTo,
                                             systemMetadata:     nil,
-                                            subjectId:          forwardMessageInput.subjectId,
+                                            subjectId:          forwardMessageInput.threadId,
                                             token:              token,
                                             tokenIssuer:        nil,
                                             typeCode:           forwardMessageInput.typeCode ?? generalTypeCode,

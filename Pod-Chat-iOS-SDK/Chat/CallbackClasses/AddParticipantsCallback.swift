@@ -36,7 +36,7 @@ extension Chat {
                     let myParticipant = Participant(messageContent: participant.formatToJSON(), threadId: message.subjectId)
                     participants.append(myParticipant)
                 }
-                Chat.cacheDB.saveThreadParticipantObjects(whereThreadIdIs: message.subjectId!, withParticipants: participants)
+                Chat.cacheDB.saveThreadParticipantObjects(whereThreadIdIs: message.subjectId!, withParticipants: participants, isAdminRequest: false)
             }
         }
         

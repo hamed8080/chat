@@ -219,11 +219,7 @@ extension Chat {
         
     }
     
-    private func addContactOnCache(withContactModel contactModel: ContactModel) {
-        if self.enableCache {
-            Chat.cacheDB.saveContact(withContactObjects: contactModel.contacts)
-        }
-    }
+    
     
     
     // MARK: - Add/Update/Remove Contact
@@ -235,15 +231,15 @@ extension Chat {
     /// then the response will come back as callbacks to client whose calls this function.
     ///
     /// Inputs:
-    /// - you have to send your parameters as "AddContactsRequestModel" to this function
+    /// - you have to send your parameters as "AddContactRequestModel" to this function
     ///
     /// Outputs:
     /// - It has 3 callbacks as responses.
     ///
-    /// - parameter addContactsInput:   (input) you have to send your parameters insid this model. (AddContactsRequestModel)
+    /// - parameter addContactsInput:   (input) you have to send your parameters insid this model. (AddContactRequestModel)
     /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! ContactModel)
-    public func addContact(addContactsInput:    AddContactsRequestModel,
+    public func addContact(addContactsInput:    AddContactRequestModel,
                            uniqueId:            @escaping (String) -> (),
                            completion:          @escaping callbackTypeAlias) {
         /**
@@ -266,7 +262,46 @@ extension Chat {
         
     }
     
-    private func sendAddContactRequest(addContactsInput:    AddContactsRequestModel,
+    
+    /// AddContacts:
+    /// it will add an array of contacts in one request
+    ///
+    /// By calling this function, HTTP request of type (ADD_CONTACTS) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "AddContactsRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 3 callbacks as responses.
+    ///
+    /// - parameter addContactsInput:   (input) you have to send your parameters insid this model. (AddContactsRequestModel)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! ContactModel)
+    public func addContacts(addContactsInput:    AddContactsRequestModel,
+                            uniqueId:            @escaping (String) -> (),
+                            completion:          @escaping callbackTypeAlias) {
+        /**
+         *  -> send the HTTP request to server to get the response from it
+         *      -> send the server respons to Cache and update it's values
+         *      -> send the server answer to client by using "completion" callback
+         *
+         */
+        log.verbose("Try to request to add contact with this parameters: \n \(addContactsInput)", context: "Chat")
+        
+        let messageUniqueId: String = addContactsInput.uniqueId ?? generateUUID()
+        uniqueId(messageUniqueId)
+        
+        sendAddContactsRequest(addContactsInput:    addContactsInput,
+                               messageUniqueId:     messageUniqueId)
+        { (addContactModel) in
+            self.addContactOnCache(withContactModel: addContactModel as! ContactModel)
+            completion(addContactModel)
+        }
+    }
+    
+    
+    private func sendAddContactRequest(addContactsInput:    AddContactRequestModel,
                                        messageUniqueId:     String,
                                        completion:          @escaping callbackTypeAlias) {
         /**
@@ -310,6 +345,55 @@ extension Chat {
         }
     }
     
+    private func sendAddContactsRequest(addContactsInput:    AddContactsRequestModel,
+                                        messageUniqueId:     String,
+                                        completion:          @escaping callbackTypeAlias) {
+        /**
+         *
+         *  -> create parameters to send HTTP request:
+         *
+         *  + method:   POST
+         *  + headers:
+         *      - _token_:          String
+         *      - _token_issuer_:   "1"
+         *  + params:  (get searchContactsInput and create the parameters from it)
+         *      - firstName:        [String]
+         *      - lastName:         [String]
+         *      - cellphoneNumber:  [String]
+         *      - email:            [String]
+         *      - uniqueId:         String?
+         *
+         */
+        
+        let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.ADD_CONTACTS.rawValue)"
+        let method: HTTPMethod      = HTTPMethod.post
+        let headers: HTTPHeaders    = ["_token_": token, "_token_issuer_": "1"]
+        
+        var params: Parameters      = [:]
+        params["firstName"]         = JSON(addContactsInput.firstNames)
+        params["lastName"]          = JSON(addContactsInput.lastNames)
+        params["cellphoneNumber"]   = JSON(addContactsInput.cellphoneNumbers)
+        params["email"]             = JSON(addContactsInput.emails)
+        params["uniqueId"]          = JSON(messageUniqueId)
+        if let typeCode_ = addContactsInput.typeCode {
+            params["typeCode"] = JSON(typeCode_)
+        }
+        
+        Networking.sharedInstance.requesttWithJSONresponse(from:            url,
+                                                           withMethod:      method,
+                                                           withHeaders:     headers,
+                                                           withParameters:  params)
+        { (jsonResponse) in
+            let contactsModel = ContactModel(messageContent: jsonResponse as! JSON)
+            completion(contactsModel)
+        }
+    }
+    
+    private func addContactOnCache(withContactModel contactModel: ContactModel) {
+        if self.enableCache {
+            Chat.cacheDB.saveContact(withContactObjects: contactModel.contacts)
+        }
+    }
     
     /// UpdateContact:
     /// it will update an existing contact
@@ -708,7 +792,7 @@ extension Chat {
 //        var cellphoneNumberArray = [String]()
 //        var emailArray = [String]()
         
-        var phoneContacts = [AddContactsRequestModel]()
+        var phoneContacts = [AddContactRequestModel]()
         
         let store = CNContactStore()
         store.requestAccess(for: .contacts) { (granted, error) in
@@ -728,7 +812,7 @@ extension Chat {
                         let phoneNumber = contact.phoneNumbers.first?.value.stringValue
                         let emailAddress = contact.emailAddresses.first?.value
                         
-                        let contact = AddContactsRequestModel(cellphoneNumber:  phoneNumber,
+                        let contact = AddContactRequestModel(cellphoneNumber:  phoneNumber,
                                                               email:            emailAddress as String?,
                                                               firstName:        firstName,
                                                               lastName:         lastName,
@@ -744,8 +828,8 @@ extension Chat {
         }
         
         
-        var contactArrayToSendUpdate = [AddContactsRequestModel]()
-        func appendContactToArrayToUpdate(withContact contact: AddContactsRequestModel) {
+        var contactArrayToSendUpdate = [AddContactRequestModel]()
+        func appendContactToArrayToUpdate(withContact contact: AddContactRequestModel) {
             contactArrayToSendUpdate.append(contact)
             if enableCache {
                 Chat.cacheDB.savePhoneBookContact(contact: contact)
@@ -783,6 +867,97 @@ extension Chat {
             }) { (myResponse) in
                 completion(myResponse)
             }
+        }
+        
+    }
+    
+    
+    
+    public func syncContact2(uniqueId:      @escaping (String) -> (),
+                             completion:    @escaping callbackTypeAlias,
+                             cacheResponse: @escaping ([ContactModel]) -> ()) {
+        log.verbose("Try to request to sync contact", context: "Chat")
+        
+        let myUniqueId = generateUUID()
+        
+        var firstNameArray = [String]()
+        var lastNameArray = [String]()
+        var cellphoneNumberArray = [String]()
+        var emailArray = [String]()
+        
+        let store = CNContactStore()
+        store.requestAccess(for: .contacts) { (granted, error) in
+            if let _ = error {
+                return
+            }
+            if granted {
+                let keys = [CNContactGivenNameKey,
+                            CNContactFamilyNameKey,
+                            CNContactPhoneNumbersKey,
+                            CNContactEmailAddressesKey]
+                let request = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
+                do {
+                    try store.enumerateContacts(with: request, usingBlock: { (contact, stopPointer) in
+                        firstNameArray.append(contact.givenName)
+                        lastNameArray.append(contact.familyName)
+                        cellphoneNumberArray.append(contact.phoneNumbers.first?.value.stringValue ?? "")
+                        emailArray.append((contact.emailAddresses.first?.value as String?) ?? "")
+                    })
+                } catch {
+                    
+                }
+            }
+        }
+        
+        
+        var firstNames: [String] = []
+        var lastNames:  [String] = []
+        var cellPhones: [String] = []
+        var emails:     [String] = []
+        
+        func appendContactToArrayToUpdate(atIndex: Int) {
+            firstNames.append(firstNameArray[atIndex])
+            lastNames.append(lastNameArray[atIndex])
+            cellPhones.append(cellphoneNumberArray[atIndex])
+            emails.append(emailArray[atIndex])
+        }
+        
+        if let cachePhoneContacts = Chat.cacheDB.retrievePhoneContacts() {
+            for (index, _) in firstNameArray.enumerated() {
+                var findContactOnPhoneBookCache = false
+                for cacheContact in cachePhoneContacts {
+                    // if there is some number that is already exist on the both phone contact and phoneBookCache, check if there is any update, update the contact
+                    if cellphoneNumberArray[index] == cacheContact.cellphoneNumber {
+                        findContactOnPhoneBookCache = true
+                        if (cacheContact.email != emailArray[index]) || (cacheContact.firstName != firstNameArray[index]) || (cacheContact.lastName != lastNameArray[index]) {
+                            appendContactToArrayToUpdate(atIndex: index)
+                        }
+                    }
+                }
+                
+                if (!findContactOnPhoneBookCache) {
+                    appendContactToArrayToUpdate(atIndex: index)
+                }
+                
+            }
+        } else {
+            // if there is no data on phoneBookCache, add all contacts from phone and save them on cache
+            for (index, _) in firstNameArray.enumerated() {
+                appendContactToArrayToUpdate(atIndex: index)
+            }
+        }
+        
+        let addContactsModel = AddContactsRequestModel(cellphoneNumbers: cellPhones,
+                                                       emails:          emails,
+                                                       firstNames:      firstNames,
+                                                       lastNames:       lastNames,
+                                                       typeCode:        nil,
+                                                       uniqueId:        myUniqueId)
+        
+        addContacts(addContactsInput: addContactsModel, uniqueId: { (resUniqueId) in
+            uniqueId(resUniqueId)
+        }) { (myResponse) in
+            completion(myResponse)
         }
         
     }

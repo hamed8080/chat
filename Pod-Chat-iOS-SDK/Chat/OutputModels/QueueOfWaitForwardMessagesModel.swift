@@ -14,7 +14,7 @@ open class QueueOfWaitForwardMessagesModel {
     let messageIds: [Int]?
     let metaData:   JSON?
     let repliedTo:  Int?
-    let subjectId:  Int?
+    let threadId:   Int?
     
     let typeCode:   String?
     let uniqueId:   String?
@@ -22,14 +22,14 @@ open class QueueOfWaitForwardMessagesModel {
     init(messageIds:    [Int]?,
          metaData:      JSON?,
          repliedTo:     Int?,
-         subjectId:     Int?,
+         threadId:      Int?,
          typeCode:      String?,
          uniqueId:      String?) {
         
         self.messageIds = messageIds
         self.metaData   = metaData
         self.repliedTo  = repliedTo
-        self.subjectId  = subjectId
+        self.threadId   = threadId
         self.typeCode   = typeCode
         self.uniqueId   = uniqueId
     }
@@ -38,7 +38,7 @@ open class QueueOfWaitForwardMessagesModel {
         self.messageIds = forwardMessageInputModel.messageIds
         self.metaData   = forwardMessageInputModel.metaData
         self.repliedTo  = forwardMessageInputModel.repliedTo
-        self.subjectId  = forwardMessageInputModel.subjectId
+        self.threadId   = forwardMessageInputModel.threadId
         self.typeCode   = forwardMessageInputModel.typeCode
         self.uniqueId   = uniqueId
     }

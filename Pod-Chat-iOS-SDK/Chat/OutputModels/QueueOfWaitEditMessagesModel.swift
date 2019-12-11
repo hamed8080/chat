@@ -14,7 +14,8 @@ open class QueueOfWaitEditMessagesModel {
     let content:    String?
     let metaData:   JSON?
     let repliedTo:  Int?
-    let subjectId:  Int?
+    let messageId:  Int?
+    let threadId:   Int?
     
     let typeCode:   String?
     let uniqueId:   String?
@@ -22,14 +23,16 @@ open class QueueOfWaitEditMessagesModel {
     init(content:   String?,
          metaData:  JSON?,
          repliedTo: Int?,
-         subjectId: Int?,
+         messageId: Int?,
+         threadId:  Int?,
          typeCode:  String?,
          uniqueId:  String?) {
         
         self.content    = content
         self.metaData   = metaData
         self.repliedTo  = repliedTo
-        self.subjectId  = subjectId
+        self.messageId  = messageId
+        self.threadId   = threadId
         self.typeCode   = typeCode
         self.uniqueId   = uniqueId
     }
@@ -38,7 +41,8 @@ open class QueueOfWaitEditMessagesModel {
         self.content    = editMessageInputModel.content
         self.metaData   = editMessageInputModel.metaData
         self.repliedTo  = editMessageInputModel.repliedTo
-        self.subjectId  = editMessageInputModel.subjectId
+        self.messageId  = editMessageInputModel.messageId
+        self.threadId   = nil
         self.typeCode   = editMessageInputModel.typeCode
         self.uniqueId   = editMessageInputModel.uniqueId
     }

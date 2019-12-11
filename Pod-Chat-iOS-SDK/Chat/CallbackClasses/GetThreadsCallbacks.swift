@@ -81,7 +81,7 @@ extension Chat {
                         }
                     }
                     var cacheThreadIds: [Int] = []
-                    let cacheThreadModel = Chat.cacheDB.retrieveThreads(ascending: false, count: 100000, name: nil, offset: 0, threadIds: nil, timeStamp: cacheTimeStamp)
+                    let cacheThreadModel = Chat.cacheDB.retrieveThreads(ascending: false, count: 100000, name: nil, offset: 0, threadIds: nil/*, timeStamp: cacheTimeStamp*/)
                     for thread in cacheThreadModel?.threads ?? [] {
                         if let thID = thread.id {
                             cacheThreadIds.append(thID)

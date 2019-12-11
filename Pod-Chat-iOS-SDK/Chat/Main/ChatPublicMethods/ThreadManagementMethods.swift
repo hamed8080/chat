@@ -107,8 +107,8 @@ extension Chat {
                                                                count:       getThreadsInput.count ?? 50,
                                                                name:        getThreadsInput.name,
                                                                offset:      getThreadsInput.offset ?? 0,
-                                                               threadIds:   getThreadsInput.threadIds,
-                                                               timeStamp:   cacheTimeStamp) {
+                                                               threadIds:   getThreadsInput.threadIds/*,
+                                                               timeStamp:   cacheTimeStamp*/) {
                 cacheResponse(cacheThreads)
             }
         }

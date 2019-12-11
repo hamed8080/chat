@@ -82,7 +82,7 @@ extension Cache {
         messageToSaveOnQueue.wC             = image.wC as NSNumber?
         
         // save function that will try to save changes that made on the Cache
-        saveContext(subject: "Create QueueOfImages -create a new object-")
+        saveContext(subject: "Create QueueOfUploadImages -create a new object-")
     }
     
     func saveUploadFileToWaitQueue(file: QueueOfWaitUploadFilesModel) {
@@ -105,7 +105,7 @@ extension Cache {
         let messageToSaveOnQueue = QueueOfEditMessages(entity: theWaitQueueEntity!, insertInto: context)
         messageToSaveOnQueue.content    = editMessage.content
         messageToSaveOnQueue.repliedTo  = editMessage.repliedTo as NSNumber?
-        messageToSaveOnQueue.subjectId  = editMessage.subjectId as NSNumber?
+        messageToSaveOnQueue.messageId  = editMessage.messageId as NSNumber?
         messageToSaveOnQueue.typeCode   = editMessage.typeCode
         messageToSaveOnQueue.uniqueId   = editMessage.uniqueId
         
@@ -124,7 +124,7 @@ extension Cache {
         let messageToSaveOnQueue = QueueOfForwardMessages(entity: theWaitQueueEntity!, insertInto: context)
         messageToSaveOnQueue.messageIds = forwardMessage.messageIds as [NSNumber]?
         messageToSaveOnQueue.repliedTo  = forwardMessage.repliedTo as NSNumber?
-        messageToSaveOnQueue.subjectId  = forwardMessage.subjectId as NSNumber?
+        messageToSaveOnQueue.threadId  = forwardMessage.threadId as NSNumber?
         messageToSaveOnQueue.typeCode   = forwardMessage.typeCode
         messageToSaveOnQueue.uniqueId   = forwardMessage.uniqueId
         
@@ -198,7 +198,7 @@ extension Cache {
     }
     
     func retrieveWaitUploadImages(threadId: Int) -> [QueueOfWaitUploadImagesModel]? {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfImages")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfUploadImages")
         
         // this predicate used to get messages that are in the specific thread using 'threadId' property
         let threadPredicate = NSPredicate(format: "threadId == %i", threadId)

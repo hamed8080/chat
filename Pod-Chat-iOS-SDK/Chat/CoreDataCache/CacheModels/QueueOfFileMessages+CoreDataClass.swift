@@ -19,7 +19,7 @@ public class QueueOfFileMessages: NSManagedObject {
         var imageToSend:    Data?
         var metaData:       JSON?
         var repliedTo:      Int?
-        var subjectId:      Int?
+//        var subjectId:      Int?
         var threadId:       Int?
         
         func createVariables() {
@@ -37,9 +37,9 @@ public class QueueOfFileMessages: NSManagedObject {
             if let repliedTo2 = self.repliedTo as? Int {
                 repliedTo = repliedTo2
             }
-            if let subjectId2 = self.subjectId as? Int {
-                subjectId = subjectId2
-            }
+//            if let subjectId2 = self.subjectId as? Int {
+//                subjectId = subjectId2
+//            }
             if let threadId2 = self.threadId as? Int {
                 threadId = threadId2
             }

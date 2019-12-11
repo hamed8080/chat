@@ -1,250 +1,252 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14490.98" systemVersion="18D109" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14903" systemVersion="18G1012" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="CMBlockedContact" representedClassName=".CMBlockedContact" syncable="YES">
-        <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="nickName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="firstName" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="lastName" optional="YES" attributeType="String"/>
+        <attribute name="nickName" optional="YES" attributeType="String"/>
     </entity>
     <entity name="CMContact" representedClassName=".CMContact" syncable="YES">
-        <attribute name="blocked" optional="YES" attributeType="Boolean" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="cellphoneNumber" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="hasUser" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="notSeenDuration" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="time" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="uniqueId" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="userId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <relationship name="linkedUser" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMLinkedUser" inverseName="dummyContact" inverseEntity="CMLinkedUser" syncable="YES"/>
+        <attribute name="blocked" optional="YES" attributeType="Boolean" defaultValueString="0.0" usesScalarValueType="NO"/>
+        <attribute name="cellphoneNumber" optional="YES" attributeType="String"/>
+        <attribute name="email" optional="YES" attributeType="String"/>
+        <attribute name="firstName" optional="YES" attributeType="String"/>
+        <attribute name="hasUser" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="image" optional="YES" attributeType="String"/>
+        <attribute name="lastName" optional="YES" attributeType="String"/>
+        <attribute name="notSeenDuration" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="time" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="uniqueId" optional="YES" attributeType="String"/>
+        <attribute name="userId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <relationship name="linkedUser" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMLinkedUser" inverseName="dummyContact" inverseEntity="CMLinkedUser"/>
     </entity>
     <entity name="CMConversation" representedClassName=".CMConversation" syncable="YES">
-        <attribute name="admin" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="canEditInfo" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="canSpam" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="descriptions" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="group" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="joinDate" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="lastMessage" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="lastParticipantImage" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="lastParticipantName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="lastSeenMessageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="lastSeenMessageNanos" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="lastSeenMessageTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="metadata" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="mute" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="participantCount" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="partner" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="partnerLastDeliveredMessageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="partnerLastDeliveredMessageNanos" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="partnerLastDeliveredMessageTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="partnerLastSeenMessageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="partnerLastSeenMessageNanos" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="partnerLastSeenMessageTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="type" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="unreadCount" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <relationship name="dummyForwardInfo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMForwardInfo" inverseName="conversation" inverseEntity="CMForwardInfo" syncable="YES"/>
-        <relationship name="dummyMessage" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="conversation" inverseEntity="CMMessage" syncable="YES"/>
-        <relationship name="dummyUserRoles" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMUserRole" inverseName="conversation" inverseEntity="CMUserRole" syncable="YES"/>
-        <relationship name="inviter" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMParticipant" inverseName="dummyConversationInviter" inverseEntity="CMParticipant" syncable="YES"/>
-        <relationship name="lastMessageVO" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="dummyConversationLastMessageVO" inverseEntity="CMMessage" syncable="YES"/>
-        <relationship name="participants" optional="YES" toMany="YES" deletionRule="Deny" ordered="YES" destinationEntity="CMParticipant" inverseName="dummyConversationParticipants" inverseEntity="CMParticipant" syncable="YES"/>
+        <attribute name="admin" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="canEditInfo" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="canSpam" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="descriptions" optional="YES" attributeType="String"/>
+        <attribute name="group" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="image" optional="YES" attributeType="String"/>
+        <attribute name="joinDate" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="lastMessage" optional="YES" attributeType="String"/>
+        <attribute name="lastParticipantImage" optional="YES" attributeType="String"/>
+        <attribute name="lastParticipantName" optional="YES" attributeType="String"/>
+        <attribute name="lastSeenMessageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="lastSeenMessageNanos" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="lastSeenMessageTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="metadata" optional="YES" attributeType="String"/>
+        <attribute name="mute" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="participantCount" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="partner" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="partnerLastDeliveredMessageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="partnerLastDeliveredMessageNanos" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="partnerLastDeliveredMessageTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="partnerLastSeenMessageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="partnerLastSeenMessageNanos" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="partnerLastSeenMessageTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="unreadCount" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <relationship name="dummyForwardInfo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMForwardInfo" inverseName="conversation" inverseEntity="CMForwardInfo"/>
+        <relationship name="dummyMessage" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="conversation" inverseEntity="CMMessage"/>
+        <relationship name="dummyUserRoles" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMUserRole" inverseName="conversation" inverseEntity="CMUserRole"/>
+        <relationship name="inviter" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMParticipant" inverseName="dummyConversationInviter" inverseEntity="CMParticipant"/>
+        <relationship name="lastMessageVO" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="dummyConversationLastMessageVO" inverseEntity="CMMessage"/>
+        <relationship name="participants" optional="YES" toMany="YES" deletionRule="Deny" ordered="YES" destinationEntity="CMParticipant" inverseName="dummyConversationParticipants" inverseEntity="CMParticipant"/>
     </entity>
     <entity name="CMForwardInfo" representedClassName=".CMForwardInfo" syncable="YES">
-        <relationship name="conversation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="dummyForwardInfo" inverseEntity="CMConversation" syncable="YES"/>
-        <relationship name="dummyMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="forwardInfo" inverseEntity="CMMessage" syncable="YES"/>
-        <relationship name="participant" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMParticipant" inverseName="dummyForwardInfo" inverseEntity="CMParticipant" syncable="YES"/>
+        <relationship name="conversation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="dummyForwardInfo" inverseEntity="CMConversation"/>
+        <relationship name="dummyMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="forwardInfo" inverseEntity="CMMessage"/>
+        <relationship name="participant" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMParticipant" inverseName="dummyForwardInfo" inverseEntity="CMParticipant"/>
     </entity>
     <entity name="CMLinkedUser" representedClassName=".CMLinkedUser" syncable="YES">
-        <attribute name="coreUserId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="nickname" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="dummyContact" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMContact" inverseName="linkedUser" inverseEntity="CMContact" syncable="YES"/>
+        <attribute name="coreUserId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="image" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="nickname" optional="YES" attributeType="String"/>
+        <attribute name="username" optional="YES" attributeType="String"/>
+        <relationship name="dummyContact" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMContact" inverseName="linkedUser" inverseEntity="CMContact"/>
     </entity>
     <entity name="CMMessage" representedClassName=".CMMessage" syncable="YES">
-        <attribute name="deletable" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="delivered" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="editable" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="edited" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="message" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="messageType" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="metaData" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="ownerId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="previousId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="seen" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="uniqueId" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="conversation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="dummyMessage" inverseEntity="CMConversation" syncable="YES"/>
-        <relationship name="dummyConversationLastMessageVO" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="lastMessageVO" inverseEntity="CMConversation" syncable="YES"/>
-        <relationship name="forwardInfo" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMForwardInfo" inverseName="dummyMessage" inverseEntity="CMForwardInfo" syncable="YES"/>
-        <relationship name="participant" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMParticipant" inverseName="dummyMessage" inverseEntity="CMParticipant" syncable="YES"/>
-        <relationship name="replyInfo" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMReplyInfo" inverseName="dummyMessage" inverseEntity="CMReplyInfo" syncable="YES"/>
+        <attribute name="deletable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="delivered" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="editable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="edited" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="message" optional="YES" attributeType="String"/>
+        <attribute name="messageType" optional="YES" attributeType="String"/>
+        <attribute name="metaData" optional="YES" attributeType="String"/>
+        <attribute name="ownerId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="previousId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="seen" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="uniqueId" optional="YES" attributeType="String"/>
+        <relationship name="conversation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="dummyMessage" inverseEntity="CMConversation"/>
+        <relationship name="dummyConversationLastMessageVO" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="lastMessageVO" inverseEntity="CMConversation"/>
+        <relationship name="forwardInfo" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMForwardInfo" inverseName="dummyMessage" inverseEntity="CMForwardInfo"/>
+        <relationship name="participant" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMParticipant" inverseName="dummyMessage" inverseEntity="CMParticipant"/>
+        <relationship name="replyInfo" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMReplyInfo" inverseName="dummyMessage" inverseEntity="CMReplyInfo"/>
     </entity>
     <entity name="CMParticipant" representedClassName=".CMParticipant" syncable="YES">
-        <attribute name="admin" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="blocked" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="cellphoneNumber" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="contactId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="coreUserId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="myFriend" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="notSeenDuration" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="online" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="receiveEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="roles" optional="YES" attributeType="Transformable" syncable="YES"/>
-        <attribute name="sendEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <relationship name="dummyConversationInviter" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="inviter" inverseEntity="CMConversation" syncable="YES"/>
-        <relationship name="dummyConversationParticipants" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="participants" inverseEntity="CMConversation" syncable="YES"/>
-        <relationship name="dummyForwardInfo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMForwardInfo" inverseName="participant" inverseEntity="CMForwardInfo" syncable="YES"/>
-        <relationship name="dummyMessage" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="participant" inverseEntity="CMMessage" syncable="YES"/>
-        <relationship name="dummyReplyInfo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMReplyInfo" inverseName="participant" inverseEntity="CMReplyInfo" syncable="YES"/>
+        <attribute name="admin" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="blocked" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="cellphoneNumber" optional="YES" attributeType="String"/>
+        <attribute name="contactId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="coreUserId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="email" optional="YES" attributeType="String"/>
+        <attribute name="firstName" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="image" optional="YES" attributeType="String"/>
+        <attribute name="lastName" optional="YES" attributeType="String"/>
+        <attribute name="myFriend" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="notSeenDuration" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="online" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="receiveEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="roles" optional="YES" attributeType="Transformable"/>
+        <attribute name="sendEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <relationship name="dummyAdmins" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ThreadAdmins" inverseName="participants" inverseEntity="ThreadAdmins"/>
+        <relationship name="dummyConversationInviter" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="inviter" inverseEntity="CMConversation"/>
+        <relationship name="dummyConversationParticipants" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="participants" inverseEntity="CMConversation"/>
+        <relationship name="dummyForwardInfo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMForwardInfo" inverseName="participant" inverseEntity="CMForwardInfo"/>
+        <relationship name="dummyMessage" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="participant" inverseEntity="CMMessage"/>
+        <relationship name="dummyReplyInfo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMReplyInfo" inverseName="participant" inverseEntity="CMReplyInfo"/>
     </entity>
     <entity name="CMReplyInfo" representedClassName=".CMReplyInfo" syncable="YES">
-        <attribute name="deletedd" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="message" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="messageType" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="metadata" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="repliedToMessageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="systemMetadata" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <relationship name="dummyMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="replyInfo" inverseEntity="CMMessage" syncable="YES"/>
-        <relationship name="participant" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMParticipant" inverseName="dummyReplyInfo" inverseEntity="CMParticipant" syncable="YES"/>
+        <attribute name="deletedd" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="message" optional="YES" attributeType="String"/>
+        <attribute name="messageType" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="metadata" optional="YES" attributeType="String"/>
+        <attribute name="repliedToMessageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="systemMetadata" optional="YES" attributeType="String"/>
+        <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <relationship name="dummyMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="replyInfo" inverseEntity="CMMessage"/>
+        <relationship name="participant" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMParticipant" inverseName="dummyReplyInfo" inverseEntity="CMParticipant"/>
     </entity>
     <entity name="CMThreadParticipants" representedClassName=".CMThreadParticipants" syncable="YES">
-        <attribute name="participantId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="threadId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="time" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="participantId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="threadId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="time" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <entity name="CMUploadFile" representedClassName=".CMUploadFile" syncable="YES">
-        <attribute name="hashCode" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="hashCode" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
     </entity>
     <entity name="CMUploadImage" representedClassName=".CMUploadImage" syncable="YES">
-        <attribute name="actualHeight" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="actualWidth" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="hashCode" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="height" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="width" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="actualHeight" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="actualWidth" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="hashCode" optional="YES" attributeType="String"/>
+        <attribute name="height" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="width" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
     </entity>
     <entity name="CMUser" representedClassName=".CMUser" syncable="YES">
-        <attribute name="cellphoneNumber" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="coreUserId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="lastSeen" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="receiveEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="sendEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="cellphoneNumber" optional="YES" attributeType="String"/>
+        <attribute name="coreUserId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="email" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="image" optional="YES" attributeType="String"/>
+        <attribute name="lastSeen" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="receiveEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="sendEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
     </entity>
     <entity name="CMUserRole" representedClassName=".CMUserRole" syncable="YES">
-        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="roles" optional="YES" attributeType="Transformable" syncable="YES"/>
-        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <relationship name="conversation" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="dummyUserRoles" inverseEntity="CMConversation" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="roles" optional="YES" attributeType="Transformable"/>
+        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <relationship name="conversation" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="dummyUserRoles" inverseEntity="CMConversation"/>
     </entity>
     <entity name="MessageGaps" representedClassName=".MessageGaps" syncable="YES">
-        <attribute name="messageId" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="previousId" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="threadId" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="messageId" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="previousId" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="threadId" attributeType="Integer 64" usesScalarValueType="NO"/>
     </entity>
     <entity name="PhoneContact" representedClassName=".PhoneContact" syncable="YES">
-        <attribute name="cellphoneNumber" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="cellphoneNumber" optional="YES" attributeType="String"/>
+        <attribute name="email" optional="YES" attributeType="String"/>
+        <attribute name="firstName" optional="YES" attributeType="String"/>
+        <attribute name="lastName" optional="YES" attributeType="String"/>
     </entity>
     <entity name="QueueOfEditMessages" representedClassName=".QueueOfEditMessages" syncable="YES">
-        <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="metaData" optional="YES" attributeType="Transformable" syncable="YES"/>
-        <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="subjectId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="typeCode" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="uniqueId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="content" optional="YES" attributeType="String"/>
+        <attribute name="messageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="metaData" optional="YES" attributeType="Transformable"/>
+        <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="threadId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="typeCode" optional="YES" attributeType="String"/>
+        <attribute name="uniqueId" optional="YES" attributeType="String"/>
     </entity>
     <entity name="QueueOfFileMessages" representedClassName=".QueueOfFileMessages" syncable="YES">
-        <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="fileName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="fileToSend" optional="YES" attributeType="Binary" syncable="YES"/>
-        <attribute name="hC" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="imageName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="imageToSend" optional="YES" attributeType="Binary" syncable="YES"/>
-        <attribute name="metaData" optional="YES" attributeType="Transformable" syncable="YES"/>
-        <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="subjectId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="typeCode" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="uniqueId" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="wC" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="xC" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="yC" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="content" optional="YES" attributeType="String"/>
+        <attribute name="fileName" optional="YES" attributeType="String"/>
+        <attribute name="fileToSend" optional="YES" attributeType="Binary"/>
+        <attribute name="hC" optional="YES" attributeType="String"/>
+        <attribute name="imageName" optional="YES" attributeType="String"/>
+        <attribute name="imageToSend" optional="YES" attributeType="Binary"/>
+        <attribute name="metaData" optional="YES" attributeType="Transformable"/>
+        <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="typeCode" optional="YES" attributeType="String"/>
+        <attribute name="uniqueId" optional="YES" attributeType="String"/>
+        <attribute name="wC" optional="YES" attributeType="String"/>
+        <attribute name="xC" optional="YES" attributeType="String"/>
+        <attribute name="yC" optional="YES" attributeType="String"/>
     </entity>
     <entity name="QueueOfForwardMessages" representedClassName=".QueueOfForwardMessages" syncable="YES">
-        <attribute name="messageIds" optional="YES" attributeType="Transformable" syncable="YES"/>
-        <attribute name="metaData" optional="YES" attributeType="Transformable" syncable="YES"/>
-        <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="subjectId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="typeCode" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="uniqueId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="messageIds" optional="YES" attributeType="Transformable"/>
+        <attribute name="metaData" optional="YES" attributeType="Transformable"/>
+        <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="typeCode" optional="YES" attributeType="String"/>
+        <attribute name="uniqueId" optional="YES" attributeType="String"/>
     </entity>
     <entity name="QueueOfTextMessages" representedClassName=".QueueOfTextMessages" syncable="YES">
-        <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="metaData" optional="YES" attributeType="Transformable" syncable="YES"/>
-        <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="systemMetadata" optional="YES" attributeType="Transformable" syncable="YES"/>
-        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="typeCode" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="uniqueId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="content" optional="YES" attributeType="String"/>
+        <attribute name="metaData" optional="YES" attributeType="Transformable"/>
+        <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="systemMetadata" optional="YES" attributeType="Transformable"/>
+        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="typeCode" optional="YES" attributeType="String"/>
+        <attribute name="uniqueId" optional="YES" attributeType="String"/>
     </entity>
     <entity name="QueueOfUploadFiles" representedClassName=".QueueOfUploadFiles" syncable="YES">
-        <attribute name="dataToSend" optional="YES" attributeType="Binary" syncable="YES"/>
-        <attribute name="fileExtension" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="fileName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="fileSize" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="originalFileName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="uniqueId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="dataToSend" optional="YES" attributeType="Binary"/>
+        <attribute name="fileExtension" optional="YES" attributeType="String"/>
+        <attribute name="fileName" optional="YES" attributeType="String"/>
+        <attribute name="fileSize" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="originalFileName" optional="YES" attributeType="String"/>
+        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="uniqueId" optional="YES" attributeType="String"/>
     </entity>
     <entity name="QueueOfUploadImages" representedClassName=".QueueOfUploadImages" syncable="YES">
-        <attribute name="dataToSend" optional="YES" attributeType="Binary" syncable="YES"/>
-        <attribute name="fileExtension" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="fileName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="fileSize" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="hC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="originalFileName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="uniqueId" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="wC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="xC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="yC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="dataToSend" optional="YES" attributeType="Binary"/>
+        <attribute name="fileExtension" optional="YES" attributeType="String"/>
+        <attribute name="fileName" optional="YES" attributeType="String"/>
+        <attribute name="fileSize" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="hC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="originalFileName" optional="YES" attributeType="String"/>
+        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="uniqueId" optional="YES" attributeType="String"/>
+        <attribute name="wC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="xC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="yC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
     </entity>
     <entity name="ThreadAdmins" representedClassName=".ThreadAdmins" syncable="YES">
-        <attribute name="name" attributeType="String" syncable="YES"/>
-        <attribute name="roles" attributeType="Transformable" syncable="YES"/>
-        <attribute name="threadId" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="userId" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="roles" attributeType="Transformable"/>
+        <attribute name="threadId" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="userId" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <relationship name="participants" optional="YES" toMany="YES" deletionRule="Deny" ordered="YES" destinationEntity="CMParticipant" inverseName="dummyAdmins" inverseEntity="CMParticipant"/>
     </entity>
     <elements>
         <element name="CMBlockedContact" positionX="-461.90234375" positionY="-78.6953125" width="128" height="105"/>
@@ -253,7 +255,7 @@
         <element name="CMForwardInfo" positionX="44.06640625" positionY="6.28515625" width="128" height="90"/>
         <element name="CMLinkedUser" positionX="-319.42578125" positionY="117.296875" width="128" height="135"/>
         <element name="CMMessage" positionX="-287.66796875" positionY="271.8515625" width="128" height="330"/>
-        <element name="CMParticipant" positionX="349.671875" positionY="95.74609375" width="128" height="405"/>
+        <element name="CMParticipant" positionX="349.671875" positionY="95.74609375" width="128" height="418"/>
         <element name="CMReplyInfo" positionX="166.9453125" positionY="487.76171875" width="128" height="180"/>
         <element name="CMThreadParticipants" positionX="80.10546875" positionY="-125.96875" width="128" height="90"/>
         <element name="CMUploadFile" positionX="-461.58984375" positionY="539" width="128" height="90"/>
@@ -262,12 +264,12 @@
         <element name="CMUserRole" positionX="-54" positionY="243" width="128" height="120"/>
         <element name="MessageGaps" positionX="293.2421875" positionY="-115.6953125" width="128" height="90"/>
         <element name="PhoneContact" positionX="-261" positionY="0" width="128" height="105"/>
-        <element name="QueueOfEditMessages" positionX="-243" positionY="18" width="128" height="135"/>
-        <element name="QueueOfFileMessages" positionX="-261" positionY="0" width="128" height="270"/>
-        <element name="QueueOfForwardMessages" positionX="-234" positionY="36" width="128" height="135"/>
+        <element name="QueueOfEditMessages" positionX="-243" positionY="18" width="128" height="148"/>
+        <element name="QueueOfFileMessages" positionX="-261" positionY="0" width="128" height="253"/>
+        <element name="QueueOfForwardMessages" positionX="-234" positionY="36" width="128" height="133"/>
         <element name="QueueOfTextMessages" positionX="-252" positionY="9" width="128" height="150"/>
         <element name="QueueOfUploadFiles" positionX="-252" positionY="9" width="128" height="150"/>
         <element name="QueueOfUploadImages" positionX="-261" positionY="0" width="128" height="210"/>
-        <element name="ThreadAdmins" positionX="-261" positionY="0" width="128" height="105"/>
+        <element name="ThreadAdmins" positionX="-261" positionY="0" width="128" height="118"/>
     </elements>
 </model>

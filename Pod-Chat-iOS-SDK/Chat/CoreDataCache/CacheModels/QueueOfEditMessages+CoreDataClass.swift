@@ -18,7 +18,8 @@ public class QueueOfEditMessages: NSManagedObject {
         
         var metaData:       JSON?
         var repliedTo:      Int?
-        var subjectId:      Int?
+        var messageId:      Int?
+        var threadId:       Int?
         
         func createVariables() {
             
@@ -29,8 +30,11 @@ public class QueueOfEditMessages: NSManagedObject {
             if let repliedTo2 = self.repliedTo as? Int {
                 repliedTo = repliedTo2
             }
-            if let subjectId2 = self.subjectId as? Int {
-                subjectId = subjectId2
+            if let messageId2 = self.messageId as? Int {
+                messageId = messageId2
+            }
+            if let threadId2 = self.threadId as? Int {
+                threadId = threadId2
             }
             
         }
@@ -39,7 +43,8 @@ public class QueueOfEditMessages: NSManagedObject {
             let queueOfWaitEditMessagesModel = QueueOfWaitEditMessagesModel(content:    self.content,
                                                                             metaData:   metaData,
                                                                             repliedTo:  repliedTo,
-                                                                            subjectId:  subjectId,
+                                                                            messageId:  messageId,
+                                                                            threadId:   threadId,
                                                                             typeCode:   self.typeCode,
                                                                             uniqueId:   self.uniqueId)
             return queueOfWaitEditMessagesModel

@@ -27,7 +27,7 @@ extension QueueOfFileMessages {
     @NSManaged public var content:      String?
     @NSManaged public var metaData:     NSObject?
     @NSManaged public var repliedTo:    NSNumber?
-    @NSManaged public var subjectId:    NSNumber?
+//    @NSManaged public var subjectId:    NSNumber?
     @NSManaged public var typeCode:     String?
     @NSManaged public var uniqueId:     String?
     @NSManaged public var fileToSend:   NSData?

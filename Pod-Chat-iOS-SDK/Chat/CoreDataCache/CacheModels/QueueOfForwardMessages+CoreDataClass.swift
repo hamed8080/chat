@@ -19,7 +19,7 @@ public class QueueOfForwardMessages: NSManagedObject {
         var metaData:       JSON?
         var messageIds:     [Int]?
         var repliedTo:      Int?
-        var subjectId:      Int?
+        var threadId:       Int?
         
         func createVariables() {
             
@@ -34,8 +34,8 @@ public class QueueOfForwardMessages: NSManagedObject {
             if let repliedTo2 = self.repliedTo as? Int {
                 repliedTo = repliedTo2
             }
-            if let subjectId2 = self.subjectId as? Int {
-                subjectId = subjectId2
+            if let threadId2 = self.threadId as? Int {
+                threadId = threadId2
             }
             
         }
@@ -44,7 +44,7 @@ public class QueueOfForwardMessages: NSManagedObject {
             let queueOfWaitForwardMessagesModel = QueueOfWaitForwardMessagesModel(messageIds:   messageIds,
                                                                                   metaData:     metaData,
                                                                                   repliedTo:    repliedTo,
-                                                                                  subjectId:    subjectId,
+                                                                                  threadId:     threadId,
                                                                                   typeCode:     self.typeCode,
                                                                                   uniqueId:     self.uniqueId)
             return queueOfWaitForwardMessagesModel

@@ -31,11 +31,15 @@ extension Chat {
         
         if enableCache {
             var participants = [Participant]()
+            var adminRequest = false
             for item in message.content?.convertToJSON() ?? [] {
                 let myParticipant = Participant(messageContent: item.1, threadId: message.subjectId!)
+                if ((myParticipant.roles?.count ?? 0) > 0) {
+                    adminRequest = true
+                }
                 participants.append(myParticipant)
             }
-            Chat.cacheDB.saveThreadParticipantObjects(whereThreadIdIs: message.subjectId!, withParticipants: participants)
+            Chat.cacheDB.saveThreadParticipantObjects(whereThreadIdIs: message.subjectId!, withParticipants: participants, isAdminRequest: adminRequest)
         }
         
         if Chat.map[message.uniqueId] != nil {

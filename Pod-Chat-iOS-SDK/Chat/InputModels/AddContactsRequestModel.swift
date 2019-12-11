@@ -8,7 +8,7 @@
 
 import Foundation
 
-open class AddContactsRequestModel {
+open class AddContactRequestModel {
     
     public let cellphoneNumber: String?
     public let email:           String?
@@ -35,3 +35,30 @@ open class AddContactsRequestModel {
     
 }
 
+
+open class AddContactsRequestModel {
+    
+    public let cellphoneNumbers:    [String]
+    public let emails:              [String]
+    public let firstNames:          [String]
+    public let lastNames:           [String]
+    
+    public let typeCode:            String?
+    public let uniqueId:            String?
+    
+    public init(cellphoneNumbers:   [String],
+                emails:             [String],
+                firstNames:         [String],
+                lastNames:          [String],
+                typeCode:           String?,
+                uniqueId:           String?) {
+        
+        self.cellphoneNumbers   = cellphoneNumbers
+        self.emails             = emails
+        self.firstNames         = firstNames
+        self.lastNames          = lastNames
+        self.typeCode           = typeCode
+        self.uniqueId           = uniqueId
+    }
+    
+}

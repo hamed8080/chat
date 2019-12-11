@@ -14,16 +14,17 @@ import SwiftyJSON
 
 extension Cache {
     
-    /*
-     * Save UserInfo:
-     * by calling this function, it will save (or update) the UserInfo on the Cache.
-     *
-     *  + Access:   Public
-     *  + Inputs:
-     *      - user: User
-     *  + Outputs:  _
-     *
-     */
+    
+    /// Save UserInfo:
+    /// by calling this function, it will save (or update) the UserInfo on the Cache.
+    ///
+    /// Inputs:
+    /// - it get a "User" model as an input
+    ///
+    /// Outputs:
+    /// - it returns no output
+    ///
+    /// - parameter withUserObject: send your userModel to this parameter.(User)
     public func saveUserInfo(withUserObject user: User) {
         /*
          *  -> fetch CMUser on the cache (check if there is any information about UserInfo on the cache)
@@ -72,16 +73,17 @@ extension Cache {
     }
     
     
-    /*
-     * Save Contact:
-     * by calling this function, it save (or update) contacts that comes from server, into the Cache.
-     *
-     *  + Access:   Public
-     *  + Inputs:
-     *      - contacts: [Contact]
-     *  + Outputs:  _
-     *
-     */
+    
+    /// Save Contact:
+    /// by calling this function, it save (or update) contacts that comes from server, into the Cache.
+    ///
+    /// Inputs:
+    /// - it gets an array of "Contact" model as an input
+    ///
+    /// Outputs:
+    /// - it returns no output
+    ///
+    /// - parameter withContactObjects: send your contacts to this parameter.([Contact])
     public func saveContact(withContactObjects contacts: [Contact]) {
         /*
          *  -> for every Contact object on 'contacts' Input
@@ -96,22 +98,18 @@ extension Cache {
     }
     
     
-    /*
-     * Save PhoneBook Contact:
-     *
-     * by calling this function, it save (or update) PhoneContact that comes from users phone, into the Cache.
-     * -> it will fetch PhoneContact
-     * -> if it found any object that has the same 'cellphoneNumber' as the input contact 'cellphoneNumber',
-     *    it will update its properties
-     * -> otherwise it will create a PhoneContact object on the cache
-     *
-     *  + Access:   Public
-     *  + Inputs:
-     *      - contact:  AddContactsRequestModel
-     *  + Outputs:  _
-     *
-     */
-    public func savePhoneBookContact(contact myContact: AddContactsRequestModel) {
+    
+    /// Save PhoneBook Contact:
+    /// by calling this function, it save (or update) PhoneContact that comes from users phone, into the Cache.
+    ///
+    /// Inputs:
+    /// - it gets  "AddContactRequestModel" model as an input
+    ///
+    /// Outputs:
+    /// - it returns no output
+    ///
+    /// - parameter contact:    send your contacts to this parameter.(AddContactRequestModel)
+    public func savePhoneBookContact(contact myContact: AddContactRequestModel) {
         /*
          *  -> fetch PhoneContact objects from 'PhoneContact' Entity
          *  -> filter it by cellphoneNumber
@@ -152,18 +150,16 @@ extension Cache {
     
     
     
-    
-    /*
-     * Save Thread:
-     *
-     * by calling this function, save (or update) Threads that comes from server, into the cache
-     *
-     *  + Access:   Public
-     *  + Inputs:
-     *      - threads: [Conversation]
-     *  + Outputs:  _
-     *
-     */
+    /// Save Thread:
+    /// by calling this function, save (or update) Threads that comes from server, into the cache
+    ///
+    /// Inputs:
+    /// - it gets an array of  "[Conversation]" model as an input
+    ///
+    /// Outputs:
+    /// - it returns no output
+    ///
+    /// - parameter withThreadObjects:    send your threads to this parameter.([Conversation])
     public func saveThread(withThreadObjects threads: [Conversation]) {
         /*
          *  -> for every Conversation object on 'threads' Input
@@ -178,19 +174,20 @@ extension Cache {
     }
     
     
-    /*
-     * Save ThreadParticipant:
-     *
-     * by calling this function, save (or update) threadParticipants that comes from server into the cache
-     *
-     *  + Access:   Public
-     *  + Inputs:
-     *      - threadId:     Int
-     *      - participants: [Participant]
-     *  + Outputs:  -
-     *
-     */
-    public func saveThreadParticipantObjects(whereThreadIdIs threadId: Int, withParticipants participants: [Participant]) {
+    
+    /// Save ThreadParticipant:
+    /// by calling this function, save (or update) threadParticipants that comes from server into the cache
+    ///
+    /// Inputs:
+    /// - it gets an array of  "[Participant]" model  and the "ThreadId" as inputs
+    ///
+    /// Outputs:
+    /// - it returns no output
+    ///
+    /// - parameter whereThreadIdIs:    the threadId that you want to update your participants on. (Int)
+    /// - parameter withParticipants:   send your participants to this parameter.([Participant])
+    /// - parameter isAdminRequest:     if your request was getting adminParticipants, you have to send "true" to this parameter. (Bool)
+    public func saveThreadParticipantObjects(whereThreadIdIs threadId: Int, withParticipants participants: [Participant], isAdminRequest: Bool) {
         /*
          *  -> fetch CMConversation objects from CMConversation entity
          *  -> filter it by threadId
@@ -207,7 +204,7 @@ extension Cache {
             if let result = try context.fetch(fetchRequest) as? [CMConversation] {
                 if (result.count > 0) {
                     for item in participants {
-                        if let myCMParticipantObject = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: item) {
+                        if let myCMParticipantObject = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: item, isAdminRequest: isAdminRequest) {
                             result.first!.addToParticipants(myCMParticipantObject)
                             saveContext(subject: "Add/Update CMParticipant in a thread and Update CMConversation")
                             /*
@@ -229,6 +226,7 @@ extension Cache {
     }
     
     
+    // ToDo: maybe i have to delete this method, because admins has handled on the 'saveThreadParticipantObjects' method
     public func updateAdminRoles(inThreadId threadId: Int, withUserRoles myUserRole: UserRole) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMParticipant")
         fetchRequest.predicate = NSPredicate(format: "id == %i AND threadId == %i", myUserRole.userId, threadId)
@@ -254,7 +252,19 @@ extension Cache {
         
     }
     
-    // this function will save (or update) messages that comes from server, in the Cache.
+    
+    
+    /// Save Message:
+    /// by calling this function, save (or update) Messages that comes from server, in the Cache.
+    ///
+    /// Inputs:
+    /// - it gets an array of  "[Message]" model  and the "ThreadId" as inputs
+    ///
+    /// Outputs:
+    /// - it returns no output
+    ///
+    /// - parameter messages:           send your messages to this parameter.([Message])
+    /// - parameter getHistoryParams:   this variable will contains the getHistory Request that has send and couses the 'messages' response. (JSON?)
     public func saveMessageObjects(messages: [Message], getHistoryParams: JSON?) {
         /*
          *  -> check if we have 'getHistoryParams' Input or not
@@ -417,15 +427,13 @@ extension Cache {
                                   threadId:     threadId,
                                   toTime:       nil,
                                   uniqueId:     nil)
-                    return
+                    break
                     
                 // 2- delete all records that:     'time' > 'time' (first item on the cache result)
                 case (count, offset, .none, .none, .none, Ordering.ascending.rawValue, .none, 0):
                     var firstObject: Message?
-                    let fetchRequest = retrieveMessageHistoryFetchRequest(firstMessageId:   nil,
-                                                                          fromTime:         nil,
+                    let fetchRequest = retrieveMessageHistoryFetchRequest(fromTime:         nil,
                                                                           messageId:        nil,
-                                                                          lastMessageId:    nil,
                                                                           order:            nil,
                                                                           query:            nil,
                                                                           threadId:         threadId,
@@ -453,15 +461,13 @@ extension Cache {
                                           uniqueId:     nil)
                         }
                     }
-                    return
+                    break
                     
                 // 3- delete all records that:     'time' < 'time' (first item on the cache result)
                 case (count, offset, .none, .none, .none, Ordering.descending.rawValue, .none, 0):
                     var lastObject: Message?
-                    let fetchRequest = retrieveMessageHistoryFetchRequest(firstMessageId:   nil,
-                                                                          fromTime:         nil,
+                    let fetchRequest = retrieveMessageHistoryFetchRequest(fromTime:         nil,
                                                                           messageId:        nil,
-                                                                          lastMessageId:    nil,
                                                                           order:            nil,
                                                                           query:            nil,
                                                                           threadId:         threadId,
@@ -489,7 +495,7 @@ extension Cache {
                                           uniqueId:     nil)
                         }
                     }
-                    return
+                    break
                     
                     
                 
@@ -515,7 +521,7 @@ extension Cache {
                                   threadId:     threadId,
                                   toTime:       messages.last!.time!,
                                   uniqueId:     nil)
-                    return
+                    break
                     
                 // 5- delete all records that:   'time' > result.first.time
                 // delete every message between result.first and result.last from cache
@@ -538,7 +544,7 @@ extension Cache {
                                   threadId:     threadId,
                                   toTime:       messages.last!.time!,
                                   uniqueId:     nil)
-                    return
+                    break
                     
                 // 6- if (result.last.previousId = nil) => delete all recored befor the result.last
                 // delete every message between result.first and result.last from cache
@@ -563,7 +569,7 @@ extension Cache {
                                   threadId:     threadId,
                                   toTime:       messages.last!.time!,
                                   uniqueId:     nil)
-                    return
+                    break
                     
                 // 7- if (result.first.previousId = nil) => delete all recored befor the result.first
                 // delete every message between result.first and result.last from cache
@@ -588,7 +594,7 @@ extension Cache {
                                   threadId:     threadId,
                                   toTime:       messages.last!.time!,
                                   uniqueId:     nil)
-                    return
+                    break
                     
 //                // 8- delete the exact message with messageId
 //                case let (_, _, .some(theId), _, _, order, _, 0):
@@ -601,7 +607,7 @@ extension Cache {
 //                                  threadId:     threadId,
 //                                  toTime:       nil,
 //                                  uniqueId:     nil)
-//                    return
+//                    break
 //
 //                // 9- delete all result from cache
 //                case let (_, _, .none, _, _, _, .some(myQuery), _):
@@ -614,7 +620,7 @@ extension Cache {
 //                                  threadId:     threadId,
 //                                  toTime:       nil,
 //                                  uniqueId:     nil)
-//                    return
+//                    break
                     
                 case let (count, offset, id, from, to, order, query, result):
                     
@@ -705,7 +711,7 @@ extension Cache {
                         
                     }
                     
-                    return
+                    break
                 }
             }
             
