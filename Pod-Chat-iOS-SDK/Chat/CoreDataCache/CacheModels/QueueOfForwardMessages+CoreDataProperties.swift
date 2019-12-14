@@ -17,7 +17,8 @@ extension QueueOfForwardMessages {
         return NSFetchRequest<QueueOfForwardMessages>(entityName: "QueueOfForwardMessages")
     }
 
-    @NSManaged public var messageIds:   [NSNumber]?
+//    @NSManaged public var messageIds:   [NSNumber]?
+    @NSManaged public var messageId:    NSNumber?
     @NSManaged public var metaData:     NSObject?
     @NSManaged public var repliedTo:    NSNumber?
     @NSManaged public var threadId:     NSNumber?

@@ -89,18 +89,18 @@ extension Chat {
             if let textMessages = Chat.cacheDB.retrieveWaitTextMessages(threadId: getHistoryInput.threadId) {
                 textMessagesNotSent(textMessages)
             }
-//            if let editMessages = Chat.cacheDB.retrieveWaitEditMessages(threadId: getHistoryInput.threadId) {
-//                editMessagesNotSent(editMessages)
-//            }
-//            if let forwardMessages = Chat.cacheDB.retrieveWaitForwardMessages(threadId: getHistoryInput.threadId) {
-//                forwardMessagesNotSent(forwardMessages)
-//            }
+            if let editMessages = Chat.cacheDB.retrieveWaitEditMessages(threadId: getHistoryInput.threadId) {
+                editMessagesNotSent(editMessages)
+            }
+            if let forwardMessages = Chat.cacheDB.retrieveWaitForwardMessages(threadId: getHistoryInput.threadId) {
+                forwardMessagesNotSent(forwardMessages)
+            }
             if let fileMessages = Chat.cacheDB.retrieveWaitFileMessages(threadId: getHistoryInput.threadId) {
                 fileMessagesNotSent(fileMessages)
             }
-//            if let uploadImages = Chat.cacheDB.retrieveWaitUploadImages(threadId: getHistoryInput.threadId) {
-//                uploadImageNotSent(uploadImages)
-//            }
+            if let uploadImages = Chat.cacheDB.retrieveWaitUploadImages(threadId: getHistoryInput.threadId) {
+                uploadImageNotSent(uploadImages)
+            }
             if let uploadFiles = Chat.cacheDB.retrieveWaitUploadFiles(threadId: getHistoryInput.threadId) {
                 uploadFileNotSent(uploadFiles)
             }
@@ -259,47 +259,47 @@ extension Chat {
     }
     
     
-    /// SendBotMessage:
+    /// SendInteractiveMessage:
     /// send a botMessage.
     ///
     /// By calling this function, a request of type 40 (BOT_MESSAGE) will send throut Chat-SDK,
     /// then the response will come back as callbacks to client whose calls this function.
     ///
     /// Inputs:
-    /// - you have to send your parameters as "SendBotMessageRequestModel" to this function
+    /// - you have to send your parameters as "SendInteractiveMessageRequestModel" to this function
     ///
     /// Outputs:
     /// - It has 4 callbacks as response:
     ///
-    /// - parameter sendBotMessageInput:    (input) you have to send your parameters insid this model. (SendBotMessageRequestModel)
+    /// - parameter inputModel:    (input) you have to send your parameters insid this model. (SendInteractiveMessageRequestModel)
     /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter onSent:                 (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
     /// - parameter onDelivere:             (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
     /// - parameter onSeen:                 (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
-    public func sendBotMessage(sendBotMessageInput: SendBotMessageRequestModel,
-                               uniqueId:            @escaping ((String) -> ()),
-                               onSent:              @escaping callbackTypeAlias,
-                               onDelivered:         @escaping callbackTypeAlias,
-                               onSeen:              @escaping callbackTypeAlias) {
-        log.verbose("Try to send BotMessage with this parameters: \n \(sendBotMessageInput)", context: "Chat")
+    public func sendInteractiveMessage(inputModel:  SendInteractiveMessageRequestModel,
+                                       uniqueId:    @escaping ((String) -> ()),
+                                       onSent:      @escaping callbackTypeAlias,
+                                       onDelivered: @escaping callbackTypeAlias,
+                                       onSeen:      @escaping callbackTypeAlias) {
+        log.verbose("Try to send BotMessage with this parameters: \n \(inputModel)", context: "Chat")
         
         sendCallbackToUserOnSent = onSent
         sendCallbackToUserOnDeliver = onDelivered
         sendCallbackToUserOnSeen = onSeen
         
-        let tempUniqueId = sendBotMessageInput.uniqueId ?? generateUUID()
+        let tempUniqueId = inputModel.uniqueId ?? generateUUID()
         
-        let messageTxtContent = MakeCustomTextToSend(message: sendBotMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
+        let messageTxtContent = MakeCustomTextToSend(message: inputModel.content).replaceSpaceEnterWithSpecificCharecters()
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.BOT_MESSAGE.rawValue,
                                             content:            messageTxtContent,
-                                            metaData:           "\(sendBotMessageInput.metaData)",
+                                            metaData:           "\(inputModel.metaData)",
                                             repliedTo:          nil,
-                                            systemMetadata:     (sendBotMessageInput.systemMetadata != nil) ? "\(sendBotMessageInput.systemMetadata!)" : nil,
-                                            subjectId:          sendBotMessageInput.messageId,
+                                            systemMetadata:     (inputModel.systemMetadata != nil) ? "\(inputModel.systemMetadata!)" : nil,
+                                            subjectId:          inputModel.messageId,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           sendBotMessageInput.typeCode ?? generalTypeCode,
+                                            typeCode:           inputModel.typeCode ?? generalTypeCode,
                                             uniqueId:           tempUniqueId,
                                             uniqueIds:          nil,
                                             isCreateThreadAndSendMessage: nil)
@@ -498,7 +498,6 @@ extension Chat {
                                onDelivere:          @escaping callbackTypeAlias,
                                onSeen:              @escaping callbackTypeAlias) {
         log.verbose("Try to Forward with this parameters: \n \(forwardMessageInput)", context: "Chat")
-        let tempUniqueId = generateUUID()
         
         /**
          seve this message on the Cache Wait Queue,
@@ -507,13 +506,16 @@ extension Chat {
          now user knows which messages didn't send correctly, and can handle them
          */
         if enableCache {
-            let messageObjectToSendToQueue = QueueOfWaitForwardMessagesModel(messageIds:    forwardMessageInput.messageIds,
-                                                                             metaData:      forwardMessageInput.metaData,
-                                                                             repliedTo:     forwardMessageInput.repliedTo,
-                                                                             threadId:      forwardMessageInput.threadId,
-                                                                             typeCode:      forwardMessageInput.typeCode,
-                                                                             uniqueId:      tempUniqueId)
-            Chat.cacheDB.saveForwardMessageToWaitQueue(forwardMessage: messageObjectToSendToQueue)
+            for (index, item) in forwardMessageInput.messageIds.enumerated() {
+                let messageObjectToSendToQueue = QueueOfWaitForwardMessagesModel(//messageIds:    [item],
+                                                                                 messageId:     item,
+                                                                                 metaData:      forwardMessageInput.metaData,
+                                                                                 repliedTo:     forwardMessageInput.repliedTo,
+                                                                                 threadId:      forwardMessageInput.threadId,
+                                                                                 typeCode:      forwardMessageInput.typeCode,
+                                                                                 uniqueId:      forwardMessageInput.uniqueIds[index])
+                Chat.cacheDB.saveForwardMessageToWaitQueue(forwardMessage: messageObjectToSendToQueue)
+            }
         }
         
         sendCallbackToUserOnSent = onSent

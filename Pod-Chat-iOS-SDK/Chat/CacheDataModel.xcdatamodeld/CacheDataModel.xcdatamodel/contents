@@ -203,7 +203,7 @@
         <attribute name="yC" optional="YES" attributeType="String"/>
     </entity>
     <entity name="QueueOfForwardMessages" representedClassName=".QueueOfForwardMessages" syncable="YES">
-        <attribute name="messageIds" optional="YES" attributeType="Transformable"/>
+        <attribute name="messageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="metaData" optional="YES" attributeType="Transformable"/>
         <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>

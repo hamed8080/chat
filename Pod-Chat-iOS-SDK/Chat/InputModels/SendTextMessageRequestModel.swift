@@ -42,31 +42,3 @@ open class SendTextMessageRequestModel {
 }
 
 
-open class SendBotMessageRequestModel {
-    
-    public let content:         String
-    public let messageId:       Int
-    public let metaData:        JSON
-    public let systemMetadata:  JSON?
-    
-    public let typeCode:        String?
-    public let uniqueId:        String?
-    
-    public init(content:        String,
-                messageId:      Int,
-                metaData:       JSON,
-                systemMetadata: JSON?,
-                typeCode:       String?,
-                uniqueId:       String?) {
-        
-        self.content        = content
-        self.messageId      = messageId
-        self.metaData       = metaData
-        self.systemMetadata = systemMetadata
-        self.typeCode       = typeCode
-        self.uniqueId       = uniqueId
-    }
-    
-}
-
-

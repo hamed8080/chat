@@ -25,6 +25,7 @@
 		3E0B910122F579C300986A96 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0B90FF22F579C300986A96 /* Networking.swift */; };
 		3E11F56121DA18D0004B3B2C /* GetImageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E11F56021DA18D0004B3B2C /* GetImageRequestModel.swift */; };
 		3E11F56D21DA1A02004B3B2C /* GetFileRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E11F56C21DA1A02004B3B2C /* GetFileRequestModel.swift */; };
+		3E1EA58423A4ABC500B4C3F8 /* SendInteractiveMessageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1EA58323A4ABC500B4C3F8 /* SendInteractiveMessageRequestModel.swift */; };
 		3E24083021F5C844001F32F1 /* CMUser+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E24081821F5C844001F32F1 /* CMUser+CoreDataClass.swift */; };
 		3E24083121F5C844001F32F1 /* CMUser+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E24081821F5C844001F32F1 /* CMUser+CoreDataClass.swift */; };
 		3E24083221F5C844001F32F1 /* CMUser+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E24081921F5C844001F32F1 /* CMUser+CoreDataProperties.swift */; };
@@ -390,6 +391,7 @@
 		3E1C357D225B5E79001A343B /* Starscream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Starscream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E1C357F225B5E7D001A343B /* SwiftyBeaver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftyBeaver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E1C3581225B5E81001A343B /* SwiftyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E1EA58323A4ABC500B4C3F8 /* SendInteractiveMessageRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendInteractiveMessageRequestModel.swift; sourceTree = "<group>"; };
 		3E24081821F5C844001F32F1 /* CMUser+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMUser+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3E24081921F5C844001F32F1 /* CMUser+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMUser+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3E24081A21F5C844001F32F1 /* CMReplyInfo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMReplyInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -708,6 +710,7 @@
 				3EA1568121CE1B70004B1346 /* SearchContactsRequestModel.swift */,
 				3EA1569D21CE1C96004B1346 /* SendFileMessageRequestModel.swift */,
 				3EA1569521CE1C3C004B1346 /* SendTextMessageRequestModel.swift */,
+				3E1EA58323A4ABC500B4C3F8 /* SendInteractiveMessageRequestModel.swift */,
 				3E8E080C229567040077C685 /* SetRoleRequestModel.swift */,
 				3EA156A721CE1D02004B1346 /* SpamPvThreadRequestModel.swift */,
 				3EA1567F21CE1B5B004B1346 /* UnblockContactsRequestModel.swift */,
@@ -1284,6 +1287,7 @@
 				3E24083A21F5C844001F32F1 /* CMParticipant+CoreDataProperties.swift in Sources */,
 				3EB5207F22ABF4A200B7EA45 /* LeaveThreadCallbacks.swift in Sources */,
 				3EB7595C228D98FC00A48262 /* CancelMessageRequestModel.swift in Sources */,
+				3E1EA58423A4ABC500B4C3F8 /* SendInteractiveMessageRequestModel.swift in Sources */,
 				3EA156A821CE1D02004B1346 /* SpamPvThreadRequestModel.swift in Sources */,
 				3E8D56D921DB9D6200B844DE /* MapReverse.swift in Sources */,
 				3EBBEDF42174C69700F5CDC7 /* GetThreadParticipantsModel.swift in Sources */,

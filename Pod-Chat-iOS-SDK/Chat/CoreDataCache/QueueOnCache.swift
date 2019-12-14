@@ -13,6 +13,7 @@ import CoreData
 // handle Queue of wait messages
 extension Cache {
     
+    // MARK: - save to the wait Queues
     func saveTextMessageToWaitQueue(textMessage: QueueOfWaitTextMessagesModel) {
         let theWaitQueueEntity = NSEntityDescription.entity(forEntityName: "QueueOfTextMessages", in: context)
         let messageToSaveOnQueue = QueueOfTextMessages(entity: theWaitQueueEntity!, insertInto: context)
@@ -36,6 +37,62 @@ extension Cache {
         
         // save function that will try to save changes that made on the Cache
         saveContext(subject: "Create QueueOfTextMessages -create a new object-")
+    }
+    
+    func saveEditMessageToWaitQueue(editMessage: QueueOfWaitEditMessagesModel) {
+        
+        let fetchRequest = retrieveMessageHistoryFetchRequest(fromTime:     nil,
+                                                              messageId:    editMessage.messageId,
+                                                              order:        nil,
+                                                              query:        nil,
+                                                              threadId:     nil,
+                                                              toTime:       nil,
+                                                              uniqueId:     nil)
+        
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMMessage] {
+                if (result.count > 0) {
+                    let theWaitQueueEntity = NSEntityDescription.entity(forEntityName: "QueueOfEditMessages", in: context)
+                    let messageToSaveOnQueue = QueueOfEditMessages(entity: theWaitQueueEntity!, insertInto: context)
+                    messageToSaveOnQueue.content    = editMessage.content
+                    messageToSaveOnQueue.repliedTo  = editMessage.repliedTo as NSNumber?
+                    messageToSaveOnQueue.messageId  = editMessage.messageId as NSNumber?
+                    messageToSaveOnQueue.typeCode   = editMessage.typeCode
+                    messageToSaveOnQueue.uniqueId   = editMessage.uniqueId
+                    messageToSaveOnQueue.threadId   = result.first?.threadId
+                    if let metaData2 = editMessage.metaData {
+                        NSObject.convertJSONtoTransformable(dataToStore: metaData2) { (data) in
+                            messageToSaveOnQueue.metaData = data
+                        }
+                    }
+                    // save function that will try to save changes that made on the Cache
+                    saveContext(subject: "Create QueueOfEditMessages -create a new object-")
+                }
+            }
+        } catch {
+            fatalError("Error on fetching the CMMessage")
+        }
+        
+    }
+    
+    func saveForwardMessageToWaitQueue(forwardMessage: QueueOfWaitForwardMessagesModel) {
+        let theWaitQueueEntity = NSEntityDescription.entity(forEntityName: "QueueOfForwardMessages", in: context)
+        let messageToSaveOnQueue = QueueOfForwardMessages(entity: theWaitQueueEntity!, insertInto: context)
+//        messageToSaveOnQueue.messageIds = forwardMessage.messageIds as [NSNumber]?
+        messageToSaveOnQueue.messageId  = forwardMessage.messageId as NSNumber?
+        messageToSaveOnQueue.repliedTo  = forwardMessage.repliedTo as NSNumber?
+        messageToSaveOnQueue.threadId   = forwardMessage.threadId as NSNumber?
+        messageToSaveOnQueue.typeCode   = forwardMessage.typeCode
+        messageToSaveOnQueue.uniqueId   = forwardMessage.uniqueId
+        
+        if let metaData2 = forwardMessage.metaData {
+            NSObject.convertJSONtoTransformable(dataToStore: metaData2) { (data) in
+                messageToSaveOnQueue.metaData = data
+            }
+        }
+        
+        // save function that will try to save changes that made on the Cache
+        saveContext(subject: "Create QueueOfForwardMessages -create a new object-")
     }
     
     func saveFileMessageToWaitQueue(fileMessage: QueueOfWaitFileMessagesModel) {
@@ -100,47 +157,9 @@ extension Cache {
         saveContext(subject: "Create QueueOfUploadFiles -create a new object-")
     }
     
-    func saveEditMessageToWaitQueue(editMessage: QueueOfWaitEditMessagesModel) {
-        let theWaitQueueEntity = NSEntityDescription.entity(forEntityName: "QueueOfEditMessages", in: context)
-        let messageToSaveOnQueue = QueueOfEditMessages(entity: theWaitQueueEntity!, insertInto: context)
-        messageToSaveOnQueue.content    = editMessage.content
-        messageToSaveOnQueue.repliedTo  = editMessage.repliedTo as NSNumber?
-        messageToSaveOnQueue.messageId  = editMessage.messageId as NSNumber?
-        messageToSaveOnQueue.typeCode   = editMessage.typeCode
-        messageToSaveOnQueue.uniqueId   = editMessage.uniqueId
-        
-        if let metaData2 = editMessage.metaData {
-            NSObject.convertJSONtoTransformable(dataToStore: metaData2) { (data) in
-                messageToSaveOnQueue.metaData = data
-            }
-        }
-        
-        // save function that will try to save changes that made on the Cache
-        saveContext(subject: "Create QueueOfEditMessages -create a new object-")
-    }
-    
-    func saveForwardMessageToWaitQueue(forwardMessage: QueueOfWaitForwardMessagesModel) {
-        let theWaitQueueEntity = NSEntityDescription.entity(forEntityName: "QueueOfForwardMessages", in: context)
-        let messageToSaveOnQueue = QueueOfForwardMessages(entity: theWaitQueueEntity!, insertInto: context)
-        messageToSaveOnQueue.messageIds = forwardMessage.messageIds as [NSNumber]?
-        messageToSaveOnQueue.repliedTo  = forwardMessage.repliedTo as NSNumber?
-        messageToSaveOnQueue.threadId  = forwardMessage.threadId as NSNumber?
-        messageToSaveOnQueue.typeCode   = forwardMessage.typeCode
-        messageToSaveOnQueue.uniqueId   = forwardMessage.uniqueId
-        
-        if let metaData2 = forwardMessage.metaData {
-            NSObject.convertJSONtoTransformable(dataToStore: metaData2) { (data) in
-                messageToSaveOnQueue.metaData = data
-            }
-        }
-        
-        // save function that will try to save changes that made on the Cache
-        saveContext(subject: "Create QueueOfForwardMessages -create a new object-")
-    }
     
     
-    
-    
+    // MARK: - retrieve items from wait Queues
     func retrieveWaitTextMessages(threadId: Int) -> [QueueOfWaitTextMessagesModel]? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfTextMessages")
         
@@ -168,6 +187,56 @@ extension Cache {
             //            }
         } catch {
             fatalError("Error on fetching list of QueueOfTextMessages")
+        }
+        return nil
+    }
+    
+    func retrieveWaitEditMessages(threadId: Int) -> [QueueOfWaitEditMessagesModel]? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfEditMessages")
+        
+        // this predicate used to get messages that are in the specific thread using 'threadId' property
+        let threadPredicate = NSPredicate(format: "threadId == %i", threadId)
+        fetchRequest.predicate = threadPredicate
+        
+        do {
+            if let result = try context.fetch(fetchRequest) as? [QueueOfEditMessages] {
+                if (result.count > 0) {
+                    
+                    var messageArray = [QueueOfWaitEditMessagesModel]()
+                    for item in result {
+                        messageArray.append(item.convertQueueOfEditMessagesToQueueOfWaitEditMessagesModelObject())
+                    }
+                    return messageArray
+                    
+                }
+            }
+        } catch {
+            fatalError("Error on fetching list of QueueOfEditMessages")
+        }
+        return nil
+    }
+    
+    func retrieveWaitForwardMessages(threadId: Int) -> [QueueOfWaitForwardMessagesModel]? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfForwardMessages")
+        
+        // this predicate used to get messages that are in the specific thread using 'threadId' property
+        let threadPredicate = NSPredicate(format: "threadId == %i", threadId)
+        fetchRequest.predicate = threadPredicate
+        
+        do {
+            if let result = try context.fetch(fetchRequest) as? [QueueOfForwardMessages] {
+                if (result.count > 0) {
+                    
+                    var messageArray = [QueueOfWaitForwardMessagesModel]()
+                    for item in result {
+                        messageArray.append(item.convertQueueOfForwardMessagesToQueueOfWaitForwardMessagesModelObject())
+                    }
+                    return messageArray
+                    
+                }
+            }
+        } catch {
+            fatalError("Error on fetching list of QueueOfForwardMessages")
         }
         return nil
     }
@@ -247,59 +316,9 @@ extension Cache {
         return nil
     }
     
-    func retrieveWaitEditMessages(threadId: Int) -> [QueueOfWaitEditMessagesModel]? {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfEditMessages")
-        
-        // this predicate used to get messages that are in the specific thread using 'threadId' property
-        let threadPredicate = NSPredicate(format: "threadId == %i", threadId)
-        fetchRequest.predicate = threadPredicate
-        
-        do {
-            if let result = try context.fetch(fetchRequest) as? [QueueOfEditMessages] {
-                if (result.count > 0) {
-                    
-                    var messageArray = [QueueOfWaitEditMessagesModel]()
-                    for item in result {
-                        messageArray.append(item.convertQueueOfEditMessagesToQueueOfWaitEditMessagesModelObject())
-                    }
-                    return messageArray
-                    
-                }
-            }
-        } catch {
-            fatalError("Error on fetching list of QueueOfEditMessages")
-        }
-        return nil
-    }
-    
-    func retrieveWaitForwardMessages(threadId: Int) -> [QueueOfWaitForwardMessagesModel]? {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfForwardMessages")
-        
-        // this predicate used to get messages that are in the specific thread using 'threadId' property
-        let threadPredicate = NSPredicate(format: "threadId == %i", threadId)
-        fetchRequest.predicate = threadPredicate
-        
-        do {
-            if let result = try context.fetch(fetchRequest) as? [QueueOfForwardMessages] {
-                if (result.count > 0) {
-                    
-                    var messageArray = [QueueOfWaitForwardMessagesModel]()
-                    for item in result {
-                        messageArray.append(item.convertQueueOfForwardMessagesToQueueOfWaitForwardMessagesModelObject())
-                    }
-                    return messageArray
-                    
-                }
-            }
-        } catch {
-            fatalError("Error on fetching list of QueueOfForwardMessages")
-        }
-        return nil
-    }
     
     
-    
-    
+    // MARK: - delete items from the wait Queues
     func deleteWaitTextMessage(uniqueId: String) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfTextMessages")
         
@@ -318,112 +337,6 @@ extension Cache {
         }
     }
     
-    func deleteWaitTextMessage() {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfTextMessages")
-        do {
-            if let result = try context.fetch(fetchRequest) as? [QueueOfTextMessages] {
-                for (index, _) in result.enumerated() {
-                    deleteAndSave(object: result[index], withMessage: "QueueOfTextMessages object Deleted from cache")
-                }
-            }
-        } catch {
-            fatalError("Error on fetching list of QueueOfTextMessages with uniqueId")
-        }
-    }
-    
-    func deleteWaitFileMessage(uniqueId: String) {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfFileMessages")
-        
-        // this predicate used to get messages that are in the specific thread using 'threadId' property
-        let threadPredicate = NSPredicate(format: "uniqueId == %@", uniqueId)
-        fetchRequest.predicate = threadPredicate
-        
-        do {
-            if let result = try context.fetch(fetchRequest) as? [QueueOfFileMessages] {
-                if (result.count > 0) {
-                    deleteAndSave(object: result.first!, withMessage: "QueueOfFileMessages object Deleted from cache")
-                }
-            }
-        } catch {
-            fatalError("Error on fetching list of QueueOfFileMessages with uniqueId")
-        }
-    }
-    
-    func deleteWaitFileMessage() {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfFileMessages")
-        do {
-            if let result = try context.fetch(fetchRequest) as? [QueueOfFileMessages] {
-                for (index, _) in result.enumerated() {
-                    deleteAndSave(object: result[index], withMessage: "QueueOfFileMessages object Deleted from cache")
-                }
-            }
-        } catch {
-            fatalError("Error on fetching list of QueueOfFileMessages with uniqueId")
-        }
-    }
-    
-    func deleteWaitUploadImages(uniqueId: String) {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfUploadImages")
-        
-        // this predicate used to get messages that are in the specific thread using 'threadId' property
-        let threadPredicate = NSPredicate(format: "uniqueId == %@", uniqueId)
-        fetchRequest.predicate = threadPredicate
-        
-        do {
-            if let result = try context.fetch(fetchRequest) as? [QueueOfUploadImages] {
-                if (result.count > 0) {
-                    deleteAndSave(object: result.first!, withMessage: "QueueOfUploadImages object Deleted from cache")
-                }
-            }
-        } catch {
-            fatalError("Error on fetching list of QueueOfUploadImages with uniqueId")
-        }
-    }
-    
-    func deleteWaitUploadImages() {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfUploadImages")
-        do {
-            if let result = try context.fetch(fetchRequest) as? [QueueOfUploadImages] {
-                for (index, _) in result.enumerated() {
-                    deleteAndSave(object: result[index], withMessage: "QueueOfUploadImages object Deleted from cache")
-                }
-            }
-        } catch {
-            fatalError("Error on fetching list of QueueOfFileMessages with uniqueId")
-        }
-    }
-    
-    func deleteWaitUploadFiles(uniqueId: String) {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfUploadFiles")
-        
-        // this predicate used to get messages that are in the specific thread using 'threadId' property
-        let threadPredicate = NSPredicate(format: "uniqueId == %@", uniqueId)
-        fetchRequest.predicate = threadPredicate
-        
-        do {
-            if let result = try context.fetch(fetchRequest) as? [QueueOfUploadFiles] {
-                if (result.count > 0) {
-                    deleteAndSave(object: result.first!, withMessage: "QueueOfUploadFiles object Deleted from cache")
-                }
-            }
-        } catch {
-            fatalError("Error on fetching list of QueueOfUploadFiles with uniqueId")
-        }
-    }
-    
-    func deleteWaitUploadFiles() {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfUploadFiles")
-        do {
-            if let result = try context.fetch(fetchRequest) as? [QueueOfUploadFiles] {
-                for (index, _) in result.enumerated() {
-                    deleteAndSave(object: result[index], withMessage: "QueueOfUploadFiles object Deleted from cache")
-                }
-            }
-        } catch {
-            fatalError("Error on fetching list of QueueOfUploadFiles with uniqueId")
-        }
-    }
-    
     func deleteWaitEditMessage(uniqueId: String) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfEditMessages")
         
@@ -435,19 +348,6 @@ extension Cache {
             if let result = try context.fetch(fetchRequest) as? [QueueOfEditMessages] {
                 if (result.count > 0) {
                     deleteAndSave(object: result.first!, withMessage: "QueueOfEditMessages object Deleted from cache")
-                }
-            }
-        } catch {
-            fatalError("Error on fetching list of QueueOfEditMessages with uniqueId")
-        }
-    }
-    
-    func deleteWaitEditMessage() {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfEditMessages")
-        do {
-            if let result = try context.fetch(fetchRequest) as? [QueueOfEditMessages] {
-                for (index, _) in result.enumerated() {
-                    deleteAndSave(object: result[index], withMessage: "QueueOfEditMessages object Deleted from cache")
                 }
             }
         } catch {
@@ -473,7 +373,77 @@ extension Cache {
         }
     }
     
-    func deleteWaitForwardMessage() {
+    func deleteWaitFileMessage(uniqueId: String) {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfFileMessages")
+        
+        // this predicate used to get messages that are in the specific thread using 'threadId' property
+        let threadPredicate = NSPredicate(format: "uniqueId == %@", uniqueId)
+        fetchRequest.predicate = threadPredicate
+        
+        do {
+            if let result = try context.fetch(fetchRequest) as? [QueueOfFileMessages] {
+                if (result.count > 0) {
+                    deleteAndSave(object: result.first!, withMessage: "QueueOfFileMessages object Deleted from cache")
+                }
+            }
+        } catch {
+            fatalError("Error on fetching list of QueueOfFileMessages with uniqueId")
+        }
+    }
+    
+    func deleteWaitUploadImages(uniqueId: String) {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfUploadImages")
+        
+        // this predicate used to get messages that are in the specific thread using 'threadId' property
+        let threadPredicate = NSPredicate(format: "uniqueId == %@", uniqueId)
+        fetchRequest.predicate = threadPredicate
+        
+        do {
+            if let result = try context.fetch(fetchRequest) as? [QueueOfUploadImages] {
+                if (result.count > 0) {
+                    deleteAndSave(object: result.first!, withMessage: "QueueOfUploadImages object Deleted from cache")
+                }
+            }
+        } catch {
+            fatalError("Error on fetching list of QueueOfUploadImages with uniqueId")
+        }
+    }
+    
+    func deleteWaitUploadFiles(uniqueId: String) {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfUploadFiles")
+        
+        // this predicate used to get messages that are in the specific thread using 'threadId' property
+        let threadPredicate = NSPredicate(format: "uniqueId == %@", uniqueId)
+        fetchRequest.predicate = threadPredicate
+        
+        do {
+            if let result = try context.fetch(fetchRequest) as? [QueueOfUploadFiles] {
+                if (result.count > 0) {
+                    deleteAndSave(object: result.first!, withMessage: "QueueOfUploadFiles object Deleted from cache")
+                }
+            }
+        } catch {
+            fatalError("Error on fetching list of QueueOfUploadFiles with uniqueId")
+        }
+    }
+    
+    
+    
+    // MARK: - delete all items from some wait Queues
+    func deleteAllWaitTextMessage() {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfTextMessages")
+        do {
+            if let result = try context.fetch(fetchRequest) as? [QueueOfTextMessages] {
+                for (index, _) in result.enumerated() {
+                    deleteAndSave(object: result[index], withMessage: "QueueOfTextMessages object Deleted from cache")
+                }
+            }
+        } catch {
+            fatalError("Error on fetching list of QueueOfTextMessages with uniqueId")
+        }
+    }
+    
+    func deleteAllWaitForwardMessage() {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfForwardMessages")
         do {
             if let result = try context.fetch(fetchRequest) as? [QueueOfForwardMessages] {
@@ -486,14 +456,68 @@ extension Cache {
         }
     }
     
+    func deleteAllWaitFileMessage() {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfFileMessages")
+        do {
+            if let result = try context.fetch(fetchRequest) as? [QueueOfFileMessages] {
+                for (index, _) in result.enumerated() {
+                    deleteAndSave(object: result[index], withMessage: "QueueOfFileMessages object Deleted from cache")
+                }
+            }
+        } catch {
+            fatalError("Error on fetching list of QueueOfFileMessages with uniqueId")
+        }
+    }
     
+    func deleteAllWaitUploadImages() {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfUploadImages")
+        do {
+            if let result = try context.fetch(fetchRequest) as? [QueueOfUploadImages] {
+                for (index, _) in result.enumerated() {
+                    deleteAndSave(object: result[index], withMessage: "QueueOfUploadImages object Deleted from cache")
+                }
+            }
+        } catch {
+            fatalError("Error on fetching list of QueueOfFileMessages with uniqueId")
+        }
+    }
+    
+    func deleteAllWaitUploadFiles() {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfUploadFiles")
+        do {
+            if let result = try context.fetch(fetchRequest) as? [QueueOfUploadFiles] {
+                for (index, _) in result.enumerated() {
+                    deleteAndSave(object: result[index], withMessage: "QueueOfUploadFiles object Deleted from cache")
+                }
+            }
+        } catch {
+            fatalError("Error on fetching list of QueueOfUploadFiles with uniqueId")
+        }
+    }
+    
+    func deleteAllWaitEditMessage() {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfEditMessages")
+        do {
+            if let result = try context.fetch(fetchRequest) as? [QueueOfEditMessages] {
+                for (index, _) in result.enumerated() {
+                    deleteAndSave(object: result[index], withMessage: "QueueOfEditMessages object Deleted from cache")
+                }
+            }
+        } catch {
+            fatalError("Error on fetching list of QueueOfEditMessages with uniqueId")
+        }
+    }
+    
+    
+    
+    // MARK: - delete all wait Queues
     func deleteAllWaitQueues() {
-        deleteWaitTextMessage()
-        deleteWaitFileMessage()
-        deleteWaitUploadImages()
-        deleteWaitUploadFiles()
-        deleteWaitEditMessage()
-        deleteWaitForwardMessage()
+        deleteAllWaitTextMessage()
+        deleteAllWaitFileMessage()
+        deleteAllWaitUploadImages()
+        deleteAllWaitUploadFiles()
+        deleteAllWaitEditMessage()
+        deleteAllWaitForwardMessage()
     }
     
     
