@@ -1,5 +1,5 @@
 //
-//  CMUploadFile+CoreDataClass.swift
+//  CMFile+CoreDataClass.swift
 //  FanapPodChatSDK
 //
 //  Created by Mahyar Zhiani on 11/1/1397 AP.
@@ -11,9 +11,9 @@ import Foundation
 import CoreData
 
 
-public class CMUploadFile: NSManagedObject {
+public class CMFile: NSManagedObject {
     
-    public func convertCMUploadFileToUploadFileObject() -> UploadFile {
+    public func convertCMFileToFileObject() -> FileObject {
         
         var id:             Int?
         
@@ -23,15 +23,15 @@ public class CMUploadFile: NSManagedObject {
             }
         }
         
-        func createUploadFileModel() -> UploadFile {
-            let uploadFileModel = UploadFile(hashCode:  self.hashCode,
+        func createFileObjectModel() -> FileObject {
+            let uploadFileModel = FileObject(hashCode:  self.hashCode,
                                              id:        id,
                                              name:      self.name)
             return uploadFileModel
         }
         
         createVariables()
-        let model = createUploadFileModel()
+        let model = createFileObjectModel()
         
         return model
     }

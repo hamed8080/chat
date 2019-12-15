@@ -111,7 +111,7 @@ extension Chat {
     
     
     public func deleteUserInfoFromCache() {
-        Chat.cacheDB.deleteUserInfo()
+        Chat.cacheDB.deleteUserInfo(isCompleted: nil)
     }
     
     

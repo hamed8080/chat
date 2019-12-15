@@ -1232,13 +1232,29 @@ extension Chat {
                                                                threadId:    threadId,
                                                                uniqueId:    requestUniqueId)
         
+        if (isTyping?.threadId != 0) {
+            stopTyping()
+        }
+        isTyping = (threadId: threadId, uniqueId: requestUniqueId)
         // for every x seconds, call this function:
-        isTypingArray.append(requestUniqueId)
-        while (isTypingArray.count > 0) {
+        var counter = 0
+        while (isTyping?.threadId != 0) && (counter < 15) {
             DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
                 self.sendSignalMessage(input: signalMessageInput)
             }
+            counter += 1
         }
+        if isTyping?.threadId == 0 {
+            stopTyping()
+            return
+        }
+        
+//        isTypingArray.append(requestUniqueId)
+//        while (isTypingArray.count > 0) {
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+//                self.sendSignalMessage(input: signalMessageInput)
+//            }
+//        }
     }
     
     
@@ -1248,19 +1264,21 @@ extension Chat {
     /// by calling this method, sending isTyping message will stop
     ///
     /// Inputs:
-    /// - you have to send the "uniqueId" that  "StartTyping" method that gives to you
+    /// - this method does not have any input method
     ///
     /// Outputs:
     /// - It has no output
-    ///
-    /// - parameter uniqueId:   (input) the uniqueId that "StartTyping" gives to you (String)
-    public func stopTyping(uniqueId: String) {
-        for (index, item) in isTypingArray.enumerated() {
-            if (item == uniqueId) {
-                isTypingArray.remove(at: index)
-                break
-            }
+    public func stopTyping() {
+        if let threadId = isTyping?.threadId, threadId != 0 {
+            delegate?.systemEvents(type: SystemEventTypes.STOP_TYPING, result: threadId)
         }
+        isTyping = (0, "")
+//        for (index, item) in isTypingArray.enumerated() {
+//            if (item == uniqueId) {
+//                isTypingArray.remove(at: index)
+//                break
+//            }
+//        }
     }
     
     

@@ -1,23 +1,24 @@
 //
-//  UploadFileModel.swift
-//  Chat
+//  DownloadFileModel.swift
+//  FanapPodChatSDK
 //
-//  Created by Mahyar Zhiani on 8/5/1397 AP.
-//  Copyright © 1397 Mahyar Zhiani. All rights reserved.
+//  Created by MahyarZhiani on 9/24/1398 AP.
+//  Copyright © 1398 Mahyar Zhiani. All rights reserved.
 //
 
 import Foundation
 import SwiftyJSON
 
-open class UploadFileModel {
+
+open class DownloadFileModel {
     /*
      ---------------------------------------
      * responseAsJSON:
      *  - hasError          Bool
      *  - errorMessage      String
      *  - errorCode         Int
-     *  + result       JSON or UploadFileModel:
-     *      + UploadFile    UploadFileAsJSON
+     *  + result            DownloadFileModel:
+     *      + DownloadFile    DownloadFileAsJSON
      *          - hashCode      String
      *          - id            Int
      *          - name          String
@@ -30,33 +31,27 @@ open class UploadFileModel {
      ---------------------------------------
      */
     
-    // uploadFile model properties
+    // downloadFile model properties
     public let errorCode:           Int
     public let errorMessage:        String
     public let hasError:            Bool
-    //    public var localPath:           String = ""
-    public let uploadFile:          FileObject?
+    public let downloadFile:        FileObject?
     
     public var uploadFileJSON: JSON = [:]
     
     public init(messageContentJSON: JSON?,
                 errorCode:      Int,
                 errorMessage:   String,
-                hasError:       Bool/*,
-         localPath:      String?*/) {
+                hasError:       Bool) {
         
         self.hasError           = hasError
         self.errorMessage       = errorMessage
         self.errorCode          = errorCode
         
-        //        if let pathString = localPath {
-        //            self.localPath = pathString
-        //        }
-        
         if let myFile = messageContentJSON {
-            self.uploadFile = FileObject(messageContent: myFile)
+            self.downloadFile = FileObject(messageContent: myFile)
         } else {
-            self.uploadFile = nil
+            self.downloadFile = nil
         }
         
     }
@@ -64,34 +59,28 @@ open class UploadFileModel {
     public init(messageContentModel: FileObject?,
                 errorCode:      Int,
                 errorMessage:   String,
-                hasError:       Bool/*,
-         localPath:      String?*/) {
+                hasError:       Bool) {
         
         self.hasError           = hasError
         self.errorMessage       = errorMessage
         self.errorCode          = errorCode
         
-        //        if let pathString = localPath {
-        //            self.localPath = pathString
-        //        }
-        
         if let myFile = messageContentModel {
-            self.uploadFile = myFile
+            self.downloadFile = myFile
         } else {
-            self.uploadFile = nil
+            self.downloadFile = nil
         }
         
     }
     
     
     public func returnDataAsJSON() -> JSON {
-        let result: JSON = ["uploadFile":   uploadFile?.formatToJSON() ?? NSNull()]
+        let result: JSON = ["downloadFile":   downloadFile?.formatToJSON() ?? NSNull()]
         
         let resultAsJSON: JSON = ["result":     result,
                                   "errorCode":  errorCode,
                                   "errorMessage": errorMessage,
-                                  "hasError":   hasError/*,
-             "localPath": localPath*/]
+                                  "hasError":   hasError]
         
         return resultAsJSON
     }

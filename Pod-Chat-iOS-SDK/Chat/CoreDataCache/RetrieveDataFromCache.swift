@@ -734,9 +734,9 @@ extension Cache {
     /*
      * retrieve UploadImage
      *
-     *  -> fetch CMUploadImage from Cahce DB
+     *  -> fetch CMImage from Cahce DB
      *  -> if it found any object, it will return that,
-     *  -> otherwise it will return nil. (means cache has no relevent data(CMUploadImage) on itself based on the input).
+     *  -> otherwise it will return nil. (means cache has no relevent data(CMImage) on itself based on the input).
      *
      * first, it will fetch the Objects from CoreData.
      * then based on the client request, it will find the objects that the client want to get,
@@ -750,8 +750,8 @@ extension Cache {
      *      - (uploadImageMpdel: UploadImageModel, imagePath: String)
      *
      */
-    public func retrieveUploadImage(hashCode:   String,
-                                    imageId:    Int) -> (uploadImageMpdel: UploadImageModel, imagePath: String)? {
+    public func retrieveImageObject(hashCode:   String,
+                                    imageId:    Int) -> (imageObject: ImageObject, imagePath: String)? {
         /*
          *
          *  -> make this properties AND together: 'hashCode', 'id'
@@ -764,24 +764,25 @@ extension Cache {
          *
          */
         
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUploadImage")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
         let searchImage = NSPredicate(format: "hashCode == %@ AND id == %i", hashCode, imageId)
         fetchRequest.predicate = searchImage
         
         do {
-            if let result = try context.fetch(fetchRequest) as? [CMUploadImage] {
+            if let result = try context.fetch(fetchRequest) as? [CMImage] {
                 print("found items = \(result.count)")
                 if let firstObject = result.first {
-                    let imageObject = firstObject.convertCMUploadImageToUploadImageObject()
-                    let uploadImageModel = UploadImageModel(messageContentModel: imageObject,
-                                                            errorCode: 0,
-                                                            errorMessage: "",
-                                                            hasError: false)
+                    let imageObject = firstObject.convertCMImageToImageObject()
+//                    let uploadImageModel = UploadImageModel(messageContentModel: imageObject,
+//                                                            errorCode: 0,
+//                                                            errorMessage: "",
+//                                                            hasError: false)
                     
                     let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-                    let myFilePath = path + "/\(fileSubPath.Images)/" + "\(firstObject.id ?? 0)\(firstObject.name ?? "default.png")"
+                    let myImagePath = path + "/\(fileSubPath.Images)/" + "\(firstObject.id ?? 0)\(firstObject.name ?? "default.png")"
                     
-                    return (uploadImageModel, myFilePath)
+//                    return (uploadImageModel, myImagePath)
+                    return (imageObject, myImagePath)
                 } else {
                     return nil
                 }
@@ -790,7 +791,7 @@ extension Cache {
                 return nil
             }
         } catch {
-            fatalError("Error on fetching list of CMUploadImage")
+            fatalError("Error on fetching list of CMImage")
         }
     }
     
@@ -798,9 +799,9 @@ extension Cache {
     /*
      * retrieve UploadFile:
      *
-     *  -> fetch CMUploadImage from Cahce DB
+     *  -> fetch CMImage from Cahce DB
      *  -> if it found any object, it will return that,
-     *  -> otherwise it will return nil. (means cache has no relevent data(CMUploadFile) on itself based on the input).
+     *  -> otherwise it will return nil. (means cache has no relevent data(CMFile) on itself based on the input).
      *
      * first, it will fetch the Objects from CoreData.
      * then based on the client request, it will find the objects that the client want to get,
@@ -814,8 +815,8 @@ extension Cache {
      *      - (uploadFileModel: UploadFileModel, filePath: String)
      *
      */
-    public func retrieveUploadFile(fileId:      Int,
-                                   hashCode:    String) -> (uploadFileModel: UploadFileModel, filePath: String)? {
+    public func retrieveFileObject(fileId:      Int,
+                                   hashCode:    String) -> (fileObject: FileObject, filePath: String)? {
         /*
          *
          *  -> make this properties AND together: 'hashCode', 'id'
@@ -828,24 +829,25 @@ extension Cache {
          *
          */
         
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUploadFile")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMFile")
         let searchFile = NSPredicate(format: "hashCode == %@ AND id == %i", hashCode, fileId)
         fetchRequest.predicate = searchFile
         
         do {
-            if let result = try context.fetch(fetchRequest) as? [CMUploadFile] {
+            if let result = try context.fetch(fetchRequest) as? [CMFile] {
                 
                 if let firstObject = result.first {
-                    let fileObject = firstObject.convertCMUploadFileToUploadFileObject()
-                    let uploadFileModel = UploadFileModel(messageContentModel: fileObject,
-                                                          errorCode: 0,
-                                                          errorMessage: "",
-                                                          hasError: false)
+                    let fileObject = firstObject.convertCMFileToFileObject()
+//                    let uploadFileModel = UploadFileModel(messageContentModel: fileObject,
+//                                                          errorCode: 0,
+//                                                          errorMessage: "",
+//                                                          hasError: false)
                     
                     let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
                     let myFilePath = path + "/\(fileSubPath.Files)/" + "\(firstObject.id ?? 0)\(firstObject.name ?? "default")"
                     
-                    return (uploadFileModel, myFilePath)
+//                    return (uploadFileModel, myFilePath)
+                    return (fileObject, myFilePath)
                 } else {
                     return nil
                 }
@@ -854,7 +856,7 @@ extension Cache {
                 return nil
             }
         } catch {
-            fatalError("Error on fetching list of CMUploadFile")
+            fatalError("Error on fetching list of CMFile")
         }
     }
     

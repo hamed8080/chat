@@ -1,5 +1,5 @@
 //
-//  CMUploadFile+CoreDataProperties.swift
+//  CMFile+CoreDataProperties.swift
 //  FanapPodChatSDK
 //
 //  Created by Mahyar Zhiani on 11/23/1397 AP.
@@ -11,10 +11,10 @@ import Foundation
 import CoreData
 
 
-extension CMUploadFile {
+extension CMFile {
     
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<CMUploadFile> {
-        return NSFetchRequest<CMUploadFile>(entityName: "CMUploadFile")
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<CMFile> {
+        return NSFetchRequest<CMFile>(entityName: "CMFile")
     }
     
     @NSManaged public var hashCode: String?

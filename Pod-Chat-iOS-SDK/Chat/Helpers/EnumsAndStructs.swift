@@ -256,6 +256,7 @@ public enum FileUploadEventTypes {
 
 public enum SystemEventTypes {
     case IS_TYPING      //
+    case STOP_TYPING
 }
 
 

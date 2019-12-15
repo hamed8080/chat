@@ -113,8 +113,8 @@ extension Chat {
                 
                 if self.enableCache {
                     // save data comes from server to the Cache
-                    let uploadImageFile = UploadImage(messageContent: resultData)
-                    Chat.cacheDB.saveUploadImage(imageInfo: uploadImageFile, imageData: uploadImageInput.dataToSend)
+                    let uploadImageFile = ImageObject(messageContent: resultData)
+                    Chat.cacheDB.saveImageObject(imageInfo: uploadImageFile, imageData: uploadImageInput.dataToSend)
                     Chat.cacheDB.deleteWaitUploadImages(uniqueId: uploadImageInput.uniqueId)
                 }
                 
@@ -258,8 +258,8 @@ extension Chat {
                 
                 if self.enableCache {
                     // save data comes from server to the Cache
-                    let uploadFileFile = UploadFile(messageContent: resultData)
-                    Chat.cacheDB.saveUploadFile(fileInfo: uploadFileFile, fileData: uploadFileInput.dataToSend)
+                    let uploadFileObject = FileObject(messageContent: resultData)
+                    Chat.cacheDB.saveFileObject(fileInfo: uploadFileObject, fileData: uploadFileInput.dataToSend)
                     Chat.cacheDB.deleteWaitUploadFiles(uniqueId: uploadFileInput.uniqueId)
                 }
                 
@@ -297,28 +297,55 @@ extension Chat {
     public func getImage(getImageInput: GetImageRequestModel,
                          uniqueId:      @escaping (String) -> (),
                          progress:      @escaping (Float) -> (),
-                         completion:    @escaping (Data?, UploadImageModel) -> (),
-                         cacheResponse: @escaping (UploadImageModel, String) -> ()) {
+                         completion:    @escaping (Data?, DownloadImageModel) -> (),
+                         cacheResponse: @escaping (Data, DownloadImageModel) -> ()) {
         
         let theUniqueId = generateUUID()
         uniqueId(theUniqueId)
         
-        let url = "\(SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_IMAGE.rawValue)"
-        let method:     HTTPMethod  = HTTPMethod.get
+        var hasImageOnTheCache = false
         
         // if cache is enabled by user, first return cache result to the user
         if enableCache {
-            if let (cacheImageResult, imagePath) = Chat.cacheDB.retrieveUploadImage(hashCode:   getImageInput.hashCode,
+            if let (cacheImageResult, imagePath) = Chat.cacheDB.retrieveImageObject(hashCode:   getImageInput.hashCode,
                                                                                     imageId:    getImageInput.imageId) {
-                cacheResponse(cacheImageResult, imagePath)
+                let response = DownloadImageModel(messageContentModel:   cacheImageResult,
+                                                  errorCode:             0,
+                                                  errorMessage:          "",
+                                                  hasError:              false)
+                if FileManager.default.fileExists(atPath: imagePath) {
+                    let imagURL = URL(fileURLWithPath: imagePath)
+                    do {
+                        let data = try Data(contentsOf: imagURL)
+                        hasImageOnTheCache = true
+                        cacheResponse(data, response)
+                    } catch {
+                        fatalError("cannot get the fileData from imagPath")
+                    }
+                }
+//                cacheResponse(response, imagePath)
             }
         }
-        
         
         // IMPROVMENT NEEDED:
         // maybe if i had the answer from cache, i have to ignore the bottom code that request to server to get file again!!
         // so this code have to only request file if it couldn't find the file on the cache
+        if !hasImageOnTheCache {
+            sendRequestToDownloadImage(getImageInput: getImageInput, progress: { (theProgress) in
+                progress(theProgress)
+            }) { (data, imageModel) in
+                completion(data, imageModel)
+            }
+        }
         
+    }
+    
+    private func sendRequestToDownloadImage(getImageInput: GetImageRequestModel,
+                                            progress:      @escaping (Float) -> (),
+                                            completion:    @escaping (Data?, DownloadImageModel) -> ()) {
+        
+        let url = "\(SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_IMAGE.rawValue)"
+        let method:     HTTPMethod  = HTTPMethod.get
         Networking.sharedInstance.download(toUrl:           url,
                                            withMethod:      method,
                                            withHeaders:     nil,
@@ -331,7 +358,7 @@ extension Chat {
                 let fileName = responseHeader["name"].string
                 let fileType = responseHeader["type"].string
                 let theFinalFileName = "\(fileName ?? "default").\(fileType ?? "none")"
-                let uploadImage = UploadImage(actualHeight: nil,
+                let uploadImage = ImageObject(actualHeight: nil,
                                               actualWidth:  nil,
                                               hashCode:     getImageInput.hashCode,
                                               height:       getImageInput.height,
@@ -340,21 +367,21 @@ extension Chat {
                                               width:        getImageInput.width)
                 
                 if self.enableCache {
-                    Chat.cacheDB.saveUploadImage(imageInfo: uploadImage, imageData: myData)
+                    Chat.cacheDB.saveImageObject(imageInfo: uploadImage, imageData: myData)
                 }
                 
-                let uploadImageModel = UploadImageModel(messageContentModel: uploadImage, errorCode: 0, errorMessage: "", hasError: false)
+                let uploadImageModel = DownloadImageModel(messageContentModel: uploadImage, errorCode: 0, errorMessage: "", hasError: false)
                 completion(myData, uploadImageModel)
             } else {
                 let hasError = responseHeader["hasError"].bool ?? false
                 let errorMessage = responseHeader["errorMessage"].string ?? ""
                 let errorCode = responseHeader["errorCode"].int ?? 999
-                let errorUploadImageModel = UploadImageModel(messageContentModel: nil, errorCode: errorCode, errorMessage: errorMessage, hasError: hasError)
+                let errorUploadImageModel = DownloadImageModel(messageContentModel: nil, errorCode: errorCode, errorMessage: errorMessage, hasError: hasError)
                 completion(nil, errorUploadImageModel)
             }
         }
-        
     }
+    
     
     
     /// GetFIle:
@@ -377,28 +404,56 @@ extension Chat {
     public func getFile(getFileInput:   GetFileRequestModel,
                         uniqueId:       @escaping (String) -> (),
                         progress:       @escaping (Float) -> (),
-                        completion:     @escaping (Data?, UploadFileModel) -> (),
-                        cacheResponse:  @escaping (UploadFileModel, String) -> ()) {
+                        completion:     @escaping (Data?, DownloadFileModel) -> (),
+                        cacheResponse:  @escaping (Data, DownloadFileModel) -> ()) {
         
         let theUniqueId = generateUUID()
         uniqueId(theUniqueId)
         
-        let url = "\(SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_FILE.rawValue)"
-        let method:     HTTPMethod  = HTTPMethod.get
+        var hasFileOntheCache = false
         
         // if cache is enabled by user, first return cache result to the user
         if enableCache {
-            if let (cacheFileResult, imagePath) = Chat.cacheDB.retrieveUploadFile(fileId:   getFileInput.fileId,
+            if let (cacheFileResult, filePath) = Chat.cacheDB.retrieveFileObject(fileId:   getFileInput.fileId,
                                                                                   hashCode: getFileInput.hashCode) {
-                cacheResponse(cacheFileResult, imagePath)
+                hasFileOntheCache = true
+                let response = DownloadFileModel(messageContentModel:   cacheFileResult,
+                                                 errorCode:             0,
+                                                 errorMessage:          "",
+                                                 hasError:              false)
+                if FileManager.default.fileExists(atPath: filePath) {
+                    let fileURL = URL(fileURLWithPath: filePath)
+                    do {
+                        let data = try Data(contentsOf: fileURL)
+                        hasFileOntheCache = true
+                        cacheResponse(data, response)
+                    } catch {
+                        fatalError("cannot get the fileData from imagPath")
+                    }
+                }
+//                cacheResponse(response, imagePath)
             }
         }
-        
         
         // IMPROVMENT NEEDED:
         // maybe if i had the answer from cache, i have to ignore the bottom code that request to server to get file again!!
         // so this code have to only request file if it couldn't find the file on the cache
+        if !hasFileOntheCache {
+            sendRequestToDownloadFile(getFileInput: getFileInput, progress: { (theProgress) in
+                progress(theProgress)
+            }) { (data, fileModel) in
+                completion(data, fileModel)
+            }
+        }
         
+    }
+    
+    private func sendRequestToDownloadFile(getFileInput:   GetFileRequestModel,
+                                           progress:       @escaping (Float) -> (),
+                                           completion:     @escaping (Data?, DownloadFileModel) -> ()) {
+        
+        let url = "\(SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_FILE.rawValue)"
+        let method:     HTTPMethod  = HTTPMethod.get
         Networking.sharedInstance.download(toUrl:           url,
                                            withMethod:      method,
                                            withHeaders:     nil,
@@ -411,21 +466,23 @@ extension Chat {
                 let fileName = responseHeader["name"].string
                 let fileType = responseHeader["type"].string
                 let theFinalFileName = "\(fileName ?? "default").\(fileType ?? "none")"
-                let uploadFile = UploadFile(hashCode: getFileInput.hashCode, id: getFileInput.fileId, name: theFinalFileName)
-                Chat.cacheDB.saveUploadFile(fileInfo: uploadFile, fileData: myFile)
+                let uploadFile = FileObject(hashCode: getFileInput.hashCode, id: getFileInput.fileId, name: theFinalFileName)
+                Chat.cacheDB.saveFileObject(fileInfo: uploadFile, fileData: myFile)
                 
-                let uploadFileModel = UploadFileModel(messageContentModel: uploadFile, errorCode: 0, errorMessage: "", hasError: false)
+                let uploadFileModel = DownloadFileModel(messageContentModel:    uploadFile,
+                                                        errorCode:              0,
+                                                        errorMessage:           "",
+                                                        hasError:               false)
                 
                 completion(myFile, uploadFileModel)
             } else {
                 let hasError = responseHeader["hasError"].bool ?? false
                 let errorMessage = responseHeader["errorMessage"].string ?? ""
                 let errorCode = responseHeader["errorCode"].int ?? 999
-                let errorUploadFileModel = UploadFileModel(messageContentModel: nil, errorCode: errorCode, errorMessage: errorMessage, hasError: hasError)
+                let errorUploadFileModel = DownloadFileModel(messageContentModel: nil, errorCode: errorCode, errorMessage: errorMessage, hasError: hasError)
                 completion(nil, errorUploadFileModel)
             }
         }
-        
     }
     
     

@@ -57,10 +57,24 @@
         <relationship name="lastMessageVO" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="dummyConversationLastMessageVO" inverseEntity="CMMessage"/>
         <relationship name="participants" optional="YES" toMany="YES" deletionRule="Deny" ordered="YES" destinationEntity="CMParticipant" inverseName="dummyConversationParticipants" inverseEntity="CMParticipant"/>
     </entity>
+    <entity name="CMFile" representedClassName=".CMUploadFile" syncable="YES">
+        <attribute name="hashCode" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+    </entity>
     <entity name="CMForwardInfo" representedClassName=".CMForwardInfo" syncable="YES">
         <relationship name="conversation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="dummyForwardInfo" inverseEntity="CMConversation"/>
         <relationship name="dummyMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="forwardInfo" inverseEntity="CMMessage"/>
         <relationship name="participant" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMParticipant" inverseName="dummyForwardInfo" inverseEntity="CMParticipant"/>
+    </entity>
+    <entity name="CMImage" representedClassName=".CMUploadImage" syncable="YES">
+        <attribute name="actualHeight" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="actualWidth" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="hashCode" optional="YES" attributeType="String"/>
+        <attribute name="height" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="width" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
     </entity>
     <entity name="CMLinkedUser" representedClassName=".CMLinkedUser" syncable="YES">
         <attribute name="coreUserId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
@@ -133,20 +147,6 @@
         <attribute name="participantId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="time" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-    </entity>
-    <entity name="CMUploadFile" representedClassName=".CMUploadFile" syncable="YES">
-        <attribute name="hashCode" optional="YES" attributeType="String"/>
-        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="name" optional="YES" attributeType="String"/>
-    </entity>
-    <entity name="CMUploadImage" representedClassName=".CMUploadImage" syncable="YES">
-        <attribute name="actualHeight" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="actualWidth" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="hashCode" optional="YES" attributeType="String"/>
-        <attribute name="height" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="width" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
     </entity>
     <entity name="CMUser" representedClassName=".CMUser" syncable="YES">
         <attribute name="cellphoneNumber" optional="YES" attributeType="String"/>
@@ -258,8 +258,8 @@
         <element name="CMParticipant" positionX="349.671875" positionY="95.74609375" width="128" height="418"/>
         <element name="CMReplyInfo" positionX="166.9453125" positionY="487.76171875" width="128" height="180"/>
         <element name="CMThreadParticipants" positionX="80.10546875" positionY="-125.96875" width="128" height="90"/>
-        <element name="CMUploadFile" positionX="-461.58984375" positionY="539" width="128" height="90"/>
-        <element name="CMUploadImage" positionX="-460.42578125" positionY="37.66796875" width="128" height="150"/>
+        <element name="CMFile" positionX="-461.58984375" positionY="539" width="128" height="88"/>
+        <element name="CMImage" positionX="-460.42578125" positionY="37.66796875" width="128" height="148"/>
         <element name="CMUser" positionX="-463.83984375" positionY="196.234375" width="128" height="180"/>
         <element name="CMUserRole" positionX="-54" positionY="243" width="128" height="120"/>
         <element name="MessageGaps" positionX="293.2421875" positionY="-115.6953125" width="128" height="90"/>

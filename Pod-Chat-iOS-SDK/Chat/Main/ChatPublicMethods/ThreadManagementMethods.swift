@@ -690,6 +690,7 @@ extension Chat {
     }
     
     
+    
     // MARK: - Get/Set/Remove AdminRole
     
     /// SetRole:
@@ -749,6 +750,86 @@ extension Chat {
         }
         
     }
+    
+    
+    
+    /// addAuditorToThread:
+    /// setRoleTo a User on a peer to peer thread
+    ///
+    /// By calling this function, a request of type 42 (SET_RULE_TO_USER) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "AddRemoveAuditorRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 3 callbacks as responses.
+    ///
+    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (AddRemoveAuditorRequestModel)
+    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! UserRolesModel)
+    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (UserRolesModel)
+    public func addAuditorToThread(inputModel:      AddRemoveAuditorRequestModel,
+                                   uniqueId:        @escaping (String) -> (),
+                                   completion:      @escaping callbackTypeAlias,
+                                   cacheResponse:   @escaping callbackTypeAlias) {
+        
+        
+        let setRoleInputModel = SetRoleRequestModel(roles:          inputModel.roles,
+                                                    roleOperation:  RoleOperations.Add,
+                                                    threadId:       inputModel.threadId,
+                                                    userId:         inputModel.userId,
+                                                    typeCode:       inputModel.typeCode,
+                                                    uniqueId:       inputModel.uniqueId)
+        setRole(setRoleInput: [setRoleInputModel], uniqueId: { (setRoleUniqueId) in
+            uniqueId(setRoleUniqueId)
+        }, completion: { (theServerResponse) in
+            completion(theServerResponse)
+        }) { (theCacheResponse) in
+            cacheResponse(theCacheResponse)
+        }
+        
+    }
+    
+    
+    
+    /// removeAuditorFromThread:
+    /// removeRole From a User on a peer to peer thread
+    ///
+    /// By calling this function, a request of type 42 (SET_RULE_TO_USER) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "AddRemoveAuditorRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 3 callbacks as responses.
+    ///
+    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (AddRemoveAuditorRequestModel)
+    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! UserRolesModel)
+    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (UserRolesModel)
+    public func removeAuditorFromThread(inputModel:     AddRemoveAuditorRequestModel,
+                                        uniqueId:       @escaping (String) -> (),
+                                        completion:     @escaping callbackTypeAlias,
+                                        cacheResponse:  @escaping callbackTypeAlias) {
+    
+        let setRoleInputModel = SetRoleRequestModel(roles:          inputModel.roles,
+                                                    roleOperation:  RoleOperations.Remove,
+                                                    threadId:       inputModel.threadId,
+                                                    userId:         inputModel.userId,
+                                                    typeCode:       inputModel.typeCode,
+                                                    uniqueId:       inputModel.uniqueId)
+        setRole(setRoleInput: [setRoleInputModel], uniqueId: { (setRoleUniqueId) in
+            uniqueId(setRoleUniqueId)
+        }, completion: { (theServerResponse) in
+            completion(theServerResponse)
+        }) { (theCacheResponse) in
+            cacheResponse(theCacheResponse)
+        }
+        
+    }
+    
     
     
 }

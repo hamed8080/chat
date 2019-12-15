@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class UploadFile {
+open class FileObject {
     
     public let hashCode:       String?
     public let id:             Int?
@@ -30,7 +30,7 @@ open class UploadFile {
         self.name           = name
     }
     
-    public init(theUploadFile: UploadFile) {
+    public init(theUploadFile: FileObject) {
         
         self.hashCode       = theUploadFile.hashCode
         self.id             = theUploadFile.id
@@ -38,7 +38,7 @@ open class UploadFile {
     }
     
     
-    public func formatDataToMakeUploadImage() -> UploadFile {
+    public func formatDataToMakeUploadImage() -> FileObject {
         return self
     }
     

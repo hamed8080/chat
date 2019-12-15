@@ -22,7 +22,7 @@ extension Cache {
     ///
     /// Outputs:
     /// - it returns no output
-    public func deleteUserInfo() {
+    public func deleteUserInfo(isCompleted: (()->())?) {
         /*
          -> fetch CMUser
          -> iterate throut all CMUser objects inside the cache, and delete them one by one.
@@ -34,8 +34,12 @@ extension Cache {
                 for user in result {
                     deleteAndSave(object: user, withMessage: "CMUser Deleted.")
                 }
+                isCompleted?()
+            } else {
+                isCompleted?()
             }
         } catch {
+            isCompleted?()
             fatalError("cannot fetch CMUser, when trying to delete CMUser")
         }
     }
@@ -612,9 +616,12 @@ extension Cache {
     ///
     /// Outputs:
     /// - it returns no output
-    public func deleteAllContacts() {
-        deleteContacts()
-        deleteLinkedUsers()
+    public func deleteAllContacts(isCompleted: @escaping ()->()) {
+        deleteContacts {
+            self.deleteLinkedUsers {
+                isCompleted()
+            }
+        }
     }
     
     
@@ -626,7 +633,7 @@ extension Cache {
     ///
     /// Outputs:
     /// - it returns no output
-    func deleteContacts() {
+    func deleteContacts(isCompleted: (()->())?) {
         /*
          *  -> fetch all CMContact
          *  -> loop through the contacts
@@ -644,8 +651,12 @@ extension Cache {
                     }
                     deleteAndSave(object: contact, withMessage: "CMContact Deleted")
                 }
+                isCompleted?()
+            } else {
+                isCompleted?()
             }
         } catch {
+            isCompleted?()
             fatalError()
         }
     }
@@ -659,7 +670,7 @@ extension Cache {
     ///
     /// Outputs:
     /// - it returns no output
-    func deleteLinkedUsers() {
+    func deleteLinkedUsers(isCompleted: @escaping ()->()) {
         /*
          *  -> fetch all CMLinkedUser
          *  -> loop through the linkedUsers
@@ -672,8 +683,12 @@ extension Cache {
                 for linkeUser in result {
                     deleteAndSave(object: linkeUser, withMessage: "CMLinkedUser Deleted")
                 }
+                isCompleted()
+            } else {
+                isCompleted()
             }
         } catch {
+            isCompleted()
             fatalError()
         }
     }
@@ -689,10 +704,16 @@ extension Cache {
     ///
     /// Outputs:
     /// - it returns no output
-    public func deleteAllThreads() {
-        deleteThreads()
-        deleteAllMessage()
-        deleteParticipants()
+    public func deleteAllThreads(isCompleted: @escaping ()->()) {
+        deleteThreads {
+            self.deleteAllMessage {
+                self.deleteParticipants {
+                    isCompleted()
+                }
+            }
+        }
+        
+        
 //        deleteThreadParticipants()
     }
     
@@ -704,7 +725,7 @@ extension Cache {
     ///
     /// Outputs:
     /// - it returns no output
-    func deleteThreads() {
+    func deleteThreads(isCompleted: @escaping ()->()) {
         /*
          *  -> fetch 'CMConversation' Entity
          *  -> for every CMConversation object on the response
@@ -731,8 +752,12 @@ extension Cache {
                     }
                     deleteAndSave(object: thread, withMessage: "CMConversation Deleted.")
                 }
+                isCompleted()
+            } else {
+                isCompleted()
             }
         } catch {
+            isCompleted()
             fatalError()
         }
     }
@@ -745,23 +770,27 @@ extension Cache {
     ///
     /// Outputs:
     /// - it returns no output
-    func deleteParticipants() {
+    func deleteParticipants(isCompleted: @escaping ()->()) {
     /*
         *  -> fetch 'CMParticipant' Entity
         *  -> delete all CMParticipant objects
         *
         */
-    let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMParticipant")
-    do {
-        if let result = try context.fetch(fetchRequest) as? [CMParticipant] {
-            for row in result {
-                deleteAndSave(object: row, withMessage: "Delete row from CMParticipant table")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMParticipant")
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMParticipant] {
+                for row in result {
+                    deleteAndSave(object: row, withMessage: "Delete row from CMParticipant table")
+                }
+                isCompleted()
+            } else {
+                isCompleted()
             }
+        } catch {
+            isCompleted()
+            fatalError()
         }
-    } catch {
-        fatalError()
     }
-}
     
     /*
     func deleteThreadParticipants() {
@@ -795,11 +824,19 @@ extension Cache {
     ///
     /// Outputs:
     /// - it returns no output
-    public func deleteAllMessage() {
-        deleteMessages()
-        deleteReplyInfo()
-        deleteForwardInfo()
-        deleteMessageGaps()
+    public func deleteAllMessage(isCompleted: @escaping ()->()) {
+        deleteMessages() {
+            self.deleteReplyInfo {
+                self.deleteForwardInfo {
+                    self.deleteMessageGaps {
+                        isCompleted()
+                    }
+                }
+            }
+        }
+//        deleteReplyInfo()
+//        deleteForwardInfo()
+//        deleteMessageGaps()
     }
     
     /// Delete Messages:
@@ -810,7 +847,7 @@ extension Cache {
     ///
     /// Outputs:
     /// - it returns no output
-    func deleteMessages() {
+    func deleteMessages(isCompleted: @escaping ()->()) {
         /*
          *  -> fetch 'CMMessage' Entity
          *  -> for every CMMessage object on the response
@@ -839,8 +876,12 @@ extension Cache {
                     }
                     deleteAndSave(object: message, withMessage: "CMMessage Deleted.")
                 }
+                isCompleted()
+            } else {
+                isCompleted()
             }
         } catch {
+            isCompleted()
             fatalError()
         }
     }
@@ -853,7 +894,7 @@ extension Cache {
     ///
     /// Outputs:
     /// - it returns no output
-    func deleteForwardInfo() {
+    func deleteForwardInfo(isCompleted: @escaping ()->()) {
         /*
          *  -> fetch 'CMForwardInfo' Entity
          *  -> delete all CMForwardInfo objects
@@ -865,8 +906,12 @@ extension Cache {
                 for row in result {
                     deleteAndSave(object: row, withMessage: "Delete row from CMForwardInfo table")
                 }
+                isCompleted()
+            } else {
+                isCompleted()
             }
         } catch {
+            isCompleted()
             fatalError()
         }
     }
@@ -879,7 +924,7 @@ extension Cache {
     ///
     /// Outputs:
     /// - it returns no output
-    func deleteReplyInfo() {
+    func deleteReplyInfo(isCompleted: @escaping ()->()) {
         /*
          *  -> fetch 'CMReplyInfo' Entity
          *  -> delete all CMReplyInfo objects
@@ -891,8 +936,12 @@ extension Cache {
                 for row in result {
                     deleteAndSave(object: row, withMessage: "Delete row from CMReplyInfo table")
                 }
+                isCompleted()
+            } else {
+                isCompleted()
             }
         } catch {
+            isCompleted()
             fatalError()
         }
     }
@@ -924,7 +973,7 @@ extension Cache {
     ///
     /// Outputs:
     /// - it returns no output
-    func deleteMessageGaps() {
+    func deleteMessageGaps(isCompleted: @escaping ()->()) {
         /*
          *  -> fetch 'MessageGaps' Entity
          *  -> delete all MessageGaps objects
@@ -936,21 +985,85 @@ extension Cache {
                 for row in result {
                     deleteAndSave(object: row, withMessage: "Delete row from MessageGaps table")
                 }
+                isCompleted()
+            } else {
+                isCompleted()
             }
         } catch {
+            isCompleted()
             fatalError()
         }
     }
     
     
-    // ToDo:
+    
+    /// Delete All Images:
+    /// by calling this method, it will Remove all CMImage From CacheDB, and the image data from local app bundel
+    ///
+    /// Inputs:
+    /// - it gets no parameters as input
+    ///
+    /// Outputs:
+    /// - it returns no output
     public func deleteAllImages() {
-        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMImage] {
+                for itemInCache in result {
+                    // delete the original file from local storage of the app, using path of the file
+                    let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+                    let myImagePath = path + "/\(fileSubPath.Images)/" + "\(itemInCache.name ?? "default")\(itemInCache.id ?? 0).png"
+                    // check if this file is exixt on the app bunde, then delete it
+                    if FileManager.default.fileExists(atPath: myImagePath) {
+                        do {
+                            try FileManager.default.removeItem(atPath: myImagePath)
+                        } catch {
+                            fatalError("can not delete the image from app bundle!")
+                        }
+                    }
+                    
+                    // delete the information from cache
+                    deleteAndSave(object: itemInCache, withMessage: "Delete CMImage Object")
+                }
+            }
+        } catch {
+            fatalError("Error on fetching list of CMImage")
+        }
     }
     
-    // ToDo:
+    
+    
+    /// Delete All Files:
+    /// by calling this method, it will Remove all CMFile From CacheDB, and the file data from local app bundel
+    ///
+    /// Inputs:
+    /// - it gets no parameters as input
+    ///
+    /// Outputs:
+    /// - it returns no output
     public func deleteAllFiles() {
-        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMFile")
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMFile] {
+                for itemInCache in result {
+                    // delete the original file from local storage of the app, using path of the file
+                    let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+                    let myFilePath = path + "/\(fileSubPath.Files)/" + "\(itemInCache.id ?? 0)\(itemInCache.name ?? "default")"
+                    
+                    if FileManager.default.fileExists(atPath: myFilePath) {
+                        do {
+                            try FileManager.default.removeItem(atPath: myFilePath)
+                        } catch {
+                            fatalError("can not delete the image from app bundle!")
+                        }
+                    }
+                    // delete the information from cache
+                    deleteAndSave(object: itemInCache, withMessage: "Delete CMFile Object")
+                }
+            }
+        } catch {
+            fatalError("Error on fetching list of CMFile")
+        }
     }
     
     
@@ -964,14 +1077,21 @@ extension Cache {
     /// Outputs:
     /// - it returns no output
     public func deleteCacheData() {
-        deleteUserInfo()
-        deleteContacts()    // it will delete the LinkedUsers too
-        deleteThreads()     // it will delete threads, participants, threadParticipants too, messages (contain: message, raplyIndo, forwardInfo, messageGaps)
+        deleteUserInfo() {
+            self.deleteContacts(isCompleted: nil)
+            self.deleteThreads() {
+                self.deleteAllImages()
+                self.deleteAllFiles()
+                self.deleteAllWaitQueues()
+            }
+        }
+//        deleteContacts()    // it will delete the LinkedUsers too
+//        deleteThreads()     // it will delete threads, participants, threadParticipants too, messages (contain: message, raplyIndo, forwardInfo, messageGaps)
         
-        deleteAllImages()
-        deleteAllFiles()
+//        deleteAllImages()
+//        deleteAllFiles()
         
-        deleteAllWaitQueues()
+//        deleteAllWaitQueues()
     }
     
 }

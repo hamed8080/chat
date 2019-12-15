@@ -1,5 +1,5 @@
 //
-//  CMUploadImage+CoreDataProperties.swift
+//  CMImage+CoreDataProperties.swift
 //  FanapPodChatSDK
 //
 //  Created by Mahyar Zhiani on 11/23/1397 AP.
@@ -11,10 +11,10 @@ import Foundation
 import CoreData
 
 
-extension CMUploadImage {
+extension CMImage {
     
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<CMUploadImage> {
-        return NSFetchRequest<CMUploadImage>(entityName: "CMUploadImage")
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<CMImage> {
+        return NSFetchRequest<CMImage>(entityName: "CMImage")
     }
     
     @NSManaged public var actualHeight: NSNumber?

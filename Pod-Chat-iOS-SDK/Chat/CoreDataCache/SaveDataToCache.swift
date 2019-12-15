@@ -740,15 +740,15 @@ extension Cache {
     */
     
     
-    // this function will save (or update) uploaded image response that comes from server, in the Cache.
-    public func saveUploadImage(imageInfo: UploadImage, imageData: Data) {
+    // this function will save (or update) image response that comes from server, in the Cache.
+    public func saveImageObject(imageInfo: ImageObject, imageData: Data) {
         // check if there is any information about This Image File in the cache
         // if it has some data, it we will update that data,
         // otherwise we will create an object and save data on cache
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUploadImage")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
         do {
             
-            if let result = try context.fetch(fetchRequest) as? [CMUploadImage] {
+            if let result = try context.fetch(fetchRequest) as? [CMImage] {
                 // if there is a value in this fetch request, it mean that we had already saved This Image info in the Cache.
                 // so we just have to update that information with new response that comes from server
                 
@@ -771,7 +771,7 @@ extension Cache {
                             // delete the original file from local storage of the app, using path of the file
                             let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
                             
-                            let myFilePath = path + "/\(fileSubPath.Images)/" + "\(imageInfo.id ?? 0)\(imageInfo.name ?? "default.png")"
+                            let myFilePath = path + "/\(fileSubPath.Images)/" + "\(imageInfo.name ?? "default")\(imageInfo.id ?? 0).png"
                             // check if this file is exixt on the app bunde, then delete it
                             if FileManager.default.fileExists(atPath: myFilePath) {
                                 do {
@@ -782,16 +782,15 @@ extension Cache {
                             }
                             
                             // delete the information from cache
-                            context.delete(itemInCache)
-                            saveContext(subject: "Delete CMUploadImage Object")
+                            deleteAndSave(object: itemInCache, withMessage: "Delete CMImage Object")
                         }
                     }
                 }
                 
                 // Part2:
                 // save data comes from server to the Cache
-                let theUploadImageEntity = NSEntityDescription.entity(forEntityName: "CMUploadImage", in: context)
-                let theUploadImage = CMUploadImage(entity: theUploadImageEntity!, insertInto: context)
+                let theUploadImageEntity = NSEntityDescription.entity(forEntityName: "CMImage", in: context)
+                let theUploadImage = CMImage(entity: theUploadImageEntity!, insertInto: context)
                 
                 theUploadImage.actualHeight = imageInfo.actualHeight as NSNumber?
                 theUploadImage.actualWidth  = imageInfo.actualWidth as NSNumber?
@@ -805,8 +804,10 @@ extension Cache {
                 //                guard let directory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) as NSURL else { return }
                 let directoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
                 let directoryURL = URL(fileURLWithPath: directoryPath)
+                let imageLocalAdress = directoryURL.appendingPathComponent("\(fileSubPath.Images)/\(imageInfo.name ?? "default")\(imageInfo.id ?? 0).png")
+                
                 do {
-                    try imageData.write(to: directoryURL.appendingPathComponent("\(fileSubPath.Images)/\(imageInfo.id ?? 0)\(imageInfo.name ?? "default")"))
+                    try imageData.write(to: imageLocalAdress)
                 } catch {
                     print(error.localizedDescription)
                 }
@@ -821,14 +822,14 @@ extension Cache {
     
     
     // this function will save (or update) uploaded image response that comes from server, in the Cache.
-    public func saveUploadFile(fileInfo: UploadFile, fileData: Data) {
+    public func saveFileObject(fileInfo: FileObject, fileData: Data) {
         // check if there is any information about This Image File in the cache
         // if it has some data, it we will update that data,
         // otherwise we will create an object and save data on cache
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUploadFile")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMFile")
         do {
             
-            if let result = try context.fetch(fetchRequest) as? [CMUploadFile] {
+            if let result = try context.fetch(fetchRequest) as? [CMFile] {
                 // if there is a value in this fetch request, it mean that we had already saved This Image info in the Cache.
                 // so we just have to update that information with new response that comes from server
                 
@@ -861,16 +862,15 @@ extension Cache {
                             }
                             
                             // delete the information from cache
-                            context.delete(itemInCache)
-                            saveContext(subject: "Delete CMUploadFile Object")
+                            deleteAndSave(object: itemInCache, withMessage: "Delete CMFile Object")
                         }
                     }
                 }
                 
                 // Part2:
                 // save data comes from server to the Cache
-                let theUploadFileEntity = NSEntityDescription.entity(forEntityName: "CMUploadFile", in: context)
-                let theUploadFile = CMUploadFile(entity: theUploadFileEntity!, insertInto: context)
+                let theUploadFileEntity = NSEntityDescription.entity(forEntityName: "CMFile", in: context)
+                let theUploadFile = CMFile(entity: theUploadFileEntity!, insertInto: context)
                 
                 theUploadFile.hashCode      = fileInfo.hashCode
                 theUploadFile.id            = fileInfo.id as NSNumber?

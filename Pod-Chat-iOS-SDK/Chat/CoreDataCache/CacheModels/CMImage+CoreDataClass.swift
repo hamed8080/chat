@@ -1,5 +1,5 @@
 //
-//  CMUploadImage+CoreDataClass.swift
+//  CMImage+CoreDataClass.swift
 //  FanapPodChatSDK
 //
 //  Created by Mahyar Zhiani on 11/1/1397 AP.
@@ -11,9 +11,9 @@ import Foundation
 import CoreData
 
 
-public class CMUploadImage: NSManagedObject {
+public class CMImage: NSManagedObject {
     
-    public func convertCMUploadImageToUploadImageObject() -> UploadImage {
+    public func convertCMImageToImageObject() -> ImageObject {
         
         var actualHeight:   Int?
         var actualWidth:    Int?
@@ -40,8 +40,8 @@ public class CMUploadImage: NSManagedObject {
             }
         }
         
-        func createUploadImageModel() -> UploadImage {
-            let uploadImageModel = UploadImage(actualHeight: actualHeight,
+        func createImageObjectModel() -> ImageObject {
+            let uploadImageModel = ImageObject(actualHeight: actualHeight,
                                                actualWidth: actualWidth,
                                                hashCode: self.hashCode,
                                                height: height,
@@ -52,7 +52,7 @@ public class CMUploadImage: NSManagedObject {
         }
         
         createVariables()
-        let model = createUploadImageModel()
+        let model = createImageObjectModel()
         
         return model
     }

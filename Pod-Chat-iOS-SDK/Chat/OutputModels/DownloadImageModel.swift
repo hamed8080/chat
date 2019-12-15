@@ -1,26 +1,30 @@
 //
-//  UploadFileModel.swift
-//  Chat
+//  DownloadImageModel.swift
+//  FanapPodChatSDK
 //
-//  Created by Mahyar Zhiani on 8/5/1397 AP.
-//  Copyright © 1397 Mahyar Zhiani. All rights reserved.
+//  Created by MahyarZhiani on 9/24/1398 AP.
+//  Copyright © 1398 Mahyar Zhiani. All rights reserved.
 //
 
 import Foundation
 import SwiftyJSON
 
-open class UploadFileModel {
+open class DownloadImageModel {
     /*
      ---------------------------------------
      * responseAsJSON:
      *  - hasError          Bool
      *  - errorMessage      String
      *  - errorCode         Int
-     *  + result       JSON or UploadFileModel:
-     *      + UploadFile    UploadFileAsJSON
-     *          - hashCode      String
-     *          - id            Int
-     *          - name          String
+     *  + result            ImageObject:
+     *      + DownloadImage   ImageObjectAsJSON:
+     *          - actualHeight  Int?
+     *          - actualWidth   Int?
+     *          - hashCode      String?
+     *          - height        Int?
+     *          - id            Int?
+     *          - name          String?
+     *          - width         Int?
      ---------------------------------------
      * responseAsModel:
      *  - hasError          Bool
@@ -30,68 +34,53 @@ open class UploadFileModel {
      ---------------------------------------
      */
     
-    // uploadFile model properties
+    // uploadImage model properties
     public let errorCode:           Int
     public let errorMessage:        String
     public let hasError:            Bool
-    //    public var localPath:           String = ""
-    public let uploadFile:          FileObject?
-    
-    public var uploadFileJSON: JSON = [:]
+    public let downloadImage:       ImageObject?
     
     public init(messageContentJSON: JSON?,
                 errorCode:      Int,
                 errorMessage:   String,
-                hasError:       Bool/*,
-         localPath:      String?*/) {
+                hasError:       Bool) {
         
         self.hasError           = hasError
         self.errorMessage       = errorMessage
         self.errorCode          = errorCode
         
-        //        if let pathString = localPath {
-        //            self.localPath = pathString
-        //        }
-        
-        if let myFile = messageContentJSON {
-            self.uploadFile = FileObject(messageContent: myFile)
+        if let content = messageContentJSON {
+            self.downloadImage = ImageObject(messageContent: content)
         } else {
-            self.uploadFile = nil
+            downloadImage = nil
         }
         
     }
     
-    public init(messageContentModel: FileObject?,
+    public init(messageContentModel: ImageObject?,
                 errorCode:      Int,
                 errorMessage:   String,
-                hasError:       Bool/*,
-         localPath:      String?*/) {
+                hasError:       Bool) {
         
         self.hasError           = hasError
         self.errorMessage       = errorMessage
         self.errorCode          = errorCode
         
-        //        if let pathString = localPath {
-        //            self.localPath = pathString
-        //        }
-        
-        if let myFile = messageContentModel {
-            self.uploadFile = myFile
+        if let myImage = messageContentModel {
+            self.downloadImage    = myImage
         } else {
-            self.uploadFile = nil
+            downloadImage = nil
         }
-        
     }
     
     
     public func returnDataAsJSON() -> JSON {
-        let result: JSON = ["uploadFile":   uploadFile?.formatToJSON() ?? NSNull()]
+        let result: JSON = ["downloadImage":    downloadImage?.formatToJSON() ?? NSNull()]
         
         let resultAsJSON: JSON = ["result":     result,
                                   "errorCode":  errorCode,
                                   "errorMessage": errorMessage,
-                                  "hasError":   hasError/*,
-             "localPath": localPath*/]
+                                  "hasError":   hasError]
         
         return resultAsJSON
     }

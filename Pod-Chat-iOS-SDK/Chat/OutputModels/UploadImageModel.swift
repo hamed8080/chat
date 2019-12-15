@@ -39,7 +39,7 @@ open class UploadImageModel {
     public let errorMessage:        String
     public let hasError:            Bool
     //    public var localPath:           String = ""
-    public let uploadImage:         UploadImage?
+    public let uploadImage:         ImageObject?
     
     public init(messageContentJSON: JSON?,
                 errorCode:      Int,
@@ -56,14 +56,14 @@ open class UploadImageModel {
         //        }
         
         if let content = messageContentJSON {
-            self.uploadImage = UploadImage(messageContent: content)
+            self.uploadImage = ImageObject(messageContent: content)
         } else {
             uploadImage = nil
         }
         
     }
     
-    public init(messageContentModel: UploadImage?,
+    public init(messageContentModel: ImageObject?,
                 errorCode:      Int,
                 errorMessage:   String,
                 hasError:       Bool/*,
