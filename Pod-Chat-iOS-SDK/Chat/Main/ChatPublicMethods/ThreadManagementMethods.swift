@@ -60,11 +60,11 @@ extension Chat {
     /// Outputs:
     /// - It has 3 callbacks as responses
     ///
-    /// - parameter getThreadsInput:    (input) you have to send your parameters insid this model. (GetThreadsRequestModel)
-    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! GetThreadsModel)
-    /// - parameter cacheResponse:      (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetThreadsModel)
-    public func getThreads(getThreadsInput: GetThreadsRequestModel,
+    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (GetThreadsRequestModel)
+    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! GetThreadsModel)
+    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetThreadsModel)
+    public func getThreads(inputModel getThreadsInput: GetThreadsRequestModel,
                            uniqueId:        @escaping (String) -> (),
                            completion:      @escaping callbackTypeAlias,
                            cacheResponse:   @escaping (GetThreadsModel) -> ()) {
@@ -128,10 +128,10 @@ extension Chat {
     /// Outputs:
     /// - It has 2 callbacks as responses
     ///
-    /// - parameter updateThreadInfoInput:  (input) you have to send your parameters insid this model. (UpdateThreadInfoRequestModel)
-    /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:             (response) it will returns the response that comes from server to this request. (Any as! GetThreadsModel)
-    public func updateThreadInfo(updateThreadInfoInput: UpdateThreadInfoRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (UpdateThreadInfoRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! GetThreadsModel)
+    public func updateThreadInfo(inputModel updateThreadInfoInput: UpdateThreadInfoRequestModel,
                                  uniqueId:              @escaping (String) -> (),
                                  completion:            @escaping callbackTypeAlias) {
         
@@ -184,10 +184,10 @@ extension Chat {
     /// Outputs:
     /// - It has 3 callbacks as responses
     ///
-    /// - parameter createThreadInput:  (input) you have to send your parameters insid this model. (CreateThreadRequestModel)
-    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! ThreadModel)
-    public func createThread(createThreadInput: CreateThreadRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (CreateThreadRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ThreadModel)
+    public func createThread(inputModel createThreadInput: CreateThreadRequestModel,
                              uniqueId:          @escaping (String) -> (),
                              completion:        @escaping callbackTypeAlias) {
         
@@ -238,13 +238,13 @@ extension Chat {
     /// Outputs:
     /// - It has 5 callbacks as responses
     ///
-    /// - parameter creatThreadWithMessageInput:    (input) you have to send your parameters insid this model. (CreateThreadWithMessageRequestModel)
-    /// - parameter uniqueId:                       (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:                     (response) it will returns the response that comes from server to this request. (Any as! ThreadModel)
-    /// - parameter onSent:                         (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
-    /// - parameter onDelivere:                     (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
-    /// - parameter onSeen:                         (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
-    public func createThreadWithMessage(creatThreadWithMessageInput: CreateThreadWithMessageRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (CreateThreadWithMessageRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ThreadModel)
+    /// - parameter onSent:     (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
+    /// - parameter onDelivere: (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
+    /// - parameter onSeen:     (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+    public func createThreadWithMessage(inputModel creatThreadWithMessageInput: CreateThreadWithMessageRequestModel,
                                         uniqueId:                    @escaping (String) -> (),
                                         completion:                  @escaping callbackTypeAlias,
                                         onSent:                      @escaping callbackTypeAlias,
@@ -303,10 +303,10 @@ extension Chat {
     /// Outputs:
     /// - It has 2 callbacks as responses
     ///
-    /// - parameter leaveThreadInput:   (input) you have to send your parameters insid this model. (LeaveThreadRequestModel)
-    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! ThreadModel)
-    public func leaveThread(leaveThreadInput:   LeaveThreadRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (LeaveThreadRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ThreadModel)
+    public func leaveThread(inputModel leaveThreadInput:   LeaveThreadRequestModel,
                             uniqueId:           @escaping (String) -> (),
                             completion:         @escaping callbackTypeAlias) {
         
@@ -357,10 +357,10 @@ extension Chat {
     /// Outputs:
     /// - It has 2 callbacks as responses. the las callback will come 3 times : for LeaveThread response, for BlockContact response, for ClearHistory response
     ///
-    /// - parameter spamPvThreadInput:  (input) you have to send your parameters insid this model. (SpamPvThreadRequestModel)
-    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:         (response) it will returns the response that comes from server to this request for 3 times!. (Any as! ThreadModel) (Any as! BlockedContactModel) (Any as! ClearHistoryModel)
-    public func spamPvThread(spamPvThreadInput: SpamPvThreadRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (SpamPvThreadRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request for 3 times!. (Any as! ThreadModel) (Any as! BlockedContactModel) (Any as! ClearHistoryModel)
+    public func spamPvThread(inputModel spamPvThreadInput: SpamPvThreadRequestModel,
                              uniqueId:          @escaping (String) -> (),
                              completions:       @escaping callbackTypeAlias) {
         
@@ -413,10 +413,10 @@ extension Chat {
     /// Outputs:
     /// - It has 2 callbacks as responses.
     ///
-    /// - parameter muteThreadInput:    (input) you have to send your parameters insid this model. (MuteAndUnmuteThreadRequestModel)
-    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! MuteUnmuteThreadModel)
-    public func muteThread(muteThreadInput: MuteAndUnmuteThreadRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (MuteAndUnmuteThreadRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! MuteUnmuteThreadModel)
+    public func muteThread(inputModel muteThreadInput: MuteAndUnmuteThreadRequestModel,
                            uniqueId:        @escaping (String) -> (),
                            completion:      @escaping callbackTypeAlias) {
         
@@ -467,10 +467,10 @@ extension Chat {
     /// Outputs:
     /// - It has 2 callbacks as responses.
     ///
-    /// - parameter unmuteThreadInput:  (input) you have to send your parameters insid this model. (MuteAndUnmuteThreadRequestModel)
-    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! MuteUnmuteThreadModel)
-    public func unmuteThread(unmuteThreadInput: MuteAndUnmuteThreadRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (MuteAndUnmuteThreadRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! MuteUnmuteThreadModel)
+    public func unmuteThread(inputModel unmuteThreadInput: MuteAndUnmuteThreadRequestModel,
                              uniqueId:          @escaping (String) -> (),
                              completion:        @escaping callbackTypeAlias) {
         
@@ -523,11 +523,11 @@ extension Chat {
     /// Outputs:
     /// - It has 3 callbacks as responses.
     ///
-    /// - parameter getThreadParticipantsInput: (input) you have to send your parameters insid this model. (GetThreadParticipantsRequestModel)
-    /// - parameter uniqueId:                   (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:                 (response) it will returns the response that comes from server to this request. (Any as! GetThreadParticipantsModel)
-    /// - parameter cacheResponse:              (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetThreadParticipantsModel)
-    public func getThreadParticipants(getThreadParticipantsInput:   GetThreadParticipantsRequestModel,
+    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (GetThreadParticipantsRequestModel)
+    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! GetThreadParticipantsModel)
+    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetThreadParticipantsModel)
+    public func getThreadParticipants(inputModel getThreadParticipantsInput:   GetThreadParticipantsRequestModel,
                                       uniqueId:                     @escaping (String) -> (),
                                       completion:                   @escaping callbackTypeAlias,
                                       cacheResponse:                @escaping (GetThreadParticipantsModel) -> ()) {
@@ -590,10 +590,10 @@ extension Chat {
     /// Outputs:
     /// - It has 2 callbacks as responses.
     ///
-    /// - parameter addParticipantsInput:   (input) you have to send your parameters insid this model. (AddParticipantsRequestModel)
-    /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:             (response) it will returns the response that comes from server to this request. (Any as! AddParticipantModel)
-    public func addParticipants(addParticipantsInput:   AddParticipantsRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (AddParticipantsRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! AddParticipantModel)
+    public func addParticipants(inputModel addParticipantsInput:   AddParticipantsRequestModel,
                                 uniqueId:               @escaping (String) -> (),
                                 completion:             @escaping callbackTypeAlias) {
         /**
@@ -646,10 +646,10 @@ extension Chat {
     /// Outputs:
     /// - It has 2 callbacks as responses.
     ///
-    /// - parameter removeParticipantsInput:    (input) you have to send your parameters insid this model. (RemoveParticipantsRequestModel)
-    /// - parameter uniqueId:                   (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:                 (response) it will returns the response that comes from server to this request. (Any as! RemoveParticipantModel)
-    public func removeParticipants(removeParticipantsInput: RemoveParticipantsRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (RemoveParticipantsRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! RemoveParticipantModel)
+    public func removeParticipants(inputModel removeParticipantsInput: RemoveParticipantsRequestModel,
                                    uniqueId:                @escaping (String) -> (),
                                    completion:              @escaping callbackTypeAlias) {
         /**
@@ -705,11 +705,11 @@ extension Chat {
     /// Outputs:
     /// - It has 3 callbacks as responses.
     ///
-    /// - parameter setRoleInput:   (input) you have to send your parameters insid this model. ([SetRoleRequestModel])
+    /// - parameter inputModel:     (input) you have to send your parameters insid this model. ([SetRoleRequestModel])
     /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! UserRolesModel)
     /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (UserRolesModel)
-    public func setRole(setRoleInput:   [SetRoleRequestModel],
+    public func setRole(inputModel setRoleInput:    [SetRoleRequestModel],
                         uniqueId:       @escaping (String) -> (),
                         completion:     @escaping callbackTypeAlias,
                         cacheResponse:  @escaping callbackTypeAlias) {
@@ -753,7 +753,7 @@ extension Chat {
     
     
     
-    /// addAuditorToThread:
+    /// setAuditor:
     /// setRoleTo a User on a peer to peer thread
     ///
     /// By calling this function, a request of type 42 (SET_RULE_TO_USER) will send throut Chat-SDK,
@@ -769,26 +769,24 @@ extension Chat {
     /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! UserRolesModel)
     /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (UserRolesModel)
-    public func addAuditorToThread(inputModel:      AddRemoveAuditorRequestModel,
-                                   uniqueId:        @escaping (String) -> (),
-                                   completion:      @escaping callbackTypeAlias,
-                                   cacheResponse:   @escaping callbackTypeAlias) {
-        
-        
-        let setRoleInputModel = SetRoleRequestModel(roles:          inputModel.roles,
+    public func setAuditor(inputModel setAuditorInput:  AddRemoveAuditorRequestModel,
+                           uniqueId:        @escaping (String) -> (),
+                           completion:      @escaping callbackTypeAlias,
+                           cacheResponse:   @escaping callbackTypeAlias) {
+    
+        let setRoleInputModel = SetRoleRequestModel(roles:          setAuditorInput.roles,
                                                     roleOperation:  RoleOperations.Add,
-                                                    threadId:       inputModel.threadId,
-                                                    userId:         inputModel.userId,
-                                                    typeCode:       inputModel.typeCode,
-                                                    uniqueId:       inputModel.uniqueId)
-        setRole(setRoleInput: [setRoleInputModel], uniqueId: { (setRoleUniqueId) in
+                                                    threadId:       setAuditorInput.threadId,
+                                                    userId:         setAuditorInput.userId,
+                                                    typeCode:       setAuditorInput.typeCode,
+                                                    uniqueId:       setAuditorInput.uniqueId)
+        setRole(inputModel: [setRoleInputModel], uniqueId: { (setRoleUniqueId) in
             uniqueId(setRoleUniqueId)
         }, completion: { (theServerResponse) in
             completion(theServerResponse)
         }) { (theCacheResponse) in
             cacheResponse(theCacheResponse)
         }
-        
     }
     
     
@@ -809,18 +807,18 @@ extension Chat {
     /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! UserRolesModel)
     /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (UserRolesModel)
-    public func removeAuditorFromThread(inputModel:     AddRemoveAuditorRequestModel,
-                                        uniqueId:       @escaping (String) -> (),
-                                        completion:     @escaping callbackTypeAlias,
-                                        cacheResponse:  @escaping callbackTypeAlias) {
-    
-        let setRoleInputModel = SetRoleRequestModel(roles:          inputModel.roles,
+    public func removeAuditor(inputModel removeAuditorInput:    AddRemoveAuditorRequestModel,
+                              uniqueId:       @escaping (String) -> (),
+                              completion:     @escaping callbackTypeAlias,
+                              cacheResponse:  @escaping callbackTypeAlias) {
+
+        let setRoleInputModel = SetRoleRequestModel(roles:          removeAuditorInput.roles,
                                                     roleOperation:  RoleOperations.Remove,
-                                                    threadId:       inputModel.threadId,
-                                                    userId:         inputModel.userId,
-                                                    typeCode:       inputModel.typeCode,
-                                                    uniqueId:       inputModel.uniqueId)
-        setRole(setRoleInput: [setRoleInputModel], uniqueId: { (setRoleUniqueId) in
+                                                    threadId:       removeAuditorInput.threadId,
+                                                    userId:         removeAuditorInput.userId,
+                                                    typeCode:       removeAuditorInput.typeCode,
+                                                    uniqueId:       removeAuditorInput.uniqueId)
+        setRole(inputModel: [setRoleInputModel], uniqueId: { (setRoleUniqueId) in
             uniqueId(setRoleUniqueId)
         }, completion: { (theServerResponse) in
             completion(theServerResponse)

@@ -30,7 +30,7 @@ extension Chat {
     /// Outputs:
     /// - It has 9 callbacks as responses
     ///
-    /// - parameter getHistoryInput:        (input) you have to send your parameters insid this model. (GetHistoryRequestModel)
+    /// - parameter inputModel:             (input) you have to send your parameters insid this model. (GetHistoryRequestModel)
     /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:             (response) it will returns the response that comes from server to this request. (Any as! GetHistoryModel)
     /// - parameter cacheResponse:          (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetHistoryModel)
@@ -40,7 +40,7 @@ extension Chat {
     /// - parameter fileMessagesNotSent:    (response) it will returns the File Messages requests that has not been Sent yet! ([QueueOfWaitFileMessagesModel])
     /// - parameter uploadImageNotSent:     (response) it will returns the Upload Image requests that has not been Sent yet! ([QueueOfWaitUploadImagesModel])
     /// - parameter uploadFileNotSent:      (response) it will returns the Upload File requests that has not been Sent yet! ([QueueOfWaitUploadFilesModel])
-    public func getHistory(getHistoryInput:         GetHistoryRequestModel,
+    public func getHistory(inputModel getHistoryInput:         GetHistoryRequestModel,
                            uniqueId:                @escaping ((String) -> ()),
                            completion:              @escaping callbackTypeAlias,
                            cacheResponse:           @escaping ((GetHistoryModel) -> ()),
@@ -134,10 +134,10 @@ extension Chat {
     /// Outputs:
     /// - It has 2 callbacks as responses
     ///
-    /// - parameter clearHistoryInput:  (input) you have to send your parameters insid this model. (ClearHistoryRequestModel)
-    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! ClearHistoryModel)
-    public func clearHistory(clearHistoryInput: ClearHistoryRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (ClearHistoryRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ClearHistoryModel)
+    public func clearHistory(inputModel clearHistoryInput: ClearHistoryRequestModel,
                              uniqueId:          @escaping ((String) -> ()),
                              completion:        @escaping callbackTypeAlias) {
         
@@ -190,12 +190,12 @@ extension Chat {
     /// Outputs:
     /// - It has 4 callbacks as response:
     ///
-    /// - parameter sendTextMessageInput:   (input) you have to send your parameters insid this model. (SendTextMessageRequestModel)
-    /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter onSent:                 (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
-    /// - parameter onDelivere:             (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
-    /// - parameter onSeen:                 (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
-    public func sendTextMessage(sendTextMessageInput:   SendTextMessageRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (SendTextMessageRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter onSent:     (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
+    /// - parameter onDelivere: (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
+    /// - parameter onSeen:     (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+    public func sendTextMessage(inputModel sendTextMessageInput:    SendTextMessageRequestModel,
                                 uniqueId:               @escaping ((String) -> ()),
                                 onSent:                 @escaping callbackTypeAlias,
                                 onDelivere:             @escaping callbackTypeAlias,
@@ -271,35 +271,35 @@ extension Chat {
     /// Outputs:
     /// - It has 4 callbacks as response:
     ///
-    /// - parameter inputModel:    (input) you have to send your parameters insid this model. (SendInteractiveMessageRequestModel)
-    /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter onSent:                 (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
-    /// - parameter onDelivere:             (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
-    /// - parameter onSeen:                 (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
-    public func sendInteractiveMessage(inputModel:  SendInteractiveMessageRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (SendInteractiveMessageRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter onSent:     (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
+    /// - parameter onDelivere: (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
+    /// - parameter onSeen:     (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+    public func sendInteractiveMessage(inputModel sendInterActiveMessageInput:  SendInteractiveMessageRequestModel,
                                        uniqueId:    @escaping ((String) -> ()),
                                        onSent:      @escaping callbackTypeAlias,
                                        onDelivered: @escaping callbackTypeAlias,
                                        onSeen:      @escaping callbackTypeAlias) {
-        log.verbose("Try to send BotMessage with this parameters: \n \(inputModel)", context: "Chat")
+        log.verbose("Try to send BotMessage with this parameters: \n \(sendInterActiveMessageInput)", context: "Chat")
         
         sendCallbackToUserOnSent = onSent
         sendCallbackToUserOnDeliver = onDelivered
         sendCallbackToUserOnSeen = onSeen
         
-        let tempUniqueId = inputModel.uniqueId ?? generateUUID()
+        let tempUniqueId = sendInterActiveMessageInput.uniqueId ?? generateUUID()
         
-        let messageTxtContent = MakeCustomTextToSend(message: inputModel.content).replaceSpaceEnterWithSpecificCharecters()
+        let messageTxtContent = MakeCustomTextToSend(message: sendInterActiveMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.BOT_MESSAGE.rawValue,
                                             content:            messageTxtContent,
-                                            metaData:           "\(inputModel.metaData)",
+                                            metaData:           "\(sendInterActiveMessageInput.metaData)",
                                             repliedTo:          nil,
-                                            systemMetadata:     (inputModel.systemMetadata != nil) ? "\(inputModel.systemMetadata!)" : nil,
-                                            subjectId:          inputModel.messageId,
+                                            systemMetadata:     (sendInterActiveMessageInput.systemMetadata != nil) ? "\(sendInterActiveMessageInput.systemMetadata!)" : nil,
+                                            subjectId:          sendInterActiveMessageInput.messageId,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           inputModel.typeCode ?? generalTypeCode,
+                                            typeCode:           sendInterActiveMessageInput.typeCode ?? generalTypeCode,
                                             uniqueId:           tempUniqueId,
                                             uniqueIds:          nil,
                                             isCreateThreadAndSendMessage: nil)
@@ -334,10 +334,10 @@ extension Chat {
     /// Outputs:
     /// - It has 2 callbacks as response:
     ///
-    /// - parameter editMessageInput:   (input) you have to send your parameters insid this model. (EditTextMessageRequestModel)
-    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! EditMessageModel)
-    public func editMessage(editMessageInput:   EditTextMessageRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (EditTextMessageRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! EditMessageModel)
+    public func editMessage(inputModel editMessageInput:   EditTextMessageRequestModel,
                             uniqueId:           @escaping ((String) -> ()),
                             completion:         @escaping callbackTypeAlias) {
         log.verbose("Try to request to edit message with this parameters: \n \(editMessageInput)", context: "Chat")
@@ -407,12 +407,12 @@ extension Chat {
     /// Outputs:
     /// - It has 4 callbacks as response:
     ///
-    /// - parameter replyMessageInput:  (input) you have to send your parameters insid this model. (ReplyTextMessageRequestModel)
-    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter onSent:             (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
-    /// - parameter onDelivere:         (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
-    /// - parameter onSeen:             (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
-    public func replyMessage(replyMessageInput: ReplyTextMessageRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (ReplyTextMessageRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter onSent:     (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
+    /// - parameter onDelivere: (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
+    /// - parameter onSeen:     (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+    public func replyMessage(inputModel replyMessageInput: ReplyTextMessageRequestModel,
                              uniqueId:          @escaping ((String) -> ()),
                              onSent:            @escaping callbackTypeAlias,
                              onDelivere:        @escaping callbackTypeAlias,
@@ -487,12 +487,12 @@ extension Chat {
     /// Outputs:
     /// - It has 4 callbacks as response:
     ///
-    /// - parameter forwardMessageInput:    (input) you have to send your parameters insid this model. (ForwardMessageRequestModel)
-    /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server.        (String)
-    /// - parameter onSent:                 (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
-    /// - parameter onDelivere:             (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
-    /// - parameter onSeen:                 (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
-    public func forwardMessage(forwardMessageInput: ForwardMessageRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (ForwardMessageRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server.        (String)
+    /// - parameter onSent:     (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
+    /// - parameter onDelivere: (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
+    /// - parameter onSeen:     (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+    public func forwardMessage(inputModel forwardMessageInput: ForwardMessageRequestModel,
                                uniqueIds:           @escaping ((String) -> ()),
                                onSent:              @escaping callbackTypeAlias,
                                onDelivere:          @escaping callbackTypeAlias,
@@ -568,13 +568,13 @@ extension Chat {
     /// Outputs:
     /// - It has 5 callbacks as response:
     ///
-    /// - parameter sendFileMessageInput:   (input) you have to send your parameters insid this model. (SendFileMessageRequestModel)
-    /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter uploadProgress:         (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
-    /// - parameter onSent:                 (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
-    /// - parameter onDelivere:             (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
-    /// - parameter onSeen:                 (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
-    public func sendFileMessage(sendFileMessageInput:   SendFileMessageRequestModel,
+    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (SendFileMessageRequestModel)
+    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter uploadProgress: (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
+    /// - parameter onSent:         (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
+    /// - parameter onDelivere:     (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
+    /// - parameter onSeen:         (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+    public func sendFileMessage(inputModel sendFileMessageInput:   SendFileMessageRequestModel,
                                 uniqueId:               @escaping ((String) -> ()),
                                 uploadProgress:         @escaping ((Float) -> ()),
                                 onSent:                 @escaping callbackTypeAlias,
@@ -632,7 +632,7 @@ extension Chat {
                                                         wC:                 Int(sendFileMessageInput.wC ?? ""),
                                                         typeCode:           nil,
                                                         uniqueId:           uploadUniqueId)
-            uploadImage(uploadImageInput: uploadRequest,
+            uploadImage(inputModel: uploadRequest,
                         uniqueId: { _ in },
                         progress: { (progress) in
                             uploadProgress(progress)
@@ -663,7 +663,7 @@ extension Chat {
                                                        threadId:        sendFileMessageInput.threadId,
                                                        typeCode:        nil,
                                                        uniqueId:        uploadUniqueId)
-            uploadFile(uploadFileInput: uploadRequest,
+            uploadFile(inputModel: uploadRequest,
                        uniqueId: { _ in }, progress: { (progress) in
                 uploadProgress(progress)
             }) { (response) in
@@ -699,7 +699,7 @@ extension Chat {
                                                                     threadId:       sendFileMessageInput.threadId,
                                                                     typeCode:       sendFileMessageInput.typeCode ?? generalTypeCode,
                                                                     uniqueId:       messageUniqueId)
-            self.sendTextMessage(sendTextMessageInput: sendMessageParamModel, uniqueId: { _ in }, onSent: { (sent) in
+            self.sendTextMessage(inputModel: sendMessageParamModel, uniqueId: { _ in }, onSent: { (sent) in
                 onSent(sent)
             }, onDelivere: { (delivered) in
                 onDelivered(delivered)
@@ -723,13 +723,13 @@ extension Chat {
     /// Outputs:
     /// - It has 5 callbacks as response:
     ///
-    /// - parameter replyFileMessageInput:  (input) you have to send your parameters insid this model. (SendFileMessageRequestModel)
-    /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter uploadProgress:         (response) it will returns the progress of the uploading request by a value between 0 and 1. (Float)
-    /// - parameter onSent:                 (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
-    /// - parameter onDelivere:             (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
-    /// - parameter onSeen:                 (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
-    public func replyFileMessage(replyFileMessageInput: SendFileMessageRequestModel,
+    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (SendFileMessageRequestModel)
+    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter uploadProgress: (response) it will returns the progress of the uploading request by a value between 0 and 1. (Float)
+    /// - parameter onSent:         (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
+    /// - parameter onDelivere:     (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
+    /// - parameter onSeen:         (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+    public func replyFileMessage(inputModel replyFileMessageInput: SendFileMessageRequestModel,
                                  uniqueId:              @escaping ((String) -> ()),
                                  uploadProgress:        @escaping ((Float) -> ()),
                                  onSent:                @escaping callbackTypeAlias,
@@ -788,7 +788,7 @@ extension Chat {
                                                         wC:                 Int(replyFileMessageInput.wC ?? ""),
                                                         typeCode:           nil,
                                                         uniqueId:           uploadUniqueId)
-            uploadImage(uploadImageInput: uploadRequest,
+            uploadImage(inputModel: uploadRequest,
                         uniqueId: { _ in },
                         progress: { (progress) in
                             uploadProgress(progress)
@@ -816,7 +816,7 @@ extension Chat {
                                                        threadId:        replyFileMessageInput.threadId,
                                                        typeCode:        nil,
                                                        uniqueId:        uploadUniqueId)
-            uploadFile(uploadFileInput: uploadRequest,
+            uploadFile(inputModel: uploadRequest,
                        uniqueId: { _ in },
                        progress: { (progress) in
                         uploadProgress(progress)
@@ -849,7 +849,7 @@ extension Chat {
                                                                     threadId:       replyFileMessageInput.threadId,
                                                                     typeCode:       replyFileMessageInput.typeCode ?? generalTypeCode,
                                                                     uniqueId:       messageUniqueId)
-            self.sendTextMessage(sendTextMessageInput: sendMessageParamModel, uniqueId: { _ in }, onSent: { (sent) in
+            self.sendTextMessage(inputModel: sendMessageParamModel, uniqueId: { _ in }, onSent: { (sent) in
                 onSent(sent)
             }, onDelivere: { (delivered) in
                 onDelivered(delivered)
@@ -876,14 +876,14 @@ extension Chat {
     /// Outputs:
     /// - It has 6 callbacks as response:
     ///
-    /// - parameter sendLocationMessageRequest: (input) you have to send your parameters insid this model. (SendLocationMessageRequestModel)
-    /// - parameter uniqueId:                   (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter downloadProgress:           (response)  it will returns the progress of the downloading image from MapServices by a value between 0 and 1. (Float)
-    /// - parameter uploadProgress:             (response)  it will returns the progress of the uploading image by a value between 0 and 1. (Float)
-    /// - parameter onSent:                     (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
-    /// - parameter onDelivere:                 (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
-    /// - parameter onSeen:                     (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
-    public func sendLocationMessage(sendLocationMessageRequest: SendLocationMessageRequestModel,
+    /// - parameter inputModel:         (input) you have to send your parameters insid this model. (SendLocationMessageRequestModel)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter downloadProgress:   (response)  it will returns the progress of the downloading image from MapServices by a value between 0 and 1. (Float)
+    /// - parameter uploadProgress:     (response)  it will returns the progress of the uploading image by a value between 0 and 1. (Float)
+    /// - parameter onSent:             (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
+    /// - parameter onDelivere:         (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
+    /// - parameter onSeen:             (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+    public func sendLocationMessage(inputModel sendLocationMessageRequest: SendLocationMessageRequestModel,
                                     uniqueId:                   @escaping ((String) -> ()),
                                     downloadProgress:           @escaping ((Float) -> ()),
                                     uploadProgress:             @escaping ((Float) -> ()),
@@ -898,7 +898,7 @@ extension Chat {
                                                              width:     sendLocationMessageRequest.mapStaticWidth,
                                                              zoom:      sendLocationMessageRequest.mapStaticZoom)
         
-        mapStaticImage(mapStaticImageInput: mapStaticImageInput,
+        mapStaticImage(inputModel: mapStaticImageInput,
                        uniqueId: { _ in },
                        progress: { (myProgress) in
             downloadProgress(myProgress)
@@ -922,7 +922,7 @@ extension Chat {
         }
         
         func sendTM(params: SendFileMessageRequestModel) {
-            sendFileMessage(sendFileMessageInput: params, uniqueId: { (requestUniqueId) in
+            sendFileMessage(inputModel: params, uniqueId: { (requestUniqueId) in
                 uniqueId(requestUniqueId)
             }, uploadProgress: { (myProgress) in
                 uploadProgress(myProgress)
@@ -952,10 +952,10 @@ extension Chat {
     /// Outputs:
     /// - It has 2 callbacks as response:
     ///
-    /// - parameter deleteMessageInput: (input) you have to send your parameters insid this model. (DeleteMessageRequestModel)
-    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! DeleteMessageModel)
-    public func deleteMessage(deleteMessageInput:   DeleteMessageRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (DeleteMessageRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! DeleteMessageModel)
+    public func deleteMessage(inputModel deleteMessageInput:   DeleteMessageRequestModel,
                               uniqueId:             @escaping ((String) -> ()),
                               completion:           @escaping callbackTypeAlias) {
         log.verbose("Try to request to edit message with this parameters: \n \(deleteMessageInput)", context: "Chat")
@@ -1008,10 +1008,10 @@ extension Chat {
     /// Outputs:
     /// - It has 2 callbacks as response:
     ///
-    /// - parameter deleteMessageInput: (input) you have to send your parameters insid this model. (DeleteMultipleMessagesRequestModel)
-    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server.        (String)
-    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! DeleteMessageModel)
-    public func deleteMultipleMessages(deleteMessageInput:   DeleteMultipleMessagesRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (DeleteMultipleMessagesRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server.        (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! DeleteMessageModel)
+    public func deleteMultipleMessages(inputModel deleteMessageInput:   DeleteMultipleMessagesRequestModel,
                                        uniqueId:             @escaping ((String) -> ()),
                                        completion:           @escaping callbackTypeAlias) {
         log.verbose("Try to request to edit message with this parameters: \n \(deleteMessageInput)", context: "Chat")
@@ -1065,9 +1065,9 @@ extension Chat {
     /// Outputs:
     /// - It has 1 callbacks as response:
     ///
-    /// - parameter cancelMessageInput: (input) you have to send your parameters insid this model. (CancelMessageRequestModel)
-    /// - parameter completion:         (response) it will returns a boolean value that if this request was successfull or not! (Bool)
-    public func cancelSendMessage(cancelMessageInput:   CancelMessageRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (CancelMessageRequestModel)
+    /// - parameter completion: (response) it will returns a boolean value that if this request was successfull or not! (Bool)
+    public func cancelSendMessage(inputModel cancelMessageInput:   CancelMessageRequestModel,
                                   completion:           @escaping ((Bool) -> ())) {
         if enableCache {
             if let textUID = cancelMessageInput.textMessageUniqueId {
@@ -1115,10 +1115,10 @@ extension Chat {
     /// Outputs:
     /// - It has 2 callbacks as response:
     ///
-    /// - parameter messageDeliveryListInput:   (input) you have to send your parameters insid this model. (MessageDeliverySeenListRequestModel)
-    /// - parameter uniqueId:                   (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:                 (response) it will returns the response that comes from server to this request. (Any as! GetMessageDeliverList)
-    public func messageDeliveryList(messageDeliveryListInput:   MessageDeliverySeenListRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (MessageDeliverySeenListRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! GetMessageDeliverList)
+    public func messageDeliveryList(inputModel messageDeliveryListInput:   MessageDeliverySeenListRequestModel,
                                     uniqueId:                   @escaping ((String) -> ()),
                                     completion:                 @escaping callbackTypeAlias) {
         log.verbose("Try to request to get message deliver participants with this parameters: \n \(messageDeliveryListInput)", context: "Chat")
@@ -1167,10 +1167,10 @@ extension Chat {
     /// Outputs:
     /// - It has 2 callbacks as response:
     ///
-    /// - parameter messageSeenListInput:   (input) you have to send your parameters insid this model. (MessageDeliverySeenListRequestModel)
-    /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:             (response) it will returns the response that comes from server to this request. (Any as! GetMessageSeenList)
-    public func messageSeenList(messageSeenListInput:   MessageDeliverySeenListRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (MessageDeliverySeenListRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! GetMessageSeenList)
+    public func messageSeenList(inputModel messageSeenListInput:   MessageDeliverySeenListRequestModel,
                                 uniqueId:               @escaping ((String) -> ()),
                                 completion:             @escaping callbackTypeAlias) {
         log.verbose("Try to request to get message seen participants with this parameters: \n \(messageSeenListInput)", context: "Chat")

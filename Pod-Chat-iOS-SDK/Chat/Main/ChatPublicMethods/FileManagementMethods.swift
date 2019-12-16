@@ -30,11 +30,11 @@ extension Chat {
     /// Outputs:
     /// - It has 3 callbacks as response:
     ///
-    /// - parameter uploadImageInput:   (input) you have to send your parameters insid this model. (UploadImageRequestModel)
-    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter progress:           (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
-    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (UploadImageModel)
-    public func uploadImage(uploadImageInput:   UploadImageRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (UploadImageRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter progress:   (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (UploadImageModel)
+    public func uploadImage(inputModel uploadImageInput:   UploadImageRequestModel,
                             uniqueId:           @escaping (String) -> (),
                             progress:           @escaping (Float) -> (),
                             completion:         @escaping callbackTypeAlias) {
@@ -142,11 +142,11 @@ extension Chat {
     /// Outputs:
     /// - It has 3 callbacks as response:
     ///
-    /// - parameter uploadFileInput:    (input) you have to send your parameters insid this model. (UploadFileRequestModel)
-    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter progress:           (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
-    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (UploadFileModel)
-    public func uploadFile(uploadFileInput: UploadFileRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (UploadFileRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter progress:   (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (UploadFileModel)
+    public func uploadFile(inputModel uploadFileInput: UploadFileRequestModel,
                            uniqueId:        @escaping (String) -> (),
                            progress:        @escaping (Float) -> (),
                            completion:      @escaping callbackTypeAlias) {
@@ -289,12 +289,12 @@ extension Chat {
     /// Outputs:
     /// - It has 4 callbacks as response:
     ///
-    /// - parameter getImageInput:  (input) you have to send your parameters insid this model. (GetImageRequestModel)
+    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (GetImageRequestModel)
     /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter progress:       (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
     /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Data?, UploadImageModel)
     /// - parameter cacheResponse:  (response) it will returns the response from CacheDB if user has enabled it. (UploadImageModel, String)
-    public func getImage(getImageInput: GetImageRequestModel,
+    public func getImage(inputModel getImageInput: GetImageRequestModel,
                          uniqueId:      @escaping (String) -> (),
                          progress:      @escaping (Float) -> (),
                          completion:    @escaping (Data?, DownloadImageModel) -> (),
@@ -331,7 +331,7 @@ extension Chat {
         // maybe if i had the answer from cache, i have to ignore the bottom code that request to server to get file again!!
         // so this code have to only request file if it couldn't find the file on the cache
         if !hasImageOnTheCache {
-            sendRequestToDownloadImage(getImageInput: getImageInput, progress: { (theProgress) in
+            sendRequestToDownloadImage(withInputModel: getImageInput, progress: { (theProgress) in
                 progress(theProgress)
             }) { (data, imageModel) in
                 completion(data, imageModel)
@@ -340,7 +340,7 @@ extension Chat {
         
     }
     
-    private func sendRequestToDownloadImage(getImageInput: GetImageRequestModel,
+    private func sendRequestToDownloadImage(withInputModel getImageInput: GetImageRequestModel,
                                             progress:      @escaping (Float) -> (),
                                             completion:    @escaping (Data?, DownloadImageModel) -> ()) {
         
@@ -396,12 +396,12 @@ extension Chat {
     /// Outputs:
     /// - It has 4 callbacks as response:
     ///
-    /// - parameter getFileInput:   (input) you have to send your parameters insid this model. (GetFileRequestModel)
+    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (GetFileRequestModel)
     /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter progress:       (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
     /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Data?, UploadFileModel)
     /// - parameter cacheResponse:  (response) it will returns the response from CacheDB if user has enabled it. (UploadFileModel, String)
-    public func getFile(getFileInput:   GetFileRequestModel,
+    public func getFile(inputModel getFileInput:   GetFileRequestModel,
                         uniqueId:       @escaping (String) -> (),
                         progress:       @escaping (Float) -> (),
                         completion:     @escaping (Data?, DownloadFileModel) -> (),
@@ -439,7 +439,7 @@ extension Chat {
         // maybe if i had the answer from cache, i have to ignore the bottom code that request to server to get file again!!
         // so this code have to only request file if it couldn't find the file on the cache
         if !hasFileOntheCache {
-            sendRequestToDownloadFile(getFileInput: getFileInput, progress: { (theProgress) in
+            sendRequestToDownloadFile(withInputModel: getFileInput, progress: { (theProgress) in
                 progress(theProgress)
             }) { (data, fileModel) in
                 completion(data, fileModel)
@@ -448,7 +448,7 @@ extension Chat {
         
     }
     
-    private func sendRequestToDownloadFile(getFileInput:   GetFileRequestModel,
+    private func sendRequestToDownloadFile(withInputModel getFileInput:   GetFileRequestModel,
                                            progress:       @escaping (Float) -> (),
                                            completion:     @escaping (Data?, DownloadFileModel) -> ()) {
         

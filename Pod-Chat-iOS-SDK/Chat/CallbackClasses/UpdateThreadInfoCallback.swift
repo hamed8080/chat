@@ -106,7 +106,7 @@ extension Chat {
                                                                        threadIds:           [threadId],
                                                                        typeCode:            nil,
                                                                        uniqueId:            uID)
-                    Chat.sharedInstance.getThreads(getThreadsInput: getthreadRequestInput, uniqueId: { (_) in }, completion: { (myResponse) in
+                    Chat.sharedInstance.getThreads(inputModel: getthreadRequestInput, uniqueId: { (_) in }, completion: { (myResponse) in
                         success(myResponse as! GetThreadsModel)
                     }, cacheResponse: { (_) in })
                 }

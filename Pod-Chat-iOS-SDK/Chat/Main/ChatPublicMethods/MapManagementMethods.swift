@@ -29,10 +29,10 @@ extension Chat {
     /// Outputs:
     /// - It has 2 callbacks as responses.
     ///
-    /// - parameter mapReverseInput:    (input) you have to send your parameters insid this model. (MapReverseRequestModel)
-    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! MapReverseModel)
-    public func mapReverse(mapReverseInput: MapReverseRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (MapReverseRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! MapReverseModel)
+    public func mapReverse(inputModel mapReverseInput: MapReverseRequestModel,
                            uniqueId:        @escaping (String) -> (),
                            completion:      @escaping callbackTypeAlias) {
         
@@ -75,10 +75,10 @@ extension Chat {
     /// Outputs:
     /// - It has 2 callbacks as responses.
     ///
-    /// - parameter mapSearchInput: (input) you have to send your parameters insid this model. (MapSearchRequestModel)
-    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! MapSearchModel)
-    public func mapSearch(mapSearchInput:   MapSearchRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (MapSearchRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! MapSearchModel)
+    public func mapSearch(inputModel mapSearchInput:   MapSearchRequestModel,
                           uniqueId:         @escaping (String) -> (),
                           completion:       @escaping callbackTypeAlias) {
         
@@ -121,10 +121,10 @@ extension Chat {
     /// Outputs:
     /// - It has 2 callbacks as responses.
     ///
-    /// - parameter mapRoutingInput:    (input) you have to send your parameters insid this model. (MapRoutingRequestModel)
-    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! MapRoutingModel)
-    public func mapRouting(mapRoutingInput: MapRoutingRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (MapRoutingRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! MapRoutingModel)
+    public func mapRouting(inputModel mapRoutingInput: MapRoutingRequestModel,
                            uniqueId:        @escaping (String) -> (),
                            completion:      @escaping callbackTypeAlias) {
         
@@ -167,11 +167,11 @@ extension Chat {
     /// Outputs:
     /// - It has 2 callbacks as responses.
     ///
-    /// - parameter mapStaticImageInput:    (input) you have to send your parameters insid this model. (MapStaticImageRequestModel)
-    /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter progress:               (response)  it will returns the progress of the downloading request by a value between 0 and 1. (Float)
-    /// - parameter completion:             (response) it will returns the response that comes from server to this request. (Any as! Data)
-    public func mapStaticImage(mapStaticImageInput: MapStaticImageRequestModel,
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (MapStaticImageRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter progress:   (response)  it will returns the progress of the downloading request by a value between 0 and 1. (Float)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! Data)
+    public func mapStaticImage(inputModel mapStaticImageInput: MapStaticImageRequestModel,
                                uniqueId:            @escaping (String) -> (),
                                progress:            @escaping (Float) -> (),
                                completion:          @escaping callbackTypeAlias) {
