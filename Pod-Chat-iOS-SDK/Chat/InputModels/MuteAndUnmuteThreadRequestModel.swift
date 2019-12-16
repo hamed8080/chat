@@ -11,11 +11,17 @@ import Foundation
 open class MuteAndUnmuteThreadRequestModel {
     
     public let subjectId:   Int
-    public let typeCode:    String?
     
-    public init(subjectId: Int, typeCode: String?) {
+    public let typeCode:    String?
+    public let uniqueId:    String?
+    
+    public init(subjectId:  Int,
+                typeCode:   String?,
+                uniqueId:   String?) {
+        
         self.subjectId  = subjectId
         self.typeCode   = typeCode
+        self.uniqueId   = uniqueId
     }
     
 }

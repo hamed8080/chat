@@ -53,10 +53,10 @@ open class RemoveContactModel {
     
     
     public func returnDataAsJSON() -> JSON {
-        let finalResult: JSON = ["result": result,
-                                 "hasError": hasError,
+        let finalResult: JSON = ["result":      result,
+                                 "hasError":    hasError,
                                  "errorMessage": errorMessage ?? NSNull(),
-                                 "errorCode": errorCode ?? NSNull()]
+                                 "errorCode":   errorCode ?? NSNull()]
         
         return finalResult
     }

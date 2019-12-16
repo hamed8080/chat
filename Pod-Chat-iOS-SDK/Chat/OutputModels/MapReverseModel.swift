@@ -32,8 +32,6 @@ open class MapReverseModel {
     public let errorCode:          Int?
     public var result:             MapReverse
     
-    public var resultJSON: JSON = [:]
-    
     public init(messageContent: JSON,
                 hasError:       Bool,
                 errorMessage:   String,
@@ -44,7 +42,6 @@ open class MapReverseModel {
         self.errorCode          = errorCode
         
         self.result             = MapReverse(messageContent: messageContent)
-        self.resultJSON         = result.formatToJSON()
     }
     
     public init(hasError:       Bool,
@@ -57,12 +54,11 @@ open class MapReverseModel {
         self.errorCode          = errorCode
         
         self.result           = reversObject
-        self.resultJSON       = result.formatToJSON()
     }
     
     
     public func returnDataAsJSON() -> JSON {
-        let theResult: JSON = ["reverse": resultJSON]
+        let theResult: JSON = ["reverse":   result.formatToJSON()]
         let finalResult: JSON = ["result":          theResult,
                                  "hasError":        hasError,
                                  "errorMessage":    errorMessage ?? NSNull(),

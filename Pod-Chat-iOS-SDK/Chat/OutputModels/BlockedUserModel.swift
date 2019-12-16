@@ -36,8 +36,6 @@ open class BlockedContactModel {
     public let errorCode:          Int
     public let blockedContact:     BlockedContact
     
-    public var blockedContactJSON: JSON = [:]
-    
     public init(messageContent: JSON,
                 hasError:       Bool,
                 errorMessage:   String,
@@ -48,8 +46,6 @@ open class BlockedContactModel {
         self.errorCode          = errorCode
         
         self.blockedContact = BlockedContact(messageContent: messageContent)
-        self.blockedContactJSON = blockedContact.formatToJSON()
-        
     }
     
     public init(theBlockedContact:  BlockedContact,
@@ -61,17 +57,14 @@ open class BlockedContactModel {
         self.errorMessage       = errorMessage
         self.errorCode          = errorCode
         self.blockedContact     = theBlockedContact
-        
-        self.blockedContactJSON = blockedContact.formatToJSON()
     }
     
     public func returnDataAsJSON() -> JSON {
-        let result: JSON = ["blockedContact": blockedContactJSON]
-        
-        let resultAsJSON: JSON = ["result": result,
-                                  "hasError": hasError,
+        let result: JSON = ["blockedContact":   blockedContact.formatToJSON()]
+        let resultAsJSON: JSON = ["result":     result,
+                                  "hasError":   hasError,
                                   "errorMessage": errorMessage,
-                                  "errorCode": errorCode]
+                                  "errorCode":  errorCode]
         
         return resultAsJSON
     }

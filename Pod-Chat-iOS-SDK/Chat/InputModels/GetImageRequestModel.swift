@@ -6,7 +6,8 @@
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 
-import Foundation
+import Alamofire
+import SwiftyJSON
 
 open class GetImageRequestModel {
     
@@ -31,6 +32,25 @@ open class GetImageRequestModel {
         self.hashCode       = hashCode
         self.imageId        = imageId
         self.width          = width
+    }
+    
+    
+    func convertContentToParameters() -> Parameters {
+        var parameters: Parameters = ["hashCode": self.hashCode,
+                                      "imageId": self.imageId]
+        if let theActual = self.actual {
+            parameters["actual"] = JSON(theActual)
+        }
+        if let theDownloadable = self.downloadable {
+            parameters["downloadable"] = JSON(theDownloadable)
+        }
+        if let theHeight = self.height {
+            parameters["height"] = JSON(theHeight)
+        }
+        if let theWidth = self.width {
+            parameters["width"] = JSON(theWidth)
+        }
+        return parameters
     }
     
 }

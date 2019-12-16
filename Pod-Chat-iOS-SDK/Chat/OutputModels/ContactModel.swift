@@ -64,7 +64,6 @@ open class ContactModel {
             for item in result {
                 let tempContact = Contact(messageContent: item)
                 let tempContactJSON = tempContact.formatToJSON()
-                
                 self.contacts.append(tempContact)
                 self.contactsJSON.append(tempContactJSON)
             }
@@ -81,10 +80,10 @@ open class ContactModel {
         self.errorMessage       = errorMessage
         self.errorCode          = errorCode
         self.contentCount       = contentCount
+        
         if let result = messageContent {
             for item in result {
                 self.contacts.append(item)
-                
                 let tempContactJSON = item.formatToJSON()
                 self.contactsJSON.append(tempContactJSON)
             }
@@ -94,13 +93,13 @@ open class ContactModel {
     
     
     public func returnDataAsJSON() -> JSON {
-        let result: JSON = ["contacts": contactsJSON,
+        let result: JSON = ["contacts":     contactsJSON,
                             "contentCount": contentCount]
         
-        let finalResult: JSON = ["result": result,
-                                 "hasError": hasError,
+        let finalResult: JSON = ["result":      result,
+                                 "hasError":    hasError,
                                  "errorMessage": errorMessage ?? NSNull(),
-                                 "errorCode": errorCode ?? NSNull()]
+                                 "errorCode":   errorCode ?? NSNull()]
         
         return finalResult
     }

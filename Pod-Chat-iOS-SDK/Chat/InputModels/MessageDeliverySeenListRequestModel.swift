@@ -6,24 +6,37 @@
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 
-import Foundation
+import SwiftyJSON
 
 open class MessageDeliverySeenListRequestModel {
     
     public let count:       Int?
     public let messageId:   Int
     public let offset:      Int?
-    public let typeCode:    String?
     
-    public init(count:     Int?,
-                messageId: Int,
-                offset:    Int?,
-                typeCode:  String?) {
+    public let typeCode:    String?
+    public let uniqueId:    String?
+    
+    public init(count:      Int?,
+                messageId:  Int,
+                offset:     Int?,
+                typeCode:   String?,
+                uniqueId:   String?) {
         
         self.count      = count
         self.messageId  = messageId
         self.offset     = offset
         self.typeCode   = typeCode
+        self.uniqueId   = uniqueId
+    }
+    
+    func convertContentToJSON() -> JSON {        
+        var content: JSON = [:]
+        content["count"] = JSON(self.count ?? 50)
+        content["offset"] = JSON(self.offset ?? 0)
+        content["messageId"] = JSON(self.messageId)
+        
+        return content
     }
     
 }

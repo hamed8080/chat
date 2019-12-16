@@ -10,10 +10,6 @@ import Foundation
 import SwiftyJSON
 
 
-//#######################################################################################
-//#############################      MessageChangeState        (formatDataToMakeMessageChangeState)
-//#######################################################################################
-
 open class MessageChangeState {
     /*
      * + MessageChangeStateVO   MessageChangeState:

@@ -6,20 +6,43 @@
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 
-import Foundation
+import SwiftyJSON
 
 open class BlockContactsRequestModel {
     
     public let contactId:   Int?
     public let threadId:    Int?
-    public let typeCode:    String?
     public let userId:      Int?
     
-    public init(contactId: Int?, threadId: Int?, typeCode: String?, userId: Int?) {
+    public let typeCode:    String?
+    public let uniqueId:    String?
+    
+    public init(contactId:  Int?,
+                threadId:   Int?,
+                userId:     Int?,
+                typeCode:   String?,
+                uniqueId:   String?) {
+        
         self.contactId  = contactId
         self.threadId   = threadId
-        self.typeCode   = typeCode
         self.userId     = userId
+        self.typeCode   = typeCode
+        self.uniqueId   = uniqueId
+    }
+    
+    func convertContentToJSON() -> JSON {
+        var content: JSON = [:]
+        if let contactId = self.contactId {
+            content["contactId"] = JSON(contactId)
+        }
+        if let threadId = self.threadId {
+            content["threadId"] = JSON(threadId)
+        }
+        if let userId = self.userId {
+            content["userId"] = JSON(userId)
+        }
+        
+        return content
     }
     
 }

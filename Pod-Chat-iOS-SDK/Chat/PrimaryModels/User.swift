@@ -10,35 +10,35 @@ import Foundation
 import SwiftyJSON
 
 
-//#######################################################################################
-//#############################      User        (formatDataToMakeUser)
-//#######################################################################################
+/*
+ * + User               User:
+ *    - cellphoneNumber:    String?
+ *    - email:              String?
+ *    - id:                 Int?
+ *    - image:              String?
+ *    - lastSeen:           Int?
+ *    - name:               String?
+ *    - receiveEnable:      Bool?
+ *    - sendEnable:         Bool?
+ */
 
 open class User {
-    /*
-     * + User               User:
-     *    - cellphoneNumber:    String?
-     *    - email:              String?
-     *    - id:                 Int?
-     *    - image:              String?
-     *    - lastSeen:           Int?
-     *    - name:               String?
-     *    - receiveEnable:      Bool?
-     *    - sendEnable:         Bool?
-     */
     
-    public let cellphoneNumber:    String?
-    public let email:              String?
-    public let id:                 Int?
-    public let image:              String?
-    public let lastSeen:           Int?
-    public let name:               String?
-    public let receiveEnable:      Bool?
-    public let sendEnable:         Bool?
+    
+    public let cellphoneNumber: String?
+    public let coreUserId:      Int?
+    public let email:           String?
+    public let id:              Int?
+    public let image:           String?
+    public let lastSeen:        Int?
+    public let name:            String?
+    public let receiveEnable:   Bool?
+    public let sendEnable:      Bool?
     
     public init(messageContent: JSON) {
         
         self.cellphoneNumber    = messageContent["cellphoneNumber"].string
+        self.coreUserId         = messageContent["coreUserId"].int
         self.email              = messageContent["email"].string
         self.id                 = messageContent["id"].int
         self.image              = messageContent["image"].string
@@ -49,16 +49,18 @@ open class User {
         
     }
     
-    public init(cellphoneNumber:   String?,
-                email:             String?,
-                id:                Int?,
-                image:             String?,
-                lastSeen:          Int?,
-                name:              String?,
-                receiveEnable:     Bool?,
-                sendEnable:        Bool?) {
+    public init(cellphoneNumber:    String?,
+                coreUserId:         Int?,
+                email:              String?,
+                id:                 Int?,
+                image:              String?,
+                lastSeen:           Int?,
+                name:               String?,
+                receiveEnable:      Bool?,
+                sendEnable:         Bool?) {
         
         self.cellphoneNumber    = cellphoneNumber
+        self.coreUserId         = coreUserId
         self.email              = email
         self.id                 = id
         self.image              = image
@@ -68,16 +70,17 @@ open class User {
         self.sendEnable         = sendEnable
     }
     
-    public init(theUser: User) {
+    public init(withUserObject: User) {
         
-        self.cellphoneNumber    = theUser.cellphoneNumber
-        self.email              = theUser.email
-        self.id                 = theUser.id
-        self.image              = theUser.image
-        self.lastSeen           = theUser.lastSeen
-        self.name               = theUser.name
-        self.receiveEnable      = theUser.receiveEnable
-        self.sendEnable         = theUser.sendEnable
+        self.cellphoneNumber    = withUserObject.cellphoneNumber
+        self.coreUserId         = withUserObject.coreUserId
+        self.email              = withUserObject.email
+        self.id                 = withUserObject.id
+        self.image              = withUserObject.image
+        self.lastSeen           = withUserObject.lastSeen
+        self.name               = withUserObject.name
+        self.receiveEnable      = withUserObject.receiveEnable
+        self.sendEnable         = withUserObject.sendEnable
     }
     
     
@@ -86,14 +89,15 @@ open class User {
     }
     
     public func formatToJSON() -> JSON {
-        let result: JSON = ["id":               id ?? NSNull(),
-                            "name":             name ?? NSNull(),
+        let result: JSON = ["cellphoneNumber":  cellphoneNumber ?? NSNull(),
+                            "coreUserId":       coreUserId ?? NSNull(),
                             "email":            email ?? NSNull(),
-                            "cellphoneNumber":  cellphoneNumber ?? NSNull(),
+                            "id":               id ?? NSNull(),
                             "image":            image ?? NSNull(),
                             "lastSeen":         lastSeen ?? NSNull(),
-                            "sendEnable":       sendEnable ?? NSNull(),
-                            "receiveEnable":    receiveEnable ?? NSNull()]
+                            "name":             name ?? NSNull(),
+                            "receiveEnable":    receiveEnable ?? NSNull(),
+                            "sendEnable":       sendEnable ?? NSNull()]
         return result
     }
     

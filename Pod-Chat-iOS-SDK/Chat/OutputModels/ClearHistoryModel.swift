@@ -19,19 +19,16 @@ open class ClearHistoryModel {
     // result model
     public var threadId:           Int
     
-    public var threadJSON:        JSON?
-    
     public init(messageContent: JSON,
-                hasError: Bool,
-                errorMessage: String,
-                errorCode: Int) {
+                hasError:       Bool,
+                errorMessage:   String,
+                errorCode:      Int) {
         
         self.hasError           = hasError
         self.errorMessage       = errorMessage
         self.errorCode          = errorCode
         
         self.threadId = messageContent["threadId"].intValue
-        
     }
     
     public init(threadId:       Int,
@@ -44,16 +41,14 @@ open class ClearHistoryModel {
         self.errorCode          = errorCode
         
         self.threadId = threadId
-        
     }
     
     public func returnDataAsJSON() -> JSON {
-        let result: JSON = ["threadId": threadId]
-        
-        let finalResult: JSON = ["result": result,
-                                 "hasError": hasError,
+        let result: JSON = ["threadId":     threadId]
+        let finalResult: JSON = ["result":      result,
+                                 "hasError":    hasError,
                                  "errorMessage": errorMessage,
-                                 "errorCode": errorCode]
+                                 "errorCode":   errorCode]
         
         return finalResult
     }

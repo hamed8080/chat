@@ -10,40 +10,40 @@ import Foundation
 import SwiftyJSON
 
 
-//#######################################################################################
-//#############################      Contact        (formatDataToMakeContact)
-//#######################################################################################
-
 open class Contact {
     /*
-     * + ContactVO          Contact:
-     *    - cellphoneNumber     String?
-     *    - email               String?
-     *    - firstName           String?
-     *    - hasUser             Bool?
-     *    - id                  Int?
-     *    - image               String?
-     *    - lastName            String?
-     *    - linkedUser          LinkedUser?
-     *    - notSeenDuration     Int?
-     *    - uniqueId            Bool?
-     *    - userId              Int?
+     *  + ContactVO          Contact:
+     *      - blocked           Bool?
+     *      - cellphoneNumber   String?
+     *      - email             String?
+     *      - firstName         String?
+     *      - hasUser           Bool?
+     *      - id                Int?
+     *      - image             String?
+     *      - lastName          String?
+     *      - linkedUser        LinkedUser?
+     *      - notSeenDuration   Int?
+     *      - timeStamp         UInt?
+     *      - uniqueId          Bool?
+     *      - userId            Int?
      */
     
-    public let cellphoneNumber:    String?
-    public let email:              String?
-    public let firstName:          String?
-    public var hasUser:            Bool     = false
-    public let id:                 Int?
-    public let image:              String?
-    public let lastName:           String?
-    public var linkedUser:         LinkedUser?
-    public let notSeenDuration:    Int?
-    public let timeStamp:          UInt?
-    public let uniqueId:           String?
-    public let userId:             Int?
+    public let blocked:         Bool?
+    public let cellphoneNumber: String?
+    public let email:           String?
+    public let firstName:       String?
+    public var hasUser:         Bool     = false
+    public let id:              Int?
+    public let image:           String?
+    public let lastName:        String?
+    public var linkedUser:      LinkedUser?
+    public let notSeenDuration: Int?
+    public let timeStamp:       UInt?
+//    public let uniqueId:        String?
+    public let userId:          Int?
     
     public init(messageContent: JSON) {
+        self.blocked            = messageContent["blocked"].bool
         self.cellphoneNumber    = messageContent["cellphoneNumber"].string
         self.email              = messageContent["email"].string
         self.firstName          = messageContent["firstName"].string
@@ -52,7 +52,7 @@ open class Contact {
         self.lastName           = messageContent["lastName"].string
         self.notSeenDuration    = messageContent["notSeenDuration"].int
         self.timeStamp          = messageContent["timeStamp"].uInt
-        self.uniqueId           = messageContent["uniqueId"].string
+//        self.uniqueId           = messageContent["uniqueId"].string
         self.userId             = messageContent["userId"].int
         
         if (messageContent["hasUser"] != JSON.null) {
@@ -69,19 +69,21 @@ open class Contact {
         
     }
     
-    public init(cellphoneNumber:   String?,
-                email:             String?,
-                firstName:         String?,
-                hasUser:           Bool,
-                id:                Int?,
-                image:             String?,
-                lastName:          String?,
-                linkedUser:        LinkedUser?,
-                notSeenDuration:   Int?,
-                timeStamp:         UInt?,
-                uniqueId:          String?,
-                userId:            Int?) {
+    public init(blocked:            Bool?,
+                cellphoneNumber:    String?,
+                email:              String?,
+                firstName:          String?,
+                hasUser:            Bool,
+                id:                 Int?,
+                image:              String?,
+                lastName:           String?,
+                linkedUser:         LinkedUser?,
+                notSeenDuration:    Int?,
+                timeStamp:          UInt?,
+//                uniqueId:           String?,
+                userId:             Int?) {
         
+        self.blocked            = blocked
         self.cellphoneNumber    = cellphoneNumber
         self.email              = email
         self.firstName          = firstName
@@ -92,13 +94,14 @@ open class Contact {
         self.linkedUser         = linkedUser
         self.notSeenDuration    = notSeenDuration
         self.timeStamp          = timeStamp
-        self.uniqueId           = uniqueId
+//        self.uniqueId           = uniqueId
         self.userId             = userId
         
     }
     
     public init(theContact: Contact) {
         
+        self.blocked            = theContact.blocked
         self.cellphoneNumber    = theContact.cellphoneNumber
         self.email              = theContact.email
         self.firstName          = theContact.firstName
@@ -109,7 +112,7 @@ open class Contact {
         self.linkedUser         = theContact.linkedUser
         self.notSeenDuration    = theContact.notSeenDuration
         self.timeStamp          = theContact.timeStamp
-        self.uniqueId           = theContact.uniqueId
+//        self.uniqueId           = theContact.uniqueId
         self.userId             = theContact.userId
     }
     
@@ -119,17 +122,18 @@ open class Contact {
     }
     
     public func formatToJSON() -> JSON {
-        let result: JSON = ["cellphoneNumber":  cellphoneNumber ?? NSNull(),
+        let result: JSON = ["blocked":          blocked ?? NSNull(),
+                            "cellphoneNumber":  cellphoneNumber ?? NSNull(),
                             "email":            email ?? NSNull(),
                             "firstName":        firstName ?? NSNull(),
                             "hasUser":          hasUser,
                             "id":               id ?? NSNull(),
                             "image":            image ?? NSNull(),
                             "lastName":         lastName ?? NSNull(),
-                            "linkedUserJSON":   linkedUser?.formatToJSON() ?? NSNull(),
+                            "linkedUser":       linkedUser?.formatToJSON() ?? NSNull(),
                             "notSeenDuration":  notSeenDuration ?? NSNull(),
                             "timeStamp":        timeStamp ?? NSNull(),
-                            "uniqueId":         uniqueId ?? NSNull(),
+//                            "uniqueId":         uniqueId ?? NSNull(),
                             "userId":           userId ?? NSNull()]
         return result
     }

@@ -6,7 +6,8 @@
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 
-import Foundation
+import Alamofire
+import SwiftyJSON
 
 open class UploadFileRequestModel {
     
@@ -16,15 +17,18 @@ open class UploadFileRequestModel {
     public let fileSize:            Int?
     public let originalFileName:    String?
     public let threadId:            Int?
-    public let uniqueId:            String?
     
-    public init(dataToSend:        Data,
-                fileExtension:     String?,
-                fileName:          String,
-                fileSize:          Int?,
-                originalFileName:  String?,
-                threadId:          Int?,
-                uniqueId:          String?) {
+    public let typeCode:            String?
+    public let uniqueId:            String
+    
+    public init(dataToSend:         Data,
+                fileExtension:      String?,
+                fileName:           String,
+                fileSize:           Int?,
+                originalFileName:   String?,
+                threadId:           Int?,
+                typeCode:           String?,
+                uniqueId:           String?) {
         
         self.dataToSend         = dataToSend
         self.fileExtension      = fileExtension
@@ -32,7 +36,26 @@ open class UploadFileRequestModel {
         self.fileSize           = fileSize
         self.originalFileName   = originalFileName
         self.threadId           = threadId
-        self.uniqueId           = uniqueId
+        self.typeCode           = typeCode
+        self.uniqueId           = uniqueId ?? NSUUID().uuidString
+    }
+    
+    
+    func convertContentToParameters() -> Parameters {
+        
+        var content: Parameters = [:]
+        let theFileName = JSON(self.fileName ?? "\(NSUUID().uuidString))")
+        content["fileName"] = JSON(theFileName)
+        content["uniqueId"] = JSON(self.uniqueId)
+        content["originalFileName"] = JSON(self.originalFileName ?? theFileName)
+        if let myFileSize_ = self.fileSize {
+            content["fileSize"] = JSON(myFileSize_)
+        }
+        if let threadId_ = self.threadId {
+            content["threadId"] = JSON(threadId_)
+        }
+
+        return content
     }
     
 }

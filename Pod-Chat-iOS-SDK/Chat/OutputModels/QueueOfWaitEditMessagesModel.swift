@@ -12,32 +12,37 @@ import SwiftyJSON
 open class QueueOfWaitEditMessagesModel {
     
     let content:    String?
-    let metaData:   JSON?
+    let metadata:   JSON?
     let repliedTo:  Int?
-    let subjectId:  Int?
+    let messageId:  Int?
+    let threadId:   Int?
+    
     let typeCode:   String?
     let uniqueId:   String?
     
     init(content:   String?,
-         metaData:  JSON?,
+         metadata:  JSON?,
          repliedTo: Int?,
-         subjectId: Int?,
+         messageId: Int?,
+         threadId:  Int?,
          typeCode:  String?,
          uniqueId:  String?) {
         
         self.content    = content
-        self.metaData   = metaData
+        self.metadata   = metadata
         self.repliedTo  = repliedTo
-        self.subjectId  = subjectId
+        self.messageId  = messageId
+        self.threadId   = threadId
         self.typeCode   = typeCode
         self.uniqueId   = uniqueId
     }
     
     init(editMessageInputModel: EditTextMessageRequestModel) {
         self.content    = editMessageInputModel.content
-        self.metaData   = editMessageInputModel.metaData
+        self.metadata   = editMessageInputModel.metadata
         self.repliedTo  = editMessageInputModel.repliedTo
-        self.subjectId  = editMessageInputModel.subjectId
+        self.messageId  = editMessageInputModel.messageId
+        self.threadId   = nil
         self.typeCode   = editMessageInputModel.typeCode
         self.uniqueId   = editMessageInputModel.uniqueId
     }

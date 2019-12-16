@@ -9,9 +9,6 @@
 import Foundation
 import SwiftyJSON
 
-//#######################################################################################
-//#############################      ThreadParticipants        (reformatThreadParticipants)
-//#######################################################################################
 
 open class ThreadParticipants {
     

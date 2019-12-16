@@ -11,35 +11,39 @@ import SwiftyJSON
 
 open class QueueOfWaitForwardMessagesModel {
     
-    let messageIds: [Int]?
-    let metaData:   JSON?
+//    let messageIds: [Int]?
+    let messageId:  Int?
+    let metadata:   JSON?
     let repliedTo:  Int?
-    let subjectId:  Int?
+    let threadId:   Int?
+    
     let typeCode:   String?
     let uniqueId:   String?
     
-    init(messageIds:    [Int]?,
-         metaData:      JSON?,
+    init(//messageIds:    [Int]?,
+         messageId:     Int?,
+         metadata:      JSON?,
          repliedTo:     Int?,
-         subjectId:     Int?,
+         threadId:      Int?,
          typeCode:      String?,
          uniqueId:      String?) {
         
-        self.messageIds = messageIds
-        self.metaData   = metaData
+//        self.messageIds = messageIds
+        self.messageId  = messageId
+        self.metadata   = metadata
         self.repliedTo  = repliedTo
-        self.subjectId  = subjectId
+        self.threadId   = threadId
         self.typeCode   = typeCode
         self.uniqueId   = uniqueId
     }
     
-    init(forwardMessageInputModel: ForwardMessageRequestModel, uniqueId: String) {
-        self.messageIds = forwardMessageInputModel.messageIds
-        self.metaData   = forwardMessageInputModel.metaData
-        self.repliedTo  = forwardMessageInputModel.repliedTo
-        self.subjectId  = forwardMessageInputModel.subjectId
-        self.typeCode   = forwardMessageInputModel.typeCode
-        self.uniqueId   = uniqueId
-    }
+//    init(forwardMessageInputModel: ForwardMessageRequestModel, uniqueId: String) {
+//        self.messageIds = forwardMessageInputModel.messageIds
+//        self.metadata   = forwardMessageInputModel.metadata
+//        self.repliedTo  = forwardMessageInputModel.repliedTo
+//        self.threadId   = forwardMessageInputModel.threadId
+//        self.typeCode   = forwardMessageInputModel.typeCode
+//        self.uniqueId   = uniqueId
+//    }
     
 }

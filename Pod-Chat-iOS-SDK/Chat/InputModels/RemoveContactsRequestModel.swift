@@ -10,10 +10,18 @@ import Foundation
 
 open class RemoveContactsRequestModel {
     
-    public let id:  Int
+    public let contactId:   Int
     
-    public init(id: Int) {
-        self.id = id
+    public let typeCode:    String?
+    public let uniqueId:    String?
+    
+    public init(contactId:  Int,
+                typeCode:   String?,
+                uniqueId:   String?) {
+        
+        self.contactId  = contactId
+        self.typeCode   = typeCode
+        self.uniqueId   = uniqueId
     }
     
 }

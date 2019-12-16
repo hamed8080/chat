@@ -26,13 +26,15 @@ open class SendLocationMessageRequestModel {
     public let sendMessageYC:          String?
     public let sendMessageHC:          String?
     public let sendMessageWC:          String?
-    public let sendMessageThreadId:    Int?
+    public let sendMessageThreadId:    Int
     
     public let sendMessageContent:     String?
-    public let sendMessageMetaData:    JSON?
+    public let sendMessageMetadata:    JSON?
     public let sendMessageRepliedTo:   Int?
-    public let sendMessageSubjectId:   Int?
     public let sendMessageTypeCode:    String?
+    
+    public let typeCode:         String?
+    public let uniqueId:         String?
     
     public init(mapStaticCenterLat:     Double,
                 mapStaticCenterLng:     Double,
@@ -45,12 +47,13 @@ open class SendLocationMessageRequestModel {
                 sendMessageYC:          String?,
                 sendMessageHC:          String?,
                 sendMessageWC:          String?,
-                sendMessageThreadId:    Int?,
+                sendMessageThreadId:    Int,
                 sendMessageContent:     String?,
-                sendMessageMetaData:    JSON?,
+                sendMessageMetadata:    JSON?,
                 sendMessageRepliedTo:   Int?,
-                sendMessageSubjectId:   Int?,
-                sendMessageTypeCode:    String?) {
+                sendMessageTypeCode:    String?,
+                typeCode:               String?,
+                uniqueId:               String?) {
         
         self.mapStaticCenterLat     = mapStaticCenterLat
         self.mapStaticCenterLng     = mapStaticCenterLng
@@ -67,10 +70,11 @@ open class SendLocationMessageRequestModel {
         self.sendMessageThreadId    = sendMessageThreadId
         
         self.sendMessageContent     = sendMessageContent
-        self.sendMessageMetaData    = sendMessageMetaData
+        self.sendMessageMetadata    = sendMessageMetadata
         self.sendMessageRepliedTo   = sendMessageRepliedTo
-        self.sendMessageSubjectId   = sendMessageSubjectId
         self.sendMessageTypeCode    = sendMessageTypeCode
+        self.typeCode               = typeCode
+        self.uniqueId               = uniqueId
     }
     
 }

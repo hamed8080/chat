@@ -7,29 +7,38 @@
 //
 
 import Foundation
-
 import SwiftyJSON
 
 
 open class ForwardMessageRequestModel {
     
-    public let messageIds:          [Int]
-    public let metaData:            JSON?
-    public let repliedTo:           Int?
-    public let subjectId:           Int
-    public let typeCode:            String?
+    public let messageIds:      [Int]
+    public let metadata:        JSON?
+    public let repliedTo:       Int?
+    public let threadId:        Int
+    public let uniqueIds:       [String]
     
-    public init(messageIds:        [Int],
-                metaData:          JSON?,
-                repliedTo:         Int?,
-                subjectId:         Int,
-                typeCode:          String?) {
+    public let typeCode: String?
+    
+    public init(messageIds: [Int],
+                metadata:   JSON?,
+                repliedTo:  Int?,
+                threadId:   Int,
+                typeCode:   String?) {
         
-        self.messageIds         = messageIds
-        self.metaData           = metaData
-        self.repliedTo          = repliedTo
-        self.subjectId          = subjectId
-        self.typeCode           = typeCode
+        self.messageIds = messageIds
+        self.metadata   = metadata
+        self.repliedTo  = repliedTo
+        self.threadId   = threadId
+        self.typeCode   = typeCode
+        
+        var uniqueIdArr : [String] = []
+        for _ in messageIds {
+            let tempUniqueId = UUID().uuidString
+            uniqueIdArr.append(tempUniqueId)
+        }
+        self.uniqueIds = uniqueIdArr
+        
     }
     
 }

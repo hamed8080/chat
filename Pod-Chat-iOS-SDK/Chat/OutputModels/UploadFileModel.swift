@@ -35,7 +35,7 @@ open class UploadFileModel {
     public let errorMessage:        String
     public let hasError:            Bool
     //    public var localPath:           String = ""
-    public let uploadFile:          UploadFile?
+    public let uploadFile:          FileObject?
     
     public var uploadFileJSON: JSON = [:]
     
@@ -54,15 +54,14 @@ open class UploadFileModel {
         //        }
         
         if let myFile = messageContentJSON {
-            self.uploadFile = UploadFile(messageContent: myFile)
-            self.uploadFileJSON = uploadFile!.formatToJSON()
+            self.uploadFile = FileObject(messageContent: myFile)
         } else {
             self.uploadFile = nil
         }
         
     }
     
-    public init(messageContentModel: UploadFile?,
+    public init(messageContentModel: FileObject?,
                 errorCode:      Int,
                 errorMessage:   String,
                 hasError:       Bool/*,
@@ -78,7 +77,6 @@ open class UploadFileModel {
         
         if let myFile = messageContentModel {
             self.uploadFile = myFile
-            self.uploadFileJSON = uploadFile!.formatToJSON()
         } else {
             self.uploadFile = nil
         }
@@ -87,12 +85,12 @@ open class UploadFileModel {
     
     
     public func returnDataAsJSON() -> JSON {
-        let result: JSON = ["uploadFile": uploadFileJSON]
+        let result: JSON = ["uploadFile":   uploadFile?.formatToJSON() ?? NSNull()]
         
-        let resultAsJSON: JSON = ["result": result,
-                                  "errorCode": errorCode,
+        let resultAsJSON: JSON = ["result":     result,
+                                  "errorCode":  errorCode,
                                   "errorMessage": errorMessage,
-                                  "hasError": hasError/*,
+                                  "hasError":   hasError/*,
              "localPath": localPath*/]
         
         return resultAsJSON

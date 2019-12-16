@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 
 
-open class UploadImage {
+open class ImageObject {
     
     public let actualHeight:   Int?
     public let actualWidth:    Int?
@@ -47,7 +47,7 @@ open class UploadImage {
         self.width          = width
     }
     
-    public init(theUploadImage: UploadImage) {
+    public init(theUploadImage: ImageObject) {
         
         self.actualHeight   = theUploadImage.actualHeight
         self.actualWidth    = theUploadImage.actualWidth
@@ -59,7 +59,7 @@ open class UploadImage {
     }
     
     
-    public func formatDataToMakeUploadImage() -> UploadImage {
+    public func formatDataToMakeUploadImage() -> ImageObject {
         return self
     }
     

@@ -24,13 +24,13 @@ public enum chatMessageVOTypes: Int {
     case BLOCK                              = 7
     case UNBLOCK                            = 8
     case LEAVE_THREAD                       = 9
-    case RENAME                             = 10
+    case RENAME                             = 10    // not implemented yet!
     case ADD_PARTICIPANT                    = 11
-    case GET_STATUS                         = 12
+    case GET_STATUS                         = 12    // not implemented yet!
     case GET_CONTACTS                       = 13
     case GET_THREADS                        = 14
     case GET_HISTORY                        = 15
-    case CHANGE_TYPE                        = 16
+    case CHANGE_TYPE                        = 16    // not implemented yet!
     case REMOVED_FROM_THREAD                = 17
     case REMOVE_PARTICIPANT                 = 18
     case MUTE_THREAD                        = 19
@@ -38,9 +38,9 @@ public enum chatMessageVOTypes: Int {
     case UPDATE_THREAD_INFO                 = 21
     case FORWARD_MESSAGE                    = 22
     case USER_INFO                          = 23
-    case USER_STATUS                        = 24
+    case USER_STATUS                        = 24    // not implemented yet!
     case GET_BLOCKED                        = 25
-    case RELATION_INFO                      = 26
+    case RELATION_INFO                      = 26    // not implemented yet!
     case THREAD_PARTICIPANTS                = 27
     case EDIT_MESSAGE                       = 28
     case DELETE_MESSAGE                     = 29
@@ -48,34 +48,56 @@ public enum chatMessageVOTypes: Int {
     case LAST_SEEN_UPDATED                  = 31
     case GET_MESSAGE_DELEVERY_PARTICIPANTS  = 32
     case GET_MESSAGE_SEEN_PARTICIPANTS      = 33
-    case BOT_MESSAGE                        = 40
+    case BOT_MESSAGE                        = 40    // not implemented yet!
     case SPAM_PV_THREAD                     = 41
     case SET_RULE_TO_USER                   = 42
     case CLEAR_HISTORY                      = 44
-    case SIGNAL_MESSAGE                     = 45
-    case GET_THREAD_ADMINS                  = 48
+    case SYSTEM_MESSAGE                     = 46
+    case GET_NOT_SEEN_DURATION              = 47
+    case GET_THREAD_ADMINS                  = 48    // it has been deprecated! (actualy has not been implemented yet! and won't be!!)
     case LOGOUT                             = 100
     case ERROR                              = 999
 }
 
 
-public enum InviteeVOidTypes: Int {
-    case TO_BE_USER_SSO_ID              = 1
-    case TO_BE_USER_CONTACT_ID          = 2
-    case TO_BE_USER_CELLPHONE_NUMBER    = 3
-    case TO_BE_USER_USERNAME            = 4
-    case TO_BE_USER_ID                  = 5
+public enum INVITEE_VO_ID_TYPES {
+    
+    case TO_BE_USER_SSO_ID
+    case TO_BE_USER_CONTACT_ID
+    case TO_BE_USER_CELLPHONE_NUMBER
+    case TO_BE_USER_USERNAME
+    case TO_BE_USER_ID
+    
+    public func stringValue() -> String {
+        switch self {
+        case .TO_BE_USER_SSO_ID:            return "TO_BE_USER_SSO_ID"
+        case .TO_BE_USER_CONTACT_ID:        return "TO_BE_USER_CONTACT_ID"
+        case .TO_BE_USER_CELLPHONE_NUMBER:  return "TO_BE_USER_CELLPHONE_NUMBER"
+        case .TO_BE_USER_USERNAME:          return "TO_BE_USER_USERNAME"
+        case .TO_BE_USER_ID:                return "TO_BE_USER_ID"
+        }
+    }
+    
+    public func intValue() -> Int {
+        switch self {
+        case .TO_BE_USER_SSO_ID:            return 1
+        case .TO_BE_USER_CONTACT_ID:        return 2
+        case .TO_BE_USER_CELLPHONE_NUMBER:  return 3
+        case .TO_BE_USER_USERNAME:          return 4
+        case .TO_BE_USER_ID:                return 5
+        }
+    }
+    
 }
-
 
 public enum ThreadTypes: String {
-    case NORMAL         = "NORMAL"
-    case OWNER_GROUP    = "OWNER_GROUP"
-    case PUBLIC_GROUP   = "PUBLIC_GROUP"
-    case CHANNEL_GROUP  = "CHANNEL_GROUP"
-    case CHANNEL        = "CHANNEL"
+    case NORMAL                 = "NORMAL"
+    case OWNER_GROUP            = "OWNER_GROUP"
+    case PUBLIC_GROUP           = "PUBLIC_GROUP"
+    case CHANNEL_GROUP          = "CHANNEL_GROUP"
+    case CHANNEL                = "CHANNEL"
+    case NOTIFICATION_CHANNEL   = "NOTIFICATION_CHANNEL"
 }
-
 
 public struct SERVICE_ADDRESSES_ENUM {
     public var SSO_ADDRESS          = "http://172.16.110.76"
@@ -84,11 +106,12 @@ public struct SERVICE_ADDRESSES_ENUM {
     public var MAP_ADDRESS          = "https://api.neshan.org/v1"
 }
 
-
 public enum SERVICES_PATH: String {
     
     // Devices:
     case SSO_DEVICES        = "/oauth2/grants/devices"
+    case SSO_GENERATE_KEY   = "/handshake/users/"
+    case SSO_GET_KEY        = "/handshake/keys/"
     
     // Contacts:
     case ADD_CONTACTS       = "/nzh/addContacts"
@@ -102,6 +125,13 @@ public enum SERVICES_PATH: String {
     case UPLOAD_FILE        = "/nzh/uploadFile"
     case GET_FILE           = "/nzh/file/"
     
+    // PodDrive
+    case DRIVE_UPLOAD_FILE          = "/nzh/drive/uploadFile"
+    case DRIVE_UPLOAD_FILE_FROM_URL = "/nzh/drive/uploadFileFromUrl"
+    case DRIVE_UPLOAD_IMAGE         = "/nzh/drive/uploadImage"
+    case DRIVE_DOWNLOAD_FILE        = "/nzh/drive/downloadFile"
+    case DRIVE_DOWNLOAD_IMAGE       = "/nzh/drive/downloadImage"
+    
     // Neshan Map
     case REVERSE            = "/reverse"
     case SEARCH             = "/search"
@@ -109,7 +139,6 @@ public enum SERVICES_PATH: String {
     case STATIC_IMAGE       = "/static"
     
 }
-
 
 public enum CHAT_ERRORS: String {
     
@@ -135,7 +164,6 @@ public enum CHAT_ERRORS: String {
     case err6700 = "You should Enter a Center Location like {lat: \" \", lng: \" \"}"
 }
 
-
 public enum asyncStateTypes: String {
     case type0  = "CONNECTING"
     case type1  = "CONNECTED"
@@ -144,47 +172,106 @@ public enum asyncStateTypes: String {
 }
 
 
-
-
-
+/*
 public enum UserEventTypes {
-    case userInfo
+    case userInfo           // type 23
+}
+*/
+
+public enum ContactEventTypes {
+    case CONTACTS_LIST_CHANGE   //
+    case CONTACTS_SEARCH_RESULT_CHANGE  //
+    
+    /*
+    case getContacts        // type 13
+    case addContact
+    case updateContact
+    case removeContact
+    case BlockContact       // type 7
+    case GetBlockedList     // type 25
+    case UnblockContact     // type 8
+    */
 }
 
-
-public enum MessageEventTypes/*: String*/ {
-    case delivery   //= "Delivery"
-    case seen       //= "Seen"
-    case delete     //= "Delete"
-    case new        //= "New"
-    case edit       //= "Edit"
-}
-
-
-public enum ThreadEventTypes/*: String*/ {
-    case getThreads
-    case getHistory
-    case getThreadParticipants
-    case UpdateThreadInfo
-    case new                  //= "Thread_New"
+public enum ThreadEventTypes {
+    case THREAD_NEW                     // type 1
+    case THREAD_LEAVE_PARTICIPANT       // type 9
+    case THREAD_LAST_ACTIVITY_TIME      //
+    case THREAD_ADD_PARTICIPANTS        // type 11
+    case THREAD_REMOVED_FROM            // type 17
+    case THREAD_REMOVE_PARTICIPANTS     // type 18
+    case THREAD_MUTE                    // type 19
+    case THREAD_UNMUTE                  // type 20
+    case THREAD_INFO_UPDATED            // type 21
+    case THREAD_UNREAD_COUNT_UPDATED    // type 31
+    case THREADS_LIST_CHANGE            //
+    case THREAD_PARTICIPANTS_LIST_CHANGE//
+    
+    /*
+//    case CreateThread           // type 1
+//    case LeaveThread            // type 9
+//    case AddParticipant         // type 11
+    case GetThreads             // type 14
+    case GetHistory             // type 15
+//    case RemovedFromThread      // type 17
+//    case RemoveParticipant      // type 18
+//    case Mute                   // type 19
+//    case Unmute                 // type 20
+//    case UpdateThreadInfo       // type 21
+    case ThreadInfoUpdated      // type 30
+    case GetThreadParticipants          // type 27
+//    case LastSeenUpdated                // type 31
+    case GetMessageDeliveryParticipants // type 32
+    case GetMessageSeenParticipants     // type 33
+    case SpamPvThread           // type 41
+    case SetRoleToUser          // type 42
+    case ClearHistory           // type 44
+    case SignalMessage          // type 46
+    
     case leaveParticipant     //= "Thread_Leave_Participant"
-    case addParticipant       //= "Thread_Add_Participant"
-    case removeParticipant    //= "Thread_Remove_Participant"
-    case mute                 //= "Thread_Mute"
-    case unmute               //= "Thread_Unmute"
     case infoUpdated          //= "Thread_Info_Updated"
     case removedFrom          //= "Thread_Removed_From"
     case unreadCountUpdate    //= "Thread_Unread_Count_Update"
     case lastActivityTime     //= "Thread_Last_Activity_Time"
+    case isTyping
+    */
 }
 
-public enum ContactEventTypes {
-    case getContact
-    case addContact
-    case removeContact
-    case blockContact
-    case unblockContact
-    
+public enum MessageEventTypes {
+    case MESSAGE_NEW        // type 2
+    case MESSAGE_SEND       // type 3
+    case MESSAGE_DELIVERY   // type 4
+    case MESSAGE_SEEN       // type 5
+    case MESSAGE_EDIT       // type 28
+    case MESSAGE_DELETE     // type 29
+}
+
+public enum FileUploadEventTypes {
+    case NOT_STARTED        //
+    case UPLOADING          //
+    case UPLOADED           //
+    case UPLOAD_ERROR       //
+    case UPLOAD_CANCELED    //
+}
+
+public enum SystemEventTypes {
+    case IS_TYPING      //
+    case STOP_TYPING
+}
+
+
+public enum BotEventTypes {
+    case BOT_MESSAGE    //
+}
+
+
+public enum SignalMessageType: Int {
+    case IS_TYPING      = 1
+    case RECORD_VOICE   = 2
+    case UPLOAD_PICTURE = 3
+    case UPLOAD_VIDEO   = 4
+    case UPLOAD_SOUND   = 5
+    case UPLOAD_FILE    = 6
 }
 
 
@@ -194,6 +281,26 @@ public enum DownloaUploadAction {
     case resume
 }
 
+
+
+public enum Roles: String {
+    case CHANGE_THREAD_INFO         = "change_thread_info"
+    case POST_CHANNEL_MESSAGE       = "post_channel_message"
+    case EDIT_MESSAGE_OF_OTHERS     = "edit_message_of_others"
+    case DELETE_MESSAGE_OF_OTHERS   = "delete_message_of_others"
+    case ADD_NEW_USER               = "add_new_user"
+    case REMOVE_USER                = "remove_user"
+    case ADD_RULE_TO_USER           = "add_rule_to_user"
+    case REMOVE_ROLE_FROM_USER      = "remove_role_from_user"
+    case READ_THREAD                = "read_thread"
+    case EDIT_THREAD                = "edit_thread"
+    case THREAD_ADMIN               = "thread_admin"
+}
+
+public enum RoleOperations: String {
+    case Add    = "add"
+    case Remove = "remove"
+}
 
 
 //let messageIdsList: [Int] = params["content"].arrayObject! as! [Int]
@@ -214,9 +321,9 @@ public enum DownloaUploadAction {
 //    if let uniqueId = params["uniqueId"].string {
 //        sendMessageParams["uniqueId"] = JSON(uniqueId)
 //    }
-//    if let metaData = params["metaData"].arrayObject {
-//        let metaDataStr = "\(metaData)"
-//        sendMessageParams["metaData"] = JSON(metaDataStr)
+//    if let metadata = params["metadata"].arrayObject {
+//        let metadataStr = "\(metadata)"
+//        sendMessageParams["metadata"] = JSON(metadataStr)
 //    }
 //    sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: SendMessageCallbacks(), deliverCallback: SendMessageCallbacks(), seenCallback: SendMessageCallbacks()) { (theUniqueId) in
 //        uniqueIdsList.append(theUniqueId)

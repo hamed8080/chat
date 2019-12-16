@@ -6,7 +6,8 @@
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 
-import Foundation
+import Alamofire
+import SwiftyJSON
 
 open class GetFileRequestModel {
     
@@ -21,6 +22,15 @@ open class GetFileRequestModel {
         self.fileId         = fileId
         self.downloadable   = downloadable
         self.hashCode       = hashCode
+    }
+    
+    func convertContentToParameters() -> Parameters {
+        var parameters: Parameters = ["hashCode":   self.hashCode,
+                                      "fileId":     self.fileId]
+        if let theDownloadable = self.downloadable {
+            parameters["downloadable"] = JSON(theDownloadable)
+        }
+        return parameters
     }
     
 }
