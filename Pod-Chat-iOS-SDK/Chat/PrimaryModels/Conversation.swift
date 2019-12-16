@@ -56,6 +56,7 @@ open class Conversation {
     public let lastSeenMessageId:               Int?
     public let lastSeenMessageNanos:            UInt?
     public let lastSeenMessageTime:             UInt?
+    public let mentioned:                       Bool?
     public let metadata:                        String?
     public let mute:                            Bool?
     public let participantCount:                Int?
@@ -66,6 +67,7 @@ open class Conversation {
     public let partnerLastSeenMessageId:        Int?
     public let partnerLastSeenMessageNanos:     UInt?
     public let partnerLastSeenMessageTime:      UInt?
+    public let pin:                             Bool?
     public let time:                            UInt?
     public let title:                           String?
     public let type:                            Int?
@@ -90,6 +92,7 @@ open class Conversation {
         self.lastSeenMessageId              = messageContent["lastSeenMessageId"].int
         self.lastSeenMessageNanos           = messageContent["lastSeenMessageNanos"].uInt
         self.lastSeenMessageTime            = messageContent["lastSeenMessageTime"].uInt
+        self.mentioned                      = messageContent["mentioned"].bool
         self.metadata                       = messageContent["metadata"].string
         self.mute                           = messageContent["mute"].bool
         self.participantCount               = messageContent["participantCount"].int
@@ -100,6 +103,7 @@ open class Conversation {
         self.partnerLastSeenMessageId           = messageContent["partnerLastSeenMessageId"].int
         self.partnerLastSeenMessageNanos        = messageContent["partnerLastSeenMessageNanos"].uInt
         self.partnerLastSeenMessageTime         = messageContent["partnerLastSeenMessageTime"].uInt
+        self.pin                            = messageContent["pin"].bool
         self.time                           = messageContent["time"].uInt
         self.title                          = messageContent["title"].string
         self.type                           = messageContent["type"].int
@@ -138,6 +142,7 @@ open class Conversation {
                 lastSeenMessageId:      Int?,
                 lastSeenMessageNanos:   UInt?,
                 lastSeenMessageTime:    UInt?,
+                mentioned:              Bool?,
                 metadata:               String?,
                 mute:                   Bool?,
                 participantCount:       Int?,
@@ -148,6 +153,7 @@ open class Conversation {
                 partnerLastSeenMessageId:       Int?,
                 partnerLastSeenMessageNanos:    UInt?,
                 partnerLastSeenMessageTime:     UInt?,
+                pin:            Bool?,
                 time:           UInt?,
                 title:          String?,
                 type:           Int?,
@@ -170,6 +176,7 @@ open class Conversation {
         self.lastSeenMessageId      = lastSeenMessageId
         self.lastSeenMessageNanos   = lastSeenMessageNanos
         self.lastSeenMessageTime    = lastSeenMessageTime
+        self.mentioned              = mentioned
         self.metadata               = metadata
         self.mute                   = mute
         self.participantCount       = participantCount
@@ -180,6 +187,7 @@ open class Conversation {
         self.partnerLastSeenMessageId       = partnerLastSeenMessageId
         self.partnerLastSeenMessageNanos    = partnerLastSeenMessageNanos
         self.partnerLastSeenMessageTime     = partnerLastSeenMessageTime
+        self.pin            = pin
         self.time           = time
         self.title          = title
         self.type           = type
@@ -206,6 +214,7 @@ open class Conversation {
         self.lastSeenMessageId      = theConversation.lastSeenMessageId
         self.lastSeenMessageNanos   = theConversation.lastSeenMessageNanos
         self.lastSeenMessageTime    = theConversation.lastSeenMessageTime
+        self.mentioned              = theConversation.mentioned
         self.metadata               = theConversation.metadata
         self.mute                   = theConversation.mute
         self.participantCount       = theConversation.participantCount
@@ -216,6 +225,7 @@ open class Conversation {
         self.partnerLastSeenMessageId       = theConversation.partnerLastSeenMessageId
         self.partnerLastSeenMessageNanos    = theConversation.partnerLastSeenMessageNanos
         self.partnerLastSeenMessageTime     = theConversation.partnerLastSeenMessageTime
+        self.pin            = theConversation.pin
         self.time           = theConversation.time
         self.title          = theConversation.title
         self.type           = theConversation.type
@@ -255,6 +265,7 @@ open class Conversation {
                             "lastSeenMessageId":            lastSeenMessageId ?? NSNull(),
                             "lastSeenMessageNanos":         lastSeenMessageNanos ?? NSNull(),
                             "lastSeenMessageTime":          lastSeenMessageTime ?? NSNull(),
+                            "mentioned":                    mentioned ?? NSNull(),
                             "metadata":                     metadata ?? NSNull(),
                             "mute":                         mute ?? NSNull(),
                             "participantCount":             participantCount ?? NSNull(),
@@ -265,6 +276,7 @@ open class Conversation {
                             "partnerLastSeenMessageId":     partnerLastSeenMessageId ?? NSNull(),
                             "partnerLastSeenMessageNanos":  partnerLastSeenMessageNanos ?? NSNull(),
                             "partnerLastSeenMessageTime":   partnerLastSeenMessageTime ?? NSNull(),
+                            "pin":                          pin ?? NSNull(),
                             "time":                         time ?? NSNull(),
                             "title":                        title ?? NSNull(),
                             "type":                         type ?? NSNull(),

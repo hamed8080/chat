@@ -57,7 +57,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_HISTORY.rawValue,
                                             content:            "\(getHistoryInput.convertContentToJSON())",
-                                            metaData:           nil,
+                                            metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
                                             subjectId:          getHistoryInput.threadId,
@@ -147,7 +147,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.CLEAR_HISTORY.rawValue,
                                             content:            "\(clearHistoryInput.convertContentToJSON())",
-                                            metaData:           nil,
+                                            metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
                                             subjectId:          clearHistoryInput.threadId,
@@ -217,7 +217,7 @@ extension Chat {
          */
         if enableCache {
             let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(content:          sendTextMessageInput.content,
-                                                                          metaData:         sendTextMessageInput.metaData,
+                                                                          metadata:         sendTextMessageInput.metadata,
                                                                           repliedTo:        sendTextMessageInput.repliedTo,
                                                                           systemMetadata:   sendTextMessageInput.systemMetadata,
                                                                           threadId:         sendTextMessageInput.threadId,
@@ -230,7 +230,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.MESSAGE.rawValue,
                                             content:            messageTxtContent,
-                                            metaData:           (sendTextMessageInput.metaData != nil) ? "\(sendTextMessageInput.metaData!)" : nil,
+                                            metadata:           (sendTextMessageInput.metadata != nil) ? "\(sendTextMessageInput.metadata!)" : nil,
                                             repliedTo:          sendTextMessageInput.repliedTo,
                                             systemMetadata:     (sendTextMessageInput.systemMetadata != nil) ? "\(sendTextMessageInput.systemMetadata!)" : nil,
                                             subjectId:          sendTextMessageInput.threadId,
@@ -293,7 +293,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.BOT_MESSAGE.rawValue,
                                             content:            messageTxtContent,
-                                            metaData:           "\(sendInterActiveMessageInput.metaData)",
+                                            metadata:           "\(sendInterActiveMessageInput.metadata)",
                                             repliedTo:          nil,
                                             systemMetadata:     (sendInterActiveMessageInput.systemMetadata != nil) ? "\(sendInterActiveMessageInput.systemMetadata!)" : nil,
                                             subjectId:          sendInterActiveMessageInput.messageId,
@@ -354,7 +354,7 @@ extension Chat {
          */
         if enableCache {
             let messageObjectToSendToQueue = QueueOfWaitEditMessagesModel(content:      editMessageInput.content,
-                                                                          metaData:     editMessageInput.metaData,
+                                                                          metadata:     editMessageInput.metadata,
                                                                           repliedTo:    editMessageInput.repliedTo,
                                                                           messageId:    editMessageInput.messageId,
                                                                           threadId:     nil,
@@ -367,7 +367,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.EDIT_MESSAGE.rawValue,
                                             content:            messageTxtContent,
-                                            metaData:           (editMessageInput.metaData != nil) ? "\(editMessageInput.metaData!)" : nil,
+                                            metadata:           (editMessageInput.metadata != nil) ? "\(editMessageInput.metadata!)" : nil,
                                             repliedTo:          editMessageInput.repliedTo,
                                             systemMetadata:     nil,
                                             subjectId:          editMessageInput.messageId,
@@ -433,7 +433,7 @@ extension Chat {
          */
         if enableCache {
             let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(content:          replyMessageInput.content,
-                                                                          metaData:         replyMessageInput.metaData,
+                                                                          metadata:         replyMessageInput.metadata,
                                                                           repliedTo:        replyMessageInput.repliedTo,
                                                                           systemMetadata:   nil,
                                                                           threadId:         replyMessageInput.subjectId,
@@ -446,7 +446,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.MESSAGE.rawValue,
                                             content:            messageTxtContent,
-                                            metaData:           (replyMessageInput.metaData != nil) ? "\(replyMessageInput.metaData!)" : nil,
+                                            metadata:           (replyMessageInput.metadata != nil) ? "\(replyMessageInput.metadata!)" : nil,
                                             repliedTo:          replyMessageInput.repliedTo,
                                             systemMetadata:     nil,
                                             subjectId:          replyMessageInput.subjectId,
@@ -509,7 +509,7 @@ extension Chat {
             for (index, item) in forwardMessageInput.messageIds.enumerated() {
                 let messageObjectToSendToQueue = QueueOfWaitForwardMessagesModel(//messageIds:    [item],
                                                                                  messageId:     item,
-                                                                                 metaData:      forwardMessageInput.metaData,
+                                                                                 metadata:      forwardMessageInput.metadata,
                                                                                  repliedTo:     forwardMessageInput.repliedTo,
                                                                                  threadId:      forwardMessageInput.threadId,
                                                                                  typeCode:      forwardMessageInput.typeCode,
@@ -525,7 +525,7 @@ extension Chat {
         // ToDo: upward code must be delete and this code will be the correct implementation
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.FORWARD_MESSAGE.rawValue,
                                             content:            "\(forwardMessageInput.messageIds)",
-                                            metaData:           (forwardMessageInput.metaData != nil) ? "\(forwardMessageInput.metaData!)" : nil,
+                                            metadata:           (forwardMessageInput.metadata != nil) ? "\(forwardMessageInput.metadata!)" : nil,
                                             repliedTo:          forwardMessageInput.repliedTo,
                                             systemMetadata:     nil,
                                             subjectId:          forwardMessageInput.threadId,
@@ -595,7 +595,7 @@ extension Chat {
             let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      sendFileMessageInput.content,
                                                                           fileName:     sendFileMessageInput.fileName,
                                                                           imageName:    sendFileMessageInput.imageName,
-                                                                          metaData:     sendFileMessageInput.metaData,
+                                                                          metadata:     sendFileMessageInput.metadata,
                                                                           repliedTo:    sendFileMessageInput.repliedTo,
                                                                           threadId:     sendFileMessageInput.threadId,
                                                                           xC:           sendFileMessageInput.xC,
@@ -614,10 +614,10 @@ extension Chat {
         var fileExtension:  String  = ""
         let uploadUniqueId = generateUUID()
         
-        var metaData: JSON = [:]
-        metaData["file"]["originalName"] = JSON(sendFileMessageInput.fileName ?? sendFileMessageInput.imageName ?? "")
-        metaData["file"]["mimeType"]    = JSON("")
-        metaData["file"]["size"]        = JSON(fileSize)
+        var metadata: JSON = [:]
+        metadata["file"]["originalName"] = JSON(sendFileMessageInput.fileName ?? sendFileMessageInput.imageName ?? "")
+        metadata["file"]["mimeType"]    = JSON("")
+        metadata["file"]["size"]        = JSON(fileSize)
         
         if let image = sendFileMessageInput.imageToSend {
             let uploadRequest = UploadImageRequestModel(dataToSend:         image,
@@ -649,9 +649,9 @@ extension Chat {
                 imageMetadata["actualHeight"]    = JSON(myResponse.uploadImage!.actualHeight ?? 0)
                 imageMetadata["actualWidth"]     = JSON(myResponse.uploadImage!.actualWidth ?? 0)
                 imageMetadata["hashCode"]        = JSON(myResponse.uploadImage!.hashCode ?? "")
-                metaData["file"] = imageMetadata
+                metadata["file"] = imageMetadata
                 
-                sendMessage(withMetaData: metaData)
+                sendMessage(withMetadata: metadata)
             }
             
         } else if let file = sendFileMessageInput.fileToSend {
@@ -675,9 +675,9 @@ extension Chat {
                 fileMetadata["id"]          = JSON(myResponse.uploadFile!.id ?? 0)
                 fileMetadata["name"]        = JSON(myResponse.uploadFile!.name ?? "")
                 fileMetadata["hashCode"]    = JSON(myResponse.uploadFile!.hashCode ?? "")
-                metaData["file"] = fileMetadata
+                metadata["file"] = fileMetadata
                 
-                sendMessage(withMetaData: metaData)
+                sendMessage(withMetadata: metadata)
             }
             
         }
@@ -691,11 +691,11 @@ extension Chat {
         
         
         // this will call when all data were uploaded and it will sends the textMessage
-        func sendMessage(withMetaData: JSON) {
+        func sendMessage(withMetadata: JSON) {
             let sendMessageParamModel = SendTextMessageRequestModel(content:        sendFileMessageInput.content ?? "",
-                                                                    metaData:       withMetaData,
+                                                                    metadata:       withMetadata,
                                                                     repliedTo:      sendFileMessageInput.repliedTo,
-                                                                    systemMetadata: sendFileMessageInput.metaData,
+                                                                    systemMetadata: sendFileMessageInput.metadata,
                                                                     threadId:       sendFileMessageInput.threadId,
                                                                     typeCode:       sendFileMessageInput.typeCode ?? generalTypeCode,
                                                                     uniqueId:       messageUniqueId)
@@ -752,7 +752,7 @@ extension Chat {
             let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      replyFileMessageInput.content,
                                                                           fileName:     replyFileMessageInput.fileName,
                                                                           imageName:    replyFileMessageInput.imageName,
-                                                                          metaData:     replyFileMessageInput.metaData,
+                                                                          metadata:     replyFileMessageInput.metadata,
                                                                           repliedTo:    replyFileMessageInput.repliedTo,
                                                                           threadId:     replyFileMessageInput.threadId,
                                                                           xC:           replyFileMessageInput.xC,
@@ -770,10 +770,10 @@ extension Chat {
         var fileSize:       Int     = 0
         var fileExtension:  String  = ""
         
-        var metaData: JSON = [:]
-        metaData["file"]["originalName"] = JSON(replyFileMessageInput.fileName ?? replyFileMessageInput.imageName ?? "")
-        metaData["file"]["mimeType"]    = JSON("")
-        metaData["file"]["size"]        = JSON(fileSize)
+        var metadata: JSON = [:]
+        metadata["file"]["originalName"] = JSON(replyFileMessageInput.fileName ?? replyFileMessageInput.imageName ?? "")
+        metadata["file"]["mimeType"]    = JSON("")
+        metadata["file"]["size"]        = JSON(fileSize)
         
         if let image = replyFileMessageInput.imageToSend {
             let uploadRequest = UploadImageRequestModel(dataToSend:         image,
@@ -795,16 +795,16 @@ extension Chat {
             }) { (response) in
                 let myResponse: UploadImageModel = response as! UploadImageModel
                 let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_IMAGE.rawValue)?imageId=\(myResponse.uploadImage!.id ?? 0)&hashCode=\(myResponse.uploadImage!.hashCode ?? "")"
-                metaData["file"]["link"]            = JSON(link)
-                metaData["file"]["id"]              = JSON(myResponse.uploadImage!.id ?? 0)
-                metaData["file"]["name"]            = JSON(myResponse.uploadImage!.name ?? "")
-                metaData["file"]["height"]          = JSON(myResponse.uploadImage!.height ?? 0)
-                metaData["file"]["width"]           = JSON(myResponse.uploadImage!.width ?? 0)
-                metaData["file"]["actualHeight"]    = JSON(myResponse.uploadImage!.actualHeight ?? 0)
-                metaData["file"]["actualWidth"]     = JSON(myResponse.uploadImage!.actualWidth ?? 0)
-                metaData["file"]["hashCode"]        = JSON(myResponse.uploadImage!.hashCode ?? "")
+                metadata["file"]["link"]            = JSON(link)
+                metadata["file"]["id"]              = JSON(myResponse.uploadImage!.id ?? 0)
+                metadata["file"]["name"]            = JSON(myResponse.uploadImage!.name ?? "")
+                metadata["file"]["height"]          = JSON(myResponse.uploadImage!.height ?? 0)
+                metadata["file"]["width"]           = JSON(myResponse.uploadImage!.width ?? 0)
+                metadata["file"]["actualHeight"]    = JSON(myResponse.uploadImage!.actualHeight ?? 0)
+                metadata["file"]["actualWidth"]     = JSON(myResponse.uploadImage!.actualWidth ?? 0)
+                metadata["file"]["hashCode"]        = JSON(myResponse.uploadImage!.hashCode ?? "")
                 
-                sendMessage(withMetaData: metaData)
+                sendMessage(withMetadata: metadata)
             }
             
         } else if let file = replyFileMessageInput.fileToSend {
@@ -823,12 +823,12 @@ extension Chat {
             }) { (response) in
                 let myResponse: UploadFileModel = response as! UploadFileModel
                 let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_FILE.rawValue)?fileId=\(myResponse.uploadFile!.id ?? 0)&hashCode=\(myResponse.uploadFile!.hashCode ?? "")"
-                metaData["file"]["link"]            = JSON(link)
-                metaData["file"]["id"]              = JSON(myResponse.uploadFile!.id ?? 0)
-                metaData["file"]["name"]            = JSON(myResponse.uploadFile!.name ?? "")
-                metaData["file"]["hashCode"]        = JSON(myResponse.uploadFile!.hashCode ?? "")
+                metadata["file"]["link"]            = JSON(link)
+                metadata["file"]["id"]              = JSON(myResponse.uploadFile!.id ?? 0)
+                metadata["file"]["name"]            = JSON(myResponse.uploadFile!.name ?? "")
+                metadata["file"]["hashCode"]        = JSON(myResponse.uploadFile!.hashCode ?? "")
                 
-                sendMessage(withMetaData: metaData)
+                sendMessage(withMetadata: metadata)
             }
         }
         
@@ -841,11 +841,11 @@ extension Chat {
         
         
         // this will call when all data were uploaded and it will sends the textMessage
-        func sendMessage(withMetaData: JSON) {
+        func sendMessage(withMetadata: JSON) {
             let sendMessageParamModel = SendTextMessageRequestModel(content:        replyFileMessageInput.content ?? "",
-                                                                    metaData:       withMetaData,
+                                                                    metadata:       withMetadata,
                                                                     repliedTo:      replyFileMessageInput.repliedTo,
-                                                                    systemMetadata: replyFileMessageInput.metaData,
+                                                                    systemMetadata: replyFileMessageInput.metadata,
                                                                     threadId:       replyFileMessageInput.threadId,
                                                                     typeCode:       replyFileMessageInput.typeCode ?? generalTypeCode,
                                                                     uniqueId:       messageUniqueId)
@@ -911,7 +911,7 @@ extension Chat {
                                                                wC:          sendLocationMessageRequest.sendMessageWC,
                                                                threadId:    sendLocationMessageRequest.sendMessageThreadId,
                                                                content:     sendLocationMessageRequest.sendMessageContent,
-                                                               metaData:    sendLocationMessageRequest.sendMessageMetaData,
+                                                               metadata:    sendLocationMessageRequest.sendMessageMetadata,
                                                                repliedTo:   sendLocationMessageRequest.sendMessageRepliedTo,
                                                                fileToSend:  nil,
                                                                imageToSend: (imageData as! Data),
@@ -967,7 +967,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.DELETE_MESSAGE.rawValue,
                                             content:            "\(content)",
-                                            metaData:           nil,
+                                            metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
                                             subjectId:          deleteMessageInput.subjectId,
@@ -1018,7 +1018,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.DELETE_MESSAGE.rawValue,
                                             content:            "\(deleteMessageInput.convertContentToJSON())",
-                                            metaData:           nil,
+                                            metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
                                             subjectId:          nil,
@@ -1125,7 +1125,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_MESSAGE_DELEVERY_PARTICIPANTS.rawValue,
                                             content:            "\(messageDeliveryListInput.convertContentToJSON())",
-                                            metaData:           nil,
+                                            metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
                                             subjectId:          nil,
@@ -1177,7 +1177,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_MESSAGE_SEEN_PARTICIPANTS.rawValue,
                                             content:            "\(messageSeenListInput.convertContentToJSON())",
-                                            metaData:           nil,
+                                            metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
                                             subjectId:          nil,
@@ -1308,7 +1308,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.SYSTEM_MESSAGE.rawValue,
                                             content:            "\(content)",
-                                            metaData:           nil,
+                                            metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
                                             subjectId:          input.threadId,

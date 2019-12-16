@@ -22,7 +22,7 @@ open class SendFileMessageRequestModel {
     public let threadId:    Int
     
     public let content:     String?
-    public let metaData:    JSON?
+    public let metadata:    JSON?
     public let repliedTo:   Int?
     
     public let fileToSend:      Data?
@@ -39,7 +39,7 @@ open class SendFileMessageRequestModel {
                 wC:             String?,
                 threadId:       Int,
                 content:        String?,
-                metaData:       JSON?,
+                metadata:       JSON?,
                 repliedTo:      Int?,
                 fileToSend:     Data?,
                 imageToSend:    Data?,
@@ -55,7 +55,7 @@ open class SendFileMessageRequestModel {
         self.threadId       = threadId
         
         self.content        = content
-        self.metaData       = metaData
+        self.metadata       = metadata
         self.repliedTo      = repliedTo
         
         self.fileToSend     = fileToSend

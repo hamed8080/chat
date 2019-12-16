@@ -20,6 +20,7 @@ public class CMMessage: NSManagedObject {
         var editable:       Bool?
         var edited:         Bool?
         var id:             Int?
+        var mentioned:      Bool?
         var ownerId:        Int?
         var previousId:     Int?
         var seen:           Bool?
@@ -38,6 +39,9 @@ public class CMMessage: NSManagedObject {
             }
             if let id2 = self.id as? Int {
                 id = id2
+            }
+            if let mentioned2 = self.mentioned as? Bool {
+                mentioned = mentioned2
             }
             if let ownerId2 = self.ownerId as? Int {
                 ownerId = ownerId2
@@ -60,24 +64,26 @@ public class CMMessage: NSManagedObject {
         }
         
         func createMessageModel() -> Message {
-            let messageModel = Message(threadId: threadId,
-                                       delivered: delivered,
-                                       editable: editable,
-                                       edited: edited,
-                                       deletable: deletable,
-                                       id: id,
-                                       message: self.message,
-                                       messageType: self.messageType,
-                                       metaData: self.metaData,
-                                       ownerId: ownerId,
-                                       previousId: previousId,
-                                       seen: seen,
-                                       time: time,
-                                       uniqueId: self.uniqueId,
-                                       conversation: conversation?.convertCMConversationToConversationObject(),
-                                       forwardInfo: forwardInfo?.convertCMForwardInfoToForwardInfoObject(),
-                                       participant: participant?.convertCMParticipantToParticipantObject(),
-                                       replyInfo: replyInfo?.convertCMReplyInfoToReplyInfoObject())
+            let messageModel = Message(threadId:        threadId,
+                                       deletable:       deletable,
+                                       delivered:       delivered,
+                                       editable:        editable,
+                                       edited:          edited,
+                                       id:              id,
+                                       mentioned:       mentioned,
+                                       message:         self.message,
+                                       messageType:     self.messageType,
+                                       metadata:        self.metadata,
+                                       ownerId:         ownerId,
+                                       previousId:      previousId,
+                                       seen:            seen,
+                                       systemMetadata:  self.systemMetadata,
+                                       time:            time,
+                                       uniqueId:        self.uniqueId,
+                                       conversation:    conversation?.convertCMConversationToConversationObject(),
+                                       forwardInfo:     forwardInfo?.convertCMForwardInfoToForwardInfoObject(),
+                                       participant:     participant?.convertCMParticipantToParticipantObject(),
+                                       replyInfo:       replyInfo?.convertCMReplyInfoToReplyInfoObject())
             return messageModel
         }
         

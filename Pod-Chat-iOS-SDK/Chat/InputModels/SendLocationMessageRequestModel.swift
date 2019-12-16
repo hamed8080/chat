@@ -29,7 +29,7 @@ open class SendLocationMessageRequestModel {
     public let sendMessageThreadId:    Int
     
     public let sendMessageContent:     String?
-    public let sendMessageMetaData:    JSON?
+    public let sendMessageMetadata:    JSON?
     public let sendMessageRepliedTo:   Int?
     public let sendMessageTypeCode:    String?
     
@@ -49,7 +49,7 @@ open class SendLocationMessageRequestModel {
                 sendMessageWC:          String?,
                 sendMessageThreadId:    Int,
                 sendMessageContent:     String?,
-                sendMessageMetaData:    JSON?,
+                sendMessageMetadata:    JSON?,
                 sendMessageRepliedTo:   Int?,
                 sendMessageTypeCode:    String?,
                 typeCode:               String?,
@@ -70,7 +70,7 @@ open class SendLocationMessageRequestModel {
         self.sendMessageThreadId    = sendMessageThreadId
         
         self.sendMessageContent     = sendMessageContent
-        self.sendMessageMetaData    = sendMessageMetaData
+        self.sendMessageMetadata    = sendMessageMetadata
         self.sendMessageRepliedTo   = sendMessageRepliedTo
         self.sendMessageTypeCode    = sendMessageTypeCode
         self.typeCode               = typeCode

@@ -17,7 +17,7 @@ public class QueueOfFileMessages: NSManagedObject {
         
         var fileToSend:     Data?
         var imageToSend:    Data?
-        var metaData:       JSON?
+        var metadata:       JSON?
         var repliedTo:      Int?
 //        var subjectId:      Int?
         var threadId:       Int?
@@ -30,8 +30,8 @@ public class QueueOfFileMessages: NSManagedObject {
                 imageToSend = imageToSend2
             }
             
-            self.metaData?.retrieveJSONfromTransformableData(completion: { (returnedJSON) in
-                metaData = returnedJSON
+            self.metadata?.retrieveJSONfromTransformableData(completion: { (returnedJSON) in
+                metadata = returnedJSON
             })
             
             if let repliedTo2 = self.repliedTo as? Int {
@@ -49,7 +49,7 @@ public class QueueOfFileMessages: NSManagedObject {
             let queueOfWaitFileMessagesModel = QueueOfWaitFileMessagesModel(content:        self.content,
                                                                             fileName:       self.fileName,
                                                                             imageName:      self.imageName,
-                                                                            metaData:       metaData,
+                                                                            metadata:       metadata,
                                                                             repliedTo:      repliedTo,
 //                                                                            subjectId:  subjectId,
                                                                             threadId:       threadId,

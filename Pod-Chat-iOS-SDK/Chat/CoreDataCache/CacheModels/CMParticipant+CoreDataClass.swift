@@ -16,6 +16,7 @@ public class CMParticipant: NSManagedObject {
     public func convertCMParticipantToParticipantObject() -> Participant {
         
         var admin:              Bool?
+        var auditor:            Bool?
         var blocked:            Bool?
         var contactId:          Int?
         var coreUserId:         Int?
@@ -30,6 +31,9 @@ public class CMParticipant: NSManagedObject {
         func createVariables() {
             if let admin2 = self.admin as? Bool {
                 admin = admin2
+            }
+            if let auditor2 = self.auditor as? Bool {
+                auditor = auditor2
             }
             if let blocked2 = self.blocked as? Bool {
                 blocked = blocked2
@@ -65,14 +69,19 @@ public class CMParticipant: NSManagedObject {
         
         func createMessageModel() -> Participant {
             let participantModel = Participant(admin:           admin,
+                                               auditor:         auditor,
                                                blocked:         blocked,
                                                cellphoneNumber: self.cellphoneNumber,
+                                               contactFirstName: self.contactFirstName,
                                                contactId:       contactId,
+                                               contactName:     self.contactName,
+                                               contactLastName: self.contactLastName,
                                                coreUserId:      coreUserId,
                                                email:           self.email,
                                                firstName:       self.firstName,
                                                id:              id,
                                                image:           self.image,
+                                               keyId:           self.keyId,
                                                lastName:        self.lastName,
                                                myFriend:        myFriend,
                                                name:            self.name,
@@ -80,7 +89,8 @@ public class CMParticipant: NSManagedObject {
                                                online:          online,
                                                receiveEnable:   receiveEnable,
                                                roles:           roles,
-                                               sendEnable:      sendEnable)
+                                               sendEnable:      sendEnable,
+                                               username:        self.username)
             
             return participantModel
         }

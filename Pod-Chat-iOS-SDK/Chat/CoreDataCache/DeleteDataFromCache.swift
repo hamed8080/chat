@@ -14,6 +14,7 @@ import CoreData
 
 extension Cache {
     
+    // MARK: - delete UserInfo:
     /// Delete UserInfo:
     /// by calling this method, it will delete the CMUser that had been saved on the cache
     ///
@@ -46,6 +47,7 @@ extension Cache {
     
     
     
+    // MARK: - delete Contacts:
     /// Delete Contacts by ContactIds:
     /// by calling this method, it will delete the CMContact that had been saved on the cache
     ///
@@ -149,6 +151,7 @@ extension Cache {
     
     
     
+    // MARK: - delete Participants:
     /// Delete Participants by their ParticipantsIds on a specific thread:
     /// by calling this method, it will delete the CMParticipant that had not been updated for specific timeStamp.
     ///
@@ -178,7 +181,7 @@ extension Cache {
                         for (index, participant) in result.first!.participants!.enumerated() {
                             for id in participantIds {
                                 if (Int(exactly: participant.id ?? 0) == id) {
-                                    result.first?.removeFromParticipants(at: index)
+                                    result.first!.removeFromParticipants(at: index)
                                     deleteAndSave(object: participant, withMessage: "Delete CMParticipant Object from Thread")
                                 }
                             }
@@ -285,7 +288,7 @@ extension Cache {
                     
                     for (index, participant) in result.first!.participants!.enumerated() {
                         if ((participant.time as! Int) <= xTime) {
-                            result.first?.removeFromParticipants(at: index)
+                            result.first!.removeFromParticipants(at: index)
                             deleteAndSave(object: participant, withMessage: "Delete CMParticipant Object from Thread")
                         }
                     }
@@ -334,7 +337,7 @@ extension Cache {
     */
     
     
-    
+    // MARK: - delete Threads:
     /// Delete Threads by their ThreadIds:
     /// by calling this method, we will delete specific CMConversation
     ///
@@ -422,6 +425,7 @@ extension Cache {
     
     
     
+    // MARK: - delete Messages:
     // ToDo: make it better, because it calls another function t delete messages (one more query on the cache)
     /// Delete Message:
     /// by calling this method, we will delete specific CMMessages
@@ -567,6 +571,7 @@ extension Cache {
     
     
     
+    // MARK: - delete MessageGaps:
     /// Delete MessageGaps:
     /// by calling this method, we will delete MessageGaps
     ///
@@ -1067,7 +1072,7 @@ extension Cache {
     }
     
     
-    
+    // MARK: - delete AllCacheData:
     /// Delete Everything fromCache:
     /// by calling this method, it will just Remove everything From CacheDB.
     ///

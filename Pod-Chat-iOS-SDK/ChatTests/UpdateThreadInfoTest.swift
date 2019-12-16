@@ -112,14 +112,14 @@
 //            }
 //            
 //            let myExpectationUniqueId = self.expectation(description: "Update Thread Info")
-//            let metaData: JSON = ["id": 1101,
+//            let metadata: JSON = ["id": 1101,
 //                                  "owner": "masoudmanson",
 //                                  "name": "Masoud"]
 //            let paramsToSend: JSON = ["subjectId": 1101,
 //                                      "image": "https://static2.farakav.com/files/pictures/thumb/01330672.jpg",
 //                                      "description": "توضیحات ترد",
 //                                      "title": "عنوان ترد",
-//                                      "metadata": metaData]
+//                                      "metadata": metadata]
 //            self.myChatObject?.updateThreadInfo(params: paramsToSend, uniqueId: { (updateThreadInfoUniqueId) in
 //                log.debug("Update thread info unique id is: \n|| \(updateThreadInfoUniqueId)", context: "Test")
 //            }, completion: { (response) in

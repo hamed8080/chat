@@ -321,9 +321,9 @@ public enum RoleOperations: String {
 //    if let uniqueId = params["uniqueId"].string {
 //        sendMessageParams["uniqueId"] = JSON(uniqueId)
 //    }
-//    if let metaData = params["metaData"].arrayObject {
-//        let metaDataStr = "\(metaData)"
-//        sendMessageParams["metaData"] = JSON(metaDataStr)
+//    if let metadata = params["metadata"].arrayObject {
+//        let metadataStr = "\(metadata)"
+//        sendMessageParams["metadata"] = JSON(metadataStr)
 //    }
 //    sendMessageWithCallback(params: sendMessageParams, callback: nil, sentCallback: SendMessageCallbacks(), deliverCallback: SendMessageCallbacks(), seenCallback: SendMessageCallbacks()) { (theUniqueId) in
 //        uniqueIdsList.append(theUniqueId)

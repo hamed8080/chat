@@ -16,15 +16,15 @@ public class QueueOfTextMessages: NSManagedObject {
     
     public func convertQueueOfTextMessagesToQueueOfWaitTextMessagesModelObject() -> QueueOfWaitTextMessagesModel {
         
-        var metaData:       JSON?
+        var metadata:       JSON?
         var repliedTo:      Int?
         var threadId:       Int?
         var systemMetadata: JSON?
         
         func createVariables() {
             
-            self.metaData?.retrieveJSONfromTransformableData(completion: { (returnedJSON) in
-                metaData = returnedJSON
+            self.metadata?.retrieveJSONfromTransformableData(completion: { (returnedJSON) in
+                metadata = returnedJSON
             })
             
             if let repliedTo2 = self.repliedTo as? Int {
@@ -42,7 +42,7 @@ public class QueueOfTextMessages: NSManagedObject {
         
         func createQueueOfWaitTextMessagesModel() -> QueueOfWaitTextMessagesModel {
             let queueOfWaitTextMessagesModel = QueueOfWaitTextMessagesModel(content:        self.content,
-                                                                            metaData:       metaData,
+                                                                            metadata:       metadata,
                                                                             repliedTo:      repliedTo,
                                                                             systemMetadata: systemMetadata,
                                                                             threadId:       threadId,

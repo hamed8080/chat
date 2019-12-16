@@ -72,7 +72,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.USER_INFO.rawValue,
                                             content:            nil,
-                                            metaData:           nil,
+                                            metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
                                             subjectId:          nil,

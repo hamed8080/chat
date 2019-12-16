@@ -15,6 +15,7 @@ import SwiftyJSON
 extension Cache {
     
     
+    // MARK: - save UserInfo:
     /// Save UserInfo:
     /// by calling this function, it will save (or update) the UserInfo on the Cache.
     ///
@@ -74,6 +75,7 @@ extension Cache {
     
     
     
+    // MARK: - save Contact:
     /// Save Contact:
     /// by calling this function, it save (or update) contacts that comes from server, into the Cache.
     ///
@@ -99,6 +101,7 @@ extension Cache {
     
     
     
+    // MARK: - save PhoneBook Contact:
     /// Save PhoneBook Contact:
     /// by calling this function, it save (or update) PhoneContact that comes from users phone, into the Cache.
     ///
@@ -150,6 +153,7 @@ extension Cache {
     
     
     
+    // MARK: - save Thread:
     /// Save Thread:
     /// by calling this function, save (or update) Threads that comes from server, into the cache
     ///
@@ -175,6 +179,7 @@ extension Cache {
     
     
     
+    // MARK: - save ThreadParticipant:
     /// Save ThreadParticipant:
     /// by calling this function, save (or update) threadParticipants that comes from server into the cache
     ///
@@ -254,6 +259,7 @@ extension Cache {
     
     
     
+    // MARK: - save Message:
     /// Save Message:
     /// by calling this function, save (or update) Messages that comes from server, in the Cache.
     ///
@@ -731,6 +737,7 @@ extension Cache {
     }
     
     
+    
     /*
     public func saveMessageGap(threadId: Int, messageIds: [Int], messagePreviousIds: [Int]) {
         for (index, _) in messageIds.enumerated() {
@@ -740,6 +747,8 @@ extension Cache {
     */
     
     
+    
+    // MARK: - save ImageObject:
     // this function will save (or update) image response that comes from server, in the Cache.
     public func saveImageObject(imageInfo: ImageObject, imageData: Data) {
         // check if there is any information about This Image File in the cache
@@ -821,6 +830,8 @@ extension Cache {
     }
     
     
+    
+    // MARK: - save FileObject:
     // this function will save (or update) uploaded image response that comes from server, in the Cache.
     public func saveFileObject(fileInfo: FileObject, fileData: Data) {
         // check if there is any information about This Image File in the cache

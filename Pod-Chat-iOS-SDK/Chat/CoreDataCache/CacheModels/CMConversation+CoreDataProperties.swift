@@ -31,6 +31,7 @@ extension CMConversation {
     @NSManaged public var lastSeenMessageId:    NSNumber?
     @NSManaged public var lastSeenMessageNanos: NSNumber?
     @NSManaged public var lastSeenMessageTime:  NSNumber?
+    @NSManaged public var mentioned:            NSNumber?
     @NSManaged public var metadata:             String?
     @NSManaged public var mute:                 NSNumber?
     @NSManaged public var participantCount:     NSNumber?
@@ -41,6 +42,7 @@ extension CMConversation {
     @NSManaged public var partnerLastSeenMessageId:         NSNumber?
     @NSManaged public var partnerLastSeenMessageNanos:      NSNumber?
     @NSManaged public var partnerLastSeenMessageTime:       NSNumber?
+    @NSManaged public var pin:          NSNumber?
     @NSManaged public var time:         NSNumber?
     @NSManaged public var title:        String?
     @NSManaged public var type:         NSNumber?

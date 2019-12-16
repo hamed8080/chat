@@ -23,9 +23,9 @@ extension Cache {
         messageToSaveOnQueue.typeCode   = textMessage.typeCode
         messageToSaveOnQueue.uniqueId   = textMessage.uniqueId
         
-        if let metaData2 = textMessage.metaData {
-            NSObject.convertJSONtoTransformable(dataToStore: metaData2) { (data) in
-                messageToSaveOnQueue.metaData = data
+        if let metadata2 = textMessage.metadata {
+            NSObject.convertJSONtoTransformable(dataToStore: metadata2) { (data) in
+                messageToSaveOnQueue.metadata = data
             }
         }
         
@@ -59,10 +59,10 @@ extension Cache {
                     messageToSaveOnQueue.messageId  = editMessage.messageId as NSNumber?
                     messageToSaveOnQueue.typeCode   = editMessage.typeCode
                     messageToSaveOnQueue.uniqueId   = editMessage.uniqueId
-                    messageToSaveOnQueue.threadId   = result.first?.threadId
-                    if let metaData2 = editMessage.metaData {
-                        NSObject.convertJSONtoTransformable(dataToStore: metaData2) { (data) in
-                            messageToSaveOnQueue.metaData = data
+                    messageToSaveOnQueue.threadId   = result.first!.threadId
+                    if let metadata2 = editMessage.metadata {
+                        NSObject.convertJSONtoTransformable(dataToStore: metadata2) { (data) in
+                            messageToSaveOnQueue.metadata = data
                         }
                     }
                     // save function that will try to save changes that made on the Cache
@@ -85,9 +85,9 @@ extension Cache {
         messageToSaveOnQueue.typeCode   = forwardMessage.typeCode
         messageToSaveOnQueue.uniqueId   = forwardMessage.uniqueId
         
-        if let metaData2 = forwardMessage.metaData {
-            NSObject.convertJSONtoTransformable(dataToStore: metaData2) { (data) in
-                messageToSaveOnQueue.metaData = data
+        if let metadata2 = forwardMessage.metadata {
+            NSObject.convertJSONtoTransformable(dataToStore: metadata2) { (data) in
+                messageToSaveOnQueue.metadata = data
             }
         }
         
@@ -113,9 +113,9 @@ extension Cache {
         messageToSaveOnQueue.typeCode    = fileMessage.typeCode
         messageToSaveOnQueue.uniqueId    = fileMessage.uniqueId
         
-        if let metaData2 = fileMessage.metaData {
-            NSObject.convertJSONtoTransformable(dataToStore: metaData2) { (data) in
-                messageToSaveOnQueue.metaData = data
+        if let metadata2 = fileMessage.metadata {
+            NSObject.convertJSONtoTransformable(dataToStore: metadata2) { (data) in
+                messageToSaveOnQueue.metadata = data
             }
         }
         

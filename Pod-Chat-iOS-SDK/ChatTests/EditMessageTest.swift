@@ -78,7 +78,7 @@
 //    let reconnectOnClose        = true              // auto connect to socket after socket close
 //    
 //    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//    // MARK: - test with params: ["subjectId": 182, "content": "Hi", "metaData": ["id": 2341234132, "type": "BOT_MESSAGE", "owner": "Masoud"]]
+//    // MARK: - test with params: ["subjectId": 182, "content": "Hi", "metadata": ["id": 2341234132, "type": "BOT_MESSAGE", "owner": "Masoud"]]
 //    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //    func test_Edit_Message() {
 //        myChatObject = Chat(socketAddress: socketAddress,

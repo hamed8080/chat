@@ -36,6 +36,7 @@
         <attribute name="lastSeenMessageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="lastSeenMessageNanos" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="lastSeenMessageTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="mentioned" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="mute" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="participantCount" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
@@ -46,6 +47,7 @@
         <attribute name="partnerLastSeenMessageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="partnerLastSeenMessageNanos" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="partnerLastSeenMessageTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="pin" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="type" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
@@ -90,12 +92,14 @@
         <attribute name="editable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="edited" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="mentioned" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="message" optional="YES" attributeType="String"/>
         <attribute name="messageType" optional="YES" attributeType="String"/>
-        <attribute name="metaData" optional="YES" attributeType="String"/>
+        <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="ownerId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="previousId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="seen" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="systemMetadata" optional="YES" attributeType="String"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="uniqueId" optional="YES" attributeType="String"/>
@@ -107,14 +111,19 @@
     </entity>
     <entity name="CMParticipant" representedClassName=".CMParticipant" syncable="YES">
         <attribute name="admin" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="auditor" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="blocked" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="cellphoneNumber" optional="YES" attributeType="String"/>
+        <attribute name="contactFirstName" optional="YES" attributeType="String"/>
         <attribute name="contactId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="contactLastName" optional="YES" attributeType="String"/>
+        <attribute name="contactName" optional="YES" attributeType="String"/>
         <attribute name="coreUserId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="email" optional="YES" attributeType="String"/>
         <attribute name="firstName" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="image" optional="YES" attributeType="String"/>
+        <attribute name="keyId" optional="YES" attributeType="String"/>
         <attribute name="lastName" optional="YES" attributeType="String"/>
         <attribute name="myFriend" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
@@ -125,6 +134,7 @@
         <attribute name="sendEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="username" optional="YES" attributeType="String"/>
         <relationship name="dummyAdmins" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ThreadAdmins" inverseName="participants" inverseEntity="ThreadAdmins"/>
         <relationship name="dummyConversationInviter" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="inviter" inverseEntity="CMConversation"/>
         <relationship name="dummyConversationParticipants" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="participants" inverseEntity="CMConversation"/>
@@ -180,7 +190,7 @@
     <entity name="QueueOfEditMessages" representedClassName=".QueueOfEditMessages" syncable="YES">
         <attribute name="content" optional="YES" attributeType="String"/>
         <attribute name="messageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="metaData" optional="YES" attributeType="Transformable"/>
+        <attribute name="metadata" optional="YES" attributeType="Transformable"/>
         <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="typeCode" optional="YES" attributeType="String"/>
@@ -193,7 +203,7 @@
         <attribute name="hC" optional="YES" attributeType="String"/>
         <attribute name="imageName" optional="YES" attributeType="String"/>
         <attribute name="imageToSend" optional="YES" attributeType="Binary"/>
-        <attribute name="metaData" optional="YES" attributeType="Transformable"/>
+        <attribute name="metadata" optional="YES" attributeType="Transformable"/>
         <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="typeCode" optional="YES" attributeType="String"/>
@@ -204,7 +214,7 @@
     </entity>
     <entity name="QueueOfForwardMessages" representedClassName=".QueueOfForwardMessages" syncable="YES">
         <attribute name="messageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="metaData" optional="YES" attributeType="Transformable"/>
+        <attribute name="metadata" optional="YES" attributeType="Transformable"/>
         <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="typeCode" optional="YES" attributeType="String"/>
@@ -212,7 +222,7 @@
     </entity>
     <entity name="QueueOfTextMessages" representedClassName=".QueueOfTextMessages" syncable="YES">
         <attribute name="content" optional="YES" attributeType="String"/>
-        <attribute name="metaData" optional="YES" attributeType="Transformable"/>
+        <attribute name="metadata" optional="YES" attributeType="Transformable"/>
         <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="systemMetadata" optional="YES" attributeType="Transformable"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
@@ -251,15 +261,15 @@
     <elements>
         <element name="CMBlockedContact" positionX="-461.90234375" positionY="-78.6953125" width="128" height="105"/>
         <element name="CMContact" positionX="-307.48828125" positionY="-144.9375" width="128" height="240"/>
-        <element name="CMConversation" positionX="-126.5546875" positionY="-151.546875" width="128" height="553"/>
+        <element name="CMConversation" positionX="-126.5546875" positionY="-151.546875" width="128" height="583"/>
+        <element name="CMFile" positionX="-461.58984375" positionY="539" width="128" height="88"/>
         <element name="CMForwardInfo" positionX="44.06640625" positionY="6.28515625" width="128" height="90"/>
+        <element name="CMImage" positionX="-460.42578125" positionY="37.66796875" width="128" height="148"/>
         <element name="CMLinkedUser" positionX="-319.42578125" positionY="117.296875" width="128" height="135"/>
-        <element name="CMMessage" positionX="-287.66796875" positionY="271.8515625" width="128" height="330"/>
-        <element name="CMParticipant" positionX="349.671875" positionY="95.74609375" width="128" height="418"/>
+        <element name="CMMessage" positionX="-287.66796875" positionY="271.8515625" width="128" height="358"/>
+        <element name="CMParticipant" positionX="349.671875" positionY="95.74609375" width="128" height="508"/>
         <element name="CMReplyInfo" positionX="166.9453125" positionY="487.76171875" width="128" height="180"/>
         <element name="CMThreadParticipants" positionX="80.10546875" positionY="-125.96875" width="128" height="90"/>
-        <element name="CMFile" positionX="-461.58984375" positionY="539" width="128" height="88"/>
-        <element name="CMImage" positionX="-460.42578125" positionY="37.66796875" width="128" height="148"/>
         <element name="CMUser" positionX="-463.83984375" positionY="196.234375" width="128" height="180"/>
         <element name="CMUserRole" positionX="-54" positionY="243" width="128" height="120"/>
         <element name="MessageGaps" positionX="293.2421875" positionY="-115.6953125" width="128" height="90"/>
@@ -267,7 +277,7 @@
         <element name="QueueOfEditMessages" positionX="-243" positionY="18" width="128" height="148"/>
         <element name="QueueOfFileMessages" positionX="-261" positionY="0" width="128" height="253"/>
         <element name="QueueOfForwardMessages" positionX="-234" positionY="36" width="128" height="133"/>
-        <element name="QueueOfTextMessages" positionX="-252" positionY="9" width="128" height="150"/>
+        <element name="QueueOfTextMessages" positionX="-252" positionY="9" width="128" height="148"/>
         <element name="QueueOfUploadFiles" positionX="-252" positionY="9" width="128" height="150"/>
         <element name="QueueOfUploadImages" positionX="-261" positionY="0" width="128" height="210"/>
         <element name="ThreadAdmins" positionX="-261" positionY="0" width="128" height="118"/>

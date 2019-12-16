@@ -20,9 +20,9 @@ open class CreateThreadWithMessageRequestModel {
     
     public let messageForwardedMessageIds:  String?
     public let messageForwardedUniqueIds:   String?
-    public let messageMetaData:             String?
+    public let messageMetadata:             String?
     public let messageRepliedTo:            Int?
-    public let messageSystemMetaData:       String?
+    public let messageSystemMetadata:       String?
     public let messageText:                 String
     public let messageType:                 String?
     
@@ -37,9 +37,9 @@ open class CreateThreadWithMessageRequestModel {
                 threadType:             ThreadTypes,
                 messageForwardedMessageIds: String?,
                 messageForwardedUniqueIds:  String?,
-                messageMetaData:        String?,
+                messageMetadata:        String?,
                 messageRepliedTo:       Int?,
-                messageSystemMetaData:  String?,
+                messageSystemMetadata:  String?,
                 messageText:            String,
                 messageType:            String?,
                 typeCode:               String?,
@@ -54,9 +54,9 @@ open class CreateThreadWithMessageRequestModel {
         
         self.messageForwardedMessageIds = messageForwardedMessageIds
         self.messageForwardedUniqueIds  = messageForwardedUniqueIds
-        self.messageMetaData            = messageMetaData
+        self.messageMetadata            = messageMetadata
         self.messageRepliedTo           = messageRepliedTo
-        self.messageSystemMetaData      = messageSystemMetaData
+        self.messageSystemMetadata      = messageSystemMetadata
         self.messageText                = messageText
         self.messageType                = messageType
         
@@ -71,10 +71,10 @@ open class CreateThreadWithMessageRequestModel {
         if let type = self.messageType {
             messageContentParams["type"] = JSON(type)
         }
-        if let metaData = self.messageMetaData {
-            messageContentParams["metaData"] = JSON(metaData)
+        if let metadata = self.messageMetadata {
+            messageContentParams["metadata"] = JSON(metadata)
         }
-        if let systemMetadata = self.messageSystemMetaData {
+        if let systemMetadata = self.messageSystemMetadata {
             messageContentParams["systemMetadata"] = JSON(systemMetadata)
         }
         if let repliedTo = self.messageRepliedTo {
@@ -100,8 +100,8 @@ open class CreateThreadWithMessageRequestModel {
         if let image = self.threadImage {
             myContent["image"] = JSON(image)
         }
-        if let metaData = self.threadMetadata {
-            myContent["metadata"] = JSON(metaData)
+        if let metadata = self.threadMetadata {
+            myContent["metadata"] = JSON(metadata)
         }
         if let description = self.threadDescription {
             myContent["description"] = JSON(description)

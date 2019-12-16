@@ -113,7 +113,7 @@
 //            let myExpectation = self.expectation(description: "Send File Message")
 //            
 //            let metadata: JSON = ["id": 2341234123, "type": "BOT_MESSAGE", "owner": "Mahyar"]
-//            let paramsToSendMessage: JSON = ["subjectId": 1101, "content": "empty message", "metaData": metadata]
+//            let paramsToSendMessage: JSON = ["subjectId": 1101, "content": "empty message", "metadata": metadata]
 //            
 //            
 ////            var filePath = NSBundle.mainBundle().URLForResource("pic", withExtension: "png")
@@ -190,7 +190,7 @@
 //            let myExpectation = self.expectation(description: "Send File Message")
 //            
 //            let metadata: JSON = ["id": 2341234123, "type": "BOT_MESSAGE", "owner": "Mahyar"]
-//            let paramsToSendMessage: JSON = ["subjectId": 1101, "content": "empty message", "metaData": metadata]
+//            let paramsToSendMessage: JSON = ["subjectId": 1101, "content": "empty message", "metadata": metadata]
 //            
 //            let image = UIImage(named: "pic", in: Bundle(for: Chat.self), compatibleWith: nil)
 ////            let image = UIImage(named: "pic")
@@ -265,7 +265,7 @@
 //            let myExpectation = self.expectation(description: "Send File Message")
 //            
 //            let metadata: JSON = ["id": 2341234123, "type": "BOT_MESSAGE", "owner": "Mahyar"]
-//            let paramsToSendMessage: JSON = ["subjectId": 1101, "content": "Message bumber 1", "metaData": metadata]
+//            let paramsToSendMessage: JSON = ["subjectId": 1101, "content": "Message bumber 1", "metadata": metadata]
 //            
 //            let image = UIImage(named: "pic", in: Bundle(for: Chat.self), compatibleWith: nil)
 ////            let image = UIImage(named: "pic")

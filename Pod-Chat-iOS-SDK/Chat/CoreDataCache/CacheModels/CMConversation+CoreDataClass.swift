@@ -20,11 +20,12 @@ public class CMConversation: NSManagedObject {
         var group:                          Bool?
         var id:                             Int?
         var joinDate:                       Int?
-        //        var lastParticipantImage:           String?
-        //        var lastParticipantName:            String?
+//        var lastParticipantImage:           String?
+//        var lastParticipantName:            String?
         var lastSeenMessageId:              Int?
         var lastSeenMessageNanos:           UInt?
         var lastSeenMessageTime:            UInt?
+        var mentioned:                      Bool?
         var mute:                           Bool?
         var participantCount:               Int?
         var partner:                        Int?
@@ -34,6 +35,7 @@ public class CMConversation: NSManagedObject {
         var partnerLastSeenMessageId:       Int?
         var partnerLastSeenMessageNanos:    UInt?
         var partnerLastSeenMessageTime:     UInt?
+        var pin:                            Bool?
         var time:                           UInt?
         var type:                           Int?
         var unreadCount:                    Int?
@@ -67,6 +69,9 @@ public class CMConversation: NSManagedObject {
             if let lastSeenMessageTime2 = self.lastSeenMessageTime as? UInt {
                 lastSeenMessageTime = lastSeenMessageTime2
             }
+            if let mentioned2 = self.mentioned as? Bool {
+                mentioned = mentioned2
+            }
             if let mute2 = self.mute as? Bool {
                 mute = mute2
             }
@@ -93,6 +98,9 @@ public class CMConversation: NSManagedObject {
             }
             if let partnerLastSeenMessageTime2 = self.partnerLastSeenMessageTime as? UInt {
                 partnerLastSeenMessageTime = partnerLastSeenMessageTime2
+            }
+            if let pin2 = self.pin as? Bool {
+                pin = pin2
             }
             if let time2 = self.time as? UInt {
                 time = time2
@@ -129,6 +137,7 @@ public class CMConversation: NSManagedObject {
                                                  lastSeenMessageId:     lastSeenMessageId,
                                                  lastSeenMessageNanos:  lastSeenMessageNanos,
                                                  lastSeenMessageTime:   lastSeenMessageTime,
+                                                 mentioned:             mentioned,
                                                  metadata:              self.metadata,
                                                  mute:                  mute,
                                                  participantCount:      participantCount,
@@ -139,6 +148,7 @@ public class CMConversation: NSManagedObject {
                                                  partnerLastSeenMessageId:      partnerLastSeenMessageId,
                                                  partnerLastSeenMessageNanos:   partnerLastSeenMessageNanos,
                                                  partnerLastSeenMessageTime:    partnerLastSeenMessageTime,
+                                                 pin:                   pin,
                                                  time:                  time,
                                                  title:                 self.title,
                                                  type:                  type,

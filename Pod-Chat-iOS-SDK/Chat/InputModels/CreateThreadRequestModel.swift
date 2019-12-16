@@ -50,8 +50,8 @@ open class CreateThreadRequestModel {
         if let image = self.image {
             content["image"] = JSON(image)
         }
-        if let metaData = self.metadata {
-            content["metadata"] = JSON(metaData)
+        if let metadata2 = self.metadata {
+            content["metadata"] = JSON(metadata2)
         }
         if let description = self.description {
             content["description"] = JSON(description)

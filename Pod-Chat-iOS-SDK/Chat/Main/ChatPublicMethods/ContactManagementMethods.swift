@@ -64,7 +64,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_CONTACTS.rawValue,
                                             content:            "\(getContactsInput.convertContentToJSON())",
-                                            metaData:           nil,
+                                            metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
                                             subjectId:          nil,
@@ -597,7 +597,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.BLOCK.rawValue,
                                             content:            "\(blockContactsInput.convertContentToJSON())",
-                                            metaData:           nil,
+                                            metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
                                             subjectId:          nil,
@@ -664,7 +664,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_BLOCKED.rawValue,
                                             content:            "\(getBlockedContactsInput.convertContentToJSON())",
-                                            metaData:           nil,
+                                            metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
                                             subjectId:          nil,
@@ -732,7 +732,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.UNBLOCK.rawValue,
                                             content:            "\(unblockContactsInput.convertContentToJSON())",
-                                            metaData:           nil,
+                                            metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
                                             subjectId:          unblockContactsInput.blockId,

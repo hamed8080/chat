@@ -50,7 +50,7 @@ extension Chat {
                 
                 let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.DELIVERY.rawValue,
                                                     content:            "\(deliverInput.messageId ?? 0)",
-                                                    metaData:           nil,
+                                                    metadata:           nil,
                                                     repliedTo:          nil,
                                                     systemMetadata:     nil,
                                                     subjectId:          nil,
@@ -107,7 +107,7 @@ extension Chat {
                 
                 let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.SEEN.rawValue,
                                                     content:            "\(seenInput.messageId ?? 0)",
-                                                    metaData:           nil,
+                                                    metadata:           nil,
                                                     repliedTo:          nil,
                                                     systemMetadata:     nil,
                                                     subjectId:          nil,

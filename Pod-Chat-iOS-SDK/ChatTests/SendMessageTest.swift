@@ -78,7 +78,7 @@
 //    let reconnectOnClose        = true              // auto connect to socket after socket close
 //    
 //    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//    // MARK: - test with params: ["subjectId": 182, "content": "Hi", "metaData": ["id": 2341234132, "type": "BOT_MESSAGE", "owner": "Masoud"]]
+//    // MARK: - test with params: ["subjectId": 182, "content": "Hi", "metadata": ["id": 2341234132, "type": "BOT_MESSAGE", "owner": "Masoud"]]
 //    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //    func test_Send_Message_uniqueId_response() {
 //        myChatObject = Chat(socketAddress: socketAddress,
@@ -114,11 +114,11 @@
 //            let myExpectationUniqueId = self.expectation(description: "Send Text Message")
 //            //        myExpectationUniqueId.expectedFulfillmentCount = 2
 //            let metadata: JSON = ["id": 2341234132, "type": "BOT_MESSAGE", "owner": "Masoud"]
-//            let paramsToSend: JSON = ["subjectId": 1133, "content": "Hasdfasdfasdfasdfasdfasi", "metaData": metadata]
+//            let paramsToSend: JSON = ["subjectId": 1133, "content": "Hasdfasdfasdfasdfasdfasi", "metadata": metadata]
 //            self.myChatObject?.sendTextMessage(params: paramsToSend, uniqueId: { (uniqueIdResponse) in
-//                log.debug("Send Message with params: [subjectId: 182, content: Hi, metaData: [id: 2341234132, type: BOT_MESSAGE, owner: Masoud]] UniqueId Test Response: \n:|| \(uniqueIdResponse)", context: "Test")
+//                log.debug("Send Message with params: [subjectId: 182, content: Hi, metadata: [id: 2341234132, type: BOT_MESSAGE, owner: Masoud]] UniqueId Test Response: \n:|| \(uniqueIdResponse)", context: "Test")
 //            }, onSent: { (sentResponse) in
-//                log.debug("Send Message with params: [subjectId: 182, content: Hi, metaData: [id: 2341234132, type: BOT_MESSAGE, owner: Masoud]] Sent Test Response: \n:|| \(sentResponse)", context: "Test")
+//                log.debug("Send Message with params: [subjectId: 182, content: Hi, metadata: [id: 2341234132, type: BOT_MESSAGE, owner: Masoud]] Sent Test Response: \n:|| \(sentResponse)", context: "Test")
 //                self.somethingWithDelegateAsyncResult = true
 //                myExpectationUniqueId.fulfill()
 //            }, onDelivere: { (deliverResponse) in }, onSeen: { (seenResponse) in })
@@ -142,7 +142,7 @@
 //    
 //    
 //    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//    // MARK: - test with params: ["subjectId": 182, "content": "Hi", "metaData": ["id": 2341234132, "type": "BOT_MESSAGE", "owner": "Masoud"]]
+//    // MARK: - test with params: ["subjectId": 182, "content": "Hi", "metadata": ["id": 2341234132, "type": "BOT_MESSAGE", "owner": "Masoud"]]
 //    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //    func test_Send_Message_deliver_response() {
 //        myChatObject = Chat(socketAddress: socketAddress,
@@ -177,13 +177,13 @@
 //            
 //            let myExpectation = self.expectation(description: "Send Text Message")
 //            let metadata: JSON = ["id": 2341234132, "type": "BOT_MESSAGE", "owner": "Mahyar"]
-//            let paramsToSend: JSON = ["subjectId": 1133, "content": "Hi", "metaData": metadata]
+//            let paramsToSend: JSON = ["subjectId": 1133, "content": "Hi", "metadata": metadata]
 //            self.myChatObject?.sendTextMessage(params: paramsToSend, uniqueId: { (uniqueIdResponse) in
-//                log.debug("Send Message with params: [subjectId: 182, content: Hi, metaData: [id: 2341234132, type: BOT_MESSAGE, owner: Masoud]] UniqueId Test Response: \n:|| \(uniqueIdResponse)", context: "Test")
+//                log.debug("Send Message with params: [subjectId: 182, content: Hi, metadata: [id: 2341234132, type: BOT_MESSAGE, owner: Masoud]] UniqueId Test Response: \n:|| \(uniqueIdResponse)", context: "Test")
 //            }, onSent: { (sentResponse) in
-//                log.debug("Send Message with params: [subjectId: 182, content: Hi, metaData: [id: 2341234132, type: BOT_MESSAGE, owner: Masoud]] Sent Test Response: \n:|| \(sentResponse)", context: "Test")
+//                log.debug("Send Message with params: [subjectId: 182, content: Hi, metadata: [id: 2341234132, type: BOT_MESSAGE, owner: Masoud]] Sent Test Response: \n:|| \(sentResponse)", context: "Test")
 //            }, onDelivere: { (deliverResponse) in
-//                log.debug("Send Message with params: [subjectId: 182, content: Hi, metaData: [id: 2341234132, type: BOT_MESSAGE, owner: Masoud]] Deliver Test Response: \n:|| \(deliverResponse)", context: "Test")
+//                log.debug("Send Message with params: [subjectId: 182, content: Hi, metadata: [id: 2341234132, type: BOT_MESSAGE, owner: Masoud]] Deliver Test Response: \n:|| \(deliverResponse)", context: "Test")
 //                self.somethingWithDelegateAsyncResult = true
 //                myExpectation.fulfill()
 //            }, onSeen: { (seenResponse) in })

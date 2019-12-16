@@ -175,12 +175,12 @@
 //            messageVO.appendIfDictionary(key: "time", json: JSON(theTime))
 //        }
 //
-//        if let theMetaData = params["metadata"].string {
-//            messageVO.appendIfDictionary(key: "metadata", json: JSON(theMetaData))
+//        if let theMetadata = params["metadata"].string {
+//            messageVO.appendIfDictionary(key: "metadata", json: JSON(theMetadata))
 //        }
 //
-//        if let theSystemMetaData = params["systemMetadata"].string {
-//            messageVO.appendIfDictionary(key: "systemMetadata", json: JSON(theSystemMetaData))
+//        if let theSystemMetadata = params["systemMetadata"].string {
+//            messageVO.appendIfDictionary(key: "systemMetadata", json: JSON(theSystemMetadata))
 //        }
 //
 //        if let theRepliedTo = params["repliedTo"].int {

@@ -14,7 +14,7 @@ import CoreData
 
 extension Cache {
     
-    
+    // MARK: - retrieve UserInfo:
     /// Retrieve UserInfo:
     /// retrieve UserInfo from cacheDB and return the result to the caller
     ///
@@ -58,6 +58,8 @@ extension Cache {
     }
     
     
+    
+    // MARK: - retrieve Contacts:
     /// Retrieve Contacts:
     /// retrieve Contacts from cacheDB and return the result to the caller
     ///
@@ -212,6 +214,8 @@ extension Cache {
     }
     
     
+    
+    // MARK: - retrieve PhoneContacts:
     /// Retrieve PhoneContacts:
     /// retrieve PhoneContacts from cacheDB and return the result to the caller
     ///
@@ -262,6 +266,7 @@ extension Cache {
     
     
     
+    // MARK: - retrieve Threads:
     /// Retrieve Threads:
     /// retrieve Threads from cacheDB and return the result to the caller
     ///
@@ -378,6 +383,8 @@ extension Cache {
     }
     
     
+    
+    // MARK: - retrieve ThreadParticipants:
     /// Retrieve ThreadParticipants:
     /// retrieve ThreadParticipants from cacheDB and return the result to the caller
     ///
@@ -533,6 +540,7 @@ extension Cache {
     
     
     
+    // MARK: - retrieve MessageHistory:
     /// Retrieve MessageHistory:
     /// retrieve MessageHistory from cacheDB and return the result to the caller
     ///
@@ -731,8 +739,10 @@ extension Cache {
     }
     
     
+    
+    // MARK: - retrieve ImageObject:
     /*
-     * retrieve UploadImage
+     * retrieve ImageObject
      *
      *  -> fetch CMImage from Cahce DB
      *  -> if it found any object, it will return that,
@@ -796,8 +806,9 @@ extension Cache {
     }
     
     
+    // MARK: - retrieve FileObject:
     /*
-     * retrieve UploadFile:
+     * retrieve FileObject:
      *
      *  -> fetch CMImage from Cahce DB
      *  -> if it found any object, it will return that,

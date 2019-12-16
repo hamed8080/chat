@@ -28,15 +28,20 @@ open class Participant {
      *    - sendEnable:         Bool?
      */
     
-    public let admin:           Bool?
-    public let blocked:         Bool?
-    public let cellphoneNumber: String?
-    public let contactId:       Int?
+    public let admin:               Bool?
+    public let auditor:             Bool?
+    public let blocked:             Bool?
+    public let cellphoneNumber:     String?
+    public let contactFirstName:    String?
+    public let contactId:           Int?
+    public let contactName:         String?
+    public let contactLastName:     String?
     public let coreUserId:      Int?
     public let email:           String?
     public let firstName:       String?
     public let id:              Int?
     public let image:           String?
+    public let keyId:           String?
     public let lastName:        String?
     public let myFriend:        Bool?
     public let name:            String?
@@ -45,23 +50,31 @@ open class Participant {
     public let receiveEnable:   Bool?
     public let roles:           [String]?
     public let sendEnable:      Bool?
+    public let username:        String?
     
     public init(messageContent: JSON, threadId: Int?) {
         self.admin              = messageContent["admin"].bool
+        self.auditor            = messageContent["auditor"].bool
         self.blocked            = messageContent["blocked"].bool
         self.cellphoneNumber    = messageContent["cellphoneNumber"].string
+        self.contactFirstName   = messageContent["contactFirstName"].string
         self.contactId          = messageContent["contactId"].int
+        self.contactName        = messageContent["contactName"].string
+        self.contactLastName    = messageContent["contactLastName"].string
         self.coreUserId         = messageContent["coreUserId"].int
         self.email              = messageContent["email"].string
         self.firstName          = messageContent["firstName"].string
         self.id                 = messageContent["id"].int
         self.image              = messageContent["image"].string
+        self.keyId              = messageContent["keyId"].string
         self.lastName           = messageContent["lastName"].string
         self.myFriend           = messageContent["myFriend"].bool
         self.name               = messageContent["name"].string
         self.notSeenDuration    = messageContent["notSeenDuration"].int
         self.online             = messageContent["online"].bool
         self.receiveEnable      = messageContent["receiveEnable"].bool
+        self.sendEnable         = messageContent["sendEnable"].bool
+        self.username           = messageContent["username"].string
         
         var adminRoles = [String]()
         if let myRoles = messageContent["roles"].arrayObject as! [String]? {
@@ -71,18 +84,22 @@ open class Participant {
         }
         (adminRoles.count > 0) ? (self.roles = adminRoles) : (self.roles = nil)
         
-        self.sendEnable         = messageContent["sendEnable"].bool
     }
     
     public init(admin:              Bool?,
+                auditor:            Bool?,
                 blocked:            Bool?,
                 cellphoneNumber:    String?,
+                contactFirstName:   String?,
                 contactId:          Int?,
+                contactName:        String?,
+                contactLastName:    String?,
                 coreUserId:         Int?,
                 email:              String?,
                 firstName:          String?,
                 id:                 Int?,
                 image:              String?,
+                keyId:              String?,
                 lastName:           String?,
                 myFriend:           Bool?,
                 name:               String?,
@@ -90,17 +107,23 @@ open class Participant {
                 online:             Bool?,
                 receiveEnable:      Bool?,
                 roles:              [String]?,
-                sendEnable:         Bool?) {
+                sendEnable:         Bool?,
+                username:           String?) {
         
         self.admin              = admin
+        self.auditor            = auditor
         self.blocked            = blocked
         self.cellphoneNumber    = cellphoneNumber
+        self.contactFirstName   = contactFirstName
         self.contactId          = contactId
+        self.contactName        = contactName
+        self.contactLastName    = contactLastName
         self.coreUserId         = coreUserId
         self.email              = email
         self.firstName          = firstName
         self.id                 = id
         self.image              = image
+        self.keyId              = keyId
         self.lastName           = lastName
         self.myFriend           = myFriend
         self.name               = name
@@ -109,19 +132,25 @@ open class Participant {
         self.receiveEnable      = receiveEnable
         self.roles              = roles
         self.sendEnable         = sendEnable
+        self.username           = username
     }
     
     public init(theParticipant: Participant) {
         
         self.admin              = theParticipant.admin
+        self.auditor            = theParticipant.auditor
         self.blocked            = theParticipant.blocked
         self.cellphoneNumber    = theParticipant.cellphoneNumber
+        self.contactFirstName   = theParticipant.contactFirstName
         self.contactId          = theParticipant.contactId
+        self.contactName        = theParticipant.contactName
+        self.contactLastName    = theParticipant.contactLastName
         self.coreUserId         = theParticipant.coreUserId
         self.email              = theParticipant.email
         self.firstName          = theParticipant.firstName
         self.id                 = theParticipant.id
         self.image              = theParticipant.image
+        self.keyId              = theParticipant.keyId
         self.lastName           = theParticipant.lastName
         self.myFriend           = theParticipant.myFriend
         self.name               = theParticipant.name
@@ -130,6 +159,7 @@ open class Participant {
         self.receiveEnable      = theParticipant.receiveEnable
         self.roles              = theParticipant.roles
         self.sendEnable         = theParticipant.sendEnable
+        self.username           = theParticipant.username
     }
     
     
@@ -139,14 +169,19 @@ open class Participant {
     
     public func formatToJSON() -> JSON {
         let result: JSON = ["admin":            admin ?? NSNull(),
+                            "auditor":          auditor ?? NSNull(),
                             "blocked":          blocked ?? NSNull(),
                             "cellphoneNumber":  cellphoneNumber ?? NSNull(),
+                            "contactFirstName": contactFirstName ?? NSNull(),
                             "contactId":        contactId ?? NSNull(),
+                            "contactName":      contactName ?? NSNull(),
+                            "contactLastName":  contactLastName ?? NSNull(),
                             "coreUserId":       coreUserId ?? NSNull(),
                             "email":            email ?? NSNull(),
                             "firstName":        firstName ?? NSNull(),
                             "id":               id ?? NSNull(),
                             "image":            image ?? NSNull(),
+                            "keyId":            keyId ?? NSNull(),
                             "lastName":         lastName ?? NSNull(),
                             "myFriend":         myFriend ?? NSNull(),
                             "name":             name ?? NSNull(),
@@ -154,7 +189,8 @@ open class Participant {
                             "online":           online ?? NSNull(),
                             "receiveEnable":    receiveEnable ?? NSNull(),
                             "roles":            roles ?? NSNull(),
-                            "sendEnable":       sendEnable ?? NSNull()]
+                            "sendEnable":       sendEnable ?? NSNull(),
+                            "username":         username ?? NSNull()]
         return result
     }
     

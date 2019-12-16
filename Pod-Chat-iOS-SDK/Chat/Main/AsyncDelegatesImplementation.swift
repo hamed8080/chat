@@ -362,7 +362,7 @@ class SendChatMessageVO {
     
     let chatMessageVOType:  Int
     var content:            String? = nil
-    var metaData:           String? = nil
+    var metadata:           String? = nil
     var repliedTo:          Int?    = nil
     var systemMetadata:     String? = nil
     var subjectId:          Int?    = nil
@@ -376,7 +376,7 @@ class SendChatMessageVO {
     
     init(chatMessageVOType: Int,
          content:           String?,
-         metaData:          String?,
+         metadata:          String?,
          repliedTo:         Int?,
          systemMetadata:    String?,
          subjectId:         Int?,
@@ -388,7 +388,7 @@ class SendChatMessageVO {
          isCreateThreadAndSendMessage: Bool?) {
         
         self.content            = content
-        self.metaData           = metaData
+        self.metadata           = metadata
         self.repliedTo          = repliedTo
         self.systemMetadata     = systemMetadata
         self.subjectId          = subjectId
@@ -433,8 +433,8 @@ class SendChatMessageVO {
         if let myContent = content["content"].string {
             self.content = myContent
         }
-        if let myMetaData = content["metaData"].string {
-            self.metaData = myMetaData
+        if let myMetadata = content["metadata"].string {
+            self.metadata = myMetadata
         }
         if let myRepliedTo = content["repliedTo"].int {
             self.repliedTo = myRepliedTo
@@ -483,8 +483,8 @@ class SendChatMessageVO {
         if let theMessage = content {
             messageVO["content"] = JSON(theMessage)
         }
-        if let theMetaData = metaData {
-            messageVO["metaData"] = JSON(theMetaData)
+        if let theMetadata = metadata {
+            messageVO["metadata"] = JSON(theMetadata)
         }
         if let theRepliedTo = repliedTo {
             messageVO["repliedTo"] = JSON(theRepliedTo)

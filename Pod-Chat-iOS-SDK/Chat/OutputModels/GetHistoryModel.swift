@@ -27,7 +27,7 @@ open class GetHistoryModel {
      *          - edited:         Bool?
      *          - id:             Int?
      *          - message:        String?
-     *          - metaData:       String?
+     *          - metadata:       String?
      *          - ownerId:        Int?
      *          - previousId:     Int?
      *          - seen:           Bool?
