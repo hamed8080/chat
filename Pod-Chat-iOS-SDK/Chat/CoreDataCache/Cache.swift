@@ -19,13 +19,13 @@ public class Cache {
     public init() {
         
         context = coreDataStack.persistentContainer.viewContext
-        print("create context of cache")
+//        print("create context of cache")
     }
     
     func saveContext(subject: String) {
         do {
             try context.save()
-            print("\(subject), has Saved Successfully on CoreData Cache")
+//            print("\(subject), has Saved Successfully on CoreData Cache")
         } catch {
             fatalError("\(subject), Error to save data on CoreData Cache")
         }

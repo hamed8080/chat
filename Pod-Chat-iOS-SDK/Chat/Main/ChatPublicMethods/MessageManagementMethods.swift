@@ -85,7 +85,7 @@ extension Chat {
        
 //         if cache is enabled by user, first return cache result to the user
         if enableCache {
-
+            
             if let textMessages = Chat.cacheDB.retrieveWaitTextMessages(threadId: getHistoryInput.threadId) {
                 textMessagesNotSent(textMessages)
             }
@@ -104,7 +104,7 @@ extension Chat {
             if let uploadFiles = Chat.cacheDB.retrieveWaitUploadFiles(threadId: getHistoryInput.threadId) {
                 uploadFileNotSent(uploadFiles)
             }
-
+            
             if let cacheHistoryResult = Chat.cacheDB.retrieveMessageHistory(count:          getHistoryInput.count ?? 50,
                                                                             firstMessageId: nil,
                                                                             fromTime:       getHistoryInput.fromTime,

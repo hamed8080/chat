@@ -148,7 +148,7 @@ extension Chat: AsyncDelegates {
     // TODO: this delegate method should be delete, because it is not necessary
     public func asyncSendMessage(params: Any) {
         // this message is sends through Async
-        print("\n\n\n\n^^^^^^^^^^^^^^^^^\n^^^^^^^^^^^^^^^^^\nThis Message sends through Async: \n \(params)\n^^^^^^^^^^^^^^^^")
+//        print("\n\n\n\n^^^^^^^^^^^^^^^^^\n^^^^^^^^^^^^^^^^^\nThis Message sends through Async: \n \(params)\n^^^^^^^^^^^^^^^^")
     }
     
     /*

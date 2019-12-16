@@ -71,6 +71,24 @@ open class GetHistoryRequestModel {
         self.uniqueId           = uniqueId
     }
     
+    public init(json: JSON) {
+        self.count              = json["count"].int
+        self.fromTime           = json["fromTime"].uInt
+        self.messageId          = json["messageId"].int
+        self.messageType        = json["messageType"].int
+        self.metadataCriteria   = json["metadataCriteria"]
+        self.offset             = json["offset"].int
+        self.order              = json["order"].string
+        self.query              = json["query"].string
+        self.senderId           = json["senderId"].int
+        self.threadId           = json["threadId"].intValue
+        self.toTime             = json["toTime"].uInt
+        self.uniqueIds          = json["uniqueIds"].arrayObject as? [String]
+        self.userId             = json["userId"].int
+        self.typeCode           = json["typeCode"].string
+        self.uniqueId           = json["uniqueId"].string
+    }
+    
     func convertContentToJSON() -> JSON {
         var content: JSON = [:]
         content["count"] = JSON(self.count ?? 50)
