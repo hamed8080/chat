@@ -899,7 +899,7 @@ extension Chat {
                 let deliveryModel = DeliverSeenRequestModel(messageId:  message.id,
                                                             ownerId:    messageOwner,
                                                             typeCode:   nil)
-                deliver(deliverInput: deliveryModel)
+                deliver(inputModel: deliveryModel)
             }
         }
         
