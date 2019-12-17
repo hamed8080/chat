@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios, "11.2"
   s.source       = { :git => "https://github.com/Mahyar1990/Fanap-Chat-SDK.git", :tag => s.version }
   s.source_files = "Pod-Chat-iOS-SDK/Chat/**/*.{h,swift,xcdatamodeld,m,momd}"
-  s.resource_bundles = {'Pod-Chat-iOS-SDK' => ['Pod-Chat-iOS-SDK/*.xcdatamodeld']}
+  s.resource_bundles = {'Pod-Chat-iOS-SDK' => ['Pod-Chat-iOS-SDK/Chat/*.xcdatamodeld']}
   s.frameworks  = "Foundation" , "CoreData" , "Contacts"
   s.dependency "FanapPodAsyncSDK"
   s.dependency "Alamofire" , '~> 4.8.2'
