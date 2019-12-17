@@ -38,13 +38,7 @@ public class CoreDataStack: NSObject {
          */
         
         let momdName = "CacheDataModel" //pass this as a parameter
-        guard let bundle = Bundle(identifier: "com.fanapSoft.FanapPodChatSDK") else { fatalError("Error loading bundle") }
-        print("bundle = \(bundle)")
-        guard let modelPath = bundle.path(forResource: momdName, ofType: ".momd") else { fatalError("Error loading model from bundle") }
-        print("modelPath = \(modelPath)")
-        let modelURL = URL(fileURLWithPath: modelPath)
-        print("modelURL = \(modelURL)")
-//        guard let modelURL = Bundle(for: type(of: self)).url(forResource: momdName, withExtension: "momd") else { fatalError("Error loading model from bundle") }
+        guard let modelURL = Bundle(for: Chat.self).url(forResource: momdName, withExtension: "momd") else { fatalError("Error loading model from bundle") }
         /*
          The managed object model for the application.
          It is a fatal error for the application not to be able to find and load its model.
