@@ -38,7 +38,7 @@ public class CoreDataStack: NSObject {
          */
         
         let momdName = "CacheDataModel" //pass this as a parameter
-        let bundle = Bundle(for: Self.self)
+        guard let bundle = Bundle(identifier: "com.fanapSoft.FanapPodChatSDK") else { fatalError("Error loading bundle") }
         print("bundle = \(bundle)")
         guard let modelPath = bundle.path(forResource: momdName, ofType: ".momd") else { fatalError("Error loading model from bundle") }
         print("modelPath = \(modelPath)")
