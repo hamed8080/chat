@@ -38,7 +38,22 @@ public class CoreDataStack: NSObject {
          */
         
         let momdName = "CacheDataModel" //pass this as a parameter
-        guard let modelURL = Bundle(for: Chat.self).url(forResource: momdName, withExtension: "momd") else { fatalError("Error loading model from bundle") }
+        
+        let boundle = Bundle(for: Cache.self)
+        print("Cache boundle = \(boundle)")
+        print("Cache bundlePath = \(boundle.bundlePath)")
+        print("Cache bundleURL = \(boundle.bundleURL)")
+        print("Cache bundleIdentifier = \(boundle.bundleIdentifier ?? "???")")
+        
+        let boundle2 = Bundle(for: Chat.self)
+        print("Cache boundle = \(boundle2)")
+        print("Cache bundlePath = \(boundle2.bundlePath)")
+        print("Cache bundleURL = \(boundle2.bundleURL)")
+        print("Cache bundleIdentifier = \(boundle2.bundleIdentifier ?? "???")")
+        
+        guard let modelURL = Bundle(identifier: "com.fanapSoft.FanapPodChatSDK")!.url(forResource: momdName, withExtension: "momd") else { fatalError("Error loading model from bundle") }
+        
+//        guard let modelURL = Bundle(for: Chat.self).url(forResource: momdName, withExtension: "momd") else { fatalError("Error loading model from bundle") }
         print("\n\n modelURL = \(modelURL)\n\n")
         /*
          The managed object model for the application.
