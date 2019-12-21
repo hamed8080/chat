@@ -594,7 +594,7 @@ extension Cache {
                     theReplyInfo.time               = myReplyInfo.time as NSNumber?
                     if let participantObject = myReplyInfo.participant {
                         if let participantObject = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: participantObject, isAdminRequest: false) {
-                            result.first!.participant = participantObject
+                            theReplyInfo.participant = participantObject
                         }
                     }
                     replyInfoObjectToReturn = theReplyInfo
