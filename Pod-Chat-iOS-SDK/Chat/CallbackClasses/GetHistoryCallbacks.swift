@@ -29,8 +29,6 @@ extension Chat {
                                           contentCount:     message.contentCount,
                                           subjectId:        message.subjectId)
         
-        // ToDo: get cache result and compare it with server result
-        
         
         if Chat.map[message.uniqueId] != nil {
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
@@ -56,15 +54,17 @@ extension Chat {
             if let arrayContent = response.resultAsArray {
                 let content = sendParams.content?.convertToJSON()
                 
-                // save data comes from server to the Cache
-                var messages = [Message]()
-                for item in response.resultAsArray ?? [] {
-                    let myMessage = Message(threadId: sendParams.subjectId!, pushMessageVO: item)
-                    messages.append(myMessage)
+                if Chat.sharedInstance.enableCache {
+                    // save data comes from server to the Cache
+                    var messages = [Message]()
+                    for item in response.resultAsArray ?? [] {
+                        let myMessage = Message(threadId: sendParams.subjectId!, pushMessageVO: item)
+                        messages.append(myMessage)
+                    }
+                    
+                    handleServerAndCacheDifferential(sendParams: sendParams, serverResponse: messages)
+                    Chat.cacheDB.saveMessageObjects(messages: messages, getHistoryParams: sendParams.convertModelToJSON())
                 }
-                
-                handleServerAndCacheDifferential(sendParams: sendParams, serverResponse: messages)
-                Chat.cacheDB.saveMessageObjects(messages: messages, getHistoryParams: sendParams.convertModelToJSON())
                 
                 let getHistoryModel = GetHistoryModel(messageContent:   arrayContent,
                                                       contentCount:     response.contentCount,

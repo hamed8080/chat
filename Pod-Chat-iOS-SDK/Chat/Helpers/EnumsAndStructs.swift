@@ -182,6 +182,9 @@ public enum ContactEventTypes {
     case CONTACTS_LIST_CHANGE   //
     case CONTACTS_SEARCH_RESULT_CHANGE  //
     
+    case CONTACT_NEW
+    case CONTACT_DELETE
+    
     /*
     case getContacts        // type 13
     case addContact
@@ -206,6 +209,10 @@ public enum ThreadEventTypes {
     case THREAD_UNREAD_COUNT_UPDATED    // type 31
     case THREADS_LIST_CHANGE            //
     case THREAD_PARTICIPANTS_LIST_CHANGE//
+    
+    case THREAD_DELETE
+    case THREAD_PARTICIPANT_NEW
+    case THREAD_PARTICIPANT_DELETE
     
     /*
 //    case CreateThread           // type 1

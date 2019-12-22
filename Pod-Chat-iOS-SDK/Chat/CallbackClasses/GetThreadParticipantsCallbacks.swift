@@ -29,18 +29,18 @@ extension Chat {
                                           contentCount:   message.contentCount,
                                           subjectId:      message.subjectId)
         
-        if enableCache {
-            var participants = [Participant]()
-            var adminRequest = false
-            for item in message.content?.convertToJSON() ?? [] {
-                let myParticipant = Participant(messageContent: item.1, threadId: message.subjectId!)
-                if ((myParticipant.roles?.count ?? 0) > 0) {
-                    adminRequest = true
-                }
-                participants.append(myParticipant)
-            }
-            Chat.cacheDB.saveThreadParticipantObjects(whereThreadIdIs: message.subjectId!, withParticipants: participants, isAdminRequest: adminRequest)
-        }
+//        if enableCache {
+//            var participants = [Participant]()
+//            var adminRequest = false
+//            for item in message.content?.convertToJSON() ?? [] {
+//                let myParticipant = Participant(messageContent: item.1, threadId: message.subjectId!)
+//                if ((myParticipant.roles?.count ?? 0) > 0) {
+//                    adminRequest = true
+//                }
+//                participants.append(myParticipant)
+//            }
+//            Chat.cacheDB.saveThreadParticipantObjects(whereThreadIdIs: message.subjectId!, withParticipants: participants, isAdminRequest: adminRequest)
+//        }
         
         if Chat.map[message.uniqueId] != nil {
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
@@ -70,6 +70,22 @@ extension Chat {
             
             if let arrayContent = response.resultAsArray {
                 let content = sendParams.content?.convertToJSON()
+                
+                if Chat.sharedInstance.enableCache {
+                    var participants = [Participant]()
+                    var adminRequest = false
+                    for item in response.resultAsArray ?? [] {
+                        let myParticipant = Participant(messageContent: item, threadId: response.subjectId!)
+                        if ((myParticipant.roles?.count ?? 0) > 0) {
+                            adminRequest = true
+                        }
+                        participants.append(myParticipant)
+                    }
+                    
+                    handleServerAndCacheDifferential(sendParams: sendParams, serverResponse: participants, adminRequest: adminRequest)
+                    Chat.cacheDB.saveThreadParticipantObjects(whereThreadIdIs: response.subjectId!, withParticipants: participants, isAdminRequest: adminRequest)
+                }
+                
                 let getThreadParticipantsModel = GetThreadParticipantsModel(messageContent: arrayContent,
                                                                             contentCount:   response.contentCount,
                                                                             count:          content?["count"].intValue ?? 0,
@@ -80,6 +96,51 @@ extension Chat {
                 success(getThreadParticipantsModel)
             }
         }
+        
+        private func handleServerAndCacheDifferential(sendParams: SendChatMessageVO, serverResponse: [Participant], adminRequest: Bool) {
+            
+            if let content = sendParams.content?.convertToJSON() {
+                let getThreadParticipantsInput = GetThreadParticipantsRequestModel(json: content)
+                if let cacheParticipantsResult = Chat.cacheDB.retrieveThreadParticipants(admin:     adminRequest,
+                                                                                         ascending: true,
+                                                                                         count:     getThreadParticipantsInput.count ?? 50,
+                                                                                         offset:    getThreadParticipantsInput.offset ?? 0,
+                                                                                         threadId:  getThreadParticipantsInput.threadId,
+                                                                                         timeStamp: Chat.sharedInstance.cacheTimeStamp) {
+                    // check if there was any thread on the server response that wasn't on the cache, send them as New Thread Event to the client
+                    for participant in serverResponse {
+                        var foundThrd = false
+                        for cacheParticipant in cacheParticipantsResult.participants {
+                            if (participant.id == cacheParticipant.id) {
+                                foundThrd = true
+                                break
+                            }
+                        }
+                        // meands this contact was not on the cache response
+                        if !foundThrd {
+                            Chat.sharedInstance.delegate?.threadEvents(type: ThreadEventTypes.THREAD_PARTICIPANT_NEW, result: participant)
+                        }
+                    }
+                    
+                    // check if there was any thread on the cache response that wasn't on the server response, send them as Delete Thread Event to the client
+                    for cacheParticipant in cacheParticipantsResult.participants {
+                        var foundThrd = false
+                        for participant in serverResponse {
+                            if (cacheParticipant.id == participant.id) {
+                                foundThrd = true
+                                break
+                            }
+                        }
+                        // meands this contact was not on the server response
+                        if !foundThrd {
+                            Chat.sharedInstance.delegate?.threadEvents(type: ThreadEventTypes.THREAD_PARTICIPANT_DELETE, result: cacheParticipant)
+                        }
+                    }
+                    
+                }
+            }
+        }
+        
     }
     
 }

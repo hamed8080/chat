@@ -41,6 +41,18 @@ open class GetThreadParticipantsRequestModel {
         self.uniqueId       = uniqueId
     }
     
+    public init(json: JSON) {
+        self.admin          = json["admin"].bool
+        self.count          = json["count"].int
+        self.firstMessageId = json["firstMessageId"].int
+        self.lastMessageId  = json["lastMessageId"].int
+        self.name           = json["name"].string
+        self.offset         = json["offset"].int
+        self.threadId       = json["threadId"].intValue
+        self.typeCode       = json["typeCode"].string
+        self.uniqueId       = json["uniqueId"].string
+    }
+    
     func convertContentToJSON() -> JSON {
         var content: JSON = [:]
         content["count"]    = JSON(self.count ?? 50)
