@@ -29,6 +29,23 @@ extension Chat {
                                           contentCount:     nil,
                                           subjectId:        message.subjectId)
         
+//        delegate?.threadEvents(type: ThreadEventTypes.THREAD_ADD_ADMIN, threadId: message.subjectId, thread: nil, messageId: nil, senderId: nil)
+//        delegate?.threadEvents(type: ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME, threadId: message.subjectId, thread: nil, messageId: nil, senderId: nil)
+        
+        let tAddAdminEM = ThreadEventModel(type:            ThreadEventTypes.THREAD_ADD_ADMIN,
+                                           participants:    nil,
+                                           threads:         nil,
+                                           threadId:        message.subjectId,
+                                           senderId:        nil)
+        delegate?.threadEvents(model: tAddAdminEM)
+        let tLastActivityEM = ThreadEventModel(type:            ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME,
+                                               participants:    nil,
+                                               threads:         nil,
+                                               threadId:        message.subjectId,
+                                               senderId:        nil)
+        delegate?.threadEvents(model: tLastActivityEM)
+        
+        
         if Chat.map[message.uniqueId] != nil {
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
             callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
@@ -50,7 +67,7 @@ extension Chat {
                               response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
-            log.verbose("GetAdminListCallback", context: "Chat")
+            log.verbose("AddAdminCallback", context: "Chat")
             
             if let stringContent = response.resultAsString {
                 

@@ -11,16 +11,18 @@ import Foundation
 
 open class ThreadEventModel {
     
-    public let type:        ThreadEventTypes
-    public let thread:      Conversation?
-    public let threadId:    Int?
-    public let senderId:    Int?
+    public let type:            ThreadEventTypes
+    public let participants:    [Participant]?
+    public let threads:         [Conversation]?
+    public let threadId:        Int?
+    public let senderId:        Int?
     
-    init(type: ThreadEventTypes, thread: Conversation?, threadId: Int?, senderId: Int?) {
-        self.type       = type
-        self.thread     = thread
-        self.threadId   = threadId
-        self.senderId   = senderId
+    init(type: ThreadEventTypes, participants: [Participant]?, threads: [Conversation]?, threadId: Int?, senderId: Int?) {
+        self.type           = type
+        self.participants   = participants
+        self.threads        = threads
+        self.threadId       = threadId
+        self.senderId       = senderId
     }
     
 }

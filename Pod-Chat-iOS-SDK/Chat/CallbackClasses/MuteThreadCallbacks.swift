@@ -20,9 +20,15 @@ extension Chat {
          */
         log.verbose("Message of type 'MUTE_THREAD' recieved", context: "Chat")
         
-        if let threadId = message.subjectId {
-            delegate?.threadEvents(type: ThreadEventTypes.THREAD_MUTE, result: threadId)
-        }
+//        if let threadId = message.subjectId {
+//            delegate?.threadEvents(type: ThreadEventTypes.THREAD_MUTE, threadId: threadId, thread: nil, messageId: nil, senderId: nil)
+//        }
+        let tMuteEM = ThreadEventModel(type:            ThreadEventTypes.THREAD_MUTE,
+                                       participants:    nil,
+                                       threads:         nil,
+                                       threadId:        message.subjectId,
+                                       senderId:        nil)
+        delegate?.threadEvents(model: tMuteEM)
         
         let returnData = CreateReturnData(hasError:         false,
                                           errorMessage:     "",

@@ -42,12 +42,12 @@ public protocol ChatDelegates: class {
     
     func chatError(errorCode: Int, errorMessage: String, errorResult: Any?)
     
-    func contactEvents(type: ContactEventTypes, result: Any)
-    func threadEvents(type: ThreadEventTypes, result: Any)
-    func messageEvents(type: MessageEventTypes, result: Any)
-    func botEvents(type: BotEventTypes, result: Any)
-    func fileUploadEvents(type: FileUploadEventTypes, result: Any)
-    func systemEvents(type: SystemEventTypes, result: Any)
+    func botEvents(model: BotEventModel)
+    func contactEvents(model: ContactEventModel)
+    func fileUploadEvents(model: FileUploadEventModel)
+    func messageEvents(model: MessageEventModel)
+    func systemEvents(model: SystemEventModel)
+    func threadEvents(model: ThreadEventModel)
     
 }
 

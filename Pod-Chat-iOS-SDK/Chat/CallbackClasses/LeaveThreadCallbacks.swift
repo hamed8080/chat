@@ -26,14 +26,34 @@ extension Chat {
                                           contentCount:     message.contentCount,
                                           subjectId:        message.subjectId)
         
-        if let conAsJSON = message.content?.convertToJSON() {
-            let conversation = Conversation(messageContent: conAsJSON)
-            if let _ = conversation.title {
-                delegate?.threadEvents(type: ThreadEventTypes.THREAD_LEAVE_PARTICIPANT, result: conversation)
-            } else {
-                delegate?.threadEvents(type: ThreadEventTypes.THREAD_LEAVE_PARTICIPANT, result: conversation.id!)
-            }
-        }
+//        if let conAsJSON = message.content?.convertToJSON() {
+//            let conversation = Conversation(messageContent: conAsJSON)
+//            if let _ = conversation.title {
+//                delegate?.threadEvents(type: ThreadEventTypes.THREAD_LEAVE_PARTICIPANT, threadId: nil, thread: conversation, messageId: nil, senderId: nil)
+//            } else {
+//                delegate?.threadEvents(type: ThreadEventTypes.THREAD_LEAVE_PARTICIPANT, threadId: conversation.id!, thread: nil, messageId: nil, senderId: nil)
+//            }
+//        }
+        let leaveThreadModel = ThreadModel(messageContent:  message.content?.convertToJSON() ?? [:],
+                                           hasError:        false,
+                                           errorMessage:    "",
+                                           errorCode:       0)
+//        let participant = Participant(messageContent:   message.content?.convertToJSON() ?? [:],
+//                                      threadId:         message.subjectId)
+        let tLeaveEM = ThreadEventModel(type:           ThreadEventTypes.THREAD_LEAVE_PARTICIPANT,
+                                        participants:   leaveThreadModel.thread?.participants,
+                                        threads:        nil,
+                                        threadId:       message.subjectId,
+                                        senderId:       nil)
+        delegate?.threadEvents(model: tLeaveEM)
+        let tLastActivityEM = ThreadEventModel(type:           ThreadEventTypes.THREAD_LEAVE_PARTICIPANT,
+                                               participants:   nil,
+                                               threads:        nil,
+                                               threadId:       message.subjectId,
+                                               senderId:       nil)
+        delegate?.threadEvents(model: tLastActivityEM)
+        
+        
         
         if enableCache {
             if let threadJSON = message.content?.convertToJSON() {

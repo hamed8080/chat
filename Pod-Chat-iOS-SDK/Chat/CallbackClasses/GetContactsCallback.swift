@@ -100,10 +100,11 @@ extension Chat {
                         contacts.append(myContact)
                     }
                     
-                    handleServerAndCacheDifferential(sendParams: sendParams, serverResponse: contacts)
+//                    handleServerAndCacheDifferential(sendParams: sendParams, serverResponse: contacts)
+                    let contactEventModel = ContactEventModel(type: ContactEventTypes.CONTACTS_LIST_CHANGE, contacts: contacts)
+                    Chat.sharedInstance.delegate?.contactEvents(model: contactEventModel)
                     Chat.cacheDB.saveContact(withContactObjects: contacts)
                 }
-                
                 
                 let getContactsModel = GetContactsModel(messageContent: arrayContent,
                                                         contentCount:   response.contentCount,
@@ -116,6 +117,7 @@ extension Chat {
             }
         }
         
+        /*
         private func handleServerAndCacheDifferential(sendParams: SendChatMessageVO, serverResponse: [Contact]) {
             
             if let content = sendParams.content?.convertToJSON() {
@@ -142,7 +144,7 @@ extension Chat {
                         }
                         // meands this contact was not on the cache response
                         if !foundCntc {
-                            Chat.sharedInstance.delegate?.contactEvents(type: ContactEventTypes.CONTACT_NEW, result: contact)
+                            Chat.sharedInstance.delegate?.contactEvents(type: ContactEventTypes.CONTACT_NEW, contacts: [contact])
                         }
                     }
                     
@@ -157,13 +159,14 @@ extension Chat {
                         }
                         // meands this contact was not on the server response
                         if !foundCntc {
-                            Chat.sharedInstance.delegate?.contactEvents(type: ContactEventTypes.CONTACT_DELETE, result: cacheContact)
+                            Chat.sharedInstance.delegate?.contactEvents(type: ContactEventTypes.CONTACT_DELETE, contacts: [cacheContact])
                         }
                     }
                     
                 }
             }
         }
+        */
         
     }
     

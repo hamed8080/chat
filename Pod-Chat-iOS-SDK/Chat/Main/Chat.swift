@@ -169,10 +169,62 @@ public class Chat {
     var getUserInfoRetry        = 5
     var getUserInfoRetryCount   = 0
     var chatPingMessageInterval = 20
+    
     var lastReceivedMessageTime:        Date?
-    var lastReceivedMessageTimeoutId:   RepeatingTimer?
+    var lastReceivedMessageTimer:   RepeatingTimer? {
+        didSet {
+            self.lastReceivedMessageTimer?.suspend()
+            DispatchQueue.global().async {
+                self.lastReceivedMessageTime = Date()
+//                self.lastReceivedMessageTimeoutId = RepeatingTimer(timeInterval: (Double(self.chatPingMessageInterval) * 1.5))
+                self.lastReceivedMessageTimer?.eventHandler = {
+                    if let lastReceivedMessageTimeBanged = self.lastReceivedMessageTime {
+                        let elapsed = Int(Date().timeIntervalSince(lastReceivedMessageTimeBanged))
+                        if (elapsed >= self.connectionCheckTimeout) {
+                            DispatchQueue.main.async {
+                                self.asyncClient?.asyncReconnectSocket()
+                            }
+                            self.lastReceivedMessageTimer?.suspend()
+                        }
+                    }
+                }
+                self.lastReceivedMessageTimer?.resume()
+            }
+        }
+    }
+    
     var lastSentMessageTime:            Date?
-    var lastSentMessageTimeoutId:       RepeatingTimer?
+    var lastSentMessageTimer:       RepeatingTimer? {
+        didSet {
+            /*
+             * first of all, it will suspend the timer
+             * then on the background thread it will run a timer
+             * if the "chatState" = true (means chat is still connected)
+             * and there are "chatPingMessageInterval" seconds passed from last message that sends to chat
+             * it will send a ping message on the main thread
+             *
+             */
+            self.lastSentMessageTimer?.suspend()
+            DispatchQueue.global().async {
+                self.lastSentMessageTime = Date()
+//                self.lastSentMessageTimeoutId = RepeatingTimer(timeInterval: TimeInterval(self.chatPingMessageInterval))
+                self.lastSentMessageTimer?.eventHandler = {
+                    if let lastSendMessageTimeBanged = self.lastSentMessageTime {
+                        let elapsed = Int(Date().timeIntervalSince(lastSendMessageTimeBanged))
+                        if (elapsed >= self.chatPingMessageInterval) && (self.chatState == true) {
+                            DispatchQueue.main.async {
+                                self.ping()
+                            }
+                            self.lastSentMessageTimer?.suspend()
+                        }
+                    }
+                }
+                self.lastSentMessageTimer?.resume()
+            }
+        }
+    }
+
+    
     var chatState = false
     var cacheTimeStamp = (2 * 24) * (60 * 60)
     
@@ -224,6 +276,7 @@ public class Chat {
     public var clearHistoryCallbackToUser:         callbackTypeAlias?
     public var getAdminListCallbackToUser:         callbackTypeAlias?
     public var setRoleToUserCallbackToUser:        callbackTypeAlias?
+    public var removeRoleFromUserCallbackToUser:    callbackTypeAlias?
 //    public var sendSignalMessageCallbackToUser:    callbackTypeAlias?
     
     

@@ -51,10 +51,12 @@ public enum chatMessageVOTypes: Int {
     case BOT_MESSAGE                        = 40    // not implemented yet!
     case SPAM_PV_THREAD                     = 41
     case SET_RULE_TO_USER                   = 42
+    case REMOVE_ROLE_FROM_USER              = 43
     case CLEAR_HISTORY                      = 44
     case SYSTEM_MESSAGE                     = 46
     case GET_NOT_SEEN_DURATION              = 47
-    case GET_THREAD_ADMINS                  = 48    // it has been deprecated! (actualy has not been implemented yet! and won't be!!)
+    case PIN                                = 48
+    case UNPIN                              = 49
     case LOGOUT                             = 100
     case ERROR                              = 999
 }
@@ -214,34 +216,11 @@ public enum ThreadEventTypes {
     case THREAD_PARTICIPANT_NEW
     case THREAD_PARTICIPANT_DELETE
     
-    /*
-//    case CreateThread           // type 1
-//    case LeaveThread            // type 9
-//    case AddParticipant         // type 11
-    case GetThreads             // type 14
-    case GetHistory             // type 15
-//    case RemovedFromThread      // type 17
-//    case RemoveParticipant      // type 18
-//    case Mute                   // type 19
-//    case Unmute                 // type 20
-//    case UpdateThreadInfo       // type 21
-    case ThreadInfoUpdated      // type 30
-    case GetThreadParticipants          // type 27
-//    case LastSeenUpdated                // type 31
-    case GetMessageDeliveryParticipants // type 32
-    case GetMessageSeenParticipants     // type 33
-    case SpamPvThread           // type 41
-    case SetRoleToUser          // type 42
-    case ClearHistory           // type 44
-    case SignalMessage          // type 46
-    
-    case leaveParticipant     //= "Thread_Leave_Participant"
-    case infoUpdated          //= "Thread_Info_Updated"
-    case removedFrom          //= "Thread_Removed_From"
-    case unreadCountUpdate    //= "Thread_Unread_Count_Update"
-    case lastActivityTime     //= "Thread_Last_Activity_Time"
-    case isTyping
-    */
+    case THREAD_ADD_ADMIN
+    case THREAD_REMOVE_ADMIN
+    case THREAD_PIN
+    case THREAD_UNPIN
+ 
 }
 
 public enum MessageEventTypes {
@@ -262,13 +241,14 @@ public enum FileUploadEventTypes {
 }
 
 public enum SystemEventTypes {
-    case IS_TYPING      //
+    case SERVER_TIME
+    case IS_TYPING
     case STOP_TYPING
 }
 
 
 public enum BotEventTypes {
-    case BOT_MESSAGE    //
+    case BOT_MESSAGE    
 }
 
 

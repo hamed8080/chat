@@ -7,3 +7,16 @@
 //
 
 import Foundation
+
+
+open class BotEventModel {
+    
+    public let type:    BotEventTypes
+    public let message: Any?
+    
+    init(type: BotEventTypes, message: Any?) {
+        self.type       = type
+        self.message    = message
+    }
+    
+}

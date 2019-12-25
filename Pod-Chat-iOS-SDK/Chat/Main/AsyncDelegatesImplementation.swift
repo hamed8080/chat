@@ -251,24 +251,24 @@ extension Chat: AsyncDelegates {
         
         
         // checkout to keep the Chat alive
-        self.lastReceivedMessageTimeoutId?.suspend()
-        DispatchQueue.global().async {
-            self.lastReceivedMessageTime = Date()
-            let myTimeInterval = Double(self.chatPingMessageInterval) * 1.5
-            self.lastReceivedMessageTimeoutId = RepeatingTimer(timeInterval: myTimeInterval)
-            self.lastReceivedMessageTimeoutId?.eventHandler = {
-                if let lastReceivedMessageTimeBanged = self.lastReceivedMessageTime {
-                    let elapsed = Int(Date().timeIntervalSince(lastReceivedMessageTimeBanged))
-                    if (elapsed >= self.connectionCheckTimeout) {
-                        DispatchQueue.main.async {
-                            self.asyncClient?.asyncReconnectSocket()
-                        }
-                        self.lastReceivedMessageTimeoutId?.suspend()
-                    }
-                }
-            }
-            self.lastReceivedMessageTimeoutId?.resume()
-        }
+        lastReceivedMessageTimer = RepeatingTimer(timeInterval: (Double(self.chatPingMessageInterval) * 1.5))
+//        self.lastReceivedMessageTimeoutId?.suspend()
+//        DispatchQueue.global().async {
+//            self.lastReceivedMessageTime = Date()
+//            self.lastReceivedMessageTimeoutId = RepeatingTimer(timeInterval: (Double(self.chatPingMessageInterval) * 1.5))
+//            self.lastReceivedMessageTimeoutId?.eventHandler = {
+//                if let lastReceivedMessageTimeBanged = self.lastReceivedMessageTime {
+//                    let elapsed = Int(Date().timeIntervalSince(lastReceivedMessageTimeBanged))
+//                    if (elapsed >= self.connectionCheckTimeout) {
+//                        DispatchQueue.main.async {
+//                            self.asyncClient?.asyncReconnectSocket()
+//                        }
+//                        self.lastReceivedMessageTimeoutId?.suspend()
+//                    }
+//                }
+//            }
+//            self.lastReceivedMessageTimeoutId?.resume()
+//        }
         
         let chatMessage = ChatMessage(withContent: withContent.content.convertToJSON())
         receivedMessageHandler(withContent: chatMessage)
@@ -317,6 +317,9 @@ class ChatMessage {
     let type:           Int
     let uniqueId:       String
     
+    var messageId:      Int? = nil
+    var participantId:  Int? = nil
+    
     init(code: Int?, content: String?, contentCount: Int?, message: String?, messageType: Int, subjectId: Int?, time: Int, type: Int, uniqueId: String) {
         self.code           = code
         self.content        = content
@@ -339,6 +342,8 @@ class ChatMessage {
         self.time           = withContent["time"].intValue
         self.type           = withContent["type"].intValue
         self.uniqueId       = withContent["uniqueId"].stringValue
+        self.messageId      = withContent["messageId"].int
+        self.participantId  = withContent["participantId"].int
     }
     
     func returnToJSON() -> JSON {
@@ -350,7 +355,9 @@ class ChatMessage {
                                    "subjectId":     subjectId ?? NSNull(),
                                    "time":          time,
                                    "type":          type,
-                                   "uniqueId":      uniqueId]
+                                   "uniqueId":      uniqueId,
+                                   "messageId":     messageId ?? NSNull(),
+                                   "participantId": participantId ?? NSNull()]
         return myReturnValue
     }
     

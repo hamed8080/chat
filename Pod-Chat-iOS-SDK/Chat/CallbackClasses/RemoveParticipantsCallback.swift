@@ -29,13 +29,27 @@ extension Chat {
                                           contentCount:     message.contentCount,
                                           subjectId:        message.subjectId)
         
-        if let threadId = message.subjectId {
-            delegate?.threadEvents(type: ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME, result: threadId)
-            if let conAsJSON = message.content?.convertToJSON() {
-                let conversation = Conversation(messageContent: conAsJSON)
-                delegate?.threadEvents(type: ThreadEventTypes.THREAD_REMOVE_PARTICIPANTS, result: conversation)
-            }
-        }
+//        if let threadId = message.subjectId {
+//            delegate?.threadEvents(type: ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME, threadId: threadId, thread: nil, messageId: nil, senderId: nil)
+//            if let conAsJSON = message.content?.convertToJSON() {
+//                let conversation = Conversation(messageContent: conAsJSON)
+//                delegate?.threadEvents(type: ThreadEventTypes.THREAD_REMOVE_PARTICIPANTS, threadId: nil, thread: conversation, messageId: nil, senderId: nil)
+//            }
+//        }
+        
+        let tRemoveParticipantEM = ThreadEventModel(type:           ThreadEventTypes.THREAD_REMOVE_PARTICIPANTS,
+                                                    participants:   nil,
+                                                    threads:        nil,
+                                                    threadId:       message.subjectId,
+                                                    senderId:       nil)
+        delegate?.threadEvents(model: tRemoveParticipantEM)
+        let tLastActivityEM = ThreadEventModel(type:            ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME,
+                                               participants:    nil,
+                                               threads:         nil,
+                                               threadId:        message.subjectId,
+                                               senderId:        nil)
+        delegate?.threadEvents(model: tLastActivityEM)
+        
         
         if enableCache {
             var participantIds = [Int]()

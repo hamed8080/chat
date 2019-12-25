@@ -509,31 +509,32 @@ extension Chat {
      *
      */
     func runSendMessageTimer() {
-        /*
-         * first of all, it will suspend the timer
-         * then on the background thread it will run a timer
-         * if the "chatState" = true (means chat is still connected)
-         * and there are "chatPingMessageInterval" seconds passed from last message that sends to chat
-         * it will send a ping message on the main thread
-         *
-         */
-        self.lastSentMessageTimeoutId?.suspend()
-        DispatchQueue.global().async {
-            self.lastSentMessageTime = Date()
-            self.lastSentMessageTimeoutId = RepeatingTimer(timeInterval: TimeInterval(self.chatPingMessageInterval))
-            self.lastSentMessageTimeoutId?.eventHandler = {
-                if let lastSendMessageTimeBanged = self.lastSentMessageTime {
-                    let elapsed = Int(Date().timeIntervalSince(lastSendMessageTimeBanged))
-                    if (elapsed >= self.chatPingMessageInterval) && (self.chatState == true) {
-                        DispatchQueue.main.async {
-                            self.ping()
-                        }
-                        self.lastSentMessageTimeoutId?.suspend()
-                    }
-                }
-            }
-            self.lastSentMessageTimeoutId?.resume()
-        }
+        lastSentMessageTimer = RepeatingTimer(timeInterval: TimeInterval(self.chatPingMessageInterval))
+//        /*
+//         * first of all, it will suspend the timer
+//         * then on the background thread it will run a timer
+//         * if the "chatState" = true (means chat is still connected)
+//         * and there are "chatPingMessageInterval" seconds passed from last message that sends to chat
+//         * it will send a ping message on the main thread
+//         *
+//         */
+//        self.lastSentMessageTimeoutId?.suspend()
+//        DispatchQueue.global().async {
+//            self.lastSentMessageTime = Date()
+//            self.lastSentMessageTimeoutId = RepeatingTimer(timeInterval: TimeInterval(self.chatPingMessageInterval))
+//            self.lastSentMessageTimeoutId?.eventHandler = {
+//                if let lastSendMessageTimeBanged = self.lastSentMessageTime {
+//                    let elapsed = Int(Date().timeIntervalSince(lastSendMessageTimeBanged))
+//                    if (elapsed >= self.chatPingMessageInterval) && (self.chatState == true) {
+//                        DispatchQueue.main.async {
+//                            self.ping()
+//                        }
+//                        self.lastSentMessageTimeoutId?.suspend()
+//                    }
+//                }
+//            }
+//            self.lastSentMessageTimeoutId?.resume()
+//        }
     }
     
     
@@ -588,8 +589,8 @@ extension Chat {
                                     deliverCallback:    nil,
                                     seenCallback:       nil,
                                     uniuqueIdCallback:  nil)
-        } else if (lastSentMessageTimeoutId != nil) {
-            lastSentMessageTimeoutId?.suspend()
+        } else if (lastSentMessageTimer != nil) {
+            lastSentMessageTimer?.suspend()
         }
     }
     
@@ -785,8 +786,23 @@ extension Chat {
         // a message of type 31 (LAST_SEEN_UPDATED) comes from Server.
         case chatMessageVOTypes.LAST_SEEN_UPDATED.rawValue:
             log.verbose("Message of type 'LAST_SEEN_UPDATED' recieved", context: "Chat")
-            delegate?.threadEvents(type: ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME, result: message.subjectId ?? 0)
+//            delegate?.threadEvents(type: ThreadEventTypes.THREAD_UNREAD_COUNT_UPDATED, threadId: message.subjectId, thread: nil, messageId: message.messageId, senderId: message.participantId)
+//            delegate?.threadEvents(type: ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME, threadId: message.subjectId, thread: nil, messageId: nil, senderId: nil)
 //            delegate?.threadEvents(type: ThreadEventTypes.lastSeenUpdate, result: messageContent)
+            let tUnreadCountUpdateEM = ThreadEventModel(type:           ThreadEventTypes.THREAD_UNREAD_COUNT_UPDATED,
+                                                        participants:   nil,
+                                                        threads:        nil,
+                                                        threadId:       message.subjectId,
+                                                        senderId:       message.participantId)
+            delegate?.threadEvents(model: tUnreadCountUpdateEM)
+            let tActivityTimeEM = ThreadEventModel(type:            ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME,
+                                                   participants:    nil,
+                                                   threads:         nil,
+                                                   threadId:        message.subjectId,
+                                                   senderId:        nil)
+            delegate?.threadEvents(model: tActivityTimeEM)
+            
+            
             // this functionality has beed deprecated
             /*
              let paramsToSend: JSON = ["threadIds": messageContent["conversationId"].intValue]
@@ -820,8 +836,8 @@ extension Chat {
         // a message of type 40 (BOT_MESSAGE) comes from Server.
         case chatMessageVOTypes.BOT_MESSAGE.rawValue:
             log.verbose("Message of type 'BOT_MESSAGE' recieved", context: "Chat")
-            //            let result: JSON = ["bot": messageContent]
-            //            self.delegate?.botEvents(type: "BOT_MESSAGE", result: result)
+            let botEventModel = BotEventModel(type: BotEventTypes.BOT_MESSAGE, message: message.content)
+            delegate?.botEvents(model: botEventModel)
             break
             
         // a message of type 41 (SPAM_PV_THREAD) comes from Server.
@@ -834,16 +850,43 @@ extension Chat {
             responseOfSetRoleToUser(withMessage: message)
             break
             
+        // a message of type 43 (SET_RULE_TO_USER) comes from Server.
+        case chatMessageVOTypes.REMOVE_ROLE_FROM_USER.rawValue:
+            responseOfRemoveRoleFromUser(withMessage: message)
+            break
+            
         // a message of type 44 (CLEAR_HISTORY) comes from Server.
         case chatMessageVOTypes.CLEAR_HISTORY.rawValue:
             responseOfClearHistory(withMessage: message)
             break
             
-        // a message of type 45 (SIGNAL_MESSAGE) comes from Server
+        // a message of type 46 (SYSTEM_MESSAGE) comes from Server
         case chatMessageVOTypes.SYSTEM_MESSAGE.rawValue:
-            log.verbose("Message of type 'SIGNAL_MESSAGE' revieved", context: "Chat")
-//            delegate?.threadEvents(type: ThreadEventTypes.isTyping, result: "\(messageContentAsString)")
+            log.verbose("Message of type 'SYSTEM_MESSAGE' revieved", context: "Chat")
+            
+            let systemEventModel = SystemEventModel(type: SystemEventTypes.IS_TYPING, time: nil, threadId: message.subjectId, user: message.content)
+            delegate?.systemEvents(model: systemEventModel)
             return
+            
+        // a message of type 48 (PIN) comes from Server.
+        case chatMessageVOTypes.PIN.rawValue:
+            let tPinEM = ThreadEventModel(type:         ThreadEventTypes.THREAD_PIN,
+                                          participants: nil,
+                                          threads:      nil,
+                                          threadId:     message.subjectId,
+                                          senderId:     nil)
+            delegate?.threadEvents(model: tPinEM)
+            break
+            
+        // a message of type 49 (PIN) comes from Server.
+        case chatMessageVOTypes.UNPIN.rawValue:
+            let tPinEM = ThreadEventModel(type:         ThreadEventTypes.THREAD_UNPIN,
+                                          participants: nil,
+                                          threads:      nil,
+                                          threadId:     message.subjectId,
+                                          senderId:     nil)
+            delegate?.threadEvents(model: tPinEM)
+            break
             
         // a message of type 100 (LOGOUT) comes from Server.
         case chatMessageVOTypes.LOGOUT.rawValue:
@@ -909,15 +952,38 @@ extension Chat {
             Chat.cacheDB.saveMessageObjects(messages: [theMessage], getHistoryParams: nil)
         }
         
-        delegate?.messageEvents(type: MessageEventTypes.MESSAGE_NEW, result: message)
-        delegate?.threadEvents(type: ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME, result: threadId)
-        delegate?.threadEvents(type: ThreadEventTypes.THREAD_UNREAD_COUNT_UPDATED, result: threadId)
+        let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_NEW,
+                                                  message:  message,
+                                                  threadId: nil,
+                                                  senderId: nil)
+        delegate?.messageEvents(model: messageEventModel)
+        
+        let tLastActivityEM = ThreadEventModel(type:            ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME,
+                                               participants:    nil,
+                                               threads:         nil,
+                                               threadId:        threadId,
+                                               senderId:        nil)
+        delegate?.threadEvents(model: tLastActivityEM)
+        let tUnreadCountEM = ThreadEventModel(type:         ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME,
+                                              participants: nil,
+                                              threads:      nil,
+                                              threadId:     threadId,
+                                              senderId:     nil)
+        delegate?.threadEvents(model: tUnreadCountEM)
+        
+//        delegate?.threadEvents(type: ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME, threadId: threadId, thread: nil, messageId: nil, senderId: nil)
+//        delegate?.threadEvents(type: ThreadEventTypes.THREAD_UNREAD_COUNT_UPDATED, threadId: threadId, thread: nil, messageId: nil, senderId: nil)
     }
     
     
     func userRemovedFromThread(id: Int?) {
         if let threadId = id {
-            delegate?.threadEvents(type: ThreadEventTypes.THREAD_REMOVED_FROM, result: threadId)
+            let tRemoveFromThreadEM = ThreadEventModel(type:            ThreadEventTypes.THREAD_REMOVED_FROM,
+                                                       participants:    nil,
+                                                       threads:         nil,
+                                                       threadId:        threadId,
+                                                       senderId:        nil)
+            delegate?.threadEvents(model: tRemoveFromThreadEM)
             
             if enableCache {
                 Chat.cacheDB.deleteThreads(withThreadIds: [threadId])
@@ -929,7 +995,13 @@ extension Chat {
     func threadInfoUpdated(withMessage message: ChatMessage) {
         log.verbose("Message of type 'THREAD_INFO_UPDATED' recieved", context: "Chat")
         let conversation = Conversation(messageContent: message.content?.convertToJSON() ?? [:])
-        delegate?.threadEvents(type: ThreadEventTypes.THREAD_INFO_UPDATED, result: conversation)
+//        delegate?.threadEvents(type: ThreadEventTypes.THREAD_INFO_UPDATED, threadId: nil, thread: conversation, messageId: nil, senderId: nil)
+        let tInfoUpdatedEM = ThreadEventModel(type:         ThreadEventTypes.THREAD_INFO_UPDATED,
+                                              participants: nil,
+                                              threads:      [conversation],
+                                              threadId:     nil,
+                                              senderId:     nil)
+        delegate?.threadEvents(model: tInfoUpdatedEM)
     }
     
 }

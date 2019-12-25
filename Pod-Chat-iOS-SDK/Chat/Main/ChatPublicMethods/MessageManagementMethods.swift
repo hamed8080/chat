@@ -1270,7 +1270,8 @@ extension Chat {
     /// - It has no output
     public func stopTyping() {
         if let threadId = isTyping?.threadId, threadId != 0 {
-            delegate?.systemEvents(type: SystemEventTypes.STOP_TYPING, result: threadId)
+            let systemEventModel = SystemEventModel(type: SystemEventTypes.STOP_TYPING, time: nil, threadId: threadId, user: nil)
+            delegate?.systemEvents(model: systemEventModel)
         }
         isTyping = (0, "")
 //        for (index, item) in isTypingArray.enumerated() {

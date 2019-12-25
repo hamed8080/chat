@@ -20,9 +20,16 @@ extension Chat {
          */
         log.verbose("Message of type 'UNMUTE_THREAD' recieved", context: "Chat")
         
-        if let threadId = message.subjectId {
-            delegate?.threadEvents(type: ThreadEventTypes.THREAD_UNMUTE, result: threadId)
-        }
+//        if let threadId = message.subjectId {
+//            delegate?.threadEvents(type: ThreadEventTypes.THREAD_UNMUTE, threadId: threadId, thread: nil, messageId: nil, senderId: nil)
+//        }
+        
+        let tUnmuteEM = ThreadEventModel(type:          ThreadEventTypes.THREAD_UNMUTE,
+                                         participants:  nil,
+                                         threads:       nil,
+                                         threadId:      message.subjectId,
+                                         senderId:      nil)
+        delegate?.threadEvents(model: tUnmuteEM)
         
         let returnData = CreateReturnData(hasError:         false,
                                           errorMessage:     "",

@@ -31,8 +31,11 @@ extension Chat {
         
         let myMessage = Message(threadId:       message.subjectId,
                                 pushMessageVO:  message.content?.convertToJSON() ?? [:])
-        
-        delegate?.messageEvents(type: MessageEventTypes.MESSAGE_EDIT, result: myMessage)
+        let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_EDIT,
+                                                  message:  myMessage,
+                                                  threadId: nil,
+                                                  senderId: nil)
+        delegate?.messageEvents(model: messageEventModel)
         
         // save edited data on the cache
         // remove this message from wait edit queue
@@ -48,15 +51,15 @@ extension Chat {
                                       success: { (successJSON) in
                 self.editMessageCallbackToUser?(successJSON)
             }) { _ in }
-            chatEditMessageHandler(threadId: message.subjectId ?? 0, messageContent: message.content?.convertToJSON() ?? [:])
+//            chatEditMessageHandler(threadId: message.subjectId ?? 0, messageContent: message.content?.convertToJSON() ?? [:])
             Chat.map.removeValue(forKey: message.uniqueId)
         }
     }
     
-    func chatEditMessageHandler(threadId: Int, messageContent: JSON) {
-        let message = Message(threadId: threadId, pushMessageVO: messageContent)
-        delegate?.messageEvents(type: MessageEventTypes.MESSAGE_EDIT, result: message)
-    }
+//    func chatEditMessageHandler(threadId: Int, messageContent: JSON) {
+//        let message = Message(threadId: threadId, pushMessageVO: messageContent)
+//        delegate?.messageEvents(type: MessageEventTypes.MESSAGE_EDIT, message: message)
+//    }
     
     
     public class EditMessageCallbacks: CallbackProtocol {

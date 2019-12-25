@@ -7,3 +7,16 @@
 //
 
 import Foundation
+
+
+open class ContactEventModel {
+    
+    public let type:        ContactEventTypes
+    public let contacts:    [Contact]
+    
+    init(type: ContactEventTypes, contacts: [Contact]) {
+        self.type       = type
+        self.contacts   = contacts
+    }
+    
+}

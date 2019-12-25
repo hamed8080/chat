@@ -29,18 +29,32 @@ extension Chat {
                                           contentCount:   message.contentCount,
                                           subjectId:      message.subjectId)
         
-//        if enableCache {
-//            var participants = [Participant]()
-//            var adminRequest = false
-//            for item in message.content?.convertToJSON() ?? [] {
-//                let myParticipant = Participant(messageContent: item.1, threadId: message.subjectId!)
-//                if ((myParticipant.roles?.count ?? 0) > 0) {
-//                    adminRequest = true
-//                }
-//                participants.append(myParticipant)
-//            }
-//            Chat.cacheDB.saveThreadParticipantObjects(whereThreadIdIs: message.subjectId!, withParticipants: participants, isAdminRequest: adminRequest)
-//        }
+        if enableCache {
+            let threadParticipantsModel = GetThreadParticipantsModel(messageContent: returnData.resultAsArray ?? [],
+                                                                     contentCount: returnData.contentCount,
+                                                                     count:        0,
+                                                                     offset:       0,
+                                                                     hasError:     false,
+                                                                     errorMessage: "",
+                                                                     errorCode:    0)
+            let tParticipantsListChangeEM = ThreadEventModel(type:          ThreadEventTypes.THREAD_PARTICIPANTS_LIST_CHANGE,
+                                                             participants:  threadParticipantsModel.participants,
+                                                             threads:       nil,
+                                                             threadId:      message.subjectId,
+                                                             senderId:      nil)
+            delegate?.threadEvents(model: tParticipantsListChangeEM)
+            
+            var participants = [Participant]()
+            var adminRequest = false
+            for item in message.content?.convertToJSON() ?? [] {
+                let myParticipant = Participant(messageContent: item.1, threadId: message.subjectId!)
+                if ((myParticipant.roles?.count ?? 0) > 0) {
+                    adminRequest = true
+                }
+                participants.append(myParticipant)
+            }
+            Chat.cacheDB.saveThreadParticipantObjects(whereThreadIdIs: message.subjectId!, withParticipants: participants, isAdminRequest: adminRequest)
+        }
         
         if Chat.map[message.uniqueId] != nil {
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
@@ -71,20 +85,20 @@ extension Chat {
             if let arrayContent = response.resultAsArray {
                 let content = sendParams.content?.convertToJSON()
                 
-                if Chat.sharedInstance.enableCache {
-                    var participants = [Participant]()
-                    var adminRequest = false
-                    for item in response.resultAsArray ?? [] {
-                        let myParticipant = Participant(messageContent: item, threadId: response.subjectId!)
-                        if ((myParticipant.roles?.count ?? 0) > 0) {
-                            adminRequest = true
-                        }
-                        participants.append(myParticipant)
-                    }
-                    
-                    handleServerAndCacheDifferential(sendParams: sendParams, serverResponse: participants, adminRequest: adminRequest)
-                    Chat.cacheDB.saveThreadParticipantObjects(whereThreadIdIs: response.subjectId!, withParticipants: participants, isAdminRequest: adminRequest)
-                }
+//                if Chat.sharedInstance.enableCache {
+//                    var participants = [Participant]()
+//                    var adminRequest = false
+//                    for item in response.resultAsArray ?? [] {
+//                        let myParticipant = Participant(messageContent: item, threadId: response.subjectId!)
+//                        if ((myParticipant.roles?.count ?? 0) > 0) {
+//                            adminRequest = true
+//                        }
+//                        participants.append(myParticipant)
+//                    }
+//
+//                    handleServerAndCacheDifferential(sendParams: sendParams, serverResponse: participants, adminRequest: adminRequest)
+//                    Chat.cacheDB.saveThreadParticipantObjects(whereThreadIdIs: response.subjectId!, withParticipants: participants, isAdminRequest: adminRequest)
+//                }
                 
                 let getThreadParticipantsModel = GetThreadParticipantsModel(messageContent: arrayContent,
                                                                             contentCount:   response.contentCount,
@@ -97,6 +111,7 @@ extension Chat {
             }
         }
         
+        /*
         private func handleServerAndCacheDifferential(sendParams: SendChatMessageVO, serverResponse: [Participant], adminRequest: Bool) {
             
             if let content = sendParams.content?.convertToJSON() {
@@ -116,9 +131,14 @@ extension Chat {
                                 break
                             }
                         }
-                        // meands this contact was not on the cache response
+                        // meands this participant was not on the cache response
                         if !foundThrd {
-                            Chat.sharedInstance.delegate?.threadEvents(type: ThreadEventTypes.THREAD_PARTICIPANT_NEW, result: participant)
+                            let tNewParticipantEM = ThreadEventModel(type: ThreadEventTypes.THREAD_PARTICIPANT_NEW,
+                                                                     participants: [participant],
+                                                                     threads: nil,
+                                                                     threadId: nil,
+                                                                     senderId: nil)
+                            Chat.sharedInstance.delegate?.threadEvents(model: tNewParticipantEM)
                         }
                     }
                     
@@ -133,13 +153,19 @@ extension Chat {
                         }
                         // meands this contact was not on the server response
                         if !foundThrd {
-                            Chat.sharedInstance.delegate?.threadEvents(type: ThreadEventTypes.THREAD_PARTICIPANT_DELETE, result: cacheParticipant)
+                            let tNewParticipantEM = ThreadEventModel(type: ThreadEventTypes.THREAD_PARTICIPANT_DELETE,
+                                                                     participants: [cacheParticipant],
+                                                                     threads: nil,
+                                                                     threadId: nil,
+                                                                     senderId: nil)
+                            Chat.sharedInstance.delegate?.threadEvents(model: tNewParticipantEM)
                         }
                     }
                     
                 }
             }
         }
+        */
         
     }
     
