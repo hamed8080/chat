@@ -218,9 +218,11 @@ extension Chat {
          */
         if enableCache {
             let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(content:          sendTextMessageInput.content,
-                                                                          metadata:         sendTextMessageInput.metadata,
+//                                                                          metadata:         sendTextMessageInput.metadata,
+                                                                          metadata:         (sendTextMessageInput.metadata != nil) ? "\(sendTextMessageInput.metadata)" : nil,
                                                                           repliedTo:        sendTextMessageInput.repliedTo,
-                                                                          systemMetadata:   sendTextMessageInput.systemMetadata,
+//                                                                          systemMetadata:   sendTextMessageInput.systemMetadata,
+                                                                          systemMetadata:   (sendTextMessageInput.systemMetadata != nil) ? "\(sendTextMessageInput.systemMetadata)" : nil,
                                                                           threadId:         sendTextMessageInput.threadId,
                                                                           typeCode:         sendTextMessageInput.typeCode,
                                                                           uniqueId:         tempUniqueId)
@@ -357,7 +359,8 @@ extension Chat {
          */
         if enableCache {
             let messageObjectToSendToQueue = QueueOfWaitEditMessagesModel(content:      editMessageInput.content,
-                                                                          metadata:     editMessageInput.metadata,
+//                                                                          metadata:     editMessageInput.metadata,
+                                                                          metadata:     (editMessageInput.metadata != nil) ? "\(editMessageInput.metadata!)" : nil,
                                                                           repliedTo:    editMessageInput.repliedTo,
                                                                           messageId:    editMessageInput.messageId,
                                                                           threadId:     nil,
@@ -437,7 +440,8 @@ extension Chat {
          */
         if enableCache {
             let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(content:          replyMessageInput.content,
-                                                                          metadata:         replyMessageInput.metadata,
+//                                                                          metadata:         replyMessageInput.metadata,
+                                                                          metadata:         (replyMessageInput.metadata != nil) ? "\(replyMessageInput.metadata!)" : nil,
                                                                           repliedTo:        replyMessageInput.repliedTo,
                                                                           systemMetadata:   nil,
                                                                           threadId:         replyMessageInput.subjectId,
@@ -513,7 +517,7 @@ extension Chat {
             for (index, item) in forwardMessageInput.messageIds.enumerated() {
                 let messageObjectToSendToQueue = QueueOfWaitForwardMessagesModel(//messageIds:    [item],
                                                                                  messageId:     item,
-                                                                                 metadata:      forwardMessageInput.metadata,
+                                                                                 metadata:      (forwardMessageInput.metadata != nil) ? "\(forwardMessageInput.metadata!)" : nil,
                                                                                  repliedTo:     forwardMessageInput.repliedTo,
                                                                                  threadId:      forwardMessageInput.threadId,
                                                                                  typeCode:      forwardMessageInput.typeCode,
@@ -598,7 +602,8 @@ extension Chat {
             let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      sendFileMessageInput.content,
                                                                           fileName:     sendFileMessageInput.fileName,
                                                                           imageName:    sendFileMessageInput.imageName,
-                                                                          metadata:     sendFileMessageInput.metadata,
+//                                                                          metadata:     sendFileMessageInput.metadata,
+                                                                          metadata:     (sendFileMessageInput.metadata != nil) ? "\(sendFileMessageInput.metadata!)" : nil,
                                                                           repliedTo:    sendFileMessageInput.repliedTo,
                                                                           threadId:     sendFileMessageInput.threadId,
                                                                           xC:           sendFileMessageInput.xC,
@@ -755,7 +760,8 @@ extension Chat {
             let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      replyFileMessageInput.content,
                                                                           fileName:     replyFileMessageInput.fileName,
                                                                           imageName:    replyFileMessageInput.imageName,
-                                                                          metadata:     replyFileMessageInput.metadata,
+//                                                                          metadata:     replyFileMessageInput.metadata,
+                                                                          metadata:     (replyFileMessageInput.metadata != nil) ? "\(replyFileMessageInput.metadata!)" : nil,
                                                                           repliedTo:    replyFileMessageInput.repliedTo,
                                                                           threadId:     replyFileMessageInput.threadId,
                                                                           xC:           replyFileMessageInput.xC,

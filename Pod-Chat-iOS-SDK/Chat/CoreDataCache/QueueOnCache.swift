@@ -23,17 +23,19 @@ extension Cache {
         messageToSaveOnQueue.typeCode   = textMessage.typeCode
         messageToSaveOnQueue.uniqueId   = textMessage.uniqueId
         
-        if let metadata2 = textMessage.metadata {
-            NSObject.convertJSONtoTransformable(dataToStore: metadata2) { (data) in
-                messageToSaveOnQueue.metadata = data
-            }
-        }
-        
-        if let systemMetadata2 = textMessage.systemMetadata {
-            NSObject.convertJSONtoTransformable(dataToStore: systemMetadata2) { (data) in
-                messageToSaveOnQueue.systemMetadata = data
-            }
-        }
+//        if let metadata2 = textMessage.metadata {
+//            NSObject.convertJSONtoTransformable(dataToStore: metadata2) { (data) in
+//                messageToSaveOnQueue.metadata = data
+//            }
+//        }
+//
+//        if let systemMetadata2 = textMessage.systemMetadata {
+//            NSObject.convertJSONtoTransformable(dataToStore: systemMetadata2) { (data) in
+//                messageToSaveOnQueue.systemMetadata = data
+//            }
+//        }
+        messageToSaveOnQueue.metadata       = textMessage.metadata
+        messageToSaveOnQueue.systemMetadata = textMessage.systemMetadata
         
         // save function that will try to save changes that made on the Cache
         saveContext(subject: "Create QueueOfTextMessages -create a new object-")
@@ -60,11 +62,13 @@ extension Cache {
                     messageToSaveOnQueue.typeCode   = editMessage.typeCode
                     messageToSaveOnQueue.uniqueId   = editMessage.uniqueId
                     messageToSaveOnQueue.threadId   = result.first!.threadId
-                    if let metadata2 = editMessage.metadata {
-                        NSObject.convertJSONtoTransformable(dataToStore: metadata2) { (data) in
-                            messageToSaveOnQueue.metadata = data
-                        }
-                    }
+//                    if let metadata2 = editMessage.metadata {
+//                        NSObject.convertJSONtoTransformable(dataToStore: metadata2) { (data) in
+//                            messageToSaveOnQueue.metadata = data
+//                        }
+//                    }
+                    messageToSaveOnQueue.metadata   = editMessage.metadata
+                    
                     // save function that will try to save changes that made on the Cache
                     saveContext(subject: "Create QueueOfEditMessages -create a new object-")
                 }
@@ -85,11 +89,12 @@ extension Cache {
         messageToSaveOnQueue.typeCode   = forwardMessage.typeCode
         messageToSaveOnQueue.uniqueId   = forwardMessage.uniqueId
         
-        if let metadata2 = forwardMessage.metadata {
-            NSObject.convertJSONtoTransformable(dataToStore: metadata2) { (data) in
-                messageToSaveOnQueue.metadata = data
-            }
-        }
+//        if let metadata2 = forwardMessage.metadata {
+//            NSObject.convertJSONtoTransformable(dataToStore: metadata2) { (data) in
+//                messageToSaveOnQueue.metadata = data
+//            }
+//        }
+        messageToSaveOnQueue.metadata   = forwardMessage.metadata
         
         // save function that will try to save changes that made on the Cache
         saveContext(subject: "Create QueueOfForwardMessages -create a new object-")
@@ -105,19 +110,20 @@ extension Cache {
         messageToSaveOnQueue.imageToSend    = fileMessage.imageToSend as NSData?
         messageToSaveOnQueue.repliedTo      = fileMessage.repliedTo as NSNumber?
 //        messageToSaveOnQueue.subjectId      = fileMessage.subjectId as NSNumber?
-        messageToSaveOnQueue.threadId           = fileMessage.threadId as NSNumber?
-        messageToSaveOnQueue.hC                 = fileMessage.hC
-        messageToSaveOnQueue.wC                 = fileMessage.wC
-        messageToSaveOnQueue.xC                 = fileMessage.xC
-        messageToSaveOnQueue.yC                 = fileMessage.yC
+        messageToSaveOnQueue.threadId       = fileMessage.threadId as NSNumber?
+        messageToSaveOnQueue.hC             = fileMessage.hC
+        messageToSaveOnQueue.wC             = fileMessage.wC
+        messageToSaveOnQueue.xC             = fileMessage.xC
+        messageToSaveOnQueue.yC             = fileMessage.yC
         messageToSaveOnQueue.typeCode    = fileMessage.typeCode
         messageToSaveOnQueue.uniqueId    = fileMessage.uniqueId
         
-        if let metadata2 = fileMessage.metadata {
-            NSObject.convertJSONtoTransformable(dataToStore: metadata2) { (data) in
-                messageToSaveOnQueue.metadata = data
-            }
-        }
+//        if let metadata2 = fileMessage.metadata {
+//            NSObject.convertJSONtoTransformable(dataToStore: metadata2) { (data) in
+//                messageToSaveOnQueue.metadata = data
+//            }
+//        }
+        messageToSaveOnQueue.metadata   = fileMessage.metadata
         
         // save function that will try to save changes that made on the Cache
         saveContext(subject: "Create QueueOfFileMessages -create a new object-")

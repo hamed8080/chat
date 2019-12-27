@@ -14,7 +14,8 @@ open class QueueOfWaitFileMessagesModel {
     let content:        String?
     let fileName:       String?
     let imageName:      String?
-    let metadata:       JSON?
+//    let metadata:       JSON?
+    let metadata:       String?
     let repliedTo:      Int?
     let threadId:       Int?
     let xC:             String?
@@ -30,7 +31,8 @@ open class QueueOfWaitFileMessagesModel {
     init(content:       String?,
          fileName:      String?,
          imageName:     String?,
-         metadata:      JSON?,
+//         metadata:      JSON?,
+         metadata:      String?,
          repliedTo:     Int?,
          threadId:      Int?,
          xC:            String?,
@@ -63,7 +65,8 @@ open class QueueOfWaitFileMessagesModel {
         self.content        = fileMessageInputModel.content
         self.fileName       = fileMessageInputModel.fileName
         self.imageName      = fileMessageInputModel.imageName
-        self.metadata       = fileMessageInputModel.metadata
+//        self.metadata       = fileMessageInputModel.metadata
+        self.metadata       = (fileMessageInputModel.metadata != nil) ? "\(fileMessageInputModel.metadata!)" : nil
         self.repliedTo      = fileMessageInputModel.repliedTo
         self.threadId       = fileMessageInputModel.threadId
         self.xC             = fileMessageInputModel.xC
@@ -76,5 +79,23 @@ open class QueueOfWaitFileMessagesModel {
         self.typeCode       = fileMessageInputModel.typeCode
         self.uniqueId       = uniqueId
     }
+    
+    
+    public func returnDataAsJSONAndData() -> (jsonResult: JSON, imageToSend: Data?, fileToSend: Data?) {
+        let result: JSON = ["content":      content ?? NSNull(),
+                            "fileName":     fileName ?? NSNull(),
+                            "imageName":    imageName ?? NSNull(),
+                            "metadata":     metadata ?? NSNull(),
+                            "repliedTo":    repliedTo ?? NSNull(),
+                            "threadId":     threadId ?? NSNull(),
+                            "xC":           xC ?? NSNull(),
+                            "yC":           yC ?? NSNull(),
+                            "hC":           hC ?? NSNull(),
+                            "wC":           wC ?? NSNull(),
+                            "typeCode":     typeCode ?? NSNull(),
+                            "uniqueId":     uniqueId ?? NSNull()]
+        return (result, imageToSend, fileToSend)
+    }
+    
     
 }

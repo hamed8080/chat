@@ -38,6 +38,7 @@ public class QueueOfUploadFiles: NSManagedObject {
                                                                           fileSize:         fileSize,
                                                                           originalFileName: self.originalFileName,
                                                                           threadId:         threadId,
+                                                                          typeCode:         self.typeCode,
                                                                           uniqueId:         self.uniqueId)
             return queueOfWaitUploadFilesModel
         }

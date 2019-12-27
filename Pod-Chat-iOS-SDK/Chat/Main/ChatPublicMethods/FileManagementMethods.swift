@@ -55,11 +55,12 @@ extension Chat {
                                                                           fileSize:           uploadImageInput.fileSize,
                                                                           originalFileName:   uploadImageInput.originalFileName,
                                                                           threadId:           uploadImageInput.threadId,
-                                                                          uniqueId:           uploadImageInput.uniqueId,
                                                                           xC:                 uploadImageInput.xC,
                                                                           yC:                 uploadImageInput.yC,
                                                                           hC:                 uploadImageInput.hC,
-                                                                          wC:                 uploadImageInput.wC)
+                                                                          wC:                 uploadImageInput.wC,
+                                                                          typeCode:           uploadImageInput.typeCode,
+                                                                          uniqueId:           uploadImageInput.uniqueId)
             Chat.cacheDB.saveUploadImageToWaitQueue(image: messageObjectToSendToQueue)
         }
         
@@ -208,6 +209,7 @@ extension Chat {
                                                                          fileSize:          uploadFileInput.fileSize,
                                                                          originalFileName:  uploadFileInput.originalFileName,
                                                                          threadId:          uploadFileInput.threadId,
+                                                                         typeCode:          uploadFileInput.typeCode,
                                                                          uniqueId:          uploadFileInput.uniqueId)
             Chat.cacheDB.saveUploadFileToWaitQueue(file: messageObjectToSendToQueue)
         }
