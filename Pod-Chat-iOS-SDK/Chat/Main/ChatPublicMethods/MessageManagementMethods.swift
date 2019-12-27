@@ -202,6 +202,7 @@ extension Chat {
                                 onSeen:                 @escaping callbackTypeAlias) {
         log.verbose("Try to send Message with this parameters: \n \(sendTextMessageInput)", context: "Chat")
         
+        stopTyping()
         sendCallbackToUserOnSent = onSent
         sendCallbackToUserOnDeliver = onDelivere
         sendCallbackToUserOnSeen = onSeen
@@ -283,6 +284,7 @@ extension Chat {
                                        onSeen:      @escaping callbackTypeAlias) {
         log.verbose("Try to send BotMessage with this parameters: \n \(sendInterActiveMessageInput)", context: "Chat")
         
+        stopTyping()
         sendCallbackToUserOnSent = onSent
         sendCallbackToUserOnDeliver = onDelivered
         sendCallbackToUserOnSeen = onSeen
@@ -342,6 +344,7 @@ extension Chat {
                             completion:         @escaping callbackTypeAlias) {
         log.verbose("Try to request to edit message with this parameters: \n \(editMessageInput)", context: "Chat")
         
+        stopTyping()
         editMessageCallbackToUser = completion
         
         let requestUniqueId = editMessageInput.uniqueId ?? generateUUID()
@@ -419,6 +422,7 @@ extension Chat {
                              onSeen:            @escaping callbackTypeAlias) {
         log.verbose("Try to reply Message with this parameters: \n \(replyMessageInput)", context: "Chat")
         
+        stopTyping()
         sendCallbackToUserOnSent = onSent
         sendCallbackToUserOnDeliver = onDelivere
         sendCallbackToUserOnSeen = onSeen
@@ -522,7 +526,6 @@ extension Chat {
         sendCallbackToUserOnDeliver = onDelivere
         sendCallbackToUserOnSeen = onSeen
         
-        // ToDo: upward code must be delete and this code will be the correct implementation
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.FORWARD_MESSAGE.rawValue,
                                             content:            "\(forwardMessageInput.messageIds)",
                                             metadata:           (forwardMessageInput.metadata != nil) ? "\(forwardMessageInput.metadata!)" : nil,
@@ -1235,6 +1238,7 @@ extension Chat {
         if (isTyping?.threadId != 0) {
             stopTyping()
         }
+        
         isTyping = (threadId: threadId, uniqueId: requestUniqueId)
         // for every x seconds, call this function:
         var counter = 0
