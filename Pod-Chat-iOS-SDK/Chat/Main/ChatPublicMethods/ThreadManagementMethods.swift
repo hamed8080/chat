@@ -830,6 +830,115 @@ extension Chat {
     
     
     
+    // MARK: - Pin/Unpin Thread
+    
+    /// PinThread:
+    /// pin a thread
+    ///
+    /// By calling this function, a request of type 48 (PIN_THREAD) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "PinAndUnpinThreadRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as responses.
+    ///
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (PinAndUnpinThreadRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! PinUnpinThreadModel)
+    public func pinThread(inputModel pinThreadInput: PinAndUnpinThreadRequestModel,
+                           uniqueId:        @escaping (String) -> (),
+                           completion:      @escaping callbackTypeAlias) {
+        
+        log.verbose("Try to request to pin threads with this parameters: \n \(pinThreadInput)", context: "Chat")
+        
+        pinThreadCallbackToUser = completion
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.PIN_THREAD.rawValue,
+                                            content:            nil,
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          pinThreadInput.threadId,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           pinThreadInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           pinThreadInput.uniqueId ?? generateUUID(),
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: true)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callback:           PinThreadCallbacks(),
+                                callbacks:          nil,
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil) { (muteThreadUniqueId) in
+            uniqueId(muteThreadUniqueId)
+        }
+        
+    }
+    
+    
+    /// UnpinThread:
+    /// unpin a thread
+    ///
+    /// By calling this function, a request of type 49 (UNPIN_THREAD) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "PinAndUnpinThreadRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as responses.
+    ///
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (PinAndUnpinThreadRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! PinUnpinThreadModel)
+    public func unpinThread(inputModel unpinThreadInput: PinAndUnpinThreadRequestModel,
+                             uniqueId:          @escaping (String) -> (),
+                             completion:        @escaping callbackTypeAlias) {
+        
+        log.verbose("Try to request to unpin threads with this parameters: \n \(unpinThreadInput)", context: "Chat")
+        
+        unpinThreadCallbackToUser = completion
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.UNPIN_THREAD.rawValue,
+                                            content:            nil,
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          unpinThreadInput.threadId,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           unpinThreadInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           unpinThreadInput.uniqueId ?? generateUUID(),
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: true)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callback:           UnpinThreadCallbacks(),
+                                callbacks:          nil,
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil) { (muteThreadUniqueId) in
+            uniqueId(muteThreadUniqueId)
+        }
+        
+    }
+    
 }
 
 

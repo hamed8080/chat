@@ -154,6 +154,10 @@
 		3E8ADC7F23B3559000E3538D /* EventTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADC7E23B3559000E3538D /* EventTypes.swift */; };
 		3E8ADC8123B358F300E3538D /* DownloaUploadActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADC8023B358F300E3538D /* DownloaUploadActions.swift */; };
 		3E8ADC8323B3590300E3538D /* SignalMessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADC8223B3590300E3538D /* SignalMessageType.swift */; };
+		3E8ADCF123B783CC00E3538D /* PinAndUnpinThreadRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADCF023B783CC00E3538D /* PinAndUnpinThreadRequestModel.swift */; };
+		3E8ADCFD23B7845200E3538D /* PinThreadCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADCFC23B7845200E3538D /* PinThreadCallback.swift */; };
+		3E8ADCFF23B784E600E3538D /* PinUnpinThreadModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADCFE23B784E600E3538D /* PinUnpinThreadModel.swift */; };
+		3E8ADD0123B7855500E3538D /* UnpinThreadCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADD0023B7855500E3538D /* UnpinThreadCallback.swift */; };
 		3E8D56D521DB975700B844DE /* MapReverseRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8D56D421DB975700B844DE /* MapReverseRequestModel.swift */; };
 		3E8D56D721DB9CF300B844DE /* MapReverseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8D56D621DB9CF300B844DE /* MapReverseModel.swift */; };
 		3E8D56D921DB9D6200B844DE /* MapReverse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8D56D821DB9D6200B844DE /* MapReverse.swift */; };
@@ -497,6 +501,10 @@
 		3E8ADC7E23B3559000E3538D /* EventTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTypes.swift; sourceTree = "<group>"; };
 		3E8ADC8023B358F300E3538D /* DownloaUploadActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloaUploadActions.swift; sourceTree = "<group>"; };
 		3E8ADC8223B3590300E3538D /* SignalMessageType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalMessageType.swift; sourceTree = "<group>"; };
+		3E8ADCF023B783CC00E3538D /* PinAndUnpinThreadRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinAndUnpinThreadRequestModel.swift; sourceTree = "<group>"; };
+		3E8ADCFC23B7845200E3538D /* PinThreadCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinThreadCallback.swift; sourceTree = "<group>"; };
+		3E8ADCFE23B784E600E3538D /* PinUnpinThreadModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinUnpinThreadModel.swift; sourceTree = "<group>"; };
+		3E8ADD0023B7855500E3538D /* UnpinThreadCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnpinThreadCallback.swift; sourceTree = "<group>"; };
 		3E8D56D421DB975700B844DE /* MapReverseRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapReverseRequestModel.swift; sourceTree = "<group>"; };
 		3E8D56D621DB9CF300B844DE /* MapReverseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapReverseModel.swift; sourceTree = "<group>"; };
 		3E8D56D821DB9D6200B844DE /* MapReverse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapReverse.swift; sourceTree = "<group>"; };
@@ -774,6 +782,7 @@
 				3EA156A521CE1CE8004B1346 /* UpdateThreadInfoRequestModel.swift */,
 				3EA156A321CE1CD6004B1346 /* UploadFileRequestModel.swift */,
 				3EA156A121CE1CC4004B1346 /* UploadImageRequestModel.swift */,
+				3E8ADCF023B783CC00E3538D /* PinAndUnpinThreadRequestModel.swift */,
 			);
 			path = InputModels;
 			sourceTree = "<group>";
@@ -871,6 +880,8 @@
 				3EB5208022ABF4DC00B7EA45 /* SpamPvThread.swift */,
 				3EB5206E22ABF36500B7EA45 /* SendMessageCallbacks.swift */,
 				3EB5208C22ABF5AF00B7EA45 /* SendSignalMessageCallback.swift */,
+				3E8ADCFC23B7845200E3538D /* PinThreadCallback.swift */,
+				3E8ADD0023B7855500E3538D /* UnpinThreadCallback.swift */,
 				3EB5208A22ABF58C00B7EA45 /* SetRoleToUserCallback.swift */,
 				3E33159823AFD0EB0070A3D1 /* RemoveRoleFromUserCallback.swift */,
 				3EB5207A22ABF45E00B7EA45 /* UnblockContactCallbacks.swift */,
@@ -933,6 +944,7 @@
 				3EBBEDED2174C5A600F5CDC7 /* GetContactsModel.swift */,
 				3EBBEDF12174C5EC00F5CDC7 /* GetHistoryModel.swift */,
 				3EE6B50E22DF46A400540F17 /* SendMessageModel.swift */,
+				3E8ADCFE23B784E600E3538D /* PinUnpinThreadModel.swift */,
 				3EBBEDF32174C69700F5CDC7 /* GetThreadParticipantsModel.swift */,
 				3EBBEDEF2174C5C800F5CDC7 /* GetThreadsModel.swift */,
 				3E8D56D621DB9CF300B844DE /* MapReverseModel.swift */,
@@ -1369,6 +1381,7 @@
 				3EAAFAB423A6379600003258 /* DownloadFileModel.swift in Sources */,
 				3EA1567821CE1AF0004B1346 /* UpdateContactsRequestModel.swift in Sources */,
 				3E43D1562132BF700069DF9A /* SendMessage.swift in Sources */,
+				3E8ADCF123B783CC00E3538D /* PinAndUnpinThreadRequestModel.swift in Sources */,
 				3E0A76C222AFD6F8009D669E /* FileManagementMethods.swift in Sources */,
 				3E8D87E3221861920092B440 /* QueueOfFileMessages+CoreDataProperties.swift in Sources */,
 				3EA1569A21CE1C68004B1346 /* ReplyTextMessageRequestModel.swift in Sources */,
@@ -1409,6 +1422,7 @@
 				3EA156AA21CE1D10004B1346 /* MessageDeliverySeenListRequestModel.swift in Sources */,
 				3E3315A723B206CC0070A3D1 /* BotEventModel.swift in Sources */,
 				3E8ADC7D23B3556300E3538D /* ServiceAddresses.swift in Sources */,
+				3E8ADCFD23B7845200E3538D /* PinThreadCallback.swift in Sources */,
 				3EA1569421CE1C2B004B1346 /* LeaveThreadRequestModel.swift in Sources */,
 				3E24083E21F5C844001F32F1 /* CMMessage+CoreDataProperties.swift in Sources */,
 				3EBBEDD72174C27B00F5CDC7 /* Message.swift in Sources */,
@@ -1439,12 +1453,14 @@
 				3E0A76C022AFD5A7009D669E /* MessageManagementMethods.swift in Sources */,
 				3EA1567621CE1AC9004B1346 /* AddContactsRequestModel.swift in Sources */,
 				3E8E923122A38F2D0037CD41 /* SendSignalMessageRequestModel.swift in Sources */,
+				3E8ADD0123B7855500E3538D /* UnpinThreadCallback.swift in Sources */,
 				3EB5208922ABF56600B7EA45 /* GetAdminListCallback.swift in Sources */,
 				3EB5204B22ABE83100B7EA45 /* CacheExtensions.swift in Sources */,
 				3EB5205E22ABF1A400B7EA45 /* UserInfoCallback.swift in Sources */,
 				3EA1569E21CE1C96004B1346 /* SendFileMessageRequestModel.swift in Sources */,
 				3E8ADC4B23B24B4400E3538D /* FileUploadEventModel.swift in Sources */,
 				3E8ADC7123B3522500E3538D /* Roles.swift in Sources */,
+				3E8ADCFF23B784E600E3538D /* PinUnpinThreadModel.swift in Sources */,
 				3EB5208D22ABF5AF00B7EA45 /* SendSignalMessageCallback.swift in Sources */,
 				3E24085221F5C844001F32F1 /* CMContact+CoreDataProperties.swift in Sources */,
 				3E8ADC6B23B3514F00E3538D /* SendAsyncMessageVO.swift in Sources */,
