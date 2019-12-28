@@ -426,7 +426,7 @@ extension Cache {
     
     
     // MARK: - delete Messages:
-    // ToDo: make it better, because it calls another function t delete messages (one more query on the cache)
+    // ToDo: make it better, because it calls another function to delete messages (one more query on the cache)
     /// Delete Message:
     /// by calling this method, we will delete specific CMMessages
     ///

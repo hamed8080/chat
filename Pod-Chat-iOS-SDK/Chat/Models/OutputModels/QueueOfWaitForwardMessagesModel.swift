@@ -13,7 +13,8 @@ open class QueueOfWaitForwardMessagesModel {
     
 //    let messageIds: [Int]?
     let messageId:  Int?
-    let metadata:   JSON?
+//    let metadata:   JSON?
+    let metadata:   String?
     let repliedTo:  Int?
     let threadId:   Int?
     
@@ -22,7 +23,8 @@ open class QueueOfWaitForwardMessagesModel {
     
     init(//messageIds:    [Int]?,
          messageId:     Int?,
-         metadata:      JSON?,
+//         metadata:      JSON?,
+         metadata:      String?,
          repliedTo:     Int?,
          threadId:      Int?,
          typeCode:      String?,
@@ -45,5 +47,16 @@ open class QueueOfWaitForwardMessagesModel {
 //        self.typeCode   = forwardMessageInputModel.typeCode
 //        self.uniqueId   = uniqueId
 //    }
+    
+    
+    public func returnDataAsJSON() -> JSON {
+        let result: JSON = ["messageId":    messageId ?? NSNull(),
+                            "metadata":     metadata ?? NSNull(),
+                            "repliedTo":    repliedTo ?? NSNull(),
+                            "threadId":     threadId ?? NSNull(),
+                            "typeCode":     typeCode ?? NSNull(),
+                            "uniqueId":     uniqueId ?? NSNull()]
+        return result
+    }
     
 }

@@ -35,7 +35,13 @@ extension Chat {
                                           contentCount:     nil,
                                           subjectId:        message.subjectId)
         
-        delegate?.messageEvents(type: MessageEventTypes.MESSAGE_SEND, result: returnData)
+        let myMessage = Message(threadId:       message.subjectId,
+                                pushMessageVO:  message.content?.convertToJSON() ?? [:])
+        let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_SEND,
+                                                  message:  myMessage,
+                                                  threadId: message.subjectId,
+                                                  senderId: nil)
+        delegate?.messageEvents(model: messageEventModel)
         
         if enableCache {
             if let _ = message.subjectId {
@@ -81,7 +87,13 @@ extension Chat {
                                           contentCount:     nil,
                                           subjectId:        message.subjectId)
         
-        delegate?.messageEvents(type: MessageEventTypes.MESSAGE_DELIVERY, result: returnData)
+        let myMessage = Message(threadId:         message.subjectId,
+                                pushMessageVO:    message.content?.convertToJSON() ?? [:])
+        let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_DELIVERY,
+                                                  message:  myMessage,
+                                                  threadId: message.subjectId,
+                                                  senderId: message.participantId)
+        delegate?.messageEvents(model: messageEventModel)
         
         var findItAt: Int?
         let threadIdObject = Chat.mapOnDeliver["\(message.subjectId ?? 0)"]
@@ -169,7 +181,13 @@ extension Chat {
                                           contentCount:     nil,
                                           subjectId:        message.subjectId)
         
-        delegate?.messageEvents(type: MessageEventTypes.MESSAGE_SEEN, result: returnData)
+        let myMessage = Message(threadId:         message.subjectId,
+                                pushMessageVO:    message.content?.convertToJSON() ?? [:])
+        let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_SEEN,
+                                                  message:  myMessage,
+                                                  threadId: message.subjectId,
+                                                  senderId: message.participantId)
+        delegate?.messageEvents(model: messageEventModel)
         
         var findItAt: Int?
         let threadIdObject = Chat.mapOnSeen["\(message.subjectId ?? 0)"]

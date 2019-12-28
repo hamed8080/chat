@@ -29,6 +29,14 @@ open class GetContactsRequestModel {
         self.uniqueId   = uniqueId
     }
     
+    public init(json: JSON) {
+        self.count      = json["count"].int
+        self.offset     = json["offset"].int
+        self.query      = json["query"].string
+        self.typeCode   = json["typeCode"].string
+        self.uniqueId   = json["uniqueId"].string
+    }
+    
     func convertContentToJSON() -> JSON {
         var content: JSON = [:]
         

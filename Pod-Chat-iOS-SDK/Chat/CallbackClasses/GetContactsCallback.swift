@@ -50,14 +50,14 @@ extension Chat {
                                           contentCount:     message.contentCount,
                                           subjectId:        message.subjectId)
         
-        if enableCache {
-            var contacts = [Contact]()
-            for item in message.content?.convertToJSON() ?? [:] {
-                let myContact = Contact(messageContent: item.1)
-                contacts.append(myContact)
-            }
-            Chat.cacheDB.saveContact(withContactObjects: contacts)
-        }
+//        if enableCache {
+//            var contacts = [Contact]()
+//            for item in message.content?.convertToJSON() ?? [:] {
+//                let myContact = Contact(messageContent: item.1)
+//                contacts.append(myContact)
+//            }
+//            Chat.cacheDB.saveContact(withContactObjects: contacts)
+//        }
         
         if Chat.map[message.uniqueId] != nil {
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
@@ -92,6 +92,20 @@ extension Chat {
             log.verbose("GetContactsCallback", context: "Chat")
             if let arrayContent = response.resultAsArray {
                 let content = sendParams.content?.convertToJSON()
+                
+                if Chat.sharedInstance.enableCache {
+                    var contacts = [Contact]()
+                    for item in response.resultAsArray ?? [] {
+                        let myContact = Contact(messageContent: item)
+                        contacts.append(myContact)
+                    }
+                    
+//                    handleServerAndCacheDifferential(sendParams: sendParams, serverResponse: contacts)
+                    let contactEventModel = ContactEventModel(type: ContactEventTypes.CONTACTS_LIST_CHANGE, contacts: contacts)
+                    Chat.sharedInstance.delegate?.contactEvents(model: contactEventModel)
+                    Chat.cacheDB.saveContact(withContactObjects: contacts)
+                }
+                
                 let getContactsModel = GetContactsModel(messageContent: arrayContent,
                                                         contentCount:   response.contentCount,
                                                         count:          content?["count"].intValue ?? 0,
@@ -102,6 +116,57 @@ extension Chat {
                 success(getContactsModel)
             }
         }
+        
+        /*
+        private func handleServerAndCacheDifferential(sendParams: SendChatMessageVO, serverResponse: [Contact]) {
+            
+            if let content = sendParams.content?.convertToJSON() {
+                let getCntactsInput = GetContactsRequestModel(json: content)
+                if let cacheContactResult = Chat.cacheDB.retrieveContacts(ascending:        true,
+                                                                          cellphoneNumber:  nil,
+                                                                          count:            getCntactsInput.count ?? 50,
+                                                                          email:            nil,
+                                                                          firstName:        nil,
+                                                                          id:               nil,
+                                                                          lastName:         nil,
+                                                                          offset:           getCntactsInput.offset ?? 0,
+                                                                          search:           getCntactsInput.query,
+                                                                          timeStamp:        Chat.sharedInstance.cacheTimeStamp,
+                                                                          uniqueId:         nil) {
+                    // check if there was any contact on the server response that wasn't on the cache, send them as New Contact Event to the client
+                    for contact in serverResponse {
+                        var foundCntc = false
+                        for cacheContact in cacheContactResult.contacts {
+                            if (contact.id == cacheContact.id) {
+                                foundCntc = true
+                                break
+                            }
+                        }
+                        // meands this contact was not on the cache response
+                        if !foundCntc {
+                            Chat.sharedInstance.delegate?.contactEvents(type: ContactEventTypes.CONTACT_NEW, contacts: [contact])
+                        }
+                    }
+                    
+                    // check if there was any contact on the cache response that wasn't on the server response, send them as Delete Contact Event to the client
+                    for cacheContact in cacheContactResult.contacts {
+                        var foundCntc = false
+                        for contact in serverResponse {
+                            if (cacheContact.id == contact.id) {
+                                foundCntc = true
+                                break
+                            }
+                        }
+                        // meands this contact was not on the server response
+                        if !foundCntc {
+                            Chat.sharedInstance.delegate?.contactEvents(type: ContactEventTypes.CONTACT_DELETE, contacts: [cacheContact])
+                        }
+                    }
+                    
+                }
+            }
+        }
+        */
         
     }
     

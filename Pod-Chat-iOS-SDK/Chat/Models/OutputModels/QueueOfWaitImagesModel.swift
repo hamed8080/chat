@@ -17,11 +17,12 @@ open class QueueOfWaitUploadImagesModel {
     let fileSize:         Int?
     let originalFileName: String?
     let threadId:         Int?
-    let uniqueId:         String?
     let xC:               Int?
     let yC:               Int?
     let hC:               Int?
     let wC:               Int?
+    let typeCode:         String?
+    let uniqueId:         String?
     
     init(dataToSend:        Data?,
          fileExtension:     String?,
@@ -29,11 +30,12 @@ open class QueueOfWaitUploadImagesModel {
          fileSize:          Int?,
          originalFileName:  String?,
          threadId:          Int?,
-         uniqueId:          String?,
          xC:                Int?,
          yC:                Int?,
          hC:                Int?,
-         wC:                Int?) {
+         wC:                Int?,
+         typeCode:          String?,
+         uniqueId:          String?) {
         
         self.dataToSend         = dataToSend
         self.fileExtension      = fileExtension
@@ -41,12 +43,12 @@ open class QueueOfWaitUploadImagesModel {
         self.fileSize           = fileSize
         self.originalFileName   = originalFileName
         self.threadId           = threadId
-        self.uniqueId           = uniqueId
         self.xC                 = xC
         self.yC                 = yC
         self.hC                 = hC
         self.wC                 = wC
-        
+        self.typeCode           = typeCode
+        self.uniqueId           = uniqueId
     }
     
     init(imageInputModel: UploadImageRequestModel) {
@@ -56,11 +58,28 @@ open class QueueOfWaitUploadImagesModel {
         self.fileSize           = imageInputModel.fileSize
         self.originalFileName   = imageInputModel.originalFileName
         self.threadId           = imageInputModel.threadId
-        self.uniqueId           = imageInputModel.uniqueId
         self.xC                 = imageInputModel.xC
         self.yC                 = imageInputModel.yC
         self.hC                 = imageInputModel.hC
         self.wC                 = imageInputModel.wC
+        self.typeCode           = imageInputModel.typeCode
+        self.uniqueId           = imageInputModel.uniqueId
+    }
+    
+    
+    public func returnDataAsJSONAndData() -> (jsonResult: JSON, imageToSend: Data?) {
+        let result: JSON = ["fileExtension":    fileExtension ?? NSNull(),
+                            "fileName":         fileName ?? NSNull(),
+                            "fileSize":         fileSize ?? NSNull(),
+                            "originalFileName": originalFileName ?? NSNull(),
+                            "threadId":         threadId ?? NSNull(),
+                            "xC":               xC ?? NSNull(),
+                            "yC":               yC ?? NSNull(),
+                            "hC":               hC ?? NSNull(),
+                            "wC":               wC ?? NSNull(),
+                            "typeCode":         typeCode ?? NSNull(),
+                            "uniqueId":         uniqueId ?? NSNull()]
+        return (result, dataToSend)
     }
     
 }

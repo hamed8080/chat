@@ -17,6 +17,7 @@ open class QueueOfWaitUploadFilesModel {
     let fileSize:           Int?
     let originalFileName:   String?
     let threadId:           Int?
+    let typeCode:           String?
     let uniqueId:           String?
     
     init(dataToSend:        Data?,
@@ -25,6 +26,7 @@ open class QueueOfWaitUploadFilesModel {
          fileSize:          Int?,
          originalFileName:  String?,
          threadId:          Int?,
+         typeCode:          String?,
          uniqueId:          String?) {
         
         self.dataToSend         = dataToSend
@@ -33,6 +35,7 @@ open class QueueOfWaitUploadFilesModel {
         self.fileSize           = fileSize
         self.originalFileName   = originalFileName
         self.threadId           = threadId
+        self.typeCode           = typeCode
         self.uniqueId           = uniqueId
         
     }
@@ -44,7 +47,20 @@ open class QueueOfWaitUploadFilesModel {
         self.fileSize           = fileInputModel.fileSize
         self.originalFileName   = fileInputModel.originalFileName
         self.threadId           = fileInputModel.threadId
+        self.typeCode           = fileInputModel.typeCode
         self.uniqueId           = fileInputModel.uniqueId
+    }
+    
+    
+    public func returnDataAsJSONAndData() -> (jsonResult: JSON, fileToSend: Data?) {
+        let result: JSON = ["fileExtension":    fileExtension ?? NSNull(),
+                            "fileName":         fileName ?? NSNull(),
+                            "fileSize":         fileSize ?? NSNull(),
+                            "originalFileName": originalFileName ?? NSNull(),
+                            "threadId":         threadId ?? NSNull(),
+                            "typeCode":         typeCode ?? NSNull(),
+                            "uniqueId":         uniqueId ?? NSNull()]
+        return (result, dataToSend)
     }
     
 }

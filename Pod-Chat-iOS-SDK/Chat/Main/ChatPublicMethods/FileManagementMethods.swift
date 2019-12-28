@@ -55,11 +55,12 @@ extension Chat {
                                                                           fileSize:           uploadImageInput.fileSize,
                                                                           originalFileName:   uploadImageInput.originalFileName,
                                                                           threadId:           uploadImageInput.threadId,
-                                                                          uniqueId:           uploadImageInput.uniqueId,
                                                                           xC:                 uploadImageInput.xC,
                                                                           yC:                 uploadImageInput.yC,
                                                                           hC:                 uploadImageInput.hC,
-                                                                          wC:                 uploadImageInput.wC)
+                                                                          wC:                 uploadImageInput.wC,
+                                                                          typeCode:           uploadImageInput.typeCode,
+                                                                          uniqueId:           uploadImageInput.uniqueId)
             Chat.cacheDB.saveUploadImageToWaitQueue(image: messageObjectToSendToQueue)
         }
         
@@ -92,6 +93,7 @@ extension Chat {
                                        "Content-type":      "multipart/form-data"]
 //        let parameters: Parameters = ["fileName": fileName]
         
+        var uploadProgress: Float = 0
         Networking.sharedInstance.upload(toUrl:             url,
                                          withHeaders:       headers,
 //                                         withParameters:    parameters,
@@ -100,8 +102,22 @@ extension Chat {
                                          isFile:            false,
                                          dataToSend:        uploadImageInput.dataToSend,
                                          uniqueId:          uploadImageInput.uniqueId,
-                                         progress: { (myProgress) in
-                                            progress(myProgress)
+                                         progress:
+            { (myProgress) in
+                uploadProgress = myProgress
+                let fileInfo = FileInfo(fileName: uploadImageInput.fileName ?? "?",
+                                        fileSize: uploadImageInput.fileSize ?? 0)
+                let fUploadedEM = FileUploadEventModel(type:            FileUploadEventTypes.UPLOADING,
+                                                       errorCode:       nil,
+                                                       errorMessage:    nil,
+                                                       errorEvent:      nil,
+                                                       fileInfo:        fileInfo,
+                                                       fileObjectData:  nil,
+                                                       progress:        uploadProgress,
+                                                       threadId:        uploadImageInput.threadId,
+                                                       uniqueId:        uploadImageInput.uniqueId)
+                Chat.sharedInstance.delegate?.fileUploadEvents(model: fUploadedEM)
+                progress(myProgress)
         }) { (response) in
             let myResponse: JSON = response as! JSON
             let hasError        = myResponse["hasError"].boolValue
@@ -123,7 +139,33 @@ extension Chat {
                                                         errorMessage:       errorMessage,
                                                         hasError:           hasError)
                 
+                let fileInfo = FileInfo(fileName: uploadImageInput.fileName ?? "?",
+                                        fileSize: uploadImageInput.fileSize ?? 0)
+                let fUploadedEM = FileUploadEventModel(type:            FileUploadEventTypes.UPLOADED,
+                                                       errorCode:       errorCode,
+                                                       errorMessage:    errorMessage,
+                                                       errorEvent:      nil,
+                                                       fileInfo:        fileInfo,
+                                                       fileObjectData:  nil,
+                                                       progress:        uploadProgress,
+                                                       threadId:        uploadImageInput.threadId,
+                                                       uniqueId:        uploadImageInput.uniqueId)
+                Chat.sharedInstance.delegate?.fileUploadEvents(model: fUploadedEM)
+                
                 completion(uploadImageModel)
+            } else {
+                let fileInfo = FileInfo(fileName: uploadImageInput.fileName ?? "?",
+                                        fileSize: uploadImageInput.fileSize ?? 0)
+                let fUploadErrorEM = FileUploadEventModel(type:             FileUploadEventTypes.UPLOAD_ERROR,
+                                                          errorCode:        errorCode,
+                                                          errorMessage:     errorMessage,
+                                                          errorEvent:       nil,
+                                                          fileInfo:         fileInfo,
+                                                          fileObjectData:   uploadImageInput.dataToSend,
+                                                          progress:         uploadProgress,
+                                                          threadId:         uploadImageInput.threadId,
+                                                          uniqueId:         uploadImageInput.uniqueId)
+                Chat.sharedInstance.delegate?.fileUploadEvents(model: fUploadErrorEM)
             }
         }
         
@@ -167,6 +209,7 @@ extension Chat {
                                                                          fileSize:          uploadFileInput.fileSize,
                                                                          originalFileName:  uploadFileInput.originalFileName,
                                                                          threadId:          uploadFileInput.threadId,
+                                                                         typeCode:          uploadFileInput.typeCode,
                                                                          uniqueId:          uploadFileInput.uniqueId)
             Chat.cacheDB.saveUploadFileToWaitQueue(file: messageObjectToSendToQueue)
         }
@@ -235,7 +278,7 @@ extension Chat {
                                        "Content-type":      "multipart/form-data"]
 //        let parameters: Parameters = ["fileName": fileName]
         
-        
+        var uploadProgress: Float = 0
         Networking.sharedInstance.upload(toUrl:             url,
                                          withHeaders:       headers,
 //                                         withParameters: parameters,
@@ -244,8 +287,22 @@ extension Chat {
                                          isFile:            true,
                                          dataToSend:        uploadFileInput.dataToSend,
                                          uniqueId:          uploadFileInput.uniqueId,
-                                         progress: { (myProgress) in
-                                            progress(myProgress)
+                                         progress:
+            { (myProgress) in
+                uploadProgress = myProgress
+                let fileInfo = FileInfo(fileName: uploadFileInput.fileName ?? "?",
+                                        fileSize: uploadFileInput.fileSize ?? 0)
+                let fUploadedEM = FileUploadEventModel(type:            FileUploadEventTypes.UPLOADING,
+                                                       errorCode:       nil,
+                                                       errorMessage:    nil,
+                                                       errorEvent:      nil,
+                                                       fileInfo:        fileInfo,
+                                                       fileObjectData:  nil,
+                                                       progress:        uploadProgress,
+                                                       threadId:        uploadFileInput.threadId,
+                                                       uniqueId:        uploadFileInput.uniqueId)
+                Chat.sharedInstance.delegate?.fileUploadEvents(model: fUploadedEM)
+                progress(myProgress)
         }) { (response) in
             let myResponse: JSON = response as! JSON
             
@@ -263,12 +320,38 @@ extension Chat {
                     Chat.cacheDB.deleteWaitUploadFiles(uniqueId: uploadFileInput.uniqueId)
                 }
                 
+                let fileInfo = FileInfo(fileName: uploadFileInput.fileName ?? "?",
+                                        fileSize: uploadFileInput.fileSize ?? 0)
+                let fUploadedEM = FileUploadEventModel(type:            FileUploadEventTypes.UPLOADED,
+                                                       errorCode:       errorCode,
+                                                       errorMessage:    errorMessage,
+                                                       errorEvent:      nil,
+                                                       fileInfo:        fileInfo,
+                                                       fileObjectData:  nil,
+                                                       progress:        uploadProgress,
+                                                       threadId:        uploadFileInput.threadId,
+                                                       uniqueId:        uploadFileInput.uniqueId)
+                Chat.sharedInstance.delegate?.fileUploadEvents(model: fUploadedEM)
+                
                 let uploadFileModel = UploadFileModel(messageContentJSON:   resultData,
                                                       errorCode:            errorCode,
                                                       errorMessage:         errorMessage,
                                                       hasError:             hasError)
                 
                 completion(uploadFileModel)
+            } else {
+                let fileInfo = FileInfo(fileName: uploadFileInput.fileName ?? "?",
+                                        fileSize: uploadFileInput.fileSize ?? 0)
+                let fUploadErrorEM = FileUploadEventModel(type:             FileUploadEventTypes.UPLOAD_ERROR,
+                                                          errorCode:        errorCode,
+                                                          errorMessage:     errorMessage,
+                                                          errorEvent:       nil,
+                                                          fileInfo:         fileInfo,
+                                                          fileObjectData:   uploadFileInput.dataToSend,
+                                                          progress:         uploadProgress,
+                                                          threadId:         uploadFileInput.threadId,
+                                                          uniqueId:         uploadFileInput.uniqueId)
+                Chat.sharedInstance.delegate?.fileUploadEvents(model: fUploadErrorEM)
             }
         }
         

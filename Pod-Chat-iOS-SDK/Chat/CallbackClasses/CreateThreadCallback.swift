@@ -32,7 +32,12 @@ extension Chat {
         
         if let contentAsJSON = message.content?.convertToJSON() {
             let conversationModel = Conversation(messageContent: contentAsJSON)
-            delegate?.threadEvents(type: ThreadEventTypes.THREAD_NEW, result: conversationModel)
+            let tNewEM = ThreadEventModel(type:         ThreadEventTypes.THREAD_NEW,
+                                          participants: nil,
+                                          threads:      [conversationModel],
+                                          threadId:     nil,
+                                          senderId:     nil)
+            delegate?.threadEvents(model: tNewEM)
         }
         
         if enableCache {

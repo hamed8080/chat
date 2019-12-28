@@ -54,11 +54,12 @@ public class QueueOfUploadImages: NSManagedObject {
                                                                             fileSize:           fileSize,
                                                                             originalFileName:   self.originalFileName,
                                                                             threadId:           threadId,
-                                                                            uniqueId:           self.uniqueId,
                                                                             xC:                 xC,
                                                                             yC:                 yC,
                                                                             hC:                 hC,
-                                                                            wC:                 wC)
+                                                                            wC:                 wC,
+                                                                            typeCode:           self.typeCode,
+                                                                            uniqueId:           self.uniqueId)
             return queueOfWaitUploadImagesModel
         }
         

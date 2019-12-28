@@ -51,6 +51,20 @@ open class GetThreadsRequestModel {
         self.uniqueId               = uniqueId
     }
     
+    public init(json: JSON) {
+        self.count                  = json["count"].int
+        self.creatorCoreUserId      = json["creatorCoreUserId"].int
+        self.metadataCriteria       = json["metadataCriteria"]
+        self.name                   = json["name"].string
+        self.new                    = json["new"].bool
+        self.offset                 = json["offset"].int
+        self.partnerCoreContactId   = json["partnerCoreContactId"].int
+        self.partnerCoreUserId      = json["partnerCoreUserId"].int
+        self.threadIds              = json["threadIds"].arrayObject as? [Int]
+        self.typeCode               = json["typeCode"].string
+        self.uniqueId               = json["uniqueId"].string
+    }
+    
     func convertContentToJSON() -> JSON {
         var content: JSON = [:]
         content["count"]    = JSON(self.count ?? 50)

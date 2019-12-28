@@ -18,7 +18,8 @@ extension QueueOfEditMessages {
     }
 
     @NSManaged public var content:      String?
-    @NSManaged public var metadata:     NSObject?
+//    @NSManaged public var metadata:     NSObject?
+    @NSManaged public var metadata:     String?
     @NSManaged public var repliedTo:    NSNumber?
     @NSManaged public var messageId:    NSNumber?
     @NSManaged public var threadId:     NSNumber?

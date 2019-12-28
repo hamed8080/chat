@@ -20,13 +20,14 @@ extension Chat {
          */
         log.verbose("Message of type 'ADD_PARTICIPANT' recieved", context: "Chat")
         
-        if let threadId = message.subjectId {
-            delegate?.threadEvents(type: ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME, result: threadId)
-            if let conAsJSON = message.content?.convertToJSON() {
-                let conversation = Conversation(messageContent: conAsJSON)
-                delegate?.threadEvents(type: ThreadEventTypes.THREAD_ADD_PARTICIPANTS, result: conversation)
-            }
-        }
+//        if let threadId = message.subjectId {
+//            delegate?.threadEvents(type: ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME, threadId: threadId, thread: nil, messageId: nil, senderId: nil)
+//            if let conAsJSON = message.content?.convertToJSON() {
+//                let conversation = Conversation(messageContent: conAsJSON)
+//                delegate?.threadEvents(type: ThreadEventTypes.THREAD_ADD_PARTICIPANTS, threadId: nil, thread: conversation, messageId: nil, senderId: nil)
+//            }
+//        }
+        
         
         if enableCache {
             var participants = [Participant]()
@@ -56,6 +57,23 @@ extension Chat {
             }) { _ in }
             Chat.map.removeValue(forKey: message.uniqueId)
         }
+        
+        let addParticipantModel = AddParticipantModel(messageContent:   returnData.result ?? [:],
+                                                      hasError:         false,
+                                                      errorMessage:     "",
+                                                      errorCode:        0)
+        let tAddParticipantEM = ThreadEventModel(type:          ThreadEventTypes.THREAD_ADD_PARTICIPANTS,
+                                                 participants:  addParticipantModel.thread?.participants,
+                                                 threads:       nil,
+                                                 threadId:      message.subjectId,
+                                                 senderId:      nil)
+        delegate?.threadEvents(model: tAddParticipantEM)
+        let tLastActivityEM = ThreadEventModel(type:            ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME,
+                                               participants:    nil,
+                                               threads:         nil,
+                                               threadId:        message.subjectId,
+                                               senderId:        nil)
+        delegate?.threadEvents(model: tLastActivityEM)
         
     }
     
