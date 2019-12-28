@@ -194,7 +194,7 @@ extension Cache {
                             let messageObject = updateCMMessageEntity(withMessageObject: threadLastMessageVO)
                             result.first!.lastMessageVO = messageObject
                         }
-                        if let threadParticipants = myThread.participants {
+                        if let threadParticipants = myThread.participants, (threadParticipants.count > 0) {
                             var threadParticipantsArr = [CMParticipant]()
                             for item in threadParticipants {
                                 if let threadparticipant = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: item, isAdminRequest: false) {
@@ -243,7 +243,7 @@ extension Cache {
                             let messageObject = updateCMMessageEntity(withMessageObject: threadLastMessageVO)
                             conversation.lastMessageVO = messageObject
                         }
-                        if let threadParticipants = myThread.participants {
+                        if let threadParticipants = myThread.participants, (threadParticipants.count > 0) {
                             var threadParticipantsArr = [CMParticipant]()
                             for item in threadParticipants {
                                 if let threadparticipant = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: item, isAdminRequest: false) {
