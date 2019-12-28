@@ -57,6 +57,7 @@ extension Chat {
             if (message.uniqueId != "") {
                 if enableCache {
                     
+                    
                     let threadsModel = GetThreadsModel(messageContent: returnData.resultAsArray ?? [],
                                                        contentCount: returnData.contentCount,
                                                        count:        0,
@@ -100,6 +101,12 @@ extension Chat {
                     for thread in cacheThreadModel?.threads ?? [] {
                         if let thID = thread.id {
                             cacheThreadIds.append(thID)
+                            let tNewEM = ThreadEventModel(type:          ThreadEventTypes.THREAD_NEW,
+                                                          participants:  nil,
+                                                          threads:       nil,
+                                                          threadId:      thID,
+                                                          senderId:      nil)
+                            delegate?.threadEvents(model: tNewEM)
                         }
                     }
                     for sti in serverThreadIds {
@@ -109,20 +116,6 @@ extension Chat {
                             }
                         }
                     }
-                    
-                    let threadsModel = GetThreadsModel(messageContent: returnData.resultAsArray ?? [],
-                                                       contentCount: returnData.contentCount,
-                                                       count:        0,
-                                                       offset:       0,
-                                                       hasError:     false,
-                                                       errorMessage: "",
-                                                       errorCode:    0)
-                    let tLastChangeEM = ThreadEventModel(type:          ThreadEventTypes.THREADS_LIST_CHANGE,
-                                                         participants:  nil,
-                                                         threads:       threadsModel.threads,
-                                                         threadId:      nil,
-                                                         senderId:      nil)
-                    delegate?.threadEvents(model: tLastChangeEM)
                     
                     for id in cacheThreadIds {
                         let tDeleteEM = ThreadEventModel(type:          ThreadEventTypes.THREAD_DELETE,
