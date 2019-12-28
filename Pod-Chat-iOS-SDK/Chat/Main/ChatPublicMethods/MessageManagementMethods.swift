@@ -219,10 +219,10 @@ extension Chat {
         if enableCache {
             let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(content:          sendTextMessageInput.content,
 //                                                                          metadata:         sendTextMessageInput.metadata,
-                                                                          metadata:         (sendTextMessageInput.metadata != nil) ? "\(sendTextMessageInput.metadata)" : nil,
+                                                                          metadata:         (sendTextMessageInput.metadata != nil) ? "\(sendTextMessageInput.metadata!)" : nil,
                                                                           repliedTo:        sendTextMessageInput.repliedTo,
 //                                                                          systemMetadata:   sendTextMessageInput.systemMetadata,
-                                                                          systemMetadata:   (sendTextMessageInput.systemMetadata != nil) ? "\(sendTextMessageInput.systemMetadata)" : nil,
+                                                                          systemMetadata:   (sendTextMessageInput.systemMetadata != nil) ? "\(sendTextMessageInput.systemMetadata!)" : nil,
                                                                           threadId:         sendTextMessageInput.threadId,
                                                                           typeCode:         sendTextMessageInput.typeCode,
                                                                           uniqueId:         tempUniqueId)
