@@ -40,7 +40,6 @@ extension Chat {
 //        }
 //    }
     
-    // ToDo: convert the JSON output to Model
     public class SpamPvThread: CallbackProtocol {
         func onResultCallback(uID:      String,
                               response: CreateReturnData,

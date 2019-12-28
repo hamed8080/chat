@@ -190,7 +190,7 @@
     <entity name="QueueOfEditMessages" representedClassName=".QueueOfEditMessages" syncable="YES">
         <attribute name="content" optional="YES" attributeType="String"/>
         <attribute name="messageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="metadata" optional="YES" attributeType="Transformable"/>
+        <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="typeCode" optional="YES" attributeType="String"/>
@@ -203,7 +203,7 @@
         <attribute name="hC" optional="YES" attributeType="String"/>
         <attribute name="imageName" optional="YES" attributeType="String"/>
         <attribute name="imageToSend" optional="YES" attributeType="Binary"/>
-        <attribute name="metadata" optional="YES" attributeType="Transformable"/>
+        <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="typeCode" optional="YES" attributeType="String"/>
@@ -214,7 +214,7 @@
     </entity>
     <entity name="QueueOfForwardMessages" representedClassName=".QueueOfForwardMessages" syncable="YES">
         <attribute name="messageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="metadata" optional="YES" attributeType="Transformable"/>
+        <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="typeCode" optional="YES" attributeType="String"/>
@@ -222,9 +222,9 @@
     </entity>
     <entity name="QueueOfTextMessages" representedClassName=".QueueOfTextMessages" syncable="YES">
         <attribute name="content" optional="YES" attributeType="String"/>
-        <attribute name="metadata" optional="YES" attributeType="Transformable"/>
+        <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="systemMetadata" optional="YES" attributeType="Transformable"/>
+        <attribute name="systemMetadata" optional="YES" attributeType="String"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="typeCode" optional="YES" attributeType="String"/>
         <attribute name="uniqueId" optional="YES" attributeType="String"/>
@@ -236,6 +236,7 @@
         <attribute name="fileSize" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="originalFileName" optional="YES" attributeType="String"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="typeCode" optional="YES" attributeType="String"/>
         <attribute name="uniqueId" optional="YES" attributeType="String"/>
     </entity>
     <entity name="QueueOfUploadImages" representedClassName=".QueueOfUploadImages" syncable="YES">
@@ -246,6 +247,7 @@
         <attribute name="hC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="originalFileName" optional="YES" attributeType="String"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="typeCode" optional="YES" attributeType="String"/>
         <attribute name="uniqueId" optional="YES" attributeType="String"/>
         <attribute name="wC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="xC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
@@ -278,8 +280,8 @@
         <element name="QueueOfFileMessages" positionX="-261" positionY="0" width="128" height="253"/>
         <element name="QueueOfForwardMessages" positionX="-234" positionY="36" width="128" height="133"/>
         <element name="QueueOfTextMessages" positionX="-252" positionY="9" width="128" height="148"/>
-        <element name="QueueOfUploadFiles" positionX="-252" positionY="9" width="128" height="150"/>
-        <element name="QueueOfUploadImages" positionX="-261" positionY="0" width="128" height="210"/>
+        <element name="QueueOfUploadFiles" positionX="-252" positionY="9" width="128" height="163"/>
+        <element name="QueueOfUploadImages" positionX="-261" positionY="0" width="128" height="223"/>
         <element name="ThreadAdmins" positionX="-261" positionY="0" width="128" height="118"/>
     </elements>
 </model>

@@ -51,7 +51,9 @@ extension Chat {
                                           resultAsString:   nil,
                                           contentCount:     nil,
                                           subjectId:        message.subjectId)
-        //                .returnJSON()
+        
+        let systemEventModel = SystemEventModel(type: SystemEventTypes.SERVER_TIME, time: message.time, threadId: nil, user: nil)
+        Chat.sharedInstance.delegate?.systemEvents(model: systemEventModel)
         
         if enableCache {
             let user = User(messageContent: message.content?.convertToJSON() ?? [:])

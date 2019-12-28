@@ -47,6 +47,7 @@ extension Chat: AsyncDelegates {
         log.verbose("Async Disconnected", context: "Chat: DelegateComesFromAsync")
         oldPeerId = peerId
         peerId = nil
+        isChatReady = false
         delegate?.chatDisconnect()
     }
     
@@ -78,11 +79,11 @@ extension Chat: AsyncDelegates {
         /*
          *  -> get this variables and save them all inside the "chatFullStateObject" property
          *  -> if the "socketState" is equal to "1" (CONNECTED):
-         *      -> change value of the "chatState" to "true" (means that Async is connected)
+         *      -> change value of the "isChatReady" to "true" (means that Async is connected)
          *      -> then send a "ping" message
          *  -> if the "socketState" is equal to "3" (CLOSED):
-         *      -> change value of the "chatState" to "false" (means that Async is not connected)
-         *  -> at the end, fire the "chatState" delegate with the "chatFullStateObject" property thar we filled it earlier
+         *      -> change value of the "isChatReady" to "false" (means that Async is not connected)
+         *  -> at the end, fire the "isChatReady" delegate with the "chatFullStateObject" property thar we filled it earlier
          *
          */
         
@@ -94,15 +95,16 @@ extension Chat: AsyncDelegates {
                                "peerId": peerId]
         switch (socketState) {
         case 0: // CONNECTING
+            isChatReady = false
             break
         case 1: // CONNECTED
-            chatState = true
             ping()
             break
         case 2: // CLOSING
+            isChatReady = false
             break
         case 3: // CLOSED
-            chatState = false
+            isChatReady = false
             break
         default:
             break
@@ -184,7 +186,6 @@ extension Chat: AsyncDelegates {
      *  - Outputs:  _
      *
      */
-    // TODO: ther is no timer send the getUserInfo request again.
     func handleAsyncReady() {
         log.verbose("HandleAsyncReady", context: "Chat")
         /*
@@ -199,29 +200,29 @@ extension Chat: AsyncDelegates {
         
         peerId = asyncClient?.asyncGetPeerId()
         
-        // TODO: i have to implement a timer to check this part for every 10second (5 times at most!)
+        getUserInfoTimer = RepeatingTimer(timeInterval: Double(2))
+        
+    }
+    
+    func makeChatReady() {
         if userInfo == nil {
-            if (getUserInfoRetryCount < getUserInfoRetry) {
-                getUserInfoRetryCount += 1
-                
-                getUserInfo(uniqueId: { _ in }, completion: { (result) in
-                    let resultModel: UserInfoModel = result as! UserInfoModel
-                    log.verbose("get info result comes, and save userInfo: \n \(resultModel.returnDataAsJSON())", context: "Chat")
-                    
-                    if resultModel.hasError == false {
-                        self.userInfo = User(withUserObject: resultModel.user)
-                        self.chatState = true
-                        self.delegate?.chatReady(withUserInfo: self.userInfo!)
-                        if self.enableCache {
-                            self.getAllThreads(withInputModel: GetAllThreadsRequestModel(summary: true, typeCode: nil))
-                        }
+            getUserInfoRetryCount += 1
+            getUserInfo(uniqueId: { _ in }, completion: { (result) in
+                let resultModel: UserInfoModel = result as! UserInfoModel
+                log.verbose("get info result comes, and save userInfo: \n \(resultModel.returnDataAsJSON())", context: "Chat")
+
+                if resultModel.hasError == false {
+                    self.userInfo = User(withUserObject: resultModel.user)
+                    self.isChatReady = true
+                    self.delegate?.chatReady(withUserInfo: self.userInfo!)
+                    if self.enableCache {
+                        self.getAllThreads(withInputModel: GetAllThreadsRequestModel(summary: true, typeCode: nil))
                     }
-                }) { _ in }
-                
-            }
+                }
+            }) { _ in }
         } else {
             getUserInfoRetryCount = 0
-            chatState = true
+            isChatReady = true
             delegate?.chatReady(withUserInfo: userInfo!)
         }
     }
@@ -230,11 +231,7 @@ extension Chat: AsyncDelegates {
     /*
      * Handle ReceiveMessage From Async:
      *
-     *
-     *
      */
-    // TODO: duble check this funciton, where i setup a timer to check connetion
-    // why did i try to reconnect to socket from here???? itn't it of the Async responsibility??
     func handleReceiveMessageFromAsync(withContent: AsyncMessage) {
         /*
          *  -> stop the "lastReceivedMessageTimeoutId" timer (that contains the timer to send ping to chat server)
@@ -249,26 +246,25 @@ extension Chat: AsyncDelegates {
          *
          */
         
-        
         // checkout to keep the Chat alive
-        self.lastReceivedMessageTimeoutId?.suspend()
-        DispatchQueue.global().async {
-            self.lastReceivedMessageTime = Date()
-            let myTimeInterval = Double(self.chatPingMessageInterval) * 1.5
-            self.lastReceivedMessageTimeoutId = RepeatingTimer(timeInterval: myTimeInterval)
-            self.lastReceivedMessageTimeoutId?.eventHandler = {
-                if let lastReceivedMessageTimeBanged = self.lastReceivedMessageTime {
-                    let elapsed = Int(Date().timeIntervalSince(lastReceivedMessageTimeBanged))
-                    if (elapsed >= self.connectionCheckTimeout) {
-                        DispatchQueue.main.async {
-                            self.asyncClient?.asyncReconnectSocket()
-                        }
-                        self.lastReceivedMessageTimeoutId?.suspend()
-                    }
-                }
-            }
-            self.lastReceivedMessageTimeoutId?.resume()
-        }
+        lastReceivedMessageTimer = RepeatingTimer(timeInterval: (Double(self.chatPingMessageInterval) * 1.5))
+//        self.lastReceivedMessageTimeoutId?.suspend()
+//        DispatchQueue.global().async {
+//            self.lastReceivedMessageTime = Date()
+//            self.lastReceivedMessageTimeoutId = RepeatingTimer(timeInterval: (Double(self.chatPingMessageInterval) * 1.5))
+//            self.lastReceivedMessageTimeoutId?.eventHandler = {
+//                if let lastReceivedMessageTimeBanged = self.lastReceivedMessageTime {
+//                    let elapsed = Int(Date().timeIntervalSince(lastReceivedMessageTimeBanged))
+//                    if (elapsed >= self.connectionCheckTimeout) {
+//                        DispatchQueue.main.async {
+//                            self.asyncClient?.asyncReconnectSocket()
+//                        }
+//                        self.lastReceivedMessageTimeoutId?.suspend()
+//                    }
+//                }
+//            }
+//            self.lastReceivedMessageTimeoutId?.resume()
+//        }
         
         let chatMessage = ChatMessage(withContent: withContent.content.convertToJSON())
         receivedMessageHandler(withContent: chatMessage)
@@ -276,289 +272,6 @@ extension Chat: AsyncDelegates {
     
     
 }
-
-
-class AsyncMessage {
-    
-    let content:    String  // String of JSON
-    let id:         Int
-    let senderId:   Int
-    let senderName: String?
-    let type:       Int
-    
-    init(content: String, id: Int, senderId: Int, senderName: String?, type: Int) {
-        self.content    = content
-        self.id         = id
-        self.senderId   = senderId
-        self.senderName = senderName
-        self.type       = type
-    }
-    
-    init(withContent: JSON) {
-        self.content    = withContent["content"].stringValue
-        self.id         = withContent["id"].intValue
-        self.senderId   = withContent["senderId"].intValue
-        self.senderName = withContent["senderName"].string
-        self.type       = withContent["type"].intValue
-    }
-    
-}
-
-
-class ChatMessage {
-
-    var code:           Int?
-    let content:        String? // String of JSON
-    let contentCount:   Int?
-    var message:        String?
-    let messageType:    Int
-    let subjectId:      Int?
-    let time:           Int
-    let type:           Int
-    let uniqueId:       String
-    
-    init(code: Int?, content: String?, contentCount: Int?, message: String?, messageType: Int, subjectId: Int?, time: Int, type: Int, uniqueId: String) {
-        self.code           = code
-        self.content        = content
-        self.contentCount   = contentCount
-        self.message        = message
-        self.messageType    = messageType
-        self.subjectId      = subjectId
-        self.time           = time
-        self.type           = type
-        self.uniqueId       = uniqueId
-    }
-    
-    init(withContent: JSON) {
-        self.code           = withContent["code"].int
-        self.content        = withContent["content"].string
-        self.contentCount   = withContent["contentCount"].int
-        self.message        = withContent["message"].string
-        self.messageType    = withContent["messageType"].intValue
-        self.subjectId      = withContent["subjectId"].int
-        self.time           = withContent["time"].intValue
-        self.type           = withContent["type"].intValue
-        self.uniqueId       = withContent["uniqueId"].stringValue
-    }
-    
-    func returnToJSON() -> JSON {
-        let myReturnValue: JSON = ["code":          code ?? NSNull(),
-                                   "content":       content ?? NSNull(),
-                                   "contentCount":  contentCount ?? NSNull(),
-                                   "message":       message ?? NSNull(),
-                                   "messageType":   messageType,
-                                   "subjectId":     subjectId ?? NSNull(),
-                                   "time":          time,
-                                   "type":          type,
-                                   "uniqueId":      uniqueId]
-        return myReturnValue
-    }
-    
-}
-
-
-
-class SendChatMessageVO {
-    
-    let chatMessageVOType:  Int
-    var content:            String? = nil
-    var metadata:           String? = nil
-    var repliedTo:          Int?    = nil
-    var systemMetadata:     String? = nil
-    var subjectId:          Int?    = nil
-    let token:              String
-    var tokenIssuer:        Int?    = nil
-    var typeCode:           String? = nil
-    var uniqueId:           String? = nil
-    var uniqueIds:          [String]? = nil
-    
-    var isCreateThreadAndSendMessage: Bool
-    
-    init(chatMessageVOType: Int,
-         content:           String?,
-         metadata:          String?,
-         repliedTo:         Int?,
-         systemMetadata:    String?,
-         subjectId:         Int?,
-         token:             String,
-         tokenIssuer:       Int?,
-         typeCode:          String?,
-         uniqueId:          String?,
-         uniqueIds:         [String]?,
-         isCreateThreadAndSendMessage: Bool?) {
-        
-        self.content            = content
-        self.metadata           = metadata
-        self.repliedTo          = repliedTo
-        self.systemMetadata     = systemMetadata
-        self.subjectId          = subjectId
-        self.token              = token
-        self.tokenIssuer        = tokenIssuer
-        self.chatMessageVOType  = chatMessageVOType
-        self.typeCode           = typeCode
-        self.uniqueId           = uniqueId
-        self.uniqueIds          = uniqueIds
-        
-        self.isCreateThreadAndSendMessage   = isCreateThreadAndSendMessage ?? false
-        
-        func generateUUID() -> String {
-            return ""
-        }
-        
-        self.uniqueId = ""
-        if let uID = uniqueId {
-            self.uniqueId = uID
-        } else if (chatMessageVOType == chatMessageVOTypes.DELETE_MESSAGE.rawValue) {
-            if let contentJSON = content?.convertToJSON() {
-                if let x = contentJSON["ids"].arrayObject {
-                    if (x.count <= 1) {
-                        self.uniqueId = generateUUID()
-                    }
-                } else {
-                    self.uniqueId = generateUUID()
-                }
-            }
-        } else if (chatMessageVOType == chatMessageVOTypes.PING.rawValue) {
-            self.uniqueId = generateUUID()
-        }
-        
-    }
-    
-    init(content: JSON) {
-        
-        self.token              = content["token"].stringValue
-        self.tokenIssuer        = content["tokenIssuer"].int ?? 1
-        self.chatMessageVOType  = content["chatMessageVOType"].intValue
-        
-        if let myContent = content["content"].string {
-            self.content = myContent
-        }
-        if let myMetadata = content["metadata"].string {
-            self.metadata = myMetadata
-        }
-        if let myRepliedTo = content["repliedTo"].int {
-            self.repliedTo = myRepliedTo
-        }
-        if let mySystemMetadata = content["systemMetadata"].string {
-            self.systemMetadata = mySystemMetadata
-        }
-        if let mySubjectId = content["subjectId"].int {
-            self.subjectId = mySubjectId
-        }
-        
-        if let myTypeCode = content["typeCode"].string {
-            self.typeCode = myTypeCode
-        }
-        
-        self.isCreateThreadAndSendMessage   = content["isCreateThreadAndSendMessage"].bool ?? false
-        
-        func generateUUID() -> String {
-            return ""
-        }
-        
-        self.uniqueId = ""
-        if let uIds = content["uniqueId"].string?.convertToJSON().arrayObject as? [String], (uIds.count > 0) {
-            self.uniqueIds = uIds
-        } else if let uID = content["uniqueId"].string {
-            self.uniqueId = uID
-        } else if (content["chatMessageVOType"].intValue == chatMessageVOTypes.DELETE_MESSAGE.rawValue) {
-            if let x = content["content"]["ids"].arrayObject {
-                if x.count <= 1 {
-                    self.uniqueId = generateUUID()
-                }
-            } else {
-                self.uniqueId = generateUUID()
-            }
-        } else if (content["chatMessageVOType"].intValue != chatMessageVOTypes.PING.rawValue) {
-            self.uniqueId = generateUUID()
-        }
-        
-    }
-    
-    
-    func convertModelToJSON() -> JSON {
-        var messageVO: JSON = ["token":         token,
-                               "tokenIssuer":   tokenIssuer ?? 1,
-                               "type":          chatMessageVOType]
-        if let theMessage = content {
-            messageVO["content"] = JSON(theMessage)
-        }
-        if let theMetadata = metadata {
-            messageVO["metadata"] = JSON(theMetadata)
-        }
-        if let theRepliedTo = repliedTo {
-            messageVO["repliedTo"] = JSON(theRepliedTo)
-        }
-        if let theSubjectId = subjectId {
-            messageVO["subjectId"] = JSON(theSubjectId)
-        }
-        if let theSystemMetadata = systemMetadata {
-            messageVO["systemMetadata"] = JSON(theSystemMetadata)
-        }
-        if let theTypeCode = typeCode {
-            messageVO["typeCode"] = JSON(theTypeCode)
-        }
-        
-        if let theUniqueIds = uniqueIds {
-            messageVO["uniqueId"] = JSON("\(theUniqueIds)")
-        } else if let theUniqueId = uniqueId {
-            messageVO["uniqueId"] = JSON(theUniqueId)
-        }
-        
-        return messageVO
-    }
-    
-    func convertModelToString() -> String {
-        return "\(convertModelToJSON())"
-    }
-    
-}
-
-
-
-class SendAsyncMessageVO {
-    
-    var content:        String
-    let msgTTL:         Int
-    let peerName:       String
-    let priority:       Int
-    let pushMsgType:    Int?
-    
-    init(content: String, msgTTL: Int, peerName: String, priority: Int, pushMsgType: Int?) {
-        self.content        = content
-        self.msgTTL         = msgTTL
-        self.peerName       = peerName
-        self.priority       = priority
-        self.pushMsgType    = pushMsgType
-    }
-    
-    init(content: JSON) {
-        self.content        = content["content"].stringValue
-        self.msgTTL         = content["ttl"].intValue
-        self.peerName       = content["peerName"].stringValue
-        self.priority       = content["priority"].int ?? 1
-        self.pushMsgType    = content["pushMsgType"].intValue
-    }
-    
-    func convertModelToJSON() -> JSON {
-        let messageVO: JSON = ["content":   content,
-                               "peerName":  peerName,
-                               "priority":  priority,
-                               "ttl":       msgTTL]
-        
-        return messageVO
-    }
-    
-    func convertModelToString() -> String {
-        let model = convertModelToJSON()
-        let stringModel = "\(model)"
-        let str = String(stringModel.filter { !" \n\t\r".contains($0) })
-        return str
-    }
-    
-    
-}
-
 
 
 

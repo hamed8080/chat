@@ -202,6 +202,7 @@ extension Chat {
                                 onSeen:                 @escaping callbackTypeAlias) {
         log.verbose("Try to send Message with this parameters: \n \(sendTextMessageInput)", context: "Chat")
         
+        stopTyping()
         sendCallbackToUserOnSent = onSent
         sendCallbackToUserOnDeliver = onDelivere
         sendCallbackToUserOnSeen = onSeen
@@ -217,9 +218,11 @@ extension Chat {
          */
         if enableCache {
             let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(content:          sendTextMessageInput.content,
-                                                                          metadata:         sendTextMessageInput.metadata,
+//                                                                          metadata:         sendTextMessageInput.metadata,
+                                                                          metadata:         (sendTextMessageInput.metadata != nil) ? "\(sendTextMessageInput.metadata)" : nil,
                                                                           repliedTo:        sendTextMessageInput.repliedTo,
-                                                                          systemMetadata:   sendTextMessageInput.systemMetadata,
+//                                                                          systemMetadata:   sendTextMessageInput.systemMetadata,
+                                                                          systemMetadata:   (sendTextMessageInput.systemMetadata != nil) ? "\(sendTextMessageInput.systemMetadata)" : nil,
                                                                           threadId:         sendTextMessageInput.threadId,
                                                                           typeCode:         sendTextMessageInput.typeCode,
                                                                           uniqueId:         tempUniqueId)
@@ -283,6 +286,7 @@ extension Chat {
                                        onSeen:      @escaping callbackTypeAlias) {
         log.verbose("Try to send BotMessage with this parameters: \n \(sendInterActiveMessageInput)", context: "Chat")
         
+        stopTyping()
         sendCallbackToUserOnSent = onSent
         sendCallbackToUserOnDeliver = onDelivered
         sendCallbackToUserOnSeen = onSeen
@@ -342,6 +346,7 @@ extension Chat {
                             completion:         @escaping callbackTypeAlias) {
         log.verbose("Try to request to edit message with this parameters: \n \(editMessageInput)", context: "Chat")
         
+        stopTyping()
         editMessageCallbackToUser = completion
         
         let requestUniqueId = editMessageInput.uniqueId ?? generateUUID()
@@ -354,7 +359,8 @@ extension Chat {
          */
         if enableCache {
             let messageObjectToSendToQueue = QueueOfWaitEditMessagesModel(content:      editMessageInput.content,
-                                                                          metadata:     editMessageInput.metadata,
+//                                                                          metadata:     editMessageInput.metadata,
+                                                                          metadata:     (editMessageInput.metadata != nil) ? "\(editMessageInput.metadata!)" : nil,
                                                                           repliedTo:    editMessageInput.repliedTo,
                                                                           messageId:    editMessageInput.messageId,
                                                                           threadId:     nil,
@@ -419,6 +425,7 @@ extension Chat {
                              onSeen:            @escaping callbackTypeAlias) {
         log.verbose("Try to reply Message with this parameters: \n \(replyMessageInput)", context: "Chat")
         
+        stopTyping()
         sendCallbackToUserOnSent = onSent
         sendCallbackToUserOnDeliver = onDelivere
         sendCallbackToUserOnSeen = onSeen
@@ -433,7 +440,8 @@ extension Chat {
          */
         if enableCache {
             let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(content:          replyMessageInput.content,
-                                                                          metadata:         replyMessageInput.metadata,
+//                                                                          metadata:         replyMessageInput.metadata,
+                                                                          metadata:         (replyMessageInput.metadata != nil) ? "\(replyMessageInput.metadata!)" : nil,
                                                                           repliedTo:        replyMessageInput.repliedTo,
                                                                           systemMetadata:   nil,
                                                                           threadId:         replyMessageInput.subjectId,
@@ -509,7 +517,7 @@ extension Chat {
             for (index, item) in forwardMessageInput.messageIds.enumerated() {
                 let messageObjectToSendToQueue = QueueOfWaitForwardMessagesModel(//messageIds:    [item],
                                                                                  messageId:     item,
-                                                                                 metadata:      forwardMessageInput.metadata,
+                                                                                 metadata:      (forwardMessageInput.metadata != nil) ? "\(forwardMessageInput.metadata!)" : nil,
                                                                                  repliedTo:     forwardMessageInput.repliedTo,
                                                                                  threadId:      forwardMessageInput.threadId,
                                                                                  typeCode:      forwardMessageInput.typeCode,
@@ -522,7 +530,6 @@ extension Chat {
         sendCallbackToUserOnDeliver = onDelivere
         sendCallbackToUserOnSeen = onSeen
         
-        // ToDo: upward code must be delete and this code will be the correct implementation
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.FORWARD_MESSAGE.rawValue,
                                             content:            "\(forwardMessageInput.messageIds)",
                                             metadata:           (forwardMessageInput.metadata != nil) ? "\(forwardMessageInput.metadata!)" : nil,
@@ -595,7 +602,8 @@ extension Chat {
             let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      sendFileMessageInput.content,
                                                                           fileName:     sendFileMessageInput.fileName,
                                                                           imageName:    sendFileMessageInput.imageName,
-                                                                          metadata:     sendFileMessageInput.metadata,
+//                                                                          metadata:     sendFileMessageInput.metadata,
+                                                                          metadata:     (sendFileMessageInput.metadata != nil) ? "\(sendFileMessageInput.metadata!)" : nil,
                                                                           repliedTo:    sendFileMessageInput.repliedTo,
                                                                           threadId:     sendFileMessageInput.threadId,
                                                                           xC:           sendFileMessageInput.xC,
@@ -752,7 +760,8 @@ extension Chat {
             let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      replyFileMessageInput.content,
                                                                           fileName:     replyFileMessageInput.fileName,
                                                                           imageName:    replyFileMessageInput.imageName,
-                                                                          metadata:     replyFileMessageInput.metadata,
+//                                                                          metadata:     replyFileMessageInput.metadata,
+                                                                          metadata:     (replyFileMessageInput.metadata != nil) ? "\(replyFileMessageInput.metadata!)" : nil,
                                                                           repliedTo:    replyFileMessageInput.repliedTo,
                                                                           threadId:     replyFileMessageInput.threadId,
                                                                           xC:           replyFileMessageInput.xC,
@@ -1235,6 +1244,7 @@ extension Chat {
         if (isTyping?.threadId != 0) {
             stopTyping()
         }
+        
         isTyping = (threadId: threadId, uniqueId: requestUniqueId)
         // for every x seconds, call this function:
         var counter = 0
@@ -1270,7 +1280,8 @@ extension Chat {
     /// - It has no output
     public func stopTyping() {
         if let threadId = isTyping?.threadId, threadId != 0 {
-            delegate?.systemEvents(type: SystemEventTypes.STOP_TYPING, result: threadId)
+            let systemEventModel = SystemEventModel(type: SystemEventTypes.STOP_TYPING, time: nil, threadId: threadId, user: nil)
+            delegate?.systemEvents(model: systemEventModel)
         }
         isTyping = (0, "")
 //        for (index, item) in isTypingArray.enumerated() {

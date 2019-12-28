@@ -17,9 +17,8 @@ public class QueueOfFileMessages: NSManagedObject {
         
         var fileToSend:     Data?
         var imageToSend:    Data?
-        var metadata:       JSON?
+//        var metadata:       JSON?
         var repliedTo:      Int?
-//        var subjectId:      Int?
         var threadId:       Int?
         
         func createVariables() {
@@ -30,16 +29,13 @@ public class QueueOfFileMessages: NSManagedObject {
                 imageToSend = imageToSend2
             }
             
-            self.metadata?.retrieveJSONfromTransformableData(completion: { (returnedJSON) in
-                metadata = returnedJSON
-            })
+//            self.metadata?.retrieveJSONfromTransformableData(completion: { (returnedJSON) in
+//                metadata = returnedJSON
+//            })
             
             if let repliedTo2 = self.repliedTo as? Int {
                 repliedTo = repliedTo2
             }
-//            if let subjectId2 = self.subjectId as? Int {
-//                subjectId = subjectId2
-//            }
             if let threadId2 = self.threadId as? Int {
                 threadId = threadId2
             }
@@ -49,7 +45,8 @@ public class QueueOfFileMessages: NSManagedObject {
             let queueOfWaitFileMessagesModel = QueueOfWaitFileMessagesModel(content:        self.content,
                                                                             fileName:       self.fileName,
                                                                             imageName:      self.imageName,
-                                                                            metadata:       metadata,
+//                                                                            metadata:       metadata,
+                                                                            metadata:       self.metadata,
                                                                             repliedTo:      repliedTo,
 //                                                                            subjectId:  subjectId,
                                                                             threadId:       threadId,

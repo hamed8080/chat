@@ -114,8 +114,10 @@ public class CMConversation: NSManagedObject {
             
             
             if let participantArr = self.participants {
-                for item in participantArr {
-                    participants.append(item.convertCMParticipantToParticipantObject())
+                if participantArr.count > 1 {
+                    for item in participantArr {
+                        participants.append(item.convertCMParticipantToParticipantObject())
+                    }
                 }
             }
         }

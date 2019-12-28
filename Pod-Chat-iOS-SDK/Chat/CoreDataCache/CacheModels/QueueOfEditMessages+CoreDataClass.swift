@@ -16,16 +16,16 @@ public class QueueOfEditMessages: NSManagedObject {
     
     public func convertQueueOfEditMessagesToQueueOfWaitEditMessagesModelObject() -> QueueOfWaitEditMessagesModel {
         
-        var metadata:       JSON?
+//        var metadata:       JSON?
         var repliedTo:      Int?
         var messageId:      Int?
         var threadId:       Int?
         
         func createVariables() {
             
-            self.metadata?.retrieveJSONfromTransformableData(completion: { (returnedJSON) in
-                metadata = returnedJSON
-            })
+//            self.metadata?.retrieveJSONfromTransformableData(completion: { (returnedJSON) in
+//                metadata = returnedJSON
+//            })
             
             if let repliedTo2 = self.repliedTo as? Int {
                 repliedTo = repliedTo2
@@ -41,7 +41,8 @@ public class QueueOfEditMessages: NSManagedObject {
         
         func createQueueOfWaitEditMessagesModel() -> QueueOfWaitEditMessagesModel {
             let queueOfWaitEditMessagesModel = QueueOfWaitEditMessagesModel(content:    self.content,
-                                                                            metadata:   metadata,
+//                                                                            metadata:   metadata,
+                                                                            metadata:   self.metadata,
                                                                             repliedTo:  repliedTo,
                                                                             messageId:  messageId,
                                                                             threadId:   threadId,

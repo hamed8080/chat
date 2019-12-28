@@ -27,6 +27,7 @@ class Networking {
                 progress:           callbackTypeAliasFloat?,
                 completion:         @escaping callbackTypeAlias) {
         
+        var uploadProgress: Float = 0
         Alamofire.upload(multipartFormData: { (multipartFormData) in
             
             if let hasImage = isImage {
@@ -63,6 +64,7 @@ class Networking {
                 })
                 upload.uploadProgress(closure: { (myProgress) in
                     let myProgressFloat: Float = Float(myProgress.fractionCompleted)
+                    uploadProgress = myProgressFloat
                     progress?(myProgressFloat)
                 })
                 upload.responseJSON { response in
@@ -75,18 +77,30 @@ class Networking {
                     
                 }
             case .failure(let error):
+                let fileInfo = FileInfo(fileName: (withParameters?["fileName"] as? String) ?? "?",
+                                        fileSize: (withParameters?["fileSize"] as? Int) ?? 0)
+                let fUploadError = FileUploadEventModel(type:           FileUploadEventTypes.UPLOAD_ERROR,
+                                                        errorCode:      nil,
+                                                        errorMessage:   "\(CHAT_ERRORS.err6200.rawValue) (Request Error)",
+                                                        errorEvent:     error,
+                                                        fileInfo:       fileInfo,
+                                                        fileObjectData: dataToSend as? Data,
+                                                        progress:       uploadProgress,
+                                                        threadId:       (withParameters?["threadId"] as? Int),
+                                                        uniqueId:       uniqueId)
+                Chat.sharedInstance.delegate?.fileUploadEvents(model: fUploadError)
                 completion(error)
             }
         }
     }
     
     
-    func download(toUrl urlStr:       String,
-                  withMethod:            HTTPMethod,
-                  withHeaders:           HTTPHeaders?,
-                  withParameters:        Parameters?,
-                  progress:              callbackTypeAliasFloat?,
-                  downloadReturnData:    @escaping (Data?, JSON) -> ()) {
+    func download(toUrl urlStr:         String,
+                  withMethod:           HTTPMethod,
+                  withHeaders:          HTTPHeaders?,
+                  withParameters:       Parameters?,
+                  progress:             callbackTypeAliasFloat?,
+                  downloadReturnData:   @escaping (Data?, JSON) -> ()) {
         
         let url = URL(string: urlStr)!
         

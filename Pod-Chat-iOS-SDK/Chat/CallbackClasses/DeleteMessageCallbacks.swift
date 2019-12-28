@@ -51,7 +51,11 @@ extension Chat {
                                     participant:    nil,
                                     replyInfo:      nil)
             
-            delegate?.messageEvents(type: MessageEventTypes.MESSAGE_DELETE, result: myMessage)
+            let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_DELETE,
+                                                      message:  myMessage,
+                                                      threadId: message.subjectId,
+                                                      senderId: nil)
+            delegate?.messageEvents(model: messageEventModel)
         }
         
         if enableCache {

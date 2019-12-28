@@ -16,16 +16,16 @@ public class QueueOfTextMessages: NSManagedObject {
     
     public func convertQueueOfTextMessagesToQueueOfWaitTextMessagesModelObject() -> QueueOfWaitTextMessagesModel {
         
-        var metadata:       JSON?
+//        var metadata:       JSON?
         var repliedTo:      Int?
         var threadId:       Int?
-        var systemMetadata: JSON?
+//        var systemMetadata: JSON?
         
         func createVariables() {
             
-            self.metadata?.retrieveJSONfromTransformableData(completion: { (returnedJSON) in
-                metadata = returnedJSON
-            })
+//            self.metadata?.retrieveJSONfromTransformableData(completion: { (returnedJSON) in
+//                metadata = returnedJSON
+//            })
             
             if let repliedTo2 = self.repliedTo as? Int {
                 repliedTo = repliedTo2
@@ -34,17 +34,19 @@ public class QueueOfTextMessages: NSManagedObject {
                 threadId = threadId2
             }
             
-            self.systemMetadata?.retrieveJSONfromTransformableData(completion: { (returnedJSON) in
-                systemMetadata = returnedJSON
-            })
+//            self.systemMetadata?.retrieveJSONfromTransformableData(completion: { (returnedJSON) in
+//                systemMetadata = returnedJSON
+//            })
             
         }
         
         func createQueueOfWaitTextMessagesModel() -> QueueOfWaitTextMessagesModel {
             let queueOfWaitTextMessagesModel = QueueOfWaitTextMessagesModel(content:        self.content,
-                                                                            metadata:       metadata,
+//                                                                            metadata:       metadata,
+                                                                            metadata:       self.metadata,
                                                                             repliedTo:      repliedTo,
-                                                                            systemMetadata: systemMetadata,
+//                                                                            systemMetadata: systemMetadata,
+                                                                            systemMetadata: self.systemMetadata,
                                                                             threadId:       threadId,
                                                                             typeCode:       self.typeCode,
                                                                             uniqueId:       self.uniqueId)

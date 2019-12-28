@@ -22,7 +22,9 @@ extension QueueOfTextMessages {
     @NSManaged public var threadId:         NSNumber?
     @NSManaged public var typeCode:         String?
     @NSManaged public var uniqueId:         String?
-    @NSManaged public var metadata:         NSObject?
-    @NSManaged public var systemMetadata:   NSObject?
+//    @NSManaged public var metadata:         NSObject?
+    @NSManaged public var metadata:         String?
+//    @NSManaged public var systemMetadata:   NSObject?
+    @NSManaged public var systemMetadata:   String?
 
 }

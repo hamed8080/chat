@@ -16,7 +16,7 @@ public class QueueOfForwardMessages: NSManagedObject {
     
     public func convertQueueOfForwardMessagesToQueueOfWaitForwardMessagesModelObject() -> QueueOfWaitForwardMessagesModel {
         
-        var metadata:       JSON?
+//        var metadata:       JSON?
 //        var messageIds:     [Int]?
         var messageId:      Int?
         var repliedTo:      Int?
@@ -24,9 +24,9 @@ public class QueueOfForwardMessages: NSManagedObject {
         
         func createVariables() {
             
-            self.metadata?.retrieveJSONfromTransformableData(completion: { (returnedJSON) in
-                metadata = returnedJSON
-            })
+//            self.metadata?.retrieveJSONfromTransformableData(completion: { (returnedJSON) in
+//                metadata = returnedJSON
+//            })
             
 //            if let messageIds2 = self.messageIds as? [Int] {
             if let messageIds2 = self.messageId as? Int {
@@ -45,7 +45,8 @@ public class QueueOfForwardMessages: NSManagedObject {
         func createQueueOfWaitForwardtMessagesModel() -> QueueOfWaitForwardMessagesModel {
             let queueOfWaitForwardMessagesModel = QueueOfWaitForwardMessagesModel(//messageIds:   messageIds,
                                                                                   messageId:    messageId,
-                                                                                  metadata:     metadata,
+//                                                                                  metadata:     metadata,
+                                                                                  metadata:     self.metadata,
                                                                                   repliedTo:    repliedTo,
                                                                                   threadId:     threadId,
                                                                                   typeCode:     self.typeCode,

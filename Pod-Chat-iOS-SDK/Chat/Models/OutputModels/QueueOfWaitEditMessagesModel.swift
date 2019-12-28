@@ -12,7 +12,8 @@ import SwiftyJSON
 open class QueueOfWaitEditMessagesModel {
     
     let content:    String?
-    let metadata:   JSON?
+//    let metadata:   JSON?
+    let metadata:   String?
     let repliedTo:  Int?
     let messageId:  Int?
     let threadId:   Int?
@@ -21,7 +22,8 @@ open class QueueOfWaitEditMessagesModel {
     let uniqueId:   String?
     
     init(content:   String?,
-         metadata:  JSON?,
+//         metadata:  JSON?,
+         metadata:  String?,
          repliedTo: Int?,
          messageId: Int?,
          threadId:  Int?,
@@ -39,12 +41,25 @@ open class QueueOfWaitEditMessagesModel {
     
     init(editMessageInputModel: EditTextMessageRequestModel) {
         self.content    = editMessageInputModel.content
-        self.metadata   = editMessageInputModel.metadata
+//        self.metadata   = editMessageInputModel.metadata
+        self.metadata   = (editMessageInputModel.metadata != nil) ? "\(editMessageInputModel.metadata!)" : nil
         self.repliedTo  = editMessageInputModel.repliedTo
         self.messageId  = editMessageInputModel.messageId
         self.threadId   = nil
         self.typeCode   = editMessageInputModel.typeCode
         self.uniqueId   = editMessageInputModel.uniqueId
+    }
+    
+    
+    public func returnDataAsJSON() -> JSON {
+        let result: JSON = ["content":      content ?? NSNull(),
+                            "metadata":     metadata ?? NSNull(),
+                            "repliedTo":    repliedTo ?? NSNull(),
+                            "messageId":    messageId ?? NSNull(),
+                            "threadId":     threadId ?? NSNull(),
+                            "typeCode":     typeCode ?? NSNull(),
+                            "uniqueId":     uniqueId ?? NSNull()]
+        return result
     }
     
 }

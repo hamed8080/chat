@@ -47,10 +47,18 @@ extension Chat {
          */
         log.verbose("Message of type 'UPDATE_THREAD_INFO' recieved", context: "Chat")
         
-        if let contentAsJSON = message.content?.convertToJSON() {
-            let conversationModel = Conversation(messageContent: contentAsJSON)
-            delegate?.threadEvents(type: ThreadEventTypes.THREAD_INFO_UPDATED, result: conversationModel)
-        }
+//        if let contentAsJSON = message.content?.convertToJSON() {
+//            let conversationModel = Conversation(messageContent: contentAsJSON)
+//            delegate?.threadEvents(type: ThreadEventTypes.THREAD_INFO_UPDATED, threadId: nil, thread: conversationModel, messageId: nil, senderId: nil)
+//        }
+        
+        let tUpdateInfoEM = ThreadEventModel(type:          ThreadEventTypes.THREAD_INFO_UPDATED,
+                                             participants:  nil,
+                                             threads:       nil,
+                                             threadId:      message.subjectId,
+                                             senderId:      nil)
+        delegate?.threadEvents(model: tUpdateInfoEM)
+        
         
         if enableCache {
             if let threadJSON = message.content?.convertToJSON() {

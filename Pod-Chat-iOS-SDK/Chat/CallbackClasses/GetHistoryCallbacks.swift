@@ -29,8 +29,6 @@ extension Chat {
                                           contentCount:     message.contentCount,
                                           subjectId:        message.subjectId)
         
-        // ToDo: get cache result and compare it with server result
-        
         
         if Chat.map[message.uniqueId] != nil {
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
@@ -56,15 +54,17 @@ extension Chat {
             if let arrayContent = response.resultAsArray {
                 let content = sendParams.content?.convertToJSON()
                 
-                // save data comes from server to the Cache
-                var messages = [Message]()
-                for item in response.resultAsArray ?? [] {
-                    let myMessage = Message(threadId: sendParams.subjectId!, pushMessageVO: item)
-                    messages.append(myMessage)
+                if Chat.sharedInstance.enableCache {
+                    // save data comes from server to the Cache
+                    var messages = [Message]()
+                    for item in response.resultAsArray ?? [] {
+                        let myMessage = Message(threadId: sendParams.subjectId!, pushMessageVO: item)
+                        messages.append(myMessage)
+                    }
+                    
+                    handleServerAndCacheDifferential(sendParams: sendParams, serverResponse: messages)
+                    Chat.cacheDB.saveMessageObjects(messages: messages, getHistoryParams: sendParams.convertModelToJSON())
                 }
-                
-                handleServerAndCacheDifferential(sendParams: sendParams, serverResponse: messages)
-                Chat.cacheDB.saveMessageObjects(messages: messages, getHistoryParams: sendParams.convertModelToJSON())
                 
                 let getHistoryModel = GetHistoryModel(messageContent:   arrayContent,
                                                       contentCount:     response.contentCount,
@@ -97,32 +97,58 @@ extension Chat {
                                                                                 uniqueId:       getHistoryInput.uniqueId) {
                     
                     // check if there was any message on the server response that wasn't on the cache, send them as New Message Event to the client
+                    // check if there was any message on the server response that also was on the cache, then check their data, and if see any difference, send them as Edit Message Event to the client
                     for message in serverResponse {
-                        var foundMsg = false
+                        var foundNewMsg = true
+                        var foundEditMsg = true
                         for cacheMessage in cacheHistoryResult.history {
                             if (message.id == cacheMessage.id) {
-                                foundMsg = true
+                                foundNewMsg = false
+                                if (message.message == cacheMessage.message)
+                                    && (message.metadata == cacheMessage.metadata)
+                                    && (message.mentioned == cacheMessage.mentioned)
+                                    && (message.previousId == cacheMessage.previousId) {
+                                    foundEditMsg = false
+                                }
                                 break
                             }
                         }
                         // meands this message was not on the cache response
-                        if !foundMsg {
-                            Chat.sharedInstance.delegate?.messageEvents(type: MessageEventTypes.MESSAGE_NEW, result: message)
+                        if foundNewMsg {
+                            let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_NEW,
+                                                                      message:  message,
+                                                                      threadId: message.threadId,
+                                                                      senderId: nil)
+                            Chat.sharedInstance.delegate?.messageEvents(model: messageEventModel)
                         }
+                        
+                        // meands this message was not on the cache response
+                        if foundEditMsg {
+                            let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_EDIT,
+                                                                      message:  message,
+                                                                      threadId: message.threadId,
+                                                                      senderId: nil)
+                            Chat.sharedInstance.delegate?.messageEvents(model: messageEventModel)
+                        }
+                        
                     }
                     
                     // check if there was any message on the cache response that wasn't on the server response, send them as Delete Message Event to the client
                     for cacheMessage in cacheHistoryResult.history {
-                        var foundMsg = false
+                        var foundDeleteMsg = false
                         for message in serverResponse {
                             if (cacheMessage.id == message.id) {
-                                foundMsg = true
+                                foundDeleteMsg = true
                                 break
                             }
                         }
                         // meands this message was not on the server response
-                        if !foundMsg {
-                            Chat.sharedInstance.delegate?.messageEvents(type: MessageEventTypes.MESSAGE_DELETE, result: cacheMessage)
+                        if !foundDeleteMsg {
+                            let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_DELETE,
+                                                                      message:  cacheMessage,
+                                                                      threadId: cacheMessage.threadId,
+                                                                      senderId: nil)
+                            Chat.sharedInstance.delegate?.messageEvents(model: messageEventModel)
                         }
                     }
                     

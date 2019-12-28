@@ -142,7 +142,7 @@ public class Chat {
     var mapApiKey:          String  = "8b77db18704aa646ee5aaea13e7370f4f88b9e8c"
     var mapServer:          String  = "https://api.neshan.org/v1"
     
-    //    var ssoGrantDevicesAddress = params.ssoGrantDevicesAddress
+//    var ssoGrantDevicesAddress = params.ssoGrantDevicesAddress
     var chatFullStateObject: JSON = [:]
     
     var msgPriority:        Int     = 0
@@ -169,20 +169,105 @@ public class Chat {
     var getUserInfoRetry        = 5
     var getUserInfoRetryCount   = 0
     var chatPingMessageInterval = 20
-    var lastReceivedMessageTime:        Date?
-    var lastReceivedMessageTimeoutId:   RepeatingTimer?
-    var lastSentMessageTime:            Date?
-    var lastSentMessageTimeoutId:       RepeatingTimer?
-    var chatState = false
-    var cacheTimeStamp = (2 * 24) * (60 * 60)
+    var cacheTimeStamp          = (2 * 24) * (60 * 60)
+    
+    var isChatReady     = false {
+        didSet {
+            if isChatReady {
+                for item in sendRequestQueue {
+                    sendRequestToAsync(type: item.type, content: item.content)
+                }
+            }
+        }
+    }
     
     var SERVICE_ADDRESSES = SERVICE_ADDRESSES_ENUM()
     
-    public var uploadRequest:      [(upload: Request, uniqueId: String)]   = []
-    public var downloadRequest:    [(download: Request, uniqueId: String)] = []
+    var sendRequestQueue:       [(type: Int, content: String)]          = []
+    public var uploadRequest:   [(upload: Request, uniqueId: String)]   = []
+    public var downloadRequest: [(download: Request, uniqueId: String)] = []
     
-//    var isTypingArray: [String] = []
     var isTyping: (threadId: Int, uniqueId: String)? = (0, "")
+    
+    
+    
+    // MARK: - Timers
+    
+    var getUserInfoTimer: RepeatingTimer? {
+        didSet {
+            if isChatReady {
+                self.getUserInfoTimer?.suspend()
+            } else {
+                self.getUserInfoTimer?.suspend()
+                DispatchQueue.global().async {
+                    self.getUserInfoTimer?.eventHandler = {
+                        if (self.getUserInfoRetryCount < self.getUserInfoRetry) {
+                            DispatchQueue.main.async {
+                                self.makeChatReady()
+                            }
+                            self.getUserInfoTimer?.suspend()
+                        }
+                    }
+                    self.getUserInfoTimer?.resume()
+                }
+            }
+        }
+    }
+    
+    var lastReceivedMessageTime:    Date?
+    var lastReceivedMessageTimer:   RepeatingTimer? {
+        didSet {
+            self.lastReceivedMessageTimer?.suspend()
+            DispatchQueue.global().async {
+                self.lastReceivedMessageTime = Date()
+//                self.lastReceivedMessageTimeoutId = RepeatingTimer(timeInterval: (Double(self.chatPingMessageInterval) * 1.5))
+                self.lastReceivedMessageTimer?.eventHandler = {
+                    if let lastReceivedMessageTimeBanged = self.lastReceivedMessageTime {
+                        let elapsed = Int(Date().timeIntervalSince(lastReceivedMessageTimeBanged))
+                        if (elapsed >= self.connectionCheckTimeout) {
+                            DispatchQueue.main.async {
+                                self.asyncClient?.asyncReconnectSocket()
+                            }
+                            self.lastReceivedMessageTimer?.suspend()
+                        }
+                    }
+                }
+                self.lastReceivedMessageTimer?.resume()
+            }
+        }
+    }
+    
+    var lastSentMessageTime:    Date?
+    var lastSentMessageTimer:   RepeatingTimer? {
+        didSet {
+            /*
+             * first of all, it will suspend the timer
+             * then on the background thread it will run a timer
+             * if the "isChatReady" = true (means chat is still connected)
+             * and there are "chatPingMessageInterval" seconds passed from last message that sends to chat
+             * it will send a ping message on the main thread
+             *
+             */
+            self.lastSentMessageTimer?.suspend()
+            DispatchQueue.global().async {
+                self.lastSentMessageTime = Date()
+//                self.lastSentMessageTimeoutId = RepeatingTimer(timeInterval: TimeInterval(self.chatPingMessageInterval))
+                self.lastSentMessageTimer?.eventHandler = {
+                    if let lastSendMessageTimeBanged = self.lastSentMessageTime {
+                        let elapsed = Int(Date().timeIntervalSince(lastSendMessageTimeBanged))
+                        if (elapsed >= self.chatPingMessageInterval) && (self.isChatReady == true) {
+                            DispatchQueue.main.async {
+                                self.ping()
+                            }
+                            self.lastSentMessageTimer?.suspend()
+                        }
+                    }
+                }
+                self.lastSentMessageTimer?.resume()
+            }
+        }
+    }
+    
     
     // MARK: - properties that save callbacks on themselves
     
@@ -198,33 +283,34 @@ public class Chat {
     static var mapOnSeen    = [String: [[String: CallbackProtocolWith3Calls]]]()
     
     // property to hold Sent callbecks to implement later, on somewhere else on the program
-    public var userInfoCallbackToUser:             callbackTypeAlias?
-    public var getContactsCallbackToUser:          callbackTypeAlias?
-    public var threadsCallbackToUser:              callbackTypeAlias?
-    public var historyCallbackToUser:              callbackTypeAlias?
-    public var threadParticipantsCallbackToUser:   callbackTypeAlias?
-    public var createThreadCallbackToUser:         callbackTypeAlias?
-    public var addParticipantsCallbackToUser:      callbackTypeAlias?
-    public var removeParticipantsCallbackToUser:   callbackTypeAlias?
-    public var sendCallbackToUserOnSent:           callbackTypeAlias?
-    public var sendCallbackToUserOnDeliver:        callbackTypeAlias?
-    public var sendCallbackToUserOnSeen:           callbackTypeAlias?
-    public var editMessageCallbackToUser:          callbackTypeAlias?
-    public var deleteMessageCallbackToUser:        callbackTypeAlias?
-    public var muteThreadCallbackToUser:           callbackTypeAlias?
-    public var unmuteThreadCallbackToUser:         callbackTypeAlias?
-    public var updateThreadInfoCallbackToUser:     callbackTypeAlias?
-    public var blockCallbackToUser:                callbackTypeAlias?
-    public var unblockCallbackToUser:              callbackTypeAlias?
-    public var getBlockedCallbackToUser:           callbackTypeAlias?
-    public var leaveThreadCallbackToUser:          callbackTypeAlias?
-    public var spamPvThreadCallbackToUser:         callbackTypeAlias?
-    public var getMessageSeenListCallbackToUser:   callbackTypeAlias?
+    public var userInfoCallbackToUser:              callbackTypeAlias?
+    public var getContactsCallbackToUser:           callbackTypeAlias?
+    public var threadsCallbackToUser:               callbackTypeAlias?
+    public var historyCallbackToUser:               callbackTypeAlias?
+    public var threadParticipantsCallbackToUser:    callbackTypeAlias?
+    public var createThreadCallbackToUser:          callbackTypeAlias?
+    public var addParticipantsCallbackToUser:       callbackTypeAlias?
+    public var removeParticipantsCallbackToUser:    callbackTypeAlias?
+    public var sendCallbackToUserOnSent:            callbackTypeAlias?
+    public var sendCallbackToUserOnDeliver:         callbackTypeAlias?
+    public var sendCallbackToUserOnSeen:            callbackTypeAlias?
+    public var editMessageCallbackToUser:           callbackTypeAlias?
+    public var deleteMessageCallbackToUser:         callbackTypeAlias?
+    public var muteThreadCallbackToUser:            callbackTypeAlias?
+    public var unmuteThreadCallbackToUser:          callbackTypeAlias?
+    public var updateThreadInfoCallbackToUser:      callbackTypeAlias?
+    public var blockCallbackToUser:                 callbackTypeAlias?
+    public var unblockCallbackToUser:               callbackTypeAlias?
+    public var getBlockedCallbackToUser:            callbackTypeAlias?
+    public var leaveThreadCallbackToUser:           callbackTypeAlias?
+    public var spamPvThreadCallbackToUser:          callbackTypeAlias?
+    public var getMessageSeenListCallbackToUser:    callbackTypeAlias?
     public var getMessageDeliverListCallbackToUser: callbackTypeAlias?
-    public var clearHistoryCallbackToUser:         callbackTypeAlias?
-    public var getAdminListCallbackToUser:         callbackTypeAlias?
-    public var setRoleToUserCallbackToUser:        callbackTypeAlias?
-//    public var sendSignalMessageCallbackToUser:    callbackTypeAlias?
+    public var clearHistoryCallbackToUser:          callbackTypeAlias?
+    public var getAdminListCallbackToUser:          callbackTypeAlias?
+    public var setRoleToUserCallbackToUser:         callbackTypeAlias?
+    public var removeRoleFromUserCallbackToUser:    callbackTypeAlias?
+    
     
     
     // MARK: - create Async with the parameters
