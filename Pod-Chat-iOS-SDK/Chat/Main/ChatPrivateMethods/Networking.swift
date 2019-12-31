@@ -153,7 +153,7 @@ class Networking {
                                   withParameters:   Parameters?,
                                   completion:       @escaping callbackTypeAlias) {
         
-        let url = URL(string: urlStr)!
+        guard let url = URL(string: urlStr) else { print("could not open url, it was nil"); return }
         Alamofire.request(url,
                           method:       withMethod,
                           parameters:   withParameters,

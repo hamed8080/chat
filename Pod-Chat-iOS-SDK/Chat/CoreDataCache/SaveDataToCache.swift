@@ -178,6 +178,47 @@ extension Cache {
     }
     
     
+    // MARK: - save Pin/Unpin on Conversation:
+    /// Save Pin/Unpin on CMConversation Entity:
+    /// by calling this function, save (or update) Pin/Unpin property on Thread that comes from server, into the cache
+    ///
+    /// Inputs:
+    /// - it gets the threadId as  "Int" value as an input
+    ///
+    /// Outputs:
+    /// - it returns no output
+    ///
+    /// - parameter withThreadId:   send your thread to this parameter.(Int)
+    /// - parameter isPinned:       specify if this thread is pinned or not. (Bool)
+    func savePinUnpinCMConversationEntity(withThreadId id: Int, isPinned: Bool) {
+        /*
+         * -> fetch CMConversation objcets from the CMConversation Entity,
+         *    and see if we already had this Conversation on the cache or not
+         * -> if we found the object on the Entity, we will update only the "pin" property value of it,
+         * -> if not, we will create CMConversation object and save it on the Cache
+         *
+         */
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
+        fetchRequest.predicate = NSPredicate(format: "id == %i", id)
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMConversation] {
+                if (result.count > 0) {
+                    result.first!.pin = isPinned as NSNumber?
+                    
+                    saveContext(subject: "Update CMConversation on PinThread -update existing object-")
+                } else {
+                    let conversationEntity = NSEntityDescription.entity(forEntityName: "CMConversation", in: context)
+                    let conversation = CMConversation(entity: conversationEntity!, insertInto: context)
+                    conversation.pin = isPinned as NSNumber?
+                    
+                    saveContext(subject: "Update CMConversation on PinThread -create new object-")
+                }
+            }
+        } catch {
+            fatalError("Error on trying to find the thread from CMConversation entity")
+        }
+    }
+    
     
     // MARK: - save ThreadParticipant:
     /// Save ThreadParticipant:

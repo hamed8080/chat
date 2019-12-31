@@ -151,7 +151,7 @@ extension Chat {
                                                                  id:                nil,
                                                                  lastName:          searchContactsInput.lastName,
                                                                  offset:            searchContactsInput.offset ?? 0,
-                                                                 search:            nil,
+                                                                 search:            searchContactsInput.query,
                                                                  timeStamp:         cacheTimeStamp,
                                                                  uniqueId:          nil) {
                 cacheResponse(cacheContacts)
@@ -208,6 +208,9 @@ extension Chat {
         }
         if let typeCode_ = searchContactsInput.typeCode {
             params["typeCode"] = JSON(typeCode_)
+        }
+        if let query_ = searchContactsInput.query {
+            params["q"] = JSON(query_)
         }
         
         Networking.sharedInstance.requesttWithJSONresponse(from:            url,
@@ -278,10 +281,10 @@ extension Chat {
     /// - It has 3 callbacks as responses.
     ///
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (AddContactsRequestModel)
-    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter uniqueIds:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ContactModel)
     public func addContacts(inputModel addContactsInput:    AddContactsRequestModel,
-                            uniqueId:            @escaping (String) -> (),
+                            uniqueIds:           @escaping ([String]) -> (),
                             completion:          @escaping callbackTypeAlias) {
         /**
          *  -> send the HTTP request to server to get the response from it
@@ -291,11 +294,10 @@ extension Chat {
          */
         log.verbose("Try to request to add contact with this parameters: \n \(addContactsInput)", context: "Chat")
         
-        let messageUniqueId: String = addContactsInput.uniqueId ?? generateUUID()
-        uniqueId(messageUniqueId)
+        let messageUniqueIds: [String] = addContactsInput.uniqueIds
+        uniqueIds(messageUniqueIds)
         
-        sendAddContactsRequest(withInputModel:    addContactsInput,
-                               messageUniqueId:     messageUniqueId)
+        sendAddContactsRequest(withInputModel: addContactsInput)
         { (addContactModel) in
             self.addContactOnCache(withInputModel: addContactModel as! ContactModel)
             completion(addContactModel)
@@ -348,7 +350,6 @@ extension Chat {
     }
     
     private func sendAddContactsRequest(withInputModel addContactsInput:    AddContactsRequestModel,
-                                        messageUniqueId:     String,
                                         completion:          @escaping callbackTypeAlias) {
         /**
          *
@@ -367,25 +368,39 @@ extension Chat {
          *
          */
         
-        let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.ADD_CONTACTS.rawValue)"
+        var url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.ADD_CONTACTS.rawValue)"
         let method: HTTPMethod      = HTTPMethod.post
         let headers: HTTPHeaders    = ["_token_": token, "_token_issuer_": "1"]
         
-        var params: Parameters      = [:]
-        params["firstName"]         = JSON(addContactsInput.firstNames)
-        params["lastName"]          = JSON(addContactsInput.lastNames)
-        params["cellphoneNumber"]   = JSON(addContactsInput.cellphoneNumbers)
-        params["email"]             = JSON(addContactsInput.emails)
-        params["uniqueId"]          = JSON(messageUniqueId)
-        if let typeCode_ = addContactsInput.typeCode {
-            params["typeCode"] = JSON(typeCode_)
+//        var params: Parameters      = [:]
+        
+        url += "?"
+        let contactCount = addContactsInput.cellphoneNumbers.count
+        for (index, _) in addContactsInput.cellphoneNumbers.enumerated() {
+            url += "firstName=\(addContactsInput.firstNames[index])"
+            url += "&lastName=\(addContactsInput.lastNames[index])"
+            url += "&cellphoneNumber=\(addContactsInput.cellphoneNumbers[index])"
+            url += "&email=\(addContactsInput.emails[index])"
+            url += "&uniqueId=\(addContactsInput.uniqueIds[index])"
+            if (index != contactCount - 1) {
+                url += "&"
+            }
         }
         
-        Networking.sharedInstance.requesttWithJSONresponse(from:            url,
+        if let typeCode_ = addContactsInput.typeCode {
+            url += "&typeCode=\(typeCode_)"
+        } else {
+            url += "&typeCode=\(generalTypeCode)"
+        }
+        print("\n\n*******************\n url = \n\(url)\n*******************\n\n")
+        
+        let textAppend = url.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? url
+        Networking.sharedInstance.requesttWithJSONresponse(from:            textAppend,
                                                            withMethod:      method,
                                                            withHeaders:     headers,
-                                                           withParameters:  params)
+                                                           withParameters:  nil)
         { (jsonResponse) in
+            print("\n\n*******************\n jsonResponse = \n\(jsonResponse)\n*******************\n\n")
             let contactsModel = ContactModel(messageContent: jsonResponse as! JSON)
             completion(contactsModel)
         }
@@ -876,12 +891,10 @@ extension Chat {
     /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! [ContactModel])
     /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. ([ContactModel])
-    public func syncContacts(uniqueId:      @escaping (String) -> (),
+    public func syncContacts(uniqueIds:     @escaping ([String]) -> (),
                              completion:    @escaping callbackTypeAlias,
                              cacheResponse: @escaping ([ContactModel]) -> ()) {
         log.verbose("Try to request to sync contact", context: "Chat")
-        
-        let myUniqueId = generateUUID()
         
         var firstNameArray = [String]()
         var lastNameArray = [String]()
@@ -913,16 +926,18 @@ extension Chat {
         }
         
         
-        var firstNames: [String] = []
-        var lastNames:  [String] = []
-        var cellPhones: [String] = []
-        var emails:     [String] = []
+        var firstNames:         [String] = []
+        var lastNames:          [String] = []
+        var cellPhones:         [String] = []
+        var emails:             [String] = []
+        var contactUniqueIds:   [String] = []
         
         func appendContactToArrayToUpdate(atIndex: Int) {
             firstNames.append(firstNameArray[atIndex])
             lastNames.append(lastNameArray[atIndex])
             cellPhones.append(cellphoneNumberArray[atIndex])
             emails.append(emailArray[atIndex])
+            contactUniqueIds.append(generateUUID())
         }
         
         if let cachePhoneContacts = Chat.cacheDB.retrievePhoneContacts() {
@@ -955,10 +970,10 @@ extension Chat {
                                                        firstNames:      firstNames,
                                                        lastNames:       lastNames,
                                                        typeCode:        nil,
-                                                       uniqueId:        myUniqueId)
+                                                       uniqueIds:       contactUniqueIds)
         
-        addContacts(inputModel: addContactsModel, uniqueId: { (resUniqueId) in
-            uniqueId(resUniqueId)
+        addContacts(inputModel: addContactsModel, uniqueIds: { (resUniqueIds) in
+            uniqueIds(resUniqueIds)
         }) { (myResponse) in
             completion(myResponse)
         }

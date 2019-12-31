@@ -821,23 +821,13 @@ extension Chat {
             return
             
         // a message of type 48 (PIN) comes from Server.
-        case chatMessageVOTypes.PIN.rawValue:
-            let tPinEM = ThreadEventModel(type:         ThreadEventTypes.THREAD_PIN,
-                                          participants: nil,
-                                          threads:      nil,
-                                          threadId:     message.subjectId,
-                                          senderId:     nil)
-            delegate?.threadEvents(model: tPinEM)
+        case chatMessageVOTypes.PIN_THREAD.rawValue:
+            responseOfPinThread(withMessage: message)
             break
             
         // a message of type 49 (PIN) comes from Server.
-        case chatMessageVOTypes.UNPIN.rawValue:
-            let tPinEM = ThreadEventModel(type:         ThreadEventTypes.THREAD_UNPIN,
-                                          participants: nil,
-                                          threads:      nil,
-                                          threadId:     message.subjectId,
-                                          senderId:     nil)
-            delegate?.threadEvents(model: tPinEM)
+        case chatMessageVOTypes.UNPIN_THREAD.rawValue:
+            responseOfUnpinThread(withMessage: message)
             break
             
         // a message of type 100 (LOGOUT) comes from Server.

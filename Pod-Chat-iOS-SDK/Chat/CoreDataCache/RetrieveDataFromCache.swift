@@ -296,6 +296,41 @@ extension Cache {
                                 threadIds:  [Int]?/*,
                                 timeStamp:  Int*/) -> GetThreadsModel? {
         
+        let unpinnedThreads = retrieveTheThreads(ascending: ascending, count: count, name: name, offset: offset, threadIds: threadIds)
+        
+        if (count < 1000) {
+            let pinnedThreadsArray = retrievePinThreads(ascending: ascending)
+            var extraItems = pinnedThreadsArray?.count ?? 0
+            for (index, item) in (unpinnedThreads?.threads ?? []).enumerated() {
+                for thrd in pinnedThreadsArray ?? [] {
+                    if (item.id == thrd.id) {
+                        unpinnedThreads?.threads.remove(at: index)
+                        extraItems -= 1
+                    }
+                }
+            }
+            
+            for item in pinnedThreadsArray ?? [] {
+                unpinnedThreads?.threads.insert(item, at: 0)
+            }
+            if (extraItems > 0) {
+                for _ in (1...(pinnedThreadsArray?.count ?? 0)) {
+                    unpinnedThreads?.threads.removeLast()
+                }
+            }
+        }
+        
+        return unpinnedThreads
+        
+    }
+    
+    func retrieveTheThreads(ascending:  Bool,
+                            count:      Int,
+                            name:       String?,
+                            offset:     Int,
+                            threadIds:  [Int]?/*,
+                            timeStamp:  Int*/) -> GetThreadsModel? {
+        
         // This part is deprecated because of a new service that has been come from server that gives all threadIds in one request
 //        /*
 //         * first of all, try to delete all the Participants that has not been updated for a long time (check it from timeStamp)
@@ -319,14 +354,14 @@ extension Cache {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
         
         // use this array to make "logical OR" for threads
-        var fetchPredicatArray = [NSPredicate]()
+        var orFetchPredicatArray = [NSPredicate]()
         // put the search statement on the predicate to search throut the Conversations(Threads)
         if let searchStatement = name {
             if (searchStatement != "") {
                 let searchTitle = NSPredicate(format: "title CONTAINS[cd] %@", searchStatement)
                 let searchDescriptions = NSPredicate(format: "descriptions CONTAINS[cd] %@", searchStatement)
-                fetchPredicatArray.append(searchTitle)
-                fetchPredicatArray.append(searchDescriptions)
+                orFetchPredicatArray.append(searchTitle)
+                orFetchPredicatArray.append(searchDescriptions)
             }
         }
         
@@ -334,14 +369,24 @@ extension Cache {
         if let searchThreadId = threadIds {
             for i in searchThreadId {
                 let threadIdPredicate = NSPredicate(format: "id == %i", i)
-                fetchPredicatArray.append(threadIdPredicate)
+                orFetchPredicatArray.append(threadIdPredicate)
             }
         }
         
-        if (fetchPredicatArray.count > 0) {
-            let predicateCompound = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.or, subpredicates: fetchPredicatArray)
+//        var andFetchPredicaArray = [NSPredicate]()
+        
+        if (orFetchPredicatArray.count > 0) {
+            let predicateCompound = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.or, subpredicates: orFetchPredicatArray)
+//            andFetchPredicaArray.append(predicateCompound)
             fetchRequest.predicate = predicateCompound
         }
+        
+//        let pinnedThreads = NSPredicate(format: "pin != %@", true)
+//        andFetchPredicaArray.append(pinnedThreads)
+//        if (andFetchPredicaArray.count > 0) {
+//            let predicateCompound = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.and, subpredicates: andFetchPredicaArray)
+//            fetchRequest.predicate = predicateCompound
+//        }
         
         // sort the result by the time
         let sortByTime = NSSortDescriptor(key: "time", ascending: ascending)
@@ -382,6 +427,44 @@ extension Cache {
         }
     }
     
+    func retrievePinThreads(ascending:  Bool) -> [Conversation]? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
+        
+        let theOnlyPredicate: NSPredicate?
+        theOnlyPredicate = NSPredicate(format: "pin == %@", true)
+        fetchRequest.predicate = theOnlyPredicate
+        
+        // sort the result by the time
+        let sortByTime = NSSortDescriptor(key: "time", ascending: ascending)
+        fetchRequest.sortDescriptors = [sortByTime]
+        
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMConversation] {
+                
+                var conversationArr = [Conversation]()
+                for item in result {
+                    let conversationObject = item.convertCMConversationToConversationObject()
+                    conversationArr.append(conversationObject)
+                }
+                
+//                let getThreadModelResponse = GetThreadsModel(conversationObjects:   conversationArr,
+//                                                             contentCount:          result.count,
+//                                                             count:                 result.count,
+//                                                             offset:                0,
+//                                                             hasError:              false,
+//                                                             errorMessage:          "",
+//                                                             errorCode:             0)
+//
+//                return getThreadModelResponse
+                return conversationArr
+                
+            } else {
+                return nil
+            }
+        } catch {
+            fatalError("Error on fetching list of CMConversation")
+        }
+    }
     
     
     // MARK: - retrieve ThreadParticipants:

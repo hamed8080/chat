@@ -101,12 +101,12 @@ extension Chat {
                     for thread in cacheThreadModel?.threads ?? [] {
                         if let thID = thread.id {
                             cacheThreadIds.append(thID)
-                            let tNewEM = ThreadEventModel(type:          ThreadEventTypes.THREAD_NEW,
-                                                          participants:  nil,
-                                                          threads:       nil,
-                                                          threadId:      thID,
-                                                          senderId:      nil)
-                            delegate?.threadEvents(model: tNewEM)
+//                            let tNewEM = ThreadEventModel(type:          ThreadEventTypes.THREAD_NEW,
+//                                                          participants:  nil,
+//                                                          threads:       nil,
+//                                                          threadId:      thID,
+//                                                          senderId:      nil)
+//                            delegate?.threadEvents(model: tNewEM)
                         }
                     }
                     for sti in serverThreadIds {
