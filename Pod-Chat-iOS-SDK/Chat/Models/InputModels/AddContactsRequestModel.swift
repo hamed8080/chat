@@ -44,21 +44,21 @@ open class AddContactsRequestModel {
     public let lastNames:           [String]
     
     public let typeCode:            String?
-    public let uniqueId:            String?
+    public let uniqueIds:           [String]
     
     public init(cellphoneNumbers:   [String],
                 emails:             [String],
                 firstNames:         [String],
                 lastNames:          [String],
                 typeCode:           String?,
-                uniqueId:           String?) {
+                uniqueIds:          [String]) {
         
         self.cellphoneNumbers   = cellphoneNumbers
         self.emails             = emails
         self.firstNames         = firstNames
         self.lastNames          = lastNames
         self.typeCode           = typeCode
-        self.uniqueId           = uniqueId
+        self.uniqueIds          = uniqueIds
     }
     
 }

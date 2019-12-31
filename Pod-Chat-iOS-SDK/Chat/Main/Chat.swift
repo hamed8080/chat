@@ -310,6 +310,8 @@ public class Chat {
     public var getAdminListCallbackToUser:          callbackTypeAlias?
     public var setRoleToUserCallbackToUser:         callbackTypeAlias?
     public var removeRoleFromUserCallbackToUser:    callbackTypeAlias?
+    public var pinThreadCallbackToUser:             callbackTypeAlias?
+    public var unpinThreadCallbackToUser:           callbackTypeAlias?
     
     
     

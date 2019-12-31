@@ -24,8 +24,17 @@ public enum Roles: String {
 }
 
 
-public enum RoleOperations: String {
-    case Add    = "add"
-    case Remove = "remove"
+public enum RoleOperations {
+    
+    case Add
+    case Remove
+    
+    func returnString() -> String {
+        switch self {
+        case .Add:      return "add"
+        case .Remove:   return "remove"
+        }
+    }
+    
 }
 
