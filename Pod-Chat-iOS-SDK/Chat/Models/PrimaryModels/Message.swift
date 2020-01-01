@@ -31,23 +31,23 @@ open class Message {
      *    - replyInfo:      ReplyInfo?
      */
     
-    public let deletable:   Bool?
-    public let delivered:   Bool?
-    public let editable:    Bool?
-    public let edited:      Bool?
+    public var deletable:   Bool?
+    public var delivered:   Bool?
+    public var editable:    Bool?
+    public var edited:      Bool?
     public var id:          Int?
     public var mentioned:   Bool?
     public var message:     String?
-    public let messageType: String?
+    public var messageType: String?
     public var metadata:    String?
     public var ownerId:     Int?
-    public let previousId:  Int?
-    public let seen:        Bool?
-    public let systemMetadata:  String?
+    public var previousId:  Int?
+    public var seen:        Bool?
+    public var systemMetadata:  String?
     public var threadId:    Int?
-    public let time:        UInt?
+    public var time:        UInt?
 //    public let timeNanos:   UInt?
-    public let uniqueId:    String?
+    public var uniqueId:    String?
     
     public var conversation:   Conversation?
     public var forwardInfo:    ForwardInfo?

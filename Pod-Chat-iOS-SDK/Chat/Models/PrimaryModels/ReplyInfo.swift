@@ -25,16 +25,16 @@ open class ReplyInfo {
      */
     
     
-    public let deleted:             Bool?
-    public let repliedToMessageId:  Int?
-    public let message:             String?
-    public let messageType:         Int?
-    public let metadata:            String?
-    public let systemMetadata:      String?
+    public var deleted:             Bool?
+    public var repliedToMessageId:  Int?
+    public var message:             String?
+    public var messageType:         Int?
+    public var metadata:            String?
+    public var systemMetadata:      String?
 //    public let timeNanos:           UInt?
-    public let time:                UInt?
+    public var time:                UInt?
     
-    public let participant:        Participant?
+    public var participant:        Participant?
     //    public let repliedToMessage:    String?
     
     public init(messageContent: JSON) {

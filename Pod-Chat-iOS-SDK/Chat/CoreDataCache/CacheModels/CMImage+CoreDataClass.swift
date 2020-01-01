@@ -43,9 +43,9 @@ public class CMImage: NSManagedObject {
         func createImageObjectModel() -> ImageObject {
             let uploadImageModel = ImageObject(actualHeight: actualHeight,
                                                actualWidth: actualWidth,
-                                               hashCode: self.hashCode,
+                                               hashCode: self.hashCode!,
                                                height: height,
-                                               id: id,
+                                               id: id!,
                                                name: self.name,
                                                width: width)
             return uploadImageModel

@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 import SwiftyJSON
+import MobileCoreServices
 
 // MARK: - Functions that will save data on CoreData Cache
 
@@ -797,23 +798,32 @@ extension Cache {
         // otherwise we will create an object and save data on cache
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
         do {
-            
             if let result = try context.fetch(fetchRequest) as? [CMImage] {
                 // if there is a value in this fetch request, it mean that we had already saved This Image info in the Cache.
                 // so we just have to update that information with new response that comes from server
                 
-                // TODO: prevent copy one file in several places in the app - search by the Image file itself through the app bundle
                 /*
                  if find sth, check out the information about that file:
                  if the info of both, was the same, just delete the fileInfo from cache, and then save it later
                  if the info was different, just save the new info in the cache and link it to this image file path
                  */
                 
+                var tempImage: ImageObject?
+                
                 // Part1:
                 // find data that are exist in the Cache, (and the response request is containing that). and delete them
                 for itemInCache in result {
-                    if let imageId = Int(exactly: itemInCache.id ?? 0) {
+                    if let imageId = Int(exactly: itemInCache.id!) {
                         if (imageId == imageInfo.id) {
+                            
+                            tempImage = ImageObject(actualHeight: itemInCache.actualHeight as? Int,
+                                                    actualWidth:  itemInCache.actualWidth as? Int,
+                                                    hashCode:     itemInCache.hashCode!,
+                                                    height:       itemInCache.height as? Int,
+                                                    id:           itemInCache.id as! Int,
+                                                    name:         itemInCache.name,
+                                                    width:        itemInCache.width as? Int)
+                            
                             // the uploadImage object that we are going to create, is already exist in the Cache
                             // to update information in this object:
                             // we will delete them first, then we will create it again later
@@ -821,7 +831,7 @@ extension Cache {
                             // delete the original file from local storage of the app, using path of the file
                             let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
                             
-                            let myFilePath = path + "/\(fileSubPath.Images)/" + "\(imageInfo.name ?? "default")\(imageInfo.id ?? 0).png"
+                            let myFilePath = path + "/\(fileSubPath.Images)/" + "\(itemInCache.id!)\(itemInCache.name ?? "default")"
                             // check if this file is exixt on the app bunde, then delete it
                             if FileManager.default.fileExists(atPath: myFilePath) {
                                 do {
@@ -842,25 +852,22 @@ extension Cache {
                 let theUploadImageEntity = NSEntityDescription.entity(forEntityName: "CMImage", in: context)
                 let theUploadImage = CMImage(entity: theUploadImageEntity!, insertInto: context)
                 
-                theUploadImage.actualHeight = imageInfo.actualHeight as NSNumber?
-                theUploadImage.actualWidth  = imageInfo.actualWidth as NSNumber?
+                theUploadImage.actualHeight = (imageInfo.actualHeight ?? tempImage?.actualHeight) as NSNumber?
+                theUploadImage.actualWidth  = (imageInfo.actualWidth ?? tempImage?.actualWidth) as NSNumber?
                 theUploadImage.hashCode     = imageInfo.hashCode
-                theUploadImage.height       = imageInfo.height as NSNumber?
+                theUploadImage.height       = (imageInfo.height ?? tempImage?.height) as NSNumber?
                 theUploadImage.id           = imageInfo.id as NSNumber?
-                theUploadImage.name         = imageInfo.name
-                theUploadImage.width        = imageInfo.width as NSNumber?
+                theUploadImage.name         = (imageInfo.name ?? tempImage?.name)
+                theUploadImage.width        = (imageInfo.width ?? tempImage?.width) as NSNumber?
                 
                 // save file on app bundle
-                //                guard let directory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) as NSURL else { return }
                 let directoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-                let directoryURL = URL(fileURLWithPath: directoryPath)
-                let imageLocalAdress = directoryURL.appendingPathComponent("\(fileSubPath.Images)/\(imageInfo.name ?? "default")\(imageInfo.id ?? 0).png")
+                let directoryURL        = URL(fileURLWithPath: directoryPath)
+                let imagesLocalirectory = directoryURL.appendingPathComponent("\(fileSubPath.Images)")
+                createDirectory(at: imagesLocalirectory)
                 
-                do {
-                    try imageData.write(to: imageLocalAdress)
-                } catch {
-                    print(error.localizedDescription)
-                }
+                let imageLocalAdress    = imagesLocalirectory.appendingPathComponent("\(imageInfo.id)\(imageInfo.name ?? "default")")
+                saveDataToDirectory(data: imageData, to: imageLocalAdress)
                 
                 saveContext(subject: "Update UploadImage")
             }
@@ -885,25 +892,31 @@ extension Cache {
                 // if there is a value in this fetch request, it mean that we had already saved This Image info in the Cache.
                 // so we just have to update that information with new response that comes from server
                 
-                // TODO: prevent copy one file in several places in the app - search by the Image file itself through the app bundle
                 /*
                  if find sth, check out the information about that file:
                  if the info of both, was the same, just delete the fileInfo from cache, and then save it later
                  if the info was different, just save the new info in the cache and link it to this image file path
                  */
                 
+                var tempFile: FileObject?
+                
                 // Part1:
                 // find data that are exist in the Cache, (and the response request is containing that). and delete them
                 for itemInCache in result {
                     if let fileId = Int(exactly: itemInCache.id ?? 0) {
                         if (fileId == fileInfo.id) {
+                            
+                            tempFile = FileObject(hashCode:  itemInCache.hashCode!,
+                                                  id:        itemInCache.id as! Int,
+                                                  name:      itemInCache.name)
+                            
                             // the uploadFile object that we are going to create, is already exist in the Cache
                             // to update information in this object:
                             // we will delete them first, then we will create it again later
                             
                             // delete the original file from local storage of the app, using path of the file
                             let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-                            let myFilePath = path + "/\(fileSubPath.Files)/" + "\(fileInfo.id ?? 0)\(fileInfo.name ?? "default")"
+                            let myFilePath = path + "/\(fileSubPath.Files)/" + "\(itemInCache.id!)\(itemInCache.name ?? "default")"
                             
                             if FileManager.default.fileExists(atPath: myFilePath) {
                                 do {
@@ -926,16 +939,16 @@ extension Cache {
                 
                 theUploadFile.hashCode      = fileInfo.hashCode
                 theUploadFile.id            = fileInfo.id as NSNumber?
-                theUploadFile.name          = fileInfo.name
+                theUploadFile.name          = (fileInfo.name ?? tempFile?.name)
                 
                 // save file on app bundle
                 let directoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
                 let directoryURL = URL(fileURLWithPath: directoryPath)
-                do {
-                    try fileData.write(to: directoryURL.appendingPathComponent("\(fileSubPath.Files)/\(fileInfo.id ?? 0)\(fileInfo.name ?? "default")"))
-                } catch {
-                    print(error.localizedDescription)
-                }
+                let filesLocalirectory = directoryURL.appendingPathComponent("\(fileSubPath.Files)")
+                createDirectory(at: filesLocalirectory)
+                
+                let fileLocalAdress    = filesLocalirectory.appendingPathComponent("\(fileInfo.id)\(fileInfo.name ?? "default")")
+                saveDataToDirectory(data: fileData, to: fileLocalAdress)
                 
                 saveContext(subject: "Update UploadFile")
             }
@@ -944,6 +957,28 @@ extension Cache {
         }
         
     }
+    
+    
+    
+    private func createDirectory(at url: URL) {
+        if !(FileManager.default.fileExists(atPath: url.path, isDirectory: nil)) {
+            do {
+                try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
+                print("directory created at:\n \(url)")
+            } catch {
+                print("error on creating Directory \n\(error.localizedDescription)")
+            }
+        }
+    }
+    
+    private func saveDataToDirectory(data: Data, to url: URL) {
+        do {
+            try data.write(to: url)
+        } catch {
+            print("error when try to write data on documentDirectory \n\(error.localizedDescription)")
+        }
+    }
+    
     
     
     

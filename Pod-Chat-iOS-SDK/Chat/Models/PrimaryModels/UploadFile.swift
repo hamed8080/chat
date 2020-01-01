@@ -11,18 +11,18 @@ import SwiftyJSON
 
 open class FileObject {
     
-    public let hashCode:       String?
-    public let id:             Int?
-    public let name:           String?
+    public var hashCode:       String
+    public var id:             Int
+    public var name:           String?
     
     public init(messageContent: JSON) {
-        self.hashCode       = messageContent["hashCode"].string
-        self.id             = messageContent["id"].int
+        self.hashCode       = messageContent["hashCode"].stringValue
+        self.id             = messageContent["id"].intValue
         self.name           = messageContent["name"].string
     }
     
-    public init(hashCode:   String?,
-                id:         Int?,
+    public init(hashCode:   String,
+                id:         Int,
                 name:       String?) {
         
         self.hashCode       = hashCode
@@ -43,8 +43,8 @@ open class FileObject {
     }
     
     public func formatToJSON() -> JSON {
-        let result: JSON = ["hashCode":     hashCode ?? NSNull(),
-                            "id":           id ?? NSNull(),
+        let result: JSON = ["hashCode":     hashCode,
+                            "id":           id,
                             "name":         name ?? NSNull()]
         return result
     }

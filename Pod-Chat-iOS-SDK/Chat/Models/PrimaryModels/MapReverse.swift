@@ -12,13 +12,13 @@ import SwiftyJSON
 
 open class MapReverse {
     
-    public let address:             String?
-    public let city:                String?
-    public let neighbourhood:       Bool?
-    public let in_odd_even_zone:    Bool?
-    public let in_traffic_zone:     Bool?
-    public let municipality_zone:   Int?
-    public let state:               String?
+    public var address:             String?
+    public var city:                String?
+    public var neighbourhood:       Bool?
+    public var in_odd_even_zone:    Bool?
+    public var in_traffic_zone:     Bool?
+    public var municipality_zone:   Int?
+    public var state:               String?
     
     public init(messageContent: JSON) {
         self.address            = messageContent["address"].string

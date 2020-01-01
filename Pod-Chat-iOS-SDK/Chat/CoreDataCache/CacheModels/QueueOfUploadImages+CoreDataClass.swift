@@ -16,7 +16,7 @@ public class QueueOfUploadImages: NSManagedObject {
     public func convertQueueOfUploadImagesToQueueOfWaitUploadImagesModelObject() -> QueueOfWaitUploadImagesModel {
         
         var dataToSend: Data?
-        var fileSize:   Int?
+        var fileSize:   Int64?
         var threadId:   Int?
         var xC:         Int?
         var yC:         Int?
@@ -27,7 +27,7 @@ public class QueueOfUploadImages: NSManagedObject {
             if let dataToSend2 = self.dataToSend as Data? {
                 dataToSend = dataToSend2
             }
-            if let fileSize2 = self.fileSize as? Int {
+            if let fileSize2 = self.fileSize as? Int64 {
                 fileSize = fileSize2
             }
             if let threadId2 = self.threadId as? Int {

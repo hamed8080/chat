@@ -28,19 +28,19 @@ open class Contact {
      *      - userId            Int?
      */
     
-    public let blocked:         Bool?
-    public let cellphoneNumber: String?
-    public let email:           String?
-    public let firstName:       String?
+    public var blocked:         Bool?
+    public var cellphoneNumber: String?
+    public var email:           String?
+    public var firstName:       String?
     public var hasUser:         Bool     = false
-    public let id:              Int?
-    public let image:           String?
-    public let lastName:        String?
+    public var id:              Int?
+    public var image:           String?
+    public var lastName:        String?
     public var linkedUser:      LinkedUser?
-    public let notSeenDuration: Int?
-    public let timeStamp:       UInt?
+    public var notSeenDuration: Int?
+    public var timeStamp:       UInt?
 //    public let uniqueId:        String?
-    public let userId:          Int?
+    public var userId:          Int?
     
     public init(messageContent: JSON) {
         self.blocked            = messageContent["blocked"].bool
@@ -61,11 +61,8 @@ open class Contact {
         
         if (messageContent["linkedUser"] != JSON.null) {
             self.linkedUser = LinkedUser(messageContent: messageContent["linkedUser"])
+            self.hasUser = true
         }
-        
-        //        if let tempLinkUser = messageContent["linkedUser"].array {
-        //            self.linkedUser = LinkedUser(messageContent: tempLinkUser.first!)
-        //        }
         
     }
     

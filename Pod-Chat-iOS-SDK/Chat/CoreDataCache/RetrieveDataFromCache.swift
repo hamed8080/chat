@@ -431,7 +431,7 @@ extension Cache {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
         
         let theOnlyPredicate: NSPredicate?
-        theOnlyPredicate = NSPredicate(format: "pin == %@", true)
+        theOnlyPredicate = NSPredicate(format: "pin == %@", NSNumber(value: true))
         fetchRequest.predicate = theOnlyPredicate
         
         // sort the result by the time
@@ -863,18 +863,12 @@ extension Cache {
         
         do {
             if let result = try context.fetch(fetchRequest) as? [CMImage] {
-                print("found items = \(result.count)")
+                
                 if let firstObject = result.first {
                     let imageObject = firstObject.convertCMImageToImageObject()
-//                    let uploadImageModel = UploadImageModel(messageContentModel: imageObject,
-//                                                            errorCode: 0,
-//                                                            errorMessage: "",
-//                                                            hasError: false)
-                    
                     let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-                    let myImagePath = path + "/\(fileSubPath.Images)/" + "\(firstObject.id ?? 0)\(firstObject.name ?? "default.png")"
+                    let myImagePath = path + "/\(fileSubPath.Images)/" + "\(firstObject.id ?? 0)\(firstObject.name ?? "default")"
                     
-//                    return (uploadImageModel, myImagePath)
                     return (imageObject, myImagePath)
                 } else {
                     return nil
@@ -932,15 +926,10 @@ extension Cache {
                 
                 if let firstObject = result.first {
                     let fileObject = firstObject.convertCMFileToFileObject()
-//                    let uploadFileModel = UploadFileModel(messageContentModel: fileObject,
-//                                                          errorCode: 0,
-//                                                          errorMessage: "",
-//                                                          hasError: false)
                     
                     let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
                     let myFilePath = path + "/\(fileSubPath.Files)/" + "\(firstObject.id ?? 0)\(firstObject.name ?? "default")"
                     
-//                    return (uploadFileModel, myFilePath)
                     return (fileObject, myFilePath)
                 } else {
                     return nil

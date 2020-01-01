@@ -28,29 +28,29 @@ open class Participant {
      *    - sendEnable:         Bool?
      */
     
-    public let admin:               Bool?
-    public let auditor:             Bool?
-    public let blocked:             Bool?
-    public let cellphoneNumber:     String?
-    public let contactFirstName:    String?
-    public let contactId:           Int?
-    public let contactName:         String?
-    public let contactLastName:     String?
-    public let coreUserId:      Int?
-    public let email:           String?
-    public let firstName:       String?
-    public let id:              Int?
-    public let image:           String?
-    public let keyId:           String?
-    public let lastName:        String?
-    public let myFriend:        Bool?
-    public let name:            String?
-    public let notSeenDuration: Int?
-    public let online:          Bool?
-    public let receiveEnable:   Bool?
-    public let roles:           [String]?
-    public let sendEnable:      Bool?
-    public let username:        String?
+    public var admin:               Bool?
+    public var auditor:             Bool?
+    public var blocked:             Bool?
+    public var cellphoneNumber:     String?
+    public var contactFirstName:    String?
+    public var contactId:           Int?
+    public var contactName:         String?
+    public var contactLastName:     String?
+    public var coreUserId:      Int?
+    public var email:           String?
+    public var firstName:       String?
+    public var id:              Int?
+    public var image:           String?
+    public var keyId:           String?
+    public var lastName:        String?
+    public var myFriend:        Bool?
+    public var name:            String?
+    public var notSeenDuration: Int?
+    public var online:          Bool?
+    public var receiveEnable:   Bool?
+    public var roles:           [String]?
+    public var sendEnable:      Bool?
+    public var username:        String?
     
     public init(messageContent: JSON, threadId: Int?) {
         self.admin              = messageContent["admin"].bool
