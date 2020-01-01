@@ -24,8 +24,8 @@ public class CMFile: NSManagedObject {
         }
         
         func createFileObjectModel() -> FileObject {
-            let uploadFileModel = FileObject(hashCode:  self.hashCode,
-                                             id:        id,
+            let uploadFileModel = FileObject(hashCode:  self.hashCode!,
+                                             id:        id!,
                                              name:      self.name)
             return uploadFileModel
         }

@@ -40,9 +40,9 @@ open class FileUploadEventModel {
 open class FileInfo {
     
     public let fileName:    String
-    public let fileSize:    Int?
+    public let fileSize:    Int64?
     
-    init(fileName: String, fileSize: Int?) {
+    init(fileName: String, fileSize: Int64?) {
         self.fileName   = fileName
         self.fileSize   = fileSize
     }

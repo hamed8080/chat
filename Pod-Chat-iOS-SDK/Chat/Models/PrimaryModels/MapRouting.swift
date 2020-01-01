@@ -63,8 +63,8 @@ open class MapRouting {
 
 open class MapRoutingRout {
     
-    public let overview_polyline:   MapRoutOverviewPolyline
-    public let legs:                [MapRoutLegs]
+    public var overview_polyline:   MapRoutOverviewPolyline
+    public var legs:                [MapRoutLegs]
     
     public init(messageContent: JSON) {
         
@@ -116,7 +116,7 @@ open class MapRoutingRout {
 
 open class MapRoutOverviewPolyline {
     
-    public let points: String?
+    public var points: String?
     
     init(messageContent: JSON) {
         self.points  = messageContent["points"].string
@@ -141,7 +141,7 @@ open class MapRoutOverviewPolyline {
 
 open class MapRoutLegs {
     
-    public let summary:     String?
+    public var summary:     String?
     public var distance:    MapRoutLegsDistanceDuration?
     public var duration:    MapRoutLegsDistanceDuration?
     public var steps:       [MapRoutLegsSteps]?
@@ -215,8 +215,8 @@ open class MapRoutLegs {
 
 open class MapRoutLegsDistanceDuration {
     
-    public let value:   Int?
-    public let text:    String?
+    public var value:   Int?
+    public var text:    String?
     
     init(messageContent: JSON) {
         self.value  = messageContent["value"].int
@@ -250,9 +250,9 @@ open class MapRoutLegsDistanceDuration {
 
 open class MapRoutLegsSteps {
     
-    public let name:            String?
-    public let instruction:     String?
-    public let rotaryName:      String?
+    public var name:            String?
+    public var instruction:     String?
+    public var rotaryName:      String?
     public var distance:        MapRoutLegsDistanceDuration?
     public var duration:        MapRoutLegsDistanceDuration?
     public var start_location:  [Double]?

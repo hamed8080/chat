@@ -12,7 +12,7 @@ import SwiftyJSON
 
 open class MapSearch {
     
-    public let count:   Int
+    public var count:   Int
     public var items:   [MapItem]?
     
     public init(messageContent: JSON) {

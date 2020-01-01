@@ -16,14 +16,14 @@ public class QueueOfUploadFiles: NSManagedObject {
     public func convertQueueOfUploadFilesToQueueOfWaitUploadFilesModelObject() -> QueueOfWaitUploadFilesModel {
         
         var dataToSend: Data?
-        var fileSize:   Int?
+        var fileSize:   Int64?
         var threadId:   Int?
         
         func createVariables() {
             if let dataToSend2 = self.dataToSend as Data? {
                 dataToSend = dataToSend2
             }
-            if let fileSize2 = self.fileSize as? Int {
+            if let fileSize2 = self.fileSize as? Int64 {
                 fileSize = fileSize2
             }
             if let threadId2 = self.threadId as? Int {

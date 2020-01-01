@@ -20,11 +20,11 @@ open class LinkedUser {
      *   - username         String?
      */
     
-    public let coreUserId:  Int?
-    public let image:       String?
-    public let name:        String?
-    public let nickname:    String?
-    public let username:    String?
+    public var coreUserId:  Int?
+    public var image:       String?
+    public var name:        String?
+    public var nickname:    String?
+    public var username:    String?
     
     
     public init(messageContent: JSON) {

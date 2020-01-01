@@ -14,7 +14,7 @@ open class QueueOfWaitUploadImagesModel {
     let dataToSend:       Data?
     let fileExtension:    String?
     let fileName:         String?
-    let fileSize:         Int?
+    let fileSize:         Int64?
     let originalFileName: String?
     let threadId:         Int?
     let xC:               Int?
@@ -27,7 +27,7 @@ open class QueueOfWaitUploadImagesModel {
     init(dataToSend:        Data?,
          fileExtension:     String?,
          fileName:          String?,
-         fileSize:          Int?,
+         fileSize:          Int64?,
          originalFileName:  String?,
          threadId:          Int?,
          xC:                Int?,

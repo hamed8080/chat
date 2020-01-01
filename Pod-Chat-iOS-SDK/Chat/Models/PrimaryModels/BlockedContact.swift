@@ -19,10 +19,10 @@ open class BlockedContact {
      *    - nickName        String
      */
     
-    public let id:         Int?
-    public let firstName:  String?
-    public let lastName:   String?
-    public let nickName:   String?
+    public var id:         Int?
+    public var firstName:  String?
+    public var lastName:   String?
+    public var nickName:   String?
     
     public init(messageContent: JSON) {
         self.id         = messageContent["id"].int

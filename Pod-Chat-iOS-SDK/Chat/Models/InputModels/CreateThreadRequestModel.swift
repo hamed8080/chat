@@ -47,27 +47,28 @@ open class CreateThreadRequestModel {
             inviteees.append(item.formatToJSON())
         }
         content["invitees"] = JSON(inviteees)
+        if let description = self.description {
+            content["description"] = JSON(description)
+        }
         if let image = self.image {
             content["image"] = JSON(image)
         }
         if let metadata2 = self.metadata {
             content["metadata"] = JSON(metadata2)
         }
-        if let description = self.description {
-            content["description"] = JSON(description)
-        }
-        if let type = self.type {
-            var theType: Int = 0
-            switch type {
-            case    ThreadTypes.NORMAL:        theType = 0
-            case    ThreadTypes.OWNER_GROUP:   theType = 1
-            case    ThreadTypes.PUBLIC_GROUP:  theType = 2
-            case    ThreadTypes.CHANNEL_GROUP: theType = 4
-            case    ThreadTypes.CHANNEL:       theType = 8
-            default: break
-            }
-            content["type"] = JSON(theType)
-        }
+//        if let type = self.type {
+//            var theType: Int = 0
+//            switch type {
+//            case    ThreadTypes.NORMAL:        theType = 0
+//            case    ThreadTypes.OWNER_GROUP:   theType = 1
+//            case    ThreadTypes.PUBLIC_GROUP:  theType = 2
+//            case    ThreadTypes.CHANNEL_GROUP: theType = 4
+//            case    ThreadTypes.CHANNEL:       theType = 8
+//            default: break
+//            }
+//            content["type"] = JSON(theType)
+//        }
+        content["type"] = JSON(self.type?.intValue() ?? 0)
         
         return content
     }

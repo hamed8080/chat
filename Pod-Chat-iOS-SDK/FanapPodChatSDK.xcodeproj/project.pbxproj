@@ -91,6 +91,7 @@
 		3E43D1582132BF9C0069DF9A /* ReceiveMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E43D1572132BF9C0069DF9A /* ReceiveMessage.swift */; };
 		3E49635421D79BFB00A67D19 /* FanapPodAsyncSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E49635121D79BF300A67D19 /* FanapPodAsyncSDK.framework */; };
 		3E52BFB323A6762800D43DAC /* AddRemoveAuditorRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E52BFB223A6762800D43DAC /* AddRemoveAuditorRequestModel.swift */; };
+		3E56EDD523BCE07100FED6CD /* CreateThreadWithFileMessageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E56EDD423BCE07100FED6CD /* CreateThreadWithFileMessageRequestModel.swift */; };
 		3E5AAECE221937560085C03D /* QueueOfEditMessages+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5AAECC221937560085C03D /* QueueOfEditMessages+CoreDataClass.swift */; };
 		3E5AAECF221937560085C03D /* QueueOfEditMessages+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5AAECC221937560085C03D /* QueueOfEditMessages+CoreDataClass.swift */; };
 		3E5AAED0221937560085C03D /* QueueOfEditMessages+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5AAECD221937560085C03D /* QueueOfEditMessages+CoreDataProperties.swift */; };
@@ -451,6 +452,7 @@
 		3E43D1572132BF9C0069DF9A /* ReceiveMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveMessage.swift; sourceTree = "<group>"; };
 		3E49634021D79BF300A67D19 /* FanapPodAsyncSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FanapPodAsyncSDK.xcodeproj; path = "../../Pod-Async-iOS-SDK/Pod-Async-iOS-SDK/FanapPodAsyncSDK.xcodeproj"; sourceTree = "<group>"; };
 		3E52BFB223A6762800D43DAC /* AddRemoveAuditorRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRemoveAuditorRequestModel.swift; sourceTree = "<group>"; };
+		3E56EDD423BCE07100FED6CD /* CreateThreadWithFileMessageRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateThreadWithFileMessageRequestModel.swift; sourceTree = "<group>"; };
 		3E5AAECC221937560085C03D /* QueueOfEditMessages+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QueueOfEditMessages+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3E5AAECD221937560085C03D /* QueueOfEditMessages+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QueueOfEditMessages+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3E5AAEE82219509C0085C03D /* QueueOfWaitImagesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueOfWaitImagesModel.swift; sourceTree = "<group>"; };
@@ -746,6 +748,7 @@
 				3ECFCAB7228967BD00313419 /* ClearHistoryRequestModel.swift */,
 				3EA1568721CE1BB7004B1346 /* CreateThreadRequestModel.swift */,
 				3EA1568921CE1BCB004B1346 /* CreateThreadWithMessageRequestModel.swift */,
+				3E56EDD423BCE07100FED6CD /* CreateThreadWithFileMessageRequestModel.swift */,
 				3EA1569F21CE1CAE004B1346 /* DeleteMessageRequestModel.swift */,
 				3E7ACC0B22C2376800042168 /* DeleteMultipleMessagesRequestModel.swift */,
 				3EA156AB21CE1D1E004B1346 /* DeliverSeenRequestModel.swift */,
@@ -1420,6 +1423,7 @@
 				3EB5206F22ABF36500B7EA45 /* SendMessageCallbacks.swift in Sources */,
 				3E437D5C218F36DA0021C0ED /* GetBlockedContactListModel.swift in Sources */,
 				3EA156AA21CE1D10004B1346 /* MessageDeliverySeenListRequestModel.swift in Sources */,
+				3E56EDD523BCE07100FED6CD /* CreateThreadWithFileMessageRequestModel.swift in Sources */,
 				3E3315A723B206CC0070A3D1 /* BotEventModel.swift in Sources */,
 				3E8ADC7D23B3556300E3538D /* ServiceAddresses.swift in Sources */,
 				3E8ADCFD23B7845200E3538D /* PinThreadCallback.swift in Sources */,

@@ -18,9 +18,9 @@ open class MessageChangeState {
      *    - threadId                Int?
      */
     
-    public let messageId:  Int?
-    public let senderId:   Int?
-    public let threadId:   Int?
+    public var messageId:  Int?
+    public var senderId:   Int?
+    public var threadId:   Int?
     
     public init(messageContent: JSON) {
         self.messageId  = messageContent["messageId"].int

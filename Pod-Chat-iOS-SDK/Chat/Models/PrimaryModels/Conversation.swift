@@ -42,36 +42,36 @@ open class Conversation {
      *    - participants:                   [Participant]?
      */
     
-    public let admin:                           Bool?
-    public let canEditInfo:                     Bool?
-    public let canSpam:                         Bool?
-    public let description:                     String?
-    public let group:                           Bool?
-    public let id:                              Int?
-    public let image:                           String?
-    public let joinDate:                        Int?
-    public let lastMessage:                     String?
-    public let lastParticipantImage:            String?
-    public let lastParticipantName:             String?
-    public let lastSeenMessageId:               Int?
-    public let lastSeenMessageNanos:            UInt?
-    public let lastSeenMessageTime:             UInt?
-    public let mentioned:                       Bool?
-    public let metadata:                        String?
-    public let mute:                            Bool?
-    public let participantCount:                Int?
-    public let partner:                         Int?
-    public let partnerLastDeliveredMessageId:   Int?
-    public let partnerLastDeliveredMessageNanos:UInt?
-    public let partnerLastDeliveredMessageTime: UInt?
-    public let partnerLastSeenMessageId:        Int?
-    public let partnerLastSeenMessageNanos:     UInt?
-    public let partnerLastSeenMessageTime:      UInt?
-    public let pin:                             Bool?
-    public let time:                            UInt?
-    public let title:                           String?
-    public let type:                            Int?
-    public let unreadCount:                     Int?
+    public var admin:                           Bool?
+    public var canEditInfo:                     Bool?
+    public var canSpam:                         Bool?
+    public var description:                     String?
+    public var group:                           Bool?
+    public var id:                              Int?
+    public var image:                           String?
+    public var joinDate:                        Int?
+    public var lastMessage:                     String?
+    public var lastParticipantImage:            String?
+    public var lastParticipantName:             String?
+    public var lastSeenMessageId:               Int?
+    public var lastSeenMessageNanos:            UInt?
+    public var lastSeenMessageTime:             UInt?
+    public var mentioned:                       Bool?
+    public var metadata:                        String?
+    public var mute:                            Bool?
+    public var participantCount:                Int?
+    public var partner:                         Int?
+    public var partnerLastDeliveredMessageId:   Int?
+    public var partnerLastDeliveredMessageNanos:UInt?
+    public var partnerLastDeliveredMessageTime: UInt?
+    public var partnerLastSeenMessageId:        Int?
+    public var partnerLastSeenMessageNanos:     UInt?
+    public var partnerLastSeenMessageTime:      UInt?
+    public var pin:                             Bool?
+    public var time:                            UInt?
+    public var title:                           String?
+    public var type:                            Int?
+    public var unreadCount:                     Int?
     
     public var inviter:                        Participant?
     public var lastMessageVO:                  Message?

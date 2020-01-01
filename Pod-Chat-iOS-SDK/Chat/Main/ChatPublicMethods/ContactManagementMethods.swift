@@ -194,6 +194,7 @@ extension Chat {
         var params: Parameters = [:]
         params["size"] = JSON(searchContactsInput.size ?? 50)
         params["offset"] = JSON(searchContactsInput.offset ?? 0)
+        params["typeCode"] = JSON(searchContactsInput.typeCode ?? generalTypeCode)
         if let firstName = searchContactsInput.firstName {
             params["firstName"] = JSON(firstName)
         }
@@ -205,9 +206,6 @@ extension Chat {
         }
         if let email = searchContactsInput.email {
             params["email"] = JSON(email)
-        }
-        if let typeCode_ = searchContactsInput.typeCode {
-            params["typeCode"] = JSON(typeCode_)
         }
         if let query_ = searchContactsInput.query {
             params["q"] = JSON(query_)
@@ -334,10 +332,8 @@ extension Chat {
         params["lastName"]          = JSON(addContactsInput.lastName ?? "")
         params["cellphoneNumber"]   = JSON(addContactsInput.cellphoneNumber ?? "")
         params["email"]             = JSON(addContactsInput.email ?? "")
+        params["typeCode"]          = JSON(addContactsInput.typeCode ?? generalTypeCode)
         params["uniqueId"]          = JSON(messageUniqueId)
-        if let typeCode_ = addContactsInput.typeCode {
-            params["typeCode"] = JSON(typeCode_)
-        }
         
         Networking.sharedInstance.requesttWithJSONresponse(from:            url,
                                                            withMethod:      method,
@@ -387,12 +383,13 @@ extension Chat {
             }
         }
         
-        if let typeCode_ = addContactsInput.typeCode {
-            url += "&typeCode=\(typeCode_)"
-        } else {
-            url += "&typeCode=\(generalTypeCode)"
-        }
-        print("\n\n*******************\n url = \n\(url)\n*******************\n\n")
+        url += "&typeCode=\(addContactsInput.typeCode ?? generalTypeCode)"
+        
+//        if let typeCode_ = addContactsInput.typeCode {
+//            url += "&typeCode=\(typeCode_)"
+//        } else {
+//            url += "&typeCode=\(generalTypeCode)"
+//        }
         
         let textAppend = url.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? url
         Networking.sharedInstance.requesttWithJSONresponse(from:            textAppend,
@@ -400,7 +397,6 @@ extension Chat {
                                                            withHeaders:     headers,
                                                            withParameters:  nil)
         { (jsonResponse) in
-            print("\n\n*******************\n jsonResponse = \n\(jsonResponse)\n*******************\n\n")
             let contactsModel = ContactModel(messageContent: jsonResponse as! JSON)
             completion(contactsModel)
         }
@@ -456,7 +452,7 @@ extension Chat {
         let messageUniqueId: String = updateContactsInput.uniqueId ?? generateUUID()
         uniqueId(messageUniqueId)
         
-        sendUpdateContactRequest(withInputModel: updateContactsInput)
+        sendUpdateContactRequest(withInputModel: updateContactsInput, andUniqueId: messageUniqueId)
         { (contactModel) in
             self.addContactOnCache(withInputModel: contactModel as! ContactModel)
             completion(contactModel)
@@ -465,6 +461,7 @@ extension Chat {
     }
     
     private func sendUpdateContactRequest(withInputModel updateContactsInput:  UpdateContactsRequestModel,
+                                          andUniqueId:          String,
                                           completion:           @escaping callbackTypeAlias) {
         
         let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.UPDATE_CONTACTS.rawValue)"
@@ -472,14 +469,13 @@ extension Chat {
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
         
         var params: Parameters = [:]
-        params["id"]              = JSON(updateContactsInput.id)
-        params["firstName"]       = JSON(updateContactsInput.firstName)
-        params["lastName"]        = JSON(updateContactsInput.lastName)
-        params["cellphoneNumber"] = JSON(updateContactsInput.cellphoneNumber)
-        params["email"]           = JSON(updateContactsInput.email)
-        if let typeCode_ = updateContactsInput.typeCode {
-            params["typeCode"] = JSON(typeCode_)
-        }
+        params["id"]                = JSON(updateContactsInput.id)
+        params["firstName"]         = JSON(updateContactsInput.firstName)
+        params["lastName"]          = JSON(updateContactsInput.lastName)
+        params["cellphoneNumber"]   = JSON(updateContactsInput.cellphoneNumber)
+        params["email"]             = JSON(updateContactsInput.email)
+        params["typeCode"]          = JSON(updateContactsInput.typeCode ?? generalTypeCode)
+        params["uniqueId"]          = JSON(andUniqueId)
         
         Networking.sharedInstance.requesttWithJSONresponse(from:            url,
                                                            withMethod:      method,
@@ -550,9 +546,7 @@ extension Chat {
         
         var params: Parameters = [:]
         params["id"] = JSON(removeContactsInput.contactId)
-        if let typeCode_ = removeContactsInput.typeCode {
-            params["typeCode"] = JSON(typeCode_)
-        }
+        params["typeCode"] = JSON(removeContactsInput.typeCode ?? generalTypeCode)
         
         Networking.sharedInstance.requesttWithJSONresponse(from:            url,
                                                            withMethod:      method,
