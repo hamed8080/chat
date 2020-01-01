@@ -59,7 +59,7 @@
         <relationship name="lastMessageVO" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="dummyConversationLastMessageVO" inverseEntity="CMMessage"/>
         <relationship name="participants" optional="YES" toMany="YES" deletionRule="Deny" ordered="YES" destinationEntity="CMParticipant" inverseName="dummyConversationParticipants" inverseEntity="CMParticipant"/>
     </entity>
-    <entity name="CMFile" representedClassName=".CMUploadFile" syncable="YES">
+    <entity name="CMFile" representedClassName=".CMFile" syncable="YES">
         <attribute name="hashCode" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
@@ -69,7 +69,7 @@
         <relationship name="dummyMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="forwardInfo" inverseEntity="CMMessage"/>
         <relationship name="participant" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMParticipant" inverseName="dummyForwardInfo" inverseEntity="CMParticipant"/>
     </entity>
-    <entity name="CMImage" representedClassName=".CMUploadImage" syncable="YES">
+    <entity name="CMImage" representedClassName=".CMImage" syncable="YES">
         <attribute name="actualHeight" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="actualWidth" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="hashCode" optional="YES" attributeType="String"/>

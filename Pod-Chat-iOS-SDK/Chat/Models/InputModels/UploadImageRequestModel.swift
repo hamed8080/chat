@@ -13,9 +13,9 @@ open class UploadImageRequestModel {
     
     public let dataToSend:          Data
     public let fileExtension:       String?
-    public let fileName:            String?
-    public let fileSize:            Int?
-    public let originalFileName:    String?
+    public let fileName:            String
+    public let fileSize:            Int64
+    public let originalFileName:    String
     public let threadId:            Int?
     public let xC:                  Int?
     public let yC:                  Int?
@@ -27,8 +27,7 @@ open class UploadImageRequestModel {
     
     public init(dataToSend:         Data,
                 fileExtension:      String?,
-                fileName:           String,
-                fileSize:           Int?,
+                fileName:           String?,
                 originalFileName:   String?,
                 threadId:           Int?,
                 xC:                 Int?,
@@ -38,11 +37,13 @@ open class UploadImageRequestModel {
                 typeCode:           String?,
                 uniqueId:           String?) {
         
+        let theFileName:           String  = fileName ?? "\(NSUUID().uuidString))"
+        
         self.dataToSend         = dataToSend
         self.fileExtension      = fileExtension
-        self.fileName           = fileName
-        self.fileSize           = fileSize
-        self.originalFileName   = originalFileName
+        self.fileName           = theFileName
+        self.fileSize           = Int64(dataToSend.count)
+        self.originalFileName   = originalFileName ?? theFileName
         self.threadId           = threadId
         self.xC                 = xC
         self.yC                 = yC
@@ -54,23 +55,13 @@ open class UploadImageRequestModel {
     
     func convertContentToParameters() -> Parameters {
         
-//        var fileName:           String  = ""
-//        var fileType:           String  = ""
-//        var fileSize:           Int     = 0
-//        var theFileExtension:       String  = ""
-        
         var content: Parameters = [:]
-        content["fileName"] = JSON(self.fileName ?? "\(NSUUID().uuidString))")
-        content["uniqueId"] = JSON(self.uniqueId)
-        if let myFileSize_ = self.fileSize {
-            content["fileSize"] = JSON(myFileSize_)
-        }
-        if let threadId_ = self.threadId {
-            content["threadId"] = JSON(threadId_)
-        }
-        if let myOriginalFileName_ = self.originalFileName {
-            content["originalFileName"] = JSON(myOriginalFileName_)
-        }
+        content["fileName"]         = JSON(self.fileName)
+        content["uniqueId"]         = JSON(self.uniqueId)
+        content["fileSize"]         = JSON(self.fileSize)
+        content["originalFileName"] = JSON(self.originalFileName)
+        content["threadId"]         = JSON(self.threadId ?? 0)
+        
         if let xC_ = self.xC {
             content["xC"] = JSON(xC_)
         }

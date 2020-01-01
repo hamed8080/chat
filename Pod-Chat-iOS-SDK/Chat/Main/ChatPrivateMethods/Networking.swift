@@ -49,7 +49,8 @@ class Networking {
             }
             if let parameters = withParameters {
                 for (key, value) in parameters {
-                    multipartFormData.append((value as AnyObject).data(using: String.Encoding.utf8.rawValue)!, withName: key as String)
+                    multipartFormData.append("\(value)".data(using: String.Encoding.utf8)!, withName: key as String)
+//                    multipartFormData.append((value as AnyObject).data(using: String.Encoding.utf8.rawValue)!, withName: key as String)
                 }
             }
         }, to: url) { (myResult) in
@@ -78,7 +79,7 @@ class Networking {
                 }
             case .failure(let error):
                 let fileInfo = FileInfo(fileName: (withParameters?["fileName"] as? String) ?? "?",
-                                        fileSize: (withParameters?["fileSize"] as? Int) ?? 0)
+                                        fileSize: (withParameters?["fileSize"] as? Int64) ?? 0)
                 let fUploadError = FileUploadEventModel(type:           FileUploadEventTypes.UPLOAD_ERROR,
                                                         errorCode:      nil,
                                                         errorMessage:   "\(CHAT_ERRORS.err6200.rawValue) (Request Error)",

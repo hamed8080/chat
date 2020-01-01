@@ -25,15 +25,15 @@ import SwiftyJSON
 open class User {
     
     
-    public let cellphoneNumber: String?
-    public let coreUserId:      Int?
-    public let email:           String?
-    public let id:              Int?
-    public let image:           String?
-    public let lastSeen:        Int?
-    public let name:            String?
-    public let receiveEnable:   Bool?
-    public let sendEnable:      Bool?
+    public var cellphoneNumber: String?
+    public var coreUserId:      Int?
+    public var email:           String?
+    public var id:              Int?
+    public var image:           String?
+    public var lastSeen:        Int?
+    public var name:            String?
+    public var receiveEnable:   Bool?
+    public var sendEnable:      Bool?
     
     public init(messageContent: JSON) {
         

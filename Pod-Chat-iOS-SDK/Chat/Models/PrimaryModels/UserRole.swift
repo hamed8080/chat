@@ -18,8 +18,8 @@ open class UserRole {
      *    - roles:      [String]?
      */
     
-    public let userId:      Int
-    public let name:        String
+    public var userId:      Int
+    public var name:        String
     public var roles:       [String]?
 //    public let threadId:    Int?
     

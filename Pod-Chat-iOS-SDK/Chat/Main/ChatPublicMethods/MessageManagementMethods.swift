@@ -602,7 +602,6 @@ extension Chat {
             let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      sendFileMessageInput.content,
                                                                           fileName:     sendFileMessageInput.fileName,
                                                                           imageName:    sendFileMessageInput.imageName,
-//                                                                          metadata:     sendFileMessageInput.metadata,
                                                                           metadata:     (sendFileMessageInput.metadata != nil) ? "\(sendFileMessageInput.metadata!)" : nil,
                                                                           repliedTo:    sendFileMessageInput.repliedTo,
                                                                           threadId:     sendFileMessageInput.threadId,
@@ -617,21 +616,15 @@ extension Chat {
             Chat.cacheDB.saveFileMessageToWaitQueue(fileMessage: messageObjectToSendToQueue)
         }
         
-//        var fileType:       String  = ""
-        var fileSize:       Int     = 0
         var fileExtension:  String  = ""
         let uploadUniqueId = generateUUID()
         
         var metadata: JSON = [:]
-        metadata["file"]["originalName"] = JSON(sendFileMessageInput.fileName ?? sendFileMessageInput.imageName ?? "")
-        metadata["file"]["mimeType"]    = JSON("")
-        metadata["file"]["size"]        = JSON(fileSize)
         
         if let image = sendFileMessageInput.imageToSend {
             let uploadRequest = UploadImageRequestModel(dataToSend:         image,
                                                         fileExtension:      fileExtension,
                                                         fileName:           sendFileMessageInput.imageName ?? "defaultName",
-                                                        fileSize:           fileSize,
                                                         originalFileName:   sendFileMessageInput.fileName ?? uploadUniqueId,
                                                         threadId:           sendFileMessageInput.threadId,
                                                         xC:                 Int(sendFileMessageInput.xC ?? ""),
@@ -640,23 +633,28 @@ extension Chat {
                                                         wC:                 Int(sendFileMessageInput.wC ?? ""),
                                                         typeCode:           nil,
                                                         uniqueId:           uploadUniqueId)
+            
+            metadata["file"]["originalName"] = JSON(uploadRequest.originalFileName)
+            metadata["file"]["mimeType"]    = JSON("")
+            metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
+            
             uploadImage(inputModel: uploadRequest,
                         uniqueId: { _ in },
                         progress: { (progress) in
                             uploadProgress(progress)
             }) { (response) in
                 let myResponse: UploadImageModel = response as! UploadImageModel
-                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_IMAGE.rawValue)?imageId=\(myResponse.uploadImage!.id ?? 0)&hashCode=\(myResponse.uploadImage!.hashCode ?? "")"
+                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_IMAGE.rawValue)?imageId=\(myResponse.uploadImage!.id)&hashCode=\(myResponse.uploadImage!.hashCode)"
                 
                 var imageMetadata : JSON = [:]
                 imageMetadata["link"]            = JSON(link)
-                imageMetadata["id"]              = JSON(myResponse.uploadImage!.id ?? 0)
+                imageMetadata["id"]              = JSON(myResponse.uploadImage!.id)
                 imageMetadata["name"]            = JSON(myResponse.uploadImage!.name ?? "")
                 imageMetadata["height"]          = JSON(myResponse.uploadImage!.height ?? 0)
                 imageMetadata["width"]           = JSON(myResponse.uploadImage!.width ?? 0)
                 imageMetadata["actualHeight"]    = JSON(myResponse.uploadImage!.actualHeight ?? 0)
                 imageMetadata["actualWidth"]     = JSON(myResponse.uploadImage!.actualWidth ?? 0)
-                imageMetadata["hashCode"]        = JSON(myResponse.uploadImage!.hashCode ?? "")
+                imageMetadata["hashCode"]        = JSON(myResponse.uploadImage!.hashCode)
                 metadata["file"] = imageMetadata
                 
                 sendMessage(withMetadata: metadata)
@@ -666,24 +664,28 @@ extension Chat {
             let uploadRequest = UploadFileRequestModel(dataToSend:      file,
                                                        fileExtension:   fileExtension,
                                                        fileName:        sendFileMessageInput.fileName ?? "defaultName",
-                                                       fileSize:        fileSize,
                                                        originalFileName: sendFileMessageInput.fileName ?? uploadUniqueId,
                                                        threadId:        sendFileMessageInput.threadId,
                                                        typeCode:        nil,
                                                        uniqueId:        uploadUniqueId)
+            
+            metadata["file"]["originalName"] = JSON(uploadRequest.originalFileName)
+            metadata["file"]["mimeType"]    = JSON("")
+            metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
+            
             uploadFile(inputModel: uploadRequest,
                        uniqueId: { _ in }, progress: { (progress) in
                 uploadProgress(progress)
             }) { (response) in
                 let myResponse: UploadFileModel = response as! UploadFileModel
-                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_FILE.rawValue)?fileId=\(myResponse.uploadFile!.id ?? 0)&hashCode=\(myResponse.uploadFile!.hashCode ?? "")"
+                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_FILE.rawValue)?fileId=\(myResponse.uploadFile!.id)&hashCode=\(myResponse.uploadFile!.hashCode)"
                 
                 var fileMetadata : JSON = [:]
                 fileMetadata["link"]        = JSON(link)
-                fileMetadata["id"]          = JSON(myResponse.uploadFile!.id ?? 0)
+                fileMetadata["id"]          = JSON(myResponse.uploadFile!.id)
                 fileMetadata["name"]        = JSON(myResponse.uploadFile!.name ?? "")
-                fileMetadata["hashCode"]    = JSON(myResponse.uploadFile!.hashCode ?? "")
-                metadata["file"] = fileMetadata
+                fileMetadata["hashCode"]    = JSON(myResponse.uploadFile!.hashCode)
+                metadata["file"]    = fileMetadata
                 
                 sendMessage(withMetadata: metadata)
             }
@@ -745,9 +747,23 @@ extension Chat {
                                  onSeen:                @escaping callbackTypeAlias) {
         log.verbose("Try to reply File Message with this parameters: \n \(replyFileMessageInput)", context: "Chat")
         
+        sendFileMessage(inputModel: replyFileMessageInput, uniqueId: { (replyRequestUniqueId) in
+            uniqueId(replyRequestUniqueId)
+        }, uploadProgress: { (progress) in
+            uploadProgress(progress)
+        }, onSent: { (sebtResponse) in
+            onSent(sebtResponse)
+        }, onDelivered: { (deliverResponse) in
+            onDelivered(deliverResponse)
+        }) { (seenResponse) in
+            onSeen(seenResponse)
+        }
+        
+        /*
         let messageUniqueId = replyFileMessageInput.uniqueId ?? generateUUID()
         uniqueId(messageUniqueId)
         
+        var fileExtension:  String  = ""
         let uploadUniqueId = generateUUID()
         
         /**
@@ -760,7 +776,6 @@ extension Chat {
             let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      replyFileMessageInput.content,
                                                                           fileName:     replyFileMessageInput.fileName,
                                                                           imageName:    replyFileMessageInput.imageName,
-//                                                                          metadata:     replyFileMessageInput.metadata,
                                                                           metadata:     (replyFileMessageInput.metadata != nil) ? "\(replyFileMessageInput.metadata!)" : nil,
                                                                           repliedTo:    replyFileMessageInput.repliedTo,
                                                                           threadId:     replyFileMessageInput.threadId,
@@ -775,20 +790,12 @@ extension Chat {
             Chat.cacheDB.saveFileMessageToWaitQueue(fileMessage: messageObjectToSendToQueue)
         }
         
-//        var fileType:       String  = ""
-        var fileSize:       Int     = 0
-        var fileExtension:  String  = ""
-        
         var metadata: JSON = [:]
-        metadata["file"]["originalName"] = JSON(replyFileMessageInput.fileName ?? replyFileMessageInput.imageName ?? "")
-        metadata["file"]["mimeType"]    = JSON("")
-        metadata["file"]["size"]        = JSON(fileSize)
         
         if let image = replyFileMessageInput.imageToSend {
             let uploadRequest = UploadImageRequestModel(dataToSend:         image,
                                                         fileExtension:      fileExtension,
                                                         fileName:           replyFileMessageInput.imageName ?? "defaultName",
-                                                        fileSize:           fileSize,
                                                         originalFileName:   replyFileMessageInput.fileName ?? uploadUniqueId,
                                                         threadId:           replyFileMessageInput.threadId,
                                                         xC:                 Int(replyFileMessageInput.xC ?? ""),
@@ -797,21 +804,26 @@ extension Chat {
                                                         wC:                 Int(replyFileMessageInput.wC ?? ""),
                                                         typeCode:           nil,
                                                         uniqueId:           uploadUniqueId)
+            
+            metadata["file"]["originalName"]    = JSON(uploadRequest.originalFileName)
+            metadata["file"]["mimeType"]        = JSON("")
+            metadata["file"]["size"]            = JSON(uploadRequest.fileSize)
+            
             uploadImage(inputModel: uploadRequest,
                         uniqueId: { _ in },
                         progress: { (progress) in
                             uploadProgress(progress)
             }) { (response) in
                 let myResponse: UploadImageModel = response as! UploadImageModel
-                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_IMAGE.rawValue)?imageId=\(myResponse.uploadImage!.id ?? 0)&hashCode=\(myResponse.uploadImage!.hashCode ?? "")"
+                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_IMAGE.rawValue)?imageId=\(myResponse.uploadImage!.id)&hashCode=\(myResponse.uploadImage!.hashCode)"
                 metadata["file"]["link"]            = JSON(link)
-                metadata["file"]["id"]              = JSON(myResponse.uploadImage!.id ?? 0)
+                metadata["file"]["id"]              = JSON(myResponse.uploadImage!.id)
                 metadata["file"]["name"]            = JSON(myResponse.uploadImage!.name ?? "")
                 metadata["file"]["height"]          = JSON(myResponse.uploadImage!.height ?? 0)
                 metadata["file"]["width"]           = JSON(myResponse.uploadImage!.width ?? 0)
                 metadata["file"]["actualHeight"]    = JSON(myResponse.uploadImage!.actualHeight ?? 0)
                 metadata["file"]["actualWidth"]     = JSON(myResponse.uploadImage!.actualWidth ?? 0)
-                metadata["file"]["hashCode"]        = JSON(myResponse.uploadImage!.hashCode ?? "")
+                metadata["file"]["hashCode"]        = JSON(myResponse.uploadImage!.hashCode)
                 
                 sendMessage(withMetadata: metadata)
             }
@@ -820,22 +832,26 @@ extension Chat {
             let uploadRequest = UploadFileRequestModel(dataToSend:      file,
                                                        fileExtension:   fileExtension,
                                                        fileName:        replyFileMessageInput.fileName ?? "defaultName",
-                                                       fileSize:        fileSize,
                                                        originalFileName: replyFileMessageInput.fileName ?? uploadUniqueId,
                                                        threadId:        replyFileMessageInput.threadId,
                                                        typeCode:        nil,
                                                        uniqueId:        uploadUniqueId)
+            
+            metadata["file"]["originalName"]    = JSON(uploadRequest.originalFileName)
+            metadata["file"]["mimeType"]        = JSON("")
+            metadata["file"]["size"]            = JSON(uploadRequest.fileSize)
+            
             uploadFile(inputModel: uploadRequest,
                        uniqueId: { _ in },
                        progress: { (progress) in
                         uploadProgress(progress)
             }) { (response) in
                 let myResponse: UploadFileModel = response as! UploadFileModel
-                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_FILE.rawValue)?fileId=\(myResponse.uploadFile!.id ?? 0)&hashCode=\(myResponse.uploadFile!.hashCode ?? "")"
+                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_FILE.rawValue)?fileId=\(myResponse.uploadFile!.id)&hashCode=\(myResponse.uploadFile!.hashCode)"
                 metadata["file"]["link"]            = JSON(link)
-                metadata["file"]["id"]              = JSON(myResponse.uploadFile!.id ?? 0)
+                metadata["file"]["id"]              = JSON(myResponse.uploadFile!.id)
                 metadata["file"]["name"]            = JSON(myResponse.uploadFile!.name ?? "")
-                metadata["file"]["hashCode"]        = JSON(myResponse.uploadFile!.hashCode ?? "")
+                metadata["file"]["hashCode"]        = JSON(myResponse.uploadFile!.hashCode)
                 
                 sendMessage(withMetadata: metadata)
             }
@@ -866,6 +882,7 @@ extension Chat {
                 onSeen(seen)
             }
         }
+        */
         
     }
     

@@ -266,8 +266,8 @@ extension Chat {
                                             subjectId:          nil,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           creatThreadWithMessageInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           creatThreadWithMessageInput.uniqueId,
+                                            typeCode:           creatThreadWithMessageInput.createThreadInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           creatThreadWithMessageInput.createThreadInput.uniqueId,
                                             uniqueIds:          nil,
                                             isCreateThreadAndSendMessage: true)
         
@@ -284,6 +284,184 @@ extension Chat {
                                 deliverCallback:    SendMessageCallbacks(parameters: chatMessage),
                                 seenCallback:       SendMessageCallbacks(parameters: chatMessage)) { (theUniqueId) in
                                     uniqueId(theUniqueId)
+        }
+        
+    }
+    
+    
+    /// CreateThreadAndSendFileMessage:
+    /// upload a File, then create a thread with somebody and simultaneously send a message on this thread.
+    ///
+    /// By calling this function, first an HTTP request will fires that will upload the image/file , then a request of type 1 (CREATE_THREAD) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "CreateThreadWithMessageRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 5 callbacks as responses
+    ///
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (CreateThreadWithMessageRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ThreadModel)
+    /// - parameter onSent:     (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
+    /// - parameter onDelivere: (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
+    /// - parameter onSeen:     (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+    public func createThreadWithFileMessage(inputModel creatThreadWithFileMessageInput: CreateThreadWithFileMessageRequestModel,
+                                            uploadUniqueId:     @escaping (String) -> (),
+                                            uploadProgress:     @escaping (Float) -> (),
+                                            uniqueId:           @escaping (String) -> (),
+                                            completion:         @escaping callbackTypeAlias,
+                                            onSent:             @escaping callbackTypeAlias,
+                                            onDelivered:        @escaping callbackTypeAlias,
+                                            onSeen:             @escaping callbackTypeAlias) {
+        log.verbose("Try to Send File and CreatThreadWithMessage with this parameters: \n \(creatThreadWithFileMessageInput)", context: "Chat")
+        
+        let threadMessageUniqueId = creatThreadWithFileMessageInput.creatThreadWithMessageInput.createThreadInput.uniqueId ?? generateUUID()
+        uniqueId(threadMessageUniqueId)
+        
+        /**
+         seve this message on the Cache Wait Queue,
+         so if there was an situation that response of the server to this message doesn't come, then we know that our message didn't sent correctly
+         and we will send this Queue to user on the GetHistory request,
+         now user knows which messages didn't send correctly, and can handle them
+         */
+//        if enableCache {
+//            let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      creatThreadWithFileMessageInput.content,
+//                                                                          fileName:     creatThreadWithFileMessageInput.fileName,
+//                                                                          imageName:    creatThreadWithFileMessageInput.imageName,
+//                                                                          metadata:     (creatThreadWithFileMessageInput.metadata != nil) ? "\(creatThreadWithFileMessageInput.metadata!)" : nil,
+//                                                                          repliedTo:    creatThreadWithFileMessageInput.repliedTo,
+//                                                                          threadId:     creatThreadWithFileMessageInput.threadId,
+//                                                                          xC:           creatThreadWithFileMessageInput.xC,
+//                                                                          yC:           creatThreadWithFileMessageInput.yC,
+//                                                                          hC:           creatThreadWithFileMessageInput.hC,
+//                                                                          wC:           creatThreadWithFileMessageInput.wC,
+//                                                                          fileToSend:   creatThreadWithFileMessageInput.fileToSend,
+//                                                                          imageToSend:  creatThreadWithFileMessageInput.imageToSend,
+//                                                                          typeCode:     creatThreadWithFileMessageInput.typeCode,
+//                                                                          uniqueId:     messageUniqueId)
+//            Chat.cacheDB.saveFileMessageToWaitQueue(fileMessage: messageObjectToSendToQueue)
+//        }
+        
+        var fileExtension:  String  = ""
+        let uploadUniqueId = generateUUID()
+        
+        var metadata: JSON = [:]
+        
+        if let imageInputs = creatThreadWithFileMessageInput.uploadImageInput {
+            let uploadRequest = UploadImageRequestModel(dataToSend:         imageInputs.dataToSend,
+                                                        fileExtension:      fileExtension,
+                                                        fileName:           imageInputs.fileName,
+                                                        originalFileName:   imageInputs.originalFileName,
+                                                        threadId:           imageInputs.threadId,
+                                                        xC:                 imageInputs.xC,
+                                                        yC:                 imageInputs.yC,
+                                                        hC:                 imageInputs.hC,
+                                                        wC:                 imageInputs.wC,
+                                                        typeCode:           nil,
+                                                        uniqueId:           uploadUniqueId)
+            
+            metadata["file"]["originalName"] = JSON(uploadRequest.originalFileName)
+            metadata["file"]["mimeType"]    = JSON("")
+            metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
+            
+            uploadImage(inputModel: uploadRequest,
+                        uniqueId: { _ in },
+                        progress: { (progress) in
+                            uploadProgress(progress)
+            }) { (response) in
+                let myResponse: UploadImageModel = response as! UploadImageModel
+                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_IMAGE.rawValue)?imageId=\(myResponse.uploadImage!.id)&hashCode=\(myResponse.uploadImage!.hashCode)"
+                
+                var imageMetadata : JSON = [:]
+                imageMetadata["link"]            = JSON(link)
+                imageMetadata["id"]              = JSON(myResponse.uploadImage!.id)
+                imageMetadata["name"]            = JSON(myResponse.uploadImage!.name ?? "")
+                imageMetadata["height"]          = JSON(myResponse.uploadImage!.height ?? 0)
+                imageMetadata["width"]           = JSON(myResponse.uploadImage!.width ?? 0)
+                imageMetadata["actualHeight"]    = JSON(myResponse.uploadImage!.actualHeight ?? 0)
+                imageMetadata["actualWidth"]     = JSON(myResponse.uploadImage!.actualWidth ?? 0)
+                imageMetadata["hashCode"]        = JSON(myResponse.uploadImage!.hashCode)
+                metadata["file"] = imageMetadata
+                
+                createThreadAndSendMessage(withMetadata: metadata)
+            }
+            
+        } else if let fileInputs = creatThreadWithFileMessageInput.uploadfileInput {
+            let uploadRequest = UploadFileRequestModel(dataToSend:      fileInputs.dataToSend,
+                                                       fileExtension:   fileExtension,
+                                                       fileName:        fileInputs.fileName,
+                                                       originalFileName: fileInputs.originalFileName,
+                                                       threadId:        fileInputs.threadId,
+                                                       typeCode:        nil,
+                                                       uniqueId:        uploadUniqueId)
+            
+            metadata["file"]["originalName"] = JSON(uploadRequest.originalFileName)
+            metadata["file"]["mimeType"]    = JSON("")
+            metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
+            
+            uploadFile(inputModel: uploadRequest,
+                       uniqueId: { _ in }, progress: { (progress) in
+                uploadProgress(progress)
+            }) { (response) in
+                let myResponse: UploadFileModel = response as! UploadFileModel
+                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_FILE.rawValue)?fileId=\(myResponse.uploadFile!.id)&hashCode=\(myResponse.uploadFile!.hashCode)"
+                
+                var fileMetadata : JSON = [:]
+                fileMetadata["link"]        = JSON(link)
+                fileMetadata["id"]          = JSON(myResponse.uploadFile!.id)
+                fileMetadata["name"]        = JSON(myResponse.uploadFile!.name ?? "")
+                fileMetadata["hashCode"]    = JSON(myResponse.uploadFile!.hashCode)
+                metadata["file"]    = fileMetadata
+                
+                createThreadAndSendMessage(withMetadata: metadata)
+            }
+            
+        }
+        
+        // if there was no data to send, then returns an error to user
+        if (creatThreadWithFileMessageInput.uploadfileInput?.dataToSend == nil) && (creatThreadWithFileMessageInput.uploadImageInput?.dataToSend == nil) {
+            delegate?.chatError(errorCode:      6302,
+                                errorMessage:   CHAT_ERRORS.err6302.rawValue,
+                                errorResult:    nil)
+        }
+        
+        
+        // this will call when all data were uploaded and it will sends the textMessage
+        func createThreadAndSendMessage(withMetadata: JSON) {
+//            let messageInput = MessageInput(forwardedMessageIds: creatThreadWithFileMessageInput.creatThreadWithMessageInput.message?.forwardedMessageIds,
+//                                            repliedTo:          creatThreadWithFileMessageInput.creatThreadWithMessageInput.message?.repliedTo,
+//                                            text:               creatThreadWithFileMessageInput.creatThreadWithMessageInput.message?.text,
+//                                            type:               creatThreadWithFileMessageInput.creatThreadWithMessageInput.message?.type,
+//                                            metadata:           withMetadata,
+//                                            systemMetadata:     creatThreadWithFileMessageInput.creatThreadWithMessageInput.message?.systemMetadata,
+//                                            uniqueId:           creatThreadWithFileMessageInput.creatThreadWithMessageInput.message?.uniqueId)
+//
+//            let createThreadSendMessageParamModel = CreateThreadWithMessageRequestModel(description: creatThreadWithFileMessageInput.creatThreadWithMessageInput.description,
+//                                                                                        image:      creatThreadWithFileMessageInput.creatThreadWithMessageInput.image,
+//                                                                                        invitees:   creatThreadWithFileMessageInput.creatThreadWithMessageInput.invitees,
+//                                                                                        metadata:   creatThreadWithFileMessageInput.creatThreadWithMessageInput.metadata,
+//                                                                                        title:      creatThreadWithFileMessageInput.creatThreadWithMessageInput.title,
+//                                                                                        type:       creatThreadWithFileMessageInput.creatThreadWithMessageInput.type,
+//                                                                                        message:    messageInput,
+//                                                                                        typeCode:   creatThreadWithFileMessageInput.creatThreadWithMessageInput.typeCode ?? generalTypeCode,
+//                                                                                        uniqueId:   threadMessageUniqueId)
+            
+            let createThreadSendMessageParamModel = CreateThreadWithMessageRequestModel(createThreadInput: creatThreadWithFileMessageInput.creatThreadWithMessageInput.createThreadInput,
+                                                                                        sendMessageInput: creatThreadWithFileMessageInput.creatThreadWithMessageInput.sendMessageInput)
+            createThreadSendMessageParamModel.sendMessageInput?.metadata = withMetadata
+            
+            self.createThreadWithMessage(inputModel: createThreadSendMessageParamModel, uniqueId: { _ in }, completion: { (createThreadResponse) in
+                completion(createThreadResponse)
+            }, onSent: { (sent) in
+                onSent(sent)
+            }, onDelivere: { (delivered) in
+                onDelivered(delivered)
+            }) { (seen) in
+                onSeen(seen)
+            }
+            
         }
         
     }

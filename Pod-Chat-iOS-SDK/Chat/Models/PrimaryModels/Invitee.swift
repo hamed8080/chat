@@ -17,7 +17,7 @@ open class Invitee {
      *    - idType       {int}
      */
     
-    public let id:     String?
+    public var id:     String?
     public var idType: Int?
     
     public init(messageContent: JSON) {

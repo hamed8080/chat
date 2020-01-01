@@ -29,6 +29,17 @@ public enum ThreadTypes: String {
         }
     }
     
+    public func intValue() -> Int {
+        switch self {
+        case .NORMAL:               return 0
+        case .OWNER_GROUP:          return 1
+        case .PUBLIC_GROUP:         return 2
+        case .CHANNEL_GROUP:        return 4
+        case .CHANNEL:              return 8
+        case .NOTIFICATION_CHANNEL: return 16
+        }
+    }
+    
 }
 
 

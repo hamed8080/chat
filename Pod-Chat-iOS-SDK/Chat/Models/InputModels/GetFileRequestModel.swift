@@ -14,14 +14,17 @@ open class GetFileRequestModel {
     public let downloadable:    Bool?
     public let fileId:          Int
     public let hashCode:        String
+    public let serverResponse:  Bool
     
     public init(downloadable:   Bool?,
                 fileId:         Int,
-                hashCode:       String) {
+                hashCode:       String,
+                serverResponse: Bool?) {
         
         self.fileId         = fileId
         self.downloadable   = downloadable
         self.hashCode       = hashCode
+        self.serverResponse = serverResponse ?? false
     }
     
     func convertContentToParameters() -> Parameters {

@@ -12,29 +12,29 @@ import SwiftyJSON
 
 open class ImageObject {
     
-    public let actualHeight:   Int?
-    public let actualWidth:    Int?
-    public let hashCode:       String?
-    public let height:         Int?
-    public let id:             Int?
-    public let name:           String?
-    public let width:          Int?
+    public var actualHeight:   Int?
+    public var actualWidth:    Int?
+    public var hashCode:       String
+    public var height:         Int?
+    public var id:             Int
+    public var name:           String?
+    public var width:          Int?
     
     public init(messageContent: JSON) {
         self.actualHeight   = messageContent["actualHeight"].int
         self.actualWidth    = messageContent["actualWidth"].int
-        self.hashCode       = messageContent["hashCode"].string
+        self.hashCode       = messageContent["hashCode"].stringValue
         self.height         = messageContent["height"].int
-        self.id             = messageContent["id"].int
+        self.id             = messageContent["id"].intValue
         self.name           = messageContent["name"].string
         self.width          = messageContent["width"].int
     }
     
     public init(actualHeight:  Int?,
                 actualWidth:   Int?,
-                hashCode:      String?,
+                hashCode:      String,
                 height:        Int?,
-                id:            Int?,
+                id:            Int,
                 name:          String?,
                 width:         Int?) {
         
@@ -66,9 +66,9 @@ open class ImageObject {
     public func formatToJSON() -> JSON {
         let result: JSON = ["actualHeight": actualHeight ?? NSNull(),
                             "actualWidth":  actualWidth ?? NSNull(),
-                            "hashCode":     hashCode ?? NSNull(),
+                            "hashCode":     hashCode,
                             "height":       height ?? NSNull(),
-                            "id":           id ?? NSNull(),
+                            "id":           id,
                             "name":         name ?? NSNull(),
                             "width":        width ?? NSNull()]
         return result
