@@ -11,16 +11,20 @@ import Foundation
 open class CreateThreadWithFileMessageRequestModel {
     
     let creatThreadWithMessageInput:    CreateThreadWithMessageRequestModel
-    let uploadfileInput:                UploadFileRequestModel?
-    let uploadImageInput:               UploadImageRequestModel?
+    let uploadInput:                    UploadRequestModel
+    
+//    let uploadfileInput:                UploadFileRequestModel?
+//    let uploadImageInput:               UploadImageRequestModel?
     
     init(creatThreadWithMessageInput:   CreateThreadWithMessageRequestModel,
-         uploadfileInput:               UploadFileRequestModel?,
-         uploadImageInput:              UploadImageRequestModel?) {
+//         uploadfileInput:               UploadFileRequestModel?,
+//         uploadImageInput:              UploadImageRequestModel?
+         uploadInput:                   UploadRequestModel) {
         
         self.creatThreadWithMessageInput    = creatThreadWithMessageInput
-        self.uploadfileInput                = uploadfileInput
-        self.uploadImageInput               = uploadImageInput
+//        self.uploadfileInput                = uploadfileInput
+//        self.uploadImageInput               = uploadImageInput
+        self.uploadInput                    = uploadInput
     }
     
 }

@@ -34,15 +34,15 @@ extension Chat {
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter progress:   (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (UploadImageModel)
-    public func uploadImage(inputModel uploadImageInput:   UploadImageRequestModel,
-                            uniqueId:           @escaping (String) -> (),
-                            progress:           @escaping (Float) -> (),
-                            completion:         @escaping callbackTypeAlias) {
+    func uploadImage(inputModel uploadImageInput:   UploadImageRequestModel,
+                     uniqueId:      @escaping (String) -> (),
+                     progress:      @escaping (Float) -> (),
+                     completion:    @escaping callbackTypeAlias) {
         log.verbose("Try to upload image with this parameters: \n \(uploadImageInput)", context: "Chat")
         
         uniqueId(uploadImageInput.uniqueId)
         
-        if enableCache {
+        if (enableCache) && (uploadImageInput.threadId != nil) {
             /**
              seve this upload image on the Cache Wait Queue,
              so if there was an situation that response of the server to this uploading doesn't come, then we know that our upload request didn't sent correctly
@@ -173,7 +173,7 @@ extension Chat {
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter progress:   (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (UploadFileModel)
-    public func uploadFile(inputModel uploadFileInput: UploadFileRequestModel,
+     func uploadFile(inputModel uploadFileInput: UploadFileRequestModel,
                            uniqueId:        @escaping (String) -> (),
                            progress:        @escaping (Float) -> (),
                            completion:      @escaping callbackTypeAlias) {
@@ -181,7 +181,7 @@ extension Chat {
         
         uniqueId(uploadFileInput.uniqueId)
         
-        if enableCache {
+        if (enableCache) && (uploadFileInput.threadId != nil) {
             /*
              seve this upload image on the Cache Wait Queue,
              so if there was an situation that response of the server to this uploading doesn't come, then we know that our upload request didn't sent correctly

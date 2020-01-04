@@ -22,10 +22,10 @@ open class SendLocationMessageRequestModel {
     public let mapStaticZoom:        Int
     
     public let sendMessageImageName:   String?
-    public let sendMessageXC:          String?
-    public let sendMessageYC:          String?
-    public let sendMessageHC:          String?
-    public let sendMessageWC:          String?
+    public let sendMessageXC:          Int?
+    public let sendMessageYC:          Int?
+    public let sendMessageHC:          Int?
+    public let sendMessageWC:          Int?
     public let sendMessageThreadId:    Int
     
     public let sendMessageContent:     String?
@@ -43,10 +43,10 @@ open class SendLocationMessageRequestModel {
                 mapStaticWidth:         Int?,
                 mapStaticZoom:          Int?,
                 sendMessageImageName:   String?,
-                sendMessageXC:          String?,
-                sendMessageYC:          String?,
-                sendMessageHC:          String?,
-                sendMessageWC:          String?,
+                sendMessageXC:          Int?,
+                sendMessageYC:          Int?,
+                sendMessageHC:          Int?,
+                sendMessageWC:          Int?,
                 sendMessageThreadId:    Int,
                 sendMessageContent:     String?,
                 sendMessageMetadata:    JSON?,

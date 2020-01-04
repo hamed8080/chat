@@ -304,6 +304,7 @@
 		3EE0694B2212A3100099068F /* PhoneContact+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE069482212A3100099068F /* PhoneContact+CoreDataClass.swift */; };
 		3EE0694C2212A3100099068F /* PhoneContact+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE069492212A3100099068F /* PhoneContact+CoreDataProperties.swift */; };
 		3EE0694D2212A3100099068F /* PhoneContact+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE069492212A3100099068F /* PhoneContact+CoreDataProperties.swift */; };
+		3EE4D99923C085870030BB0D /* UploadRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE4D99823C085870030BB0D /* UploadRequestModel.swift */; };
 		3EE6B50F22DF46A400540F17 /* SendMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE6B50E22DF46A400540F17 /* SendMessageModel.swift */; };
 		3EEA835422EEC6A10014B075 /* EditMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EEA835322EEC6A10014B075 /* EditMessageModel.swift */; };
 		3EEA835522EEC6A10014B075 /* EditMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EEA835322EEC6A10014B075 /* EditMessageModel.swift */; };
@@ -637,6 +638,7 @@
 		3EE0261621206EA6001810FB /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
 		3EE069482212A3100099068F /* PhoneContact+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhoneContact+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3EE069492212A3100099068F /* PhoneContact+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhoneContact+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		3EE4D99823C085870030BB0D /* UploadRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadRequestModel.swift; sourceTree = "<group>"; };
 		3EE6B50E22DF46A400540F17 /* SendMessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMessageModel.swift; sourceTree = "<group>"; };
 		3EEA835322EEC6A10014B075 /* EditMessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMessageModel.swift; sourceTree = "<group>"; };
 		3EEA836022EEC6CB0014B075 /* DeleteMessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteMessageModel.swift; sourceTree = "<group>"; };
@@ -770,6 +772,7 @@
 				3E00CAF621DCA9030029B1FC /* MapStaticImageRequestModel.swift */,
 				3EA156A921CE1D10004B1346 /* MessageDeliverySeenListRequestModel.swift */,
 				3EA1568B21CE1BDC004B1346 /* MuteAndUnmuteThreadRequestModel.swift */,
+				3E8ADCF023B783CC00E3538D /* PinAndUnpinThreadRequestModel.swift */,
 				3EA1567921CE1B0B004B1346 /* RemoveContactsRequestModel.swift */,
 				3EA1569121CE1C15004B1346 /* RemoveParticipantsRequestModel.swift */,
 				3EA1569921CE1C68004B1346 /* ReplyTextMessageRequestModel.swift */,
@@ -783,9 +786,9 @@
 				3EA1567F21CE1B5B004B1346 /* UnblockContactsRequestModel.swift */,
 				3EA1567721CE1AF0004B1346 /* UpdateContactsRequestModel.swift */,
 				3EA156A521CE1CE8004B1346 /* UpdateThreadInfoRequestModel.swift */,
+				3EE4D99823C085870030BB0D /* UploadRequestModel.swift */,
 				3EA156A321CE1CD6004B1346 /* UploadFileRequestModel.swift */,
 				3EA156A121CE1CC4004B1346 /* UploadImageRequestModel.swift */,
-				3E8ADCF023B783CC00E3538D /* PinAndUnpinThreadRequestModel.swift */,
 			);
 			path = InputModels;
 			sourceTree = "<group>";
@@ -1300,6 +1303,7 @@
 				3E8ADC8123B358F300E3538D /* DownloaUploadActions.swift in Sources */,
 				3EB5206722ABF29D00B7EA45 /* CreateThreadCallback.swift in Sources */,
 				3E24084821F5C844001F32F1 /* CMFile+CoreDataClass.swift in Sources */,
+				3EE4D99923C085870030BB0D /* UploadRequestModel.swift in Sources */,
 				3E24085021F5C844001F32F1 /* CMContact+CoreDataClass.swift in Sources */,
 				3EBBEDF62174C6AF00F5CDC7 /* CreateThreadModel.swift in Sources */,
 				3E24083C21F5C844001F32F1 /* CMMessage+CoreDataClass.swift in Sources */,
@@ -1743,7 +1747,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 0.5.8.4;
+				MARKETING_VERSION = 0.5.8.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.fanapSoft.FanapPodChatSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1777,7 +1781,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 0.5.8.4;
+				MARKETING_VERSION = 0.5.8.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.fanapSoft.FanapPodChatSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

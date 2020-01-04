@@ -582,15 +582,19 @@ extension Chat {
     /// - parameter onDelivere:     (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
     /// - parameter onSeen:         (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
     public func sendFileMessage(inputModel sendFileMessageInput:   SendFileMessageRequestModel,
-                                uniqueId:               @escaping ((String) -> ()),
+                                uploadUniqueId:         @escaping ((String) -> ()),
                                 uploadProgress:         @escaping ((Float) -> ()),
+                                messageUniqueId:        @escaping ((String) -> ()),
                                 onSent:                 @escaping callbackTypeAlias,
                                 onDelivered:            @escaping callbackTypeAlias,
                                 onSeen:                 @escaping callbackTypeAlias) {
         log.verbose("Try to Send File adn Message with this parameters: \n \(sendFileMessageInput)", context: "Chat")
         
-        let messageUniqueId = sendFileMessageInput.uniqueId ?? generateUUID()
-        uniqueId(messageUniqueId)
+        let uploadUId = sendFileMessageInput.uploadInput.uniqueId
+        uploadUniqueId(uploadUId)
+        
+        let msgUniqueId = sendFileMessageInput.messageInput.uniqueId ?? generateUUID()
+        messageUniqueId(msgUniqueId)
         
         /**
          seve this message on the Cache Wait Queue,
@@ -599,116 +603,102 @@ extension Chat {
          now user knows which messages didn't send correctly, and can handle them
          */
         if enableCache {
-            let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      sendFileMessageInput.content,
-                                                                          fileName:     sendFileMessageInput.fileName,
-                                                                          imageName:    sendFileMessageInput.imageName,
-                                                                          metadata:     (sendFileMessageInput.metadata != nil) ? "\(sendFileMessageInput.metadata!)" : nil,
-                                                                          repliedTo:    sendFileMessageInput.repliedTo,
-                                                                          threadId:     sendFileMessageInput.threadId,
-                                                                          xC:           sendFileMessageInput.xC,
-                                                                          yC:           sendFileMessageInput.yC,
-                                                                          hC:           sendFileMessageInput.hC,
-                                                                          wC:           sendFileMessageInput.wC,
-                                                                          fileToSend:   sendFileMessageInput.fileToSend,
-                                                                          imageToSend:  sendFileMessageInput.imageToSend,
-                                                                          typeCode:     sendFileMessageInput.typeCode,
-                                                                          uniqueId:     messageUniqueId)
-            Chat.cacheDB.saveFileMessageToWaitQueue(fileMessage: messageObjectToSendToQueue)
+            if let file = sendFileMessageInput.uploadInput as? UploadFileRequestModel {
+                let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      sendFileMessageInput.messageInput.content,
+                                                                            fileName:     file.fileName,
+                                                                            metadata:     (sendFileMessageInput.messageInput.metadata != nil) ? "\(sendFileMessageInput.messageInput.metadata!)" : nil,
+                                                                            repliedTo:    sendFileMessageInput.messageInput.repliedTo,
+                                                                            threadId:     sendFileMessageInput.messageInput.threadId,
+                                                                            xC:           nil,
+                                                                            yC:           nil,
+                                                                            hC:           nil,
+                                                                            wC:           nil,
+                                                                            fileToSend:   file.dataToSend,
+                                                                            imageToSend:  nil,
+                                                                            typeCode:     sendFileMessageInput.messageInput.typeCode,
+                                                                            uniqueId:     msgUniqueId)
+                Chat.cacheDB.saveFileMessageToWaitQueue(fileMessage: messageObjectToSendToQueue)
+                
+            } else if let image = sendFileMessageInput.uploadInput as? UploadImageRequestModel {
+                let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      sendFileMessageInput.messageInput.content,
+                                                                              fileName:     nil,
+                                                                              metadata:     (sendFileMessageInput.messageInput.metadata != nil) ? "\(sendFileMessageInput.messageInput.metadata!)" : nil,
+                                                                              repliedTo:    sendFileMessageInput.messageInput.repliedTo,
+                                                                              threadId:     sendFileMessageInput.messageInput.threadId,
+                                                                              xC:           image.xC,
+                                                                              yC:           image.yC,
+                                                                              hC:           image.hC,
+                                                                              wC:           image.wC,
+                                                                              fileToSend:   nil,
+                                                                              imageToSend:  image.dataToSend,
+                                                                              typeCode:     sendFileMessageInput.messageInput.typeCode,
+                                                                              uniqueId:     msgUniqueId)
+                Chat.cacheDB.saveFileMessageToWaitQueue(fileMessage: messageObjectToSendToQueue)
+            }
+            
         }
         
         var fileExtension:  String  = ""
-        let uploadUniqueId = generateUUID()
         
         var metadata: JSON = [:]
         
-        if let image = sendFileMessageInput.imageToSend {
-            let uploadRequest = UploadImageRequestModel(dataToSend:         image,
+        if let image = sendFileMessageInput.uploadInput as? UploadImageRequestModel {
+            let uploadRequest = UploadImageRequestModel(dataToSend:         image.dataToSend,
                                                         fileExtension:      fileExtension,
-                                                        fileName:           sendFileMessageInput.imageName ?? "defaultName",
-                                                        originalFileName:   sendFileMessageInput.fileName ?? uploadUniqueId,
-                                                        threadId:           sendFileMessageInput.threadId,
-                                                        xC:                 Int(sendFileMessageInput.xC ?? ""),
-                                                        yC:                 Int(sendFileMessageInput.yC ?? ""),
-                                                        hC:                 Int(sendFileMessageInput.hC ?? ""),
-                                                        wC:                 Int(sendFileMessageInput.wC ?? ""),
+                                                        fileName:           image.fileName,
+                                                        originalFileName:   image.originalFileName,
+                                                        threadId:           image.threadId,
+                                                        xC:                 image.xC,
+                                                        yC:                 image.yC,
+                                                        hC:                 image.hC,
+                                                        wC:                 image.wC,
                                                         typeCode:           nil,
-                                                        uniqueId:           uploadUniqueId)
+                                                        uniqueId:           uploadUId)
             
             metadata["file"]["originalName"] = JSON(uploadRequest.originalFileName)
             metadata["file"]["mimeType"]    = JSON("")
             metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
             
-            uploadImage(inputModel: uploadRequest,
-                        uniqueId: { _ in },
-                        progress: { (progress) in
-                            uploadProgress(progress)
+            uploadImage(inputModel: uploadRequest, uniqueId: { _ in }, progress: { (progress) in
+                uploadProgress(progress)
             }) { (response) in
                 let myResponse: UploadImageModel = response as! UploadImageModel
-                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_IMAGE.rawValue)?imageId=\(myResponse.uploadImage!.id)&hashCode=\(myResponse.uploadImage!.hashCode)"
-                
-                var imageMetadata : JSON = [:]
-                imageMetadata["link"]            = JSON(link)
-                imageMetadata["id"]              = JSON(myResponse.uploadImage!.id)
-                imageMetadata["name"]            = JSON(myResponse.uploadImage!.name ?? "")
-                imageMetadata["height"]          = JSON(myResponse.uploadImage!.height ?? 0)
-                imageMetadata["width"]           = JSON(myResponse.uploadImage!.width ?? 0)
-                imageMetadata["actualHeight"]    = JSON(myResponse.uploadImage!.actualHeight ?? 0)
-                imageMetadata["actualWidth"]     = JSON(myResponse.uploadImage!.actualWidth ?? 0)
-                imageMetadata["hashCode"]        = JSON(myResponse.uploadImage!.hashCode)
-                metadata["file"] = imageMetadata
-                
+                metadata["file"] = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
                 sendMessage(withMetadata: metadata)
             }
             
-        } else if let file = sendFileMessageInput.fileToSend {
-            let uploadRequest = UploadFileRequestModel(dataToSend:      file,
+        } else if let file = sendFileMessageInput.uploadInput as? UploadFileRequestModel {
+            let uploadRequest = UploadFileRequestModel(dataToSend:      file.dataToSend,
                                                        fileExtension:   fileExtension,
-                                                       fileName:        sendFileMessageInput.fileName ?? "defaultName",
-                                                       originalFileName: sendFileMessageInput.fileName ?? uploadUniqueId,
-                                                       threadId:        sendFileMessageInput.threadId,
+                                                       fileName:        file.fileName,
+                                                       originalFileName: file.originalFileName,
+                                                       threadId:        file.threadId,
                                                        typeCode:        nil,
-                                                       uniqueId:        uploadUniqueId)
+                                                       uniqueId:        uploadUId)
             
             metadata["file"]["originalName"] = JSON(uploadRequest.originalFileName)
             metadata["file"]["mimeType"]    = JSON("")
             metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
             
-            uploadFile(inputModel: uploadRequest,
-                       uniqueId: { _ in }, progress: { (progress) in
+            uploadFile(inputModel: uploadRequest, uniqueId: { _ in }, progress: { (progress) in
                 uploadProgress(progress)
             }) { (response) in
                 let myResponse: UploadFileModel = response as! UploadFileModel
-                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_FILE.rawValue)?fileId=\(myResponse.uploadFile!.id)&hashCode=\(myResponse.uploadFile!.hashCode)"
-                
-                var fileMetadata : JSON = [:]
-                fileMetadata["link"]        = JSON(link)
-                fileMetadata["id"]          = JSON(myResponse.uploadFile!.id)
-                fileMetadata["name"]        = JSON(myResponse.uploadFile!.name ?? "")
-                fileMetadata["hashCode"]    = JSON(myResponse.uploadFile!.hashCode)
-                metadata["file"]    = fileMetadata
-                
+                metadata["file"]    = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
                 sendMessage(withMetadata: metadata)
             }
             
         }
         
-        // if there was no data to send, then returns an error to user
-        if (sendFileMessageInput.imageToSend == nil) && (sendFileMessageInput.fileToSend == nil) {
-            delegate?.chatError(errorCode:      6302,
-                                errorMessage:   CHAT_ERRORS.err6302.rawValue,
-                                errorResult:    nil)
-        }
-        
-        
         // this will call when all data were uploaded and it will sends the textMessage
         func sendMessage(withMetadata: JSON) {
-            let sendMessageParamModel = SendTextMessageRequestModel(content:        sendFileMessageInput.content ?? "",
+            let sendMessageParamModel = SendTextMessageRequestModel(content:        sendFileMessageInput.messageInput.content,
                                                                     metadata:       withMetadata,
-                                                                    repliedTo:      sendFileMessageInput.repliedTo,
-                                                                    systemMetadata: sendFileMessageInput.metadata,
-                                                                    threadId:       sendFileMessageInput.threadId,
-                                                                    typeCode:       sendFileMessageInput.typeCode ?? generalTypeCode,
-                                                                    uniqueId:       messageUniqueId)
+                                                                    repliedTo:      sendFileMessageInput.messageInput.repliedTo,
+                                                                    systemMetadata: sendFileMessageInput.messageInput.metadata,
+                                                                    threadId:       sendFileMessageInput.messageInput.threadId,
+                                                                    typeCode:       sendFileMessageInput.messageInput.typeCode ?? generalTypeCode,
+                                                                    uniqueId:       msgUniqueId)
             self.sendTextMessage(inputModel: sendMessageParamModel, uniqueId: { _ in }, onSent: { (sent) in
                 onSent(sent)
             }, onDelivere: { (delivered) in
@@ -740,17 +730,20 @@ extension Chat {
     /// - parameter onDelivere:     (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
     /// - parameter onSeen:         (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
     public func replyFileMessage(inputModel replyFileMessageInput: SendFileMessageRequestModel,
-                                 uniqueId:              @escaping ((String) -> ()),
+                                 uploadUniqueId:        @escaping ((String) -> ()),
                                  uploadProgress:        @escaping ((Float) -> ()),
+                                 messageUniqueId:       @escaping ((String) -> ()),
                                  onSent:                @escaping callbackTypeAlias,
                                  onDelivered:           @escaping callbackTypeAlias,
                                  onSeen:                @escaping callbackTypeAlias) {
         log.verbose("Try to reply File Message with this parameters: \n \(replyFileMessageInput)", context: "Chat")
         
-        sendFileMessage(inputModel: replyFileMessageInput, uniqueId: { (replyRequestUniqueId) in
-            uniqueId(replyRequestUniqueId)
+        sendFileMessage(inputModel: replyFileMessageInput, uploadUniqueId: { (uploadImageUniqueId) in
+            uploadUniqueId(uploadImageUniqueId)
         }, uploadProgress: { (progress) in
             uploadProgress(progress)
+        }, messageUniqueId: { (replyRequestUniqueId) in
+            messageUniqueId(replyRequestUniqueId)
         }, onSent: { (sebtResponse) in
             onSent(sebtResponse)
         }, onDelivered: { (deliverResponse) in
@@ -758,131 +751,6 @@ extension Chat {
         }) { (seenResponse) in
             onSeen(seenResponse)
         }
-        
-        /*
-        let messageUniqueId = replyFileMessageInput.uniqueId ?? generateUUID()
-        uniqueId(messageUniqueId)
-        
-        var fileExtension:  String  = ""
-        let uploadUniqueId = generateUUID()
-        
-        /**
-         seve this message on the Cache Wait Queue,
-         so if there was an situation that response of the server to this message doesn't come, then we know that our message didn't sent correctly
-         and we will send this Queue to user on the GetHistory request,
-         now user knows which messages didn't send correctly, and can handle them
-         */
-        if enableCache {
-            let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      replyFileMessageInput.content,
-                                                                          fileName:     replyFileMessageInput.fileName,
-                                                                          imageName:    replyFileMessageInput.imageName,
-                                                                          metadata:     (replyFileMessageInput.metadata != nil) ? "\(replyFileMessageInput.metadata!)" : nil,
-                                                                          repliedTo:    replyFileMessageInput.repliedTo,
-                                                                          threadId:     replyFileMessageInput.threadId,
-                                                                          xC:           replyFileMessageInput.xC,
-                                                                          yC:           replyFileMessageInput.yC,
-                                                                          hC:           replyFileMessageInput.hC,
-                                                                          wC:           replyFileMessageInput.wC,
-                                                                          fileToSend:   replyFileMessageInput.fileToSend,
-                                                                          imageToSend:  replyFileMessageInput.imageToSend,
-                                                                          typeCode:     replyFileMessageInput.typeCode,
-                                                                          uniqueId:     messageUniqueId)
-            Chat.cacheDB.saveFileMessageToWaitQueue(fileMessage: messageObjectToSendToQueue)
-        }
-        
-        var metadata: JSON = [:]
-        
-        if let image = replyFileMessageInput.imageToSend {
-            let uploadRequest = UploadImageRequestModel(dataToSend:         image,
-                                                        fileExtension:      fileExtension,
-                                                        fileName:           replyFileMessageInput.imageName ?? "defaultName",
-                                                        originalFileName:   replyFileMessageInput.fileName ?? uploadUniqueId,
-                                                        threadId:           replyFileMessageInput.threadId,
-                                                        xC:                 Int(replyFileMessageInput.xC ?? ""),
-                                                        yC:                 Int(replyFileMessageInput.yC ?? ""),
-                                                        hC:                 Int(replyFileMessageInput.hC ?? ""),
-                                                        wC:                 Int(replyFileMessageInput.wC ?? ""),
-                                                        typeCode:           nil,
-                                                        uniqueId:           uploadUniqueId)
-            
-            metadata["file"]["originalName"]    = JSON(uploadRequest.originalFileName)
-            metadata["file"]["mimeType"]        = JSON("")
-            metadata["file"]["size"]            = JSON(uploadRequest.fileSize)
-            
-            uploadImage(inputModel: uploadRequest,
-                        uniqueId: { _ in },
-                        progress: { (progress) in
-                            uploadProgress(progress)
-            }) { (response) in
-                let myResponse: UploadImageModel = response as! UploadImageModel
-                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_IMAGE.rawValue)?imageId=\(myResponse.uploadImage!.id)&hashCode=\(myResponse.uploadImage!.hashCode)"
-                metadata["file"]["link"]            = JSON(link)
-                metadata["file"]["id"]              = JSON(myResponse.uploadImage!.id)
-                metadata["file"]["name"]            = JSON(myResponse.uploadImage!.name ?? "")
-                metadata["file"]["height"]          = JSON(myResponse.uploadImage!.height ?? 0)
-                metadata["file"]["width"]           = JSON(myResponse.uploadImage!.width ?? 0)
-                metadata["file"]["actualHeight"]    = JSON(myResponse.uploadImage!.actualHeight ?? 0)
-                metadata["file"]["actualWidth"]     = JSON(myResponse.uploadImage!.actualWidth ?? 0)
-                metadata["file"]["hashCode"]        = JSON(myResponse.uploadImage!.hashCode)
-                
-                sendMessage(withMetadata: metadata)
-            }
-            
-        } else if let file = replyFileMessageInput.fileToSend {
-            let uploadRequest = UploadFileRequestModel(dataToSend:      file,
-                                                       fileExtension:   fileExtension,
-                                                       fileName:        replyFileMessageInput.fileName ?? "defaultName",
-                                                       originalFileName: replyFileMessageInput.fileName ?? uploadUniqueId,
-                                                       threadId:        replyFileMessageInput.threadId,
-                                                       typeCode:        nil,
-                                                       uniqueId:        uploadUniqueId)
-            
-            metadata["file"]["originalName"]    = JSON(uploadRequest.originalFileName)
-            metadata["file"]["mimeType"]        = JSON("")
-            metadata["file"]["size"]            = JSON(uploadRequest.fileSize)
-            
-            uploadFile(inputModel: uploadRequest,
-                       uniqueId: { _ in },
-                       progress: { (progress) in
-                        uploadProgress(progress)
-            }) { (response) in
-                let myResponse: UploadFileModel = response as! UploadFileModel
-                let link = "\(self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_FILE.rawValue)?fileId=\(myResponse.uploadFile!.id)&hashCode=\(myResponse.uploadFile!.hashCode)"
-                metadata["file"]["link"]            = JSON(link)
-                metadata["file"]["id"]              = JSON(myResponse.uploadFile!.id)
-                metadata["file"]["name"]            = JSON(myResponse.uploadFile!.name ?? "")
-                metadata["file"]["hashCode"]        = JSON(myResponse.uploadFile!.hashCode)
-                
-                sendMessage(withMetadata: metadata)
-            }
-        }
-        
-        // if there was no data to send, then returns an error to user
-        if (replyFileMessageInput.imageToSend == nil) && (replyFileMessageInput.fileToSend == nil) {
-            delegate?.chatError(errorCode:      6302,
-                                errorMessage:   CHAT_ERRORS.err6302.rawValue,
-                                errorResult:    nil)
-        }
-        
-        
-        // this will call when all data were uploaded and it will sends the textMessage
-        func sendMessage(withMetadata: JSON) {
-            let sendMessageParamModel = SendTextMessageRequestModel(content:        replyFileMessageInput.content ?? "",
-                                                                    metadata:       withMetadata,
-                                                                    repliedTo:      replyFileMessageInput.repliedTo,
-                                                                    systemMetadata: replyFileMessageInput.metadata,
-                                                                    threadId:       replyFileMessageInput.threadId,
-                                                                    typeCode:       replyFileMessageInput.typeCode ?? generalTypeCode,
-                                                                    uniqueId:       messageUniqueId)
-            self.sendTextMessage(inputModel: sendMessageParamModel, uniqueId: { _ in }, onSent: { (sent) in
-                onSent(sent)
-            }, onDelivere: { (delivered) in
-                onDelivered(delivered)
-            }) { (seen) in
-                onSeen(seen)
-            }
-        }
-        */
         
     }
     
@@ -910,9 +778,10 @@ extension Chat {
     /// - parameter onDelivere:         (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
     /// - parameter onSeen:             (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
     public func sendLocationMessage(inputModel sendLocationMessageRequest: SendLocationMessageRequestModel,
-                                    uniqueId:                   @escaping ((String) -> ()),
                                     downloadProgress:           @escaping ((Float) -> ()),
+                                    uploadUniqueId:             @escaping ((String) -> ()),
                                     uploadProgress:             @escaping ((Float) -> ()),
+                                    messageUniqueId:            @escaping ((String) -> ()),
                                     onSent:                     @escaping callbackTypeAlias,
                                     onDelivere:                 @escaping callbackTypeAlias,
                                     onSeen:                     @escaping callbackTypeAlias) {
@@ -929,29 +798,41 @@ extension Chat {
                        progress: { (myProgress) in
             downloadProgress(myProgress)
         }) { (imageData) in
-            let fileMessageInput = SendFileMessageRequestModel(fileName:    nil,
-                                                               imageName:   sendLocationMessageRequest.sendMessageImageName,
-                                                               xC:          sendLocationMessageRequest.sendMessageXC,
-                                                               yC:          sendLocationMessageRequest.sendMessageYC,
-                                                               hC:          sendLocationMessageRequest.sendMessageHC,
-                                                               wC:          sendLocationMessageRequest.sendMessageWC,
-                                                               threadId:    sendLocationMessageRequest.sendMessageThreadId,
-                                                               content:     sendLocationMessageRequest.sendMessageContent,
-                                                               metadata:    sendLocationMessageRequest.sendMessageMetadata,
-                                                               repliedTo:   sendLocationMessageRequest.sendMessageRepliedTo,
-                                                               fileToSend:  nil,
-                                                               imageToSend: (imageData as! Data),
-                                                               typeCode:    sendLocationMessageRequest.typeCode ?? self.generalTypeCode,
-                                                               uniqueId:    sendLocationMessageRequest.uniqueId ?? self.generateUUID())
+            
+            let uploadInput = UploadRequestModel(dataToSend:        (imageData as! Data),
+                                                 fileExtension:     nil,
+                                                 fileName:          sendLocationMessageRequest.sendMessageImageName,
+                                                 originalFileName:  nil,
+                                                 threadId:          sendLocationMessageRequest.sendMessageThreadId,
+                                                 xC:                sendLocationMessageRequest.sendMessageXC,
+                                                 yC:                sendLocationMessageRequest.sendMessageYC,
+                                                 hC:                sendLocationMessageRequest.sendMessageHC,
+                                                 wC:                sendLocationMessageRequest.sendMessageWC,
+                                                 typeCode:          sendLocationMessageRequest.typeCode ?? self.generalTypeCode,
+                                                 uniqueId:          sendLocationMessageRequest.uniqueId ?? self.generateUUID())
+            
+            let messageInput = SendTextMessageRequestModel(content: sendLocationMessageRequest.sendMessageContent ?? "",
+                                                           metadata: sendLocationMessageRequest.sendMessageMetadata,
+                                                           repliedTo: sendLocationMessageRequest.sendMessageRepliedTo,
+                                                           systemMetadata: nil,
+                                                           threadId: sendLocationMessageRequest.sendMessageThreadId,
+                                                           typeCode: sendLocationMessageRequest.sendMessageTypeCode ?? self.generalTypeCode,
+                                                           uniqueId: sendLocationMessageRequest.uniqueId ?? self.generateUUID())
+            
+            let fileMessageInput = SendFileMessageRequestModel(messageInput:    messageInput,
+                                                               uploadInput:     uploadInput)
             
             sendTM(params: fileMessageInput)
         }
         
         func sendTM(params: SendFileMessageRequestModel) {
-            sendFileMessage(inputModel: params, uniqueId: { (requestUniqueId) in
-                uniqueId(requestUniqueId)
+            
+            sendFileMessage(inputModel: params, uploadUniqueId: { (uploadImageUniqueId) in
+                uploadUniqueId(uploadImageUniqueId)
             }, uploadProgress: { (myProgress) in
                 uploadProgress(myProgress)
+            }, messageUniqueId: { (requestUniqueId) in
+                messageUniqueId(requestUniqueId)
             }, onSent: { (sent) in
                 onSent(sent)
             }, onDelivered: { (deliver) in

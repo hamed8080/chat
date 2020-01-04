@@ -200,17 +200,16 @@
         <attribute name="content" optional="YES" attributeType="String"/>
         <attribute name="fileName" optional="YES" attributeType="String"/>
         <attribute name="fileToSend" optional="YES" attributeType="Binary"/>
-        <attribute name="hC" optional="YES" attributeType="String"/>
-        <attribute name="imageName" optional="YES" attributeType="String"/>
+        <attribute name="hC" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="imageToSend" optional="YES" attributeType="Binary"/>
         <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="typeCode" optional="YES" attributeType="String"/>
         <attribute name="uniqueId" optional="YES" attributeType="String"/>
-        <attribute name="wC" optional="YES" attributeType="String"/>
-        <attribute name="xC" optional="YES" attributeType="String"/>
-        <attribute name="yC" optional="YES" attributeType="String"/>
+        <attribute name="wC" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="xC" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="yC" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <entity name="QueueOfForwardMessages" representedClassName=".QueueOfForwardMessages" syncable="YES">
         <attribute name="messageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
@@ -277,7 +276,7 @@
         <element name="MessageGaps" positionX="293.2421875" positionY="-115.6953125" width="128" height="90"/>
         <element name="PhoneContact" positionX="-261" positionY="0" width="128" height="105"/>
         <element name="QueueOfEditMessages" positionX="-243" positionY="18" width="128" height="148"/>
-        <element name="QueueOfFileMessages" positionX="-261" positionY="0" width="128" height="253"/>
+        <element name="QueueOfFileMessages" positionX="-261" positionY="0" width="128" height="238"/>
         <element name="QueueOfForwardMessages" positionX="-234" positionY="36" width="128" height="133"/>
         <element name="QueueOfTextMessages" positionX="-252" positionY="9" width="128" height="148"/>
         <element name="QueueOfUploadFiles" positionX="-252" positionY="9" width="128" height="163"/>

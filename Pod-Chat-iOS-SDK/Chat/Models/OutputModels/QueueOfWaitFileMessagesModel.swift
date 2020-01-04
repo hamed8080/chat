@@ -13,15 +13,15 @@ open class QueueOfWaitFileMessagesModel {
     
     let content:        String?
     let fileName:       String?
-    let imageName:      String?
+//    let imageName:      String?
 //    let metadata:       JSON?
     let metadata:       String?
     let repliedTo:      Int?
     let threadId:       Int?
-    let xC:             String?
-    let yC:             String?
-    let hC:             String?
-    let wC:             String?
+    let xC:             Int?
+    let yC:             Int?
+    let hC:             Int?
+    let wC:             Int?
     let fileToSend:     Data?
     let imageToSend:    Data?
     
@@ -30,15 +30,15 @@ open class QueueOfWaitFileMessagesModel {
     
     init(content:       String?,
          fileName:      String?,
-         imageName:     String?,
+//         imageName:     String?,
 //         metadata:      JSON?,
          metadata:      String?,
          repliedTo:     Int?,
          threadId:      Int?,
-         xC:            String?,
-         yC:            String?,
-         hC:            String?,
-         wC:            String?,
+         xC:            Int?,
+         yC:            Int?,
+         hC:            Int?,
+         wC:            Int?,
          fileToSend:    Data?,
          imageToSend:   Data?,
          typeCode:      String?,
@@ -46,7 +46,7 @@ open class QueueOfWaitFileMessagesModel {
         
         self.content        = content
         self.fileName       = fileName
-        self.imageName      = imageName
+//        self.imageName      = imageName
         self.metadata       = metadata
         self.repliedTo      = repliedTo
         self.threadId       = threadId
@@ -62,29 +62,61 @@ open class QueueOfWaitFileMessagesModel {
     }
     
     init(fileMessageInputModel: SendFileMessageRequestModel, uniqueId: String) {
-        self.content        = fileMessageInputModel.content
-        self.fileName       = fileMessageInputModel.fileName
-        self.imageName      = fileMessageInputModel.imageName
-//        self.metadata       = fileMessageInputModel.metadata
-        self.metadata       = (fileMessageInputModel.metadata != nil) ? "\(fileMessageInputModel.metadata!)" : nil
-        self.repliedTo      = fileMessageInputModel.repliedTo
-        self.threadId       = fileMessageInputModel.threadId
-        self.xC             = fileMessageInputModel.xC
-        self.yC             = fileMessageInputModel.yC
-        self.hC             = fileMessageInputModel.hC
-        self.wC             = fileMessageInputModel.wC
-        self.fileToSend     = fileMessageInputModel.fileToSend
-        self.imageToSend    = fileMessageInputModel.imageToSend
         
-        self.typeCode       = fileMessageInputModel.typeCode
+        self.content        = fileMessageInputModel.messageInput.content
+        self.metadata       = (fileMessageInputModel.messageInput.metadata != nil) ? "\(fileMessageInputModel.messageInput.metadata!)" : nil
+        self.repliedTo      = fileMessageInputModel.messageInput.repliedTo
+        self.threadId       = fileMessageInputModel.messageInput.threadId
+        self.typeCode       = fileMessageInputModel.messageInput.typeCode
         self.uniqueId       = uniqueId
+        
+        self.fileName       = fileMessageInputModel.uploadInput.fileName
+        if let file = fileMessageInputModel.uploadInput as? UploadFileRequestModel {
+            self.xC             = nil
+            self.yC             = nil
+            self.hC             = nil
+            self.wC             = nil
+            self.fileToSend     = file.dataToSend
+            self.imageToSend    = nil
+        } else if let image = fileMessageInputModel.uploadInput as? UploadImageRequestModel {
+            self.xC             = image.xC
+            self.yC             = image.yC
+            self.hC             = image.hC
+            self.wC             = image.wC
+            self.fileToSend     = nil
+            self.imageToSend    = image.dataToSend
+        } else {
+            self.xC             = nil
+            self.yC             = nil
+            self.hC             = nil
+            self.wC             = nil
+            self.fileToSend     = nil
+            self.imageToSend    = nil
+        }
+        
+//        self.content        = fileMessageInputModel.content
+//        self.fileName       = fileMessageInputModel.fileName
+////        self.imageName      = fileMessageInputModel.imageName
+////        self.metadata       = fileMessageInputModel.metadata
+//        self.metadata       = (fileMessageInputModel.metadata != nil) ? "\(fileMessageInputModel.metadata!)" : nil
+//        self.repliedTo      = fileMessageInputModel.repliedTo
+//        self.threadId       = fileMessageInputModel.threadId
+//        self.xC             = fileMessageInputModel.xC
+//        self.yC             = fileMessageInputModel.yC
+//        self.hC             = fileMessageInputModel.hC
+//        self.wC             = fileMessageInputModel.wC
+//        self.fileToSend     = fileMessageInputModel.fileToSend
+//        self.imageToSend    = fileMessageInputModel.imageToSend
+//
+//        self.typeCode       = fileMessageInputModel.typeCode
+//        self.uniqueId       = uniqueId
     }
     
     
     public func returnDataAsJSONAndData() -> (jsonResult: JSON, imageToSend: Data?, fileToSend: Data?) {
         let result: JSON = ["content":      content ?? NSNull(),
                             "fileName":     fileName ?? NSNull(),
-                            "imageName":    imageName ?? NSNull(),
+//                            "imageName":    imageName ?? NSNull(),
                             "metadata":     metadata ?? NSNull(),
                             "repliedTo":    repliedTo ?? NSNull(),
                             "threadId":     threadId ?? NSNull(),
