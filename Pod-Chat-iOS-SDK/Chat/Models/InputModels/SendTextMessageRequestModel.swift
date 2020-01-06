@@ -20,7 +20,7 @@ open class SendTextMessageRequestModel {
     public let threadId:        Int
     
     public let typeCode: String?
-    public let uniqueId: String?
+    public let uniqueId: String
     
     public init(content:        String,
                 metadata:       JSON?,
@@ -36,7 +36,7 @@ open class SendTextMessageRequestModel {
         self.systemMetadata = systemMetadata
         self.threadId       = threadId
         self.typeCode       = typeCode
-        self.uniqueId       = uniqueId
+        self.uniqueId       = uniqueId ?? UUID().uuidString
     }
     
 }

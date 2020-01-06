@@ -16,7 +16,7 @@ open class AddContactRequestModel {
     public let lastName:        String?
     
     public let typeCode:        String?
-    public let uniqueId:        String?
+    public let uniqueId:        String
     
     public init(cellphoneNumber:    String?,
                 email:              String?,
@@ -30,7 +30,7 @@ open class AddContactRequestModel {
         self.firstName          = firstName
         self.lastName           = lastName
         self.typeCode           = typeCode
-        self.uniqueId           = uniqueId
+        self.uniqueId           = uniqueId ?? UUID().uuidString
     }
     
 }

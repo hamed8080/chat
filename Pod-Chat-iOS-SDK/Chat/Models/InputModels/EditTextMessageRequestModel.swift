@@ -18,7 +18,7 @@ open class EditTextMessageRequestModel {
     public let messageId:   Int
     
     public let typeCode:    String?
-    public let uniqueId:    String?
+    public let uniqueId:    String
     
     public init(content:    String,
                 metadata:   JSON?,
@@ -32,7 +32,7 @@ open class EditTextMessageRequestModel {
         self.repliedTo  = repliedTo
         self.messageId  = messageId
         self.typeCode   = typeCode
-        self.uniqueId   = uniqueId
+        self.uniqueId   = uniqueId ?? UUID().uuidString
     }
     
 }

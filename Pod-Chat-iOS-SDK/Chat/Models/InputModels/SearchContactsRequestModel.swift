@@ -20,7 +20,7 @@ open class SearchContactsRequestModel {
     public let query:           String?
     
     public let typeCode:        String?
-    public let uniqueId:        String?
+    public let uniqueId:        String
 //    public let typeCode:        String?
     
     public init(cellphoneNumber:    String?,
@@ -43,7 +43,7 @@ open class SearchContactsRequestModel {
         self.size               = size
         self.query              = query
         self.typeCode           = typeCode
-        self.uniqueId           = uniqueId
+        self.uniqueId           = uniqueId ?? UUID().uuidString
     }
     
 }

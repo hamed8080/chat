@@ -67,6 +67,8 @@ extension Chat {
          *  -> if the cache is enabled by the user, go and retrieve UserInfo content and pass it to the user
          *
          */
+        let theUniqueId = generateUUID()
+        uniqueId(theUniqueId)
         
         userInfoCallbackToUser = completion
         
@@ -79,7 +81,7 @@ extension Chat {
                                             token:              token,
                                             tokenIssuer:        nil,
                                             typeCode:           generalTypeCode,
-                                            uniqueId:           generateUUID(),
+                                            uniqueId:           theUniqueId,
                                             uniqueIds:          nil,
                                             isCreateThreadAndSendMessage: nil)
         
@@ -90,13 +92,14 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callback:           UserInfoCallback(),
-                                callbacks:          nil,
+//                                callback:           nil,
+                                callbacks:          [(UserInfoCallback(), theUniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
-                                seenCallback:       nil) { (getUserInfoUniqueId) in
-            uniqueId(getUserInfoUniqueId)
-        }
+                                seenCallback:       nil)
+//        { (getUserInfoUniqueId) in
+//            uniqueId(getUserInfoUniqueId)
+//        }
         
         
         

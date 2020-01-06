@@ -20,7 +20,7 @@ open class UpdateThreadInfoRequestModel {
     public let title:           String? // New Title for thread
     
     public let typeCode:        String?
-    public let uniqueId:        String?
+    public let uniqueId:        String
     
     public init(description:        String?,
                 image:              String?,
@@ -36,7 +36,7 @@ open class UpdateThreadInfoRequestModel {
         self.threadId       = threadId
         self.title          = title
         self.typeCode       = typeCode
-        self.uniqueId       = uniqueId
+        self.uniqueId       = uniqueId ?? UUID().uuidString
     }
     
     func convertContentToJSON() -> JSON {

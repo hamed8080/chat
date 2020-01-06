@@ -13,7 +13,7 @@ open class SpamPvThreadRequestModel {
     public let threadId:    Int?
     
     public let typeCode:    String?
-    public let uniqueId:    String?
+    public let uniqueId:    String
     
     public init(threadId:   Int?,
                 typeCode:   String?,
@@ -21,7 +21,7 @@ open class SpamPvThreadRequestModel {
         
         self.threadId   = threadId
         self.typeCode   = typeCode
-        self.uniqueId   = uniqueId
+        self.uniqueId   = uniqueId ?? UUID().uuidString
     }
     
 }

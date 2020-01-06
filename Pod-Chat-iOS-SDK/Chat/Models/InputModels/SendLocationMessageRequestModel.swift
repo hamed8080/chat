@@ -34,7 +34,7 @@ open class SendLocationMessageRequestModel {
     public let sendMessageTypeCode:    String?
     
     public let typeCode:         String?
-    public let uniqueId:         String?
+    public let uniqueId:         String
     
     public init(mapStaticCenterLat:     Double,
                 mapStaticCenterLng:     Double,
@@ -74,7 +74,7 @@ open class SendLocationMessageRequestModel {
         self.sendMessageRepliedTo   = sendMessageRepliedTo
         self.sendMessageTypeCode    = sendMessageTypeCode
         self.typeCode               = typeCode
-        self.uniqueId               = uniqueId
+        self.uniqueId               = uniqueId ?? UUID().uuidString
     }
     
 }

@@ -9,13 +9,16 @@
 import Foundation
 import FanapPodAsyncSDK
 import SwiftyJSON
+import Alamofire
 
 
 // MARK: - Public Methods
 
 extension Chat {
     
-    
+    public func isConnectedToInternet() -> Bool {
+        return NetworkReachabilityManager()!.isReachable
+    }
     
     public func deleteCache() {
         Chat.cacheDB.deleteCacheData()
@@ -68,12 +71,12 @@ extension Chat {
                                                       pushMsgType:  3)
                 
                 sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                        callback:           nil,
+//                                        callback:           nil,
                                         callbacks:          nil,
                                         sentCallback:       nil,
                                         deliverCallback:    nil,
-                                        seenCallback:       nil,
-                                        uniuqueIdCallback:  nil)
+                                        seenCallback:       nil)
+//                                        uniuqueIdCallback:  nil)
             }
         }
     }
@@ -125,12 +128,12 @@ extension Chat {
                                                       pushMsgType:  3)
                 
                 sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                        callback:           nil,
+//                                        callback:           nil,
                                         callbacks:          nil,
                                         sentCallback:       nil,
                                         deliverCallback:    nil,
-                                        seenCallback:       nil,
-                                        uniuqueIdCallback:  nil)
+                                        seenCallback:       nil)
+//                                        uniuqueIdCallback:  nil)
             }
         }
     }

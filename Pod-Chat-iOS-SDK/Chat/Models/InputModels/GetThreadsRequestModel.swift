@@ -24,7 +24,7 @@ open class GetThreadsRequestModel {
     public let threadIds:               [Int]?  // An array of thread ids to be received
     
     public let typeCode:                String?
-    public let uniqueId:                String?
+    public let uniqueId:                String
     
     public init(count:                  Int?,
                 creatorCoreUserId:      Int?,
@@ -48,7 +48,7 @@ open class GetThreadsRequestModel {
         self.partnerCoreUserId      = partnerCoreUserId
         self.threadIds              = threadIds
         self.typeCode               = typeCode
-        self.uniqueId               = uniqueId
+        self.uniqueId               = uniqueId ?? UUID().uuidString
     }
     
     public init(json: JSON) {
@@ -62,7 +62,7 @@ open class GetThreadsRequestModel {
         self.partnerCoreUserId      = json["partnerCoreUserId"].int
         self.threadIds              = json["threadIds"].arrayObject as? [Int]
         self.typeCode               = json["typeCode"].string
-        self.uniqueId               = json["uniqueId"].string
+        self.uniqueId               = json["uniqueId"].string ?? UUID().uuidString
     }
     
     func convertContentToJSON() -> JSON {
@@ -91,26 +91,6 @@ open class GetThreadsRequestModel {
             content["metadataCriteria"] = JSON(metadataCriteria)
         }
         
-        return content
-    }
-    
-}
-
-
-class GetAllThreadsRequestModel {
-    
-    public let summary:         Bool
-    
-    public let typeCode: String?
-    
-    init(summary:   Bool,
-         typeCode:  String?) {
-        self.summary    = summary
-        self.typeCode   = typeCode
-    }
-    
-    func convertContentToJSON() -> JSON {
-        let content: JSON = ["summary": self.summary]
         return content
     }
     

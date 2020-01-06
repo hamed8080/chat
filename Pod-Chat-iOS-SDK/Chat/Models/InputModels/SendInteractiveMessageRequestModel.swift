@@ -18,7 +18,7 @@ open class SendInteractiveMessageRequestModel {
     public let systemMetadata:  JSON?
     
     public let typeCode:        String?
-    public let uniqueId:        String?
+    public let uniqueId:        String
     
     public init(content:        String,
                 messageId:      Int,
@@ -32,7 +32,7 @@ open class SendInteractiveMessageRequestModel {
         self.metadata       = metadata
         self.systemMetadata = systemMetadata
         self.typeCode       = typeCode
-        self.uniqueId       = uniqueId
+        self.uniqueId       = uniqueId ?? UUID().uuidString
     }
     
 }

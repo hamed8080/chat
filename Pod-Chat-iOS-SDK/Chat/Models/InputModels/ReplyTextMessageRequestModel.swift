@@ -19,7 +19,7 @@ open class ReplyTextMessageRequestModel {
     public let subjectId:   Int
     
     public let typeCode:    String?
-    public let uniqueId:    String?
+    public let uniqueId:    String
     
     public init(content:    String,
                 metadata:   JSON?,
@@ -33,7 +33,7 @@ open class ReplyTextMessageRequestModel {
         self.repliedTo  = repliedTo
         self.subjectId  = subjectId
         self.typeCode   = typeCode
-        self.uniqueId   = uniqueId
+        self.uniqueId   = uniqueId ?? UUID().uuidString
     }
     
 }

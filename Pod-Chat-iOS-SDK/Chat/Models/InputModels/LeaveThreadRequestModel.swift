@@ -14,7 +14,7 @@ open class LeaveThreadRequestModel {
     public let threadId:    Int
     
     public let typeCode:    String?
-    public let uniqueId:    String?
+    public let uniqueId:    String
     
     public init(
 //                content:            [Int]?,
@@ -25,7 +25,7 @@ open class LeaveThreadRequestModel {
 //        self.content            = content
         self.threadId   = threadId
         self.typeCode   = typeCode
-        self.uniqueId   = uniqueId
+        self.uniqueId   = uniqueId ?? UUID().uuidString
     }
     
 }

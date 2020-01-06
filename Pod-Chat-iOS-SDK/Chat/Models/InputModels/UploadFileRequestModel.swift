@@ -11,29 +11,6 @@ import SwiftyJSON
 
 open class UploadFileRequestModel: UploadRequestModel {
     
-//    public init(dataToSend:         Data,
-//                fileExtension:      String?,
-//                fileName:           String?,
-//                originalFileName:   String?,
-//                threadId:           Int?,
-//                typeCode:           String?,
-//                uniqueId:           String?) {
-//
-//        super.init()
-//
-//        let theFileName = fileName ?? "\(NSUUID().uuidString))"
-//
-//        self.dataToSend         = dataToSend
-//        self.fileExtension      = fileExtension
-//        self.fileName           = theFileName
-//        self.fileSize           = Int64(dataToSend.count)
-//        self.originalFileName   = originalFileName ?? theFileName
-//        self.threadId           = threadId
-//        self.typeCode           = typeCode
-//        self.uniqueId           = uniqueId ?? NSUUID().uuidString
-//    }
-    
-    
     func convertContentToParameters() -> Parameters {
         
         var content: Parameters = [:]
