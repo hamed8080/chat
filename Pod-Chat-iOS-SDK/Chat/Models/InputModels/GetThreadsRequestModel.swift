@@ -7,7 +7,6 @@
 //
 
 import Foundation
-
 import SwiftyJSON
 
 
@@ -15,7 +14,7 @@ open class GetThreadsRequestModel {
     
     public let count:                   Int?    // count of threads to be received (default value is 50)
     public let creatorCoreUserId:       Int?    // SSO User Id of thread creator
-    public let metadataCriteria:        JSON?   //
+    public let metadataCriteria:        String?   //
     public let name:                    String? // Search term to look up in thread Titles
     public let new:                     Bool?   //
     public let offset:                  Int?    // offset of select query (default value is 0)
@@ -28,7 +27,7 @@ open class GetThreadsRequestModel {
     
     public init(count:                  Int?,
                 creatorCoreUserId:      Int?,
-                metadataCriteria:       JSON?,
+                metadataCriteria:       String?,
                 name:                   String?,
                 new:                    Bool?,
                 offset:                 Int?,
@@ -54,7 +53,7 @@ open class GetThreadsRequestModel {
     public init(json: JSON) {
         self.count                  = json["count"].int
         self.creatorCoreUserId      = json["creatorCoreUserId"].int
-        self.metadataCriteria       = json["metadataCriteria"]
+        self.metadataCriteria       = json["metadataCriteria"].string
         self.name                   = json["name"].string
         self.new                    = json["new"].bool
         self.offset                 = json["offset"].int

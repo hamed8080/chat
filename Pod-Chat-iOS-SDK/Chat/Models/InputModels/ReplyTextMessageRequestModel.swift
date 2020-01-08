@@ -8,13 +8,11 @@
 
 import Foundation
 
-import SwiftyJSON
-
 
 open class ReplyTextMessageRequestModel {
     
     public let content:     String
-    public let metadata:    JSON?
+    public let metadata:    String?
     public let repliedTo:   Int
     public let subjectId:   Int
     
@@ -22,7 +20,7 @@ open class ReplyTextMessageRequestModel {
     public let uniqueId:    String
     
     public init(content:    String,
-                metadata:   JSON?,
+                metadata:   String?,
                 repliedTo:  Int,
                 subjectId:  Int,
                 typeCode:   String?,

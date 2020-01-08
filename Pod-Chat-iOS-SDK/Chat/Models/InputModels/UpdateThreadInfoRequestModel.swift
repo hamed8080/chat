@@ -15,7 +15,7 @@ open class UpdateThreadInfoRequestModel {
     
     public let description:     String? // Description for thread
     public let image:           String? // URL og thread image to be set
-    public let metadata:        JSON?   // New Metadata to be set on thread
+    public let metadata:        String?   // New Metadata to be set on thread
     public let threadId:        Int     // Id of thread
     public let title:           String? // New Title for thread
     
@@ -24,7 +24,7 @@ open class UpdateThreadInfoRequestModel {
     
     public init(description:        String?,
                 image:              String?,
-                metadata:           JSON?,
+                metadata:           String?,
                 threadId:           Int,
                 title:              String,
                 typeCode:           String?,
@@ -41,21 +41,21 @@ open class UpdateThreadInfoRequestModel {
     
     func convertContentToJSON() -> JSON {
         var content: JSON = [:]
-        if let image = self.image {
-            content["image"] = JSON(image)
+        if let image_ = self.image {
+            content["image"] = JSON(image_)
         }
-        if let description = self.description {
-            content["description"] = JSON(description)
+        if let description_ = self.description {
+            content["description"] = JSON(description_)
         }
-        if let name = self.title {
-            content["name"] = JSON(name)
+        if let name_ = self.title {
+            content["name"] = JSON(name_)
         }
-        if let metadata = self.metadata {
-            let metadataStr = "\(metadata)"
+        if let metadata_ = self.metadata {
+            let metadataStr = metadata_
             content["metadata"] = JSON(metadataStr)
         }
-        if let title = self.title {
-            content["title"] = JSON(title)
+        if let title_ = self.title {
+            content["title"] = JSON(title_)
         }
         
         return content

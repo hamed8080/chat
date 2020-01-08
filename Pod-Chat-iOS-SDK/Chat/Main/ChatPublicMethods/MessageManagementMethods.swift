@@ -371,7 +371,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.EDIT_MESSAGE.rawValue,
                                             content:            messageTxtContent,
-                                            metadata:           (editMessageInput.metadata != nil) ? "\(editMessageInput.metadata!)" : nil,
+                                            metadata:           (editMessageInput.metadata != nil) ? (editMessageInput.metadata!) : nil,
                                             repliedTo:          editMessageInput.repliedTo,
                                             systemMetadata:     nil,
                                             subjectId:          editMessageInput.messageId,
@@ -517,7 +517,7 @@ extension Chat {
             for (index, item) in forwardMessageInput.messageIds.enumerated() {
                 let messageObjectToSendToQueue = QueueOfWaitForwardMessagesModel(//messageIds:    [item],
                                                                                  messageId:     item,
-                                                                                 metadata:      (forwardMessageInput.metadata != nil) ? "\(forwardMessageInput.metadata!)" : nil,
+                                                                                 metadata:      (forwardMessageInput.metadata != nil) ? (forwardMessageInput.metadata!) : nil,
                                                                                  repliedTo:     forwardMessageInput.repliedTo,
                                                                                  threadId:      forwardMessageInput.threadId,
                                                                                  typeCode:      forwardMessageInput.typeCode,
@@ -690,7 +690,7 @@ extension Chat {
         // this will call when all data were uploaded and it will sends the textMessage
         func sendMessage(withMetadata: JSON) {
             let sendMessageParamModel = SendTextMessageRequestModel(content:        sendFileMessageInput.messageInput.content,
-                                                                    metadata:       withMetadata,
+                                                                    metadata:       "\(withMetadata)",
                                                                     repliedTo:      sendFileMessageInput.messageInput.repliedTo,
                                                                     systemMetadata: sendFileMessageInput.messageInput.metadata,
                                                                     threadId:       sendFileMessageInput.messageInput.threadId,

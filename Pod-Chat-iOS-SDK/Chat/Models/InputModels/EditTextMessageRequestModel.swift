@@ -7,13 +7,12 @@
 //
 
 import Foundation
-import SwiftyJSON
 
 
 open class EditTextMessageRequestModel {
     
     public let content:     String
-    public let metadata:    JSON?
+    public let metadata:    String?
     public let repliedTo:   Int?
     public let messageId:   Int
     
@@ -21,7 +20,7 @@ open class EditTextMessageRequestModel {
     public let uniqueId:    String
     
     public init(content:    String,
-                metadata:   JSON?,
+                metadata:   String?,
                 repliedTo:  Int?,
                 messageId:  Int,
                 typeCode:   String?,

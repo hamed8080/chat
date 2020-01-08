@@ -7,25 +7,24 @@
 //
 
 import Foundation
-
 import SwiftyJSON
 
 
 open class SendTextMessageRequestModel {
     
     public let content:         String
-    public let metadata:        JSON?
+    public let metadata:        String?
     public let repliedTo:       Int?
-    public let systemMetadata:  JSON?
+    public let systemMetadata:  String?
     public let threadId:        Int
     
     public let typeCode: String?
     public let uniqueId: String
     
     public init(content:        String,
-                metadata:       JSON?,
+                metadata:       String?,
                 repliedTo:      Int?,
-                systemMetadata: JSON?,
+                systemMetadata: String?,
                 threadId:       Int,
                 typeCode:       String?,
                 uniqueId:       String?) {

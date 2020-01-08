@@ -17,11 +17,34 @@ open class MessageInput {
     public let repliedTo:           Int?
     public let text:                String?
     public let type:                String?
-    public var metadata:            String?
+    var metadata:            String?
     public let systemMetadata:      String?
     public let uniqueId:            String
     
     public init(forwardedMessageIds:   [String]?,
+                repliedTo:             Int?,
+                text:                  String?,
+                type:                  String?,
+//                metadata:              String?,
+                systemMetadata:        String?,
+                uniqueId:              String?) {
+        
+        self.forwardedMessageIds = forwardedMessageIds
+        if (forwardedMessageIds?.count ?? 0) > 0 {
+            self.forwardedUniqueIds = []
+        }
+        for _ in self.forwardedMessageIds ?? [] {
+            self.forwardedUniqueIds?.append(UUID().uuidString)
+        }
+        self.repliedTo      = repliedTo
+        self.text           = text
+        self.type           = type
+        self.metadata       = nil
+        self.systemMetadata = systemMetadata
+        self.uniqueId       = uniqueId ?? UUID().uuidString
+    }
+    
+    init(forwardedMessageIds:   [String]?,
          repliedTo:             Int?,
          text:                  String?,
          type:                  String?,

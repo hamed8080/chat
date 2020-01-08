@@ -18,7 +18,7 @@ open class GetHistoryRequestModel {
 //    public let lastMessageId:       Int?
     public let messageId:           Int?        // Id of single message to get
     public let messageType:         Int?        // Type of messages to get (types should be set by client)
-    public let metadataCriteria:    JSON?       // This JSON will be used to search in message metadata with GraphQL
+    public let metadataCriteria:    String?       // This JSON will be used to search in message metadata with GraphQL
     public let offset:              Int?        // Offset of select query
     public let order:               String?   // Order of select query (default: DESC)
     public let query:               String?     // Search term to be looked up in messages content
@@ -40,7 +40,7 @@ open class GetHistoryRequestModel {
 //                lastMessageId:      Int?,
                 messageId:          Int?,
                 messageType:        Int?,
-                metadataCriteria:   JSON?,
+                metadataCriteria:   String?,
                 offset:             Int?,
                 order:              String?,
                 query:              String?,
@@ -76,7 +76,7 @@ open class GetHistoryRequestModel {
         self.fromTime           = json["fromTime"].uInt
         self.messageId          = json["messageId"].int
         self.messageType        = json["messageType"].int
-        self.metadataCriteria   = json["metadataCriteria"]
+        self.metadataCriteria   = json["metadataCriteria"].string
         self.offset             = json["offset"].int
         self.order              = json["order"].string
         self.query              = json["query"].string

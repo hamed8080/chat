@@ -9,8 +9,6 @@
 
 import Foundation
 
-import SwiftyJSON
-
 
 open class SendLocationMessageRequestModel {
     
@@ -29,7 +27,7 @@ open class SendLocationMessageRequestModel {
     public let sendMessageThreadId:    Int
     
     public let sendMessageContent:     String?
-    public let sendMessageMetadata:    JSON?
+    public let sendMessageMetadata:    String?
     public let sendMessageRepliedTo:   Int?
     public let sendMessageTypeCode:    String?
     
@@ -49,7 +47,7 @@ open class SendLocationMessageRequestModel {
                 sendMessageWC:          Int?,
                 sendMessageThreadId:    Int,
                 sendMessageContent:     String?,
-                sendMessageMetadata:    JSON?,
+                sendMessageMetadata:    String?,
                 sendMessageRepliedTo:   Int?,
                 sendMessageTypeCode:    String?,
                 typeCode:               String?,
