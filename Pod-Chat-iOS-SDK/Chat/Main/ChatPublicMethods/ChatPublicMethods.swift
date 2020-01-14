@@ -42,8 +42,7 @@ extension Chat {
         log.verbose("Try to send deliver message for a message id with this parameters: \n \(deliverInput)", context: "Chat")
         
         if let theUserInfo = userInfo {
-            let userInfoJSON = theUserInfo.formatToJSON()
-            if (deliverInput.ownerId != userInfoJSON["id"].intValue) {
+            if (deliverInput.ownerId != theUserInfo.id!) {
                 /*
                 let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.DELIVERY.rawValue,
                                                "content":           deliverInput.messageId,
@@ -99,8 +98,7 @@ extension Chat {
         log.verbose("Try to send deliver message for a message id with this parameters: \n \(seenInput)", context: "Chat")
         
         if let theUserInfo = userInfo {
-            let userInfoJSON = theUserInfo.formatToJSON()
-            if (seenInput.ownerId != userInfoJSON["id"].intValue) {
+            if (seenInput.ownerId != theUserInfo.id!) {
                 /*
                 let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.SEEN.rawValue,
                                                "content":           seenInput.messageId,
