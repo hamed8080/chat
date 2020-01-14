@@ -14,7 +14,7 @@ open class AddParticipantsRequestModel {
     public let threadId:    Int     //
     
     public let typeCode:    String?
-    public let uniqueId:    String?
+    public let uniqueId:    String
     
     public init(contacts:   [Int],
                 threadId:   Int,
@@ -24,7 +24,7 @@ open class AddParticipantsRequestModel {
         self.contacts   = contacts
         self.threadId   = threadId
         self.typeCode   = typeCode
-        self.uniqueId   = uniqueId
+        self.uniqueId   = uniqueId ?? UUID().uuidString
     }
     
 }

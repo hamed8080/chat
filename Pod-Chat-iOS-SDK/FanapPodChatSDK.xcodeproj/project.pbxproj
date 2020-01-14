@@ -23,6 +23,9 @@
 		3E0A76CA22AFDBF6009D669E /* CreateReturnData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0A76C922AFDBF6009D669E /* CreateReturnData.swift */; };
 		3E0B910022F579C300986A96 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0B90FF22F579C300986A96 /* Networking.swift */; };
 		3E0B910122F579C300986A96 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0B90FF22F579C300986A96 /* Networking.swift */; };
+		3E10995623C365240034093E /* MessageInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E10995523C365240034093E /* MessageInput.swift */; };
+		3E10996223C3659B0034093E /* GetAllThreadsRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E10996123C3659B0034093E /* GetAllThreadsRequestModel.swift */; };
+		3E10996423C365EC0034093E /* SetRemoveRoleRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E10996323C365EC0034093E /* SetRemoveRoleRequestModel.swift */; };
 		3E11F56121DA18D0004B3B2C /* GetImageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E11F56021DA18D0004B3B2C /* GetImageRequestModel.swift */; };
 		3E11F56D21DA1A02004B3B2C /* GetFileRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E11F56C21DA1A02004B3B2C /* GetFileRequestModel.swift */; };
 		3E1EA58423A4ABC500B4C3F8 /* SendInteractiveMessageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1EA58323A4ABC500B4C3F8 /* SendInteractiveMessageRequestModel.swift */; };
@@ -304,6 +307,7 @@
 		3EE0694B2212A3100099068F /* PhoneContact+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE069482212A3100099068F /* PhoneContact+CoreDataClass.swift */; };
 		3EE0694C2212A3100099068F /* PhoneContact+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE069492212A3100099068F /* PhoneContact+CoreDataProperties.swift */; };
 		3EE0694D2212A3100099068F /* PhoneContact+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE069492212A3100099068F /* PhoneContact+CoreDataProperties.swift */; };
+		3EE4D99923C085870030BB0D /* UploadRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE4D99823C085870030BB0D /* UploadRequestModel.swift */; };
 		3EE6B50F22DF46A400540F17 /* SendMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE6B50E22DF46A400540F17 /* SendMessageModel.swift */; };
 		3EEA835422EEC6A10014B075 /* EditMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EEA835322EEC6A10014B075 /* EditMessageModel.swift */; };
 		3EEA835522EEC6A10014B075 /* EditMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EEA835322EEC6A10014B075 /* EditMessageModel.swift */; };
@@ -401,6 +405,9 @@
 		3E0A76C522AFD8B0009D669E /* UserManagementMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManagementMethods.swift; sourceTree = "<group>"; };
 		3E0A76C922AFDBF6009D669E /* CreateReturnData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateReturnData.swift; sourceTree = "<group>"; };
 		3E0B90FF22F579C300986A96 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
+		3E10995523C365240034093E /* MessageInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageInput.swift; sourceTree = "<group>"; };
+		3E10996123C3659B0034093E /* GetAllThreadsRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAllThreadsRequestModel.swift; sourceTree = "<group>"; };
+		3E10996323C365EC0034093E /* SetRemoveRoleRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetRemoveRoleRequestModel.swift; sourceTree = "<group>"; };
 		3E11F56021DA18D0004B3B2C /* GetImageRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetImageRequestModel.swift; sourceTree = "<group>"; };
 		3E11F56C21DA1A02004B3B2C /* GetFileRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetFileRequestModel.swift; sourceTree = "<group>"; };
 		3E1C357D225B5E79001A343B /* Starscream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Starscream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -637,6 +644,7 @@
 		3EE0261621206EA6001810FB /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
 		3EE069482212A3100099068F /* PhoneContact+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhoneContact+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3EE069492212A3100099068F /* PhoneContact+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhoneContact+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		3EE4D99823C085870030BB0D /* UploadRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadRequestModel.swift; sourceTree = "<group>"; };
 		3EE6B50E22DF46A400540F17 /* SendMessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMessageModel.swift; sourceTree = "<group>"; };
 		3EEA835322EEC6A10014B075 /* EditMessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMessageModel.swift; sourceTree = "<group>"; };
 		3EEA836022EEC6CB0014B075 /* DeleteMessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteMessageModel.swift; sourceTree = "<group>"; };
@@ -748,6 +756,7 @@
 				3ECFCAB7228967BD00313419 /* ClearHistoryRequestModel.swift */,
 				3EA1568721CE1BB7004B1346 /* CreateThreadRequestModel.swift */,
 				3EA1568921CE1BCB004B1346 /* CreateThreadWithMessageRequestModel.swift */,
+				3E10995523C365240034093E /* MessageInput.swift */,
 				3E56EDD423BCE07100FED6CD /* CreateThreadWithFileMessageRequestModel.swift */,
 				3EA1569F21CE1CAE004B1346 /* DeleteMessageRequestModel.swift */,
 				3E7ACC0B22C2376800042168 /* DeleteMultipleMessagesRequestModel.swift */,
@@ -762,6 +771,7 @@
 				3E11F56021DA18D0004B3B2C /* GetImageRequestModel.swift */,
 				3EA1568D21CE1BED004B1346 /* GetThreadParticipantsRequestModel.swift */,
 				3EA1568321CE1B86004B1346 /* GetThreadsRequestModel.swift */,
+				3E10996123C3659B0034093E /* GetAllThreadsRequestModel.swift */,
 				3EA1569321CE1C2B004B1346 /* LeaveThreadRequestModel.swift */,
 				3E8D56D421DB975700B844DE /* MapReverseRequestModel.swift */,
 				3E9853E6222C2DB900BD38D0 /* SendLocationMessageRequestModel.swift */,
@@ -770,6 +780,7 @@
 				3E00CAF621DCA9030029B1FC /* MapStaticImageRequestModel.swift */,
 				3EA156A921CE1D10004B1346 /* MessageDeliverySeenListRequestModel.swift */,
 				3EA1568B21CE1BDC004B1346 /* MuteAndUnmuteThreadRequestModel.swift */,
+				3E8ADCF023B783CC00E3538D /* PinAndUnpinThreadRequestModel.swift */,
 				3EA1567921CE1B0B004B1346 /* RemoveContactsRequestModel.swift */,
 				3EA1569121CE1C15004B1346 /* RemoveParticipantsRequestModel.swift */,
 				3EA1569921CE1C68004B1346 /* ReplyTextMessageRequestModel.swift */,
@@ -779,13 +790,14 @@
 				3E1EA58323A4ABC500B4C3F8 /* SendInteractiveMessageRequestModel.swift */,
 				3E8E923022A38F2D0037CD41 /* SendSignalMessageRequestModel.swift */,
 				3E8E080C229567040077C685 /* SetRoleRequestModel.swift */,
+				3E10996323C365EC0034093E /* SetRemoveRoleRequestModel.swift */,
 				3EA156A721CE1D02004B1346 /* SpamPvThreadRequestModel.swift */,
 				3EA1567F21CE1B5B004B1346 /* UnblockContactsRequestModel.swift */,
 				3EA1567721CE1AF0004B1346 /* UpdateContactsRequestModel.swift */,
 				3EA156A521CE1CE8004B1346 /* UpdateThreadInfoRequestModel.swift */,
+				3EE4D99823C085870030BB0D /* UploadRequestModel.swift */,
 				3EA156A321CE1CD6004B1346 /* UploadFileRequestModel.swift */,
 				3EA156A121CE1CC4004B1346 /* UploadImageRequestModel.swift */,
-				3E8ADCF023B783CC00E3538D /* PinAndUnpinThreadRequestModel.swift */,
 			);
 			path = InputModels;
 			sourceTree = "<group>";
@@ -1300,6 +1312,7 @@
 				3E8ADC8123B358F300E3538D /* DownloaUploadActions.swift in Sources */,
 				3EB5206722ABF29D00B7EA45 /* CreateThreadCallback.swift in Sources */,
 				3E24084821F5C844001F32F1 /* CMFile+CoreDataClass.swift in Sources */,
+				3EE4D99923C085870030BB0D /* UploadRequestModel.swift in Sources */,
 				3E24085021F5C844001F32F1 /* CMContact+CoreDataClass.swift in Sources */,
 				3EBBEDF62174C6AF00F5CDC7 /* CreateThreadModel.swift in Sources */,
 				3E24083C21F5C844001F32F1 /* CMMessage+CoreDataClass.swift in Sources */,
@@ -1427,6 +1440,7 @@
 				3E3315A723B206CC0070A3D1 /* BotEventModel.swift in Sources */,
 				3E8ADC7D23B3556300E3538D /* ServiceAddresses.swift in Sources */,
 				3E8ADCFD23B7845200E3538D /* PinThreadCallback.swift in Sources */,
+				3E10995623C365240034093E /* MessageInput.swift in Sources */,
 				3EA1569421CE1C2B004B1346 /* LeaveThreadRequestModel.swift in Sources */,
 				3E24083E21F5C844001F32F1 /* CMMessage+CoreDataProperties.swift in Sources */,
 				3EBBEDD72174C27B00F5CDC7 /* Message.swift in Sources */,
@@ -1442,6 +1456,7 @@
 				3EA1567C21CE1B1F004B1346 /* BlockContactsRequestModel.swift in Sources */,
 				3EA156BD21CE274E004B1346 /* CoreDataStack.swift in Sources */,
 				3EBBEDE52174C36700F5CDC7 /* MessageChangeState.swift in Sources */,
+				3E10996423C365EC0034093E /* SetRemoveRoleRequestModel.swift in Sources */,
 				3EB5207922ABF43500B7EA45 /* BlockContactCallbacks.swift in Sources */,
 				3E24084621F5C844001F32F1 /* CMConversation+CoreDataProperties.swift in Sources */,
 				3E0A76C422AFD7C0009D669E /* MapManagementMethods.swift in Sources */,
@@ -1458,6 +1473,7 @@
 				3EA1567621CE1AC9004B1346 /* AddContactsRequestModel.swift in Sources */,
 				3E8E923122A38F2D0037CD41 /* SendSignalMessageRequestModel.swift in Sources */,
 				3E8ADD0123B7855500E3538D /* UnpinThreadCallback.swift in Sources */,
+				3E10996223C3659B0034093E /* GetAllThreadsRequestModel.swift in Sources */,
 				3EB5208922ABF56600B7EA45 /* GetAdminListCallback.swift in Sources */,
 				3EB5204B22ABE83100B7EA45 /* CacheExtensions.swift in Sources */,
 				3EB5205E22ABF1A400B7EA45 /* UserInfoCallback.swift in Sources */,
@@ -1743,7 +1759,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 0.5.8.4;
+				MARKETING_VERSION = 0.5.8.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.fanapSoft.FanapPodChatSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1777,7 +1793,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 0.5.8.4;
+				MARKETING_VERSION = 0.5.8.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.fanapSoft.FanapPodChatSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -108,7 +108,7 @@ extension Chat {
                 
                 let getContactsModel = GetContactsModel(messageContent: arrayContent,
                                                         contentCount:   response.contentCount,
-                                                        count:          content?["count"].intValue ?? 0,
+                                                        count:          content?["size"].intValue ?? 0,
                                                         offset:         content?["offset"].intValue ?? 0,
                                                         hasError:       response.hasError,
                                                         errorMessage:   response.errorMessage,

@@ -14,7 +14,7 @@ open class RemoveParticipantsRequestModel {
     public let threadId:        Int
     
     public let typeCode:    String?
-    public let uniqueId:    String?
+    public let uniqueId:    String
     
     public init(participantIds: [Int],
                 threadId:       Int,
@@ -24,7 +24,7 @@ open class RemoveParticipantsRequestModel {
         self.participantIds = participantIds
         self.threadId       = threadId
         self.typeCode       = typeCode
-        self.uniqueId       = uniqueId
+        self.uniqueId       = uniqueId ?? UUID().uuidString
     }
     
 }

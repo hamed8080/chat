@@ -375,7 +375,9 @@ extension Cache {
         
 //        var andFetchPredicaArray = [NSPredicate]()
         
-        if (orFetchPredicatArray.count > 0) {
+        if (orFetchPredicatArray.count == 1) {
+            fetchRequest.predicate = orFetchPredicatArray.first!
+        } else if (orFetchPredicatArray.count > 1) {
             let predicateCompound = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.or, subpredicates: orFetchPredicatArray)
 //            andFetchPredicaArray.append(predicateCompound)
             fetchRequest.predicate = predicateCompound

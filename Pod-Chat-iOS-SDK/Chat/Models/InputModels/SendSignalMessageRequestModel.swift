@@ -7,13 +7,14 @@
 //
 
 import Foundation
+import SwiftyJSON
 
 open class SendSignalMessageRequestModel {
     
     public let signalType:  SignalMessageType
     public let threadId:    Int
     
-    public let uniqueId:    String?
+    public let uniqueId:    String
     
     public init(signalType: SignalMessageType,
                 threadId:   Int,
@@ -21,7 +22,14 @@ open class SendSignalMessageRequestModel {
         
         self.signalType = signalType
         self.threadId   = threadId
-        self.uniqueId   = uniqueId
+        self.uniqueId   = uniqueId ?? UUID().uuidString
+    }
+    
+    func convertContentToJSON() -> JSON {
+        var content: JSON = [:]
+        content["type"] = JSON("\(self.signalType.rawValue)")
+        
+        return content
     }
     
 }

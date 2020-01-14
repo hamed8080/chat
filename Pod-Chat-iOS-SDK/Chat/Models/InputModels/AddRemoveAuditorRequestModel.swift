@@ -15,7 +15,7 @@ open class AddRemoveAuditorRequestModel {
     public let threadId:        Int
     public let userId:          Int
     public let typeCode:        String?
-    public let uniqueId:        String?
+    public let uniqueId:        String
     
     public init(roles:              [Roles],
                 threadId:           Int,
@@ -27,7 +27,7 @@ open class AddRemoveAuditorRequestModel {
         self.threadId   = threadId
         self.userId     = userId
         self.typeCode   = typeCode
-        self.uniqueId   = uniqueId
+        self.uniqueId   = uniqueId ?? UUID().uuidString
     }
     
 //    func convertContentToJSON() -> JSON {

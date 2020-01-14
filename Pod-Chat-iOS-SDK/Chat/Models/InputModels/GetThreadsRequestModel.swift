@@ -7,7 +7,6 @@
 //
 
 import Foundation
-
 import SwiftyJSON
 
 
@@ -15,7 +14,7 @@ open class GetThreadsRequestModel {
     
     public let count:                   Int?    // count of threads to be received (default value is 50)
     public let creatorCoreUserId:       Int?    // SSO User Id of thread creator
-    public let metadataCriteria:        JSON?   //
+    public let metadataCriteria:        String?   //
     public let name:                    String? // Search term to look up in thread Titles
     public let new:                     Bool?   //
     public let offset:                  Int?    // offset of select query (default value is 0)
@@ -24,11 +23,11 @@ open class GetThreadsRequestModel {
     public let threadIds:               [Int]?  // An array of thread ids to be received
     
     public let typeCode:                String?
-    public let uniqueId:                String?
+    public let uniqueId:                String
     
     public init(count:                  Int?,
                 creatorCoreUserId:      Int?,
-                metadataCriteria:       JSON?,
+                metadataCriteria:       String?,
                 name:                   String?,
                 new:                    Bool?,
                 offset:                 Int?,
@@ -48,13 +47,13 @@ open class GetThreadsRequestModel {
         self.partnerCoreUserId      = partnerCoreUserId
         self.threadIds              = threadIds
         self.typeCode               = typeCode
-        self.uniqueId               = uniqueId
+        self.uniqueId               = uniqueId ?? UUID().uuidString
     }
     
     public init(json: JSON) {
         self.count                  = json["count"].int
         self.creatorCoreUserId      = json["creatorCoreUserId"].int
-        self.metadataCriteria       = json["metadataCriteria"]
+        self.metadataCriteria       = json["metadataCriteria"].string
         self.name                   = json["name"].string
         self.new                    = json["new"].bool
         self.offset                 = json["offset"].int
@@ -62,7 +61,7 @@ open class GetThreadsRequestModel {
         self.partnerCoreUserId      = json["partnerCoreUserId"].int
         self.threadIds              = json["threadIds"].arrayObject as? [Int]
         self.typeCode               = json["typeCode"].string
-        self.uniqueId               = json["uniqueId"].string
+        self.uniqueId               = json["uniqueId"].string ?? UUID().uuidString
     }
     
     func convertContentToJSON() -> JSON {
@@ -91,26 +90,6 @@ open class GetThreadsRequestModel {
             content["metadataCriteria"] = JSON(metadataCriteria)
         }
         
-        return content
-    }
-    
-}
-
-
-class GetAllThreadsRequestModel {
-    
-    public let summary:         Bool
-    
-    public let typeCode: String?
-    
-    init(summary:   Bool,
-         typeCode:  String?) {
-        self.summary    = summary
-        self.typeCode   = typeCode
-    }
-    
-    func convertContentToJSON() -> JSON {
-        let content: JSON = ["summary": self.summary]
         return content
     }
     

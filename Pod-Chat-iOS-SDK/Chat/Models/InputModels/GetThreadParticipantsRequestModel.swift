@@ -18,7 +18,7 @@ open class GetThreadParticipantsRequestModel {
     public let offset:          Int?    // Offset of select Query
     public let threadId:        Int     // Id of thread which you want to get participants of
     public let typeCode:        String?
-    public let uniqueId:        String?
+    public let uniqueId:        String
     
     public init(admin:          Bool?,
                 count:          Int?,
@@ -38,7 +38,7 @@ open class GetThreadParticipantsRequestModel {
         self.offset         = offset
         self.threadId       = threadId
         self.typeCode       = typeCode
-        self.uniqueId       = uniqueId
+        self.uniqueId       = uniqueId ?? UUID().uuidString
     }
     
     public init(json: JSON) {
@@ -50,7 +50,7 @@ open class GetThreadParticipantsRequestModel {
         self.offset         = json["offset"].int
         self.threadId       = json["threadId"].intValue
         self.typeCode       = json["typeCode"].string
-        self.uniqueId       = json["uniqueId"].string
+        self.uniqueId       = json["uniqueId"].string ?? UUID().uuidString
     }
     
     func convertContentToJSON() -> JSON {

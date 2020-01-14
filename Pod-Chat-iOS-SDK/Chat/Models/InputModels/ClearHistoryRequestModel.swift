@@ -13,7 +13,7 @@ open class ClearHistoryRequestModel {
     public let threadId:    Int
     
     public let typeCode:    String?
-    public let uniqueId:    String?
+    public let uniqueId:    String
     
     public init(threadId:   Int,
                 typeCode:   String?,
@@ -21,14 +21,12 @@ open class ClearHistoryRequestModel {
         
         self.threadId   = threadId
         self.typeCode   = typeCode
-        self.uniqueId   = uniqueId
+        self.uniqueId   = uniqueId ?? UUID().uuidString
     }
     
     func convertContentToJSON() -> JSON {
         var content: JSON = [:]
-        if let uniqueId = self.uniqueId {
-            content["uniqueId"] = JSON(uniqueId)
-        }
+        content["threadId"] = JSON(self.threadId)
         
         return content
     }
