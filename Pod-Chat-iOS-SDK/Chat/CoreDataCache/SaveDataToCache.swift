@@ -491,7 +491,7 @@ extension Cache {
                                                                           query:            nil,
                                                                           threadId:         threadId,
                                                                           toTime:           nil,
-                                                                          uniqueId:         nil)
+                                                                          uniqueIds:        nil)
                     do {
                         if let result = try context.fetch(fetchRequest) as? [Message] {
                             if result.count > 0 {
@@ -525,7 +525,7 @@ extension Cache {
                                                                           query:            nil,
                                                                           threadId:         threadId,
                                                                           toTime:           nil,
-                                                                          uniqueId:         nil)
+                                                                          uniqueIds:        nil)
                     do {
                         if let result = try context.fetch(fetchRequest) as? [Message] {
                             if result.count > 0 {

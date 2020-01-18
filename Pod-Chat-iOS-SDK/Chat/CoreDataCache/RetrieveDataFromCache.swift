@@ -724,7 +724,7 @@ extension Cache {
                                        query:           String?,
                                        threadId:        Int,
                                        toTime:          UInt?,
-                                       uniqueId:        String?) -> GetHistoryModel? {
+                                       uniqueIds:       [String]?) -> GetHistoryModel? {
         /*
          first we have to make AND of these 2 properties: 'firstMessageId' AND 'lastMessageId'.
          then make them OR with 'query' property.
@@ -740,7 +740,7 @@ extension Cache {
                                                               query:            query,
                                                               threadId:         threadId,
                                                               toTime:           toTime,
-                                                              uniqueId:         uniqueId)
+                                                              uniqueIds:        uniqueIds)
         
         do {
             if let result = try context.fetch(fetchRequest) as? [CMMessage] {
@@ -804,7 +804,7 @@ extension Cache {
                                             query:          String?,
                                             threadId:       Int?,
                                             toTime:         UInt?,
-                                            uniqueId:       String?) -> NSFetchRequest<NSFetchRequestResult> {
+                                            uniqueIds:      [String]?) -> NSFetchRequest<NSFetchRequestResult> {
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMMessage")
         
@@ -813,15 +813,25 @@ extension Cache {
                                           ascending:    (order == Ordering.ascending.rawValue) ? true: false)
         fetchRequest.sortDescriptors = [sortByTime]
         
-        switch (messageId, uniqueId, threadId, fromTime, toTime, query) {
+        switch (messageId, uniqueIds, threadId, fromTime, toTime, query) {
             
         // if messageId is set, just search for message that has this exact messageId
         case let (.some(myMessageId), _, _, _, _, _):
             fetchRequest.predicate = NSPredicate(format: "id == %i", myMessageId)
             
         // if uniqueId is set, just search for message that has this exact uniqueId
-        case let ( _, .some(myUniqueId), _, _, _, _):
-            fetchRequest.predicate = NSPredicate(format: "uniqueId == %@", myUniqueId)
+        case let ( _, .some(myUniqueIds), _, _, _, _):
+            var predicateArray = [NSPredicate]()
+            for item in myUniqueIds {
+                predicateArray.append(NSPredicate(format: "uniqueId == %@", item))
+            }
+            if (predicateArray.count == 1) {
+                fetchRequest.predicate = predicateArray.first!
+            } else if (predicateArray.count > 1) {
+                let myAndCompoundPredicate = NSCompoundPredicate(type: .or, subpredicates: predicateArray)
+                fetchRequest.predicate = myAndCompoundPredicate
+            }
+//            fetchRequest.predicate = NSPredicate(format: "uniqueId == %@", myUniqueId)
             
         // check if there was any parameter has been set, and put it's predicate statement on an array, then AND them all
         case let (.none, .none, threadId, fromTime, toTime, query):
