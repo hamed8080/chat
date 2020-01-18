@@ -235,40 +235,45 @@ extension Cache {
     /// - parameter withParticipants:   send your participants to this parameter.([Participant])
     /// - parameter isAdminRequest:     if your request was getting adminParticipants, you have to send "true" to this parameter. (Bool)
     public func saveThreadParticipantObjects(whereThreadIdIs threadId: Int, withParticipants participants: [Participant], isAdminRequest: Bool) {
-        /*
-         *  -> fetch CMConversation objects from CMConversation entity
-         *  -> filter it by threadId
-         *  -> if we found any CMConversation object
-         *      -> loop through its Participants
-         *          -> update or save all participants with the cache data
-         *          -> if any user had roles, update 'ThreadAdmin' Entity
-         *          -> then update the 'ThreadParticipant' Entity
-         *
-         */
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
-        fetchRequest.predicate = NSPredicate(format: "id == %i", threadId)
-        do {
-            if let result = try context.fetch(fetchRequest) as? [CMConversation] {
-                if (result.count > 0) {
-                    for item in participants {
-                        if let myCMParticipantObject = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: item, isAdminRequest: isAdminRequest) {
-                            result.first!.addToParticipants(myCMParticipantObject)
-                            saveContext(subject: "Add/Update CMParticipant in a thread and Update CMConversation")
-                            /*
-                            if let roles = item.roles {
-                                let userRoles = UserRole(userId: item.id!, name: item.name!, roles: roles)
-                                _ = updateThreadAdminEntity(inThreadId: threadId, roles: userRoles)
-                            }
-                            updateThreadParticipantEntity(inThreadId: Int(exactly: result.first!.id!)!, withParticipantId: Int(exactly: item.id!)!)
-                            */
-                        }
-                    }
-                }
-                saveContext(subject: "Update CMConversation after adding/updating new Participant")
-            }
-        } catch {
-            fatalError("Error on getting CMConversation when trying to add/update thread participants")
+        
+        for item in participants {
+            _ = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: item, isAdminRequest: isAdminRequest)
         }
+        
+//        /*
+//         *  -> fetch CMConversation objects from CMConversation entity
+//         *  -> filter it by threadId
+//         *  -> if we found any CMConversation object
+//         *      -> loop through its Participants
+//         *          -> update or save all participants with the cache data
+//         *          -> if any user had roles, update 'ThreadAdmin' Entity
+//         *          -> then update the 'ThreadParticipant' Entity
+//         *
+//         */
+//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
+//        fetchRequest.predicate = NSPredicate(format: "id == %i", threadId)
+//        do {
+//            if let result = try context.fetch(fetchRequest) as? [CMConversation] {
+//                if (result.count > 0) {
+//                    for item in participants {
+//                        if let myCMParticipantObject = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: item, isAdminRequest: isAdminRequest) {
+//                            result.first!.addToParticipants(myCMParticipantObject)
+//                            saveContext(subject: "Add/Update CMParticipant in a thread and Update CMConversation")
+//                            /*
+//                            if let roles = item.roles {
+//                                let userRoles = UserRole(userId: item.id!, name: item.name!, roles: roles)
+//                                _ = updateThreadAdminEntity(inThreadId: threadId, roles: userRoles)
+//                            }
+//                            updateThreadParticipantEntity(inThreadId: Int(exactly: result.first!.id!)!, withParticipantId: Int(exactly: item.id!)!)
+//                            */
+//                        }
+//                    }
+//                }
+//                saveContext(subject: "Update CMConversation after adding/updating new Participant")
+//            }
+//        } catch {
+//            fatalError("Error on getting CMConversation when trying to add/update thread participants")
+//        }
         
     }
     
