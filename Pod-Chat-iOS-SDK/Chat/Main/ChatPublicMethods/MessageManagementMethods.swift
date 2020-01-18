@@ -1222,4 +1222,26 @@ extension Chat {
         
     }
     
+    
+    /// PinThread:
+    /// pin message on a specific thread
+    ///
+    /// by calling this method, message of type "" is sends to the sserver
+    ///
+    /// Inputs:
+    /// - this method does not have any input method
+    ///
+    /// Outputs:
+    /// - It has no output
+    public func pinMessage() {
+        
+    }
+    
+    
+    public func unpinMessage() {
+        
+    }
+    
+    
+    
 }

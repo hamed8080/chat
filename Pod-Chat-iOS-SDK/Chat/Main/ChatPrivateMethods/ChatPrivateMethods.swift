@@ -917,12 +917,6 @@ extension Chat {
                                                             ownerId:    messageOwner,
                                                             typeCode:   nil)
                 deliver(inputModel: deliveryModel)
-                
-                let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_NEW,
-                                                          message:  message,
-                                                          threadId: nil,
-                                                          senderId: nil)
-                delegate?.messageEvents(model: messageEventModel)
             }
         }
         
@@ -932,6 +926,11 @@ extension Chat {
             Chat.cacheDB.saveMessageObjects(messages: [theMessage], getHistoryParams: nil)
         }
         
+        let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_NEW,
+                                                  message:  message,
+                                                  threadId: nil,
+                                                  senderId: nil)
+        delegate?.messageEvents(model: messageEventModel)
         let tLastActivityEM = ThreadEventModel(type:            ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME,
                                                participants:    nil,
                                                threads:         nil,

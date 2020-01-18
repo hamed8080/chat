@@ -18,9 +18,9 @@ open class GetHistoryRequestModel {
 //    public let lastMessageId:       Int?
     public let messageId:           Int?        // Id of single message to get
     public let messageType:         Int?        // Type of messages to get (types should be set by client)
-    public let metadataCriteria:    String?       // This JSON will be used to search in message metadata with GraphQL
+    public let metadataCriteria:    String?     // This JSON will be used to search in message metadata with GraphQL
     public let offset:              Int?        // Offset of select query
-    public let order:               String?   // Order of select query (default: DESC)
+    public let order:               String?     // Order of select query (default: DESC)
     public let query:               String?     // Search term to be looked up in messages content
     public let senderId:            Int?        // Messages of this sender only
     public let threadId:            Int         // Id of thread to get its history
