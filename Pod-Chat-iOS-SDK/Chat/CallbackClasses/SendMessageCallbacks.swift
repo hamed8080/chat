@@ -98,19 +98,32 @@ extension Chat {
         var findItAt: Int?
         let threadIdObject = Chat.mapOnDeliver["\(message.subjectId ?? 0)"]
         if let threadIdObj = threadIdObject {
-            let threadIdObjCount = threadIdObj.count
-            if (threadIdObjCount > 0) {
-                for i in 1...threadIdObjCount {
-                    let uniqueIdObj: [String: CallbackProtocolWith3Calls] = threadIdObj[i - 1]
-                    if let callback = uniqueIdObj[message.uniqueId] {
-                        findItAt = i
-                        callback.onDeliver(uID:         message.uniqueId,
-                                           response:    returnData) { (successJSON) in
-                            self.sendCallbackToUserOnDeliver?(successJSON)
-                        }
+            
+            for (index, item) in threadIdObj.enumerated() {
+                let uniqueIdObj: [String: CallbackProtocolWith3Calls] = item
+                if let callback = uniqueIdObj[message.uniqueId] {
+                    findItAt = index
+                    callback.onDeliver(uID:         message.uniqueId,
+                                       response:    returnData) { (successJSON) in
+                        self.sendCallbackToUserOnDeliver?(successJSON)
                     }
                 }
             }
+            
+//            let threadIdObjCount = threadIdObj.count
+//            if (threadIdObjCount > 0) {
+//                for i in 1...threadIdObjCount {
+//                    let uniqueIdObj: [String: CallbackProtocolWith3Calls] = threadIdObj[i - 1]
+//                    if let callback = uniqueIdObj[message.uniqueId] {
+//                        findItAt = i
+//                        callback.onDeliver(uID:         message.uniqueId,
+//                                           response:    returnData) { (successJSON) in
+//                            self.sendCallbackToUserOnDeliver?(successJSON)
+//                        }
+//                    }
+//                }
+//            }
+            
         } else {
             /**
              in situation that Create Thread with send Message, this part will execute,
@@ -134,24 +147,27 @@ extension Chat {
         }
         
         if let itemAt = findItAt {
-            // unique ids that i have to send them that they delivery comes
-            var uniqueIdsWithDelivery: [String] = []
-            
-            // find objects form first to index that delivery comes
-            for i in 1...itemAt {
-                if let threadIdObj = threadIdObject {
-                    let uniqueIdObj = threadIdObj[i - 1]
-                    for key in uniqueIdObj.keys {
-                        uniqueIdsWithDelivery.append(key)
-                    }
-                }
-            }
+//            // unique ids that i have to send them that they delivery comes
+//            var uniqueIdsWithDelivery: [String] = []
+//
+//            // find objects form first to index that delivery comes
+//            for i in 1...itemAt {
+//                if let threadIdObj = threadIdObject {
+//                    let uniqueIdObj = threadIdObj[i - 1]
+//                    for key in uniqueIdObj.keys {
+//                        uniqueIdsWithDelivery.append(key)
+//                    }
+//                }
+//            }
             
             // remove items from array and update array
-            for i in 0...(itemAt - 1) {
-                let index = i
-                Chat.mapOnDeliver["\(message.subjectId ?? 0)"]?.remove(at: index)
+            for _ in 0...itemAt {
+                Chat.mapOnDeliver["\(message.subjectId ?? 0)"]?.removeFirst()
             }
+//            for i in 0...(itemAt - 1) {
+//                let index = i
+//                Chat.mapOnDeliver["\(message.subjectId ?? 0)"]?.remove(at: index)
+//            }
             
         }
         
@@ -192,19 +208,31 @@ extension Chat {
         var findItAt: Int?
         let threadIdObject = Chat.mapOnSeen["\(message.subjectId ?? 0)"]
         if let threadIdObj = threadIdObject {
-            if (threadIdObj.count > 0) {
-                for i in 1...threadIdObj.count {
-                    let index = i - 1
-                    let uniqueIdObj: [String: CallbackProtocolWith3Calls] = threadIdObj[index]
-                    if let callback = uniqueIdObj[message.uniqueId] {
-                        findItAt = i
-                        callback.onSeen(uID:        message.uniqueId,
-                                        response:   returnData) { (successJSON) in
-                            self.sendCallbackToUserOnSeen?(successJSON)
-                        }
+            
+            for (index, item) in threadIdObj.enumerated() {
+                let uniqueIdObj: [String: CallbackProtocolWith3Calls] = item
+                if let callback = uniqueIdObj[message.uniqueId] {
+                    findItAt = index
+                    callback.onSeen(uID:        message.uniqueId,
+                                    response:   returnData) { (successJSON) in
+                        self.sendCallbackToUserOnSeen?(successJSON)
                     }
                 }
             }
+            
+//            if (threadIdObj.count > 0) {
+//                for i in 1...threadIdObj.count {
+//                    let index = i - 1
+//                    let uniqueIdObj: [String: CallbackProtocolWith3Calls] = threadIdObj[index]
+//                    if let callback = uniqueIdObj[message.uniqueId] {
+//                        findItAt = i
+//                        callback.onSeen(uID:        message.uniqueId,
+//                                        response:   returnData) { (successJSON) in
+//                            self.sendCallbackToUserOnSeen?(successJSON)
+//                        }
+//                    }
+//                }
+//            }
         } else {
             /**
              in situation that Create Thread with send Message, this part will execute,
@@ -228,23 +256,30 @@ extension Chat {
         }
         
         if let itemAt = findItAt {
-            // unique ids that i have to send them that they delivery comes
-            var uniqueIdsWithDelivery: [String] = []
-            
-            // find objects form first to index that delivery comes
-            for i in 1...itemAt {
-                if let threadIdObj = threadIdObject {
-                    let uniqueIdObj = threadIdObj[i - 1]
-                    for key in uniqueIdObj.keys {
-                        uniqueIdsWithDelivery.append(key)
-                    }
-                }
-            }
+//            // unique ids that i have to send them that they delivery comes
+//            var uniqueIdsWithDelivery: [String] = []
+//
+//            // find objects form first to index that seen comes
+//            for i in 1...itemAt {
+//                if let threadIdObj = threadIdObject {
+//                    let uniqueIdObj = threadIdObj[i - 1]
+//                    for key in uniqueIdObj.keys {
+//                        uniqueIdsWithDelivery.append(key)
+//                    }
+//                }
+//            }
             
             // remove items from array and update array
-            for i in 1...itemAt {
-                Chat.mapOnSeen["\(message.subjectId ?? 0)"]?.remove(at: i - 1)
+//            var i = 0
+//            while (i < itemAt + 1) {
+//                Chat.mapOnSeen["\(message.subjectId ?? 0)"]?.removeFirst()
+//            }
+            for _ in 0...itemAt {
+                Chat.mapOnSeen["\(message.subjectId ?? 0)"]?.removeFirst()
             }
+//            for i in 1...itemAt {
+//                Chat.mapOnSeen["\(message.subjectId ?? 0)"]?.remove(at: i - 1)
+//            }
         }
         
     }
@@ -295,16 +330,17 @@ extension Chat {
              */
             log.verbose("SendMessage Deliver Callback", context: "Chat")
             if let stringContent = response.resultAsString {
+                let content = stringContent.convertToJSON()
                 let message = SendMessageModel(messageContent:  response.result,
-                                               messageId:       Int(stringContent) ?? 0,
-                                               isSent:          false,
+                                               messageId:       content["messageId"].int ?? 0,
+                                               isSent:          true,
                                                isDelivered:     true,
                                                isSeen:          false,
                                                hasError:        response.hasError,
                                                errorMessage:    response.errorMessage,
                                                errorCode:       response.errorCode,
-                                               threadId:        response.subjectId,
-                                               participantId:   response.result?["participantId"].int)
+                                               threadId:        content["conversationId"].int ?? response.subjectId,
+                                               participantId:   content["participantId"].int ?? 0)
                 success(message)
             }
         }
@@ -321,16 +357,17 @@ extension Chat {
              */
             log.verbose("SendMessage Seen Callback", context: "Chat")
             if let stringContent = response.resultAsString {
+                let content = stringContent.convertToJSON()
                 let message = SendMessageModel(messageContent:  response.result,
-                                               messageId:       Int(stringContent) ?? 0,
-                                               isSent:          false,
-                                               isDelivered:     false,
+                                               messageId:       content["messageId"].int ?? 0,
+                                               isSent:          true,
+                                               isDelivered:     true,
                                                isSeen:          true,
                                                hasError:        response.hasError,
                                                errorMessage:    response.errorMessage,
                                                errorCode:       response.errorCode,
-                                               threadId:        response.subjectId,
-                                               participantId:   response.result?["participantId"].int)
+                                               threadId:        content["conversationId"].int ?? response.subjectId,
+                                               participantId:   content["participantId"].int ?? 0)
                 success(message)
             }
         }
