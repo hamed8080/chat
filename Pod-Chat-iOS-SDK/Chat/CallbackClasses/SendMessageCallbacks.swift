@@ -161,8 +161,7 @@ extension Chat {
 //            }
             
             // remove items from array and update array
-            for i in 0...itemAt {
-                print("deliver removed as index \(i)")
+            for _ in 0...itemAt {
                 Chat.mapOnDeliver["\(message.subjectId ?? 0)"]?.removeFirst()
             }
 //            for i in 0...(itemAt - 1) {
@@ -275,8 +274,7 @@ extension Chat {
 //            while (i < itemAt + 1) {
 //                Chat.mapOnSeen["\(message.subjectId ?? 0)"]?.removeFirst()
 //            }
-            for i in 0...itemAt {
-                print("seen removed as index \(i)")
+            for _ in 0...itemAt {
                 Chat.mapOnSeen["\(message.subjectId ?? 0)"]?.removeFirst()
             }
 //            for i in 1...itemAt {

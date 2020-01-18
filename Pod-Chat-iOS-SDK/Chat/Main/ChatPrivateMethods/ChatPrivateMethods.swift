@@ -944,8 +944,6 @@ extension Chat {
                                               senderId:     nil)
         delegate?.threadEvents(model: tUnreadCountEM)
         
-//        delegate?.threadEvents(type: ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME, threadId: threadId, thread: nil, messageId: nil, senderId: nil)
-//        delegate?.threadEvents(type: ThreadEventTypes.THREAD_UNREAD_COUNT_UPDATED, threadId: threadId, thread: nil, messageId: nil, senderId: nil)
     }
     
     
