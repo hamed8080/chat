@@ -67,7 +67,7 @@ open class GetThreadsRequestModel {
     func convertContentToJSON() -> JSON {
         var content: JSON = [:]
         content["count"]    = JSON(self.count ?? 50)
-        content["offset"]    = JSON(self.offset ?? 0)
+        content["offset"]   = JSON(self.offset ?? 0)
         if let name = self.name {
             content["name"] = JSON(name)
         }
