@@ -14,7 +14,7 @@ open class GetContactsRequestModel {
     public let offset:      Int?
     public let query:       String?
     public let typeCode:    String?
-    public let uniqueId:    String?
+    public let uniqueId:    String
     
     public init(count:      Int?,
                 offset:     Int?,
@@ -26,7 +26,7 @@ open class GetContactsRequestModel {
         self.offset     = offset
         self.query      = query
         self.typeCode   = typeCode
-        self.uniqueId   = uniqueId
+        self.uniqueId   = uniqueId ?? UUID().uuidString
     }
     
     public init(json: JSON) {
@@ -34,7 +34,7 @@ open class GetContactsRequestModel {
         self.offset     = json["offset"].int
         self.query      = json["query"].string
         self.typeCode   = json["typeCode"].string
-        self.uniqueId   = json["uniqueId"].string
+        self.uniqueId   = json["uniqueId"].string ?? UUID().uuidString
     }
     
     func convertContentToJSON() -> JSON {

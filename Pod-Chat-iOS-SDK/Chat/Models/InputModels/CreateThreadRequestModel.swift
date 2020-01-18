@@ -18,7 +18,7 @@ open class CreateThreadRequestModel {
     public let type:        ThreadTypes?
     
     public let typeCode:    String?
-    public let uniqueId:    String?
+    public let uniqueId:    String
     
     public init(description:    String?,
                 image:          String?,
@@ -36,7 +36,7 @@ open class CreateThreadRequestModel {
         self.title          = title
         self.type           = type
         self.typeCode       = typeCode
-        self.uniqueId       = uniqueId
+        self.uniqueId       = uniqueId ?? UUID().uuidString
     }
     
     func convertContentToJSON() -> JSON {
@@ -56,19 +56,11 @@ open class CreateThreadRequestModel {
         if let metadata2 = self.metadata {
             content["metadata"] = JSON(metadata2)
         }
-//        if let type = self.type {
-//            var theType: Int = 0
-//            switch type {
-//            case    ThreadTypes.NORMAL:        theType = 0
-//            case    ThreadTypes.OWNER_GROUP:   theType = 1
-//            case    ThreadTypes.PUBLIC_GROUP:  theType = 2
-//            case    ThreadTypes.CHANNEL_GROUP: theType = 4
-//            case    ThreadTypes.CHANNEL:       theType = 8
-//            default: break
-//            }
-//            content["type"] = JSON(theType)
-//        }
+        if let typeCode_ = self.typeCode {
+            content["typeCode"] = JSON(typeCode_)
+        }
         content["type"] = JSON(self.type?.intValue() ?? 0)
+        content["uniqueId"] = JSON(self.uniqueId)
         
         return content
     }

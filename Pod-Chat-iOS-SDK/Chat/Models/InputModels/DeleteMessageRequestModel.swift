@@ -17,7 +17,7 @@ open class DeleteMessageRequestModel {
     public let subjectId:       Int
 //    public let messageId:           Int
     public let typeCode: String?
-    public let uniqueId: String?
+    public let uniqueId: String
     
     public init(deleteForAll:   Bool?,
                 subjectId:      Int,
@@ -27,7 +27,16 @@ open class DeleteMessageRequestModel {
         self.deleteForAll   = deleteForAll
         self.subjectId      = subjectId
         self.typeCode       = typeCode
-        self.uniqueId       = uniqueId
+        self.uniqueId       = uniqueId ?? UUID().uuidString
+    }
+    
+    func convertContentToJSON() -> JSON {
+        var content: JSON = []
+        if let deleteForAll = self.deleteForAll {
+            content["deleteForAll"] = JSON("\(deleteForAll)")
+        }
+        
+        return content
     }
     
 }

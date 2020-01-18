@@ -18,11 +18,11 @@ extension QueueOfFileMessages {
     }
 
     @NSManaged public var fileName:     String?
-    @NSManaged public var imageName:    String?
-    @NSManaged public var xC:           String?
-    @NSManaged public var yC:           String?
-    @NSManaged public var hC:           String?
-    @NSManaged public var wC:           String?
+//    @NSManaged public var imageName:    String?
+    @NSManaged public var xC:           NSNumber?
+    @NSManaged public var yC:           NSNumber?
+    @NSManaged public var hC:           NSNumber?
+    @NSManaged public var wC:           NSNumber?
     @NSManaged public var threadId:     NSNumber?
     @NSManaged public var content:      String?
 //    @NSManaged public var metadata:     NSObject?

@@ -39,7 +39,7 @@ public class CMConversation: NSManagedObject {
         var time:                           UInt?
         var type:                           Int?
         var unreadCount:                    Int?
-        var participants                    = [Participant]()
+        var participants:                   [Participant]?
         
         func createVariables() {
             if let admin2 = self.admin as? Bool {
@@ -114,8 +114,9 @@ public class CMConversation: NSManagedObject {
             
             
             if let participantArr = self.participants {
+                participants = []
                 for item in participantArr {
-                    participants.append(item.convertCMParticipantToParticipantObject())
+                    participants?.append(item.convertCMParticipantToParticipantObject())
                 }
             }
         }

@@ -378,48 +378,83 @@ extension Chat {
     
     
     func sendMessageWithCallback(asyncMessageVO:    SendAsyncMessageVO,
-                                 callback:          CallbackProtocol?,
-                                 callbacks:         [CallbackProtocol]?,
-                                 sentCallback:      CallbackProtocolWith3Calls?,
-                                 deliverCallback:   CallbackProtocolWith3Calls?,
-                                 seenCallback:      CallbackProtocolWith3Calls?,
-                                 uniuqueIdCallback: callbackTypeAliasString?) {
+//                                 callback:          (call: CallbackProtocol, uniques: String)?,
+                                 callbacks:         [(call: CallbackProtocol, uniques: String)]?,
+                                 sentCallback:      (call: CallbackProtocolWith3Calls, uniques: [String])?,
+                                 deliverCallback:   (call: CallbackProtocolWith3Calls, uniques: [String])?,
+                                 seenCallback:      (call: CallbackProtocolWith3Calls, uniques: [String])?/*,
+                                 uniuqueIdCallback: callbackTypeAliasString?*/) {
         
         let chatMessageVO = SendChatMessageVO(content: asyncMessageVO.content.convertToJSON())
         
         
-        let uniqueIds = chatMessageVO.uniqueIds ?? [chatMessageVO.uniqueId ?? ""]
-        for uId in uniqueIds {
-            if uId != "" {
-                uniuqueIdCallback?(uId)
-            }
-        }
+//        let uniqueIds = chatMessageVO.uniqueIds ?? [chatMessageVO.uniqueId ?? ""]
+//        for uId in uniqueIds {
+//            if uId != "" {
+//                uniuqueIdCallback?(uId)
+//            }
+//        }
         
-        if (callback != nil) {
-            if (asyncMessageVO.content.convertToJSON()["chatMessageVOType"].intValue == 41) {
-                Chat.spamMap[uniqueIds.first!] = [callback, callback, callback] as? [CallbackProtocol]
-            } else {
-                Chat.map[uniqueIds.first!] = callback
-            }
-        }
+//        if (callback != nil) {
+//            if (asyncMessageVO.content.convertToJSON()["chatMessageVOType"].intValue == 41) {
+//                Chat.spamMap[uniqueIds.first!] = [callback, callback, callback] as? [CallbackProtocol]
+//            } else {
+//                Chat.map[uniqueIds.first!] = callback
+//            }
+//        }
+        
+//        if let myCallbacks = callbacks {
+//            for (index, item) in myCallbacks.enumerated() {
+//                let uIdJSON = chatMessageVO.content?.convertToJSON()
+//                if let uIds = uIdJSON?["uniqueIds"].arrayObject as? [String] {
+//                    let uId = uIds[index]
+//                    Chat.map[uId] = item
+//                }
+//            }
+//        }
+//        if (sentCallback != nil) {
+//            for (index, _) in uniqueIds.enumerated() {
+//                Chat.mapOnSent[uniqueIds[index]] = sentCallback
+//            }
+//        }
+//        if (deliverCallback != nil) {
+//            for (index, _) in uniqueIds.enumerated() {
+//                let uniqueIdDic: [String: CallbackProtocolWith3Calls] = [uniqueIds[index]: deliverCallback!]
+//                if Chat.mapOnDeliver["\(chatMessageVO.subjectId ?? 0)"] != nil {
+//                    Chat.mapOnDeliver["\(chatMessageVO.subjectId ?? 0)"]!.append(uniqueIdDic)
+//                } else {
+//                    Chat.mapOnDeliver["\(chatMessageVO.subjectId ?? 0)"] = [uniqueIdDic]
+//                }
+//            }
+//        }
+//        if (seenCallback != nil) {
+//            for (index, _) in uniqueIds.enumerated() {
+//                let uniqueIdDic: [String: CallbackProtocolWith3Calls] = [uniqueIds[index]: deliverCallback!]
+//                if Chat.mapOnSeen["\(chatMessageVO.subjectId ?? 0)"] != nil {
+//                    Chat.mapOnSeen["\(chatMessageVO.subjectId ?? 0)"]!.append(uniqueIdDic)
+//                } else {
+//                    Chat.mapOnSeen["\(chatMessageVO.subjectId ?? 0)"] = [uniqueIdDic]
+//                }
+//            }
+//        }
         
         if let myCallbacks = callbacks {
-            for (index, item) in myCallbacks.enumerated() {
-                let uIdJSON = chatMessageVO.content?.convertToJSON()
-                if let uIds = uIdJSON?["uniqueIds"].arrayObject as? [String] {
-                    let uId = uIds[index]
-                    Chat.map[uId] = item
+            for item in myCallbacks {
+                if (asyncMessageVO.content.convertToJSON()["chatMessageVOType"].intValue == 41) {
+                    Chat.spamMap[item.uniques] = [item.call, item.call, item.call] //as? [CallbackProtocol]
+                } else {
+                    Chat.map[item.uniques] = item.call
                 }
             }
         }
         if (sentCallback != nil) {
-            for (index, _) in uniqueIds.enumerated() {
-                Chat.mapOnSent[uniqueIds[index]] = sentCallback
+            for uId in sentCallback!.uniques {
+                Chat.mapOnSent[uId] = sentCallback!.call
             }
         }
         if (deliverCallback != nil) {
-            for (index, _) in uniqueIds.enumerated() {
-                let uniqueIdDic: [String: CallbackProtocolWith3Calls] = [uniqueIds[index]: deliverCallback!]
+            for uId in sentCallback!.uniques {
+                let uniqueIdDic: [String: CallbackProtocolWith3Calls] = [uId: deliverCallback!.call]
                 if Chat.mapOnDeliver["\(chatMessageVO.subjectId ?? 0)"] != nil {
                     Chat.mapOnDeliver["\(chatMessageVO.subjectId ?? 0)"]!.append(uniqueIdDic)
                 } else {
@@ -428,8 +463,8 @@ extension Chat {
             }
         }
         if (seenCallback != nil) {
-            for (index, _) in uniqueIds.enumerated() {
-                let uniqueIdDic: [String: CallbackProtocolWith3Calls] = [uniqueIds[index]: deliverCallback!]
+            for uId in seenCallback!.uniques {
+                let uniqueIdDic: [String: CallbackProtocolWith3Calls] = [uId: deliverCallback!.call]
                 if Chat.mapOnSeen["\(chatMessageVO.subjectId ?? 0)"] != nil {
                     Chat.mapOnSeen["\(chatMessageVO.subjectId ?? 0)"]!.append(uniqueIdDic)
                 } else {
@@ -446,9 +481,6 @@ extension Chat {
         let contentToSend = asyncMessageVO.convertModelToString()
         
         log.verbose("AsyncMessageContent of type JSON (to send to socket): \n \(contentToSend)", context: "Chat")
-        
-//        asyncClient?.pushSendData(type: asyncMessageVO.pushMsgType ?? 3, content: contentToSend)
-//        runSendMessageTimer()
         
         print("chatMessageVO.chatMessageVOType = \(chatMessageVO.chatMessageVOType)")
         if (chatMessageVO.chatMessageVOType == 0) {
@@ -535,12 +567,12 @@ extension Chat {
                                                   pushMsgType:  5)
             
             sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                    callback:           nil,
+//                                    callback:           nil,
                                     callbacks:          nil,
                                     sentCallback:       nil,
                                     deliverCallback:    nil,
-                                    seenCallback:       nil,
-                                    uniuqueIdCallback:  nil)
+                                    seenCallback:       nil)
+//                                    uniuqueIdCallback:  nil)
         } else if (lastSentMessageTimer != nil) {
             lastSentMessageTimer?.suspend()
         }

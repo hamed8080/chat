@@ -49,7 +49,7 @@ extension Cache {
                                                               query:        nil,
                                                               threadId:     nil,
                                                               toTime:       nil,
-                                                              uniqueId:     nil)
+                                                              uniqueIds:    nil)
         
         do {
             if let result = try context.fetch(fetchRequest) as? [CMMessage] {
@@ -106,15 +106,15 @@ extension Cache {
         messageToSaveOnQueue.content        = fileMessage.content
         messageToSaveOnQueue.fileName       = fileMessage.fileName
         messageToSaveOnQueue.fileToSend     = fileMessage.fileToSend as NSData?
-        messageToSaveOnQueue.imageName      = fileMessage.imageName
+//        messageToSaveOnQueue.imageName      = fileMessage.imageName
         messageToSaveOnQueue.imageToSend    = fileMessage.imageToSend as NSData?
         messageToSaveOnQueue.repliedTo      = fileMessage.repliedTo as NSNumber?
 //        messageToSaveOnQueue.subjectId      = fileMessage.subjectId as NSNumber?
         messageToSaveOnQueue.threadId       = fileMessage.threadId as NSNumber?
-        messageToSaveOnQueue.hC             = fileMessage.hC
-        messageToSaveOnQueue.wC             = fileMessage.wC
-        messageToSaveOnQueue.xC             = fileMessage.xC
-        messageToSaveOnQueue.yC             = fileMessage.yC
+        messageToSaveOnQueue.hC             = fileMessage.hC as NSNumber?
+        messageToSaveOnQueue.wC             = fileMessage.wC as NSNumber?
+        messageToSaveOnQueue.xC             = fileMessage.xC as NSNumber?
+        messageToSaveOnQueue.yC             = fileMessage.yC as NSNumber?
         messageToSaveOnQueue.typeCode    = fileMessage.typeCode
         messageToSaveOnQueue.uniqueId    = fileMessage.uniqueId
         

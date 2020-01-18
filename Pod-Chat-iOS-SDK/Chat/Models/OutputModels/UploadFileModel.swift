@@ -96,4 +96,20 @@ open class UploadFileModel {
         return resultAsJSON
     }
     
+    
+    func returnMetaData(onServiceAddress: String) -> JSON {
+        var fileMetadata : JSON = [:]
+        
+        if let upload = uploadFile {
+            let link = "\(onServiceAddress)\(SERVICES_PATH.GET_FILE.rawValue)?fileId=\(upload.id)&hashCode=\(upload.hashCode)"
+            fileMetadata["link"]        = JSON(link)
+            fileMetadata["id"]          = JSON(upload.id)
+            fileMetadata["name"]        = JSON(upload.name ?? "")
+            fileMetadata["hashCode"]    = JSON(upload.hashCode)
+        }
+        
+        return fileMetadata
+    }
+    
+    
 }

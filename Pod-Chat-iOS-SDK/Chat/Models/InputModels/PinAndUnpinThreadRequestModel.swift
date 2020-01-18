@@ -13,7 +13,7 @@ open class PinAndUnpinThreadRequestModel {
     public let threadId:    Int
     
     public let typeCode:    String?
-    public let uniqueId:    String?
+    public let uniqueId:    String
     
     public init(threadId:  Int,
                 typeCode:   String?,
@@ -21,7 +21,7 @@ open class PinAndUnpinThreadRequestModel {
         
         self.threadId   = threadId
         self.typeCode   = typeCode
-        self.uniqueId   = uniqueId
+        self.uniqueId   = uniqueId ?? UUID().uuidString
     }
     
 }
