@@ -194,17 +194,20 @@ extension Cache {
                             let messageObject = updateCMMessageEntity(withMessageObject: threadLastMessageVO)
                             result.first!.lastMessageVO = messageObject
                         }
-                        if let threadParticipants = myThread.participants, (threadParticipants.count > 0) {
-                            var threadParticipantsArr = [CMParticipant]()
-                            for item in threadParticipants {
-                                if let threadparticipant = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: item, isAdminRequest: false) {
-                                    threadParticipantsArr.append(threadparticipant)
-//                                    updateThreadParticipantEntity(inThreadId: Int(exactly: result.first!.id!)!, withParticipantId: Int(exactly: threadparticipant.id!)!)
-//                                    result.first!.participants?.append(threadparticipant)
-                                }
-                            }
-                            result.first!.addToParticipants(threadParticipantsArr)
-                        }
+                        
+                        // this part is deprecated because the server is no longer sends Participants on the Conversation model
+//                        if let threadParticipants = myThread.participants, (threadParticipants.count > 0) {
+//                            var threadParticipantsArr = [CMParticipant]()
+//                            for item in threadParticipants {
+//                                if let threadparticipant = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: item, isAdminRequest: false) {
+//                                    threadParticipantsArr.append(threadparticipant)
+////                                    updateThreadParticipantEntity(inThreadId: Int(exactly: result.first!.id!)!, withParticipantId: Int(exactly: threadparticipant.id!)!)
+////                                    result.first!.participants?.append(threadparticipant)
+//                                }
+//                            }
+//                            result.first!.addToParticipants(threadParticipantsArr)
+//                        }
+                        
                         conversationToReturn = result.first!
                         
                         saveContext(subject: "Update CMConversation -update existing object-")
@@ -243,17 +246,20 @@ extension Cache {
                             let messageObject = updateCMMessageEntity(withMessageObject: threadLastMessageVO)
                             conversation.lastMessageVO = messageObject
                         }
-                        if let threadParticipants = myThread.participants, (threadParticipants.count > 0) {
-                            var threadParticipantsArr = [CMParticipant]()
-                            for item in threadParticipants {
-                                if let threadparticipant = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: item, isAdminRequest: false) {
-                                    threadParticipantsArr.append(threadparticipant)
-//                                    updateThreadParticipantEntity(inThreadId: Int(exactly: conversation.id!)!, withParticipantId: Int(exactly: threadparticipant.id!)!)
-//                                    conversation.participants?.append(threadparticipant) // this line causes crash!!
-                                }
-                            }
-                            conversation.addToParticipants(threadParticipantsArr)
-                        }
+                        
+                        // this part is deprecated because the server is no longer sends Participants on the Conversation model
+//                        if let threadParticipants = myThread.participants, (threadParticipants.count > 0) {
+//                            var threadParticipantsArr = [CMParticipant]()
+//                            for item in threadParticipants {
+//                                if let threadparticipant = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: item, isAdminRequest: false) {
+//                                    threadParticipantsArr.append(threadparticipant)
+////                                    updateThreadParticipantEntity(inThreadId: Int(exactly: conversation.id!)!, withParticipantId: Int(exactly: threadparticipant.id!)!)
+////                                    conversation.participants?.append(threadparticipant) // this line causes crash!!
+//                                }
+//                            }
+//                            conversation.addToParticipants(threadParticipantsArr)
+//                        }
+                        
                         conversationToReturn = conversation
                         
                         saveContext(subject: "Update CMConversation -create new object-")

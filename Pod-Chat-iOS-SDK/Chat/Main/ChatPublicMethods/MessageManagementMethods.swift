@@ -116,7 +116,7 @@ extension Chat {
                                                                             query:          getHistoryInput.query,
                                                                             threadId:       getHistoryInput.threadId,
                                                                             toTime:         getHistoryInput.toTime,
-                                                                            uniqueId:       getHistoryInput.uniqueId) {
+                                                                            uniqueIds:      getHistoryInput.uniqueIds) {
                 cacheResponse(cacheHistoryResult)
             }
         }

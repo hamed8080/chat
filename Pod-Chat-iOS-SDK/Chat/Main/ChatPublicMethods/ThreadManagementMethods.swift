@@ -678,8 +678,8 @@ extension Chat {
         if enableCache {
             if let cacheThreadParticipants = Chat.cacheDB.retrieveThreadParticipants(admin:     getThreadParticipantsInput.admin,
                                                                                      ascending: true,
-                                                                                     count:     getThreadParticipantsInput.count ?? 0,
-                                                                                     offset:    getThreadParticipantsInput.offset ?? 50,
+                                                                                     count:     getThreadParticipantsInput.count ?? 50,
+                                                                                     offset:    getThreadParticipantsInput.offset ?? 0,
                                                                                      threadId:  getThreadParticipantsInput.threadId,
                                                                                      timeStamp: cacheTimeStamp) {
                 cacheResponse(cacheThreadParticipants)

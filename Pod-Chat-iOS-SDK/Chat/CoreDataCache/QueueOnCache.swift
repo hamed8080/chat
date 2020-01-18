@@ -49,7 +49,7 @@ extension Cache {
                                                               query:        nil,
                                                               threadId:     nil,
                                                               toTime:       nil,
-                                                              uniqueId:     nil)
+                                                              uniqueIds:    nil)
         
         do {
             if let result = try context.fetch(fetchRequest) as? [CMMessage] {

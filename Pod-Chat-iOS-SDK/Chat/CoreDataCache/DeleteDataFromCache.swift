@@ -164,35 +164,54 @@ extension Cache {
     /// - parameter inThread:       specify the threadId that want to delete participants from it. (Int)
     /// - parameter participantIds: participantIds to delete them. ([Int])
     public func deleteParticipant(inThread: Int, withParticipantIds participantIds: [Int]) {
-        /*
-         *  -> fetch all the CMConversation where its is is equal to 'inThread' threadId
-         *  -> if there is any response on the result
-         *  -> loop through all participants of the conversation,
-         *      -> loop through the 'participantIds' input
-         *          -> if we fount the participant that has the same participant id, we will delete that participant object
-         *
-         */
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
-        fetchRequest.predicate = NSPredicate(format: "id == %i", inThread)
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMParticipant")
+        fetchRequest.predicate = NSPredicate(format: "threadId == %i", inThread)
         do {
-            if let result = try context.fetch(fetchRequest) as? [CMConversation] {
+            if let result = try context.fetch(fetchRequest) as? [CMParticipant] {
                 if (result.count > 0) {
-                    if let _ = result.first!.participants {
-                        for (index, participant) in result.first!.participants!.enumerated() {
-                            for id in participantIds {
-                                if (Int(exactly: participant.id ?? 0) == id) {
-                                    result.first!.removeFromParticipants(at: index)
-                                    deleteAndSave(object: participant, withMessage: "Delete CMParticipant Object from Thread")
-                                }
+                    for (index, participant) in result.enumerated() {
+                        for id in participantIds {
+                            if (Int(exactly: participant.id ?? 0) == id) {
+                                deleteAndSave(object: result[index], withMessage: "Delete CMParticipant Object from Cache")
                             }
                         }
                     }
                 }
-                saveContext(subject: "Update CMConversation")
+                saveContext(subject: "Update CMParticipant")
             }
         } catch {
-            fatalError("Error on fetching list of CMConversation when trying to delete some Participant from it")
+            fatalError("Error on fetching list of CMParticipant when trying to delete some Participant from it")
         }
+        
+//        /*
+//         *  -> fetch all the CMConversation where its is is equal to 'inThread' threadId
+//         *  -> if there is any response on the result
+//         *  -> loop through all participants of the conversation,
+//         *      -> loop through the 'participantIds' input
+//         *          -> if we fount the participant that has the same participant id, we will delete that participant object
+//         *
+//         */
+//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
+//        fetchRequest.predicate = NSPredicate(format: "id == %i", inThread)
+//        do {
+//            if let result = try context.fetch(fetchRequest) as? [CMConversation] {
+//                if (result.count > 0) {
+//                    if let _ = result.first!.participants {
+//                        for (index, participant) in result.first!.participants!.enumerated() {
+//                            for id in participantIds {
+//                                if (Int(exactly: participant.id ?? 0) == id) {
+//                                    result.first!.removeFromParticipants(at: index)
+//                                    deleteAndSave(object: participant, withMessage: "Delete CMParticipant Object from Thread")
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//                saveContext(subject: "Update CMConversation")
+//            }
+//        } catch {
+//            fatalError("Error on fetching list of CMConversation when trying to delete some Participant from it")
+//        }
     }
     
     /*
@@ -256,57 +275,75 @@ extension Cache {
     /// - parameter inThread:       specify the threadId that want to delete participants from it. (Int)
     /// - parameter byTimeStamp:    declear the seconds to delete participants that has not updated for this amount of time. (Int)
     func deleteThreadParticipants(inThread: Int, byTimeStamp: Int) {
-        /*
-         *  -> get the current time
-         *  -> decrease it with the timeStamp input and create a new time
-         *  -> fetch CMConversation Entity with its threadId
-         *  -> loop through the participants of the thread (result) and
-         *      -> remove this particiapnt from the thread
-         *      -> delete the particiapnt object itself
-         *
-         */
-        
-        
-        /*
-         *  -> get the current time
-         *  -> decrease it with the timeStamp input and create a new time
-         *  -> fetch CMThreadParticipants Entity where object that has lesser time value than this new time that we generated
-         *  -> loop through the result and
-         *      -> send threadId and ParticipantId to the 'deleteParticipant(inThread: Int, withParticipantIds: [Int])' to delete these participants
-         *      -> delete the threadParticipant itself
-         *
-         */
-        
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMParticipant")
         let currentTime = Int(Date().timeIntervalSince1970)
         let xTime = Int(currentTime - byTimeStamp)
-        fetchRequest.predicate = NSPredicate(format: "id == %i", inThread)
+        fetchRequest.predicate = NSPredicate(format: "threadId == %i", inThread)
         do {
-            if let result = try context.fetch(fetchRequest) as? [CMConversation] {
-                
+            if let result = try context.fetch(fetchRequest) as? [CMParticipant] {
                 if result.count > 0 {
-                    
-                    for (index, participant) in result.first!.participants!.enumerated() {
+                    for (index, participant) in result.enumerated() {
                         if ((participant.time as! Int) <= xTime) {
-                            result.first!.removeFromParticipants(at: index)
-                            deleteAndSave(object: participant, withMessage: "Delete CMParticipant Object from Thread")
+                            deleteAndSave(object: result[index], withMessage: "Delete CMParticipant Object from Thread")
                         }
                     }
-                    
                 }
-                
-                /*
-                for threadParticipant in result {
-                    deleteParticipant(inThread: Int(exactly: threadParticipant.threadId!)!, withParticipantIds: [Int(exactly: threadParticipant.participantId!)!])
-                    context.delete(threadParticipant)
-                    saveContext(subject: "item Deleted from CMThreadParticipants")
-                }
-                */
-                
             }
         } catch {
-            fatalError("Error on fetching CMThreadParticipants when trying to delete object based on timeStamp")
+            fatalError("Error on fetching CMParticipant when trying to delete object based on timeStamp")
         }
+        
+//        /*
+//         *  -> get the current time
+//         *  -> decrease it with the timeStamp input and create a new time
+//         *  -> fetch CMConversation Entity with its threadId
+//         *  -> loop through the participants of the thread (result) and
+//         *      -> remove this particiapnt from the thread
+//         *      -> delete the particiapnt object itself
+//         *
+//         */
+//
+//
+//        /*
+//         *  -> get the current time
+//         *  -> decrease it with the timeStamp input and create a new time
+//         *  -> fetch CMThreadParticipants Entity where object that has lesser time value than this new time that we generated
+//         *  -> loop through the result and
+//         *      -> send threadId and ParticipantId to the 'deleteParticipant(inThread: Int, withParticipantIds: [Int])' to delete these participants
+//         *      -> delete the threadParticipant itself
+//         *
+//         */
+//
+//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
+//        let currentTime = Int(Date().timeIntervalSince1970)
+//        let xTime = Int(currentTime - byTimeStamp)
+//        fetchRequest.predicate = NSPredicate(format: "id == %i", inThread)
+//        do {
+//            if let result = try context.fetch(fetchRequest) as? [CMConversation] {
+//
+//                if result.count > 0 {
+//
+//                    for (index, participant) in result.first!.participants!.enumerated() {
+//                        if ((participant.time as! Int) <= xTime) {
+//                            result.first!.removeFromParticipants(at: index)
+//                            deleteAndSave(object: participant, withMessage: "Delete CMParticipant Object from Thread")
+//                        }
+//                    }
+//
+//                }
+//
+//                /*
+//                for threadParticipant in result {
+//                    deleteParticipant(inThread: Int(exactly: threadParticipant.threadId!)!, withParticipantIds: [Int(exactly: threadParticipant.participantId!)!])
+//                    context.delete(threadParticipant)
+//                    saveContext(subject: "item Deleted from CMThreadParticipants")
+//                }
+//                */
+//
+//            }
+//        } catch {
+//            fatalError("Error on fetching CMThreadParticipants when trying to delete object based on timeStamp")
+//        }
     }
     
     
@@ -371,12 +408,12 @@ extension Cache {
         do {
             if let result = try context.fetch(fetchRequest) as? [CMConversation] {
                 for (threadIndex, thread) in result.enumerated() {
-                    if let participants = thread.participants {
-                        for (index, _) in participants.enumerated() {
-                            result[threadIndex].removeFromParticipants(at: index)
-                            deleteAndSave(object: (thread.participants?[index])!, withMessage: "Delete CMParticipant Object")
-                        }
-                    }
+//                    if let participants = thread.participants {
+//                        for (index, _) in participants.enumerated() {
+//                            result[threadIndex].removeFromParticipants(at: index)
+//                            deleteAndSave(object: (thread.participants?[index])!, withMessage: "Delete CMParticipant Object")
+//                        }
+//                    }
                     if let _ = thread.inviter {
                         result[threadIndex].removeFromParticipants(thread.inviter!)
                         deleteAndSave(object: thread.inviter!, withMessage: "Delete CMParticipant Object")
@@ -460,7 +497,7 @@ extension Cache {
                                                               query:            query,
                                                               threadId:         threadId,
                                                               toTime:           toTime,
-                                                              uniqueId:         uniqueId)
+                                                              uniqueIds:        (uniqueId != nil) ? [uniqueId!] : nil)
         do {
             if let result = try context.fetch(fetchRequest) as? [CMMessage] {
                 
@@ -750,11 +787,11 @@ extension Cache {
 //                    if (thread.lastMessageVO != nil) {
 //                        deleteAndSave(object: thread.lastMessageVO!, withMessage: "lastMessageVO from CMConversation Deleted.")
 //                    }
-                    if let threadParticipants = thread.participants {
-                        for participant in threadParticipants {
-                            deleteAndSave(object: participant, withMessage: "participant from CMConversation Deleted.")
-                        }
-                    }
+//                    if let threadParticipants = thread.participants {
+//                        for participant in threadParticipants {
+//                            deleteAndSave(object: participant, withMessage: "participant from CMConversation Deleted.")
+//                        }
+//                    }
                     deleteAndSave(object: thread, withMessage: "CMConversation Deleted.")
                 }
                 isCompleted()
