@@ -14,7 +14,7 @@ open class RoleRequestModel {
     public let threadId:        Int
     public let userId:          Int
     public let typeCode:        String?
-    public let uniqueId:        String?
+    public let uniqueId:        String
     
     public init(roles:              [Roles],
                 threadId:           Int,
@@ -27,33 +27,9 @@ open class RoleRequestModel {
         self.threadId       = threadId
         self.userId         = userId
         self.typeCode       = typeCode
-        self.uniqueId       = uniqueId
+        self.uniqueId       = uniqueId ?? UUID().uuidString
     }
     
-    
-}
-
-
-class SetRemoveRoleRequestModel {
-    
-    public let roleRequestModel:    RoleRequestModel
-    public let roleOperation:       String
-    
-    init(roleRequestModel:  RoleRequestModel,
-         roleOperation:     RoleOperations) {
-        self.roleRequestModel   = roleRequestModel
-        self.roleOperation      = roleOperation.returnString()
-    }
-    
-    func convertContentToJSON() -> JSON {
-        var content: JSON = [:]
-        content["userId"]           = JSON(self.roleRequestModel.userId)
-        content["roles"]            = JSON(self.roleRequestModel.roles)
-        content["roleOperation"]    = JSON(self.roleOperation)
-        content["checkThreadMembership"] = JSON(true)
-        
-        return content
-    }
     
 }
 

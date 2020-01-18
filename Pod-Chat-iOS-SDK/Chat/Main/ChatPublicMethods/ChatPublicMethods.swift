@@ -9,13 +9,16 @@
 import Foundation
 import FanapPodAsyncSDK
 import SwiftyJSON
+import Alamofire
 
 
 // MARK: - Public Methods
 
 extension Chat {
     
-    
+    public func isConnectedToInternet() -> Bool {
+        return NetworkReachabilityManager()!.isReachable
+    }
     
     public func deleteCache() {
         Chat.cacheDB.deleteCacheData()
@@ -39,8 +42,7 @@ extension Chat {
         log.verbose("Try to send deliver message for a message id with this parameters: \n \(deliverInput)", context: "Chat")
         
         if let theUserInfo = userInfo {
-            let userInfoJSON = theUserInfo.formatToJSON()
-            if (deliverInput.ownerId != userInfoJSON["id"].intValue) {
+            if (deliverInput.ownerId != theUserInfo.id!) {
                 /*
                 let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.DELIVERY.rawValue,
                                                "content":           deliverInput.messageId,
@@ -68,12 +70,12 @@ extension Chat {
                                                       pushMsgType:  3)
                 
                 sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                        callback:           nil,
+//                                        callback:           nil,
                                         callbacks:          nil,
                                         sentCallback:       nil,
                                         deliverCallback:    nil,
-                                        seenCallback:       nil,
-                                        uniuqueIdCallback:  nil)
+                                        seenCallback:       nil)
+//                                        uniuqueIdCallback:  nil)
             }
         }
     }
@@ -96,8 +98,7 @@ extension Chat {
         log.verbose("Try to send deliver message for a message id with this parameters: \n \(seenInput)", context: "Chat")
         
         if let theUserInfo = userInfo {
-            let userInfoJSON = theUserInfo.formatToJSON()
-            if (seenInput.ownerId != userInfoJSON["id"].intValue) {
+            if (seenInput.ownerId != theUserInfo.id!) {
                 /*
                 let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.SEEN.rawValue,
                                                "content":           seenInput.messageId,
@@ -125,12 +126,12 @@ extension Chat {
                                                       pushMsgType:  3)
                 
                 sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                        callback:           nil,
+//                                        callback:           nil,
                                         callbacks:          nil,
                                         sentCallback:       nil,
                                         deliverCallback:    nil,
-                                        seenCallback:       nil,
-                                        uniuqueIdCallback:  nil)
+                                        seenCallback:       nil)
+//                                        uniuqueIdCallback:  nil)
             }
         }
     }

@@ -22,7 +22,16 @@ open class FileUploadEventModel {
     public let threadId:        Int?
     public let uniqueId:        String?
     
-    init(type: FileUploadEventTypes, errorCode: Int?, errorMessage: String?, errorEvent: Error?, fileInfo: FileInfo, fileObjectData: Data?, progress: Float?, threadId: Int?, uniqueId: String?) {
+    init(type:          FileUploadEventTypes,
+         errorCode:     Int?,
+         errorMessage:  String?,
+         errorEvent:    Error?,
+         fileInfo:      FileInfo,
+         fileObjectData: Data?,
+         progress:      Float?,
+         threadId:      Int?,
+         uniqueId:      String?) {
+        
         self.type           = type
         self.errorCode      = errorCode
         self.errorMessage   = errorMessage

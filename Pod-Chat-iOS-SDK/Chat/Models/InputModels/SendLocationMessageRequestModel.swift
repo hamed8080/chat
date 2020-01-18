@@ -9,8 +9,6 @@
 
 import Foundation
 
-import SwiftyJSON
-
 
 open class SendLocationMessageRequestModel {
     
@@ -22,19 +20,19 @@ open class SendLocationMessageRequestModel {
     public let mapStaticZoom:        Int
     
     public let sendMessageImageName:   String?
-    public let sendMessageXC:          String?
-    public let sendMessageYC:          String?
-    public let sendMessageHC:          String?
-    public let sendMessageWC:          String?
+    public let sendMessageXC:          Int?
+    public let sendMessageYC:          Int?
+    public let sendMessageHC:          Int?
+    public let sendMessageWC:          Int?
     public let sendMessageThreadId:    Int
     
     public let sendMessageContent:     String?
-    public let sendMessageMetadata:    JSON?
+    public let sendMessageMetadata:    String?
     public let sendMessageRepliedTo:   Int?
     public let sendMessageTypeCode:    String?
     
     public let typeCode:         String?
-    public let uniqueId:         String?
+    public let uniqueId:         String
     
     public init(mapStaticCenterLat:     Double,
                 mapStaticCenterLng:     Double,
@@ -43,13 +41,13 @@ open class SendLocationMessageRequestModel {
                 mapStaticWidth:         Int?,
                 mapStaticZoom:          Int?,
                 sendMessageImageName:   String?,
-                sendMessageXC:          String?,
-                sendMessageYC:          String?,
-                sendMessageHC:          String?,
-                sendMessageWC:          String?,
+                sendMessageXC:          Int?,
+                sendMessageYC:          Int?,
+                sendMessageHC:          Int?,
+                sendMessageWC:          Int?,
                 sendMessageThreadId:    Int,
                 sendMessageContent:     String?,
-                sendMessageMetadata:    JSON?,
+                sendMessageMetadata:    String?,
                 sendMessageRepliedTo:   Int?,
                 sendMessageTypeCode:    String?,
                 typeCode:               String?,
@@ -74,7 +72,7 @@ open class SendLocationMessageRequestModel {
         self.sendMessageRepliedTo   = sendMessageRepliedTo
         self.sendMessageTypeCode    = sendMessageTypeCode
         self.typeCode               = typeCode
-        self.uniqueId               = uniqueId
+        self.uniqueId               = uniqueId ?? UUID().uuidString
     }
     
 }

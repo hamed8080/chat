@@ -17,7 +17,7 @@ open class UpdateContactsRequestModel {
     public let lastName:        String
     
     public let typeCode:        String?
-    public let uniqueId:        String?
+    public let uniqueId:        String
     
     public init(cellphoneNumber:    String,
                 email:              String,
@@ -33,7 +33,7 @@ open class UpdateContactsRequestModel {
         self.id                 = id
         self.lastName           = lastName
         self.typeCode           = typeCode
-        self.uniqueId           = uniqueId
+        self.uniqueId           = uniqueId ?? UUID().uuidString
     }
     
 }

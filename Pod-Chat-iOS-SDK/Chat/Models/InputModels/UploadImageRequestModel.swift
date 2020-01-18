@@ -9,49 +9,7 @@
 import Alamofire
 import SwiftyJSON
 
-open class UploadImageRequestModel {
-    
-    public let dataToSend:          Data
-    public let fileExtension:       String?
-    public let fileName:            String
-    public let fileSize:            Int64
-    public let originalFileName:    String
-    public let threadId:            Int?
-    public let xC:                  Int?
-    public let yC:                  Int?
-    public let hC:                  Int?
-    public let wC:                  Int?
-    
-    public let typeCode:            String?
-    public let uniqueId:            String
-    
-    public init(dataToSend:         Data,
-                fileExtension:      String?,
-                fileName:           String?,
-                originalFileName:   String?,
-                threadId:           Int?,
-                xC:                 Int?,
-                yC:                 Int?,
-                hC:                 Int?,
-                wC:                 Int?,
-                typeCode:           String?,
-                uniqueId:           String?) {
-        
-        let theFileName:           String  = fileName ?? "\(NSUUID().uuidString))"
-        
-        self.dataToSend         = dataToSend
-        self.fileExtension      = fileExtension
-        self.fileName           = theFileName
-        self.fileSize           = Int64(dataToSend.count)
-        self.originalFileName   = originalFileName ?? theFileName
-        self.threadId           = threadId
-        self.xC                 = xC
-        self.yC                 = yC
-        self.hC                 = hC
-        self.wC                 = wC
-        self.typeCode           = typeCode
-        self.uniqueId           = uniqueId ?? NSUUID().uuidString
-    }
+open class UploadImageRequestModel: UploadRequestModel {
     
     func convertContentToParameters() -> Parameters {
         
@@ -79,4 +37,5 @@ open class UploadImageRequestModel {
     }
     
 }
+
 

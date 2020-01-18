@@ -13,7 +13,7 @@ open class RemoveContactsRequestModel {
     public let contactId:   Int
     
     public let typeCode:    String?
-    public let uniqueId:    String?
+    public let uniqueId:    String
     
     public init(contactId:  Int,
                 typeCode:   String?,
@@ -21,7 +21,7 @@ open class RemoveContactsRequestModel {
         
         self.contactId  = contactId
         self.typeCode   = typeCode
-        self.uniqueId   = uniqueId
+        self.uniqueId   = uniqueId ?? UUID().uuidString
     }
     
 }

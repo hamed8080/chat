@@ -59,7 +59,7 @@ extension Chat {
          */
         
         log.verbose("Try to request to get Contacts with this parameters: \n \(getContactsInput)", context: "Chat")
-        
+        uniqueId(getContactsInput.uniqueId)
         getContactsCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_CONTACTS.rawValue,
@@ -71,7 +71,7 @@ extension Chat {
                                             token:              token,
                                             tokenIssuer:        nil,
                                             typeCode:           getContactsInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           getContactsInput.typeCode ?? generateUUID(),
+                                            uniqueId:           getContactsInput.uniqueId,
                                             uniqueIds:          nil,
                                             isCreateThreadAndSendMessage: true)
         
@@ -82,13 +82,13 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callback:           GetContactsCallback(parameters: chatMessage),
-                                callbacks:          nil,
+//                                callback:           nil,
+                                callbacks:          [(GetContactsCallback(parameters: chatMessage), getContactsInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
-                                seenCallback:       nil) { (getContactUniqueId) in
-            uniqueId(getContactUniqueId)
-        }
+                                seenCallback:       nil) //{ (getContactUniqueId) in
+//            uniqueId(getContactUniqueId)
+//        }
         
         // if cache is enabled by user, it will return cache result to the user
         if enableCache {
@@ -138,9 +138,7 @@ extension Chat {
          *
          */
         log.verbose("Try to request to search contact with this parameters: \n \(searchContactsInput)", context: "Chat")
-        
-        let requestUniqueId = searchContactsInput.uniqueId ?? generateUUID()
-        uniqueId(requestUniqueId)
+        uniqueId(searchContactsInput.uniqueId)
         
         if enableCache {
             if let cacheContacts = Chat.cacheDB.retrieveContacts(ascending:         true,
@@ -252,12 +250,10 @@ extension Chat {
          *
          */
         log.verbose("Try to request to add contact with this parameters: \n \(addContactsInput)", context: "Chat")
+        uniqueId(addContactsInput.uniqueId)
         
-        let messageUniqueId: String = addContactsInput.uniqueId ?? generateUUID()
-        uniqueId(messageUniqueId)
-        
-        sendAddContactRequest(withInputModel: addContactsInput,
-                              messageUniqueId:  messageUniqueId)
+        sendAddContactRequest(withInputModel:   addContactsInput,
+                              messageUniqueId:  addContactsInput.uniqueId)
         { (addContactModel) in
             self.addContactOnCache(withInputModel: addContactModel as! ContactModel)
             completion(addContactModel)
@@ -291,9 +287,7 @@ extension Chat {
          *
          */
         log.verbose("Try to request to add contact with this parameters: \n \(addContactsInput)", context: "Chat")
-        
-        let messageUniqueIds: [String] = addContactsInput.uniqueIds
-        uniqueIds(messageUniqueIds)
+        uniqueIds(addContactsInput.uniqueIds)
         
         sendAddContactsRequest(withInputModel: addContactsInput)
         { (addContactModel) in
@@ -368,8 +362,6 @@ extension Chat {
         let method: HTTPMethod      = HTTPMethod.post
         let headers: HTTPHeaders    = ["_token_": token, "_token_issuer_": "1"]
         
-//        var params: Parameters      = [:]
-        
         url += "?"
         let contactCount = addContactsInput.cellphoneNumbers.count
         for (index, _) in addContactsInput.cellphoneNumbers.enumerated() {
@@ -382,14 +374,7 @@ extension Chat {
                 url += "&"
             }
         }
-        
         url += "&typeCode=\(addContactsInput.typeCode ?? generalTypeCode)"
-        
-//        if let typeCode_ = addContactsInput.typeCode {
-//            url += "&typeCode=\(typeCode_)"
-//        } else {
-//            url += "&typeCode=\(generalTypeCode)"
-//        }
         
         let textAppend = url.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? url
         Networking.sharedInstance.requesttWithJSONresponse(from:            textAppend,
@@ -447,12 +432,9 @@ extension Chat {
          *
          */
         log.verbose("Try to request to update contact with this parameters: \n \(updateContactsInput)", context: "Chat")
+        uniqueId(updateContactsInput.uniqueId)
         
-        
-        let messageUniqueId: String = updateContactsInput.uniqueId ?? generateUUID()
-        uniqueId(messageUniqueId)
-        
-        sendUpdateContactRequest(withInputModel: updateContactsInput, andUniqueId: messageUniqueId)
+        sendUpdateContactRequest(withInputModel: updateContactsInput, andUniqueId: updateContactsInput.uniqueId)
         { (contactModel) in
             self.addContactOnCache(withInputModel: contactModel as! ContactModel)
             completion(contactModel)
@@ -513,9 +495,7 @@ extension Chat {
          *
          */
         log.verbose("Try to request to remove contact with this parameters: \n \(removeContactsInput)", context: "Chat")
-        
-        let requestUniqueId: String = removeContactsInput.uniqueId ?? generateUUID()
-        uniqueId(requestUniqueId)
+        uniqueId(removeContactsInput.uniqueId)
         
         sendRemoveContactRequest(withInputModel: removeContactsInput)
         { (removeContactModel) in
@@ -603,7 +583,7 @@ extension Chat {
          *
          */
         log.verbose("Try to request to block user with this parameters: \n \(blockContactsInput)", context: "Chat")
-        
+        uniqueId(blockContactsInput.uniqueId)
         blockCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.BLOCK.rawValue,
@@ -615,7 +595,7 @@ extension Chat {
                                             token:              token,
                                             tokenIssuer:        nil,
                                             typeCode:           blockContactsInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           blockContactsInput.uniqueId ?? generateUUID(),
+                                            uniqueId:           blockContactsInput.uniqueId,
                                             uniqueIds:          nil,
                                             isCreateThreadAndSendMessage: true)
         
@@ -626,13 +606,13 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callback:           BlockContactCallbacks(),
-                                callbacks:          nil,
+//                                callback:           nil,
+                                callbacks:          [(BlockContactCallbacks(), blockContactsInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
-                                seenCallback:       nil) { (blockUniqueId) in
-            uniqueId(blockUniqueId)
-        }
+                                seenCallback:       nil) //{ (blockUniqueId) in
+//            uniqueId(blockUniqueId)
+//        }
         
     }
     
@@ -670,7 +650,7 @@ extension Chat {
          *
          */
         log.verbose("Try to request to get block users with this parameters: \n \(getBlockedContactsInput)", context: "Chat")
-        
+        uniqueId(getBlockedContactsInput.uniqueId)
         getBlockedCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_BLOCKED.rawValue,
@@ -682,7 +662,7 @@ extension Chat {
                                             token:              token,
                                             tokenIssuer:        nil,
                                             typeCode:           getBlockedContactsInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           getBlockedContactsInput.uniqueId ?? generateUUID(),
+                                            uniqueId:           getBlockedContactsInput.uniqueId,
                                             uniqueIds:          nil,
                                             isCreateThreadAndSendMessage: true)
         
@@ -693,13 +673,13 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callback:           GetBlockedContactsCallbacks(parameters: chatMessage),
-                                callbacks:          nil,
+//                                callback:           nil,
+                                callbacks:          [(GetBlockedContactsCallbacks(parameters: chatMessage), getBlockedContactsInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
-                                seenCallback:       nil) { (getBlockedUniqueId) in
-            uniqueId(getBlockedUniqueId)
-        }
+                                seenCallback:       nil) //{ (getBlockedUniqueId) in
+//            uniqueId(getBlockedUniqueId)
+//        }
         
     }
     
@@ -738,7 +718,7 @@ extension Chat {
          *
          */
         log.verbose("Try to request to unblock user with this parameters: \n \(unblockContactsInput)", context: "Chat")
-        
+        uniqueId(unblockContactsInput.uniqueId)
         unblockCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.UNBLOCK.rawValue,
@@ -750,7 +730,7 @@ extension Chat {
                                             token:              token,
                                             tokenIssuer:        nil,
                                             typeCode:           unblockContactsInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           unblockContactsInput.uniqueId ?? generateUUID(),
+                                            uniqueId:           unblockContactsInput.uniqueId,
                                             uniqueIds:          nil,
                                             isCreateThreadAndSendMessage: true)
         
@@ -761,13 +741,13 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callback:           UnblockContactCallbacks(),
-                                callbacks:          nil,
+//                                callback:           nil,
+                                callbacks:          [(UnblockContactCallbacks(), unblockContactsInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
-                                seenCallback:       nil) { (blockUniqueId) in
-            uniqueId(blockUniqueId)
-        }
+                                seenCallback:       nil) //{ (blockUniqueId) in
+//            uniqueId(blockUniqueId)
+//        }
         
     }
     

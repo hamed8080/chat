@@ -15,7 +15,7 @@ open class MessageDeliverySeenListRequestModel {
     public let offset:      Int?
     
     public let typeCode:    String?
-    public let uniqueId:    String?
+    public let uniqueId:    String
     
     public init(count:      Int?,
                 messageId:  Int,
@@ -27,7 +27,7 @@ open class MessageDeliverySeenListRequestModel {
         self.messageId  = messageId
         self.offset     = offset
         self.typeCode   = typeCode
-        self.uniqueId   = uniqueId
+        self.uniqueId   = uniqueId ?? UUID().uuidString
     }
     
     func convertContentToJSON() -> JSON {        

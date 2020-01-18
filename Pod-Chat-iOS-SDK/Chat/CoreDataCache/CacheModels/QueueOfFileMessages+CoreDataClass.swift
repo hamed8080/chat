@@ -21,6 +21,11 @@ public class QueueOfFileMessages: NSManagedObject {
         var repliedTo:      Int?
         var threadId:       Int?
         
+        var xC:       Int?
+        var yC:       Int?
+        var wC:       Int?
+        var hC:       Int?
+        
         func createVariables() {
             if let fileToSend2 = self.fileToSend as Data? {
                 fileToSend = fileToSend2
@@ -39,21 +44,33 @@ public class QueueOfFileMessages: NSManagedObject {
             if let threadId2 = self.threadId as? Int {
                 threadId = threadId2
             }
+            if let xC_ = self.xC as? Int {
+                xC = xC_
+            }
+            if let yC_ = self.yC as? Int {
+                yC = yC_
+            }
+            if let wC_ = self.wC as? Int {
+                wC = wC_
+            }
+            if let hC_ = self.hC as? Int {
+                hC = hC_
+            }
         }
         
         func createQueueOfWaitFileMessagesModel() -> QueueOfWaitFileMessagesModel {
             let queueOfWaitFileMessagesModel = QueueOfWaitFileMessagesModel(content:        self.content,
                                                                             fileName:       self.fileName,
-                                                                            imageName:      self.imageName,
+//                                                                            imageName:      self.imageName,
 //                                                                            metadata:       metadata,
                                                                             metadata:       self.metadata,
                                                                             repliedTo:      repliedTo,
 //                                                                            subjectId:  subjectId,
                                                                             threadId:       threadId,
-                                                                            xC:             self.xC,
-                                                                            yC:             self.yC,
-                                                                            hC:             self.hC,
-                                                                            wC:             self.wC,
+                                                                            xC:             xC,
+                                                                            yC:             yC,
+                                                                            hC:             hC,
+                                                                            wC:             wC,
                                                                             fileToSend:     fileToSend,
                                                                             imageToSend:    imageToSend,
                                                                             typeCode:       self.typeCode,

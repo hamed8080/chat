@@ -13,56 +13,14 @@ import SwiftyJSON
 
 open class SendFileMessageRequestModel {
     
-    public let fileName:    String?
-    public let imageName:   String?
-    public let xC:          String?
-    public let yC:          String?
-    public let hC:          String?
-    public let wC:          String?
-    public let threadId:    Int
+    let messageInput:   SendTextMessageRequestModel
+    let uploadInput:    UploadRequestModel
     
-    public let content:     String?
-    public let metadata:    JSON?
-    public let repliedTo:   Int?
-    
-    public let fileToSend:      Data?
-    public let imageToSend:     Data?
-    
-    public let typeCode: String?
-    public let uniqueId: String?
-    
-    public init(fileName:       String?,
-                imageName:      String?,
-                xC:             String?,
-                yC:             String?,
-                hC:             String?,
-                wC:             String?,
-                threadId:       Int,
-                content:        String?,
-                metadata:       JSON?,
-                repliedTo:      Int?,
-                fileToSend:     Data?,
-                imageToSend:    Data?,
-                typeCode:       String?,
-                uniqueId:       String?) {
+    public init(messageInput:   SendTextMessageRequestModel,
+                uploadInput:    UploadRequestModel) {
         
-        self.fileName       = fileName
-        self.imageName      = imageName
-        self.xC             = xC
-        self.yC             = yC
-        self.hC             = yC
-        self.wC             = yC
-        self.threadId       = threadId
-        
-        self.content        = content
-        self.metadata       = metadata
-        self.repliedTo      = repliedTo
-        
-        self.fileToSend     = fileToSend
-        self.imageToSend    = imageToSend
-        
-        self.typeCode       = typeCode
-        self.uniqueId       = uniqueId
+        self.messageInput   = messageInput
+        self.uploadInput    = uploadInput
     }
     
 }

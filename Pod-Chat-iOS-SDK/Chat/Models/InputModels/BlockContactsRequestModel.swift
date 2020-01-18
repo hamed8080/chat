@@ -15,7 +15,7 @@ open class BlockContactsRequestModel {
     public let userId:      Int?
     
     public let typeCode:    String?
-    public let uniqueId:    String?
+    public let uniqueId:    String
     
     public init(contactId:  Int?,
                 threadId:   Int?,
@@ -27,7 +27,7 @@ open class BlockContactsRequestModel {
         self.threadId   = threadId
         self.userId     = userId
         self.typeCode   = typeCode
-        self.uniqueId   = uniqueId
+        self.uniqueId   = uniqueId ?? UUID().uuidString
     }
     
     func convertContentToJSON() -> JSON {

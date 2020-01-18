@@ -94,7 +94,7 @@ extension Chat {
                                                                                 query:          getHistoryInput.query,
                                                                                 threadId:       sendParams.subjectId!,
                                                                                 toTime:         getHistoryInput.toTime,
-                                                                                uniqueId:       getHistoryInput.uniqueId) {
+                                                                                uniqueIds:      getHistoryInput.uniqueIds) {
                     
                     // check if there was any message on the server response that wasn't on the cache, send them as New Message Event to the client
                     // check if there was any message on the server response that also was on the cache, then check their data, and if see any difference, send them as Edit Message Event to the client
