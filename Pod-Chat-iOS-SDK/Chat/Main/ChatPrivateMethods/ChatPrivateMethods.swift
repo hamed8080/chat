@@ -852,13 +852,23 @@ extension Chat {
             delegate?.systemEvents(model: systemEventModel)
             return
             
-        // a message of type 48 (PIN) comes from Server.
+        // a message of type 48 (PIN_THREAD) comes from Server.
         case chatMessageVOTypes.PIN_THREAD.rawValue:
             responseOfPinThread(withMessage: message)
             break
             
-        // a message of type 49 (PIN) comes from Server.
+        // a message of type 49 (UNPIN_THREAD) comes from Server.
         case chatMessageVOTypes.UNPIN_THREAD.rawValue:
+            responseOfUnpinThread(withMessage: message)
+            break
+            
+        // a message of type 50 (PIN_MESSAGE) comes from Server.
+        case chatMessageVOTypes.PIN_MESSAGE.rawValue:
+            responseOfUnpinThread(withMessage: message)
+            break
+            
+        // a message of type 51 (UNPIN_MESSAGE) comes from Server.
+        case chatMessageVOTypes.UNPIN_MESSAGE.rawValue:
             responseOfUnpinThread(withMessage: message)
             break
             
@@ -913,7 +923,7 @@ extension Chat {
         
         if let messageOwner = message.participant?.id {
             if messageOwner != userInfo?.id {
-                let deliveryModel = DeliverSeenRequestModel(messageId:  message.id,
+                let deliveryModel = DeliverSeenRequestModel(messageId:  message.id ?? 0,
                                                             ownerId:    messageOwner,
                                                             typeCode:   nil)
                 deliver(inputModel: deliveryModel)

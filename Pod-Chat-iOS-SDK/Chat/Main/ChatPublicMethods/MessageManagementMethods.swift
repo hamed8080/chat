@@ -1223,22 +1223,106 @@ extension Chat {
     }
     
     
-    /// PinThread:
+    // MARK: - Pin/Unpin Message
+    
+    /// PinMessage:
     /// pin message on a specific thread
     ///
-    /// by calling this method, message of type "" is sends to the sserver
+    /// by calling this method, message of type "PIN_MESSAGE" is sends to the sserver
     ///
     /// Inputs:
-    /// - this method does not have any input method
+    /// - you have to send your parameters as "PinAndUnpinMessageRequestModel" to this function
     ///
     /// Outputs:
-    /// - It has no output
-    public func pinMessage() {
+    /// - It has 2 callbacks as response:
+    ///
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (PinAndUnpinMessageRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! PinUnpinMessageModel)
+    public func pinMessage(inputModel:  PinAndUnpinMessageRequestModel,
+                           uniqueId:    @escaping (String) -> (),
+                           completion:  @escaping callbackTypeAlias) {
+            
+        log.verbose("Try to request to pin message with this parameters: \n \(inputModel)", context: "Chat")
+        uniqueId(inputModel.uniqueId)
+        
+        pinMessageCallbackToUser = completion
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.PIN_MESSAGE.rawValue,
+                                            content:            "\(inputModel.convertContentToJSON())",
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          inputModel.messageId,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           inputModel.typeCode ?? generalTypeCode,
+                                            uniqueId:           inputModel.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: true)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          [(PinMessageCallbacks(), inputModel.uniqueId)],
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
         
     }
     
     
-    public func unpinMessage() {
+    /// UnpinMessage:
+    /// pin message on a specific thread
+    ///
+    /// by calling this method, message of type "UNPIN_MESSAGE" is sends to the sserver
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "PinAndUnpinMessageRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as response:
+    ///
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (PinAndUnpinMessageRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! PinUnpinMessageModel)
+    public func unpinMessage(inputModel:  PinAndUnpinMessageRequestModel,
+                             uniqueId:    @escaping (String) -> (),
+                             completion:  @escaping callbackTypeAlias) {
+            
+        log.verbose("Try to request to unpin message with this parameters: \n \(inputModel)", context: "Chat")
+        uniqueId(inputModel.uniqueId)
+        
+        unpinMessageCallbackToUser = completion
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.UNPIN_MESSAGE.rawValue,
+                                            content:            "\(inputModel.convertContentToJSON())",
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          inputModel.messageId,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           inputModel.typeCode ?? generalTypeCode,
+                                            uniqueId:           inputModel.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: true)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          [(UnpinMessageCallbacks(), inputModel.uniqueId)],
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
         
     }
     

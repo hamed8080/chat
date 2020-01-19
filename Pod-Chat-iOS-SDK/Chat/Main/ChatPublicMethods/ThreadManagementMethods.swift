@@ -815,12 +815,12 @@ extension Chat {
     /// then the response will come back as callbacks to client whose calls this function.
     ///
     /// Inputs:
-    /// - you have to send your parameters as "[RoleRequestModel]" to this function
+    /// - you have to send your parameters as "RoleRequestModel" to this function
     ///
     /// Outputs:
     /// - It has 3 callbacks as responses.
     ///
-    /// - parameter inputModel:     (input) you have to send your parameters insid this model. ([RoleRequestModel])
+    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (RoleRequestModel)
     /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! UserRolesModel)
     /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (UserRolesModel)
@@ -833,7 +833,7 @@ extension Chat {
         setRoleToUserCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.SET_RULE_TO_USER.rawValue,
-                                            content:            "\(SetRemoveRoleRequestModel(roleRequestModel: setRoleInput, roleOperation: RoleOperations.Add).convertContentToJSON())",
+                                            content:            "\(setRoleInput.convertContentToJSON())",
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -852,14 +852,10 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(SetRoleToUserCallback(parameters: chatMessage), setRoleInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (getAminListUniqueId) in
-//            uniqueId(getAminListUniqueId)
-//        }
         
     }
     
@@ -885,17 +881,12 @@ extension Chat {
                            uniqueId:        @escaping (String) -> (),
                            completion:      @escaping callbackTypeAlias,
                            cacheResponse:   @escaping callbackTypeAlias) {
-        
+
         uniqueId(removeRoleInput.uniqueId)
         removeRoleFromUserCallbackToUser = completion
         
-//        var content: [JSON] = []
-//        for item in removeRoleInput {
-//            content.append(SetRemoveRoleRequestModel(roleRequestModel: item, roleOperation: RoleOperations.Remove).convertContentToJSON())
-//        }
-        
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.REMOVE_ROLE_FROM_USER.rawValue,
-                                            content:            "\(SetRemoveRoleRequestModel(roleRequestModel: removeRoleInput, roleOperation: RoleOperations.Remove).convertContentToJSON())",
+                                            content:            "\(removeRoleInput.convertContentToJSON())",
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -906,23 +897,19 @@ extension Chat {
                                             uniqueId:           removeRoleInput.uniqueId,
                                             uniqueIds:          nil,
                                             isCreateThreadAndSendMessage: true)
-        
+
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
                                               msgTTL:       msgTTL,
                                               peerName:     serverName,
                                               priority:     msgPriority,
                                               pushMsgType:  nil)
-        
+
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(SetRoleToUserCallback(parameters: chatMessage), removeRoleInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (getAminListUniqueId) in
-//            uniqueId(getAminListUniqueId)
-//        }
-        
+
     }
     
     
@@ -947,11 +934,13 @@ extension Chat {
                            completion:      @escaping callbackTypeAlias,
                            cacheResponse:   @escaping callbackTypeAlias) {
         
-        let setRoleInputModel = RoleRequestModel(roles:          setAuditorInput.roles,
-                                                 threadId:       setAuditorInput.threadId,
-                                                 userId:         setAuditorInput.userId,
-                                                 typeCode:       setAuditorInput.typeCode,
-                                                 uniqueId:       setAuditorInput.uniqueId)
+        let setRoleModel = SetRemoveRoleModel(userId:   setAuditorInput.userId,
+                                              roles:    setAuditorInput.roles)
+        let setRoleInputModel = RoleRequestModel(userRoles: [setRoleModel],
+                                                 threadId:  setAuditorInput.threadId,
+                                                 typeCode:  setAuditorInput.typeCode,
+                                                 uniqueId:  setAuditorInput.uniqueId)
+        
         setRole(inputModel: setRoleInputModel, uniqueId: { (setRoleUniqueId) in
             uniqueId(setRoleUniqueId)
         }, completion: { (theServerResponse) in
@@ -983,12 +972,14 @@ extension Chat {
                               uniqueId:       @escaping (String) -> (),
                               completion:     @escaping callbackTypeAlias,
                               cacheResponse:  @escaping callbackTypeAlias) {
-
-        let removeRoleInputModel = RoleRequestModel(roles:       removeAuditorInput.roles,
-                                                    threadId:    removeAuditorInput.threadId,
-                                                    userId:      removeAuditorInput.userId,
-                                                    typeCode:    removeAuditorInput.typeCode,
-                                                    uniqueId:    removeAuditorInput.uniqueId)
+        
+        let removeRoleModel = SetRemoveRoleModel(userId:    removeAuditorInput.userId,
+                                                 roles:     removeAuditorInput.roles)
+        let removeRoleInputModel = RoleRequestModel(userRoles:  [removeRoleModel],
+                                                    threadId:   removeAuditorInput.threadId,
+                                                    typeCode:   removeAuditorInput.typeCode,
+                                                    uniqueId:   removeAuditorInput.uniqueId)
+        
         removeRole(inputModel: removeRoleInputModel, uniqueId: { (removeRoleUniqueId) in
             uniqueId(removeRoleUniqueId)
         }, completion: { (theServerResponse) in

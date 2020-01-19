@@ -63,12 +63,12 @@ extension Chat {
             log.verbose("UnpinThreadCallbacks", context: "Chat")
             
             if let stringContent = response.resultAsString {
-                let muteModel = PinUnpinThreadModel(threadId:       Int(stringContent) ?? 0,
-                                                    hasError:       response.hasError,
-                                                    errorMessage:   response.errorMessage,
-                                                    errorCode:      response.errorCode)
+                let unpinModel = PinUnpinThreadModel(threadId:      Int(stringContent) ?? 0,
+                                                     hasError:      response.hasError,
+                                                     errorMessage:  response.errorMessage,
+                                                     errorCode:     response.errorCode)
                 
-                success(muteModel)
+                success(unpinModel)
             }
             
         }
