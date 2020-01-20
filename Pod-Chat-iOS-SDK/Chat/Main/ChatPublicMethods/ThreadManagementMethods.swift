@@ -1026,6 +1026,61 @@ extension Chat {
                                 seenCallback:       nil)
     }
     
+    
+    // MARK: - Seen Duration
+    
+    /// NotSeenDuration:
+    /// contact not seen duration time
+    ///
+    /// By calling this function, a request of type 47 (GET_NOT_SEEN_DURATION) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "NotSeenDurationRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as responses.
+    ///
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (NotSeenDurationRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! NotSeenDurationModel)
+    public func unpinThread(inputModel notSeenDurationInput: NotSeenDurationRequestModel,
+                             uniqueId:          @escaping (String) -> (),
+                             completion:        @escaping callbackTypeAlias) {
+        
+        log.verbose("Try to request to get  user notSeenDuration with this parameters: \n \(notSeenDurationInput)", context: "Chat")
+        uniqueId(notSeenDurationInput.uniqueId)
+        
+        getNotSeenDurationCallbackToUser = completion
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_NOT_SEEN_DURATION.rawValue,
+                                            content:            "\(notSeenDurationInput.convertContentToJSON())",
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          nil,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           notSeenDurationInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           notSeenDurationInput.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: true)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          [(NotSeenDurationCallback(), notSeenDurationInput.uniqueId)],
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+    }
+    
+    
+    
 }
 
 

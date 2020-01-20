@@ -852,6 +852,11 @@ extension Chat {
             delegate?.systemEvents(model: systemEventModel)
             return
             
+        // a message of type 47 (GET_NOT_SEEN_DURATION) comes from Server.
+        case chatMessageVOTypes.GET_NOT_SEEN_DURATION.rawValue:
+            responseOfNotSeenDuration(withMessage: message)
+            break
+            
         // a message of type 48 (PIN_THREAD) comes from Server.
         case chatMessageVOTypes.PIN_THREAD.rawValue:
             responseOfPinThread(withMessage: message)

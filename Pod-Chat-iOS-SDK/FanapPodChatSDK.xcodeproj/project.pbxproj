@@ -82,6 +82,9 @@
 		3E35336623D4502200731774 /* UnpinMessageCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E35336523D4502200731774 /* UnpinMessageCallback.swift */; };
 		3E35336823D4548200731774 /* PinUnpinMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E35336723D4548200731774 /* PinUnpinMessageModel.swift */; };
 		3E35336A23D4560D00731774 /* PinUnpinMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E35336923D4560D00731774 /* PinUnpinMessage.swift */; };
+		3E3D785223D5EFC0005797A4 /* NotSeenDurationRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3D785123D5EFC0005797A4 /* NotSeenDurationRequestModel.swift */; };
+		3E3D785E23D5F12C005797A4 /* NotSeenDurationCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3D785D23D5F12C005797A4 /* NotSeenDurationCallback.swift */; };
+		3E3D786023D5F278005797A4 /* NotSeenDurationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3D785F23D5F278005797A4 /* NotSeenDurationModel.swift */; };
 		3E3E56792160A2F20084C8C1 /* ReplyMessageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E56782160A2F10084C8C1 /* ReplyMessageTest.swift */; };
 		3E3E56852160A30B0084C8C1 /* EditMessageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E56842160A30B0084C8C1 /* EditMessageTest.swift */; };
 		3E3E56872160A3280084C8C1 /* ForwardMessageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E56862160A3280084C8C1 /* ForwardMessageTest.swift */; };
@@ -454,6 +457,9 @@
 		3E35336523D4502200731774 /* UnpinMessageCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnpinMessageCallback.swift; sourceTree = "<group>"; };
 		3E35336723D4548200731774 /* PinUnpinMessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinUnpinMessageModel.swift; sourceTree = "<group>"; };
 		3E35336923D4560D00731774 /* PinUnpinMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinUnpinMessage.swift; sourceTree = "<group>"; };
+		3E3D785123D5EFC0005797A4 /* NotSeenDurationRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotSeenDurationRequestModel.swift; sourceTree = "<group>"; };
+		3E3D785D23D5F12C005797A4 /* NotSeenDurationCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotSeenDurationCallback.swift; sourceTree = "<group>"; };
+		3E3D785F23D5F278005797A4 /* NotSeenDurationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotSeenDurationModel.swift; sourceTree = "<group>"; };
 		3E3E56782160A2F10084C8C1 /* ReplyMessageTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyMessageTest.swift; sourceTree = "<group>"; };
 		3E3E56842160A30B0084C8C1 /* EditMessageTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMessageTest.swift; sourceTree = "<group>"; };
 		3E3E56862160A3280084C8C1 /* ForwardMessageTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForwardMessageTest.swift; sourceTree = "<group>"; };
@@ -764,6 +770,7 @@
 			children = (
 				3EA1567521CE1AC9004B1346 /* AddContactsRequestModel.swift */,
 				3EA1568F21CE1BFC004B1346 /* AddParticipantsRequestModel.swift */,
+				3E3D785123D5EFC0005797A4 /* NotSeenDurationRequestModel.swift */,
 				3E52BFB223A6762800D43DAC /* AddRemoveAuditorRequestModel.swift */,
 				3EA1567B21CE1B1F004B1346 /* BlockContactsRequestModel.swift */,
 				3EB7595B228D98FC00A48262 /* CancelMessageRequestModel.swift */,
@@ -915,6 +922,7 @@
 				3E8ADCFC23B7845200E3538D /* PinThreadCallback.swift */,
 				3E8ADD0023B7855500E3538D /* UnpinThreadCallback.swift */,
 				3E35336323D44D3F00731774 /* PinMessageCallback.swift */,
+				3E3D785D23D5F12C005797A4 /* NotSeenDurationCallback.swift */,
 				3E35336523D4502200731774 /* UnpinMessageCallback.swift */,
 				3EB5208A22ABF58C00B7EA45 /* SetRoleToUserCallback.swift */,
 				3E33159823AFD0EB0070A3D1 /* RemoveRoleFromUserCallback.swift */,
@@ -995,6 +1003,7 @@
 				3E78AA94218479BA002A6EC0 /* UploadImageModel.swift */,
 				3EAAFAB523A65BD100003258 /* DownloadImageModel.swift */,
 				3EBBEDEA2174C44400F5CDC7 /* UserInfoModel.swift */,
+				3E3D785F23D5F278005797A4 /* NotSeenDurationModel.swift */,
 				3E8D87D422185B2A0092B440 /* QueueOfWaitEditMessagesModel.swift */,
 				3E8D87D1221858290092B440 /* QueueOfWaitFileMessagesModel.swift */,
 				3E8D87D722185C0E0092B440 /* QueueOfWaitForwardMessagesModel.swift */,
@@ -1416,10 +1425,12 @@
 				3EBBEDD92174C2A200F5CDC7 /* BlockedContact.swift in Sources */,
 				3E63A088213A618F00E4E2C2 /* ObjectTypes.swift in Sources */,
 				3EB5201B22ABC1AB00B7EA45 /* CMUserRole+CoreDataClass.swift in Sources */,
+				3E3D785E23D5F12C005797A4 /* NotSeenDurationCallback.swift in Sources */,
 				3EB5208522ABF51D00B7EA45 /* GetMessageSeenList.swift in Sources */,
 				3EAAFAB423A6379600003258 /* DownloadFileModel.swift in Sources */,
 				3EA1567821CE1AF0004B1346 /* UpdateContactsRequestModel.swift in Sources */,
 				3E43D1562132BF700069DF9A /* SendMessage.swift in Sources */,
+				3E3D786023D5F278005797A4 /* NotSeenDurationModel.swift in Sources */,
 				3E8ADCF123B783CC00E3538D /* PinAndUnpinThreadRequestModel.swift in Sources */,
 				3E0A76C222AFD6F8009D669E /* FileManagementMethods.swift in Sources */,
 				3E8D87E3221861920092B440 /* QueueOfFileMessages+CoreDataProperties.swift in Sources */,
@@ -1485,6 +1496,7 @@
 				3EB5207922ABF43500B7EA45 /* BlockContactCallbacks.swift in Sources */,
 				3E24084621F5C844001F32F1 /* CMConversation+CoreDataProperties.swift in Sources */,
 				3E0A76C422AFD7C0009D669E /* MapManagementMethods.swift in Sources */,
+				3E3D785223D5EFC0005797A4 /* NotSeenDurationRequestModel.swift in Sources */,
 				3E35336423D44D3F00731774 /* PinMessageCallback.swift in Sources */,
 				3E35336223D44C5400731774 /* PinAndUnpinMessageRequestModel.swift in Sources */,
 				3E8D56D721DB9CF300B844DE /* MapReverseModel.swift in Sources */,
