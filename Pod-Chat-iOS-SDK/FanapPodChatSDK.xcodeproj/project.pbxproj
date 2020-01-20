@@ -69,6 +69,8 @@
 		3E24085D21F5C844001F32F1 /* CMLinkedUser+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E24082E21F5C844001F32F1 /* CMLinkedUser+CoreDataClass.swift */; };
 		3E24085E21F5C844001F32F1 /* CMLinkedUser+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E24082F21F5C844001F32F1 /* CMLinkedUser+CoreDataProperties.swift */; };
 		3E24085F21F5C844001F32F1 /* CMLinkedUser+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E24082F21F5C844001F32F1 /* CMLinkedUser+CoreDataProperties.swift */; };
+		3E2ADA5123D5A5AE00331407 /* CMPinMessage+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E2ADA4F23D5A5AE00331407 /* CMPinMessage+CoreDataClass.swift */; };
+		3E2ADA5223D5A5AE00331407 /* CMPinMessage+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E2ADA5023D5A5AE00331407 /* CMPinMessage+CoreDataProperties.swift */; };
 		3E33159923AFD0EB0070A3D1 /* RemoveRoleFromUserCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E33159823AFD0EB0070A3D1 /* RemoveRoleFromUserCallback.swift */; };
 		3E3315A523B202E30070A3D1 /* SystemEventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3315A423B202E30070A3D1 /* SystemEventModel.swift */; };
 		3E3315A723B206CC0070A3D1 /* BotEventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3315A623B206CC0070A3D1 /* BotEventModel.swift */; };
@@ -439,6 +441,8 @@
 		3E24082921F5C844001F32F1 /* CMContact+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMContact+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3E24082E21F5C844001F32F1 /* CMLinkedUser+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMLinkedUser+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3E24082F21F5C844001F32F1 /* CMLinkedUser+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMLinkedUser+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		3E2ADA4F23D5A5AE00331407 /* CMPinMessage+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMPinMessage+CoreDataClass.swift"; sourceTree = "<group>"; };
+		3E2ADA5023D5A5AE00331407 /* CMPinMessage+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMPinMessage+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3E33159823AFD0EB0070A3D1 /* RemoveRoleFromUserCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveRoleFromUserCallback.swift; sourceTree = "<group>"; };
 		3E3315A423B202E30070A3D1 /* SystemEventModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemEventModel.swift; sourceTree = "<group>"; };
 		3E3315A623B206CC0070A3D1 /* BotEventModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BotEventModel.swift; sourceTree = "<group>"; };
@@ -832,6 +836,8 @@
 		3EB5204722ABE7AA00B7EA45 /* CacheModels */ = {
 			isa = PBXGroup;
 			children = (
+				3E2ADA4F23D5A5AE00331407 /* CMPinMessage+CoreDataClass.swift */,
+				3E2ADA5023D5A5AE00331407 /* CMPinMessage+CoreDataProperties.swift */,
 				3E037C2022E2DB6E00094C80 /* MessageGaps+CoreDataClass.swift */,
 				3E037C2122E2DB6E00094C80 /* MessageGaps+CoreDataProperties.swift */,
 				3E24082821F5C844001F32F1 /* CMContact+CoreDataClass.swift */,
@@ -1360,6 +1366,7 @@
 				3EA1567E21CE1B49004B1346 /* GetBlockedContactListRequestModel.swift in Sources */,
 				3E8ADC6923B3511F00E3538D /* SendChatMessageVO.swift in Sources */,
 				3E0A76CA22AFDBF6009D669E /* CreateReturnData.swift in Sources */,
+				3E2ADA5223D5A5AE00331407 /* CMPinMessage+CoreDataProperties.swift in Sources */,
 				3E3315AB23B221E90070A3D1 /* MessageEventModel.swift in Sources */,
 				3ECFCAB8228967BD00313419 /* ClearHistoryRequestModel.swift in Sources */,
 				3E00CAF521DC9E6B0029B1FC /* MapRoutingModel.swift in Sources */,
@@ -1465,6 +1472,7 @@
 				3EA1567A21CE1B0B004B1346 /* RemoveContactsRequestModel.swift in Sources */,
 				3E11F56D21DA1A02004B3B2C /* GetFileRequestModel.swift in Sources */,
 				3EB5208722ABF53D00B7EA45 /* ClearHistoryCallback.swift in Sources */,
+				3E2ADA5123D5A5AE00331407 /* CMPinMessage+CoreDataClass.swift in Sources */,
 				3E5AAEE92219509C0085C03D /* QueueOfWaitImagesModel.swift in Sources */,
 				3EA1569C21CE1C7C004B1346 /* ForwardMessageRequestModel.swift in Sources */,
 				3EB5206922ABF2E100B7EA45 /* UpdateThreadInfoCallback.swift in Sources */,

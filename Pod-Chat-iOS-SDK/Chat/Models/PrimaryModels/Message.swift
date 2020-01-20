@@ -49,10 +49,10 @@ open class Message {
 //    public let timeNanos:   UInt?
     public var uniqueId:    String?
     
-    public var conversation:   Conversation?
-    public var forwardInfo:    ForwardInfo?
-    public var participant:    Participant?
-    public var replyInfo:      ReplyInfo?
+    public var conversation:    Conversation?
+    public var forwardInfo:     ForwardInfo?
+    public var participant:     Participant?
+    public var replyInfo:       ReplyInfo?
     
     public init(threadId: Int?, pushMessageVO: JSON) {
         
@@ -98,26 +98,26 @@ open class Message {
         
     }
     
-    public init(threadId:      Int?,
-                deletable:     Bool?,
-                delivered:     Bool?,
-                editable:      Bool?,
-                edited:        Bool?,
-                id:            Int?,
+    public init(threadId:       Int?,
+                deletable:      Bool?,
+                delivered:      Bool?,
+                editable:       Bool?,
+                edited:         Bool?,
+                id:             Int?,
                 mentioned:      Bool?,
-                message:       String?,
-                messageType:   String?,
-                metadata:      String?,
-                ownerId:       Int?,
-                previousId:    Int?,
-                seen:          Bool?,
+                message:        String?,
+                messageType:    String?,
+                metadata:       String?,
+                ownerId:        Int?,
+                previousId:     Int?,
+                seen:           Bool?,
                 systemMetadata: String?,
-                time:          UInt?,
-                uniqueId:      String?,
-                conversation:  Conversation?,
-                forwardInfo:   ForwardInfo?,
-                participant:   Participant?,
-                replyInfo:     ReplyInfo?) {
+                time:           UInt?,
+                uniqueId:       String?,
+                conversation:   Conversation?,
+                forwardInfo:    ForwardInfo?,
+                participant:    Participant?,
+                replyInfo:      ReplyInfo?) {
         
         self.threadId       = threadId
         self.deletable      = deletable

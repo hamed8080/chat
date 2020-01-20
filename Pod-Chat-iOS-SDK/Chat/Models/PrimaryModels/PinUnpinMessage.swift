@@ -31,7 +31,7 @@ open class PinUnpinMessage {
         self.text       = pinUnpinContent["text"].string
     }
     
-    func convertContentToJSON() -> JSON {
+    func formatToJSON() -> JSON {
         var content: JSON = [:]
         content["messageId"] = JSON(messageId)
         content["notifyAll"] = JSON(notifyAll)

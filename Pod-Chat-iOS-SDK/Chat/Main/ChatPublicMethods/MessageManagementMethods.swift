@@ -75,14 +75,10 @@ extension Chat {
                                               pushMsgType:  nil)
       
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(GetHistoryCallbacks(parameters: chatMessage), getHistoryInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (getHistoryUniqueId) in
-//            uniqueId(getHistoryUniqueId)
-//        }
        
 //         if cache is enabled by user, first return cache result to the user
         if enableCache {
@@ -166,15 +162,10 @@ extension Chat {
                                               pushMsgType:  nil)
   
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(ClearHistoryCallback(parameters: chatMessage), clearHistoryInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (clearHistoryUniqueId) in
-//            uniqueId(clearHistoryUniqueId)
-//        }
-    
     }
        
     
@@ -202,6 +193,7 @@ extension Chat {
                                 onSent:                 @escaping callbackTypeAlias,
                                 onDelivere:             @escaping callbackTypeAlias,
                                 onSeen:                 @escaping callbackTypeAlias) {
+        
         log.verbose("Try to send Message with this parameters: \n \(sendTextMessageInput)", context: "Chat")
         uniqueId(sendTextMessageInput.uniqueId)
         
@@ -250,15 +242,10 @@ extension Chat {
                                               pushMsgType:  4)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          nil,
                                 sentCallback:       (SendMessageCallbacks(parameters: chatMessage), [sendTextMessageInput.uniqueId]),
                                 deliverCallback:    (SendMessageCallbacks(parameters: chatMessage), [sendTextMessageInput.uniqueId]),
                                 seenCallback:       (SendMessageCallbacks(parameters: chatMessage), [sendTextMessageInput.uniqueId]))
-//        { (theUniqueId) in
-//                                    uniqueId(theUniqueId)
-//        }
-        
     }
     
     
@@ -284,6 +271,7 @@ extension Chat {
                                        onSent:      @escaping callbackTypeAlias,
                                        onDelivered: @escaping callbackTypeAlias,
                                        onSeen:      @escaping callbackTypeAlias) {
+        
         log.verbose("Try to send BotMessage with this parameters: \n \(sendInterActiveMessageInput)", context: "Chat")
         uniqueId(sendInterActiveMessageInput.uniqueId)
         
@@ -314,15 +302,10 @@ extension Chat {
                                               pushMsgType:  4)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          nil,
                                 sentCallback:       (SendMessageCallbacks(parameters: chatMessage), [sendInterActiveMessageInput.uniqueId]),
                                 deliverCallback:    (SendMessageCallbacks(parameters: chatMessage), [sendInterActiveMessageInput.uniqueId]),
                                 seenCallback:       (SendMessageCallbacks(parameters: chatMessage), [sendInterActiveMessageInput.uniqueId]))
-//        { (theUniqueId) in
-//            uniqueId(theUniqueId)
-//        }
-        
     }
     
     
@@ -344,6 +327,7 @@ extension Chat {
     public func editMessage(inputModel editMessageInput:   EditTextMessageRequestModel,
                             uniqueId:           @escaping ((String) -> ()),
                             completion:         @escaping callbackTypeAlias) {
+        
         log.verbose("Try to request to edit message with this parameters: \n \(editMessageInput)", context: "Chat")
         uniqueId(editMessageInput.uniqueId)
         
@@ -389,15 +373,10 @@ extension Chat {
                                               pushMsgType:  4)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(EditMessageCallbacks(parameters: chatMessage), editMessageInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (editMessageUniqueId) in
-//            uniqueId(editMessageUniqueId)
-//        }
-        
     }
      
     
@@ -423,6 +402,7 @@ extension Chat {
                              onSent:            @escaping callbackTypeAlias,
                              onDelivere:        @escaping callbackTypeAlias,
                              onSeen:            @escaping callbackTypeAlias) {
+        
         log.verbose("Try to reply Message with this parameters: \n \(replyMessageInput)", context: "Chat")
         uniqueId(replyMessageInput.uniqueId)
         
@@ -470,15 +450,10 @@ extension Chat {
                                               pushMsgType:  4)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          nil,
                                 sentCallback:       (SendMessageCallbacks(parameters: chatMessage), [replyMessageInput.uniqueId]),
                                 deliverCallback:    (SendMessageCallbacks(parameters: chatMessage), [replyMessageInput.uniqueId]),
                                 seenCallback:       (SendMessageCallbacks(parameters: chatMessage), [replyMessageInput.uniqueId]))
-//        { (theUniqueId) in
-//            uniqueId(theUniqueId)
-//        }
-        
     }
     
     
@@ -504,6 +479,7 @@ extension Chat {
                                onSent:              @escaping callbackTypeAlias,
                                onDelivere:          @escaping callbackTypeAlias,
                                onSeen:              @escaping callbackTypeAlias) {
+        
         log.verbose("Try to Forward with this parameters: \n \(forwardMessageInput)", context: "Chat")
         uniqueIds(forwardMessageInput.uniqueIds)
         
@@ -550,15 +526,10 @@ extension Chat {
                                               pushMsgType:  4)
 
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          nil,
                                 sentCallback:       (SendMessageCallbacks(parameters: chatMessage), forwardMessageInput.uniqueIds),
                                 deliverCallback:    (SendMessageCallbacks(parameters: chatMessage), forwardMessageInput.uniqueIds),
                                 seenCallback:       (SendMessageCallbacks(parameters: chatMessage), forwardMessageInput.uniqueIds))
-//        { (theUniqueId) in
-//            uniqueIds(theUniqueId)
-//        }
-        
     }
     
     
@@ -589,6 +560,7 @@ extension Chat {
                                 onSent:                 @escaping callbackTypeAlias,
                                 onDelivered:            @escaping callbackTypeAlias,
                                 onSeen:                 @escaping callbackTypeAlias) {
+        
         log.verbose("Try to Send File adn Message with this parameters: \n \(sendFileMessageInput)", context: "Chat")
         uploadUniqueId(sendFileMessageInput.uploadInput.uniqueId)
         messageUniqueId(sendFileMessageInput.messageInput.uniqueId)
@@ -862,8 +834,11 @@ extension Chat {
     public func deleteMessage(inputModel deleteMessageInput:   DeleteMessageRequestModel,
                               uniqueId:             @escaping ((String) -> ()),
                               completion:           @escaping callbackTypeAlias) {
+        
         log.verbose("Try to request to edit message with this parameters: \n \(deleteMessageInput)", context: "Chat")
         uniqueId(deleteMessageInput.uniqueId)
+        
+        deleteMessageCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.DELETE_MESSAGE.rawValue,
                                             content:            "\(deleteMessageInput.convertContentToJSON())",
@@ -885,15 +860,10 @@ extension Chat {
                                               pushMsgType:  4)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(DeleteMessageCallbacks(parameters: chatMessage), deleteMessageInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (deleteMessageUniqueId) in
-//            uniqueId(deleteMessageUniqueId)
-//        }
-        deleteMessageCallbackToUser = completion
     }
     
     
@@ -915,8 +885,11 @@ extension Chat {
     public func deleteMultipleMessages(inputModel deleteMessageInput:   DeleteMultipleMessagesRequestModel,
                                        uniqueIds:            @escaping (([String]) -> ()),
                                        completion:           @escaping callbackTypeAlias) {
+        
         log.verbose("Try to request to edit message with this parameters: \n \(deleteMessageInput)", context: "Chat")
         uniqueIds(deleteMessageInput.uniqueIds)
+        
+        deleteMessageCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.DELETE_MESSAGE.rawValue,
                                             content:            "\(deleteMessageInput.convertContentToJSON())",
@@ -940,20 +913,13 @@ extension Chat {
         var myCallBacks: [(DeleteMessageCallbacks, String)] = []
         for uId in deleteMessageInput.uniqueIds {
             myCallBacks.append((DeleteMessageCallbacks(parameters: chatMessage), uId))
-//            uniqueId(uId)
         }
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          myCallBacks,
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (deleteMessageUniqueId) in
-//            uniqueId(deleteMessageUniqueId)
-//        }
-        deleteMessageCallbackToUser = completion
-        
     }
     
     
@@ -1024,8 +990,11 @@ extension Chat {
     public func messageDeliveryList(inputModel messageDeliveryListInput:   MessageDeliverySeenListRequestModel,
                                     uniqueId:                   @escaping ((String) -> ()),
                                     completion:                 @escaping callbackTypeAlias) {
+        
         log.verbose("Try to request to get message deliver participants with this parameters: \n \(messageDeliveryListInput)", context: "Chat")
         uniqueId(messageDeliveryListInput.uniqueId)
+        
+        getMessageDeliverListCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_MESSAGE_DELEVERY_PARTICIPANTS.rawValue,
                                             content:            "\(messageDeliveryListInput.convertContentToJSON())",
@@ -1047,16 +1016,10 @@ extension Chat {
                                               pushMsgType:  4)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(GetMessageDeliverList(parameters: chatMessage), messageDeliveryListInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (messageDeliverListUniqueId) in
-//            uniqueId(messageDeliverListUniqueId)
-//        }
-        getMessageDeliverListCallbackToUser = completion
-        
     }
     
     
@@ -1078,8 +1041,11 @@ extension Chat {
     public func messageSeenList(inputModel messageSeenListInput:   MessageDeliverySeenListRequestModel,
                                 uniqueId:               @escaping ((String) -> ()),
                                 completion:             @escaping callbackTypeAlias) {
+        
         log.verbose("Try to request to get message seen participants with this parameters: \n \(messageSeenListInput)", context: "Chat")
         uniqueId(messageSeenListInput.uniqueId)
+        
+        getMessageSeenListCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_MESSAGE_SEEN_PARTICIPANTS.rawValue,
                                             content:            "\(messageSeenListInput.convertContentToJSON())",
@@ -1101,16 +1067,10 @@ extension Chat {
                                               pushMsgType:  4)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(GetMessageSeenList(parameters: chatMessage), messageSeenListInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (messageSeenListUniqueId) in
-//            uniqueId(messageSeenListUniqueId)
-//        }
-        getMessageSeenListCallbackToUser = completion
-        
     }
     
     
@@ -1211,15 +1171,11 @@ extension Chat {
                                               priority:     msgPriority,
                                               pushMsgType:  4)
         
-        
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          nil,
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//                                uniuqueIdCallback:  nil)
-        
     }
     
     
@@ -1272,7 +1228,6 @@ extension Chat {
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-        
     }
     
     
@@ -1323,7 +1278,6 @@ extension Chat {
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-        
     }
     
     

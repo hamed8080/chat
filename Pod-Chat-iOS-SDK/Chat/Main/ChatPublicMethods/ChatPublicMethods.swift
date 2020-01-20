@@ -39,6 +39,7 @@ extension Chat {
     ///
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (DeliverSeenRequestModel)
     public func deliver(inputModel deliverInput: DeliverSeenRequestModel) {
+        
         log.verbose("Try to send deliver message for a message id with this parameters: \n messageId = \(deliverInput.messageId) , ownerId = \(deliverInput.ownerId)", context: "Chat")
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.DELIVERY.rawValue,
@@ -112,6 +113,7 @@ extension Chat {
     ///
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (DeliverSeenRequestModel)
     public func seen(inputModel seenInput: DeliverSeenRequestModel) {
+        
         log.verbose("Try to send seen message for a message id with this parameters: \n messageId = \(seenInput.messageId) , ownerId = \(seenInput.ownerId)", context: "Chat")
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.SEEN.rawValue,

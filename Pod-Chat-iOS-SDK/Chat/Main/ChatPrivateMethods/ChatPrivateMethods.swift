@@ -864,12 +864,12 @@ extension Chat {
             
         // a message of type 50 (PIN_MESSAGE) comes from Server.
         case chatMessageVOTypes.PIN_MESSAGE.rawValue:
-            responseOfUnpinThread(withMessage: message)
+            responseOfPinMessage(withMessage: message)
             break
             
         // a message of type 51 (UNPIN_MESSAGE) comes from Server.
         case chatMessageVOTypes.UNPIN_MESSAGE.rawValue:
-            responseOfUnpinThread(withMessage: message)
+            responseOfUnpinMessage(withMessage: message)
             break
             
         // a message of type 100 (LOGOUT) comes from Server.

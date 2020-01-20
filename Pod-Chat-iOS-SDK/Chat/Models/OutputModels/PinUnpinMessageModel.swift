@@ -30,7 +30,7 @@ open class PinUnpinMessageModel {
     }
 
     public func returnDataAsJSON() -> JSON {
-        let result: JSON = ["pinMessageVO": pinUnpinModel.convertContentToJSON()]
+        let result: JSON = ["pinMessageVO": pinUnpinModel.formatToJSON()]
 
         let resultAsJSON: JSON = ["result":         result,
                                   "hasError":       hasError,

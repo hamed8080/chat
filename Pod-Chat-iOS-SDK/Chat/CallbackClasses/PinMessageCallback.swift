@@ -32,11 +32,13 @@ extension Chat {
                                           contentCount:     nil,
                                           subjectId:        message.subjectId)
         
-//        if enableCache {
-//            if let thId = message.subjectId {
-//                Chat.cacheDB.savePinUnpinCMConversationEntity(withThreadId: thId, isPinned: true)
-//            }
-//        }
+        if enableCache {
+            if let thId = message.subjectId {
+                if let pinMessageJSON = message.content?.convertToJSON() {
+                    Chat.cacheDB.savePinCMMessageEntity(threadId: thId, withPinMessageObject: PinUnpinMessage(pinUnpinContent: pinMessageJSON))
+                }
+            }
+        }
         
         if Chat.map[message.uniqueId] != nil {
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!

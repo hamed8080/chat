@@ -39,12 +39,10 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(GetThreadsCallbacks(parameters: chatMessage), "")],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//                                uniuqueIdCallback:  nil)
     }
     
     
@@ -94,14 +92,10 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(GetThreadsCallbacks(parameters: chatMessage), getThreadsInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (getThreadUniqueId) in
-//            uniqueId(getThreadUniqueId)
-//        }
         
         // if cache is enabled by user, it will return cache result to the user
         if enableCache {
@@ -162,15 +156,10 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(UpdateThreadInfoCallback(), updateThreadInfoInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (updateThreadInfoUniqueId) in
-//            uniqueId(updateThreadInfoUniqueId)
-//        }
-        
     }
     
     
@@ -220,15 +209,10 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(CreateThreadCallback(parameters: chatMessage), createThreadInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (createThreadUniqueId) in
-//            uniqueId(createThreadUniqueId)
-//        }
-        
     }
     
     
@@ -289,15 +273,10 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(CreateThreadCallback(parameters: chatMessage), creatThreadWithMessageInput.createThreadInput.uniqueId)],
                                 sentCallback:       (creatThreadWithMessageInput.sendMessageInput != nil) ? (SendMessageCallbacks(parameters: chatMessage), [creatThreadWithMessageInput.sendMessageInput!.uniqueId]) : nil,
                                 deliverCallback:    (creatThreadWithMessageInput.sendMessageInput != nil) ? (SendMessageCallbacks(parameters: chatMessage), [creatThreadWithMessageInput.sendMessageInput!.uniqueId]) : nil,
                                 seenCallback:       (creatThreadWithMessageInput.sendMessageInput != nil) ? (SendMessageCallbacks(parameters: chatMessage), [creatThreadWithMessageInput.sendMessageInput!.uniqueId]) : nil)
-//        { (theUniqueId) in
-//            uniqueId(theUniqueId)
-//        }
-        
     }
     
     
@@ -327,6 +306,7 @@ extension Chat {
                                             onSent:             @escaping callbackTypeAlias,
                                             onDelivered:        @escaping callbackTypeAlias,
                                             onSeen:             @escaping callbackTypeAlias) {
+        
         log.verbose("Try to Send File and CreatThreadWithMessage with this parameters: \n \(creatThreadWithFileMessageInput)", context: "Chat")
         
         uniqueId(creatThreadWithFileMessageInput.creatThreadWithMessageInput.createThreadInput.uniqueId)
@@ -436,15 +416,10 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(LeaveThreadCallbacks(), leaveThreadInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (leaveThreadUniqueId) in
-//            uniqueId(leaveThreadUniqueId)
-//        }
-        
     }
     
     
@@ -492,15 +467,10 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(SpamPvThread(), spamPvThreadInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (spamUniqueId) in
-//            uniqueId(spamUniqueId)
-//        }
-        
     }
     
     
@@ -550,15 +520,10 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(MuteThreadCallbacks(), muteThreadInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (muteThreadUniqueId) in
-//            uniqueId(muteThreadUniqueId)
-//        }
-        
     }
     
     
@@ -606,15 +571,10 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(UnmuteThreadCallbacks(), unmuteThreadInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (muteThreadUniqueId) in
-//            uniqueId(muteThreadUniqueId)
-//        }
-        
     }
     
     
@@ -640,6 +600,7 @@ extension Chat {
                                       uniqueId:                     @escaping (String) -> (),
                                       completion:                   @escaping callbackTypeAlias,
                                       cacheResponse:                @escaping (GetThreadParticipantsModel) -> ()) {
+        
         log.verbose("Try to request to get thread participants with this parameters: \n \(getThreadParticipantsInput)", context: "Chat")
         uniqueId(getThreadParticipantsInput.uniqueId)
         
@@ -665,14 +626,10 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(GetThreadParticipantsCallbacks(parameters: chatMessage), getThreadParticipantsInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (getParticipantsUniqueId) in
-//            uniqueId(getParticipantsUniqueId)
-//        }
         
         // if cache is enabled by user, it will return cache result to the user
         if enableCache {
@@ -707,9 +664,6 @@ extension Chat {
     public func addParticipants(inputModel addParticipantsInput:   AddParticipantsRequestModel,
                                 uniqueId:               @escaping (String) -> (),
                                 completion:             @escaping callbackTypeAlias) {
-        /**
-         *
-         */
         log.verbose("Try to request to add participants with this parameters: \n \(addParticipantsInput)", context: "Chat")
         uniqueId(addParticipantsInput.uniqueId)
         
@@ -735,15 +689,10 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(AddParticipantsCallback(parameters: chatMessage), addParticipantsInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (addParticipantsUniqueId) in
-//            uniqueId(addParticipantsUniqueId)
-//        }
-        
     }
     
     
@@ -765,9 +714,6 @@ extension Chat {
     public func removeParticipants(inputModel removeParticipantsInput: RemoveParticipantsRequestModel,
                                    uniqueId:                @escaping (String) -> (),
                                    completion:              @escaping callbackTypeAlias) {
-        /**
-         *
-         */
         log.verbose("Try to request to remove participants with this parameters: \n \(removeParticipantsInput)", context: "Chat")
         uniqueId(removeParticipantsInput.uniqueId)
         
@@ -793,15 +739,10 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(RemoveParticipantsCallback(parameters: chatMessage), removeParticipantsInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (removeParticipantsUniqueId) in
-//            uniqueId(removeParticipantsUniqueId)
-//        }
-        
     }
     
     
@@ -826,8 +767,7 @@ extension Chat {
     /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (UserRolesModel)
     public func setRole(inputModel setRoleInput: RoleRequestModel,
                         uniqueId:       @escaping (String) -> (),
-                        completion:     @escaping callbackTypeAlias,
-                        cacheResponse:  @escaping callbackTypeAlias) {
+                        completion:     @escaping callbackTypeAlias) {
         
         uniqueId(setRoleInput.uniqueId)
         setRoleToUserCallbackToUser = completion
@@ -856,7 +796,6 @@ extension Chat {
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-        
     }
     
     
@@ -879,8 +818,7 @@ extension Chat {
     /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (UserRolesModel)
     public func removeRole(inputModel removeRoleInput: RoleRequestModel,
                            uniqueId:        @escaping (String) -> (),
-                           completion:      @escaping callbackTypeAlias,
-                           cacheResponse:   @escaping callbackTypeAlias) {
+                           completion:      @escaping callbackTypeAlias) {
 
         uniqueId(removeRoleInput.uniqueId)
         removeRoleFromUserCallbackToUser = completion
@@ -909,7 +847,6 @@ extension Chat {
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-
     }
     
     
@@ -931,8 +868,7 @@ extension Chat {
     /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (UserRolesModel)
     public func setAuditor(inputModel setAuditorInput:  AddRemoveAuditorRequestModel,
                            uniqueId:        @escaping (String) -> (),
-                           completion:      @escaping callbackTypeAlias,
-                           cacheResponse:   @escaping callbackTypeAlias) {
+                           completion:      @escaping callbackTypeAlias) {
         
         let setRoleModel = SetRemoveRoleModel(userId:   setAuditorInput.userId,
                                               roles:    setAuditorInput.roles)
@@ -945,9 +881,7 @@ extension Chat {
             uniqueId(setRoleUniqueId)
         }, completion: { (theServerResponse) in
             completion(theServerResponse)
-        }) { (theCacheResponse) in
-            cacheResponse(theCacheResponse)
-        }
+        })
     }
     
     
@@ -970,8 +904,7 @@ extension Chat {
     /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (UserRolesModel)
     public func removeAuditor(inputModel removeAuditorInput:    AddRemoveAuditorRequestModel,
                               uniqueId:       @escaping (String) -> (),
-                              completion:     @escaping callbackTypeAlias,
-                              cacheResponse:  @escaping callbackTypeAlias) {
+                              completion:     @escaping callbackTypeAlias) {
         
         let removeRoleModel = SetRemoveRoleModel(userId:    removeAuditorInput.userId,
                                                  roles:     removeAuditorInput.roles)
@@ -984,9 +917,7 @@ extension Chat {
             uniqueId(removeRoleUniqueId)
         }, completion: { (theServerResponse) in
             completion(theServerResponse)
-        }) { (theCacheResponse) in
-            cacheResponse(theCacheResponse)
-        }
+        })
         
     }
     
@@ -1038,15 +969,10 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(PinThreadCallbacks(), pinThreadInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (muteThreadUniqueId) in
-//            uniqueId(muteThreadUniqueId)
-//        }
-        
     }
     
     
@@ -1094,15 +1020,10 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(UnpinThreadCallbacks(), unpinThreadInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (muteThreadUniqueId) in
-//            uniqueId(muteThreadUniqueId)
-//        }
-        
     }
     
 }
