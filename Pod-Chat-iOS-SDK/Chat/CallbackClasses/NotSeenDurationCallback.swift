@@ -47,13 +47,15 @@ extension Chat {
             
             log.verbose("NotSeenDurationCallback", context: "Chat")
             
-            if let content = response.result {
-                let notSeenDurationModel = NotSeenDurationModel(notSeenDuration: content,
-                                                                hasError:        response.hasError,
-                                                                errorMessage:    response.errorMessage,
-                                                                errorCode:       response.errorCode)
+            if !(response.hasError) {
+                if let content = response.result {
+                    let notSeenDurationModel = NotSeenDurationModel(notSeenDuration: content,
+                                                                    hasError:        response.hasError,
+                                                                    errorMessage:    response.errorMessage,
+                                                                    errorCode:       response.errorCode)
 
-                success(notSeenDurationModel)
+                    success(notSeenDurationModel)
+                }
             }
             
         }

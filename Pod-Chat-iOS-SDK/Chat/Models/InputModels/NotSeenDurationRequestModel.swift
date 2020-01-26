@@ -27,8 +27,12 @@ open class NotSeenDurationRequestModel {
     }
     
     func convertContentToJSON() -> JSON {
-        var content: JSON = []
-        content["userIds"] = JSON(self.userIds)
+        var content: JSON = [:]
+        var users: JSON = []
+        for item in userIds {
+            users.appendIfArray(json: JSON(item))
+        }
+        content["userIds"] = JSON(users)
         return content
     }
     

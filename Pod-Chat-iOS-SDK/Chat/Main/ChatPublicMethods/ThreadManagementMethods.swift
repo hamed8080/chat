@@ -1044,7 +1044,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (NotSeenDurationRequestModel)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! NotSeenDurationModel)
-    public func unpinThread(inputModel notSeenDurationInput: NotSeenDurationRequestModel,
+    public func contactNotSeenDuration(inputModel notSeenDurationInput: NotSeenDurationRequestModel,
                              uniqueId:          @escaping (String) -> (),
                              completion:        @escaping callbackTypeAlias) {
         
