@@ -221,6 +221,34 @@ extension Cache {
     }
     
     
+    // MARK: - save Pin/Unpin on Messages:
+    /// Save Pin/Unpin on CMMessage Entity:
+    /// by calling this function, save (or update) 'pinMessage' property on Message that comes from server, into the cache
+    ///
+    /// Inputs:
+    /// - it gets the messageId as  "Int" , and pinMessage as "PinUnpinMessage" value as inputs
+    ///
+    /// Outputs:
+    /// - it returns no output
+    ///
+    /// - parameter messageId:      send your messageId to this parameter.(Int)
+    /// - parameter pinMessage:     send your  pinMessageObject to save it on the cache (PinUnpinMessage)
+    func savePinCMMessageEntity(threadId: Int, withPinMessageObject pinMessage: PinUnpinMessage) {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
+        fetchRequest.predicate = NSPredicate(format: "id == %i", threadId)
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMConversation] {
+                if (result.count > 0) {
+                    result.first!.pinMessage = updateCMPinMessageEntity(withObject: pinMessage)
+                    saveContext(subject: "Update CMConversation on save PinMessage -update existing object-")
+                }
+            }
+        } catch {
+            fatalError("Error on trying to find the Thread from CMConversation entity")
+        }
+    }
+    
+    
     // MARK: - save ThreadParticipant:
     /// Save ThreadParticipant:
     /// by calling this function, save (or update) threadParticipants that comes from server into the cache

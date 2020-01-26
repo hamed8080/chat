@@ -56,17 +56,8 @@ extension Chat {
     public func getUserInfo(uniqueId:       @escaping ((String) -> ()),
                             completion:     @escaping callbackTypeAlias,
                             cacheResponse:  @escaping ((UserInfoModel) -> ())) {
+        
         log.verbose("Try to request to get user info", context: "Chat")
-        /*
-         *  -> set the "completion" to the "userInfoCallbackToUser" variable
-         *      (when the expected answer comes from server, userInfocallbackToUser will call, and the "complition of this func will execute")
-         *  -> create "SendChatMessageVO"
-         *  -> create "SendAsyncMessageVO" and put "SendChatMessageVO" inside its content
-         *  -> send the "SendAsyncMessageVO" to Async
-         *  -> configure that when answer comes from server, "UserInfoCallback()" is the responsable func to do the rest
-         *  -> if the cache is enabled by the user, go and retrieve UserInfo content and pass it to the user
-         *
-         */
         let theUniqueId = generateUUID()
         uniqueId(theUniqueId)
         
@@ -92,16 +83,10 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(UserInfoCallback(), theUniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (getUserInfoUniqueId) in
-//            uniqueId(getUserInfoUniqueId)
-//        }
-        
-        
         
         // if cache is enabled by user, first return cache result to the user
         if enableCache {

@@ -35,18 +35,51 @@ extension Cache {
             do {
                 if let result = try context.fetch(fetchRequest) as? [CMContact] {
                     if (result.count > 0) {
-                        result.first!.blocked           = myContact.blocked as NSNumber?
-                        result.first!.cellphoneNumber   = myContact.cellphoneNumber
-                        result.first!.email             = myContact.email
-                        result.first!.firstName         = myContact.firstName
-                        result.first!.hasUser           = myContact.hasUser as NSNumber?
-                        result.first!.id                = myContact.id as NSNumber?
-                        result.first!.image             = myContact.image
-                        result.first!.lastName          = myContact.lastName
-                        result.first!.notSeenDuration   = myContact.notSeenDuration as NSNumber?
-//                        result.first!.uniqueId          = myContact.uniqueId
-                        result.first!.userId            = myContact.userId as NSNumber?
-                        result.first!.time              = myContact.timeStamp as NSNumber? // Int(Date().timeIntervalSince1970) as NSNumber?
+                        if let blocked = myContact.blocked as NSNumber? {
+                            result.first!.blocked = blocked
+                        }
+                        if let cellphoneNumber = myContact.cellphoneNumber {
+                            result.first!.cellphoneNumber = cellphoneNumber
+                        }
+                        if let email = myContact.email {
+                            result.first!.email = email
+                        }
+                        if let firstName = myContact.firstName {
+                            result.first!.firstName = firstName
+                        }
+                        if let hasUser = myContact.hasUser as NSNumber? {
+                            result.first!.hasUser = hasUser
+                        }
+                        if let id = myContact.id as NSNumber? {
+                            result.first!.id = id
+                        }
+                        if let image = myContact.image {
+                            result.first!.image = image
+                        }
+                        if let lastName = myContact.lastName {
+                            result.first!.lastName = lastName
+                        }
+                        if let notSeenDuration = myContact.notSeenDuration as NSNumber? {
+                            result.first!.notSeenDuration = notSeenDuration
+                        }
+                        if let userId = myContact.userId as NSNumber? {
+                            result.first!.userId = userId
+                        }
+                        if let timeStamp = myContact.timeStamp as NSNumber? {
+                            result.first!.time = timeStamp
+                        }
+//                        result.first!.blocked           = myContact.blocked as NSNumber?
+//                        result.first!.cellphoneNumber   = myContact.cellphoneNumber
+//                        result.first!.email             = myContact.email
+//                        result.first!.firstName         = myContact.firstName
+//                        result.first!.hasUser           = myContact.hasUser as NSNumber?
+//                        result.first!.id                = myContact.id as NSNumber?
+//                        result.first!.image             = myContact.image
+//                        result.first!.lastName          = myContact.lastName
+//                        result.first!.notSeenDuration   = myContact.notSeenDuration as NSNumber?
+////                        result.first!.uniqueId          = myContact.uniqueId
+//                        result.first!.userId            = myContact.userId as NSNumber?
+//                        result.first!.time              = myContact.timeStamp as NSNumber? // Int(Date().timeIntervalSince1970) as NSNumber?
                         if let contactLinkeUser = myContact.linkedUser {
                             let linkedUserObject = updateCMLinkedUserEntity(withLinkedUser: contactLinkeUser)
                             result.first!.linkedUser = linkedUserObject
@@ -109,11 +142,26 @@ extension Cache {
             do {
                 if let result = try context.fetch(fetchRequest) as? [CMLinkedUser] {
                     if (result.count > 0) {
-                        result.first!.coreUserId    = myLinkedUser.coreUserId as NSNumber?
-                        result.first!.image         = myLinkedUser.image
-                        result.first!.name          = myLinkedUser.name
-                        result.first!.nickname      = myLinkedUser.nickname
-                        result.first!.username      = myLinkedUser.username
+                        if let coreUserId = myLinkedUser.coreUserId as NSNumber? {
+                            result.first!.coreUserId = coreUserId
+                        }
+                        if let image = myLinkedUser.image {
+                            result.first!.image = image
+                        }
+                        if let name = myLinkedUser.name {
+                            result.first!.name = name
+                        }
+                        if let nickname = myLinkedUser.nickname {
+                            result.first!.nickname = nickname
+                        }
+                        if let username = myLinkedUser.username {
+                            result.first!.username = username
+                        }
+//                        result.first!.coreUserId    = myLinkedUser.coreUserId as NSNumber?
+//                        result.first!.image         = myLinkedUser.image
+//                        result.first!.name          = myLinkedUser.name
+//                        result.first!.nickname      = myLinkedUser.nickname
+//                        result.first!.username      = myLinkedUser.username
                         linkedUserToReturn = result.first!
                         saveContext(subject: "Update CMLinkedUser -update existing object-")
                     } else {
@@ -162,30 +210,103 @@ extension Cache {
             do {
                 if let result = try context.fetch(fetchRequest) as? [CMConversation] {
                     if (result.count > 0) {
-                        result.first!.admin                  = myThread.admin as NSNumber?
-                        result.first!.canEditInfo            = myThread.canEditInfo as NSNumber?
-                        result.first!.canSpam                = myThread.canSpam as NSNumber?
-                        result.first!.descriptions           = myThread.description
-                        result.first!.group                  = myThread.group as NSNumber?
-                        result.first!.id                     = myThread.id as NSNumber?
-                        result.first!.image                  = myThread.image
-                        result.first!.joinDate               = myThread.joinDate as NSNumber?
-                        result.first!.lastMessage            = myThread.lastMessage
-                        result.first!.lastParticipantImage   = myThread.lastParticipantImage
-                        result.first!.lastParticipantName    = myThread.lastParticipantName
-                        result.first!.lastSeenMessageId      = myThread.lastSeenMessageId as NSNumber?
-                        result.first!.mentioned             = myThread.mentioned as NSNumber?
-                        result.first!.metadata               = myThread.metadata
-                        result.first!.mute                   = myThread.mute as NSNumber?
-                        result.first!.participantCount       = myThread.participantCount as NSNumber?
-                        result.first!.partner                = myThread.partner as NSNumber?
-                        result.first!.partnerLastDeliveredMessageId  = myThread.partnerLastDeliveredMessageId as NSNumber?
-                        result.first!.partnerLastSeenMessageId       = myThread.partnerLastSeenMessageId as NSNumber?
-                        result.first!.pin                   = myThread.pin as NSNumber?
-                        result.first!.title                  = myThread.title
-                        result.first!.time                   = myThread.time as NSNumber?
-                        result.first!.type                   = myThread.time as NSNumber?
-                        result.first!.unreadCount            = myThread.unreadCount as NSNumber?
+                        if let admin = myThread.admin as NSNumber? {
+                            result.first!.admin = admin
+                        }
+                        if let canEditInfo = myThread.canEditInfo as NSNumber? {
+                            result.first!.canEditInfo = canEditInfo
+                        }
+                        if let canSpam = myThread.canSpam as NSNumber? {
+                            result.first!.canSpam = canSpam
+                        }
+                        if let descriptions = myThread.description {
+                            result.first!.descriptions = descriptions
+                        }
+                        if let group = myThread.group as NSNumber? {
+                            result.first!.group = group
+                        }
+                        if let id = myThread.id as NSNumber? {
+                            result.first!.id = id
+                        }
+                        if let image = myThread.image {
+                            result.first!.image = image
+                        }
+                        if let joinDate = myThread.joinDate as NSNumber? {
+                            result.first!.joinDate = joinDate
+                        }
+                        if let lastMessage = myThread.lastMessage {
+                            result.first!.lastMessage = lastMessage
+                        }
+                        if let lastParticipantImage = myThread.lastParticipantImage {
+                            result.first!.lastParticipantImage = lastParticipantImage
+                        }
+                        if let lastParticipantName = myThread.lastParticipantName {
+                            result.first!.lastParticipantName = lastParticipantName
+                        }
+                        if let lastSeenMessageId = myThread.lastSeenMessageId as NSNumber? {
+                            result.first!.lastSeenMessageId = lastSeenMessageId
+                        }
+                        if let mentioned = myThread.mentioned as NSNumber? {
+                            result.first!.mentioned = mentioned
+                        }
+                        if let metadata = myThread.metadata {
+                            result.first!.metadata = metadata
+                        }
+                        if let mute = myThread.mute as NSNumber? {
+                            result.first!.mute = mute
+                        }
+                        if let participantCount = myThread.participantCount as NSNumber? {
+                            result.first!.participantCount = participantCount
+                        }
+                        if let partner = myThread.partner as NSNumber? {
+                            result.first!.partner = partner
+                        }
+                        if let partnerLastDeliveredMessageId = myThread.partnerLastDeliveredMessageId as NSNumber? {
+                            result.first!.partnerLastDeliveredMessageId = partnerLastDeliveredMessageId
+                        }
+                        if let partnerLastSeenMessageId = myThread.partnerLastSeenMessageId as NSNumber? {
+                            result.first!.partnerLastSeenMessageId = partnerLastSeenMessageId
+                        }
+                        if let pin = myThread.pin as NSNumber? {
+                            result.first!.pin = pin
+                        }
+                        if let title = myThread.title {
+                            result.first!.title = title
+                        }
+                        if let time = myThread.time as NSNumber? {
+                            result.first!.time = time
+                        }
+                        if let type = myThread.type as NSNumber? {
+                            result.first!.type = type
+                        }
+                        if let unreadCount = myThread.unreadCount as NSNumber? {
+                            result.first!.unreadCount = unreadCount
+                        }
+                        
+//                        result.first!.admin                 = (myThread.admin as NSNumber?) ?? (result.first!.admin)
+//                        result.first!.canEditInfo           = (myThread.canEditInfo as NSNumber?) ?? (result.first!.canEditInfo)
+//                        result.first!.canSpam               = (myThread.canSpam as NSNumber?) ?? (result.first!.canSpam)
+//                        result.first!.descriptions          = (myThread.description) ?? (result.first!.descriptions)
+//                        result.first!.group                 = (myThread.group as NSNumber?) ?? (result.first!.group)
+//                        result.first!.id                    = (myThread.id as NSNumber?) ?? (result.first!.id)
+//                        result.first!.image                 = (myThread.image) ?? (result.first!.image)
+//                        result.first!.joinDate              = (myThread.joinDate as NSNumber?) ?? (result.first!.joinDate)
+//                        result.first!.lastMessage           = myThread.lastMessage
+//                        result.first!.lastParticipantImage  = myThread.lastParticipantImage
+//                        result.first!.lastParticipantName   = myThread.lastParticipantName
+//                        result.first!.lastSeenMessageId     = myThread.lastSeenMessageId as NSNumber?
+//                        result.first!.mentioned             = myThread.mentioned as NSNumber?
+//                        result.first!.metadata              = myThread.metadata
+//                        result.first!.mute                  = myThread.mute as NSNumber?
+//                        result.first!.participantCount      = myThread.participantCount as NSNumber?
+//                        result.first!.partner               = myThread.partner as NSNumber?
+//                        result.first!.partnerLastDeliveredMessageId = myThread.partnerLastDeliveredMessageId as NSNumber?
+//                        result.first!.partnerLastSeenMessageId      = myThread.partnerLastSeenMessageId as NSNumber?
+//                        result.first!.pin                   = myThread.pin as NSNumber?
+//                        result.first!.title                 = myThread.title
+//                        result.first!.time                  = myThread.time as NSNumber?
+//                        result.first!.type                  = myThread.time as NSNumber?
+//                        result.first!.unreadCount           = myThread.unreadCount as NSNumber?
                         if let threadInviter = myThread.inviter {
                             let inviterObject = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: threadInviter, isAdminRequest: false)
                             result.first!.inviter = inviterObject
@@ -193,6 +314,11 @@ extension Cache {
                         if let threadLastMessageVO = myThread.lastMessageVO {
                             let messageObject = updateCMMessageEntity(withMessageObject: threadLastMessageVO)
                             result.first!.lastMessageVO = messageObject
+                        }
+                        if let pinMessage = myThread.pinMessage {
+                            if let pin = updateCMPinMessageEntity(withObject: pinMessage) {
+                                result.first!.pinMessage = pin
+                            }
                         }
                         
                         // this part is deprecated because the server is no longer sends Participants on the Conversation model
@@ -226,14 +352,14 @@ extension Cache {
                         conversation.lastParticipantImage   = myThread.lastParticipantImage
                         conversation.lastParticipantName    = myThread.lastParticipantName
                         conversation.lastSeenMessageId      = myThread.lastSeenMessageId as NSNumber?
-                        conversation.mentioned             = myThread.mentioned as NSNumber?
+                        conversation.mentioned              = myThread.mentioned as NSNumber?
                         conversation.metadata               = myThread.metadata
                         conversation.mute                   = myThread.mute as NSNumber?
                         conversation.participantCount       = myThread.participantCount as NSNumber?
                         conversation.partner                = myThread.partner as NSNumber?
                         conversation.partnerLastDeliveredMessageId  = myThread.partnerLastDeliveredMessageId as NSNumber?
                         conversation.partnerLastSeenMessageId       = myThread.partnerLastSeenMessageId as NSNumber?
-                        conversation.pin                   = myThread.pin as NSNumber?
+                        conversation.pin                    = myThread.pin as NSNumber?
                         conversation.title                  = myThread.title
                         conversation.time                   = myThread.time as NSNumber?
                         conversation.type                   = myThread.time as NSNumber?
@@ -245,6 +371,11 @@ extension Cache {
                         if let threadLastMessageVO = myThread.lastMessageVO {
                             let messageObject = updateCMMessageEntity(withMessageObject: threadLastMessageVO)
                             conversation.lastMessageVO = messageObject
+                        }
+                        if let pinMessage = myThread.pinMessage {
+                            if let pin = updateCMPinMessageEntity(withObject: pinMessage) {
+                                conversation.pinMessage = pin
+                            }
                         }
                         
                         // this part is deprecated because the server is no longer sends Participants on the Conversation model
@@ -299,36 +430,109 @@ extension Cache {
             do {
                 if let result = try context.fetch(fetchRequest) as? [CMParticipant] {
                     if (result.count > 0) {
-                        result.first!.admin             = myParticipant.admin as NSNumber?
-                        result.first!.auditor           = myParticipant.auditor as NSNumber?
-                        result.first!.blocked           = myParticipant.blocked as NSNumber?
-                        result.first!.cellphoneNumber   = myParticipant.cellphoneNumber
-                        result.first!.contactFirstName  = myParticipant.contactFirstName
-                        result.first!.contactId         = myParticipant.contactId as NSNumber?
-                        result.first!.contactName       = myParticipant.contactName
-                        result.first!.contactLastName   = myParticipant.contactLastName
-                        result.first!.email             = myParticipant.email
-                        result.first!.firstName         = myParticipant.firstName
-                        result.first!.id                = myParticipant.id as NSNumber?
-                        result.first!.image             = myParticipant.image
-                        result.first!.keyId             = myParticipant.keyId
-                        result.first!.lastName          = myParticipant.lastName
-                        result.first!.myFriend          = myParticipant.myFriend as NSNumber?
-                        result.first!.name              = myParticipant.name
-                        result.first!.notSeenDuration   = myParticipant.notSeenDuration as NSNumber?
-                        result.first!.online            = myParticipant.online as NSNumber?
-                        result.first!.receiveEnable     = myParticipant.receiveEnable as NSNumber?
-                        if isAdminRequest {
-                            result.first!.roles         = (myParticipant.roles != []) ? myParticipant.roles : nil
-                        } else {
-                            result.first!.roles         = ((myParticipant.roles?.count ?? 0) > 0) ? myParticipant.roles : result.first!.roles
+                        if let admin = myParticipant.admin as NSNumber? {
+                            result.first!.admin = admin
                         }
-                        result.first!.sendEnable        = myParticipant.sendEnable as NSNumber?
-                        result.first!.threadId          = threadId as NSNumber?
-                        result.first!.time              = Int(Date().timeIntervalSince1970) as NSNumber?
-                        result.first!.username          = myParticipant.username
-                        
-                        result.first!.admin             = ((result.first!.roles?.count ?? 0) > 0) ? true : false
+                        if let auditor = myParticipant.auditor as NSNumber? {
+                            result.first!.auditor = auditor
+                        }
+                        if let blocked = myParticipant.blocked as NSNumber? {
+                            result.first!.blocked = blocked
+                        }
+                        if let cellphoneNumber = myParticipant.cellphoneNumber {
+                            result.first!.cellphoneNumber = cellphoneNumber
+                        }
+                        if let contactFirstName = myParticipant.contactFirstName {
+                            result.first!.contactFirstName = contactFirstName
+                        }
+                        if let contactId = myParticipant.contactId as NSNumber? {
+                            result.first!.contactId = contactId
+                        }
+                        if let contactName = myParticipant.contactName {
+                            result.first!.contactName = contactName
+                        }
+                        if let contactLastName = myParticipant.contactLastName {
+                            result.first!.contactLastName = contactLastName
+                        }
+                        if let email = myParticipant.email {
+                            result.first!.email = email
+                        }
+                        if let firstName = myParticipant.firstName {
+                            result.first!.firstName = firstName
+                        }
+                        if let id = myParticipant.id as NSNumber? {
+                            result.first!.id = id
+                        }
+                        if let image = myParticipant.image {
+                            result.first!.image = image
+                        }
+                        if let keyId = myParticipant.keyId {
+                            result.first!.keyId = keyId
+                        }
+                        if let lastName = myParticipant.lastName {
+                            result.first!.lastName = lastName
+                        }
+                        if let myFriend = myParticipant.myFriend as NSNumber? {
+                            result.first!.myFriend = myFriend
+                        }
+                        if let name = myParticipant.name {
+                            result.first!.name = name
+                        }
+                        if let notSeenDuration = myParticipant.notSeenDuration as NSNumber? {
+                            result.first!.notSeenDuration = notSeenDuration
+                        }
+                        if let online = myParticipant.online as NSNumber? {
+                            result.first!.online = online
+                        }
+                        if let receiveEnable = myParticipant.receiveEnable as NSNumber? {
+                            result.first!.receiveEnable = receiveEnable
+                        }
+                        if isAdminRequest {
+                            result.first!.roles = (myParticipant.roles != []) ? myParticipant.roles : nil
+                        } else {
+                            result.first!.roles = ((myParticipant.roles?.count ?? 0) > 0) ? myParticipant.roles : result.first!.roles
+                        }
+                        if let sendEnable = myParticipant.sendEnable as NSNumber? {
+                            result.first!.sendEnable = sendEnable
+                        }
+                        if let theThreadId = threadId as NSNumber? {
+                            result.first!.threadId = theThreadId
+                        }
+                        if let username = myParticipant.username {
+                            result.first!.username = username
+                        }
+                        result.first!.time = Int(Date().timeIntervalSince1970) as NSNumber?
+                        result.first!.admin = ((result.first!.roles?.count ?? 0) > 0) ? true : false
+//                        result.first!.admin             = myParticipant.admin as NSNumber?
+//                        result.first!.auditor           = myParticipant.auditor as NSNumber?
+//                        result.first!.blocked           = myParticipant.blocked as NSNumber?
+//                        result.first!.cellphoneNumber   = myParticipant.cellphoneNumber
+//                        result.first!.contactFirstName  = myParticipant.contactFirstName
+//                        result.first!.contactId         = myParticipant.contactId as NSNumber?
+//                        result.first!.contactName       = myParticipant.contactName
+//                        result.first!.contactLastName   = myParticipant.contactLastName
+//                        result.first!.email             = myParticipant.email
+//                        result.first!.firstName         = myParticipant.firstName
+//                        result.first!.id                = myParticipant.id as NSNumber?
+//                        result.first!.image             = myParticipant.image
+//                        result.first!.keyId             = myParticipant.keyId
+//                        result.first!.lastName          = myParticipant.lastName
+//                        result.first!.myFriend          = myParticipant.myFriend as NSNumber?
+//                        result.first!.name              = myParticipant.name
+//                        result.first!.notSeenDuration   = myParticipant.notSeenDuration as NSNumber?
+//                        result.first!.online            = myParticipant.online as NSNumber?
+//                        result.first!.receiveEnable     = myParticipant.receiveEnable as NSNumber?
+//                        if isAdminRequest {
+//                            result.first!.roles         = (myParticipant.roles != []) ? myParticipant.roles : nil
+//                        } else {
+//                            result.first!.roles         = ((myParticipant.roles?.count ?? 0) > 0) ? myParticipant.roles : result.first!.roles
+//                        }
+//                        result.first!.sendEnable        = myParticipant.sendEnable as NSNumber?
+//                        result.first!.threadId          = threadId as NSNumber?
+//                        result.first!.time              = Int(Date().timeIntervalSince1970) as NSNumber?
+//                        result.first!.username          = myParticipant.username
+//
+//                        result.first!.admin             = ((result.first!.roles?.count ?? 0) > 0) ? true : false
                         participantObjectToReturn = result.first!
                         
                         saveContext(subject: "Update CMParticipant -update existing object-")
@@ -458,54 +662,97 @@ extension Cache {
             do {
                 if let result = try context.fetch(fetchRequest) as? [CMMessage] {
                     if (result.count > 0) {
-                        result.first!.delivered         = myMessage.delivered as NSNumber?
-                        result.first!.editable          = myMessage.editable as NSNumber?
-                        result.first!.edited            = myMessage.edited as NSNumber?
-                        result.first!.id                = myMessage.id as NSNumber?
-                        result.first!.mentioned         = myMessage.mentioned as NSNumber?
-                        result.first!.message           = myMessage.message
-                        result.first!.messageType       = myMessage.messageType
-                        result.first!.metadata          = myMessage.metadata
-                        result.first!.ownerId           = myMessage.ownerId as NSNumber?
-                        result.first!.previousId        = myMessage.previousId as NSNumber?
-                        result.first!.seen              = myMessage.seen as NSNumber?
-                        result.first!.systemMetadata    = myMessage.systemMetadata
-                        result.first!.threadId          = myMessage.threadId as NSNumber?
-                        result.first!.time              = myMessage.time as NSNumber?
-                        result.first!.uniqueId          = myMessage.uniqueId
+                        if let delivered = myMessage.delivered as NSNumber? {
+                            result.first!.delivered = delivered
+                        }
+                        if let editable = myMessage.editable as NSNumber? {
+                            result.first!.editable = editable
+                        }
+                        if let edited = myMessage.edited as NSNumber? {
+                            result.first!.edited = edited
+                        }
+                        if let id = myMessage.id as NSNumber? {
+                            result.first!.id = id
+                        }
+                        if let mentioned = myMessage.mentioned as NSNumber? {
+                            result.first!.mentioned = mentioned
+                        }
+                        if let message = myMessage.message {
+                            result.first!.message = message
+                        }
+                        if let messageType = myMessage.messageType {
+                            result.first!.messageType = messageType
+                        }
+                        if let metadata = myMessage.metadata {
+                            result.first!.metadata = metadata
+                        }
+                        if let ownerId = myMessage.ownerId as NSNumber? {
+                            result.first!.ownerId = ownerId
+                        }
+                        if let previousId = myMessage.previousId as NSNumber? {
+                            result.first!.previousId = previousId
+                        }
+                        if let seen = myMessage.seen as NSNumber? {
+                            result.first!.seen = seen
+                        }
+                        if let systemMetadata = myMessage.systemMetadata {
+                            result.first!.systemMetadata = systemMetadata
+                        }
+                        if let threadId = myMessage.threadId as NSNumber? {
+                            result.first!.threadId = threadId
+                        }
+                        if let time = myMessage.time as NSNumber? {
+                            result.first!.time = time
+                        }
+                        if let uniqueId = myMessage.uniqueId {
+                            result.first!.uniqueId = uniqueId
+                        }
+                        
+//                        result.first!.delivered         = myMessage.delivered as NSNumber?
+//                        result.first!.editable          = myMessage.editable as NSNumber?
+//                        result.first!.edited            = myMessage.edited as NSNumber?
+//                        result.first!.id                = myMessage.id as NSNumber?
+//                        result.first!.mentioned         = myMessage.mentioned as NSNumber?
+//                        result.first!.message           = myMessage.message
+//                        result.first!.messageType       = myMessage.messageType
+//                        result.first!.metadata          = myMessage.metadata
+//                        result.first!.ownerId           = myMessage.ownerId as NSNumber?
+//                        result.first!.previousId        = myMessage.previousId as NSNumber?
+//                        result.first!.seen              = myMessage.seen as NSNumber?
+//                        result.first!.systemMetadata    = myMessage.systemMetadata
+//                        result.first!.threadId          = myMessage.threadId as NSNumber?
+//                        result.first!.time              = myMessage.time as NSNumber?
+//                        result.first!.uniqueId          = myMessage.uniqueId
                         if let messageConversation = myMessage.conversation {
                             if let conversationObject = updateCMConversationEntity(withConversationObject: messageConversation) {
                                 result.first!.conversation = conversationObject
                             }
                         }
-                        
-                        if let messageForwardInfo = myMessage.forwardInfo {
-                            if let conversation = messageForwardInfo.conversation {
-                                if let thId = conversation.id {
-                                    let forward = updateCMForwardInfoEntity(inThreadId: thId, withObject: messageForwardInfo)
-                                    result.first!.forwardInfo = forward
-                                }
-                            }
-                        }
-                        
                         if let messageParticipant = myMessage.participant {
                             if let participantObject = updateCMParticipantEntity(inThreadId: myMessage.threadId!, withParticipantsObject: messageParticipant, isAdminRequest: false) {
                                 result.first!.participant = participantObject
                             }
                         }
                         
-                        if let messageReplyInfo = myMessage.replyInfo {
-                            if let reply = updateCMReplyInfoEntity(inThreadId: myMessage.threadId!, withObject: messageReplyInfo) {
-                                result.first!.replyInfo = reply
+                        if let messageForwardInfo = myMessage.forwardInfo {
+                            if let conversation = messageForwardInfo.conversation {
+                                if let thId = conversation.id {
+                                    result.first!.forwardInfo = createCMForwardInfo(fromObject: messageForwardInfo, onThreadId: thId)
+//                                    let forward = updateCMForwardInfoEntity(inThreadId: thId, withObject: messageForwardInfo)
+//                                    result.first!.forwardInfo = forward
+                                }
                             }
                         }
+                        if let messageReplyInfo = myMessage.replyInfo {
+                            result.first!.replyInfo = createCMReplyInfo(fromObject: messageReplyInfo, onThreadId: myMessage.threadId!)
+//                            if let reply = updateCMReplyInfoEntity(inThreadId: myMessage.threadId!, withObject: messageReplyInfo) {
+//                                result.first!.replyInfo = reply
+//                            }
+                        }
                         
-//                        saveMessageGap(threadId:            result.first?.threadId as! Int,
-//                                       messageIds:          [result.first?.id as! Int],
-//                                       messagePreviousIds:  [result.first?.previousId as! Int])
                         messageObjectToReturn = result.first!
-                        
                         saveContext(subject: "Update CMMessage -update existing object-")
+                        
                     } else {
                         let theMessageEntity = NSEntityDescription.entity(forEntityName: "CMMessage", in: context)
                         let theMessage = CMMessage(entity: theMessageEntity!, insertInto: context)
@@ -529,34 +776,31 @@ extension Cache {
                                 theMessage.conversation = conversationObject
                             }
                         }
-                        
-                        if let messageForwardInfo = myMessage.forwardInfo {
-                            if let conversation = messageForwardInfo.conversation {
-                                if let thId = conversation.id {
-                                    let forward = updateCMForwardInfoEntity(inThreadId: thId, withObject: messageForwardInfo)
-                                    theMessage.forwardInfo = forward
-                                }
-                            }
-                        }
-                        
                         if let messageParticipant = myMessage.participant {
                             if let participantObject = updateCMParticipantEntity(inThreadId: myMessage.threadId!, withParticipantsObject: messageParticipant, isAdminRequest: false) {
                                 theMessage.participant = participantObject
                             }
                         }
                         
-                        if let messageReplyInfo = myMessage.replyInfo {
-                            if let reply = updateCMReplyInfoEntity(inThreadId: myMessage.threadId!, withObject: messageReplyInfo) {
-                                theMessage.replyInfo = reply
+                        if let messageForwardInfo = myMessage.forwardInfo {
+                            if let conversation = messageForwardInfo.conversation {
+                                if let thId = conversation.id {
+                                    theMessage.forwardInfo = createCMForwardInfo(fromObject: messageForwardInfo, onThreadId: thId)
+//                                    let forward = updateCMForwardInfoEntity(inThreadId: thId, withObject: messageForwardInfo)
+//                                    theMessage.forwardInfo = forward
+                                }
                             }
                         }
+                        if let messageReplyInfo = myMessage.replyInfo {
+                            theMessage.replyInfo = createCMReplyInfo(fromObject: messageReplyInfo, onThreadId: myMessage.threadId!)
+//                            if let reply = updateCMReplyInfoEntity(inThreadId: myMessage.threadId!, withObject: messageReplyInfo) {
+//                                theMessage.replyInfo = reply
+//                            }
+                        }
                         
-//                        saveMessageGap(threadId:            theMessage.threadId as! Int,
-//                                       messageIds:          [theMessage.id as! Int],
-//                                       messagePreviousIds:  [theMessage.previousId as! Int])
                         messageObjectToReturn = theMessage
-                        
                         saveContext(subject: "Update CMMessage -create a new object-")
+                        
                     }
                 }
             } catch {
@@ -567,96 +811,172 @@ extension Cache {
     }
     
     
-    // MARK: - update ReplyInfo:
-    func updateCMReplyInfoEntity(inThreadId threadId: Int, withObject myReplyInfo: ReplyInfo) -> CMReplyInfo? {
-        var replyInfoObjectToReturn: CMReplyInfo?
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMReplyInfo")
-        do {
-            if let result = try context.fetch(fetchRequest) as? [CMReplyInfo] {
-                if (result.count > 0) {
-                    result.first!.deletedd          = myReplyInfo.deleted as NSNumber?
-                    result.first!.message           = myReplyInfo.message
-                    result.first!.messageType       = myReplyInfo.messageType as NSNumber?
-                    result.first!.metadata          = myReplyInfo.metadata
-                    result.first!.repliedToMessageId    = myReplyInfo.repliedToMessageId as NSNumber?
-                    result.first!.systemMetadata    = myReplyInfo.systemMetadata
-                    result.first!.time              = myReplyInfo.time as NSNumber?
-                    if let participantObject = myReplyInfo.participant {
-                        if let participantObject = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: participantObject, isAdminRequest: false) {
-                            result.first!.participant = participantObject
-                        }
-                    }
-                    replyInfoObjectToReturn = result.first
-                    saveContext(subject: "Update CMReplyInfo -update existing object-")
-                } else {
-                    let theCMReplyInfo = NSEntityDescription.entity(forEntityName: "CMReplyInfo", in: context)
-                    let theReplyInfo = CMReplyInfo(entity: theCMReplyInfo!, insertInto: context)
-                    theReplyInfo.deletedd           = myReplyInfo.deleted as NSNumber?
-                    theReplyInfo.message            = myReplyInfo.message
-                    theReplyInfo.messageType        = myReplyInfo.messageType as NSNumber?
-                    theReplyInfo.metadata           = myReplyInfo.metadata
-                    theReplyInfo.repliedToMessageId = myReplyInfo.repliedToMessageId as NSNumber?
-                    theReplyInfo.systemMetadata     = myReplyInfo.systemMetadata
-                    theReplyInfo.time               = myReplyInfo.time as NSNumber?
-                    if let participantObject = myReplyInfo.participant {
-                        if let participantObject = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: participantObject, isAdminRequest: false) {
-                            theReplyInfo.participant = participantObject
-                        }
-                    }
-                    replyInfoObjectToReturn = theReplyInfo
-                    saveContext(subject: "Update CMReplyInfo -create a new object-")
-                }
+//    // MARK: - update ReplyInfo:
+//    func updateCMReplyInfoEntity(inThreadId threadId: Int, withObject myReplyInfo: ReplyInfo) -> CMReplyInfo? {
+//        var replyInfoObjectToReturn: CMReplyInfo?
+//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMReplyInfo")
+//        if let theTime = myReplyInfo.time {
+//            fetchRequest.predicate = NSPredicate(format: "time == %i", theTime)
+//        }
+//        do {
+//            if let result = try context.fetch(fetchRequest) as? [CMReplyInfo] {
+//                if (result.count > 0) {
+//                    result.first!.deletedd          = myReplyInfo.deleted as NSNumber?
+//                    result.first!.message           = myReplyInfo.message
+//                    result.first!.messageType       = myReplyInfo.messageType as NSNumber?
+//                    result.first!.metadata          = myReplyInfo.metadata
+//                    result.first!.repliedToMessageId    = myReplyInfo.repliedToMessageId as NSNumber?
+//                    result.first!.systemMetadata    = myReplyInfo.systemMetadata
+//                    result.first!.time              = myReplyInfo.time as NSNumber?
+//                    if let participantObject = myReplyInfo.participant {
+//                        if let participantObject = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: participantObject, isAdminRequest: false) {
+//                            result.first!.participant = participantObject
+//                        }
+//                    }
+//                    replyInfoObjectToReturn = result.first
+//                    saveContext(subject: "Update CMReplyInfo -update existing object-")
+//                } else {
+//                    let theCMReplyInfo = NSEntityDescription.entity(forEntityName: "CMReplyInfo", in: context)
+//                    let theReplyInfo = CMReplyInfo(entity: theCMReplyInfo!, insertInto: context)
+//                    theReplyInfo.deletedd           = myReplyInfo.deleted as NSNumber?
+//                    theReplyInfo.message            = myReplyInfo.message
+//                    theReplyInfo.messageType        = myReplyInfo.messageType as NSNumber?
+//                    theReplyInfo.metadata           = myReplyInfo.metadata
+//                    theReplyInfo.repliedToMessageId = myReplyInfo.repliedToMessageId as NSNumber?
+//                    theReplyInfo.systemMetadata     = myReplyInfo.systemMetadata
+//                    theReplyInfo.time               = myReplyInfo.time as NSNumber?
+//                    if let participantObject = myReplyInfo.participant {
+//                        if let participantObject = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: participantObject, isAdminRequest: false) {
+//                            theReplyInfo.participant = participantObject
+//                        }
+//                    }
+//                    replyInfoObjectToReturn = theReplyInfo
+//                    saveContext(subject: "Update CMReplyInfo -create a new object-")
+//                }
+//            }
+//        } catch {
+//            fatalError("")
+//        }
+//        return replyInfoObjectToReturn
+//    }
+//
+//    // MARK: - update ForwardInfo:
+//    func updateCMForwardInfoEntity(inThreadId threadId: Int, withObject myForwardInfo: ForwardInfo) -> CMForwardInfo? {
+//        var forwardInfoObjectToReturn: CMForwardInfo?
+//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMForwardInfo")
+//        do {
+//            if let result = try context.fetch(fetchRequest) as? [CMForwardInfo] {
+//                if (result.count > 0) {
+//                    if let theParticipantObject = myForwardInfo.participant {
+//                        if let participantObject = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: theParticipantObject, isAdminRequest: false) {
+//                            result.first!.participant = participantObject
+//                        }
+//                    }
+//                    if let theConversationObject = myForwardInfo.conversation {
+//                        if let conversationObject = updateCMConversationEntity(withConversationObject: theConversationObject) {
+//                            result.first!.conversation = conversationObject
+//                        }
+//                    }
+//                    forwardInfoObjectToReturn = result.first
+//                    saveContext(subject: "Update CMForwardInfo -update existing object-")
+//                } else {
+//                    let theCMForwardInfo = NSEntityDescription.entity(forEntityName: "CMForwardInfo", in: context)
+//                    let theForwardInfo = CMForwardInfo(entity: theCMForwardInfo!, insertInto: context)
+//
+//                    if let theParticipantObject = myForwardInfo.participant {
+//                        if let participantObject = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: theParticipantObject, isAdminRequest: false) {
+//                            theForwardInfo.participant = participantObject
+//                        }
+//                    }
+//                    if let theConversationObject = myForwardInfo.conversation {
+//                        if let conversationObject = updateCMConversationEntity(withConversationObject: theConversationObject) {
+//                            theForwardInfo.conversation = conversationObject
+//                        }
+//                    }
+//                    forwardInfoObjectToReturn = theForwardInfo
+//                    saveContext(subject: "Update CMForwardInfo -create a new object-")
+//                }
+//            }
+//        } catch {
+//            fatalError("")
+//        }
+//        return forwardInfoObjectToReturn
+//    }
+    
+    
+    private func createCMReplyInfo(fromObject: ReplyInfo, onThreadId: Int) -> CMReplyInfo {
+        let theCMReplyInfo = NSEntityDescription.entity(forEntityName: "CMReplyInfo", in: context)
+        let theReplyInfo = CMReplyInfo(entity: theCMReplyInfo!, insertInto: context)
+        theReplyInfo.deletedd           = fromObject.deleted as NSNumber?
+        theReplyInfo.message            = fromObject.message
+        theReplyInfo.messageType        = fromObject.messageType as NSNumber?
+        theReplyInfo.metadata           = fromObject.metadata
+        theReplyInfo.repliedToMessageId = fromObject.repliedToMessageId as NSNumber?
+        theReplyInfo.systemMetadata     = fromObject.systemMetadata
+        theReplyInfo.time               = fromObject.time as NSNumber?
+        if let participantObject = fromObject.participant {
+            if let participantObject = updateCMParticipantEntity(inThreadId: onThreadId, withParticipantsObject: participantObject, isAdminRequest: false) {
+                theReplyInfo.participant = participantObject
             }
-        } catch {
-            fatalError("")
         }
-        return replyInfoObjectToReturn
+        return theReplyInfo
     }
     
-    // MARK: - update ForwardInfo:
-    func updateCMForwardInfoEntity(inThreadId threadId: Int, withObject myForwardInfo: ForwardInfo) -> CMForwardInfo? {
-        var forwardInfoObjectToReturn: CMForwardInfo?
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMForwardInfo")
+    private func createCMForwardInfo(fromObject: ForwardInfo, onThreadId: Int) -> CMForwardInfo {
+        let theCMForwardInfo = NSEntityDescription.entity(forEntityName: "CMForwardInfo", in: context)
+        let theForwardInfo = CMForwardInfo(entity: theCMForwardInfo!, insertInto: context)
+        if let theParticipantObject = fromObject.participant {
+            if let participantObject = updateCMParticipantEntity(inThreadId: onThreadId, withParticipantsObject: theParticipantObject, isAdminRequest: false) {
+                theForwardInfo.participant = participantObject
+            }
+        }
+        if let theConversationObject = fromObject.conversation {
+            if let conversationObject = updateCMConversationEntity(withConversationObject: theConversationObject) {
+                theForwardInfo.conversation = conversationObject
+            }
+        }
+        return theForwardInfo
+    }
+    
+    // MARK: - update PinMessage
+    func updateCMPinMessageEntity(withObject myPinMessage: PinUnpinMessage) -> CMPinMessage? {
+        var pinMessageObjectToReturn: CMPinMessage?
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMPinMessage")
+        fetchRequest.predicate = NSPredicate(format: "messageId == %i", myPinMessage.messageId)
         do {
-            if let result = try context.fetch(fetchRequest) as? [CMForwardInfo] {
+            if let result = try context.fetch(fetchRequest) as? [CMPinMessage] {
                 if (result.count > 0) {
-                    if let theParticipantObject = myForwardInfo.participant {
-                        if let participantObject = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: theParticipantObject, isAdminRequest: false) {
-                            result.first!.participant = participantObject
-                        }
+                    if let messageId = myPinMessage.messageId as NSNumber? {
+                        result.first!.messageId = messageId
                     }
-                    if let theConversationObject = myForwardInfo.conversation {
-                        if let conversationObject = updateCMConversationEntity(withConversationObject: theConversationObject) {
-                            result.first!.conversation = conversationObject
-                        }
+                    if let notifyAll = myPinMessage.notifyAll as NSNumber? {
+                        result.first!.notifyAll = notifyAll
                     }
-                    forwardInfoObjectToReturn = result.first
-                    saveContext(subject: "Update CMForwardInfo -update existing object-")
-                } else {
-                    let theCMForwardInfo = NSEntityDescription.entity(forEntityName: "CMForwardInfo", in: context)
-                    let theForwardInfo = CMForwardInfo(entity: theCMForwardInfo!, insertInto: context)
+                    if let text = myPinMessage.text {
+                        result.first!.text = text
+                    }
+//                    result.first!.messageId = myPinMessage.messageId as NSNumber?
+//                    result.first!.notifyAll = myPinMessage.notifyAll as NSNumber?
+//                    result.first!.text      = myPinMessage.text
                     
-                    if let theParticipantObject = myForwardInfo.participant {
-                        if let participantObject = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: theParticipantObject, isAdminRequest: false) {
-                            theForwardInfo.participant = participantObject
-                        }
-                    }
-                    if let theConversationObject = myForwardInfo.conversation {
-                        if let conversationObject = updateCMConversationEntity(withConversationObject: theConversationObject) {
-                            theForwardInfo.conversation = conversationObject
-                        }
-                    }
-                    forwardInfoObjectToReturn = theForwardInfo
-                    saveContext(subject: "Update CMForwardInfo -create a new object-")
+                    pinMessageObjectToReturn = result.first
+                    saveContext(subject: "Update CMPinMessage -update existing object-")
+                } else {
+                    let theCMPinMessage = NSEntityDescription.entity(forEntityName: "CMPinMessage", in: context)
+                    let thePinMessage = CMPinMessage(entity: theCMPinMessage!, insertInto: context)
+                    thePinMessage.messageId  = myPinMessage.messageId as NSNumber?
+                    thePinMessage.notifyAll  = myPinMessage.notifyAll as NSNumber?
+                    thePinMessage.text       = myPinMessage.text
+                    
+                    pinMessageObjectToReturn = thePinMessage
+                    saveContext(subject: "Update CMPinMessage -create a new object-")
                 }
             }
         } catch {
             fatalError("")
         }
-        return forwardInfoObjectToReturn
+        return pinMessageObjectToReturn
     }
-    
-    
     
     /*
     

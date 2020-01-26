@@ -39,45 +39,63 @@ extension Chat {
     ///
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (DeliverSeenRequestModel)
     public func deliver(inputModel deliverInput: DeliverSeenRequestModel) {
-        log.verbose("Try to send deliver message for a message id with this parameters: \n \(deliverInput)", context: "Chat")
         
-        if let theUserInfo = userInfo {
-            if (deliverInput.ownerId != theUserInfo.id!) {
-                /*
-                let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.DELIVERY.rawValue,
-                                               "content":           deliverInput.messageId,
-                                               "typeCode":          deliverInput.typeCode ?? generalTypeCode,
-                                               "pushMsgType":       3]
-                */
-                
-                let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.DELIVERY.rawValue,
-                                                    content:            "\(deliverInput.messageId ?? 0)",
-                                                    metadata:           nil,
-                                                    repliedTo:          nil,
-                                                    systemMetadata:     nil,
-                                                    subjectId:          nil,
-                                                    token:              token,
-                                                    tokenIssuer:        nil,
-                                                    typeCode:           deliverInput.typeCode ?? generalTypeCode,
-                                                    uniqueId:           nil,
-                                                    uniqueIds:          nil,
-                                                    isCreateThreadAndSendMessage: nil)
-                
-                let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
-                                                      msgTTL:       msgTTL,
-                                                      peerName:     serverName,
-                                                      priority:     msgPriority,
-                                                      pushMsgType:  3)
-                
-                sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                        callback:           nil,
-                                        callbacks:          nil,
-                                        sentCallback:       nil,
-                                        deliverCallback:    nil,
-                                        seenCallback:       nil)
-//                                        uniuqueIdCallback:  nil)
-            }
-        }
+        log.verbose("Try to send deliver message for a message id with this parameters: \n messageId = \(deliverInput.messageId) , ownerId = \(deliverInput.ownerId)", context: "Chat")
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.DELIVERY.rawValue,
+                                            content:            "\(deliverInput.messageId)",
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          nil,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           deliverInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           nil,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: nil)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  3)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          nil,
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+        
+//        if let theUserInfo = userInfo {
+//            if (deliverInput.ownerId != theUserInfo.id!) {
+//
+//                let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.DELIVERY.rawValue,
+//                                                    content:            "\(deliverInput.messageId)",
+//                                                    metadata:           nil,
+//                                                    repliedTo:          nil,
+//                                                    systemMetadata:     nil,
+//                                                    subjectId:          nil,
+//                                                    token:              token,
+//                                                    tokenIssuer:        nil,
+//                                                    typeCode:           deliverInput.typeCode ?? generalTypeCode,
+//                                                    uniqueId:           nil,
+//                                                    uniqueIds:          nil,
+//                                                    isCreateThreadAndSendMessage: nil)
+//
+//                let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+//                                                      msgTTL:       msgTTL,
+//                                                      peerName:     serverName,
+//                                                      priority:     msgPriority,
+//                                                      pushMsgType:  3)
+//
+//                sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+//                                        callbacks:          nil,
+//                                        sentCallback:       nil,
+//                                        deliverCallback:    nil,
+//                                        seenCallback:       nil)
+//            }
+//        }
     }
     
     
@@ -95,45 +113,71 @@ extension Chat {
     ///
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (DeliverSeenRequestModel)
     public func seen(inputModel seenInput: DeliverSeenRequestModel) {
-        log.verbose("Try to send deliver message for a message id with this parameters: \n \(seenInput)", context: "Chat")
         
-        if let theUserInfo = userInfo {
-            if (seenInput.ownerId != theUserInfo.id!) {
-                /*
-                let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.SEEN.rawValue,
-                                               "content":           seenInput.messageId,
-                                               "typeCode":          seenInput.typeCode ?? generalTypeCode,
-                                               "pushMsgType":       3]
-                */
-                
-                let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.SEEN.rawValue,
-                                                    content:            "\(seenInput.messageId ?? 0)",
-                                                    metadata:           nil,
-                                                    repliedTo:          nil,
-                                                    systemMetadata:     nil,
-                                                    subjectId:          nil,
-                                                    token:              token,
-                                                    tokenIssuer:        nil,
-                                                    typeCode:           seenInput.typeCode ?? generalTypeCode,
-                                                    uniqueId:           nil,
-                                                    uniqueIds:          nil,
-                                                    isCreateThreadAndSendMessage: nil)
-                
-                let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
-                                                      msgTTL:       msgTTL,
-                                                      peerName:     serverName,
-                                                      priority:     msgPriority,
-                                                      pushMsgType:  3)
-                
-                sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                        callback:           nil,
-                                        callbacks:          nil,
-                                        sentCallback:       nil,
-                                        deliverCallback:    nil,
-                                        seenCallback:       nil)
-//                                        uniuqueIdCallback:  nil)
-            }
-        }
+        log.verbose("Try to send seen message for a message id with this parameters: \n messageId = \(seenInput.messageId) , ownerId = \(seenInput.ownerId)", context: "Chat")
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.SEEN.rawValue,
+                                            content:            "\(seenInput.messageId)",
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          nil,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           seenInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           nil,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: nil)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  3)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          nil,
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+        
+//        if let theUserInfo = userInfo {
+//            if (seenInput.ownerId != theUserInfo.id!) {
+//                /*
+//                let sendMessageParams: JSON = ["chatMessageVOType": chatMessageVOTypes.SEEN.rawValue,
+//                                               "content":           seenInput.messageId,
+//                                               "typeCode":          seenInput.typeCode ?? generalTypeCode,
+//                                               "pushMsgType":       3]
+//                */
+//
+//                let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.SEEN.rawValue,
+//                                                    content:            "\(seenInput.messageId ?? 0)",
+//                                                    metadata:           nil,
+//                                                    repliedTo:          nil,
+//                                                    systemMetadata:     nil,
+//                                                    subjectId:          nil,
+//                                                    token:              token,
+//                                                    tokenIssuer:        nil,
+//                                                    typeCode:           seenInput.typeCode ?? generalTypeCode,
+//                                                    uniqueId:           nil,
+//                                                    uniqueIds:          nil,
+//                                                    isCreateThreadAndSendMessage: nil)
+//
+//                let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+//                                                      msgTTL:       msgTTL,
+//                                                      peerName:     serverName,
+//                                                      priority:     msgPriority,
+//                                                      pushMsgType:  3)
+//
+//                sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+////                                        callback:           nil,
+//                                        callbacks:          nil,
+//                                        sentCallback:       nil,
+//                                        deliverCallback:    nil,
+//                                        seenCallback:       nil)
+////                                        uniuqueIdCallback:  nil)
+//            }
+//        }
     }
     
 }

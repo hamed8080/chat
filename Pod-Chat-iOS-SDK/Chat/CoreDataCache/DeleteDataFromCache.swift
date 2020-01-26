@@ -421,6 +421,9 @@ extension Cache {
                     if let _ = thread.lastMessageVO {
                         deleteAndSave(object: thread.lastMessageVO!, withMessage: "Delete CMMessage Object")
                     }
+                    if let _ = thread.pinMessage {
+                        deleteAndSave(object: thread.pinMessage!, withMessage: "Delete pinMessage from CMPinMessage Object")
+                    }
                     deleteMessage(inThread: (thread.id as? Int)!, allMessages: true, withMessageIds: [])
                     deleteAndSave(object: thread, withMessage: "Delete CMConversation Object")
                 }
@@ -457,6 +460,33 @@ extension Cache {
             }
         } catch {
             fatalError("Error on fetching list of CMConversation when trying to delete Threads...")
+        }
+    }
+    
+    // MARK: - delete Pin/Unpin Message from Thread:
+    /// Delete Pin/Unpin Message on CMConversation Entity:
+    /// by calling this function, 'pinMessage' property on Conversation will be delete
+    ///
+    /// Inputs:
+    /// - it gets the messageId as  "Int" , and pinMessage as "PinUnpinMessage" value as inputs
+    ///
+    /// Outputs:
+    /// - it returns no output
+    ///
+    /// - parameter messageId:      send your messageId to this parameter.(Int)
+    /// - parameter pinMessage:     send your  pinMessageObject to save it on the cache (PinUnpinMessage)
+    func deletePinMessageFromCMConversationEntity(threadId: Int) {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
+        fetchRequest.predicate = NSPredicate(format: "id == %i", threadId)
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMConversation] {
+                if (result.count > 0) {
+                    result.first!.pinMessage = nil
+                    saveContext(subject: "Update CMConversation on save PinMessage -update existing object-")
+                }
+            }
+        } catch {
+            fatalError("Error on trying to find the Thread from CMConversation entity")
         }
     }
     
@@ -527,7 +557,6 @@ extension Cache {
             fatalError("Error on fetching list of CMMessage")
         }
     }
-    
     
     
     /// Delete Message on specific thread:

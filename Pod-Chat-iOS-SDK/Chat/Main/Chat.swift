@@ -312,6 +312,9 @@ public class Chat {
     public var removeRoleFromUserCallbackToUser:    callbackTypeAlias?
     public var pinThreadCallbackToUser:             callbackTypeAlias?
     public var unpinThreadCallbackToUser:           callbackTypeAlias?
+    public var pinMessageCallbackToUser:            callbackTypeAlias?
+    public var unpinMessageCallbackToUser:          callbackTypeAlias?
+    public var getNotSeenDurationCallbackToUser:    callbackTypeAlias?
     
     
     

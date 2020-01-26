@@ -38,6 +38,7 @@ extension Chat {
                      uniqueId:      @escaping (String) -> (),
                      progress:      @escaping (Float) -> (),
                      completion:    @escaping callbackTypeAlias) {
+        
         log.verbose("Try to upload image with this parameters: \n \(uploadImageInput)", context: "Chat")
         
         uniqueId(uploadImageInput.uniqueId)
@@ -177,6 +178,7 @@ extension Chat {
                            uniqueId:        @escaping (String) -> (),
                            progress:        @escaping (Float) -> (),
                            completion:      @escaping callbackTypeAlias) {
+        
         log.verbose("Try to upload file with this parameters: \n \(uploadFileInput)", context: "Chat")
         
         uniqueId(uploadFileInput.uniqueId)

@@ -35,7 +35,7 @@ extension Chat {
                                     delivered:      nil,
                                     editable:       nil,
                                     edited:         nil,
-                                    id:             Int(content) ?? 0,
+                                    id:             Int(content),
                                     mentioned:      nil,
                                     message:        nil,
                                     messageType:    nil,
