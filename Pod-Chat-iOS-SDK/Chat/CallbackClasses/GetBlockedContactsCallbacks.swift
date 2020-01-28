@@ -78,7 +78,7 @@ extension Chat {
              *      -> send the "GetBlockedContactListModel" as a callback
              *
              */
-            if let arrayContent = response.resultAsArray {
+            if let arrayContent = response.resultAsArray as? [JSON] {
                 let content = sendParams.content?.convertToJSON()
                 let getBlockedModel = GetBlockedContactListModel(messageContent:    arrayContent,
                                                                  contentCount:      response.contentCount,

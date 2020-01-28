@@ -58,7 +58,7 @@ extension Chat {
                 if enableCache {
                     
                     
-                    let threadsModel = GetThreadsModel(messageContent: returnData.resultAsArray ?? [],
+                    let threadsModel = GetThreadsModel(messageContent: (returnData.resultAsArray as? [JSON]) ?? [],
                                                        contentCount: returnData.contentCount,
                                                        count:        0,
                                                        offset:       0,
@@ -152,7 +152,7 @@ extension Chat {
              */
             log.verbose("GetThreadsCallbacks", context: "Chat")
             
-            if let arrayContent = response.resultAsArray {
+            if let arrayContent = response.resultAsArray as? [JSON] {
                 let content = sendParams.content?.convertToJSON()
                 
 //                if Chat.sharedInstance.enableCache {

@@ -315,6 +315,7 @@ public class Chat {
     public var pinMessageCallbackToUser:            callbackTypeAlias?
     public var unpinMessageCallbackToUser:          callbackTypeAlias?
     public var getNotSeenDurationCallbackToUser:    callbackTypeAlias?
+    public var getCurrentUserRolesCallbackToUser:   callbackTypeAlias?
     
     
     

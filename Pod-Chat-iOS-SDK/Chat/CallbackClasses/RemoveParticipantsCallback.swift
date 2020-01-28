@@ -90,7 +90,7 @@ extension Chat {
              */
             log.verbose("RemoveParticipantsCallback", context: "Chat")
             
-            if let arrayContent = response.resultAsArray {
+            if let arrayContent = response.resultAsArray as? [JSON] {
                 
                 var removeParticipantsArray = [Participant]()
                 for item in arrayContent {

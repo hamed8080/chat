@@ -59,7 +59,7 @@ extension Chat {
              *
              *
              */
-            if let arrayContent = response.resultAsArray {
+            if let arrayContent = response.resultAsArray as? [JSON] {
                 let content = sendParams.content?.convertToJSON()
                 
                 let getBlockedModel = GetThreadParticipantsModel(messageContent: arrayContent,

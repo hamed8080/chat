@@ -877,6 +877,9 @@ extension Chat {
             responseOfUnpinMessage(withMessage: message)
             break
             
+        case chatMessageVOTypes.Get_Current_User_Roles.rawValue:
+            responseOfGetCurrentUserRoles(withMessage: message)
+            
         // a message of type 100 (LOGOUT) comes from Server.
         case chatMessageVOTypes.LOGOUT.rawValue:
             break

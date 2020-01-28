@@ -90,12 +90,12 @@ extension Chat {
              *
              */
             log.verbose("GetContactsCallback", context: "Chat")
-            if let arrayContent = response.resultAsArray {
+            if let arrayContent = response.resultAsArray as? [JSON] {
                 let content = sendParams.content?.convertToJSON()
                 
                 if Chat.sharedInstance.enableCache {
                     var contacts = [Contact]()
-                    for item in response.resultAsArray ?? [] {
+                    for item in (response.resultAsArray as? [JSON]) ?? [] {
                         let myContact = Contact(messageContent: item)
                         contacts.append(myContact)
                     }

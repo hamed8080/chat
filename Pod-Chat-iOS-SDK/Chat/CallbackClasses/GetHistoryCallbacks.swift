@@ -51,13 +51,13 @@ extension Chat {
                               failure:  @escaping callbackTypeAlias) {
             log.verbose("GetHistoryCallbacks", context: "Chat")
             
-            if let arrayContent = response.resultAsArray {
+            if let arrayContent = response.resultAsArray as? [JSON] {
                 let content = sendParams.content?.convertToJSON()
                 
                 if Chat.sharedInstance.enableCache {
                     // save data comes from server to the Cache
                     var messages = [Message]()
-                    for item in response.resultAsArray ?? [] {
+                    for item in (response.resultAsArray as? [JSON]) ?? [] {
                         let myMessage = Message(threadId: sendParams.subjectId!, pushMessageVO: item)
                         messages.append(myMessage)
                     }
