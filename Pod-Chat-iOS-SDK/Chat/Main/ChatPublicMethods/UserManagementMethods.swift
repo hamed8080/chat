@@ -128,6 +128,7 @@ extension Chat {
     
     // log out from async
     public func logOut() {
+        deleteCache()
         asyncClient?.asyncLogOut()
     }
     
