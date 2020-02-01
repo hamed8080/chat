@@ -1020,6 +1020,74 @@ extension Cache {
     }
     
     
+    public func retrieveAllImagesSize() -> Int {
+        
+        var folderSize = 0
+        // get your directory url
+//        let documentsDirectoryURL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first! + "/\(fileSubPath.Images)"
+        let documentsDirectoryURL = URL(fileURLWithPath: path)
+        
+        // check if the url is a directory
+        if (try? documentsDirectoryURL.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory == true {
+            print("url is a folder url")
+            // lets get the folder files
+            (try? FileManager.default.contentsOfDirectory(at: documentsDirectoryURL, includingPropertiesForKeys: nil))?.lazy.forEach {
+                folderSize += (try? $0.resourceValues(forKeys: [.totalFileAllocatedSizeKey]))?.totalFileAllocatedSize ?? 0
+            }
+//            // format it using NSByteCountFormatter to display it properly
+//            let  byteCountFormatter =  ByteCountFormatter()
+//            byteCountFormatter.allowedUnits = .useBytes
+//            byteCountFormatter.countStyle = .file
+//            let folderSizeToDisplay = byteCountFormatter.string(for: folderSize) ?? ""
+//            print(folderSizeToDisplay)  // "X,XXX,XXX bytes"
+        }
+        return folderSize
+        
+    }
+    
+    
+    public func retrieveAllFilesSize() -> Int {
+        
+        var folderSize = 0
+        // get your directory url
+        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first! + "/\(fileSubPath.Files)"
+        let documentsDirectoryURL = URL(fileURLWithPath: path)
+        
+        // check if the url is a directory
+        if (try? documentsDirectoryURL.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory == true {
+            print("url is a folder url")
+            // lets get the folder files
+            (try? FileManager.default.contentsOfDirectory(at: documentsDirectoryURL, includingPropertiesForKeys: nil))?.lazy.forEach {
+                folderSize += (try? $0.resourceValues(forKeys: [.totalFileAllocatedSizeKey]))?.totalFileAllocatedSize ?? 0
+            }
+        }
+        return folderSize
+        
+    }
+    
+    
+//    public func retrieveLocalSize() -> Int {
+//
+//        var folderSize = 0
+//        // get your directory url
+//        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+//        let documentsDirectoryURL = URL(fileURLWithPath: path)
+//
+//        // check if the url is a directory
+//        if (try? documentsDirectoryURL.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory == true {
+//            print("url is a folder url")
+//            // lets get the folder files
+//            (try? FileManager.default.contentsOfDirectory(at: documentsDirectoryURL, includingPropertiesForKeys: nil))?.lazy.forEach {
+//                folderSize += (try? $0.resourceValues(forKeys: [.totalFileAllocatedSizeKey]))?.totalFileAllocatedSize ?? 0
+//            }
+//        }
+//        return folderSize
+//
+//    }
+    
+    
+    
 }
 
 

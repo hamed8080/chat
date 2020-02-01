@@ -116,6 +116,12 @@ extension Chat {
                     }
                     Chat.cacheDB.deleteThreads(withThreadIds: cacheThreadIds)
                     Chat.map.removeValue(forKey: message.uniqueId)
+                    
+                    
+                    
+                    print("all file Size = \(getLocalFilesFolderSize())")
+                    print("all image Size = \(getLocalImageFolderSize())")
+                    print("all folder Size \(getLocalFolderSize())")
                 }
             }
         }

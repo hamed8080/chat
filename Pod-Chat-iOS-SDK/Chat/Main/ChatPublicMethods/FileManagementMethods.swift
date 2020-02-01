@@ -558,5 +558,28 @@ extension Chat {
     }
     
     
+    // MARK: - Get Local Storage Size
+    public func getLocalFolderSize() -> Int {
+        return getLocalImageFolderSize() + getLocalFilesFolderSize()
+    }
+    
+    public func getLocalImageFolderSize() -> Int {
+        return Chat.cacheDB.retrieveAllImagesSize()
+    }
+    
+    public func getLocalFilesFolderSize() -> Int {
+        return Chat.cacheDB.retrieveAllFilesSize()
+    }
+    
+    
+    // MARK: - Delete Local Storage Folders
+    public func deleteLocalImages() {
+        Chat.cacheDB.deleteAllImages()
+    }
+    
+    public func deleteLocalFiles() {
+        Chat.cacheDB.deleteAllFiles()
+    }
+    
     
 }
