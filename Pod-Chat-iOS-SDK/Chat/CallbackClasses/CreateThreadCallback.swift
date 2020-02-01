@@ -15,19 +15,6 @@ import FanapPodAsyncSDK
 extension Chat {
     
     func responseOfCreateThread(withMessage message: ChatMessage) {
-        /**
-         *
-         *  -> send "THREAD_NEW" event to user
-         *
-         *  -> check if Cache is enabled by the user
-         *      -> if yes, save the income Data to the Cache
-         *
-         *  -> check if we have saved the message uniqueId on the "map" property
-         *      -> if yes: (means we send this request and waiting for the response of it)
-         *          -> create the "CreateReturnData" variable
-         *          -> call the "onResultCallback" which will send callback to createThread function (by using "createThreadCallbackToUser")
-         *
-         */
         log.verbose("Message of type 'CREATE_THREAD' recieved", context: "Chat")
         
         if let contentAsJSON = message.content?.convertToJSON() {
@@ -71,25 +58,19 @@ extension Chat {
         init(parameters: SendChatMessageVO) {
             self.mySendMessageParams = parameters
         }
+        
         func onResultCallback(uID:      String,
                               response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
-            /**
-             *  -> check if response hasError or not
-             *      -> if no, create the "ThreadModel"
-             *      -> send the "ThreadModel" as a callback
-             *
-             */
             log.verbose("CreateThreadCallback", context: "Chat")
+            
             if let content = response.result {
-                
                 let createThreadModel = ThreadModel(messageContent:   content,
                                                     hasError:         response.hasError,
                                                     errorMessage:     response.errorMessage,
                                                     errorCode:        response.errorCode)
                 success(createThreadModel)
-                
             }
         }
         

@@ -15,11 +15,6 @@ import FanapPodAsyncSDK
 extension Chat {
     
     func responseOfMessageDeliveryList(withMessage message: ChatMessage) {
-        /*
-         *
-         *
-         *
-         */
         log.verbose("Message of type 'GET_MESSAGE_DELEVERY_PARTICIPANTS' recieved", context: "Chat")
         
         let returnData = CreateReturnData(hasError:         false,
@@ -45,7 +40,6 @@ extension Chat {
     
     
     public class GetMessageDeliverList: CallbackProtocol {
-        
         var sendParams: SendChatMessageVO
         init(parameters: SendChatMessageVO) {
             self.sendParams = parameters
@@ -55,10 +49,10 @@ extension Chat {
                               response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
+            log.verbose("GetMessageDeliverListCallback", context: "Chat")
             
             if let arrayContent = response.resultAsArray as? [JSON] {
                 let content = sendParams.content?.convertToJSON()
-                
                 let getBlockedModel = GetThreadParticipantsModel(messageContent: arrayContent,
                                                                  contentCount:  response.contentCount,
                                                                  count:         content?["count"].intValue ?? 0,

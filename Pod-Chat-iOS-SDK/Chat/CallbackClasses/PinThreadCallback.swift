@@ -14,9 +14,6 @@ import FanapPodAsyncSDK
 extension Chat {
     
     func responseOfPinThread(withMessage message: ChatMessage) {
-        /**
-         *
-         */
         log.verbose("Message of type 'PIN_THREAD' recieved", context: "Chat")
         
         let tPinEM = ThreadEventModel(type:            ThreadEventTypes.THREAD_PIN,
@@ -57,9 +54,6 @@ extension Chat {
                               response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
-            /**
-             *
-             */
             log.verbose("PinThreadCallbacks", context: "Chat")
             
             if let stringContent = response.resultAsString {
@@ -67,7 +61,6 @@ extension Chat {
                                                     hasError:       response.hasError,
                                                     errorMessage:   response.errorMessage,
                                                     errorCode:      response.errorCode)
-                
                 success(muteModel)
             }
             

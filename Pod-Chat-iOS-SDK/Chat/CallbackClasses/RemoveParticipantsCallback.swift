@@ -15,9 +15,6 @@ import FanapPodAsyncSDK
 extension Chat {
     
     func responseOfRemoveParticipant(withMessage message: ChatMessage) {
-        /**
-         *
-         */
         log.verbose("Message of type 'REMOVE_PARTICIPANT' recieved", context: "Chat")
         
         let returnData = CreateReturnData(hasError:         false,
@@ -28,14 +25,6 @@ extension Chat {
                                           resultAsString:   nil,
                                           contentCount:     message.contentCount,
                                           subjectId:        message.subjectId)
-        
-//        if let threadId = message.subjectId {
-//            delegate?.threadEvents(type: ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME, threadId: threadId, thread: nil, messageId: nil, senderId: nil)
-//            if let conAsJSON = message.content?.convertToJSON() {
-//                let conversation = Conversation(messageContent: conAsJSON)
-//                delegate?.threadEvents(type: ThreadEventTypes.THREAD_REMOVE_PARTICIPANTS, threadId: nil, thread: conversation, messageId: nil, senderId: nil)
-//            }
-//        }
         
         let tRemoveParticipantEM = ThreadEventModel(type:           ThreadEventTypes.THREAD_REMOVE_PARTICIPANTS,
                                                     participants:   nil,
@@ -75,7 +64,6 @@ extension Chat {
     
     
     public class RemoveParticipantsCallback: CallbackProtocol {
-        
         var sendParams: SendChatMessageVO
         init(parameters: SendChatMessageVO) {
             self.sendParams = parameters
@@ -85,9 +73,6 @@ extension Chat {
                               response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
-            /**
-             *
-             */
             log.verbose("RemoveParticipantsCallback", context: "Chat")
             
             if let arrayContent = response.resultAsArray as? [JSON] {

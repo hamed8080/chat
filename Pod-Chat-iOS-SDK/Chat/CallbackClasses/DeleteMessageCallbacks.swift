@@ -15,9 +15,6 @@ import FanapPodAsyncSDK
 extension Chat {
     
     func responseOfDeleteMessage(withMessage message: ChatMessage) {
-        /**
-         *
-         */
         log.verbose("Message of type 'DELETE_MESSAGE' recieved", context: "Chat")
         
         let returnData = CreateReturnData(hasError:         false,
@@ -86,7 +83,6 @@ extension Chat {
             log.verbose("DeleteMessageCallbacks", context: "Chat")
             
             if let content = response.resultAsString {
-                
                 let deletedMessageModel = DeleteMessageModel(deletedMessageId:  Int(content) ?? 0,
                                                              hasError:          response.hasError,
                                                              errorMessage:      response.errorMessage,

@@ -15,9 +15,6 @@ import FanapPodAsyncSDK
 extension Chat {
     
     func responseOfEditMessage(withMessage message: ChatMessage) {
-        /**
-         *
-         */
         log.verbose("Message of type 'EDIT_MESSAGE' recieved", context: "Chat")
         
         let returnData = CreateReturnData(hasError:         false,

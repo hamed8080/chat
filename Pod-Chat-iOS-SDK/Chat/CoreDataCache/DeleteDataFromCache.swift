@@ -571,7 +571,7 @@ extension Cache {
     /// - parameter inThread:       the threadId that you want to delete messages from it. (Int)
     /// - parameter allMessages:    if you want to delete all messages on this thread, send this param as "true". (Bool)
     /// - parameter withMessageIds: if you want to delete specifice messages with their Ids, send them to this param. ([Int])
-    public func deleteMessage(inThread: Int, allMessages: Bool, withMessageIds messageIds: [Int]) {
+    public func deleteMessage(inThread: Int, allMessages: Bool, withMessageIds messageIds: [Int]?) {
         /*
          *  -> define a method that will handle of deletion of messages
          *      -> delete the participant object of the message
@@ -611,8 +611,8 @@ extension Cache {
                     
                     if allMessages {
                         deleteCMMessage(message: message)
-                    } else {
-                        for msgId in messageIds {
+                    } else if let theMessageIds = messageIds {
+                        for msgId in theMessageIds {
                             if (Int(exactly: message.id ?? 0) == msgId) {
                                 deleteCMMessage(message: message)
                             }

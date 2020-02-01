@@ -15,9 +15,6 @@ import FanapPodAsyncSDK
 extension Chat {
     
     func responseOfThreadParticipants(withMessage message: ChatMessage) {
-        /**
-         *
-         */
         log.verbose("Message of type 'THREAD_PARTICIPANTS' recieved", context: "Chat")
         
         let returnData = CreateReturnData(hasError:       false,
@@ -77,9 +74,6 @@ extension Chat {
                               response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
-            /**
-             *
-             */
             log.verbose("GetThreadParticipantsCallbacks", context: "Chat")
             
             if let arrayContent = response.resultAsArray as? [JSON] {

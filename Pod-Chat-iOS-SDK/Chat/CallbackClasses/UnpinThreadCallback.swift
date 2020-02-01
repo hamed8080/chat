@@ -14,9 +14,6 @@ import FanapPodAsyncSDK
 extension Chat {
     
     func responseOfUnpinThread(withMessage message: ChatMessage) {
-        /**
-         *
-         */
         log.verbose("Message of type 'UNPIN_THREAD' recieved", context: "Chat")
         
         let tUnpinEM = ThreadEventModel(type:            ThreadEventTypes.THREAD_UNPIN,
@@ -57,9 +54,6 @@ extension Chat {
                               response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
-            /**
-             *
-             */
             log.verbose("UnpinThreadCallbacks", context: "Chat")
             
             if let stringContent = response.resultAsString {

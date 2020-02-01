@@ -278,9 +278,7 @@
 		3EB5208322ABF4FB00B7EA45 /* GetMessageDeliverList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5208222ABF4FB00B7EA45 /* GetMessageDeliverList.swift */; };
 		3EB5208522ABF51D00B7EA45 /* GetMessageSeenList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5208422ABF51D00B7EA45 /* GetMessageSeenList.swift */; };
 		3EB5208722ABF53D00B7EA45 /* ClearHistoryCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5208622ABF53D00B7EA45 /* ClearHistoryCallback.swift */; };
-		3EB5208922ABF56600B7EA45 /* GetAdminListCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5208822ABF56600B7EA45 /* GetAdminListCallback.swift */; };
 		3EB5208B22ABF58C00B7EA45 /* SetRoleToUserCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5208A22ABF58C00B7EA45 /* SetRoleToUserCallback.swift */; };
-		3EB5208D22ABF5AF00B7EA45 /* SendSignalMessageCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5208C22ABF5AF00B7EA45 /* SendSignalMessageCallback.swift */; };
 		3EB7595C228D98FC00A48262 /* CancelMessageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB7595B228D98FC00A48262 /* CancelMessageRequestModel.swift */; };
 		3EBBEDC62174C18F00F5CDC7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDC52174C18F00F5CDC7 /* User.swift */; };
 		3EBBEDD32174C20200F5CDC7 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDD22174C20200F5CDC7 /* Contact.swift */; };
@@ -627,9 +625,7 @@
 		3EB5208222ABF4FB00B7EA45 /* GetMessageDeliverList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMessageDeliverList.swift; sourceTree = "<group>"; };
 		3EB5208422ABF51D00B7EA45 /* GetMessageSeenList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMessageSeenList.swift; sourceTree = "<group>"; };
 		3EB5208622ABF53D00B7EA45 /* ClearHistoryCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearHistoryCallback.swift; sourceTree = "<group>"; };
-		3EB5208822ABF56600B7EA45 /* GetAdminListCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAdminListCallback.swift; sourceTree = "<group>"; };
 		3EB5208A22ABF58C00B7EA45 /* SetRoleToUserCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetRoleToUserCallback.swift; sourceTree = "<group>"; };
-		3EB5208C22ABF5AF00B7EA45 /* SendSignalMessageCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendSignalMessageCallback.swift; sourceTree = "<group>"; };
 		3EB7595B228D98FC00A48262 /* CancelMessageRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelMessageRequestModel.swift; sourceTree = "<group>"; };
 		3EBBEDC52174C18F00F5CDC7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		3EBBEDD22174C20200F5CDC7 /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
@@ -912,7 +908,6 @@
 				3EB5206622ABF29D00B7EA45 /* CreateThreadCallback.swift */,
 				3EB5207222ABF3BB00B7EA45 /* DeleteMessageCallbacks.swift */,
 				3EB5207022ABF38900B7EA45 /* EditMessageCallbacks.swift */,
-				3EB5208822ABF56600B7EA45 /* GetAdminListCallback.swift */,
 				3EB5207C22ABF47D00B7EA45 /* GetBlockedContactsCallbacks.swift */,
 				3EB5205B22ABF0BC00B7EA45 /* GetContactsCallback.swift */,
 				3ECFC9A323E0581100978C96 /* GetCurrentUserRolesCallback.swift */,
@@ -926,7 +921,6 @@
 				3EB5206C22ABF33C00B7EA45 /* RemoveParticipantsCallback.swift */,
 				3EB5208022ABF4DC00B7EA45 /* SpamPvThread.swift */,
 				3EB5206E22ABF36500B7EA45 /* SendMessageCallbacks.swift */,
-				3EB5208C22ABF5AF00B7EA45 /* SendSignalMessageCallback.swift */,
 				3E8ADCFC23B7845200E3538D /* PinThreadCallback.swift */,
 				3E8ADD0023B7855500E3538D /* UnpinThreadCallback.swift */,
 				3E35336323D44D3F00731774 /* PinMessageCallback.swift */,
@@ -1525,14 +1519,12 @@
 				3E8E923122A38F2D0037CD41 /* SendSignalMessageRequestModel.swift in Sources */,
 				3E8ADD0123B7855500E3538D /* UnpinThreadCallback.swift in Sources */,
 				3E10996223C3659B0034093E /* GetAllThreadsRequestModel.swift in Sources */,
-				3EB5208922ABF56600B7EA45 /* GetAdminListCallback.swift in Sources */,
 				3EB5204B22ABE83100B7EA45 /* CacheExtensions.swift in Sources */,
 				3EB5205E22ABF1A400B7EA45 /* UserInfoCallback.swift in Sources */,
 				3EA1569E21CE1C96004B1346 /* SendFileMessageRequestModel.swift in Sources */,
 				3E8ADC4B23B24B4400E3538D /* FileUploadEventModel.swift in Sources */,
 				3E8ADC7123B3522500E3538D /* Roles.swift in Sources */,
 				3E8ADCFF23B784E600E3538D /* PinUnpinThreadModel.swift in Sources */,
-				3EB5208D22ABF5AF00B7EA45 /* SendSignalMessageCallback.swift in Sources */,
 				3E24085221F5C844001F32F1 /* CMContact+CoreDataProperties.swift in Sources */,
 				3E8ADC6B23B3514F00E3538D /* SendAsyncMessageVO.swift in Sources */,
 				3EA1567121CE1A92004B1346 /* GetContactsRequestModel.swift in Sources */,

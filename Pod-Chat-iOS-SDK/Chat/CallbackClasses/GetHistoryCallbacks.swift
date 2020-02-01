@@ -15,9 +15,6 @@ import FanapPodAsyncSDK
 extension Chat {
     
     func responseOfGetHistory(withMessage message: ChatMessage) {
-        /**
-         *
-         */
         log.verbose("Message of type 'GET_HISTORY' recieved", context: "Chat")
         
         let returnData = CreateReturnData(hasError:         false,
@@ -28,7 +25,6 @@ extension Chat {
                                           resultAsString:   nil,
                                           contentCount:     message.contentCount,
                                           subjectId:        message.subjectId)
-        
         
         if Chat.map[message.uniqueId] != nil {
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!

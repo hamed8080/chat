@@ -290,17 +290,10 @@ extension Chat {
         init(parameters: SendChatMessageVO) {
             self.sendParams = parameters
         }
+        
         func onSent(uID:        String,
                     response:   CreateReturnData,
                     success:    @escaping callbackTypeAlias) {
-            /**
-             *
-             *  -> check if response hasError or not
-             *      -> if yes, create the "SendMessageModel"
-             *      -> send the "SendMessageModel" as a callback
-             *
-             */
-            
             log.verbose("SendMessage Sent Callback", context: "Chat")
             if let stringContent = response.resultAsString {
                 let message = SendMessageModel(messageContent:  response.result,
@@ -313,7 +306,6 @@ extension Chat {
                                                errorCode:       response.errorCode,
                                                threadId:        response.subjectId,
                                                participantId:   response.result?["participantId"].int)
-                
                 success(message)
             }
         }
@@ -321,14 +313,8 @@ extension Chat {
         func onDeliver(uID:         String,
                        response:    CreateReturnData,
                        success:     @escaping callbackTypeAlias) {
-            /**
-             *
-             *  -> check if response hasError or not
-             *      -> if yes, create the "SendMessageModel"
-             *      -> send the "SendMessageModel" as a callback
-             *
-             */
             log.verbose("SendMessage Deliver Callback", context: "Chat")
+            
             if let stringContent = response.resultAsString {
                 let content = stringContent.convertToJSON()
                 let message = SendMessageModel(messageContent:  response.result,
@@ -348,14 +334,8 @@ extension Chat {
         func onSeen(uID:        String,
                     response:   CreateReturnData,
                     success:    @escaping callbackTypeAlias) {
-            /**
-             *
-             *  -> check if response hasError or not
-             *      -> if yes, create the "SendMessageModel"
-             *      -> send the "SendMessageModel" as a callback
-             *
-             */
             log.verbose("SendMessage Seen Callback", context: "Chat")
+            
             if let stringContent = response.resultAsString {
                 let content = stringContent.convertToJSON()
                 let message = SendMessageModel(messageContent:  response.result,

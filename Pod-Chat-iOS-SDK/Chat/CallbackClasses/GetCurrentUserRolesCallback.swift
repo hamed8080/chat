@@ -43,10 +43,10 @@ extension Chat {
                               response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
+            log.verbose("GetCurrentUserRolesCallback", context: "Chat")
             
             if let content = response.resultAsArray as? [String] {
 //                message.content?.convertToJSON() ?? [:]
-                
                 let unblockUserModel = GetCurrentUserRolesModel(messageContent: content,
                                                                 hasError:       response.hasError,
                                                                 errorMessage:   response.errorMessage,

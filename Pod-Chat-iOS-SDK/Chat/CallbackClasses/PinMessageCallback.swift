@@ -16,13 +16,6 @@ extension Chat {
     func responseOfPinMessage(withMessage message: ChatMessage) {
         log.verbose("Message of type 'PIN_MESSAGE' recieved", context: "Chat")
         
-//        let tPinEM = ThreadEventModel(type:            ThreadEventTypes.THREAD_PIN,
-//                                      participants:    nil,
-//                                      threads:         nil,
-//                                      threadId:        message.subjectId,
-//                                      senderId:        nil)
-//        delegate?.threadEvents(model: tPinEM)
-        
         let returnData = CreateReturnData(hasError:         false,
                                           errorMessage:     "",
                                           errorCode:        0,
@@ -56,7 +49,6 @@ extension Chat {
                               response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
-            
             log.verbose("PinMessageCallbacks", context: "Chat")
             
             if let content = response.result {

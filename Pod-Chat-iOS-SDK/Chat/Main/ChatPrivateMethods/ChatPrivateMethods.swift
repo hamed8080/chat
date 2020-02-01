@@ -109,47 +109,13 @@ extension Chat {
                     
                 }
                 
-                
             } else if let error = response.error {
                 log.error("Response of getDeviceIdWithToken is Failed)", context: "Chat")
                 self.delegate?.chatError(errorCode:     6200,
                                          errorMessage:  "\(CHAT_ERRORS.err6200.rawValue): \(error)",
                                          errorResult:   error.localizedDescription)
             }
-            
         }
-        
-        // last implementation of this function was using the httpRequest function that will deprecate because of complexity that comes with it over time.
-        /*
-        httpRequest(from: url, withMethod: method, withHeaders: headers, withParameters: nil, dataToSend: nil, uniqueId: nil, isImage: nil, isFile: nil, completion: { (myResponse) in
-            let responseStr: String = myResponse as! String
-         
-            if let dataFromMsgString = responseStr.data(using: .utf8, allowLossyConversion: false) {
-                // get currrent user deviceIdresponseStr
-                var msg: JSON
-                do {
-                    msg = try JSON(data: dataFromMsgString)
-                } catch {
-                    fatalError()
-                }
-                
-                if let devices = msg["devices"].array {
-                    for device in devices {
-                        if device["current"].bool == true {
-                            completion(device["uid"].stringValue)
-                            break
-                        }
-                    }
-                    if (self.deviceId == nil || (self.deviceId == "")) {
-                        self.delegate?.chatError(errorCode: 6000, errorMessage: CHAT_ERRORS.err6000.rawValue, errorResult: nil)
-                    }
-                } else {
-                    self.delegate?.chatError(errorCode: 6001, errorMessage: CHAT_ERRORS.err6001.rawValue, errorResult: nil)
-                }
-                
-            }
-        }, progress: nil, idDownloadRequest: false, isMapServiceRequst: false) { _,_  in }
-        */
         
     }
     
@@ -378,65 +344,12 @@ extension Chat {
     
     
     func sendMessageWithCallback(asyncMessageVO:    SendAsyncMessageVO,
-//                                 callback:          (call: CallbackProtocol, uniques: String)?,
                                  callbacks:         [(call: CallbackProtocol, uniques: String)]?,
                                  sentCallback:      (call: CallbackProtocolWith3Calls, uniques: [String])?,
                                  deliverCallback:   (call: CallbackProtocolWith3Calls, uniques: [String])?,
-                                 seenCallback:      (call: CallbackProtocolWith3Calls, uniques: [String])?/*,
-                                 uniuqueIdCallback: callbackTypeAliasString?*/) {
+                                 seenCallback:      (call: CallbackProtocolWith3Calls, uniques: [String])?) {
         
         let chatMessageVO = SendChatMessageVO(content: asyncMessageVO.content.convertToJSON())
-        
-        
-//        let uniqueIds = chatMessageVO.uniqueIds ?? [chatMessageVO.uniqueId ?? ""]
-//        for uId in uniqueIds {
-//            if uId != "" {
-//                uniuqueIdCallback?(uId)
-//            }
-//        }
-        
-//        if (callback != nil) {
-//            if (asyncMessageVO.content.convertToJSON()["chatMessageVOType"].intValue == 41) {
-//                Chat.spamMap[uniqueIds.first!] = [callback, callback, callback] as? [CallbackProtocol]
-//            } else {
-//                Chat.map[uniqueIds.first!] = callback
-//            }
-//        }
-        
-//        if let myCallbacks = callbacks {
-//            for (index, item) in myCallbacks.enumerated() {
-//                let uIdJSON = chatMessageVO.content?.convertToJSON()
-//                if let uIds = uIdJSON?["uniqueIds"].arrayObject as? [String] {
-//                    let uId = uIds[index]
-//                    Chat.map[uId] = item
-//                }
-//            }
-//        }
-//        if (sentCallback != nil) {
-//            for (index, _) in uniqueIds.enumerated() {
-//                Chat.mapOnSent[uniqueIds[index]] = sentCallback
-//            }
-//        }
-//        if (deliverCallback != nil) {
-//            for (index, _) in uniqueIds.enumerated() {
-//                let uniqueIdDic: [String: CallbackProtocolWith3Calls] = [uniqueIds[index]: deliverCallback!]
-//                if Chat.mapOnDeliver["\(chatMessageVO.subjectId ?? 0)"] != nil {
-//                    Chat.mapOnDeliver["\(chatMessageVO.subjectId ?? 0)"]!.append(uniqueIdDic)
-//                } else {
-//                    Chat.mapOnDeliver["\(chatMessageVO.subjectId ?? 0)"] = [uniqueIdDic]
-//                }
-//            }
-//        }
-//        if (seenCallback != nil) {
-//            for (index, _) in uniqueIds.enumerated() {
-//                let uniqueIdDic: [String: CallbackProtocolWith3Calls] = [uniqueIds[index]: deliverCallback!]
-//                if Chat.mapOnSeen["\(chatMessageVO.subjectId ?? 0)"] != nil {
-//                    Chat.mapOnSeen["\(chatMessageVO.subjectId ?? 0)"]!.append(uniqueIdDic)
-//                } else {
-//                    Chat.mapOnSeen["\(chatMessageVO.subjectId ?? 0)"] = [uniqueIdDic]
-//                }
-//            }
-//        }
         
         if let myCallbacks = callbacks {
             for item in myCallbacks {
@@ -567,12 +480,11 @@ extension Chat {
                                                   pushMsgType:  5)
             
             sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                    callback:           nil,
                                     callbacks:          nil,
                                     sentCallback:       nil,
                                     deliverCallback:    nil,
                                     seenCallback:       nil)
-//                                    uniuqueIdCallback:  nil)
+            
         } else if (lastSentMessageTimer != nil) {
             lastSentMessageTimer?.suspend()
         }
@@ -888,9 +800,6 @@ extension Chat {
         case chatMessageVOTypes.ERROR.rawValue:
             log.verbose("Message of type 'ERROR' recieved", context: "Chat")
             if Chat.map[message.uniqueId] != nil {
-//                let message: String = messageContentAsJSON["message"].stringValue
-//                let code: Int = messageContentAsJSON["code"].intValue
-                
                 let returnData = CreateReturnData(hasError:         true,
                                                   errorMessage:     message.message,
                                                   errorCode:        message.code,
@@ -919,7 +828,6 @@ extension Chat {
             break
             
         default:
-            //            print("This type of message is not defined yet!!!")
             log.warning("This type of message is not defined yet!!!\n incomes = \(message.returnToJSON())", context: "Chat")
             break
         }
@@ -983,8 +891,8 @@ extension Chat {
     
     func threadInfoUpdated(withMessage message: ChatMessage) {
         log.verbose("Message of type 'THREAD_INFO_UPDATED' recieved", context: "Chat")
+        
         let conversation = Conversation(messageContent: message.content?.convertToJSON() ?? [:])
-//        delegate?.threadEvents(type: ThreadEventTypes.THREAD_INFO_UPDATED, threadId: nil, thread: conversation, messageId: nil, senderId: nil)
         let tInfoUpdatedEM = ThreadEventModel(type:         ThreadEventTypes.THREAD_INFO_UPDATED,
                                               participants: nil,
                                               threads:      [conversation],

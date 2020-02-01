@@ -31,17 +31,6 @@ extension Chat {
      *
      */
     func responseOfGetThreads(withMessage message: ChatMessage) {
-        /*
-         *  -> check if we have saves the message uniqueId on the "map" property
-         *      -> if yes: (means we send this request and waiting for the response of it)
-         *          -> create the "CreateReturnData" variable
-         *          -> check if Cache is enabled by the user
-         *              -> if yes, save the income Data to the Cache
-         *          -> call the "onResultCallback" which will send callback to getThreads function (by using "threadsCallbackToUser")
-         *      -> if no: (means this request is maybe is the response of GetAllThreads request)
-         *          -> so we have to get the thread Ids, then search on the Cache, and delete threads that are not on the server response.
-         *
-         */
         log.verbose("Message of type 'GET_THREADS' recieved", context: "Chat")
         
         let returnData = CreateReturnData(hasError:         false,
@@ -144,12 +133,6 @@ extension Chat {
                               response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
-            /*
-             *  -> check if response hasError or not
-             *      -> if no, create the "GetThreadsModel"
-             *      -> send the "GetThreadsModel" as a callback
-             *
-             */
             log.verbose("GetThreadsCallbacks", context: "Chat")
             
             if let arrayContent = response.resultAsArray as? [JSON] {
