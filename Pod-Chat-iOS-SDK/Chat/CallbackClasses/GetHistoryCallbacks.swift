@@ -29,9 +29,15 @@ extension Chat {
         if Chat.map[message.uniqueId] != nil {
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
             callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
-                self.historyCallbackToUser?(successJSON)
+                self.getHistoryCallbackToUser?(successJSON)
             }) { _ in }
             Chat.map.removeValue(forKey: message.uniqueId)
+        } else if Chat.mentionMap[message.uniqueId] != nil {
+            let callback: CallbackProtocol = Chat.mentionMap[message.uniqueId]!
+            callback.onResultCallback(uID: message.uniqueId, response: returnData, success: { (successJSON) in
+                self.getMentionListCallbackToUser?(successJSON)
+            }) { _ in }
+            Chat.mentionMap.removeValue(forKey: message.uniqueId)
         }
     }
     
@@ -152,11 +158,41 @@ extension Chat {
             }
         }
         
-        
     }
     
     
-    
+    public class GetMentionCallbacks: CallbackProtocol {
+        var sendParams: SendChatMessageVO
+        init(parameters: SendChatMessageVO) {
+            self.sendParams = parameters
+        }
+        func onResultCallback(uID:      String,
+                              response: CreateReturnData,
+                              success:  @escaping callbackTypeAlias,
+                              failure:  @escaping callbackTypeAlias) {
+            log.verbose("GetMentionCallbacks", context: "Chat")
+            
+            if let arrayContent = response.resultAsArray as? [JSON] {
+                let content = sendParams.content?.convertToJSON()
+                
+                if Chat.sharedInstance.enableCache {
+                    
+                }
+                
+                let getHistoryModel = GetHistoryModel(messageContent:   arrayContent,
+                                                      contentCount:     response.contentCount,
+                                                      count:            content?["count"].intValue ?? 0,
+                                                      offset:           content?["offset"].intValue ?? 0,
+                                                      hasError:         response.hasError,
+                                                      errorMessage:     response.errorMessage,
+                                                      errorCode:        response.errorCode,
+                                                      threadId:         response.subjectId)
+                
+                success(getHistoryModel)
+            }
+                        
+        }
+    }
     
     
     

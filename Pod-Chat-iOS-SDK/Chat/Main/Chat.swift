@@ -273,8 +273,9 @@ public class Chat {
     
     // property to hold array of request that comes from client, but they have not completed yet (response didn't come yet)
     // the keys are uniqueIds of the requests
-    static var map = [String: CallbackProtocol]()
-    static var spamMap = [String: [CallbackProtocol]]()
+    static var map          = [String: CallbackProtocol]()
+    static var mentionMap   = [String: CallbackProtocol]()
+    static var spamMap      = [String: [CallbackProtocol]]()
     
     // property to hold array of Sent, Deliver and Seen requests that comes from client, but they have not completed yet, and response didn't come yet.
     // the keys are uniqueIds of the requests
@@ -286,7 +287,8 @@ public class Chat {
     public var userInfoCallbackToUser:              callbackTypeAlias?
     public var getContactsCallbackToUser:           callbackTypeAlias?
     public var threadsCallbackToUser:               callbackTypeAlias?
-    public var historyCallbackToUser:               callbackTypeAlias?
+    public var getHistoryCallbackToUser:            callbackTypeAlias?
+    public var getMentionListCallbackToUser:        callbackTypeAlias?
     public var threadParticipantsCallbackToUser:    callbackTypeAlias?
     public var createThreadCallbackToUser:          callbackTypeAlias?
     public var addParticipantsCallbackToUser:       callbackTypeAlias?

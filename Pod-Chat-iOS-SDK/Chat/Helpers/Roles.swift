@@ -25,17 +25,17 @@ public enum Roles: String {
     
     func returnString() -> String {
         switch self {
-        case .CHANGE_THREAD_INFO:       return "change_thread_info"
-        case .POST_CHANNEL_MESSAGE:     return "post_channel_message"
-        case .EDIT_MESSAGE_OF_OTHERS:   return "edit_message_of_others"
-        case .DELETE_MESSAGE_OF_OTHERS: return "delete_message_of_others"
-        case .ADD_NEW_USER:             return "add_new_user"
-        case .REMOVE_USER:              return "remove_user"
-        case .ADD_RULE_TO_USER:         return "add_rule_to_user"
-        case .REMOVE_ROLE_FROM_USER:    return "remove_role_from_user"
-        case .READ_THREAD:              return "read_thread"
-        case .EDIT_THREAD:              return "edit_thread"
-        case .THREAD_ADMIN:             return "thread_admin"
+        case .CHANGE_THREAD_INFO:       return "CHANGE_THREAD_INFO"
+        case .POST_CHANNEL_MESSAGE:     return "POST_CHANNEL_MESSAGE"
+        case .EDIT_MESSAGE_OF_OTHERS:   return "EDIT_MESSAGE_OF_OTHERS"
+        case .DELETE_MESSAGE_OF_OTHERS: return "DELETE_MESSAGE_OF_OTHERS"
+        case .ADD_NEW_USER:             return "ADD_NEW_USER"
+        case .REMOVE_USER:              return "REMOVE_USER"
+        case .ADD_RULE_TO_USER:         return "ADD_RULE_TO_USER"
+        case .REMOVE_ROLE_FROM_USER:    return "REMOVE_ROLE_FROM_USER"
+        case .READ_THREAD:              return "READ_THREAD"
+        case .EDIT_THREAD:              return "EDIT_THREAD"
+        case .THREAD_ADMIN:             return "THREAD_ADMIN"
         }
     }
     

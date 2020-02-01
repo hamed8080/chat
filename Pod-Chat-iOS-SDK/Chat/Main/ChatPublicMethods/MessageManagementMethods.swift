@@ -53,7 +53,7 @@ extension Chat {
         
         log.verbose("Try to request to get history with this parameters: \n \(getHistoryInput)", context: "Chat")
         uniqueId(getHistoryInput.uniqueId)
-        historyCallbackToUser = completion
+        getHistoryCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_HISTORY.rawValue,
                                             content:            "\(getHistoryInput.convertContentToJSON())",
@@ -117,6 +117,45 @@ extension Chat {
             }
         }
       
+    }
+    
+    public func getMentionList(inputModel getMentionInput: GetMentionRequestModel,
+                               uniqueId:                @escaping ((String) -> ()),
+                               completion:              @escaping callbackTypeAlias,
+                               cacheResponse:           @escaping ((GetHistoryModel) -> ())) {
+        log.verbose("Try to request to get mention list with this parameters: \n \(getMentionInput)", context: "Chat")
+        uniqueId(getMentionInput.uniqueId)
+        getMentionListCallbackToUser = completion
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_HISTORY.rawValue,
+                                            content:            "\(getMentionInput.convertContentToJSON())",
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          getMentionInput.threadId,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           getMentionInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           getMentionInput.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: true)
+      
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          [(GetMentionCallbacks(parameters: chatMessage), getMentionInput.uniqueId)],
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+        
+        if enableCache {
+            
+        }
+        
     }
     
     /// ClearHistory:

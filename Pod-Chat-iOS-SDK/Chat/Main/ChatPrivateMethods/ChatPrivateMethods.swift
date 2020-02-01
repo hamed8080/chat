@@ -355,6 +355,8 @@ extension Chat {
             for item in myCallbacks {
                 if (asyncMessageVO.content.convertToJSON()["chatMessageVOType"].intValue == 41) {
                     Chat.spamMap[item.uniques] = [item.call, item.call, item.call] //as? [CallbackProtocol]
+                } else if let _ = item.call as? GetMentionCallbacks {
+                    Chat.mentionMap[item.uniques] = item.call
                 } else {
                     Chat.map[item.uniques] = item.call
                 }
