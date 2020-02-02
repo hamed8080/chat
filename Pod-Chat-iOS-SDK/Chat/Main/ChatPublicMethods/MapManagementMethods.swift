@@ -191,9 +191,9 @@ extension Chat {
         Networking.sharedInstance.download(toUrl: url,
                                            withMethod: method,
                                            withHeaders: nil,
-                                           withParameters: parameters,
-                                           progress: { (downloadProgress) in
-                                            progress(downloadProgress)
+                                           withParameters: parameters
+        , progress: { (downloadProgress) in
+            progress(downloadProgress)
         }) { (myResponse, jsonResponse) in
             guard let image = myResponse else { print("Value is empty!!!"); return }
             completion(image)

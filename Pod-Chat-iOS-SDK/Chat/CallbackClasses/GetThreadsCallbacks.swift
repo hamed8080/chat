@@ -119,9 +119,15 @@ extension Chat {
                     
                     
                     
-                    print("all file Size = \(getLocalFilesFolderSize())")
-                    print("all image Size = \(getLocalImageFolderSize())")
-                    print("all folder Size \(getLocalFolderSize())")
+                    print("all file UsedSpace = \(getLocalFilesFolderUsedSpace())")
+                    print("all image UsedSpace = \(getLocalImageFolderUsedSpace())")
+                    print("all local UsedSpace \(getLocalUsedSpace())")
+                    deleteLocalImages()
+                    deleteLocalFiles()
+                    print("all file UsedSpace = \(getLocalFilesFolderUsedSpace())")
+                    print("all image UsedSpace = \(getLocalImageFolderUsedSpace())")
+                    print("all local UsedSpace \(getLocalUsedSpace())")
+                    
                 }
             }
         }

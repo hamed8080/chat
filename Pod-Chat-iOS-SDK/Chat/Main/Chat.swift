@@ -45,81 +45,85 @@ public class Chat {
                                  messageTtl:                 Int,
                                  reconnectOnClose:           Bool) {
         
-            //        Chat.cacheDB.deleteCacheData()
+        //        Chat.cacheDB.deleteCacheData()
         
-            self.socketAddress      = socketAddress
-            self.ssoHost            = ssoHost
-            self.platformHost       = platformHost
-            self.fileServer         = fileServer
-            self.serverName         = serverName
-            self.token              = token
-            self.enableCache        = enableCache
-            self.mapServer          = mapServer
-        
-            if let timeStamp = cacheTimeStampInSec {
-                cacheTimeStamp = timeStamp
-            }
-        
-            if let theMapApiKey = mapApiKey {
-                self.mapApiKey = theMapApiKey
-            }
-        
-            if let theTypeCode = typeCode {
-                self.generalTypeCode = theTypeCode
-            }
-        
-            if let theMsgPriority = msgPriority {
-                self.msgPriority = theMsgPriority
-            } else {
-                self.msgPriority = 1
-            }
-        
-            if let theMsgTTL = msgTTL {
-                self.msgTTL = theMsgTTL
-            } else {
-                self.msgTTL = 10
-            }
-        
-            if let theMsgTTL = msgTTL {
-                self.msgTTL = theMsgTTL
-            } else {
-                self.msgTTL = 10
-            }
-        
-            if let theHttpRequestTimeout = httpRequestTimeout {
-                self.httpRequestTimeout = theHttpRequestTimeout
-            } else {
-                self.httpRequestTimeout = 20
-            }
-        
-            if let theActualTimingLog = actualTimingLog {
-                self.actualTimingLog = theActualTimingLog
-            } else {
-                self.actualTimingLog = false
-            }
-        
-            self.wsConnectionWaitTime   = wsConnectionWaitTime
-            self.connectionRetryInterval = connectionRetryInterval
-            self.connectionCheckTimeout = connectionCheckTimeout
-            self.messageTtl             = messageTtl
-            self.reconnectOnClose       = reconnectOnClose
-        
-            self.SERVICE_ADDRESSES.SSO_ADDRESS          = ssoHost
-            self.SERVICE_ADDRESSES.PLATFORM_ADDRESS     = platformHost
-            self.SERVICE_ADDRESSES.FILESERVER_ADDRESS   = fileServer
-            self.SERVICE_ADDRESSES.MAP_ADDRESS          = mapServer
-        
-            getDeviceIdWithToken { (deviceIdStr) in
-                self.deviceId = deviceIdStr
-                
-                log.verbose("get deviceId successfully = \(self.deviceId ?? "error!!")", context: "Chat")
-                
-                DispatchQueue.main.async {
-                    self.CreateAsync()
-                }
-            }
-        
+        self.socketAddress      = socketAddress
+        self.ssoHost            = ssoHost
+        self.platformHost       = platformHost
+        self.fileServer         = fileServer
+        self.serverName         = serverName
+        self.token              = token
+        self.enableCache        = enableCache
+        self.mapServer          = mapServer
+    
+        if let timeStamp = cacheTimeStampInSec {
+            cacheTimeStamp = timeStamp
         }
+    
+        if let theMapApiKey = mapApiKey {
+            self.mapApiKey = theMapApiKey
+        }
+    
+        if let theTypeCode = typeCode {
+            self.generalTypeCode = theTypeCode
+        }
+    
+        if let theMsgPriority = msgPriority {
+            self.msgPriority = theMsgPriority
+        } else {
+            self.msgPriority = 1
+        }
+    
+        if let theMsgTTL = msgTTL {
+            self.msgTTL = theMsgTTL
+        } else {
+            self.msgTTL = 10
+        }
+    
+        if let theMsgTTL = msgTTL {
+            self.msgTTL = theMsgTTL
+        } else {
+            self.msgTTL = 10
+        }
+    
+        if let theHttpRequestTimeout = httpRequestTimeout {
+            self.httpRequestTimeout = theHttpRequestTimeout
+        } else {
+            self.httpRequestTimeout = 20
+        }
+    
+        if let theActualTimingLog = actualTimingLog {
+            self.actualTimingLog = theActualTimingLog
+        } else {
+            self.actualTimingLog = false
+        }
+    
+        self.wsConnectionWaitTime   = wsConnectionWaitTime
+        self.connectionRetryInterval = connectionRetryInterval
+        self.connectionCheckTimeout = connectionCheckTimeout
+        self.messageTtl             = messageTtl
+        self.reconnectOnClose       = reconnectOnClose
+    
+        self.SERVICE_ADDRESSES.SSO_ADDRESS          = ssoHost
+        self.SERVICE_ADDRESSES.PLATFORM_ADDRESS     = platformHost
+        self.SERVICE_ADDRESSES.FILESERVER_ADDRESS   = fileServer
+        self.SERVICE_ADDRESSES.MAP_ADDRESS          = mapServer
+    
+        getDeviceIdWithToken { (deviceIdStr) in
+            self.deviceId = deviceIdStr
+            
+            log.verbose("get deviceId successfully = \(self.deviceId ?? "error!!")", context: "Chat")
+            
+            DispatchQueue.main.async {
+                self.CreateAsync()
+            }
+        }
+        
+        if checkIfDeviceHasFreeSpace(needSpaceInMB: 100, turnOffTheCache: true) {
+            self.enableCache = false
+        }
+        
+    }
     
     // the delegate property that the user class should make itself to be implment this delegat.
     // At first, the class sould confirm to ChatDelegates, and then implement the ChatDelegates methods

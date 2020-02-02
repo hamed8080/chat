@@ -17,6 +17,21 @@ import SwiftyBeaver
 
 extension Chat {
     
+    
+    func checkIfDeviceHasFreeSpace(needSpaceInMB: Int64, turnOffTheCache: Bool) -> Bool {
+        let availableSpace = DiskStatus.freeDiskSpaceInBytes
+        if availableSpace < (needSpaceInMB * 1024 * 1024) {
+            var message = "your disk space is less than \(DiskStatus.MBFormatter(DiskStatus.freeDiskSpaceInBytes))MB."
+            if turnOffTheCache {
+                message += " " + "so, the cache will be switch OFF!"
+            }
+            delegate?.chatError(errorCode: 6401, errorMessage: message, errorResult: nil)
+            return false
+        } else {
+            return true
+        }
+    }
+    
     /*
      *  Get deviceId with token:
      *
