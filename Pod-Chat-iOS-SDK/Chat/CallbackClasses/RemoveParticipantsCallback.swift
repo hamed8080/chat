@@ -20,8 +20,8 @@ extension Chat {
         let returnData = CreateReturnData(hasError:         false,
                                           errorMessage:     "",
                                           errorCode:        0,
-                                          result:           message.content?.convertToJSON() ?? [:],
-                                          resultAsArray:    nil,
+                                          result:           nil,
+                                          resultAsArray:    message.content?.convertToJSON().array,
                                           resultAsString:   nil,
                                           contentCount:     message.contentCount,
                                           subjectId:        message.subjectId)

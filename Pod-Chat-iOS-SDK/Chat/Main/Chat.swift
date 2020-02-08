@@ -142,7 +142,7 @@ public class Chat {
     var serverName:     String  = ""        // Name of the server that we had registered on
     var token:          String  = ""        // every user have to had a token (get it from SSO Server)
     var generalTypeCode:    String  = "default"
-    public var enableCache:        Bool    = false
+    public var enableCache: Bool    = false
     var mapApiKey:          String  = "8b77db18704aa646ee5aaea13e7370f4f88b9e8c"
     var mapServer:          String  = "https://api.neshan.org/v1"
     
