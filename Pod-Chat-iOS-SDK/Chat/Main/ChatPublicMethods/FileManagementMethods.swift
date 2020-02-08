@@ -344,7 +344,7 @@ extension Chat {
         }
         
         if (!hasImageOnTheCache) || (getImageInput.serverResponse) {
-            _ = checkIfDeviceHasFreeSpace(needSpaceInMB: 100, turnOffTheCache: false)
+            _ = checkIfDeviceHasFreeSpace(needSpaceInMB: self.deviecLimitationSpaceMB, turnOffTheCache: false)
             sendRequestToDownloadImage(withInputModel: getImageInput, progress: { (theProgress) in
                 progress(theProgress)
             }) { (data, imageModel) in
@@ -451,7 +451,7 @@ extension Chat {
         }
         
         if (!hasFileOntheCache) || (getFileInput.serverResponse) {
-            _ = checkIfDeviceHasFreeSpace(needSpaceInMB: 100, turnOffTheCache: false)
+            _ = checkIfDeviceHasFreeSpace(needSpaceInMB: deviecLimitationSpaceMB, turnOffTheCache: false)
             sendRequestToDownloadFile(withInputModel: getFileInput, progress: { (theProgress) in
                 progress(theProgress)
             }) { (data, fileModel) in

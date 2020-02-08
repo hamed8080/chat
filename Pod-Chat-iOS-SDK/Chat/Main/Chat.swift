@@ -43,9 +43,8 @@ public class Chat {
                                  connectionRetryInterval:    Int,
                                  connectionCheckTimeout:     Int,
                                  messageTtl:                 Int,
-                                 reconnectOnClose:           Bool) {
-        
-        //        Chat.cacheDB.deleteCacheData()
+                                 reconnectOnClose:           Bool,
+                                 deviecLimitationSpaceMB:    Int64?) {
         
         self.socketAddress      = socketAddress
         self.ssoHost            = ssoHost
@@ -55,60 +54,50 @@ public class Chat {
         self.token              = token
         self.enableCache        = enableCache
         self.mapServer          = mapServer
-    
+        
         if let timeStamp = cacheTimeStampInSec {
             cacheTimeStamp = timeStamp
         }
-    
+        
         if let theMapApiKey = mapApiKey {
             self.mapApiKey = theMapApiKey
         }
-    
+        
         if let theTypeCode = typeCode {
             self.generalTypeCode = theTypeCode
         }
-    
+        
         if let theMsgPriority = msgPriority {
             self.msgPriority = theMsgPriority
-        } else {
-            self.msgPriority = 1
         }
-    
+        
         if let theMsgTTL = msgTTL {
             self.msgTTL = theMsgTTL
-        } else {
-            self.msgTTL = 10
         }
-    
-        if let theMsgTTL = msgTTL {
-            self.msgTTL = theMsgTTL
-        } else {
-            self.msgTTL = 10
-        }
-    
+        
         if let theHttpRequestTimeout = httpRequestTimeout {
             self.httpRequestTimeout = theHttpRequestTimeout
-        } else {
-            self.httpRequestTimeout = 20
         }
-    
+        
         if let theActualTimingLog = actualTimingLog {
             self.actualTimingLog = theActualTimingLog
-        } else {
-            self.actualTimingLog = false
         }
-    
+        
+        if let timeLimitation = deviecLimitationSpaceMB {
+            self.deviecLimitationSpaceMB = timeLimitation
+        }
+        
         self.wsConnectionWaitTime   = wsConnectionWaitTime
         self.connectionRetryInterval = connectionRetryInterval
         self.connectionCheckTimeout = connectionCheckTimeout
         self.messageTtl             = messageTtl
         self.reconnectOnClose       = reconnectOnClose
-    
+        
         self.SERVICE_ADDRESSES.SSO_ADDRESS          = ssoHost
         self.SERVICE_ADDRESSES.PLATFORM_ADDRESS     = platformHost
         self.SERVICE_ADDRESSES.FILESERVER_ADDRESS   = fileServer
         self.SERVICE_ADDRESSES.MAP_ADDRESS          = mapServer
-    
+        
         getDeviceIdWithToken { (deviceIdStr) in
             self.deviceId = deviceIdStr
             
@@ -119,7 +108,7 @@ public class Chat {
             }
         }
         
-        if checkIfDeviceHasFreeSpace(needSpaceInMB: 100, turnOffTheCache: true) {
+        if checkIfDeviceHasFreeSpace(needSpaceInMB: self.deviecLimitationSpaceMB, turnOffTheCache: true) {
             self.enableCache = false
         }
         
@@ -149,9 +138,9 @@ public class Chat {
 //    var ssoGrantDevicesAddress = params.ssoGrantDevicesAddress
     var chatFullStateObject: JSON = [:]
     
-    var msgPriority:        Int     = 0
-    var msgTTL:             Int     = 0
-    var httpRequestTimeout: Int     = 0
+    var msgPriority:        Int     = 1
+    var msgTTL:             Int     = 10
+    var httpRequestTimeout: Int     = 20
     var actualTimingLog:    Bool    = false
     
     var wsConnectionWaitTime:       Double = 0.0
@@ -174,6 +163,7 @@ public class Chat {
     var getUserInfoRetryCount   = 0
     var chatPingMessageInterval = 20
     var cacheTimeStamp          = (2 * 24) * (60 * 60)
+    var deviecLimitationSpaceMB: Int64 = 100
     
     var isChatReady     = false {
         didSet {
