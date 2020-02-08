@@ -15,19 +15,7 @@ import FanapPodAsyncSDK
 extension Chat {
     
     func responseOfAddParticipant(withMessage message: ChatMessage) {
-        /**
-         *
-         */
         log.verbose("Message of type 'ADD_PARTICIPANT' recieved", context: "Chat")
-        
-//        if let threadId = message.subjectId {
-//            delegate?.threadEvents(type: ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME, threadId: threadId, thread: nil, messageId: nil, senderId: nil)
-//            if let conAsJSON = message.content?.convertToJSON() {
-//                let conversation = Conversation(messageContent: conAsJSON)
-//                delegate?.threadEvents(type: ThreadEventTypes.THREAD_ADD_PARTICIPANTS, threadId: nil, thread: conversation, messageId: nil, senderId: nil)
-//            }
-//        }
-        
         
         if enableCache {
             var participants = [Participant]()
@@ -79,7 +67,6 @@ extension Chat {
     
     
     public class AddParticipantsCallback: CallbackProtocol {
-        
         var sendParams: SendChatMessageVO
         init(parameters: SendChatMessageVO) {
             self.sendParams = parameters
@@ -89,9 +76,6 @@ extension Chat {
                               response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
-            /**
-             *
-             */
             log.verbose("AddParticipantsCallback", context: "Chat")
             
             if let content = response.result {

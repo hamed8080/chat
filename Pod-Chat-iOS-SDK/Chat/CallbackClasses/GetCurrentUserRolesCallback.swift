@@ -1,65 +1,59 @@
 //
-//  UnpinMessageCallback.swift
+//  GetCurrentUserRolesCallback.swift
 //  FanapPodChatSDK
 //
-//  Created by MahyarZhiani on 10/29/1398 AP.
+//  Created by MahyarZhiani on 11/8/1398 AP.
 //  Copyright © 1398 Mahyar Zhiani. All rights reserved.
 //
 
 import Foundation
+import SwiftyJSON
 import SwiftyBeaver
 import FanapPodAsyncSDK
 
 
 extension Chat {
     
-    func responseOfUnpinMessage(withMessage message: ChatMessage) {
-        log.verbose("Message of type 'UNPIN_MESSAGE' recieved", context: "Chat")
+    func responseOfGetCurrentUserRoles(withMessage message: ChatMessage) {
+        log.verbose("Message of type 'GET_CURRENT_USER_ROLES' recieved", context: "Chat")
         
         let returnData = CreateReturnData(hasError:         false,
                                           errorMessage:     "",
                                           errorCode:        0,
-                                          result:           message.content?.convertToJSON() ?? [:],
-                                          resultAsArray:    nil,
+                                          result:           nil,
+                                          resultAsArray:    message.content?.convertToJSON().arrayObject,
                                           resultAsString:   nil,
                                           contentCount:     nil,
                                           subjectId:        message.subjectId)
-        
-        if enableCache {
-            if let thId = message.subjectId {
-                Chat.cacheDB.deletePinMessageFromCMConversationEntity(threadId: thId)
-            }
-        }
         
         if Chat.map[message.uniqueId] != nil {
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
             callback.onResultCallback(uID:      message.uniqueId,
                                       response: returnData,
                                       success:  { (successJSON) in
-                self.unpinMessageCallbackToUser?(successJSON)
+                self.getCurrentUserRolesCallbackToUser?(successJSON)
             }) { _ in }
             Chat.map.removeValue(forKey: message.uniqueId)
         }
+        
     }
     
-    public class UnpinMessageCallbacks: CallbackProtocol {
+    public class GetCurrentUserRolesCallbacks: CallbackProtocol {
         func onResultCallback(uID:      String,
                               response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
-            log.verbose("UnpinMessageCallbacks", context: "Chat")
+            log.verbose("GetCurrentUserRolesCallback", context: "Chat")
             
-            if let content = response.result {
-                let pinMessageModel = PinUnpinMessageModel(pinUnpinModel:   PinUnpinMessage(pinUnpinContent: content),
-                                                           hasError:        response.hasError,
-                                                           errorMessage:    response.errorMessage,
-                                                           errorCode:       response.errorCode)
-                success(pinMessageModel)
+            if let content = response.resultAsArray as? [String] {
+//                message.content?.convertToJSON() ?? [:]
+                let unblockUserModel = GetCurrentUserRolesModel(messageContent: content,
+                                                                hasError:       response.hasError,
+                                                                errorMessage:   response.errorMessage,
+                                                                errorCode:      response.errorCode)
+                success(unblockUserModel)
             }
-
-            
         }
-        
     }
     
 }

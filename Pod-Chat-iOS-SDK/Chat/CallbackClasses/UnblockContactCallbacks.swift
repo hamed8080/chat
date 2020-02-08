@@ -30,15 +30,6 @@ extension Chat {
      *
      */
     func responseOfUnblockContact(withMessage message: ChatMessage) {
-        /*
-         *  -> check if we have saves the message uniqueId on the "map" property
-         *      -> if yes: (means we send this request and waiting for the response of it)
-         *          -> create the "CreateReturnData" variable
-         *          -> check if Cache is enabled by the user
-         *              -> if yes, save the income Data to the Cache
-         *          -> call the "onResultCallback" which will send callback to unblockContact function (by using "unblockCallbackToUser")
-         *
-         */
         log.verbose("Message of type 'UNBLOCK' recieved", context: "Chat")
         
         let returnData = CreateReturnData(hasError:         false,
@@ -67,12 +58,8 @@ extension Chat {
                               response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
-            /*
-             *  -> check if response has result or not
-             *      -> if yes, create the "BlockedContactModel"
-             *      -> send the "BlockedContactModel" as a callback
-             *
-             */
+            log.verbose("UnblockContactCallback", context: "Chat")
+            
             if let content = response.result {
                 let unblockUserModel = BlockedContactModel(messageContent:  content,
                                                            hasError:        response.hasError,

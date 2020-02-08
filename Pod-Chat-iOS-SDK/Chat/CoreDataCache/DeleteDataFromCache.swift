@@ -571,7 +571,7 @@ extension Cache {
     /// - parameter inThread:       the threadId that you want to delete messages from it. (Int)
     /// - parameter allMessages:    if you want to delete all messages on this thread, send this param as "true". (Bool)
     /// - parameter withMessageIds: if you want to delete specifice messages with their Ids, send them to this param. ([Int])
-    public func deleteMessage(inThread: Int, allMessages: Bool, withMessageIds messageIds: [Int]) {
+    public func deleteMessage(inThread: Int, allMessages: Bool, withMessageIds messageIds: [Int]?) {
         /*
          *  -> define a method that will handle of deletion of messages
          *      -> delete the participant object of the message
@@ -611,8 +611,8 @@ extension Cache {
                     
                     if allMessages {
                         deleteCMMessage(message: message)
-                    } else {
-                        for msgId in messageIds {
+                    } else if let theMessageIds = messageIds {
+                        for msgId in theMessageIds {
                             if (Int(exactly: message.id ?? 0) == msgId) {
                                 deleteCMMessage(message: message)
                             }
@@ -1083,7 +1083,7 @@ extension Cache {
                 for itemInCache in result {
                     // delete the original file from local storage of the app, using path of the file
                     let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-                    let myImagePath = path + "/\(fileSubPath.Images)/" + "\(itemInCache.name ?? "default")\(itemInCache.id ?? 0).png"
+                    let myImagePath = path + "/\(fileSubPath.Images)/" + "\(itemInCache.id!)\(itemInCache.name ?? "default")"
                     // check if this file is exixt on the app bunde, then delete it
                     if FileManager.default.fileExists(atPath: myImagePath) {
                         do {
@@ -1119,7 +1119,7 @@ extension Cache {
                 for itemInCache in result {
                     // delete the original file from local storage of the app, using path of the file
                     let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-                    let myFilePath = path + "/\(fileSubPath.Files)/" + "\(itemInCache.id ?? 0)\(itemInCache.name ?? "default")"
+                    let myFilePath = path + "/\(fileSubPath.Files)/" + "\(itemInCache.id!)\(itemInCache.name ?? "default")"
                     
                     if FileManager.default.fileExists(atPath: myFilePath) {
                         do {

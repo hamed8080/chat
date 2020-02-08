@@ -44,7 +44,6 @@ extension Chat {
                               response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
-            
             log.verbose("NotSeenDurationCallback", context: "Chat")
             
             if !(response.hasError) {

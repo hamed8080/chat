@@ -44,10 +44,15 @@ class SendAsyncMessageVO {
     }
     
     func convertModelToString() -> String {
-        let model = convertModelToJSON()
-        let stringModel = "\(model)"
-        let str = String(stringModel.filter { !" \n\t\r".contains($0) })
-        return str
+        if let stringValue = convertModelToJSON().toString() {
+            return stringValue
+        } else {
+            return "\(convertModelToJSON())"
+        }
+//        let model = convertModelToJSON()
+//        let stringModel = "\(model)"
+//        let str = String(stringModel.filter { !" \n\t\r".contains($0) })
+//        return str
     }
     
     

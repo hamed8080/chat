@@ -161,7 +161,11 @@ class SendChatMessageVO {
     }
     
     func convertModelToString() -> String {
-        return "\(convertModelToJSON())"
+        if let stringValue = convertModelToJSON().toString() {
+            return stringValue
+        } else {
+            return "\(convertModelToJSON())"
+        }
     }
     
 }

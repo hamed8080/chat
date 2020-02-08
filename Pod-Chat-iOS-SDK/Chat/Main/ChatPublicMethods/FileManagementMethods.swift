@@ -344,6 +344,7 @@ extension Chat {
         }
         
         if (!hasImageOnTheCache) || (getImageInput.serverResponse) {
+            _ = checkIfDeviceHasFreeSpace(needSpaceInMB: 100, turnOffTheCache: false)
             sendRequestToDownloadImage(withInputModel: getImageInput, progress: { (theProgress) in
                 progress(theProgress)
             }) { (data, imageModel) in
@@ -362,9 +363,9 @@ extension Chat {
         Networking.sharedInstance.download(toUrl:           url,
                                            withMethod:      method,
                                            withHeaders:     nil,
-                                           withParameters:  getImageInput.convertContentToParameters(),
-                                           progress: { (myProgress) in
-                                            progress(myProgress)
+                                           withParameters:  getImageInput.convertContentToParameters()
+        , progress: { (myProgress) in
+            progress(myProgress)
         }) { (imageDataResponse, responseHeader)  in
             if let myData = imageDataResponse {
                 // save data comes from server to the Cache
@@ -380,16 +381,18 @@ extension Chat {
                                               width:        getImageInput.width)
                 
                 if self.enableCache {
-                    Chat.cacheDB.saveImageObject(imageInfo: uploadImage, imageData: myData)
+                    if self.checkIfDeviceHasFreeSpace(needSpaceInMB: Int64(myData.count / 1024), turnOffTheCache: true) {
+                        Chat.cacheDB.saveImageObject(imageInfo: uploadImage, imageData: myData)
+                    }
                 }
                 
                 let uploadImageModel = DownloadImageModel(messageContentModel: uploadImage, errorCode: 0, errorMessage: "", hasError: false)
                 completion(myData, uploadImageModel)
             } else {
-                let hasError = responseHeader["hasError"].bool ?? false
-                let errorMessage = responseHeader["errorMessage"].string ?? ""
-                let errorCode = responseHeader["errorCode"].int ?? 999
-                let errorUploadImageModel = DownloadImageModel(messageContentModel: nil, errorCode: errorCode, errorMessage: errorMessage, hasError: hasError)
+                let errorUploadImageModel = DownloadImageModel(messageContentModel: nil,
+                                                               errorCode:           responseHeader["errorCode"].int ?? 999,
+                                                               errorMessage:        responseHeader["errorMessage"].string ?? "",
+                                                               hasError:            responseHeader["hasError"].bool ?? false)
                 completion(nil, errorUploadImageModel)
             }
         }
@@ -448,6 +451,7 @@ extension Chat {
         }
         
         if (!hasFileOntheCache) || (getFileInput.serverResponse) {
+            _ = checkIfDeviceHasFreeSpace(needSpaceInMB: 100, turnOffTheCache: false)
             sendRequestToDownloadFile(withInputModel: getFileInput, progress: { (theProgress) in
                 progress(theProgress)
             }) { (data, fileModel) in
@@ -466,9 +470,9 @@ extension Chat {
         Networking.sharedInstance.download(toUrl:           url,
                                            withMethod:      method,
                                            withHeaders:     nil,
-                                           withParameters:  getFileInput.convertContentToParameters(),
-                                           progress: { (myProgress) in
-                                            progress(myProgress)
+                                           withParameters:  getFileInput.convertContentToParameters()
+        , progress: { (myProgress) in
+            progress(myProgress)
         }) { (fileDataResponse, responseHeader) in
             if let myFile = fileDataResponse {
                 // save data comes from server to the Cache
@@ -476,7 +480,12 @@ extension Chat {
                 let fileType = responseHeader["type"].string
                 let theFinalFileName = "\(fileName ?? "default").\(fileType ?? "none")"
                 let uploadFile = FileObject(hashCode: getFileInput.hashCode, id: getFileInput.fileId, name: theFinalFileName)
-                Chat.cacheDB.saveFileObject(fileInfo: uploadFile, fileData: myFile)
+                
+                if self.enableCache {
+                    if self.checkIfDeviceHasFreeSpace(needSpaceInMB: Int64(myFile.count / 1024), turnOffTheCache: true) {
+                        Chat.cacheDB.saveFileObject(fileInfo: uploadFile, fileData: myFile)
+                    }
+                }
                 
                 let uploadFileModel = DownloadFileModel(messageContentModel:    uploadFile,
                                                         errorCode:              0,
@@ -558,5 +567,41 @@ extension Chat {
     }
     
     
+    // MARK: - Get Local Storage Size
+    public func getDeviceFreeSpace() {
+        
+    }
+    
+    public func getLocalUsedSpace() -> Int {
+        return getLocalImageFolderUsedSpace() + getLocalFilesFolderUsedSpace()
+    }
+    
+    public func getLocalImageFolderUsedSpace() -> Int {
+        return Chat.cacheDB.retrieveAllImagesSize()
+    }
+    
+    public func getLocalFilesFolderUsedSpace() -> Int {
+        return Chat.cacheDB.retrieveAllFilesSize()
+    }
+    
+    
+    // MARK: - Delete Local Storage Folders
+    public func deleteLocalImages() {
+        Chat.cacheDB.deleteAllImages()
+    }
+    
+    public func deleteLocalFiles() {
+        Chat.cacheDB.deleteAllFiles()
+    }
+    
+    public func deleteAllLocalContent() {
+        deleteLocalImages()
+        deleteLocalFiles()
+    }
+    
+    
+    public func deleteCache() {
+        Chat.cacheDB.deleteCacheData()
+    }
     
 }

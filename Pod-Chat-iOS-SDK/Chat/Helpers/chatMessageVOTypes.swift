@@ -54,6 +54,7 @@ public enum chatMessageVOTypes: Int {
     case UNPIN_THREAD                       = 49
     case PIN_MESSAGE                        = 50
     case UNPIN_MESSAGE                      = 51
+    case Get_Current_User_Roles             = 54
     case LOGOUT                             = 100
     case ERROR                              = 999
 }

@@ -113,7 +113,7 @@ class Networking {
             let myProgressFloat: Float = Float(downloadProgress.fractionCompleted)
             progress?(myProgressFloat)
         })
-            .responseData { (myResponse) in
+        .responseData { (myResponse) in
             if myResponse.result.isSuccess {
                 if let downloadedData = myResponse.data {
                     if let response = myResponse.response {

@@ -1081,6 +1081,59 @@ extension Chat {
     
     
     
+    
+    /// GetCurrentUserRoles:
+    /// get my own roles on specific thread
+    ///
+    /// By calling this function, a request of type 53 (Get_Current_User_Roles) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "[RoleRequestModel]" to this function
+    ///
+    /// Outputs:
+    /// - It has 3 callbacks as responses.
+    ///
+    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (GetCurrentUserRolesRequestModel)
+    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! UserRolesModel)
+    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (UserRolesModel)
+    public func getCurrentUserRoles(inputModel:     GetCurrentUserRolesRequestModel,
+                                    uniqueId:       @escaping (String) -> (),
+                                    completion:     @escaping callbackTypeAlias) {
+        
+        uniqueId(inputModel.uniqueId)
+        getCurrentUserRolesCallbackToUser = completion
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.Get_Current_User_Roles.rawValue,
+                                            content:            nil,
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          inputModel.threadId,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           inputModel.typeCode ?? generalTypeCode,
+                                            uniqueId:           inputModel.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: true)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          [(GetCurrentUserRolesCallbacks(), inputModel.uniqueId)],
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+    }
+    
+    
+    
+    
 }
 
 

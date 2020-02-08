@@ -13,9 +13,7 @@ import SwiftyJSON
 open class GetHistoryRequestModel {
     
     public let count:               Int?        // Count of threads to be received
-//    public let firstMessageId:      Int?
     public let fromTime:            UInt?       // Get messages which have bigger time than given fromTime
-//    public let lastMessageId:       Int?
     public let messageId:           Int?        // Id of single message to get
     public let messageType:         Int?        // Type of messages to get (types should be set by client)
     public let metadataCriteria:    String?     // This JSON will be used to search in message metadata with GraphQL
@@ -30,7 +28,9 @@ open class GetHistoryRequestModel {
     
     public let typeCode:            String?
     public let uniqueId:            String
-    
+
+//    public let firstMessageId:      Int?
+//    public let lastMessageId:       Int?
 //    public let fromTimeNanos:            UInt?   //
 //    public let toTimeNanos:              UInt?   //
     
