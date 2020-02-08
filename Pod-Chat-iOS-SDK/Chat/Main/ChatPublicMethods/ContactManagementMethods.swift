@@ -135,7 +135,7 @@ extension Chat {
         sendSearchContactRequest(withInputModel: searchContactsInput)
         { (contactModel) in
             self.addContactOnCache(withInputModel: contactModel as! ContactModel)
-            let contactEventModel = ContactEventModel(type: ContactEventTypes.CONTACTS_SEARCH_RESULT_CHANGE, contacts: (contactModel as! ContactModel).contacts)
+            let contactEventModel = ContactEventModel(type: ContactEventTypes.CONTACTS_SEARCH_RESULT_CHANGE, contacts: (contactModel as! ContactModel).contacts, contactsLastSeenDuration: nil)
             self.delegate?.contactEvents(model: contactEventModel)
             completion(contactModel)
         }

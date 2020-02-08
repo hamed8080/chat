@@ -13,6 +13,7 @@ public enum ContactEventTypes {
     
     case CONTACTS_LIST_CHANGE           //
     case CONTACTS_SEARCH_RESULT_CHANGE  //
+    case CONTACTS_LAST_SEEN
     
 //    case CONTACT_NEW
 //    case CONTACT_DELETE
