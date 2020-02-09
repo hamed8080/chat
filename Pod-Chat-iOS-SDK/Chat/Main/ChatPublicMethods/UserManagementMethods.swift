@@ -98,6 +98,43 @@ extension Chat {
     }
     
     
+    public func serProfile(inputModel setProfileInput:  SetProfileRequestModel,
+                           uniqueId:                    @escaping ((String) -> ()),
+                           completion:                  @escaping callbackTypeAlias) {
+        
+        log.verbose("Try to request to set Profile", context: "Chat")
+        
+        uniqueId(setProfileInput.uniqueId)
+        setProfileCallbackToUser = completion
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.SET_PROFILE.rawValue,
+                                            content:            setProfileInput.convertContentToJSON().toString(),
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          nil,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           setProfileInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           setProfileInput.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: nil)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          [(SetProfileCallback(), setProfileInput.uniqueId)],
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+        
+    }
+    
+    
     public func deleteUserInfoFromCache() {
         Chat.cacheDB.deleteUserInfo(isCompleted: nil)
     }

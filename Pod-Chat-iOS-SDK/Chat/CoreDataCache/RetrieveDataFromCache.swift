@@ -43,7 +43,9 @@ extension Cache {
                                     lastSeen:       first.lastSeen as? Int,
                                     name:           first.name,
                                     receiveEnable:  first.receiveEnable as? Bool,
-                                    sendEnable:     first.sendEnable as? Bool)
+                                    sendEnable:     first.sendEnable as? Bool,
+                                    username:       first.username,
+                                    chatProfileVO:  Profile(bio: first.bio, metadata: first.metadata))
                     let userInfoModel = UserInfoModel(userObject: user, hasError: false, errorMessage: "", errorCode: 0)
                     return userInfoModel
                     

@@ -166,15 +166,18 @@
         <attribute name="time" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <entity name="CMUser" representedClassName=".CMUser" syncable="YES">
+        <attribute name="bio" optional="YES" attributeType="String"/>
         <attribute name="cellphoneNumber" optional="YES" attributeType="String"/>
         <attribute name="coreUserId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="email" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="image" optional="YES" attributeType="String"/>
         <attribute name="lastSeen" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="receiveEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="sendEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="username" optional="YES" attributeType="String"/>
     </entity>
     <entity name="CMUserRole" representedClassName=".CMUserRole" syncable="YES">
         <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
@@ -276,9 +279,10 @@
         <element name="CMLinkedUser" positionX="-319.42578125" positionY="117.296875" width="128" height="135"/>
         <element name="CMMessage" positionX="-287.66796875" positionY="271.8515625" width="128" height="358"/>
         <element name="CMParticipant" positionX="349.671875" positionY="95.74609375" width="128" height="508"/>
+        <element name="CMPinMessage" positionX="-261" positionY="0" width="128" height="103"/>
         <element name="CMReplyInfo" positionX="166.9453125" positionY="487.76171875" width="128" height="178"/>
         <element name="CMThreadParticipants" positionX="80.10546875" positionY="-125.96875" width="128" height="90"/>
-        <element name="CMUser" positionX="-463.83984375" positionY="196.234375" width="128" height="180"/>
+        <element name="CMUser" positionX="-463.83984375" positionY="196.234375" width="128" height="223"/>
         <element name="CMUserRole" positionX="-54" positionY="243" width="128" height="120"/>
         <element name="MessageGaps" positionX="293.2421875" positionY="-115.6953125" width="128" height="90"/>
         <element name="PhoneContact" positionX="-261" positionY="0" width="128" height="105"/>
@@ -289,6 +293,5 @@
         <element name="QueueOfUploadFiles" positionX="-252" positionY="9" width="128" height="163"/>
         <element name="QueueOfUploadImages" positionX="-261" positionY="0" width="128" height="223"/>
         <element name="ThreadAdmins" positionX="-261" positionY="0" width="128" height="118"/>
-        <element name="CMPinMessage" positionX="-261" positionY="0" width="128" height="103"/>
     </elements>
 </model>

@@ -34,6 +34,8 @@ open class User {
     public var name:            String?
     public var receiveEnable:   Bool?
     public var sendEnable:      Bool?
+    public var username:        String?
+    public var chatProfileVO:   Profile?
     
     public init(messageContent: JSON) {
         
@@ -46,7 +48,10 @@ open class User {
         self.name               = messageContent["name"].string
         self.receiveEnable      = messageContent["receiveEnable"].bool
         self.sendEnable         = messageContent["sendEnable"].bool
-        
+        self.username           = messageContent["username"].string
+        if (messageContent["chatProfileVO"] != JSON.null) {
+            self.chatProfileVO  = Profile(messageContent: messageContent["chatProfileVO"])
+        }
     }
     
     public init(cellphoneNumber:    String?,
@@ -57,7 +62,9 @@ open class User {
                 lastSeen:           Int?,
                 name:               String?,
                 receiveEnable:      Bool?,
-                sendEnable:         Bool?) {
+                sendEnable:         Bool?,
+                username:           String?,
+                chatProfileVO:      Profile?) {
         
         self.cellphoneNumber    = cellphoneNumber
         self.coreUserId         = coreUserId
@@ -68,6 +75,8 @@ open class User {
         self.name               = name
         self.receiveEnable      = receiveEnable
         self.sendEnable         = sendEnable
+        self.username           = username
+        self.chatProfileVO      = chatProfileVO
     }
     
     public init(withUserObject: User) {
@@ -81,11 +90,8 @@ open class User {
         self.name               = withUserObject.name
         self.receiveEnable      = withUserObject.receiveEnable
         self.sendEnable         = withUserObject.sendEnable
-    }
-    
-    
-    public func formatDataToMakeUser() -> User {
-        return self
+        self.username           = withUserObject.username
+        self.chatProfileVO      = withUserObject.chatProfileVO
     }
     
     public func formatToJSON() -> JSON {
@@ -97,7 +103,9 @@ open class User {
                             "lastSeen":         lastSeen ?? NSNull(),
                             "name":             name ?? NSNull(),
                             "receiveEnable":    receiveEnable ?? NSNull(),
-                            "sendEnable":       sendEnable ?? NSNull()]
+                            "sendEnable":       sendEnable ?? NSNull(),
+                            "username":         username ?? NSNull(),
+                            "chatProfileVO":    chatProfileVO?.formatToJSON() ?? NSNull()]
         return result
     }
     

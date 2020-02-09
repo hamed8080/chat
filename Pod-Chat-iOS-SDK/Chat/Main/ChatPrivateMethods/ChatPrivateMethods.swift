@@ -806,9 +806,9 @@ extension Chat {
             responseOfUnpinMessage(withMessage: message)
             break
             
-        // a message of type 53 (SET_PROFILE) comes from Server.
+        // a message of type 52 (SET_PROFILE) comes from Server.
         case chatMessageVOTypes.SET_PROFILE.rawValue:
-            // ToDo:
+            responseOfSetProfile(withMessage: message)
             break
         
         // a message of type 54 (GET_CURRENT_USER_ROLES) comes from Server
