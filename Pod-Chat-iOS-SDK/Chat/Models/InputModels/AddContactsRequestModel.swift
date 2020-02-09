@@ -14,6 +14,7 @@ open class AddContactRequestModel {
     public let email:           String?
     public let firstName:       String?
     public let lastName:        String?
+    public let username:        String?
     
     public let typeCode:        String?
     public let uniqueId:        String
@@ -22,6 +23,7 @@ open class AddContactRequestModel {
                 email:              String?,
                 firstName:          String?,
                 lastName:           String?,
+                username:           String?,
                 typeCode:           String?,
                 uniqueId:           String?) {
         
@@ -29,6 +31,7 @@ open class AddContactRequestModel {
         self.email              = email
         self.firstName          = firstName
         self.lastName           = lastName
+        self.username           = username
         self.typeCode           = typeCode
         self.uniqueId           = uniqueId ?? UUID().uuidString
     }
@@ -42,6 +45,7 @@ open class AddContactsRequestModel {
     public let emails:              [String]
     public let firstNames:          [String]
     public let lastNames:           [String]
+    public let usernames:           [String]
     
     public let typeCode:            String?
     public let uniqueIds:           [String]
@@ -50,6 +54,7 @@ open class AddContactsRequestModel {
                 emails:             [String],
                 firstNames:         [String],
                 lastNames:          [String],
+                usernames:          [String],
                 typeCode:           String?,
                 uniqueIds:          [String]) {
         
@@ -57,6 +62,7 @@ open class AddContactsRequestModel {
         self.emails             = emails
         self.firstNames         = firstNames
         self.lastNames          = lastNames
+        self.usernames          = usernames
         self.typeCode           = typeCode
         self.uniqueIds          = uniqueIds
     }

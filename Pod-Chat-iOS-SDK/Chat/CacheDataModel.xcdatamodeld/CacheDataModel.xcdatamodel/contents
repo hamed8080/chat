@@ -271,7 +271,7 @@
     </entity>
     <elements>
         <element name="CMBlockedContact" positionX="-461.90234375" positionY="-78.6953125" width="128" height="105"/>
-        <element name="CMContact" positionX="-307.48828125" positionY="-144.9375" width="128" height="240"/>
+        <element name="CMContact" positionX="-307.48828125" positionY="-144.9375" width="128" height="238"/>
         <element name="CMConversation" positionX="-126.5546875" positionY="-151.546875" width="128" height="598"/>
         <element name="CMFile" positionX="-461.58984375" positionY="539" width="128" height="88"/>
         <element name="CMForwardInfo" positionX="44.06640625" positionY="6.28515625" width="128" height="90"/>
