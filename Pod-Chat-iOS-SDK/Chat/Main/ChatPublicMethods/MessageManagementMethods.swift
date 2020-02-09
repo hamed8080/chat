@@ -259,8 +259,8 @@ extension Chat {
             Chat.cacheDB.saveTextMessageToWaitQueue(textMessage: messageObjectToSendToQueue)
         }
         
-        let messageTxtContent = sendTextMessageInput.content
-//        let messageTxtContent = MakeCustomTextToSend(message: sendTextMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
+//        let messageTxtContent = sendTextMessageInput.content
+        let messageTxtContent = MakeCustomTextToSend(message: sendTextMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.MESSAGE.rawValue,
                                             content:            messageTxtContent,
@@ -320,8 +320,8 @@ extension Chat {
         sendCallbackToUserOnDeliver = onDelivered
         sendCallbackToUserOnSeen = onSeen
         
-        let messageTxtContent = sendInterActiveMessageInput.content
-//        let messageTxtContent = MakeCustomTextToSend(message: sendInterActiveMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
+//        let messageTxtContent = sendInterActiveMessageInput.content
+        let messageTxtContent = MakeCustomTextToSend(message: sendInterActiveMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.BOT_MESSAGE.rawValue,
                                             content:            messageTxtContent,
@@ -392,8 +392,8 @@ extension Chat {
             Chat.cacheDB.saveEditMessageToWaitQueue(editMessage: messageObjectToSendToQueue)
         }
         
-        let messageTxtContent = editMessageInput.content
-//        let messageTxtContent = MakeCustomTextToSend(message: editMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
+//        let messageTxtContent = editMessageInput.content
+        let messageTxtContent = MakeCustomTextToSend(message: editMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.EDIT_MESSAGE.rawValue,
                                             content:            messageTxtContent,
@@ -470,8 +470,8 @@ extension Chat {
             Chat.cacheDB.saveTextMessageToWaitQueue(textMessage: messageObjectToSendToQueue)
         }
         
-        let messageTxtContent = replyMessageInput.content
-//        let messageTxtContent = MakeCustomTextToSend(message: replyMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
+//        let messageTxtContent = replyMessageInput.content
+        let messageTxtContent = MakeCustomTextToSend(message: replyMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.MESSAGE.rawValue,
                                             content:            messageTxtContent,
@@ -617,18 +617,18 @@ extension Chat {
         if enableCache {
             if let file = sendFileMessageInput.uploadInput as? UploadFileRequestModel {
                 let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      sendFileMessageInput.messageInput.content,
-                                                                            fileName:     file.fileName,
-                                                                            metadata:     (sendFileMessageInput.messageInput.metadata != nil) ? "\(sendFileMessageInput.messageInput.metadata!)" : nil,
-                                                                            repliedTo:    sendFileMessageInput.messageInput.repliedTo,
-                                                                            threadId:     sendFileMessageInput.messageInput.threadId,
-                                                                            xC:           nil,
-                                                                            yC:           nil,
-                                                                            hC:           nil,
-                                                                            wC:           nil,
-                                                                            fileToSend:   file.dataToSend,
-                                                                            imageToSend:  nil,
-                                                                            typeCode:     sendFileMessageInput.messageInput.typeCode,
-                                                                            uniqueId:     sendFileMessageInput.messageInput.uniqueId)
+                                                                              fileName:     file.fileName,
+                                                                              metadata:     (sendFileMessageInput.messageInput.metadata != nil) ? "\(sendFileMessageInput.messageInput.metadata!)" : nil,
+                                                                              repliedTo:    sendFileMessageInput.messageInput.repliedTo,
+                                                                              threadId:     sendFileMessageInput.messageInput.threadId,
+                                                                              xC:           nil,
+                                                                              yC:           nil,
+                                                                              hC:           nil,
+                                                                              wC:           nil,
+                                                                              fileToSend:   file.dataToSend,
+                                                                              imageToSend:  nil,
+                                                                              typeCode:     sendFileMessageInput.messageInput.typeCode,
+                                                                              uniqueId:     sendFileMessageInput.messageInput.uniqueId)
                 Chat.cacheDB.saveFileMessageToWaitQueue(fileMessage: messageObjectToSendToQueue)
                 
             } else if let image = sendFileMessageInput.uploadInput as? UploadImageRequestModel {
