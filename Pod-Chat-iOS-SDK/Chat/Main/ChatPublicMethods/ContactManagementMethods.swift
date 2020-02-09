@@ -601,10 +601,8 @@ extension Chat {
     ///
     /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! [ContactModel])
-    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. ([ContactModel])
     public func syncContacts(uniqueIds:     @escaping ([String]) -> (),
-                             completion:    @escaping callbackTypeAlias,
-                             cacheResponse: @escaping ([ContactModel]) -> ()) {
+                             completion:    @escaping callbackTypeAlias) {
         log.verbose("Try to request to sync contact", context: "Chat")
         
         var firstNameArray = [String]()
