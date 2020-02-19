@@ -52,6 +52,11 @@ public enum chatMessageVOTypes: Int {
     case GET_NOT_SEEN_DURATION              = 47
     case PIN_THREAD                         = 48
     case UNPIN_THREAD                       = 49
+    case PIN_MESSAGE                        = 50
+    case UNPIN_MESSAGE                      = 51
+    case SET_PROFILE                        = 52
+    case GET_CURRENT_USER_ROLES             = 54
+    case CONTACTS_LAST_SEEN                 = 60
     case LOGOUT                             = 100
     case ERROR                              = 999
 }

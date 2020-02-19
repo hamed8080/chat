@@ -421,6 +421,9 @@ extension Cache {
                     if let _ = thread.lastMessageVO {
                         deleteAndSave(object: thread.lastMessageVO!, withMessage: "Delete CMMessage Object")
                     }
+                    if let _ = thread.pinMessage {
+                        deleteAndSave(object: thread.pinMessage!, withMessage: "Delete pinMessage from CMPinMessage Object")
+                    }
                     deleteMessage(inThread: (thread.id as? Int)!, allMessages: true, withMessageIds: [])
                     deleteAndSave(object: thread, withMessage: "Delete CMConversation Object")
                 }
@@ -457,6 +460,33 @@ extension Cache {
             }
         } catch {
             fatalError("Error on fetching list of CMConversation when trying to delete Threads...")
+        }
+    }
+    
+    // MARK: - delete Pin/Unpin Message from Thread:
+    /// Delete Pin/Unpin Message on CMConversation Entity:
+    /// by calling this function, 'pinMessage' property on Conversation will be delete
+    ///
+    /// Inputs:
+    /// - it gets the messageId as  "Int" , and pinMessage as "PinUnpinMessage" value as inputs
+    ///
+    /// Outputs:
+    /// - it returns no output
+    ///
+    /// - parameter messageId:      send your messageId to this parameter.(Int)
+    /// - parameter pinMessage:     send your  pinMessageObject to save it on the cache (PinUnpinMessage)
+    func deletePinMessageFromCMConversationEntity(threadId: Int) {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
+        fetchRequest.predicate = NSPredicate(format: "id == %i", threadId)
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMConversation] {
+                if (result.count > 0) {
+                    result.first!.pinMessage = nil
+                    saveContext(subject: "Update CMConversation on save PinMessage -update existing object-")
+                }
+            }
+        } catch {
+            fatalError("Error on trying to find the Thread from CMConversation entity")
         }
     }
     
@@ -529,7 +559,6 @@ extension Cache {
     }
     
     
-    
     /// Delete Message on specific thread:
     /// by calling this method, we will delete CMMessages on specific Thread
     ///
@@ -542,7 +571,7 @@ extension Cache {
     /// - parameter inThread:       the threadId that you want to delete messages from it. (Int)
     /// - parameter allMessages:    if you want to delete all messages on this thread, send this param as "true". (Bool)
     /// - parameter withMessageIds: if you want to delete specifice messages with their Ids, send them to this param. ([Int])
-    public func deleteMessage(inThread: Int, allMessages: Bool, withMessageIds messageIds: [Int]) {
+    public func deleteMessage(inThread: Int, allMessages: Bool, withMessageIds messageIds: [Int]?) {
         /*
          *  -> define a method that will handle of deletion of messages
          *      -> delete the participant object of the message
@@ -582,8 +611,8 @@ extension Cache {
                     
                     if allMessages {
                         deleteCMMessage(message: message)
-                    } else {
-                        for msgId in messageIds {
+                    } else if let theMessageIds = messageIds {
+                        for msgId in theMessageIds {
                             if (Int(exactly: message.id ?? 0) == msgId) {
                                 deleteCMMessage(message: message)
                             }
@@ -1054,7 +1083,7 @@ extension Cache {
                 for itemInCache in result {
                     // delete the original file from local storage of the app, using path of the file
                     let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-                    let myImagePath = path + "/\(fileSubPath.Images)/" + "\(itemInCache.name ?? "default")\(itemInCache.id ?? 0).png"
+                    let myImagePath = path + "/\(fileSubPath.Images)/" + "\(itemInCache.id!)\(itemInCache.name ?? "default")"
                     // check if this file is exixt on the app bunde, then delete it
                     if FileManager.default.fileExists(atPath: myImagePath) {
                         do {
@@ -1090,7 +1119,7 @@ extension Cache {
                 for itemInCache in result {
                     // delete the original file from local storage of the app, using path of the file
                     let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-                    let myFilePath = path + "/\(fileSubPath.Files)/" + "\(itemInCache.id ?? 0)\(itemInCache.name ?? "default")"
+                    let myFilePath = path + "/\(fileSubPath.Files)/" + "\(itemInCache.id!)\(itemInCache.name ?? "default")"
                     
                     if FileManager.default.fileExists(atPath: myFilePath) {
                         do {

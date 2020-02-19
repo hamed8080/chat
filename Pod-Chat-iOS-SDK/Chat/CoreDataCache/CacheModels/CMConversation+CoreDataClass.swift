@@ -156,7 +156,8 @@ public class CMConversation: NSManagedObject {
                                                  unreadCount:           unreadCount,
                                                  inviter:               self.inviter?.convertCMParticipantToParticipantObject(),
                                                  lastMessageVO:         self.lastMessageVO?.convertCMMessageToMessageObject(),
-                                                 participants:          participants)
+                                                 participants:          participants,
+                                                 pinMessage:            pinMessage?.convertCMPinMessageToPinUnpinMessageObject())
             
             return conversationModel
         }

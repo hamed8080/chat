@@ -53,6 +53,7 @@ extension CMConversation {
     @NSManaged public var lastMessageVO:    CMMessage?
     @NSManaged public var participants:     [CMParticipant]?
     @NSManaged public var dummyUserRoles:   [String]?
+    @NSManaged public var pinMessage:       CMPinMessage?
 
 }
 

@@ -15,9 +15,6 @@ import FanapPodAsyncSDK
 extension Chat {
     
     func responseOfDeleteMessage(withMessage message: ChatMessage) {
-        /**
-         *
-         */
         log.verbose("Message of type 'DELETE_MESSAGE' recieved", context: "Chat")
         
         let returnData = CreateReturnData(hasError:         false,
@@ -35,7 +32,7 @@ extension Chat {
                                     delivered:      nil,
                                     editable:       nil,
                                     edited:         nil,
-                                    id:             Int(content) ?? 0,
+                                    id:             Int(content),
                                     mentioned:      nil,
                                     message:        nil,
                                     messageType:    nil,
@@ -45,6 +42,7 @@ extension Chat {
                                     seen:           nil,
                                     systemMetadata: nil,
                                     time:           nil,
+                                    timeNanos:      nil,
                                     uniqueId:       nil,
                                     conversation:   nil,
                                     forwardInfo:    nil,
@@ -54,11 +52,14 @@ extension Chat {
             let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_DELETE,
                                                       message:  myMessage,
                                                       threadId: message.subjectId,
+                                                      messageId: message.messageId,
                                                       senderId: nil)
             delegate?.messageEvents(model: messageEventModel)
         }
         
         if enableCache {
+            // ToDo: check in the cache, if this message was pinMessage on the Conversation Model
+            // ToDo: check in the cache, if this message was lasMessage on the Conversation Model
             Chat.cacheDB.deleteMessage(inThread: message.subjectId!, allMessages: false, withMessageIds: [Int(message.content ?? "") ?? 0])
         }
         
@@ -86,7 +87,6 @@ extension Chat {
             log.verbose("DeleteMessageCallbacks", context: "Chat")
             
             if let content = response.resultAsString {
-                
                 let deletedMessageModel = DeleteMessageModel(deletedMessageId:  Int(content) ?? 0,
                                                              hasError:          response.hasError,
                                                              errorMessage:      response.errorMessage,

@@ -11,12 +11,6 @@ import SwiftyJSON
 
 
 open class UserRole {
-    /*
-     * + UserRole   UserRole:
-     *    - id:         Int?
-     *    - name:       String?
-     *    - roles:      [String]?
-     */
     
     public var userId:      Int
     public var name:        String

@@ -43,7 +43,9 @@ extension Cache {
                                     lastSeen:       first.lastSeen as? Int,
                                     name:           first.name,
                                     receiveEnable:  first.receiveEnable as? Bool,
-                                    sendEnable:     first.sendEnable as? Bool)
+                                    sendEnable:     first.sendEnable as? Bool,
+                                    username:       first.username,
+                                    chatProfileVO:  Profile(bio: first.bio, metadata: first.metadata))
                     let userInfoModel = UserInfoModel(userObject: user, hasError: false, errorMessage: "", errorCode: 0)
                     return userInfoModel
                     
@@ -1018,6 +1020,72 @@ extension Cache {
             fatalError("Error on fetching list of CMFile")
         }
     }
+    
+    
+    public func retrieveAllImagesSize() -> Int {
+        
+        var folderSize = 0
+        // get your directory url
+//        let documentsDirectoryURL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first! + "/\(fileSubPath.Images)"
+        let documentsDirectoryURL = URL(fileURLWithPath: path)
+        
+        // check if the url is a directory
+        if (try? documentsDirectoryURL.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory == true {
+            // lets get the folder files
+            (try? FileManager.default.contentsOfDirectory(at: documentsDirectoryURL, includingPropertiesForKeys: nil))?.lazy.forEach {
+                folderSize += (try? $0.resourceValues(forKeys: [.totalFileAllocatedSizeKey]))?.totalFileAllocatedSize ?? 0
+            }
+//            // format it using NSByteCountFormatter to display it properly
+//            let  byteCountFormatter =  ByteCountFormatter()
+//            byteCountFormatter.allowedUnits = .useBytes
+//            byteCountFormatter.countStyle = .file
+//            let folderSizeToDisplay = byteCountFormatter.string(for: folderSize) ?? ""
+//            print(folderSizeToDisplay)  // "X,XXX,XXX bytes"
+        }
+        return folderSize
+        
+    }
+    
+    
+    public func retrieveAllFilesSize() -> Int {
+        
+        var folderSize = 0
+        // get your directory url
+        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first! + "/\(fileSubPath.Files)"
+        let documentsDirectoryURL = URL(fileURLWithPath: path)
+        
+        // check if the url is a directory
+        if (try? documentsDirectoryURL.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory == true {
+            // lets get the folder files
+            (try? FileManager.default.contentsOfDirectory(at: documentsDirectoryURL, includingPropertiesForKeys: nil))?.lazy.forEach {
+                folderSize += (try? $0.resourceValues(forKeys: [.totalFileAllocatedSizeKey]))?.totalFileAllocatedSize ?? 0
+            }
+        }
+        return folderSize
+        
+    }
+    
+    
+//    public func retrieveLocalSize() -> Int {
+//
+//        var folderSize = 0
+//        // get your directory url
+//        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+//        let documentsDirectoryURL = URL(fileURLWithPath: path)
+//
+//        // check if the url is a directory
+//        if (try? documentsDirectoryURL.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory == true {
+//            print("url is a folder url")
+//            // lets get the folder files
+//            (try? FileManager.default.contentsOfDirectory(at: documentsDirectoryURL, includingPropertiesForKeys: nil))?.lazy.forEach {
+//                folderSize += (try? $0.resourceValues(forKeys: [.totalFileAllocatedSizeKey]))?.totalFileAllocatedSize ?? 0
+//            }
+//        }
+//        return folderSize
+//
+//    }
+    
     
     
 }

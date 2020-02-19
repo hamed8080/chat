@@ -11,12 +11,14 @@ import Foundation
 
 open class ContactEventModel {
     
-    public let type:        ContactEventTypes
-    public let contacts:    [Contact]
+    public let type:                        ContactEventTypes
+    public let contacts:                    [Contact]?
+    public let contactsLastSeenDuration:    [UserLastSeenDuration]?
     
-    init(type: ContactEventTypes, contacts: [Contact]) {
-        self.type       = type
-        self.contacts   = contacts
+    init(type: ContactEventTypes, contacts: [Contact]?, contactsLastSeenDuration: [UserLastSeenDuration]?) {
+        self.type                       = type
+        self.contacts                   = contacts
+        self.contactsLastSeenDuration   = contactsLastSeenDuration
     }
     
 }

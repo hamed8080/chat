@@ -18,14 +18,14 @@ class CreateReturnData {
     let contentCount:   Int
     let result:         JSON?
     let resultAsString: String?
-    let resultAsArray:  [JSON]?
+    let resultAsArray:  [Any]?
     let subjectId:      Int?
     
     init(hasError:      Bool,
          errorMessage:  String?,
          errorCode:     Int?,
          result:        JSON?,
-         resultAsArray: [JSON]?,
+         resultAsArray: [Any]?,
          resultAsString: String?,
          contentCount:  Int?,
          subjectId:     Int?) {

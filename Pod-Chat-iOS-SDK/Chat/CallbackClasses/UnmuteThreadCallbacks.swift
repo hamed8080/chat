@@ -15,14 +15,7 @@ import FanapPodAsyncSDK
 extension Chat {
     
     func responseOfUnmuteThread(withMessage message: ChatMessage) {
-        /**
-         *
-         */
         log.verbose("Message of type 'UNMUTE_THREAD' recieved", context: "Chat")
-        
-//        if let threadId = message.subjectId {
-//            delegate?.threadEvents(type: ThreadEventTypes.THREAD_UNMUTE, threadId: threadId, thread: nil, messageId: nil, senderId: nil)
-//        }
         
         let tUnmuteEM = ThreadEventModel(type:          ThreadEventTypes.THREAD_UNMUTE,
                                          participants:  nil,
@@ -56,9 +49,6 @@ extension Chat {
                               response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
-            /**
-             *
-             */
             log.verbose("UnmuteThreadCallbacks", context: "Chat")
             
             if let stringContent = response.resultAsString {

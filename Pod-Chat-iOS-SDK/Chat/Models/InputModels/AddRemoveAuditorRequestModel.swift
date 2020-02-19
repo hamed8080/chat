@@ -30,13 +30,4 @@ open class AddRemoveAuditorRequestModel {
         self.uniqueId   = uniqueId ?? UUID().uuidString
     }
     
-//    func convertContentToJSON() -> JSON {
-//        var content: JSON = [:]
-//        content["userId"]           = JSON(self.userId)
-//        content["roles"]            = JSON(self.roles)
-//        content["checkThreadMembership"] = JSON(true)
-//
-//        return content
-//    }
-    
 }
