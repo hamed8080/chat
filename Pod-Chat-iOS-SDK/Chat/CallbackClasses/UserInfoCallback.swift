@@ -32,15 +32,6 @@ extension Chat {
     // TODO: complete the comments
     // TODO: take a look at the failure state (and check if all things is right)
     func responseOfUserInfo(withMessage message: ChatMessage) {
-        /*
-         *  -> check if we have saves the message uniqueId on the "map" property
-         *      -> if yes: (means we send this request and waiting for the response of it)
-         *          -> create the "CreateReturnData" variable
-         *          -> check if Cache is enabled by the user
-         *              -> if yes, save the income Data to the Cache
-         *          -> call the "onResultCallback" which will send callback to getUserInfo function (by using "userInfoCallbackToUser")
-         *
-         */
         log.verbose("Message of type 'USER_INFO' recieved", context: "Chat")
         
         let returnData = CreateReturnData(hasError:         false,
@@ -59,7 +50,6 @@ extension Chat {
             let user = User(messageContent: message.content?.convertToJSON() ?? [:])
             Chat.cacheDB.saveUserInfo(withUserObject: user)
         }
-//            delegate?.userEvents(type: UserEventTypes.userInfo, result: userInfo)
         
         if Chat.map[message.uniqueId] != nil {    
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
@@ -89,13 +79,8 @@ extension Chat {
                               response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
-            /*
-             *  -> check if response hasError or not
-             *      -> if not, create the "UserInfoModel"
-             *          -> send the "UserInfoModel" as a callback
-             *
-             */
             log.verbose("UserInfoCallback", context: "Chat")
+            
             if let content = response.result {
                 let userInfoModel = UserInfoModel(messageContent:   content,
                                                   hasError:         response.hasError,

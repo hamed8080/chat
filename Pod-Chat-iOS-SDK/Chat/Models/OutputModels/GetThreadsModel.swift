@@ -11,50 +11,6 @@ import SwiftyJSON
 
 
 open class GetThreadsModel {
-    /*
-     ---------------------------------------
-     * responseAsJSON:
-     *  - hasError      Bool
-     *  - errorMessage  String
-     *  - errorCode     Int
-     *  + result            [JSON]:
-     *      - contentCount      Int
-     *      - hasNext           Bool
-     *      - nextOffset        Int
-     *      + threads           ThreadsAsJSON
-     *          - admin:                          Bool?
-     *          - canEditInfo:                    Bool?
-     *          - canSpam:                        Bool?
-     *          - description:                    String?
-     *          - group:                          Bool?
-     *          - id:                             Int?
-     *          - image:                          String?
-     *          - joinDate:                       Int?
-     *          - lastMessage:                    String?
-     *          - lastParticipantImage:           String?
-     *          - lastParticipantName:            String?
-     *          - lastSeenMessageId:              Int?
-     *          - metadata:                       String?
-     *          - mute:                           Bool?
-     *          - participantCount:               Int?
-     *          - partner:                        Int?
-     *          - partnerLastDeliveredMessageId:  Int?
-     *          - partnerLastSeenMessageId:       Int?
-     *          - title:                          String?
-     *          - time:                           Int?
-     *          - type:                           Int?
-     *          - unreadCount:                    Int?
-     *          + inviter:                        Participant?
-     *          + lastMessageVO:                  Message?
-     *          + participants:                   [Participant]?
-     ---------------------------------------
-     * responseAsModel:
-     *  - hasError      Bool
-     *  - errorMessage  String
-     *  - errorCode     Int
-     *  + threads       [Conversation]
-     ---------------------------------------
-     */
     
     // GetThreads model properties
     public let hasError:           Bool

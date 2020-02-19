@@ -15,14 +15,8 @@ import FanapPodAsyncSDK
 extension Chat {
     
     func responseOfMuteThread(withMessage message: ChatMessage) {
-        /**
-         *
-         */
         log.verbose("Message of type 'MUTE_THREAD' recieved", context: "Chat")
         
-//        if let threadId = message.subjectId {
-//            delegate?.threadEvents(type: ThreadEventTypes.THREAD_MUTE, threadId: threadId, thread: nil, messageId: nil, senderId: nil)
-//        }
         let tMuteEM = ThreadEventModel(type:            ThreadEventTypes.THREAD_MUTE,
                                        participants:    nil,
                                        threads:         nil,
@@ -55,9 +49,6 @@ extension Chat {
                               response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
-            /**
-             *
-             */
             log.verbose("MuteThreadCallbacks", context: "Chat")
             
             if let stringContent = response.resultAsString {

@@ -49,7 +49,9 @@ public class CMUser: NSManagedObject {
                                  lastSeen:      lastSeen,
                                  name:          self.name,
                                  receiveEnable: receiveEnable,
-                                 sendEnable:    sendEnable)
+                                 sendEnable:    sendEnable,
+                                 username:      username,
+                                 chatProfileVO: Profile(bio: bio, metadata: metadata))
             return userModel
         }
         

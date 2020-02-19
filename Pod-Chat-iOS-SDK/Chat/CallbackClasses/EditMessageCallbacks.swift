@@ -15,9 +15,6 @@ import FanapPodAsyncSDK
 extension Chat {
     
     func responseOfEditMessage(withMessage message: ChatMessage) {
-        /**
-         *
-         */
         log.verbose("Message of type 'EDIT_MESSAGE' recieved", context: "Chat")
         
         let returnData = CreateReturnData(hasError:         false,
@@ -34,6 +31,7 @@ extension Chat {
         let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_EDIT,
                                                   message:  myMessage,
                                                   threadId: nil,
+                                                  messageId: nil,
                                                   senderId: nil)
         delegate?.messageEvents(model: messageEventModel)
         

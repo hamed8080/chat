@@ -15,6 +15,7 @@ open class UpdateContactsRequestModel {
     public let firstName:       String
     public let id:              Int
     public let lastName:        String
+    public let username:        String
     
     public let typeCode:        String?
     public let uniqueId:        String
@@ -24,6 +25,7 @@ open class UpdateContactsRequestModel {
                 firstName:          String,
                 id:                 Int,
                 lastName:           String,
+                username:           String,
                 typeCode:           String?,
                 uniqueId:           String?) {
         
@@ -32,6 +34,7 @@ open class UpdateContactsRequestModel {
         self.firstName          = firstName
         self.id                 = id
         self.lastName           = lastName
+        self.username           = username
         self.typeCode           = typeCode
         self.uniqueId           = uniqueId ?? UUID().uuidString
     }

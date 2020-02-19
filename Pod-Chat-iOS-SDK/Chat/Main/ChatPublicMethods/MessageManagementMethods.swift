@@ -53,7 +53,7 @@ extension Chat {
         
         log.verbose("Try to request to get history with this parameters: \n \(getHistoryInput)", context: "Chat")
         uniqueId(getHistoryInput.uniqueId)
-        historyCallbackToUser = completion
+        getHistoryCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_HISTORY.rawValue,
                                             content:            "\(getHistoryInput.convertContentToJSON())",
@@ -75,14 +75,10 @@ extension Chat {
                                               pushMsgType:  nil)
       
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(GetHistoryCallbacks(parameters: chatMessage), getHistoryInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (getHistoryUniqueId) in
-//            uniqueId(getHistoryUniqueId)
-//        }
        
 //         if cache is enabled by user, first return cache result to the user
         if enableCache {
@@ -121,6 +117,61 @@ extension Chat {
             }
         }
       
+    }
+    
+    /// GetMentionList:
+    /// get Mention list
+    ///
+    /// By calling this function, a request of type 15 (GET_HISTORY) will send throut Chat-SDK, (but it has some differencess from normal getHistory request, that its only return messages that i am mentioned on it)
+    /// then the responses will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "GetMentionRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 3 callbacks as responses
+    ///
+    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (GetMentionRequestModel)
+    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! GetHistoryModel)
+    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetHistoryModel)
+    public func getMentionList(inputModel getMentionInput: GetMentionRequestModel,
+                               uniqueId:                @escaping ((String) -> ()),
+                               completion:              @escaping callbackTypeAlias,
+                               cacheResponse:           @escaping ((GetHistoryModel) -> ())) {
+        log.verbose("Try to request to get mention list with this parameters: \n \(getMentionInput)", context: "Chat")
+        uniqueId(getMentionInput.uniqueId)
+        getMentionListCallbackToUser = completion
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_HISTORY.rawValue,
+                                            content:            "\(getMentionInput.convertContentToJSON())",
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          getMentionInput.threadId,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           getMentionInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           getMentionInput.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: true)
+      
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          [(GetMentionCallbacks(parameters: chatMessage), getMentionInput.uniqueId)],
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+        
+        if enableCache {
+            
+        }
+        
     }
     
     /// ClearHistory:
@@ -166,15 +217,10 @@ extension Chat {
                                               pushMsgType:  nil)
   
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(ClearHistoryCallback(parameters: chatMessage), clearHistoryInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (clearHistoryUniqueId) in
-//            uniqueId(clearHistoryUniqueId)
-//        }
-    
     }
        
     
@@ -202,6 +248,7 @@ extension Chat {
                                 onSent:                 @escaping callbackTypeAlias,
                                 onDelivere:             @escaping callbackTypeAlias,
                                 onSeen:                 @escaping callbackTypeAlias) {
+        
         log.verbose("Try to send Message with this parameters: \n \(sendTextMessageInput)", context: "Chat")
         uniqueId(sendTextMessageInput.uniqueId)
         
@@ -228,6 +275,7 @@ extension Chat {
             Chat.cacheDB.saveTextMessageToWaitQueue(textMessage: messageObjectToSendToQueue)
         }
         
+//        let messageTxtContent = sendTextMessageInput.content
         let messageTxtContent = MakeCustomTextToSend(message: sendTextMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.MESSAGE.rawValue,
@@ -250,15 +298,10 @@ extension Chat {
                                               pushMsgType:  4)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          nil,
                                 sentCallback:       (SendMessageCallbacks(parameters: chatMessage), [sendTextMessageInput.uniqueId]),
                                 deliverCallback:    (SendMessageCallbacks(parameters: chatMessage), [sendTextMessageInput.uniqueId]),
                                 seenCallback:       (SendMessageCallbacks(parameters: chatMessage), [sendTextMessageInput.uniqueId]))
-//        { (theUniqueId) in
-//                                    uniqueId(theUniqueId)
-//        }
-        
     }
     
     
@@ -284,6 +327,7 @@ extension Chat {
                                        onSent:      @escaping callbackTypeAlias,
                                        onDelivered: @escaping callbackTypeAlias,
                                        onSeen:      @escaping callbackTypeAlias) {
+        
         log.verbose("Try to send BotMessage with this parameters: \n \(sendInterActiveMessageInput)", context: "Chat")
         uniqueId(sendInterActiveMessageInput.uniqueId)
         
@@ -292,6 +336,7 @@ extension Chat {
         sendCallbackToUserOnDeliver = onDelivered
         sendCallbackToUserOnSeen = onSeen
         
+//        let messageTxtContent = sendInterActiveMessageInput.content
         let messageTxtContent = MakeCustomTextToSend(message: sendInterActiveMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.BOT_MESSAGE.rawValue,
@@ -314,15 +359,10 @@ extension Chat {
                                               pushMsgType:  4)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          nil,
                                 sentCallback:       (SendMessageCallbacks(parameters: chatMessage), [sendInterActiveMessageInput.uniqueId]),
                                 deliverCallback:    (SendMessageCallbacks(parameters: chatMessage), [sendInterActiveMessageInput.uniqueId]),
                                 seenCallback:       (SendMessageCallbacks(parameters: chatMessage), [sendInterActiveMessageInput.uniqueId]))
-//        { (theUniqueId) in
-//            uniqueId(theUniqueId)
-//        }
-        
     }
     
     
@@ -344,6 +384,7 @@ extension Chat {
     public func editMessage(inputModel editMessageInput:   EditTextMessageRequestModel,
                             uniqueId:           @escaping ((String) -> ()),
                             completion:         @escaping callbackTypeAlias) {
+        
         log.verbose("Try to request to edit message with this parameters: \n \(editMessageInput)", context: "Chat")
         uniqueId(editMessageInput.uniqueId)
         
@@ -367,6 +408,7 @@ extension Chat {
             Chat.cacheDB.saveEditMessageToWaitQueue(editMessage: messageObjectToSendToQueue)
         }
         
+//        let messageTxtContent = editMessageInput.content
         let messageTxtContent = MakeCustomTextToSend(message: editMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.EDIT_MESSAGE.rawValue,
@@ -389,15 +431,10 @@ extension Chat {
                                               pushMsgType:  4)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(EditMessageCallbacks(parameters: chatMessage), editMessageInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (editMessageUniqueId) in
-//            uniqueId(editMessageUniqueId)
-//        }
-        
     }
      
     
@@ -423,6 +460,7 @@ extension Chat {
                              onSent:            @escaping callbackTypeAlias,
                              onDelivere:        @escaping callbackTypeAlias,
                              onSeen:            @escaping callbackTypeAlias) {
+        
         log.verbose("Try to reply Message with this parameters: \n \(replyMessageInput)", context: "Chat")
         uniqueId(replyMessageInput.uniqueId)
         
@@ -448,6 +486,7 @@ extension Chat {
             Chat.cacheDB.saveTextMessageToWaitQueue(textMessage: messageObjectToSendToQueue)
         }
         
+//        let messageTxtContent = replyMessageInput.content
         let messageTxtContent = MakeCustomTextToSend(message: replyMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.MESSAGE.rawValue,
@@ -470,15 +509,10 @@ extension Chat {
                                               pushMsgType:  4)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          nil,
                                 sentCallback:       (SendMessageCallbacks(parameters: chatMessage), [replyMessageInput.uniqueId]),
                                 deliverCallback:    (SendMessageCallbacks(parameters: chatMessage), [replyMessageInput.uniqueId]),
                                 seenCallback:       (SendMessageCallbacks(parameters: chatMessage), [replyMessageInput.uniqueId]))
-//        { (theUniqueId) in
-//            uniqueId(theUniqueId)
-//        }
-        
     }
     
     
@@ -504,6 +538,7 @@ extension Chat {
                                onSent:              @escaping callbackTypeAlias,
                                onDelivere:          @escaping callbackTypeAlias,
                                onSeen:              @escaping callbackTypeAlias) {
+        
         log.verbose("Try to Forward with this parameters: \n \(forwardMessageInput)", context: "Chat")
         uniqueIds(forwardMessageInput.uniqueIds)
         
@@ -550,15 +585,10 @@ extension Chat {
                                               pushMsgType:  4)
 
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          nil,
                                 sentCallback:       (SendMessageCallbacks(parameters: chatMessage), forwardMessageInput.uniqueIds),
                                 deliverCallback:    (SendMessageCallbacks(parameters: chatMessage), forwardMessageInput.uniqueIds),
                                 seenCallback:       (SendMessageCallbacks(parameters: chatMessage), forwardMessageInput.uniqueIds))
-//        { (theUniqueId) in
-//            uniqueIds(theUniqueId)
-//        }
-        
     }
     
     
@@ -589,6 +619,7 @@ extension Chat {
                                 onSent:                 @escaping callbackTypeAlias,
                                 onDelivered:            @escaping callbackTypeAlias,
                                 onSeen:                 @escaping callbackTypeAlias) {
+        
         log.verbose("Try to Send File adn Message with this parameters: \n \(sendFileMessageInput)", context: "Chat")
         uploadUniqueId(sendFileMessageInput.uploadInput.uniqueId)
         messageUniqueId(sendFileMessageInput.messageInput.uniqueId)
@@ -602,18 +633,18 @@ extension Chat {
         if enableCache {
             if let file = sendFileMessageInput.uploadInput as? UploadFileRequestModel {
                 let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      sendFileMessageInput.messageInput.content,
-                                                                            fileName:     file.fileName,
-                                                                            metadata:     (sendFileMessageInput.messageInput.metadata != nil) ? "\(sendFileMessageInput.messageInput.metadata!)" : nil,
-                                                                            repliedTo:    sendFileMessageInput.messageInput.repliedTo,
-                                                                            threadId:     sendFileMessageInput.messageInput.threadId,
-                                                                            xC:           nil,
-                                                                            yC:           nil,
-                                                                            hC:           nil,
-                                                                            wC:           nil,
-                                                                            fileToSend:   file.dataToSend,
-                                                                            imageToSend:  nil,
-                                                                            typeCode:     sendFileMessageInput.messageInput.typeCode,
-                                                                            uniqueId:     sendFileMessageInput.messageInput.uniqueId)
+                                                                              fileName:     file.fileName,
+                                                                              metadata:     (sendFileMessageInput.messageInput.metadata != nil) ? "\(sendFileMessageInput.messageInput.metadata!)" : nil,
+                                                                              repliedTo:    sendFileMessageInput.messageInput.repliedTo,
+                                                                              threadId:     sendFileMessageInput.messageInput.threadId,
+                                                                              xC:           nil,
+                                                                              yC:           nil,
+                                                                              hC:           nil,
+                                                                              wC:           nil,
+                                                                              fileToSend:   file.dataToSend,
+                                                                              imageToSend:  nil,
+                                                                              typeCode:     sendFileMessageInput.messageInput.typeCode,
+                                                                              uniqueId:     sendFileMessageInput.messageInput.uniqueId)
                 Chat.cacheDB.saveFileMessageToWaitQueue(fileMessage: messageObjectToSendToQueue)
                 
             } else if let image = sendFileMessageInput.uploadInput as? UploadImageRequestModel {
@@ -862,8 +893,11 @@ extension Chat {
     public func deleteMessage(inputModel deleteMessageInput:   DeleteMessageRequestModel,
                               uniqueId:             @escaping ((String) -> ()),
                               completion:           @escaping callbackTypeAlias) {
+        
         log.verbose("Try to request to edit message with this parameters: \n \(deleteMessageInput)", context: "Chat")
         uniqueId(deleteMessageInput.uniqueId)
+        
+        deleteMessageCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.DELETE_MESSAGE.rawValue,
                                             content:            "\(deleteMessageInput.convertContentToJSON())",
@@ -885,15 +919,10 @@ extension Chat {
                                               pushMsgType:  4)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(DeleteMessageCallbacks(parameters: chatMessage), deleteMessageInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (deleteMessageUniqueId) in
-//            uniqueId(deleteMessageUniqueId)
-//        }
-        deleteMessageCallbackToUser = completion
     }
     
     
@@ -915,8 +944,11 @@ extension Chat {
     public func deleteMultipleMessages(inputModel deleteMessageInput:   DeleteMultipleMessagesRequestModel,
                                        uniqueIds:            @escaping (([String]) -> ()),
                                        completion:           @escaping callbackTypeAlias) {
+        
         log.verbose("Try to request to edit message with this parameters: \n \(deleteMessageInput)", context: "Chat")
         uniqueIds(deleteMessageInput.uniqueIds)
+        
+        deleteMessageCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.DELETE_MESSAGE.rawValue,
                                             content:            "\(deleteMessageInput.convertContentToJSON())",
@@ -940,20 +972,13 @@ extension Chat {
         var myCallBacks: [(DeleteMessageCallbacks, String)] = []
         for uId in deleteMessageInput.uniqueIds {
             myCallBacks.append((DeleteMessageCallbacks(parameters: chatMessage), uId))
-//            uniqueId(uId)
         }
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          myCallBacks,
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (deleteMessageUniqueId) in
-//            uniqueId(deleteMessageUniqueId)
-//        }
-        deleteMessageCallbackToUser = completion
-        
     }
     
     
@@ -1024,8 +1049,11 @@ extension Chat {
     public func messageDeliveryList(inputModel messageDeliveryListInput:   MessageDeliverySeenListRequestModel,
                                     uniqueId:                   @escaping ((String) -> ()),
                                     completion:                 @escaping callbackTypeAlias) {
+        
         log.verbose("Try to request to get message deliver participants with this parameters: \n \(messageDeliveryListInput)", context: "Chat")
         uniqueId(messageDeliveryListInput.uniqueId)
+        
+        getMessageDeliverListCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_MESSAGE_DELEVERY_PARTICIPANTS.rawValue,
                                             content:            "\(messageDeliveryListInput.convertContentToJSON())",
@@ -1047,16 +1075,10 @@ extension Chat {
                                               pushMsgType:  4)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(GetMessageDeliverList(parameters: chatMessage), messageDeliveryListInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (messageDeliverListUniqueId) in
-//            uniqueId(messageDeliverListUniqueId)
-//        }
-        getMessageDeliverListCallbackToUser = completion
-        
     }
     
     
@@ -1078,8 +1100,11 @@ extension Chat {
     public func messageSeenList(inputModel messageSeenListInput:   MessageDeliverySeenListRequestModel,
                                 uniqueId:               @escaping ((String) -> ()),
                                 completion:             @escaping callbackTypeAlias) {
+        
         log.verbose("Try to request to get message seen participants with this parameters: \n \(messageSeenListInput)", context: "Chat")
         uniqueId(messageSeenListInput.uniqueId)
+        
+        getMessageSeenListCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_MESSAGE_SEEN_PARTICIPANTS.rawValue,
                                             content:            "\(messageSeenListInput.convertContentToJSON())",
@@ -1101,16 +1126,10 @@ extension Chat {
                                               pushMsgType:  4)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(GetMessageSeenList(parameters: chatMessage), messageSeenListInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (messageSeenListUniqueId) in
-//            uniqueId(messageSeenListUniqueId)
-//        }
-        getMessageSeenListCallbackToUser = completion
-        
     }
     
     
@@ -1211,38 +1230,326 @@ extension Chat {
                                               priority:     msgPriority,
                                               pushMsgType:  4)
         
-        
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          nil,
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//                                uniuqueIdCallback:  nil)
-        
     }
     
     
-    /// PinThread:
+    // MARK: - Pin/Unpin Message
+    
+    /// PinMessage:
     /// pin message on a specific thread
     ///
-    /// by calling this method, message of type "" is sends to the sserver
+    /// by calling this method, message of type "PIN_MESSAGE" is sends to the sserver
     ///
     /// Inputs:
-    /// - this method does not have any input method
+    /// - you have to send your parameters as "PinAndUnpinMessageRequestModel" to this function
     ///
     /// Outputs:
-    /// - It has no output
-    public func pinMessage() {
+    /// - It has 2 callbacks as response:
+    ///
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (PinAndUnpinMessageRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! PinUnpinMessageModel)
+    public func pinMessage(inputModel:  PinAndUnpinMessageRequestModel,
+                           uniqueId:    @escaping (String) -> (),
+                           completion:  @escaping callbackTypeAlias) {
+            
+        log.verbose("Try to request to pin message with this parameters: \n \(inputModel)", context: "Chat")
+        uniqueId(inputModel.uniqueId)
+        
+        pinMessageCallbackToUser = completion
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.PIN_MESSAGE.rawValue,
+                                            content:            "\(inputModel.convertContentToJSON())",
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          inputModel.messageId,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           inputModel.typeCode ?? generalTypeCode,
+                                            uniqueId:           inputModel.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: true)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          [(PinMessageCallbacks(), inputModel.uniqueId)],
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+    }
+    
+    
+    /// UnpinMessage:
+    /// pin message on a specific thread
+    ///
+    /// by calling this method, message of type "UNPIN_MESSAGE" is sends to the sserver
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "PinAndUnpinMessageRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as response:
+    ///
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (PinAndUnpinMessageRequestModel)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! PinUnpinMessageModel)
+    public func unpinMessage(inputModel:  PinAndUnpinMessageRequestModel,
+                             uniqueId:    @escaping (String) -> (),
+                             completion:  @escaping callbackTypeAlias) {
+            
+        log.verbose("Try to request to unpin message with this parameters: \n \(inputModel)", context: "Chat")
+        uniqueId(inputModel.uniqueId)
+        
+        unpinMessageCallbackToUser = completion
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.UNPIN_MESSAGE.rawValue,
+                                            content:            "\(inputModel.convertContentToJSON())",
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          inputModel.messageId,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           inputModel.typeCode ?? generalTypeCode,
+                                            uniqueId:           inputModel.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: true)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          [(UnpinMessageCallbacks(), inputModel.uniqueId)],
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+    }
+    
+    
+    
+    
+    // MARK: Resend/Remove Queue Methods
+    
+    public func resend(textMessages:    [QueueOfWaitTextMessagesModel],
+                       uniqueId:        @escaping (String)->(),
+                       sent:            @escaping (SendMessageModel)->(),
+                       deliver:         @escaping (SendMessageModel)->(),
+                       seen:            @escaping (SendMessageModel)->() ) {
+        
+        for txt in textMessages {
+            let input = SendTextMessageRequestModel(content:    txt.content!,
+                                                    metadata:   txt.metadata,
+                                                    repliedTo:  txt.repliedTo,
+                                                    systemMetadata: txt.systemMetadata,
+                                                    threadId:   txt.threadId!,
+                                                    typeCode: txt.typeCode,
+                                                    uniqueId: txt.uniqueId)
+            sendTextMessage(inputModel: input, uniqueId: { (sendTextMessageUniqueId) in
+                uniqueId(sendTextMessageUniqueId)
+            }, onSent: { (sentResponse) in
+                sent(sentResponse as! SendMessageModel)
+            }, onDelivere: { (deliverResponse) in
+                deliver(deliverResponse as! SendMessageModel)
+            }) { (seenResponse) in
+                seen(seenResponse as! SendMessageModel)
+            }
+        }
+        
+    }
+    
+    public func resend(editMessages:    [QueueOfWaitEditMessagesModel],
+                       uniqueId:        @escaping (String)->(),
+                       completion:      @escaping (EditMessageModel)->()) {
+        
+        for editMsg in editMessages {
+            let input = EditTextMessageRequestModel(content: editMsg.content!,
+                                                    metadata: editMsg.metadata,
+                                                    repliedTo: editMsg.repliedTo,
+                                                    messageId: editMsg.messageId!,
+                                                    typeCode: editMsg.typeCode,
+                                                    uniqueId: editMsg.uniqueId)
+            editMessage(inputModel: input, uniqueId: { (editTextMessageUniqueId) in
+                uniqueId(editTextMessageUniqueId)
+            }) { (editMessageResponse) in
+                completion(editMessageResponse as! EditMessageModel)
+            }
+        }
+        
+    }
+    
+    public func resend(forwardMessages: [QueueOfWaitForwardMessagesModel],
+                       uniqueIds:       @escaping ([String])->(),
+                       sent:            @escaping (SendMessageModel)->(),
+                       deliver:         @escaping (SendMessageModel)->(),
+                       seen:            @escaping (SendMessageModel)->() ) {
+        
+        for frwrdMsg in forwardMessages {
+            let input = ForwardMessageRequestModel(messageIds:  [frwrdMsg.messageId!],
+                                                    metadata:    frwrdMsg.metadata,
+                                                    repliedTo:   frwrdMsg.repliedTo,
+                                                    threadId:    frwrdMsg.threadId!,
+                                                    typeCode:    frwrdMsg.typeCode)
+            forwardMessage(inputModel: input, uniqueIds: { (forwardMessageUniqueIds) in
+                uniqueIds(forwardMessageUniqueIds)
+            }, onSent: { (sentResponse) in
+                sent(sentResponse as! SendMessageModel)
+            }, onDelivere: { (deliverResponse) in
+                deliver(deliverResponse as! SendMessageModel)
+            }) { (seenResponse) in
+                seen(seenResponse as! SendMessageModel)
+            }
+        }
+        
+    }
+    
+    public func resend(fileMessages:    QueueOfWaitFileMessagesModel,
+                       uploadUniqueId:  @escaping (String)->(),
+                       uploadProgress:  @escaping (Float)->(),
+                       messageUniqueId: @escaping (String)->(),
+                       sent:            @escaping (SendMessageModel)->(),
+                       deliver:         @escaping (SendMessageModel)->(),
+                       seen:            @escaping (SendMessageModel)->() ) {
+        
+        let message = SendTextMessageRequestModel(content: fileMessages.content ?? "",
+                                                  metadata: fileMessages.metadata,
+                                                  repliedTo: fileMessages.repliedTo,
+                                                  systemMetadata: nil,
+                                                  threadId: fileMessages.threadId!,
+                                                  typeCode: fileMessages.typeCode,
+                                                  uniqueId: fileMessages.uniqueId)
+        
+        var upload: UploadRequestModel? = nil
+        if let fileData = fileMessages.fileToSend {
+            upload = UploadRequestModel(dataToSend:         fileData,
+                                        fileExtension:      nil,
+                                        fileName:           fileMessages.fileName,
+                                        originalFileName:   fileMessages.fileName,
+                                        threadId:           fileMessages.threadId,
+                                        typeCode:           fileMessages.typeCode,
+                                        uniqueId:           nil)
+        } else if let imageData = fileMessages.imageToSend {
+            upload = UploadRequestModel(dataToSend:         imageData,
+                                        fileExtension:      nil,
+                                        fileName:           fileMessages.fileName,
+                                        originalFileName:   fileMessages.fileName,
+                                        threadId:           fileMessages.threadId!,
+                                        xC:                 fileMessages.xC,
+                                        yC:                 fileMessages.yC,
+                                        hC:                 fileMessages.hC,
+                                        wC:                 fileMessages.wC,
+                                        typeCode:           fileMessages.typeCode,
+                                        uniqueId:           nil)
+        }
+        if let theUpload = upload {
+            let input = SendFileMessageRequestModel(messageInput: message, uploadInput: theUpload)
+            sendFileMessage(inputModel: input, uploadUniqueId: { (thUploadUniqueId) in
+                uploadUniqueId(thUploadUniqueId)
+            }, uploadProgress: { (theUploadProgress) in
+                uploadProgress(theUploadProgress)
+            }, messageUniqueId: { (theMessageUniqueId) in
+                messageUniqueId(theMessageUniqueId)
+            }, onSent: { (sentResponse) in
+                sent(sentResponse as! SendMessageModel)
+            }, onDelivered: { (deliverResponse) in
+                deliver(deliverResponse as! SendMessageModel)
+            }) { (seenResponse) in
+                seen(seenResponse as! SendMessageModel)
+            }
+        }
+        
+    }
+    
+    public func resend(uploadImageObj:  QueueOfWaitUploadImagesModel,
+                       uniqueId:        @escaping (String)->(),
+                       uploadProgress:  @escaping (Float)->(),
+                       completion:      @escaping (UploadImageModel)->()) {
+        
+        let input = UploadImageRequestModel(dataToSend:     uploadImageObj.dataToSend!,
+                                            fileExtension:  uploadImageObj.fileExtension,
+                                            fileName:       uploadImageObj.fileName,
+                                            originalFileName: nil,
+                                            threadId:       uploadImageObj.threadId!,
+                                            xC:             uploadImageObj.xC,
+                                            yC:             uploadImageObj.yC,
+                                            hC:             uploadImageObj.hC,
+                                            wC:             uploadImageObj.wC,
+                                            typeCode:       uploadImageObj.typeCode,
+                                            uniqueId:       uploadImageObj.uniqueId)
+        uploadImage(inputModel: input, uniqueId: { (uploadUniqueId) in
+            uniqueId(uploadUniqueId)
+        }, progress: { (theUploadProgress) in
+            uploadProgress(theUploadProgress)
+        }) { (uploadResponse) in
+            completion(uploadResponse as! UploadImageModel)
+        }
+        
+    }
+    
+    public func resend(uploadFileObj:   [QueueOfWaitUploadFilesModel],
+                       uniqueId:        @escaping (String)->(),
+                       uploadProgress:  @escaping (Float)->(),
+                       completion:      @escaping (UploadFileModel)->()) {
+        
+        for upld in uploadFileObj {
+            let input = UploadFileRequestModel(dataToSend:      upld.dataToSend!,
+                                               fileExtension:   upld.fileExtension,
+                                               fileName:        upld.fileName,
+                                               originalFileName: nil,
+                                               threadId:        upld.threadId!,
+                                               typeCode:        upld.typeCode,
+                                               uniqueId:        upld.uniqueId)
+            uploadFile(inputModel: input, uniqueId: { (uploadUniqueId) in
+                uniqueId(uploadUniqueId)
+            }, progress: { (theUploadProgress) in
+                uploadProgress(theUploadProgress)
+            }) { (uploadResponse) in
+                completion(uploadResponse as! UploadFileModel)
+            }
+        }
         
     }
     
     
-    public func unpinMessage() {
-        
-    }
-    
-    
+//    public func removeMessageFromNotSentQueues(textMessages:       [QueueOfWaitTextMessagesModel],
+//                                               editMessages:       [QueueOfWaitEditMessagesModel],
+//                                               forwardMessages:    [QueueOfWaitForwardMessagesModel],
+//                                               fileMessages:       [QueueOfWaitFileMessagesModel],
+//                                               uploadImage:        [QueueOfWaitUploadImagesModel],
+//                                               uploadFile:         [QueueOfWaitUploadFilesModel]) {
+//
+//        for txt in textMessages {
+//            Chat.cacheDB.deleteWaitTextMessage(uniqueId: txt.uniqueId!)
+//        }
+//        for edt in editMessages {
+//            Chat.cacheDB.deleteWaitEditMessage(uniqueId: edt.uniqueId!)
+//        }
+//        for frd in forwardMessages {
+//            Chat.cacheDB.deleteWaitForwardMessage(uniqueId: frd.uniqueId!)
+//        }
+//        for flm in fileMessages {
+//            Chat.cacheDB.deleteWaitFileMessage(uniqueId: flm.uniqueId!)
+//        }
+//        for uimg in uploadImage {
+//            Chat.cacheDB.deleteWaitUploadImages(uniqueId: uimg.uniqueId!)
+//        }
+//        for ufl in uploadFile {
+//            Chat.cacheDB.deleteWaitUploadFiles(uniqueId: ufl.uniqueId!)
+//        }
+//    }
     
     
     

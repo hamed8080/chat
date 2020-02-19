@@ -56,17 +56,8 @@ extension Chat {
     public func getUserInfo(uniqueId:       @escaping ((String) -> ()),
                             completion:     @escaping callbackTypeAlias,
                             cacheResponse:  @escaping ((UserInfoModel) -> ())) {
+        
         log.verbose("Try to request to get user info", context: "Chat")
-        /*
-         *  -> set the "completion" to the "userInfoCallbackToUser" variable
-         *      (when the expected answer comes from server, userInfocallbackToUser will call, and the "complition of this func will execute")
-         *  -> create "SendChatMessageVO"
-         *  -> create "SendAsyncMessageVO" and put "SendChatMessageVO" inside its content
-         *  -> send the "SendAsyncMessageVO" to Async
-         *  -> configure that when answer comes from server, "UserInfoCallback()" is the responsable func to do the rest
-         *  -> if the cache is enabled by the user, go and retrieve UserInfo content and pass it to the user
-         *
-         */
         let theUniqueId = generateUUID()
         uniqueId(theUniqueId)
         
@@ -92,16 +83,10 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(UserInfoCallback(), theUniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
-//        { (getUserInfoUniqueId) in
-//            uniqueId(getUserInfoUniqueId)
-//        }
-        
-        
         
         // if cache is enabled by user, first return cache result to the user
         if enableCache {
@@ -112,7 +97,65 @@ extension Chat {
         
     }
     
+    /// SetProfile:
+    /// this function will set Bio and Metadata to the user, and it will save on the UserInfo model
+    ///
+    /// By calling this function, a request of type 52 (SET_PROFILE) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "SetProfileRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as responses
+    ///
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ProfileModel)
+    public func setProfile(inputModel setProfileInput:  SetProfileRequestModel,
+                           uniqueId:                    @escaping ((String) -> ()),
+                           completion:                  @escaping callbackTypeAlias) {
+        
+        log.verbose("Try to request to set Profile", context: "Chat")
+        
+        uniqueId(setProfileInput.uniqueId)
+        setProfileCallbackToUser = completion
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.SET_PROFILE.rawValue,
+                                            content:            setProfileInput.convertContentToJSON().toString(),
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          nil,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           setProfileInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           setProfileInput.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: nil)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          [(SetProfileCallback(), setProfileInput.uniqueId)],
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+        
+    }
     
+    
+    /// DeleteUserInfoFromCache:
+    /// this function will delete the UserInfo data from cahce database
+    ///
+    /// Inputs:
+    /// - this method does not any input to send
+    ///
+    /// Outputs:
+    /// - this method does not any output
     public func deleteUserInfoFromCache() {
         Chat.cacheDB.deleteUserInfo(isCompleted: nil)
     }
@@ -136,13 +179,29 @@ extension Chat {
         asyncClient?.asyncReconnectSocket()
     }
     
-    // this function will get a String and it will put it on 'token' variable, to use on your requests!
+    /// SetToken:
+    /// by using this method you can set token to use on your requests
+    ///
+    /// Inputs:
+    /// - this method gets 'newToken' as 'String' value
+    ///
+    /// Outputs:
+    /// - this method does not any output
     public func setToken(newToken: String) {
         token = newToken
     }
     
     // log out from async
+    /// LogOut:
+    /// by calling this metho, youe all cache data will delete and then you will logout from async
+    ///
+    /// Inputs:
+    /// - this method does not any input
+    ///
+    /// Outputs:
+    /// - this method does not any output
     public func logOut() {
+        deleteCache()
         asyncClient?.asyncLogOut()
     }
     

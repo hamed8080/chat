@@ -41,25 +41,10 @@ extension Chat {
                             uniqueId:           @escaping ((String) -> ()),
                             completion:         @escaping callbackTypeAlias,
                             cacheResponse:      @escaping (GetContactsModel) -> ()) {
-        /*
-         *  -> set the "completion" to the "getContactsCallbackToUser" variable
-         *      (when the expected answer comes from server, getContactsCallbackToUser will call, and the "complition" of this func will execute)
-         *  -> get getContactsInput and create the content JSON of it:
-         *      + content:
-         *          - size:     Int
-         *          - offset:   Int
-         *          - name:     String?
-         *  -> convert the JSON content to String
-         *  -> create "SendChatMessageVO" and put the String content inside its content
-         *  -> create "SendAsyncMessageVO" and put "SendChatMessageVO" inside its content
-         *  -> send the "SendAsyncMessageVO" to Async
-         *  -> configure that when answer comes from server, "GetContactsCallback()" is the responsable func to do the rest
-         *  -> send a request to Cache and return the Cahce response on the "cacheResponse" callback
-         *
-         */
         
         log.verbose("Try to request to get Contacts with this parameters: \n \(getContactsInput)", context: "Chat")
         uniqueId(getContactsInput.uniqueId)
+        
         getContactsCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_CONTACTS.rawValue,
@@ -82,13 +67,10 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(GetContactsCallback(parameters: chatMessage), getContactsInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
-                                seenCallback:       nil) //{ (getContactUniqueId) in
-//            uniqueId(getContactUniqueId)
-//        }
+                                seenCallback:       nil)
         
         // if cache is enabled by user, it will return cache result to the user
         if enableCache {
@@ -130,13 +112,7 @@ extension Chat {
                                uniqueId:            @escaping ((String) -> ()),
                                completion:          @escaping callbackTypeAlias,
                                cacheResponse:       @escaping (GetContactsModel) -> ()) {
-        /**
-         *  -> if Cache was enabled, get the data from Cache and send it to client as "cacheResponse" callback
-         *  -> send the HTTP request to server to get the response from it
-         *      -> send the server respons to Cache and update it's values
-         *      -> send the server answer to client by using "completion" callback
-         *
-         */
+        
         log.verbose("Try to request to search contact with this parameters: \n \(searchContactsInput)", context: "Chat")
         uniqueId(searchContactsInput.uniqueId)
         
@@ -159,7 +135,7 @@ extension Chat {
         sendSearchContactRequest(withInputModel: searchContactsInput)
         { (contactModel) in
             self.addContactOnCache(withInputModel: contactModel as! ContactModel)
-            let contactEventModel = ContactEventModel(type: ContactEventTypes.CONTACTS_SEARCH_RESULT_CHANGE, contacts: (contactModel as! ContactModel).contacts)
+            let contactEventModel = ContactEventModel(type: ContactEventTypes.CONTACTS_SEARCH_RESULT_CHANGE, contacts: (contactModel as! ContactModel).contacts, contactsLastSeenDuration: nil)
             self.delegate?.contactEvents(model: contactEventModel)
             completion(contactModel)
         }
@@ -168,23 +144,6 @@ extension Chat {
     
     private func sendSearchContactRequest(withInputModel searchContactsInput:  SearchContactsRequestModel,
                                           completion:           @escaping callbackTypeAlias) {
-        /**
-         *  -> create parameters to send HTTP request:
-         *
-         *  + method:   POST
-         *  + headers:
-         *      - _token_:          String
-         *      - _token_issuer_:   "1"
-         *  + params:  (get searchContactsInput and create the parameters from it)
-         *      - size:                        Int
-         *      - offset:                      Int
-         *      - firstName:               String?
-         *      - lastName:               String?
-         *      - cellphoneNumber:  String?
-         *      - email:                      String?
-         *      - uniqueId:                 String?
-         *
-         */
         
         let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.SEARCH_CONTACTS.rawValue)"
         let method: HTTPMethod = HTTPMethod.post
@@ -243,12 +202,7 @@ extension Chat {
     public func addContact(inputModel addContactsInput:    AddContactRequestModel,
                            uniqueId:            @escaping (String) -> (),
                            completion:          @escaping callbackTypeAlias) {
-        /**
-         *  -> send the HTTP request to server to get the response from it
-         *      -> send the server respons to Cache and update it's values
-         *      -> send the server answer to client by using "completion" callback
-         *
-         */
+        
         log.verbose("Try to request to add contact with this parameters: \n \(addContactsInput)", context: "Chat")
         uniqueId(addContactsInput.uniqueId)
         
@@ -280,12 +234,7 @@ extension Chat {
     public func addContacts(inputModel addContactsInput:    AddContactsRequestModel,
                             uniqueIds:           @escaping ([String]) -> (),
                             completion:          @escaping callbackTypeAlias) {
-        /**
-         *  -> send the HTTP request to server to get the response from it
-         *      -> send the server respons to Cache and update it's values
-         *      -> send the server answer to client by using "completion" callback
-         *
-         */
+        
         log.verbose("Try to request to add contact with this parameters: \n \(addContactsInput)", context: "Chat")
         uniqueIds(addContactsInput.uniqueIds)
         
@@ -300,22 +249,6 @@ extension Chat {
     private func sendAddContactRequest(withInputModel addContactsInput:    AddContactRequestModel,
                                        messageUniqueId:     String,
                                        completion:          @escaping callbackTypeAlias) {
-        /**
-         *
-         *  -> create parameters to send HTTP request:
-         *
-         *  + method:   POST
-         *  + headers:
-         *      - _token_:          String
-         *      - _token_issuer_:   "1"
-         *  + params:  (get searchContactsInput and create the parameters from it)
-         *      - firstName:        String?
-         *      - lastName:         String?
-         *      - cellphoneNumber:  String?
-         *      - email:            String?
-         *      - uniqueId:         String?
-         *
-         */
         
         let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.ADD_CONTACTS.rawValue)"
         let method: HTTPMethod      = HTTPMethod.post
@@ -324,8 +257,13 @@ extension Chat {
         var params: Parameters      = [:]
         params["firstName"]         = JSON(addContactsInput.firstName ?? "")
         params["lastName"]          = JSON(addContactsInput.lastName ?? "")
-        params["cellphoneNumber"]   = JSON(addContactsInput.cellphoneNumber ?? "")
         params["email"]             = JSON(addContactsInput.email ?? "")
+        if let username = addContactsInput.username {
+            params["username"] = JSON(username)
+        }
+        if let cellphoneNumber = addContactsInput.cellphoneNumber {
+            params["cellphoneNumber"] = JSON(cellphoneNumber)
+        }
         params["typeCode"]          = JSON(addContactsInput.typeCode ?? generalTypeCode)
         params["uniqueId"]          = JSON(messageUniqueId)
         
@@ -341,22 +279,6 @@ extension Chat {
     
     private func sendAddContactsRequest(withInputModel addContactsInput:    AddContactsRequestModel,
                                         completion:          @escaping callbackTypeAlias) {
-        /**
-         *
-         *  -> create parameters to send HTTP request:
-         *
-         *  + method:   POST
-         *  + headers:
-         *      - _token_:          String
-         *      - _token_issuer_:   "1"
-         *  + params:  (get searchContactsInput and create the parameters from it)
-         *      - firstName:        [String]
-         *      - lastName:         [String]
-         *      - cellphoneNumber:  [String]
-         *      - email:            [String]
-         *      - uniqueId:         String?
-         *
-         */
         
         var url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.ADD_CONTACTS.rawValue)"
         let method: HTTPMethod      = HTTPMethod.post
@@ -370,6 +292,7 @@ extension Chat {
             url += "&cellphoneNumber=\(addContactsInput.cellphoneNumbers[index])"
             url += "&email=\(addContactsInput.emails[index])"
             url += "&uniqueId=\(addContactsInput.uniqueIds[index])"
+            url += "&username=\(addContactsInput.usernames[index])"
             if (index != contactCount - 1) {
                 url += "&"
             }
@@ -411,26 +334,7 @@ extension Chat {
     public func updateContact(inputModel updateContactsInput:  UpdateContactsRequestModel,
                               uniqueId:             @escaping (String) -> (),
                               completion:           @escaping callbackTypeAlias) {
-        /**
-         *  -> create parameters to send HTTP request:
-         *
-         *  + method:   POST
-         *  + headers:
-         *      - _token_:          String
-         *      - _token_issuer_:   "1"
-         *  + params:  (get searchContactsInput and create the parameters from it)
-         *      - id:               Int
-         *      - firstName:        String
-         *      - lastName:         String
-         *      - cellphoneNumber:  String
-         *      - email:            String
-         *      - uniqueId:         String?
-         *
-         *  -> send the HTTP request to server to get the response from it
-         *      -> send the server respons to Cache and update it's values
-         *      -> send the server answer to client by using "completion" callback
-         *
-         */
+        
         log.verbose("Try to request to update contact with this parameters: \n \(updateContactsInput)", context: "Chat")
         uniqueId(updateContactsInput.uniqueId)
         
@@ -456,6 +360,7 @@ extension Chat {
         params["lastName"]          = JSON(updateContactsInput.lastName)
         params["cellphoneNumber"]   = JSON(updateContactsInput.cellphoneNumber)
         params["email"]             = JSON(updateContactsInput.email)
+        params["username"]          = JSON(updateContactsInput.username)
         params["typeCode"]          = JSON(updateContactsInput.typeCode ?? generalTypeCode)
         params["uniqueId"]          = JSON(andUniqueId)
         
@@ -488,12 +393,7 @@ extension Chat {
     public func removeContact(inputModel removeContactsInput:  RemoveContactsRequestModel,
                               uniqueId:             @escaping (String) -> (),
                               completion:           @escaping callbackTypeAlias) {
-        /**
-         *  -> send the HTTP request to server to get the response from it
-         *      -> send the server respons to Cache and update it's values
-         *      -> send the server answer to client by using "completion" callback
-         *
-         */
+        
         log.verbose("Try to request to remove contact with this parameters: \n \(removeContactsInput)", context: "Chat")
         uniqueId(removeContactsInput.uniqueId)
         
@@ -508,18 +408,7 @@ extension Chat {
     
     private func sendRemoveContactRequest(withInputModel removeContactsInput:  RemoveContactsRequestModel,
                                           completion:           @escaping callbackTypeAlias) {
-        /**
-         *  -> create parameters to send HTTP request:
-         *
-         *  + method:   POST
-         *  + headers:
-         *      - _token_:          String
-         *      - _token_issuer_:   "1"
-         *  + params:  (get removeContactInput and create the parameters from it)
-         *      - contactId:        Int
-         *      - uniqueId:         String?
-         *
-         **/
+        
         let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.REMOVE_CONTACTS.rawValue)"
         let method: HTTPMethod = HTTPMethod.post
         let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
@@ -567,21 +456,7 @@ extension Chat {
     public func blockContact(inputModel blockContactsInput:    BlockContactsRequestModel,
                              uniqueId:              @escaping (String) -> (),
                              completion:            @escaping callbackTypeAlias) {
-        /*
-         *  -> set the "completion" to the "blockCallbackToUser" variable
-         *      (when the expected answer comes from server, blockCallbackToUser will call, and the "complition" of this func will execute)
-         *  -> get blockContactsInput and create the content JSON of it:
-         *      + content:
-         *          - contactId:    Int?
-         *          - threadId:     Int?
-         *          - userId:       Int?
-         *  -> convert the JSON content to String
-         *  -> create "SendChatMessageVO" and put the String content inside its content
-         *  -> create "SendAsyncMessageVO" and put "SendChatMessageVO" inside its content
-         *  -> send the "SendAsyncMessageVO" to Async
-         *  -> configure that when answer comes from server, "BlockContactCallbacks()" is the responsable func to do the rest
-         *
-         */
+        
         log.verbose("Try to request to block user with this parameters: \n \(blockContactsInput)", context: "Chat")
         uniqueId(blockContactsInput.uniqueId)
         blockCallbackToUser = completion
@@ -606,14 +481,10 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(BlockContactCallbacks(), blockContactsInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
-                                seenCallback:       nil) //{ (blockUniqueId) in
-//            uniqueId(blockUniqueId)
-//        }
-        
+                                seenCallback:       nil)
     }
     
     
@@ -635,20 +506,7 @@ extension Chat {
     public func getBlockedContacts(inputModel getBlockedContactsInput: GetBlockedContactListRequestModel,
                                    uniqueId:                @escaping (String) -> (),
                                    completion:              @escaping callbackTypeAlias) {
-        /*
-         *  -> set the "completion" to the "getBlockedCallbackToUser" variable
-         *      (when the expected answer comes from server, getBlockedCallbackToUser will call, and the "complition" of this func will execute)
-         *  -> get getBlockedContactsInput and create the content JSON of it:
-         *      + content:
-         *          - count:    Int?
-         *          - offset:   Int?
-         *  -> convert the JSON content to String
-         *  -> create "SendChatMessageVO" and put the String content inside its content
-         *  -> create "SendAsyncMessageVO" and put "SendChatMessageVO" inside its content
-         *  -> send the "SendAsyncMessageVO" to Async
-         *  -> configure that when answer comes from server, "GetBlockedContactsCallbacks()" is the responsable func to do the rest
-         *
-         */
+        
         log.verbose("Try to request to get block users with this parameters: \n \(getBlockedContactsInput)", context: "Chat")
         uniqueId(getBlockedContactsInput.uniqueId)
         getBlockedCallbackToUser = completion
@@ -673,14 +531,10 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(GetBlockedContactsCallbacks(parameters: chatMessage), getBlockedContactsInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
-                                seenCallback:       nil) //{ (getBlockedUniqueId) in
-//            uniqueId(getBlockedUniqueId)
-//        }
-        
+                                seenCallback:       nil)
     }
     
     
@@ -702,23 +556,10 @@ extension Chat {
     public func unblockContact(inputModel unblockContactsInput:    UnblockContactsRequestModel,
                                uniqueId:                @escaping (String) -> (),
                                completion:              @escaping callbackTypeAlias) {
-        /*
-         *  -> set the "completion" to the "unblockCallbackToUser" variable
-         *      (when the expected answer comes from server, unblockCallbackToUser will call, and the "complition" of this func will execute)
-         *  -> get unblockContact and create the content JSON of it:
-         *      + content:
-         *          - contactId:    Int?
-         *          - threadId:     Int?
-         *          - userId:       Int?
-         *  -> convert the JSON content to String
-         *  -> create "SendChatMessageVO" and put the String content inside its content
-         *  -> create "SendAsyncMessageVO" and put "SendChatMessageVO" inside its content
-         *  -> send the "SendAsyncMessageVO" to Async
-         *  -> configure that when answer comes from server, "UnblockContactCallbacks()" is the responsable func to do the rest
-         *
-         */
+        
         log.verbose("Try to request to unblock user with this parameters: \n \(unblockContactsInput)", context: "Chat")
         uniqueId(unblockContactsInput.uniqueId)
+        
         unblockCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.UNBLOCK.rawValue,
@@ -741,114 +582,14 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-//                                callback:           nil,
                                 callbacks:          [(UnblockContactCallbacks(), unblockContactsInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
-                                seenCallback:       nil) //{ (blockUniqueId) in
-//            uniqueId(blockUniqueId)
-//        }
-        
+                                seenCallback:       nil)
     }
     
     
     // MARK: Sync Contact
-    
-    
-//    public func syncContact2(uniqueId:      @escaping (String) -> (),
-//                             completion:    @escaping callbackTypeAlias,
-//                             cacheResponse: @escaping ([ContactModel]) -> ()) {
-//        log.verbose("Try to request to sync contact", context: "Chat")
-//
-//        let myUniqueId = generateUUID()
-//        uniqueId(myUniqueId)
-//
-//// use this to send addcontact reqeusst as an Array
-////        var firstNameArray = [String]()
-////        var lastNameArray = [String]()
-////        var cellphoneNumberArray = [String]()
-////        var emailArray = [String]()
-//
-//        var phoneContacts = [AddContactRequestModel]()
-//
-//        let store = CNContactStore()
-//        store.requestAccess(for: .contacts) { (granted, error) in
-//            if let _ = error {
-//                return
-//            }
-//            if granted {
-//                let keys = [CNContactGivenNameKey,
-//                            CNContactFamilyNameKey,
-//                            CNContactPhoneNumbersKey,
-//                            CNContactEmailAddressesKey]
-//                let request = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
-//                do {
-//                    try store.enumerateContacts(with: request, usingBlock: { (contact, stopPointer) in
-//                        let firstName = contact.givenName
-//                        let lastName = contact.familyName
-//                        let phoneNumber = contact.phoneNumbers.first?.value.stringValue
-//                        let emailAddress = contact.emailAddresses.first?.value
-//
-//                        let contact = AddContactRequestModel(cellphoneNumber:  phoneNumber,
-//                                                              email:            emailAddress as String?,
-//                                                              firstName:        firstName,
-//                                                              lastName:         lastName,
-//                                                              typeCode:         nil,
-//                                                              uniqueId:         nil)
-//                        phoneContacts.append(contact)
-//                    })
-//                } catch {
-//
-//                }
-//            }
-//
-//        }
-//
-//
-//        var contactArrayToSendUpdate = [AddContactRequestModel]()
-//        func appendContactToArrayToUpdate(withContact contact: AddContactRequestModel) {
-//            contactArrayToSendUpdate.append(contact)
-//            if enableCache {
-//                Chat.cacheDB.savePhoneBookContact(contact: contact)
-//            }
-//        }
-//
-//        if let cachePhoneContacts = Chat.cacheDB.retrievePhoneContacts() {
-//            for contact in phoneContacts {
-//                var findContactOnPhoneBookCache = false
-//                for cacheContact in cachePhoneContacts {
-//                    // if there is some number that is already exist on the both phone contact and phoneBookCache, check if there is any update, update the contact
-//                    if contact.cellphoneNumber == cacheContact.cellphoneNumber {
-//                        findContactOnPhoneBookCache = true
-//                        if (cacheContact.email != contact.email) || (cacheContact.firstName != contact.firstName) || cacheContact.lastName != contact.lastName {
-//                            appendContactToArrayToUpdate(withContact: contact)
-//                        }
-//                    }
-//                }
-//
-//                if (!findContactOnPhoneBookCache) {
-//                    appendContactToArrayToUpdate(withContact: contact)
-//                }
-//
-//            }
-//        } else {
-//            // if there is no data on phoneBookCache, add all contacts from phone and save them on cache
-//            for contact in phoneContacts {
-//                appendContactToArrayToUpdate(withContact: contact)
-//            }
-//        }
-//
-//
-//        for item in contactArrayToSendUpdate {
-//            addContact(inputModel: item, uniqueId: { _ in
-//            }) { (myResponse) in
-//                completion(myResponse)
-//            }
-//        }
-//
-//    }
-    
-    
     
     /// SyncContact:
     /// sync contacts from the client contact with Chat contact.
@@ -864,10 +605,8 @@ extension Chat {
     ///
     /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! [ContactModel])
-    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. ([ContactModel])
     public func syncContacts(uniqueIds:     @escaping ([String]) -> (),
-                             completion:    @escaping callbackTypeAlias,
-                             cacheResponse: @escaping ([ContactModel]) -> ()) {
+                             completion:    @escaping callbackTypeAlias) {
         log.verbose("Try to request to sync contact", context: "Chat")
         
         var firstNameArray = [String]()
@@ -943,6 +682,7 @@ extension Chat {
                                                        emails:          emails,
                                                        firstNames:      firstNames,
                                                        lastNames:       lastNames,
+                                                       usernames:       [],
                                                        typeCode:        nil,
                                                        uniqueIds:       contactUniqueIds)
         

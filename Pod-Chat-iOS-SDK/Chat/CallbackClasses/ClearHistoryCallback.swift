@@ -15,11 +15,6 @@ import FanapPodAsyncSDK
 extension Chat {
     
     func responseOfClearHistory(withMessage message: ChatMessage) {
-        /*
-         *
-         *
-         *
-         */
         log.verbose("Message of type 'CLEAR_HISTORY' recieved", context: "Chat")
         
         let returnData = CreateReturnData(hasError:       false,
@@ -30,10 +25,9 @@ extension Chat {
                                           resultAsString: message.content,
                                           contentCount:   nil,
                                           subjectId:      message.subjectId)
-        //                .returnJSON()
         
         if enableCache {
-            
+            Chat.cacheDB.deleteMessage(inThread: message.subjectId!, allMessages: true, withMessageIds: nil)
         }
         
         if Chat.map[message.uniqueId] != nil {
@@ -70,11 +64,6 @@ extension Chat {
                               response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
-            /*
-             *
-             *
-             *
-             */
             log.verbose("ClearHistoryCallback", context: "Chat")
             
             if let content = response.resultAsString {

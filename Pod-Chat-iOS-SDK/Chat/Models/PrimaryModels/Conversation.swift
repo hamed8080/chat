@@ -12,36 +12,6 @@ import SwiftyJSON
 
 open class Conversation {
     
-    /*
-     * + Conversation       Conversation:
-     *    - admin:                          Bool?
-     *    - canEditInfo:                    Bool?
-     *    - canSpam:                        Bool?
-     *    - description:                    String?
-     *    - group:                          Bool?
-     *    - id:                             Int?
-     *    - image:                          String?
-     *    - joinDate:                       Int?
-     *    - lastMessage:                    String?
-     *    - lastParticipantImage:           String?
-     *    - lastParticipantName:            String?
-     *    - lastSeenMessageId:              Int?
-     *    - metadata:                       String?
-     *    - mute:                           Bool?
-     *    - participantCount:               Int?
-     *    - partner:                        Int?
-     *    - partnerLastDeliveredMessageId:  Int?
-     *    - partnerLastSeenMessageId:       Int?
-     *    - title:                          String?
-     *    - time:                           Int?
-     *    - type:                           Int?
-     *    - unreadCount:                    Int?
-     
-     *    - inviter:                        Participant?
-     *    - lastMessageVO:                  Message?
-     *    - participants:                   [Participant]?
-     */
-    
     public var admin:                           Bool?
     public var canEditInfo:                     Bool?
     public var canSpam:                         Bool?
@@ -73,9 +43,10 @@ open class Conversation {
     public var type:                            Int?
     public var unreadCount:                     Int?
     
-    public var inviter:                        Participant?
-    public var lastMessageVO:                  Message?
-    public var participants:                   [Participant]?
+    public var inviter:                         Participant?
+    public var lastMessageVO:                   Message?
+    public var participants:                    [Participant]?
+    public var pinMessage:                      PinUnpinMessage?
     
     public init(messageContent: JSON) {
         self.admin                          = messageContent["admin"].bool
@@ -126,6 +97,10 @@ open class Conversation {
             self.lastMessageVO = Message(threadId: id, pushMessageVO: messageContent["lastMessageVO"])
         }
         
+        if (messageContent["pinMessageVO"] != JSON.null) {
+            self.pinMessage = PinUnpinMessage(pinUnpinContent: messageContent["pinMessageVO"])
+        }
+        
     }
     
     public init(admin:          Bool?,
@@ -160,7 +135,8 @@ open class Conversation {
                 unreadCount:    Int?,
                 inviter:        Participant?,
                 lastMessageVO:  Message?,
-                participants:   [Participant]?) {
+                participants:   [Participant]?,
+                pinMessage:     PinUnpinMessage?) {
         
         self.admin          = admin
         self.canEditInfo    = canEditInfo
@@ -196,6 +172,7 @@ open class Conversation {
         self.inviter        = inviter
         self.lastMessageVO  = lastMessageVO
         self.participants   = participants
+        self.pinMessage     = pinMessage
     }
     
     public init(theConversation: Conversation) {
@@ -234,6 +211,7 @@ open class Conversation {
         self.inviter        = theConversation.inviter
         self.lastMessageVO  = theConversation.lastMessageVO
         self.participants   = theConversation.participants
+        self.pinMessage     = theConversation.pinMessage
     }
     
     
@@ -283,7 +261,8 @@ open class Conversation {
                             "unreadCount":                  unreadCount ?? NSNull(),
                             "inviter":                      inviter?.formatToJSON() ?? NSNull(),
                             "lastMessageVO":                lastMessageVO?.formatToJSON() ?? NSNull(),
-                            "participants":                 participantsJSON]
+                            "participants":                 participantsJSON,
+                            "pinMessage":                   pinMessage?.formatToJSON() ?? NSNull()]
 //        if let lastMsgJSON = lastMessageVO {
 //            result["lastMessageVO"] = lastMsgJSON.formatToJSON()
 //        }
