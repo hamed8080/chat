@@ -257,9 +257,13 @@ extension Chat {
         var params: Parameters      = [:]
         params["firstName"]         = JSON(addContactsInput.firstName ?? "")
         params["lastName"]          = JSON(addContactsInput.lastName ?? "")
-        params["cellphoneNumber"]   = JSON(addContactsInput.cellphoneNumber ?? "")
         params["email"]             = JSON(addContactsInput.email ?? "")
-        params["username"]          = JSON(addContactsInput.username ?? "")
+        if let username = addContactsInput.username {
+            params["username"] = JSON(username)
+        }
+        if let cellphoneNumber = addContactsInput.cellphoneNumber {
+            params["cellphoneNumber"] = JSON(cellphoneNumber)
+        }
         params["typeCode"]          = JSON(addContactsInput.typeCode ?? generalTypeCode)
         params["uniqueId"]          = JSON(messageUniqueId)
         

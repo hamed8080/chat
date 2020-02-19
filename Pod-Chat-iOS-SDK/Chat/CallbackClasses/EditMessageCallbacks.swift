@@ -31,6 +31,7 @@ extension Chat {
         let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_EDIT,
                                                   message:  myMessage,
                                                   threadId: nil,
+                                                  messageId: nil,
                                                   senderId: nil)
         delegate?.messageEvents(model: messageEventModel)
         

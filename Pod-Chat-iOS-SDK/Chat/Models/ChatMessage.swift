@@ -47,8 +47,8 @@ class ChatMessage {
         self.time           = withContent["time"].intValue
         self.type           = withContent["type"].intValue
         self.uniqueId       = withContent["uniqueId"].stringValue
-        self.messageId      = withContent["messageId"].int
-        self.participantId  = withContent["participantId"].int
+        self.messageId      = withContent["messageId"].int ?? withContent["content"].string?.convertToJSON()["messageId"].int
+        self.participantId  = withContent["participantId"].int ?? withContent["content"].string?.convertToJSON()["participantId"].int
     }
     
     func returnToJSON() -> JSON {

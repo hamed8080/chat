@@ -111,7 +111,7 @@ extension Chat {
     ///
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ProfileModel)
-    public func serProfile(inputModel setProfileInput:  SetProfileRequestModel,
+    public func setProfile(inputModel setProfileInput:  SetProfileRequestModel,
                            uniqueId:                    @escaping ((String) -> ()),
                            completion:                  @escaping callbackTypeAlias) {
         

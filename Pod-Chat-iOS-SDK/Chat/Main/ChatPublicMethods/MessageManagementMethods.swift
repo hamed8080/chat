@@ -1524,32 +1524,32 @@ extension Chat {
     }
     
     
-    public func removeMessageFromNotSentQueues(textMessages:       [QueueOfWaitTextMessagesModel],
-                                               editMessages:       [QueueOfWaitEditMessagesModel],
-                                               forwardMessages:    [QueueOfWaitForwardMessagesModel],
-                                               fileMessages:       [QueueOfWaitFileMessagesModel],
-                                               uploadImage:        [QueueOfWaitUploadImagesModel],
-                                               uploadFile:         [QueueOfWaitUploadFilesModel]) {
-        
-        for txt in textMessages {
-            Chat.cacheDB.deleteWaitTextMessage(uniqueId: txt.uniqueId!)
-        }
-        for edt in editMessages {
-            Chat.cacheDB.deleteWaitEditMessage(uniqueId: edt.uniqueId!)
-        }
-        for frd in forwardMessages {
-            Chat.cacheDB.deleteWaitForwardMessage(uniqueId: frd.uniqueId!)
-        }
-        for flm in fileMessages {
-            Chat.cacheDB.deleteWaitFileMessage(uniqueId: flm.uniqueId!)
-        }
-        for uimg in uploadImage {
-            Chat.cacheDB.deleteWaitUploadImages(uniqueId: uimg.uniqueId!)
-        }
-        for ufl in uploadFile {
-            Chat.cacheDB.deleteWaitUploadFiles(uniqueId: ufl.uniqueId!)
-        }
-    }
+//    public func removeMessageFromNotSentQueues(textMessages:       [QueueOfWaitTextMessagesModel],
+//                                               editMessages:       [QueueOfWaitEditMessagesModel],
+//                                               forwardMessages:    [QueueOfWaitForwardMessagesModel],
+//                                               fileMessages:       [QueueOfWaitFileMessagesModel],
+//                                               uploadImage:        [QueueOfWaitUploadImagesModel],
+//                                               uploadFile:         [QueueOfWaitUploadFilesModel]) {
+//
+//        for txt in textMessages {
+//            Chat.cacheDB.deleteWaitTextMessage(uniqueId: txt.uniqueId!)
+//        }
+//        for edt in editMessages {
+//            Chat.cacheDB.deleteWaitEditMessage(uniqueId: edt.uniqueId!)
+//        }
+//        for frd in forwardMessages {
+//            Chat.cacheDB.deleteWaitForwardMessage(uniqueId: frd.uniqueId!)
+//        }
+//        for flm in fileMessages {
+//            Chat.cacheDB.deleteWaitFileMessage(uniqueId: flm.uniqueId!)
+//        }
+//        for uimg in uploadImage {
+//            Chat.cacheDB.deleteWaitUploadImages(uniqueId: uimg.uniqueId!)
+//        }
+//        for ufl in uploadFile {
+//            Chat.cacheDB.deleteWaitUploadFiles(uniqueId: ufl.uniqueId!)
+//        }
+//    }
     
     
     

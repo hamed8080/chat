@@ -883,6 +883,7 @@ extension Chat {
         let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_NEW,
                                                   message:  message,
                                                   threadId: nil,
+                                                  messageId: nil,
                                                   senderId: nil)
         delegate?.messageEvents(model: messageEventModel)
         let tLastActivityEM = ThreadEventModel(type:            ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME,

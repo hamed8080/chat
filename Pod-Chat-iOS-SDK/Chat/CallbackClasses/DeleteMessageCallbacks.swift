@@ -51,11 +51,14 @@ extension Chat {
             let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_DELETE,
                                                       message:  myMessage,
                                                       threadId: message.subjectId,
+                                                      messageId: message.messageId,
                                                       senderId: nil)
             delegate?.messageEvents(model: messageEventModel)
         }
         
         if enableCache {
+            // ToDo: check in the cache, if this message was pinMessage on the Conversation Model
+            // ToDo: check in the cache, if this message was lasMessage on the Conversation Model
             Chat.cacheDB.deleteMessage(inThread: message.subjectId!, allMessages: false, withMessageIds: [Int(message.content ?? "") ?? 0])
         }
         

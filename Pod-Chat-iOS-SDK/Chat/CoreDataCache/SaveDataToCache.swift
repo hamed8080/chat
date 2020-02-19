@@ -470,7 +470,7 @@ extension Cache {
          *              we have to delete all messages that we have on the cache (afterward we will save server answers into it)
          *              -> delete all messages with this query input
          *
-         *          10-
+         *          10-s
          *              input:
          *                  fromTime    = UInt
          *                  toTime      = UInt

@@ -120,6 +120,7 @@ extension Chat {
                             let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_NEW,
                                                                       message:  message,
                                                                       threadId: message.threadId,
+                                                                      messageId: nil,
                                                                       senderId: nil)
                             Chat.sharedInstance.delegate?.messageEvents(model: messageEventModel)
                         }
@@ -129,6 +130,7 @@ extension Chat {
                             let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_EDIT,
                                                                       message:  message,
                                                                       threadId: message.threadId,
+                                                                      messageId: nil,
                                                                       senderId: nil)
                             Chat.sharedInstance.delegate?.messageEvents(model: messageEventModel)
                         }
@@ -149,6 +151,7 @@ extension Chat {
                             let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_DELETE,
                                                                       message:  cacheMessage,
                                                                       threadId: cacheMessage.threadId,
+                                                                      messageId: nil,
                                                                       senderId: nil)
                             Chat.sharedInstance.delegate?.messageEvents(model: messageEventModel)
                         }
