@@ -109,7 +109,7 @@ public class Chat {
         }
         
         if checkIfDeviceHasFreeSpace(needSpaceInMB: self.deviecLimitationSpaceMB, turnOffTheCache: true) {
-            self.enableCache = false
+//            self.enableCache = false
         }
         
     }

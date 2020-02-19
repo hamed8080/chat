@@ -42,6 +42,7 @@ extension Chat {
                                     seen:           nil,
                                     systemMetadata: nil,
                                     time:           nil,
+                                    timeNanos:      nil,
                                     uniqueId:       nil,
                                     conversation:   nil,
                                     forwardInfo:    nil,

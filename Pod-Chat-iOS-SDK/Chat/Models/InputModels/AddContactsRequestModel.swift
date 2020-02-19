@@ -23,11 +23,26 @@ open class AddContactRequestModel {
                 email:              String?,
                 firstName:          String?,
                 lastName:           String?,
-                username:           String?,
                 typeCode:           String?,
                 uniqueId:           String?) {
         
         self.cellphoneNumber    = cellphoneNumber
+        self.email              = email
+        self.firstName          = firstName
+        self.lastName           = lastName
+        self.username           = nil
+        self.typeCode           = typeCode
+        self.uniqueId           = uniqueId ?? UUID().uuidString
+    }
+    
+    public init(email:              String?,
+                firstName:          String?,
+                lastName:           String?,
+                username:           String?,
+                typeCode:           String?,
+                uniqueId:           String?) {
+        
+        self.cellphoneNumber    = nil
         self.email              = email
         self.firstName          = firstName
         self.lastName           = lastName
