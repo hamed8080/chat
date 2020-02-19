@@ -1105,7 +1105,7 @@ extension Chat {
         uniqueId(inputModel.uniqueId)
         getCurrentUserRolesCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.Get_Current_User_Roles.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_CURRENT_USER_ROLES.rawValue,
                                             content:            nil,
                                             metadata:           nil,
                                             repliedTo:          nil,

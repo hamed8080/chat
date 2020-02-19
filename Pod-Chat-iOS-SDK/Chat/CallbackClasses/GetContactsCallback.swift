@@ -86,7 +86,7 @@ extension Chat {
                     }
                     
 //                    handleServerAndCacheDifferential(sendParams: sendParams, serverResponse: contacts)
-                    let contactEventModel = ContactEventModel(type: ContactEventTypes.CONTACTS_LIST_CHANGE, contacts: contacts)
+                    let contactEventModel = ContactEventModel(type: ContactEventTypes.CONTACTS_LIST_CHANGE, contacts: contacts, contactsLastSeenDuration: nil)
                     Chat.sharedInstance.delegate?.contactEvents(model: contactEventModel)
                     Chat.cacheDB.saveContact(withContactObjects: contacts)
                 }

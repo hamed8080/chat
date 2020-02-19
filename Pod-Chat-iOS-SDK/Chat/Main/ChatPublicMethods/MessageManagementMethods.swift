@@ -119,6 +119,22 @@ extension Chat {
       
     }
     
+    /// GetMentionList:
+    /// get Mention list
+    ///
+    /// By calling this function, a request of type 15 (GET_HISTORY) will send throut Chat-SDK, (but it has some differencess from normal getHistory request, that its only return messages that i am mentioned on it)
+    /// then the responses will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "GetMentionRequestModel" to this function
+    ///
+    /// Outputs:
+    /// - It has 3 callbacks as responses
+    ///
+    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (GetMentionRequestModel)
+    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! GetHistoryModel)
+    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetHistoryModel)
     public func getMentionList(inputModel getMentionInput: GetMentionRequestModel,
                                uniqueId:                @escaping ((String) -> ()),
                                completion:              @escaping callbackTypeAlias,
@@ -259,8 +275,8 @@ extension Chat {
             Chat.cacheDB.saveTextMessageToWaitQueue(textMessage: messageObjectToSendToQueue)
         }
         
-        let messageTxtContent = sendTextMessageInput.content
-//        let messageTxtContent = MakeCustomTextToSend(message: sendTextMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
+//        let messageTxtContent = sendTextMessageInput.content
+        let messageTxtContent = MakeCustomTextToSend(message: sendTextMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.MESSAGE.rawValue,
                                             content:            messageTxtContent,
@@ -320,8 +336,8 @@ extension Chat {
         sendCallbackToUserOnDeliver = onDelivered
         sendCallbackToUserOnSeen = onSeen
         
-        let messageTxtContent = sendInterActiveMessageInput.content
-//        let messageTxtContent = MakeCustomTextToSend(message: sendInterActiveMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
+//        let messageTxtContent = sendInterActiveMessageInput.content
+        let messageTxtContent = MakeCustomTextToSend(message: sendInterActiveMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.BOT_MESSAGE.rawValue,
                                             content:            messageTxtContent,
@@ -392,8 +408,8 @@ extension Chat {
             Chat.cacheDB.saveEditMessageToWaitQueue(editMessage: messageObjectToSendToQueue)
         }
         
-        let messageTxtContent = editMessageInput.content
-//        let messageTxtContent = MakeCustomTextToSend(message: editMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
+//        let messageTxtContent = editMessageInput.content
+        let messageTxtContent = MakeCustomTextToSend(message: editMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.EDIT_MESSAGE.rawValue,
                                             content:            messageTxtContent,
@@ -470,8 +486,8 @@ extension Chat {
             Chat.cacheDB.saveTextMessageToWaitQueue(textMessage: messageObjectToSendToQueue)
         }
         
-        let messageTxtContent = replyMessageInput.content
-//        let messageTxtContent = MakeCustomTextToSend(message: replyMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
+//        let messageTxtContent = replyMessageInput.content
+        let messageTxtContent = MakeCustomTextToSend(message: replyMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.MESSAGE.rawValue,
                                             content:            messageTxtContent,
@@ -617,18 +633,18 @@ extension Chat {
         if enableCache {
             if let file = sendFileMessageInput.uploadInput as? UploadFileRequestModel {
                 let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      sendFileMessageInput.messageInput.content,
-                                                                            fileName:     file.fileName,
-                                                                            metadata:     (sendFileMessageInput.messageInput.metadata != nil) ? "\(sendFileMessageInput.messageInput.metadata!)" : nil,
-                                                                            repliedTo:    sendFileMessageInput.messageInput.repliedTo,
-                                                                            threadId:     sendFileMessageInput.messageInput.threadId,
-                                                                            xC:           nil,
-                                                                            yC:           nil,
-                                                                            hC:           nil,
-                                                                            wC:           nil,
-                                                                            fileToSend:   file.dataToSend,
-                                                                            imageToSend:  nil,
-                                                                            typeCode:     sendFileMessageInput.messageInput.typeCode,
-                                                                            uniqueId:     sendFileMessageInput.messageInput.uniqueId)
+                                                                              fileName:     file.fileName,
+                                                                              metadata:     (sendFileMessageInput.messageInput.metadata != nil) ? "\(sendFileMessageInput.messageInput.metadata!)" : nil,
+                                                                              repliedTo:    sendFileMessageInput.messageInput.repliedTo,
+                                                                              threadId:     sendFileMessageInput.messageInput.threadId,
+                                                                              xC:           nil,
+                                                                              yC:           nil,
+                                                                              hC:           nil,
+                                                                              wC:           nil,
+                                                                              fileToSend:   file.dataToSend,
+                                                                              imageToSend:  nil,
+                                                                              typeCode:     sendFileMessageInput.messageInput.typeCode,
+                                                                              uniqueId:     sendFileMessageInput.messageInput.uniqueId)
                 Chat.cacheDB.saveFileMessageToWaitQueue(fileMessage: messageObjectToSendToQueue)
                 
             } else if let image = sendFileMessageInput.uploadInput as? UploadImageRequestModel {
@@ -1324,6 +1340,216 @@ extension Chat {
     }
     
     
+    
+    
+    // MARK: Resend/Remove Queue Methods
+    
+    public func resend(textMessages:    [QueueOfWaitTextMessagesModel],
+                       uniqueId:        @escaping (String)->(),
+                       sent:            @escaping (SendMessageModel)->(),
+                       deliver:         @escaping (SendMessageModel)->(),
+                       seen:            @escaping (SendMessageModel)->() ) {
+        
+        for txt in textMessages {
+            let input = SendTextMessageRequestModel(content:    txt.content!,
+                                                    metadata:   txt.metadata,
+                                                    repliedTo:  txt.repliedTo,
+                                                    systemMetadata: txt.systemMetadata,
+                                                    threadId:   txt.threadId!,
+                                                    typeCode: txt.typeCode,
+                                                    uniqueId: txt.uniqueId)
+            sendTextMessage(inputModel: input, uniqueId: { (sendTextMessageUniqueId) in
+                uniqueId(sendTextMessageUniqueId)
+            }, onSent: { (sentResponse) in
+                sent(sentResponse as! SendMessageModel)
+            }, onDelivere: { (deliverResponse) in
+                deliver(deliverResponse as! SendMessageModel)
+            }) { (seenResponse) in
+                seen(seenResponse as! SendMessageModel)
+            }
+        }
+        
+    }
+    
+    public func resend(editMessages:    [QueueOfWaitEditMessagesModel],
+                       uniqueId:        @escaping (String)->(),
+                       completion:      @escaping (EditMessageModel)->()) {
+        
+        for editMsg in editMessages {
+            let input = EditTextMessageRequestModel(content: editMsg.content!,
+                                                    metadata: editMsg.metadata,
+                                                    repliedTo: editMsg.repliedTo,
+                                                    messageId: editMsg.messageId!,
+                                                    typeCode: editMsg.typeCode,
+                                                    uniqueId: editMsg.uniqueId)
+            editMessage(inputModel: input, uniqueId: { (editTextMessageUniqueId) in
+                uniqueId(editTextMessageUniqueId)
+            }) { (editMessageResponse) in
+                completion(editMessageResponse as! EditMessageModel)
+            }
+        }
+        
+    }
+    
+    public func resend(forwardMessages: [QueueOfWaitForwardMessagesModel],
+                       uniqueIds:       @escaping ([String])->(),
+                       sent:            @escaping (SendMessageModel)->(),
+                       deliver:         @escaping (SendMessageModel)->(),
+                       seen:            @escaping (SendMessageModel)->() ) {
+        
+        for frwrdMsg in forwardMessages {
+            let input = ForwardMessageRequestModel(messageIds:  [frwrdMsg.messageId!],
+                                                    metadata:    frwrdMsg.metadata,
+                                                    repliedTo:   frwrdMsg.repliedTo,
+                                                    threadId:    frwrdMsg.threadId!,
+                                                    typeCode:    frwrdMsg.typeCode)
+            forwardMessage(inputModel: input, uniqueIds: { (forwardMessageUniqueIds) in
+                uniqueIds(forwardMessageUniqueIds)
+            }, onSent: { (sentResponse) in
+                sent(sentResponse as! SendMessageModel)
+            }, onDelivere: { (deliverResponse) in
+                deliver(deliverResponse as! SendMessageModel)
+            }) { (seenResponse) in
+                seen(seenResponse as! SendMessageModel)
+            }
+        }
+        
+    }
+    
+    public func resend(fileMessages:    QueueOfWaitFileMessagesModel,
+                       uploadUniqueId:  @escaping (String)->(),
+                       uploadProgress:  @escaping (Float)->(),
+                       messageUniqueId: @escaping (String)->(),
+                       sent:            @escaping (SendMessageModel)->(),
+                       deliver:         @escaping (SendMessageModel)->(),
+                       seen:            @escaping (SendMessageModel)->() ) {
+        
+        let message = SendTextMessageRequestModel(content: fileMessages.content ?? "",
+                                                  metadata: fileMessages.metadata,
+                                                  repliedTo: fileMessages.repliedTo,
+                                                  systemMetadata: nil,
+                                                  threadId: fileMessages.threadId!,
+                                                  typeCode: fileMessages.typeCode,
+                                                  uniqueId: fileMessages.uniqueId)
+        
+        var upload: UploadRequestModel? = nil
+        if let fileData = fileMessages.fileToSend {
+            upload = UploadRequestModel(dataToSend:         fileData,
+                                        fileExtension:      nil,
+                                        fileName:           fileMessages.fileName,
+                                        originalFileName:   fileMessages.fileName,
+                                        threadId:           fileMessages.threadId,
+                                        typeCode:           fileMessages.typeCode,
+                                        uniqueId:           nil)
+        } else if let imageData = fileMessages.imageToSend {
+            upload = UploadRequestModel(dataToSend:         imageData,
+                                        fileExtension:      nil,
+                                        fileName:           fileMessages.fileName,
+                                        originalFileName:   fileMessages.fileName,
+                                        threadId:           fileMessages.threadId!,
+                                        xC:                 fileMessages.xC,
+                                        yC:                 fileMessages.yC,
+                                        hC:                 fileMessages.hC,
+                                        wC:                 fileMessages.wC,
+                                        typeCode:           fileMessages.typeCode,
+                                        uniqueId:           nil)
+        }
+        if let theUpload = upload {
+            let input = SendFileMessageRequestModel(messageInput: message, uploadInput: theUpload)
+            sendFileMessage(inputModel: input, uploadUniqueId: { (thUploadUniqueId) in
+                uploadUniqueId(thUploadUniqueId)
+            }, uploadProgress: { (theUploadProgress) in
+                uploadProgress(theUploadProgress)
+            }, messageUniqueId: { (theMessageUniqueId) in
+                messageUniqueId(theMessageUniqueId)
+            }, onSent: { (sentResponse) in
+                sent(sentResponse as! SendMessageModel)
+            }, onDelivered: { (deliverResponse) in
+                deliver(deliverResponse as! SendMessageModel)
+            }) { (seenResponse) in
+                seen(seenResponse as! SendMessageModel)
+            }
+        }
+        
+    }
+    
+    public func resend(uploadImageObj:  QueueOfWaitUploadImagesModel,
+                       uniqueId:        @escaping (String)->(),
+                       uploadProgress:  @escaping (Float)->(),
+                       completion:      @escaping (UploadImageModel)->()) {
+        
+        let input = UploadImageRequestModel(dataToSend:     uploadImageObj.dataToSend!,
+                                            fileExtension:  uploadImageObj.fileExtension,
+                                            fileName:       uploadImageObj.fileName,
+                                            originalFileName: nil,
+                                            threadId:       uploadImageObj.threadId!,
+                                            xC:             uploadImageObj.xC,
+                                            yC:             uploadImageObj.yC,
+                                            hC:             uploadImageObj.hC,
+                                            wC:             uploadImageObj.wC,
+                                            typeCode:       uploadImageObj.typeCode,
+                                            uniqueId:       uploadImageObj.uniqueId)
+        uploadImage(inputModel: input, uniqueId: { (uploadUniqueId) in
+            uniqueId(uploadUniqueId)
+        }, progress: { (theUploadProgress) in
+            uploadProgress(theUploadProgress)
+        }) { (uploadResponse) in
+            completion(uploadResponse as! UploadImageModel)
+        }
+        
+    }
+    
+    public func resend(uploadFileObj:   [QueueOfWaitUploadFilesModel],
+                       uniqueId:        @escaping (String)->(),
+                       uploadProgress:  @escaping (Float)->(),
+                       completion:      @escaping (UploadFileModel)->()) {
+        
+        for upld in uploadFileObj {
+            let input = UploadFileRequestModel(dataToSend:      upld.dataToSend!,
+                                               fileExtension:   upld.fileExtension,
+                                               fileName:        upld.fileName,
+                                               originalFileName: nil,
+                                               threadId:        upld.threadId!,
+                                               typeCode:        upld.typeCode,
+                                               uniqueId:        upld.uniqueId)
+            uploadFile(inputModel: input, uniqueId: { (uploadUniqueId) in
+                uniqueId(uploadUniqueId)
+            }, progress: { (theUploadProgress) in
+                uploadProgress(theUploadProgress)
+            }) { (uploadResponse) in
+                completion(uploadResponse as! UploadFileModel)
+            }
+        }
+        
+    }
+    
+    
+//    public func removeMessageFromNotSentQueues(textMessages:       [QueueOfWaitTextMessagesModel],
+//                                               editMessages:       [QueueOfWaitEditMessagesModel],
+//                                               forwardMessages:    [QueueOfWaitForwardMessagesModel],
+//                                               fileMessages:       [QueueOfWaitFileMessagesModel],
+//                                               uploadImage:        [QueueOfWaitUploadImagesModel],
+//                                               uploadFile:         [QueueOfWaitUploadFilesModel]) {
+//
+//        for txt in textMessages {
+//            Chat.cacheDB.deleteWaitTextMessage(uniqueId: txt.uniqueId!)
+//        }
+//        for edt in editMessages {
+//            Chat.cacheDB.deleteWaitEditMessage(uniqueId: edt.uniqueId!)
+//        }
+//        for frd in forwardMessages {
+//            Chat.cacheDB.deleteWaitForwardMessage(uniqueId: frd.uniqueId!)
+//        }
+//        for flm in fileMessages {
+//            Chat.cacheDB.deleteWaitFileMessage(uniqueId: flm.uniqueId!)
+//        }
+//        for uimg in uploadImage {
+//            Chat.cacheDB.deleteWaitUploadImages(uniqueId: uimg.uniqueId!)
+//        }
+//        for ufl in uploadFile {
+//            Chat.cacheDB.deleteWaitUploadFiles(uniqueId: ufl.uniqueId!)
+//        }
+//    }
     
     
     

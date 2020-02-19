@@ -40,6 +40,7 @@ extension Chat {
         let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_SEND,
                                                   message:  myMessage,
                                                   threadId: message.subjectId,
+                                                  messageId: message.messageId,
                                                   senderId: nil)
         delegate?.messageEvents(model: messageEventModel)
         
@@ -92,7 +93,8 @@ extension Chat {
         let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_DELIVERY,
                                                   message:  myMessage,
                                                   threadId: message.subjectId,
-                                                  senderId: message.participantId)
+                                                  messageId: message.messageId ?? message.content?.convertToJSON()["messageId"].int,
+                                                  senderId: message.participantId ?? message.content?.convertToJSON()["participantId"].int)
         delegate?.messageEvents(model: messageEventModel)
         
         var findItAt: Int?
@@ -202,7 +204,8 @@ extension Chat {
         let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_SEEN,
                                                   message:  myMessage,
                                                   threadId: message.subjectId,
-                                                  senderId: message.participantId)
+                                                  messageId: message.messageId ?? message.content?.convertToJSON()["messageId"].int,
+                                                  senderId: message.participantId ?? message.content?.convertToJSON()["participantId"].int)
         delegate?.messageEvents(model: messageEventModel)
         
         var findItAt: Int?

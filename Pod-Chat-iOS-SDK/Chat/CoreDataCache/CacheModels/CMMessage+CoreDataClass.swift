@@ -26,6 +26,7 @@ public class CMMessage: NSManagedObject {
         var seen:           Bool?
         var threadId:       Int?
         var time:           UInt?
+//        var timeNano:       UInt?
         
         func createVariables() {
             if let delivered2 = self.delivered as? Bool {
@@ -57,6 +58,8 @@ public class CMMessage: NSManagedObject {
             }
             if let time2 = self.time as? UInt {
                 time = time2
+//                time = UInt(time2 / 100)
+//                timeNano = (UInt(time2) - (time! * 100)) * (1000000)
             }
             if let deletable2 = self.deletable as? Bool {
                 deletable = deletable2
@@ -79,6 +82,7 @@ public class CMMessage: NSManagedObject {
                                        seen:            seen,
                                        systemMetadata:  self.systemMetadata,
                                        time:            time,
+                                       timeNanos:       0,
                                        uniqueId:        self.uniqueId,
                                        conversation:    conversation?.convertCMConversationToConversationObject(),
                                        forwardInfo:     forwardInfo?.convertCMForwardInfoToForwardInfoObject(),

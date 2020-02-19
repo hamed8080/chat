@@ -49,6 +49,10 @@ extension Cache {
                     result.first!.name              = user.name
                     result.first!.receiveEnable     = user.receiveEnable as NSNumber?
                     result.first!.sendEnable        = user.sendEnable as NSNumber?
+                    result.first!.username          = user.username
+                    result.first!.bio               = user.chatProfileVO?.bio
+                    result.first!.metadata          = user.chatProfileVO?.metadata
+                    
                     // save function that will try to save changes that made on the Cache
                     saveContext(subject: "Update UserInfo -update existing object-")
                 } else {
@@ -56,15 +60,18 @@ extension Cache {
                     // this part will execute, which will create an object of User and save it on the Cache
                     let theUserEntity = NSEntityDescription.entity(forEntityName: "CMUser", in: context)
                     let theUser = CMUser(entity: theUserEntity!, insertInto: context)
-                    theUser.cellphoneNumber    = user.cellphoneNumber
-                    theUser.coreUserId         = user.coreUserId as NSNumber?
-                    theUser.email              = user.email
-                    theUser.id                 = user.id as NSNumber?
-                    theUser.image              = user.image
-                    theUser.lastSeen           = user.lastSeen as NSNumber?
-                    theUser.name               = user.name
-                    theUser.receiveEnable      = user.receiveEnable as NSNumber?
-                    theUser.sendEnable         = user.sendEnable as NSNumber?
+                    theUser.cellphoneNumber = user.cellphoneNumber
+                    theUser.coreUserId      = user.coreUserId as NSNumber?
+                    theUser.email           = user.email
+                    theUser.id              = user.id as NSNumber?
+                    theUser.image           = user.image
+                    theUser.lastSeen        = user.lastSeen as NSNumber?
+                    theUser.name            = user.name
+                    theUser.receiveEnable   = user.receiveEnable as NSNumber?
+                    theUser.sendEnable      = user.sendEnable as NSNumber?
+                    theUser.username        = user.username
+                    theUser.bio             = user.chatProfileVO?.bio
+                    theUser.metadata        = user.chatProfileVO?.metadata
                     // save function that will try to save changes that made on the Cache
                     saveContext(subject: "Update UserInfo -create a new object-")
                 }
@@ -463,7 +470,7 @@ extension Cache {
          *              we have to delete all messages that we have on the cache (afterward we will save server answers into it)
          *              -> delete all messages with this query input
          *
-         *          10-
+         *          10-s
          *              input:
          *                  fromTime    = UInt
          *                  toTime      = UInt

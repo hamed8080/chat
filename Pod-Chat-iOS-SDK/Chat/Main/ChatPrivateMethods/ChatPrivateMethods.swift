@@ -806,9 +806,20 @@ extension Chat {
             responseOfUnpinMessage(withMessage: message)
             break
             
-        case chatMessageVOTypes.Get_Current_User_Roles.rawValue:
+        // a message of type 52 (SET_PROFILE) comes from Server.
+        case chatMessageVOTypes.SET_PROFILE.rawValue:
+            responseOfSetProfile(withMessage: message)
+            break
+        
+        // a message of type 54 (GET_CURRENT_USER_ROLES) comes from Server
+        case chatMessageVOTypes.GET_CURRENT_USER_ROLES.rawValue:
             responseOfGetCurrentUserRoles(withMessage: message)
-            
+        
+        // a message of type 60 (CONTACTS_LAST_SEEN) comes from Server.
+        case chatMessageVOTypes.CONTACTS_LAST_SEEN.rawValue:
+            sendContactsLastSeenDurationUpdate(withMessage: message)
+            break
+        
         // a message of type 100 (LOGOUT) comes from Server.
         case chatMessageVOTypes.LOGOUT.rawValue:
             break
@@ -872,6 +883,7 @@ extension Chat {
         let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_NEW,
                                                   message:  message,
                                                   threadId: nil,
+                                                  messageId: nil,
                                                   senderId: nil)
         delegate?.messageEvents(model: messageEventModel)
         let tLastActivityEM = ThreadEventModel(type:            ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME,
@@ -917,6 +929,19 @@ extension Chat {
                                               senderId:     nil)
         delegate?.threadEvents(model: tInfoUpdatedEM)
     }
+    
+    
+    func sendContactsLastSeenDurationUpdate(withMessage message: ChatMessage) {
+        if let object = message.content?.convertToJSON() {
+            var users = [UserLastSeenDuration]()
+            for item in object {
+                users.append(UserLastSeenDuration(userId: Int(item.0)!, time: item.1.intValue))
+            }
+            let eventModel = ContactEventModel(type: ContactEventTypes.CONTACTS_LAST_SEEN, contacts: nil, contactsLastSeenDuration: users)
+            delegate?.contactEvents(model: eventModel)
+        }
+    }
+    
     
 }
 

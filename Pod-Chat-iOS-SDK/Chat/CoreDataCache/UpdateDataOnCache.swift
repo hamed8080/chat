@@ -701,7 +701,9 @@ extension Cache {
                         if let threadId = myMessage.threadId as NSNumber? {
                             result.first!.threadId = threadId
                         }
-                        if let time = myMessage.time as NSNumber? {
+                        if let time = myMessage.time as NSNumber? /*, let timeNano = myMessage.timeNanos*/ {
+//                            let theTime = ((UInt(time / 1000)) * 1000000000 ) + timeNano
+//                            result.first!.time = theTime as NSNumber
                             result.first!.time = time
                         }
                         if let uniqueId = myMessage.uniqueId {
@@ -769,7 +771,7 @@ extension Cache {
                         theMessage.seen             = myMessage.seen as NSNumber?
                         theMessage.systemMetadata   = myMessage.systemMetadata
                         theMessage.threadId         = myMessage.threadId as NSNumber?
-                        theMessage.time             = myMessage.time as NSNumber?
+                        theMessage.time             = myMessage.time as NSNumber? // (((UInt(myMessage.time! / 1000)) * 1000000000 ) + myMessage.timeNanos!) as NSNumber?
                         theMessage.uniqueId         = myMessage.uniqueId
                         if let messageConversation = myMessage.conversation {
                             if let conversationObject = updateCMConversationEntity(withConversationObject: messageConversation) {

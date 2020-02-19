@@ -135,7 +135,7 @@ extension Chat {
         sendSearchContactRequest(withInputModel: searchContactsInput)
         { (contactModel) in
             self.addContactOnCache(withInputModel: contactModel as! ContactModel)
-            let contactEventModel = ContactEventModel(type: ContactEventTypes.CONTACTS_SEARCH_RESULT_CHANGE, contacts: (contactModel as! ContactModel).contacts)
+            let contactEventModel = ContactEventModel(type: ContactEventTypes.CONTACTS_SEARCH_RESULT_CHANGE, contacts: (contactModel as! ContactModel).contacts, contactsLastSeenDuration: nil)
             self.delegate?.contactEvents(model: contactEventModel)
             completion(contactModel)
         }
@@ -257,8 +257,13 @@ extension Chat {
         var params: Parameters      = [:]
         params["firstName"]         = JSON(addContactsInput.firstName ?? "")
         params["lastName"]          = JSON(addContactsInput.lastName ?? "")
-        params["cellphoneNumber"]   = JSON(addContactsInput.cellphoneNumber ?? "")
         params["email"]             = JSON(addContactsInput.email ?? "")
+        if let username = addContactsInput.username {
+            params["username"] = JSON(username)
+        }
+        if let cellphoneNumber = addContactsInput.cellphoneNumber {
+            params["cellphoneNumber"] = JSON(cellphoneNumber)
+        }
         params["typeCode"]          = JSON(addContactsInput.typeCode ?? generalTypeCode)
         params["uniqueId"]          = JSON(messageUniqueId)
         
@@ -287,6 +292,7 @@ extension Chat {
             url += "&cellphoneNumber=\(addContactsInput.cellphoneNumbers[index])"
             url += "&email=\(addContactsInput.emails[index])"
             url += "&uniqueId=\(addContactsInput.uniqueIds[index])"
+            url += "&username=\(addContactsInput.usernames[index])"
             if (index != contactCount - 1) {
                 url += "&"
             }
@@ -354,6 +360,7 @@ extension Chat {
         params["lastName"]          = JSON(updateContactsInput.lastName)
         params["cellphoneNumber"]   = JSON(updateContactsInput.cellphoneNumber)
         params["email"]             = JSON(updateContactsInput.email)
+        params["username"]          = JSON(updateContactsInput.username)
         params["typeCode"]          = JSON(updateContactsInput.typeCode ?? generalTypeCode)
         params["uniqueId"]          = JSON(andUniqueId)
         
@@ -598,10 +605,8 @@ extension Chat {
     ///
     /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! [ContactModel])
-    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. ([ContactModel])
     public func syncContacts(uniqueIds:     @escaping ([String]) -> (),
-                             completion:    @escaping callbackTypeAlias,
-                             cacheResponse: @escaping ([ContactModel]) -> ()) {
+                             completion:    @escaping callbackTypeAlias) {
         log.verbose("Try to request to sync contact", context: "Chat")
         
         var firstNameArray = [String]()
@@ -677,6 +682,7 @@ extension Chat {
                                                        emails:          emails,
                                                        firstNames:      firstNames,
                                                        lastNames:       lastNames,
+                                                       usernames:       [],
                                                        typeCode:        nil,
                                                        uniqueIds:       contactUniqueIds)
         

@@ -46,6 +46,7 @@ open class Message {
     public var systemMetadata:  String?
     public var threadId:    Int?
     public var time:        UInt?
+    public var timeNanos:   UInt?
 //    public let timeNanos:   UInt?
     public var uniqueId:    String?
     
@@ -69,13 +70,13 @@ open class Message {
         self.previousId     = pushMessageVO["previousId"].int
         self.seen           = pushMessageVO["seen"].bool
         self.systemMetadata = pushMessageVO["systemMetadata"].string
-//        self.time       = pushMessageVO["time"].uInt
-//        self.timeNanos  = pushMessageVO["timeNanos"].uInt
-        self.uniqueId   = pushMessageVO["uniqueId"].string
+        self.time           = pushMessageVO["time"].uInt
+        self.timeNanos      = pushMessageVO["timeNanos"].uInt
+        self.uniqueId       = pushMessageVO["uniqueId"].string
         
-        let timeNano = pushMessageVO["timeNanos"].uIntValue
-        let timeTemp = pushMessageVO["time"].uIntValue
-        self.time = ((UInt(timeTemp / 1000)) * 1000000000 ) + timeNano
+//        let timeNano = pushMessageVO["timeNanos"].uIntValue
+//        let timeTemp = pushMessageVO["time"].uIntValue
+//        self.time = ((UInt(timeTemp / 1000)) * 1000000000 ) + timeNano
         
         if (pushMessageVO["conversation"] != JSON.null) {
             self.conversation = Conversation(messageContent: pushMessageVO["conversation"])
@@ -113,6 +114,7 @@ open class Message {
                 seen:           Bool?,
                 systemMetadata: String?,
                 time:           UInt?,
+                timeNanos:      UInt?,
                 uniqueId:       String?,
                 conversation:   Conversation?,
                 forwardInfo:    ForwardInfo?,
@@ -134,6 +136,7 @@ open class Message {
         self.seen           = seen
         self.systemMetadata = systemMetadata
         self.time           = time
+        self.timeNanos      = timeNanos
         self.uniqueId       = uniqueId
         self.conversation   = conversation
         self.forwardInfo    = forwardInfo
@@ -159,6 +162,7 @@ open class Message {
         self.seen           = theMessage.seen
         self.systemMetadata = theMessage.systemMetadata
         self.time           = theMessage.time
+        self.timeNanos      = theMessage.timeNanos
         self.uniqueId       = theMessage.uniqueId
         self.conversation   = theMessage.conversation
         self.forwardInfo    = theMessage.forwardInfo
@@ -187,6 +191,7 @@ open class Message {
                             "systemMetadata":   systemMetadata ?? NSNull(),
                             "threadId":         threadId ?? NSNull(),
                             "time":             time ?? NSNull(),
+                            "timeNanos":        timeNanos ?? NSNull(),
                             "uniqueId":         uniqueId ?? NSNull(),
                             "conversation":     conversation?.formatToJSON() ?? NSNull(),
                             "forwardInfo":      forwardInfo?.formatToJSON() ?? NSNull(),
