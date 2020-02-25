@@ -670,7 +670,7 @@ extension Chat {
         addParticipantsCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.ADD_PARTICIPANT.rawValue,
-                                            content:            "\(addParticipantsInput.contacts)",
+                                            content:            "\(addParticipantsInput.convertContentToJSON())",
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
