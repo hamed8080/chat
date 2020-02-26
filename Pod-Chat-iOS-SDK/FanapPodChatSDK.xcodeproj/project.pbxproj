@@ -29,6 +29,7 @@
 		3E11F56121DA18D0004B3B2C /* GetImageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E11F56021DA18D0004B3B2C /* GetImageRequestModel.swift */; };
 		3E11F56D21DA1A02004B3B2C /* GetFileRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E11F56C21DA1A02004B3B2C /* GetFileRequestModel.swift */; };
 		3E1EA58423A4ABC500B4C3F8 /* SendInteractiveMessageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1EA58323A4ABC500B4C3F8 /* SendInteractiveMessageRequestModel.swift */; };
+		3E1F70572405648600FAF460 /* MESSAGE_TYPE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F70562405648600FAF460 /* MESSAGE_TYPE.swift */; };
 		3E239C3D23E55B2600AE0988 /* GetMentionRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E239C3C23E55B2600AE0988 /* GetMentionRequestModel.swift */; };
 		3E24083021F5C844001F32F1 /* CMUser+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E24081821F5C844001F32F1 /* CMUser+CoreDataClass.swift */; };
 		3E24083121F5C844001F32F1 /* CMUser+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E24081821F5C844001F32F1 /* CMUser+CoreDataClass.swift */; };
@@ -431,6 +432,7 @@
 		3E1C357F225B5E7D001A343B /* SwiftyBeaver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftyBeaver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E1C3581225B5E81001A343B /* SwiftyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E1EA58323A4ABC500B4C3F8 /* SendInteractiveMessageRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendInteractiveMessageRequestModel.swift; sourceTree = "<group>"; };
+		3E1F70562405648600FAF460 /* MESSAGE_TYPE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MESSAGE_TYPE.swift; sourceTree = "<group>"; };
 		3E239C3C23E55B2600AE0988 /* GetMentionRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMentionRequestModel.swift; sourceTree = "<group>"; };
 		3E24081821F5C844001F32F1 /* CMUser+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMUser+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3E24081921F5C844001F32F1 /* CMUser+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMUser+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -1039,6 +1041,7 @@
 			isa = PBXGroup;
 			children = (
 				3E3F17782133D0A90029E4D4 /* EnumsAndStructs.swift */,
+				3E1F70562405648600FAF460 /* MESSAGE_TYPE.swift */,
 				3E8ADC8223B3590300E3538D /* SignalMessageType.swift */,
 				3E8ADC8023B358F300E3538D /* DownloaUploadActions.swift */,
 				3E8ADC7E23B3559000E3538D /* EventTypes.swift */,
@@ -1498,6 +1501,7 @@
 				3E437D5C218F36DA0021C0ED /* GetBlockedContactListModel.swift in Sources */,
 				3EA156AA21CE1D10004B1346 /* MessageDeliverySeenListRequestModel.swift in Sources */,
 				3E56EDD523BCE07100FED6CD /* CreateThreadWithFileMessageRequestModel.swift in Sources */,
+				3E1F70572405648600FAF460 /* MESSAGE_TYPE.swift in Sources */,
 				3E3315A723B206CC0070A3D1 /* BotEventModel.swift in Sources */,
 				3E8ADC7D23B3556300E3538D /* ServiceAddresses.swift in Sources */,
 				3E8ADCFD23B7845200E3538D /* PinThreadCallback.swift in Sources */,

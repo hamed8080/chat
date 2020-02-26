@@ -479,6 +479,7 @@ extension Chat {
             
             let chatMessage = SendChatMessageVO(chatMessageVOType: chatMessageVOTypes.PING.rawValue,
                                                 content:            nil,
+                                                messageType:        nil,
                                                 metadata:           nil,
                                                 repliedTo:          nil,
                                                 systemMetadata:     nil,

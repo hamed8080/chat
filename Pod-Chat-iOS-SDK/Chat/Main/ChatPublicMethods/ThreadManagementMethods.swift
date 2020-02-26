@@ -21,6 +21,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_THREADS.rawValue,
                                             content:            "\(input.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -74,6 +75,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_THREADS.rawValue,
                                             content:            "\(getThreadsInput.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -138,6 +140,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.UPDATE_THREAD_INFO.rawValue,
                                             content:            "\(updateThreadInfoInput.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -191,6 +194,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.CREATE_THREAD.rawValue,
                                             content:            "\(createThreadInput.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -255,6 +259,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.CREATE_THREAD.rawValue,
                                             content:            "\(creatThreadWithMessageInput.convertContentToJSON())",
+                                            messageType:        creatThreadWithMessageInput.sendMessageInput?.messageType.returnIntValue(),
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -398,6 +403,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.LEAVE_THREAD.rawValue,
                                             content:            nil,
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -449,6 +455,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.SPAM_PV_THREAD.rawValue,
                                             content:            nil,
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -502,6 +509,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.MUTE_THREAD.rawValue,
                                             content:            nil,
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -553,6 +561,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.UNMUTE_THREAD.rawValue,
                                             content:            nil,
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -608,6 +617,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.THREAD_PARTICIPANTS.rawValue,
                                             content:            "\(getThreadParticipantsInput.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -671,6 +681,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.ADD_PARTICIPANT.rawValue,
                                             content:            "\(addParticipantsInput.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -721,6 +732,7 @@ extension Chat {
  
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.REMOVE_PARTICIPANT.rawValue,
                                             content:            "\(removeParticipantsInput.participantIds)",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -774,6 +786,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.SET_RULE_TO_USER.rawValue,
                                             content:            "\(setRoleInput.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -825,6 +838,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.REMOVE_ROLE_FROM_USER.rawValue,
                                             content:            "\(removeRoleInput.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -951,6 +965,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.PIN_THREAD.rawValue,
                                             content:            nil,
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -1002,6 +1017,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.UNPIN_THREAD.rawValue,
                                             content:            nil,
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -1055,6 +1071,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_NOT_SEEN_DURATION.rawValue,
                                             content:            "\(notSeenDurationInput.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -1107,6 +1124,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_CURRENT_USER_ROLES.rawValue,
                                             content:            nil,
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,

@@ -16,18 +16,18 @@ open class MessageInput {
     public var forwardedUniqueIds:  [String]?
     public let repliedTo:           Int?
     public let text:                String?
-    public let type:                String?
-    var metadata:            String?
+    public let messageType:         MESSAGE_TYPE
+    var metadata:                   String?
     public let systemMetadata:      String?
     public let uniqueId:            String
     
-    public init(forwardedMessageIds:   [String]?,
-                repliedTo:             Int?,
-                text:                  String?,
-                type:                  String?,
+    public init(forwardedMessageIds:    [String]?,
+                repliedTo:              Int?,
+                text:                   String?,
+                messageType:            MESSAGE_TYPE,
 //                metadata:              String?,
-                systemMetadata:        String?,
-                uniqueId:              String?) {
+                systemMetadata:         String?,
+                uniqueId:               String?) {
         
         self.forwardedMessageIds = forwardedMessageIds
         if (forwardedMessageIds?.count ?? 0) > 0 {
@@ -38,7 +38,7 @@ open class MessageInput {
         }
         self.repliedTo      = repliedTo
         self.text           = text
-        self.type           = type
+        self.messageType    = messageType
         self.metadata       = nil
         self.systemMetadata = systemMetadata
         self.uniqueId       = uniqueId ?? UUID().uuidString
@@ -47,7 +47,7 @@ open class MessageInput {
     init(forwardedMessageIds:   [String]?,
          repliedTo:             Int?,
          text:                  String?,
-         type:                  String?,
+         messageType:           MESSAGE_TYPE,
          metadata:              String?,
          systemMetadata:        String?,
          uniqueId:              String?) {
@@ -61,7 +61,7 @@ open class MessageInput {
         }
         self.repliedTo      = repliedTo
         self.text           = text
-        self.type           = type
+        self.messageType    = messageType
         self.metadata       = metadata
         self.systemMetadata = systemMetadata
         self.uniqueId       = uniqueId ?? UUID().uuidString
@@ -80,9 +80,6 @@ open class MessageInput {
         }
         if let text_ = self.text {
             content["text"] = JSON(text_)
-        }
-        if let type_ = self.type {
-            content["type"] = JSON(type_)
         }
         if let metadata_ = self.metadata {
             content["metadata"] = JSON(metadata_)

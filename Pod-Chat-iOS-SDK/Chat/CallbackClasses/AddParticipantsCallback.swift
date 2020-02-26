@@ -53,13 +53,13 @@ extension Chat {
         let tAddParticipantEM = ThreadEventModel(type:          ThreadEventTypes.THREAD_ADD_PARTICIPANTS,
                                                  participants:  addParticipantModel.thread?.participants,
                                                  threads:       nil,
-                                                 threadId:      message.subjectId,
-                                                 senderId:      nil)
+                                                 threadId:      addParticipantModel.thread?.id,
+                                                 senderId:      message.subjectId)
         delegate?.threadEvents(model: tAddParticipantEM)
         let tLastActivityEM = ThreadEventModel(type:            ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME,
                                                participants:    nil,
                                                threads:         nil,
-                                               threadId:        message.subjectId,
+                                               threadId:        addParticipantModel.thread?.id,
                                                senderId:        nil)
         delegate?.threadEvents(model: tLastActivityEM)
         

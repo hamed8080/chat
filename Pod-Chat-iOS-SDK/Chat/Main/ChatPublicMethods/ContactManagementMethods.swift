@@ -49,6 +49,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_CONTACTS.rawValue,
                                             content:            "\(getContactsInput.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -463,6 +464,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.BLOCK.rawValue,
                                             content:            "\(blockContactsInput.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -513,6 +515,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_BLOCKED.rawValue,
                                             content:            "\(getBlockedContactsInput.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -564,6 +567,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.UNBLOCK.rawValue,
                                             content:            "\(unblockContactsInput.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,

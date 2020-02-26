@@ -18,7 +18,7 @@ public enum SignalMessageType: Int {
     case UPLOAD_SOUND   = 5
     case UPLOAD_FILE    = 6
     
-    public func intValue() -> Int {
+    public func returnIntValue() -> Int {
         switch self {
         case .IS_TYPING:        return 1
         case .RECORD_VOICE:     return 2

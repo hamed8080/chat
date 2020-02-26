@@ -20,6 +20,7 @@ public class QueueOfFileMessages: NSManagedObject {
 //        var metadata:       JSON?
         var repliedTo:      Int?
         var threadId:       Int?
+        var messageType:    Int?
         
         var xC:       Int?
         var yC:       Int?
@@ -33,7 +34,9 @@ public class QueueOfFileMessages: NSManagedObject {
             if let imageToSend2 = self.imageToSend as Data? {
                 imageToSend = imageToSend2
             }
-            
+            if let messageType2 = self.messageType as? Int {
+                messageType = messageType2
+            }
 //            self.metadata?.retrieveJSONfromTransformableData(completion: { (returnedJSON) in
 //                metadata = returnedJSON
 //            })
@@ -60,6 +63,7 @@ public class QueueOfFileMessages: NSManagedObject {
         
         func createQueueOfWaitFileMessagesModel() -> QueueOfWaitFileMessagesModel {
             let queueOfWaitFileMessagesModel = QueueOfWaitFileMessagesModel(content:        self.content,
+                                                                            messageType:    MESSAGE_TYPE.getType(from: messageType ?? 1),
                                                                             fileName:       self.fileName,
 //                                                                            imageName:      self.imageName,
 //                                                                            metadata:       metadata,
