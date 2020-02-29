@@ -24,27 +24,28 @@ public class Chat {
     
     public static let sharedInstance = Chat()
     
-    public func createChatObject(socketAddress:              String,
-                                 ssoHost:                    String,
-                                 platformHost:               String,
-                                 fileServer:                 String,
-                                 serverName:                 String,
-                                 token:                      String,
-                                 mapApiKey:                  String?,
-                                 mapServer:                  String,
-                                 typeCode:                   String?,
-                                 enableCache:                Bool,
-                                 cacheTimeStampInSec:        Int?,
-                                 msgPriority:                Int?,
-                                 msgTTL:                     Int?,
-                                 httpRequestTimeout:         Int?,
-                                 actualTimingLog:            Bool?,
-                                 wsConnectionWaitTime:       Double,
-                                 connectionRetryInterval:    Int,
-                                 connectionCheckTimeout:     Int,
-                                 messageTtl:                 Int,
-                                 reconnectOnClose:           Bool,
-                                 deviecLimitationSpaceMB:    Int64?) {
+    public func createChatObject(socketAddress:             String,
+                                 ssoHost:                   String,
+                                 platformHost:              String,
+                                 fileServer:                String,
+                                 serverName:                String,
+                                 token:                     String,
+                                 mapApiKey:                 String?,
+                                 mapServer:                 String,
+                                 typeCode:                  String?,
+                                 enableCache:               Bool,
+                                 cacheTimeStampInSec:       Int?,
+                                 msgPriority:               Int?,
+                                 msgTTL:                    Int?,
+                                 httpRequestTimeout:        Int?,
+                                 actualTimingLog:           Bool?,
+                                 wsConnectionWaitTime:      Double,
+                                 connectionRetryInterval:   Int,
+                                 connectionCheckTimeout:    Int,
+                                 messageTtl:                Int,
+                                 maxReconnectTimeInterval:  Int?,
+                                 reconnectOnClose:          Bool,
+                                 deviecLimitationSpaceMB:   Int64?) {
         
         self.socketAddress      = socketAddress
         self.ssoHost            = ssoHost
@@ -87,11 +88,12 @@ public class Chat {
             self.deviecLimitationSpaceMB = timeLimitation
         }
         
-        self.wsConnectionWaitTime   = wsConnectionWaitTime
-        self.connectionRetryInterval = connectionRetryInterval
-        self.connectionCheckTimeout = connectionCheckTimeout
-        self.messageTtl             = messageTtl
-        self.reconnectOnClose       = reconnectOnClose
+        self.wsConnectionWaitTime       = wsConnectionWaitTime
+        self.connectionRetryInterval    = connectionRetryInterval
+        self.connectionCheckTimeout     = connectionCheckTimeout
+        self.messageTtl                 = messageTtl
+        self.reconnectOnClose           = reconnectOnClose
+        self.maxReconnectTimeInterval   = maxReconnectTimeInterval ?? 60
         
         self.SERVICE_ADDRESSES.SSO_ADDRESS          = ssoHost
         self.SERVICE_ADDRESSES.PLATFORM_ADDRESS     = platformHost
@@ -148,6 +150,7 @@ public class Chat {
     var connectionCheckTimeout:     Int = 10000
     var messageTtl:                 Int = 10000
     var reconnectOnClose:           Bool = false
+    var maxReconnectTimeInterval:   Int = 60
     
 //    var imageMimeTypes = ["image/bmp", "image/png", "image/tiff", "image/gif", "image/x-icon", "image/jpeg", "image/webp"]
 //    var imageExtentions = ["bmp", "png", "tiff", "tiff2", "gif", "ico", "jpg", "jpeg", "webp"]
@@ -327,6 +330,7 @@ public class Chat {
                                 peerId:                     nil,
                                 messageTtl:                 messageTtl,
                                 connectionRetryInterval:    connectionRetryInterval,
+                                maxReconnectTimeInterval:   maxReconnectTimeInterval,
                                 reconnectOnClose:           reconnectOnClose)
             asyncClient?.delegate = self
             asyncClient?.createSocket()

@@ -87,6 +87,7 @@ open class MessageInput {
         if let systemMetadata_ = self.systemMetadata {
             content["systemMetadata"] = JSON(systemMetadata_)
         }
+        content["messageType"] = JSON(messageType.returnIntValue())
         content["uniqueId"] = JSON(self.uniqueId)
         
         return content

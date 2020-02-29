@@ -259,7 +259,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.CREATE_THREAD.rawValue,
                                             content:            "\(creatThreadWithMessageInput.convertContentToJSON())",
-                                            messageType:        creatThreadWithMessageInput.sendMessageInput?.messageType.returnIntValue(),
+                                            messageType:        nil, //creatThreadWithMessageInput.sendMessageInput?.messageType.returnIntValue()
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
