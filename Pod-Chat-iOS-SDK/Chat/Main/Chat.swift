@@ -295,9 +295,9 @@ public class Chat {
     public var muteThreadCallbackToUser:            callbackTypeAlias?
     public var unmuteThreadCallbackToUser:          callbackTypeAlias?
     public var updateThreadInfoCallbackToUser:      callbackTypeAlias?
-    public var blockCallbackToUser:                 callbackTypeAlias?
-    public var unblockCallbackToUser:               callbackTypeAlias?
-    public var getBlockedCallbackToUser:            callbackTypeAlias?
+    public var blockUserCallbackToUser:             callbackTypeAlias?
+    public var unblockUserCallbackToUser:           callbackTypeAlias?
+    public var getBlockedUserCallbackToUser:        callbackTypeAlias?
     public var leaveThreadCallbackToUser:           callbackTypeAlias?
     public var spamPvThreadCallbackToUser:          callbackTypeAlias?
     public var getMessageSeenListCallbackToUser:    callbackTypeAlias?

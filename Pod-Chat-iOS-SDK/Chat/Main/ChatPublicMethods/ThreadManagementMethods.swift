@@ -443,7 +443,7 @@ extension Chat {
     ///
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (SpamPvThreadRequestModel)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion: (response) it will returns the response that comes from server to this request for 3 times!. (Any as! ThreadModel) (Any as! BlockedContactModel) (Any as! ClearHistoryModel)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request for 3 times!. (Any as! ThreadModel) (Any as! BlockedUserModel) (Any as! ClearHistoryModel)
     public func spamPvThread(inputModel spamPvThreadInput: SpamPvThreadRequestModel,
                              uniqueId:          @escaping (String) -> (),
                              completions:       @escaping callbackTypeAlias) {
