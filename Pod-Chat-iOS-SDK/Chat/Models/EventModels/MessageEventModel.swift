@@ -16,14 +16,16 @@ open class MessageEventModel {
     public let threadId:    Int?
     public let messageId:   Int?
     public let senderId:    Int?
+    public let pinned:      Bool?
     
     
-    init(type: MessageEventTypes, message: Message, threadId: Int?, messageId: Int?, senderId: Int?) {
+    init(type: MessageEventTypes, message: Message, threadId: Int?, messageId: Int?, senderId: Int?, pinned: Bool?) {
         self.type       = type
         self.message    = message
         self.threadId   = threadId
         self.messageId  = messageId
         self.senderId   = senderId
+        self.pinned     = pinned
     }
     
 }

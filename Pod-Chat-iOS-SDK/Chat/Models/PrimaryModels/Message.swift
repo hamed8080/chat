@@ -11,25 +11,6 @@ import SwiftyJSON
 
 
 open class Message {
-    /*
-     * + MessageVO      Message:
-     *    - delivered:      Bool?
-     *    - editable:       Bool?
-     *    - edited:         Bool?
-     *    - id:             Int?
-     *    - message:        String?
-     *    - metadata:       String?
-     *    - ownerId:        Int?
-     *    - previousId:     Int?
-     *    - seen:           Bool?
-     *    - threadId:       Int?
-     *    - time:           Int?
-     *    - uniqueId:       String?
-     *    - conversation:   Conversation?
-     *    - forwardInfo:    ForwardInfo?
-     *    - participant:    Participant?
-     *    - replyInfo:      ReplyInfo?
-     */
     
     public var deletable:   Bool?
     public var delivered:   Bool?
@@ -41,6 +22,7 @@ open class Message {
     public var messageType: String?
     public var metadata:    String?
     public var ownerId:     Int?
+    public var pinned:      Bool?
     public var previousId:  Int?
     public var seen:        Bool?
     public var systemMetadata:  String?
@@ -67,6 +49,7 @@ open class Message {
         self.message        = pushMessageVO["message"].string
         self.messageType    = pushMessageVO["messageType"].string
         self.metadata       = pushMessageVO["metadata"].string
+        self.pinned         = pushMessageVO["pinned"].bool
         self.previousId     = pushMessageVO["previousId"].int
         self.seen           = pushMessageVO["seen"].bool
         self.systemMetadata = pushMessageVO["systemMetadata"].string
@@ -110,6 +93,7 @@ open class Message {
                 messageType:    String?,
                 metadata:       String?,
                 ownerId:        Int?,
+                pinned:         Bool?,
                 previousId:     Int?,
                 seen:           Bool?,
                 systemMetadata: String?,
@@ -132,6 +116,7 @@ open class Message {
         self.messageType    = messageType
         self.metadata       = metadata
         self.ownerId        = participant?.id
+        self.pinned         = pinned
         self.previousId     = previousId
         self.seen           = seen
         self.systemMetadata = systemMetadata
@@ -158,6 +143,7 @@ open class Message {
         self.messageType    = theMessage.messageType
         self.metadata       = theMessage.metadata
         self.ownerId        = theMessage.participant?.id
+        self.pinned         = theMessage.pinned
         self.previousId     = theMessage.previousId
         self.seen           = theMessage.seen
         self.systemMetadata = theMessage.systemMetadata
@@ -186,6 +172,7 @@ open class Message {
                             "messageType":      messageType ?? NSNull(),
                             "metadata":         metadata ?? NSNull(),
                             "ownerId":          ownerId ?? NSNull(),
+                            "pinned":           pinned ?? NSNull(),
                             "previousId":       previousId ?? NSNull(),
                             "seen":             seen ?? NSNull(),
                             "systemMetadata":   systemMetadata ?? NSNull(),

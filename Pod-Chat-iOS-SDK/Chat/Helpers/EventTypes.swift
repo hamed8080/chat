@@ -48,7 +48,8 @@ public enum ThreadEventTypes {
     case THREAD_DELETE
     case THREAD_NEW                     // type 1
     case THREAD_REMOVE_PARTICIPANTS     // type 18
-    
+    case MESSAGE_PIN
+    case MESSAGE_UNPIN
 //    case THREAD_PARTICIPANT_NEW
 //    case THREAD_PARTICIPANT_DELETE
  

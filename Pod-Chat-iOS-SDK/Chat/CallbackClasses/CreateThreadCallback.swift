@@ -22,8 +22,10 @@ extension Chat {
             let tNewEM = ThreadEventModel(type:         ThreadEventTypes.THREAD_NEW,
                                           participants: nil,
                                           threads:      [conversationModel],
-                                          threadId:     nil,
-                                          senderId:     nil)
+                                          threadId:     message.subjectId,
+                                          senderId:     nil,
+                                          unreadCount:  message.content?.convertToJSON()["unreadCount"].int,
+                                          pinMessage:   nil)
             delegate?.threadEvents(model: tNewEM)
         }
         

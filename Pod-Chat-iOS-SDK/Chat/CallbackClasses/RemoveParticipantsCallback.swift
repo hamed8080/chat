@@ -30,13 +30,17 @@ extension Chat {
                                                     participants:   nil,
                                                     threads:        nil,
                                                     threadId:       message.subjectId,
-                                                    senderId:       nil)
+                                                    senderId:       nil,
+                                                    unreadCount:    message.content?.convertToJSON()["unreadCount"].int,
+                                                    pinMessage:     nil)
         delegate?.threadEvents(model: tRemoveParticipantEM)
         let tLastActivityEM = ThreadEventModel(type:            ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME,
                                                participants:    nil,
                                                threads:         nil,
                                                threadId:        message.subjectId,
-                                               senderId:        nil)
+                                               senderId:        nil,
+                                               unreadCount:     message.content?.convertToJSON()["unreadCount"].int,
+                                               pinMessage:      nil)
         delegate?.threadEvents(model: tLastActivityEM)
         
         

@@ -58,7 +58,9 @@ extension Chat {
                                                          participants:  nil,
                                                          threads:       threadsModel.threads,
                                                          threadId:      nil,
-                                                         senderId:      nil)
+                                                         senderId:      nil,
+                                                         unreadCount:   message.content?.convertToJSON()["unreadCount"].int,
+                                                         pinMessage:    nil)
                     delegate?.threadEvents(model: tLastChangeEM)
                     
                     var conversations = [Conversation]()
@@ -111,7 +113,9 @@ extension Chat {
                                                          participants:  nil,
                                                          threads:       nil,
                                                          threadId:      id,
-                                                         senderId:      nil)
+                                                         senderId:      nil,
+                                                         unreadCount:   message.content?.convertToJSON()["unreadCount"].int,
+                                                         pinMessage:    nil)
                         delegate?.threadEvents(model: tDeleteEM)
                     }
                     Chat.cacheDB.deleteThreads(withThreadIds: cacheThreadIds)

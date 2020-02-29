@@ -16,11 +16,13 @@ extension Chat {
     func responseOfUnpinThread(withMessage message: ChatMessage) {
         log.verbose("Message of type 'UNPIN_THREAD' recieved", context: "Chat")
         
-        let tUnpinEM = ThreadEventModel(type:            ThreadEventTypes.THREAD_UNPIN,
-                                        participants:    nil,
-                                        threads:         nil,
-                                        threadId:        message.subjectId,
-                                        senderId:        nil)
+        let tUnpinEM = ThreadEventModel(type:           ThreadEventTypes.THREAD_UNPIN,
+                                        participants:   nil,
+                                        threads:        nil,
+                                        threadId:       message.subjectId,
+                                        senderId:       nil,
+                                        unreadCount:    message.content?.convertToJSON()["unreadCount"].int,
+                                        pinMessage:     nil)
         delegate?.threadEvents(model: tUnpinEM)
         
         if enableCache {

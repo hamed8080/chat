@@ -41,7 +41,8 @@ extension Chat {
                                                   message:  myMessage,
                                                   threadId: message.subjectId,
                                                   messageId: message.messageId,
-                                                  senderId: nil)
+                                                  senderId: nil,
+                                                  pinned:   nil)
         delegate?.messageEvents(model: messageEventModel)
         
         if enableCache {
@@ -93,8 +94,9 @@ extension Chat {
         let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_DELIVERY,
                                                   message:  myMessage,
                                                   threadId: message.subjectId,
-                                                  messageId: message.messageId ?? message.content?.convertToJSON()["messageId"].int,
-                                                  senderId: message.participantId ?? message.content?.convertToJSON()["participantId"].int)
+                                                  messageId: message.content?.convertToJSON()["messageId"].int ?? message.messageId,
+                                                  senderId: message.content?.convertToJSON()["participantId"].int ?? message.participantId,
+                                                  pinned:   message.content?.convertToJSON()["pinned"].bool)
         delegate?.messageEvents(model: messageEventModel)
         
         var findItAt: Int?
@@ -204,8 +206,9 @@ extension Chat {
         let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_SEEN,
                                                   message:  myMessage,
                                                   threadId: message.subjectId,
-                                                  messageId: message.messageId ?? message.content?.convertToJSON()["messageId"].int,
-                                                  senderId: message.participantId ?? message.content?.convertToJSON()["participantId"].int)
+                                                  messageId: message.content?.convertToJSON()["messageId"].int ?? message.messageId,
+                                                  senderId: message.content?.convertToJSON()["participantId"].int ?? message.participantId,
+                                                  pinned:   message.content?.convertToJSON()["pinned"].bool)
         delegate?.messageEvents(model: messageEventModel)
         
         var findItAt: Int?

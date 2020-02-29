@@ -98,6 +98,7 @@
         <attribute name="messageType" optional="YES" attributeType="String"/>
         <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="ownerId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="pinned" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="previousId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="seen" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="systemMetadata" optional="YES" attributeType="String"/>
@@ -280,7 +281,7 @@
         <element name="CMForwardInfo" positionX="44.06640625" positionY="6.28515625" width="128" height="90"/>
         <element name="CMImage" positionX="-460.42578125" positionY="37.66796875" width="128" height="148"/>
         <element name="CMLinkedUser" positionX="-319.42578125" positionY="117.296875" width="128" height="135"/>
-        <element name="CMMessage" positionX="-287.66796875" positionY="271.8515625" width="128" height="358"/>
+        <element name="CMMessage" positionX="-287.66796875" positionY="271.8515625" width="128" height="373"/>
         <element name="CMParticipant" positionX="349.671875" positionY="95.74609375" width="128" height="508"/>
         <element name="CMPinMessage" positionX="-261" positionY="0" width="128" height="103"/>
         <element name="CMReplyInfo" positionX="166.9453125" positionY="487.76171875" width="128" height="178"/>

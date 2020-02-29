@@ -121,7 +121,8 @@ extension Chat {
                                                                       message:  message,
                                                                       threadId: message.threadId,
                                                                       messageId: nil,
-                                                                      senderId: nil)
+                                                                      senderId: nil,
+                                                                      pinned:   content["pinned"].bool)
                             Chat.sharedInstance.delegate?.messageEvents(model: messageEventModel)
                         }
                         
@@ -131,7 +132,8 @@ extension Chat {
                                                                       message:  message,
                                                                       threadId: message.threadId,
                                                                       messageId: nil,
-                                                                      senderId: nil)
+                                                                      senderId: nil,
+                                                                      pinned:   content["pinned"].bool)
                             Chat.sharedInstance.delegate?.messageEvents(model: messageEventModel)
                         }
                         
@@ -152,7 +154,8 @@ extension Chat {
                                                                       message:  cacheMessage,
                                                                       threadId: cacheMessage.threadId,
                                                                       messageId: nil,
-                                                                      senderId: nil)
+                                                                      senderId: nil,
+                                                                      pinned:   content["pinned"].bool)
                             Chat.sharedInstance.delegate?.messageEvents(model: messageEventModel)
                         }
                     }
