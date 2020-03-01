@@ -191,7 +191,7 @@ extension Chat {
          *
          */
         log.verbose("Message of type 'SEEN' recieved", context: "Chat")
-        "implement retrieve newThreads from cache, based on unreadCount + update unreadCount when seen is called"
+        
         if (message.content?.convertToJSON()["participantId"].int ?? message.participantId) == userInfo?.id {
             let messages = Chat.cacheDB.retrieveMessageHistory(count: 999,
                                                                firstMessageId: message.content?.convertToJSON()["messageId"].int ?? message.messageId,
