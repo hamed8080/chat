@@ -720,6 +720,10 @@ extension Chat {
                                                    pinMessage:      nil)
             delegate?.threadEvents(model: tActivityTimeEM)
             
+            if let count = message.content?.convertToJSON()["unreadCount"].int, let threadId = message.subjectId {
+                Chat.cacheDB.updateUnreadCountOnCMConversation(withThreadId: threadId, unreadCount: count, addCount: nil)
+            }
+            
             
             // this functionality has beed deprecated
             /*
@@ -876,10 +880,12 @@ extension Chat {
         
         if let messageOwner = message.participant?.id {
             if messageOwner != userInfo?.id {
+                Chat.cacheDB.updateUnreadCountOnCMConversation(withThreadId: threadId, unreadCount: nil, addCount: 1)
                 let deliveryModel = DeliverSeenRequestModel(messageId:  message.id ?? 0,
                                                             ownerId:    messageOwner,
                                                             typeCode:   nil)
-                deliver(inputModel: deliveryModel)
+                seen(inputModel: deliveryModel)
+//                deliver(inputModel: deliveryModel)
             }
         }
         
@@ -946,6 +952,10 @@ extension Chat {
                                               unreadCount:  message.content?.convertToJSON()["unreadCount"].int,
                                               pinMessage:   nil)
         delegate?.threadEvents(model: tInfoUpdatedEM)
+        
+        if let count = message.content?.convertToJSON()["unreadCount"].int, let threadId = message.subjectId {
+            Chat.cacheDB.updateUnreadCountOnCMConversation(withThreadId: threadId, unreadCount: count, addCount: nil)
+        }
     }
     
     

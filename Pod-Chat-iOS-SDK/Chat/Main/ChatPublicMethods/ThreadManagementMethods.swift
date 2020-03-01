@@ -101,14 +101,21 @@ extension Chat {
         
         // if cache is enabled by user, it will return cache result to the user
         if enableCache {
-            if let cacheThreads = Chat.cacheDB.retrieveThreads(ascending:   false,
-                                                               count:       getThreadsInput.count ?? 50,
-                                                               name:        getThreadsInput.name,
-                                                               offset:      getThreadsInput.offset ?? 0,
-                                                               threadIds:   getThreadsInput.threadIds/*,
-                                                               timeStamp:   cacheTimeStamp*/) {
-                cacheResponse(cacheThreads)
+            if getThreadsInput.new ?? false {
+                if let cacheThreads = Chat.cacheDB.retrieveNewThreads(count:    getThreadsInput.count ?? 50,
+                                                                      offset:   getThreadsInput.offset ?? 0) {
+                    cacheResponse(cacheThreads)
+                }
+            } else {
+                if let cacheThreads = Chat.cacheDB.retrieveThreads(ascending:   false,
+                                                                   count:       getThreadsInput.count ?? 50,
+                                                                   name:        getThreadsInput.name,
+                                                                   offset:      getThreadsInput.offset ?? 0,
+                                                                   threadIds:   getThreadsInput.threadIds) {
+                    cacheResponse(cacheThreads)
+                }
             }
+            
         }
         
     }

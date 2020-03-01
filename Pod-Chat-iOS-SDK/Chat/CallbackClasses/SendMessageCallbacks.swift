@@ -191,6 +191,21 @@ extension Chat {
          *
          */
         log.verbose("Message of type 'SEEN' recieved", context: "Chat")
+        "implement retrieve newThreads from cache, based on unreadCount + update unreadCount when seen is called"
+        if (message.content?.convertToJSON()["participantId"].int ?? message.participantId) == userInfo?.id {
+            let messages = Chat.cacheDB.retrieveMessageHistory(count: 999,
+                                                               firstMessageId: message.content?.convertToJSON()["messageId"].int ?? message.messageId,
+                                                               fromTime: nil,
+                                                               lastMessageId: nil,
+                                                               messageId: nil,
+                                                               offset: 0,
+                                                               order: nil,
+                                                               query: nil,
+                                                               threadId: message.subjectId!,
+                                                               toTime: nil,
+                                                               uniqueIds: nil)
+            Chat.cacheDB.updateUnreadCountOnCMConversation(withThreadId: message.subjectId!, unreadCount: messages?.history.count, addCount: nil)
+        }
         
         let returnData = CreateReturnData(hasError:         false,
                                           errorMessage:     "",
