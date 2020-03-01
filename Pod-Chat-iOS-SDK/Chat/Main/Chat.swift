@@ -45,6 +45,8 @@ public class Chat {
                                  messageTtl:                Int,
                                  maxReconnectTimeInterval:  Int?,
                                  reconnectOnClose:          Bool,
+                                 localImageCustomPath:      URL?,
+                                 localFileCustomPath:       URL?,
                                  deviecLimitationSpaceMB:   Int64?) {
         
         self.socketAddress      = socketAddress
@@ -99,6 +101,9 @@ public class Chat {
         self.SERVICE_ADDRESSES.PLATFORM_ADDRESS     = platformHost
         self.SERVICE_ADDRESSES.FILESERVER_ADDRESS   = fileServer
         self.SERVICE_ADDRESSES.MAP_ADDRESS          = mapServer
+        
+        self.localImageCustomPath = localImageCustomPath
+        self.localFileCustomPath = localFileCustomPath
         
         getDeviceIdWithToken { (deviceIdStr) in
             self.deviceId = deviceIdStr
@@ -160,6 +165,9 @@ public class Chat {
     var peerId:         Int?
     var oldPeerId:      Int?
     var userInfo:       User?
+    
+    var localImageCustomPath: URL?
+    var localFileCustomPath: URL?
     
     var getHistoryCount         = 50
     var getUserInfoRetry        = 5
