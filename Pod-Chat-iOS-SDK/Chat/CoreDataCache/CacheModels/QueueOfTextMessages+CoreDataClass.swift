@@ -19,6 +19,7 @@ public class QueueOfTextMessages: NSManagedObject {
 //        var metadata:       JSON?
         var repliedTo:      Int?
         var threadId:       Int?
+        var messageType:    Int?
 //        var systemMetadata: JSON?
         
         func createVariables() {
@@ -33,6 +34,9 @@ public class QueueOfTextMessages: NSManagedObject {
             if let threadId2 = self.threadId as? Int {
                 threadId = threadId2
             }
+            if let messageType2 = self.messageType as? Int {
+                messageType = messageType2
+            }
             
 //            self.systemMetadata?.retrieveJSONfromTransformableData(completion: { (returnedJSON) in
 //                systemMetadata = returnedJSON
@@ -42,6 +46,7 @@ public class QueueOfTextMessages: NSManagedObject {
         
         func createQueueOfWaitTextMessagesModel() -> QueueOfWaitTextMessagesModel {
             let queueOfWaitTextMessagesModel = QueueOfWaitTextMessagesModel(content:        self.content,
+                                                                            messageType:    MESSAGE_TYPE.getType(from: messageType ?? 1),
 //                                                                            metadata:       metadata,
                                                                             metadata:       self.metadata,
                                                                             repliedTo:      repliedTo,

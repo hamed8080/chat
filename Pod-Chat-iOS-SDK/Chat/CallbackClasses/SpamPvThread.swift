@@ -33,10 +33,10 @@ extension Chat {
                 }
                 // blocked Response
                 else if let _ = result["id"].int {
-                    let blockUserModel = BlockedContactModel(messageContent:    response.result!,
-                                                             hasError:          response.hasError,
-                                                             errorMessage:      response.errorMessage,
-                                                             errorCode:         response.errorCode)
+                    let blockUserModel = BlockedUserModel(messageContent:    response.result!,
+                                                          hasError:          response.hasError,
+                                                          errorMessage:      response.errorMessage,
+                                                          errorCode:         response.errorCode)
                     success(blockUserModel)
                 }
             // ClearHistory Response

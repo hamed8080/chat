@@ -27,6 +27,7 @@ extension CMMessage {
     @NSManaged public var messageType:      String?
     @NSManaged public var metadata:         String?
     @NSManaged public var ownerId:          NSNumber?
+    @NSManaged public var pinned:           NSNumber?
     @NSManaged public var previousId:       NSNumber?
     @NSManaged public var seen:             NSNumber?
     @NSManaged public var systemMetadata:   String?

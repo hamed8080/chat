@@ -16,13 +16,17 @@ open class ThreadEventModel {
     public let threads:         [Conversation]?
     public let threadId:        Int?
     public let senderId:        Int?
+    public let unreadCount:     Int?
+    public let pinMessage:      PinUnpinMessage?
     
-    init(type: ThreadEventTypes, participants: [Participant]?, threads: [Conversation]?, threadId: Int?, senderId: Int?) {
+    init(type: ThreadEventTypes, participants: [Participant]?, threads: [Conversation]?, threadId: Int?, senderId: Int?, unreadCount: Int?, pinMessage: PinUnpinMessage?) {
         self.type           = type
         self.participants   = participants
         self.threads        = threads
         self.threadId       = threadId
         self.senderId       = senderId
+        self.unreadCount    = unreadCount
+        self.pinMessage     = pinMessage
     }
     
 }

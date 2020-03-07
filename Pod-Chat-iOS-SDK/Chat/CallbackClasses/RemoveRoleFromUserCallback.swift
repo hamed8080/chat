@@ -26,17 +26,21 @@ extension Chat {
                                           contentCount:     nil,
                                           subjectId:        message.subjectId)
         
-        let tRemoveAdminEM = ThreadEventModel(type:         ThreadEventTypes.THREAD_ADD_ADMIN,
+        let tRemoveAdminEM = ThreadEventModel(type:         ThreadEventTypes.THREAD_REMOVE_ADMIN,
                                               participants: nil,
                                               threads:      nil,
                                               threadId:     message.subjectId,
-                                              senderId:     nil)
+                                              senderId:     nil,
+                                              unreadCount:  message.content?.convertToJSON()["unreadCount"].int,
+                                              pinMessage:   nil)
         delegate?.threadEvents(model: tRemoveAdminEM)
         let tLastActivityEM = ThreadEventModel(type:            ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME,
                                                participants:    nil,
                                                threads:         nil,
                                                threadId:        message.subjectId,
-                                               senderId:        nil)
+                                               senderId:        nil,
+                                               unreadCount:     message.content?.convertToJSON()["unreadCount"].int,
+                                               pinMessage:      nil)
         delegate?.threadEvents(model: tLastActivityEM)
         
         

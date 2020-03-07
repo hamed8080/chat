@@ -25,6 +25,17 @@ extension Chat {
                                           contentCount:     nil,
                                           subjectId:        message.subjectId)
         
+        if let messageContent = message.content?.convertToJSON() {
+            let threadEventModel = ThreadEventModel(type: ThreadEventTypes.MESSAGE_UNPIN,
+                                                    participants:   nil,
+                                                    threads:        nil,
+                                                    threadId:       message.subjectId,
+                                                    senderId:       nil,
+                                                    unreadCount:    messageContent["unreadCount"].int,
+                                                    pinMessage:     PinUnpinMessage(pinUnpinContent: messageContent))
+            delegate?.threadEvents(model: threadEventModel)
+        }
+        
         if enableCache {
             if let thId = message.subjectId {
                 Chat.cacheDB.deletePinMessageFromCMConversationEntity(threadId: thId)

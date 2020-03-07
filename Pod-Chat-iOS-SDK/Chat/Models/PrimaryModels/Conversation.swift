@@ -74,7 +74,7 @@ open class Conversation {
         self.partnerLastSeenMessageId           = messageContent["partnerLastSeenMessageId"].int
         self.partnerLastSeenMessageNanos        = messageContent["partnerLastSeenMessageNanos"].uInt
         self.partnerLastSeenMessageTime         = messageContent["partnerLastSeenMessageTime"].uInt
-        self.pin                            = messageContent["pin"].bool
+        self.pin                            = messageContent["pin"].bool ?? messageContent["pinned"].bool
         self.time                           = messageContent["time"].uInt
         self.title                          = messageContent["title"].string
         self.type                           = messageContent["type"].int

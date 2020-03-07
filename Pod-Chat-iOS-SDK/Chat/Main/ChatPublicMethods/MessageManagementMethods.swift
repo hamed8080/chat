@@ -57,6 +57,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_HISTORY.rawValue,
                                             content:            "\(getHistoryInput.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -145,6 +146,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_HISTORY.rawValue,
                                             content:            "\(getMentionInput.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -199,6 +201,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.CLEAR_HISTORY.rawValue,
                                             content:            "\(clearHistoryInput.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -266,6 +269,7 @@ extension Chat {
          */
         if enableCache {
             let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(content:          sendTextMessageInput.content,
+                                                                          messageType:      sendTextMessageInput.messageType,
                                                                           metadata:         (sendTextMessageInput.metadata != nil) ? "\(sendTextMessageInput.metadata!)" : nil,
                                                                           repliedTo:        sendTextMessageInput.repliedTo,
                                                                           systemMetadata:   (sendTextMessageInput.systemMetadata != nil) ? "\(sendTextMessageInput.systemMetadata!)" : nil,
@@ -280,6 +284,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.MESSAGE.rawValue,
                                             content:            messageTxtContent,
+                                            messageType:        sendTextMessageInput.messageType.returnIntValue(),
                                             metadata:           (sendTextMessageInput.metadata != nil) ? "\(sendTextMessageInput.metadata!)" : nil,
                                             repliedTo:          sendTextMessageInput.repliedTo,
                                             systemMetadata:     (sendTextMessageInput.systemMetadata != nil) ? "\(sendTextMessageInput.systemMetadata!)" : nil,
@@ -341,6 +346,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.BOT_MESSAGE.rawValue,
                                             content:            messageTxtContent,
+                                            messageType:        nil,
                                             metadata:           "\(sendInterActiveMessageInput.metadata)",
                                             repliedTo:          nil,
                                             systemMetadata:     (sendInterActiveMessageInput.systemMetadata != nil) ? "\(sendInterActiveMessageInput.systemMetadata!)" : nil,
@@ -399,6 +405,7 @@ extension Chat {
          */
         if enableCache {
             let messageObjectToSendToQueue = QueueOfWaitEditMessagesModel(content:      editMessageInput.content,
+                                                                          messageType:  editMessageInput.messageType,
                                                                           metadata:     (editMessageInput.metadata != nil) ? "\(editMessageInput.metadata!)" : nil,
                                                                           repliedTo:    editMessageInput.repliedTo,
                                                                           messageId:    editMessageInput.messageId,
@@ -413,6 +420,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.EDIT_MESSAGE.rawValue,
                                             content:            messageTxtContent,
+                                            messageType:        editMessageInput.messageType.returnIntValue(),
                                             metadata:           (editMessageInput.metadata != nil) ? (editMessageInput.metadata!) : nil,
                                             repliedTo:          editMessageInput.repliedTo,
                                             systemMetadata:     nil,
@@ -477,6 +485,7 @@ extension Chat {
          */
         if enableCache {
             let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(content:          replyMessageInput.content,
+                                                                          messageType:      replyMessageInput.messageType,
                                                                           metadata:         (replyMessageInput.metadata != nil) ? "\(replyMessageInput.metadata!)" : nil,
                                                                           repliedTo:        replyMessageInput.repliedTo,
                                                                           systemMetadata:   nil,
@@ -491,6 +500,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.MESSAGE.rawValue,
                                             content:            messageTxtContent,
+                                            messageType:        replyMessageInput.messageType.returnIntValue(),
                                             metadata:           (replyMessageInput.metadata != nil) ? "\(replyMessageInput.metadata!)" : nil,
                                             repliedTo:          replyMessageInput.repliedTo,
                                             systemMetadata:     nil,
@@ -567,6 +577,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.FORWARD_MESSAGE.rawValue,
                                             content:            "\(forwardMessageInput.messageIds)",
+                                            messageType:        nil,
                                             metadata:           (forwardMessageInput.metadata != nil) ? "\(forwardMessageInput.metadata!)" : nil,
                                             repliedTo:          forwardMessageInput.repliedTo,
                                             systemMetadata:     nil,
@@ -633,6 +644,7 @@ extension Chat {
         if enableCache {
             if let file = sendFileMessageInput.uploadInput as? UploadFileRequestModel {
                 let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      sendFileMessageInput.messageInput.content,
+                                                                              messageType:  sendFileMessageInput.messageInput.messageType,
                                                                               fileName:     file.fileName,
                                                                               metadata:     (sendFileMessageInput.messageInput.metadata != nil) ? "\(sendFileMessageInput.messageInput.metadata!)" : nil,
                                                                               repliedTo:    sendFileMessageInput.messageInput.repliedTo,
@@ -649,6 +661,7 @@ extension Chat {
                 
             } else if let image = sendFileMessageInput.uploadInput as? UploadImageRequestModel {
                 let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      sendFileMessageInput.messageInput.content,
+                                                                              messageType:  sendFileMessageInput.messageInput.messageType,
                                                                               fileName:     nil,
                                                                               metadata:     (sendFileMessageInput.messageInput.metadata != nil) ? "\(sendFileMessageInput.messageInput.metadata!)" : nil,
                                                                               repliedTo:    sendFileMessageInput.messageInput.repliedTo,
@@ -721,6 +734,7 @@ extension Chat {
         // this will call when all data were uploaded and it will sends the textMessage
         func sendMessage(withMetadata: JSON) {
             let sendMessageParamModel = SendTextMessageRequestModel(content:        sendFileMessageInput.messageInput.content,
+                                                                    messageType:    MESSAGE_TYPE.file,
                                                                     metadata:       "\(withMetadata)",
                                                                     repliedTo:      sendFileMessageInput.messageInput.repliedTo,
                                                                     systemMetadata: sendFileMessageInput.messageInput.metadata,
@@ -840,6 +854,7 @@ extension Chat {
                                                  uniqueId:          sendLocationMessageRequest.uniqueId)
             
             let messageInput = SendTextMessageRequestModel(content: sendLocationMessageRequest.sendMessageContent ?? "",
+                                                           messageType:    MESSAGE_TYPE.picture,
                                                            metadata: sendLocationMessageRequest.sendMessageMetadata,
                                                            repliedTo: sendLocationMessageRequest.sendMessageRepliedTo,
                                                            systemMetadata: nil,
@@ -901,6 +916,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.DELETE_MESSAGE.rawValue,
                                             content:            "\(deleteMessageInput.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -952,6 +968,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.DELETE_MESSAGE.rawValue,
                                             content:            "\(deleteMessageInput.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -1057,6 +1074,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_MESSAGE_DELEVERY_PARTICIPANTS.rawValue,
                                             content:            "\(messageDeliveryListInput.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -1108,6 +1126,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_MESSAGE_SEEN_PARTICIPANTS.rawValue,
                                             content:            "\(messageSeenListInput.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -1213,6 +1232,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.SYSTEM_MESSAGE.rawValue,
                                             content:            "\(input.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -1265,6 +1285,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.PIN_MESSAGE.rawValue,
                                             content:            "\(inputModel.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -1315,6 +1336,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.UNPIN_MESSAGE.rawValue,
                                             content:            "\(inputModel.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -1352,6 +1374,7 @@ extension Chat {
         
         for txt in textMessages {
             let input = SendTextMessageRequestModel(content:    txt.content!,
+                                                    messageType:    txt.messageType,
                                                     metadata:   txt.metadata,
                                                     repliedTo:  txt.repliedTo,
                                                     systemMetadata: txt.systemMetadata,
@@ -1377,6 +1400,7 @@ extension Chat {
         
         for editMsg in editMessages {
             let input = EditTextMessageRequestModel(content: editMsg.content!,
+                                                    messageType: editMsg.messageType,
                                                     metadata: editMsg.metadata,
                                                     repliedTo: editMsg.repliedTo,
                                                     messageId: editMsg.messageId!,
@@ -1425,6 +1449,7 @@ extension Chat {
                        seen:            @escaping (SendMessageModel)->() ) {
         
         let message = SendTextMessageRequestModel(content: fileMessages.content ?? "",
+                                                  messageType:  MESSAGE_TYPE.file,
                                                   metadata: fileMessages.metadata,
                                                   repliedTo: fileMessages.repliedTo,
                                                   systemMetadata: nil,

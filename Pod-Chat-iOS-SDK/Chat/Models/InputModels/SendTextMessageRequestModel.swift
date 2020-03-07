@@ -13,6 +13,7 @@ import SwiftyJSON
 open class SendTextMessageRequestModel {
     
     public let content:         String
+    public let messageType:     MESSAGE_TYPE
     public let metadata:        String?
     public let repliedTo:       Int?
     public let systemMetadata:  String?
@@ -22,6 +23,7 @@ open class SendTextMessageRequestModel {
     public let uniqueId: String
     
     public init(content:        String,
+                messageType:    MESSAGE_TYPE,
                 metadata:       String?,
                 repliedTo:      Int?,
                 systemMetadata: String?,
@@ -30,6 +32,7 @@ open class SendTextMessageRequestModel {
                 uniqueId:       String?) {
         
         self.content        = content
+        self.messageType    = messageType
         self.metadata       = metadata
         self.repliedTo      = repliedTo
         self.systemMetadata = systemMetadata

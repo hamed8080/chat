@@ -38,6 +38,7 @@ extension Chat {
                                     messageType:    nil,
                                     metadata:       nil,
                                     ownerId:        nil,
+                                    pinned:         content.convertToJSON()["pinned"].bool,
                                     previousId:     nil,
                                     seen:           nil,
                                     systemMetadata: nil,
@@ -50,11 +51,24 @@ extension Chat {
                                     replyInfo:      nil)
             
             let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_DELETE,
-                                                      message:  myMessage,
+                                                      message:  nil,
                                                       threadId: message.subjectId,
-                                                      messageId: message.messageId,
-                                                      senderId: nil)
+                                                      messageId: message.content?.convertToJSON()["id"].int ?? message.messageId ?? Int(content),
+                                                      senderId: nil,
+                                                      pinned:   message.content?.convertToJSON()["pinned"].bool)
             delegate?.messageEvents(model: messageEventModel)
+            
+            if message.content?.convertToJSON()["pinned"].bool ?? false {
+                let threadEventModel = ThreadEventModel(type:           ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME,
+                                                        participants:   nil,
+                                                        threads:        nil,
+                                                        threadId:       message.subjectId,
+                                                        senderId:       nil,
+                                                        unreadCount:    message.content?.convertToJSON()["unreadCount"].int,
+                                                        pinMessage:     nil)
+                delegate?.threadEvents(model: threadEventModel)
+            }
+            
         }
         
         if enableCache {

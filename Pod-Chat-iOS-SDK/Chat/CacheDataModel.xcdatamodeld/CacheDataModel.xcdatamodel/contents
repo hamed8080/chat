@@ -98,6 +98,7 @@
         <attribute name="messageType" optional="YES" attributeType="String"/>
         <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="ownerId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="pinned" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="previousId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="seen" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="systemMetadata" optional="YES" attributeType="String"/>
@@ -200,6 +201,7 @@
     <entity name="QueueOfEditMessages" representedClassName=".QueueOfEditMessages" syncable="YES">
         <attribute name="content" optional="YES" attributeType="String"/>
         <attribute name="messageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="messageType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
@@ -212,6 +214,7 @@
         <attribute name="fileToSend" optional="YES" attributeType="Binary"/>
         <attribute name="hC" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="imageToSend" optional="YES" attributeType="Binary"/>
+        <attribute name="messageType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
@@ -231,6 +234,7 @@
     </entity>
     <entity name="QueueOfTextMessages" representedClassName=".QueueOfTextMessages" syncable="YES">
         <attribute name="content" optional="YES" attributeType="String"/>
+        <attribute name="messageType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="systemMetadata" optional="YES" attributeType="String"/>
@@ -277,7 +281,7 @@
         <element name="CMForwardInfo" positionX="44.06640625" positionY="6.28515625" width="128" height="90"/>
         <element name="CMImage" positionX="-460.42578125" positionY="37.66796875" width="128" height="148"/>
         <element name="CMLinkedUser" positionX="-319.42578125" positionY="117.296875" width="128" height="135"/>
-        <element name="CMMessage" positionX="-287.66796875" positionY="271.8515625" width="128" height="358"/>
+        <element name="CMMessage" positionX="-287.66796875" positionY="271.8515625" width="128" height="373"/>
         <element name="CMParticipant" positionX="349.671875" positionY="95.74609375" width="128" height="508"/>
         <element name="CMPinMessage" positionX="-261" positionY="0" width="128" height="103"/>
         <element name="CMReplyInfo" positionX="166.9453125" positionY="487.76171875" width="128" height="178"/>
@@ -286,10 +290,10 @@
         <element name="CMUserRole" positionX="-54" positionY="243" width="128" height="120"/>
         <element name="MessageGaps" positionX="293.2421875" positionY="-115.6953125" width="128" height="90"/>
         <element name="PhoneContact" positionX="-261" positionY="0" width="128" height="105"/>
-        <element name="QueueOfEditMessages" positionX="-243" positionY="18" width="128" height="148"/>
-        <element name="QueueOfFileMessages" positionX="-261" positionY="0" width="128" height="238"/>
+        <element name="QueueOfEditMessages" positionX="-243" positionY="18" width="128" height="163"/>
+        <element name="QueueOfFileMessages" positionX="-261" positionY="0" width="128" height="253"/>
         <element name="QueueOfForwardMessages" positionX="-234" positionY="36" width="128" height="133"/>
-        <element name="QueueOfTextMessages" positionX="-252" positionY="9" width="128" height="148"/>
+        <element name="QueueOfTextMessages" positionX="-252" positionY="9" width="128" height="163"/>
         <element name="QueueOfUploadFiles" positionX="-252" positionY="9" width="128" height="163"/>
         <element name="QueueOfUploadImages" positionX="-261" positionY="0" width="128" height="223"/>
         <element name="ThreadAdmins" positionX="-261" positionY="0" width="128" height="118"/>

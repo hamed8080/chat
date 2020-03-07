@@ -479,6 +479,7 @@ extension Chat {
             
             let chatMessage = SendChatMessageVO(chatMessageVOType: chatMessageVOTypes.PING.rawValue,
                                                 content:            nil,
+                                                messageType:        nil,
                                                 metadata:           nil,
                                                 repliedTo:          nil,
                                                 systemMetadata:     nil,
@@ -706,14 +707,22 @@ extension Chat {
                                                         participants:   nil,
                                                         threads:        nil,
                                                         threadId:       message.subjectId,
-                                                        senderId:       message.participantId)
+                                                        senderId:       message.participantId,
+                                                        unreadCount:    message.content?.convertToJSON()["unreadCount"].int,
+                                                        pinMessage:     nil)
             delegate?.threadEvents(model: tUnreadCountUpdateEM)
             let tActivityTimeEM = ThreadEventModel(type:            ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME,
                                                    participants:    nil,
                                                    threads:         nil,
                                                    threadId:        message.subjectId,
-                                                   senderId:        nil)
+                                                   senderId:        nil,
+                                                   unreadCount:     message.content?.convertToJSON()["unreadCount"].int,
+                                                   pinMessage:      nil)
             delegate?.threadEvents(model: tActivityTimeEM)
+            
+            if let count = message.content?.convertToJSON()["unreadCount"].int, let threadId = message.subjectId {
+                Chat.cacheDB.updateUnreadCountOnCMConversation(withThreadId: threadId, unreadCount: count, addCount: nil)
+            }
             
             
             // this functionality has beed deprecated
@@ -749,7 +758,8 @@ extension Chat {
         // a message of type 40 (BOT_MESSAGE) comes from Server.
         case chatMessageVOTypes.BOT_MESSAGE.rawValue:
             log.verbose("Message of type 'BOT_MESSAGE' recieved", context: "Chat")
-            let botEventModel = BotEventModel(type: BotEventTypes.BOT_MESSAGE, message: message.content)
+            let botEventModel = BotEventModel(type:     BotEventTypes.BOT_MESSAGE,
+                                              message:  message.content)
             delegate?.botEvents(model: botEventModel)
             break
             
@@ -777,7 +787,10 @@ extension Chat {
         case chatMessageVOTypes.SYSTEM_MESSAGE.rawValue:
             log.verbose("Message of type 'SYSTEM_MESSAGE' revieved", context: "Chat")
             
-            let systemEventModel = SystemEventModel(type: SystemEventTypes.IS_TYPING, time: nil, threadId: message.subjectId, user: message.content)
+            let systemEventModel = SystemEventModel(type:       SystemEventTypes.IS_TYPING,
+                                                    time:       nil,
+                                                    threadId:   message.subjectId,
+                                                    user:       message.content)
             delegate?.systemEvents(model: systemEventModel)
             return
             
@@ -867,10 +880,12 @@ extension Chat {
         
         if let messageOwner = message.participant?.id {
             if messageOwner != userInfo?.id {
+                Chat.cacheDB.updateUnreadCountOnCMConversation(withThreadId: threadId, unreadCount: nil, addCount: 1)
                 let deliveryModel = DeliverSeenRequestModel(messageId:  message.id ?? 0,
                                                             ownerId:    messageOwner,
                                                             typeCode:   nil)
-                deliver(inputModel: deliveryModel)
+                seen(inputModel: deliveryModel)
+//                deliver(inputModel: deliveryModel)
             }
         }
         
@@ -882,21 +897,26 @@ extension Chat {
         
         let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_NEW,
                                                   message:  message,
-                                                  threadId: nil,
+                                                  threadId: threadId,
                                                   messageId: nil,
-                                                  senderId: nil)
+                                                  senderId: nil,
+                                                  pinned:   messageContent["pinned"].bool)
         delegate?.messageEvents(model: messageEventModel)
         let tLastActivityEM = ThreadEventModel(type:            ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME,
                                                participants:    nil,
                                                threads:         nil,
                                                threadId:        threadId,
-                                               senderId:        nil)
+                                               senderId:        nil,
+                                               unreadCount:     messageContent["unreadCount"].int,
+                                               pinMessage:      nil)
         delegate?.threadEvents(model: tLastActivityEM)
         let tUnreadCountEM = ThreadEventModel(type:         ThreadEventTypes.THREAD_UNREAD_COUNT_UPDATED,
                                               participants: nil,
                                               threads:      nil,
                                               threadId:     threadId,
-                                              senderId:     nil)
+                                              senderId:     nil,
+                                              unreadCount:  messageContent["unreadCount"].int ?? message.conversation?.unreadCount,
+                                              pinMessage:   nil)
         delegate?.threadEvents(model: tUnreadCountEM)
         
     }
@@ -908,7 +928,9 @@ extension Chat {
                                                        participants:    nil,
                                                        threads:         nil,
                                                        threadId:        threadId,
-                                                       senderId:        nil)
+                                                       senderId:        nil,
+                                                       unreadCount:     nil,
+                                                       pinMessage:      nil)
             delegate?.threadEvents(model: tRemoveFromThreadEM)
             
             if enableCache {
@@ -925,9 +947,15 @@ extension Chat {
         let tInfoUpdatedEM = ThreadEventModel(type:         ThreadEventTypes.THREAD_INFO_UPDATED,
                                               participants: nil,
                                               threads:      [conversation],
-                                              threadId:     nil,
-                                              senderId:     nil)
+                                              threadId:     message.subjectId,
+                                              senderId:     nil,
+                                              unreadCount:  message.content?.convertToJSON()["unreadCount"].int,
+                                              pinMessage:   nil)
         delegate?.threadEvents(model: tInfoUpdatedEM)
+        
+        if let count = message.content?.convertToJSON()["unreadCount"].int, let threadId = message.subjectId {
+            Chat.cacheDB.updateUnreadCountOnCMConversation(withThreadId: threadId, unreadCount: count, addCount: nil)
+        }
     }
     
     
@@ -937,7 +965,9 @@ extension Chat {
             for item in object {
                 users.append(UserLastSeenDuration(userId: Int(item.0)!, time: item.1.intValue))
             }
-            let eventModel = ContactEventModel(type: ContactEventTypes.CONTACTS_LAST_SEEN, contacts: nil, contactsLastSeenDuration: users)
+            let eventModel = ContactEventModel(type:                        ContactEventTypes.CONTACTS_LAST_SEEN,
+                                               contacts:                    nil,
+                                               contactsLastSeenDuration:    users)
             delegate?.contactEvents(model: eventModel)
         }
     }
