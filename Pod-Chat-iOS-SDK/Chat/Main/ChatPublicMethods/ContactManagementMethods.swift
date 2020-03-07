@@ -259,9 +259,9 @@ extension Chat {
         params["firstName"]         = JSON(addContactsInput.firstName ?? "")
         params["lastName"]          = JSON(addContactsInput.lastName ?? "")
         params["email"]             = JSON(addContactsInput.email ?? "")
-        if let username = addContactsInput.username {
-            params["username"] = JSON(username)
-        }
+//        if let username = addContactsInput.username {
+//            params["username"] = JSON(username)
+//        }
         if let cellphoneNumber = addContactsInput.cellphoneNumber {
             params["cellphoneNumber"] = JSON(cellphoneNumber)
         }
@@ -293,7 +293,7 @@ extension Chat {
             url += "&cellphoneNumber=\(addContactsInput.cellphoneNumbers[index])"
             url += "&email=\(addContactsInput.emails[index])"
             url += "&uniqueId=\(addContactsInput.uniqueIds[index])"
-            url += "&username=\(addContactsInput.usernames[index])"
+//            url += "&username=\(addContactsInput.usernames[index])"
             if (index != contactCount - 1) {
                 url += "&"
             }
@@ -686,7 +686,7 @@ extension Chat {
                                                        emails:          emails,
                                                        firstNames:      firstNames,
                                                        lastNames:       lastNames,
-                                                       usernames:       [],
+//                                                       usernames:       [],
                                                        typeCode:        nil,
                                                        uniqueIds:       contactUniqueIds)
         

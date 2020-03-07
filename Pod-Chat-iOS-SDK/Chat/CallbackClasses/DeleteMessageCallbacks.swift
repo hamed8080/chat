@@ -51,9 +51,9 @@ extension Chat {
                                     replyInfo:      nil)
             
             let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_DELETE,
-                                                      message:  myMessage,
+                                                      message:  nil,
                                                       threadId: message.subjectId,
-                                                      messageId: message.content?.convertToJSON()["id"].int ?? message.messageId,
+                                                      messageId: message.content?.convertToJSON()["id"].int ?? message.messageId ?? Int(content),
                                                       senderId: nil,
                                                       pinned:   message.content?.convertToJSON()["pinned"].bool)
             delegate?.messageEvents(model: messageEventModel)
