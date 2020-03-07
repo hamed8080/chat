@@ -35,8 +35,10 @@ extension Chat {
         let tUpdateInfoEM = ThreadEventModel(type:          ThreadEventTypes.THREAD_INFO_UPDATED,
                                              participants:  nil,
                                              threads:       nil,
-                                             threadId:      message.subjectId,
-                                             senderId:      nil)
+                                             threadId:      message.content?.convertToJSON()["id"].int ?? message.subjectId,
+                                             senderId:      nil,
+                                             unreadCount:   message.content?.convertToJSON()["unreadCount"].int,
+                                             pinMessage:    nil)
         delegate?.threadEvents(model: tUpdateInfoEM)
         
         

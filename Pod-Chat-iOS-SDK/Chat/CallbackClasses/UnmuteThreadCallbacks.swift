@@ -21,7 +21,9 @@ extension Chat {
                                          participants:  nil,
                                          threads:       nil,
                                          threadId:      message.subjectId,
-                                         senderId:      nil)
+                                         senderId:      nil,
+                                         unreadCount:   message.content?.convertToJSON()["unreadCount"].int,
+                                         pinMessage:    nil)
         delegate?.threadEvents(model: tUnmuteEM)
         
         let returnData = CreateReturnData(hasError:         false,

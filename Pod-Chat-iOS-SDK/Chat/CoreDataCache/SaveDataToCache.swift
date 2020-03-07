@@ -832,7 +832,7 @@ extension Cache {
     
     // MARK: - save ImageObject:
     // this function will save (or update) image response that comes from server, in the Cache.
-    public func saveImageObject(imageInfo: ImageObject, imageData: Data) {
+    public func saveImageObject(imageInfo: ImageObject, imageData: Data, toLocalPath: URL?) {
         // check if there is any information about This Image File in the cache
         // if it has some data, it we will update that data,
         // otherwise we will create an object and save data on cache
@@ -869,13 +869,19 @@ extension Cache {
                             // we will delete them first, then we will create it again later
                             
                             // delete the original file from local storage of the app, using path of the file
-                            let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+                            var imagePath = ""
+                            if let path = toLocalPath {
+                                imagePath = path.absoluteString
+                            } else {
+                                let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+                                imagePath = path + "/\(fileSubPath.Images)/"
+                            }
                             
-                            let myFilePath = path + "/\(fileSubPath.Images)/" + "\(itemInCache.id!)\(itemInCache.name ?? "default")"
+                            let myImagePath = imagePath + "\(itemInCache.id!)\(itemInCache.name ?? "default")"
                             // check if this file is exixt on the app bunde, then delete it
-                            if FileManager.default.fileExists(atPath: myFilePath) {
+                            if FileManager.default.fileExists(atPath: myImagePath) {
                                 do {
-                                    try FileManager.default.removeItem(atPath: myFilePath)
+                                    try FileManager.default.removeItem(atPath: myImagePath)
                                 } catch {
                                     fatalError("can not delete the image from app bundle!")
                                 }
@@ -901,9 +907,15 @@ extension Cache {
                 theUploadImage.width        = (imageInfo.width ?? tempImage?.width) as NSNumber?
                 
                 // save file on app bundle
-                let directoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-                let directoryURL        = URL(fileURLWithPath: directoryPath)
-                let imagesLocalirectory = directoryURL.appendingPathComponent("\(fileSubPath.Images)")
+                var imagesLocalirectory: URL
+                if let path = toLocalPath {
+                    imagesLocalirectory = path
+                } else {
+                    let directoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+                    let directoryURL        = URL(fileURLWithPath: directoryPath)
+                    imagesLocalirectory = directoryURL.appendingPathComponent("\(fileSubPath.Images)")
+                }
+                
                 createDirectory(at: imagesLocalirectory)
                 
                 let imageLocalAdress    = imagesLocalirectory.appendingPathComponent("\(imageInfo.id)\(imageInfo.name ?? "default")")
@@ -921,7 +933,7 @@ extension Cache {
     
     // MARK: - save FileObject:
     // this function will save (or update) uploaded image response that comes from server, in the Cache.
-    public func saveFileObject(fileInfo: FileObject, fileData: Data) {
+    public func saveFileObject(fileInfo: FileObject, fileData: Data, toLocalPath: URL?) {
         // check if there is any information about This Image File in the cache
         // if it has some data, it we will update that data,
         // otherwise we will create an object and save data on cache
@@ -955,8 +967,15 @@ extension Cache {
                             // we will delete them first, then we will create it again later
                             
                             // delete the original file from local storage of the app, using path of the file
-                            let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-                            let myFilePath = path + "/\(fileSubPath.Files)/" + "\(itemInCache.id!)\(itemInCache.name ?? "default")"
+                            var filePath = ""
+                            if let path = toLocalPath {
+                                filePath = path.absoluteString
+                            } else {
+                                let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+                                filePath = path + "/\(fileSubPath.Files)/"
+                            }
+                            
+                            let myFilePath = filePath + "\(itemInCache.id!)\(itemInCache.name ?? "default")"
                             
                             if FileManager.default.fileExists(atPath: myFilePath) {
                                 do {
@@ -982,9 +1001,15 @@ extension Cache {
                 theUploadFile.name          = (fileInfo.name ?? tempFile?.name)
                 
                 // save file on app bundle
-                let directoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-                let directoryURL = URL(fileURLWithPath: directoryPath)
-                let filesLocalirectory = directoryURL.appendingPathComponent("\(fileSubPath.Files)")
+                var filesLocalirectory: URL
+                if let path = toLocalPath {
+                    filesLocalirectory = path
+                } else {
+                    let directoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+                    let directoryURL = URL(fileURLWithPath: directoryPath)
+                    filesLocalirectory = directoryURL.appendingPathComponent("\(fileSubPath.Files)")
+                }
+                
                 createDirectory(at: filesLocalirectory)
                 
                 let fileLocalAdress    = filesLocalirectory.appendingPathComponent("\(fileInfo.id)\(fileInfo.name ?? "default")")

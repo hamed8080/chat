@@ -14,6 +14,7 @@ class SendChatMessageVO {
     
     let chatMessageVOType:  Int
     var content:            String? = nil
+    var messageType:        Int? = nil
     var metadata:           String? = nil
     var repliedTo:          Int?    = nil
     var systemMetadata:     String? = nil
@@ -28,6 +29,7 @@ class SendChatMessageVO {
     
     init(chatMessageVOType: Int,
          content:           String?,
+         messageType:       Int?,
          metadata:          String?,
          repliedTo:         Int?,
          systemMetadata:    String?,
@@ -40,6 +42,7 @@ class SendChatMessageVO {
          isCreateThreadAndSendMessage: Bool?) {
         
         self.content            = content
+        self.messageType        = messageType
         self.metadata           = metadata
         self.repliedTo          = repliedTo
         self.systemMetadata     = systemMetadata
@@ -101,6 +104,9 @@ class SendChatMessageVO {
         if let myTypeCode = content["typeCode"].string {
             self.typeCode = myTypeCode
         }
+        if let myMessageType = content["messageType"].int {
+            self.messageType = myMessageType
+        }
         
         self.isCreateThreadAndSendMessage   = content["isCreateThreadAndSendMessage"].bool ?? false
         
@@ -134,6 +140,9 @@ class SendChatMessageVO {
                                "type":          chatMessageVOType]
         if let theMessage = content {
             messageVO["content"] = JSON(theMessage)
+        }
+        if let theMessageType = messageType {
+            messageVO["messageType"] = JSON(theMessageType)
         }
         if let theMetadata = metadata {
             messageVO["metadata"] = JSON(theMetadata)

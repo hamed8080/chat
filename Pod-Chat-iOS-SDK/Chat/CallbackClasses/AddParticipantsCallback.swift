@@ -53,14 +53,18 @@ extension Chat {
         let tAddParticipantEM = ThreadEventModel(type:          ThreadEventTypes.THREAD_ADD_PARTICIPANTS,
                                                  participants:  addParticipantModel.thread?.participants,
                                                  threads:       nil,
-                                                 threadId:      message.subjectId,
-                                                 senderId:      nil)
+                                                 threadId:      message.content?.convertToJSON()["id"].int ?? addParticipantModel.thread?.id ?? message.messageId,
+                                                 senderId:      nil,
+                                                 unreadCount:   message.content?.convertToJSON()["unreadCount"].int,
+                                                 pinMessage:    nil)
         delegate?.threadEvents(model: tAddParticipantEM)
         let tLastActivityEM = ThreadEventModel(type:            ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME,
                                                participants:    nil,
                                                threads:         nil,
-                                               threadId:        message.subjectId,
-                                               senderId:        nil)
+                                               threadId:        message.content?.convertToJSON()["id"].int ?? addParticipantModel.thread?.id ?? message.messageId,
+                                               senderId:        nil,
+                                               unreadCount:     message.content?.convertToJSON()["unreadCount"].int,
+                                               pinMessage:      nil)
         delegate?.threadEvents(model: tLastActivityEM)
         
     }

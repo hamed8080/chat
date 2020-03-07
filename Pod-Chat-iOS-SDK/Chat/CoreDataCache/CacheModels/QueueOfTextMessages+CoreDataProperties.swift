@@ -18,6 +18,7 @@ extension QueueOfTextMessages {
     }
 
     @NSManaged public var content:          String?
+    @NSManaged public var messageType:      NSNumber?
     @NSManaged public var repliedTo:        NSNumber?
     @NSManaged public var threadId:         NSNumber?
     @NSManaged public var typeCode:         String?

@@ -20,6 +20,7 @@ public class QueueOfEditMessages: NSManagedObject {
         var repliedTo:      Int?
         var messageId:      Int?
         var threadId:       Int?
+        var messageType:    Int?
         
         func createVariables() {
             
@@ -36,11 +37,15 @@ public class QueueOfEditMessages: NSManagedObject {
             if let threadId2 = self.threadId as? Int {
                 threadId = threadId2
             }
+            if let messageType2 = self.messageType as? Int {
+                messageType = messageType2
+            }
             
         }
         
         func createQueueOfWaitEditMessagesModel() -> QueueOfWaitEditMessagesModel {
             let queueOfWaitEditMessagesModel = QueueOfWaitEditMessagesModel(content:    self.content,
+                                                                            messageType: MESSAGE_TYPE.getType(from: messageType ?? 1),
 //                                                                            metadata:   metadata,
                                                                             metadata:   self.metadata,
                                                                             repliedTo:  repliedTo,

@@ -24,27 +24,30 @@ public class Chat {
     
     public static let sharedInstance = Chat()
     
-    public func createChatObject(socketAddress:              String,
-                                 ssoHost:                    String,
-                                 platformHost:               String,
-                                 fileServer:                 String,
-                                 serverName:                 String,
-                                 token:                      String,
-                                 mapApiKey:                  String?,
-                                 mapServer:                  String,
-                                 typeCode:                   String?,
-                                 enableCache:                Bool,
-                                 cacheTimeStampInSec:        Int?,
-                                 msgPriority:                Int?,
-                                 msgTTL:                     Int?,
-                                 httpRequestTimeout:         Int?,
-                                 actualTimingLog:            Bool?,
-                                 wsConnectionWaitTime:       Double,
-                                 connectionRetryInterval:    Int,
-                                 connectionCheckTimeout:     Int,
-                                 messageTtl:                 Int,
-                                 reconnectOnClose:           Bool,
-                                 deviecLimitationSpaceMB:    Int64?) {
+    public func createChatObject(socketAddress:             String,
+                                 ssoHost:                   String,
+                                 platformHost:              String,
+                                 fileServer:                String,
+                                 serverName:                String,
+                                 token:                     String,
+                                 mapApiKey:                 String?,
+                                 mapServer:                 String,
+                                 typeCode:                  String?,
+                                 enableCache:               Bool,
+                                 cacheTimeStampInSec:       Int?,
+                                 msgPriority:               Int?,
+                                 msgTTL:                    Int?,
+                                 httpRequestTimeout:        Int?,
+                                 actualTimingLog:           Bool?,
+                                 wsConnectionWaitTime:      Double,
+                                 connectionRetryInterval:   Int,
+                                 connectionCheckTimeout:    Int,
+                                 messageTtl:                Int,
+                                 maxReconnectTimeInterval:  Int?,
+                                 reconnectOnClose:          Bool,
+                                 localImageCustomPath:      URL?,
+                                 localFileCustomPath:       URL?,
+                                 deviecLimitationSpaceMB:   Int64?) {
         
         self.socketAddress      = socketAddress
         self.ssoHost            = ssoHost
@@ -87,16 +90,20 @@ public class Chat {
             self.deviecLimitationSpaceMB = timeLimitation
         }
         
-        self.wsConnectionWaitTime   = wsConnectionWaitTime
-        self.connectionRetryInterval = connectionRetryInterval
-        self.connectionCheckTimeout = connectionCheckTimeout
-        self.messageTtl             = messageTtl
-        self.reconnectOnClose       = reconnectOnClose
+        self.wsConnectionWaitTime       = wsConnectionWaitTime
+        self.connectionRetryInterval    = connectionRetryInterval
+        self.connectionCheckTimeout     = connectionCheckTimeout
+        self.messageTtl                 = messageTtl
+        self.reconnectOnClose           = reconnectOnClose
+        self.maxReconnectTimeInterval   = maxReconnectTimeInterval ?? 60
         
         self.SERVICE_ADDRESSES.SSO_ADDRESS          = ssoHost
         self.SERVICE_ADDRESSES.PLATFORM_ADDRESS     = platformHost
         self.SERVICE_ADDRESSES.FILESERVER_ADDRESS   = fileServer
         self.SERVICE_ADDRESSES.MAP_ADDRESS          = mapServer
+        
+        self.localImageCustomPath = localImageCustomPath
+        self.localFileCustomPath = localFileCustomPath
         
         getDeviceIdWithToken { (deviceIdStr) in
             self.deviceId = deviceIdStr
@@ -148,6 +155,7 @@ public class Chat {
     var connectionCheckTimeout:     Int = 10000
     var messageTtl:                 Int = 10000
     var reconnectOnClose:           Bool = false
+    var maxReconnectTimeInterval:   Int = 60
     
 //    var imageMimeTypes = ["image/bmp", "image/png", "image/tiff", "image/gif", "image/x-icon", "image/jpeg", "image/webp"]
 //    var imageExtentions = ["bmp", "png", "tiff", "tiff2", "gif", "ico", "jpg", "jpeg", "webp"]
@@ -157,6 +165,9 @@ public class Chat {
     var peerId:         Int?
     var oldPeerId:      Int?
     var userInfo:       User?
+    
+    var localImageCustomPath: URL?
+    var localFileCustomPath: URL?
     
     var getHistoryCount         = 50
     var getUserInfoRetry        = 5
@@ -295,9 +306,9 @@ public class Chat {
     public var muteThreadCallbackToUser:            callbackTypeAlias?
     public var unmuteThreadCallbackToUser:          callbackTypeAlias?
     public var updateThreadInfoCallbackToUser:      callbackTypeAlias?
-    public var blockCallbackToUser:                 callbackTypeAlias?
-    public var unblockCallbackToUser:               callbackTypeAlias?
-    public var getBlockedCallbackToUser:            callbackTypeAlias?
+    public var blockUserCallbackToUser:             callbackTypeAlias?
+    public var unblockUserCallbackToUser:           callbackTypeAlias?
+    public var getBlockedUserCallbackToUser:        callbackTypeAlias?
     public var leaveThreadCallbackToUser:           callbackTypeAlias?
     public var spamPvThreadCallbackToUser:          callbackTypeAlias?
     public var getMessageSeenListCallbackToUser:    callbackTypeAlias?
@@ -327,6 +338,7 @@ public class Chat {
                                 peerId:                     nil,
                                 messageTtl:                 messageTtl,
                                 connectionRetryInterval:    connectionRetryInterval,
+                                maxReconnectTimeInterval:   maxReconnectTimeInterval,
                                 reconnectOnClose:           reconnectOnClose)
             asyncClient?.delegate = self
             asyncClient?.createSocket()

@@ -326,6 +326,39 @@ extension Cache {
         
     }
     
+    public func retrieveNewThreads(count:   Int,
+                                   offset:  Int) -> GetThreadsModel? {
+        
+        var returnModel: GetThreadsModel?
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
+        fetchRequest.predicate = NSPredicate(format: "unreadCount >= %@", 0)
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMConversation] {
+                var threadObjects = [Conversation]()
+                var insideCount = 0
+                for (index, item) in result.enumerated() {
+                    if (index >= offset) && (insideCount <= count) {
+                        threadObjects.append(item.convertCMConversationToConversationObject())
+                        insideCount += 1
+                    }
+                }
+                
+                returnModel = GetThreadsModel(conversationObjects:  threadObjects,
+                                              contentCount:         result.count,
+                                              count:                threadObjects.count,
+                                              offset:               offset,
+                                              hasError:             false,
+                                              errorMessage:         "",
+                                              errorCode:            0)
+            }
+        } catch {
+            fatalError("Error on fetching list of CMConversation that has unreadCounts")
+        }
+        
+        return returnModel
+    }
+    
     func retrieveTheThreads(ascending:  Bool,
                             count:      Int,
                             name:       String?,

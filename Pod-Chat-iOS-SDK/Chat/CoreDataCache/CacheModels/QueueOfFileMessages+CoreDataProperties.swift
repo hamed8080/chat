@@ -18,6 +18,7 @@ extension QueueOfFileMessages {
     }
 
     @NSManaged public var fileName:     String?
+    @NSManaged public var messageType:  NSNumber?
 //    @NSManaged public var imageName:    String?
     @NSManaged public var xC:           NSNumber?
     @NSManaged public var yC:           NSNumber?

@@ -1,5 +1,5 @@
 //
-//  GetBlockedContactsCallbacks.swift
+//  GetBlockedUsersCallbacks.swift
 //  FanapPodChatSDK
 //
 //  Created by Mahyar Zhiani on 3/18/1398 AP.
@@ -26,7 +26,7 @@ extension Chat {
      *  + Outputs:
      *      - it doesn't have direct output,
      *          but on the situation where the response is valid,
-     *          it will call the "onResultCallback" callback to getBlockedContacts function (by using "blockCallbackToUser")
+     *          it will call the "onResultCallback" callback to getBlockedContacts function (by using "blockUserCallbackToUser")
      *
      */
     func responseOfGetBlockContact(withMessage message: ChatMessage) {
@@ -46,7 +46,7 @@ extension Chat {
             callback.onResultCallback(uID:      message.uniqueId,
                                       response: returnData,
                                       success:  { (successJSON) in
-                self.getBlockedCallbackToUser?(successJSON)
+                self.getBlockedUserCallbackToUser?(successJSON)
             }) { _ in }
             Chat.map.removeValue(forKey: message.uniqueId)
         }
@@ -54,7 +54,7 @@ extension Chat {
     }
     
     
-    public class GetBlockedContactsCallbacks: CallbackProtocol {
+    public class GetBlockedUsersCallbacks: CallbackProtocol {
         var sendParams: SendChatMessageVO
         init(parameters: SendChatMessageVO) {
             self.sendParams = parameters
@@ -67,13 +67,13 @@ extension Chat {
             
             if let arrayContent = response.resultAsArray as? [JSON] {
                 let content = sendParams.content?.convertToJSON()
-                let getBlockedModel = GetBlockedContactListModel(messageContent:    arrayContent,
-                                                                 contentCount:      response.contentCount,
-                                                                 count:             content?["count"].intValue ?? 0,
-                                                                 offset:            content?["offset"].intValue ?? 0,
-                                                                 hasError:          response.hasError,
-                                                                 errorMessage:      response.errorMessage,
-                                                                 errorCode:         response.errorCode)
+                let getBlockedModel = GetBlockedUserListModel(messageContent:   arrayContent,
+                                                              contentCount:     response.contentCount,
+                                                              count:            content?["count"].intValue ?? 0,
+                                                              offset:           content?["offset"].intValue ?? 0,
+                                                              hasError:         response.hasError,
+                                                              errorMessage:     response.errorMessage,
+                                                              errorCode:        response.errorCode)
                 success(getBlockedModel)
             }
             
