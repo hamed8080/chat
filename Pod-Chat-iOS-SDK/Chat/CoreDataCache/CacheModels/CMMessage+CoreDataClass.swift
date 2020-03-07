@@ -22,6 +22,7 @@ public class CMMessage: NSManagedObject {
         var id:             Int?
         var mentioned:      Bool?
         var ownerId:        Int?
+        var pinned:         Bool?
         var previousId:     Int?
         var seen:           Bool?
         var threadId:       Int?
@@ -46,6 +47,9 @@ public class CMMessage: NSManagedObject {
             }
             if let ownerId2 = self.ownerId as? Int {
                 ownerId = ownerId2
+            }
+            if let pinned2 = self.pinned as? Bool {
+                pinned = pinned2
             }
             if let previousId2 = self.previousId as? Int {
                 previousId = previousId2
@@ -78,6 +82,7 @@ public class CMMessage: NSManagedObject {
                                        messageType:     self.messageType,
                                        metadata:        self.metadata,
                                        ownerId:         ownerId,
+                                       pinned:          pinned,
                                        previousId:      previousId,
                                        seen:            seen,
                                        systemMetadata:  self.systemMetadata,

@@ -106,7 +106,7 @@ extension Chat {
                 if self.enableCache {
                     // save data comes from server to the Cache
                     let uploadImageFile = ImageObject(messageContent: resultData)
-                    Chat.cacheDB.saveImageObject(imageInfo: uploadImageFile, imageData: uploadImageInput.dataToSend)
+                    Chat.cacheDB.saveImageObject(imageInfo: uploadImageFile, imageData: uploadImageInput.dataToSend, toLocalPath: self.localImageCustomPath)
                     let getImageRequest = GetImageRequestModel(actual:      nil,
                                                                downloadable: nil,
                                                                height:      nil,
@@ -243,7 +243,7 @@ Networking.sharedInstance.upload(toUrl:             url,
         if self.enableCache {
             // save data comes from server to the Cache
             let uploadFileObject = FileObject(messageContent: resultData)
-            Chat.cacheDB.saveFileObject(fileInfo: uploadFileObject, fileData: uploadFileInput.dataToSend)
+            Chat.cacheDB.saveFileObject(fileInfo: uploadFileObject, fileData: uploadFileInput.dataToSend, toLocalPath: self.localFileCustomPath)
             let getFileRequest = GetFileRequestModel(downloadable:  nil,
                                                         fileId:        uploadFileObject.id,
                                                         hashCode:      uploadFileObject.hashCode,
@@ -382,7 +382,7 @@ Networking.sharedInstance.upload(toUrl:             url,
                 
                 if self.enableCache {
                     if self.checkIfDeviceHasFreeSpace(needSpaceInMB: Int64(myData.count / 1024), turnOffTheCache: true) {
-                        Chat.cacheDB.saveImageObject(imageInfo: uploadImage, imageData: myData)
+                        Chat.cacheDB.saveImageObject(imageInfo: uploadImage, imageData: myData, toLocalPath: self.localImageCustomPath)
                     }
                 }
                 
@@ -483,7 +483,7 @@ Networking.sharedInstance.upload(toUrl:             url,
                 
                 if self.enableCache {
                     if self.checkIfDeviceHasFreeSpace(needSpaceInMB: Int64(myFile.count / 1024), turnOffTheCache: true) {
-                        Chat.cacheDB.saveFileObject(fileInfo: uploadFile, fileData: myFile)
+                        Chat.cacheDB.saveFileObject(fileInfo: uploadFile, fileData: myFile, toLocalPath: self.localFileCustomPath)
                     }
                 }
                 

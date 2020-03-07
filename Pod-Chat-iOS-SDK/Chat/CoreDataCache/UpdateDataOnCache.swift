@@ -405,6 +405,27 @@ extension Cache {
     
     
     
+    func updateUnreadCountOnCMConversation(withThreadId threadId: Int, unreadCount: Int?, addCount: Int?) {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
+        fetchRequest.predicate = NSPredicate(format: "id == %i", threadId)
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMConversation] {
+                if result.count > 0 {
+                    if let count = unreadCount {
+                        result.first!.unreadCount = count as NSNumber
+                    } else if let add = addCount {
+                        let count = Int(truncating: result.first!.unreadCount ?? 0)
+                        result.first!.unreadCount = (count + add) as NSNumber
+                    }
+                }
+            }
+        } catch {
+            fatalError("Error on trying to find the thread from CMConversation entity to update unreadCount")
+        }
+    }
+    
+    
+    
     // MARK: - update Participant:
     /*
      * Update Participant Entity:

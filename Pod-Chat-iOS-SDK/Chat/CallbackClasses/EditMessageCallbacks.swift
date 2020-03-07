@@ -32,8 +32,20 @@ extension Chat {
                                                   message:  myMessage,
                                                   threadId: nil,
                                                   messageId: nil,
-                                                  senderId: nil)
+                                                  senderId: nil,
+                                                  pinned:   message.content?.convertToJSON()["pinned"].bool)
         delegate?.messageEvents(model: messageEventModel)
+        
+        if myMessage.pinned ?? false {
+            let threadEventModel = ThreadEventModel(type:           ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME,
+                                                    participants:   nil,
+                                                    threads:        nil,
+                                                    threadId:       message.subjectId,
+                                                    senderId:       nil,
+                                                    unreadCount:    message.content?.convertToJSON()["unreadCount"].int,
+                                                    pinMessage:     nil)
+            delegate?.threadEvents(model: threadEventModel)
+        }
         
         // save edited data on the cache
         // remove this message from wait edit queue

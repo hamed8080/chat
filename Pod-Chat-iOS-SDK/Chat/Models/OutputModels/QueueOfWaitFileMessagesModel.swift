@@ -12,6 +12,7 @@ import SwiftyJSON
 open class QueueOfWaitFileMessagesModel {
     
     let content:        String?
+    let messageType:    MESSAGE_TYPE
     let fileName:       String?
 //    let imageName:      String?
 //    let metadata:       JSON?
@@ -29,6 +30,7 @@ open class QueueOfWaitFileMessagesModel {
     let uniqueId:    String?
     
     init(content:       String?,
+         messageType:   MESSAGE_TYPE,
          fileName:      String?,
 //         imageName:     String?,
 //         metadata:      JSON?,
@@ -45,6 +47,7 @@ open class QueueOfWaitFileMessagesModel {
          uniqueId:      String?) {
         
         self.content        = content
+        self.messageType    = messageType
         self.fileName       = fileName
 //        self.imageName      = imageName
         self.metadata       = metadata
@@ -64,6 +67,7 @@ open class QueueOfWaitFileMessagesModel {
     init(fileMessageInputModel: SendFileMessageRequestModel, uniqueId: String) {
         
         self.content        = fileMessageInputModel.messageInput.content
+        self.messageType    = fileMessageInputModel.messageInput.messageType
         self.metadata       = (fileMessageInputModel.messageInput.metadata != nil) ? "\(fileMessageInputModel.messageInput.metadata!)" : nil
         self.repliedTo      = fileMessageInputModel.messageInput.repliedTo
         self.threadId       = fileMessageInputModel.messageInput.threadId
@@ -115,6 +119,7 @@ open class QueueOfWaitFileMessagesModel {
     
     public func returnDataAsJSONAndData() -> (jsonResult: JSON, imageToSend: Data?, fileToSend: Data?) {
         let result: JSON = ["content":      content ?? NSNull(),
+                            "messageType":  messageType,
                             "fileName":     fileName ?? NSNull(),
 //                            "imageName":    imageName ?? NSNull(),
                             "metadata":     metadata ?? NSNull(),

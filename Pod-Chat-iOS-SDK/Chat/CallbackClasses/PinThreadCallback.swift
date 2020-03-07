@@ -16,11 +16,13 @@ extension Chat {
     func responseOfPinThread(withMessage message: ChatMessage) {
         log.verbose("Message of type 'PIN_THREAD' recieved", context: "Chat")
         
-        let tPinEM = ThreadEventModel(type:            ThreadEventTypes.THREAD_PIN,
-                                      participants:    nil,
-                                      threads:         nil,
-                                      threadId:        message.subjectId,
-                                      senderId:        nil)
+        let tPinEM = ThreadEventModel(type:         ThreadEventTypes.THREAD_PIN,
+                                      participants: nil,
+                                      threads:      nil,
+                                      threadId:     message.subjectId,
+                                      senderId:     nil,
+                                      unreadCount:  message.content?.convertToJSON()["unreadCount"].int,
+                                      pinMessage:   nil)
         delegate?.threadEvents(model: tPinEM)
         
         let returnData = CreateReturnData(hasError:         false,

@@ -43,7 +43,10 @@ extension Chat {
                                           contentCount:     nil,
                                           subjectId:        message.subjectId)
         
-        let systemEventModel = SystemEventModel(type: SystemEventTypes.SERVER_TIME, time: message.time, threadId: nil, user: nil)
+        let systemEventModel = SystemEventModel(type:       SystemEventTypes.SERVER_TIME,
+                                                time:       message.time,
+                                                threadId:   nil,
+                                                user:       nil)
         Chat.sharedInstance.delegate?.systemEvents(model: systemEventModel)
         
         if enableCache {

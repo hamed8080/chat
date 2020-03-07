@@ -41,7 +41,8 @@ extension Chat {
                                                   message:  myMessage,
                                                   threadId: message.subjectId,
                                                   messageId: message.messageId,
-                                                  senderId: nil)
+                                                  senderId: nil,
+                                                  pinned:   nil)
         delegate?.messageEvents(model: messageEventModel)
         
         if enableCache {
@@ -93,8 +94,9 @@ extension Chat {
         let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_DELIVERY,
                                                   message:  myMessage,
                                                   threadId: message.subjectId,
-                                                  messageId: message.messageId ?? message.content?.convertToJSON()["messageId"].int,
-                                                  senderId: message.participantId ?? message.content?.convertToJSON()["participantId"].int)
+                                                  messageId: message.content?.convertToJSON()["messageId"].int ?? message.messageId,
+                                                  senderId: message.content?.convertToJSON()["participantId"].int ?? message.participantId,
+                                                  pinned:   message.content?.convertToJSON()["pinned"].bool)
         delegate?.messageEvents(model: messageEventModel)
         
         var findItAt: Int?
@@ -190,6 +192,21 @@ extension Chat {
          */
         log.verbose("Message of type 'SEEN' recieved", context: "Chat")
         
+        if (message.content?.convertToJSON()["participantId"].int ?? message.participantId) == userInfo?.id {
+            let messages = Chat.cacheDB.retrieveMessageHistory(count: 999,
+                                                               firstMessageId: message.content?.convertToJSON()["messageId"].int ?? message.messageId,
+                                                               fromTime: nil,
+                                                               lastMessageId: nil,
+                                                               messageId: nil,
+                                                               offset: 0,
+                                                               order: nil,
+                                                               query: nil,
+                                                               threadId: message.subjectId!,
+                                                               toTime: nil,
+                                                               uniqueIds: nil)
+            Chat.cacheDB.updateUnreadCountOnCMConversation(withThreadId: message.subjectId!, unreadCount: messages?.history.count, addCount: nil)
+        }
+        
         let returnData = CreateReturnData(hasError:         false,
                                           errorMessage:     "",
                                           errorCode:        0,
@@ -204,8 +221,9 @@ extension Chat {
         let messageEventModel = MessageEventModel(type:     MessageEventTypes.MESSAGE_SEEN,
                                                   message:  myMessage,
                                                   threadId: message.subjectId,
-                                                  messageId: message.messageId ?? message.content?.convertToJSON()["messageId"].int,
-                                                  senderId: message.participantId ?? message.content?.convertToJSON()["participantId"].int)
+                                                  messageId: message.content?.convertToJSON()["messageId"].int ?? message.messageId,
+                                                  senderId: message.content?.convertToJSON()["participantId"].int ?? message.participantId,
+                                                  pinned:   message.content?.convertToJSON()["pinned"].bool)
         delegate?.messageEvents(model: messageEventModel)
         
         var findItAt: Int?

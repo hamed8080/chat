@@ -14,7 +14,7 @@ open class CreateThreadWithFileMessageRequestModel {
     public let uploadInput:                    UploadRequestModel
     
     public init(creatThreadWithMessageInput:   CreateThreadWithMessageRequestModel,
-         uploadInput:                   UploadRequestModel) {
+                uploadInput:                   UploadRequestModel) {
         
         self.creatThreadWithMessageInput    = creatThreadWithMessageInput
         self.uploadInput                    = uploadInput

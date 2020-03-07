@@ -38,7 +38,9 @@ extension Chat {
                                                              participants:  threadParticipantsModel.participants,
                                                              threads:       nil,
                                                              threadId:      message.subjectId,
-                                                             senderId:      nil)
+                                                             senderId:      nil,
+                                                             unreadCount:   message.content?.convertToJSON()["unreadCount"].int,
+                                                             pinMessage:    nil)
             delegate?.threadEvents(model: tParticipantsListChangeEM)
             
             var participants = [Participant]()

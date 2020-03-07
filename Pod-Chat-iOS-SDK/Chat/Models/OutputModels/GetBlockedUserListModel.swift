@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class GetBlockedContactListModel {
+open class GetBlockedUserListModel {
     /*
      ---------------------------------------
      * responseAsJSON:
@@ -43,7 +43,7 @@ open class GetBlockedContactListModel {
     public var contentCount:       Int = 0
     public var hasNext:            Bool = false
     public var nextOffset:         Int = 0
-    public var blockedList:        [BlockedContact] = []
+    public var blockedList:        [BlockedUser] = []
     
     public var blockedListJSON:    [JSON] = []
     
@@ -69,7 +69,7 @@ open class GetBlockedContactListModel {
         self.nextOffset = offset + messageLength
         
         for item in messageContent {
-            let blockedContact = BlockedContact(messageContent: item)
+            let blockedContact = BlockedUser(messageContent: item)
             let blockedContactJSON = blockedContact.formatToJSON()
             
             blockedList.append(blockedContact)
@@ -78,7 +78,7 @@ open class GetBlockedContactListModel {
         
     }
     
-    public init(messageContent: [BlockedContact]?,
+    public init(messageContent: [BlockedUser]?,
                 contentCount: Int,
                 count: Int,
                 offset: Int,

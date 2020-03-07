@@ -49,6 +49,7 @@ extension Chat {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_CONTACTS.rawValue,
                                             content:            "\(getContactsInput.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -258,9 +259,9 @@ extension Chat {
         params["firstName"]         = JSON(addContactsInput.firstName ?? "")
         params["lastName"]          = JSON(addContactsInput.lastName ?? "")
         params["email"]             = JSON(addContactsInput.email ?? "")
-        if let username = addContactsInput.username {
-            params["username"] = JSON(username)
-        }
+//        if let username = addContactsInput.username {
+//            params["username"] = JSON(username)
+//        }
         if let cellphoneNumber = addContactsInput.cellphoneNumber {
             params["cellphoneNumber"] = JSON(cellphoneNumber)
         }
@@ -292,7 +293,7 @@ extension Chat {
             url += "&cellphoneNumber=\(addContactsInput.cellphoneNumbers[index])"
             url += "&email=\(addContactsInput.emails[index])"
             url += "&uniqueId=\(addContactsInput.uniqueIds[index])"
-            url += "&username=\(addContactsInput.usernames[index])"
+//            url += "&username=\(addContactsInput.usernames[index])"
             if (index != contactCount - 1) {
                 url += "&"
             }
@@ -452,17 +453,18 @@ extension Chat {
     ///
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (BlockContactsRequestModel)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! BlockedContactModel)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! BlockedUserModel)
     public func blockContact(inputModel blockContactsInput:    BlockContactsRequestModel,
                              uniqueId:              @escaping (String) -> (),
                              completion:            @escaping callbackTypeAlias) {
         
         log.verbose("Try to request to block user with this parameters: \n \(blockContactsInput)", context: "Chat")
         uniqueId(blockContactsInput.uniqueId)
-        blockCallbackToUser = completion
+        blockUserCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.BLOCK.rawValue,
                                             content:            "\(blockContactsInput.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -481,7 +483,7 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          [(BlockContactCallbacks(), blockContactsInput.uniqueId)],
+                                callbacks:          [(BlockUserCallbacks(), blockContactsInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
@@ -502,17 +504,18 @@ extension Chat {
     ///
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (GetBlockedContactListRequestModel)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! GetBlockedContactListModel)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! GetBlockedUserListModel)
     public func getBlockedContacts(inputModel getBlockedContactsInput: GetBlockedContactListRequestModel,
                                    uniqueId:                @escaping (String) -> (),
                                    completion:              @escaping callbackTypeAlias) {
         
         log.verbose("Try to request to get block users with this parameters: \n \(getBlockedContactsInput)", context: "Chat")
         uniqueId(getBlockedContactsInput.uniqueId)
-        getBlockedCallbackToUser = completion
+        getBlockedUserCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_BLOCKED.rawValue,
                                             content:            "\(getBlockedContactsInput.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -531,7 +534,7 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          [(GetBlockedContactsCallbacks(parameters: chatMessage), getBlockedContactsInput.uniqueId)],
+                                callbacks:          [(GetBlockedUsersCallbacks(parameters: chatMessage), getBlockedContactsInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
@@ -552,7 +555,7 @@ extension Chat {
     ///
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (UnblockContactsRequestModel)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! BlockedContactModel)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! BlockedUserModel)
     public func unblockContact(inputModel unblockContactsInput:    UnblockContactsRequestModel,
                                uniqueId:                @escaping (String) -> (),
                                completion:              @escaping callbackTypeAlias) {
@@ -560,10 +563,11 @@ extension Chat {
         log.verbose("Try to request to unblock user with this parameters: \n \(unblockContactsInput)", context: "Chat")
         uniqueId(unblockContactsInput.uniqueId)
         
-        unblockCallbackToUser = completion
+        unblockUserCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.UNBLOCK.rawValue,
                                             content:            "\(unblockContactsInput.convertContentToJSON())",
+                                            messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
@@ -582,7 +586,7 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          [(UnblockContactCallbacks(), unblockContactsInput.uniqueId)],
+                                callbacks:          [(UnblockUserCallbacks(), unblockContactsInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
@@ -682,7 +686,7 @@ extension Chat {
                                                        emails:          emails,
                                                        firstNames:      firstNames,
                                                        lastNames:       lastNames,
-                                                       usernames:       [],
+//                                                       usernames:       [],
                                                        typeCode:        nil,
                                                        uniqueIds:       contactUniqueIds)
         

@@ -1,5 +1,5 @@
 //
-//  UnblockContactCallbacks.swift
+//  BlockUserCallbacks.swift
 //  FanapPodChatSDK
 //
 //  Created by Mahyar Zhiani on 3/18/1398 AP.
@@ -15,7 +15,7 @@ import FanapPodAsyncSDK
 extension Chat {
     
     /*
-     * UnblockContact Response comes from server
+     * BlockContact Response comes from server
      *
      *  send Event to client if needed!
      *  call the "onResultCallback"
@@ -26,11 +26,11 @@ extension Chat {
      *  + Outputs:
      *      - it doesn't have direct output,
      *          but on the situation where the response is valid,
-     *          it will call the "onResultCallback" callback to unblockContact function (by using "unblockCallbackToUser")
+     *          it will call the "onResultCallback" callback to blockContact function (by using "blockUserCallbackToUser")
      *
      */
-    func responseOfUnblockContact(withMessage message: ChatMessage) {
-        log.verbose("Message of type 'UNBLOCK' recieved", context: "Chat")
+    func responseOfBlockContact(withMessage message: ChatMessage) {
+        log.verbose("Message of type 'BLOCK' recieved", context: "Chat")
         
         let returnData = CreateReturnData(hasError:         false,
                                           errorMessage:     "",
@@ -41,33 +41,46 @@ extension Chat {
                                           contentCount:     message.contentCount,
                                           subjectId:        message.subjectId)
         
-        if Chat.map[message.uniqueId] != nil {
+        if (Chat.map[message.uniqueId] != nil) {
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
             callback.onResultCallback(uID:      message.uniqueId,
                                       response: returnData,
                                       success:  { (successJSON) in
-                self.unblockCallbackToUser?(successJSON)
+                self.blockUserCallbackToUser?(successJSON)
             }) { _ in }
             Chat.map.removeValue(forKey: message.uniqueId)
+            
+        } else if (Chat.spamMap[message.uniqueId] != nil) {
+            let callback: CallbackProtocol = Chat.spamMap[message.uniqueId]!.first!
+            callback.onResultCallback(uID:      message.uniqueId,
+                                      response: returnData,
+                                      success:  { (successJSON) in
+                                        self.spamPvThreadCallbackToUser?(successJSON)
+            }) { _ in }
+            Chat.spamMap[message.uniqueId]?.removeFirst()
+            if (Chat.spamMap[message.uniqueId]!.count < 1) {
+                Chat.spamMap.removeValue(forKey: message.uniqueId)
+            }
         }
         
     }
     
-    public class UnblockContactCallbacks: CallbackProtocol {
+    public class BlockUserCallbacks: CallbackProtocol {
         func onResultCallback(uID:      String,
                               response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
-            log.verbose("UnblockContactCallback", context: "Chat")
+            log.verbose("BlockContactsCallback", context: "Chat")
             
             if let content = response.result {
-                let unblockUserModel = BlockedContactModel(messageContent:  content,
-                                                           hasError:        response.hasError,
-                                                           errorMessage:    response.errorMessage,
-                                                           errorCode:       response.errorCode)
-                success(unblockUserModel)
+                let blockUserModel = BlockedUserModel(messageContent:    content,
+                                                      hasError:          response.hasError,
+                                                      errorMessage:      response.errorMessage,
+                                                      errorCode:         response.errorCode)
+                success(blockUserModel)
             }
         }
+        
     }
     
 }
