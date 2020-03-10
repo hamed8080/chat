@@ -31,6 +31,7 @@ extension Chat {
     /// - It has 9 callbacks as responses
     ///
     /// - parameter inputModel:             (input) you have to send your parameters insid this model. (GetHistoryRequestModel)
+    /// - parameter getCacheResponse:       (input) specify if you want to get cache response for this request (Bool?)
     /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:             (response) it will returns the response that comes from server to this request. (Any as! GetHistoryModel)
     /// - parameter cacheResponse:          (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetHistoryModel)
@@ -40,7 +41,8 @@ extension Chat {
     /// - parameter fileMessagesNotSent:    (response) it will returns the File Messages requests that has not been Sent yet! ([QueueOfWaitFileMessagesModel])
     /// - parameter uploadImageNotSent:     (response) it will returns the Upload Image requests that has not been Sent yet! ([QueueOfWaitUploadImagesModel])
     /// - parameter uploadFileNotSent:      (response) it will returns the Upload File requests that has not been Sent yet! ([QueueOfWaitUploadFilesModel])
-    public func getHistory(inputModel getHistoryInput:         GetHistoryRequestModel,
+    public func getHistory(inputModel getHistoryInput:  GetHistoryRequestModel,
+                           getCacheResponse:            Bool?,
                            uniqueId:                @escaping ((String) -> ()),
                            completion:              @escaping callbackTypeAlias,
                            cacheResponse:           @escaping ((GetHistoryModel) -> ()),
@@ -82,7 +84,7 @@ extension Chat {
                                 seenCallback:       nil)
        
 //         if cache is enabled by user, first return cache result to the user
-        if enableCache {
+        if (getCacheResponse ?? enableCache) {
             
             if let textMessages = Chat.cacheDB.retrieveWaitTextMessages(threadId: getHistoryInput.threadId) {
                 textMessagesNotSent(textMessages)
@@ -132,11 +134,13 @@ extension Chat {
     /// Outputs:
     /// - It has 3 callbacks as responses
     ///
-    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (GetMentionRequestModel)
-    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! GetHistoryModel)
-    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetHistoryModel)
-    public func getMentionList(inputModel getMentionInput: GetMentionRequestModel,
+    /// - parameter inputModel:         (input) you have to send your parameters insid this model. (GetMentionRequestModel)
+    /// - parameter getCacheResponse:   (input) specify if you want to get cache response for this request (Bool?)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! GetHistoryModel)
+    /// - parameter cacheResponse:      (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetHistoryModel)
+    public func getMentionList(inputModel getMentionInput:  GetMentionRequestModel,
+                               getCacheResponse:            Bool?,
                                uniqueId:                @escaping ((String) -> ()),
                                completion:              @escaping callbackTypeAlias,
                                cacheResponse:           @escaping ((GetHistoryModel) -> ())) {
@@ -170,8 +174,8 @@ extension Chat {
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
         
-        if enableCache {
-            
+        if (getCacheResponse ?? enableCache) {
+            // ToDo:
         }
         
     }

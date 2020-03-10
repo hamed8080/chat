@@ -33,11 +33,13 @@ extension Chat {
     /// Outputs:
     /// - It has 3 callbacks as responses.
     ///
-    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (GetContactsRequestModel)
-    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! GetContactsModel)
-    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetContactsModel)
-    public func getContacts(inputModel getContactsInput:   GetContactsRequestModel,
+    /// - parameter inputModel:         (input) you have to send your parameters insid this model. (GetContactsRequestModel)
+    /// - parameter getCacheResponse:   (input) specify if you want to get cache response for this request (Bool?)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! GetContactsModel)
+    /// - parameter cacheResponse:      (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetContactsModel)
+    public func getContacts(inputModel getContactsInput:    GetContactsRequestModel,
+                            getCacheResponse:               Bool?,
                             uniqueId:           @escaping ((String) -> ()),
                             completion:         @escaping callbackTypeAlias,
                             cacheResponse:      @escaping (GetContactsModel) -> ()) {
@@ -74,7 +76,7 @@ extension Chat {
                                 seenCallback:       nil)
         
         // if cache is enabled by user, it will return cache result to the user
-        if enableCache {
+        if (getCacheResponse ?? enableCache) {
             if let cacheContacts = Chat.cacheDB.retrieveContacts(ascending:         true,
                                                                  cellphoneNumber:   nil,
                                                                  count:             getContactsInput.count ?? 50,
@@ -105,11 +107,13 @@ extension Chat {
     /// Outputs:
     /// - It has 3 callbacks as responses.
     ///
-    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (SearchContactsRequestModel)
-    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! GetContactsModel)
-    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetContactsModel)
-    public func searchContacts(inputModel searchContactsInput: SearchContactsRequestModel,
+    /// - parameter inputModel:         (input) you have to send your parameters insid this model. (SearchContactsRequestModel)
+    /// - parameter getCacheResponse:   (input) specify if you want to get cache response for this request (Bool?)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! GetContactsModel)
+    /// - parameter cacheResponse:      (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetContactsModel)
+    public func searchContacts(inputModel searchContactsInput:  SearchContactsRequestModel,
+                               getCacheResponse:                Bool?,
                                uniqueId:            @escaping ((String) -> ()),
                                completion:          @escaping callbackTypeAlias,
                                cacheResponse:       @escaping (GetContactsModel) -> ()) {
@@ -117,7 +121,7 @@ extension Chat {
         log.verbose("Try to request to search contact with this parameters: \n \(searchContactsInput)", context: "Chat")
         uniqueId(searchContactsInput.uniqueId)
         
-        if enableCache {
+        if (getCacheResponse ?? enableCache) {
             if let cacheContacts = Chat.cacheDB.retrieveContacts(ascending:         true,
                                                                  cellphoneNumber:   searchContactsInput.cellphoneNumber,
                                                                  count:             searchContactsInput.size ?? 50,
@@ -502,10 +506,12 @@ extension Chat {
     /// Outputs:
     /// - It has 3 callbacks as responses.
     ///
-    /// - parameter inputModel: (input) you have to send your parameters insid this model. (GetBlockedContactListRequestModel)
-    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! GetBlockedUserListModel)
-    public func getBlockedContacts(inputModel getBlockedContactsInput: GetBlockedContactListRequestModel,
+    /// - parameter inputModel:         (input) you have to send your parameters insid this model. (GetBlockedContactListRequestModel)
+    /// - parameter getCacheResponse:   (input) specify if you want to get cache response for this request (Bool?)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! GetBlockedUserListModel)
+    public func getBlockedContacts(inputModel getBlockedContactsInput:  GetBlockedContactListRequestModel,
+                                   getCacheResponse:                    Bool?,
                                    uniqueId:                @escaping (String) -> (),
                                    completion:              @escaping callbackTypeAlias) {
         
@@ -538,6 +544,11 @@ extension Chat {
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
+        
+        if (getCacheResponse ?? enableCache) {
+            // ToDo:
+        }
+        
     }
     
     

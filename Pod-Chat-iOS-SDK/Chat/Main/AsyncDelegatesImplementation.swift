@@ -207,7 +207,7 @@ extension Chat: AsyncDelegates {
     func makeChatReady() {
         if userInfo == nil {
             getUserInfoRetryCount += 1
-            getUserInfo(uniqueId: { _ in }, completion: { (result) in
+            getUserInfo(getCacheResponse: nil, uniqueId: { _ in }, completion: { (result) in
                 let resultModel: UserInfoModel = result as! UserInfoModel
                 log.verbose("get info result comes, and save userInfo: \n \(resultModel.returnDataAsJSON())", context: "Chat")
 

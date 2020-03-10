@@ -59,11 +59,13 @@ extension Chat {
     /// Outputs:
     /// - It has 3 callbacks as responses
     ///
-    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (GetThreadsRequestModel)
-    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! GetThreadsModel)
-    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetThreadsModel)
-    public func getThreads(inputModel getThreadsInput: GetThreadsRequestModel,
+    /// - parameter inputModel:         (input) you have to send your parameters insid this model. (GetThreadsRequestModel)
+    /// - parameter getCacheResponse:   (input) specify if you want to get cache response for this request (Bool?)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! GetThreadsModel)
+    /// - parameter cacheResponse:      (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetThreadsModel)
+    public func getThreads(inputModel getThreadsInput:  GetThreadsRequestModel,
+                           getCacheResponse:            Bool?,
                            uniqueId:        @escaping (String) -> (),
                            completion:      @escaping callbackTypeAlias,
                            cacheResponse:   @escaping (GetThreadsModel) -> ()) {
@@ -100,7 +102,7 @@ extension Chat {
                                 seenCallback:       nil)
         
         // if cache is enabled by user, it will return cache result to the user
-        if enableCache {
+        if (getCacheResponse ?? enableCache) {
             if getThreadsInput.new ?? false {
                 if let cacheThreads = Chat.cacheDB.retrieveNewThreads(count:    getThreadsInput.count ?? 50,
                                                                       offset:   getThreadsInput.offset ?? 0) {
@@ -608,11 +610,13 @@ extension Chat {
     /// Outputs:
     /// - It has 3 callbacks as responses.
     ///
-    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (GetThreadParticipantsRequestModel)
-    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! GetThreadParticipantsModel)
-    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetThreadParticipantsModel)
-    public func getThreadParticipants(inputModel getThreadParticipantsInput:   GetThreadParticipantsRequestModel,
+    /// - parameter inputModel:         (input) you have to send your parameters insid this model. (GetThreadParticipantsRequestModel)
+    /// - parameter getCacheResponse:   (input) specify if you want to get cache response for this request (Bool?)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! GetThreadParticipantsModel)
+    /// - parameter cacheResponse:      (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetThreadParticipantsModel)
+    public func getThreadParticipants(inputModel getThreadParticipantsInput:    GetThreadParticipantsRequestModel,
+                                      getCacheResponse:                         Bool?,
                                       uniqueId:                     @escaping (String) -> (),
                                       completion:                   @escaping callbackTypeAlias,
                                       cacheResponse:                @escaping (GetThreadParticipantsModel) -> ()) {
@@ -649,7 +653,7 @@ extension Chat {
                                 seenCallback:       nil)
         
         // if cache is enabled by user, it will return cache result to the user
-        if enableCache {
+        if (getCacheResponse ?? enableCache) {
             if let cacheThreadParticipants = Chat.cacheDB.retrieveThreadParticipants(admin:     getThreadParticipantsInput.admin,
                                                                                      ascending: true,
                                                                                      count:     getThreadParticipantsInput.count ?? 50,
