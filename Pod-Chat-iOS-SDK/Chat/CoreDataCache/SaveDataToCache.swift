@@ -240,7 +240,26 @@ extension Cache {
     ///
     /// - parameter messageId:      send your messageId to this parameter.(Int)
     /// - parameter pinMessage:     send your  pinMessageObject to save it on the cache (PinUnpinMessage)
-    func savePinCMMessageEntity(threadId: Int, withPinMessageObject pinMessage: PinUnpinMessage) {
+    func savePinMessage(threadId: Int, withPinMessageObject pinMessage: PinUnpinMessage) {
+        deletePinMessage(threadId: threadId)
+//        deletePinMessageFromCMConversationEntity(threadId: threadId)
+        savePinMessageOnCMConversationEntity(threadId: threadId, withPinMessageObject: pinMessage)
+        savePinMessageOnCMMessageEntity(messageId: pinMessage.messageId)
+//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
+//        fetchRequest.predicate = NSPredicate(format: "id == %i", threadId)
+//        do {
+//            if let result = try context.fetch(fetchRequest) as? [CMConversation] {
+//                if (result.count > 0) {
+//                    result.first!.pinMessage = updateCMPinMessageEntity(withObject: pinMessage)
+//                    saveContext(subject: "Update CMConversation on save PinMessage -update existing object-")
+//                }
+//            }
+//        } catch {
+//            fatalError("Error on trying to find the Thread from CMConversation entity")
+//        }
+    }
+    
+    func savePinMessageOnCMConversationEntity(threadId: Int, withPinMessageObject pinMessage: PinUnpinMessage) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
         fetchRequest.predicate = NSPredicate(format: "id == %i", threadId)
         do {
@@ -252,6 +271,20 @@ extension Cache {
             }
         } catch {
             fatalError("Error on trying to find the Thread from CMConversation entity")
+        }
+    }
+    
+    func savePinMessageOnCMMessageEntity(messageId: Int) {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMMessage")
+        fetchRequest.predicate = NSPredicate(format: "id", messageId)
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMMessage] {
+                if (result.count > 0) {
+                    result.first!.pinned = true as NSNumber
+                }
+            }
+        } catch {
+            fatalError("Error on trying to find the Thread from CMMessage entity")
         }
     }
     
