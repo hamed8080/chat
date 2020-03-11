@@ -324,6 +324,7 @@ public class Chat {
     public var getNotSeenDurationCallbackToUser:    callbackTypeAlias?
     public var getCurrentUserRolesCallbackToUser:   callbackTypeAlias?
     public var setProfileCallbackToUser:            callbackTypeAlias?
+    public var joinThreadCallbackToUser:            callbackTypeAlias?
     
     
     

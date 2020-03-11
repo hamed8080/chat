@@ -755,6 +755,11 @@ extension Chat {
             responseOfMessageSeenList(withMessage: message)
             break
             
+        // a message of type 39 (JOIN_THREAD) comes from Server.
+        case chatMessageVOTypes.JOIN_THREAD.rawValue:
+            responseOfJoinThread(withMessage: message)
+            break
+            
         // a message of type 40 (BOT_MESSAGE) comes from Server.
         case chatMessageVOTypes.BOT_MESSAGE.rawValue:
             log.verbose("Message of type 'BOT_MESSAGE' recieved", context: "Chat")
