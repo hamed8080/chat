@@ -58,6 +58,7 @@ public enum chatMessageVOTypes: Int {
     case SET_PROFILE                        = 52
     case GET_CURRENT_USER_ROLES             = 54
     case CONTACTS_LAST_SEEN                 = 60
+    case ALL_UNREAD_MESSAGE_COUNT           = 61
     case LOGOUT                             = 100
     case ERROR                              = 999
 }

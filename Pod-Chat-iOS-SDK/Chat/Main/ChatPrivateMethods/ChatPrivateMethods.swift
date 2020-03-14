@@ -837,6 +837,11 @@ extension Chat {
         case chatMessageVOTypes.CONTACTS_LAST_SEEN.rawValue:
             sendContactsLastSeenDurationUpdate(withMessage: message)
             break
+            
+        // a message of type 61 (ALL_UNREAD_MESSAGE_COUNT) comes from Server.
+        case chatMessageVOTypes.ALL_UNREAD_MESSAGE_COUNT.rawValue:
+            responseOfAllUnreadMessageCount(withMessage: message)
+            break
         
         // a message of type 100 (LOGOUT) comes from Server.
         case chatMessageVOTypes.LOGOUT.rawValue:

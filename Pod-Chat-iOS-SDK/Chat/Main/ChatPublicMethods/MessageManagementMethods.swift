@@ -18,6 +18,54 @@ extension Chat {
     
     // MARK: - Get/Clear History
     
+    /// GetAllUnreadMessagesCount
+    ///
+    public func getAllUnreadMessagesCount(inputModel:       GetAllUnreadMessageCountRequestModel,
+                                          getCacheResponse: Bool?,
+                                          uniqueId:         @escaping ((String) -> ()),
+                                          completion:       @escaping callbackTypeAlias,
+                                          cacheResponse:    @escaping ((UnreadMessageCountModel) -> ())) {
+        
+        log.verbose("Try to request to get all unread messages count", context: "Chat")
+        uniqueId(inputModel.uniqueId)
+        getAllUnreadMessagesCountCallbackToUser = completion
+      
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.ALL_UNREAD_MESSAGE_COUNT.rawValue,
+                                            content:            nil,
+                                            messageType:        nil,
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          nil,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           inputModel.typeCode ?? generalTypeCode,
+                                            uniqueId:           inputModel.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: true)
+    
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+      
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          [(GetAllUnreadMessagesCountCallbacks(), inputModel.uniqueId)],
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+      
+        if (getCacheResponse ?? enableCache) {
+            let cacheUnreadCount = Chat.cacheDB.retrieveAllUnreadMessageCount()
+            let unreadMessageCountModel = UnreadMessageCountModel(unreadCount:  cacheUnreadCount,
+                                                                  hasError:     false,
+                                                                  errorMessage: "",
+                                                                  errorCode:    0)
+            cacheResponse(unreadMessageCountModel)
+        }
+    }
+    
     /// GetHistory:
     /// get messages in a specific thread
     ///
