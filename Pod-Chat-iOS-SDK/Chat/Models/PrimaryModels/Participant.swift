@@ -64,7 +64,7 @@ open class Participant {
         self.coreUserId         = messageContent["coreUserId"].int
         self.email              = messageContent["email"].string
         self.firstName          = messageContent["firstName"].string
-        self.id                 = messageContent["id"].int
+        self.id                 = messageContent["id"].int //?? ( (messageContent["id"].string != nil) ? Int(messageContent["id"].stringValue) : nil )
         self.image              = messageContent["image"].string
         self.keyId              = messageContent["keyId"].string
         self.lastName           = messageContent["lastName"].string
@@ -82,7 +82,10 @@ open class Participant {
                 adminRoles.append(role)
             }
         }
-        (adminRoles.count > 0) ? (self.roles = adminRoles) : (self.roles = nil)
+        if (adminRoles.count > 0) {
+            self.roles = adminRoles
+        }
+//         ?  : (self.roles = nil)
         
     }
     

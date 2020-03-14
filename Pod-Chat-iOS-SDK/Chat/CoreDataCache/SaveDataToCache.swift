@@ -276,7 +276,7 @@ extension Cache {
     
     func savePinMessageOnCMMessageEntity(messageId: Int) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMMessage")
-        fetchRequest.predicate = NSPredicate(format: "id", messageId)
+        fetchRequest.predicate = NSPredicate(format: "id == %i", messageId)
         do {
             if let result = try context.fetch(fetchRequest) as? [CMMessage] {
                 if (result.count > 0) {
