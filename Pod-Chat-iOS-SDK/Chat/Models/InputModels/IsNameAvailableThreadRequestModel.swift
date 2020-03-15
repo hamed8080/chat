@@ -6,4 +6,28 @@
 //  Copyright © 1398 Mahyar Zhiani. All rights reserved.
 //
 
-import Foundation
+import SwiftyJSON
+
+
+open class IsNameAvailableThreadRequestModel {
+    
+    public let name:        String
+    public let typeCode:    String?
+    public let uniqueId:    String
+    
+    public init(name:       String,
+                typeCode:   String?,
+                uniqueId:   String?) {
+        
+        self.name       = name
+        self.typeCode   = typeCode
+        self.uniqueId   = uniqueId ?? UUID().uuidString
+    }
+    
+    func convertContentToJSON() -> JSON {
+        var content: JSON = [:]
+        content["name"] = JSON(self.name)
+        return content
+    }
+    
+}

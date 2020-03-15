@@ -6,7 +6,7 @@
 //  Copyright © 1398 Mahyar Zhiani. All rights reserved.
 //
 
-import SwiftyJSON
+import Foundation
 
 
 open class JoinThreadRequestModel {

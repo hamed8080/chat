@@ -384,11 +384,49 @@ extension Chat {
     }
     
     
+    public func isNameAvailable(inputModel isNameAvailableThreadInput: IsNameAvailableThreadRequestModel,
+                                uniqueId:    @escaping (String) -> (),
+                                completion:  @escaping callbackTypeAlias) {
+        
+        log.verbose("Try to request to join thread with this parameters: \n \(isNameAvailableThreadInput.convertContentToJSON())", context: "Chat")
+        uniqueId(isNameAvailableThreadInput.uniqueId)
+        
+        isNameAvailableThreadCallbackToUser = completion
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.IS_NAME_AVAILABLE.rawValue,
+                                            content:            "\(isNameAvailableThreadInput.name)",
+                                            messageType:        nil,
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          nil,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           isNameAvailableThreadInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           isNameAvailableThreadInput.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: true)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          [(IsNameAvailableThreadCallbacks(), isNameAvailableThreadInput.uniqueId)],
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+        
+    }
+    
+    
     public func joinThread(inputModel joinThreadInput: JoinThreadRequestModel,
                            uniqueId:    @escaping (String) -> (),
                            completion:  @escaping callbackTypeAlias) {
         
-        log.verbose("Try to request to join thread with this parameters: \n \(joinThreadInput)", context: "Chat")
+        log.verbose("Try to request to join thread with this parameters: \n uniqueName = \(joinThreadInput.uniqueName)", context: "Chat")
         uniqueId(joinThreadInput.uniqueId)
         
         joinThreadCallbackToUser = completion

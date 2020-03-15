@@ -43,7 +43,7 @@ extension Chat {
                               response: CreateReturnData,
                               success:  @escaping callbackTypeAlias,
                               failure:  @escaping callbackTypeAlias) {
-            log.verbose("BlockContactsCallback", context: "Chat")
+            log.verbose("JoinThreadCallback", context: "Chat")
             
             if let content = response.result {
                 let joinThreadModel = ThreadModel(messageContent:   content,

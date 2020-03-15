@@ -755,6 +755,11 @@ extension Chat {
             responseOfMessageSeenList(withMessage: message)
             break
             
+        // a message of type 34 (IS_NAME_AVAILABLE) comes from Server.
+        case chatMessageVOTypes.IS_NAME_AVAILABLE.rawValue:
+            responseOfIsNameAvailableThread(withMessage: message)
+            break
+            
         // a message of type 39 (JOIN_THREAD) comes from Server.
         case chatMessageVOTypes.JOIN_THREAD.rawValue:
             responseOfJoinThread(withMessage: message)

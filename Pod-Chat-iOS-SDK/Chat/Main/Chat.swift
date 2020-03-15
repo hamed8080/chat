@@ -326,6 +326,7 @@ public class Chat {
     public var getCurrentUserRolesCallbackToUser:   callbackTypeAlias?
     public var setProfileCallbackToUser:            callbackTypeAlias?
     public var joinThreadCallbackToUser:            callbackTypeAlias?
+    public var isNameAvailableThreadCallbackToUser: callbackTypeAlias?
     
     
     
