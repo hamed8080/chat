@@ -179,117 +179,116 @@ extension Chat {
                     progress:        @escaping (Float) -> (),
                     completion:      @escaping callbackTypeAlias) {
 
-log.verbose("Try to upload file with this parameters: \n \(uploadFileInput)", context: "Chat")
+        log.verbose("Try to upload file with this parameters: \n \(uploadFileInput)", context: "Chat")
 
-uniqueId(uploadFileInput.uniqueId)
+        uniqueId(uploadFileInput.uniqueId)
 
-if (enableCache) && (uploadFileInput.threadId != nil) {
-    /*
-        seve this upload image on the Cache Wait Queue,
-        so if there was an situation that response of the server to this uploading doesn't come, then we know that our upload request didn't sent correctly
-        and we will send this Queue to user on the GetHistory request,
-        now user knows which upload requests didn't send correctly, and can handle them
-        */
-    let messageObjectToSendToQueue = QueueOfWaitUploadFilesModel(dataToSend:        uploadFileInput.dataToSend,
-                                                                    fileExtension:     uploadFileInput.fileExtension,
-                                                                    fileName:          uploadFileInput.fileName,
-                                                                    fileSize:          uploadFileInput.fileSize,
-                                                                    originalFileName:  uploadFileInput.originalFileName,
-                                                                    threadId:          uploadFileInput.threadId,
-                                                                    typeCode:          uploadFileInput.typeCode,
-                                                                    uniqueId:          uploadFileInput.uniqueId)
-    Chat.cacheDB.saveUploadFileToWaitQueue(file: messageObjectToSendToQueue)
-}
-
-let url = "\(SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.UPLOAD_FILE.rawValue)"
-let headers:    HTTPHeaders = ["_token_":           token,
-                                "_token_issuer_":    "1",
-                                "Content-type":      "multipart/form-data"]
-
-var uploadProgress: Float = 0
-Networking.sharedInstance.upload(toUrl:             url,
-                                    withHeaders:       headers,
-                                    withParameters:    uploadFileInput.convertContentToParameters(),
-                                    isImage:           false,
-                                    isFile:            true,
-                                    dataToSend:        uploadFileInput.dataToSend,
-                                    uniqueId:          uploadFileInput.uniqueId,
-                                    progress:
-    { (myProgress) in
-        uploadProgress = myProgress
-        let fileInfo = FileInfo(fileName: uploadFileInput.fileName,
-                                fileSize: uploadFileInput.fileSize)
-        let fUploadedEM = FileUploadEventModel(type:            FileUploadEventTypes.UPLOADING,
-                                                errorCode:       nil,
-                                                errorMessage:    nil,
-                                                errorEvent:      nil,
-                                                fileInfo:        fileInfo,
-                                                fileObjectData:  nil,
-                                                progress:        uploadProgress,
-                                                threadId:        uploadFileInput.threadId,
-                                                uniqueId:        uploadFileInput.uniqueId)
-        Chat.sharedInstance.delegate?.fileUploadEvents(model: fUploadedEM)
-        progress(myProgress)
-}) { (response) in
-    let myResponse: JSON = response as! JSON
-    
-    let hasError        = myResponse["hasError"].boolValue
-    let errorMessage    = myResponse["errorMessage"].stringValue
-    let errorCode       = myResponse["errorCode"].intValue
-    
-    if (!hasError) {
-        let resultData = myResponse["result"]
-        
-        if self.enableCache {
-            // save data comes from server to the Cache
-            let uploadFileObject = FileObject(messageContent: resultData)
-            Chat.cacheDB.saveFileObject(fileInfo: uploadFileObject, fileData: uploadFileInput.dataToSend, toLocalPath: self.localFileCustomPath)
-            let getFileRequest = GetFileRequestModel(downloadable:  nil,
-                                                        fileId:        uploadFileObject.id,
-                                                        hashCode:      uploadFileObject.hashCode,
-                                                        serverResponse: true)
-            self.sendRequestToDownloadFile(withInputModel:  getFileRequest,
-                                            progress:        { _ in },
-                                            completion:      { (_, _) in })
-            Chat.cacheDB.deleteWaitUploadFiles(uniqueId: uploadFileInput.uniqueId)
+        if (enableCache) && (uploadFileInput.threadId != nil) {
+            /*
+                seve this upload image on the Cache Wait Queue,
+                so if there was an situation that response of the server to this uploading doesn't come, then we know that our upload request didn't sent correctly
+                and we will send this Queue to user on the GetHistory request,
+                now user knows which upload requests didn't send correctly, and can handle them
+                */
+            let messageObjectToSendToQueue = QueueOfWaitUploadFilesModel(dataToSend:        uploadFileInput.dataToSend,
+                                                                            fileExtension:     uploadFileInput.fileExtension,
+                                                                            fileName:          uploadFileInput.fileName,
+                                                                            fileSize:          uploadFileInput.fileSize,
+                                                                            originalFileName:  uploadFileInput.originalFileName,
+                                                                            threadId:          uploadFileInput.threadId,
+                                                                            typeCode:          uploadFileInput.typeCode,
+                                                                            uniqueId:          uploadFileInput.uniqueId)
+            Chat.cacheDB.saveUploadFileToWaitQueue(file: messageObjectToSendToQueue)
         }
-        
-        let fileInfo = FileInfo(fileName: uploadFileInput.fileName,
-                                fileSize: uploadFileInput.fileSize)
-        let fUploadedEM = FileUploadEventModel(type:            FileUploadEventTypes.UPLOADED,
-                                                errorCode:       errorCode,
-                                                errorMessage:    errorMessage,
-                                                errorEvent:      nil,
-                                                fileInfo:        fileInfo,
-                                                fileObjectData:  nil,
-                                                progress:        uploadProgress,
-                                                threadId:        uploadFileInput.threadId,
-                                                uniqueId:        uploadFileInput.uniqueId)
-        Chat.sharedInstance.delegate?.fileUploadEvents(model: fUploadedEM)
-        
-        let uploadFileModel = UploadFileModel(messageContentJSON:   resultData,
-                                                errorCode:            errorCode,
-                                                errorMessage:         errorMessage,
-                                                hasError:             hasError)
-        
-        completion(uploadFileModel)
-    } else {
-        let fileInfo = FileInfo(fileName: uploadFileInput.fileName,
-                                fileSize: uploadFileInput.fileSize)
-        let fUploadErrorEM = FileUploadEventModel(type:             FileUploadEventTypes.UPLOAD_ERROR,
-                                                    errorCode:        errorCode,
-                                                    errorMessage:     errorMessage,
-                                                    errorEvent:       nil,
-                                                    fileInfo:         fileInfo,
-                                                    fileObjectData:   uploadFileInput.dataToSend,
-                                                    progress:         uploadProgress,
-                                                    threadId:         uploadFileInput.threadId,
-                                                    uniqueId:         uploadFileInput.uniqueId)
-        Chat.sharedInstance.delegate?.fileUploadEvents(model: fUploadErrorEM)
-    }
-}
 
-}
+        let url = "\(SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.UPLOAD_FILE.rawValue)"
+        let headers:    HTTPHeaders = ["_token_":           token,
+                                        "_token_issuer_":    "1",
+                                        "Content-type":      "multipart/form-data"]
+
+        var uploadProgress: Float = 0
+        Networking.sharedInstance.upload(toUrl:             url,
+                                            withHeaders:       headers,
+                                            withParameters:    uploadFileInput.convertContentToParameters(),
+                                            isImage:           false,
+                                            isFile:            true,
+                                            dataToSend:        uploadFileInput.dataToSend,
+                                            uniqueId:          uploadFileInput.uniqueId,
+                                            progress:
+            { (myProgress) in
+                uploadProgress = myProgress
+                let fileInfo = FileInfo(fileName: uploadFileInput.fileName,
+                                        fileSize: uploadFileInput.fileSize)
+                let fUploadedEM = FileUploadEventModel(type:            FileUploadEventTypes.UPLOADING,
+                                                        errorCode:       nil,
+                                                        errorMessage:    nil,
+                                                        errorEvent:      nil,
+                                                        fileInfo:        fileInfo,
+                                                        fileObjectData:  nil,
+                                                        progress:        uploadProgress,
+                                                        threadId:        uploadFileInput.threadId,
+                                                        uniqueId:        uploadFileInput.uniqueId)
+                Chat.sharedInstance.delegate?.fileUploadEvents(model: fUploadedEM)
+                progress(myProgress)
+        }) { (response) in
+            let myResponse: JSON = response as! JSON
+            
+            let hasError        = myResponse["hasError"].boolValue
+            let errorMessage    = myResponse["errorMessage"].stringValue
+            let errorCode       = myResponse["errorCode"].intValue
+            
+            if (!hasError) {
+                let resultData = myResponse["result"]
+                
+                if self.enableCache {
+                    // save data comes from server to the Cache
+                    let uploadFileObject = FileObject(messageContent: resultData)
+                    Chat.cacheDB.saveFileObject(fileInfo: uploadFileObject, fileData: uploadFileInput.dataToSend, toLocalPath: self.localFileCustomPath)
+                    let getFileRequest = GetFileRequestModel(downloadable:  nil,
+                                                                fileId:        uploadFileObject.id,
+                                                                hashCode:      uploadFileObject.hashCode,
+                                                                serverResponse: true)
+                    self.sendRequestToDownloadFile(withInputModel:  getFileRequest,
+                                                    progress:        { _ in },
+                                                    completion:      { (_, _) in })
+                    Chat.cacheDB.deleteWaitUploadFiles(uniqueId: uploadFileInput.uniqueId)
+                }
+                
+                let fileInfo = FileInfo(fileName: uploadFileInput.fileName,
+                                        fileSize: uploadFileInput.fileSize)
+                let fUploadedEM = FileUploadEventModel(type:            FileUploadEventTypes.UPLOADED,
+                                                        errorCode:       errorCode,
+                                                        errorMessage:    errorMessage,
+                                                        errorEvent:      nil,
+                                                        fileInfo:        fileInfo,
+                                                        fileObjectData:  nil,
+                                                        progress:        uploadProgress,
+                                                        threadId:        uploadFileInput.threadId,
+                                                        uniqueId:        uploadFileInput.uniqueId)
+                Chat.sharedInstance.delegate?.fileUploadEvents(model: fUploadedEM)
+                
+                let uploadFileModel = UploadFileModel(messageContentJSON:   resultData,
+                                                        errorCode:            errorCode,
+                                                        errorMessage:         errorMessage,
+                                                        hasError:             hasError)
+                
+                completion(uploadFileModel)
+            } else {
+                let fileInfo = FileInfo(fileName: uploadFileInput.fileName,
+                                        fileSize: uploadFileInput.fileSize)
+                let fUploadErrorEM = FileUploadEventModel(type:             FileUploadEventTypes.UPLOAD_ERROR,
+                                                            errorCode:        errorCode,
+                                                            errorMessage:     errorMessage,
+                                                            errorEvent:       nil,
+                                                            fileInfo:         fileInfo,
+                                                            fileObjectData:   uploadFileInput.dataToSend,
+                                                            progress:         uploadProgress,
+                                                            threadId:         uploadFileInput.threadId,
+                                                            uniqueId:         uploadFileInput.uniqueId)
+                Chat.sharedInstance.delegate?.fileUploadEvents(model: fUploadErrorEM)
+            }
+        }
+    }
     
     
     // MARK: - Get Image/File
@@ -306,12 +305,14 @@ Networking.sharedInstance.upload(toUrl:             url,
     /// Outputs:
     /// - It has 4 callbacks as response:
     ///
-    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (GetImageRequestModel)
-    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter progress:       (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
-    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Data?, UploadImageModel)
-    /// - parameter cacheResponse:  (response) it will returns the response from CacheDB if user has enabled it. (UploadImageModel, String)
-    public func getImage(inputModel getImageInput: GetImageRequestModel,
+    /// - parameter inputModel:         (input) you have to send your parameters insid this model. (GetImageRequestModel)
+    /// - parameter getCacheResponse:   (input) specify if you want to get cache response for this request (Bool?)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter progress:           (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Data?, UploadImageModel)
+    /// - parameter cacheResponse:      (response) it will returns the response from CacheDB if user has enabled it. (UploadImageModel, String)
+    public func getImage(inputModel getImageInput:  GetImageRequestModel,
+                         getCacheResponse:          Bool?,
                          uniqueId:      @escaping (String) -> (),
                          progress:      @escaping (Float) -> (),
                          completion:    @escaping (Data?, DownloadImageModel) -> (),
@@ -323,7 +324,7 @@ Networking.sharedInstance.upload(toUrl:             url,
         var hasImageOnTheCache = false
         
         // if cache is enabled by user, first return cache result to the user
-        if enableCache {
+        if (getCacheResponse ?? enableCache) {
             if let (cacheImageResult, imagePath) = Chat.cacheDB.retrieveImageObject(hashCode:   getImageInput.hashCode,
                                                                                     imageId:    getImageInput.imageId) {
                 let response = DownloadImageModel(messageContentModel:   cacheImageResult,
@@ -412,12 +413,14 @@ Networking.sharedInstance.upload(toUrl:             url,
     /// Outputs:
     /// - It has 4 callbacks as response:
     ///
-    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (GetFileRequestModel)
-    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter progress:       (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
-    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Data?, UploadFileModel)
-    /// - parameter cacheResponse:  (response) it will returns the response from CacheDB if user has enabled it. (UploadFileModel, String)
-    public func getFile(inputModel getFileInput:   GetFileRequestModel,
+    /// - parameter inputModel:         (input) you have to send your parameters insid this model. (GetFileRequestModel)
+    /// - parameter getCacheResponse:   (input) specify if you want to get cache response for this request (Bool?)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter progress:           (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Data?, UploadFileModel)
+    /// - parameter cacheResponse:      (response) it will returns the response from CacheDB if user has enabled it. (UploadFileModel, String)
+    public func getFile(inputModel getFileInput:    GetFileRequestModel,
+                        getCacheResponse:           Bool?,
                         uniqueId:       @escaping (String) -> (),
                         progress:       @escaping (Float) -> (),
                         completion:     @escaping (Data?, DownloadFileModel) -> (),
@@ -429,7 +432,7 @@ Networking.sharedInstance.upload(toUrl:             url,
         var hasFileOntheCache = false
         
         // if cache is enabled by user, first return cache result to the user
-        if enableCache {
+        if (getCacheResponse ?? enableCache) {
             if let (cacheFileResult, filePath) = Chat.cacheDB.retrieveFileObject(fileId:   getFileInput.fileId,
                                                                                   hashCode: getFileInput.hashCode) {
                 hasFileOntheCache = true

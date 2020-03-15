@@ -755,6 +755,16 @@ extension Chat {
             responseOfMessageSeenList(withMessage: message)
             break
             
+        // a message of type 34 (IS_NAME_AVAILABLE) comes from Server.
+        case chatMessageVOTypes.IS_NAME_AVAILABLE.rawValue:
+            responseOfIsNameAvailableThread(withMessage: message)
+            break
+            
+        // a message of type 39 (JOIN_THREAD) comes from Server.
+        case chatMessageVOTypes.JOIN_THREAD.rawValue:
+            responseOfJoinThread(withMessage: message)
+            break
+            
         // a message of type 40 (BOT_MESSAGE) comes from Server.
         case chatMessageVOTypes.BOT_MESSAGE.rawValue:
             log.verbose("Message of type 'BOT_MESSAGE' recieved", context: "Chat")
@@ -831,6 +841,11 @@ extension Chat {
         // a message of type 60 (CONTACTS_LAST_SEEN) comes from Server.
         case chatMessageVOTypes.CONTACTS_LAST_SEEN.rawValue:
             sendContactsLastSeenDurationUpdate(withMessage: message)
+            break
+            
+        // a message of type 61 (ALL_UNREAD_MESSAGE_COUNT) comes from Server.
+        case chatMessageVOTypes.ALL_UNREAD_MESSAGE_COUNT.rawValue:
+            responseOfAllUnreadMessageCount(withMessage: message)
             break
         
         // a message of type 100 (LOGOUT) comes from Server.

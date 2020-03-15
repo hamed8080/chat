@@ -38,6 +38,9 @@ open class CreateThreadWithMessageRequestModel {
         if let metadata2 = self.createThreadInput.metadata {
             content["metadata"] = JSON(metadata2)
         }
+        if let uniqueName_ = self.createThreadInput.uniqueName {
+            content["uniqueName"] = JSON(uniqueName_)
+        }
         content["type"] = JSON(self.createThreadInput.type?.intValue() ?? 0)
         
         if let message_ = sendMessageInput {

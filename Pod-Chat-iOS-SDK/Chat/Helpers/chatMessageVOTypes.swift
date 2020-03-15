@@ -43,6 +43,8 @@ public enum chatMessageVOTypes: Int {
     case LAST_SEEN_UPDATED                  = 31
     case GET_MESSAGE_DELEVERY_PARTICIPANTS  = 32
     case GET_MESSAGE_SEEN_PARTICIPANTS      = 33
+    case IS_NAME_AVAILABLE                  = 34
+    case JOIN_THREAD                        = 39
     case BOT_MESSAGE                        = 40    // not implemented yet!
     case SPAM_PV_THREAD                     = 41
     case SET_RULE_TO_USER                   = 42
@@ -57,6 +59,7 @@ public enum chatMessageVOTypes: Int {
     case SET_PROFILE                        = 52
     case GET_CURRENT_USER_ROLES             = 54
     case CONTACTS_LAST_SEEN                 = 60
+    case ALL_UNREAD_MESSAGE_COUNT           = 61
     case LOGOUT                             = 100
     case ERROR                              = 999
 }
