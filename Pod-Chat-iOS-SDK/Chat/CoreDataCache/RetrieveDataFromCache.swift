@@ -332,7 +332,7 @@ extension Cache {
         var returnModel: GetThreadsModel?
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
-        fetchRequest.predicate = NSPredicate(format: "unreadCount >= %@", 0)
+        fetchRequest.predicate = NSPredicate(format: "unreadCount > %i", 0)
         do {
             if let result = try context.fetch(fetchRequest) as? [CMConversation] {
                 var threadObjects = [Conversation]()
