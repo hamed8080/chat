@@ -59,11 +59,13 @@ extension Chat {
     /// Outputs:
     /// - It has 3 callbacks as responses
     ///
-    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (GetThreadsRequestModel)
-    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! GetThreadsModel)
-    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetThreadsModel)
-    public func getThreads(inputModel getThreadsInput: GetThreadsRequestModel,
+    /// - parameter inputModel:         (input) you have to send your parameters insid this model. (GetThreadsRequestModel)
+    /// - parameter getCacheResponse:   (input) specify if you want to get cache response for this request (Bool?)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! GetThreadsModel)
+    /// - parameter cacheResponse:      (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetThreadsModel)
+    public func getThreads(inputModel getThreadsInput:  GetThreadsRequestModel,
+                           getCacheResponse:            Bool?,
                            uniqueId:        @escaping (String) -> (),
                            completion:      @escaping callbackTypeAlias,
                            cacheResponse:   @escaping (GetThreadsModel) -> ()) {
@@ -100,7 +102,7 @@ extension Chat {
                                 seenCallback:       nil)
         
         // if cache is enabled by user, it will return cache result to the user
-        if enableCache {
+        if (getCacheResponse ?? enableCache) {
             if getThreadsInput.new ?? false {
                 if let cacheThreads = Chat.cacheDB.retrieveNewThreads(count:    getThreadsInput.count ?? 50,
                                                                       offset:   getThreadsInput.offset ?? 0) {
@@ -173,7 +175,7 @@ extension Chat {
     }
     
     
-    // MARK: - Create Thread
+    // MARK: - Create/Join Thread
     
     /// CreateThread:
     /// create a thread with somebody
@@ -378,6 +380,82 @@ extension Chat {
             }
             
         }
+        
+    }
+    
+    
+    public func isNameAvailable(inputModel isNameAvailableThreadInput: IsNameAvailableThreadRequestModel,
+                                uniqueId:    @escaping (String) -> (),
+                                completion:  @escaping callbackTypeAlias) {
+        
+        log.verbose("Try to request to join thread with this parameters: \n \(isNameAvailableThreadInput.convertContentToJSON())", context: "Chat")
+        uniqueId(isNameAvailableThreadInput.uniqueId)
+        
+        isNameAvailableThreadCallbackToUser = completion
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.IS_NAME_AVAILABLE.rawValue,
+                                            content:            "\(isNameAvailableThreadInput.name)",
+                                            messageType:        nil,
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          nil,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           isNameAvailableThreadInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           isNameAvailableThreadInput.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: true)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          [(IsNameAvailableThreadCallbacks(), isNameAvailableThreadInput.uniqueId)],
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+        
+    }
+    
+    
+    public func joinThread(inputModel joinThreadInput: JoinThreadRequestModel,
+                           uniqueId:    @escaping (String) -> (),
+                           completion:  @escaping callbackTypeAlias) {
+        
+        log.verbose("Try to request to join thread with this parameters: \n uniqueName = \(joinThreadInput.uniqueName)", context: "Chat")
+        uniqueId(joinThreadInput.uniqueId)
+        
+        joinThreadCallbackToUser = completion
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.JOIN_THREAD.rawValue,
+                                            content:            joinThreadInput.uniqueName,
+                                            messageType:        nil,
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          nil,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           joinThreadInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           joinThreadInput.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: true)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          [(JoinThreadCallbacks(), joinThreadInput.uniqueId)],
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
         
     }
     
@@ -608,11 +686,13 @@ extension Chat {
     /// Outputs:
     /// - It has 3 callbacks as responses.
     ///
-    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (GetThreadParticipantsRequestModel)
-    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! GetThreadParticipantsModel)
-    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetThreadParticipantsModel)
-    public func getThreadParticipants(inputModel getThreadParticipantsInput:   GetThreadParticipantsRequestModel,
+    /// - parameter inputModel:         (input) you have to send your parameters insid this model. (GetThreadParticipantsRequestModel)
+    /// - parameter getCacheResponse:   (input) specify if you want to get cache response for this request (Bool?)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! GetThreadParticipantsModel)
+    /// - parameter cacheResponse:      (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetThreadParticipantsModel)
+    public func getThreadParticipants(inputModel getThreadParticipantsInput:    GetThreadParticipantsRequestModel,
+                                      getCacheResponse:                         Bool?,
                                       uniqueId:                     @escaping (String) -> (),
                                       completion:                   @escaping callbackTypeAlias,
                                       cacheResponse:                @escaping (GetThreadParticipantsModel) -> ()) {
@@ -649,7 +729,7 @@ extension Chat {
                                 seenCallback:       nil)
         
         // if cache is enabled by user, it will return cache result to the user
-        if enableCache {
+        if (getCacheResponse ?? enableCache) {
             if let cacheThreadParticipants = Chat.cacheDB.retrieveThreadParticipants(admin:     getThreadParticipantsInput.admin,
                                                                                      ascending: true,
                                                                                      count:     getThreadParticipantsInput.count ?? 50,

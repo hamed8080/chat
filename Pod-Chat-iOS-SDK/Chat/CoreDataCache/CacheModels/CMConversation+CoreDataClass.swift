@@ -154,6 +154,7 @@ public class CMConversation: NSManagedObject {
                                                  title:                 self.title,
                                                  type:                  type,
                                                  unreadCount:           unreadCount,
+                                                 uniqueName:            nil,
                                                  inviter:               self.inviter?.convertCMParticipantToParticipantObject(),
                                                  lastMessageVO:         self.lastMessageVO?.convertCMMessageToMessageObject(),
                                                  participants:          participants,

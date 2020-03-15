@@ -38,7 +38,8 @@ extension Chat {
         
         if enableCache {
             if let thId = message.subjectId {
-                Chat.cacheDB.deletePinMessageFromCMConversationEntity(threadId: thId)
+                Chat.cacheDB.deletePinMessage(threadId: thId)
+//                Chat.cacheDB.deletePinMessageFromCMConversationEntity(threadId: thId)
             }
         }
         

@@ -50,10 +50,12 @@ extension Chat {
     /// Outputs:
     /// - It has 3 callbacks as responses
     ///
-    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! UserInfoModel)
-    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (UserInfoModel)
-    public func getUserInfo(uniqueId:       @escaping ((String) -> ()),
+    /// - parameter getCacheResponse:   (input) specify if you want to get cache response for this request (Bool?)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! UserInfoModel)
+    /// - parameter cacheResponse:      (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (UserInfoModel)
+    public func getUserInfo(getCacheResponse:   Bool?,
+                            uniqueId:       @escaping ((String) -> ()),
                             completion:     @escaping callbackTypeAlias,
                             cacheResponse:  @escaping ((UserInfoModel) -> ())) {
         
@@ -90,7 +92,7 @@ extension Chat {
                                 seenCallback:       nil)
         
         // if cache is enabled by user, first return cache result to the user
-        if enableCache {
+        if (getCacheResponse ?? enableCache) {
             if let cacheUserInfoResult = Chat.cacheDB.retrieveUserInfo() {
                 cacheResponse(cacheUserInfoResult)
             }

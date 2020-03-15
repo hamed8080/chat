@@ -39,7 +39,8 @@ extension Chat {
         if enableCache {
             if let thId = message.subjectId {
                 if let pinMessageJSON = message.content?.convertToJSON() {
-                    Chat.cacheDB.savePinCMMessageEntity(threadId: thId, withPinMessageObject: PinUnpinMessage(pinUnpinContent: pinMessageJSON))
+                    Chat.cacheDB.savePinMessage(threadId: thId, withPinMessageObject: PinUnpinMessage(pinUnpinContent: pinMessageJSON))
+//                    Chat.cacheDB.savePinCMMessageEntity(threadId: thId, withPinMessageObject: PinUnpinMessage(pinUnpinContent: pinMessageJSON))
                 }
             }
         }

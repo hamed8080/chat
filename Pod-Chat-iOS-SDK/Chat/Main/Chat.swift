@@ -292,6 +292,7 @@ public class Chat {
     public var userInfoCallbackToUser:              callbackTypeAlias?
     public var getContactsCallbackToUser:           callbackTypeAlias?
     public var threadsCallbackToUser:               callbackTypeAlias?
+    public var getAllUnreadMessagesCountCallbackToUser: callbackTypeAlias?
     public var getHistoryCallbackToUser:            callbackTypeAlias?
     public var getMentionListCallbackToUser:        callbackTypeAlias?
     public var threadParticipantsCallbackToUser:    callbackTypeAlias?
@@ -324,6 +325,8 @@ public class Chat {
     public var getNotSeenDurationCallbackToUser:    callbackTypeAlias?
     public var getCurrentUserRolesCallbackToUser:   callbackTypeAlias?
     public var setProfileCallbackToUser:            callbackTypeAlias?
+    public var joinThreadCallbackToUser:            callbackTypeAlias?
+    public var isNameAvailableThreadCallbackToUser: callbackTypeAlias?
     
     
     

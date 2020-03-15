@@ -14,6 +14,7 @@ open class CreateThreadRequestModel {
     public let image:       String?
     public let invitees:    [Invitee]
     public let metadata:    String?
+    public let uniqueName:  String?
     public let title:       String
     public let type:        ThreadTypes?
     
@@ -24,6 +25,7 @@ open class CreateThreadRequestModel {
                 image:          String?,
                 invitees:       [Invitee],
                 metadata:       String?,
+                uniqueName:     String?,
                 title:          String,
                 type:           ThreadTypes?,
                 typeCode:       String?,
@@ -33,6 +35,7 @@ open class CreateThreadRequestModel {
         self.image          = image
         self.invitees       = invitees
         self.metadata       = metadata
+        self.uniqueName     = uniqueName
         self.title          = title
         self.type           = type
         self.typeCode       = typeCode
@@ -55,6 +58,9 @@ open class CreateThreadRequestModel {
         }
         if let metadata2 = self.metadata {
             content["metadata"] = JSON(metadata2)
+        }
+        if let uniqueName_ = self.uniqueName {
+            content["uniqueName"] = JSON(uniqueName_)
         }
         if let typeCode_ = self.typeCode {
             content["typeCode"] = JSON(typeCode_)

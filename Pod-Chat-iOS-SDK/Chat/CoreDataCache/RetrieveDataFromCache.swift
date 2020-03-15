@@ -290,7 +290,7 @@ extension Cache {
     /// - parameter timeStamp:  the only way to delete Thread, is to check if there is a long time that some contact is not updated, we will delete it. this it the timeStamp to check (Int)
     ///
     /// - returns: GetThreadsModel?
-    // TODO: - Have to implement search in threads by using 'name' and also 'threadIds' properties!
+    // TODO: Have to implement search in threads by using 'name' and also 'threadIds' properties!
     public func retrieveThreads(ascending:  Bool,
                                 count:      Int,
                                 name:       String?,
@@ -332,7 +332,7 @@ extension Cache {
         var returnModel: GetThreadsModel?
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
-        fetchRequest.predicate = NSPredicate(format: "unreadCount >= %@", 0)
+        fetchRequest.predicate = NSPredicate(format: "unreadCount > %i", 0)
         do {
             if let result = try context.fetch(fetchRequest) as? [CMConversation] {
                 var threadObjects = [Conversation]()
@@ -725,6 +725,22 @@ extension Cache {
     
     
     // MARK: - retrieve MessageHistory:
+    public func retrieveAllUnreadMessageCount() -> Int {
+        var countSum = 0
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMConversation] {
+                for thread in result {
+                    let t = thread.convertCMConversationToConversationObject()
+                    countSum += t.unreadCount ?? 0
+                }
+            }
+        } catch {
+            fatalError("Error on fetching list of CMMessage that are unreaded")
+        }
+        return countSum
+    }
+    
     /// Retrieve MessageHistory:
     /// retrieve MessageHistory from cacheDB and return the result to the caller
     ///

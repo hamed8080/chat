@@ -316,6 +316,7 @@ extension Cache {
                             result.first!.lastMessageVO = messageObject
                         }
                         if let pinMessage = myThread.pinMessage {
+                            deleteAllPinMessageFromCMMessageEntity(onThreadId: threadId)
                             if let pin = updateCMPinMessageEntity(withObject: pinMessage) {
                                 result.first!.pinMessage = pin
                             }
@@ -373,6 +374,7 @@ extension Cache {
                             conversation.lastMessageVO = messageObject
                         }
                         if let pinMessage = myThread.pinMessage {
+                            deleteAllPinMessageFromCMMessageEntity(onThreadId: threadId)
                             if let pin = updateCMPinMessageEntity(withObject: pinMessage) {
                                 conversation.pinMessage = pin
                             }
