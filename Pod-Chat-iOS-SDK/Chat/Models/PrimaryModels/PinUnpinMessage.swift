@@ -15,16 +15,19 @@ open class PinUnpinMessage {
     public let notifyAll:   Bool
     public let text:        String?
     public let sender:      Participant?
+    public let time:        Int?
     
     public init(messageId:  Int,
                 notifyAll:  Bool,
                 text:       String?,
-                sender:     Participant?) {
+                sender:     Participant?,
+                time:       Int?) {
         
         self.messageId  = messageId
         self.notifyAll  = notifyAll
         self.text       = text
         self.sender     = sender
+        self.time       = time
     }
     
     public init(pinUnpinContent: JSON) {
@@ -32,6 +35,7 @@ open class PinUnpinMessage {
         self.notifyAll  = pinUnpinContent["notifyAll"].boolValue
         self.text       = pinUnpinContent["text"].string
         self.sender     = Participant(messageContent: pinUnpinContent["sender"], threadId: nil)
+        self.time       = pinUnpinContent["time"].int
     }
     
     func formatToJSON() -> JSON {
@@ -43,6 +47,9 @@ open class PinUnpinMessage {
         }
         if let sender_ = sender {
             content["sender"] = sender_.formatToJSON()
+        }
+        if let time_ = time {
+            content["time"] = JSON(time)
         }
         return content
     }
