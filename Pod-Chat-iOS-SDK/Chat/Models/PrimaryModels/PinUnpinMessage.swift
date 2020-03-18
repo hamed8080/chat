@@ -49,7 +49,7 @@ open class PinUnpinMessage {
             content["sender"] = sender_.formatToJSON()
         }
         if let time_ = time {
-            content["time"] = JSON(time)
+            content["time"] = JSON(time_)
         }
         return content
     }
