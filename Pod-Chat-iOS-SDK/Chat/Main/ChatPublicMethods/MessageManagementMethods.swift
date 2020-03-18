@@ -31,7 +31,7 @@ extension Chat {
         getAllUnreadMessagesCountCallbackToUser = completion
       
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.ALL_UNREAD_MESSAGE_COUNT.rawValue,
-                                            content:            nil,
+                                            content:            "\(inputModel.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,

@@ -12,25 +12,31 @@ import SwiftyJSON
 
 open class GetAllUnreadMessageCountRequestModel {
     
-    public let typeCode:    String?
-    public let uniqueId:    String
+    public let countMuteThreads:    Bool?
+    public let typeCode:            String?
+    public let uniqueId:            String
     
-    public init(typeCode:   String?,
-                uniqueId:   String?) {
+    public init(countMuteThreads:   Bool?,
+                typeCode:           String?,
+                uniqueId:           String?) {
         
-        self.typeCode   = typeCode
-        self.uniqueId   = uniqueId ?? UUID().uuidString
+        self.countMuteThreads   = countMuteThreads
+        self.typeCode           = typeCode
+        self.uniqueId           = uniqueId ?? UUID().uuidString
     }
     
     public init(json: JSON) {
-        self.typeCode   = json["typeCode"].string
-        self.uniqueId   = json["uniqueId"].string ?? UUID().uuidString
+        self.countMuteThreads   = json["mute"].bool
+        self.typeCode           = json["typeCode"].string
+        self.uniqueId           = json["uniqueId"].string ?? UUID().uuidString
     }
     
-//    func convertContentToJSON() -> JSON {
-//        var content: JSON = [:]
-//
-//        return content
-//    }
+    func convertContentToJSON() -> JSON {
+        var content: JSON = [:]
+        if let countMuteThreads_ = countMuteThreads {
+            content["mute"] = JSON(countMuteThreads_)
+        }
+        return content
+    }
     
 }
