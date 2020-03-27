@@ -15,6 +15,7 @@ open class UploadRequestModel {
     public let fileExtension:       String? //= nil
     public let fileName:            String  //= ""
     public let fileSize:            Int64   //= 0
+    public let mimeType:            String
     public let originalFileName:    String  //= ""
     public let threadId:            Int?    //= nil
     
@@ -31,6 +32,7 @@ open class UploadRequestModel {
     public init(dataToSend:         Data,
                 fileExtension:      String?,
                 fileName:           String?,
+                mimeType:           String?,
                 originalFileName:   String?,
                 threadId:           Int?,
                 typeCode:           String?,
@@ -42,6 +44,7 @@ open class UploadRequestModel {
         self.fileExtension      = fileExtension
         self.fileName           = theFileName
         self.fileSize           = Int64(dataToSend.count)
+        self.mimeType           = mimeType ?? ""
         self.originalFileName   = originalFileName ?? theFileName
         self.threadId           = threadId
         self.typeCode           = typeCode
@@ -57,6 +60,7 @@ open class UploadRequestModel {
     public init(dataToSend:         Data,
                 fileExtension:      String?,
                 fileName:           String?,
+                mimeType:           String?,
                 originalFileName:   String?,
                 threadId:           Int?,
                 xC:                 Int?,
@@ -72,6 +76,7 @@ open class UploadRequestModel {
         self.fileExtension      = fileExtension
         self.fileName           = theFileName
         self.fileSize           = Int64(dataToSend.count)
+        self.mimeType           = mimeType ?? ""
         self.originalFileName   = originalFileName ?? theFileName
         self.threadId           = threadId
         self.xC                 = xC

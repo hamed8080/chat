@@ -20,6 +20,7 @@ extension QueueOfUploadFiles {
     @NSManaged public var fileExtension:    String?
     @NSManaged public var fileName:         String?
     @NSManaged public var fileSize:         NSNumber?
+    @NSManaged public var mimeType:         String?
     @NSManaged public var originalFileName: String?
     @NSManaged public var threadId:         NSNumber?
     @NSManaged public var typeCode:         String?

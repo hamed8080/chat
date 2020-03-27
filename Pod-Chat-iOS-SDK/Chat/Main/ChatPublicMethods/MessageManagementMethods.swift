@@ -699,6 +699,7 @@ extension Chat {
                                                                               messageType:  sendFileMessageInput.messageInput.messageType,
                                                                               fileName:     file.fileName,
                                                                               metadata:     (sendFileMessageInput.messageInput.metadata != nil) ? "\(sendFileMessageInput.messageInput.metadata!)" : nil,
+                                                                              mimeType:     sendFileMessageInput.uploadInput.mimeType,
                                                                               repliedTo:    sendFileMessageInput.messageInput.repliedTo,
                                                                               threadId:     sendFileMessageInput.messageInput.threadId,
                                                                               xC:           nil,
@@ -716,6 +717,7 @@ extension Chat {
                                                                               messageType:  sendFileMessageInput.messageInput.messageType,
                                                                               fileName:     nil,
                                                                               metadata:     (sendFileMessageInput.messageInput.metadata != nil) ? "\(sendFileMessageInput.messageInput.metadata!)" : nil,
+                                                                              mimeType:     sendFileMessageInput.uploadInput.mimeType,
                                                                               repliedTo:    sendFileMessageInput.messageInput.repliedTo,
                                                                               threadId:     sendFileMessageInput.messageInput.threadId,
                                                                               xC:           image.xC,
@@ -739,6 +741,7 @@ extension Chat {
             let uploadRequest = UploadImageRequestModel(dataToSend:         image.dataToSend,
                                                         fileExtension:      fileExtension,
                                                         fileName:           image.fileName,
+                                                        mimeType:           image.mimeType,
                                                         originalFileName:   image.originalFileName,
                                                         threadId:           image.threadId,
                                                         xC:                 image.xC,
@@ -748,15 +751,14 @@ extension Chat {
                                                         typeCode:           nil,
                                                         uniqueId:           image.uniqueId)
             
-            metadata["file"]["originalName"] = JSON(uploadRequest.originalFileName)
-            metadata["file"]["mimeType"]    = JSON("")
-            metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
-            
             uploadImage(inputModel: uploadRequest, uniqueId: { _ in }, progress: { (progress) in
                 uploadProgress(progress)
             }) { (response) in
                 let myResponse: UploadImageModel = response as! UploadImageModel
                 metadata["file"] = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
+                metadata["file"]["originalName"] = JSON(uploadRequest.originalFileName)
+                metadata["file"]["mimeType"]    = JSON(uploadRequest.mimeType)
+                metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
                 sendMessage(withMetadata: metadata)
             }
             
@@ -764,20 +766,20 @@ extension Chat {
             let uploadRequest = UploadFileRequestModel(dataToSend:      file.dataToSend,
                                                        fileExtension:   fileExtension,
                                                        fileName:        file.fileName,
+                                                       mimeType:        file.mimeType,
                                                        originalFileName: file.originalFileName,
                                                        threadId:        file.threadId,
                                                        typeCode:        nil,
                                                        uniqueId:        file.uniqueId)
-            
-            metadata["file"]["originalName"] = JSON(uploadRequest.originalFileName)
-            metadata["file"]["mimeType"]    = JSON("")
-            metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
             
             uploadFile(inputModel: uploadRequest, uniqueId: { _ in }, progress: { (progress) in
                 uploadProgress(progress)
             }) { (response) in
                 let myResponse: UploadFileModel = response as! UploadFileModel
                 metadata["file"]    = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
+                metadata["file"]["originalName"] = JSON(uploadRequest.originalFileName)
+                metadata["file"]["mimeType"]    = JSON(uploadRequest.mimeType)
+                metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
                 sendMessage(withMetadata: metadata)
             }
             
@@ -896,6 +898,7 @@ extension Chat {
             let uploadInput = UploadRequestModel(dataToSend:        (imageData as! Data),
                                                  fileExtension:     nil,
                                                  fileName:          sendLocationMessageRequest.sendMessageImageName,
+                                                 mimeType:          "image/png",
                                                  originalFileName:  nil,
                                                  threadId:          sendLocationMessageRequest.sendMessageThreadId,
                                                  xC:                sendLocationMessageRequest.sendMessageXC,
@@ -1514,6 +1517,7 @@ extension Chat {
             upload = UploadRequestModel(dataToSend:         fileData,
                                         fileExtension:      nil,
                                         fileName:           fileMessages.fileName,
+                                        mimeType:           fileMessages.mimeType,
                                         originalFileName:   fileMessages.fileName,
                                         threadId:           fileMessages.threadId,
                                         typeCode:           fileMessages.typeCode,
@@ -1522,6 +1526,7 @@ extension Chat {
             upload = UploadRequestModel(dataToSend:         imageData,
                                         fileExtension:      nil,
                                         fileName:           fileMessages.fileName,
+                                        mimeType:           fileMessages.mimeType,
                                         originalFileName:   fileMessages.fileName,
                                         threadId:           fileMessages.threadId!,
                                         xC:                 fileMessages.xC,
@@ -1558,6 +1563,7 @@ extension Chat {
         let input = UploadImageRequestModel(dataToSend:     uploadImageObj.dataToSend!,
                                             fileExtension:  uploadImageObj.fileExtension,
                                             fileName:       uploadImageObj.fileName,
+                                            mimeType:       uploadImageObj.mimeType,
                                             originalFileName: nil,
                                             threadId:       uploadImageObj.threadId!,
                                             xC:             uploadImageObj.xC,
@@ -1585,6 +1591,7 @@ extension Chat {
             let input = UploadFileRequestModel(dataToSend:      upld.dataToSend!,
                                                fileExtension:   upld.fileExtension,
                                                fileName:        upld.fileName,
+                                               mimeType:        upld.mimeType,
                                                originalFileName: nil,
                                                threadId:        upld.threadId!,
                                                typeCode:        upld.typeCode,

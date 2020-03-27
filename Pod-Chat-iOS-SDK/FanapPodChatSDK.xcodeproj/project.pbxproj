@@ -319,6 +319,7 @@
 		3EBBEDFC2174C9FB00F5CDC7 /* ChatProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDFB2174C9FB00F5CDC7 /* ChatProtocols.swift */; };
 		3EBBEDFE2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDFD2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift */; };
 		3EBBEE012174CBCA00F5CDC7 /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEE002174CBCA00F5CDC7 /* Extentions.swift */; };
+		3EBEC369242B0A2200FCDE4A /* pic.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3EBEC35E242B0A2200FCDE4A /* pic.jpg */; };
 		3ECFC9A023E0502900978C96 /* GetCurrentUserRolesRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECFC99F23E0502900978C96 /* GetCurrentUserRolesRequestModel.swift */; };
 		3ECFC9A223E0521B00978C96 /* GetCurrentUserRolesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECFC9A123E0521B00978C96 /* GetCurrentUserRolesModel.swift */; };
 		3ECFC9A423E0581100978C96 /* GetCurrentUserRolesCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECFC9A323E0581100978C96 /* GetCurrentUserRolesCallback.swift */; };
@@ -681,6 +682,7 @@
 		3EBBEDFB2174C9FB00F5CDC7 /* ChatProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatProtocols.swift; sourceTree = "<group>"; };
 		3EBBEDFD2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncDelegatesImplementation.swift; sourceTree = "<group>"; };
 		3EBBEE002174CBCA00F5CDC7 /* Extentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
+		3EBEC35E242B0A2200FCDE4A /* pic.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pic.jpg; sourceTree = "<group>"; };
 		3ECFC99F23E0502900978C96 /* GetCurrentUserRolesRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentUserRolesRequestModel.swift; sourceTree = "<group>"; };
 		3ECFC9A123E0521B00978C96 /* GetCurrentUserRolesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentUserRolesModel.swift; sourceTree = "<group>"; };
 		3ECFC9A323E0581100978C96 /* GetCurrentUserRolesCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentUserRolesCallback.swift; sourceTree = "<group>"; };
@@ -1118,6 +1120,7 @@
 			children = (
 				3EA156B721CE2419004B1346 /* CacheDataModel.xcdatamodeld */,
 				3EE025F021206E63001810FB /* Chat.h */,
+				3EBEC35E242B0A2200FCDE4A /* pic.jpg */,
 				3E78AAB92184A309002A6EC0 /* pic.png */,
 				3EB5208E22ABF68700B7EA45 /* Main */,
 				3EB5205F22ABF1E000B7EA45 /* CallbackClasses */,
@@ -1353,6 +1356,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3EBEC369242B0A2200FCDE4A /* pic.jpg in Resources */,
 				3E78AABA2184A30A002A6EC0 /* pic.png in Resources */,
 				3E78AAB72184A25F002A6EC0 /* Assets.xcassets in Resources */,
 			);
