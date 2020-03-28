@@ -75,7 +75,7 @@ open class QueueOfWaitUploadImagesModel {
         let result: JSON = ["fileExtension":    fileExtension ?? NSNull(),
                             "fileName":         fileName ?? NSNull(),
                             "fileSize":         fileSize ?? NSNull(),
-                            "mimeType":         mimeType,
+                            "mimeType":         mimeType ?? "",
                             "originalFileName": originalFileName ?? NSNull(),
                             "threadId":         threadId ?? NSNull(),
                             "xC":               xC ?? NSNull(),
