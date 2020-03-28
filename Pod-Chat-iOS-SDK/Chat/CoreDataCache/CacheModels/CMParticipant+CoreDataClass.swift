@@ -90,7 +90,8 @@ public class CMParticipant: NSManagedObject {
                                                receiveEnable:   receiveEnable,
                                                roles:           roles,
                                                sendEnable:      sendEnable,
-                                               username:        self.username)
+                                               username:        self.username,
+                                               chatProfileVO:   nil)
             
             return participantModel
         }
