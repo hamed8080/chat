@@ -42,6 +42,10 @@ extension CMParticipant {
     @NSManaged public var threadId:         NSNumber?
     @NSManaged public var time:             NSNumber?
     @NSManaged public var username:         String?
+    
+    @NSManaged public var bio:              String?
+    @NSManaged public var metadata:         String?
+    
     @NSManaged public var dummyConversationInviter:         [CMConversation]?
     @NSManaged public var dummyConversationParticipants:    [CMConversation]?
     @NSManaged public var dummyForwardInfo: CMForwardInfo?

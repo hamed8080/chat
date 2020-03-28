@@ -524,6 +524,8 @@ extension Cache {
                         if let username = myParticipant.username {
                             result.first!.username = username
                         }
+                        result.first!.bio               = myParticipant.chatProfileVO?.bio
+                        result.first!.metadata          = myParticipant.chatProfileVO?.metadata
                         result.first!.time = Int(Date().timeIntervalSince1970) as NSNumber?
                         result.first!.admin = ((result.first!.roles?.count ?? 0) > 0) ? true : false
 //                        result.first!.admin             = myParticipant.admin as NSNumber?
@@ -586,6 +588,8 @@ extension Cache {
                         theParticipant.threadId         = threadId as NSNumber?
                         theParticipant.time             = Int(Date().timeIntervalSince1970) as NSNumber?
                         theParticipant.username         = myParticipant.username
+                        theParticipant.bio              = myParticipant.chatProfileVO?.bio
+                        theParticipant.metadata         = myParticipant.chatProfileVO?.metadata
                         participantObjectToReturn = theParticipant
                         
                         saveContext(subject: "Update CMParticipant -create a new object-")

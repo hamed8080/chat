@@ -91,7 +91,7 @@ public class CMParticipant: NSManagedObject {
                                                roles:           roles,
                                                sendEnable:      sendEnable,
                                                username:        self.username,
-                                               chatProfileVO:   nil)
+                                               chatProfileVO:   Profile(bio: bio, metadata: metadata))
             
             return participantModel
         }
