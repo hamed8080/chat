@@ -1199,12 +1199,15 @@ extension Chat {
     /// - It has 3 callbacks as responses.
     ///
     /// - parameter inputModel:     (input) you have to send your parameters insid this model. (GetCurrentUserRolesRequestModel)
+    /// - parameter getCacheResponse:   (input) specify if you want to get cache response for this request (Bool?)
     /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! UserRolesModel)
-    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (UserRolesModel)
+    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! GetCurrentUserRolesModel)
+    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetCurrentUserRolesModel)
     public func getCurrentUserRoles(inputModel:     GetCurrentUserRolesRequestModel,
+                                    getCacheResponse:   Bool?,
                                     uniqueId:       @escaping (String) -> (),
-                                    completion:     @escaping callbackTypeAlias) {
+                                    completion:     @escaping callbackTypeAlias,
+                                    cacheResponse:  @escaping (GetCurrentUserRolesModel) -> () ) {
         
         uniqueId(inputModel.uniqueId)
         getCurrentUserRolesCallbackToUser = completion
@@ -1234,6 +1237,14 @@ extension Chat {
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
+        
+        // if cache is enabled by user, it will return cache result to the user
+        if (getCacheResponse ?? enableCache) {
+            if let cacheCurrentUserRoles = Chat.cacheDB.retrieveCurrentUserRoles(onThreadId: inputModel.threadId) {
+                cacheResponse(cacheCurrentUserRoles)
+            }
+        }
+        
     }
     
     

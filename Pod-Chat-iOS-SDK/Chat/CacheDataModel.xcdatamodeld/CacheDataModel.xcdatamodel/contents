@@ -60,6 +60,10 @@
         <relationship name="participants" optional="YES" toMany="YES" deletionRule="Deny" ordered="YES" destinationEntity="CMParticipant" inverseName="dummyConversationParticipants" inverseEntity="CMParticipant"/>
         <relationship name="pinMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMPinMessage" inverseName="message" inverseEntity="CMPinMessage"/>
     </entity>
+    <entity name="CMCurrentUserRoles" representedClassName=".CMCurrentUserRoles" syncable="YES">
+        <attribute name="roles" optional="YES" attributeType="Transformable"/>
+        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+    </entity>
     <entity name="CMFile" representedClassName=".CMFile" syncable="YES">
         <attribute name="hashCode" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
@@ -286,7 +290,7 @@
         <element name="CMLinkedUser" positionX="-278.86328125" positionY="121.0546875" width="128" height="135"/>
         <element name="CMMessage" positionX="-185.7109375" positionY="279.0234375" width="128" height="373"/>
         <element name="CMParticipant" positionX="732.75" positionY="-25.08984375" width="128" height="508"/>
-        <element name="CMPinMessage" positionX="263.37890625" positionY="662.7421875" width="128" height="103"/>
+        <element name="CMPinMessage" positionX="341.734375" positionY="-23.5546875" width="128" height="103"/>
         <element name="CMReplyInfo" positionX="982.71484375" positionY="482.37890625" width="128" height="178"/>
         <element name="CMThreadParticipants" positionX="-459.9921875" positionY="520.90625" width="128" height="90"/>
         <element name="CMUser" positionX="-463.83984375" positionY="196.234375" width="128" height="223"/>
@@ -300,5 +304,6 @@
         <element name="QueueOfUploadFiles" positionX="1079.53125" positionY="19.48046875" width="128" height="178"/>
         <element name="QueueOfUploadImages" positionX="1076.33203125" positionY="-208.8203125" width="128" height="238"/>
         <element name="ThreadAdmins" positionX="954.83984375" positionY="318.64453125" width="128" height="118"/>
+        <element name="CMCurrentUserRoles" positionX="387" positionY="189" width="128" height="73"/>
     </elements>
 </model>
