@@ -16,6 +16,7 @@ public enum MESSAGE_TYPE {
     case video
     case sound
     case file
+    case link
     
     public func returnIntValue() -> Int {
         switch self {
@@ -25,6 +26,7 @@ public enum MESSAGE_TYPE {
         case .video:    return 4
         case .sound:    return 5
         case .file:     return 6
+        case .link:     return 7
         }
     }
     
@@ -36,6 +38,7 @@ public enum MESSAGE_TYPE {
         case 4:     return MESSAGE_TYPE.video
         case 5:     return MESSAGE_TYPE.sound
         case 6:     return MESSAGE_TYPE.file
+        case 7:     return MESSAGE_TYPE.link
         default:    return MESSAGE_TYPE.text
         }
     }

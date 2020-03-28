@@ -294,6 +294,8 @@
 		3EB5208722ABF53D00B7EA45 /* ClearHistoryCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5208622ABF53D00B7EA45 /* ClearHistoryCallback.swift */; };
 		3EB5208B22ABF58C00B7EA45 /* SetRoleToUserCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB5208A22ABF58C00B7EA45 /* SetRoleToUserCallback.swift */; };
 		3EB7595C228D98FC00A48262 /* CancelMessageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB7595B228D98FC00A48262 /* CancelMessageRequestModel.swift */; };
+		3EB8BC86242E8DE900BCBF7C /* CMCurrentUserRoles+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB8BC84242E8DE900BCBF7C /* CMCurrentUserRoles+CoreDataClass.swift */; };
+		3EB8BC87242E8DE900BCBF7C /* CMCurrentUserRoles+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB8BC85242E8DE900BCBF7C /* CMCurrentUserRoles+CoreDataProperties.swift */; };
 		3EBADE8B23E6B7A3009BC821 /* DiskStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBADE8A23E6B7A3009BC821 /* DiskStatus.swift */; };
 		3EBBEDC62174C18F00F5CDC7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDC52174C18F00F5CDC7 /* User.swift */; };
 		3EBBEDD32174C20200F5CDC7 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDD22174C20200F5CDC7 /* Contact.swift */; };
@@ -319,6 +321,7 @@
 		3EBBEDFC2174C9FB00F5CDC7 /* ChatProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDFB2174C9FB00F5CDC7 /* ChatProtocols.swift */; };
 		3EBBEDFE2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDFD2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift */; };
 		3EBBEE012174CBCA00F5CDC7 /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEE002174CBCA00F5CDC7 /* Extentions.swift */; };
+		3EBEC369242B0A2200FCDE4A /* pic.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3EBEC35E242B0A2200FCDE4A /* pic.jpg */; };
 		3ECFC9A023E0502900978C96 /* GetCurrentUserRolesRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECFC99F23E0502900978C96 /* GetCurrentUserRolesRequestModel.swift */; };
 		3ECFC9A223E0521B00978C96 /* GetCurrentUserRolesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECFC9A123E0521B00978C96 /* GetCurrentUserRolesModel.swift */; };
 		3ECFC9A423E0581100978C96 /* GetCurrentUserRolesCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECFC9A323E0581100978C96 /* GetCurrentUserRolesCallback.swift */; };
@@ -656,6 +659,8 @@
 		3EB5208622ABF53D00B7EA45 /* ClearHistoryCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearHistoryCallback.swift; sourceTree = "<group>"; };
 		3EB5208A22ABF58C00B7EA45 /* SetRoleToUserCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetRoleToUserCallback.swift; sourceTree = "<group>"; };
 		3EB7595B228D98FC00A48262 /* CancelMessageRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelMessageRequestModel.swift; sourceTree = "<group>"; };
+		3EB8BC84242E8DE900BCBF7C /* CMCurrentUserRoles+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMCurrentUserRoles+CoreDataClass.swift"; sourceTree = "<group>"; };
+		3EB8BC85242E8DE900BCBF7C /* CMCurrentUserRoles+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMCurrentUserRoles+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3EBADE8A23E6B7A3009BC821 /* DiskStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskStatus.swift; sourceTree = "<group>"; };
 		3EBBEDC52174C18F00F5CDC7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		3EBBEDD22174C20200F5CDC7 /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
@@ -681,6 +686,7 @@
 		3EBBEDFB2174C9FB00F5CDC7 /* ChatProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatProtocols.swift; sourceTree = "<group>"; };
 		3EBBEDFD2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncDelegatesImplementation.swift; sourceTree = "<group>"; };
 		3EBBEE002174CBCA00F5CDC7 /* Extentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
+		3EBEC35E242B0A2200FCDE4A /* pic.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pic.jpg; sourceTree = "<group>"; };
 		3ECFC99F23E0502900978C96 /* GetCurrentUserRolesRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentUserRolesRequestModel.swift; sourceTree = "<group>"; };
 		3ECFC9A123E0521B00978C96 /* GetCurrentUserRolesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentUserRolesModel.swift; sourceTree = "<group>"; };
 		3ECFC9A323E0581100978C96 /* GetCurrentUserRolesCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentUserRolesCallback.swift; sourceTree = "<group>"; };
@@ -882,14 +888,16 @@
 		3EB5204722ABE7AA00B7EA45 /* CacheModels */ = {
 			isa = PBXGroup;
 			children = (
-				3E2ADA4F23D5A5AE00331407 /* CMPinMessage+CoreDataClass.swift */,
-				3E2ADA5023D5A5AE00331407 /* CMPinMessage+CoreDataProperties.swift */,
-				3E037C2022E2DB6E00094C80 /* MessageGaps+CoreDataClass.swift */,
-				3E037C2122E2DB6E00094C80 /* MessageGaps+CoreDataProperties.swift */,
 				3E24082821F5C844001F32F1 /* CMContact+CoreDataClass.swift */,
 				3E24082921F5C844001F32F1 /* CMContact+CoreDataProperties.swift */,
 				3E24082221F5C844001F32F1 /* CMConversation+CoreDataClass.swift */,
 				3E24082321F5C844001F32F1 /* CMConversation+CoreDataProperties.swift */,
+				3EB8BC84242E8DE900BCBF7C /* CMCurrentUserRoles+CoreDataClass.swift */,
+				3EB8BC85242E8DE900BCBF7C /* CMCurrentUserRoles+CoreDataProperties.swift */,
+				3E2ADA4F23D5A5AE00331407 /* CMPinMessage+CoreDataClass.swift */,
+				3E2ADA5023D5A5AE00331407 /* CMPinMessage+CoreDataProperties.swift */,
+				3E037C2022E2DB6E00094C80 /* MessageGaps+CoreDataClass.swift */,
+				3E037C2122E2DB6E00094C80 /* MessageGaps+CoreDataProperties.swift */,
 				3E24082021F5C844001F32F1 /* CMForwardInfo+CoreDataClass.swift */,
 				3E24082121F5C844001F32F1 /* CMForwardInfo+CoreDataProperties.swift */,
 				3E24082E21F5C844001F32F1 /* CMLinkedUser+CoreDataClass.swift */,
@@ -1118,6 +1126,7 @@
 			children = (
 				3EA156B721CE2419004B1346 /* CacheDataModel.xcdatamodeld */,
 				3EE025F021206E63001810FB /* Chat.h */,
+				3EBEC35E242B0A2200FCDE4A /* pic.jpg */,
 				3E78AAB92184A309002A6EC0 /* pic.png */,
 				3EB5208E22ABF68700B7EA45 /* Main */,
 				3EB5205F22ABF1E000B7EA45 /* CallbackClasses */,
@@ -1353,6 +1362,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3EBEC369242B0A2200FCDE4A /* pic.jpg in Resources */,
 				3E78AABA2184A30A002A6EC0 /* pic.png in Resources */,
 				3E78AAB72184A25F002A6EC0 /* Assets.xcassets in Resources */,
 			);
@@ -1490,6 +1500,7 @@
 				3E43D1562132BF700069DF9A /* SendMessage.swift in Sources */,
 				3E3D786023D5F278005797A4 /* NotSeenDurationModel.swift in Sources */,
 				3E8ADCF123B783CC00E3538D /* PinAndUnpinThreadRequestModel.swift in Sources */,
+				3EB8BC87242E8DE900BCBF7C /* CMCurrentUserRoles+CoreDataProperties.swift in Sources */,
 				3E0A76C222AFD6F8009D669E /* FileManagementMethods.swift in Sources */,
 				3E8D87E3221861920092B440 /* QueueOfFileMessages+CoreDataProperties.swift in Sources */,
 				3EA1569A21CE1C68004B1346 /* ReplyTextMessageRequestModel.swift in Sources */,
@@ -1525,6 +1536,7 @@
 				3E037C2222E2DB6E00094C80 /* MessageGaps+CoreDataClass.swift in Sources */,
 				3EBBEDD32174C20200F5CDC7 /* Contact.swift in Sources */,
 				3EE0261721206EA6001810FB /* Chat.swift in Sources */,
+				3EB8BC86242E8DE900BCBF7C /* CMCurrentUserRoles+CoreDataClass.swift in Sources */,
 				3EB5206F22ABF36500B7EA45 /* SendMessageCallbacks.swift in Sources */,
 				3E35336A23D4560D00731774 /* PinUnpinMessage.swift in Sources */,
 				3E437D5C218F36DA0021C0ED /* GetBlockedUserListModel.swift in Sources */,
@@ -1863,7 +1875,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 0.6.2.3;
+				MARKETING_VERSION = 0.6.2.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.fanapSoft.FanapPodChatSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1897,7 +1909,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 0.6.2.3;
+				MARKETING_VERSION = 0.6.2.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.fanapSoft.FanapPodChatSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

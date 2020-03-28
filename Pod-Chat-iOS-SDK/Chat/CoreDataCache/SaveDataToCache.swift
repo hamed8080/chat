@@ -82,6 +82,47 @@ extension Cache {
     }
     
     
+    // MARK: - save CurrentUserRoles:
+    /// Save Current User Roles:
+    /// by calling this function, it will save (or update) the User Roles on the Cache.
+    ///
+    /// Inputs:
+    /// - it gets array of "Roles" and the threadId as Int value, an inputs
+    ///
+    /// Outputs:
+    /// - it returns no output
+    ///
+    /// - parameter withRoles:  send your currentUserRoles to this parameter.([Roles])
+    /// - parameter onThreadId: send your threadId to this parameter.(Int)
+    public func saveCurrentUserRoles(withRoles: [Roles], onThreadId threadId: Int) {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMCurrentUserRoles")
+        fetchRequest.predicate = NSPredicate(format: "threadId == %i", threadId)
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMCurrentUserRoles] {
+                // if there is a value in this fetch request, it mean that we had already saved UserInfo on the Cache.
+                // so we just have to update that information with new response that comes from server
+                if (result.count > 0) {
+                    result.first!.threadId  = threadId as NSNumber?
+                    result.first!.roles     = RolesArray(roles: withRoles)
+                    // save function that will try to save changes that made on the Cache
+                    saveContext(subject: "Update CurrentUserRoles -update existing object-")
+                } else {
+                    // if there wasn't any CMUser object (means there is no information about UserInfo on the Cache)
+                    // this part will execute, which will create an object of User and save it on the Cache
+                    let theCurrentUserRolesEntity = NSEntityDescription.entity(forEntityName: "CMCurrentUserRoles", in: context)
+                    let theCurrentUserRoles = CMCurrentUserRoles(entity: theCurrentUserRolesEntity!, insertInto: context)
+                    theCurrentUserRoles.threadId    = threadId as NSNumber?
+                    theCurrentUserRoles.roles       = RolesArray(roles: withRoles)
+                    // save function that will try to save changes that made on the Cache
+                    saveContext(subject: "Creat CurrentUserRoles -create a new object-")
+                }
+            }
+        } catch {
+            fatalError("Error on fetching list of CMUser")
+        }
+    }
+    
+    
     
     // MARK: - save Contact:
     /// Save Contact:

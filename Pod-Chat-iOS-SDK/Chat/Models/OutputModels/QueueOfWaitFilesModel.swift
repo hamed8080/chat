@@ -15,6 +15,7 @@ open class QueueOfWaitUploadFilesModel {
     let fileExtension:      String?
     let fileName:           String?
     let fileSize:           Int64?
+    let mimeType:           String
     let originalFileName:   String?
     let threadId:           Int?
     let typeCode:           String?
@@ -24,6 +25,7 @@ open class QueueOfWaitUploadFilesModel {
          fileExtension:     String?,
          fileName:          String?,
          fileSize:          Int64?,
+         mimeType:          String?,
          originalFileName:  String?,
          threadId:          Int?,
          typeCode:          String?,
@@ -33,6 +35,7 @@ open class QueueOfWaitUploadFilesModel {
         self.fileExtension      = fileExtension
         self.fileName           = fileName
         self.fileSize           = fileSize
+        self.mimeType           = mimeType ?? ""
         self.originalFileName   = originalFileName
         self.threadId           = threadId
         self.typeCode           = typeCode
@@ -45,6 +48,7 @@ open class QueueOfWaitUploadFilesModel {
         self.fileExtension      = fileInputModel.fileExtension
         self.fileName           = fileInputModel.fileName
         self.fileSize           = fileInputModel.fileSize
+        self.mimeType           = fileInputModel.mimeType
         self.originalFileName   = fileInputModel.originalFileName
         self.threadId           = fileInputModel.threadId
         self.typeCode           = fileInputModel.typeCode
@@ -56,6 +60,7 @@ open class QueueOfWaitUploadFilesModel {
         let result: JSON = ["fileExtension":    fileExtension ?? NSNull(),
                             "fileName":         fileName ?? NSNull(),
                             "fileSize":         fileSize ?? NSNull(),
+                            "mimeType":         mimeType,
                             "originalFileName": originalFileName ?? NSNull(),
                             "threadId":         threadId ?? NSNull(),
                             "typeCode":         typeCode ?? NSNull(),
