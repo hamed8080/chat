@@ -54,9 +54,9 @@ open class UpdateThreadInfoRequestModel {
             let metadataStr = metadata_
             content["metadata"] = JSON(metadataStr)
         }
-        if let title_ = self.title {
-            content["title"] = JSON(title_)
-        }
+//        if let title_ = self.title {
+//            content["title"] = JSON(title_)
+//        }
         
         return content
     }

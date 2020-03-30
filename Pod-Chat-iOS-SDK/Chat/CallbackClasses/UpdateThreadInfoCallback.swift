@@ -32,9 +32,14 @@ extension Chat {
     func responseOfUpdateThreadInfo(withMessage message: ChatMessage) {
         log.verbose("Message of type 'UPDATE_THREAD_INFO' recieved", context: "Chat")
         
+        var threads: [Conversation]?
+        if let content = message.content?.convertToJSON() {
+            let thread = Conversation(messageContent: content)
+            threads = [thread]
+        }
         let tUpdateInfoEM = ThreadEventModel(type:          ThreadEventTypes.THREAD_INFO_UPDATED,
                                              participants:  nil,
-                                             threads:       nil,
+                                             threads:       threads,
                                              threadId:      message.content?.convertToJSON()["id"].int ?? message.subjectId,
                                              senderId:      nil,
                                              unreadCount:   message.content?.convertToJSON()["unreadCount"].int,
@@ -79,22 +84,31 @@ extension Chat {
             log.verbose("UpdateThreadInfoCallback", context: "Chat")
             
             if let content = response.result {
-                if let threadId = content["id"].int {
-                    let getthreadRequestInput = GetThreadsRequestModel(count:               nil,
-                                                                       creatorCoreUserId:   nil,
-                                                                       metadataCriteria:    nil,
-                                                                       name:                nil,
-                                                                       new:                 nil,
-                                                                       offset:              nil,
-                                                                       partnerCoreContactId: nil,
-                                                                       partnerCoreUserId:   nil,
-                                                                       threadIds:           [threadId],
-                                                                       typeCode:            nil,
-                                                                       uniqueId:            uID)
-                    Chat.sharedInstance.getThreads(inputModel: getthreadRequestInput, getCacheResponse: nil, uniqueId: { (_) in }, completion: { (myResponse) in
-                        success(myResponse as! GetThreadsModel)
-                    }, cacheResponse: { (_) in })
-                }
+                let thread = Conversation(messageContent: content)
+                let returnModel = GetThreadsModel(conversationObjects: [thread],
+                                                  contentCount: 1,
+                                                  count:        1,
+                                                  offset:       0,
+                                                  hasError:     false,
+                                                  errorMessage: "",
+                                                  errorCode:    0)
+                success(returnModel)
+//                if let threadId = content["id"].int {
+//                    let getthreadRequestInput = GetThreadsRequestModel(count:               nil,
+//                                                                       creatorCoreUserId:   nil,
+//                                                                       metadataCriteria:    nil,
+//                                                                       name:                nil,
+//                                                                       new:                 nil,
+//                                                                       offset:              nil,
+//                                                                       partnerCoreContactId: nil,
+//                                                                       partnerCoreUserId:   nil,
+//                                                                       threadIds:           [threadId],
+//                                                                       typeCode:            nil,
+//                                                                       uniqueId:            uID)
+//                    Chat.sharedInstance.getThreads(inputModel: getthreadRequestInput, getCacheResponse: nil, uniqueId: { (_) in }, completion: { (myResponse) in
+//                        success(myResponse as! GetThreadsModel)
+//                    }, cacheResponse: { (_) in })
+//                }
             }
             
         }
