@@ -66,9 +66,9 @@ extension Chat {
     /// - parameter cacheResponse:      (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetThreadsModel)
     public func getThreads(inputModel getThreadsInput:  GetThreadsRequestModel,
                            getCacheResponse:            Bool?,
-                           uniqueId:        @escaping (String) -> (),
-                           completion:      @escaping callbackTypeAlias,
-                           cacheResponse:   @escaping (GetThreadsModel) -> ()) {
+                           uniqueId:            @escaping (String) -> (),
+                           completion:          @escaping callbackTypeAlias,
+                           cacheResponse:       @escaping (GetThreadsModel) -> ()) {
         
         log.verbose("Try to request to get threads with this parameters: \n \(getThreadsInput)", context: "Chat")
         uniqueId(getThreadsInput.uniqueId)
@@ -139,8 +139,8 @@ extension Chat {
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! GetThreadsModel)
     public func updateThreadInfo(inputModel updateThreadInfoInput: UpdateThreadInfoRequestModel,
-                                 uniqueId:              @escaping (String) -> (),
-                                 completion:            @escaping callbackTypeAlias) {
+                                 uniqueId:          @escaping (String) -> (),
+                                 completion:        @escaping callbackTypeAlias) {
         
         log.verbose("Try to request to update thread info with this parameters: \n \(updateThreadInfoInput)", context: "Chat")
         uniqueId(updateThreadInfoInput.uniqueId)
@@ -248,12 +248,12 @@ extension Chat {
     /// - parameter onDelivere: (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
     /// - parameter onSeen:     (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
     public func createThreadWithMessage(inputModel creatThreadWithMessageInput: CreateThreadWithMessageRequestModel,
-                                        threadUniqueId:                         @escaping (String) -> (),
-                                        messageUniqueId:                        @escaping (String) -> (),
-                                        completion:                             @escaping callbackTypeAlias,
-                                        onSent:                                 @escaping callbackTypeAlias,
-                                        onDelivere:                             @escaping callbackTypeAlias,
-                                        onSeen:                                 @escaping callbackTypeAlias) {
+                                        threadUniqueId:     @escaping (String) -> (),
+                                        messageUniqueId:    @escaping (String) -> (),
+                                        completion:         @escaping callbackTypeAlias,
+                                        onSent:             @escaping callbackTypeAlias,
+                                        onDelivere:         @escaping callbackTypeAlias,
+                                        onSeen:             @escaping callbackTypeAlias) {
         
         log.verbose("Try to request to create thread and Send Message participants with this parameters: \n \(creatThreadWithMessageInput)", context: "Chat")
         threadUniqueId(creatThreadWithMessageInput.createThreadInput.uniqueId)
@@ -385,8 +385,8 @@ extension Chat {
     
     
     public func isNameAvailable(inputModel isNameAvailableThreadInput: IsNameAvailableThreadRequestModel,
-                                uniqueId:    @escaping (String) -> (),
-                                completion:  @escaping callbackTypeAlias) {
+                                uniqueId:       @escaping (String) -> (),
+                                completion:     @escaping callbackTypeAlias) {
         
         log.verbose("Try to request to join thread with this parameters: \n \(isNameAvailableThreadInput.convertContentToJSON())", context: "Chat")
         uniqueId(isNameAvailableThreadInput.uniqueId)
@@ -423,8 +423,8 @@ extension Chat {
     
     
     public func joinThread(inputModel joinThreadInput: JoinThreadRequestModel,
-                           uniqueId:    @escaping (String) -> (),
-                           completion:  @escaping callbackTypeAlias) {
+                           uniqueId:        @escaping (String) -> (),
+                           completion:      @escaping callbackTypeAlias) {
         
         log.verbose("Try to request to join thread with this parameters: \n uniqueName = \(joinThreadInput.uniqueName)", context: "Chat")
         uniqueId(joinThreadInput.uniqueId)
@@ -478,8 +478,8 @@ extension Chat {
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ThreadModel)
     public func leaveThread(inputModel leaveThreadInput:   LeaveThreadRequestModel,
-                            uniqueId:           @escaping (String) -> (),
-                            completion:         @escaping callbackTypeAlias) {
+                            uniqueId:       @escaping (String) -> (),
+                            completion:     @escaping callbackTypeAlias) {
         
         log.verbose("Try to request to leave thread with this parameters: \n \(leaveThreadInput)", context: "Chat")
         uniqueId(leaveThreadInput.uniqueId)
@@ -693,9 +693,9 @@ extension Chat {
     /// - parameter cacheResponse:      (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetThreadParticipantsModel)
     public func getThreadParticipants(inputModel getThreadParticipantsInput:    GetThreadParticipantsRequestModel,
                                       getCacheResponse:                         Bool?,
-                                      uniqueId:                     @escaping (String) -> (),
-                                      completion:                   @escaping callbackTypeAlias,
-                                      cacheResponse:                @escaping (GetThreadParticipantsModel) -> ()) {
+                                      uniqueId:             @escaping (String) -> (),
+                                      completion:           @escaping callbackTypeAlias,
+                                      cacheResponse:        @escaping (GetThreadParticipantsModel) -> ()) {
         
         log.verbose("Try to request to get thread participants with this parameters: \n \(getThreadParticipantsInput)", context: "Chat")
         uniqueId(getThreadParticipantsInput.uniqueId)
@@ -759,8 +759,8 @@ extension Chat {
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! AddParticipantModel)
     public func addParticipants(inputModel addParticipantsInput:   AddParticipantsRequestModel,
-                                uniqueId:               @escaping (String) -> (),
-                                completion:             @escaping callbackTypeAlias) {
+                                uniqueId:       @escaping (String) -> (),
+                                completion:     @escaping callbackTypeAlias) {
         log.verbose("Try to request to add participants with this parameters: \n \(addParticipantsInput)", context: "Chat")
         uniqueId(addParticipantsInput.uniqueId)
         
@@ -810,8 +810,8 @@ extension Chat {
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! RemoveParticipantModel)
     public func removeParticipants(inputModel removeParticipantsInput: RemoveParticipantsRequestModel,
-                                   uniqueId:                @escaping (String) -> (),
-                                   completion:              @escaping callbackTypeAlias) {
+                                   uniqueId:        @escaping (String) -> (),
+                                   completion:      @escaping callbackTypeAlias) {
         log.verbose("Try to request to remove participants with this parameters: \n \(removeParticipantsInput)", context: "Chat")
         uniqueId(removeParticipantsInput.uniqueId)
         
@@ -1004,8 +1004,8 @@ extension Chat {
     /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! UserRolesModel)
     /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (UserRolesModel)
     public func removeAuditor(inputModel removeAuditorInput:    AddRemoveAuditorRequestModel,
-                              uniqueId:       @escaping (String) -> (),
-                              completion:     @escaping callbackTypeAlias) {
+                              uniqueId:         @escaping (String) -> (),
+                              completion:       @escaping callbackTypeAlias) {
         
         let removeRoleModel = SetRemoveRoleModel(userId:    removeAuditorInput.userId,
                                                  roles:     removeAuditorInput.roles)
@@ -1094,9 +1094,9 @@ extension Chat {
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! PinUnpinThreadModel)
     public func unpinThread(inputModel unpinThreadInput: PinAndUnpinThreadRequestModel,
-                             uniqueId:          @escaping (String) -> (),
-                             completion:        @escaping callbackTypeAlias) {
-        
+                            uniqueId:       @escaping (String) -> (),
+                            completion:     @escaping callbackTypeAlias) {
+    
         log.verbose("Try to request to unpin threads with this parameters: \n \(unpinThreadInput)", context: "Chat")
         uniqueId(unpinThreadInput.uniqueId)
         
@@ -1117,10 +1117,10 @@ extension Chat {
                                             isCreateThreadAndSendMessage: true)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
-                                              msgTTL:       msgTTL,
-                                              peerName:     serverName,
-                                              priority:     msgPriority,
-                                              pushMsgType:  nil)
+                                                msgTTL:       msgTTL,
+                                                peerName:     serverName,
+                                                priority:     msgPriority,
+                                                pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
                                 callbacks:          [(UnpinThreadCallbacks(), unpinThreadInput.uniqueId)],
@@ -1148,8 +1148,8 @@ extension Chat {
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! NotSeenDurationModel)
     public func contactNotSeenDuration(inputModel notSeenDurationInput: NotSeenDurationRequestModel,
-                             uniqueId:          @escaping (String) -> (),
-                             completion:        @escaping callbackTypeAlias) {
+                                       uniqueId:        @escaping (String) -> (),
+                                       completion:      @escaping callbackTypeAlias) {
         
         log.verbose("Try to request to get  user notSeenDuration with this parameters: \n \(notSeenDurationInput)", context: "Chat")
         uniqueId(notSeenDurationInput.uniqueId)
@@ -1198,18 +1198,18 @@ extension Chat {
     /// Outputs:
     /// - It has 3 callbacks as responses.
     ///
-    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (GetCurrentUserRolesRequestModel)
+    /// - parameter inputModel:         (input) you have to send your parameters insid this model. (GetCurrentUserRolesRequestModel)
     /// - parameter getCacheResponse:   (input) specify if you want to get cache response for this request (Bool?)
     /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! GetCurrentUserRolesModel)
     /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetCurrentUserRolesModel)
-    public func getCurrentUserRoles(inputModel:     GetCurrentUserRolesRequestModel,
+    public func getCurrentUserRoles(inputModel getCurrentUserRolesInput:    GetCurrentUserRolesRequestModel,
                                     getCacheResponse:   Bool?,
-                                    uniqueId:       @escaping (String) -> (),
-                                    completion:     @escaping callbackTypeAlias,
-                                    cacheResponse:  @escaping (GetCurrentUserRolesModel) -> () ) {
+                                    uniqueId:           @escaping (String) -> (),
+                                    completion:         @escaping callbackTypeAlias,
+                                    cacheResponse:      @escaping (GetCurrentUserRolesModel) -> () ) {
         
-        uniqueId(inputModel.uniqueId)
+        uniqueId(getCurrentUserRolesInput.uniqueId)
         getCurrentUserRolesCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_CURRENT_USER_ROLES.rawValue,
@@ -1218,11 +1218,11 @@ extension Chat {
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
-                                            subjectId:          inputModel.threadId,
+                                            subjectId:          getCurrentUserRolesInput.threadId,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           inputModel.typeCode ?? generalTypeCode,
-                                            uniqueId:           inputModel.uniqueId,
+                                            typeCode:           getCurrentUserRolesInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           getCurrentUserRolesInput.uniqueId,
                                             uniqueIds:          nil,
                                             isCreateThreadAndSendMessage: true)
         
@@ -1233,14 +1233,14 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          [(GetCurrentUserRolesCallbacks(), inputModel.uniqueId)],
+                                callbacks:          [(GetCurrentUserRolesCallbacks(), getCurrentUserRolesInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
         
         // if cache is enabled by user, it will return cache result to the user
         if (getCacheResponse ?? enableCache) {
-            if let cacheCurrentUserRoles = Chat.cacheDB.retrieveCurrentUserRoles(onThreadId: inputModel.threadId) {
+            if let cacheCurrentUserRoles = Chat.cacheDB.retrieveCurrentUserRoles(onThreadId: getCurrentUserRolesInput.threadId) {
                 cacheResponse(cacheCurrentUserRoles)
             }
         }

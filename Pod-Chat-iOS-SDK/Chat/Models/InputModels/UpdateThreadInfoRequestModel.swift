@@ -6,8 +6,7 @@
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 
-import Foundation
-
+import FanapPodAsyncSDK
 import SwiftyJSON
 
 
@@ -35,6 +34,7 @@ open class UpdateThreadInfoRequestModel {
         self.metadata       = metadata
         self.threadId       = threadId
         self.title          = title
+        
         self.typeCode       = typeCode
         self.uniqueId       = uniqueId ?? UUID().uuidString
     }
@@ -45,13 +45,15 @@ open class UpdateThreadInfoRequestModel {
             content["image"] = JSON(image_)
         }
         if let description_ = self.description {
-            content["description"] = JSON(description_)
+            let theDecription = MakeCustomTextToSend(message: description_).replaceSpaceEnterWithSpecificCharecters()
+            content["description"] = JSON(theDecription)
         }
         if let name_ = self.title {
-            content["name"] = JSON(name_)
+            let theName = MakeCustomTextToSend(message: name_).replaceSpaceEnterWithSpecificCharecters()
+            content["name"] = JSON(theName)
         }
         if let metadata_ = self.metadata {
-            let metadataStr = metadata_
+            let metadataStr = MakeCustomTextToSend(message: metadata_).replaceSpaceEnterWithSpecificCharecters()
             content["metadata"] = JSON(metadataStr)
         }
 //        if let title_ = self.title {

@@ -12,6 +12,7 @@ import Foundation
 open class JoinThreadRequestModel {
     
     public let uniqueName:  String
+    
     public let typeCode:    String?
     public let uniqueId:    String
     
@@ -20,6 +21,7 @@ open class JoinThreadRequestModel {
                 uniqueId:   String?) {
         
         self.uniqueName = uniqueName
+        
         self.typeCode   = typeCode
         self.uniqueId   = uniqueId ?? UUID().uuidString
     }

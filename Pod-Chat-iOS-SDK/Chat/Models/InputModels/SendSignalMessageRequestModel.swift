@@ -22,6 +22,7 @@ open class SendSignalMessageRequestModel {
         
         self.signalType = signalType
         self.threadId   = threadId
+        
         self.uniqueId   = uniqueId ?? UUID().uuidString
     }
     

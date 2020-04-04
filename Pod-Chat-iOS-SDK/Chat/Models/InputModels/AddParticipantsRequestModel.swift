@@ -28,6 +28,7 @@ open class AddParticipantsRequestModel {
         self.coreUserIds = nil
         self.usernames  = nil
         self.threadId   = threadId
+        
         self.typeCode   = typeCode
         self.uniqueId   = uniqueId ?? UUID().uuidString
     }
@@ -41,6 +42,7 @@ open class AddParticipantsRequestModel {
         self.coreUserIds = nil
         self.usernames  = usernames
         self.threadId   = threadId
+        
         self.typeCode   = typeCode
         self.uniqueId   = uniqueId ?? UUID().uuidString
     }
@@ -54,6 +56,7 @@ open class AddParticipantsRequestModel {
         self.coreUserIds = coreUserIds
         self.usernames  = nil
         self.threadId   = threadId
+        
         self.typeCode   = typeCode
         self.uniqueId   = uniqueId ?? UUID().uuidString
     }

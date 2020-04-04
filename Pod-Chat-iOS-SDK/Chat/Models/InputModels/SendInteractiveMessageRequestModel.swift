@@ -30,6 +30,7 @@ open class SendInteractiveMessageRequestModel {
         self.messageId      = messageId
         self.metadata       = metadata
         self.systemMetadata = systemMetadata
+        
         self.typeCode       = typeCode
         self.uniqueId       = uniqueId ?? UUID().uuidString
     }

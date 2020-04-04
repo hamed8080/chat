@@ -50,19 +50,19 @@ extension Chat {
              and we will send this Queue to user on the GetHistory request,
              now user knows which upload requests didn't send correctly, and can handle them
              */
-            let messageObjectToSendToQueue = QueueOfWaitUploadImagesModel(dataToSend:         uploadImageInput.dataToSend,
-                                                                          fileExtension:      uploadImageInput.fileExtension,
-                                                                          fileName:           uploadImageInput.fileName,
-                                                                          fileSize:           uploadImageInput.fileSize,
+            let messageObjectToSendToQueue = QueueOfWaitUploadImagesModel(dataToSend:       uploadImageInput.dataToSend,
+                                                                          fileExtension:    uploadImageInput.fileExtension,
+                                                                          fileName:         uploadImageInput.fileName,
+                                                                          fileSize:         uploadImageInput.fileSize,
                                                                           mimeType:         uploadImageInput.mimeType,
-                                                                          originalFileName:   uploadImageInput.originalFileName,
-                                                                          threadId:           uploadImageInput.threadId,
-                                                                          xC:                 uploadImageInput.xC,
-                                                                          yC:                 uploadImageInput.yC,
-                                                                          hC:                 uploadImageInput.hC,
-                                                                          wC:                 uploadImageInput.wC,
-                                                                          typeCode:           uploadImageInput.typeCode,
-                                                                          uniqueId:           uploadImageInput.uniqueId)
+                                                                          originalFileName: uploadImageInput.originalFileName,
+                                                                          threadId:         uploadImageInput.threadId,
+                                                                          xC:               uploadImageInput.xC,
+                                                                          yC:               uploadImageInput.yC,
+                                                                          hC:               uploadImageInput.hC,
+                                                                          wC:               uploadImageInput.wC,
+                                                                          typeCode:         uploadImageInput.typeCode,
+                                                                          uniqueId:         uploadImageInput.uniqueId)
             Chat.cacheDB.saveUploadImageToWaitQueue(image: messageObjectToSendToQueue)
         }
         

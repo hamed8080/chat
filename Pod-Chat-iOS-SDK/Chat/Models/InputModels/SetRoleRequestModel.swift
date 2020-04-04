@@ -14,6 +14,7 @@ open class RoleRequestModel {
 //    public var roles:           [String] = []
     public let threadId:        Int
 //    public let userId:          Int
+    
     public let typeCode:        String?
     public let uniqueId:        String
     
@@ -30,6 +31,7 @@ open class RoleRequestModel {
         
         self.userRoles  = userRoles
         self.threadId   = threadId
+        
         self.typeCode   = typeCode
         self.uniqueId   = uniqueId ?? UUID().uuidString
     }

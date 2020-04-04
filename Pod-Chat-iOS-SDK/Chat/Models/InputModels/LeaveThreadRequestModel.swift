@@ -24,6 +24,7 @@ open class LeaveThreadRequestModel {
         
 //        self.content            = content
         self.threadId   = threadId
+        
         self.typeCode   = typeCode
         self.uniqueId   = uniqueId ?? UUID().uuidString
     }

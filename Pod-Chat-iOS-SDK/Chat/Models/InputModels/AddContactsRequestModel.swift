@@ -31,6 +31,7 @@ open class AddContactRequestModel {
         self.firstName          = firstName
         self.lastName           = lastName
         self.username           = nil
+        
         self.typeCode           = typeCode
         self.uniqueId           = uniqueId ?? UUID().uuidString
     }
@@ -47,6 +48,7 @@ open class AddContactRequestModel {
         self.firstName          = firstName
         self.lastName           = lastName
         self.username           = username
+        
         self.typeCode           = typeCode
         self.uniqueId           = uniqueId ?? UUID().uuidString
     }
@@ -78,6 +80,7 @@ open class AddContactsRequestModel {
         self.firstNames         = firstNames
         self.lastNames          = lastNames
 //        self.usernames          = usernames
+        
         self.typeCode           = typeCode
         self.uniqueIds          = uniqueIds
     }

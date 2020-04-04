@@ -20,6 +20,7 @@ open class RemoveContactsRequestModel {
                 uniqueId:   String?) {
         
         self.contactId  = contactId
+        
         self.typeCode   = typeCode
         self.uniqueId   = uniqueId ?? UUID().uuidString
     }

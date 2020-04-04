@@ -6,6 +6,7 @@
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 
+import FanapPodAsyncSDK
 import SwiftyJSON
 
 open class GetThreadParticipantsRequestModel {
@@ -17,6 +18,7 @@ open class GetThreadParticipantsRequestModel {
     public let name:            String? // Search in Participants list (LIKE in name, contactName, email)
     public let offset:          Int?    // Offset of select Query
     public let threadId:        Int     // Id of thread which you want to get participants of
+    
     public let typeCode:        String?
     public let uniqueId:        String
     
@@ -49,6 +51,7 @@ open class GetThreadParticipantsRequestModel {
         self.name           = json["name"].string
         self.offset         = json["offset"].int
         self.threadId       = json["threadId"].intValue
+        
         self.typeCode       = json["typeCode"].string
         self.uniqueId       = json["uniqueId"].string ?? UUID().uuidString
     }
@@ -67,7 +70,8 @@ open class GetThreadParticipantsRequestModel {
         }
         
         if let name = self.name {
-            content["name"]   = JSON(name)
+            let theName = MakeCustomTextToSend(message: name).replaceSpaceEnterWithSpecificCharecters()
+            content["name"]   = JSON(theName)
         }
         
         if let admin = self.admin {

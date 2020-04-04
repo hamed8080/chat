@@ -6,6 +6,7 @@
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 
+import FanapPodAsyncSDK
 import SwiftyJSON
 
 open class CreateThreadRequestModel {
@@ -38,26 +39,30 @@ open class CreateThreadRequestModel {
         self.uniqueName     = uniqueName
         self.title          = title
         self.type           = type
+        
         self.typeCode       = typeCode
         self.uniqueId       = uniqueId ?? UUID().uuidString
     }
     
     func convertContentToJSON() -> JSON {
         var content: JSON = [:]
-        content["title"] = JSON(self.title)
+//        content["title"] = JSON(self.title)
+        content["title"] = JSON(MakeCustomTextToSend(message: self.title).replaceSpaceEnterWithSpecificCharecters())
         var inviteees = [JSON]()
         for item in self.invitees {
             inviteees.append(item.formatToJSON())
         }
         content["invitees"] = JSON(inviteees)
         if let description = self.description {
-            content["description"] = JSON(description)
+            let theDescription = MakeCustomTextToSend(message: description).replaceSpaceEnterWithSpecificCharecters()
+            content["description"] = JSON(theDescription)
         }
         if let image = self.image {
             content["image"] = JSON(image)
         }
         if let metadata2 = self.metadata {
-            content["metadata"] = JSON(metadata2)
+            let theMeta = MakeCustomTextToSend(message: metadata2).replaceSpaceEnterWithSpecificCharecters()
+            content["metadata"] = JSON(theMeta)
         }
         if let uniqueName_ = self.uniqueName {
             content["uniqueName"] = JSON(uniqueName_)

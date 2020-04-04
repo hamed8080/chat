@@ -6,7 +6,7 @@
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 
-import Foundation
+import FanapPodAsyncSDK
 import SwiftyJSON
 
 
@@ -67,6 +67,7 @@ open class GetHistoryRequestModel {
         self.toTime             = toTime
         self.uniqueIds          = uniqueIds
         self.userId             = userId
+        
         self.typeCode           = typeCode
         self.uniqueId           = uniqueId ?? UUID().uuidString
     }
@@ -85,6 +86,7 @@ open class GetHistoryRequestModel {
         self.toTime             = json["toTime"].uInt
         self.uniqueIds          = json["uniqueIds"].arrayObject as? [String]
         self.userId             = json["userId"].int
+        
         self.typeCode           = json["typeCode"].string
         self.uniqueId           = json["uniqueId"].string ?? UUID().uuidString
     }
@@ -110,7 +112,8 @@ open class GetHistoryRequestModel {
             content["order"] = JSON(order)
         }
         if let query = self.query {
-            content["query"] = JSON(query)
+            let theQuery = MakeCustomTextToSend(message: query).replaceSpaceEnterWithSpecificCharecters()
+            content["query"] = JSON(theQuery)
         }
         if let id = self.messageId {
             content["id"] = JSON(id)
@@ -119,7 +122,8 @@ open class GetHistoryRequestModel {
             content["userId"] = JSON(userId)
         }
         if let metadataCriteria = self.metadataCriteria {
-            content["metadataCriteria"] = JSON(metadataCriteria)
+            let theMeta = MakeCustomTextToSend(message: metadataCriteria).replaceSpaceEnterWithSpecificCharecters()
+            content["metadataCriteria"] = JSON(theMeta)
         }
         if let uniqueIds = self.uniqueIds {
             content["uniqueIds"] = JSON(uniqueIds)

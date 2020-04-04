@@ -20,6 +20,7 @@ open class PinAndUnpinThreadRequestModel {
                 uniqueId:   String?) {
         
         self.threadId   = threadId
+        
         self.typeCode   = typeCode
         self.uniqueId   = uniqueId ?? UUID().uuidString
     }

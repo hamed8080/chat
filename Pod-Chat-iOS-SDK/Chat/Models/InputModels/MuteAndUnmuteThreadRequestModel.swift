@@ -20,6 +20,7 @@ open class MuteAndUnmuteThreadRequestModel {
                 uniqueId:   String?) {
         
         self.subjectId  = subjectId
+        
         self.typeCode   = typeCode
         self.uniqueId   = uniqueId ?? UUID().uuidString
     }

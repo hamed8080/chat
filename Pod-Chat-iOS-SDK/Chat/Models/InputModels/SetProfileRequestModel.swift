@@ -25,6 +25,8 @@ open class SetProfileRequestModel {
         
         self.bio        = bio
         self.metadata   = metadata
+//        self.bio        = MakeCustomTextToSend(message: bio).replaceSpaceEnterWithSpecificCharecters()
+//        self.metadata   = MakeCustomTextToSend(message: metadata).replaceSpaceEnterWithSpecificCharecters()
         self.typeCode   = typeCode
         self.uniqueId   = uniqueId ?? UUID().uuidString
     }
@@ -37,7 +39,8 @@ open class SetProfileRequestModel {
             content["bio"] = JSON(theBio)
         }
         if let myMetadata = metadata {
-            content["metadata"] = JSON(myMetadata)
+            let theMeta = MakeCustomTextToSend(message: myMetadata).replaceSpaceEnterWithSpecificCharecters()
+            content["metadata"] = JSON(theMeta)
         }
         return content
     }

@@ -16,6 +16,7 @@ open class GetMentionRequestModel {
     public let offset:              Int?        // Offset of select query
     public let threadId:            Int         // Id of thread to get its history
     public let onlyUnreadMention:   Bool
+    
     public let typeCode:            String?
     public let uniqueId:            String
     
@@ -30,6 +31,7 @@ open class GetMentionRequestModel {
         self.offset             = offset
         self.threadId           = threadId
         self.onlyUnreadMention  = onlyUnreadMention
+        
         self.typeCode           = typeCode
         self.uniqueId           = uniqueId ?? UUID().uuidString
     }
@@ -39,6 +41,7 @@ open class GetMentionRequestModel {
         self.offset             = json["offset"].int
         self.threadId           = json["threadId"].intValue
         self.onlyUnreadMention  = json["unreadMentioned"].boolValue
+        
         self.typeCode           = json["typeCode"].string
         self.uniqueId           = json["uniqueId"].string ?? UUID().uuidString
     }

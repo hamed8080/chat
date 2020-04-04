@@ -14,8 +14,8 @@ open class DeleteMultipleMessagesRequestModel {
     public let deleteForAll:    Bool?
     public let threadId:        Int
     public let messageIds:      [Int]
-    public let uniqueIds:       [String]
     
+    public let uniqueIds:       [String]
     public let typeCode:        String?
     
     public init(deleteForAll:   Bool?,
@@ -26,6 +26,7 @@ open class DeleteMultipleMessagesRequestModel {
         self.deleteForAll   = deleteForAll
         self.threadId       = threadId
         self.messageIds     = messageIds
+        
         self.typeCode       = typeCode
         
         var theUniqueIds: [String] = []

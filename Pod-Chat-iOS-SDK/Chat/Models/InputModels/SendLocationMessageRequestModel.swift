@@ -73,6 +73,7 @@ open class SendLocationMessageRequestModel {
         self.sendMessageMetadata    = sendMessageMetadata
         self.sendMessageRepliedTo   = sendMessageRepliedTo
         self.sendMessageTypeCode    = sendMessageTypeCode
+        
         self.typeCode               = typeCode
         self.uniqueId               = uniqueId ?? UUID().uuidString
     }

@@ -32,6 +32,7 @@ open class SendTextMessageRequestModel {
                 uniqueId:       String?) {
         
         self.content        = content
+//        self.content        = MakeCustomTextToSend(message: content).replaceSpaceEnterWithSpecificCharecters()
         self.messageType    = messageType
         self.metadata       = metadata
         self.repliedTo      = repliedTo

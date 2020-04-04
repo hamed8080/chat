@@ -23,6 +23,7 @@ open class GetBlockedContactListRequestModel {
         
         self.count      = count
         self.offset     = offset
+        
         self.typeCode   = typeCode
         self.uniqueId   = uniqueId ?? UUID().uuidString
     }
