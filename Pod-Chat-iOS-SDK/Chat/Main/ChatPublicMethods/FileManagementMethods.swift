@@ -1,5 +1,5 @@
 //
-//  FileManagementMethods.swift
+//
 //  FanapPodChatSDK
 //
 //  Created by Mahyar Zhiani on 3/21/1398 AP.
@@ -34,7 +34,7 @@ extension Chat {
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter progress:   (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (UploadImageModel)
-    func uploadImage(inputModel uploadImageInput:   UploadImageRequestModel,
+    public func uploadImage(inputModel uploadImageInput:   UploadImageRequestModel,
                      uniqueId:      @escaping (String) -> (),
                      progress:      @escaping (Float) -> (),
                      completion:    @escaping callbackTypeAlias) {
@@ -175,7 +175,7 @@ extension Chat {
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter progress:   (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (UploadFileModel)
-    func uploadFile(inputModel uploadFileInput: UploadFileRequestModel,
+    public func uploadFile(inputModel uploadFileInput: UploadFileRequestModel,
                     uniqueId:        @escaping (String) -> (),
                     progress:        @escaping (Float) -> (),
                     completion:      @escaping callbackTypeAlias) {
