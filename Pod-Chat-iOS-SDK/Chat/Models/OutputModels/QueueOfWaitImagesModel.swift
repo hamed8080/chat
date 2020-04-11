@@ -15,6 +15,7 @@ open class QueueOfWaitUploadImagesModel {
     let fileExtension:    String?
     let fileName:         String?
     let fileSize:         Int64?
+    let mimeType:         String?
     let originalFileName: String?
     let threadId:         Int?
     let xC:               Int?
@@ -28,6 +29,7 @@ open class QueueOfWaitUploadImagesModel {
          fileExtension:     String?,
          fileName:          String?,
          fileSize:          Int64?,
+         mimeType:          String?,
          originalFileName:  String?,
          threadId:          Int?,
          xC:                Int?,
@@ -41,6 +43,7 @@ open class QueueOfWaitUploadImagesModel {
         self.fileExtension      = fileExtension
         self.fileName           = fileName
         self.fileSize           = fileSize
+        self.mimeType           = mimeType ?? ""
         self.originalFileName   = originalFileName
         self.threadId           = threadId
         self.xC                 = xC
@@ -56,6 +59,7 @@ open class QueueOfWaitUploadImagesModel {
         self.fileExtension      = imageInputModel.fileExtension
         self.fileName           = imageInputModel.fileName
         self.fileSize           = imageInputModel.fileSize
+        self.mimeType           = imageInputModel.mimeType
         self.originalFileName   = imageInputModel.originalFileName
         self.threadId           = imageInputModel.threadId
         self.xC                 = imageInputModel.xC
@@ -71,6 +75,7 @@ open class QueueOfWaitUploadImagesModel {
         let result: JSON = ["fileExtension":    fileExtension ?? NSNull(),
                             "fileName":         fileName ?? NSNull(),
                             "fileSize":         fileSize ?? NSNull(),
+                            "mimeType":         mimeType ?? "",
                             "originalFileName": originalFileName ?? NSNull(),
                             "threadId":         threadId ?? NSNull(),
                             "xC":               xC ?? NSNull(),

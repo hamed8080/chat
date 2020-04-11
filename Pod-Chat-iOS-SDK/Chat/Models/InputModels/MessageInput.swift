@@ -6,7 +6,7 @@
 //  Copyright © 1398 Mahyar Zhiani. All rights reserved.
 //
 
-import Foundation
+import FanapPodAsyncSDK
 import SwiftyJSON
 
 
@@ -38,9 +38,11 @@ open class MessageInput {
         }
         self.repliedTo      = repliedTo
         self.text           = text
+//        self.text           = MakeCustomTextToSend(message: text).replaceSpaceEnterWithSpecificCharecters()
         self.messageType    = messageType
         self.metadata       = nil
         self.systemMetadata = systemMetadata
+//        self.systemMetadata = MakeCustomTextToSend(message: systemMetadata).replaceSpaceEnterWithSpecificCharecters()
         self.uniqueId       = uniqueId ?? UUID().uuidString
     }
     
@@ -61,9 +63,12 @@ open class MessageInput {
         }
         self.repliedTo      = repliedTo
         self.text           = text
+//        self.text           = MakeCustomTextToSend(message: text).replaceSpaceEnterWithSpecificCharecters()
         self.messageType    = messageType
         self.metadata       = metadata
+//        self.metadata       = MakeCustomTextToSend(message: metadata).replaceSpaceEnterWithSpecificCharecters()
         self.systemMetadata = systemMetadata
+//        self.systemMetadata = MakeCustomTextToSend(message: systemMetadata).replaceSpaceEnterWithSpecificCharecters()
         self.uniqueId       = uniqueId ?? UUID().uuidString
     }
     
@@ -79,13 +84,16 @@ open class MessageInput {
             content["repliedTo"] = JSON(repliedTo_)
         }
         if let text_ = self.text {
-            content["text"] = JSON(text_)
+            let theText = MakeCustomTextToSend(message: text_).replaceSpaceEnterWithSpecificCharecters()
+            content["text"] = JSON(theText)
         }
         if let metadata_ = self.metadata {
-            content["metadata"] = JSON(metadata_)
+            let theMeta = MakeCustomTextToSend(message: metadata_).replaceSpaceEnterWithSpecificCharecters()
+            content["metadata"] = JSON(theMeta)
         }
         if let systemMetadata_ = self.systemMetadata {
-            content["systemMetadata"] = JSON(systemMetadata_)
+            let theSystemMeta = MakeCustomTextToSend(message: systemMetadata_).replaceSpaceEnterWithSpecificCharecters()
+            content["systemMetadata"] = JSON(theSystemMeta)
         }
         content["messageType"] = JSON(messageType.returnIntValue())
         content["uniqueId"] = JSON(self.uniqueId)

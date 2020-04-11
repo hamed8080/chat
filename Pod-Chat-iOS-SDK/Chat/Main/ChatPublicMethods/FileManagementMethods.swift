@@ -1,5 +1,5 @@
 //
-//  FileManagementMethods.swift
+//
 //  FanapPodChatSDK
 //
 //  Created by Mahyar Zhiani on 3/21/1398 AP.
@@ -34,7 +34,7 @@ extension Chat {
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter progress:   (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (UploadImageModel)
-    func uploadImage(inputModel uploadImageInput:   UploadImageRequestModel,
+    public func uploadImage(inputModel uploadImageInput:   UploadImageRequestModel,
                      uniqueId:      @escaping (String) -> (),
                      progress:      @escaping (Float) -> (),
                      completion:    @escaping callbackTypeAlias) {
@@ -50,18 +50,19 @@ extension Chat {
              and we will send this Queue to user on the GetHistory request,
              now user knows which upload requests didn't send correctly, and can handle them
              */
-            let messageObjectToSendToQueue = QueueOfWaitUploadImagesModel(dataToSend:         uploadImageInput.dataToSend,
-                                                                          fileExtension:      uploadImageInput.fileExtension,
-                                                                          fileName:           uploadImageInput.fileName,
-                                                                          fileSize:           uploadImageInput.fileSize,
-                                                                          originalFileName:   uploadImageInput.originalFileName,
-                                                                          threadId:           uploadImageInput.threadId,
-                                                                          xC:                 uploadImageInput.xC,
-                                                                          yC:                 uploadImageInput.yC,
-                                                                          hC:                 uploadImageInput.hC,
-                                                                          wC:                 uploadImageInput.wC,
-                                                                          typeCode:           uploadImageInput.typeCode,
-                                                                          uniqueId:           uploadImageInput.uniqueId)
+            let messageObjectToSendToQueue = QueueOfWaitUploadImagesModel(dataToSend:       uploadImageInput.dataToSend,
+                                                                          fileExtension:    uploadImageInput.fileExtension,
+                                                                          fileName:         uploadImageInput.fileName,
+                                                                          fileSize:         uploadImageInput.fileSize,
+                                                                          mimeType:         uploadImageInput.mimeType,
+                                                                          originalFileName: uploadImageInput.originalFileName,
+                                                                          threadId:         uploadImageInput.threadId,
+                                                                          xC:               uploadImageInput.xC,
+                                                                          yC:               uploadImageInput.yC,
+                                                                          hC:               uploadImageInput.hC,
+                                                                          wC:               uploadImageInput.wC,
+                                                                          typeCode:         uploadImageInput.typeCode,
+                                                                          uniqueId:         uploadImageInput.uniqueId)
             Chat.cacheDB.saveUploadImageToWaitQueue(image: messageObjectToSendToQueue)
         }
         
@@ -174,7 +175,7 @@ extension Chat {
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter progress:   (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (UploadFileModel)
-    func uploadFile(inputModel uploadFileInput: UploadFileRequestModel,
+    public func uploadFile(inputModel uploadFileInput: UploadFileRequestModel,
                     uniqueId:        @escaping (String) -> (),
                     progress:        @escaping (Float) -> (),
                     completion:      @escaping callbackTypeAlias) {
@@ -194,6 +195,7 @@ extension Chat {
                                                                             fileExtension:     uploadFileInput.fileExtension,
                                                                             fileName:          uploadFileInput.fileName,
                                                                             fileSize:          uploadFileInput.fileSize,
+                                                                            mimeType:           uploadFileInput.mimeType,
                                                                             originalFileName:  uploadFileInput.originalFileName,
                                                                             threadId:          uploadFileInput.threadId,
                                                                             typeCode:          uploadFileInput.typeCode,

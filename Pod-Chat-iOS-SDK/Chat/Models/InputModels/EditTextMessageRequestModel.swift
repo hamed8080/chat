@@ -33,6 +33,7 @@ open class EditTextMessageRequestModel {
         self.metadata       = metadata
         self.repliedTo      = repliedTo
         self.messageId      = messageId
+        
         self.typeCode       = typeCode
         self.uniqueId       = uniqueId ?? UUID().uuidString
     }

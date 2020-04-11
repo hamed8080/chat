@@ -17,6 +17,7 @@ open class QueueOfWaitFileMessagesModel {
 //    let imageName:      String?
 //    let metadata:       JSON?
     let metadata:       String?
+    let mimeType:       String
     let repliedTo:      Int?
     let threadId:       Int?
     let xC:             Int?
@@ -35,6 +36,7 @@ open class QueueOfWaitFileMessagesModel {
 //         imageName:     String?,
 //         metadata:      JSON?,
          metadata:      String?,
+         mimeType:      String?,
          repliedTo:     Int?,
          threadId:      Int?,
          xC:            Int?,
@@ -51,6 +53,7 @@ open class QueueOfWaitFileMessagesModel {
         self.fileName       = fileName
 //        self.imageName      = imageName
         self.metadata       = metadata
+        self.mimeType       = mimeType ?? ""
         self.repliedTo      = repliedTo
         self.threadId       = threadId
         self.xC             = xC
@@ -69,6 +72,7 @@ open class QueueOfWaitFileMessagesModel {
         self.content        = fileMessageInputModel.messageInput.content
         self.messageType    = fileMessageInputModel.messageInput.messageType
         self.metadata       = (fileMessageInputModel.messageInput.metadata != nil) ? "\(fileMessageInputModel.messageInput.metadata!)" : nil
+        self.mimeType       = fileMessageInputModel.uploadInput.mimeType
         self.repliedTo      = fileMessageInputModel.messageInput.repliedTo
         self.threadId       = fileMessageInputModel.messageInput.threadId
         self.typeCode       = fileMessageInputModel.messageInput.typeCode
@@ -123,6 +127,7 @@ open class QueueOfWaitFileMessagesModel {
                             "fileName":     fileName ?? NSNull(),
 //                            "imageName":    imageName ?? NSNull(),
                             "metadata":     metadata ?? NSNull(),
+                            "mimeType":     mimeType,
                             "repliedTo":    repliedTo ?? NSNull(),
                             "threadId":     threadId ?? NSNull(),
                             "xC":           xC ?? NSNull(),

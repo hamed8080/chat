@@ -26,6 +26,17 @@ extension Chat {
                                           contentCount:     nil,
                                           subjectId:        message.subjectId)
         
+        if enableCache {
+            if let response = returnData.resultAsArray as? [String], let threadId = message.subjectId {
+                let currentUserRolesModel = GetCurrentUserRolesModel(messageContent:    response,
+                                                                     hasError:          returnData.hasError,
+                                                                     errorMessage:      returnData.errorMessage,
+                                                                     errorCode:         returnData.errorCode)
+                
+                Chat.cacheDB.saveCurrentUserRoles(withRoles: currentUserRolesModel.userRoles, onThreadId: threadId)
+            }
+        }
+        
         if Chat.map[message.uniqueId] != nil {
             let callback: CallbackProtocol = Chat.map[message.uniqueId]!
             callback.onResultCallback(uID:      message.uniqueId,
@@ -46,12 +57,11 @@ extension Chat {
             log.verbose("GetCurrentUserRolesCallback", context: "Chat")
             
             if let content = response.resultAsArray as? [String] {
-//                message.content?.convertToJSON() ?? [:]
-                let unblockUserModel = GetCurrentUserRolesModel(messageContent: content,
-                                                                hasError:       response.hasError,
-                                                                errorMessage:   response.errorMessage,
-                                                                errorCode:      response.errorCode)
-                success(unblockUserModel)
+                let currentUserRolesModel = GetCurrentUserRolesModel(messageContent:    content,
+                                                                     hasError:          response.hasError,
+                                                                     errorMessage:      response.errorMessage,
+                                                                     errorCode:         response.errorCode)
+                success(currentUserRolesModel)
             }
         }
     }

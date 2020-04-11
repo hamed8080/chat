@@ -32,7 +32,8 @@ public class CMPinMessage: NSManagedObject {
                 let pinMessageModel = PinUnpinMessage(messageId:    messageId ?? 0,
                                                       notifyAll:    notifyAll ?? false,
                                                       text:         self.text,
-                                                      sender:       nil)
+                                                      sender:       nil,
+                                                      time:         nil)
                 return pinMessageModel
             }
             

@@ -26,6 +26,7 @@ open class DeleteMessageRequestModel {
         
         self.deleteForAll   = deleteForAll
         self.subjectId      = subjectId
+        
         self.typeCode       = typeCode
         self.uniqueId       = uniqueId ?? UUID().uuidString
     }

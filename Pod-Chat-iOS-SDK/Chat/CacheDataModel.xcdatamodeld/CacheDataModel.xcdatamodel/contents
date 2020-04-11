@@ -60,6 +60,10 @@
         <relationship name="participants" optional="YES" toMany="YES" deletionRule="Deny" ordered="YES" destinationEntity="CMParticipant" inverseName="dummyConversationParticipants" inverseEntity="CMParticipant"/>
         <relationship name="pinMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMPinMessage" inverseName="message" inverseEntity="CMPinMessage"/>
     </entity>
+    <entity name="CMCurrentUserRoles" representedClassName=".CMCurrentUserRoles" syncable="YES">
+        <attribute name="roles" optional="YES" attributeType="Transformable"/>
+        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+    </entity>
     <entity name="CMFile" representedClassName=".CMFile" syncable="YES">
         <attribute name="hashCode" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
@@ -114,6 +118,7 @@
     <entity name="CMParticipant" representedClassName=".CMParticipant" syncable="YES">
         <attribute name="admin" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="auditor" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="bio" optional="YES" attributeType="String"/>
         <attribute name="blocked" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="cellphoneNumber" optional="YES" attributeType="String"/>
         <attribute name="contactFirstName" optional="YES" attributeType="String"/>
@@ -127,6 +132,7 @@
         <attribute name="image" optional="YES" attributeType="String"/>
         <attribute name="keyId" optional="YES" attributeType="String"/>
         <attribute name="lastName" optional="YES" attributeType="String"/>
+        <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="myFriend" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="notSeenDuration" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
@@ -216,6 +222,7 @@
         <attribute name="imageToSend" optional="YES" attributeType="Binary"/>
         <attribute name="messageType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="metadata" optional="YES" attributeType="String"/>
+        <attribute name="mimeType" optional="YES" attributeType="String"/>
         <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="typeCode" optional="YES" attributeType="String"/>
@@ -247,6 +254,7 @@
         <attribute name="fileExtension" optional="YES" attributeType="String"/>
         <attribute name="fileName" optional="YES" attributeType="String"/>
         <attribute name="fileSize" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="mimeType" optional="YES" attributeType="String"/>
         <attribute name="originalFileName" optional="YES" attributeType="String"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="typeCode" optional="YES" attributeType="String"/>
@@ -258,6 +266,7 @@
         <attribute name="fileName" optional="YES" attributeType="String"/>
         <attribute name="fileSize" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="hC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="mimeType" optional="YES" attributeType="String"/>
         <attribute name="originalFileName" optional="YES" attributeType="String"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="typeCode" optional="YES" attributeType="String"/>
@@ -276,26 +285,27 @@
     <elements>
         <element name="CMBlockedContact" positionX="-461.90234375" positionY="-78.6953125" width="128" height="105"/>
         <element name="CMContact" positionX="-307.48828125" positionY="-144.9375" width="128" height="238"/>
-        <element name="CMConversation" positionX="-126.5546875" positionY="-151.546875" width="128" height="598"/>
-        <element name="CMFile" positionX="-461.58984375" positionY="539" width="128" height="88"/>
-        <element name="CMForwardInfo" positionX="44.06640625" positionY="6.28515625" width="128" height="90"/>
+        <element name="CMConversation" positionX="30.32421875" positionY="-129.10546875" width="128" height="598"/>
+        <element name="CMCurrentUserRoles" positionX="387" positionY="189" width="128" height="73"/>
+        <element name="CMFile" positionX="-462.546875" positionY="425.40625" width="128" height="88"/>
+        <element name="CMForwardInfo" positionX="432.70703125" positionY="541.2578125" width="128" height="90"/>
         <element name="CMImage" positionX="-460.42578125" positionY="37.66796875" width="128" height="148"/>
-        <element name="CMLinkedUser" positionX="-319.42578125" positionY="117.296875" width="128" height="135"/>
-        <element name="CMMessage" positionX="-287.66796875" positionY="271.8515625" width="128" height="373"/>
-        <element name="CMParticipant" positionX="349.671875" positionY="95.74609375" width="128" height="508"/>
-        <element name="CMPinMessage" positionX="-261" positionY="0" width="128" height="103"/>
-        <element name="CMReplyInfo" positionX="166.9453125" positionY="487.76171875" width="128" height="178"/>
-        <element name="CMThreadParticipants" positionX="80.10546875" positionY="-125.96875" width="128" height="90"/>
+        <element name="CMLinkedUser" positionX="-278.86328125" positionY="121.0546875" width="128" height="135"/>
+        <element name="CMMessage" positionX="-185.7109375" positionY="279.0234375" width="128" height="373"/>
+        <element name="CMParticipant" positionX="732.75" positionY="-25.08984375" width="128" height="538"/>
+        <element name="CMPinMessage" positionX="341.734375" positionY="-23.5546875" width="128" height="103"/>
+        <element name="CMReplyInfo" positionX="982.71484375" positionY="482.37890625" width="128" height="178"/>
+        <element name="CMThreadParticipants" positionX="-459.9921875" positionY="520.90625" width="128" height="90"/>
         <element name="CMUser" positionX="-463.83984375" positionY="196.234375" width="128" height="223"/>
-        <element name="CMUserRole" positionX="-54" positionY="243" width="128" height="120"/>
-        <element name="MessageGaps" positionX="293.2421875" positionY="-115.6953125" width="128" height="90"/>
-        <element name="PhoneContact" positionX="-261" positionY="0" width="128" height="105"/>
-        <element name="QueueOfEditMessages" positionX="-243" positionY="18" width="128" height="163"/>
-        <element name="QueueOfFileMessages" positionX="-261" positionY="0" width="128" height="253"/>
-        <element name="QueueOfForwardMessages" positionX="-234" positionY="36" width="128" height="133"/>
-        <element name="QueueOfTextMessages" positionX="-252" positionY="9" width="128" height="163"/>
-        <element name="QueueOfUploadFiles" positionX="-252" positionY="9" width="128" height="163"/>
-        <element name="QueueOfUploadImages" positionX="-261" positionY="0" width="128" height="223"/>
-        <element name="ThreadAdmins" positionX="-261" positionY="0" width="128" height="118"/>
+        <element name="CMUserRole" positionX="471.12890625" positionY="272.80078125" width="128" height="120"/>
+        <element name="MessageGaps" positionX="-459.22265625" positionY="620.73828125" width="128" height="90"/>
+        <element name="PhoneContact" positionX="-459.39453125" positionY="-191.34765625" width="128" height="105"/>
+        <element name="QueueOfEditMessages" positionX="1209.28125" positionY="-34.71875" width="128" height="163"/>
+        <element name="QueueOfFileMessages" positionX="1220.84375" positionY="275.875" width="128" height="268"/>
+        <element name="QueueOfForwardMessages" positionX="1214.4296875" positionY="135.15234375" width="128" height="133"/>
+        <element name="QueueOfTextMessages" positionX="1210.796875" positionY="-206.65625" width="128" height="163"/>
+        <element name="QueueOfUploadFiles" positionX="1079.53125" positionY="19.48046875" width="128" height="178"/>
+        <element name="QueueOfUploadImages" positionX="1076.33203125" positionY="-208.8203125" width="128" height="238"/>
+        <element name="ThreadAdmins" positionX="954.83984375" positionY="318.64453125" width="128" height="118"/>
     </elements>
 </model>

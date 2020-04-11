@@ -14,6 +14,7 @@ open class AddRemoveAuditorRequestModel {
     public var roles:           [Roles] = []
     public let threadId:        Int
     public let userId:          Int
+    
     public let typeCode:        String?
     public let uniqueId:        String
     
@@ -26,6 +27,7 @@ open class AddRemoveAuditorRequestModel {
         self.roles      = roles
         self.threadId   = threadId
         self.userId     = userId
+        
         self.typeCode   = typeCode
         self.uniqueId   = uniqueId ?? UUID().uuidString
     }

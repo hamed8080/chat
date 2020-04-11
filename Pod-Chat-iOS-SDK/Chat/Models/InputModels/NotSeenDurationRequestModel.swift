@@ -22,6 +22,7 @@ open class NotSeenDurationRequestModel {
                 uniqueId:   String?) {
         
         self.userIds    = userIds
+        
         self.typeCode   = typeCode
         self.uniqueId   = uniqueId ?? UUID().uuidString
     }

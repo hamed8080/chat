@@ -20,6 +20,7 @@ open class GetCurrentUserRolesRequestModel {
                 uniqueId:   String?) {
         
         self.threadId   = threadId
+        
         self.typeCode   = typeCode
         self.uniqueId   = uniqueId ?? UUID().uuidString
     }

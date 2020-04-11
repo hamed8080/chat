@@ -6,7 +6,7 @@
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 
-import Foundation
+import FanapPodAsyncSDK
 import SwiftyJSON
 
 
@@ -46,6 +46,7 @@ open class GetThreadsRequestModel {
         self.partnerCoreContactId   = partnerCoreContactId
         self.partnerCoreUserId      = partnerCoreUserId
         self.threadIds              = threadIds
+        
         self.typeCode               = typeCode
         self.uniqueId               = uniqueId ?? UUID().uuidString
     }
@@ -60,6 +61,7 @@ open class GetThreadsRequestModel {
         self.partnerCoreContactId   = json["partnerCoreContactId"].int
         self.partnerCoreUserId      = json["partnerCoreUserId"].int
         self.threadIds              = json["threadIds"].arrayObject as? [Int]
+        
         self.typeCode               = json["typeCode"].string
         self.uniqueId               = json["uniqueId"].string ?? UUID().uuidString
     }
@@ -69,7 +71,8 @@ open class GetThreadsRequestModel {
         content["count"]    = JSON(self.count ?? 50)
         content["offset"]   = JSON(self.offset ?? 0)
         if let name = self.name {
-            content["name"] = JSON(name)
+            let theName = MakeCustomTextToSend(message: name).replaceSpaceEnterWithSpecificCharecters()
+            content["name"] = JSON(theName)
         }
         if let new = self.new {
             content["new"] = JSON(new)
@@ -87,7 +90,8 @@ open class GetThreadsRequestModel {
             content["partnerCoreContactId"] = JSON(coreUserId)
         }
         if let metadataCriteria = self.metadataCriteria {
-            content["metadataCriteria"] = JSON(metadataCriteria)
+            let theMeta = MakeCustomTextToSend(message: metadataCriteria).replaceSpaceEnterWithSpecificCharecters()
+            content["metadataCriteria"] = JSON(theMeta)
         }
         
         return content

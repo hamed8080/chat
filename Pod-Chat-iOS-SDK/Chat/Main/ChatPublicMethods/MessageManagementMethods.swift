@@ -31,7 +31,7 @@ extension Chat {
         getAllUnreadMessagesCountCallbackToUser = completion
       
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.ALL_UNREAD_MESSAGE_COUNT.rawValue,
-                                            content:            nil,
+                                            content:            "\(inputModel.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
@@ -332,14 +332,14 @@ extension Chat {
         }
         
 //        let messageTxtContent = sendTextMessageInput.content
-        let messageTxtContent = MakeCustomTextToSend(message: sendTextMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
+//        let messageTxtContent = MakeCustomTextToSend(message: sendTextMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.MESSAGE.rawValue,
-                                            content:            messageTxtContent,
+                                            content:            MakeCustomTextToSend(message: sendTextMessageInput.content).replaceSpaceEnterWithSpecificCharecters(),
                                             messageType:        sendTextMessageInput.messageType.returnIntValue(),
-                                            metadata:           (sendTextMessageInput.metadata != nil) ? "\(sendTextMessageInput.metadata!)" : nil,
+                                            metadata:           (sendTextMessageInput.metadata != nil) ? "\(MakeCustomTextToSend(message: sendTextMessageInput.metadata!).replaceSpaceEnterWithSpecificCharecters())" : nil,
                                             repliedTo:          sendTextMessageInput.repliedTo,
-                                            systemMetadata:     (sendTextMessageInput.systemMetadata != nil) ? "\(sendTextMessageInput.systemMetadata!)" : nil,
+                                            systemMetadata:     (sendTextMessageInput.systemMetadata != nil) ? "\(MakeCustomTextToSend(message: sendTextMessageInput.systemMetadata!).replaceSpaceEnterWithSpecificCharecters())" : nil,
                                             subjectId:          sendTextMessageInput.threadId,
                                             token:              token,
                                             tokenIssuer:        nil,
@@ -394,14 +394,14 @@ extension Chat {
         sendCallbackToUserOnSeen = onSeen
         
 //        let messageTxtContent = sendInterActiveMessageInput.content
-        let messageTxtContent = MakeCustomTextToSend(message: sendInterActiveMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
+//        let messageTxtContent = MakeCustomTextToSend(message: sendInterActiveMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.BOT_MESSAGE.rawValue,
-                                            content:            messageTxtContent,
+                                            content:            MakeCustomTextToSend(message: sendInterActiveMessageInput.content).replaceSpaceEnterWithSpecificCharecters(),
                                             messageType:        nil,
-                                            metadata:           "\(sendInterActiveMessageInput.metadata)",
+                                            metadata:           "\(MakeCustomTextToSend(message: sendInterActiveMessageInput.metadata).replaceSpaceEnterWithSpecificCharecters())",
                                             repliedTo:          nil,
-                                            systemMetadata:     (sendInterActiveMessageInput.systemMetadata != nil) ? "\(sendInterActiveMessageInput.systemMetadata!)" : nil,
+                                            systemMetadata:     (sendInterActiveMessageInput.systemMetadata != nil) ? "\(MakeCustomTextToSend(message: sendInterActiveMessageInput.systemMetadata!).replaceSpaceEnterWithSpecificCharecters())" : nil,
                                             subjectId:          sendInterActiveMessageInput.messageId,
                                             token:              token,
                                             tokenIssuer:        nil,
@@ -468,12 +468,12 @@ extension Chat {
         }
         
 //        let messageTxtContent = editMessageInput.content
-        let messageTxtContent = MakeCustomTextToSend(message: editMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
+//        let messageTxtContent = MakeCustomTextToSend(message: editMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.EDIT_MESSAGE.rawValue,
-                                            content:            messageTxtContent,
+                                            content:            MakeCustomTextToSend(message: editMessageInput.content).replaceSpaceEnterWithSpecificCharecters(),
                                             messageType:        editMessageInput.messageType.returnIntValue(),
-                                            metadata:           (editMessageInput.metadata != nil) ? (editMessageInput.metadata!) : nil,
+                                            metadata:           (editMessageInput.metadata != nil) ? (MakeCustomTextToSend(message: editMessageInput.metadata!).replaceSpaceEnterWithSpecificCharecters()) : nil,
                                             repliedTo:          editMessageInput.repliedTo,
                                             systemMetadata:     nil,
                                             subjectId:          editMessageInput.messageId,
@@ -548,12 +548,12 @@ extension Chat {
         }
         
 //        let messageTxtContent = replyMessageInput.content
-        let messageTxtContent = MakeCustomTextToSend(message: replyMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
+//        let messageTxtContent = MakeCustomTextToSend(message: replyMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.MESSAGE.rawValue,
-                                            content:            messageTxtContent,
+                                            content:            MakeCustomTextToSend(message: replyMessageInput.content).replaceSpaceEnterWithSpecificCharecters(),
                                             messageType:        replyMessageInput.messageType.returnIntValue(),
-                                            metadata:           (replyMessageInput.metadata != nil) ? "\(replyMessageInput.metadata!)" : nil,
+                                            metadata:           (replyMessageInput.metadata != nil) ? "\(MakeCustomTextToSend(message: replyMessageInput.metadata!).replaceSpaceEnterWithSpecificCharecters())" : nil,
                                             repliedTo:          replyMessageInput.repliedTo,
                                             systemMetadata:     nil,
                                             subjectId:          replyMessageInput.subjectId,
@@ -630,7 +630,7 @@ extension Chat {
         let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.FORWARD_MESSAGE.rawValue,
                                             content:            "\(forwardMessageInput.messageIds)",
                                             messageType:        nil,
-                                            metadata:           (forwardMessageInput.metadata != nil) ? "\(forwardMessageInput.metadata!)" : nil,
+                                            metadata:           (forwardMessageInput.metadata != nil) ? "\(MakeCustomTextToSend(message: forwardMessageInput.metadata!).replaceSpaceEnterWithSpecificCharecters())" : nil,
                                             repliedTo:          forwardMessageInput.repliedTo,
                                             systemMetadata:     nil,
                                             subjectId:          forwardMessageInput.threadId,
@@ -699,6 +699,7 @@ extension Chat {
                                                                               messageType:  sendFileMessageInput.messageInput.messageType,
                                                                               fileName:     file.fileName,
                                                                               metadata:     (sendFileMessageInput.messageInput.metadata != nil) ? "\(sendFileMessageInput.messageInput.metadata!)" : nil,
+                                                                              mimeType:     sendFileMessageInput.uploadInput.mimeType,
                                                                               repliedTo:    sendFileMessageInput.messageInput.repliedTo,
                                                                               threadId:     sendFileMessageInput.messageInput.threadId,
                                                                               xC:           nil,
@@ -716,6 +717,7 @@ extension Chat {
                                                                               messageType:  sendFileMessageInput.messageInput.messageType,
                                                                               fileName:     nil,
                                                                               metadata:     (sendFileMessageInput.messageInput.metadata != nil) ? "\(sendFileMessageInput.messageInput.metadata!)" : nil,
+                                                                              mimeType:     sendFileMessageInput.uploadInput.mimeType,
                                                                               repliedTo:    sendFileMessageInput.messageInput.repliedTo,
                                                                               threadId:     sendFileMessageInput.messageInput.threadId,
                                                                               xC:           image.xC,
@@ -739,6 +741,7 @@ extension Chat {
             let uploadRequest = UploadImageRequestModel(dataToSend:         image.dataToSend,
                                                         fileExtension:      fileExtension,
                                                         fileName:           image.fileName,
+                                                        mimeType:           image.mimeType,
                                                         originalFileName:   image.originalFileName,
                                                         threadId:           image.threadId,
                                                         xC:                 image.xC,
@@ -748,15 +751,14 @@ extension Chat {
                                                         typeCode:           nil,
                                                         uniqueId:           image.uniqueId)
             
-            metadata["file"]["originalName"] = JSON(uploadRequest.originalFileName)
-            metadata["file"]["mimeType"]    = JSON("")
-            metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
-            
             uploadImage(inputModel: uploadRequest, uniqueId: { _ in }, progress: { (progress) in
                 uploadProgress(progress)
             }) { (response) in
                 let myResponse: UploadImageModel = response as! UploadImageModel
                 metadata["file"] = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
+                metadata["file"]["originalName"] = JSON(uploadRequest.originalFileName)
+                metadata["file"]["mimeType"]    = JSON(uploadRequest.mimeType)
+                metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
                 sendMessage(withMetadata: metadata)
             }
             
@@ -764,20 +766,20 @@ extension Chat {
             let uploadRequest = UploadFileRequestModel(dataToSend:      file.dataToSend,
                                                        fileExtension:   fileExtension,
                                                        fileName:        file.fileName,
+                                                       mimeType:        file.mimeType,
                                                        originalFileName: file.originalFileName,
                                                        threadId:        file.threadId,
                                                        typeCode:        nil,
                                                        uniqueId:        file.uniqueId)
-            
-            metadata["file"]["originalName"] = JSON(uploadRequest.originalFileName)
-            metadata["file"]["mimeType"]    = JSON("")
-            metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
             
             uploadFile(inputModel: uploadRequest, uniqueId: { _ in }, progress: { (progress) in
                 uploadProgress(progress)
             }) { (response) in
                 let myResponse: UploadFileModel = response as! UploadFileModel
                 metadata["file"]    = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
+                metadata["file"]["originalName"] = JSON(uploadRequest.originalFileName)
+                metadata["file"]["mimeType"]    = JSON(uploadRequest.mimeType)
+                metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
                 sendMessage(withMetadata: metadata)
             }
             
@@ -896,6 +898,7 @@ extension Chat {
             let uploadInput = UploadRequestModel(dataToSend:        (imageData as! Data),
                                                  fileExtension:     nil,
                                                  fileName:          sendLocationMessageRequest.sendMessageImageName,
+                                                 mimeType:          "image/png",
                                                  originalFileName:  nil,
                                                  threadId:          sendLocationMessageRequest.sendMessageThreadId,
                                                  xC:                sendLocationMessageRequest.sendMessageXC,
@@ -1364,7 +1367,7 @@ extension Chat {
     
     
     /// UnpinMessage:
-    /// pin message on a specific thread
+    /// unpin the message from a specific thread
     ///
     /// by calling this method, message of type "UNPIN_MESSAGE" is sends to the sserver
     ///
@@ -1425,14 +1428,14 @@ extension Chat {
                        seen:            @escaping (SendMessageModel)->() ) {
         
         for txt in textMessages {
-            let input = SendTextMessageRequestModel(content:    txt.content!,
+            let input = SendTextMessageRequestModel(content:        txt.content!,
                                                     messageType:    txt.messageType,
-                                                    metadata:   txt.metadata,
-                                                    repliedTo:  txt.repliedTo,
+                                                    metadata:       txt.metadata,
+                                                    repliedTo:      txt.repliedTo,
                                                     systemMetadata: txt.systemMetadata,
-                                                    threadId:   txt.threadId!,
-                                                    typeCode: txt.typeCode,
-                                                    uniqueId: txt.uniqueId)
+                                                    threadId:       txt.threadId!,
+                                                    typeCode:       txt.typeCode,
+                                                    uniqueId:       txt.uniqueId)
             sendTextMessage(inputModel: input, uniqueId: { (sendTextMessageUniqueId) in
                 uniqueId(sendTextMessageUniqueId)
             }, onSent: { (sentResponse) in
@@ -1451,13 +1454,13 @@ extension Chat {
                        completion:      @escaping (EditMessageModel)->()) {
         
         for editMsg in editMessages {
-            let input = EditTextMessageRequestModel(content: editMsg.content!,
+            let input = EditTextMessageRequestModel(content:    editMsg.content!,
                                                     messageType: editMsg.messageType,
-                                                    metadata: editMsg.metadata,
-                                                    repliedTo: editMsg.repliedTo,
-                                                    messageId: editMsg.messageId!,
-                                                    typeCode: editMsg.typeCode,
-                                                    uniqueId: editMsg.uniqueId)
+                                                    metadata:   editMsg.metadata,
+                                                    repliedTo:  editMsg.repliedTo,
+                                                    messageId:  editMsg.messageId!,
+                                                    typeCode:   editMsg.typeCode,
+                                                    uniqueId:   editMsg.uniqueId)
             editMessage(inputModel: input, uniqueId: { (editTextMessageUniqueId) in
                 uniqueId(editTextMessageUniqueId)
             }) { (editMessageResponse) in
@@ -1475,10 +1478,10 @@ extension Chat {
         
         for frwrdMsg in forwardMessages {
             let input = ForwardMessageRequestModel(messageIds:  [frwrdMsg.messageId!],
-                                                    metadata:    frwrdMsg.metadata,
-                                                    repliedTo:   frwrdMsg.repliedTo,
-                                                    threadId:    frwrdMsg.threadId!,
-                                                    typeCode:    frwrdMsg.typeCode)
+                                                    metadata:   frwrdMsg.metadata,
+                                                    repliedTo:  frwrdMsg.repliedTo,
+                                                    threadId:   frwrdMsg.threadId!,
+                                                    typeCode:   frwrdMsg.typeCode)
             forwardMessage(inputModel: input, uniqueIds: { (forwardMessageUniqueIds) in
                 uniqueIds(forwardMessageUniqueIds)
             }, onSent: { (sentResponse) in
@@ -1500,20 +1503,21 @@ extension Chat {
                        deliver:         @escaping (SendMessageModel)->(),
                        seen:            @escaping (SendMessageModel)->() ) {
         
-        let message = SendTextMessageRequestModel(content: fileMessages.content ?? "",
-                                                  messageType:  MESSAGE_TYPE.file,
-                                                  metadata: fileMessages.metadata,
-                                                  repliedTo: fileMessages.repliedTo,
-                                                  systemMetadata: nil,
-                                                  threadId: fileMessages.threadId!,
-                                                  typeCode: fileMessages.typeCode,
-                                                  uniqueId: fileMessages.uniqueId)
+        let message = SendTextMessageRequestModel(content:          fileMessages.content ?? "",
+                                                  messageType:      MESSAGE_TYPE.file,
+                                                  metadata:         fileMessages.metadata,
+                                                  repliedTo:        fileMessages.repliedTo,
+                                                  systemMetadata:   nil,
+                                                  threadId:         fileMessages.threadId!,
+                                                  typeCode:         fileMessages.typeCode,
+                                                  uniqueId:         fileMessages.uniqueId)
         
         var upload: UploadRequestModel? = nil
         if let fileData = fileMessages.fileToSend {
             upload = UploadRequestModel(dataToSend:         fileData,
                                         fileExtension:      nil,
                                         fileName:           fileMessages.fileName,
+                                        mimeType:           fileMessages.mimeType,
                                         originalFileName:   fileMessages.fileName,
                                         threadId:           fileMessages.threadId,
                                         typeCode:           fileMessages.typeCode,
@@ -1522,6 +1526,7 @@ extension Chat {
             upload = UploadRequestModel(dataToSend:         imageData,
                                         fileExtension:      nil,
                                         fileName:           fileMessages.fileName,
+                                        mimeType:           fileMessages.mimeType,
                                         originalFileName:   fileMessages.fileName,
                                         threadId:           fileMessages.threadId!,
                                         xC:                 fileMessages.xC,
@@ -1558,6 +1563,7 @@ extension Chat {
         let input = UploadImageRequestModel(dataToSend:     uploadImageObj.dataToSend!,
                                             fileExtension:  uploadImageObj.fileExtension,
                                             fileName:       uploadImageObj.fileName,
+                                            mimeType:       uploadImageObj.mimeType,
                                             originalFileName: nil,
                                             threadId:       uploadImageObj.threadId!,
                                             xC:             uploadImageObj.xC,
@@ -1585,6 +1591,7 @@ extension Chat {
             let input = UploadFileRequestModel(dataToSend:      upld.dataToSend!,
                                                fileExtension:   upld.fileExtension,
                                                fileName:        upld.fileName,
+                                               mimeType:        upld.mimeType,
                                                originalFileName: nil,
                                                threadId:        upld.threadId!,
                                                typeCode:        upld.typeCode,

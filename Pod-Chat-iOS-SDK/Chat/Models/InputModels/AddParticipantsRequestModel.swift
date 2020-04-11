@@ -13,6 +13,7 @@ open class AddParticipantsRequestModel {
     
     public let contactIds:  [Int]?   //
     public let usernames:   [String]?
+    public let coreUserIds: [Int]?
     public let threadId:    Int     //
     
     public let typeCode:    String?
@@ -24,8 +25,10 @@ open class AddParticipantsRequestModel {
                 uniqueId:   String?) {
         
         self.contactIds = contactIds
+        self.coreUserIds = nil
         self.usernames  = nil
         self.threadId   = threadId
+        
         self.typeCode   = typeCode
         self.uniqueId   = uniqueId ?? UUID().uuidString
     }
@@ -36,8 +39,24 @@ open class AddParticipantsRequestModel {
                 uniqueId:   String?) {
         
         self.contactIds = nil
+        self.coreUserIds = nil
         self.usernames  = usernames
         self.threadId   = threadId
+        
+        self.typeCode   = typeCode
+        self.uniqueId   = uniqueId ?? UUID().uuidString
+    }
+    
+    public init(coreUserIds: [Int],
+                threadId:   Int,
+                typeCode:   String?,
+                uniqueId:   String?) {
+        
+        self.contactIds = nil
+        self.coreUserIds = coreUserIds
+        self.usernames  = nil
+        self.threadId   = threadId
+        
         self.typeCode   = typeCode
         self.uniqueId   = uniqueId ?? UUID().uuidString
     }
@@ -54,7 +73,14 @@ open class AddParticipantsRequestModel {
             for username in theUserNames {
                 var inviteeObjc: JSON = [:]
                 inviteeObjc["id"] = JSON(username)
-                inviteeObjc["idType"] = JSON(4)
+                inviteeObjc["idType"] = JSON(INVITEE_VO_ID_TYPES.TO_BE_USER_USERNAME.intValue())
+                content.append(inviteeObjc)
+            }
+        } else if let theCoreUserIds = coreUserIds {
+            for coreUserId in theCoreUserIds {
+                var inviteeObjc: JSON = [:]
+                inviteeObjc["id"] = JSON(coreUserId)
+                inviteeObjc["idType"] = JSON(INVITEE_VO_ID_TYPES.TO_BE_USER_ID.intValue())
                 content.append(inviteeObjc)
             }
         }

@@ -26,6 +26,7 @@ open class BlockContactsRequestModel {
         self.contactId  = contactId
         self.threadId   = threadId
         self.userId     = userId
+        
         self.typeCode   = typeCode
         self.uniqueId   = uniqueId ?? UUID().uuidString
     }

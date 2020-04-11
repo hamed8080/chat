@@ -12,6 +12,7 @@ import SwiftyJSON
 open class IsNameAvailableThreadRequestModel {
     
     public let name:        String
+    
     public let typeCode:    String?
     public let uniqueId:    String
     
@@ -20,6 +21,7 @@ open class IsNameAvailableThreadRequestModel {
                 uniqueId:   String?) {
         
         self.name       = name
+        
         self.typeCode   = typeCode
         self.uniqueId   = uniqueId ?? UUID().uuidString
     }

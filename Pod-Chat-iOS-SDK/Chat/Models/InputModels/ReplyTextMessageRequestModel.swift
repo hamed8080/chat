@@ -33,6 +33,7 @@ open class ReplyTextMessageRequestModel {
         self.metadata       = metadata
         self.repliedTo      = repliedTo
         self.subjectId      = subjectId
+        
         self.typeCode       = typeCode
         self.uniqueId       = uniqueId ?? UUID().uuidString
     }

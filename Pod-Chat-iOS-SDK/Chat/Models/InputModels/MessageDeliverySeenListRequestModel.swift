@@ -26,6 +26,7 @@ open class MessageDeliverySeenListRequestModel {
         self.count      = count
         self.messageId  = messageId
         self.offset     = offset
+        
         self.typeCode   = typeCode
         self.uniqueId   = uniqueId ?? UUID().uuidString
     }

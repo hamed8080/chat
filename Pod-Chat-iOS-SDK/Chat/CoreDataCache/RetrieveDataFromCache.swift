@@ -59,6 +59,52 @@ extension Cache {
         }
     }
     
+    // MARK: - retrieve CurrentUserRoles:
+    /// Retrieve CurrentUserRoles:
+    /// retrieve CurrentUserRoles from cacheDB and return the result to the caller
+    ///
+    /// fetch CMCurrentUserRoles from Cache
+    /// if it found any data of UserInfo in the Cache DB., it will return that,
+    /// otherwise it will return nil. (means cache has no data(CMCurrentUserRoles object) on itself)
+    ///
+    /// Inputs:
+    /// - ther is no need to send any params to this method
+    ///
+    /// Outputs:
+    /// - It returns "UserInfoModel" model as output
+    ///
+    /// - returns: UserInfoModel?
+    public func retrieveCurrentUserRoles(onThreadId threadId: Int) -> GetCurrentUserRolesModel? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMCurrentUserRoles")
+        fetchRequest.predicate = NSPredicate(format: "threadId == %i", threadId)
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMCurrentUserRoles] {
+                switch result.first {
+                case let (.some(object)):
+                    var userRoles: [Roles] = []
+                    if let myRoles = object.roles {
+                        for item in myRoles.roles {
+                            if let role = Roles(rawValue: item) {
+                                userRoles.append(role)
+                            }
+                        }
+                    }
+                    let currentUserRolesModel = GetCurrentUserRolesModel(userRoles:     userRoles,
+                                                                         hasError:      false,
+                                                                         errorMessage:  "",
+                                                                         errorCode:     0)
+                    return currentUserRolesModel
+                    
+                default: return nil
+                }
+            } else {
+                return nil
+            }
+        } catch {
+            fatalError("Error on fetching list of CMCurrentUserRoles")
+        }
+    }
+    
     
     
     // MARK: - retrieve Contacts:

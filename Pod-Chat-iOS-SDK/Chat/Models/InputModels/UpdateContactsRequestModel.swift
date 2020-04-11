@@ -35,6 +35,7 @@ open class UpdateContactsRequestModel {
         self.id                 = id
         self.lastName           = lastName
         self.username           = username
+        
         self.typeCode           = typeCode
         self.uniqueId           = uniqueId ?? UUID().uuidString
     }

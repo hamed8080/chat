@@ -23,6 +23,7 @@ open class RemoveParticipantsRequestModel {
         
         self.participantIds = participantIds
         self.threadId       = threadId
+        
         self.typeCode       = typeCode
         self.uniqueId       = uniqueId ?? UUID().uuidString
     }

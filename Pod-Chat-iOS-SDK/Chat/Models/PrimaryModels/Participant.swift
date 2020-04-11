@@ -11,22 +11,6 @@ import SwiftyJSON
 
 
 open class Participant {
-    /*
-     * + ParticipantVO      Participant:
-     *    - cellphoneNumber:    String?
-     *    - contactId:          Int?
-     *    - email:              String?
-     *    - firstName:          String?
-     *    - id:                 Int?
-     *    - image:              String?
-     *    - lastName:           String?
-     *    - myFriend:           Bool?
-     *    - name:               String?
-     *    - notSeenDuration:    Int?
-     *    - online:             Bool?
-     *    - receiveEnable:      Bool?
-     *    - sendEnable:         Bool?
-     */
     
     public var admin:               Bool?
     public var auditor:             Bool?
@@ -51,6 +35,7 @@ open class Participant {
     public var roles:           [String]?
     public var sendEnable:      Bool?
     public var username:        String?
+    public var chatProfileVO:   Profile?
     
     public init(messageContent: JSON, threadId: Int?) {
         self.admin              = messageContent["admin"].bool
@@ -75,6 +60,10 @@ open class Participant {
         self.receiveEnable      = messageContent["receiveEnable"].bool
         self.sendEnable         = messageContent["sendEnable"].bool
         self.username           = messageContent["username"].string
+        
+        if let profileJSON = messageContent["chatProfileVO"] as JSON?, (profileJSON != JSON.null) {
+            self.chatProfileVO = Profile(messageContent: profileJSON)
+        }
         
         var adminRoles = [String]()
         if let myRoles = messageContent["roles"].arrayObject as! [String]? {
@@ -111,7 +100,8 @@ open class Participant {
                 receiveEnable:      Bool?,
                 roles:              [String]?,
                 sendEnable:         Bool?,
-                username:           String?) {
+                username:           String?,
+                chatProfileVO:      Profile?) {
         
         self.admin              = admin
         self.auditor            = auditor
@@ -136,6 +126,7 @@ open class Participant {
         self.roles              = roles
         self.sendEnable         = sendEnable
         self.username           = username
+        self.chatProfileVO      = chatProfileVO
     }
     
     public init(theParticipant: Participant) {
@@ -163,6 +154,7 @@ open class Participant {
         self.roles              = theParticipant.roles
         self.sendEnable         = theParticipant.sendEnable
         self.username           = theParticipant.username
+        self.chatProfileVO      = theParticipant.chatProfileVO
     }
     
     
@@ -193,7 +185,8 @@ open class Participant {
                             "receiveEnable":    receiveEnable ?? NSNull(),
                             "roles":            roles ?? NSNull(),
                             "sendEnable":       sendEnable ?? NSNull(),
-                            "username":         username ?? NSNull()]
+                            "username":         username ?? NSNull(),
+                            "chatProfileVO":    (chatProfileVO != nil) ? (chatProfileVO!.formatToJSON()) : (NSNull())]
         return result
     }
     
