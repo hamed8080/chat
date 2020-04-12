@@ -108,7 +108,7 @@ public class Chat {
         getDeviceIdWithToken { (deviceIdStr) in
             self.deviceId = deviceIdStr
             
-            log.verbose("get deviceId successfully = \(self.deviceId ?? "error!!")", context: "Chat")
+            log.info("get deviceId successfully = \(self.deviceId ?? "error!!")", context: "Chat")
             
             DispatchQueue.main.async {
                 self.CreateAsync()
@@ -200,44 +200,55 @@ public class Chat {
     
     var getUserInfoTimer: RepeatingTimer? {
         didSet {
-            if isChatReady {
+            if (getUserInfoTimer != nil) {
+                log.verbose("getUserInfoTimer valueChanged: \n staus = \(self.getUserInfoTimer!.state) - timeInterval = \(self.getUserInfoTimer!.timeInterval) \n isChatReady = \(isChatReady)", context: "Chat")
                 self.getUserInfoTimer?.suspend()
-            } else {
-                self.getUserInfoTimer?.suspend()
-                DispatchQueue.global().async {
-                    self.getUserInfoTimer?.eventHandler = {
-                        if (self.getUserInfoRetryCount < self.getUserInfoRetry) {
-                            DispatchQueue.main.async {
-                                self.makeChatReady()
+                
+                if !isChatReady {
+                    DispatchQueue.global().async {
+                        self.getUserInfoTimer?.eventHandler = {
+                            if (self.getUserInfoRetryCount < self.getUserInfoRetry) {
+                                DispatchQueue.main.async {
+                                    self.makeChatReady()
+                                }
+                                self.getUserInfoTimer?.suspend()
                             }
-                            self.getUserInfoTimer?.suspend()
                         }
+                        self.getUserInfoTimer?.resume()
                     }
-                    self.getUserInfoTimer?.resume()
                 }
+            } else {
+                log.verbose("getUserInfoTimer valueChanged to nil. \n isChatReady = \(isChatReady)", context: "Chat")
             }
+            
         }
     }
+    
+    
     
     var lastReceivedMessageTime:    Date?
     var lastReceivedMessageTimer:   RepeatingTimer? {
         didSet {
-            self.lastReceivedMessageTimer?.suspend()
-            DispatchQueue.global().async {
-                self.lastReceivedMessageTime = Date()
-//                self.lastReceivedMessageTimeoutId = RepeatingTimer(timeInterval: (Double(self.chatPingMessageInterval) * 1.5))
-                self.lastReceivedMessageTimer?.eventHandler = {
-                    if let lastReceivedMessageTimeBanged = self.lastReceivedMessageTime {
-                        let elapsed = Int(Date().timeIntervalSince(lastReceivedMessageTimeBanged))
-                        if (elapsed >= self.connectionCheckTimeout) {
-                            DispatchQueue.main.async {
-                                self.asyncClient?.asyncReconnectSocket()
+            if (lastReceivedMessageTimer != nil) {
+                log.verbose("Chat: lastReceivedMessageTimer valueChanged: \n staus = \(self.lastReceivedMessageTimer!.state) \n timeInterval = \(self.lastReceivedMessageTimer!.timeInterval) \n lastReceivedMessageTime = \(lastReceivedMessageTime ?? Date())", context: "Chat")
+                self.lastReceivedMessageTimer?.suspend()
+                DispatchQueue.global().async {
+                    self.lastReceivedMessageTime = Date()
+                    self.lastReceivedMessageTimer?.eventHandler = {
+                        if let lastReceivedMessageTimeBanged = self.lastReceivedMessageTime {
+                            let elapsed = Int(Date().timeIntervalSince(lastReceivedMessageTimeBanged))
+                            if (elapsed >= self.connectionCheckTimeout) {
+                                DispatchQueue.main.async {
+                                    self.asyncClient?.asyncReconnectSocket()
+                                }
+                                self.lastReceivedMessageTimer?.suspend()
                             }
-                            self.lastReceivedMessageTimer?.suspend()
                         }
                     }
+                    self.lastReceivedMessageTimer?.resume()
                 }
-                self.lastReceivedMessageTimer?.resume()
+            } else {
+                log.verbose("Chat: lastReceivedMessageTimer valueChanged to nil.\n lastReceivedMessageTime = \(lastReceivedMessageTime ?? Date())", context: "Chat")
             }
         }
     }
@@ -253,23 +264,28 @@ public class Chat {
              * it will send a ping message on the main thread
              *
              */
-            self.lastSentMessageTimer?.suspend()
-            DispatchQueue.global().async {
-                self.lastSentMessageTime = Date()
-//                self.lastSentMessageTimeoutId = RepeatingTimer(timeInterval: TimeInterval(self.chatPingMessageInterval))
-                self.lastSentMessageTimer?.eventHandler = {
-                    if let lastSendMessageTimeBanged = self.lastSentMessageTime {
-                        let elapsed = Int(Date().timeIntervalSince(lastSendMessageTimeBanged))
-                        if (elapsed >= self.chatPingMessageInterval) && (self.isChatReady == true) {
-                            DispatchQueue.main.async {
-                                self.ping()
+            if (lastSentMessageTimer != nil) {
+                log.verbose("Chat: lastSentMessageTimer valueChanged: \n staus = \(self.lastSentMessageTimer!.state) \n timeInterval = \(self.lastSentMessageTimer!.timeInterval) \n lastSentMessageTime = \(lastSentMessageTime ?? Date())", context: "Chat")
+                self.lastSentMessageTimer?.suspend()
+                DispatchQueue.global().async {
+                    self.lastSentMessageTime = Date()
+                    self.lastSentMessageTimer?.eventHandler = {
+                        if let lastSendMessageTimeBanged = self.lastSentMessageTime {
+                            let elapsed = Int(Date().timeIntervalSince(lastSendMessageTimeBanged))
+                            if (elapsed >= self.chatPingMessageInterval) && (self.isChatReady == true) {
+                                DispatchQueue.main.async {
+                                    self.ping()
+                                }
+                                self.lastSentMessageTimer?.suspend()
                             }
-                            self.lastSentMessageTimer?.suspend()
                         }
                     }
+                    self.lastSentMessageTimer?.resume()
                 }
-                self.lastSentMessageTimer?.resume()
+            } else {
+                log.verbose("Chat: lastSentMessageTimer valueChanged to nil.\n lastSentMessageTime = \(lastSentMessageTime ?? Date())", context: "Chat")
             }
+            
         }
     }
     

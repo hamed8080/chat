@@ -26,7 +26,7 @@ extension Chat: AsyncDelegates {
          *  -> fire "chatConnect" delegate
          *
          */
-        log.verbose("Async Connected", context: "Chat: DelegateComesFromAsync")
+        log.info("Async Connected", context: "Chat: DelegateComesFromAsync")
         peerId = newPeerID
         delegate?.chatConnect()
     }
@@ -44,7 +44,7 @@ extension Chat: AsyncDelegates {
          *  -> fire "chatDisconnect" delegate
          *
          */
-        log.verbose("Async Disconnected", context: "Chat: DelegateComesFromAsync")
+        log.info("Async Disconnected", context: "Chat: DelegateComesFromAsync")
         oldPeerId = peerId
         peerId = nil
         isChatReady = false
@@ -63,7 +63,7 @@ extension Chat: AsyncDelegates {
          *  -> fire "chatReconnect" delegate
          *
          */
-        log.verbose("Async Reconnected", context: "Chat: DelegateComesFromAsync")
+        log.info("Async Reconnected", context: "Chat: DelegateComesFromAsync")
         peerId = newPeerID
         delegate?.chatReconnect()
     }
@@ -87,7 +87,7 @@ extension Chat: AsyncDelegates {
          *
          */
         
-        log.verbose(logMsg, context: "Chat: DelegateComesFromAsync")
+        log.info(logMsg, context: "Chat: DelegateComesFromAsync")
         chatFullStateObject = ["socketState": socketState,
                                "timeUntilReconnect": timeUntilReconnect,
                                "deviceRegister": deviceRegister,
@@ -124,7 +124,7 @@ extension Chat: AsyncDelegates {
          *  -> fire "chatError" delegate, and sends the informations that comes on this method with it
          *
          */
-        log.verbose("Error comes from Async", context: "Chat: DelegateComesFromAsync")
+        log.warning("Error comes from Async", context: "Chat: DelegateComesFromAsync")
         delegate?.chatError(errorCode:      errorCode,
                             errorMessage:   errorMessage,
                             errorResult:    errorEvent)
@@ -142,7 +142,7 @@ extension Chat: AsyncDelegates {
          * -> call "handleAsyncReady" method, which will fire "chatReady" or "chatError" delegate
          *
          */
-        log.verbose("Async Ready", context: "Chat: DelegateComesFromAsync")
+        log.info("Async Ready", context: "Chat: DelegateComesFromAsync")
         handleAsyncReady()
     }
     
@@ -166,7 +166,7 @@ extension Chat: AsyncDelegates {
          *  -> convert the JSON to "AsyncMessage" Model and send it to the "handleReceiveMessageFromAsync" method
          *
          */
-        log.debug("content of received message: \n \(params)", context: "Chat")
+        log.verbose("content of received message: \n \(params)", context: "Chat")
         
         let asyncMessage = AsyncMessage(withContent: params)
         handleReceiveMessageFromAsync(withContent: asyncMessage)
@@ -200,8 +200,8 @@ extension Chat: AsyncDelegates {
         
         peerId = asyncClient?.asyncGetPeerId()
         
+        getUserInfoTimer = nil
         getUserInfoTimer = RepeatingTimer(timeInterval: Double(2))
-        
     }
     
     func makeChatReady() {
@@ -247,24 +247,8 @@ extension Chat: AsyncDelegates {
          */
         
         // checkout to keep the Chat alive
+        lastReceivedMessageTimer = nil
         lastReceivedMessageTimer = RepeatingTimer(timeInterval: (Double(self.chatPingMessageInterval) * 1.5))
-//        self.lastReceivedMessageTimeoutId?.suspend()
-//        DispatchQueue.global().async {
-//            self.lastReceivedMessageTime = Date()
-//            self.lastReceivedMessageTimeoutId = RepeatingTimer(timeInterval: (Double(self.chatPingMessageInterval) * 1.5))
-//            self.lastReceivedMessageTimeoutId?.eventHandler = {
-//                if let lastReceivedMessageTimeBanged = self.lastReceivedMessageTime {
-//                    let elapsed = Int(Date().timeIntervalSince(lastReceivedMessageTimeBanged))
-//                    if (elapsed >= self.connectionCheckTimeout) {
-//                        DispatchQueue.main.async {
-//                            self.asyncClient?.asyncReconnectSocket()
-//                        }
-//                        self.lastReceivedMessageTimeoutId?.suspend()
-//                    }
-//                }
-//            }
-//            self.lastReceivedMessageTimeoutId?.resume()
-//        }
         
         let chatMessage = ChatMessage(withContent: withContent.content.convertToJSON())
         receivedMessageHandler(withContent: chatMessage)

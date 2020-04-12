@@ -448,6 +448,7 @@ extension Chat {
      *
      */
     func runSendMessageTimer() {
+        lastSentMessageTimer = nil
         lastSentMessageTimer = RepeatingTimer(timeInterval: TimeInterval(self.chatPingMessageInterval))
     }
     
@@ -530,7 +531,7 @@ extension Chat {
      *
      */
     func receivedMessageHandler(withContent message: ChatMessage) {
-//        log.debug("content of received message: \n \(message.returnToJSON())", context: "Chat")
+        log.verbose("content of received message: \n \(message.returnToJSON())", context: "Chat")
         lastReceivedMessageTime = Date()
                 
 //        let messageContentAsString      = message.content
@@ -884,7 +885,7 @@ extension Chat {
             break
             
         default:
-            log.warning("This type of message is not defined yet!!!\n incomes = \(message.returnToJSON())", context: "Chat")
+            log.verbose("This type of message is not defined yet!!!\n incomes = \(message.returnToJSON())", context: "Chat")
             break
         }
     }
