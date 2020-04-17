@@ -1,20 +1,20 @@
 //
-//  asyncStateTypes.swift
+//  AsyncStateType.swift
 //  FanapPodChatSDK
 //
-//  Created by MahyarZhiani on 10/4/1398 AP.
-//  Copyright © 1398 Mahyar Zhiani. All rights reserved.
+//  Created by MahyarZhiani on 1/30/1399 AP.
+//  Copyright © 1399 Mahyar Zhiani. All rights reserved.
 //
 
 import Foundation
 
 
-public enum ASYNC_STATE_TYPES {
+public enum AsyncStateType {
     
-    case CONNECTING
-    case CONNECTED
-    case CLOSING
-    case CLOSED
+    case CONNECTING     // The connection is not open yet.
+    case CONNECTED      // The connection is open and ready to communicate.
+    case CLOSING        // The connection is in the process of closing.
+    case CLOSED         // The connection is closed or couldn't be opened.
     
     public func stringValue() -> String {
         switch self {
@@ -35,5 +35,4 @@ public enum ASYNC_STATE_TYPES {
     }
     
 }
-
 

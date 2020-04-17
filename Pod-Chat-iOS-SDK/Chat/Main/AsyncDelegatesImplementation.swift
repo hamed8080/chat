@@ -74,8 +74,9 @@ extension Chat: AsyncDelegates {
      * when Async state changes, it fire this delegate method, and sends some information with itself
      *
      */
-    public func asyncStateChanged(socketState: Int, timeUntilReconnect: Int, deviceRegister: Bool, serverRegister: Bool, peerId: Int) {
+    public func asyncStateChanged(socketState: SocketStateType, timeUntilReconnect: Int, deviceRegister: Bool, serverRegister: Bool, peerId: Int) {
         let logMsg: String = "Chat state changed: \n|| socketState = \(socketState) \n|| timeUntilReconnect = \(timeUntilReconnect) \n|| deviceRegister = \(deviceRegister) \n|| serverRegister = \(serverRegister)"
+        log.info(logMsg, context: "Chat: DelegateComesFromAsync")
         /*
          *  -> get this variables and save them all inside the "chatFullStateObject" property
          *  -> if the "socketState" is equal to "1" (CONNECTED):
@@ -87,29 +88,31 @@ extension Chat: AsyncDelegates {
          *
          */
         
-        log.info(logMsg, context: "Chat: DelegateComesFromAsync")
-        chatFullStateObject = ["socketState": socketState,
-                               "timeUntilReconnect": timeUntilReconnect,
-                               "deviceRegister": deviceRegister,
-                               "serverRegister": serverRegister,
-                               "peerId": peerId]
+        var state: AsyncStateType!
         switch (socketState) {
-        case 0: // CONNECTING
+        case .CONNECTING:
+            state = AsyncStateType.CONNECTING
             isChatReady = false
             break
-        case 1: // CONNECTED
+        case .CONNECTED:
+            state = AsyncStateType.CONNECTED
             ping()
             break
-        case 2: // CLOSING
+        case .CLOSING:
+            state = AsyncStateType.CLOSING
             isChatReady = false
             break
-        case 3: // CLOSED
+        case .CLOSED:
+            state = AsyncStateType.CLOSED
             isChatReady = false
-            break
-        default:
             break
         }
-        delegate?.chatState(state: socketState)
+        chatFullStateObject = ChatFullStateModel(socketState:       state,
+                                                 timeUntilReconnect: timeUntilReconnect,
+                                                 deviceRegister:    deviceRegister,
+                                                 serverRegister:    serverRegister,
+                                                 peerId:            peerId)
+        delegate?.chatState(state: state)
     }
     
     /*

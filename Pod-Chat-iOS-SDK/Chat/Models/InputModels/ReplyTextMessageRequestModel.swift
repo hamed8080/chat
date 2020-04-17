@@ -12,7 +12,7 @@ import Foundation
 open class ReplyTextMessageRequestModel {
     
     public let content:     String
-    public let messageType: MESSAGE_TYPE
+    public let messageType: MessageType
     public let metadata:    String?
     public let repliedTo:   Int
     public let subjectId:   Int
@@ -21,7 +21,7 @@ open class ReplyTextMessageRequestModel {
     public let uniqueId:    String
     
     public init(content:        String,
-                messageType:    MESSAGE_TYPE,
+                messageType:    MessageType,
                 metadata:       String?,
                 repliedTo:      Int,
                 subjectId:      Int,

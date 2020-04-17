@@ -65,7 +65,7 @@ extension Chat {
         
         userInfoCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.USER_INFO.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.USER_INFO.intValue(),
                                             content:            nil,
                                             messageType:        nil,
                                             metadata:           nil,
@@ -123,7 +123,7 @@ extension Chat {
         uniqueId(setProfileInput.uniqueId)
         setProfileCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.SET_PROFILE.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.SET_PROFILE.intValue(),
                                             content:            setProfileInput.convertContentToJSON().toString(),
                                             messageType:        nil,
                                             metadata:           nil,
@@ -174,7 +174,7 @@ extension Chat {
     
     
     // this function will return Chate State as JSON
-    public func getChatState() -> JSON {
+    public func getChatState() -> ChatFullStateModel? {
         return chatFullStateObject
     }
     

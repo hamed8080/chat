@@ -38,7 +38,7 @@ extension Chat {
         
         log.verbose("Try to send deliver message for a message id with this parameters: \n messageId = \(deliverInput.messageId) , ownerId = \(deliverInput.ownerId)", context: "Chat")
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.DELIVERY.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.DELIVERY.intValue(),
                                             content:            "\(deliverInput.messageId)",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -83,7 +83,7 @@ extension Chat {
         
         log.verbose("Try to send seen message for a message id with this parameters: \n messageId = \(seenInput.messageId) , ownerId = \(seenInput.ownerId)", context: "Chat")
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.SEEN.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.SEEN.intValue(),
                                             content:            "\(seenInput.messageId)",
                                             messageType:        nil,
                                             metadata:           nil,

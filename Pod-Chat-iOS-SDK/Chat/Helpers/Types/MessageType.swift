@@ -1,5 +1,5 @@
 //
-//  MESSAGE_TYPES.swift
+//  MessageType.swift
 //  FanapPodChatSDK
 //
 //  Created by MahyarZhiani on 12/6/1398 AP.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum MESSAGE_TYPE {
+public enum MessageType {
     
     case text
     case voice
@@ -30,16 +30,16 @@ public enum MESSAGE_TYPE {
         }
     }
     
-    public static func getType(from: Int) -> MESSAGE_TYPE {
+    public static func getType(from: Int) -> MessageType {
         switch from {
-        case 1:     return MESSAGE_TYPE.text
-        case 2:     return MESSAGE_TYPE.voice
-        case 3:     return MESSAGE_TYPE.picture
-        case 4:     return MESSAGE_TYPE.video
-        case 5:     return MESSAGE_TYPE.sound
-        case 6:     return MESSAGE_TYPE.file
-        case 7:     return MESSAGE_TYPE.link
-        default:    return MESSAGE_TYPE.text
+        case 1:     return MessageType.text
+        case 2:     return MessageType.voice
+        case 3:     return MessageType.picture
+        case 4:     return MessageType.video
+        case 5:     return MessageType.sound
+        case 6:     return MessageType.file
+        case 7:     return MessageType.link
+        default:    return MessageType.text
         }
     }
     

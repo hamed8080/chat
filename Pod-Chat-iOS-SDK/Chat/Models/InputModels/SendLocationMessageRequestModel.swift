@@ -27,7 +27,7 @@ open class SendLocationMessageRequestModel {
     public let sendMessageThreadId:    Int
     
     public let sendMessageContent:      String?
-    public let sendMessageType:         MESSAGE_TYPE
+    public let sendMessageType:         MessageType
     public let sendMessageMetadata:     String?
     public let sendMessageRepliedTo:    Int?
     public let sendMessageTypeCode:     String?
@@ -69,7 +69,7 @@ open class SendLocationMessageRequestModel {
         self.sendMessageThreadId    = sendMessageThreadId
         
         self.sendMessageContent     = sendMessageContent
-        self.sendMessageType        = MESSAGE_TYPE.picture
+        self.sendMessageType        = MessageType.picture
         self.sendMessageMetadata    = sendMessageMetadata
         self.sendMessageRepliedTo   = sendMessageRepliedTo
         self.sendMessageTypeCode    = sendMessageTypeCode

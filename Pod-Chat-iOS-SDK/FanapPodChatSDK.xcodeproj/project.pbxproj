@@ -28,8 +28,17 @@
 		3E10996423C365EC0034093E /* SetRemoveRoleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E10996323C365EC0034093E /* SetRemoveRoleModel.swift */; };
 		3E11F56121DA18D0004B3B2C /* GetImageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E11F56021DA18D0004B3B2C /* GetImageRequestModel.swift */; };
 		3E11F56D21DA1A02004B3B2C /* GetFileRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E11F56C21DA1A02004B3B2C /* GetFileRequestModel.swift */; };
+		3E17D212244A4A49009142F8 /* ContactEventTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E17D211244A4A49009142F8 /* ContactEventTypes.swift */; };
+		3E17D214244A4A78009142F8 /* ThreadEventTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E17D213244A4A78009142F8 /* ThreadEventTypes.swift */; };
+		3E17D216244A4A97009142F8 /* BotEventTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E17D215244A4A97009142F8 /* BotEventTypes.swift */; };
+		3E17D218244A4AAA009142F8 /* SystemEventTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E17D217244A4AAA009142F8 /* SystemEventTypes.swift */; };
+		3E17D21A244A4ABA009142F8 /* FileUploadEventTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E17D219244A4ABA009142F8 /* FileUploadEventTypes.swift */; };
+		3E17D21E244A4B74009142F8 /* StringExtentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E17D21D244A4B74009142F8 /* StringExtentions.swift */; };
+		3E17D232244A525E009142F8 /* AsyncStateType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E17D231244A525E009142F8 /* AsyncStateType.swift */; };
+		3E17D234244A57C5009142F8 /* ChatFullStateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E17D233244A57C5009142F8 /* ChatFullStateModel.swift */; };
+		3E17D236244A5A0D009142F8 /* ChatDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E17D235244A5A0D009142F8 /* ChatDelegates.swift */; };
 		3E1EA58423A4ABC500B4C3F8 /* SendInteractiveMessageRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1EA58323A4ABC500B4C3F8 /* SendInteractiveMessageRequestModel.swift */; };
-		3E1F70572405648600FAF460 /* MESSAGE_TYPE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F70562405648600FAF460 /* MESSAGE_TYPE.swift */; };
+		3E1F70572405648600FAF460 /* MessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F70562405648600FAF460 /* MessageType.swift */; };
 		3E239C3D23E55B2600AE0988 /* GetMentionRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E239C3C23E55B2600AE0988 /* GetMentionRequestModel.swift */; };
 		3E24083021F5C844001F32F1 /* CMUser+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E24081821F5C844001F32F1 /* CMUser+CoreDataClass.swift */; };
 		3E24083121F5C844001F32F1 /* CMUser+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E24081821F5C844001F32F1 /* CMUser+CoreDataClass.swift */; };
@@ -173,13 +182,12 @@
 		3E8ADC6D23B3517600E3538D /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADC6C23B3517600E3538D /* ChatMessage.swift */; };
 		3E8ADC6F23B3519700E3538D /* AsyncMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADC6E23B3519700E3538D /* AsyncMessage.swift */; };
 		3E8ADC7123B3522500E3538D /* Roles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADC7023B3522500E3538D /* Roles.swift */; };
-		3E8ADC7323B352AB00E3538D /* chatMessageVOTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADC7223B352AB00E3538D /* chatMessageVOTypes.swift */; };
+		3E8ADC7323B352AB00E3538D /* ChatMessageVOTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADC7223B352AB00E3538D /* ChatMessageVOTypes.swift */; };
 		3E8ADC7523B3538200E3538D /* ThreadTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADC7423B3538200E3538D /* ThreadTypes.swift */; };
-		3E8ADC7723B353C200E3538D /* INVITEE_VO_ID_TYPES.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADC7623B353C200E3538D /* INVITEE_VO_ID_TYPES.swift */; };
-		3E8ADC7923B354B000E3538D /* ASYNC_STATE_TYPES.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADC7823B354B000E3538D /* ASYNC_STATE_TYPES.swift */; };
-		3E8ADC7B23B3551F00E3538D /* CHAT_ERRORS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADC7A23B3551F00E3538D /* CHAT_ERRORS.swift */; };
+		3E8ADC7723B353C200E3538D /* InviteeVoIdTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADC7623B353C200E3538D /* InviteeVoIdTypes.swift */; };
+		3E8ADC7B23B3551F00E3538D /* ChatErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADC7A23B3551F00E3538D /* ChatErrors.swift */; };
 		3E8ADC7D23B3556300E3538D /* ServiceAddresses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADC7C23B3556300E3538D /* ServiceAddresses.swift */; };
-		3E8ADC7F23B3559000E3538D /* EventTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADC7E23B3559000E3538D /* EventTypes.swift */; };
+		3E8ADC7F23B3559000E3538D /* MessageEventTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADC7E23B3559000E3538D /* MessageEventTypes.swift */; };
 		3E8ADC8123B358F300E3538D /* DownloaUploadActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADC8023B358F300E3538D /* DownloaUploadActions.swift */; };
 		3E8ADC8323B3590300E3538D /* SignalMessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADC8223B3590300E3538D /* SignalMessageType.swift */; };
 		3E8ADCF123B783CC00E3538D /* PinAndUnpinThreadRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADCF023B783CC00E3538D /* PinAndUnpinThreadRequestModel.swift */; };
@@ -320,7 +328,7 @@
 		3EBBEDFA2174C6E000F5CDC7 /* RemoveContactModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDF92174C6E000F5CDC7 /* RemoveContactModel.swift */; };
 		3EBBEDFC2174C9FB00F5CDC7 /* ChatProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDFB2174C9FB00F5CDC7 /* ChatProtocols.swift */; };
 		3EBBEDFE2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDFD2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift */; };
-		3EBBEE012174CBCA00F5CDC7 /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEE002174CBCA00F5CDC7 /* Extentions.swift */; };
+		3EBBEE012174CBCA00F5CDC7 /* JSONExtentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEE002174CBCA00F5CDC7 /* JSONExtentions.swift */; };
 		3EBEC369242B0A2200FCDE4A /* pic.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3EBEC35E242B0A2200FCDE4A /* pic.jpg */; };
 		3ECFC9A023E0502900978C96 /* GetCurrentUserRolesRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECFC99F23E0502900978C96 /* GetCurrentUserRolesRequestModel.swift */; };
 		3ECFC9A223E0521B00978C96 /* GetCurrentUserRolesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECFC9A123E0521B00978C96 /* GetCurrentUserRolesModel.swift */; };
@@ -439,11 +447,20 @@
 		3E10996323C365EC0034093E /* SetRemoveRoleModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetRemoveRoleModel.swift; sourceTree = "<group>"; };
 		3E11F56021DA18D0004B3B2C /* GetImageRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetImageRequestModel.swift; sourceTree = "<group>"; };
 		3E11F56C21DA1A02004B3B2C /* GetFileRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetFileRequestModel.swift; sourceTree = "<group>"; };
+		3E17D211244A4A49009142F8 /* ContactEventTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactEventTypes.swift; sourceTree = "<group>"; };
+		3E17D213244A4A78009142F8 /* ThreadEventTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadEventTypes.swift; sourceTree = "<group>"; };
+		3E17D215244A4A97009142F8 /* BotEventTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BotEventTypes.swift; sourceTree = "<group>"; };
+		3E17D217244A4AAA009142F8 /* SystemEventTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemEventTypes.swift; sourceTree = "<group>"; };
+		3E17D219244A4ABA009142F8 /* FileUploadEventTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadEventTypes.swift; sourceTree = "<group>"; };
+		3E17D21D244A4B74009142F8 /* StringExtentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtentions.swift; sourceTree = "<group>"; };
+		3E17D231244A525E009142F8 /* AsyncStateType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncStateType.swift; sourceTree = "<group>"; };
+		3E17D233244A57C5009142F8 /* ChatFullStateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatFullStateModel.swift; sourceTree = "<group>"; };
+		3E17D235244A5A0D009142F8 /* ChatDelegates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDelegates.swift; sourceTree = "<group>"; };
 		3E1C357D225B5E79001A343B /* Starscream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Starscream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E1C357F225B5E7D001A343B /* SwiftyBeaver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftyBeaver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E1C3581225B5E81001A343B /* SwiftyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E1EA58323A4ABC500B4C3F8 /* SendInteractiveMessageRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendInteractiveMessageRequestModel.swift; sourceTree = "<group>"; };
-		3E1F70562405648600FAF460 /* MESSAGE_TYPE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MESSAGE_TYPE.swift; sourceTree = "<group>"; };
+		3E1F70562405648600FAF460 /* MessageType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageType.swift; sourceTree = "<group>"; };
 		3E239C3C23E55B2600AE0988 /* GetMentionRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMentionRequestModel.swift; sourceTree = "<group>"; };
 		3E24081821F5C844001F32F1 /* CMUser+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMUser+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3E24081921F5C844001F32F1 /* CMUser+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMUser+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -554,13 +571,12 @@
 		3E8ADC6C23B3517600E3538D /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
 		3E8ADC6E23B3519700E3538D /* AsyncMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncMessage.swift; sourceTree = "<group>"; };
 		3E8ADC7023B3522500E3538D /* Roles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Roles.swift; sourceTree = "<group>"; };
-		3E8ADC7223B352AB00E3538D /* chatMessageVOTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = chatMessageVOTypes.swift; sourceTree = "<group>"; };
+		3E8ADC7223B352AB00E3538D /* ChatMessageVOTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageVOTypes.swift; sourceTree = "<group>"; };
 		3E8ADC7423B3538200E3538D /* ThreadTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadTypes.swift; sourceTree = "<group>"; };
-		3E8ADC7623B353C200E3538D /* INVITEE_VO_ID_TYPES.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = INVITEE_VO_ID_TYPES.swift; sourceTree = "<group>"; };
-		3E8ADC7823B354B000E3538D /* ASYNC_STATE_TYPES.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASYNC_STATE_TYPES.swift; sourceTree = "<group>"; };
-		3E8ADC7A23B3551F00E3538D /* CHAT_ERRORS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CHAT_ERRORS.swift; sourceTree = "<group>"; };
+		3E8ADC7623B353C200E3538D /* InviteeVoIdTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteeVoIdTypes.swift; sourceTree = "<group>"; };
+		3E8ADC7A23B3551F00E3538D /* ChatErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatErrors.swift; sourceTree = "<group>"; };
 		3E8ADC7C23B3556300E3538D /* ServiceAddresses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceAddresses.swift; sourceTree = "<group>"; };
-		3E8ADC7E23B3559000E3538D /* EventTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTypes.swift; sourceTree = "<group>"; };
+		3E8ADC7E23B3559000E3538D /* MessageEventTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageEventTypes.swift; sourceTree = "<group>"; };
 		3E8ADC8023B358F300E3538D /* DownloaUploadActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloaUploadActions.swift; sourceTree = "<group>"; };
 		3E8ADC8223B3590300E3538D /* SignalMessageType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalMessageType.swift; sourceTree = "<group>"; };
 		3E8ADCF023B783CC00E3538D /* PinAndUnpinThreadRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinAndUnpinThreadRequestModel.swift; sourceTree = "<group>"; };
@@ -685,7 +701,7 @@
 		3EBBEDF92174C6E000F5CDC7 /* RemoveContactModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveContactModel.swift; sourceTree = "<group>"; };
 		3EBBEDFB2174C9FB00F5CDC7 /* ChatProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatProtocols.swift; sourceTree = "<group>"; };
 		3EBBEDFD2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncDelegatesImplementation.swift; sourceTree = "<group>"; };
-		3EBBEE002174CBCA00F5CDC7 /* Extentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
+		3EBBEE002174CBCA00F5CDC7 /* JSONExtentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONExtentions.swift; sourceTree = "<group>"; };
 		3EBEC35E242B0A2200FCDE4A /* pic.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pic.jpg; sourceTree = "<group>"; };
 		3ECFC99F23E0502900978C96 /* GetCurrentUserRolesRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentUserRolesRequestModel.swift; sourceTree = "<group>"; };
 		3ECFC9A123E0521B00978C96 /* GetCurrentUserRolesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentUserRolesModel.swift; sourceTree = "<group>"; };
@@ -757,6 +773,41 @@
 			path = ChatPrivateMethods;
 			sourceTree = "<group>";
 		};
+		3E17D21B244A4AD5009142F8 /* EventTypes */ = {
+			isa = PBXGroup;
+			children = (
+				3E8ADC7E23B3559000E3538D /* MessageEventTypes.swift */,
+				3E17D219244A4ABA009142F8 /* FileUploadEventTypes.swift */,
+				3E17D217244A4AAA009142F8 /* SystemEventTypes.swift */,
+				3E17D215244A4A97009142F8 /* BotEventTypes.swift */,
+				3E17D213244A4A78009142F8 /* ThreadEventTypes.swift */,
+				3E17D211244A4A49009142F8 /* ContactEventTypes.swift */,
+			);
+			path = EventTypes;
+			sourceTree = "<group>";
+		};
+		3E17D21C244A4B1E009142F8 /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				3E1F70562405648600FAF460 /* MessageType.swift */,
+				3E17D231244A525E009142F8 /* AsyncStateType.swift */,
+				3E8ADC7623B353C200E3538D /* InviteeVoIdTypes.swift */,
+				3E8ADC8223B3590300E3538D /* SignalMessageType.swift */,
+				3E8ADC7423B3538200E3538D /* ThreadTypes.swift */,
+				3E8ADC7223B352AB00E3538D /* ChatMessageVOTypes.swift */,
+			);
+			path = Types;
+			sourceTree = "<group>";
+		};
+		3E17D21F244A4BE8009142F8 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				3EBBEE002174CBCA00F5CDC7 /* JSONExtentions.swift */,
+				3E17D21D244A4B74009142F8 /* StringExtentions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		3E25909821D6C8E000CB9D7D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -792,6 +843,7 @@
 		3E8ADC6723B3510C00E3538D /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				3E17D233244A57C5009142F8 /* ChatFullStateModel.swift */,
 				3E8ADC6C23B3517600E3538D /* ChatMessage.swift */,
 				3E8ADC6E23B3519700E3538D /* AsyncMessage.swift */,
 				3E8ADC6823B3511F00E3538D /* SendChatMessageVO.swift */,
@@ -989,6 +1041,7 @@
 			children = (
 				3EE0261621206EA6001810FB /* Chat.swift */,
 				3EBBEDFB2174C9FB00F5CDC7 /* ChatProtocols.swift */,
+				3E17D235244A5A0D009142F8 /* ChatDelegates.swift */,
 				3EBBEDFD2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift */,
 				3E0A76C722AFDAD4009D669E /* ChatPublicMethods */,
 				3E0A76C822AFDB8A009D669E /* ChatPrivateMethods */,
@@ -1072,19 +1125,14 @@
 		3EBBEDFF2174CB9800F5CDC7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				3E3F17782133D0A90029E4D4 /* EnumsAndStructs.swift */,
-				3E1F70562405648600FAF460 /* MESSAGE_TYPE.swift */,
-				3E8ADC8223B3590300E3538D /* SignalMessageType.swift */,
-				3E8ADC8023B358F300E3538D /* DownloaUploadActions.swift */,
-				3E8ADC7E23B3559000E3538D /* EventTypes.swift */,
 				3E8ADC7C23B3556300E3538D /* ServiceAddresses.swift */,
-				3E8ADC7A23B3551F00E3538D /* CHAT_ERRORS.swift */,
-				3E8ADC7823B354B000E3538D /* ASYNC_STATE_TYPES.swift */,
-				3E8ADC7623B353C200E3538D /* INVITEE_VO_ID_TYPES.swift */,
-				3E8ADC7423B3538200E3538D /* ThreadTypes.swift */,
-				3E8ADC7223B352AB00E3538D /* chatMessageVOTypes.swift */,
+				3E8ADC8023B358F300E3538D /* DownloaUploadActions.swift */,
 				3E8ADC7023B3522500E3538D /* Roles.swift */,
-				3EBBEE002174CBCA00F5CDC7 /* Extentions.swift */,
+				3E8ADC7A23B3551F00E3538D /* ChatErrors.swift */,
+				3E17D21F244A4BE8009142F8 /* Extensions */,
+				3E17D21C244A4B1E009142F8 /* Types */,
+				3E17D21B244A4AD5009142F8 /* EventTypes */,
+				3E3F17782133D0A90029E4D4 /* EnumsAndStructs.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -1390,9 +1438,10 @@
 				3E3315AD23B22A3F0070A3D1 /* ThreadEventModel.swift in Sources */,
 				3E5AAEF822195A510085C03D /* QueueOfUploadFiles+CoreDataProperties.swift in Sources */,
 				3EB5205422ABED5300B7EA45 /* UpdateDataOnCache.swift in Sources */,
-				3E8ADC7B23B3551F00E3538D /* CHAT_ERRORS.swift in Sources */,
+				3E8ADC7B23B3551F00E3538D /* ChatErrors.swift in Sources */,
 				3EBBEDEB2174C44400F5CDC7 /* UserInfoModel.swift in Sources */,
 				3E581EE6241D91BF006EA0EF /* UnreadMessageCountModel.swift in Sources */,
+				3E17D21A244A4ABA009142F8 /* FileUploadEventTypes.swift in Sources */,
 				3E8D87CF221856030092B440 /* QueueOfWaitTextMessagesModel.swift in Sources */,
 				3E037C2422E2DB6E00094C80 /* MessageGaps+CoreDataProperties.swift in Sources */,
 				3EE0694A2212A3100099068F /* PhoneContact+CoreDataClass.swift in Sources */,
@@ -1419,10 +1468,12 @@
 				3ED22F2F2187469F00B6FE4C /* AddParticipantModel.swift in Sources */,
 				3E8D87D522185B2A0092B440 /* QueueOfWaitEditMessagesModel.swift in Sources */,
 				3EB5206B22ABF31200B7EA45 /* AddParticipantsCallback.swift in Sources */,
+				3E17D236244A5A0D009142F8 /* ChatDelegates.swift in Sources */,
 				3ECFC9A223E0521B00978C96 /* GetCurrentUserRolesModel.swift in Sources */,
 				3E24083021F5C844001F32F1 /* CMUser+CoreDataClass.swift in Sources */,
 				3E8D56E121DBB90900B844DE /* MapRoutingRequestModel.swift in Sources */,
 				3EBBEDEE2174C5A600F5CDC7 /* GetContactsModel.swift in Sources */,
+				3E17D216244A4A97009142F8 /* BotEventTypes.swift in Sources */,
 				3EA1568A21CE1BCB004B1346 /* CreateThreadWithMessageRequestModel.swift in Sources */,
 				3E0A76C622AFD8B0009D669E /* UserManagementMethods.swift in Sources */,
 				3EBBEDE32174C35200F5CDC7 /* ForwardInfo.swift in Sources */,
@@ -1449,7 +1500,7 @@
 				3E24084C21F5C844001F32F1 /* CMImage+CoreDataClass.swift in Sources */,
 				3E24084E21F5C844001F32F1 /* CMImage+CoreDataProperties.swift in Sources */,
 				3EBBEDDD2174C2F000F5CDC7 /* LinkedUser.swift in Sources */,
-				3E8ADC7323B352AB00E3538D /* chatMessageVOTypes.swift in Sources */,
+				3E8ADC7323B352AB00E3538D /* ChatMessageVOTypes.swift in Sources */,
 				3EBADE8B23E6B7A3009BC821 /* DiskStatus.swift in Sources */,
 				3E5AAEEC221950B10085C03D /* QueueOfWaitFilesModel.swift in Sources */,
 				3EB5208B22ABF58C00B7EA45 /* SetRoleToUserCallback.swift in Sources */,
@@ -1464,17 +1515,18 @@
 				3EBBEDF22174C5EC00F5CDC7 /* GetHistoryModel.swift in Sources */,
 				3E24083221F5C844001F32F1 /* CMUser+CoreDataProperties.swift in Sources */,
 				3EB5205022ABEA3700B7EA45 /* DeleteDataFromCache.swift in Sources */,
-				3E8ADC7F23B3559000E3538D /* EventTypes.swift in Sources */,
+				3E8ADC7F23B3559000E3538D /* MessageEventTypes.swift in Sources */,
 				3E78AA9D218479DF002A6EC0 /* UploadFile.swift in Sources */,
 				3E581EDC241D85E0006EA0EF /* GetAllUnreadMessageCountRequestModel.swift in Sources */,
 				3E8D87D2221858290092B440 /* QueueOfWaitFileMessagesModel.swift in Sources */,
 				3E3F17792133D0A90029E4D4 /* EnumsAndStructs.swift in Sources */,
+				3E17D212244A4A49009142F8 /* ContactEventTypes.swift in Sources */,
 				3E581EF2241E09B5006EA0EF /* IsNameAvailableThreadCallbacks.swift in Sources */,
 				3EA1568621CE1BA0004B1346 /* GetHistoryRequestModel.swift in Sources */,
 				3E24083A21F5C844001F32F1 /* CMParticipant+CoreDataProperties.swift in Sources */,
 				3EB5207F22ABF4A200B7EA45 /* LeaveThreadCallbacks.swift in Sources */,
 				3EB7595C228D98FC00A48262 /* CancelMessageRequestModel.swift in Sources */,
-				3E8ADC7723B353C200E3538D /* INVITEE_VO_ID_TYPES.swift in Sources */,
+				3E8ADC7723B353C200E3538D /* InviteeVoIdTypes.swift in Sources */,
 				3E1EA58423A4ABC500B4C3F8 /* SendInteractiveMessageRequestModel.swift in Sources */,
 				3EA156A821CE1D02004B1346 /* SpamPvThreadRequestModel.swift in Sources */,
 				3E400DBD23EFEDDF000DA873 /* Profile.swift in Sources */,
@@ -1493,6 +1545,7 @@
 				3EB5201B22ABC1AB00B7EA45 /* CMUserRole+CoreDataClass.swift in Sources */,
 				3E581EAE241864ED006EA0EF /* JoinThreadCallbacks.swift in Sources */,
 				3E3D785E23D5F12C005797A4 /* NotSeenDurationCallback.swift in Sources */,
+				3E17D232244A525E009142F8 /* AsyncStateType.swift in Sources */,
 				3EB5208522ABF51D00B7EA45 /* GetMessageSeenList.swift in Sources */,
 				3ECFC9A023E0502900978C96 /* GetCurrentUserRolesRequestModel.swift in Sources */,
 				3EAAFAB423A6379600003258 /* DownloadFileModel.swift in Sources */,
@@ -1508,6 +1561,7 @@
 				3E5AAEF222195A510085C03D /* QueueOfUploadImages+CoreDataClass.swift in Sources */,
 				3EB5204922ABE7E300B7EA45 /* CacheEnums.swift in Sources */,
 				3EB2EAE122BF9A4D00848C62 /* UserRolesModel.swift in Sources */,
+				3E17D234244A57C5009142F8 /* ChatFullStateModel.swift in Sources */,
 				3EB5205622ABEDBB00B7EA45 /* QueueOnCache.swift in Sources */,
 				3EB5206D22ABF33C00B7EA45 /* RemoveParticipantsCallback.swift in Sources */,
 				3E3315A923B208E00070A3D1 /* ContactEventModel.swift in Sources */,
@@ -1523,6 +1577,7 @@
 				3ECFCAC422896A5300313419 /* ClearHistoryModel.swift in Sources */,
 				3E8D87E9221861920092B440 /* QueueOfForwardMessages+CoreDataClass.swift in Sources */,
 				3EB5207522ABF3DC00B7EA45 /* MuteThreadCallbacks.swift in Sources */,
+				3E17D218244A4AAA009142F8 /* SystemEventTypes.swift in Sources */,
 				3E8D87E7221861920092B440 /* QueueOfTextMessages+CoreDataProperties.swift in Sources */,
 				3E8ADC8323B3590300E3538D /* SignalMessageType.swift in Sources */,
 				3EB5207722ABF41100B7EA45 /* UnmuteThreadCallbacks.swift in Sources */,
@@ -1531,6 +1586,7 @@
 				3EBBEDDB2174C2C000F5CDC7 /* Invitee.swift in Sources */,
 				3EA1568821CE1BB7004B1346 /* CreateThreadRequestModel.swift in Sources */,
 				3EB5208122ABF4DC00B7EA45 /* SpamPvThread.swift in Sources */,
+				3E17D21E244A4B74009142F8 /* StringExtentions.swift in Sources */,
 				3E78AA99218479CB002A6EC0 /* UploadFileModel.swift in Sources */,
 				3EBBEDF82174C6CD00F5CDC7 /* ContactModel.swift in Sources */,
 				3E037C2222E2DB6E00094C80 /* MessageGaps+CoreDataClass.swift in Sources */,
@@ -1542,7 +1598,7 @@
 				3E437D5C218F36DA0021C0ED /* GetBlockedUserListModel.swift in Sources */,
 				3EA156AA21CE1D10004B1346 /* MessageDeliverySeenListRequestModel.swift in Sources */,
 				3E56EDD523BCE07100FED6CD /* CreateThreadWithFileMessageRequestModel.swift in Sources */,
-				3E1F70572405648600FAF460 /* MESSAGE_TYPE.swift in Sources */,
+				3E1F70572405648600FAF460 /* MessageType.swift in Sources */,
 				3E3315A723B206CC0070A3D1 /* BotEventModel.swift in Sources */,
 				3E8ADC7D23B3556300E3538D /* ServiceAddresses.swift in Sources */,
 				3E8ADCFD23B7845200E3538D /* PinThreadCallback.swift in Sources */,
@@ -1614,15 +1670,15 @@
 				3EA156AC21CE1D1E004B1346 /* DeliverSeenRequestModel.swift in Sources */,
 				3EB5208322ABF4FB00B7EA45 /* GetMessageDeliverList.swift in Sources */,
 				3E8E080D229567040077C685 /* SetRoleRequestModel.swift in Sources */,
-				3E8ADC7923B354B000E3538D /* ASYNC_STATE_TYPES.swift in Sources */,
 				3EB5205A22ABEFB200B7EA45 /* ChatPublicMethods.swift in Sources */,
 				3EBBEDFA2174C6E000F5CDC7 /* RemoveContactModel.swift in Sources */,
 				3E8D87E1221861920092B440 /* QueueOfFileMessages+CoreDataClass.swift in Sources */,
 				3EB5206522ABF27000B7EA45 /* GetThreadParticipantsCallbacks.swift in Sources */,
 				3EBBEDF02174C5C800F5CDC7 /* GetThreadsModel.swift in Sources */,
-				3EBBEE012174CBCA00F5CDC7 /* Extentions.swift in Sources */,
+				3EBBEE012174CBCA00F5CDC7 /* JSONExtentions.swift in Sources */,
 				3EBBEDC62174C18F00F5CDC7 /* User.swift in Sources */,
 				3E24084421F5C844001F32F1 /* CMConversation+CoreDataClass.swift in Sources */,
+				3E17D214244A4A78009142F8 /* ThreadEventTypes.swift in Sources */,
 				3EE6B50F22DF46A400540F17 /* SendMessageModel.swift in Sources */,
 				3EB5204E22ABE99A00B7EA45 /* RetrieveDataFromCache.swift in Sources */,
 				3EBBEDE12174C32700F5CDC7 /* ReplyInfo.swift in Sources */,

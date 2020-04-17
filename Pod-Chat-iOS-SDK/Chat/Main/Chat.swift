@@ -143,7 +143,7 @@ public class Chat {
     var mapServer:          String  = "https://api.neshan.org/v1"
     
 //    var ssoGrantDevicesAddress = params.ssoGrantDevicesAddress
-    var chatFullStateObject: JSON = [:]
+    var chatFullStateObject: ChatFullStateModel?
     
     var msgPriority:        Int     = 1
     var msgTTL:             Int     = 10
@@ -192,7 +192,27 @@ public class Chat {
     public var uploadRequest:   [(upload: Request, uniqueId: String)]   = []
     public var downloadRequest: [(download: Request, uniqueId: String)] = []
     
-    var isTyping: (threadId: Int, uniqueId: String)? = (0, "")
+    var isTypingOnThread: Int = 0 {
+        didSet {
+            var counter = 0
+            
+            if isTypingOnThread == 0 {
+                stopTyping()
+            } else {
+                let signalMessageInput = SendSignalMessageRequestModel(signalType:  SignalMessageType.IS_TYPING,
+                                                                       threadId:    isTypingOnThread,
+                                                                       uniqueId:    nil)
+                // for every x seconds, call this function:
+                while (isTypingOnThread != 0) && (counter < 15) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                        self.sendSignalMessage(input: signalMessageInput)
+                    }
+                    counter += 1
+                }
+            }
+            
+        }
+    }
     
     
     

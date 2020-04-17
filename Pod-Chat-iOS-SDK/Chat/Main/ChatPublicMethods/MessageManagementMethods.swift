@@ -30,7 +30,7 @@ extension Chat {
         uniqueId(inputModel.uniqueId)
         getAllUnreadMessagesCountCallbackToUser = completion
       
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.ALL_UNREAD_MESSAGE_COUNT.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.ALL_UNREAD_MESSAGE_COUNT.intValue(),
                                             content:            "\(inputModel.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -105,7 +105,7 @@ extension Chat {
         uniqueId(getHistoryInput.uniqueId)
         getHistoryCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_HISTORY.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.GET_HISTORY.intValue(),
                                             content:            "\(getHistoryInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -196,7 +196,7 @@ extension Chat {
         uniqueId(getMentionInput.uniqueId)
         getMentionListCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_HISTORY.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.GET_HISTORY.intValue(),
                                             content:            "\(getMentionInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -251,7 +251,7 @@ extension Chat {
         uniqueId(clearHistoryInput.uniqueId)
         clearHistoryCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.CLEAR_HISTORY.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.CLEAR_HISTORY.intValue(),
                                             content:            "\(clearHistoryInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -334,7 +334,7 @@ extension Chat {
 //        let messageTxtContent = sendTextMessageInput.content
 //        let messageTxtContent = MakeCustomTextToSend(message: sendTextMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.MESSAGE.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.MESSAGE.intValue(),
                                             content:            MakeCustomTextToSend(message: sendTextMessageInput.content).replaceSpaceEnterWithSpecificCharecters(),
                                             messageType:        sendTextMessageInput.messageType.returnIntValue(),
                                             metadata:           (sendTextMessageInput.metadata != nil) ? "\(MakeCustomTextToSend(message: sendTextMessageInput.metadata!).replaceSpaceEnterWithSpecificCharecters())" : nil,
@@ -396,7 +396,7 @@ extension Chat {
 //        let messageTxtContent = sendInterActiveMessageInput.content
 //        let messageTxtContent = MakeCustomTextToSend(message: sendInterActiveMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.BOT_MESSAGE.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.BOT_MESSAGE.intValue(),
                                             content:            MakeCustomTextToSend(message: sendInterActiveMessageInput.content).replaceSpaceEnterWithSpecificCharecters(),
                                             messageType:        nil,
                                             metadata:           "\(MakeCustomTextToSend(message: sendInterActiveMessageInput.metadata).replaceSpaceEnterWithSpecificCharecters())",
@@ -470,7 +470,7 @@ extension Chat {
 //        let messageTxtContent = editMessageInput.content
 //        let messageTxtContent = MakeCustomTextToSend(message: editMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.EDIT_MESSAGE.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.EDIT_MESSAGE.intValue(),
                                             content:            MakeCustomTextToSend(message: editMessageInput.content).replaceSpaceEnterWithSpecificCharecters(),
                                             messageType:        editMessageInput.messageType.returnIntValue(),
                                             metadata:           (editMessageInput.metadata != nil) ? (MakeCustomTextToSend(message: editMessageInput.metadata!).replaceSpaceEnterWithSpecificCharecters()) : nil,
@@ -550,7 +550,7 @@ extension Chat {
 //        let messageTxtContent = replyMessageInput.content
 //        let messageTxtContent = MakeCustomTextToSend(message: replyMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.MESSAGE.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.MESSAGE.intValue(),
                                             content:            MakeCustomTextToSend(message: replyMessageInput.content).replaceSpaceEnterWithSpecificCharecters(),
                                             messageType:        replyMessageInput.messageType.returnIntValue(),
                                             metadata:           (replyMessageInput.metadata != nil) ? "\(MakeCustomTextToSend(message: replyMessageInput.metadata!).replaceSpaceEnterWithSpecificCharecters())" : nil,
@@ -627,7 +627,7 @@ extension Chat {
         sendCallbackToUserOnDeliver = onDelivere
         sendCallbackToUserOnSeen = onSeen
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.FORWARD_MESSAGE.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.FORWARD_MESSAGE.intValue(),
                                             content:            "\(forwardMessageInput.messageIds)",
                                             messageType:        nil,
                                             metadata:           (forwardMessageInput.metadata != nil) ? "\(MakeCustomTextToSend(message: forwardMessageInput.metadata!).replaceSpaceEnterWithSpecificCharecters())" : nil,
@@ -788,7 +788,7 @@ extension Chat {
         // this will call when all data were uploaded and it will sends the textMessage
         func sendMessage(withMetadata: JSON) {
             let sendMessageParamModel = SendTextMessageRequestModel(content:        sendFileMessageInput.messageInput.content,
-                                                                    messageType:    MESSAGE_TYPE.file,
+                                                                    messageType:    MessageType.file,
                                                                     metadata:       "\(withMetadata)",
                                                                     repliedTo:      sendFileMessageInput.messageInput.repliedTo,
                                                                     systemMetadata: sendFileMessageInput.messageInput.metadata,
@@ -909,7 +909,7 @@ extension Chat {
                                                  uniqueId:          sendLocationMessageRequest.uniqueId)
             
             let messageInput = SendTextMessageRequestModel(content: sendLocationMessageRequest.sendMessageContent ?? "",
-                                                           messageType:    MESSAGE_TYPE.picture,
+                                                           messageType:    MessageType.picture,
                                                            metadata: sendLocationMessageRequest.sendMessageMetadata,
                                                            repliedTo: sendLocationMessageRequest.sendMessageRepliedTo,
                                                            systemMetadata: nil,
@@ -969,7 +969,7 @@ extension Chat {
         
         deleteMessageCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.DELETE_MESSAGE.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.DELETE_MESSAGE.intValue(),
                                             content:            "\(deleteMessageInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -1021,7 +1021,7 @@ extension Chat {
         
         deleteMessageCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.DELETE_MESSAGE.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.DELETE_MESSAGE.intValue(),
                                             content:            "\(deleteMessageInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -1127,7 +1127,7 @@ extension Chat {
         
         getMessageDeliverListCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_MESSAGE_DELEVERY_PARTICIPANTS.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.GET_MESSAGE_DELEVERY_PARTICIPANTS.intValue(),
                                             content:            "\(messageDeliveryListInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -1179,7 +1179,7 @@ extension Chat {
         
         getMessageSeenListCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_MESSAGE_SEEN_PARTICIPANTS.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.GET_MESSAGE_SEEN_PARTICIPANTS.intValue(),
                                             content:            "\(messageSeenListInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -1222,35 +1222,8 @@ extension Chat {
     /// - It has 1 callbacks as response:
     ///
     /// - parameter threadId:   (input) the thread id that you are typing. (Int)
-    /// - parameter uniqueId:   (response) it will returns a 'UniqueId' to you, that if you finished with typing you have to call "StopTyping" method with this "uniqueId" (String)
-    public func startTyping(threadId:   Int,
-                            uniqueId:   @escaping ((String) -> ())) {
-        
-        let requestUniqueId = generateUUID()
-        uniqueId(requestUniqueId)
-        
-        let signalMessageInput = SendSignalMessageRequestModel(signalType:  SignalMessageType.IS_TYPING,
-                                                               threadId:    threadId,
-                                                               uniqueId:    requestUniqueId)
-        
-        if (isTyping?.threadId != 0) {
-            stopTyping()
-        }
-        
-        isTyping = (threadId: threadId, uniqueId: requestUniqueId)
-        // for every x seconds, call this function:
-        var counter = 0
-        while (isTyping?.threadId != 0) && (counter < 15) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-                self.sendSignalMessage(input: signalMessageInput)
-            }
-            counter += 1
-        }
-        if isTyping?.threadId == 0 {
-            stopTyping()
-            return
-        }
-        
+    public func startTyping(threadId:   Int) {
+        isTypingOnThread = threadId
     }
     
     
@@ -1265,11 +1238,11 @@ extension Chat {
     /// Outputs:
     /// - It has no output
     public func stopTyping() {
-        if let threadId = isTyping?.threadId, threadId != 0 {
-            let systemEventModel = SystemEventModel(type: SystemEventTypes.STOP_TYPING, time: nil, threadId: threadId, user: nil)
+        if isTypingOnThread != 0 {
+            let systemEventModel = SystemEventModel(type: SystemEventTypes.STOP_TYPING, time: nil, threadId: isTypingOnThread, user: nil)
             delegate?.systemEvents(model: systemEventModel)
         }
-        isTyping = (0, "")
+        isTypingOnThread = 0
     }
     
     
@@ -1285,7 +1258,7 @@ extension Chat {
      */
     func sendSignalMessage(input: SendSignalMessageRequestModel) {
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.SYSTEM_MESSAGE.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.SYSTEM_MESSAGE.intValue(),
                                             content:            "\(input.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -1338,7 +1311,7 @@ extension Chat {
         
         pinMessageCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.PIN_MESSAGE.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.PIN_MESSAGE.intValue(),
                                             content:            "\(inputModel.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -1389,7 +1362,7 @@ extension Chat {
         
         unpinMessageCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.UNPIN_MESSAGE.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.UNPIN_MESSAGE.intValue(),
                                             content:            "\(inputModel.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -1504,7 +1477,7 @@ extension Chat {
                        seen:            @escaping (SendMessageModel)->() ) {
         
         let message = SendTextMessageRequestModel(content:          fileMessages.content ?? "",
-                                                  messageType:      MESSAGE_TYPE.file,
+                                                  messageType:      MessageType.file,
                                                   metadata:         fileMessages.metadata,
                                                   repliedTo:        fileMessages.repliedTo,
                                                   systemMetadata:   nil,

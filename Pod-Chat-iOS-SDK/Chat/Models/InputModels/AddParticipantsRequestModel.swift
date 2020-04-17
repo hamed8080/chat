@@ -73,14 +73,14 @@ open class AddParticipantsRequestModel {
             for username in theUserNames {
                 var inviteeObjc: JSON = [:]
                 inviteeObjc["id"] = JSON(username)
-                inviteeObjc["idType"] = JSON(INVITEE_VO_ID_TYPES.TO_BE_USER_USERNAME.intValue())
+                inviteeObjc["idType"] = JSON(InviteeVoIdTypes.TO_BE_USER_USERNAME.intValue())
                 content.append(inviteeObjc)
             }
         } else if let theCoreUserIds = coreUserIds {
             for coreUserId in theCoreUserIds {
                 var inviteeObjc: JSON = [:]
                 inviteeObjc["id"] = JSON(coreUserId)
-                inviteeObjc["idType"] = JSON(INVITEE_VO_ID_TYPES.TO_BE_USER_ID.intValue())
+                inviteeObjc["idType"] = JSON(InviteeVoIdTypes.TO_BE_USER_ID.intValue())
                 content.append(inviteeObjc)
             }
         }

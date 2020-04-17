@@ -1,5 +1,5 @@
 //
-//  InviteeVOIDTypes.swift
+//  InviteeVoIdTypes.swift
 //  FanapPodChatSDK
 //
 //  Created by MahyarZhiani on 10/4/1398 AP.
@@ -9,7 +9,7 @@
 import Foundation
 
 
-public enum INVITEE_VO_ID_TYPES {
+public enum InviteeVoIdTypes {
     
     case TO_BE_USER_SSO_ID
     case TO_BE_USER_CONTACT_ID

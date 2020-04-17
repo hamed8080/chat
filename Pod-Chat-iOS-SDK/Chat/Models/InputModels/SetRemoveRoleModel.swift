@@ -18,7 +18,7 @@ open class SetRemoveRoleModel {
     public init(userId: Int, roles: [Roles]) {
         self.userId = userId
         for item in roles {
-            self.roles.append(item.rawValue)
+            self.roles.append(item.stringValue())
         }
     }
     

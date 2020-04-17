@@ -12,7 +12,7 @@ import Foundation
 open class EditTextMessageRequestModel {
     
     public let content:     String
-    public let messageType: MESSAGE_TYPE
+    public let messageType: MessageType
     public let metadata:    String?
     public let repliedTo:   Int?
     public let messageId:   Int
@@ -21,7 +21,7 @@ open class EditTextMessageRequestModel {
     public let uniqueId:    String
     
     public init(content:        String,
-                messageType:    MESSAGE_TYPE,
+                messageType:    MessageType,
                 metadata:       String?,
                 repliedTo:      Int?,
                 messageId:      Int,

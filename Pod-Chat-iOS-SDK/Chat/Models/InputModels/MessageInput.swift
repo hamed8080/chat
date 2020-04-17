@@ -16,7 +16,7 @@ open class MessageInput {
     public var forwardedUniqueIds:  [String]?
     public let repliedTo:           Int?
     public let text:                String?
-    public let messageType:         MESSAGE_TYPE
+    public let messageType:         MessageType
     var metadata:                   String?
     public let systemMetadata:      String?
     public let uniqueId:            String
@@ -24,7 +24,7 @@ open class MessageInput {
     public init(forwardedMessageIds:    [String]?,
                 repliedTo:              Int?,
                 text:                   String?,
-                messageType:            MESSAGE_TYPE,
+                messageType:            MessageType,
 //                metadata:              String?,
                 systemMetadata:         String?,
                 uniqueId:               String?) {
@@ -49,7 +49,7 @@ open class MessageInput {
     init(forwardedMessageIds:   [String]?,
          repliedTo:             Int?,
          text:                  String?,
-         messageType:           MESSAGE_TYPE,
+         messageType:           MessageType,
          metadata:              String?,
          systemMetadata:        String?,
          uniqueId:              String?) {

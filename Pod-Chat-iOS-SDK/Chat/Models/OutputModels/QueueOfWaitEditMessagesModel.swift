@@ -12,7 +12,7 @@ import SwiftyJSON
 open class QueueOfWaitEditMessagesModel {
     
     let content:        String?
-    let messageType:    MESSAGE_TYPE
+    let messageType:    MessageType
 //    let metadata:   JSON?
     let metadata:       String?
     let repliedTo:      Int?
@@ -23,7 +23,7 @@ open class QueueOfWaitEditMessagesModel {
     let uniqueId:   String?
     
     init(content:       String?,
-         messageType:   MESSAGE_TYPE,
+         messageType:   MessageType,
 //         metadata:  JSON?,
          metadata:      String?,
          repliedTo:     Int?,

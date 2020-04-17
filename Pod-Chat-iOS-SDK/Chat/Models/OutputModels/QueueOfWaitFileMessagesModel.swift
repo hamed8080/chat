@@ -12,7 +12,7 @@ import SwiftyJSON
 open class QueueOfWaitFileMessagesModel {
     
     let content:        String?
-    let messageType:    MESSAGE_TYPE
+    let messageType:    MessageType
     let fileName:       String?
 //    let imageName:      String?
 //    let metadata:       JSON?
@@ -31,7 +31,7 @@ open class QueueOfWaitFileMessagesModel {
     let uniqueId:    String?
     
     init(content:       String?,
-         messageType:   MESSAGE_TYPE,
+         messageType:   MessageType,
          fileName:      String?,
 //         imageName:     String?,
 //         metadata:      JSON?,

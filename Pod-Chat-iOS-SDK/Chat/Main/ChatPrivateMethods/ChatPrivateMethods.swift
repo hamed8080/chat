@@ -112,13 +112,13 @@ extension Chat {
                         if (self.deviceId == nil || (self.deviceId == "")) {
                             // if deviceId is nil, we will send an Error Event to client
                             self.delegate?.chatError(errorCode:     6000,
-                                                     errorMessage:  CHAT_ERRORS.err6000.rawValue,
+                                                     errorMessage:  ChatErrors.err6000.stringValue(),
                                                      errorResult:   nil)
                         }
                     } else {
                         // if server response has no array value of devices, we will send an Error Event to client
                         self.delegate?.chatError(errorCode:     6001,
-                                                 errorMessage:  CHAT_ERRORS.err6001.rawValue,
+                                                 errorMessage:  ChatErrors.err6001.stringValue(),
                                                  errorResult:   nil)
                     }
                     
@@ -127,7 +127,7 @@ extension Chat {
             } else if let error = response.error {
                 log.error("Response of getDeviceIdWithToken is Failed)", context: "Chat")
                 self.delegate?.chatError(errorCode:     6200,
-                                         errorMessage:  "\(CHAT_ERRORS.err6200.rawValue): \(error)",
+                                         errorMessage:  "\(ChatErrors.err6200.stringValue()): \(error)",
                                          errorResult:   error.localizedDescription)
             }
         }
@@ -220,12 +220,12 @@ extension Chat {
                 
             } else if let error = response.error {
                 self.delegate?.chatError(errorCode:     6200,
-                                         errorMessage:  "\(CHAT_ERRORS.err6200.rawValue): \(error)",
+                                         errorMessage:  "\(ChatErrors.err6200.stringValue()): \(error)",
                     errorResult:   error.localizedDescription)
                 
                 let myJson: JSON = ["hasError":     true,
                                     "errorCode":    6200,
-                                    "errorMessage": "\(CHAT_ERRORS.err6200.rawValue) \(error)",
+                                    "errorMessage": "\(ChatErrors.err6200.stringValue()) \(error)",
                                     "errorEvent":   error.localizedDescription]
                 completion(myJson)
             }
@@ -334,12 +334,12 @@ extension Chat {
                 
             } else if let error = response.error {
                 self.delegate?.chatError(errorCode:     6200,
-                                         errorMessage:  "\(CHAT_ERRORS.err6200.rawValue): \(error)",
+                                         errorMessage:  "\(ChatErrors.err6200.stringValue()): \(error)",
                     errorResult:   error.localizedDescription)
                 
                 let myJson: JSON = ["hasError":     true,
                                     "errorCode":    6200,
-                                    "errorMessage": "\(CHAT_ERRORS.err6200.rawValue) \(error)",
+                                    "errorMessage": "\(ChatErrors.err6200.stringValue()) \(error)",
                                     "errorEvent":   error.localizedDescription]
                 completion(myJson)
             }
@@ -478,7 +478,7 @@ extension Chat {
             
             log.verbose("Try to send Ping", context: "Chat")
             
-            let chatMessage = SendChatMessageVO(chatMessageVOType: chatMessageVOTypes.PING.rawValue,
+            let chatMessage = SendChatMessageVO(chatMessageVOType: ChatMessageVOTypes.PING.intValue(),
                                                 content:            nil,
                                                 messageType:        nil,
                                                 metadata:           nil,
@@ -540,13 +540,13 @@ extension Chat {
         switch message.type {
             
         // a message of type 1 (CREATE_THREAD) comes from Server.
-        case chatMessageVOTypes.CREATE_THREAD.rawValue:
+        case ChatMessageVOTypes.CREATE_THREAD.intValue():
             responseOfCreateThread(withMessage: message)
             break
             
             // a message of type 2 (MESSAGE) comes from Server.
         // this means that a message comes.
-        case chatMessageVOTypes.MESSAGE.rawValue:
+        case ChatMessageVOTypes.MESSAGE.intValue():
             log.verbose("Message of type 'MESSAGE' recieved", context: "Chat")
 //            chatMessageHandler(threadId: threadId, messageContent: messageContent)
             chatMessageHandler(threadId: message.subjectId ?? 0, messageContent: messageContentAsJSON)
@@ -554,152 +554,152 @@ extension Chat {
             
             // a message of type 3 (SENT) comes from Server.
         // it means that the message is send.
-        case chatMessageVOTypes.SENT.rawValue:
+        case ChatMessageVOTypes.SENT.intValue():
             responseOfOnSendMessage(withMessage: message)
             break
             
             // a message of type 4 (DELIVERY) comes from Server.
         // it means that the message is delivered.
-        case chatMessageVOTypes.DELIVERY.rawValue:
+        case ChatMessageVOTypes.DELIVERY.intValue():
             responseOfOnDeliveredMessage(withMessage: message)
             break
             
             // a message of type 5 (SEEN) comes from Server.
         // it means that the message is seen.
-        case chatMessageVOTypes.SEEN.rawValue:
+        case ChatMessageVOTypes.SEEN.intValue():
             responseOfOnSeenMessage(withMessage: message)
             break
             
             // a message of type 6 (PING) comes from Server.
         // it means that a ping message comes.
-        case chatMessageVOTypes.PING.rawValue:
+        case ChatMessageVOTypes.PING.intValue():
             log.verbose("Message of type 'PING' recieved", context: "Chat")
             break
             
             // a message of type 7 (BLOCK) comes from Server.
         // it means that a user has blocked.
-        case chatMessageVOTypes.BLOCK.rawValue:
+        case ChatMessageVOTypes.BLOCK.intValue():
             responseOfBlockContact(withMessage: message)
             break
             
             // a message of type 8 (UNBLOCK) comes from Server.
         // it means that a user has unblocked.
-        case chatMessageVOTypes.UNBLOCK.rawValue:
+        case ChatMessageVOTypes.UNBLOCK.intValue():
             responseOfUnblockContact(withMessage: message)
             break
             
             // a message of type 9 (LEAVE_THREAD) comes from Server.
         // it means that a you has leaved the thread.
-        case chatMessageVOTypes.LEAVE_THREAD.rawValue:
+        case ChatMessageVOTypes.LEAVE_THREAD.intValue():
             responseOfLeaveThread(withMessage: message)
             break
             
         // a message of type 10 (RENAME) comes from Server.
-        case chatMessageVOTypes.RENAME.rawValue:
+        case ChatMessageVOTypes.RENAME.intValue():
             //
             break
             
             // a message of type 11 (ADD_PARTICIPANT) comes from Server.
         // it means some participants added to the thread.
-        case chatMessageVOTypes.ADD_PARTICIPANT.rawValue:
+        case ChatMessageVOTypes.ADD_PARTICIPANT.intValue():
             responseOfAddParticipant(withMessage: message)
             break
             
         // a message of type 12 (GET_STATUS) comes from Server.
-        case chatMessageVOTypes.GET_STATUS.rawValue:
+        case ChatMessageVOTypes.GET_STATUS.intValue():
             //
             break
             
         // a message of type 13 (GET_CONTACTS) comes from Server.
-        case chatMessageVOTypes.GET_CONTACTS.rawValue:
+        case ChatMessageVOTypes.GET_CONTACTS.intValue():
             responseOfGetContacts(withMessage: message)
             break
             
         // a message of type 14 (GET_THREADS) comes from Server.
-        case chatMessageVOTypes.GET_THREADS.rawValue:
+        case ChatMessageVOTypes.GET_THREADS.intValue():
             responseOfGetThreads(withMessage: message)
             break
             
         // a message of type 15 (GET_HISTORY) comes from Server.
-        case chatMessageVOTypes.GET_HISTORY.rawValue:
+        case ChatMessageVOTypes.GET_HISTORY.intValue():
             responseOfGetHistory(withMessage: message)
             break
             
         // a message of type 16 (CHANGE_TYPE) comes from Server.
-        case chatMessageVOTypes.CHANGE_TYPE.rawValue:
+        case ChatMessageVOTypes.CHANGE_TYPE.intValue():
             break
             
         // a message of type 17 (REMOVED_FROM_THREAD) comes from Server.
-        case chatMessageVOTypes.REMOVED_FROM_THREAD.rawValue:
+        case ChatMessageVOTypes.REMOVED_FROM_THREAD.intValue():
             userRemovedFromThread(id: message.subjectId)
             break
             
         // a message of type 18 (REMOVE_PARTICIPANT) comes from Server.
-        case chatMessageVOTypes.REMOVE_PARTICIPANT.rawValue:
+        case ChatMessageVOTypes.REMOVE_PARTICIPANT.intValue():
             responseOfRemoveParticipant(withMessage: message)
             break
             
         // a message of type 19 (MUTE_THREAD) comes from Server.
-        case chatMessageVOTypes.MUTE_THREAD.rawValue:
+        case ChatMessageVOTypes.MUTE_THREAD.intValue():
             responseOfMuteThread(withMessage: message)
             break
             
         // a message of type 20 (UNMUTE_THREAD) comes from Server.
-        case chatMessageVOTypes.UNMUTE_THREAD.rawValue:
+        case ChatMessageVOTypes.UNMUTE_THREAD.intValue():
             responseOfUnmuteThread(withMessage: message)
             break
             
         // a message of type 21 (UPDATE_THREAD_INFO) comes from Server.
-        case chatMessageVOTypes.UPDATE_THREAD_INFO.rawValue:
+        case ChatMessageVOTypes.UPDATE_THREAD_INFO.intValue():
             responseOfUpdateThreadInfo(withMessage: message)
             break
             
         // a message of type 22 (FORWARD_MESSAGE) comes from Server.
-        case chatMessageVOTypes.FORWARD_MESSAGE.rawValue:
+        case ChatMessageVOTypes.FORWARD_MESSAGE.intValue():
             log.verbose("Message of type 'FORWARD_MESSAGE' recieved", context: "Chat")
             chatMessageHandler(threadId: message.subjectId ?? 0, messageContent: messageContentAsJSON)
             break
             
         // a message of type 23 (USER_INFO) comes from Server.
-        case chatMessageVOTypes.USER_INFO.rawValue:
+        case ChatMessageVOTypes.USER_INFO.intValue():
             responseOfUserInfo(withMessage: message)
             break
             
         // a message of type 24 (USER_STATUS) comes from Server.
-        case chatMessageVOTypes.USER_STATUS.rawValue:
+        case ChatMessageVOTypes.USER_STATUS.intValue():
             break
             
         // a message of type 25 (GET_BLOCKED) comes from Server.
-        case chatMessageVOTypes.GET_BLOCKED.rawValue:
+        case ChatMessageVOTypes.GET_BLOCKED.intValue():
             responseOfGetBlockContact(withMessage: message)
             break
             
         // a message of type 26 (RELATION_INFO) comes from Server.
-        case chatMessageVOTypes.RELATION_INFO.rawValue:
+        case ChatMessageVOTypes.RELATION_INFO.intValue():
             break
             
         // a message of type 27 (THREAD_PARTICIPANTS) comes from Server.
-        case chatMessageVOTypes.THREAD_PARTICIPANTS.rawValue:
+        case ChatMessageVOTypes.THREAD_PARTICIPANTS.intValue():
             responseOfThreadParticipants(withMessage: message)
             break
             
         // a message of type 28 (EDIT_MESSAGE) comes from Server.
-        case chatMessageVOTypes.EDIT_MESSAGE.rawValue:
+        case ChatMessageVOTypes.EDIT_MESSAGE.intValue():
             responseOfEditMessage(withMessage: message)
             break
             
         // a message of type 29 (DELETE_MESSAGE) comes from Server.
-        case chatMessageVOTypes.DELETE_MESSAGE.rawValue:
+        case ChatMessageVOTypes.DELETE_MESSAGE.intValue():
             responseOfDeleteMessage(withMessage: message)
             break
             
         // a message of type 30 (THREAD_INFO_UPDATED) comes from Server.
-        case chatMessageVOTypes.THREAD_INFO_UPDATED.rawValue:
+        case ChatMessageVOTypes.THREAD_INFO_UPDATED.intValue():
             threadInfoUpdated(withMessage: message)
             break
             
         // a message of type 31 (LAST_SEEN_UPDATED) comes from Server.
-        case chatMessageVOTypes.LAST_SEEN_UPDATED.rawValue:
+        case ChatMessageVOTypes.LAST_SEEN_UPDATED.intValue():
             log.verbose("Message of type 'LAST_SEEN_UPDATED' recieved", context: "Chat")
 //            delegate?.threadEvents(type: ThreadEventTypes.THREAD_UNREAD_COUNT_UPDATED, threadId: message.subjectId, thread: nil, messageId: message.messageId, senderId: message.participantId)
 //            delegate?.threadEvents(type: ThreadEventTypes.THREAD_LAST_ACTIVITY_TIME, threadId: message.subjectId, thread: nil, messageId: nil, senderId: nil)
@@ -747,27 +747,27 @@ extension Chat {
             break
             
         // a message of type 32 (GET_MESSAGE_DELEVERY_PARTICIPANTS) comes from Server.
-        case chatMessageVOTypes.GET_MESSAGE_DELEVERY_PARTICIPANTS.rawValue:
+        case ChatMessageVOTypes.GET_MESSAGE_DELEVERY_PARTICIPANTS.intValue():
             responseOfMessageDeliveryList(withMessage: message)
             break
             
         // a message of type 33 (GET_MESSAGE_SEEN_PARTICIPANTS) comes from Server.
-        case chatMessageVOTypes.GET_MESSAGE_SEEN_PARTICIPANTS.rawValue:
+        case ChatMessageVOTypes.GET_MESSAGE_SEEN_PARTICIPANTS.intValue():
             responseOfMessageSeenList(withMessage: message)
             break
             
         // a message of type 34 (IS_NAME_AVAILABLE) comes from Server.
-        case chatMessageVOTypes.IS_NAME_AVAILABLE.rawValue:
+        case ChatMessageVOTypes.IS_NAME_AVAILABLE.intValue():
             responseOfIsNameAvailableThread(withMessage: message)
             break
             
         // a message of type 39 (JOIN_THREAD) comes from Server.
-        case chatMessageVOTypes.JOIN_THREAD.rawValue:
+        case ChatMessageVOTypes.JOIN_THREAD.intValue():
             responseOfJoinThread(withMessage: message)
             break
             
         // a message of type 40 (BOT_MESSAGE) comes from Server.
-        case chatMessageVOTypes.BOT_MESSAGE.rawValue:
+        case ChatMessageVOTypes.BOT_MESSAGE.intValue():
             log.verbose("Message of type 'BOT_MESSAGE' recieved", context: "Chat")
             let botEventModel = BotEventModel(type:     BotEventTypes.BOT_MESSAGE,
                                               message:  message.content)
@@ -775,27 +775,27 @@ extension Chat {
             break
             
         // a message of type 41 (SPAM_PV_THREAD) comes from Server.
-        case chatMessageVOTypes.SPAM_PV_THREAD.rawValue:
+        case ChatMessageVOTypes.SPAM_PV_THREAD.intValue():
 //            responseOfSpamPvThread(withMessage: message)
             break
             
         // a message of type 42 (SET_RULE_TO_USER) comes from Server.
-        case chatMessageVOTypes.SET_RULE_TO_USER.rawValue:
+        case ChatMessageVOTypes.SET_RULE_TO_USER.intValue():
             responseOfSetRoleToUser(withMessage: message)
             break
             
         // a message of type 43 (SET_RULE_TO_USER) comes from Server.
-        case chatMessageVOTypes.REMOVE_ROLE_FROM_USER.rawValue:
+        case ChatMessageVOTypes.REMOVE_ROLE_FROM_USER.intValue():
             responseOfRemoveRoleFromUser(withMessage: message)
             break
             
         // a message of type 44 (CLEAR_HISTORY) comes from Server.
-        case chatMessageVOTypes.CLEAR_HISTORY.rawValue:
+        case ChatMessageVOTypes.CLEAR_HISTORY.intValue():
             responseOfClearHistory(withMessage: message)
             break
             
         // a message of type 46 (SYSTEM_MESSAGE) comes from Server
-        case chatMessageVOTypes.SYSTEM_MESSAGE.rawValue:
+        case ChatMessageVOTypes.SYSTEM_MESSAGE.intValue():
             log.verbose("Message of type 'SYSTEM_MESSAGE' revieved", context: "Chat")
             
             let systemEventModel = SystemEventModel(type:       SystemEventTypes.IS_TYPING,
@@ -806,55 +806,55 @@ extension Chat {
             return
             
         // a message of type 47 (GET_NOT_SEEN_DURATION) comes from Server.
-        case chatMessageVOTypes.GET_NOT_SEEN_DURATION.rawValue:
+        case ChatMessageVOTypes.GET_NOT_SEEN_DURATION.intValue():
             responseOfNotSeenDuration(withMessage: message)
             break
             
         // a message of type 48 (PIN_THREAD) comes from Server.
-        case chatMessageVOTypes.PIN_THREAD.rawValue:
+        case ChatMessageVOTypes.PIN_THREAD.intValue():
             responseOfPinThread(withMessage: message)
             break
             
         // a message of type 49 (UNPIN_THREAD) comes from Server.
-        case chatMessageVOTypes.UNPIN_THREAD.rawValue:
+        case ChatMessageVOTypes.UNPIN_THREAD.intValue():
             responseOfUnpinThread(withMessage: message)
             break
             
         // a message of type 50 (PIN_MESSAGE) comes from Server.
-        case chatMessageVOTypes.PIN_MESSAGE.rawValue:
+        case ChatMessageVOTypes.PIN_MESSAGE.intValue():
             responseOfPinMessage(withMessage: message)
             break
             
         // a message of type 51 (UNPIN_MESSAGE) comes from Server.
-        case chatMessageVOTypes.UNPIN_MESSAGE.rawValue:
+        case ChatMessageVOTypes.UNPIN_MESSAGE.intValue():
             responseOfUnpinMessage(withMessage: message)
             break
             
         // a message of type 52 (SET_PROFILE) comes from Server.
-        case chatMessageVOTypes.SET_PROFILE.rawValue:
+        case ChatMessageVOTypes.SET_PROFILE.intValue():
             responseOfSetProfile(withMessage: message)
             break
         
         // a message of type 54 (GET_CURRENT_USER_ROLES) comes from Server
-        case chatMessageVOTypes.GET_CURRENT_USER_ROLES.rawValue:
+        case ChatMessageVOTypes.GET_CURRENT_USER_ROLES.intValue():
             responseOfGetCurrentUserRoles(withMessage: message)
         
         // a message of type 60 (CONTACTS_LAST_SEEN) comes from Server.
-        case chatMessageVOTypes.CONTACTS_LAST_SEEN.rawValue:
+        case ChatMessageVOTypes.CONTACTS_LAST_SEEN.intValue():
             sendContactsLastSeenDurationUpdate(withMessage: message)
             break
             
         // a message of type 61 (ALL_UNREAD_MESSAGE_COUNT) comes from Server.
-        case chatMessageVOTypes.ALL_UNREAD_MESSAGE_COUNT.rawValue:
+        case ChatMessageVOTypes.ALL_UNREAD_MESSAGE_COUNT.intValue():
             responseOfAllUnreadMessageCount(withMessage: message)
             break
         
         // a message of type 100 (LOGOUT) comes from Server.
-        case chatMessageVOTypes.LOGOUT.rawValue:
+        case ChatMessageVOTypes.LOGOUT.intValue():
             break
             
         // a message of type 999 (ERROR) comes from Server.
-        case chatMessageVOTypes.ERROR.rawValue:
+        case ChatMessageVOTypes.ERROR.intValue():
             log.verbose("Message of type 'ERROR' recieved", context: "Chat")
             if Chat.map[message.uniqueId] != nil {
                 let returnData = CreateReturnData(hasError:         true,

@@ -28,7 +28,7 @@ open class SendSignalMessageRequestModel {
     
     func convertContentToJSON() -> JSON {
         var content: JSON = [:]
-        content["type"] = JSON("\(self.signalType.rawValue)")
+        content["type"] = JSON("\(self.signalType.intValue())")
         
         return content
     }

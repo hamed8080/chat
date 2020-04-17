@@ -31,7 +31,7 @@ public class RolesArray: NSObject, NSCoding {
     init(roles: [Roles]) {
         var myRoles: [String] = []
         for role in roles {
-            myRoles.append(role.returnString())
+            myRoles.append(role.stringValue())
         }
         self.roles = myRoles
     }

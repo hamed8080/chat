@@ -9,16 +9,16 @@
 import Foundation
 
 
-public enum SignalMessageType: Int {
+public enum SignalMessageType {
     
-    case IS_TYPING      = 1
-    case RECORD_VOICE   = 2
-    case UPLOAD_PICTURE = 3
-    case UPLOAD_VIDEO   = 4
-    case UPLOAD_SOUND   = 5
-    case UPLOAD_FILE    = 6
+    case IS_TYPING
+    case RECORD_VOICE
+    case UPLOAD_PICTURE
+    case UPLOAD_VIDEO
+    case UPLOAD_SOUND
+    case UPLOAD_FILE    
     
-    public func returnIntValue() -> Int {
+    public func intValue() -> Int {
         switch self {
         case .IS_TYPING:        return 1
         case .RECORD_VOICE:     return 2

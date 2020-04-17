@@ -49,7 +49,7 @@ extension Chat {
         
         getContactsCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_CONTACTS.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.GET_CONTACTS.intValue(),
                                             content:            "\(getContactsInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -466,7 +466,7 @@ extension Chat {
         uniqueId(blockContactsInput.uniqueId)
         blockUserCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.BLOCK.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.BLOCK.intValue(),
                                             content:            "\(blockContactsInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -519,7 +519,7 @@ extension Chat {
         uniqueId(getBlockedContactsInput.uniqueId)
         getBlockedUserCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_BLOCKED.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.GET_BLOCKED.intValue(),
                                             content:            "\(getBlockedContactsInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -576,7 +576,7 @@ extension Chat {
         
         unblockUserCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.UNBLOCK.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.UNBLOCK.intValue(),
                                             content:            "\(unblockContactsInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,

@@ -65,7 +65,7 @@ extension Chat {
             }) { (failureJSON) in
                 if (self.getUserInfoRetryCount > self.getUserInfoRetry) {
                     self.delegate?.chatError(errorCode:     6101,
-                                             errorMessage:  CHAT_ERRORS.err6001.rawValue,
+                                             errorMessage:  ChatErrors.err6001.stringValue(),
                                              errorResult:   nil)
                 } else {
                     self.handleAsyncReady()

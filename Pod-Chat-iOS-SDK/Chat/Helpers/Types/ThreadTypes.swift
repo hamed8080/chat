@@ -9,14 +9,14 @@
 import Foundation
 
 
-public enum ThreadTypes: String {
+public enum ThreadTypes {
     
-    case NORMAL                 = "NORMAL"
-    case OWNER_GROUP            = "OWNER_GROUP"
-    case PUBLIC_GROUP           = "PUBLIC_GROUP"
-    case CHANNEL_GROUP          = "CHANNEL_GROUP"
-    case CHANNEL                = "CHANNEL"
-    case NOTIFICATION_CHANNEL   = "NOTIFICATION_CHANNEL"
+    case NORMAL                 // "NORMAL"
+    case OWNER_GROUP            // "OWNER_GROUP"
+    case PUBLIC_GROUP           // "PUBLIC_GROUP"
+    case CHANNEL_GROUP          // "CHANNEL_GROUP"
+    case CHANNEL                // "CHANNEL"
+    case NOTIFICATION_CHANNEL   // "NOTIFICATION_CHANNEL"
     
     public func stringValue() -> String {
         switch self {

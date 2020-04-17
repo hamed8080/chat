@@ -19,7 +19,7 @@ extension Chat {
     
     func getAllThreads(withInputModel input:   GetAllThreadsRequestModel) {
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_THREADS.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.GET_THREADS.intValue(),
                                             content:            "\(input.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -75,7 +75,7 @@ extension Chat {
         
         threadsCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_THREADS.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.GET_THREADS.intValue(),
                                             content:            "\(getThreadsInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -147,7 +147,7 @@ extension Chat {
         
         updateThreadInfoCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.UPDATE_THREAD_INFO.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.UPDATE_THREAD_INFO.intValue(),
                                             content:            "\(updateThreadInfoInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -201,7 +201,7 @@ extension Chat {
         
         createThreadCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.CREATE_THREAD.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.CREATE_THREAD.intValue(),
                                             content:            "\(createThreadInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -266,7 +266,7 @@ extension Chat {
         sendCallbackToUserOnDeliver = onDelivere
         sendCallbackToUserOnSeen    = onSeen
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.CREATE_THREAD.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.CREATE_THREAD.intValue(),
                                             content:            "\(creatThreadWithMessageInput.convertContentToJSON())",
                                             messageType:        nil, //creatThreadWithMessageInput.sendMessageInput?.messageType.returnIntValue()
                                             metadata:           nil,
@@ -393,7 +393,7 @@ extension Chat {
         
         isNameAvailableThreadCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.IS_NAME_AVAILABLE.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.IS_NAME_AVAILABLE.intValue(),
                                             content:            "\(isNameAvailableThreadInput.name)",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -431,7 +431,7 @@ extension Chat {
         
         joinThreadCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.JOIN_THREAD.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.JOIN_THREAD.intValue(),
                                             content:            joinThreadInput.uniqueName,
                                             messageType:        nil,
                                             metadata:           nil,
@@ -486,7 +486,7 @@ extension Chat {
         
         leaveThreadCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.LEAVE_THREAD.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.LEAVE_THREAD.intValue(),
                                             content:            nil,
                                             messageType:        nil,
                                             metadata:           nil,
@@ -538,7 +538,7 @@ extension Chat {
         
         spamPvThreadCallbackToUser = completions
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.SPAM_PV_THREAD.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.SPAM_PV_THREAD.intValue(),
                                             content:            nil,
                                             messageType:        nil,
                                             metadata:           nil,
@@ -592,7 +592,7 @@ extension Chat {
         
         muteThreadCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.MUTE_THREAD.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.MUTE_THREAD.intValue(),
                                             content:            nil,
                                             messageType:        nil,
                                             metadata:           nil,
@@ -644,7 +644,7 @@ extension Chat {
         
         unmuteThreadCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.UNMUTE_THREAD.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.UNMUTE_THREAD.intValue(),
                                             content:            nil,
                                             messageType:        nil,
                                             metadata:           nil,
@@ -702,7 +702,7 @@ extension Chat {
         
         threadParticipantsCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.THREAD_PARTICIPANTS.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.THREAD_PARTICIPANTS.intValue(),
                                             content:            "\(getThreadParticipantsInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -766,7 +766,7 @@ extension Chat {
         
         addParticipantsCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.ADD_PARTICIPANT.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.ADD_PARTICIPANT.intValue(),
                                             content:            "\(addParticipantsInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -817,7 +817,7 @@ extension Chat {
         
         removeParticipantsCallbackToUser = completion
  
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.REMOVE_PARTICIPANT.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.REMOVE_PARTICIPANT.intValue(),
                                             content:            "\(removeParticipantsInput.participantIds)",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -871,7 +871,7 @@ extension Chat {
         uniqueId(setRoleInput.uniqueId)
         setRoleToUserCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.SET_RULE_TO_USER.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.SET_RULE_TO_USER.intValue(),
                                             content:            "\(setRoleInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -923,7 +923,7 @@ extension Chat {
         uniqueId(removeRoleInput.uniqueId)
         removeRoleFromUserCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.REMOVE_ROLE_FROM_USER.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.REMOVE_ROLE_FROM_USER.intValue(),
                                             content:            "\(removeRoleInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -1050,7 +1050,7 @@ extension Chat {
         
         pinThreadCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.PIN_THREAD.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.PIN_THREAD.intValue(),
                                             content:            nil,
                                             messageType:        nil,
                                             metadata:           nil,
@@ -1102,7 +1102,7 @@ extension Chat {
         
         unpinThreadCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.UNPIN_THREAD.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.UNPIN_THREAD.intValue(),
                                             content:            nil,
                                             messageType:        nil,
                                             metadata:           nil,
@@ -1156,7 +1156,7 @@ extension Chat {
         
         getNotSeenDurationCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_NOT_SEEN_DURATION.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.GET_NOT_SEEN_DURATION.intValue(),
                                             content:            "\(notSeenDurationInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -1212,7 +1212,7 @@ extension Chat {
         uniqueId(getCurrentUserRolesInput.uniqueId)
         getCurrentUserRolesCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_CURRENT_USER_ROLES.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.GET_CURRENT_USER_ROLES.intValue(),
                                             content:            nil,
                                             messageType:        nil,
                                             metadata:           nil,
