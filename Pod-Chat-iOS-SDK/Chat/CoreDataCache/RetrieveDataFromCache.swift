@@ -23,12 +23,17 @@ extension Cache {
     /// otherwise it will return nil. (means cache has no data(CMUser object) on itself)
     ///
     /// Inputs:
-    /// - ther is no need to send any params to this method
+    /// ther is no need to send any params to this method
     ///
     /// Outputs:
-    /// - It returns "UserInfoModel" model as output
+    /// It returns "UserInfoModel" model as output
     ///
-    /// - returns: UserInfoModel?
+    /// - parameters:
+    ///     none
+    ///
+    /// - Returns:
+    ///     UserInfoModel?
+    ///
     public func retrieveUserInfo() -> UserInfoModel? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUser")
         do {
@@ -68,12 +73,17 @@ extension Cache {
     /// otherwise it will return nil. (means cache has no data(CMCurrentUserRoles object) on itself)
     ///
     /// Inputs:
-    /// - ther is no need to send any params to this method
+    /// ther is no need to send any params to this method
     ///
     /// Outputs:
-    /// - It returns "UserInfoModel" model as output
+    /// It returns "UserInfoModel" model as output
     ///
-    /// - returns: UserInfoModel?
+    /// - parameters:
+    ///     - onThreadId:   id of the thread. (Int)
+    ///
+    /// - Returns:
+    ///     GetCurrentUserRolesModel?
+    ///
     public func retrieveCurrentUserRoles(onThreadId threadId: Int) -> GetCurrentUserRolesModel? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMCurrentUserRoles")
         fetchRequest.predicate = NSPredicate(format: "threadId == %i", threadId)
@@ -111,30 +121,33 @@ extension Cache {
     /// Retrieve Contacts:
     /// retrieve Contacts from cacheDB and return the result to the caller
     ///
-    /// first, it will fetch the Objects from CoreData (Cache DB).
-    /// then based on the client request, it will find the objects that the client wants to get,
+    /// - first, it will fetch the Objects from CoreData (Cache DB).
+    /// - then based on the client request, it will find the objects that the client wants to get,
     /// and then it will return it as 'GetContactsModel' to the client.
-    /// (if it found any object, it will return that, otherwise it will return nil. (means cache has no data(CMContact object) on itself))
+    /// - (if it found any object, it will return that, otherwise it will return nil. (means cache has no data(CMContact object) on itself))
     ///
     /// Inputs:
-    /// - ther is no need to send any params to this method
+    /// ther is no need to send any params to this method
     ///
     /// Outputs:
-    /// - It returns "GetContactsModel" model as output
+    /// It returns "GetContactsModel" model as output
     ///
-    /// - parameter ascending:        on what order do you want to get the response? (Bool)
-    /// - parameter cellphoneNumber:  if you want to search Contact with specific cellphone number, you should fill this parameter (String?)
-    /// - parameter count:            how many Contacts do you spect to return (Int)
-    /// - parameter email:            if you want to search Contact with specific email address, you should fill this parameter (String?)
-    /// - parameter firstName:        if you want to search Contact with specific first name, you should fill this parameter (String?)
-    /// - parameter id:               if you want to search Contact with specific contact id, you should fill this parameter (Int?)
-    /// - parameter lastName:         if you want to search Contact with specific last name, you should fill this parameter (String?)
-    /// - parameter offset:           from what offset do you want to get the Cache response (Int)
-    /// - parameter search:           if you want to search some term on every content of the Contact (like as: cellphoneNumber, email, firstName, lastName), you should fill this parameter (String?)
-    /// - parameter timeStamp:        the only way to delete contact, is to check if there is a long time that some contact is not updated, we will delete it. this it the timeStamp to check (Int)
-    /// - parameter uniqueId:         this f**king parameter is not related to the Object! this related to the request! anyway just pass it as nil! (String?)
+    /// - parameters:
+    ///     - ascending:        on what order do you want to get the response? (Bool)
+    ///     - cellphoneNumber:  if you want to search Contact with specific cellphone number, you should fill this parameter (String?)
+    ///     - count:            how many Contacts do you spect to return (Int)
+    ///     - email:            if you want to search Contact with specific email address, you should fill this parameter (String?)
+    ///     - firstName:        if you want to search Contact with specific first name, you should fill this parameter (String?)
+    ///     - id:               if you want to search Contact with specific contact id, you should fill this parameter (Int?)
+    ///     - lastName:         if you want to search Contact with specific last name, you should fill this parameter (String?)
+    ///     - offset:           from what offset do you want to get the Cache response (Int)
+    ///     - search:           if you want to search some term on every content of the Contact (like as: cellphoneNumber, email, firstName, lastName), you should fill this parameter (String?)
+    ///     - timeStamp:        the only way to delete contact, is to check if there is a long time that some contact is not updated, we will delete it. this it the timeStamp to check (Int)
+    ///     - uniqueId:         this f**king parameter is not related to the Object! this related to the request! anyway just pass it as nil! (String?)
     ///
-    /// - returns: GetContactsModel?
+    /// - Returns:
+    ///     GetContactsModel?
+    ///
     public func retrieveContacts(ascending:         Bool,
                                  cellphoneNumber:   String?,
                                  count:             Int,
@@ -277,7 +290,11 @@ extension Cache {
     /// Outputs:
     /// - It returns an array of "Contact"  as output
     ///
-    /// - returns: [Contact]?
+    /// - parameters:
+    ///     none
+    ///
+    /// - returns:
+    ///     [Contact]?
     public func retrievePhoneContacts() -> [Contact]? {
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "PhoneContact")
@@ -313,63 +330,81 @@ extension Cache {
     }
     
     
-    
+    // TODO: Have to implement search in threads by using 'name' and also 'threadIds' properties!
     // MARK: - retrieve Threads:
     /// Retrieve Threads:
     /// retrieve Threads from cacheDB and return the result to the caller
     ///
-    /// fetch CMConversation from Cahce DB
-    /// if it found any object, it will return that,
-    /// otherwise it will return nil. (means cache has no data(CMConversation) on itself).
+    /// - fetch CMConversation from Cahce DB
+    /// - if it found any object, it will return that,
+    /// - otherwise it will return nil. (means cache has no data(CMConversation) on itself).
     ///
     /// Inputs:
-    /// - there are some parameters that user has to send some of them
+    /// there are some parameters that user has to send some of them
     ///
     /// Outputs:
-    /// - It returns a Model of "GetThreadsModel"  as output
+    /// It returns a Model of "GetThreadsModel"  as output
     ///
-    /// - parameter ascending:  on what order do you want to get the response? (Bool)
-    /// - parameter count:      how many Thread do you spect to return (Int)
-    /// - parameter name:       (String?)
-    /// - parameter offset:     from what offset do you want to get the Cache response (Int)
-    /// - parameter threadIds:  ([Int]?)
-    /// - parameter timeStamp:  the only way to delete Thread, is to check if there is a long time that some contact is not updated, we will delete it. this it the timeStamp to check (Int)
+    /// - parameters:
+    ///     - ascending:  on what order do you want to get the response? (Bool)
+    ///     - count:      how many Thread do you spect to return (Int)
+    ///     - name:       (String?)
+    ///     - offset:     from what offset do you want to get the Cache response (Int)
+    ///     - threadIds:  ([Int]?)
+    ///     - timeStamp:  the only way to delete Thread, is to check if there is a long time that some contact is not updated, we will delete it. this it the timeStamp to check (Int)
     ///
-    /// - returns: GetThreadsModel?
-    // TODO: Have to implement search in threads by using 'name' and also 'threadIds' properties!
+    /// - returns:
+    ///     GetThreadsModel?
+    ///
     public func retrieveThreads(ascending:  Bool,
                                 count:      Int,
                                 name:       String?,
                                 offset:     Int,
-                                threadIds:  [Int]?/*,
-                                timeStamp:  Int*/) -> GetThreadsModel? {
+                                threadIds:  [Int]?) -> GetThreadsModel? {
         
-        let unpinnedThreads = retrieveTheThreads(ascending: ascending, count: count, name: name, offset: offset, threadIds: threadIds)
+        var getThreadModelResponse: GetThreadsModel?
+        
+        var (threads, contentCount) = retrieveTheThreads(ascending: ascending, count: count, name: name, offset: offset, threadIds: threadIds)
         
         if (count < 1000) {
+            var conversations = [Conversation]()
             let pinnedThreadsArray = retrievePinThreads(ascending: ascending)
+            
+            
             var extraItems = pinnedThreadsArray?.count ?? 0
-            for (index, item) in (unpinnedThreads?.threads ?? []).enumerated() {
+            for (index, item) in (threads ?? []).enumerated() {
                 for thrd in pinnedThreadsArray ?? [] {
                     if (item.id == thrd.id) {
-                        unpinnedThreads?.threads.remove(at: index)
+                        threads?.remove(at: (index - ((pinnedThreadsArray?.count ?? 0) - extraItems)))
                         extraItems -= 1
                     }
                 }
             }
-            
             for item in pinnedThreadsArray ?? [] {
-                unpinnedThreads?.threads.insert(item, at: 0)
+                conversations.append(item)
             }
-            if (extraItems > 0) {
-                for _ in (1...(pinnedThreadsArray?.count ?? 0)) {
-                    unpinnedThreads?.threads.removeLast()
+            for item in threads ?? [] {
+                conversations.append(item)
+            }
+            
+            if (extraItems > 0) && (pinnedThreadsArray?.count ?? 0 > 0) {
+                for _ in (1...(pinnedThreadsArray?.count ?? 1)) {
+                    conversations.removeLast()
                 }
             }
+            
+            
+            getThreadModelResponse = GetThreadsModel(conversationObjects:   conversations,
+                                                     contentCount:          contentCount ?? 0,
+                                                     count:                 count,
+                                                     offset:                offset,
+                                                     hasError:              false,
+                                                     errorMessage:          "",
+                                                     errorCode:             0)
+            
         }
         
-        return unpinnedThreads
-        
+        return getThreadModelResponse
     }
     
     public func retrieveNewThreads(count:   Int,
@@ -409,20 +444,7 @@ extension Cache {
                             count:      Int,
                             name:       String?,
                             offset:     Int,
-                            threadIds:  [Int]?/*,
-                            timeStamp:  Int*/) -> GetThreadsModel? {
-        
-        // This part is deprecated because of a new service that has been come from server that gives all threadIds in one request
-//        /*
-//         * first of all, try to delete all the Participants that has not been updated for a long time (check it from timeStamp)
-//         * because we don't want to send invalid Participants inside the Conversation Model
-//         * after that, we will fetch on the Cache
-//         *
-//         */
-//        for thread in threadIds ?? [] {
-//            deleteThreadParticipants(inThread: thread, byTimeStamp: timeStamp)
-//        }
-        
+                            threadIds:  [Int]?) -> (threads: [Conversation]?, contentCount: Int?)/*GetThreadsModel?*/ {
         /*
          *  -> make this propertues OR toghether: 'title', 'descriptions', 'id'(for every id inside 'threadIds input'
          *  -> sort the result by the 'time' as 'ascending input'
@@ -454,22 +476,12 @@ extension Cache {
             }
         }
         
-//        var andFetchPredicaArray = [NSPredicate]()
-        
         if (orFetchPredicatArray.count == 1) {
             fetchRequest.predicate = orFetchPredicatArray.first!
         } else if (orFetchPredicatArray.count > 1) {
             let predicateCompound = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.or, subpredicates: orFetchPredicatArray)
-//            andFetchPredicaArray.append(predicateCompound)
             fetchRequest.predicate = predicateCompound
         }
-        
-//        let pinnedThreads = NSPredicate(format: "pin != %@", true)
-//        andFetchPredicaArray.append(pinnedThreads)
-//        if (andFetchPredicaArray.count > 0) {
-//            let predicateCompound = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.and, subpredicates: andFetchPredicaArray)
-//            fetchRequest.predicate = predicateCompound
-//        }
         
         // sort the result by the time
         let sortByTime = NSSortDescriptor(key: "time", ascending: ascending)
@@ -491,19 +503,9 @@ extension Cache {
                     let conversationObject = item.convertCMConversationToConversationObject()
                     conversationArr.append(conversationObject)
                 }
-                
-                let getThreadModelResponse = GetThreadsModel(conversationObjects:   conversationArr,
-                                                             contentCount:          result.count,
-                                                             count:                 count,
-                                                             offset:                offset,
-                                                             hasError:              false,
-                                                             errorMessage:          "",
-                                                             errorCode:             0)
-                
-                return getThreadModelResponse
-                
+                return (conversationArr, result.count)
             } else {
-                return nil
+                return (nil, nil)
             }
         } catch {
             fatalError("Error on fetching list of CMConversation")
@@ -529,16 +531,6 @@ extension Cache {
                     let conversationObject = item.convertCMConversationToConversationObject()
                     conversationArr.append(conversationObject)
                 }
-                
-//                let getThreadModelResponse = GetThreadsModel(conversationObjects:   conversationArr,
-//                                                             contentCount:          result.count,
-//                                                             count:                 result.count,
-//                                                             offset:                0,
-//                                                             hasError:              false,
-//                                                             errorMessage:          "",
-//                                                             errorCode:             0)
-//
-//                return getThreadModelResponse
                 return conversationArr
                 
             } else {
@@ -564,14 +556,17 @@ extension Cache {
     /// Outputs:
     /// - It returns a Model of "GetThreadParticipantsModel"  as output
     ///
-    /// - parameter admin:      if you want to only get admins, you have send this parameter as 'true'. (Bool?)
-    /// - parameter ascending:  on what order do you want to get the response? (Bool)
-    /// - parameter count:      how many ThreadParticipants do you spect to return (Int)
-    /// - parameter offset:     from what offset do you want to get the Cache response (Int)
-    /// - parameter threadIds:  ([Int]?)
-    /// - parameter timeStamp:  the only way to delete ThreadParticipants, is to check if there is a long time that some participants is not updated, we will delete it. this it the timeStamp to check (Int)
+    /// - parameters:
+    ///     - admin:      if you want to only get admins, you have send this parameter as 'true'. (Bool?)
+    ///     - ascending:  on what order do you want to get the response? (Bool)
+    ///     - count:      how many ThreadParticipants do you spect to return (Int)
+    ///     - offset:     from what offset do you want to get the Cache response (Int)
+    ///     - threadIds:  ([Int]?)
+    ///     - timeStamp:  the only way to delete ThreadParticipants, is to check if there is a long time that some participants is not updated, we will delete it. this it the timeStamp to check (Int)
     ///
-    /// - returns: GetThreadParticipantsModel?
+    /// - returns:
+    ///     GetThreadParticipantsModel?
+    ///
     public func retrieveThreadParticipants(admin:       Bool?,
                                            ascending:   Bool,
                                            count:       Int,
@@ -584,7 +579,6 @@ extension Cache {
          *
          */
         deleteThreadParticipants(inThread: threadId, byTimeStamp: timeStamp)
-        
         
         var getThreadParticipantModelResponse: GetThreadParticipantsModel?
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMParticipant")
@@ -620,55 +614,6 @@ extension Cache {
         } catch {
             fatalError("Error on fetching list of CMParticipant")
         }
-        
-        
-//        /*
-//         *  -> search through the CMConversation with the 'threadId'
-//         *  -> loop through its Participants and add them to the final result
-//         *  -> make the final result and pass it as GetThreadParticipantsModel
-//         *
-//         */
-//
-//        var getThreadParticipantModelResponse: GetThreadParticipantsModel?
-//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
-//        // this predicate used to get messages that are in the specific thread using 'threadId' property
-//        let threadPredicate = NSPredicate(format: "id == %i", threadId)
-//        fetchRequest.predicate = threadPredicate
-//        do {
-//            if let result = try context.fetch(fetchRequest) as? [CMConversation] {
-//                if (result.count > 0) {
-//
-//                    let thread = result.first!
-//                    if let threadParticipants = thread.participants {
-//
-//                        var insideCount = 0
-//                        var cmParticipantObjectArr = [CMParticipant]()
-//
-//                        for (index, item) in threadParticipants.enumerated() {
-//
-//                            if (index >= offset) && (insideCount < count) {
-//                                cmParticipantObjectArr.append(item)
-//                                insideCount += 1
-//                            }
-//                        }
-//
-//                        var participantsArr = [Participant]()
-//                        for item in cmParticipantObjectArr {
-//                            participantsArr.append(item.convertCMParticipantToParticipantObject())
-//                        }
-//                        getThreadParticipantModelResponse = GetThreadParticipantsModel(participantObjects:  participantsArr,
-//                                                                                       contentCount:        threadParticipants.count,
-//                                                                                       count:               count,
-//                                                                                       offset:              offset,
-//                                                                                       hasError:            false,
-//                                                                                       errorMessage:        "",
-//                                                                                       errorCode:           0)
-//                    }
-//                }
-//            }
-//        } catch {
-//            fatalError("Error on fetching list of CMParticipant")
-//        }
         
         return getThreadParticipantModelResponse
     }
@@ -707,65 +652,7 @@ extension Cache {
             fatalError("Error on fetching list of CMParticipant")
         }
         
-//        /*
-//         *  -> fetch 'CMConversation' Entity where threadId is equal to 'threadId' Input
-//         *  -> loop throught its participants
-//         *      -> if any participant had roles, means that this participant is admin
-//         *      -> so return it back to the user as Array of Participant Model
-//         *
-//         */
-//        var userAdmin: UserRolesModel?
-//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
-//        fetchRequest.predicate = NSPredicate(format: "id == %i", threadId)
-//        do {
-//            if let result = try context.fetch(fetchRequest) as? [CMConversation] {
-//
-//                var admins = [UserRole]()
-//                for thread in result {
-//                    for participant in thread.participants ?? [] {
-//                        if let roles = participant.roles {
-//                            admins.append(UserRole(userId:  participant.id as! Int,
-//                                                   name:    participant.name!,
-//                                                   roles:   roles))
-//                        }
-//                    }
-//                }
-//
-//                userAdmin = UserRolesModel(threadId:        threadId,
-//                                           userRolesObject: admins,
-//                                           hasError:        false,
-//                                           errorMessage:    "",
-//                                           errorCode:       0)
-//
-//            }
-//        } catch {
-//            fatalError("Error on trying to find the object from CMConversation entity")
-//        }
-        
         return userAdmin
-        
-        /*
-        
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "ThreadAdmins")
-        // if i found the ThreadAdmins onject, update its values
-        fetchRequest.predicate = NSPredicate(format: "threadId == %i", threadId)
-        do {
-            if let result = try context.fetch(fetchRequest) as? [ThreadAdmins] {
-
-                var adminArr = [ThreadAdmins]()
-                for admin in result {
-                    adminArr.append(admin)
-                }
-                return adminArr
-                
-            } else {
-                return nil
-            }
-        } catch {
-            fatalError("Error on trying to find the object from ThreadAdmins entity")
-        }
-        */
-        
     }
     
     
@@ -790,27 +677,30 @@ extension Cache {
     /// Retrieve MessageHistory:
     /// retrieve MessageHistory from cacheDB and return the result to the caller
     ///
-    /// fetch CMMessage from Cahce DB
-    /// if it found any data from Cache DB, it will return that,
-    /// otherwise it will return nil. (means cache has no data(CMMessage) on itself).
+    /// - fetch CMMessage from Cahce DB
+    /// - if it found any data from Cache DB, it will return that,
+    /// - otherwise it will return nil. (means cache has no data(CMMessage) on itself).
     ///
     /// Inputs:
-    /// - there are some parameters that user has to send some of them
+    /// there are some parameters that user has to send some of them
     ///
     /// Outputs:
-    /// - It returns a Model of "GetHistoryModel"  as output
+    /// It returns a Model of "GetHistoryModel"  as output
     ///
-    /// - parameter count:      how many Messages do you spect to return (Int)
-    /// - parameter fromTime:   filter the messages that sends after this time
-    /// - parameter messageId:  if you want to search specific message with its messageId, fill this parameter
-    /// - parameter offset:     from what offset do you want to get the Cache response (Int)
-    /// - parameter order:      on what order do you want to get the response? "asc" or "desc". (String?)
-    /// - parameter query:      if you want to search a specific term on the messages, fill this parameter. (String?)
-    /// - parameter threadIds:  do you want to search messages on what threadId. (Int)
-    /// - parameter fromTime:   filter the messages that sends before this time
-    /// - parameter uniqueId:   if you want to search specific message with its uniqueId, fill this parameter
+    /// - parameters:
+    ///     - count:      how many Messages do you spect to return (Int)
+    ///     - fromTime:   filter the messages that sends after this time
+    ///     - messageId:  if you want to search specific message with its messageId, fill this parameter
+    ///     - offset:     from what offset do you want to get the Cache response (Int)
+    ///     - order:      on what order do you want to get the response? "asc" or "desc". (String?)
+    ///     - query:      if you want to search a specific term on the messages, fill this parameter. (String?)
+    ///     - threadIds:  do you want to search messages on what threadId. (Int)
+    ///     - fromTime:   filter the messages that sends before this time
+    ///     - uniqueId:   if you want to search specific message with its uniqueId, fill this parameter
     ///
-    /// - returns: GetHistoryModel?
+    /// - returns:
+    ///     GetHistoryModel?
+    ///
     public func retrieveMessageHistory(count:           Int,
                                        firstMessageId:  Int?,
                                        fromTime:        UInt?,
@@ -995,27 +885,30 @@ extension Cache {
     }
     
     
-    
     // MARK: - retrieve ImageObject:
-    /*
-     * retrieve ImageObject
-     *
-     *  -> fetch CMImage from Cahce DB
-     *  -> if it found any object, it will return that,
-     *  -> otherwise it will return nil. (means cache has no relevent data(CMImage) on itself based on the input).
-     *
-     * first, it will fetch the Objects from CoreData.
-     * then based on the client request, it will find the objects that the client want to get,
-     * and then it will return it as 'UploadImageModel' model and its path (as String) to the client.
-     *
-     *  + Access:   Public
-     *  + Inputs:
-     *      - hashCode:     String
-     *      - imageId:      Int
-     *  + Outputs:
-     *      - (uploadImageMpdel: UploadImageModel, imagePath: String)
-     *
-     */
+    /// Retrieve ImageObject:
+    ///
+    /// - fetch CMImage from Cahce DB
+    /// - if it found any object, it will return that,
+    /// - otherwise it will return nil. (means cache has no relevent data(CMImage) on itself based on the input).
+    ///
+    /// first, it will fetch the Objects from CoreData.
+    /// then based on the client request, it will find the objects that the client want to get,
+    /// and then it will return it as 'UploadImageModel' model and its path (as String) to the client.
+    ///
+    /// Inputs:
+    /// there are some parameters that user has to send some of them
+    ///
+    /// Outputs:
+    /// It returns a Model of "GetHistoryModel"  as output
+    ///
+    /// - parameters:
+    ///     - hashCode:      how many Messages do you spect to return (String)
+    ///     - imageId:   filter the messages that sends after this time (Int)
+    ///
+    /// - returns:
+    ///     (imageObject: ImageObject, imagePath: String)?
+    ///
     public func retrieveImageObject(hashCode:   String,
                                     imageId:    Int) -> (imageObject: ImageObject, imagePath: String)? {
         /*
@@ -1057,25 +950,29 @@ extension Cache {
     
     
     // MARK: - retrieve FileObject:
-    /*
-     * retrieve FileObject:
-     *
-     *  -> fetch CMImage from Cahce DB
-     *  -> if it found any object, it will return that,
-     *  -> otherwise it will return nil. (means cache has no relevent data(CMFile) on itself based on the input).
-     *
-     * first, it will fetch the Objects from CoreData.
-     * then based on the client request, it will find the objects that the client want to get,
-     * and then it will return it as 'UploadFileModel' model and its path (as String) to the client.
-     *
-     *  + Access:   Public
-     *  + Inputs:
-     *      - hashCode:     String
-     *      - fileId:       Int
-     *  + Outputs:
-     *      - (uploadFileModel: UploadFileModel, filePath: String)
-     *
-     */
+    /// Retrieve FileObject:
+    ///
+    /// - fetch CMImage from Cahce DB
+    /// - if it found any object, it will return that,
+    /// - otherwise it will return nil. (means cache has no relevent data(CMFile) on itself based on the input).
+    ///
+    /// first, it will fetch the Objects from CoreData.
+    /// then based on the client request, it will find the objects that the client want to get,
+    /// and then it will return it as 'UploadFileModel' model and its path (as String) to the client.
+    ///
+    /// Inputs:
+    /// there are some parameters that user has to send some of them
+    ///
+    /// Outputs:
+    /// It returns a Model of "GetHistoryModel"  as output
+    ///
+    /// - parameters:
+    ///     - hashCode:      how many Messages do you spect to return (String)
+    ///     - imageId:   filter the messages that sends after this time (Int)
+    ///
+    /// - returns:
+    ///     (uploadFileModel: UploadFileModel, filePath: String)
+    ///
     public func retrieveFileObject(fileId:      Int,
                                    hashCode:    String) -> (fileObject: FileObject, filePath: String)? {
         /*
@@ -1160,27 +1057,6 @@ extension Cache {
         return folderSize
         
     }
-    
-    
-//    public func retrieveLocalSize() -> Int {
-//
-//        var folderSize = 0
-//        // get your directory url
-//        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-//        let documentsDirectoryURL = URL(fileURLWithPath: path)
-//
-//        // check if the url is a directory
-//        if (try? documentsDirectoryURL.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory == true {
-//            print("url is a folder url")
-//            // lets get the folder files
-//            (try? FileManager.default.contentsOfDirectory(at: documentsDirectoryURL, includingPropertiesForKeys: nil))?.lazy.forEach {
-//                folderSize += (try? $0.resourceValues(forKeys: [.totalFileAllocatedSizeKey]))?.totalFileAllocatedSize ?? 0
-//            }
-//        }
-//        return folderSize
-//
-//    }
-    
     
     
 }

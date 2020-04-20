@@ -2,8 +2,8 @@
 //  CMConversation+CoreDataProperties.swift
 //  FanapPodChatSDK
 //
-//  Created by Mahyar Zhiani on 3/18/1398 AP.
-//  Copyright © 1398 Mahyar Zhiani. All rights reserved.
+//  Created by MahyarZhiani on 1/30/1399 AP.
+//  Copyright © 1399 Mahyar Zhiani. All rights reserved.
 //
 //
 
@@ -47,12 +47,13 @@ extension CMConversation {
     @NSManaged public var title:        String?
     @NSManaged public var type:         NSNumber?
     @NSManaged public var unreadCount:  NSNumber?
+    
     @NSManaged public var dummyForwardInfo: CMForwardInfo?
-    @NSManaged public var dummyMessage:     [CMMessage]?
+    @NSManaged public var dummyMessage:     NSSet?
+    @NSManaged public var dummyUserRoles:   NSSet?
     @NSManaged public var inviter:          CMParticipant?
     @NSManaged public var lastMessageVO:    CMMessage?
-    @NSManaged public var participants:     [CMParticipant]?
-    @NSManaged public var dummyUserRoles:   [String]?
+    @NSManaged public var participants:     NSOrderedSet?
     @NSManaged public var pinMessage:       CMPinMessage?
 
 }
@@ -67,10 +68,27 @@ extension CMConversation {
     @NSManaged public func removeFromDummyMessage(_ value: CMMessage)
 
     @objc(addDummyMessage:)
-    @NSManaged public func addToDummyMessage(_ values: [CMMessage])
+    @NSManaged public func addToDummyMessage(_ values: NSSet)
 
     @objc(removeDummyMessage:)
-    @NSManaged public func removeFromDummyMessage(_ values: [CMMessage])
+    @NSManaged public func removeFromDummyMessage(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for dummyUserRoles
+extension CMConversation {
+
+    @objc(addDummyUserRolesObject:)
+    @NSManaged public func addToDummyUserRoles(_ value: CMUserRole)
+
+    @objc(removeDummyUserRolesObject:)
+    @NSManaged public func removeFromDummyUserRoles(_ value: CMUserRole)
+
+    @objc(addDummyUserRoles:)
+    @NSManaged public func addToDummyUserRoles(_ values: NSSet)
+
+    @objc(removeDummyUserRoles:)
+    @NSManaged public func removeFromDummyUserRoles(_ values: NSSet)
 
 }
 
@@ -102,26 +120,9 @@ extension CMConversation {
     @NSManaged public func removeFromParticipants(_ value: CMParticipant)
 
     @objc(addParticipants:)
-    @NSManaged public func addToParticipants(_ values: [CMParticipant])
+    @NSManaged public func addToParticipants(_ values: NSOrderedSet)
 
     @objc(removeParticipants:)
-    @NSManaged public func removeFromParticipants(_ values: [CMParticipant])
-
-}
-
-// MARK: Generated accessors for dummyUserRoles
-extension CMConversation {
-
-    @objc(addDummyUserRolesObject:)
-    @NSManaged public func addToDummyUserRoles(_ value: CMUserRole)
-
-    @objc(removeDummyUserRolesObject:)
-    @NSManaged public func removeFromDummyUserRoles(_ value: CMUserRole)
-
-    @objc(addDummyUserRoles:)
-    @NSManaged public func addToDummyUserRoles(_ values: [CMUserRole])
-
-    @objc(removeDummyUserRoles:)
-    @NSManaged public func removeFromDummyUserRoles(_ values: [CMUserRole])
+    @NSManaged public func removeFromParticipants(_ values: NSOrderedSet)
 
 }

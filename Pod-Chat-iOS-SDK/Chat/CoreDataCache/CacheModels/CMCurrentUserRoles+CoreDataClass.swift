@@ -12,7 +12,12 @@ import CoreData
 
 
 public class CMCurrentUserRoles: NSManagedObject {
-
+    
+    func updateObject(with roles: [Roles], onThreadId threadId: Int) {
+        self.threadId   = threadId as NSNumber?
+        self.roles      = RolesArray(roles: roles)
+    }
+    
 }
 
 

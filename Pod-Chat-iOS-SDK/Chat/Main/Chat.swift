@@ -11,7 +11,7 @@ import FanapPodAsyncSDK
 import CoreData
 import Alamofire
 import SwiftyJSON
-import UIKit
+//import UIKit
 //import Contacts
 
 
@@ -194,21 +194,25 @@ public class Chat {
     
     var isTypingOnThread: Int = 0 {
         didSet {
-            var counter = 0
+            var count = 0
+            let signalMessageInput = SendSignalMessageRequestModel(signalType:  SignalMessageType.IS_TYPING,
+                                                                   threadId:    isTypingOnThread,
+                                                                   uniqueId:    nil)
             
-            if isTypingOnThread == 0 {
+            let repeatTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { (timer) in
+                if (count > 30) || (self.isTypingOnThread == 0) {
+                    timer.invalidate()
+                } else {
+                    self.sendSignalMessage(input: signalMessageInput)
+                    count += 1
+                }
+            }
+            
+            if (isTypingOnThread == 0) {
+                repeatTimer.invalidate()
                 stopTyping()
             } else {
-                let signalMessageInput = SendSignalMessageRequestModel(signalType:  SignalMessageType.IS_TYPING,
-                                                                       threadId:    isTypingOnThread,
-                                                                       uniqueId:    nil)
-                // for every x seconds, call this function:
-                while (isTypingOnThread != 0) && (counter < 15) {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-                        self.sendSignalMessage(input: signalMessageInput)
-                    }
-                    counter += 1
-                }
+                repeatTimer.fire()
             }
             
         }

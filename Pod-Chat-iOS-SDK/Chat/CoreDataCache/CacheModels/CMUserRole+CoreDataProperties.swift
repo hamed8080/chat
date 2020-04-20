@@ -2,8 +2,8 @@
 //  CMUserRole+CoreDataProperties.swift
 //  FanapPodChatSDK
 //
-//  Created by Mahyar Zhiani on 3/18/1398 AP.
-//  Copyright © 1398 Mahyar Zhiani. All rights reserved.
+//  Created by MahyarZhiani on 1/30/1399 AP.
+//  Copyright © 1399 Mahyar Zhiani. All rights reserved.
 //
 //
 
@@ -21,7 +21,7 @@ extension CMUserRole {
     @NSManaged public var name:         String?
     @NSManaged public var threadId:     NSNumber?
     @NSManaged public var roles:        NSObject?
-    @NSManaged public var conversation: [CMConversation]?
+    @NSManaged public var conversation: NSSet?
 
 }
 
@@ -35,9 +35,9 @@ extension CMUserRole {
     @NSManaged public func removeFromConversation(_ value: CMConversation)
 
     @objc(addConversation:)
-    @NSManaged public func addToConversation(_ values: [CMConversation])
+    @NSManaged public func addToConversation(_ values: NSSet)
 
     @objc(removeConversation:)
-    @NSManaged public func removeFromConversation(_ values: [CMConversation])
+    @NSManaged public func removeFromConversation(_ values: NSSet)
 
 }

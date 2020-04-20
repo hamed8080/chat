@@ -16,7 +16,9 @@ extension CMReplyInfo {
     @nonobjc public class func fetchRequest() -> NSFetchRequest<CMReplyInfo> {
         return NSFetchRequest<CMReplyInfo>(entityName: "CMReplyInfo")
     }
-
+    
+    @NSManaged public var messageId:        NSNumber?
+    
     @NSManaged public var deletedd:         NSNumber?
     @NSManaged public var message:          String?
     @NSManaged public var messageType:      NSNumber?

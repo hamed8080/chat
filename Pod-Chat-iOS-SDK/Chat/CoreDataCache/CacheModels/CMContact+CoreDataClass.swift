@@ -58,7 +58,6 @@ public class CMContact: NSManagedObject {
                                        linkedUser:      self.linkedUser?.convertCMLinkedUserToLinkedUserObject(),
                                        notSeenDuration: notSeenDuration,
                                        timeStamp:       time,
-//                                       uniqueId:        self.uniqueId,
                                        userId:          userId)
             return messageModel
         }
@@ -69,5 +68,44 @@ public class CMContact: NSManagedObject {
         return model
         
     }
+    
+    
+    
+    
+    func updateObject(with contact: Contact) {
+        if let blocked = contact.blocked as NSNumber? {
+            self.blocked = blocked
+        }
+        if let cellphoneNumber = contact.cellphoneNumber {
+            self.cellphoneNumber = cellphoneNumber
+        }
+        if let email = contact.email {
+            self.email = email
+        }
+        if let firstName = contact.firstName {
+            self.firstName = firstName
+        }
+        if let hasUser = contact.hasUser as NSNumber? {
+            self.hasUser = hasUser
+        }
+        if let id = contact.id as NSNumber? {
+            self.id = id
+        }
+        if let image = contact.image {
+            self.image = image
+        }
+        if let lastName = contact.lastName {
+            self.lastName = lastName
+        }
+        if let notSeenDuration = contact.notSeenDuration as NSNumber? {
+            self.notSeenDuration = notSeenDuration
+        }
+        if let userId = contact.userId as NSNumber? {
+            self.userId = userId
+        }
+        
+        self.time = Int(Date().timeIntervalSince1970) as NSNumber?
+    }
+    
     
 }

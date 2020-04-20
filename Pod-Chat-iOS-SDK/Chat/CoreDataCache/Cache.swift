@@ -8,7 +8,7 @@
 
 import Foundation
 import CoreData
-//import SwiftyBeaver
+import FanapPodAsyncSDK
 
 
 public class Cache {
@@ -17,7 +17,6 @@ public class Cache {
     public let context: NSManagedObjectContext
     
     public init() {
-        
         context = coreDataStack.persistentContainer.viewContext
 //        print("context of the cache created")
     }
@@ -25,14 +24,16 @@ public class Cache {
     func saveContext(subject: String) {
         do {
             try context.save()
-            print("\(subject), has Saved Successfully on CoreData Cache")
+            log.verbose("\(subject), has Saved Successfully on CoreData Cache", context: "Cache on ChatSDK")
         } catch {
+            log.error("\(subject), Error to save data on CoreData Cache", context: "Cache on ChatSDK")
             fatalError("\(subject), Error to save data on CoreData Cache")
         }
     }
     
     
     func deleteAndSave(object: NSManagedObject, withMessage message: String) {
+        print("contact deleted: \(message)")
         context.delete(object)
         saveContext(subject: message)
     }

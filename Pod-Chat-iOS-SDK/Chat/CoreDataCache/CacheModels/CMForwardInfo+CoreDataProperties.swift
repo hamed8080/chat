@@ -16,7 +16,9 @@ extension CMForwardInfo {
     @nonobjc public class func fetchRequest() -> NSFetchRequest<CMForwardInfo> {
         return NSFetchRequest<CMForwardInfo>(entityName: "CMForwardInfo")
     }
-
+    
+    @NSManaged public var messageId:    NSNumber?
+    
     @NSManaged public var conversation: CMConversation?
     @NSManaged public var dummyMessage: CMMessage?
     @NSManaged public var participant:  CMParticipant?

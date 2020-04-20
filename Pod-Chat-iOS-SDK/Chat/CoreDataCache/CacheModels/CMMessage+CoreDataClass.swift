@@ -103,4 +103,56 @@ public class CMMessage: NSManagedObject {
         
     }
     
+    
+    func updateObject(with message: Message) {
+        if let delivered = message.delivered as NSNumber? {
+            self.delivered = delivered
+        }
+        if let editable = message.editable as NSNumber? {
+            self.editable = editable
+        }
+        if let edited = message.edited as NSNumber? {
+            self.edited = edited
+        }
+        if let id = message.id as NSNumber? {
+            self.id = id
+        }
+        if let mentioned = message.mentioned as NSNumber? {
+            self.mentioned = mentioned
+        }
+        if let message = message.message {
+            self.message = message
+        }
+        if let messageType = message.messageType {
+            self.messageType = messageType
+        }
+        if let metadata = message.metadata {
+            self.metadata = metadata
+        }
+        if let ownerId = message.ownerId as NSNumber? {
+            self.ownerId = ownerId
+        }
+        if let previousId = message.previousId as NSNumber? {
+            self.previousId = previousId
+        }
+        if let seen = message.seen as NSNumber? {
+            self.seen = seen
+        }
+        if let systemMetadata = message.systemMetadata {
+            self.systemMetadata = systemMetadata
+        }
+        if let threadId = message.threadId as NSNumber? {
+            self.threadId = threadId
+        }
+        if let time = message.time as NSNumber? /*, let timeNano = myMessage.timeNanos*/ {
+//                            let theTime = ((UInt(time / 1000)) * 1000000000 ) + timeNano
+//                            result.first!.time = theTime as NSNumber
+            self.time = time
+        }
+        if let uniqueId = message.uniqueId {
+            self.uniqueId = uniqueId
+        }
+    }
+    
+    
 }
