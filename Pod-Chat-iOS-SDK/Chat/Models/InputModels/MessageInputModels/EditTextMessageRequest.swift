@@ -1,0 +1,63 @@
+//
+//  EditTextMessageRequestModel.swift
+//  Chat
+//
+//  Created by Mahyar Zhiani on 10/1/1397 AP.
+//  Copyright © 1397 Mahyar Zhiani. All rights reserved.
+//
+
+import Foundation
+
+open class EditTextMessageRequest {
+    
+    public let messageType: MessageType
+    public let repliedTo:   Int?
+    public let messageId:   Int
+    public let textMessage: String
+    
+    public let typeCode:    String?
+    public let uniqueId:    String
+    
+    public init(messageType:    MessageType,
+                repliedTo:      Int?,
+                messageId:      Int,
+                textMessage:    String,
+                typeCode:       String?,
+                uniqueId:       String?) {
+        
+        self.messageType    = messageType
+        self.repliedTo      = repliedTo
+        self.messageId      = messageId
+        self.textMessage    = textMessage
+        
+        self.typeCode       = typeCode
+        self.uniqueId       = uniqueId ?? UUID().uuidString
+    }
+    
+    // this initializer will be deprecated later
+    public init(content:        String,
+                messageType:    MessageType,
+                metadata:       String?,
+                repliedTo:      Int?,
+                messageId:      Int,
+                typeCode:       String?,
+                uniqueId:       String?) {
+        
+        self.messageType    = messageType
+        self.repliedTo      = repliedTo
+        self.messageId      = messageId
+        self.textMessage    = content
+        
+        self.typeCode       = typeCode
+        self.uniqueId       = uniqueId ?? UUID().uuidString
+    }
+    
+}
+
+
+/// MARK: -  this class will be deprecate (use this class instead: 'EditTextMessageRequest')
+open class EditTextMessageRequestModel: EditTextMessageRequest {
+    
+}
+
+

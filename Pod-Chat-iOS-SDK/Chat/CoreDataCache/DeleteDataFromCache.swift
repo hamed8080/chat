@@ -131,7 +131,6 @@ extension Cache {
                 var contactIds: [Int] = []
                 for item in result {
                     contactIds.append((item.id! as? Int)!)
-                    print(item.time)
                 }
                 if contactIds.count > 0 {
                     deleteContact(withContactIds: contactIds)

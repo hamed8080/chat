@@ -13,7 +13,6 @@ open class QueueOfWaitEditMessagesModel {
     
     let content:        String?
     let messageType:    MessageType
-//    let metadata:   JSON?
     let metadata:       String?
     let repliedTo:      Int?
     let messageId:      Int?
@@ -24,7 +23,6 @@ open class QueueOfWaitEditMessagesModel {
     
     init(content:       String?,
          messageType:   MessageType,
-//         metadata:  JSON?,
          metadata:      String?,
          repliedTo:     Int?,
          messageId:     Int?,
@@ -42,14 +40,13 @@ open class QueueOfWaitEditMessagesModel {
         self.uniqueId       = uniqueId
     }
     
-    init(editMessageInputModel: EditTextMessageRequestModel) {
-        self.content        = editMessageInputModel.content
+    init(editMessageInputModel: EditTextMessageRequest) {
+        self.content        = editMessageInputModel.textMessage
         self.messageType    = editMessageInputModel.messageType
-//        self.metadata   = editMessageInputModel.metadata
-        self.metadata       = (editMessageInputModel.metadata != nil) ? "\(editMessageInputModel.metadata!)" : nil
         self.repliedTo      = editMessageInputModel.repliedTo
         self.messageId      = editMessageInputModel.messageId
         self.threadId       = nil
+        self.metadata       = nil
         self.typeCode       = editMessageInputModel.typeCode
         self.uniqueId       = editMessageInputModel.uniqueId
     }

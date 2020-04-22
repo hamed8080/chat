@@ -9,53 +9,33 @@
 import Foundation
 import SwiftyJSON
 
-
-open class SetRemoveRoleModel {
+open class SetRemoveRoleModel: RequestModelDelegates {
     
-    public let userId:  Int
-    public var roles:   [String] = []
+    public let userId:      Int
+    public var roles:       [String] = []
     
-    public init(userId: Int, roles: [Roles]) {
-        self.userId = userId
+    public init(userId:     Int,
+                roles:      [Roles]) {
+        
+        self.userId     = userId
         for item in roles {
             self.roles.append(item.stringValue())
         }
     }
     
-    func convertContentToJSON() -> JSON {
+    public func convertContentToJSON() -> JSON {
         var content: JSON = [:]
         content["userId"]           = JSON(self.userId)
         content["roles"]            = JSON(self.roles)
-//        content["roleOperation"]    = JSON(self.roleOperation)
         content["checkThreadMembership"] = JSON(false)
         
         return content
     }
     
+    public func convertContentToJSONArray() -> [JSON] {
+        return []
+    }
+    
 }
-
-
-//class SetRemoveRoleRequestModel {
-//
-//    public let roleRequestModel:    RoleRequestModel
-//    public let roleOperation:       String
-//
-//    init(roleRequestModel:  RoleRequestModel,
-//         roleOperation:     RoleOperations) {
-//        self.roleRequestModel   = roleRequestModel
-//        self.roleOperation      = roleOperation.returnString()
-//    }
-//
-//    func convertContentToJSON() -> JSON {
-//        var content: JSON = [:]
-//        content["userId"]           = JSON(self.roleRequestModel.userId)
-//        content["roles"]            = JSON(self.roleRequestModel.roles)
-////        content["roleOperation"]    = JSON(self.roleOperation)
-//        content["checkThreadMembership"] = JSON(false)
-//
-//        return content
-//    }
-//
-//}
 
 

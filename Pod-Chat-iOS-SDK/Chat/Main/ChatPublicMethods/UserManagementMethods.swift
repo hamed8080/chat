@@ -107,14 +107,14 @@ extension Chat {
     /// then the response will come back as callbacks to client whose calls this function.
     ///
     /// Inputs:
-    /// - you have to send your parameters as "SetProfileRequestModel" to this function
+    /// - you have to send your parameters as "UpdateChatProfileRequest" to this function
     ///
     /// Outputs:
     /// - It has 2 callbacks as responses
     ///
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ProfileModel)
-    public func setProfile(inputModel setProfileInput:  SetProfileRequestModel,
+    public func setProfile(inputModel setProfileInput:  UpdateChatProfileRequest,
                            uniqueId:                    @escaping ((String) -> ()),
                            completion:                  @escaping callbackTypeAlias) {
         
@@ -150,6 +150,170 @@ extension Chat {
                                 seenCallback:       nil)
         
     }
+    
+    
+    // MARK: - Block/Unblock/GetBlockList Contact
+    
+    /// BlockContact:
+    /// block a contact by its contactId.
+    ///
+    /// By calling this function, a request of type 7 (BLOCK) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "BlockRequest" to this function
+    ///
+    /// Outputs:
+    /// - It has 3 callbacks as responses.
+    ///
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (BlockRequest)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! BlockedUserModel)
+    public func blockContact(inputModel blockContactsInput:    BlockRequest,
+                             uniqueId:              @escaping (String) -> (),
+                             completion:            @escaping callbackTypeAlias) {
+        
+        log.verbose("Try to request to block user with this parameters: \n \(blockContactsInput)", context: "Chat")
+        uniqueId(blockContactsInput.uniqueId)
+        blockUserCallbackToUser = completion
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.BLOCK.intValue(),
+                                            content:            "\(blockContactsInput.convertContentToJSON())",
+                                            messageType:        nil,
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          nil,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           blockContactsInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           blockContactsInput.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: true)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          [(BlockUserCallbacks(), blockContactsInput.uniqueId)],
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+    }
+    
+    
+    /// GetBlockContactsList:
+    /// it returns a list of the blocked contacts.
+    ///
+    /// By calling this function, a request of type 25 (GET_BLOCKED) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "GetBlockedListRequest" to this function
+    ///
+    /// Outputs:
+    /// - It has 3 callbacks as responses.
+    ///
+    /// - parameter inputModel:         (input) you have to send your parameters insid this model. (GetBlockedListRequest)
+    /// - parameter getCacheResponse:   (input) specify if you want to get cache response for this request (Bool?)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! GetBlockedUserListModel)
+    public func getBlockedContacts(inputModel getBlockedContactsInput:  GetBlockedListRequest,
+                                   getCacheResponse:                    Bool?,
+                                   uniqueId:                @escaping (String) -> (),
+                                   completion:              @escaping callbackTypeAlias) {
+        
+        log.verbose("Try to request to get block users with this parameters: \n \(getBlockedContactsInput)", context: "Chat")
+        uniqueId(getBlockedContactsInput.uniqueId)
+        getBlockedUserCallbackToUser = completion
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.GET_BLOCKED.intValue(),
+                                            content:            "\(getBlockedContactsInput.convertContentToJSON())",
+                                            messageType:        nil,
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          nil,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           getBlockedContactsInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           getBlockedContactsInput.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: true)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          [(GetBlockedUsersCallbacks(parameters: chatMessage), getBlockedContactsInput.uniqueId)],
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+        
+        if (getCacheResponse ?? enableCache) {
+            // ToDo:
+        }
+        
+    }
+    
+    
+    /// UnblockContact:
+    /// unblock a contact from blocked list.
+    ///
+    /// By calling this function, a request of type 8 (UNBLOCK) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "UnblockRequest" to this function
+    ///
+    /// Outputs:
+    /// - It has 3 callbacks as responses.
+    ///
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (UnblockRequest)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! BlockedUserModel)
+    public func unblockContact(inputModel unblockContactsInput:    UnblockRequest,
+                               uniqueId:                @escaping (String) -> (),
+                               completion:              @escaping callbackTypeAlias) {
+        
+        log.verbose("Try to request to unblock user with this parameters: \n \(unblockContactsInput)", context: "Chat")
+        uniqueId(unblockContactsInput.uniqueId)
+        
+        unblockUserCallbackToUser = completion
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.UNBLOCK.intValue(),
+                                            content:            "\(unblockContactsInput.convertContentToJSON())",
+                                            messageType:        nil,
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          unblockContactsInput.blockId,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           unblockContactsInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           unblockContactsInput.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: true)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          [(UnblockUserCallbacks(), unblockContactsInput.uniqueId)],
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+    }
+    
     
     
     /// DeleteUserInfoFromCache:

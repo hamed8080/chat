@@ -14,8 +14,6 @@ open class QueueOfWaitFileMessagesModel {
     let content:        String?
     let messageType:    MessageType
     let fileName:       String?
-//    let imageName:      String?
-//    let metadata:       JSON?
     let metadata:       String?
     let mimeType:       String
     let repliedTo:      Int?
@@ -33,8 +31,6 @@ open class QueueOfWaitFileMessagesModel {
     init(content:       String?,
          messageType:   MessageType,
          fileName:      String?,
-//         imageName:     String?,
-//         metadata:      JSON?,
          metadata:      String?,
          mimeType:      String?,
          repliedTo:     Int?,
@@ -51,7 +47,6 @@ open class QueueOfWaitFileMessagesModel {
         self.content        = content
         self.messageType    = messageType
         self.fileName       = fileName
-//        self.imageName      = imageName
         self.metadata       = metadata
         self.mimeType       = mimeType ?? ""
         self.repliedTo      = repliedTo
@@ -69,7 +64,7 @@ open class QueueOfWaitFileMessagesModel {
     
     init(fileMessageInputModel: SendFileMessageRequestModel, uniqueId: String) {
         
-        self.content        = fileMessageInputModel.messageInput.content
+        self.content        = fileMessageInputModel.messageInput.textMessage
         self.messageType    = fileMessageInputModel.messageInput.messageType
         self.metadata       = (fileMessageInputModel.messageInput.metadata != nil) ? "\(fileMessageInputModel.messageInput.metadata!)" : nil
         self.mimeType       = fileMessageInputModel.uploadInput.mimeType
@@ -102,22 +97,6 @@ open class QueueOfWaitFileMessagesModel {
             self.imageToSend    = nil
         }
         
-//        self.content        = fileMessageInputModel.content
-//        self.fileName       = fileMessageInputModel.fileName
-////        self.imageName      = fileMessageInputModel.imageName
-////        self.metadata       = fileMessageInputModel.metadata
-//        self.metadata       = (fileMessageInputModel.metadata != nil) ? "\(fileMessageInputModel.metadata!)" : nil
-//        self.repliedTo      = fileMessageInputModel.repliedTo
-//        self.threadId       = fileMessageInputModel.threadId
-//        self.xC             = fileMessageInputModel.xC
-//        self.yC             = fileMessageInputModel.yC
-//        self.hC             = fileMessageInputModel.hC
-//        self.wC             = fileMessageInputModel.wC
-//        self.fileToSend     = fileMessageInputModel.fileToSend
-//        self.imageToSend    = fileMessageInputModel.imageToSend
-//
-//        self.typeCode       = fileMessageInputModel.typeCode
-//        self.uniqueId       = uniqueId
     }
     
     
@@ -125,7 +104,6 @@ open class QueueOfWaitFileMessagesModel {
         let result: JSON = ["content":      content ?? NSNull(),
                             "messageType":  messageType,
                             "fileName":     fileName ?? NSNull(),
-//                            "imageName":    imageName ?? NSNull(),
                             "metadata":     metadata ?? NSNull(),
                             "mimeType":     mimeType,
                             "repliedTo":    repliedTo ?? NSNull(),

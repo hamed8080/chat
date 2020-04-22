@@ -13,10 +13,8 @@ open class QueueOfWaitTextMessagesModel {
     
     let content:        String?
     let messageType:    MessageType
-//    let metadata:       JSON?
     let metadata:       String?
     let repliedTo:      Int?
-//    let systemMetadata: JSON?
     let systemMetadata: String?
     let threadId:       Int?
     
@@ -25,10 +23,8 @@ open class QueueOfWaitTextMessagesModel {
     
     init(content:           String?,
          messageType:       MessageType,
-//         metadata:          JSON?,
          metadata:          String?,
          repliedTo:         Int?,
-//         systemMetadata:    JSON?,
          systemMetadata:    String?,
          threadId:          Int?,
          typeCode:          String?,
@@ -44,13 +40,11 @@ open class QueueOfWaitTextMessagesModel {
         self.uniqueId       = uniqueId
     }
     
-    init(sendMessageInputModel: SendTextMessageRequestModel) {
-        self.content        = sendMessageInputModel.content
+    init(sendMessageInputModel: SendTextMessageRequest) {
+        self.content        = sendMessageInputModel.textMessage
         self.messageType    = sendMessageInputModel.messageType
-//        self.metadata       = sendMessageInputModel.metadata
         self.metadata       = (sendMessageInputModel.metadata != nil) ? "\(sendMessageInputModel.metadata!)" : nil
         self.repliedTo      = sendMessageInputModel.repliedTo
-//        self.systemMetadata = sendMessageInputModel.systemMetadata
         self.systemMetadata = (sendMessageInputModel.systemMetadata != nil) ? "\(sendMessageInputModel.systemMetadata!)" : nil
         self.threadId       = sendMessageInputModel.threadId
         self.typeCode       = sendMessageInputModel.typeCode
