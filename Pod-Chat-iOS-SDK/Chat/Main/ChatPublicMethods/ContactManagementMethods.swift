@@ -260,7 +260,7 @@ extension Chat {
         log.verbose("Try to request to get  user notSeenDuration with this parameters: \n \(notSeenDurationInput)", context: "Chat")
         uniqueId(notSeenDurationInput.uniqueId)
         
-        getNotSeenDurationCallbackToUser = completion
+        getContactNotSeenDurationCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.GET_NOT_SEEN_DURATION.intValue(),
                                             content:            "\(notSeenDurationInput.convertContentToJSON())",
@@ -283,7 +283,7 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          [(NotSeenDurationCallback(), notSeenDurationInput.uniqueId)],
+                                callbacks:          [(GetContactNotSeenDurationCallback(), notSeenDurationInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)

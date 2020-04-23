@@ -579,7 +579,7 @@ extension Chat {
             // a message of type 7 (BLOCK) comes from Server.
         // it means that a user has blocked.
         case ChatMessageVOTypes.BLOCK.intValue():
-            responseOfBlockContact(withMessage: message)
+            responseOfBlock(withMessage: message)
             break
             
             // a message of type 8 (UNBLOCK) comes from Server.
@@ -671,7 +671,7 @@ extension Chat {
             
         // a message of type 25 (GET_BLOCKED) comes from Server.
         case ChatMessageVOTypes.GET_BLOCKED.intValue():
-            responseOfGetBlockContact(withMessage: message)
+            responseOfGetBlockedList(withMessage: message)
             break
             
         // a message of type 26 (RELATION_INFO) comes from Server.
@@ -758,12 +758,12 @@ extension Chat {
             
         // a message of type 34 (IS_NAME_AVAILABLE) comes from Server.
         case ChatMessageVOTypes.IS_NAME_AVAILABLE.intValue():
-            responseOfIsNameAvailableThread(withMessage: message)
+            responseOfIsPublicThreadNameAvailable(withMessage: message)
             break
             
         // a message of type 39 (JOIN_THREAD) comes from Server.
         case ChatMessageVOTypes.JOIN_THREAD.intValue():
-            responseOfJoinThread(withMessage: message)
+            responseOfJoinPublicThread(withMessage: message)
             break
             
         // a message of type 40 (BOT_MESSAGE) comes from Server.
@@ -807,7 +807,7 @@ extension Chat {
             
         // a message of type 47 (GET_NOT_SEEN_DURATION) comes from Server.
         case ChatMessageVOTypes.GET_NOT_SEEN_DURATION.intValue():
-            responseOfNotSeenDuration(withMessage: message)
+            responseOfGetContactNotSeenDuration(withMessage: message)
             break
             
         // a message of type 48 (PIN_THREAD) comes from Server.
@@ -832,7 +832,7 @@ extension Chat {
             
         // a message of type 52 (SET_PROFILE) comes from Server.
         case ChatMessageVOTypes.SET_PROFILE.intValue():
-            responseOfSetProfile(withMessage: message)
+            responseOfUpdateChatProfile(withMessage: message)
             break
         
         // a message of type 54 (GET_CURRENT_USER_ROLES) comes from Server

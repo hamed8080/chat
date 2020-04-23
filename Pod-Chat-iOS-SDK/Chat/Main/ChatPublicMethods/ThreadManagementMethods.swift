@@ -369,7 +369,7 @@ extension Chat {
         log.verbose("Try to request to join thread with this parameters: \n \(isNameAvailableThreadInput.convertContentToJSON())", context: "Chat")
         uniqueId(isNameAvailableThreadInput.uniqueId)
         
-        isNameAvailableThreadCallbackToUser = completion
+        isPublicThreadNameAvailableCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.IS_NAME_AVAILABLE.intValue(),
                                             content:            "\(isNameAvailableThreadInput.uniqueName)",
@@ -392,7 +392,7 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          [(IsNameAvailableThreadCallbacks(), isNameAvailableThreadInput.uniqueId)],
+                                callbacks:          [(IsPublicThreadNameAvailableCallbacks(), isNameAvailableThreadInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
@@ -423,7 +423,7 @@ extension Chat {
         log.verbose("Try to request to join thread with this parameters: \n uniqueName = \(joinThreadInput.uniqueName)", context: "Chat")
         uniqueId(joinThreadInput.uniqueId)
         
-        joinThreadCallbackToUser = completion
+        joinPublicThreadCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.JOIN_THREAD.intValue(),
                                             content:            joinThreadInput.uniqueName,
@@ -446,7 +446,7 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          [(JoinThreadCallbacks(), joinThreadInput.uniqueId)],
+                                callbacks:          [(JoinPublicThreadCallbacks(), joinThreadInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
@@ -767,7 +767,7 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          [(SpamPvThread(), spamPvThreadInput.uniqueId)],
+                                callbacks:          [(SpamPrivateThread(), spamPvThreadInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)

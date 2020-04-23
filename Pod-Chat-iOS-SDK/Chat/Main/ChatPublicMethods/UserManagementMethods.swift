@@ -86,7 +86,7 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          [(UserInfoCallback(), theUniqueId)],
+                                callbacks:          [(GetUserInfoCallback(), theUniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
@@ -121,7 +121,7 @@ extension Chat {
         log.verbose("Try to request to set Profile", context: "Chat")
         
         uniqueId(setProfileInput.uniqueId)
-        setProfileCallbackToUser = completion
+        updateChatProfileCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.SET_PROFILE.intValue(),
                                             content:            setProfileInput.convertContentToJSON().toString(),
@@ -144,7 +144,7 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          [(SetProfileCallback(), setProfileInput.uniqueId)],
+                                callbacks:          [(UpdateChatProfileCallback(), setProfileInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
@@ -175,7 +175,7 @@ extension Chat {
         
         log.verbose("Try to request to block user with this parameters: \n \(blockContactsInput)", context: "Chat")
         uniqueId(blockContactsInput.uniqueId)
-        blockUserCallbackToUser = completion
+        blockCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.BLOCK.intValue(),
                                             content:            "\(blockContactsInput.convertContentToJSON())",
@@ -198,7 +198,7 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          [(BlockUserCallbacks(), blockContactsInput.uniqueId)],
+                                callbacks:          [(BlockCallbacks(), blockContactsInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
@@ -228,7 +228,7 @@ extension Chat {
         
         log.verbose("Try to request to get block users with this parameters: \n \(getBlockedContactsInput)", context: "Chat")
         uniqueId(getBlockedContactsInput.uniqueId)
-        getBlockedUserCallbackToUser = completion
+        getBlockedListCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.GET_BLOCKED.intValue(),
                                             content:            "\(getBlockedContactsInput.convertContentToJSON())",
@@ -308,7 +308,7 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          [(UnblockUserCallbacks(), unblockContactsInput.uniqueId)],
+                                callbacks:          [(UnblockCallbacks(), unblockContactsInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)

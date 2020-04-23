@@ -347,9 +347,9 @@ public class Chat {
     public var muteThreadCallbackToUser:            callbackTypeAlias?
     public var unmuteThreadCallbackToUser:          callbackTypeAlias?
     public var updateThreadInfoCallbackToUser:      callbackTypeAlias?
-    public var blockUserCallbackToUser:             callbackTypeAlias?
+    public var blockCallbackToUser:                 callbackTypeAlias?
     public var unblockUserCallbackToUser:           callbackTypeAlias?
-    public var getBlockedUserCallbackToUser:        callbackTypeAlias?
+    public var getBlockedListCallbackToUser:        callbackTypeAlias?
     public var leaveThreadCallbackToUser:           callbackTypeAlias?
     public var spamPvThreadCallbackToUser:          callbackTypeAlias?
     public var getMessageSeenListCallbackToUser:    callbackTypeAlias?
@@ -361,11 +361,11 @@ public class Chat {
     public var unpinThreadCallbackToUser:           callbackTypeAlias?
     public var pinMessageCallbackToUser:            callbackTypeAlias?
     public var unpinMessageCallbackToUser:          callbackTypeAlias?
-    public var getNotSeenDurationCallbackToUser:    callbackTypeAlias?
-    public var getCurrentUserRolesCallbackToUser:   callbackTypeAlias?
-    public var setProfileCallbackToUser:            callbackTypeAlias?
-    public var joinThreadCallbackToUser:            callbackTypeAlias?
-    public var isNameAvailableThreadCallbackToUser: callbackTypeAlias?
+    public var getContactNotSeenDurationCallbackToUser: callbackTypeAlias?
+    public var getCurrentUserRolesCallbackToUser:       callbackTypeAlias?
+    public var updateChatProfileCallbackToUser:         callbackTypeAlias?
+    public var joinPublicThreadCallbackToUser:              callbackTypeAlias?
+    public var isPublicThreadNameAvailableCallbackToUser:   callbackTypeAlias?
     
     
     
