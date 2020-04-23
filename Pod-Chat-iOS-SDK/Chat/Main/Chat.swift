@@ -355,7 +355,6 @@ public class Chat {
     public var getMessageSeenListCallbackToUser:    callbackTypeAlias?
     public var getMessageDeliverListCallbackToUser: callbackTypeAlias?
     public var clearHistoryCallbackToUser:          callbackTypeAlias?
-    public var getAdminListCallbackToUser:          callbackTypeAlias?
     public var setRoleToUserCallbackToUser:         callbackTypeAlias?
     public var removeRoleFromUserCallbackToUser:    callbackTypeAlias?
     public var pinThreadCallbackToUser:             callbackTypeAlias?
