@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class QueueOfWaitFileMessagesResponse {
+open class QueueOfWaitFileMessagesModel {
     
     let content:        String?
     let messageType:    MessageType
@@ -120,7 +120,7 @@ open class QueueOfWaitFileMessagesResponse {
 }
 
 
-open class QueueOfWaitFileMessagesModel: QueueOfWaitFileMessagesResponse {
+open class QueueOfWaitFileMessagesResponse: QueueOfWaitFileMessagesModel {
     
 }
 

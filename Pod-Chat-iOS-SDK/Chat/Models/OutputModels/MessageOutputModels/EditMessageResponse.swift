@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class EditMessageResponse: ResponseModel, ResponseModelDelegates {
+open class EditMessageModel: ResponseModel, ResponseModelDelegates {
     
     public var editedMessage: Message?
     
@@ -45,6 +45,6 @@ open class EditMessageResponse: ResponseModel, ResponseModelDelegates {
 }
 
 
-open class EditMessageModel: EditMessageResponse {
+open class EditMessageResponse: EditMessageModel {
     
 }

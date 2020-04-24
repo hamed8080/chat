@@ -15,6 +15,9 @@ open class SendInteractiveMessageRequest {
     public let metadata:        String
     public let systemMetadata:  String?
     
+    // this variables will be deprecated soon, (use 'textMessage' instead)
+    public let content: String
+    
     public let typeCode:        String?
     public let uniqueId:        String
     
@@ -32,6 +35,9 @@ open class SendInteractiveMessageRequest {
         
         self.typeCode       = typeCode
         self.uniqueId       = uniqueId ?? UUID().uuidString
+        
+        
+        self.content = textMessage
     }
     
     // this initializer will be deprecat soon
@@ -43,6 +49,7 @@ open class SendInteractiveMessageRequest {
                 uniqueId:       String?) {
         
         self.textMessage    = content
+        self.content = content
         self.messageId      = messageId
         self.metadata       = metadata
         self.systemMetadata = systemMetadata

@@ -412,7 +412,6 @@ extension Chat {
         
         log.verbose("AsyncMessageContent of type JSON (to send to socket): \n \(contentToSend)", context: "Chat")
         
-        print("chatMessageVO.chatMessageVOType = \(chatMessageVO.chatMessageVOType)")
         if (chatMessageVO.chatMessageVOType == 0) {
             sendRequestToAsync(type: asyncMessageVO.pushMsgType ?? 3, content: contentToSend)
         } else {

@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class UploadImageResponse: ResponseModel, ResponseModelDelegates {
+open class UploadImageModel: ResponseModel, ResponseModelDelegates {
     
     //    public var localPath:           String = ""
     public let uploadImage:     ImageObject?
@@ -85,7 +85,7 @@ open class UploadImageResponse: ResponseModel, ResponseModelDelegates {
 }
 
 
-open class UploadImageModel: UploadImageResponse {
+open class UploadImageResponse: UploadImageModel {
     
 }
 

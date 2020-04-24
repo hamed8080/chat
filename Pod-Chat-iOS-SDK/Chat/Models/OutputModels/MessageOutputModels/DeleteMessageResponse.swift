@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 
 
-open class DeleteMessageResponse: ResponseModel, ResponseModelDelegates {
+open class DeleteMessageModel: ResponseModel, ResponseModelDelegates {
     
     public let deletedMessageId: Int
     
@@ -37,6 +37,6 @@ open class DeleteMessageResponse: ResponseModel, ResponseModelDelegates {
 }
 
 
-open class DeleteMessageModel: DeleteMessageResponse {
+open class DeleteMessageResponse: DeleteMessageModel {
     
 }

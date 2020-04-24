@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class ProfileResponse: ResponseModel, ResponseModelDelegates {
+open class ProfileModel: ResponseModel, ResponseModelDelegates {
     
     public let profile: Profile
     
@@ -45,7 +45,7 @@ open class ProfileResponse: ResponseModel, ResponseModelDelegates {
 }
 
 
-open class ProfileModel: ProfileResponse {
+open class ProfileResponse: ProfileModel {
     
 }
 

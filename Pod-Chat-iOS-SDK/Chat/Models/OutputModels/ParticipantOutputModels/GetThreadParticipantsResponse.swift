@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 
 
-open class GetThreadParticipantsResponse: ResponseModel, ResponseModelDelegates {
+open class GetThreadParticipantsModel: ResponseModel, ResponseModelDelegates {
     
     public var contentCount:    Int = 0
     public var hasNext:         Bool = false
@@ -85,7 +85,7 @@ open class GetThreadParticipantsResponse: ResponseModel, ResponseModelDelegates 
 }
 
 
-open class GetThreadParticipantsModel: GetThreadParticipantsResponse {
+open class GetThreadParticipantsResponse: GetThreadParticipantsModel {
     
 }
 

@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class MapReverseResponse: ResponseModel, ResponseModelDelegates {
+open class MapReverseModel: ResponseModel, ResponseModelDelegates {
     
     public var result: MapReverse
     
@@ -47,7 +47,7 @@ open class MapReverseResponse: ResponseModel, ResponseModelDelegates {
 }
 
 
-open class MapReverseModel: MapReverseResponse {
+open class MapReverseResponse: MapReverseModel {
     
 }
 

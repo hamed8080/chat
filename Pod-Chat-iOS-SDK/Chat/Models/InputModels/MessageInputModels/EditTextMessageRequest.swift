@@ -15,6 +15,10 @@ open class EditTextMessageRequest {
     public let messageId:   Int
     public let textMessage: String
     
+    // this variables will be deprecated soon, (use 'textMessage' instead)
+    public let content: String
+    public let metadata: String?
+    
     public let typeCode:    String?
     public let uniqueId:    String
     
@@ -30,8 +34,14 @@ open class EditTextMessageRequest {
         self.messageId      = messageId
         self.textMessage    = textMessage
         
+        self.content        = textMessage
+        
         self.typeCode       = typeCode
         self.uniqueId       = uniqueId ?? UUID().uuidString
+        
+        
+        
+        self.metadata = nil
     }
     
     // this initializer will be deprecated later
@@ -47,6 +57,9 @@ open class EditTextMessageRequest {
         self.repliedTo      = repliedTo
         self.messageId      = messageId
         self.textMessage    = content
+        
+        self.content        = content
+        self.metadata = metadata
         
         self.typeCode       = typeCode
         self.uniqueId       = uniqueId ?? UUID().uuidString

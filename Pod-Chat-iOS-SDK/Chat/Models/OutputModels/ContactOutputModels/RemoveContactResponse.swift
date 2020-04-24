@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class RemoveContactResponse: ResponseModel, ResponseModelDelegates {
+open class RemoveContactModel: ResponseModel, ResponseModelDelegates {
     
     public var result:  Bool
     
@@ -44,7 +44,7 @@ open class RemoveContactResponse: ResponseModel, ResponseModelDelegates {
 }
 
 
-open class RemoveContactModel: RemoveContactResponse {
+open class RemoveContactResponse: RemoveContactModel {
     
 }
 

@@ -16,6 +16,9 @@ open class DeleteMessageRequest: RequestModelDelegates {
     public let typeCode:    String?
     public let uniqueId:    String
     
+    // this variable will be deprecated soon, (use 'messageId' instead)
+    public let subjectId: Int
+    
     public init(deleteForAll:   Bool?,
                 messageId:      Int,
                 typeCode:       String?,
@@ -23,6 +26,8 @@ open class DeleteMessageRequest: RequestModelDelegates {
         
         self.deleteForAll   = deleteForAll
         self.messageId      = messageId
+        
+        self.subjectId      = messageId
         
         self.typeCode       = typeCode
         self.uniqueId       = uniqueId ?? UUID().uuidString
@@ -35,6 +40,8 @@ open class DeleteMessageRequest: RequestModelDelegates {
         
         self.deleteForAll   = deleteForAll
         self.messageId      = subjectId
+        
+        self.subjectId      = subjectId
         
         self.typeCode       = typeCode
         self.uniqueId       = uniqueId ?? UUID().uuidString

@@ -18,6 +18,9 @@ open class SendTextMessageRequest {
     public let textMessage:     String
     public let threadId:        Int
     
+    // this variables will be deprecated soon, (use 'textMessage' instead)
+    public let content: String
+    
     public let typeCode: String?
     public let uniqueId: String
     
@@ -38,6 +41,8 @@ open class SendTextMessageRequest {
         self.threadId       = threadId
         self.typeCode       = typeCode
         self.uniqueId       = uniqueId ?? UUID().uuidString
+        
+        self.content = textMessage
     }
     
     // this initializer will be deprecated soon
@@ -51,6 +56,7 @@ open class SendTextMessageRequest {
                 uniqueId:       String?) {
         
         self.textMessage    = content
+        self.content = content
         self.messageType    = messageType
         self.metadata       = metadata
         self.repliedTo      = repliedTo

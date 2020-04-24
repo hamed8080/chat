@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class QueueOfWaitEditMessagesResponse {
+open class QueueOfWaitEditMessagesModel {
     
     let content:        String?
     let messageType:    MessageType
@@ -67,7 +67,7 @@ open class QueueOfWaitEditMessagesResponse {
 }
 
 
-open class QueueOfWaitEditMessagesModel: QueueOfWaitEditMessagesResponse {
+open class QueueOfWaitEditMessagesResponse: QueueOfWaitEditMessagesModel {
     
 }
 

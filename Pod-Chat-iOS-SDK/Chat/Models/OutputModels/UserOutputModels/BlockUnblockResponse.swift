@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class BlockUnblockResponse: ResponseModel, ResponseModelDelegates {
+open class BlockedUserModel: ResponseModel, ResponseModelDelegates {
     
     public var blockedContact:     BlockedUser
     
@@ -43,6 +43,6 @@ open class BlockUnblockResponse: ResponseModel, ResponseModelDelegates {
     
 }
 
-open class BlockedUserModel: BlockUnblockResponse {
+open class BlockUnblockResponse: BlockedUserModel {
     
 }

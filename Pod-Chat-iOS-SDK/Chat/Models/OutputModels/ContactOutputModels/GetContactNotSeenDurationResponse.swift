@@ -9,7 +9,7 @@
 import SwiftyJSON
 
 
-open class GetContactNotSeenDurationResponse: ResponseModel, ResponseModelDelegates {
+open class NotSeenDurationModel: ResponseModel, ResponseModelDelegates {
     
     public let notSeenDuration: [UserLastSeenDuration]
     
@@ -53,7 +53,7 @@ open class GetContactNotSeenDurationResponse: ResponseModel, ResponseModelDelega
 
 
 
-open class NotSeenDurationModel: GetContactNotSeenDurationResponse {
+open class GetContactNotSeenDurationResponse: NotSeenDurationModel {
     
 }
 

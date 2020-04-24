@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class ThreadResponse: ResponseModel, ResponseModelDelegates {
+open class ThreadModel: ResponseModel, ResponseModelDelegates {
     
     public var thread: Conversation?
     
@@ -47,6 +47,6 @@ open class ThreadResponse: ResponseModel, ResponseModelDelegates {
 
 
 
-open class ThreadModel: ThreadResponse {
+open class ThreadResponse: ThreadModel {
     
 }

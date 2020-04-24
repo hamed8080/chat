@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 
 
-open class GetContactsResponse: ResponseModel, ResponseModelDelegates {
+open class GetContactsModel: ResponseModel, ResponseModelDelegates {
     
     public var contentCount:       Int = 0
     public var hasNext:            Bool = false
@@ -86,7 +86,7 @@ open class GetContactsResponse: ResponseModel, ResponseModelDelegates {
 }
 
 
-open class GetContactsModel: GetContactsResponse {
+open class GetContactsResponse: GetContactsModel {
     
 }
 

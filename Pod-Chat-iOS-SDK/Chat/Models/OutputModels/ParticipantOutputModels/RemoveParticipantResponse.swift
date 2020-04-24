@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class RemoveParticipantResponse: ResponseModel, ResponseModelDelegates {
+open class RemoveParticipantModel: ResponseModel, ResponseModelDelegates {
     
     public var contentCount:    Int             = 0
     public var participants:    [Participant]   = []
@@ -63,7 +63,7 @@ open class RemoveParticipantResponse: ResponseModel, ResponseModelDelegates {
 }
 
 
-open class RemoveParticipantModel: RemoveParticipantResponse {
+open class RemoveParticipantResponse: RemoveParticipantModel {
     
 }
 

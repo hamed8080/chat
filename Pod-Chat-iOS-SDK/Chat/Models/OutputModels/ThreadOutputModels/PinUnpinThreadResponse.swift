@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class PinUnpinThreadResponse: ResponseModel, ResponseModelDelegates {
+open class PinUnpinThreadModel: ResponseModel, ResponseModelDelegates {
     
     public let threadId:    Int
     
@@ -36,7 +36,7 @@ open class PinUnpinThreadResponse: ResponseModel, ResponseModelDelegates {
 }
 
 
-open class PinUnpinThreadModel: PinUnpinThreadResponse {
+open class PinUnpinThreadResponse: PinUnpinThreadModel {
     
 }
 

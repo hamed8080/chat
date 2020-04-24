@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class AddParticipantResponse: ResponseModel, ResponseModelDelegates {
+open class AddParticipantModel: ResponseModel, ResponseModelDelegates {
     
     public var thread:  Conversation?
     
@@ -43,6 +43,6 @@ open class AddParticipantResponse: ResponseModel, ResponseModelDelegates {
 }
 
 
-open class AddParticipantModel: AddParticipantResponse {
+open class AddParticipantResponse: AddParticipantModel {
     
 }

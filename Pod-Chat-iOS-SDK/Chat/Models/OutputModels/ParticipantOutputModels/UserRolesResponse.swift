@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class UserRolesResponse: ResponseModel, ResponseModelDelegates {
+open class UserRolesModel: ResponseModel, ResponseModelDelegates {
     
     public var threadId:    Int
     public var userRoles:   [UserRole]  = []
@@ -62,7 +62,7 @@ open class UserRolesResponse: ResponseModel, ResponseModelDelegates {
 }
 
 
-open class UserRolesModel: UserRolesResponse {
+open class UserRolesResponse: UserRolesModel {
     
 }
 

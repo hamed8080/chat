@@ -9,7 +9,7 @@
 import SwiftyJSON
 
 
-open class PinUnpinMessageResponse: ResponseModel, ResponseModelDelegates {
+open class PinUnpinMessageModel: ResponseModel, ResponseModelDelegates {
     
     public let pinUnpinModel:   PinUnpinMessage
     
@@ -36,7 +36,7 @@ open class PinUnpinMessageResponse: ResponseModel, ResponseModelDelegates {
 }
 
 
-open class PinUnpinMessageModel: PinUnpinMessageResponse {
+open class PinUnpinMessageResponse: PinUnpinMessageModel {
     
 }
 

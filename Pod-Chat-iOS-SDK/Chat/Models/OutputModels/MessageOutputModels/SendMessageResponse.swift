@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 
 
-open class SendMessageResponse: ResponseModel, ResponseModelDelegates {
+open class SendMessageModel: ResponseModel, ResponseModelDelegates {
     
     public var isSent:          Bool
     public var isDelivered:     Bool
@@ -98,7 +98,7 @@ open class SendMessageResponse: ResponseModel, ResponseModelDelegates {
 }
 
 
-open class SendMessageModel: SendMessageResponse {
+open class SendMessageResponse: SendMessageModel {
     
 }
 

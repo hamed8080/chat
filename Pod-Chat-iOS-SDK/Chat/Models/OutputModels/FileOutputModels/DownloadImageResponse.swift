@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class DownloadImageResponse: ResponseModel, ResponseModelDelegates {
+open class DownloadImageModel: ResponseModel, ResponseModelDelegates {
     
     public let downloadImage:   ImageObject?
     
@@ -54,7 +54,7 @@ open class DownloadImageResponse: ResponseModel, ResponseModelDelegates {
 }
 
 
-open class DownloadImageModel: DownloadImageResponse {
+open class DownloadImageResponse: DownloadImageModel {
     
 }
 

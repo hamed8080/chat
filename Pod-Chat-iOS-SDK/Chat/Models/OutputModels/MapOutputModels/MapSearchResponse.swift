@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class MapSearchResponse: ResponseModel, ResponseModelDelegates {
+open class MapSearchModel: ResponseModel, ResponseModelDelegates {
     
     public var result:  MapSearch
     
@@ -47,7 +47,7 @@ open class MapSearchResponse: ResponseModel, ResponseModelDelegates {
 }
 
 
-open class MapSearchModel: MapSearchResponse {
+open class MapSearchResponse: MapSearchModel {
     
 }
 

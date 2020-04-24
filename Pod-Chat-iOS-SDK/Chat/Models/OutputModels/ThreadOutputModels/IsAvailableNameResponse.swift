@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class IsAvailableNameResponse: ResponseModel, ResponseModelDelegates {
+open class IsAvailableNameModel: ResponseModel, ResponseModelDelegates {
     
     public let uniqueName:  String?
     
@@ -45,7 +45,7 @@ open class IsAvailableNameResponse: ResponseModel, ResponseModelDelegates {
 }
 
 
-open class IsAvailableNameModel: IsAvailableNameResponse {
+open class IsAvailableNameResponse: IsAvailableNameModel {
     
 }
 

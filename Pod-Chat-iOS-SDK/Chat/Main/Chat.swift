@@ -192,29 +192,57 @@ public class Chat {
     public var uploadRequest:   [(upload: Request, uniqueId: String)]   = []
     public var downloadRequest: [(download: Request, uniqueId: String)] = []
     
-    var isTypingOnThread: Int = 0 {
+//    var repeatTimer: Timer?
+//    var signalMessageInput: SendSignalMessageRequestModel?
+//    var isTypingOnThread: Int = 0 {
+//        didSet {
+//            var count = 0
+//            signalMessageInput = SendSignalMessageRequestModel(signalType:  SignalMessageType.IS_TYPING,
+//                                                               threadId:    isTypingOnThread,
+//                                                               uniqueId:    nil)
+//
+//            repeatTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { (timer) in
+//                if (count > 30) || (self.isTypingOnThread == 0) {
+//                    if timer.isValid {
+//                        timer.invalidate()
+//                    }
+//                } else if let inputModel = self.signalMessageInput {
+//                    self.sendSignalMessage(input: inputModel)
+//                    count += 1
+//                }
+//            }
+//
+////            if (isTypingOnThread == 0) {
+////                repeatTimer?.invalidate()
+////                repeatTimer = nil
+////            } else {
+////                repeatTimer?.fire()
+////            }
+//
+//        }
+//    }
+    
+    var isTypingCount = 0
+    var sendIsTypingMessageTimer: (timer: RepeatingTimer?, onThread: Int)? {
         didSet {
-            var count = 0
-            let signalMessageInput = SendSignalMessageRequestModel(signalType:  SignalMessageType.IS_TYPING,
-                                                                   threadId:    isTypingOnThread,
-                                                                   uniqueId:    nil)
-            
-            let repeatTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { (timer) in
-                if (count > 30) || (self.isTypingOnThread == 0) {
-                    timer.invalidate()
-                } else {
-                    self.sendSignalMessage(input: signalMessageInput)
-                    count += 1
+            isTypingCount = 0
+            if (sendIsTypingMessageTimer != nil) {
+                sendIsTypingMessageTimer?.timer?.eventHandler = {
+                    if (self.isTypingCount < 30) {
+                        self.isTypingCount += 1
+                        DispatchQueue.main.async {
+                            let signalMessageInput = SendSignalMessageRequestModel(signalType:  SignalMessageType.IS_TYPING,
+                                                                                   threadId:    self.sendIsTypingMessageTimer!.onThread,
+                                                                                   uniqueId:    nil)
+                            self.sendSignalMessage(input: signalMessageInput)
+                        }
+                    } else {
+                        self.sendIsTypingMessageTimer!.timer?.suspend()
+                        self.sendIsTypingMessageTimer = nil
+                    }
                 }
+                sendIsTypingMessageTimer?.timer?.resume()
             }
-            
-            if (isTypingOnThread == 0) {
-                repeatTimer.invalidate()
-                stopTyping()
-            } else {
-                repeatTimer.fire()
-            }
-            
         }
     }
     

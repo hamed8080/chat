@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class QueueOfWaitUploadFilesResponse {
+open class QueueOfWaitUploadFilesModel {
     
     let dataToSend:         Data?
     let fileExtension:      String?
@@ -71,7 +71,7 @@ open class QueueOfWaitUploadFilesResponse {
 }
 
 
-open class QueueOfWaitUploadFilesModel: QueueOfWaitUploadFilesResponse {
+open class QueueOfWaitUploadFilesResponse: QueueOfWaitUploadFilesModel {
     
 }
 

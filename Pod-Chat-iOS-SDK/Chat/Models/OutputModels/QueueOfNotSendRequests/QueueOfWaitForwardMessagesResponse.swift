@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class QueueOfWaitForwardMessagesResponse {
+open class QueueOfWaitForwardMessagesModel {
     
 //    let messageIds: [Int]?
     let messageId:  Int?
@@ -62,7 +62,7 @@ open class QueueOfWaitForwardMessagesResponse {
 }
 
 
-open class QueueOfWaitForwardMessagesModel: QueueOfWaitForwardMessagesResponse {
+open class QueueOfWaitForwardMessagesResponse: QueueOfWaitForwardMessagesModel {
     
 }
 

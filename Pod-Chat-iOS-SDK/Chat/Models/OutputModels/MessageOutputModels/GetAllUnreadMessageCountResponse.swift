@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class GetAllUnreadMessageCountResponse: ResponseModel, ResponseModelDelegates {
+open class UnreadMessageCountModel: ResponseModel, ResponseModelDelegates {
     
     public let unreadCount: Int
     
@@ -36,7 +36,7 @@ open class GetAllUnreadMessageCountResponse: ResponseModel, ResponseModelDelegat
 }
 
 
-open class UnreadMessageCountModel: GetAllUnreadMessageCountResponse {
+open class GetAllUnreadMessageCountResponse: UnreadMessageCountModel{
     
 }
 

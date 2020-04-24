@@ -1,5 +1,5 @@
 //
-//  UserInfoResponse.swift
+//  GetUserInfoResponse.swift
 //  Chat
 //
 //  Created by Mahyar Zhiani on 7/23/1397 AP.
@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class GetUserInfoResponse: ResponseModel, ResponseModelDelegates {
+open class UserInfoModel: ResponseModel, ResponseModelDelegates {
     
     public let user:    User
     
@@ -45,7 +45,7 @@ open class GetUserInfoResponse: ResponseModel, ResponseModelDelegates {
 }
 
 
-open class UserInfoModel: GetUserInfoResponse {
+open class GetUserInfoResponse: UserInfoModel {
     
 }
 

@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 
 
-open class ContactResponse: ResponseModel, ResponseModelDelegates {
+open class ContactModel: ResponseModel, ResponseModelDelegates {
     
     public var contentCount:       Int = 0
     public var contacts:           [Contact] = []
@@ -65,6 +65,6 @@ open class ContactResponse: ResponseModel, ResponseModelDelegates {
 }
 
 
-open class ContactModel: ContactResponse {
+open class ContactResponse: ContactModel {
     
 }

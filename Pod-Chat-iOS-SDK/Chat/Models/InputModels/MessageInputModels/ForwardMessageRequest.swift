@@ -13,6 +13,10 @@ open class ForwardMessageRequest {
     public let messageIds:      [Int]
     public let threadId:        Int
     
+    // this variables will be deprecated soon
+    public let metadata:   String?
+    public let repliedTo:  Int?
+    
     public let uniqueIds:       [String]
     public let typeCode: String?
     
@@ -30,6 +34,11 @@ open class ForwardMessageRequest {
         }
         self.uniqueIds = uniqueIdArr
         self.typeCode   = typeCode
+        
+        
+        
+        self.metadata = nil
+        self.repliedTo = nil
     }
     
     // this initializer will be deprecated later
@@ -41,6 +50,9 @@ open class ForwardMessageRequest {
         
         self.messageIds = messageIds
         self.threadId   = threadId
+        
+        self.metadata = metadata
+        self.repliedTo = repliedTo
         
         var uniqueIdArr : [String] = []
         for _ in messageIds {

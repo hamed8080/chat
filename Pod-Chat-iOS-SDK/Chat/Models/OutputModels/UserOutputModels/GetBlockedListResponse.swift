@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class GetBlockedListResponse: ResponseModel, ResponseModelDelegates {
+open class GetBlockedUserListModel: ResponseModel, ResponseModelDelegates {
     
     public var contentCount:       Int = 0
     public var hasNext:            Bool = false
@@ -88,6 +88,6 @@ open class GetBlockedListResponse: ResponseModel, ResponseModelDelegates {
 }
 
 
-open class GetBlockedUserListModel: GetBlockedListResponse {
+open class GetBlockedListResponse: GetBlockedUserListModel {
     
 }

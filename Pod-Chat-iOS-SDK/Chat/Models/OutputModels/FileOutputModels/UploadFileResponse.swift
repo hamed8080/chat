@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class UploadFileResponse: ResponseModel, ResponseModelDelegates {
+open class UploadFileModel: ResponseModel, ResponseModelDelegates {
     
     public let uploadFile:  FileObject?
     
@@ -80,7 +80,7 @@ open class UploadFileResponse: ResponseModel, ResponseModelDelegates {
 }
 
 
-open class UploadFileModel: UploadFileResponse {
+open class UploadFileResponse: UploadFileModel {
     
 }
 

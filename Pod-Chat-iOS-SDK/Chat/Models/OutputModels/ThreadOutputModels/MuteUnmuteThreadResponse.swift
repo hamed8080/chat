@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class MuteUnmuteThreadResponse: ResponseModel, ResponseModelDelegates {
+open class MuteUnmuteThreadModel: ResponseModel, ResponseModelDelegates {
     
     public let threadId:    Int
     
@@ -36,7 +36,7 @@ open class MuteUnmuteThreadResponse: ResponseModel, ResponseModelDelegates {
 }
 
 
-open class MuteUnmuteThreadModel: MuteUnmuteThreadResponse {
+open class MuteUnmuteThreadResponse: MuteUnmuteThreadModel {
     
 }
 

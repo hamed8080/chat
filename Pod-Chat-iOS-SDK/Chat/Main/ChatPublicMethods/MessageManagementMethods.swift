@@ -1380,7 +1380,12 @@ extension Chat {
     ///
     /// - parameter threadId:   (input) the thread id that you are typing. (Int)
     public func startTyping(threadId:   Int) {
-        isTypingOnThread = threadId
+        
+        let t = RepeatingTimer(timeInterval: 2.0)
+        sendIsTypingMessageTimer = (t, threadId)
+        
+//        isTypingOnThread = threadId
+//        repeatTimer?.fire()
     }
     
     
@@ -1395,11 +1400,17 @@ extension Chat {
     /// Outputs:
     /// - It has no output
     public func stopTyping() {
-        if isTypingOnThread != 0 {
-            let systemEventModel = SystemEventModel(type: SystemEventTypes.STOP_TYPING, time: nil, threadId: isTypingOnThread, user: nil)
-            delegate?.systemEvents(model: systemEventModel)
-        }
-        isTypingOnThread = 0
+//        if isTypingOnThread != 0 {
+//            let systemEventModel = SystemEventModel(type: SystemEventTypes.STOP_TYPING, time: nil, threadId: isTypingOnThread, user: nil)
+//            delegate?.systemEvents(model: systemEventModel)
+//        }
+//        isTypingOnThread = 0
+//        repeatTimer?.invalidate()
+//        repeatTimer = nil
+        
+        
+        sendIsTypingMessageTimer = nil
+        
     }
     
     

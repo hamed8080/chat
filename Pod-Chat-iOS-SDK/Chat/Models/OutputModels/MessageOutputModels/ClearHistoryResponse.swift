@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class ClearHistoryResponse: ResponseModel, ResponseModelDelegates {
+open class ClearHistoryModel: ResponseModel, ResponseModelDelegates {
     
     public var threadId:           Int
     
@@ -43,6 +43,6 @@ open class ClearHistoryResponse: ResponseModel, ResponseModelDelegates {
 }
 
 
-open class ClearHistoryModel: ClearHistoryResponse {
+open class ClearHistoryResponse: ClearHistoryModel {
     
 }

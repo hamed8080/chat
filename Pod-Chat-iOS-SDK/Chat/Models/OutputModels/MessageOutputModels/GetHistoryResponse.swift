@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 
 
-open class GetHistoryResponse: ResponseModel, ResponseModelDelegates {
+open class GetHistoryModel: ResponseModel, ResponseModelDelegates {
     
     public var contentCount:    Int = 0
     public var hasNext:         Bool = false
@@ -102,7 +102,7 @@ open class GetHistoryResponse: ResponseModel, ResponseModelDelegates {
 }
 
 
-open class GetHistoryModel: GetHistoryResponse {
+open class GetHistoryResponse: GetHistoryModel {
     
 }
 
