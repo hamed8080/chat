@@ -82,7 +82,7 @@ class Networking {
                                         fileSize: (withParameters?["fileSize"] as? Int64) ?? 0)
                 let fUploadError = FileUploadEventModel(type:           FileUploadEventTypes.UPLOAD_ERROR,
                                                         errorCode:      nil,
-                                                        errorMessage:   "\(CHAT_ERRORS.err6200.rawValue) (Request Error)",
+                                                        errorMessage:   "\(ChatErrors.err6200.stringValue()) (Request Error)",
                                                         errorEvent:     error,
                                                         fileInfo:       fileInfo,
                                                         fileObjectData: dataToSend as? Data,
@@ -170,7 +170,7 @@ class Networking {
                 if let error = myResponse.error {
                     let myJson: JSON = ["hasError": true,
                                         "errorCode": 6200,
-                                        "errorMessage": "\(CHAT_ERRORS.err6200.rawValue) \(error)",
+                                        "errorMessage": "\(ChatErrors.err6200.stringValue()) \(error)",
                                         "errorEvent": error.localizedDescription]
                     completion(myJson)
                 }
@@ -199,7 +199,7 @@ class Networking {
                 if let error = response.error {
                     let myJson: JSON = ["hasError": true,
                                         "errorCode": 6200,
-                                        "errorMessage": "\(CHAT_ERRORS.err6200.rawValue) \(error)",
+                                        "errorMessage": "\(ChatErrors.err6200.stringValue()) \(error)",
                                         "errorEvent": error.localizedDescription]
                     completion(myJson)
                 }

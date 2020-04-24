@@ -39,4 +39,23 @@ public class CMLinkedUser: NSManagedObject {
         return model
     }
     
+    
+    func updateObject(with linkedUser: LinkedUser) {
+        if let coreUserId = linkedUser.coreUserId as NSNumber? {
+            self.coreUserId = coreUserId
+        }
+        if let image = linkedUser.image {
+            self.image = image
+        }
+        if let name = linkedUser.name {
+            self.name = name
+        }
+        if let nickname = linkedUser.nickname {
+            self.nickname = nickname
+        }
+        if let username = linkedUser.username {
+            self.username = username
+        }
+    }
+    
 }

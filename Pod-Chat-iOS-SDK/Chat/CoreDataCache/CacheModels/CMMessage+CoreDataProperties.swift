@@ -2,8 +2,8 @@
 //  CMMessage+CoreDataProperties.swift
 //  FanapPodChatSDK
 //
-//  Created by Mahyar Zhiani on 11/23/1397 AP.
-//  Copyright © 1397 Mahyar Zhiani. All rights reserved.
+//  Created by MahyarZhiani on 1/30/1399 AP.
+//  Copyright © 1399 Mahyar Zhiani. All rights reserved.
 //
 //
 
@@ -12,7 +12,7 @@ import CoreData
 
 
 extension CMMessage {
-    
+
     @nonobjc public class func fetchRequest() -> NSFetchRequest<CMMessage> {
         return NSFetchRequest<CMMessage>(entityName: "CMMessage")
     }
@@ -34,6 +34,7 @@ extension CMMessage {
     @NSManaged public var threadId:         NSNumber?
     @NSManaged public var time:             NSNumber?
     @NSManaged public var uniqueId:         String?
+    
     @NSManaged public var conversation:     CMConversation?
     @NSManaged public var dummyConversationLastMessageVO: CMConversation?
     @NSManaged public var forwardInfo:      CMForwardInfo?

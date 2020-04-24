@@ -15,12 +15,328 @@ import SwiftyJSON
 
 extension Chat {
     
+    // MARK: - Clear History
+    /// ClearHistory:
+    /// clear all messeages inside a specifi thread
+    ///
+    /// By calling this function, a request of type 44 (CLEAR_HISTORY) will send throut Chat-SDK,
+    /// then the responses will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "ClearHistoryRequest" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as responses
+    ///
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (ClearHistoryRequest)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ClearHistoryModel)
+    public func clearHistory(inputModel clearHistoryInput: ClearHistoryRequest,
+                             uniqueId:          @escaping ((String) -> ()),
+                             completion:        @escaping callbackTypeAlias) {
+          
+        log.verbose("Try to request to create clear history with this parameters: \n \(clearHistoryInput)", context: "Chat")
+        uniqueId(clearHistoryInput.uniqueId)
+        clearHistoryCallbackToUser = completion
+          
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.CLEAR_HISTORY.intValue(),
+                                            content:            "\(clearHistoryInput.convertContentToJSON())",
+                                            messageType:        nil,
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          clearHistoryInput.threadId,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           clearHistoryInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           clearHistoryInput.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: true)
+          
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          [(ClearHistoryCallback(parameters: chatMessage), clearHistoryInput.uniqueId)],
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+    }
+         
+      
+    // MARK: - Delete Message
     
-    // MARK: - Get/Clear History
+    /// DeleteMessage:
+    /// delete specific message by getting message id.
+    ///
+    /// By calling this function, a request of type 29 (DELETE_MESSAGE) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "DeleteMessageRequest" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as response:
+    ///
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (DeleteMessageRequest)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! DeleteMessageModel)
+    public func deleteMessage(inputModel deleteMessageInput:   DeleteMessageRequest,
+                              uniqueId:             @escaping ((String) -> ()),
+                              completion:           @escaping callbackTypeAlias) {
+        
+        log.verbose("Try to request to edit message with this parameters: \n \(deleteMessageInput)", context: "Chat")
+        uniqueId(deleteMessageInput.uniqueId)
+        
+        deleteMessageCallbackToUser = completion
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.DELETE_MESSAGE.intValue(),
+                                            content:            "\(deleteMessageInput.convertContentToJSON())",
+                                            messageType:        nil,
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          deleteMessageInput.messageId,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           deleteMessageInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           deleteMessageInput.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: nil)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  4)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          [(DeleteMessageCallbacks(parameters: chatMessage), deleteMessageInput.uniqueId)],
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+    }
+    
+    
+    /// DeleteMultipleMessages:
+    /// delete specific messages by getting their message ids.
+    ///
+    /// By calling this function, a request of type 29 (DELETE_MESSAGE) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "DeleteMultipleMessagesRequest" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as response:
+    ///
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (DeleteMultipleMessagesRequest)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server.        (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! DeleteMessageModel)
+    public func deleteMultipleMessages(inputModel deleteMessageInput:   DeleteMultipleMessagesRequest,
+                                       uniqueIds:            @escaping (([String]) -> ()),
+                                       completion:           @escaping callbackTypeAlias) {
+        
+        log.verbose("Try to request to edit message with this parameters: \n \(deleteMessageInput)", context: "Chat")
+        uniqueIds(deleteMessageInput.uniqueIds)
+        
+        deleteMessageCallbackToUser = completion
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.DELETE_MESSAGE.intValue(),
+                                            content:            "\(deleteMessageInput.convertContentToJSON())",
+                                            messageType:        nil,
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          nil,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           deleteMessageInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           nil,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: nil)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  4)
+        
+        var myCallBacks: [(DeleteMessageCallbacks, String)] = []
+        for uId in deleteMessageInput.uniqueIds {
+            myCallBacks.append((DeleteMessageCallbacks(parameters: chatMessage), uId))
+        }
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          myCallBacks,
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+    }
+    
+    
+    // MARK: - Edit Message
+    /// EditTextMessage:
+    /// edit text of a messae.
+    ///
+    /// By calling this function, a request of type 28 (EDIT_MESSAGE) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "EditTextMessageRequest" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as response:
+    ///
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (EditTextMessageRequest)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! EditMessageModel)
+    public func editMessage(inputModel editMessageInput:   EditTextMessageRequest,
+                            uniqueId:           @escaping ((String) -> ()),
+                            completion:         @escaping callbackTypeAlias) {
+        
+        log.verbose("Try to request to edit message with this parameters: \n \(editMessageInput)", context: "Chat")
+        uniqueId(editMessageInput.uniqueId)
+        
+        stopTyping()
+        editMessageCallbackToUser = completion
+        
+        /**
+         seve this message on the Cache Wait Queue,
+         so if there was an situation that response of the server to this message doesn't come, then we know that our message didn't sent correctly
+         and we will send this Queue to user on the GetHistory request,
+         now user knows which messages didn't send correctly, and can handle them
+         */
+        if enableCache {
+            let messageObjectToSendToQueue = QueueOfWaitEditMessagesModel(content:      editMessageInput.textMessage,
+                                                                          messageType:  editMessageInput.messageType,
+                                                                          metadata:     nil,
+                                                                          repliedTo:    editMessageInput.repliedTo,
+                                                                          messageId:    editMessageInput.messageId,
+                                                                          threadId:     nil,
+                                                                          typeCode:     editMessageInput.typeCode,
+                                                                          uniqueId:     editMessageInput.uniqueId)
+            Chat.cacheDB.saveEditMessageToWaitQueue(editMessage: messageObjectToSendToQueue)
+        }
+        
+//        let messageTxtContent = editMessageInput.content
+//        let messageTxtContent = MakeCustomTextToSend(message: editMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.EDIT_MESSAGE.intValue(),
+                                            content:            MakeCustomTextToSend(message: editMessageInput.textMessage).replaceSpaceEnterWithSpecificCharecters(),
+                                            messageType:        editMessageInput.messageType.returnIntValue(),
+                                            metadata:           nil,
+                                            repliedTo:          editMessageInput.repliedTo,
+                                            systemMetadata:     nil,
+                                            subjectId:          editMessageInput.messageId,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           editMessageInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           editMessageInput.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: nil)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  4)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          [(EditMessageCallbacks(parameters: chatMessage), editMessageInput.uniqueId)],
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+    }
+        
+    
+    // MARK: - Forward Message
+    /// ForwardTextMessage:
+    /// forwar some messages to a thread.
+    ///
+    /// By calling this function, a request of type 22 (FORWARD_MESSAGE) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "ForwardMessageRequest" to this function
+    ///
+    /// Outputs:
+    /// - It has 4 callbacks as response:
+    ///
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (ForwardMessageRequest)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server.        (String)
+    /// - parameter onSent:     (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
+    /// - parameter onDelivere: (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
+    /// - parameter onSeen:     (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+    public func forwardMessage(inputModel forwardMessageInput: ForwardMessageRequest,
+                               uniqueIds:           @escaping (([String]) -> ()),
+                               onSent:              @escaping callbackTypeAlias,
+                               onDelivere:          @escaping callbackTypeAlias,
+                               onSeen:              @escaping callbackTypeAlias) {
+        
+        log.verbose("Try to Forward with this parameters: \n \(forwardMessageInput)", context: "Chat")
+        uniqueIds(forwardMessageInput.uniqueIds)
+        
+        /**
+         seve this message on the Cache Wait Queue,
+         so if there was an situation that response of the server to this message doesn't come, then we know that our message didn't sent correctly
+         and we will send this Queue to user on the GetHistory request,
+         now user knows which messages didn't send correctly, and can handle them
+         */
+        if enableCache {
+            for (index, item) in forwardMessageInput.messageIds.enumerated() {
+                let messageObjectToSendToQueue = QueueOfWaitForwardMessagesModel(//messageIds:    [item],
+                                                                                 messageId:     item,
+                                                                                 metadata:      nil,
+                                                                                 repliedTo:     nil,
+                                                                                 threadId:      forwardMessageInput.threadId,
+                                                                                 typeCode:      forwardMessageInput.typeCode,
+                                                                                 uniqueId:      forwardMessageInput.uniqueIds[index])
+                Chat.cacheDB.saveForwardMessageToWaitQueue(forwardMessage: messageObjectToSendToQueue)
+            }
+        }
+        
+        sendCallbackToUserOnSent = onSent
+        sendCallbackToUserOnDeliver = onDelivere
+        sendCallbackToUserOnSeen = onSeen
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.FORWARD_MESSAGE.intValue(),
+                                            content:            "\(forwardMessageInput.messageIds)",
+                                            messageType:        nil,
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          forwardMessageInput.threadId,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           forwardMessageInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           nil,
+                                            uniqueIds:          forwardMessageInput.uniqueIds,
+                                            isCreateThreadAndSendMessage: nil)
+
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  4)
+
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          nil,
+                                sentCallback:       (SendMessageCallbacks(parameters: chatMessage), forwardMessageInput.uniqueIds),
+                                deliverCallback:    (SendMessageCallbacks(parameters: chatMessage), forwardMessageInput.uniqueIds),
+                                seenCallback:       (SendMessageCallbacks(parameters: chatMessage), forwardMessageInput.uniqueIds))
+    }
+    
+    
+    
+    // MARK: - Get History
     
     /// GetAllUnreadMessagesCount
     ///
-    public func getAllUnreadMessagesCount(inputModel:       GetAllUnreadMessageCountRequestModel,
+    public func getAllUnreadMessagesCount(inputModel:       GetAllUnreadMessageCountRequest,
                                           getCacheResponse: Bool?,
                                           uniqueId:         @escaping ((String) -> ()),
                                           completion:       @escaping callbackTypeAlias,
@@ -30,7 +346,7 @@ extension Chat {
         uniqueId(inputModel.uniqueId)
         getAllUnreadMessagesCountCallbackToUser = completion
       
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.ALL_UNREAD_MESSAGE_COUNT.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.ALL_UNREAD_MESSAGE_COUNT.intValue(),
                                             content:            "\(inputModel.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -73,12 +389,12 @@ extension Chat {
     /// then the responses will come back as callbacks to the client whose calls this function.
     ///
     /// Inputs:
-    /// - you have to send your parameters as "GetHistoryRequestModel" to this function
+    /// - you have to send your parameters as "GetHistoryRequest" to this function
     ///
     /// Outputs:
     /// - It has 9 callbacks as responses
     ///
-    /// - parameter inputModel:             (input) you have to send your parameters insid this model. (GetHistoryRequestModel)
+    /// - parameter inputModel:             (input) you have to send your parameters insid this model. (GetHistoryRequest)
     /// - parameter getCacheResponse:       (input) specify if you want to get cache response for this request (Bool?)
     /// - parameter uniqueId:               (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:             (response) it will returns the response that comes from server to this request. (Any as! GetHistoryModel)
@@ -89,7 +405,7 @@ extension Chat {
     /// - parameter fileMessagesNotSent:    (response) it will returns the File Messages requests that has not been Sent yet! ([QueueOfWaitFileMessagesModel])
     /// - parameter uploadImageNotSent:     (response) it will returns the Upload Image requests that has not been Sent yet! ([QueueOfWaitUploadImagesModel])
     /// - parameter uploadFileNotSent:      (response) it will returns the Upload File requests that has not been Sent yet! ([QueueOfWaitUploadFilesModel])
-    public func getHistory(inputModel getHistoryInput:  GetHistoryRequestModel,
+    public func getHistory(inputModel getHistoryInput:  GetHistoryRequest,
                            getCacheResponse:            Bool?,
                            uniqueId:                @escaping ((String) -> ()),
                            completion:              @escaping callbackTypeAlias,
@@ -105,7 +421,7 @@ extension Chat {
         uniqueId(getHistoryInput.uniqueId)
         getHistoryCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_HISTORY.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.GET_HISTORY.intValue(),
                                             content:            "\(getHistoryInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -177,17 +493,17 @@ extension Chat {
     /// then the responses will come back as callbacks to client whose calls this function.
     ///
     /// Inputs:
-    /// - you have to send your parameters as "GetMentionRequestModel" to this function
+    /// - you have to send your parameters as "GetMentionedRequest" to this function
     ///
     /// Outputs:
     /// - It has 3 callbacks as responses
     ///
-    /// - parameter inputModel:         (input) you have to send your parameters insid this model. (GetMentionRequestModel)
+    /// - parameter inputModel:         (input) you have to send your parameters insid this model. (GetMentionedRequest)
     /// - parameter getCacheResponse:   (input) specify if you want to get cache response for this request (Bool?)
     /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! GetHistoryModel)
     /// - parameter cacheResponse:      (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetHistoryModel)
-    public func getMentionList(inputModel getMentionInput:  GetMentionRequestModel,
+    public func getMentionList(inputModel getMentionInput:  GetMentionedRequest,
                                getCacheResponse:            Bool?,
                                uniqueId:                @escaping ((String) -> ()),
                                completion:              @escaping callbackTypeAlias,
@@ -196,7 +512,7 @@ extension Chat {
         uniqueId(getMentionInput.uniqueId)
         getMentionListCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_HISTORY.rawValue,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.GET_HISTORY.intValue(),
                                             content:            "\(getMentionInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -228,40 +544,150 @@ extension Chat {
         
     }
     
-    /// ClearHistory:
-    /// clear all messeages inside a specifi thread
+    
+    // MARK: - Get Delivery/Seen List
+    
+    /// MessageDeliveryList:
+    /// list of participants that send deliver for some message id.
     ///
-    /// By calling this function, a request of type 44 (CLEAR_HISTORY) will send throut Chat-SDK,
-    /// then the responses will come back as callbacks to client whose calls this function.
+    /// By calling this function, a request of type 32 (GET_MESSAGE_DELEVERY_PARTICIPANTS) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
     ///
     /// Inputs:
-    /// - you have to send your parameters as "ClearHistoryRequestModel" to this function
+    /// - you have to send your parameters as "GetMessageDeliveredSeenListRequest" to this function
     ///
     /// Outputs:
-    /// - It has 2 callbacks as responses
+    /// - It has 2 callbacks as response:
     ///
-    /// - parameter inputModel: (input) you have to send your parameters insid this model. (ClearHistoryRequestModel)
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (GetMessageDeliveredSeenListRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ClearHistoryModel)
-    public func clearHistory(inputModel clearHistoryInput: ClearHistoryRequestModel,
-                             uniqueId:          @escaping ((String) -> ()),
-                             completion:        @escaping callbackTypeAlias) {
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! GetMessageDeliverList)
+    public func messageDeliveryList(inputModel messageDeliveryListInput:   GetMessageDeliveredSeenListRequest,
+                                    uniqueId:                   @escaping ((String) -> ()),
+                                    completion:                 @escaping callbackTypeAlias) {
         
-        log.verbose("Try to request to create clear history with this parameters: \n \(clearHistoryInput)", context: "Chat")
-        uniqueId(clearHistoryInput.uniqueId)
-        clearHistoryCallbackToUser = completion
+        log.verbose("Try to request to get message deliver participants with this parameters: \n \(messageDeliveryListInput)", context: "Chat")
+        uniqueId(messageDeliveryListInput.uniqueId)
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.CLEAR_HISTORY.rawValue,
-                                            content:            "\(clearHistoryInput.convertContentToJSON())",
+        getMessageDeliverListCallbackToUser = completion
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.GET_MESSAGE_DELEVERY_PARTICIPANTS.intValue(),
+                                            content:            "\(messageDeliveryListInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
                                             systemMetadata:     nil,
-                                            subjectId:          clearHistoryInput.threadId,
+                                            subjectId:          nil,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           clearHistoryInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           clearHistoryInput.uniqueId,
+                                            typeCode:           messageDeliveryListInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           messageDeliveryListInput.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: nil)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  4)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          [(GetMessageDeliverList(parameters: chatMessage), messageDeliveryListInput.uniqueId)],
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+    }
+    
+    
+    /// MessageSeenList:
+    /// list of participants that send seen for some message id.
+    ///
+    /// By calling this function, a request of type 33 (GET_MESSAGE_SEEN_PARTICIPANTS) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "GetMessageDeliveredSeenListRequest" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as response:
+    ///
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (GetMessageDeliveredSeenListRequest)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! GetMessageSeenList)
+    public func messageSeenList(inputModel messageSeenListInput:   GetMessageDeliveredSeenListRequest,
+                                uniqueId:               @escaping ((String) -> ()),
+                                completion:             @escaping callbackTypeAlias) {
+        
+        log.verbose("Try to request to get message seen participants with this parameters: \n \(messageSeenListInput)", context: "Chat")
+        uniqueId(messageSeenListInput.uniqueId)
+        
+        getMessageSeenListCallbackToUser = completion
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.GET_MESSAGE_SEEN_PARTICIPANTS.intValue(),
+                                            content:            "\(messageSeenListInput.convertContentToJSON())",
+                                            messageType:        nil,
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          nil,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           messageSeenListInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           messageSeenListInput.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: nil)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  4)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          [(GetMessageSeenList(parameters: chatMessage), messageSeenListInput.uniqueId)],
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+    }
+    
+    
+    
+    // MARK: - Pin/Unpin Message
+    
+    /// PinMessage:
+    /// pin message on a specific thread
+    ///
+    /// by calling this method, message of type "PIN_MESSAGE" is sends to the sserver
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "PinUnpinMessageRequest" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as response:
+    ///
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (PinUnpinMessageRequest)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! PinUnpinMessageModel)
+    public func pinMessage(inputModel:  PinUnpinMessageRequest,
+                           uniqueId:    @escaping (String) -> (),
+                           completion:  @escaping callbackTypeAlias) {
+            
+        log.verbose("Try to request to pin message with this parameters: \n \(inputModel)", context: "Chat")
+        uniqueId(inputModel.uniqueId)
+        
+        pinMessageCallbackToUser = completion
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.PIN_MESSAGE.intValue(),
+                                            content:            "\(inputModel.convertContentToJSON())",
+                                            messageType:        nil,
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          inputModel.messageId,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           inputModel.typeCode ?? generalTypeCode,
+                                            uniqueId:           inputModel.uniqueId,
                                             uniqueIds:          nil,
                                             isCreateThreadAndSendMessage: true)
         
@@ -270,234 +696,67 @@ extension Chat {
                                               peerName:     serverName,
                                               priority:     msgPriority,
                                               pushMsgType:  nil)
-  
+        
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          [(ClearHistoryCallback(parameters: chatMessage), clearHistoryInput.uniqueId)],
+                                callbacks:          [(PinMessageCallbacks(), inputModel.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
     }
-       
     
-    // MARK: - Send/Edit/Reply/Forward Text Message
     
-    /// SendTextMessage:
-    /// send a text to somebody.
+    /// UnpinMessage:
+    /// unpin the message from a specific thread
     ///
-    /// By calling this function, a request of type 2 (MESSAGE) will send throut Chat-SDK,
-    /// then the response will come back as callbacks to client whose calls this function.
+    /// by calling this method, message of type "UNPIN_MESSAGE" is sends to the sserver
     ///
     /// Inputs:
-    /// - you have to send your parameters as "SendTextMessageRequestModel" to this function
-    ///
-    /// Outputs:
-    /// - It has 4 callbacks as response:
-    ///
-    /// - parameter inputModel: (input) you have to send your parameters insid this model. (SendTextMessageRequestModel)
-    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter onSent:     (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
-    /// - parameter onDelivere: (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
-    /// - parameter onSeen:     (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
-    public func sendTextMessage(inputModel sendTextMessageInput:    SendTextMessageRequestModel,
-                                uniqueId:               @escaping ((String) -> ()),
-                                onSent:                 @escaping callbackTypeAlias,
-                                onDelivere:             @escaping callbackTypeAlias,
-                                onSeen:                 @escaping callbackTypeAlias) {
-        
-        log.verbose("Try to send Message with this parameters: \n \(sendTextMessageInput)", context: "Chat")
-        uniqueId(sendTextMessageInput.uniqueId)
-        
-        stopTyping()
-        sendCallbackToUserOnSent = onSent
-        sendCallbackToUserOnDeliver = onDelivere
-        sendCallbackToUserOnSeen = onSeen
-        
-        /**
-         seve this message on the Cache Wait Queue,
-         so if there was an situation that response of the server to this message doesn't come,
-         then we know that our message didn't sent correctly
-         and we will send this Queue to user on the GetHistory request,
-         now user knows which messages didn't send correctly, and can handle them
-         */
-        if enableCache {
-            let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(content:          sendTextMessageInput.content,
-                                                                          messageType:      sendTextMessageInput.messageType,
-                                                                          metadata:         (sendTextMessageInput.metadata != nil) ? "\(sendTextMessageInput.metadata!)" : nil,
-                                                                          repliedTo:        sendTextMessageInput.repliedTo,
-                                                                          systemMetadata:   (sendTextMessageInput.systemMetadata != nil) ? "\(sendTextMessageInput.systemMetadata!)" : nil,
-                                                                          threadId:         sendTextMessageInput.threadId,
-                                                                          typeCode:         sendTextMessageInput.typeCode,
-                                                                          uniqueId:         sendTextMessageInput.uniqueId)
-            Chat.cacheDB.saveTextMessageToWaitQueue(textMessage: messageObjectToSendToQueue)
-        }
-        
-//        let messageTxtContent = sendTextMessageInput.content
-        let messageTxtContent = MakeCustomTextToSend(message: sendTextMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
-        
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.MESSAGE.rawValue,
-                                            content:            messageTxtContent,
-                                            messageType:        sendTextMessageInput.messageType.returnIntValue(),
-                                            metadata:           (sendTextMessageInput.metadata != nil) ? "\(sendTextMessageInput.metadata!)" : nil,
-                                            repliedTo:          sendTextMessageInput.repliedTo,
-                                            systemMetadata:     (sendTextMessageInput.systemMetadata != nil) ? "\(sendTextMessageInput.systemMetadata!)" : nil,
-                                            subjectId:          sendTextMessageInput.threadId,
-                                            token:              token,
-                                            tokenIssuer:        nil,
-                                            typeCode:           sendTextMessageInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           sendTextMessageInput.uniqueId,
-                                            uniqueIds:          nil,
-                                            isCreateThreadAndSendMessage: nil)
-        
-        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
-                                              msgTTL:       msgTTL,
-                                              peerName:     serverName,
-                                              priority:     msgPriority,
-                                              pushMsgType:  4)
-        
-        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          nil,
-                                sentCallback:       (SendMessageCallbacks(parameters: chatMessage), [sendTextMessageInput.uniqueId]),
-                                deliverCallback:    (SendMessageCallbacks(parameters: chatMessage), [sendTextMessageInput.uniqueId]),
-                                seenCallback:       (SendMessageCallbacks(parameters: chatMessage), [sendTextMessageInput.uniqueId]))
-    }
-    
-    
-    /// SendInteractiveMessage:
-    /// send a botMessage.
-    ///
-    /// By calling this function, a request of type 40 (BOT_MESSAGE) will send throut Chat-SDK,
-    /// then the response will come back as callbacks to client whose calls this function.
-    ///
-    /// Inputs:
-    /// - you have to send your parameters as "SendInteractiveMessageRequestModel" to this function
-    ///
-    /// Outputs:
-    /// - It has 4 callbacks as response:
-    ///
-    /// - parameter inputModel: (input) you have to send your parameters insid this model. (SendInteractiveMessageRequestModel)
-    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter onSent:     (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
-    /// - parameter onDelivere: (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
-    /// - parameter onSeen:     (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
-    public func sendInteractiveMessage(inputModel sendInterActiveMessageInput:  SendInteractiveMessageRequestModel,
-                                       uniqueId:    @escaping ((String) -> ()),
-                                       onSent:      @escaping callbackTypeAlias,
-                                       onDelivered: @escaping callbackTypeAlias,
-                                       onSeen:      @escaping callbackTypeAlias) {
-        
-        log.verbose("Try to send BotMessage with this parameters: \n \(sendInterActiveMessageInput)", context: "Chat")
-        uniqueId(sendInterActiveMessageInput.uniqueId)
-        
-        stopTyping()
-        sendCallbackToUserOnSent = onSent
-        sendCallbackToUserOnDeliver = onDelivered
-        sendCallbackToUserOnSeen = onSeen
-        
-//        let messageTxtContent = sendInterActiveMessageInput.content
-        let messageTxtContent = MakeCustomTextToSend(message: sendInterActiveMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
-        
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.BOT_MESSAGE.rawValue,
-                                            content:            messageTxtContent,
-                                            messageType:        nil,
-                                            metadata:           "\(sendInterActiveMessageInput.metadata)",
-                                            repliedTo:          nil,
-                                            systemMetadata:     (sendInterActiveMessageInput.systemMetadata != nil) ? "\(sendInterActiveMessageInput.systemMetadata!)" : nil,
-                                            subjectId:          sendInterActiveMessageInput.messageId,
-                                            token:              token,
-                                            tokenIssuer:        nil,
-                                            typeCode:           sendInterActiveMessageInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           sendInterActiveMessageInput.uniqueId,
-                                            uniqueIds:          nil,
-                                            isCreateThreadAndSendMessage: nil)
-        
-        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
-                                              msgTTL:       msgTTL,
-                                              peerName:     serverName,
-                                              priority:     msgPriority,
-                                              pushMsgType:  4)
-        
-        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          nil,
-                                sentCallback:       (SendMessageCallbacks(parameters: chatMessage), [sendInterActiveMessageInput.uniqueId]),
-                                deliverCallback:    (SendMessageCallbacks(parameters: chatMessage), [sendInterActiveMessageInput.uniqueId]),
-                                seenCallback:       (SendMessageCallbacks(parameters: chatMessage), [sendInterActiveMessageInput.uniqueId]))
-    }
-    
-    
-    /// EditTextMessage:
-    /// edit text of a messae.
-    ///
-    /// By calling this function, a request of type 28 (EDIT_MESSAGE) will send throut Chat-SDK,
-    /// then the response will come back as callbacks to client whose calls this function.
-    ///
-    /// Inputs:
-    /// - you have to send your parameters as "EditTextMessageRequestModel" to this function
+    /// - you have to send your parameters as "PinUnpinMessageRequest" to this function
     ///
     /// Outputs:
     /// - It has 2 callbacks as response:
     ///
-    /// - parameter inputModel: (input) you have to send your parameters insid this model. (EditTextMessageRequestModel)
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (PinUnpinMessageRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! EditMessageModel)
-    public func editMessage(inputModel editMessageInput:   EditTextMessageRequestModel,
-                            uniqueId:           @escaping ((String) -> ()),
-                            completion:         @escaping callbackTypeAlias) {
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! PinUnpinMessageModel)
+    public func unpinMessage(inputModel:  PinUnpinMessageRequest,
+                             uniqueId:    @escaping (String) -> (),
+                             completion:  @escaping callbackTypeAlias) {
+            
+        log.verbose("Try to request to unpin message with this parameters: \n \(inputModel)", context: "Chat")
+        uniqueId(inputModel.uniqueId)
         
-        log.verbose("Try to request to edit message with this parameters: \n \(editMessageInput)", context: "Chat")
-        uniqueId(editMessageInput.uniqueId)
+        unpinMessageCallbackToUser = completion
         
-        stopTyping()
-        editMessageCallbackToUser = completion
-        
-        /**
-         seve this message on the Cache Wait Queue,
-         so if there was an situation that response of the server to this message doesn't come, then we know that our message didn't sent correctly
-         and we will send this Queue to user on the GetHistory request,
-         now user knows which messages didn't send correctly, and can handle them
-         */
-        if enableCache {
-            let messageObjectToSendToQueue = QueueOfWaitEditMessagesModel(content:      editMessageInput.content,
-                                                                          messageType:  editMessageInput.messageType,
-                                                                          metadata:     (editMessageInput.metadata != nil) ? "\(editMessageInput.metadata!)" : nil,
-                                                                          repliedTo:    editMessageInput.repliedTo,
-                                                                          messageId:    editMessageInput.messageId,
-                                                                          threadId:     nil,
-                                                                          typeCode:     editMessageInput.typeCode,
-                                                                          uniqueId:     editMessageInput.uniqueId)
-            Chat.cacheDB.saveEditMessageToWaitQueue(editMessage: messageObjectToSendToQueue)
-        }
-        
-//        let messageTxtContent = editMessageInput.content
-        let messageTxtContent = MakeCustomTextToSend(message: editMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
-        
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.EDIT_MESSAGE.rawValue,
-                                            content:            messageTxtContent,
-                                            messageType:        editMessageInput.messageType.returnIntValue(),
-                                            metadata:           (editMessageInput.metadata != nil) ? (editMessageInput.metadata!) : nil,
-                                            repliedTo:          editMessageInput.repliedTo,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.UNPIN_MESSAGE.intValue(),
+                                            content:            "\(inputModel.convertContentToJSON())",
+                                            messageType:        nil,
+                                            metadata:           nil,
+                                            repliedTo:          nil,
                                             systemMetadata:     nil,
-                                            subjectId:          editMessageInput.messageId,
+                                            subjectId:          inputModel.messageId,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           editMessageInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           editMessageInput.uniqueId,
+                                            typeCode:           inputModel.typeCode ?? generalTypeCode,
+                                            uniqueId:           inputModel.uniqueId,
                                             uniqueIds:          nil,
-                                            isCreateThreadAndSendMessage: nil)
+                                            isCreateThreadAndSendMessage: true)
         
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
                                               msgTTL:       msgTTL,
                                               peerName:     serverName,
                                               priority:     msgPriority,
-                                              pushMsgType:  4)
+                                              pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          [(EditMessageCallbacks(parameters: chatMessage), editMessageInput.uniqueId)],
+                                callbacks:          [(UnpinMessageCallbacks(), inputModel.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
     }
-     
     
+    
+    // MARK: - Reply Text Message
     /// ReplyTextMessage:
     /// send reply message to a messsage.
     ///
@@ -505,17 +764,17 @@ extension Chat {
     /// then the response will come back as callbacks to client whose calls this function.
     ///
     /// Inputs:
-    /// - you have to send your parameters as "ReplyTextMessageRequestModel" to this function
+    /// - you have to send your parameters as "ReplyTextMessageRequest" to this function
     ///
     /// Outputs:
     /// - It has 4 callbacks as response:
     ///
-    /// - parameter inputModel: (input) you have to send your parameters insid this model. (ReplyTextMessageRequestModel)
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (ReplyTextMessageRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter onSent:     (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
     /// - parameter onDelivere: (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
     /// - parameter onSeen:     (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
-    public func replyMessage(inputModel replyMessageInput: ReplyTextMessageRequestModel,
+    public func replyMessage(inputModel replyMessageInput: ReplyTextMessageRequest,
                              uniqueId:          @escaping ((String) -> ()),
                              onSent:            @escaping callbackTypeAlias,
                              onDelivere:        @escaping callbackTypeAlias,
@@ -536,27 +795,27 @@ extension Chat {
          now user knows which messages didn't send correctly, and can handle them
          */
         if enableCache {
-            let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(content:          replyMessageInput.content,
+            let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(content:          replyMessageInput.textMessage,
                                                                           messageType:      replyMessageInput.messageType,
                                                                           metadata:         (replyMessageInput.metadata != nil) ? "\(replyMessageInput.metadata!)" : nil,
                                                                           repliedTo:        replyMessageInput.repliedTo,
                                                                           systemMetadata:   nil,
-                                                                          threadId:         replyMessageInput.subjectId,
+                                                                          threadId:         replyMessageInput.threadId,
                                                                           typeCode:         replyMessageInput.typeCode,
                                                                           uniqueId:         replyMessageInput.uniqueId)
             Chat.cacheDB.saveTextMessageToWaitQueue(textMessage: messageObjectToSendToQueue)
         }
         
 //        let messageTxtContent = replyMessageInput.content
-        let messageTxtContent = MakeCustomTextToSend(message: replyMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
+//        let messageTxtContent = MakeCustomTextToSend(message: replyMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.MESSAGE.rawValue,
-                                            content:            messageTxtContent,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.MESSAGE.intValue(),
+                                            content:            MakeCustomTextToSend(message: replyMessageInput.textMessage).replaceSpaceEnterWithSpecificCharecters(),
                                             messageType:        replyMessageInput.messageType.returnIntValue(),
-                                            metadata:           (replyMessageInput.metadata != nil) ? "\(replyMessageInput.metadata!)" : nil,
+                                            metadata:           (replyMessageInput.metadata != nil) ? "\(MakeCustomTextToSend(message: replyMessageInput.metadata!).replaceSpaceEnterWithSpecificCharecters())" : nil,
                                             repliedTo:          replyMessageInput.repliedTo,
                                             systemMetadata:     nil,
-                                            subjectId:          replyMessageInput.subjectId,
+                                            subjectId:          replyMessageInput.threadId,
                                             token:              token,
                                             tokenIssuer:        nil,
                                             typeCode:           replyMessageInput.typeCode ?? generalTypeCode,
@@ -576,82 +835,252 @@ extension Chat {
                                 deliverCallback:    (SendMessageCallbacks(parameters: chatMessage), [replyMessageInput.uniqueId]),
                                 seenCallback:       (SendMessageCallbacks(parameters: chatMessage), [replyMessageInput.uniqueId]))
     }
+        
     
+    // MARK: - Send Deliver/Seen Message
     
-    /// ForwardTextMessage:
-    /// forwar some messages to a thread.
+    /// Deliver:
+    /// send deliver for some message.
     ///
-    /// By calling this function, a request of type 22 (FORWARD_MESSAGE) will send throut Chat-SDK,
+    /// By calling this function, a request of type 4 (DELIVERY) will send throut Chat-SDK,
     /// then the response will come back as callbacks to client whose calls this function.
     ///
     /// Inputs:
-    /// - you have to send your parameters as "ForwardMessageRequestModel" to this function
+    /// - you have to send your parameters as "SendDeliverSeenRequest" to this function
+    ///
+    /// Outputs:
+    /// - this method does not have any output
+    ///
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (SendDeliverSeenRequest)
+    public func deliver(inputModel deliverInput: SendDeliverSeenRequest) {
+        
+        log.verbose("Try to send deliver message for a message id with this parameters: \n messageId = \(deliverInput.messageId) , ownerId = \(deliverInput.ownerId)", context: "Chat")
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.DELIVERY.intValue(),
+                                            content:            "\(deliverInput.messageId)",
+                                            messageType:        nil,
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          nil,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           deliverInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           nil,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: nil)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  3)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          nil,
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+    }
+    
+    
+    /// Seen:
+    /// send seen for some message.
+    ///
+    /// By calling this function, a request of type 5 (SEEN) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "SendDeliverSeenRequest" to this function
+    ///
+    /// Outputs:
+    /// - this method does not have any output
+    ///
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (SendDeliverSeenRequest)
+    public func seen(inputModel seenInput: SendDeliverSeenRequest) {
+        
+        log.verbose("Try to send seen message for a message id with this parameters: \n messageId = \(seenInput.messageId) , ownerId = \(seenInput.ownerId)", context: "Chat")
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.SEEN.intValue(),
+                                            content:            "\(seenInput.messageId)",
+                                            messageType:        nil,
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          nil,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           seenInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           nil,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: nil)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  3)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          nil,
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+    }
+    
+    
+    
+    // MARK: - Send Interactive Message
+    /// SendInteractiveMessage:
+    /// send a botMessage.
+    ///
+    /// By calling this function, a request of type 40 (BOT_MESSAGE) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "SendInteractiveMessageRequest" to this function
     ///
     /// Outputs:
     /// - It has 4 callbacks as response:
     ///
-    /// - parameter inputModel: (input) you have to send your parameters insid this model. (ForwardMessageRequestModel)
-    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server.        (String)
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (SendInteractiveMessageRequest)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter onSent:     (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
     /// - parameter onDelivere: (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
     /// - parameter onSeen:     (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
-    public func forwardMessage(inputModel forwardMessageInput: ForwardMessageRequestModel,
-                               uniqueIds:           @escaping (([String]) -> ()),
-                               onSent:              @escaping callbackTypeAlias,
-                               onDelivere:          @escaping callbackTypeAlias,
-                               onSeen:              @escaping callbackTypeAlias) {
+    public func sendInteractiveMessage(inputModel sendInterActiveMessageInput:  SendInteractiveMessageRequest,
+                                       uniqueId:    @escaping ((String) -> ()),
+                                       onSent:      @escaping callbackTypeAlias,
+                                       onDelivered: @escaping callbackTypeAlias,
+                                       onSeen:      @escaping callbackTypeAlias) {
         
-        log.verbose("Try to Forward with this parameters: \n \(forwardMessageInput)", context: "Chat")
-        uniqueIds(forwardMessageInput.uniqueIds)
+        log.verbose("Try to send BotMessage with this parameters: \n \(sendInterActiveMessageInput)", context: "Chat")
+        uniqueId(sendInterActiveMessageInput.uniqueId)
         
-        /**
-         seve this message on the Cache Wait Queue,
-         so if there was an situation that response of the server to this message doesn't come, then we know that our message didn't sent correctly
-         and we will send this Queue to user on the GetHistory request,
-         now user knows which messages didn't send correctly, and can handle them
-         */
-        if enableCache {
-            for (index, item) in forwardMessageInput.messageIds.enumerated() {
-                let messageObjectToSendToQueue = QueueOfWaitForwardMessagesModel(//messageIds:    [item],
-                                                                                 messageId:     item,
-                                                                                 metadata:      (forwardMessageInput.metadata != nil) ? (forwardMessageInput.metadata!) : nil,
-                                                                                 repliedTo:     forwardMessageInput.repliedTo,
-                                                                                 threadId:      forwardMessageInput.threadId,
-                                                                                 typeCode:      forwardMessageInput.typeCode,
-                                                                                 uniqueId:      forwardMessageInput.uniqueIds[index])
-                Chat.cacheDB.saveForwardMessageToWaitQueue(forwardMessage: messageObjectToSendToQueue)
-            }
-        }
-        
+        stopTyping()
         sendCallbackToUserOnSent = onSent
-        sendCallbackToUserOnDeliver = onDelivere
+        sendCallbackToUserOnDeliver = onDelivered
         sendCallbackToUserOnSeen = onSeen
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.FORWARD_MESSAGE.rawValue,
-                                            content:            "\(forwardMessageInput.messageIds)",
+//        let messageTxtContent = sendInterActiveMessageInput.content
+//        let messageTxtContent = MakeCustomTextToSend(message: sendInterActiveMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.BOT_MESSAGE.intValue(),
+                                            content:            MakeCustomTextToSend(message: sendInterActiveMessageInput.textMessage).replaceSpaceEnterWithSpecificCharecters(),
                                             messageType:        nil,
-                                            metadata:           (forwardMessageInput.metadata != nil) ? "\(forwardMessageInput.metadata!)" : nil,
-                                            repliedTo:          forwardMessageInput.repliedTo,
-                                            systemMetadata:     nil,
-                                            subjectId:          forwardMessageInput.threadId,
+                                            metadata:           "\(MakeCustomTextToSend(message: sendInterActiveMessageInput.metadata).replaceSpaceEnterWithSpecificCharecters())",
+                                            repliedTo:          nil,
+                                            systemMetadata:     (sendInterActiveMessageInput.systemMetadata != nil) ? "\(MakeCustomTextToSend(message: sendInterActiveMessageInput.systemMetadata!).replaceSpaceEnterWithSpecificCharecters())" : nil,
+                                            subjectId:          sendInterActiveMessageInput.messageId,
                                             token:              token,
                                             tokenIssuer:        nil,
-                                            typeCode:           forwardMessageInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           nil,
-                                            uniqueIds:          forwardMessageInput.uniqueIds,
+                                            typeCode:           sendInterActiveMessageInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           sendInterActiveMessageInput.uniqueId,
+                                            uniqueIds:          nil,
                                             isCreateThreadAndSendMessage: nil)
-
+        
         let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
                                               msgTTL:       msgTTL,
                                               peerName:     serverName,
                                               priority:     msgPriority,
                                               pushMsgType:  4)
-
+        
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
                                 callbacks:          nil,
-                                sentCallback:       (SendMessageCallbacks(parameters: chatMessage), forwardMessageInput.uniqueIds),
-                                deliverCallback:    (SendMessageCallbacks(parameters: chatMessage), forwardMessageInput.uniqueIds),
-                                seenCallback:       (SendMessageCallbacks(parameters: chatMessage), forwardMessageInput.uniqueIds))
+                                sentCallback:       (SendMessageCallbacks(parameters: chatMessage), [sendInterActiveMessageInput.uniqueId]),
+                                deliverCallback:    (SendMessageCallbacks(parameters: chatMessage), [sendInterActiveMessageInput.uniqueId]),
+                                seenCallback:       (SendMessageCallbacks(parameters: chatMessage), [sendInterActiveMessageInput.uniqueId]))
+    }
+        
+        
+    // MARK: - Send Location Message
+    
+    /// SendLocationMessage:
+    /// send user location StaticImage by getting user location detail
+    ///
+    /// by calling this function, a request will send to Map ServiceCall to get user StaticImage based on its location,
+    /// then send a FileMessage with this StaticImage
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "SendLocationMessageRequest" to this function
+    ///
+    /// Outputs:
+    /// - It has 6 callbacks as response:
+    ///
+    /// - parameter inputModel:         (input) you have to send your parameters insid this model. (SendLocationMessageRequest)
+    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter downloadProgress:   (response)  it will returns the progress of the downloading image from MapServices by a value between 0 and 1. (Float)
+    /// - parameter uploadProgress:     (response)  it will returns the progress of the uploading image by a value between 0 and 1. (Float)
+    /// - parameter onSent:             (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
+    /// - parameter onDelivere:         (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
+    /// - parameter onSeen:             (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+    public func sendLocationMessage(inputModel sendLocationMessageRequest: SendLocationMessageRequest,
+                                    downloadProgress:           @escaping ((Float) -> ()),
+                                    uploadUniqueId:             @escaping ((String) -> ()),
+                                    uploadProgress:             @escaping ((Float) -> ()),
+                                    messageUniqueId:            @escaping ((String) -> ()),
+                                    onSent:                     @escaping callbackTypeAlias,
+                                    onDelivere:                 @escaping callbackTypeAlias,
+                                    onSeen:                     @escaping callbackTypeAlias) {
+        
+        let mapStaticImageInput = MapStaticImageRequestModel(centerLat: sendLocationMessageRequest.mapCenter.lat,
+                                                             centerLng: sendLocationMessageRequest.mapCenter.lng,
+                                                             height:    sendLocationMessageRequest.mapHeight,
+                                                             type:      sendLocationMessageRequest.mapType,
+                                                             width:     sendLocationMessageRequest.mapWidth,
+                                                             zoom:      sendLocationMessageRequest.mapZoom)
+        
+        mapStaticImage(inputModel: mapStaticImageInput,
+                       uniqueId: { _ in },
+                       progress: { (myProgress) in
+            downloadProgress(myProgress)
+        }) { (imageData) in
+            
+            let uploadInput = UploadRequestModel(dataToSend:        (imageData as! Data),
+                                                 fileExtension:     nil,
+                                                 fileName:          sendLocationMessageRequest.mapImageName,
+                                                 mimeType:          "image/png",
+                                                 originalFileName:  nil,
+                                                 threadId:          sendLocationMessageRequest.threadId,
+                                                 xC:                nil,
+                                                 yC:                nil,
+                                                 hC:                nil,
+                                                 wC:                nil,
+                                                 typeCode:          sendLocationMessageRequest.typeCode ?? self.generalTypeCode,
+                                                 uniqueId:          sendLocationMessageRequest.uniqueId)
+            
+            let messageInput = SendTextMessageRequestModel(content:         sendLocationMessageRequest.textMessage ?? "",
+                                                           messageType:     MessageType.picture,
+                                                           metadata:        nil,
+                                                           repliedTo:       sendLocationMessageRequest.repliedTo,
+                                                           systemMetadata:  nil,
+                                                           threadId:        sendLocationMessageRequest.threadId,
+                                                           typeCode:        sendLocationMessageRequest.typeCode ?? self.generalTypeCode,
+                                                           uniqueId:        sendLocationMessageRequest.uniqueId)
+            
+            let fileMessageInput = SendFileMessageRequestModel(messageInput:    messageInput,
+                                                               uploadInput:     uploadInput)
+            
+            sendTM(params: fileMessageInput)
+        }
+        
+        func sendTM(params: SendFileMessageRequestModel) {
+            
+            sendFileMessage(inputModel: params, uploadUniqueId: { (uploadImageUniqueId) in
+                uploadUniqueId(uploadImageUniqueId)
+            }, uploadProgress: { (myProgress) in
+                uploadProgress(myProgress)
+            }, messageUniqueId: { (requestUniqueId) in
+                messageUniqueId(requestUniqueId)
+            }, onSent: { (sent) in
+                onSent(sent)
+            }, onDelivered: { (deliver) in
+                onDelivere(deliver)
+            }) { (seen) in
+                onSeen(seen)
+            }
+        }
+        
     }
     
     
@@ -664,18 +1093,18 @@ extension Chat {
     /// then the response will come back as callbacks to client whose calls this function.
     ///
     /// Inputs:
-    /// - you have to send your parameters as "SendFileMessageRequestModel" to this function
+    /// - you have to send your parameters as "SendReplyFileMessageRequest" to this function
     ///
     /// Outputs:
     /// - It has 5 callbacks as response:
     ///
-    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (SendFileMessageRequestModel)
+    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (SendReplyFileMessageRequest)
     /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter uploadProgress: (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
     /// - parameter onSent:         (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
     /// - parameter onDelivere:     (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
     /// - parameter onSeen:         (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
-    public func sendFileMessage(inputModel sendFileMessageInput:   SendFileMessageRequestModel,
+    public func sendFileMessage(inputModel sendFileMessageInput:   SendReplyFileMessageRequest,
                                 uploadUniqueId:         @escaping ((String) -> ()),
                                 uploadProgress:         @escaping ((Float) -> ()),
                                 messageUniqueId:        @escaping ((String) -> ()),
@@ -695,7 +1124,7 @@ extension Chat {
          */
         if enableCache {
             if let file = sendFileMessageInput.uploadInput as? UploadFileRequestModel {
-                let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      sendFileMessageInput.messageInput.content,
+                let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      sendFileMessageInput.messageInput.textMessage,
                                                                               messageType:  sendFileMessageInput.messageInput.messageType,
                                                                               fileName:     file.fileName,
                                                                               metadata:     (sendFileMessageInput.messageInput.metadata != nil) ? "\(sendFileMessageInput.messageInput.metadata!)" : nil,
@@ -713,7 +1142,7 @@ extension Chat {
                 Chat.cacheDB.saveFileMessageToWaitQueue(fileMessage: messageObjectToSendToQueue)
                 
             } else if let image = sendFileMessageInput.uploadInput as? UploadImageRequestModel {
-                let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      sendFileMessageInput.messageInput.content,
+                let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      sendFileMessageInput.messageInput.textMessage,
                                                                               messageType:  sendFileMessageInput.messageInput.messageType,
                                                                               fileName:     nil,
                                                                               metadata:     (sendFileMessageInput.messageInput.metadata != nil) ? "\(sendFileMessageInput.messageInput.metadata!)" : nil,
@@ -787,8 +1216,8 @@ extension Chat {
         
         // this will call when all data were uploaded and it will sends the textMessage
         func sendMessage(withMetadata: JSON) {
-            let sendMessageParamModel = SendTextMessageRequestModel(content:        sendFileMessageInput.messageInput.content,
-                                                                    messageType:    MESSAGE_TYPE.file,
+            let sendMessageParamModel = SendTextMessageRequestModel(content:        sendFileMessageInput.messageInput.textMessage,
+                                                                    messageType:    MessageType.file,
                                                                     metadata:       "\(withMetadata)",
                                                                     repliedTo:      sendFileMessageInput.messageInput.repliedTo,
                                                                     systemMetadata: sendFileMessageInput.messageInput.metadata,
@@ -814,18 +1243,18 @@ extension Chat {
     /// then the response will come back as callbacks to client whose calls this function.
     ///
     /// Inputs:
-    /// - you have to send your parameters as "SendFileMessageRequestModel" to this function
+    /// - you have to send your parameters as "SendReplyFileMessageRequest" to this function
     ///
     /// Outputs:
     /// - It has 5 callbacks as response:
     ///
-    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (SendFileMessageRequestModel)
+    /// - parameter inputModel:     (input) you have to send your parameters insid this model. (SendReplyFileMessageRequest)
     /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter uploadProgress: (response) it will returns the progress of the uploading request by a value between 0 and 1. (Float)
     /// - parameter onSent:         (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
     /// - parameter onDelivere:     (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
     /// - parameter onSeen:         (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
-    public func replyFileMessage(inputModel replyFileMessageInput: SendFileMessageRequestModel,
+    public func replyFileMessage(inputModel replyFileMessageInput: SendReplyFileMessageRequest,
                                  uploadUniqueId:        @escaping ((String) -> ()),
                                  uploadProgress:        @escaping ((Float) -> ()),
                                  messageUniqueId:       @escaping ((String) -> ()),
@@ -852,208 +1281,184 @@ extension Chat {
     
     
     
-    // MARK: - Send Location Message
-    
-    /// SendLocationMessage:
-    /// send user location StaticImage by getting user location detail
-    ///
-    /// by calling this function, a request will send to Map ServiceCall to get user StaticImage based on its location,
-    /// then send a FileMessage with this StaticImage
-    ///
-    /// Inputs:
-    /// - you have to send your parameters as "DeleteMessageRequestModel" to this function
-    ///
-    /// Outputs:
-    /// - It has 6 callbacks as response:
-    ///
-    /// - parameter inputModel:         (input) you have to send your parameters insid this model. (SendLocationMessageRequestModel)
-    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter downloadProgress:   (response)  it will returns the progress of the downloading image from MapServices by a value between 0 and 1. (Float)
-    /// - parameter uploadProgress:     (response)  it will returns the progress of the uploading image by a value between 0 and 1. (Float)
-    /// - parameter onSent:             (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
-    /// - parameter onDelivere:         (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
-    /// - parameter onSeen:             (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
-    public func sendLocationMessage(inputModel sendLocationMessageRequest: SendLocationMessageRequestModel,
-                                    downloadProgress:           @escaping ((Float) -> ()),
-                                    uploadUniqueId:             @escaping ((String) -> ()),
-                                    uploadProgress:             @escaping ((Float) -> ()),
-                                    messageUniqueId:            @escaping ((String) -> ()),
-                                    onSent:                     @escaping callbackTypeAlias,
-                                    onDelivere:                 @escaping callbackTypeAlias,
-                                    onSeen:                     @escaping callbackTypeAlias) {
+    // MARK: - Send Text Message
         
-        let mapStaticImageInput = MapStaticImageRequestModel(centerLat: sendLocationMessageRequest.mapStaticCenterLat,
-                                                             centerLng: sendLocationMessageRequest.mapStaticCenterLng,
-                                                             height:    sendLocationMessageRequest.mapStaticHeight,
-                                                             type:      sendLocationMessageRequest.mapStaticType,
-                                                             width:     sendLocationMessageRequest.mapStaticWidth,
-                                                             zoom:      sendLocationMessageRequest.mapStaticZoom)
-        
-        mapStaticImage(inputModel: mapStaticImageInput,
-                       uniqueId: { _ in },
-                       progress: { (myProgress) in
-            downloadProgress(myProgress)
-        }) { (imageData) in
-            
-            let uploadInput = UploadRequestModel(dataToSend:        (imageData as! Data),
-                                                 fileExtension:     nil,
-                                                 fileName:          sendLocationMessageRequest.sendMessageImageName,
-                                                 mimeType:          "image/png",
-                                                 originalFileName:  nil,
-                                                 threadId:          sendLocationMessageRequest.sendMessageThreadId,
-                                                 xC:                sendLocationMessageRequest.sendMessageXC,
-                                                 yC:                sendLocationMessageRequest.sendMessageYC,
-                                                 hC:                sendLocationMessageRequest.sendMessageHC,
-                                                 wC:                sendLocationMessageRequest.sendMessageWC,
-                                                 typeCode:          sendLocationMessageRequest.typeCode ?? self.generalTypeCode,
-                                                 uniqueId:          sendLocationMessageRequest.uniqueId)
-            
-            let messageInput = SendTextMessageRequestModel(content: sendLocationMessageRequest.sendMessageContent ?? "",
-                                                           messageType:    MESSAGE_TYPE.picture,
-                                                           metadata: sendLocationMessageRequest.sendMessageMetadata,
-                                                           repliedTo: sendLocationMessageRequest.sendMessageRepliedTo,
-                                                           systemMetadata: nil,
-                                                           threadId: sendLocationMessageRequest.sendMessageThreadId,
-                                                           typeCode: sendLocationMessageRequest.sendMessageTypeCode ?? self.generalTypeCode,
-                                                           uniqueId: sendLocationMessageRequest.uniqueId)
-            
-            let fileMessageInput = SendFileMessageRequestModel(messageInput:    messageInput,
-                                                               uploadInput:     uploadInput)
-            
-            sendTM(params: fileMessageInput)
-        }
-        
-        func sendTM(params: SendFileMessageRequestModel) {
-            
-            sendFileMessage(inputModel: params, uploadUniqueId: { (uploadImageUniqueId) in
-                uploadUniqueId(uploadImageUniqueId)
-            }, uploadProgress: { (myProgress) in
-                uploadProgress(myProgress)
-            }, messageUniqueId: { (requestUniqueId) in
-                messageUniqueId(requestUniqueId)
-            }, onSent: { (sent) in
-                onSent(sent)
-            }, onDelivered: { (deliver) in
-                onDelivere(deliver)
-            }) { (seen) in
-                onSeen(seen)
-            }
-        }
-        
-    }
-    
-    
-    // MARK: - Delete/Cancle Message
-    
-    /// DeleteMessage:
-    /// delete specific message by getting message id.
+    /// SendTextMessage:
+    /// send a text to somebody.
     ///
-    /// By calling this function, a request of type 29 (DELETE_MESSAGE) will send throut Chat-SDK,
+    /// By calling this function, a request of type 2 (MESSAGE) will send throut Chat-SDK,
     /// then the response will come back as callbacks to client whose calls this function.
     ///
     /// Inputs:
-    /// - you have to send your parameters as "DeleteMessageRequestModel" to this function
+    /// - you have to send your parameters as "SendTextMessageRequest" to this function
     ///
     /// Outputs:
-    /// - It has 2 callbacks as response:
+    /// - It has 4 callbacks as response:
     ///
-    /// - parameter inputModel: (input) you have to send your parameters insid this model. (DeleteMessageRequestModel)
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (SendTextMessageRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! DeleteMessageModel)
-    public func deleteMessage(inputModel deleteMessageInput:   DeleteMessageRequestModel,
-                              uniqueId:             @escaping ((String) -> ()),
-                              completion:           @escaping callbackTypeAlias) {
+    /// - parameter onSent:     (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
+    /// - parameter onDelivere: (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
+    /// - parameter onSeen:     (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+    public func sendTextMessage(inputModel sendTextMessageInput:    SendTextMessageRequest,
+                                uniqueId:               @escaping ((String) -> ()),
+                                onSent:                 @escaping callbackTypeAlias,
+                                onDelivere:             @escaping callbackTypeAlias,
+                                onSeen:                 @escaping callbackTypeAlias) {
         
-        log.verbose("Try to request to edit message with this parameters: \n \(deleteMessageInput)", context: "Chat")
-        uniqueId(deleteMessageInput.uniqueId)
+        log.verbose("Try to send Message with this parameters: \n \(sendTextMessageInput)", context: "Chat")
+        uniqueId(sendTextMessageInput.uniqueId)
         
-        deleteMessageCallbackToUser = completion
+        stopTyping()
+        sendCallbackToUserOnSent = onSent
+        sendCallbackToUserOnDeliver = onDelivere
+        sendCallbackToUserOnSeen = onSeen
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.DELETE_MESSAGE.rawValue,
-                                            content:            "\(deleteMessageInput.convertContentToJSON())",
-                                            messageType:        nil,
-                                            metadata:           nil,
-                                            repliedTo:          nil,
-                                            systemMetadata:     nil,
-                                            subjectId:          deleteMessageInput.subjectId,
-                                            token:              token,
-                                            tokenIssuer:        nil,
-                                            typeCode:           deleteMessageInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           deleteMessageInput.uniqueId,
-                                            uniqueIds:          nil,
-                                            isCreateThreadAndSendMessage: nil)
-        
-        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
-                                              msgTTL:       msgTTL,
-                                              peerName:     serverName,
-                                              priority:     msgPriority,
-                                              pushMsgType:  4)
-        
-        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          [(DeleteMessageCallbacks(parameters: chatMessage), deleteMessageInput.uniqueId)],
-                                sentCallback:       nil,
-                                deliverCallback:    nil,
-                                seenCallback:       nil)
-    }
-    
-    
-    /// DeleteMultipleMessages:
-    /// delete specific messages by getting their message ids.
-    ///
-    /// By calling this function, a request of type 29 (DELETE_MESSAGE) will send throut Chat-SDK,
-    /// then the response will come back as callbacks to client whose calls this function.
-    ///
-    /// Inputs:
-    /// - you have to send your parameters as "DeleteMultipleMessagesRequestModel" to this function
-    ///
-    /// Outputs:
-    /// - It has 2 callbacks as response:
-    ///
-    /// - parameter inputModel: (input) you have to send your parameters insid this model. (DeleteMultipleMessagesRequestModel)
-    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server.        (String)
-    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! DeleteMessageModel)
-    public func deleteMultipleMessages(inputModel deleteMessageInput:   DeleteMultipleMessagesRequestModel,
-                                       uniqueIds:            @escaping (([String]) -> ()),
-                                       completion:           @escaping callbackTypeAlias) {
-        
-        log.verbose("Try to request to edit message with this parameters: \n \(deleteMessageInput)", context: "Chat")
-        uniqueIds(deleteMessageInput.uniqueIds)
-        
-        deleteMessageCallbackToUser = completion
-        
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.DELETE_MESSAGE.rawValue,
-                                            content:            "\(deleteMessageInput.convertContentToJSON())",
-                                            messageType:        nil,
-                                            metadata:           nil,
-                                            repliedTo:          nil,
-                                            systemMetadata:     nil,
-                                            subjectId:          nil,
-                                            token:              token,
-                                            tokenIssuer:        nil,
-                                            typeCode:           deleteMessageInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           nil,
-                                            uniqueIds:          nil,
-                                            isCreateThreadAndSendMessage: nil)
-        
-        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
-                                              msgTTL:       msgTTL,
-                                              peerName:     serverName,
-                                              priority:     msgPriority,
-                                              pushMsgType:  4)
-        
-        var myCallBacks: [(DeleteMessageCallbacks, String)] = []
-        for uId in deleteMessageInput.uniqueIds {
-            myCallBacks.append((DeleteMessageCallbacks(parameters: chatMessage), uId))
+        /**
+         seve this message on the Cache Wait Queue,
+         so if there was an situation that response of the server to this message doesn't come,
+         then we know that our message didn't sent correctly
+         and we will send this Queue to user on the GetHistory request,
+         now user knows which messages didn't send correctly, and can handle them
+         */
+        if enableCache {
+            let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(content:          sendTextMessageInput.textMessage,
+                                                                          messageType:      sendTextMessageInput.messageType,
+                                                                          metadata:         (sendTextMessageInput.metadata != nil) ? "\(sendTextMessageInput.metadata!)" : nil,
+                                                                          repliedTo:        sendTextMessageInput.repliedTo,
+                                                                          systemMetadata:   (sendTextMessageInput.systemMetadata != nil) ? "\(sendTextMessageInput.systemMetadata!)" : nil,
+                                                                          threadId:         sendTextMessageInput.threadId,
+                                                                          typeCode:         sendTextMessageInput.typeCode,
+                                                                          uniqueId:         sendTextMessageInput.uniqueId)
+            Chat.cacheDB.saveTextMessageToWaitQueue(textMessage: messageObjectToSendToQueue)
         }
         
+//        let messageTxtContent = sendTextMessageInput.content
+//        let messageTxtContent = MakeCustomTextToSend(message: sendTextMessageInput.content).replaceSpaceEnterWithSpecificCharecters()
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.MESSAGE.intValue(),
+                                            content:            MakeCustomTextToSend(message: sendTextMessageInput.textMessage).replaceSpaceEnterWithSpecificCharecters(),
+                                            messageType:        sendTextMessageInput.messageType.returnIntValue(),
+                                            metadata:           (sendTextMessageInput.metadata != nil) ? "\(MakeCustomTextToSend(message: sendTextMessageInput.metadata!).replaceSpaceEnterWithSpecificCharecters())" : nil,
+                                            repliedTo:          sendTextMessageInput.repliedTo,
+                                            systemMetadata:     (sendTextMessageInput.systemMetadata != nil) ? "\(MakeCustomTextToSend(message: sendTextMessageInput.systemMetadata!).replaceSpaceEnterWithSpecificCharecters())" : nil,
+                                            subjectId:          sendTextMessageInput.threadId,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           sendTextMessageInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           sendTextMessageInput.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: nil)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  4)
+        
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          myCallBacks,
+                                callbacks:          nil,
+                                sentCallback:       (SendMessageCallbacks(parameters: chatMessage), [sendTextMessageInput.uniqueId]),
+                                deliverCallback:    (SendMessageCallbacks(parameters: chatMessage), [sendTextMessageInput.uniqueId]),
+                                seenCallback:       (SendMessageCallbacks(parameters: chatMessage), [sendTextMessageInput.uniqueId]))
+    }
+    
+    
+    // MARK: - Send Signal Messages
+    
+    /// StartTyping:
+    /// sends a message to other clients on the thread that i'm start typing
+    ///
+    /// by calling this method, message of type "IS_TYPING" is sends to the server on every specific seconds
+    /// if you want to stop it, you should call "stopTyping" method with it's "uniqueId"
+    ///
+    /// Inputs:
+    /// - you have to send the "threadId" that you are typing on
+    ///
+    /// Outputs:
+    /// - It has 1 callbacks as response:
+    ///
+    /// - parameter threadId:   (input) the thread id that you are typing. (Int)
+    public func startTyping(threadId:   Int) {
+        
+        let t = RepeatingTimer(timeInterval: 2.0)
+        sendIsTypingMessageTimer = (t, threadId)
+        
+//        isTypingOnThread = threadId
+//        repeatTimer?.fire()
+    }
+    
+    
+    /// StopTyping:
+    /// sends a message to other clients on the thread that i'm start typing
+    ///
+    /// by calling this method, sending isTyping message will stop
+    ///
+    /// Inputs:
+    /// - this method does not have any input method
+    ///
+    /// Outputs:
+    /// - It has no output
+    public func stopTyping() {
+//        if isTypingOnThread != 0 {
+//            let systemEventModel = SystemEventModel(type: SystemEventTypes.STOP_TYPING, time: nil, threadId: isTypingOnThread, user: nil)
+//            delegate?.systemEvents(model: systemEventModel)
+//        }
+//        isTypingOnThread = 0
+//        repeatTimer?.invalidate()
+//        repeatTimer = nil
+        
+        
+        sendIsTypingMessageTimer = nil
+        
+    }
+    
+    
+    /**
+     * send Signal Message:
+     *
+     *  calling this method, will start to send SignalMessage to the server
+     *
+     *  + Access:   Private
+     *  + Inputs:   SendSignalMessageRequest
+     *  + Outputs:  _
+     *
+     */
+    func sendSignalMessage(input: SendSignalMessageRequest) {
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.SYSTEM_MESSAGE.intValue(),
+                                            content:            "\(input.convertContentToJSON())",
+                                            messageType:        nil,
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          input.threadId,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           nil,
+                                            uniqueId:           input.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: nil)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  4)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          nil,
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)
     }
+        
     
     
+    
+    
+    
+    // MARK: - Cancle Message
     /// CancelSendMessage:
     /// cancel sending messages that has not been sent yet!
     ///
@@ -1101,320 +1506,8 @@ extension Chat {
     }
     
     
-    // MARK: - Get Delivery/Seen List
-    
-    /// MessageDeliveryList:
-    /// list of participants that send deliver for some message id.
-    ///
-    /// By calling this function, a request of type 32 (GET_MESSAGE_DELEVERY_PARTICIPANTS) will send throut Chat-SDK,
-    /// then the response will come back as callbacks to client whose calls this function.
-    ///
-    /// Inputs:
-    /// - you have to send your parameters as "MessageDeliverySeenListRequestModel" to this function
-    ///
-    /// Outputs:
-    /// - It has 2 callbacks as response:
-    ///
-    /// - parameter inputModel: (input) you have to send your parameters insid this model. (MessageDeliverySeenListRequestModel)
-    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! GetMessageDeliverList)
-    public func messageDeliveryList(inputModel messageDeliveryListInput:   MessageDeliverySeenListRequestModel,
-                                    uniqueId:                   @escaping ((String) -> ()),
-                                    completion:                 @escaping callbackTypeAlias) {
-        
-        log.verbose("Try to request to get message deliver participants with this parameters: \n \(messageDeliveryListInput)", context: "Chat")
-        uniqueId(messageDeliveryListInput.uniqueId)
-        
-        getMessageDeliverListCallbackToUser = completion
-        
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_MESSAGE_DELEVERY_PARTICIPANTS.rawValue,
-                                            content:            "\(messageDeliveryListInput.convertContentToJSON())",
-                                            messageType:        nil,
-                                            metadata:           nil,
-                                            repliedTo:          nil,
-                                            systemMetadata:     nil,
-                                            subjectId:          nil,
-                                            token:              token,
-                                            tokenIssuer:        nil,
-                                            typeCode:           messageDeliveryListInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           messageDeliveryListInput.uniqueId,
-                                            uniqueIds:          nil,
-                                            isCreateThreadAndSendMessage: nil)
-        
-        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
-                                              msgTTL:       msgTTL,
-                                              peerName:     serverName,
-                                              priority:     msgPriority,
-                                              pushMsgType:  4)
-        
-        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          [(GetMessageDeliverList(parameters: chatMessage), messageDeliveryListInput.uniqueId)],
-                                sentCallback:       nil,
-                                deliverCallback:    nil,
-                                seenCallback:       nil)
-    }
     
     
-    /// MessageSeenList:
-    /// list of participants that send seen for some message id.
-    ///
-    /// By calling this function, a request of type 33 (GET_MESSAGE_SEEN_PARTICIPANTS) will send throut Chat-SDK,
-    /// then the response will come back as callbacks to client whose calls this function.
-    ///
-    /// Inputs:
-    /// - you have to send your parameters as "MessageDeliverySeenListRequestModel" to this function
-    ///
-    /// Outputs:
-    /// - It has 2 callbacks as response:
-    ///
-    /// - parameter inputModel: (input) you have to send your parameters insid this model. (MessageDeliverySeenListRequestModel)
-    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! GetMessageSeenList)
-    public func messageSeenList(inputModel messageSeenListInput:   MessageDeliverySeenListRequestModel,
-                                uniqueId:               @escaping ((String) -> ()),
-                                completion:             @escaping callbackTypeAlias) {
-        
-        log.verbose("Try to request to get message seen participants with this parameters: \n \(messageSeenListInput)", context: "Chat")
-        uniqueId(messageSeenListInput.uniqueId)
-        
-        getMessageSeenListCallbackToUser = completion
-        
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.GET_MESSAGE_SEEN_PARTICIPANTS.rawValue,
-                                            content:            "\(messageSeenListInput.convertContentToJSON())",
-                                            messageType:        nil,
-                                            metadata:           nil,
-                                            repliedTo:          nil,
-                                            systemMetadata:     nil,
-                                            subjectId:          nil,
-                                            token:              token,
-                                            tokenIssuer:        nil,
-                                            typeCode:           messageSeenListInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           messageSeenListInput.uniqueId,
-                                            uniqueIds:          nil,
-                                            isCreateThreadAndSendMessage: nil)
-        
-        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
-                                              msgTTL:       msgTTL,
-                                              peerName:     serverName,
-                                              priority:     msgPriority,
-                                              pushMsgType:  4)
-        
-        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          [(GetMessageSeenList(parameters: chatMessage), messageSeenListInput.uniqueId)],
-                                sentCallback:       nil,
-                                deliverCallback:    nil,
-                                seenCallback:       nil)
-    }
-    
-    
-    // MARK: - Send Signal Messages
-    
-    /// StartTyping:
-    /// sends a message to other clients on the thread that i'm start typing
-    ///
-    /// by calling this method, message of type "IS_TYPING" is sends to the server on every specific seconds
-    /// if you want to stop it, you should call "stopTyping" method with it's "uniqueId"
-    ///
-    /// Inputs:
-    /// - you have to send the "threadId" that you are typing on
-    ///
-    /// Outputs:
-    /// - It has 1 callbacks as response:
-    ///
-    /// - parameter threadId:   (input) the thread id that you are typing. (Int)
-    /// - parameter uniqueId:   (response) it will returns a 'UniqueId' to you, that if you finished with typing you have to call "StopTyping" method with this "uniqueId" (String)
-    public func startTyping(threadId:   Int,
-                            uniqueId:   @escaping ((String) -> ())) {
-        
-        let requestUniqueId = generateUUID()
-        uniqueId(requestUniqueId)
-        
-        let signalMessageInput = SendSignalMessageRequestModel(signalType:  SignalMessageType.IS_TYPING,
-                                                               threadId:    threadId,
-                                                               uniqueId:    requestUniqueId)
-        
-        if (isTyping?.threadId != 0) {
-            stopTyping()
-        }
-        
-        isTyping = (threadId: threadId, uniqueId: requestUniqueId)
-        // for every x seconds, call this function:
-        var counter = 0
-        while (isTyping?.threadId != 0) && (counter < 15) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-                self.sendSignalMessage(input: signalMessageInput)
-            }
-            counter += 1
-        }
-        if isTyping?.threadId == 0 {
-            stopTyping()
-            return
-        }
-        
-    }
-    
-    
-    /// StopTyping:
-    /// sends a message to other clients on the thread that i'm start typing
-    ///
-    /// by calling this method, sending isTyping message will stop
-    ///
-    /// Inputs:
-    /// - this method does not have any input method
-    ///
-    /// Outputs:
-    /// - It has no output
-    public func stopTyping() {
-        if let threadId = isTyping?.threadId, threadId != 0 {
-            let systemEventModel = SystemEventModel(type: SystemEventTypes.STOP_TYPING, time: nil, threadId: threadId, user: nil)
-            delegate?.systemEvents(model: systemEventModel)
-        }
-        isTyping = (0, "")
-    }
-    
-    
-    /**
-     * send Signal Message:
-     *
-     *  calling this method, will start to send SignalMessage to the server
-     *
-     *  + Access:   Private
-     *  + Inputs:   SendSignalMessageRequestModel
-     *  + Outputs:  _
-     *
-     */
-    func sendSignalMessage(input: SendSignalMessageRequestModel) {
-        
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.SYSTEM_MESSAGE.rawValue,
-                                            content:            "\(input.convertContentToJSON())",
-                                            messageType:        nil,
-                                            metadata:           nil,
-                                            repliedTo:          nil,
-                                            systemMetadata:     nil,
-                                            subjectId:          input.threadId,
-                                            token:              token,
-                                            tokenIssuer:        nil,
-                                            typeCode:           nil,
-                                            uniqueId:           input.uniqueId,
-                                            uniqueIds:          nil,
-                                            isCreateThreadAndSendMessage: nil)
-        
-        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
-                                              msgTTL:       msgTTL,
-                                              peerName:     serverName,
-                                              priority:     msgPriority,
-                                              pushMsgType:  4)
-        
-        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          nil,
-                                sentCallback:       nil,
-                                deliverCallback:    nil,
-                                seenCallback:       nil)
-    }
-    
-    
-    // MARK: - Pin/Unpin Message
-    
-    /// PinMessage:
-    /// pin message on a specific thread
-    ///
-    /// by calling this method, message of type "PIN_MESSAGE" is sends to the sserver
-    ///
-    /// Inputs:
-    /// - you have to send your parameters as "PinAndUnpinMessageRequestModel" to this function
-    ///
-    /// Outputs:
-    /// - It has 2 callbacks as response:
-    ///
-    /// - parameter inputModel: (input) you have to send your parameters insid this model. (PinAndUnpinMessageRequestModel)
-    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! PinUnpinMessageModel)
-    public func pinMessage(inputModel:  PinAndUnpinMessageRequestModel,
-                           uniqueId:    @escaping (String) -> (),
-                           completion:  @escaping callbackTypeAlias) {
-            
-        log.verbose("Try to request to pin message with this parameters: \n \(inputModel)", context: "Chat")
-        uniqueId(inputModel.uniqueId)
-        
-        pinMessageCallbackToUser = completion
-        
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.PIN_MESSAGE.rawValue,
-                                            content:            "\(inputModel.convertContentToJSON())",
-                                            messageType:        nil,
-                                            metadata:           nil,
-                                            repliedTo:          nil,
-                                            systemMetadata:     nil,
-                                            subjectId:          inputModel.messageId,
-                                            token:              token,
-                                            tokenIssuer:        nil,
-                                            typeCode:           inputModel.typeCode ?? generalTypeCode,
-                                            uniqueId:           inputModel.uniqueId,
-                                            uniqueIds:          nil,
-                                            isCreateThreadAndSendMessage: true)
-        
-        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
-                                              msgTTL:       msgTTL,
-                                              peerName:     serverName,
-                                              priority:     msgPriority,
-                                              pushMsgType:  nil)
-        
-        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          [(PinMessageCallbacks(), inputModel.uniqueId)],
-                                sentCallback:       nil,
-                                deliverCallback:    nil,
-                                seenCallback:       nil)
-    }
-    
-    
-    /// UnpinMessage:
-    /// pin message on a specific thread
-    ///
-    /// by calling this method, message of type "UNPIN_MESSAGE" is sends to the sserver
-    ///
-    /// Inputs:
-    /// - you have to send your parameters as "PinAndUnpinMessageRequestModel" to this function
-    ///
-    /// Outputs:
-    /// - It has 2 callbacks as response:
-    ///
-    /// - parameter inputModel: (input) you have to send your parameters insid this model. (PinAndUnpinMessageRequestModel)
-    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! PinUnpinMessageModel)
-    public func unpinMessage(inputModel:  PinAndUnpinMessageRequestModel,
-                             uniqueId:    @escaping (String) -> (),
-                             completion:  @escaping callbackTypeAlias) {
-            
-        log.verbose("Try to request to unpin message with this parameters: \n \(inputModel)", context: "Chat")
-        uniqueId(inputModel.uniqueId)
-        
-        unpinMessageCallbackToUser = completion
-        
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  chatMessageVOTypes.UNPIN_MESSAGE.rawValue,
-                                            content:            "\(inputModel.convertContentToJSON())",
-                                            messageType:        nil,
-                                            metadata:           nil,
-                                            repliedTo:          nil,
-                                            systemMetadata:     nil,
-                                            subjectId:          inputModel.messageId,
-                                            token:              token,
-                                            tokenIssuer:        nil,
-                                            typeCode:           inputModel.typeCode ?? generalTypeCode,
-                                            uniqueId:           inputModel.uniqueId,
-                                            uniqueIds:          nil,
-                                            isCreateThreadAndSendMessage: true)
-        
-        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
-                                              msgTTL:       msgTTL,
-                                              peerName:     serverName,
-                                              priority:     msgPriority,
-                                              pushMsgType:  nil)
-        
-        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          [(UnpinMessageCallbacks(), inputModel.uniqueId)],
-                                sentCallback:       nil,
-                                deliverCallback:    nil,
-                                seenCallback:       nil)
-    }
     
     
     
@@ -1428,14 +1521,14 @@ extension Chat {
                        seen:            @escaping (SendMessageModel)->() ) {
         
         for txt in textMessages {
-            let input = SendTextMessageRequestModel(content:    txt.content!,
+            let input = SendTextMessageRequestModel(content:        txt.content!,
                                                     messageType:    txt.messageType,
-                                                    metadata:   txt.metadata,
-                                                    repliedTo:  txt.repliedTo,
+                                                    metadata:       txt.metadata,
+                                                    repliedTo:      txt.repliedTo,
                                                     systemMetadata: txt.systemMetadata,
-                                                    threadId:   txt.threadId!,
-                                                    typeCode: txt.typeCode,
-                                                    uniqueId: txt.uniqueId)
+                                                    threadId:       txt.threadId!,
+                                                    typeCode:       txt.typeCode,
+                                                    uniqueId:       txt.uniqueId)
             sendTextMessage(inputModel: input, uniqueId: { (sendTextMessageUniqueId) in
                 uniqueId(sendTextMessageUniqueId)
             }, onSent: { (sentResponse) in
@@ -1454,13 +1547,13 @@ extension Chat {
                        completion:      @escaping (EditMessageModel)->()) {
         
         for editMsg in editMessages {
-            let input = EditTextMessageRequestModel(content: editMsg.content!,
+            let input = EditTextMessageRequestModel(content:    editMsg.content!,
                                                     messageType: editMsg.messageType,
-                                                    metadata: editMsg.metadata,
-                                                    repliedTo: editMsg.repliedTo,
-                                                    messageId: editMsg.messageId!,
-                                                    typeCode: editMsg.typeCode,
-                                                    uniqueId: editMsg.uniqueId)
+                                                    metadata:   editMsg.metadata,
+                                                    repliedTo:  editMsg.repliedTo,
+                                                    messageId:  editMsg.messageId!,
+                                                    typeCode:   editMsg.typeCode,
+                                                    uniqueId:   editMsg.uniqueId)
             editMessage(inputModel: input, uniqueId: { (editTextMessageUniqueId) in
                 uniqueId(editTextMessageUniqueId)
             }) { (editMessageResponse) in
@@ -1478,10 +1571,10 @@ extension Chat {
         
         for frwrdMsg in forwardMessages {
             let input = ForwardMessageRequestModel(messageIds:  [frwrdMsg.messageId!],
-                                                    metadata:    frwrdMsg.metadata,
-                                                    repliedTo:   frwrdMsg.repliedTo,
-                                                    threadId:    frwrdMsg.threadId!,
-                                                    typeCode:    frwrdMsg.typeCode)
+                                                    metadata:   frwrdMsg.metadata,
+                                                    repliedTo:  frwrdMsg.repliedTo,
+                                                    threadId:   frwrdMsg.threadId!,
+                                                    typeCode:   frwrdMsg.typeCode)
             forwardMessage(inputModel: input, uniqueIds: { (forwardMessageUniqueIds) in
                 uniqueIds(forwardMessageUniqueIds)
             }, onSent: { (sentResponse) in
@@ -1503,14 +1596,14 @@ extension Chat {
                        deliver:         @escaping (SendMessageModel)->(),
                        seen:            @escaping (SendMessageModel)->() ) {
         
-        let message = SendTextMessageRequestModel(content: fileMessages.content ?? "",
-                                                  messageType:  MESSAGE_TYPE.file,
-                                                  metadata: fileMessages.metadata,
-                                                  repliedTo: fileMessages.repliedTo,
-                                                  systemMetadata: nil,
-                                                  threadId: fileMessages.threadId!,
-                                                  typeCode: fileMessages.typeCode,
-                                                  uniqueId: fileMessages.uniqueId)
+        let message = SendTextMessageRequestModel(content:          fileMessages.content ?? "",
+                                                  messageType:      MessageType.file,
+                                                  metadata:         fileMessages.metadata,
+                                                  repliedTo:        fileMessages.repliedTo,
+                                                  systemMetadata:   nil,
+                                                  threadId:         fileMessages.threadId!,
+                                                  typeCode:         fileMessages.typeCode,
+                                                  uniqueId:         fileMessages.uniqueId)
         
         var upload: UploadRequestModel? = nil
         if let fileData = fileMessages.fileToSend {

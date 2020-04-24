@@ -22,6 +22,7 @@ extension CMLinkedUser {
     @NSManaged public var name:         String?
     @NSManaged public var nickname:     String?
     @NSManaged public var username:     String?
+    
     @NSManaged public var dummyContact: CMContact?
 
 }

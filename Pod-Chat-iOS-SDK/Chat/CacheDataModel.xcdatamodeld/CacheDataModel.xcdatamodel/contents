@@ -70,6 +70,7 @@
         <attribute name="name" optional="YES" attributeType="String"/>
     </entity>
     <entity name="CMForwardInfo" representedClassName=".CMForwardInfo" syncable="YES">
+        <attribute name="messageId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="conversation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="dummyForwardInfo" inverseEntity="CMConversation"/>
         <relationship name="dummyMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="forwardInfo" inverseEntity="CMMessage"/>
         <relationship name="participant" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="CMParticipant" inverseName="dummyForwardInfo" inverseEntity="CMParticipant"/>
@@ -118,6 +119,7 @@
     <entity name="CMParticipant" representedClassName=".CMParticipant" syncable="YES">
         <attribute name="admin" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="auditor" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="bio" optional="YES" attributeType="String"/>
         <attribute name="blocked" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="cellphoneNumber" optional="YES" attributeType="String"/>
         <attribute name="contactFirstName" optional="YES" attributeType="String"/>
@@ -131,6 +133,7 @@
         <attribute name="image" optional="YES" attributeType="String"/>
         <attribute name="keyId" optional="YES" attributeType="String"/>
         <attribute name="lastName" optional="YES" attributeType="String"/>
+        <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="myFriend" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="notSeenDuration" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
@@ -141,7 +144,6 @@
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="username" optional="YES" attributeType="String"/>
-        <relationship name="dummyAdmins" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ThreadAdmins" inverseName="participants" inverseEntity="ThreadAdmins"/>
         <relationship name="dummyConversationInviter" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="inviter" inverseEntity="CMConversation"/>
         <relationship name="dummyConversationParticipants" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="participants" inverseEntity="CMConversation"/>
         <relationship name="dummyForwardInfo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMForwardInfo" inverseName="participant" inverseEntity="CMForwardInfo"/>
@@ -157,6 +159,7 @@
     <entity name="CMReplyInfo" representedClassName=".CMReplyInfo" syncable="YES">
         <attribute name="deletedd" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="message" optional="YES" attributeType="String"/>
+        <attribute name="messageId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="messageType" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="repliedToMessageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
@@ -273,25 +276,19 @@
         <attribute name="xC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="yC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
     </entity>
-    <entity name="ThreadAdmins" representedClassName=".ThreadAdmins" syncable="YES">
-        <attribute name="name" attributeType="String"/>
-        <attribute name="roles" attributeType="Transformable"/>
-        <attribute name="threadId" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="userId" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <relationship name="participants" optional="YES" toMany="YES" deletionRule="Deny" ordered="YES" destinationEntity="CMParticipant" inverseName="dummyAdmins" inverseEntity="CMParticipant"/>
-    </entity>
     <elements>
         <element name="CMBlockedContact" positionX="-461.90234375" positionY="-78.6953125" width="128" height="105"/>
         <element name="CMContact" positionX="-307.48828125" positionY="-144.9375" width="128" height="238"/>
         <element name="CMConversation" positionX="30.32421875" positionY="-129.10546875" width="128" height="598"/>
+        <element name="CMCurrentUserRoles" positionX="387" positionY="189" width="128" height="73"/>
         <element name="CMFile" positionX="-462.546875" positionY="425.40625" width="128" height="88"/>
-        <element name="CMForwardInfo" positionX="432.70703125" positionY="541.2578125" width="128" height="90"/>
+        <element name="CMForwardInfo" positionX="432.46484375" positionY="513.06640625" width="128" height="103"/>
         <element name="CMImage" positionX="-460.42578125" positionY="37.66796875" width="128" height="148"/>
         <element name="CMLinkedUser" positionX="-278.86328125" positionY="121.0546875" width="128" height="135"/>
-        <element name="CMMessage" positionX="-185.7109375" positionY="279.0234375" width="128" height="373"/>
-        <element name="CMParticipant" positionX="732.75" positionY="-25.08984375" width="128" height="508"/>
+        <element name="CMMessage" positionX="-233.07421875" positionY="278.109375" width="128" height="373"/>
+        <element name="CMParticipant" positionX="732.75" positionY="-25.08984375" width="128" height="523"/>
         <element name="CMPinMessage" positionX="341.734375" positionY="-23.5546875" width="128" height="103"/>
-        <element name="CMReplyInfo" positionX="982.71484375" positionY="482.37890625" width="128" height="178"/>
+        <element name="CMReplyInfo" positionX="982.71484375" positionY="482.37890625" width="128" height="193"/>
         <element name="CMThreadParticipants" positionX="-459.9921875" positionY="520.90625" width="128" height="90"/>
         <element name="CMUser" positionX="-463.83984375" positionY="196.234375" width="128" height="223"/>
         <element name="CMUserRole" positionX="471.12890625" positionY="272.80078125" width="128" height="120"/>
@@ -303,7 +300,5 @@
         <element name="QueueOfTextMessages" positionX="1210.796875" positionY="-206.65625" width="128" height="163"/>
         <element name="QueueOfUploadFiles" positionX="1079.53125" positionY="19.48046875" width="128" height="178"/>
         <element name="QueueOfUploadImages" positionX="1076.33203125" positionY="-208.8203125" width="128" height="238"/>
-        <element name="ThreadAdmins" positionX="954.83984375" positionY="318.64453125" width="128" height="118"/>
-        <element name="CMCurrentUserRoles" positionX="387" positionY="189" width="128" height="73"/>
     </elements>
 </model>

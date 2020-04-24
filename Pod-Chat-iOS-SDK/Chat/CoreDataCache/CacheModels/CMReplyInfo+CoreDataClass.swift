@@ -54,4 +54,15 @@ public class CMReplyInfo: NSManagedObject {
         return model
     }
     
+    func updateObject(with replyInfo: ReplyInfo, messageId: Int) {
+        self.messageId          = messageId as NSNumber?
+        self.deletedd           = replyInfo.deleted as NSNumber?
+        self.message            = replyInfo.message
+        self.messageType        = replyInfo.messageType as NSNumber?
+        self.metadata           = replyInfo.metadata
+        self.repliedToMessageId = replyInfo.repliedToMessageId as NSNumber?
+        self.systemMetadata     = replyInfo.systemMetadata
+        self.time               = replyInfo.time as NSNumber?
+    }
+    
 }

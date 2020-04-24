@@ -12,5 +12,11 @@ import CoreData
 
 @objc(MessageGaps)
 public class MessageGaps: NSManagedObject {
-
+    
+    func updateObject(onThreadId threadId: Int, withMessageId messageId: Int, withPreviousId previousId: Int) {
+        self.previousId = previousId as NSNumber?
+        self.messageId  = messageId as NSNumber?
+        self.threadId   = threadId  as NSNumber?
+    }
+    
 }

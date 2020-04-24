@@ -63,7 +63,7 @@ class SendChatMessageVO {
         self.uniqueId = ""
         if let uID = uniqueId {
             self.uniqueId = uID
-        } else if (chatMessageVOType == chatMessageVOTypes.DELETE_MESSAGE.rawValue) {
+        } else if (chatMessageVOType == ChatMessageVOTypes.DELETE_MESSAGE.intValue()) {
             if let contentJSON = content?.convertToJSON() {
                 if let x = contentJSON["ids"].arrayObject {
                     if (x.count <= 1) {
@@ -73,7 +73,7 @@ class SendChatMessageVO {
                     self.uniqueId = generateUUID()
                 }
             }
-        } else if (chatMessageVOType == chatMessageVOTypes.PING.rawValue) {
+        } else if (chatMessageVOType == ChatMessageVOTypes.PING.intValue()) {
             self.uniqueId = generateUUID()
         }
         
@@ -119,7 +119,7 @@ class SendChatMessageVO {
             self.uniqueIds = uIds
         } else if let uID = content["uniqueId"].string {
             self.uniqueId = uID
-        } else if (content["chatMessageVOType"].intValue == chatMessageVOTypes.DELETE_MESSAGE.rawValue) {
+        } else if (content["chatMessageVOType"].intValue == ChatMessageVOTypes.DELETE_MESSAGE.intValue()) {
             if let x = content["content"]["ids"].arrayObject {
                 if x.count <= 1 {
                     self.uniqueId = generateUUID()
@@ -127,7 +127,7 @@ class SendChatMessageVO {
             } else {
                 self.uniqueId = generateUUID()
             }
-        } else if (content["chatMessageVOType"].intValue != chatMessageVOTypes.PING.rawValue) {
+        } else if (content["chatMessageVOType"].intValue != ChatMessageVOTypes.PING.intValue()) {
             self.uniqueId = generateUUID()
         }
         
