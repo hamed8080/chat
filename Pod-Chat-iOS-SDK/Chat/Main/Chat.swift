@@ -395,6 +395,12 @@ public class Chat {
     public var joinPublicThreadCallbackToUser:              callbackTypeAlias?
     public var isPublicThreadNameAvailableCallbackToUser:   callbackTypeAlias?
     
+    // Bot callBacks
+    public var addBotCommandCallbackToUser: callbackTypeAlias?
+    public var createBotCallbackToUser:     callbackTypeAlias?
+    public var startBotCallbackToUser:      callbackTypeAlias?
+    public var stopBotCallbackToUser:       callbackTypeAlias?
+    
     
     
     // MARK: - create Async with the parameters
