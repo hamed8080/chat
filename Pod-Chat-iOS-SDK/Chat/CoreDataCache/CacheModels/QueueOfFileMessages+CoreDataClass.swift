@@ -63,11 +63,12 @@ public class QueueOfFileMessages: NSManagedObject {
         
         func createQueueOfWaitFileMessagesModel() -> QueueOfWaitFileMessagesModel {
             let queueOfWaitFileMessagesModel = QueueOfWaitFileMessagesModel(content:        self.content,
-                                                                            messageType:    MESSAGE_TYPE.getType(from: messageType ?? 1),
+                                                                            messageType:    MessageType.getType(from: messageType ?? 1),
                                                                             fileName:       self.fileName,
 //                                                                            imageName:      self.imageName,
 //                                                                            metadata:       metadata,
                                                                             metadata:       self.metadata,
+                                                                            mimeType:       self.mimeType,
                                                                             repliedTo:      repliedTo,
 //                                                                            subjectId:  subjectId,
                                                                             threadId:       threadId,

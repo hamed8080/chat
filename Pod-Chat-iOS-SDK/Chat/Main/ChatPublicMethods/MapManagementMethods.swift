@@ -24,15 +24,15 @@ extension Chat {
     /// then the response will come back as callbacks to client whose calls this function.
     ///
     /// Inputs:
-    /// - you have to send your parameters as "MapReverseRequestModel" to this function
+    /// - you have to send your parameters as "MapReverseRequest" to this function
     ///
     /// Outputs:
     /// - It has 2 callbacks as responses.
     ///
-    /// - parameter inputModel: (input) you have to send your parameters insid this model. (MapReverseRequestModel)
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (MapReverseRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! MapReverseModel)
-    public func mapReverse(inputModel mapReverseInput: MapReverseRequestModel,
+    public func mapReverse(inputModel mapReverseInput: MapReverseRequest,
                            uniqueId:        @escaping (String) -> (),
                            completion:      @escaping callbackTypeAlias) {
         
@@ -63,6 +63,52 @@ extension Chat {
     }
     
     
+    /// MapRouting:
+    /// send 2 locations, and then give routing suggesston.
+    ///
+    /// By calling this function, HTTP request of type (SEARCH to the MAP_ADDRESS) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "MapRoutingRequest" to this function
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as responses.
+    ///
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (MapRoutingRequest)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! MapRoutingModel)
+    public func mapRouting(inputModel mapRoutingInput: MapRoutingRequest,
+                           uniqueId:        @escaping (String) -> (),
+                           completion:      @escaping callbackTypeAlias) {
+        
+        let theUniqueId = generateUUID()
+        uniqueId(theUniqueId)
+        
+        let url = "\(SERVICE_ADDRESSES.MAP_ADDRESS)\(SERVICES_PATH.ROUTING.rawValue)"
+        let method:     HTTPMethod  = HTTPMethod.get
+        let headers:    HTTPHeaders = ["Api-Key": mapApiKey]
+        let parameters: Parameters  = ["origin":        "\(mapRoutingInput.origin.lat),\(mapRoutingInput.origin.lng)",
+            "destination":   "\(mapRoutingInput.destination.lat),\(mapRoutingInput.destination.lng)",
+                                       "alternative":   mapRoutingInput.alternative]
+        
+        Networking.sharedInstance.requesttWithJSONresponse(from:            url,
+                                                           withMethod:      method,
+                                                           withHeaders:     headers,
+                                                           withParameters:  parameters)
+        { (jsonResponse) in
+            if let theResponse = jsonResponse as? JSON {
+                let mapRoutingModel = MapRoutingModel(messageContent:   theResponse,
+                                                      hasError:         false,
+                                                      errorMessage:     "",
+                                                      errorCode:        0)
+                completion(mapRoutingModel)
+            }
+        }
+        
+    }
+    
+    
     /// MapSearch:
     /// search near thing inside the map, whoes where close to the client location.
     ///
@@ -70,15 +116,15 @@ extension Chat {
     /// then the response will come back as callbacks to client whose calls this function.
     ///
     /// Inputs:
-    /// - you have to send your parameters as "MapSearchRequestModel" to this function
+    /// - you have to send your parameters as "MapSearchRequest" to this function
     ///
     /// Outputs:
     /// - It has 2 callbacks as responses.
     ///
-    /// - parameter inputModel: (input) you have to send your parameters insid this model. (MapSearchRequestModel)
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (MapSearchRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! MapSearchModel)
-    public func mapSearch(inputModel mapSearchInput:   MapSearchRequestModel,
+    public func mapSearch(inputModel mapSearchInput:   MapSearchRequest,
                           uniqueId:         @escaping (String) -> (),
                           completion:       @escaping callbackTypeAlias) {
         
@@ -109,52 +155,6 @@ extension Chat {
     }
     
     
-    /// MapRouting:
-    /// send 2 locations, and then give routing suggesston.
-    ///
-    /// By calling this function, HTTP request of type (SEARCH to the MAP_ADDRESS) will send throut Chat-SDK,
-    /// then the response will come back as callbacks to client whose calls this function.
-    ///
-    /// Inputs:
-    /// - you have to send your parameters as "MapRoutingRequestModel" to this function
-    ///
-    /// Outputs:
-    /// - It has 2 callbacks as responses.
-    ///
-    /// - parameter inputModel: (input) you have to send your parameters insid this model. (MapRoutingRequestModel)
-    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! MapRoutingModel)
-    public func mapRouting(inputModel mapRoutingInput: MapRoutingRequestModel,
-                           uniqueId:        @escaping (String) -> (),
-                           completion:      @escaping callbackTypeAlias) {
-        
-        let theUniqueId = generateUUID()
-        uniqueId(theUniqueId)
-        
-        let url = "\(SERVICE_ADDRESSES.MAP_ADDRESS)\(SERVICES_PATH.ROUTING.rawValue)"
-        let method:     HTTPMethod  = HTTPMethod.get
-        let headers:    HTTPHeaders = ["Api-Key": mapApiKey]
-        let parameters: Parameters  = ["origin":        "\(mapRoutingInput.originLat),\(mapRoutingInput.originLng)",
-                                       "destination":   "\(mapRoutingInput.destinationLat),\(mapRoutingInput.destinationLng)",
-                                       "alternative":   mapRoutingInput.alternative]
-        
-        Networking.sharedInstance.requesttWithJSONresponse(from:            url,
-                                                           withMethod:      method,
-                                                           withHeaders:     headers,
-                                                           withParameters:  parameters)
-        { (jsonResponse) in
-            if let theResponse = jsonResponse as? JSON {
-                let mapRoutingModel = MapRoutingModel(messageContent:   theResponse,
-                                                      hasError:         false,
-                                                      errorMessage:     "",
-                                                      errorCode:        0)
-                completion(mapRoutingModel)
-            }
-        }
-        
-    }
-    
-    
     /// MapStaticImage:
     /// get a static image from the map based on the location that user wants.
     ///
@@ -162,16 +162,16 @@ extension Chat {
     /// then the response will come back as callbacks to client whose calls this function.
     ///
     /// Inputs:
-    /// - you have to send your parameters as "MapStaticImageRequestModel" to this function
+    /// - you have to send your parameters as "MapStaticImageRequest" to this function
     ///
     /// Outputs:
     /// - It has 2 callbacks as responses.
     ///
-    /// - parameter inputModel: (input) you have to send your parameters insid this model. (MapStaticImageRequestModel)
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (MapStaticImageRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter progress:   (response)  it will returns the progress of the downloading request by a value between 0 and 1. (Float)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! Data)
-    public func mapStaticImage(inputModel mapStaticImageInput: MapStaticImageRequestModel,
+    public func mapStaticImage(inputModel mapStaticImageInput: MapStaticImageRequest,
                                uniqueId:            @escaping (String) -> (),
                                progress:            @escaping (Float) -> (),
                                completion:          @escaping callbackTypeAlias) {
@@ -184,7 +184,7 @@ extension Chat {
         let parameters: Parameters  = ["key":       mapApiKey,
                                        "type":      mapStaticImageInput.type,
                                        "zoom":      mapStaticImageInput.zoom,
-                                       "center":    "\(mapStaticImageInput.centerLat),\(mapStaticImageInput.centerLng)",
+                                       "center":    "\(mapStaticImageInput.center.lat),\(mapStaticImageInput.center.lng)",
                                        "width":     mapStaticImageInput.width,
                                        "height":    mapStaticImageInput.height]
         

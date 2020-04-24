@@ -9,7 +9,7 @@
 import Foundation
 
 
-open class CancelMessageRequestModel {
+open class CancelMessageRequest {
     
     public let textMessageUniqueId:     String?
     public let editMessageUniqueId:     String?
@@ -36,3 +36,6 @@ open class CancelMessageRequestModel {
 }
 
 
+open class CancelMessageRequestModel: CancelMessageRequest {
+    
+}

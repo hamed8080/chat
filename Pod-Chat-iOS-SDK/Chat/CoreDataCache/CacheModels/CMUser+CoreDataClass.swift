@@ -61,4 +61,20 @@ public class CMUser: NSManagedObject {
         return model
     }
     
+    
+    func updateObject(with user: User) {
+        self.cellphoneNumber = user.cellphoneNumber
+        self.coreUserId      = user.coreUserId as NSNumber?
+        self.email           = user.email
+        self.id              = user.id as NSNumber?
+        self.image           = user.image
+        self.lastSeen        = user.lastSeen as NSNumber?
+        self.name            = user.name
+        self.receiveEnable   = user.receiveEnable as NSNumber?
+        self.sendEnable      = user.sendEnable as NSNumber?
+        self.username        = user.username
+        self.bio             = user.chatProfileVO?.bio
+        self.metadata        = user.chatProfileVO?.metadata
+    }
+    
 }

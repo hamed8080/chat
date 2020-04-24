@@ -20,8 +20,6 @@ public class CMConversation: NSManagedObject {
         var group:                          Bool?
         var id:                             Int?
         var joinDate:                       Int?
-//        var lastParticipantImage:           String?
-//        var lastParticipantName:            String?
         var lastSeenMessageId:              Int?
         var lastSeenMessageNanos:           UInt?
         var lastSeenMessageTime:            UInt?
@@ -116,7 +114,9 @@ public class CMConversation: NSManagedObject {
             if let participantArr = self.participants {
                 participants = []
                 for item in participantArr {
-                    participants?.append(item.convertCMParticipantToParticipantObject())
+                    if let participant = item as? CMParticipant {
+                        participants?.append(participant.convertCMParticipantToParticipantObject())
+                    }
                 }
             }
         }
@@ -154,6 +154,7 @@ public class CMConversation: NSManagedObject {
                                                  title:                 self.title,
                                                  type:                  type,
                                                  unreadCount:           unreadCount,
+                                                 uniqueName:            nil,
                                                  inviter:               self.inviter?.convertCMParticipantToParticipantObject(),
                                                  lastMessageVO:         self.lastMessageVO?.convertCMMessageToMessageObject(),
                                                  participants:          participants,
@@ -168,5 +169,82 @@ public class CMConversation: NSManagedObject {
         
         return model
     }
+    
+    
+    func updateObject(with conversation: Conversation) {
+        if let admin = conversation.admin as NSNumber? {
+            self.admin = admin
+        }
+        if let canEditInfo = conversation.canEditInfo as NSNumber? {
+            self.canEditInfo = canEditInfo
+        }
+        if let canSpam = conversation.canSpam as NSNumber? {
+            self.canSpam = canSpam
+        }
+        if let descriptions = conversation.description {
+            self.descriptions = descriptions
+        }
+        if let group = conversation.group as NSNumber? {
+            self.group = group
+        }
+        if let id = conversation.id as NSNumber? {
+            self.id = id
+        }
+        if let image = conversation.image {
+            self.image = image
+        }
+        if let joinDate = conversation.joinDate as NSNumber? {
+            self.joinDate = joinDate
+        }
+        if let lastMessage = conversation.lastMessage {
+            self.lastMessage = lastMessage
+        }
+        if let lastParticipantImage = conversation.lastParticipantImage {
+            self.lastParticipantImage = lastParticipantImage
+        }
+        if let lastParticipantName = conversation.lastParticipantName {
+            self.lastParticipantName = lastParticipantName
+        }
+        if let lastSeenMessageId = conversation.lastSeenMessageId as NSNumber? {
+            self.lastSeenMessageId = lastSeenMessageId
+        }
+        if let mentioned = conversation.mentioned as NSNumber? {
+            self.mentioned = mentioned
+        }
+        if let metadata = conversation.metadata {
+            self.metadata = metadata
+        }
+        if let mute = conversation.mute as NSNumber? {
+            self.mute = mute
+        }
+        if let participantCount = conversation.participantCount as NSNumber? {
+            self.participantCount = participantCount
+        }
+        if let partner = conversation.partner as NSNumber? {
+            self.partner = partner
+        }
+        if let partnerLastDeliveredMessageId = conversation.partnerLastDeliveredMessageId as NSNumber? {
+            self.partnerLastDeliveredMessageId = partnerLastDeliveredMessageId
+        }
+        if let partnerLastSeenMessageId = conversation.partnerLastSeenMessageId as NSNumber? {
+            self.partnerLastSeenMessageId = partnerLastSeenMessageId
+        }
+        if let pin = conversation.pin as NSNumber? {
+            self.pin = pin
+        }
+        if let title = conversation.title {
+            self.title = title
+        }
+        if let time = conversation.time as NSNumber? {
+            self.time = time
+        }
+        if let type = conversation.type as NSNumber? {
+            self.type = type
+        }
+        if let unreadCount = conversation.unreadCount as NSNumber? {
+            self.unreadCount = unreadCount
+        }
+    }
+    
     
 }

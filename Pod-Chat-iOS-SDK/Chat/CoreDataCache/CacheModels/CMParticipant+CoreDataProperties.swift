@@ -2,8 +2,8 @@
 //  CMParticipant+CoreDataProperties.swift
 //  FanapPodChatSDK
 //
-//  Created by Mahyar Zhiani on 5/2/1398 AP.
-//  Copyright © 1398 Mahyar Zhiani. All rights reserved.
+//  Created by MahyarZhiani on 1/30/1399 AP.
+//  Copyright © 1399 Mahyar Zhiani. All rights reserved.
 //
 //
 
@@ -42,13 +42,18 @@ extension CMParticipant {
     @NSManaged public var threadId:         NSNumber?
     @NSManaged public var time:             NSNumber?
     @NSManaged public var username:         String?
-    @NSManaged public var dummyConversationInviter:         [CMConversation]?
-    @NSManaged public var dummyConversationParticipants:    [CMConversation]?
-    @NSManaged public var dummyForwardInfo: CMForwardInfo?
-    @NSManaged public var dummyMessage:     [CMMessage]?
-    @NSManaged public var dummyReplyInfo:   CMReplyInfo?
+    
+    @NSManaged public var bio:              String?
+    @NSManaged public var metadata:         String?
+    
+    @NSManaged public var dummyConversationInviter:         NSSet?
+    @NSManaged public var dummyConversationParticipants:    NSSet?
+    @NSManaged public var dummyForwardInfo:                 CMForwardInfo?
+    @NSManaged public var dummyMessage:                     NSSet?
+    @NSManaged public var dummyReplyInfo:                   CMReplyInfo?
 
 }
+
 
 // MARK: Generated accessors for dummyConversationInviter
 extension CMParticipant {
@@ -60,10 +65,10 @@ extension CMParticipant {
     @NSManaged public func removeFromDummyConversationInviter(_ value: CMConversation)
 
     @objc(addDummyConversationInviter:)
-    @NSManaged public func addToDummyConversationInviter(_ values: [CMConversation])
+    @NSManaged public func addToDummyConversationInviter(_ values: NSSet)
 
     @objc(removeDummyConversationInviter:)
-    @NSManaged public func removeFromDummyConversationInviter(_ values: [CMConversation])
+    @NSManaged public func removeFromDummyConversationInviter(_ values: NSSet)
 
 }
 
@@ -77,10 +82,10 @@ extension CMParticipant {
     @NSManaged public func removeFromDummyConversationParticipants(_ value: CMConversation)
 
     @objc(addDummyConversationParticipants:)
-    @NSManaged public func addToDummyConversationParticipants(_ values: [CMConversation])
+    @NSManaged public func addToDummyConversationParticipants(_ values: NSSet)
 
     @objc(removeDummyConversationParticipants:)
-    @NSManaged public func removeFromDummyConversationParticipants(_ values: [CMConversation])
+    @NSManaged public func removeFromDummyConversationParticipants(_ values: NSSet)
 
 }
 
@@ -94,9 +99,9 @@ extension CMParticipant {
     @NSManaged public func removeFromDummyMessage(_ value: CMMessage)
 
     @objc(addDummyMessage:)
-    @NSManaged public func addToDummyMessage(_ values: [CMMessage])
+    @NSManaged public func addToDummyMessage(_ values: NSSet)
 
     @objc(removeDummyMessage:)
-    @NSManaged public func removeFromDummyMessage(_ values: [CMMessage])
+    @NSManaged public func removeFromDummyMessage(_ values: NSSet)
 
 }
