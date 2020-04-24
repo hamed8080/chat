@@ -12,5 +12,12 @@ import CoreData
 
 
 public class PhoneContact: NSManagedObject {
-
+    
+    func updateObject(with contact: AddContactRequestModel) {
+        self.cellphoneNumber    = contact.cellphoneNumber
+        self.email              = contact.email
+        self.firstName          = contact.firstName
+        self.lastName           = contact.lastName
+    }
+    
 }

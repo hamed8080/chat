@@ -102,4 +102,85 @@ public class CMParticipant: NSManagedObject {
         
         return model
     }
+    
+    
+    func updateObject(with participant: Participant, isAdminRequest: Bool) {
+        
+        if let auditor = participant.auditor as NSNumber? {
+            self.auditor = auditor
+        }
+        if let blocked = participant.blocked as NSNumber? {
+            self.blocked = blocked
+        }
+        if let cellphoneNumber = participant.cellphoneNumber {
+            self.cellphoneNumber = cellphoneNumber
+        }
+        if let contactFirstName = participant.contactFirstName {
+            self.contactFirstName = contactFirstName
+        }
+        if let contactId = participant.contactId as NSNumber? {
+            self.contactId = contactId
+        }
+        if let contactName = participant.contactName {
+            self.contactName = contactName
+        }
+        if let contactLastName = participant.contactLastName {
+            self.contactLastName = contactLastName
+        }
+        if let email = participant.email {
+            self.email = email
+        }
+        if let firstName = participant.firstName {
+            self.firstName = firstName
+        }
+        if let id = participant.id as NSNumber? {
+            self.id = id
+        }
+        if let image = participant.image {
+            self.image = image
+        }
+        if let keyId = participant.keyId {
+            self.keyId = keyId
+        }
+        if let lastName = participant.lastName {
+            self.lastName = lastName
+        }
+        if let myFriend = participant.myFriend as NSNumber? {
+            self.myFriend = myFriend
+        }
+        if let name = participant.name {
+            self.name = name
+        }
+        if let notSeenDuration = participant.notSeenDuration as NSNumber? {
+            self.notSeenDuration = notSeenDuration
+        }
+        if let online = participant.online as NSNumber? {
+            self.online = online
+        }
+        if let receiveEnable = participant.receiveEnable as NSNumber? {
+            self.receiveEnable = receiveEnable
+        }
+        if isAdminRequest {
+            self.roles = (participant.roles != []) ? participant.roles : nil
+        } else {
+            self.roles = ((participant.roles?.count ?? 0) > 0) ? participant.roles : self.roles
+        }
+        if let sendEnable = participant.sendEnable as NSNumber? {
+            self.sendEnable = sendEnable
+        }
+        if let theThreadId = threadId as NSNumber? {
+            self.threadId = theThreadId
+        }
+        if let username = participant.username {
+            self.username = username
+        }
+        
+        self.admin      = ((self.roles?.count ?? 0) > 0) ? true : false
+        self.time       = Int(Date().timeIntervalSince1970) as NSNumber?
+        self.bio        = participant.chatProfileVO?.bio
+        self.metadata   = participant.chatProfileVO?.metadata
+        
+    }
+    
+    
 }

@@ -11,7 +11,7 @@ import FanapPodAsyncSDK
 import CoreData
 import Alamofire
 import SwiftyJSON
-import UIKit
+//import UIKit
 //import Contacts
 
 
@@ -108,7 +108,7 @@ public class Chat {
         getDeviceIdWithToken { (deviceIdStr) in
             self.deviceId = deviceIdStr
             
-            log.verbose("get deviceId successfully = \(self.deviceId ?? "error!!")", context: "Chat")
+            log.info("get deviceId successfully = \(self.deviceId ?? "error!!")", context: "Chat")
             
             DispatchQueue.main.async {
                 self.CreateAsync()
@@ -143,7 +143,7 @@ public class Chat {
     var mapServer:          String  = "https://api.neshan.org/v1"
     
 //    var ssoGrantDevicesAddress = params.ssoGrantDevicesAddress
-    var chatFullStateObject: JSON = [:]
+    var chatFullStateObject: ChatFullStateModel?
     
     var msgPriority:        Int     = 1
     var msgTTL:             Int     = 10
@@ -192,7 +192,59 @@ public class Chat {
     public var uploadRequest:   [(upload: Request, uniqueId: String)]   = []
     public var downloadRequest: [(download: Request, uniqueId: String)] = []
     
-    var isTyping: (threadId: Int, uniqueId: String)? = (0, "")
+//    var repeatTimer: Timer?
+//    var signalMessageInput: SendSignalMessageRequestModel?
+//    var isTypingOnThread: Int = 0 {
+//        didSet {
+//            var count = 0
+//            signalMessageInput = SendSignalMessageRequestModel(signalType:  SignalMessageType.IS_TYPING,
+//                                                               threadId:    isTypingOnThread,
+//                                                               uniqueId:    nil)
+//
+//            repeatTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { (timer) in
+//                if (count > 30) || (self.isTypingOnThread == 0) {
+//                    if timer.isValid {
+//                        timer.invalidate()
+//                    }
+//                } else if let inputModel = self.signalMessageInput {
+//                    self.sendSignalMessage(input: inputModel)
+//                    count += 1
+//                }
+//            }
+//
+////            if (isTypingOnThread == 0) {
+////                repeatTimer?.invalidate()
+////                repeatTimer = nil
+////            } else {
+////                repeatTimer?.fire()
+////            }
+//
+//        }
+//    }
+    
+    var isTypingCount = 0
+    var sendIsTypingMessageTimer: (timer: RepeatingTimer?, onThread: Int)? {
+        didSet {
+            isTypingCount = 0
+            if (sendIsTypingMessageTimer != nil) {
+                sendIsTypingMessageTimer?.timer?.eventHandler = {
+                    if (self.isTypingCount < 30) {
+                        self.isTypingCount += 1
+                        DispatchQueue.main.async {
+                            let signalMessageInput = SendSignalMessageRequestModel(signalType:  SignalMessageType.IS_TYPING,
+                                                                                   threadId:    self.sendIsTypingMessageTimer!.onThread,
+                                                                                   uniqueId:    nil)
+                            self.sendSignalMessage(input: signalMessageInput)
+                        }
+                    } else {
+                        self.sendIsTypingMessageTimer!.timer?.suspend()
+                        self.sendIsTypingMessageTimer = nil
+                    }
+                }
+                sendIsTypingMessageTimer?.timer?.resume()
+            }
+        }
+    }
     
     
     
@@ -200,44 +252,55 @@ public class Chat {
     
     var getUserInfoTimer: RepeatingTimer? {
         didSet {
-            if isChatReady {
+            if (getUserInfoTimer != nil) {
+                log.verbose("getUserInfoTimer valueChanged: \n staus = \(self.getUserInfoTimer!.state) - timeInterval = \(self.getUserInfoTimer!.timeInterval) \n isChatReady = \(isChatReady)", context: "Chat")
                 self.getUserInfoTimer?.suspend()
-            } else {
-                self.getUserInfoTimer?.suspend()
-                DispatchQueue.global().async {
-                    self.getUserInfoTimer?.eventHandler = {
-                        if (self.getUserInfoRetryCount < self.getUserInfoRetry) {
-                            DispatchQueue.main.async {
-                                self.makeChatReady()
+                
+                if !isChatReady {
+                    DispatchQueue.global().async {
+                        self.getUserInfoTimer?.eventHandler = {
+                            if (self.getUserInfoRetryCount < self.getUserInfoRetry) {
+                                DispatchQueue.main.async {
+                                    self.makeChatReady()
+                                }
+                                self.getUserInfoTimer?.suspend()
                             }
-                            self.getUserInfoTimer?.suspend()
                         }
+                        self.getUserInfoTimer?.resume()
                     }
-                    self.getUserInfoTimer?.resume()
                 }
+            } else {
+                log.verbose("getUserInfoTimer valueChanged to nil. \n isChatReady = \(isChatReady)", context: "Chat")
             }
+            
         }
     }
+    
+    
     
     var lastReceivedMessageTime:    Date?
     var lastReceivedMessageTimer:   RepeatingTimer? {
         didSet {
-            self.lastReceivedMessageTimer?.suspend()
-            DispatchQueue.global().async {
-                self.lastReceivedMessageTime = Date()
-//                self.lastReceivedMessageTimeoutId = RepeatingTimer(timeInterval: (Double(self.chatPingMessageInterval) * 1.5))
-                self.lastReceivedMessageTimer?.eventHandler = {
-                    if let lastReceivedMessageTimeBanged = self.lastReceivedMessageTime {
-                        let elapsed = Int(Date().timeIntervalSince(lastReceivedMessageTimeBanged))
-                        if (elapsed >= self.connectionCheckTimeout) {
-                            DispatchQueue.main.async {
-                                self.asyncClient?.asyncReconnectSocket()
+            if (lastReceivedMessageTimer != nil) {
+                log.verbose("Chat: lastReceivedMessageTimer valueChanged: \n staus = \(self.lastReceivedMessageTimer!.state) \n timeInterval = \(self.lastReceivedMessageTimer!.timeInterval) \n lastReceivedMessageTime = \(lastReceivedMessageTime ?? Date())", context: "Chat")
+                self.lastReceivedMessageTimer?.suspend()
+                DispatchQueue.global().async {
+                    self.lastReceivedMessageTime = Date()
+                    self.lastReceivedMessageTimer?.eventHandler = {
+                        if let lastReceivedMessageTimeBanged = self.lastReceivedMessageTime {
+                            let elapsed = Int(Date().timeIntervalSince(lastReceivedMessageTimeBanged))
+                            if (elapsed >= self.connectionCheckTimeout) {
+                                DispatchQueue.main.async {
+                                    self.asyncClient?.asyncReconnectSocket()
+                                }
+                                self.lastReceivedMessageTimer?.suspend()
                             }
-                            self.lastReceivedMessageTimer?.suspend()
                         }
                     }
+                    self.lastReceivedMessageTimer?.resume()
                 }
-                self.lastReceivedMessageTimer?.resume()
+            } else {
+                log.verbose("Chat: lastReceivedMessageTimer valueChanged to nil.\n lastReceivedMessageTime = \(lastReceivedMessageTime ?? Date())", context: "Chat")
             }
         }
     }
@@ -253,23 +316,28 @@ public class Chat {
              * it will send a ping message on the main thread
              *
              */
-            self.lastSentMessageTimer?.suspend()
-            DispatchQueue.global().async {
-                self.lastSentMessageTime = Date()
-//                self.lastSentMessageTimeoutId = RepeatingTimer(timeInterval: TimeInterval(self.chatPingMessageInterval))
-                self.lastSentMessageTimer?.eventHandler = {
-                    if let lastSendMessageTimeBanged = self.lastSentMessageTime {
-                        let elapsed = Int(Date().timeIntervalSince(lastSendMessageTimeBanged))
-                        if (elapsed >= self.chatPingMessageInterval) && (self.isChatReady == true) {
-                            DispatchQueue.main.async {
-                                self.ping()
+            if (lastSentMessageTimer != nil) {
+                log.verbose("Chat: lastSentMessageTimer valueChanged: \n staus = \(self.lastSentMessageTimer!.state) \n timeInterval = \(self.lastSentMessageTimer!.timeInterval) \n lastSentMessageTime = \(lastSentMessageTime ?? Date())", context: "Chat")
+                self.lastSentMessageTimer?.suspend()
+                DispatchQueue.global().async {
+                    self.lastSentMessageTime = Date()
+                    self.lastSentMessageTimer?.eventHandler = {
+                        if let lastSendMessageTimeBanged = self.lastSentMessageTime {
+                            let elapsed = Int(Date().timeIntervalSince(lastSendMessageTimeBanged))
+                            if (elapsed >= self.chatPingMessageInterval) && (self.isChatReady == true) {
+                                DispatchQueue.main.async {
+                                    self.ping()
+                                }
+                                self.lastSentMessageTimer?.suspend()
                             }
-                            self.lastSentMessageTimer?.suspend()
                         }
                     }
+                    self.lastSentMessageTimer?.resume()
                 }
-                self.lastSentMessageTimer?.resume()
+            } else {
+                log.verbose("Chat: lastSentMessageTimer valueChanged to nil.\n lastSentMessageTime = \(lastSentMessageTime ?? Date())", context: "Chat")
             }
+            
         }
     }
     
@@ -307,26 +375,25 @@ public class Chat {
     public var muteThreadCallbackToUser:            callbackTypeAlias?
     public var unmuteThreadCallbackToUser:          callbackTypeAlias?
     public var updateThreadInfoCallbackToUser:      callbackTypeAlias?
-    public var blockUserCallbackToUser:             callbackTypeAlias?
+    public var blockCallbackToUser:                 callbackTypeAlias?
     public var unblockUserCallbackToUser:           callbackTypeAlias?
-    public var getBlockedUserCallbackToUser:        callbackTypeAlias?
+    public var getBlockedListCallbackToUser:        callbackTypeAlias?
     public var leaveThreadCallbackToUser:           callbackTypeAlias?
     public var spamPvThreadCallbackToUser:          callbackTypeAlias?
     public var getMessageSeenListCallbackToUser:    callbackTypeAlias?
     public var getMessageDeliverListCallbackToUser: callbackTypeAlias?
     public var clearHistoryCallbackToUser:          callbackTypeAlias?
-    public var getAdminListCallbackToUser:          callbackTypeAlias?
     public var setRoleToUserCallbackToUser:         callbackTypeAlias?
     public var removeRoleFromUserCallbackToUser:    callbackTypeAlias?
     public var pinThreadCallbackToUser:             callbackTypeAlias?
     public var unpinThreadCallbackToUser:           callbackTypeAlias?
     public var pinMessageCallbackToUser:            callbackTypeAlias?
     public var unpinMessageCallbackToUser:          callbackTypeAlias?
-    public var getNotSeenDurationCallbackToUser:    callbackTypeAlias?
-    public var getCurrentUserRolesCallbackToUser:   callbackTypeAlias?
-    public var setProfileCallbackToUser:            callbackTypeAlias?
-    public var joinThreadCallbackToUser:            callbackTypeAlias?
-    public var isNameAvailableThreadCallbackToUser: callbackTypeAlias?
+    public var getContactNotSeenDurationCallbackToUser: callbackTypeAlias?
+    public var getCurrentUserRolesCallbackToUser:       callbackTypeAlias?
+    public var updateChatProfileCallbackToUser:         callbackTypeAlias?
+    public var joinPublicThreadCallbackToUser:              callbackTypeAlias?
+    public var isPublicThreadNameAvailableCallbackToUser:   callbackTypeAlias?
     
     
     

@@ -20,59 +20,34 @@ extension Cache {
     /// Save UserInfo:
     /// by calling this function, it will save (or update) the UserInfo on the Cache.
     ///
+    /// - fetch CMUser on the cache (check if there is any information about UserInfo on the cache)
+    /// - if it found some data (CMUser object), it will update that CMUser object
+    /// - otherwise it will create an CMUser object and save that on the cache
+    ///
     /// Inputs:
-    /// - it get a "User" model as an input
+    /// it get a "User" model as an input
     ///
     /// Outputs:
-    /// - it returns no output
+    /// it returns no output
     ///
-    /// - parameter withUserObject: send your userModel to this parameter.(User)
+    /// - parameters:
+    ///     - withUserObject:   the userModel to save on Cache.(User)
+    ///
+    /// - Returns:
+    ///     none
+    ///
     public func saveUserInfo(withUserObject user: User) {
-        /*
-         *  -> fetch CMUser on the cache (check if there is any information about UserInfo on the cache)
-         *  -> if we found some data (CMUser object), we will update that CMUser object
-         *  -> otherwise we will create an CMUser object and save that on the cache
-         *
-         */
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUser")
         do {
             if let result = try context.fetch(fetchRequest) as? [CMUser] {
-                // if there is a value in this fetch request, it mean that we had already saved UserInfo on the Cache.
-                // so we just have to update that information with new response that comes from server
                 if (result.count > 0) {
-                    result.first!.cellphoneNumber   = user.cellphoneNumber
-                    result.first!.coreUserId        = user.coreUserId as NSNumber?
-                    result.first!.email             = user.email
-                    result.first!.id                = user.id as NSNumber?
-                    result.first!.image             = user.image
-                    result.first!.lastSeen          = user.lastSeen as NSNumber?
-                    result.first!.name              = user.name
-                    result.first!.receiveEnable     = user.receiveEnable as NSNumber?
-                    result.first!.sendEnable        = user.sendEnable as NSNumber?
-                    result.first!.username          = user.username
-                    result.first!.bio               = user.chatProfileVO?.bio
-                    result.first!.metadata          = user.chatProfileVO?.metadata
-                    
-                    // save function that will try to save changes that made on the Cache
+                    result.first!.updateObject(with: user)
                     saveContext(subject: "Update UserInfo -update existing object-")
+                    
                 } else {
-                    // if there wasn't any CMUser object (means there is no information about UserInfo on the Cache)
-                    // this part will execute, which will create an object of User and save it on the Cache
                     let theUserEntity = NSEntityDescription.entity(forEntityName: "CMUser", in: context)
                     let theUser = CMUser(entity: theUserEntity!, insertInto: context)
-                    theUser.cellphoneNumber = user.cellphoneNumber
-                    theUser.coreUserId      = user.coreUserId as NSNumber?
-                    theUser.email           = user.email
-                    theUser.id              = user.id as NSNumber?
-                    theUser.image           = user.image
-                    theUser.lastSeen        = user.lastSeen as NSNumber?
-                    theUser.name            = user.name
-                    theUser.receiveEnable   = user.receiveEnable as NSNumber?
-                    theUser.sendEnable      = user.sendEnable as NSNumber?
-                    theUser.username        = user.username
-                    theUser.bio             = user.chatProfileVO?.bio
-                    theUser.metadata        = user.chatProfileVO?.metadata
-                    // save function that will try to save changes that made on the Cache
+                    theUser.updateObject(with: user)
                     saveContext(subject: "Update UserInfo -create a new object-")
                 }
             }
@@ -87,33 +62,31 @@ extension Cache {
     /// by calling this function, it will save (or update) the User Roles on the Cache.
     ///
     /// Inputs:
-    /// - it gets array of "Roles" and the threadId as Int value, an inputs
+    /// it gets array of "Roles" and the threadId as Int value, an inputs
     ///
     /// Outputs:
-    /// - it returns no output
+    /// it returns no output
     ///
-    /// - parameter withRoles:  send your currentUserRoles to this parameter.([Roles])
-    /// - parameter onThreadId: send your threadId to this parameter.(Int)
+    /// - parameters:
+    ///     - withRoles:    the currentUserRoles to save on the Cache.([Roles])
+    ///     - onThreadId:   id of the thread that user has this roles. (Int)
+    ///
+    /// - Returns:
+    ///     none
+    ///
     public func saveCurrentUserRoles(withRoles: [Roles], onThreadId threadId: Int) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMCurrentUserRoles")
         fetchRequest.predicate = NSPredicate(format: "threadId == %i", threadId)
         do {
             if let result = try context.fetch(fetchRequest) as? [CMCurrentUserRoles] {
-                // if there is a value in this fetch request, it mean that we had already saved UserInfo on the Cache.
-                // so we just have to update that information with new response that comes from server
                 if (result.count > 0) {
-                    result.first!.threadId  = threadId as NSNumber?
-                    result.first!.roles     = RolesArray(roles: withRoles)
-                    // save function that will try to save changes that made on the Cache
+                    result.first!.updateObject(with: withRoles, onThreadId: threadId)
                     saveContext(subject: "Update CurrentUserRoles -update existing object-")
+                    
                 } else {
-                    // if there wasn't any CMUser object (means there is no information about UserInfo on the Cache)
-                    // this part will execute, which will create an object of User and save it on the Cache
                     let theCurrentUserRolesEntity = NSEntityDescription.entity(forEntityName: "CMCurrentUserRoles", in: context)
                     let theCurrentUserRoles = CMCurrentUserRoles(entity: theCurrentUserRolesEntity!, insertInto: context)
-                    theCurrentUserRoles.threadId    = threadId as NSNumber?
-                    theCurrentUserRoles.roles       = RolesArray(roles: withRoles)
-                    // save function that will try to save changes that made on the Cache
+                    theCurrentUserRoles.updateObject(with: withRoles, onThreadId: threadId)
                     saveContext(subject: "Creat CurrentUserRoles -create a new object-")
                 }
             }
@@ -128,24 +101,27 @@ extension Cache {
     /// Save Contact:
     /// by calling this function, it save (or update) contacts that comes from server, into the Cache.
     ///
+    /// - for every Contact object on 'contacts' Input
+    ///     - send the Contact object to 'updateCMContactEntity(withContactObject:_)' method
+    ///         - this function will create the Contact object on the cache, of if it was exist, it will update its values
+    ///
+    ///
     /// Inputs:
-    /// - it gets an array of "Contact" model as an input
+    /// it gets an array of "Contact" model as an input
     ///
     /// Outputs:
-    /// - it returns no output
+    /// it returns no output
     ///
-    /// - parameter withContactObjects: send your contacts to this parameter.([Contact])
+    /// - parameters:
+    ///     - withContactObjects:   contacts to save on Cache. ([Contact])
+    ///
+    /// - Returns:
+    ///     none
+    ///
     public func saveContact(withContactObjects contacts: [Contact]) {
-        /*
-         *  -> for every Contact object on 'contacts' Input
-         *      -> send the Contact object to 'updateCMContactEntity(withContactObject:_)' method
-         *          -> this function will create the Contact object on the cache, of if it was exist, it will update its values
-         *
-         */
         for item in contacts {
             _ = updateCMContactEntity(withContactObject: item)
         }
-        
     }
     
     
@@ -154,51 +130,44 @@ extension Cache {
     /// Save PhoneBook Contact:
     /// by calling this function, it save (or update) PhoneContact that comes from users phone, into the Cache.
     ///
+    /// - fetch PhoneContact objects from 'PhoneContact' Entity
+    /// - filter it by cellphoneNumber
+    /// - if it found any PhoneContact object, it will update its values on the Cache
+    /// - otherwise it will create new CMContact
+    ///
     /// Inputs:
-    /// - it gets  "AddContactRequestModel" model as an input
+    /// it gets  "AddContactRequestModel" model as an input
     ///
     /// Outputs:
-    /// - it returns no output
+    /// it returns no output
     ///
-    /// - parameter contact:    send your contacts to this parameter.(AddContactRequestModel)
-    public func savePhoneBookContact(contact myContact: AddContactRequestModel) {
-        /*
-         *  -> fetch PhoneContact objects from 'PhoneContact' Entity
-         *  -> filter it by cellphoneNumber
-         *  -> if we found any PhoneContact object, we will update its values on the Cache
-         *  -> otherwise we will create new CMContact
-         *
-         */
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "PhoneContact")
-        if let contactCellphoneNumber = myContact.cellphoneNumber {
-            fetchRequest.predicate = NSPredicate(format: "cellphoneNumber == %@", contactCellphoneNumber)
-            do {
-                if let result = try context.fetch(fetchRequest) as? [PhoneContact] {
-                    if (result.count > 0) {
-                        result.first!.cellphoneNumber   = myContact.cellphoneNumber
-                        result.first!.email             = myContact.email
-                        result.first!.firstName         = myContact.firstName
-                        result.first!.lastName          = myContact.lastName
-                        
-                        saveContext(subject: "Update PhoneContact -update existing object-")
-                    }
-                } else {
-                    let thePhoneContactEntity = NSEntityDescription.entity(forEntityName: "PhoneContact", in: context)
-                    let thePhoneContact = PhoneContact(entity: thePhoneContactEntity!, insertInto: context)
-//                    let theContact = CMContact(entity: thePhoneContactEntity!, insertInto: context)
-                    thePhoneContact.cellphoneNumber  = myContact.cellphoneNumber
-                    thePhoneContact.email            = myContact.email
-                    thePhoneContact.firstName        = myContact.firstName
-                    thePhoneContact.lastName         = myContact.lastName
-                    
-                    saveContext(subject: "Update PhoneContact -create new object-")
-                }
-            } catch {
-                fatalError("Error on trying to find the contact from PhoneContact entity")
-            }
-        }
-        
-    }
+    /// - parameters:
+    ///     -  contact:     contacts to save on Cache. (AddContactRequestModel)
+    ///
+    /// - Returns:
+    ///     none
+    ///
+//    public func savePhoneBookContact(contact myContact: AddContactRequestModel) {
+//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "PhoneContact")
+//        if let contactCellphoneNumber = myContact.cellphoneNumber {
+//            fetchRequest.predicate = NSPredicate(format: "cellphoneNumber == %@", contactCellphoneNumber)
+//            do {
+//                if let result = try context.fetch(fetchRequest) as? [PhoneContact] {
+//                    if (result.count > 0) {
+//                        result.first!.updateObject(with: myContact)
+//                        saveContext(subject: "Update PhoneContact -update existing object-")
+//                    } else {
+//                        let thePhoneContactEntity = NSEntityDescription.entity(forEntityName: "PhoneContact", in: context)
+//                        let thePhoneContact = PhoneContact(entity: thePhoneContactEntity!, insertInto: context)
+//                        thePhoneContact.updateObject(with: myContact)
+//                        saveContext(subject: "Update PhoneContact -create new object-")
+//                    }
+//                }
+//            } catch {
+//                fatalError("Error on trying to find the contact from PhoneContact entity")
+//            }
+//        }
+//    }
     
     
     
@@ -206,24 +175,26 @@ extension Cache {
     /// Save Thread:
     /// by calling this function, save (or update) Threads that comes from server, into the cache
     ///
+    /// - for every Conversation object on 'threads' Input
+    ///     - send the Conversation object to 'updateCMConversationEntity(withConversationObject:_)' method
+    ///         - this function will create the Conversation object on the cache, of if it was exist, it will update its values
+    ///
     /// Inputs:
-    /// - it gets an array of  "[Conversation]" model as an input
+    /// it gets an array of  "[Conversation]" model as an input
     ///
     /// Outputs:
-    /// - it returns no output
+    /// it returns no output
     ///
-    /// - parameter withThreadObjects:    send your threads to this parameter.([Conversation])
+    /// - parameters:
+    ///     - withThreadObjects:    threads to save on Cache. ([Conversation])
+    ///
+    /// - Returns:
+    ///     none
+    ///
     public func saveThread(withThreadObjects threads: [Conversation]) {
-        /*
-         *  -> for every Conversation object on 'threads' Input
-         *      -> send the Conversation object to 'updateCMConversationEntity(withConversationObject:_)' method
-         *          -> this function will create the Conversation object on the cache, of if it was exist, it will update its values
-         *
-         */
         for item in threads {
             _ = updateCMConversationEntity(withConversationObject: item)
         }
-        
     }
     
     
@@ -231,35 +202,35 @@ extension Cache {
     /// Save Pin/Unpin on CMConversation Entity:
     /// by calling this function, save (or update) Pin/Unpin property on Thread that comes from server, into the cache
     ///
+    /// - fetch CMConversation objcets from the CMConversation Entity, and see if we already had this Conversation on the cache or not
+    /// - if it found the object on the Entity, we it update only the "pin" property value of it,
+    /// - if not, it will create CMConversation object and save it on the Cache
+    ///
     /// Inputs:
-    /// - it gets the threadId as  "Int" value as an input
+    /// it gets the threadId as  "Int" value as an input
     ///
     /// Outputs:
-    /// - it returns no output
+    /// it returns no output
     ///
-    /// - parameter withThreadId:   send your thread to this parameter.(Int)
-    /// - parameter isPinned:       specify if this thread is pinned or not. (Bool)
+    /// - parameters:
+    ///     - withThreadId: the id of the thread to make it pin. (Int)
+    ///     - isPinned:     specify if this thread is pinned or not. (Bool)
+    ///
+    /// - Returns:
+    ///     none
+    ///
     func savePinUnpinCMConversationEntity(withThreadId id: Int, isPinned: Bool) {
-        /*
-         * -> fetch CMConversation objcets from the CMConversation Entity,
-         *    and see if we already had this Conversation on the cache or not
-         * -> if we found the object on the Entity, we will update only the "pin" property value of it,
-         * -> if not, we will create CMConversation object and save it on the Cache
-         *
-         */
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
         fetchRequest.predicate = NSPredicate(format: "id == %i", id)
         do {
             if let result = try context.fetch(fetchRequest) as? [CMConversation] {
                 if (result.count > 0) {
                     result.first!.pin = isPinned as NSNumber?
-                    
                     saveContext(subject: "Update CMConversation on PinThread -update existing object-")
                 } else {
                     let conversationEntity = NSEntityDescription.entity(forEntityName: "CMConversation", in: context)
                     let conversation = CMConversation(entity: conversationEntity!, insertInto: context)
                     conversation.pin = isPinned as NSNumber?
-                    
                     saveContext(subject: "Update CMConversation on PinThread -create new object-")
                 }
             }
@@ -269,37 +240,46 @@ extension Cache {
     }
     
     
-    // MARK: - save Pin/Unpin on Messages:
-    /// Save Pin/Unpin on CMMessage Entity:
+    // MARK: - save/update Pin/Unpin:
+    /// Save Pin/Unpin on CMMessage and CMConversation Entities:
     /// by calling this function, save (or update) 'pinMessage' property on Message that comes from server, into the cache
     ///
     /// Inputs:
-    /// - it gets the messageId as  "Int" , and pinMessage as "PinUnpinMessage" value as inputs
+    /// it gets the messageId as  "Int" , and pinMessage as "PinUnpinMessage" value as inputs
     ///
     /// Outputs:
-    /// - it returns no output
+    /// it returns no output
     ///
-    /// - parameter messageId:      send your messageId to this parameter.(Int)
-    /// - parameter pinMessage:     send your  pinMessageObject to save it on the cache (PinUnpinMessage)
+    /// - parameters:
+    ///     - threadId:                 id of the thread. (Int)
+    ///     - withPinMessageObject:     the pinMessageObject to save it on the cache. (PinUnpinMessage)
+    ///
+    /// - Returns:
+    ///     none
+    ///
     func savePinMessage(threadId: Int, withPinMessageObject pinMessage: PinUnpinMessage) {
         deletePinMessage(threadId: threadId)
-//        deletePinMessageFromCMConversationEntity(threadId: threadId)
         savePinMessageOnCMConversationEntity(threadId: threadId, withPinMessageObject: pinMessage)
         savePinMessageOnCMMessageEntity(messageId: pinMessage.messageId)
-//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
-//        fetchRequest.predicate = NSPredicate(format: "id == %i", threadId)
-//        do {
-//            if let result = try context.fetch(fetchRequest) as? [CMConversation] {
-//                if (result.count > 0) {
-//                    result.first!.pinMessage = updateCMPinMessageEntity(withObject: pinMessage)
-//                    saveContext(subject: "Update CMConversation on save PinMessage -update existing object-")
-//                }
-//            }
-//        } catch {
-//            fatalError("Error on trying to find the Thread from CMConversation entity")
-//        }
     }
     
+    // MARK: - save Pin/Unpin on CMConversation Entity:
+    /// Save Pin on CMConversation Entity:
+    /// by calling this function, update 'pinMessage' property on Conversation that comes from server, into the cache
+    ///
+    /// Inputs:
+    /// it gets the messageId as  "Int"  as input
+    ///
+    /// Outputs:
+    /// it returns no output
+    ///
+    /// - parameters:
+    ///     - threadId:                 id of the thread. (Int)
+    ///     - withPinMessageObject:     the pinMessageObject to save it on the cache. (PinUnpinMessage)
+    ///
+    /// - Returns:
+    ///     none
+    ///
     func savePinMessageOnCMConversationEntity(threadId: Int, withPinMessageObject pinMessage: PinUnpinMessage) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
         fetchRequest.predicate = NSPredicate(format: "id == %i", threadId)
@@ -315,6 +295,22 @@ extension Cache {
         }
     }
     
+    // MARK: - save Pin/Unpin on CMMessage:
+    /// Save Pin on CMMessage Entity:
+    /// by calling this function, update 'pinMessage' property on Message that comes from server, into the cache
+    ///
+    /// Inputs:
+    /// it gets the messageId as  "Int"  as input
+    ///
+    /// Outputs:
+    /// it returns no output
+    ///
+    /// - parameters:
+    ///     - messageId:        id of the message. (Int)
+    ///
+    /// - Returns:
+    ///     none
+    ///
     func savePinMessageOnCMMessageEntity(messageId: Int) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMMessage")
         fetchRequest.predicate = NSPredicate(format: "id == %i", messageId)
@@ -335,55 +331,23 @@ extension Cache {
     /// by calling this function, save (or update) threadParticipants that comes from server into the cache
     ///
     /// Inputs:
-    /// - it gets an array of  "[Participant]" model  and the "ThreadId" as inputs
+    /// it gets an array of  "[Participant]" model  and the "ThreadId" as inputs
     ///
     /// Outputs:
-    /// - it returns no output
+    /// it returns no output
     ///
-    /// - parameter whereThreadIdIs:    the threadId that you want to update your participants on. (Int)
-    /// - parameter withParticipants:   send your participants to this parameter.([Participant])
-    /// - parameter isAdminRequest:     if your request was getting adminParticipants, you have to send "true" to this parameter. (Bool)
+    /// - parameters:
+    ///     - whereThreadIdIs:      the threadId that you want to update your participants on. (Int)
+    ///     - withParticipants:     send your participants to this parameter.([Participant])
+    ///     - isAdminRequest:       if your request was getting adminParticipants, you have to send "true" to this parameter. (Bool)
+    ///
+    /// - Returns:
+    ///     none
+    ///
     public func saveThreadParticipantObjects(whereThreadIdIs threadId: Int, withParticipants participants: [Participant], isAdminRequest: Bool) {
-        
         for item in participants {
             _ = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: item, isAdminRequest: isAdminRequest)
         }
-        
-//        /*
-//         *  -> fetch CMConversation objects from CMConversation entity
-//         *  -> filter it by threadId
-//         *  -> if we found any CMConversation object
-//         *      -> loop through its Participants
-//         *          -> update or save all participants with the cache data
-//         *          -> if any user had roles, update 'ThreadAdmin' Entity
-//         *          -> then update the 'ThreadParticipant' Entity
-//         *
-//         */
-//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
-//        fetchRequest.predicate = NSPredicate(format: "id == %i", threadId)
-//        do {
-//            if let result = try context.fetch(fetchRequest) as? [CMConversation] {
-//                if (result.count > 0) {
-//                    for item in participants {
-//                        if let myCMParticipantObject = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: item, isAdminRequest: isAdminRequest) {
-//                            result.first!.addToParticipants(myCMParticipantObject)
-//                            saveContext(subject: "Add/Update CMParticipant in a thread and Update CMConversation")
-//                            /*
-//                            if let roles = item.roles {
-//                                let userRoles = UserRole(userId: item.id!, name: item.name!, roles: roles)
-//                                _ = updateThreadAdminEntity(inThreadId: threadId, roles: userRoles)
-//                            }
-//                            updateThreadParticipantEntity(inThreadId: Int(exactly: result.first!.id!)!, withParticipantId: Int(exactly: item.id!)!)
-//                            */
-//                        }
-//                    }
-//                }
-//                saveContext(subject: "Update CMConversation after adding/updating new Participant")
-//            }
-//        } catch {
-//            fatalError("Error on getting CMConversation when trying to add/update thread participants")
-//        }
-        
     }
     
     
@@ -420,13 +384,18 @@ extension Cache {
     /// by calling this function, save (or update) Messages that comes from server, in the Cache.
     ///
     /// Inputs:
-    /// - it gets an array of  "[Message]" model  and the "ThreadId" as inputs
+    /// it gets an array of  "[Message]" model  and the "ThreadId" as inputs
     ///
     /// Outputs:
-    /// - it returns no output
+    /// it returns no output
     ///
-    /// - parameter messages:           send your messages to this parameter.([Message])
-    /// - parameter getHistoryParams:   this variable will contains the getHistory Request that has send and couses the 'messages' response. (JSON?)
+    /// - parameters:
+    ///     - messages:             send your messages to this parameter.([Message])
+    ///     - getHistoryParams:     this variable will contains the getHistory Request that has send and couses the 'messages' response. (JSON?)
+    ///
+    /// - Returns:
+    ///     none
+    ///
     public func saveMessageObjects(messages: [Message], getHistoryParams: JSON?) {
         /*
          *  -> check if we have 'getHistoryParams' Input or not
@@ -894,22 +863,32 @@ extension Cache {
     
     
     
-    /*
-    public func saveMessageGap(threadId: Int, messageIds: [Int], messagePreviousIds: [Int]) {
-        for (index, _) in messageIds.enumerated() {
-            updateMessageGapEntity(inThreadId: threadId, withMessageId: messageIds[index], withPreviousId: messagePreviousIds[index])
-        }
-    }
-    */
     
     
     
     // MARK: - save ImageObject:
-    // this function will save (or update) image response that comes from server, in the Cache.
+    /// Save ImageObject:
+    /// this function will save (or update) image response that comes from server, in the Cache.
+    ///
+    /// - check if there is any information about This Image File in the cache
+    /// - if it has some data, it will update that data,
+    /// - otherwise it will create an object and save data on cache
+    ///
+    /// Inputs:
+    /// it gets the 'ImageObject' model,  and the imageData as 'Data' value, and localPath (optional) as inputs
+    ///
+    /// Outputs:
+    /// it returns no output
+    ///
+    /// - parameters:
+    ///     - imageInfo:    the imageObject that contains image properties to save on the Cache. (ImageObject)
+    ///     - imageData:    the image data value. (Data)
+    ///     - toLocalPath:  the path that the client specified to save this image on. (URL?)
+    ///
+    /// - Returns:
+    ///     none
+    ///
     public func saveImageObject(imageInfo: ImageObject, imageData: Data, toLocalPath: URL?) {
-        // check if there is any information about This Image File in the cache
-        // if it has some data, it we will update that data,
-        // otherwise we will create an object and save data on cache
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
         do {
             if let result = try context.fetch(fetchRequest) as? [CMImage] {
@@ -1006,11 +985,28 @@ extension Cache {
     
     
     // MARK: - save FileObject:
-    // this function will save (or update) uploaded image response that comes from server, in the Cache.
+    /// Save FileObject:
+    /// this function will save (or update) uploaded image response that comes from server, in the Cache.
+    ///
+    /// - check if there is any information about This File in the cache
+    /// - if it has some data, it will update that data,
+    /// - otherwise it will create an object and save data on cache
+    ///
+    /// Inputs:
+    /// it gets the 'FileObject' model,  and the fileData as 'Data' value, and localPath (optional) as inputs
+    ///
+    /// Outputs:
+    /// it returns no output
+    ///
+    /// - parameters:
+    ///     - fileInfo:     the FileObject that contains file properties to save on the Cache. (FileObject)
+    ///     - imageData:    the file data value. (Data)
+    ///     - toLocalPath:  the path that the client specified to save this file on. (URL?)
+    ///
+    /// - Returns:
+    ///     none
+    ///
     public func saveFileObject(fileInfo: FileObject, fileData: Data, toLocalPath: URL?) {
-        // check if there is any information about This Image File in the cache
-        // if it has some data, it we will update that data,
-        // otherwise we will create an object and save data on cache
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMFile")
         do {
             
