@@ -13,7 +13,10 @@ import CoreData
 
 public class CMConversation: NSManagedObject {
     
-    public func convertCMConversationToConversationObject() -> Conversation {
+    public func convertCMObjectToObject(showInviter:        Bool,
+                                        showLastMessageVO:  Bool,
+                                        showParticipants:   Bool,
+                                        showPinMessage:     Bool) -> Conversation {
         var admin:                          Bool?
         var canEditInfo:                    Bool?
         var canSpam:                        Bool?
@@ -37,7 +40,12 @@ public class CMConversation: NSManagedObject {
         var time:                           UInt?
         var type:                           Int?
         var unreadCount:                    Int?
+        
+        var inviter:                        Participant?
+        var lastMessage:                    Message?
         var participants:                   [Participant]?
+        var pinMessage:                     PinUnpinMessage?
+        
         
         func createVariables() {
             if let admin2 = self.admin as? Bool {
@@ -115,8 +123,23 @@ public class CMConversation: NSManagedObject {
                 participants = []
                 for item in participantArr {
                     if let participant = item as? CMParticipant {
-                        participants?.append(participant.convertCMParticipantToParticipantObject())
+                        participants?.append(participant.convertCMObjectToObject())
                     }
+                }
+            }
+            if (showInviter) {
+                if let theInviter = self.inviter {
+                    inviter = theInviter.convertCMObjectToObject()
+                }
+            }
+            if (showLastMessageVO) {
+                if let theLastMessage = self.lastMessageVO {
+                    lastMessage = theLastMessage.convertCMObjectToObject(showConversation: false, showForwardInfo: true, showParticipant: true, showReplyInfo: true)
+                }
+            }
+            if (showPinMessage) {
+                if let thePinMessage = self.pinMessage {
+                    pinMessage = thePinMessage.convertCMObjectToObject()
                 }
             }
         }
@@ -155,10 +178,10 @@ public class CMConversation: NSManagedObject {
                                                  type:                  type,
                                                  unreadCount:           unreadCount,
                                                  uniqueName:            nil,
-                                                 inviter:               self.inviter?.convertCMParticipantToParticipantObject(),
-                                                 lastMessageVO:         self.lastMessageVO?.convertCMMessageToMessageObject(),
-                                                 participants:          participants,
-                                                 pinMessage:            pinMessage?.convertCMPinMessageToPinUnpinMessageObject())
+                                                 inviter:               (showInviter)       ? inviter       : nil,
+                                                 lastMessageVO:         (showLastMessageVO) ? lastMessage   : nil,
+                                                 participants:          (showParticipants)  ? participants  : nil,
+                                                 pinMessage:            (showPinMessage)    ? pinMessage    : nil)
             
             return conversationModel
         }

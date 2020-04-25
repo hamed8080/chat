@@ -14,7 +14,7 @@ import SwiftyJSON
 
 public class QueueOfForwardMessages: NSManagedObject {
     
-    public func convertQueueOfForwardMessagesToQueueOfWaitForwardMessagesModelObject() -> QueueOfWaitForwardMessagesModel {
+    public func convertCMObjectToObject() -> QueueOfWaitForwardMessagesModel {
         
 //        var metadata:       JSON?
 //        var messageIds:     [Int]?

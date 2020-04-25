@@ -100,7 +100,7 @@
         <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="mentioned" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="message" optional="YES" attributeType="String"/>
-        <attribute name="messageType" optional="YES" attributeType="String"/>
+        <attribute name="messageType" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="ownerId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="pinned" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>

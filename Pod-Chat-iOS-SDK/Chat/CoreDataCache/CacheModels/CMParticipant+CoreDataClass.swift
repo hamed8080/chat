@@ -13,7 +13,7 @@ import CoreData
 
 public class CMParticipant: NSManagedObject {
     
-    public func convertCMParticipantToParticipantObject() -> Participant {
+    public func convertCMObjectToObject() -> Participant {
         
         var admin:              Bool?
         var auditor:            Bool?

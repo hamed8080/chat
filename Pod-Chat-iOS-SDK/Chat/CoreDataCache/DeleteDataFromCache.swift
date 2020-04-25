@@ -436,6 +436,7 @@ extension Cache {
                               uniqueId: String?) {
         let fetchRequest = retrieveMessageHistoryFetchRequest(fromTime:         fromTime,
                                                               messageId:        messageId,
+                                                              messageType:      nil,
                                                               order:            order,
                                                               query:            query,
                                                               threadId:         threadId,

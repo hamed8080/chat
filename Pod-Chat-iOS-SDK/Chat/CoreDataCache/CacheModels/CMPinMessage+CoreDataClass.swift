@@ -13,7 +13,7 @@ import CoreData
 
 public class CMPinMessage: NSManagedObject {
     
-    public func convertCMPinMessageToPinUnpinMessageObject() -> PinUnpinMessage {
+    public func convertCMObjectToObject() -> PinUnpinMessage {
             
         var messageId:  Int?
         var notifyAll:  Bool?
