@@ -97,6 +97,7 @@ extension Chat {
                                                                                 fromTime:       getHistoryInput.fromTime,
                                                                                 lastMessageId:  nil,
                                                                                 messageId:      getHistoryInput.messageId,
+                                                                                messageType:    getHistoryInput.messageType,
                                                                                 offset:         getHistoryInput.offset ?? 0,
                                                                                 order:          getHistoryInput.order,
                                                                                 query:          getHistoryInput.query,

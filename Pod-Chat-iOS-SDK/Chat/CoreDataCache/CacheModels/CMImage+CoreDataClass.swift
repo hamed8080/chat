@@ -13,7 +13,7 @@ import CoreData
 
 public class CMImage: NSManagedObject {
     
-    public func convertCMImageToImageObject() -> ImageObject {
+    public func convertCMObjectToObject() -> ImageObject {
         
         var actualHeight:   Int?
         var actualWidth:    Int?

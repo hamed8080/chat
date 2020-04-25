@@ -13,7 +13,7 @@ import CoreData
 
 public class CMContact: NSManagedObject {
     
-    public func convertCMContactToContactObject() -> Contact {
+    public func convertCMObjectToObject() -> Contact {
         
         var blocked:            Bool?
         var hasUser:            Bool?
@@ -55,7 +55,7 @@ public class CMContact: NSManagedObject {
                                        id:              id,
                                        image:           self.image,
                                        lastName:        self.lastName,
-                                       linkedUser:      self.linkedUser?.convertCMLinkedUserToLinkedUserObject(),
+                                       linkedUser:      self.linkedUser?.convertCMObjectToObject(),
                                        notSeenDuration: notSeenDuration,
                                        timeStamp:       time,
                                        userId:          userId)
