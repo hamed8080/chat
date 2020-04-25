@@ -13,7 +13,7 @@ import SwiftyJSON
 
 public class QueueOfFileMessages: NSManagedObject {
     
-    public func convertQueueOfFileMessagesToQueueOfWaitFileMessagesModelObject() -> QueueOfWaitFileMessagesModel {
+    public func convertCMObjectToObject() -> QueueOfWaitFileMessagesModel {
         
         var fileToSend:     Data?
         var imageToSend:    Data?

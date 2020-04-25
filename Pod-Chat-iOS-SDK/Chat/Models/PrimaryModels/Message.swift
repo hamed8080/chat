@@ -19,7 +19,7 @@ open class Message {
     public var id:          Int?
     public var mentioned:   Bool?
     public var message:     String?
-    public var messageType: String?
+    public var messageType: Int?
     public var metadata:    String?
     public var ownerId:     Int?
     public var pinned:      Bool?
@@ -47,7 +47,7 @@ open class Message {
         self.id             = pushMessageVO["id"].int
         self.mentioned      = pushMessageVO["mentioned"].bool
         self.message        = pushMessageVO["message"].string
-        self.messageType    = pushMessageVO["messageType"].string
+        self.messageType    = pushMessageVO["messageType"].int
         self.metadata       = pushMessageVO["metadata"].string
         self.pinned         = pushMessageVO["pinned"].bool
         self.previousId     = pushMessageVO["previousId"].int
@@ -90,7 +90,7 @@ open class Message {
                 id:             Int?,
                 mentioned:      Bool?,
                 message:        String?,
-                messageType:    String?,
+                messageType:    Int?,
                 metadata:       String?,
                 ownerId:        Int?,
                 pinned:         Bool?,

@@ -13,7 +13,7 @@ import CoreData
 
 public class CMUserRole: NSManagedObject {
     
-    public func convertCMUserRoleToUserRoleObject() -> UserRole {
+    public func convertCMObjectToObject() -> UserRole {
         
         var roles:      [String]?
         var id:         Int?

@@ -13,7 +13,7 @@ import CoreData
 
 public class CMUser: NSManagedObject {
     
-    public func convertCMUserToUserObject() -> User {
+    public func convertCMObjectToObject() -> User {
         
         var coreUserId:     Int?
         var id:             Int?

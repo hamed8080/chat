@@ -565,6 +565,7 @@ extension Cache {
                     var firstObject: Message?
                     let fetchRequest = retrieveMessageHistoryFetchRequest(fromTime:         nil,
                                                                           messageId:        nil,
+                                                                          messageType:      nil,
                                                                           order:            nil,
                                                                           query:            nil,
                                                                           threadId:         threadId,
@@ -599,6 +600,7 @@ extension Cache {
                     var lastObject: Message?
                     let fetchRequest = retrieveMessageHistoryFetchRequest(fromTime:         nil,
                                                                           messageId:        nil,
+                                                                          messageType:      nil,
                                                                           order:            nil,
                                                                           query:            nil,
                                                                           threadId:         threadId,
