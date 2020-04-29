@@ -26,9 +26,9 @@ extension Chat {
         let returnData = CreateReturnData(hasError:         false,
                                           errorMessage:     "",
                                           errorCode:        0,
-                                          result:           message.content?.convertToJSON(),
+                                          result:           nil,//message.content?.convertToJSON(),
                                           resultAsArray:    nil,
-                                          resultAsString:   nil,
+                                          resultAsString:   message.content,
                                           contentCount:     message.contentCount,
                                           subjectId:        message.subjectId)
         
@@ -50,11 +50,11 @@ extension Chat {
                               failure:  @escaping callbackTypeAlias) {
             log.verbose("StartBotCallback", context: "Chat")
             
-            if let content = response.result {
-                let startBotModel = StartStopBotResponse(messageContent:    content,
-                                                         hasError:          response.hasError,
-                                                         errorMessage:      response.errorMessage,
-                                                         errorCode:         response.errorCode)
+            if let content = response.resultAsString {
+                let startBotModel = StartStopBotResponse(botName:       content,
+                                                         hasError:      response.hasError,
+                                                         errorMessage:  response.errorMessage,
+                                                         errorCode:     response.errorCode)
                 success(startBotModel)
             }
         }

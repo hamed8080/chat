@@ -105,14 +105,18 @@ public class Chat {
         self.localImageCustomPath = localImageCustomPath
         self.localFileCustomPath = localFileCustomPath
         
-        getDeviceIdWithToken { (deviceIdStr) in
-            self.deviceId = deviceIdStr
-            
-            log.info("get deviceId successfully = \(self.deviceId ?? "error!!")", context: "Chat")
-            
-            DispatchQueue.main.async {
-                self.CreateAsync()
-            }
+//        getDeviceIdWithToken { (deviceIdStr) in
+//            self.deviceId = deviceIdStr
+//
+//            log.info("get deviceId successfully = \(self.deviceId ?? "error!!")", context: "Chat")
+//
+//            DispatchQueue.main.async {
+//                self.CreateAsync()
+//            }
+//        }
+        self.deviceId = "1234567890"
+        DispatchQueue.main.async {
+            self.CreateAsync()
         }
         
         if checkIfDeviceHasFreeSpace(needSpaceInMB: self.deviecLimitationSpaceMB, turnOffTheCache: true) {

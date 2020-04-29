@@ -8,7 +8,7 @@
 
 import SwiftyJSON
 
-open class StartStopBotRequest {
+open class StartStopBotRequest: RequestModelDelegates {
     
     public let botName:     String
     public let threadId:    Int
@@ -26,6 +26,16 @@ open class StartStopBotRequest {
         
         self.typeCode   = typeCode
         self.uniqueId   = uniqueId ?? UUID().uuidString
+    }
+    
+    public func convertContentToJSON() -> JSON {
+        var content: JSON = [:]
+        content["botName"] = JSON(botName)
+        return content
+    }
+    
+    public func convertContentToJSONArray() -> [JSON] {
+        return []
     }
     
 }

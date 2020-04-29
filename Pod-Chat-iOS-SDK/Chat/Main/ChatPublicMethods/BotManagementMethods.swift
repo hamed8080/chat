@@ -96,7 +96,7 @@ extension Chat {
         
         addBotCommandCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.CREATE_BOT.intValue(),
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.DEFINE_BOT_COMMAND.intValue(),
                                             content:            "\(addBotCommandsInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
@@ -151,8 +151,8 @@ extension Chat {
         
         startBotCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.CREATE_BOT.intValue(),
-                                            content:            startBotInput.botName,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.START_BOT.intValue(),
+                                            content:            "\(startBotInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
@@ -205,8 +205,8 @@ extension Chat {
         
         stopBotCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.CREATE_BOT.intValue(),
-                                            content:            stopBotInput.botName,
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.STOP_BOT.intValue(),
+                                            content:            "\(stopBotInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,

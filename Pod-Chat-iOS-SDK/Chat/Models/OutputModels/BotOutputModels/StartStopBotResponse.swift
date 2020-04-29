@@ -12,14 +12,14 @@ open class StartStopBotResponse: ResponseModel {
     
     public var botName:    String
     
-    public init(messageContent: JSON,
-                hasError:       Bool,
-                errorMessage:   String,
-                errorCode:      Int) {
-        
-        self.botName = messageContent["botName"].stringValue
-        super.init(hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
-    }
+//    public init(messageContent: JSON,
+//                hasError:       Bool,
+//                errorMessage:   String,
+//                errorCode:      Int) {
+//
+//        self.botName = messageContent["botName"].stringValue
+//        super.init(hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
+//    }
     
     public init(botName:        String,
                 hasError:       Bool,
