@@ -497,6 +497,7 @@ extension Chat {
                              completion:    @escaping callbackTypeAlias) {
         log.verbose("Try to request to sync contact", context: "Chat")
         
+        // save contacts on the Cache
         var firstNameArray = [String]()
         var lastNameArray = [String]()
         var cellphoneNumberArray = [String]()
@@ -519,6 +520,7 @@ extension Chat {
                         lastNameArray.append(contact.familyName)
                         cellphoneNumberArray.append(contact.phoneNumbers.first?.value.stringValue ?? "")
                         emailArray.append((contact.emailAddresses.first?.value as String?) ?? "")
+                         
                     })
                 } catch {
                     
@@ -527,6 +529,7 @@ extension Chat {
         }
         
         
+        // retrieve not synced contacts and sync them
         var firstNames:         [String] = []
         var lastNames:          [String] = []
         var cellPhones:         [String] = []
@@ -566,19 +569,24 @@ extension Chat {
             }
         }
         
-        let addContactsModel = AddContactsRequestModel(cellphoneNumbers: cellPhones,
-                                                       emails:          emails,
-                                                       firstNames:      firstNames,
-                                                       lastNames:       lastNames,
-//                                                       usernames:       [],
-                                                       typeCode:        nil,
-                                                       uniqueIds:       contactUniqueIds)
-        
-        addContacts(inputModel: addContactsModel, uniqueIds: { (resUniqueIds) in
-            uniqueIds(resUniqueIds)
-        }) { (myResponse) in
-            completion(myResponse)
+        if cellPhones.count > 0 {
+            let addContactsModel = AddContactsRequestModel(cellphoneNumbers:    cellPhones,
+                                                           emails:              emails,
+                                                           firstNames:          firstNames,
+                                                           lastNames:           lastNames,
+                                                           typeCode:            nil,
+                                                           uniqueIds:       contactUniqueIds)
+                    
+            addContacts(inputModel: addContactsModel, uniqueIds: { (resUniqueIds) in
+                uniqueIds(resUniqueIds)
+            }) { (myResponse) in
+                completion(myResponse)
+            }
+        } else {
+            let contactModel = ContactModel(contentCount: 0, messageContent: [], hasError: false, errorMessage: "", errorCode: 0)
+            completion(contactModel)
         }
+        
         
     }
     

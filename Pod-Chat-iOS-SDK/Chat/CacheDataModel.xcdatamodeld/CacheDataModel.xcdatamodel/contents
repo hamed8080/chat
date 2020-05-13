@@ -293,7 +293,7 @@
         <element name="CMUser" positionX="-463.83984375" positionY="196.234375" width="128" height="223"/>
         <element name="CMUserRole" positionX="471.12890625" positionY="272.80078125" width="128" height="120"/>
         <element name="MessageGaps" positionX="-459.22265625" positionY="620.73828125" width="128" height="90"/>
-        <element name="PhoneContact" positionX="-459.39453125" positionY="-191.34765625" width="128" height="105"/>
+        <element name="PhoneContact" positionX="-459.39453125" positionY="-191.34765625" width="128" height="103"/>
         <element name="QueueOfEditMessages" positionX="1209.28125" positionY="-34.71875" width="128" height="163"/>
         <element name="QueueOfFileMessages" positionX="1220.84375" positionY="275.875" width="128" height="268"/>
         <element name="QueueOfForwardMessages" positionX="1214.4296875" positionY="135.15234375" width="128" height="133"/>

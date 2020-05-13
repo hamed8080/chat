@@ -26,9 +26,9 @@ extension Chat {
         let returnData = CreateReturnData(hasError:         false,
                                           errorMessage:     "",
                                           errorCode:        0,
-                                          result:           nil,
+                                          result:           message.content?.convertToJSON(),
                                           resultAsArray:    nil,
-                                          resultAsString:   message.content,
+                                          resultAsString:   nil,
                                           contentCount:     message.contentCount,
                                           subjectId:        message.subjectId)
         
@@ -83,11 +83,11 @@ extension Chat {
                               failure:  @escaping callbackTypeAlias) {
             log.verbose("DeleteMessageCallbacks", context: "Chat")
             
-            if let content = response.resultAsString {
-                let deletedMessageModel = DeleteMessageResponse(deletedMessageId:   Int(content) ?? 0,
-                                                                hasError:           response.hasError,
-                                                                errorMessage:       response.errorMessage,
-                                                                errorCode:          response.errorCode)
+            if let content = response.result {
+                let deletedMessageModel = DeleteMessageResponse(messageContent: content,
+                                                                hasError:       response.hasError,
+                                                                errorMessage:   response.errorMessage,
+                                                                errorCode:      response.errorCode)
                 
                 success(deletedMessageModel)
             }

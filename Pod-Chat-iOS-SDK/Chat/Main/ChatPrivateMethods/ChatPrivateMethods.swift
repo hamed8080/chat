@@ -103,6 +103,7 @@ extension Chat {
                     
                     // loop through devices
                     if let devices = msg["devices"].array {
+                        print("devicess = \(devices)")
                         for device in devices {
                             // check if we can found user current device
                             if device["current"].bool == true {
