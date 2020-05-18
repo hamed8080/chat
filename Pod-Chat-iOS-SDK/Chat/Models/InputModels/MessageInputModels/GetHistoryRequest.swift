@@ -22,7 +22,7 @@ open class GetHistoryRequest: RequestModelDelegates {
     public let query:               String?     // Search term to be looked up in messages content
     public let threadId:            Int         // Id of thread to get its history
     public let toTime:              UInt?       // Get messages which have smaller time than given toTime
-    public let toTimeNanos:         UInt?   //
+    public let toTimeNanos:         UInt?       //
     public let uniqueIds:           [String]?   // Array of unique ids to retrieve
     public let userId:              Int?        // Messages of this SSO User
     

@@ -24,7 +24,7 @@ extension CMMessage {
     @NSManaged public var id:               NSNumber?
     @NSManaged public var mentioned:        NSNumber?
     @NSManaged public var message:          String?
-    @NSManaged public var messageType:      String?
+    @NSManaged public var messageType:      NSNumber?
     @NSManaged public var metadata:         String?
     @NSManaged public var ownerId:          NSNumber?
     @NSManaged public var pinned:           NSNumber?

@@ -13,7 +13,7 @@ import CoreData
 
 public class CMFile: NSManagedObject {
     
-    public func convertCMFileToFileObject() -> FileObject {
+    public func convertCMObjectToObject() -> FileObject {
         
         var id:             Int?
         

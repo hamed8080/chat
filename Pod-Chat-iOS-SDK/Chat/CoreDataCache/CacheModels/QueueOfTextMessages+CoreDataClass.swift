@@ -14,7 +14,7 @@ import SwiftyJSON
 
 public class QueueOfTextMessages: NSManagedObject {
     
-    public func convertQueueOfTextMessagesToQueueOfWaitTextMessagesModelObject() -> QueueOfWaitTextMessagesModel {
+    public func convertCMObjectToObject() -> QueueOfWaitTextMessagesModel {
         
 //        var metadata:       JSON?
         var repliedTo:      Int?

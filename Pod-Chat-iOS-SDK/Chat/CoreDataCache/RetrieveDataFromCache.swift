@@ -238,6 +238,10 @@ extension Cache {
             }
         }
         
+        let firstNameSort   = NSSortDescriptor(key: "firstName", ascending: ascending)
+        let lastNameSort    = NSSortDescriptor(key: "lastName", ascending: ascending)
+        fetchRequest.sortDescriptors = [lastNameSort, firstNameSort]
+        
         do {
             if let result = try context.fetch(fetchRequest) as? [CMContact] {
                 
@@ -253,7 +257,7 @@ extension Cache {
                 
                 var contactsArr = [Contact]()
                 for item in cmContactObjectArr {
-                    contactsArr.append(item.convertCMContactToContactObject())
+                    contactsArr.append(item.convertCMObjectToObject())
                 }
                 
                 let getContactModelResponse = GetContactsModel(contactsObject:  contactsArr,
@@ -420,7 +424,7 @@ extension Cache {
                 var insideCount = 0
                 for (index, item) in result.enumerated() {
                     if (index >= offset) && (insideCount <= count) {
-                        threadObjects.append(item.convertCMConversationToConversationObject())
+                        threadObjects.append(item.convertCMObjectToObject(showInviter: true, showLastMessageVO: true, showParticipants: false, showPinMessage: true))
                         insideCount += 1
                     }
                 }
@@ -500,7 +504,7 @@ extension Cache {
                 
                 var conversationArr = [Conversation]()
                 for item in cmConversationObjectArr {
-                    let conversationObject = item.convertCMConversationToConversationObject()
+                    let conversationObject = item.convertCMObjectToObject(showInviter: true, showLastMessageVO: true, showParticipants: false, showPinMessage: true)
                     conversationArr.append(conversationObject)
                 }
                 return (conversationArr, result.count)
@@ -528,7 +532,7 @@ extension Cache {
                 
                 var conversationArr = [Conversation]()
                 for item in result {
-                    let conversationObject = item.convertCMConversationToConversationObject()
+                    let conversationObject = item.convertCMObjectToObject(showInviter: true, showLastMessageVO: true, showParticipants: false, showPinMessage: true)
                     conversationArr.append(conversationObject)
                 }
                 return conversationArr
@@ -584,6 +588,12 @@ extension Cache {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMParticipant")
         let threadPredicate = NSPredicate(format: "threadId == %i", threadId)
         fetchRequest.predicate = threadPredicate
+        
+        let nameSort   = NSSortDescriptor(key: "contactName", ascending: ascending)
+        let lastNameSort    = NSSortDescriptor(key: "lastName", ascending: ascending)
+        let firstNameSort    = NSSortDescriptor(key: "firstName", ascending: ascending)
+        fetchRequest.sortDescriptors = [nameSort, lastNameSort, firstNameSort]
+        
         do {
             if let result = try context.fetch(fetchRequest) as? [CMParticipant] {
                 if (result.count > 0) {
@@ -600,7 +610,7 @@ extension Cache {
                     
                     var participantsArr = [Participant]()
                     for item in cmParticipantObjectArr {
-                        participantsArr.append(item.convertCMParticipantToParticipantObject())
+                        participantsArr.append(item.convertCMObjectToObject())
                     }
                     getThreadParticipantModelResponse = GetThreadParticipantsModel(participantObjects:  participantsArr,
                                                                                    contentCount:        result.count,
@@ -664,7 +674,7 @@ extension Cache {
         do {
             if let result = try context.fetch(fetchRequest) as? [CMConversation] {
                 for thread in result {
-                    let t = thread.convertCMConversationToConversationObject()
+                    let t = thread.convertCMObjectToObject(showInviter: false, showLastMessageVO: false, showParticipants: false, showPinMessage: false)
                     countSum += t.unreadCount ?? 0
                 }
             }
@@ -706,6 +716,7 @@ extension Cache {
                                        fromTime:        UInt?,
                                        lastMessageId:   Int?,
                                        messageId:       Int?,
+                                       messageType:     Int?,
                                        offset:          Int,
                                        order:           String?,
                                        query:           String?,
@@ -723,6 +734,7 @@ extension Cache {
          */
         let fetchRequest = retrieveMessageHistoryFetchRequest(fromTime:         fromTime,
                                                               messageId:        messageId,
+                                                              messageType:      messageType,
                                                               order:            order,
                                                               query:            query,
                                                               threadId:         threadId,
@@ -756,7 +768,7 @@ extension Cache {
                     
                     var messageArr = [Message]()
                     for item in cmMessageObjectArr {
-                        messageArr.append(item.convertCMMessageToMessageObject())
+                        messageArr.append(item.convertCMObjectToObject(showConversation: false, showForwardInfo: true, showParticipant: true, showReplyInfo: true))
                     }
                     
                     let getMessageModelResponse = GetHistoryModel(messageContent:   messageArr,
@@ -787,6 +799,7 @@ extension Cache {
      */
     func retrieveMessageHistoryFetchRequest(fromTime:       UInt?,
                                             messageId:      Int?,
+                                            messageType:    Int?,
                                             order:          String?,
                                             query:          String?,
                                             threadId:       Int?,
@@ -800,14 +813,14 @@ extension Cache {
                                           ascending:    (order == Ordering.ascending.rawValue) ? true: false)
         fetchRequest.sortDescriptors = [sortByTime]
         
-        switch (messageId, uniqueIds, threadId, fromTime, toTime, query) {
+        switch (messageId, uniqueIds, threadId, fromTime, toTime, query, messageType) {
             
         // if messageId is set, just search for message that has this exact messageId
-        case let (.some(myMessageId), _, _, _, _, _):
+        case let (.some(myMessageId), _, _, _, _, _, _):
             fetchRequest.predicate = NSPredicate(format: "id == %i", myMessageId)
             
         // if uniqueId is set, just search for message that has this exact uniqueId
-        case let ( _, .some(myUniqueIds), _, _, _, _):
+        case let ( _, .some(myUniqueIds), _, _, _, _, _):
             var predicateArray = [NSPredicate]()
             for item in myUniqueIds {
                 predicateArray.append(NSPredicate(format: "uniqueId == %@", item))
@@ -821,7 +834,7 @@ extension Cache {
 //            fetchRequest.predicate = NSPredicate(format: "uniqueId == %@", myUniqueId)
             
         // check if there was any parameter has been set, and put it's predicate statement on an array, then AND them all
-        case let (.none, .none, threadId, fromTime, toTime, query):
+        case let (.none, .none, threadId, fromTime, toTime, query, messageType):
             
             var predicateArray = [NSPredicate]()
             
@@ -838,6 +851,9 @@ extension Cache {
                 if (searchQuery != "") {
                     predicateArray.append(NSPredicate(format: "message CONTAINS[cd] %@", searchQuery))
                 }
+            }
+            if let tmessageType = messageType {
+                predicateArray.append(NSPredicate(format: "messageType == %i", tmessageType))
             }
             
             if (predicateArray.count == 1) {
@@ -931,7 +947,7 @@ extension Cache {
             if let result = try context.fetch(fetchRequest) as? [CMImage] {
                 
                 if let firstObject = result.first {
-                    let imageObject = firstObject.convertCMImageToImageObject()
+                    let imageObject = firstObject.convertCMObjectToObject()
                     let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
                     let myImagePath = path + "/\(fileSubPath.Images)/" + "\(firstObject.id ?? 0)\(firstObject.name ?? "default")"
                     
@@ -995,7 +1011,7 @@ extension Cache {
             if let result = try context.fetch(fetchRequest) as? [CMFile] {
                 
                 if let firstObject = result.first {
-                    let fileObject = firstObject.convertCMFileToFileObject()
+                    let fileObject = firstObject.convertCMObjectToObject()
                     
                     let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
                     let myFilePath = path + "/\(fileSubPath.Files)/" + "\(firstObject.id ?? 0)\(firstObject.name ?? "default")"

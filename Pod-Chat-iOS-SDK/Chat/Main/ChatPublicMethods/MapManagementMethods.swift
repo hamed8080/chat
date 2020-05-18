@@ -195,6 +195,7 @@ extension Chat {
         , progress: { (downloadProgress) in
             progress(downloadProgress)
         }) { (myResponse, jsonResponse) in
+            print("jsonResponse ===== \n\(jsonResponse)")
             guard let image = myResponse else { print("Value is empty!!!"); return }
             completion(image)
         }

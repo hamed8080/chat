@@ -60,6 +60,10 @@ public enum ChatMessageVOTypes {
     case GET_CURRENT_USER_ROLES             // 54
     case CONTACTS_LAST_SEEN                 // 60
     case ALL_UNREAD_MESSAGE_COUNT           // 61
+    case CREATE_BOT                         // 62
+    case DEFINE_BOT_COMMAND                 // 63
+    case START_BOT                          // 64
+    case STOP_BOT                           // 65
     case LOGOUT                             // 100
     case ERROR                              // 999
     
@@ -115,6 +119,10 @@ public enum ChatMessageVOTypes {
         case .GET_CURRENT_USER_ROLES:           return 54
         case .CONTACTS_LAST_SEEN:               return 60
         case .ALL_UNREAD_MESSAGE_COUNT:         return 61
+        case .CREATE_BOT:                       return 62
+        case .DEFINE_BOT_COMMAND:               return 63
+        case .START_BOT:                        return 64
+        case .STOP_BOT:                         return 65
         case .LOGOUT:                           return 100
         case .ERROR:                            return 999
         }
