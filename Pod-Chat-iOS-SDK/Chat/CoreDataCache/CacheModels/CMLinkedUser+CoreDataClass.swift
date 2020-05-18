@@ -13,7 +13,7 @@ import CoreData
 
 public class CMLinkedUser: NSManagedObject {
     
-    public func convertCMLinkedUserToLinkedUserObject() -> LinkedUser {
+    public func convertCMObjectToObject() -> LinkedUser {
         
         var coreUserId: Int?
         

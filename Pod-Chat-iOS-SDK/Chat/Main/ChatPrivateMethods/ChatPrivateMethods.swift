@@ -83,7 +83,6 @@ extension Chat {
         let url = ssoHost + SERVICES_PATH.SSO_DEVICES.rawValue
         let method: HTTPMethod = .get
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-        
         Alamofire.request(url, method: method, parameters: nil, headers: headers).responseString { (response) in
             
             // check if the result respons is success
@@ -846,6 +845,26 @@ extension Chat {
         // a message of type 61 (ALL_UNREAD_MESSAGE_COUNT) comes from Server.
         case ChatMessageVOTypes.ALL_UNREAD_MESSAGE_COUNT.intValue():
             responseOfAllUnreadMessageCount(withMessage: message)
+            break
+            
+        // a message of type 62 (CREATE_BOT) comes from Server.
+        case ChatMessageVOTypes.CREATE_BOT.intValue():
+            responseOfCreateBot(withMessage: message)
+            break
+            
+        // a message of type 63 (DEFINE_BOT_COMMAND) comes from Server.
+        case ChatMessageVOTypes.DEFINE_BOT_COMMAND.intValue():
+            responseOfAddBotCommand(withMessage: message)
+            break
+            
+        // a message of type 64 (START_BOT) comes from Server.
+        case ChatMessageVOTypes.START_BOT.intValue():
+            responseOfStartBot(withMessage: message)
+            break
+            
+        // a message of type 65 (STOP_BOT) comes from Server.
+        case ChatMessageVOTypes.STOP_BOT.intValue():
+            responseOfStopBot(withMessage: message)
             break
         
         // a message of type 100 (LOGOUT) comes from Server.

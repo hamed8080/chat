@@ -13,7 +13,10 @@ import CoreData
 
 public class CMMessage: NSManagedObject {
     
-    public func convertCMMessageToMessageObject() -> Message {
+    public func convertCMObjectToObject(showConversation:   Bool,
+                                        showForwardInfo:    Bool,
+                                        showParticipant:    Bool,
+                                        showReplyInfo:      Bool) -> Message {
         
         var deletable:      Bool?
         var delivered:      Bool?
@@ -21,13 +24,19 @@ public class CMMessage: NSManagedObject {
         var edited:         Bool?
         var id:             Int?
         var mentioned:      Bool?
+        var messageType:    Int?
         var ownerId:        Int?
         var pinned:         Bool?
         var previousId:     Int?
         var seen:           Bool?
         var threadId:       Int?
         var time:           UInt?
-//        var timeNano:       UInt?
+        
+        var conversation:   Conversation?
+        var forwardInfo:    ForwardInfo?
+        var participant:    Participant?
+        var replyInfo:      ReplyInfo?
+        
         
         func createVariables() {
             if let delivered2 = self.delivered as? Bool {
@@ -44,6 +53,9 @@ public class CMMessage: NSManagedObject {
             }
             if let mentioned2 = self.mentioned as? Bool {
                 mentioned = mentioned2
+            }
+            if let messageType2 = self.messageType as? Int {
+                messageType = messageType2
             }
             if let ownerId2 = self.ownerId as? Int {
                 ownerId = ownerId2
@@ -68,6 +80,26 @@ public class CMMessage: NSManagedObject {
             if let deletable2 = self.deletable as? Bool {
                 deletable = deletable2
             }
+            if (showConversation) {
+                if let conversation_ = self.conversation {
+                    conversation = conversation_.convertCMObjectToObject(showInviter: false, showLastMessageVO: false, showParticipants: false, showPinMessage: false)
+                }
+            }
+            if (showForwardInfo) {
+                if let forwardInfo_ = self.forwardInfo {
+                    forwardInfo = forwardInfo_.convertCMObjectToObject()
+                }
+            }
+            if (showParticipant) {
+                if let participant_ = self.participant {
+                    participant = participant_.convertCMObjectToObject()
+                }
+            }
+            if (showReplyInfo) {
+                if let replyInfo_ = self.replyInfo {
+                    replyInfo = replyInfo_.convertCMObjectToObject()
+                }
+            }
         }
         
         func createMessageModel() -> Message {
@@ -79,7 +111,7 @@ public class CMMessage: NSManagedObject {
                                        id:              id,
                                        mentioned:       mentioned,
                                        message:         self.message,
-                                       messageType:     self.messageType,
+                                       messageType:     messageType,
                                        metadata:        self.metadata,
                                        ownerId:         ownerId,
                                        pinned:          pinned,
@@ -89,10 +121,10 @@ public class CMMessage: NSManagedObject {
                                        time:            time,
                                        timeNanos:       0,
                                        uniqueId:        self.uniqueId,
-                                       conversation:    conversation?.convertCMConversationToConversationObject(),
-                                       forwardInfo:     forwardInfo?.convertCMForwardInfoToForwardInfoObject(),
-                                       participant:     participant?.convertCMParticipantToParticipantObject(),
-                                       replyInfo:       replyInfo?.convertCMReplyInfoToReplyInfoObject())
+                                       conversation:    (showConversation)  ? conversation : nil,
+                                       forwardInfo:     (showForwardInfo)   ? forwardInfo : nil,
+                                       participant:     (showParticipant)   ? participant : nil,
+                                       replyInfo:       (showReplyInfo)     ? replyInfo : nil)
             return messageModel
         }
         
@@ -123,7 +155,7 @@ public class CMMessage: NSManagedObject {
         if let message = message.message {
             self.message = message
         }
-        if let messageType = message.messageType {
+        if let messageType = message.messageType as NSNumber? {
             self.messageType = messageType
         }
         if let metadata = message.metadata {

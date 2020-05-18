@@ -13,10 +13,10 @@ import CoreData
 
 public class CMForwardInfo: NSManagedObject {
     
-    public func convertCMForwardInfoToForwardInfoObject() -> ForwardInfo {
+    public func convertCMObjectToObject() -> ForwardInfo {
         
-        let forwardInfoModel = ForwardInfo(conversation: conversation?.convertCMConversationToConversationObject(),
-                                           participant: participant?.convertCMParticipantToParticipantObject())
+        let forwardInfoModel = ForwardInfo(conversation: conversation?.convertCMObjectToObject(showInviter: false, showLastMessageVO: false, showParticipants: false, showPinMessage: false),
+                                           participant: participant?.convertCMObjectToObject())
         
         return forwardInfoModel
     }

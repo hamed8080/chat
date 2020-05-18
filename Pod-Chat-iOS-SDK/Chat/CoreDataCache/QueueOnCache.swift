@@ -45,6 +45,7 @@ extension Cache {
         
         let fetchRequest = retrieveMessageHistoryFetchRequest(fromTime:     nil,
                                                               messageId:    editMessage.messageId,
+                                                              messageType:  nil,
                                                               order:        nil,
                                                               query:        nil,
                                                               threadId:     nil,
@@ -179,7 +180,7 @@ extension Cache {
                     
                     var messageArray = [QueueOfWaitTextMessagesModel]()
                     for item in result {
-                        messageArray.append(item.convertQueueOfTextMessagesToQueueOfWaitTextMessagesModelObject())
+                        messageArray.append(item.convertCMObjectToObject())
                     }
                     return messageArray
                     
@@ -210,7 +211,7 @@ extension Cache {
                     
                     var messageArray = [QueueOfWaitEditMessagesModel]()
                     for item in result {
-                        messageArray.append(item.convertQueueOfEditMessagesToQueueOfWaitEditMessagesModelObject())
+                        messageArray.append(item.convertCMObjectToObject())
                     }
                     return messageArray
                     
@@ -235,7 +236,7 @@ extension Cache {
                     
                     var messageArray = [QueueOfWaitForwardMessagesModel]()
                     for item in result {
-                        messageArray.append(item.convertQueueOfForwardMessagesToQueueOfWaitForwardMessagesModelObject())
+                        messageArray.append(item.convertCMObjectToObject())
                     }
                     return messageArray
                     
@@ -260,7 +261,7 @@ extension Cache {
                     
                     var messageArray = [QueueOfWaitFileMessagesModel]()
                     for item in result {
-                        messageArray.append(item.convertQueueOfFileMessagesToQueueOfWaitFileMessagesModelObject())
+                        messageArray.append(item.convertCMObjectToObject())
                     }
                     return messageArray
                     
@@ -285,7 +286,7 @@ extension Cache {
                     
                     var messageArray = [QueueOfWaitUploadImagesModel]()
                     for item in result {
-                        messageArray.append(item.convertQueueOfUploadImagesToQueueOfWaitUploadImagesModelObject())
+                        messageArray.append(item.convertCMObjectToObject())
                     }
                     return messageArray
                     
@@ -310,7 +311,7 @@ extension Cache {
                     
                     var messageArray = [QueueOfWaitUploadFilesModel]()
                     for item in result {
-                        messageArray.append(item.convertQueueOfUploadFilesToQueueOfWaitUploadFilesModelObject())
+                        messageArray.append(item.convertCMObjectToObject())
                     }
                     return messageArray
                     

@@ -13,7 +13,7 @@ import CoreData
 
 public class CMReplyInfo: NSManagedObject {
     
-    public func convertCMReplyInfoToReplyInfoObject() -> ReplyInfo {
+    public func convertCMObjectToObject() -> ReplyInfo {
         
         var deleted:            Bool?
         var repliedToMessageId: Int?
@@ -43,7 +43,7 @@ public class CMReplyInfo: NSManagedObject {
                                            metadata:        self.metadata,
                                            systemMetadata:  self.systemMetadata,
                                            time:            time,
-                                           participant:     participant?.convertCMParticipantToParticipantObject())
+                                           participant:     participant?.convertCMObjectToObject())
             
             return replyInfoModel
         }

@@ -33,7 +33,7 @@ public class Cache {
     
     
     func deleteAndSave(object: NSManagedObject, withMessage message: String) {
-        print("contact deleted: \(message)")
+        print("object deleted: \(message)")
         context.delete(object)
         saveContext(subject: message)
     }

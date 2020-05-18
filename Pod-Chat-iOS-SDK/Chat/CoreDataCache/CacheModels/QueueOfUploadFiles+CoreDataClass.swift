@@ -13,7 +13,7 @@ import CoreData
 
 public class QueueOfUploadFiles: NSManagedObject {
     
-    public func convertQueueOfUploadFilesToQueueOfWaitUploadFilesModelObject() -> QueueOfWaitUploadFilesModel {
+    public func convertCMObjectToObject() -> QueueOfWaitUploadFilesModel {
         
         var dataToSend: Data?
         var fileSize:   Int64?

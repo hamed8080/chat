@@ -218,6 +218,7 @@ extension Chat {
                                                                fromTime: nil,
                                                                lastMessageId: nil,
                                                                messageId: nil,
+                                                               messageType: nil,
                                                                offset: 0,
                                                                order: nil,
                                                                query: nil,
