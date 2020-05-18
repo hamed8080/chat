@@ -83,8 +83,6 @@ extension Chat {
         let url = ssoHost + SERVICES_PATH.SSO_DEVICES.rawValue
         let method: HTTPMethod = .get
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-        print("\n\n\n url = \(url)")
-        print("\n\n\n headers = \(headers)")
         Alamofire.request(url, method: method, parameters: nil, headers: headers).responseString { (response) in
             
             // check if the result respons is success
@@ -103,7 +101,6 @@ extension Chat {
                     
                     // loop through devices
                     if let devices = msg["devices"].array {
-                        print("devicess = \(devices)")
                         for device in devices {
                             // check if we can found user current device
                             if device["current"].bool == true {

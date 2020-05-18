@@ -147,7 +147,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
-    public func savePhoneBookContact(contact myContact: AddContactRequestModel) {
+    public func savePhoneBookContact(contact myContact: AddContactRequest) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "PhoneContact")
         if let contactCellphoneNumber = myContact.cellphoneNumber {
             fetchRequest.predicate = NSPredicate(format: "cellphoneNumber == %@", contactCellphoneNumber)
@@ -166,6 +166,19 @@ extension Cache {
             } catch {
                 fatalError("Error on trying to find the contact from PhoneContact entity")
             }
+        }
+    }
+    
+    public func savePhoneBookContacts(contacts myContacts: AddContactsRequestModel) {
+        for (index, _) in myContacts.cellphoneNumbers.enumerated() {
+            let addContactInput = AddContactRequest(cellphoneNumber: myContacts.cellphoneNumbers[index],
+                                                    email:          myContacts.emails[index],
+                                                    firstName:      myContacts.firstNames[index],
+                                                    lastName:       myContacts.lastNames[index],
+                                                    ownerId:        nil,
+                                                    typeCode:       nil,
+                                                    uniqueId:       nil)
+            savePhoneBookContact(contact: addContactInput)
         }
     }
     

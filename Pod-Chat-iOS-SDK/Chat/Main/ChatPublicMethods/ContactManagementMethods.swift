@@ -520,7 +520,6 @@ extension Chat {
                         lastNameArray.append(contact.familyName)
                         cellphoneNumberArray.append(contact.phoneNumbers.first?.value.stringValue ?? "")
                         emailArray.append((contact.emailAddresses.first?.value as String?) ?? "")
-                         
                     })
                 } catch {
                     
@@ -580,6 +579,8 @@ extension Chat {
             addContacts(inputModel: addContactsModel, uniqueIds: { (resUniqueIds) in
                 uniqueIds(resUniqueIds)
             }) { (myResponse) in
+
+                Chat.cacheDB.savePhoneBookContacts(contacts: addContactsModel)
                 completion(myResponse)
             }
         } else {

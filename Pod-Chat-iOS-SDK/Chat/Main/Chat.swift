@@ -107,9 +107,8 @@ public class Chat {
         
         getDeviceIdWithToken { (deviceIdStr) in
             self.deviceId = deviceIdStr
-
             log.info("get deviceId successfully = \(self.deviceId ?? "error!!")", context: "Chat")
-
+            
             DispatchQueue.main.async {
                 self.CreateAsync()
             }
