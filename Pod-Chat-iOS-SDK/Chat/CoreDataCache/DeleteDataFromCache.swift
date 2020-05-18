@@ -506,9 +506,6 @@ extension Cache {
             if let _ = message.participant {
                 deleteAndSave(object: message.participant!, withMessage: "Delete participant from CMMessage Object")
             }
-            if let _ = message.conversation {
-                deleteAndSave(object: message.conversation!, withMessage: "Delete conversation from CMMessage Object")
-            }
             if let _ = message.replyInfo {
                 deleteAndSave(object: message.replyInfo!, withMessage: "Delete replyInfo from CMMessage Object")
             }
@@ -539,6 +536,9 @@ extension Cache {
             }
         } catch {
             fatalError("Error on fetching list of CMMessage when trying to delete")
+        }
+        
+        deleteThread(withThreadId: inThread) {
         }
         
         if allMessages {
@@ -760,6 +760,28 @@ extension Cache {
             fatalError()
         }
     }
+    
+    func deleteThread(withThreadId: Int, isCompleted: @escaping ()->()) {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
+        fetchRequest.predicate = NSPredicate(format: "id == %i", withThreadId)
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMConversation] {
+                if result.count > 0 {
+                    if (result.first!.inviter != nil) {
+                        deleteAndSave(object: result.first!.inviter!, withMessage: "inviter from CMConversation Deleted.")
+                    }
+                    deleteAndSave(object: result.first!, withMessage: "CMConversation Deleted.")
+                }
+                isCompleted()
+            } else {
+                isCompleted()
+            }
+        } catch {
+            isCompleted()
+            fatalError()
+        }
+    }
+    
     
     /// Delete ThreadParticipants:
     /// by calling this method, it will just Remove ThreadParticipants From CacheDB.

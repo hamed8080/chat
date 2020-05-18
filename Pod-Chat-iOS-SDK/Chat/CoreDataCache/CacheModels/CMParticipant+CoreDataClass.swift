@@ -104,7 +104,7 @@ public class CMParticipant: NSManagedObject {
     }
     
     
-    func updateObject(with participant: Participant, isAdminRequest: Bool) {
+    func updateObject(with participant: Participant, inThreadId: Int, isAdminRequest: Bool) {
         
         if let auditor = participant.auditor as NSNumber? {
             self.auditor = auditor
@@ -168,7 +168,7 @@ public class CMParticipant: NSManagedObject {
         if let sendEnable = participant.sendEnable as NSNumber? {
             self.sendEnable = sendEnable
         }
-        if let theThreadId = threadId as NSNumber? {
+        if let theThreadId = inThreadId as NSNumber? {
             self.threadId = theThreadId
         }
         if let username = participant.username {

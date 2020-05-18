@@ -41,6 +41,19 @@
 		3E17D256244F0905009142F8 /* AddContactRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E17D255244F0905009142F8 /* AddContactRequest.swift */; };
 		3E17D2672450AF53009142F8 /* ParticipantManagementMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E17D2662450AF53009142F8 /* ParticipantManagementMethods.swift */; };
 		3E1EA58423A4ABC500B4C3F8 /* SendInteractiveMessageRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1EA58323A4ABC500B4C3F8 /* SendInteractiveMessageRequest.swift */; };
+		3E1F313D24533DA500643EE6 /* BotManagementMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F313C24533DA500643EE6 /* BotManagementMethods.swift */; };
+		3E1F314924533EAC00643EE6 /* CreateBotRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F314824533EAC00643EE6 /* CreateBotRequest.swift */; };
+		3E1F314C24533FA700643EE6 /* CreateBotResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F314B24533FA700643EE6 /* CreateBotResponse.swift */; };
+		3E1F314F245340F500643EE6 /* AddBotCommandRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F314E245340F500643EE6 /* AddBotCommandRequest.swift */; };
+		3E1F31512453418A00643EE6 /* AddBotCommandResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F31502453418A00643EE6 /* AddBotCommandResponse.swift */; };
+		3E1F3153245344BB00643EE6 /* CreateBotCallbacks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F3152245344BB00643EE6 /* CreateBotCallbacks.swift */; };
+		3E1F31552453455500643EE6 /* AddBotCommandCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F31542453455500643EE6 /* AddBotCommandCallback.swift */; };
+		3E1F31582453467300643EE6 /* StartBotCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F31572453467300643EE6 /* StartBotCallback.swift */; };
+		3E1F315A2453467E00643EE6 /* StopBotCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F31592453467E00643EE6 /* StopBotCallback.swift */; };
+		3E1F315C2453482800643EE6 /* StartStopBotRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F315B2453482800643EE6 /* StartStopBotRequest.swift */; };
+		3E1F31602453487B00643EE6 /* StartStopBotResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F315F2453487B00643EE6 /* StartStopBotResponse.swift */; };
+		3E1F316424534A3B00643EE6 /* BotVO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F316324534A3B00643EE6 /* BotVO.swift */; };
+		3E1F31662453504700643EE6 /* BotInfoVO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F31652453504700643EE6 /* BotInfoVO.swift */; };
 		3E1F70572405648600FAF460 /* MessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F70562405648600FAF460 /* MessageType.swift */; };
 		3E239C3D23E55B2600AE0988 /* GetMentionedRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E239C3C23E55B2600AE0988 /* GetMentionedRequest.swift */; };
 		3E24083021F5C844001F32F1 /* CMUser+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E24081821F5C844001F32F1 /* CMUser+CoreDataClass.swift */; };
@@ -457,6 +470,19 @@
 		3E1C357F225B5E7D001A343B /* SwiftyBeaver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftyBeaver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E1C3581225B5E81001A343B /* SwiftyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E1EA58323A4ABC500B4C3F8 /* SendInteractiveMessageRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendInteractiveMessageRequest.swift; sourceTree = "<group>"; };
+		3E1F313C24533DA500643EE6 /* BotManagementMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BotManagementMethods.swift; sourceTree = "<group>"; };
+		3E1F314824533EAC00643EE6 /* CreateBotRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBotRequest.swift; sourceTree = "<group>"; };
+		3E1F314B24533FA700643EE6 /* CreateBotResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBotResponse.swift; sourceTree = "<group>"; };
+		3E1F314E245340F500643EE6 /* AddBotCommandRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBotCommandRequest.swift; sourceTree = "<group>"; };
+		3E1F31502453418A00643EE6 /* AddBotCommandResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBotCommandResponse.swift; sourceTree = "<group>"; };
+		3E1F3152245344BB00643EE6 /* CreateBotCallbacks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBotCallbacks.swift; sourceTree = "<group>"; };
+		3E1F31542453455500643EE6 /* AddBotCommandCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBotCommandCallback.swift; sourceTree = "<group>"; };
+		3E1F31572453467300643EE6 /* StartBotCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartBotCallback.swift; sourceTree = "<group>"; };
+		3E1F31592453467E00643EE6 /* StopBotCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopBotCallback.swift; sourceTree = "<group>"; };
+		3E1F315B2453482800643EE6 /* StartStopBotRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartStopBotRequest.swift; sourceTree = "<group>"; };
+		3E1F315F2453487B00643EE6 /* StartStopBotResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartStopBotResponse.swift; sourceTree = "<group>"; };
+		3E1F316324534A3B00643EE6 /* BotVO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BotVO.swift; sourceTree = "<group>"; };
+		3E1F31652453504700643EE6 /* BotInfoVO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BotInfoVO.swift; sourceTree = "<group>"; };
 		3E1F70562405648600FAF460 /* MessageType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageType.swift; sourceTree = "<group>"; };
 		3E239C3C23E55B2600AE0988 /* GetMentionedRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMentionedRequest.swift; sourceTree = "<group>"; };
 		3E24081821F5C844001F32F1 /* CMUser+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMUser+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -747,6 +773,7 @@
 			isa = PBXGroup;
 			children = (
 				3EB5205922ABEFB200B7EA45 /* ChatPublicMethods.swift */,
+				3E1F313C24533DA500643EE6 /* BotManagementMethods.swift */,
 				3E0A76B122AFD128009D669E /* ContactManagementMethods.swift */,
 				3E0A76C122AFD6F8009D669E /* FileManagementMethods.swift */,
 				3E0A76C322AFD7C0009D669E /* MapManagementMethods.swift */,
@@ -909,6 +936,37 @@
 			path = MapInputModels;
 			sourceTree = "<group>";
 		};
+		3E1F314A24533F1200643EE6 /* BotInputModels */ = {
+			isa = PBXGroup;
+			children = (
+				3E1F314E245340F500643EE6 /* AddBotCommandRequest.swift */,
+				3E1F314824533EAC00643EE6 /* CreateBotRequest.swift */,
+				3E1F315B2453482800643EE6 /* StartStopBotRequest.swift */,
+			);
+			path = BotInputModels;
+			sourceTree = "<group>";
+		};
+		3E1F314D24533FAB00643EE6 /* BotOutputModels */ = {
+			isa = PBXGroup;
+			children = (
+				3E1F31502453418A00643EE6 /* AddBotCommandResponse.swift */,
+				3E1F314B24533FA700643EE6 /* CreateBotResponse.swift */,
+				3E1F315F2453487B00643EE6 /* StartStopBotResponse.swift */,
+			);
+			path = BotOutputModels;
+			sourceTree = "<group>";
+		};
+		3E1F3156245345D000643EE6 /* BotResponses */ = {
+			isa = PBXGroup;
+			children = (
+				3E1F31542453455500643EE6 /* AddBotCommandCallback.swift */,
+				3E1F3152245344BB00643EE6 /* CreateBotCallbacks.swift */,
+				3E1F31572453467300643EE6 /* StartBotCallback.swift */,
+				3E1F31592453467E00643EE6 /* StopBotCallback.swift */,
+			);
+			path = BotResponses;
+			sourceTree = "<group>";
+		};
 		3E25909821D6C8E000CB9D7D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -961,6 +1019,7 @@
 			isa = PBXGroup;
 			children = (
 				3E17D247244EFFB0009142F8 /* RequestModelDelegates.swift */,
+				3E1F314A24533F1200643EE6 /* BotInputModels */,
 				3E17D257244F0B44009142F8 /* ContactInputModels */,
 				3E17D25E244F8C21009142F8 /* FileInputModels */,
 				3E17D25F244F8CDB009142F8 /* MapInputModels */,
@@ -1214,6 +1273,7 @@
 		3EB5205F22ABF1E000B7EA45 /* CallbackClasses */ = {
 			isa = PBXGroup;
 			children = (
+				3E1F3156245345D000643EE6 /* BotResponses */,
 				3EACCF092451F3E9003A97D9 /* ContactResponses */,
 				3EACCF072451F227003A97D9 /* MessageResponses */,
 				3EACCF052451EB74003A97D9 /* ParticipantResponses */,
@@ -1240,6 +1300,8 @@
 		3EBBEDD12174C19B00F5CDC7 /* PrimaryModels */ = {
 			isa = PBXGroup;
 			children = (
+				3E1F316324534A3B00643EE6 /* BotVO.swift */,
+				3E1F31652453504700643EE6 /* BotInfoVO.swift */,
 				3EBBEDD82174C2A200F5CDC7 /* BlockedUser.swift */,
 				3EBBEDD22174C20200F5CDC7 /* Contact.swift */,
 				3E400DBC23EFEDDF000DA873 /* Profile.swift */,
@@ -1270,6 +1332,7 @@
 			children = (
 				3EACCEED245180AC003A97D9 /* ResponseModel.swift */,
 				3EACCEFD245186B1003A97D9 /* ResponseModelDelegates.swift */,
+				3E1F314D24533FAB00643EE6 /* BotOutputModels */,
 				3EACCEFC24518353003A97D9 /* ContactOutputModels */,
 				3EACCF032451E950003A97D9 /* FileOutputModels */,
 				3EACCF022451E921003A97D9 /* MapOutputModels */,
@@ -1616,6 +1679,7 @@
 				3E8D87D522185B2A0092B440 /* QueueOfWaitEditMessagesResponse.swift in Sources */,
 				3EB5206B22ABF31200B7EA45 /* AddParticipantsCallback.swift in Sources */,
 				3E17D236244A5A0D009142F8 /* ChatDelegates.swift in Sources */,
+				3E1F31662453504700643EE6 /* BotInfoVO.swift in Sources */,
 				3ECFC9A223E0521B00978C96 /* GetCurrentUserRolesResponse.swift in Sources */,
 				3E24083021F5C844001F32F1 /* CMUser+CoreDataClass.swift in Sources */,
 				3E8D56E121DBB90900B844DE /* MapRoutingRequest.swift in Sources */,
@@ -1638,17 +1702,21 @@
 				3E0A76CA22AFDBF6009D669E /* CreateReturnData.swift in Sources */,
 				3E2ADA5223D5A5AE00331407 /* CMPinMessage+CoreDataProperties.swift in Sources */,
 				3E3315AB23B221E90070A3D1 /* MessageEventModel.swift in Sources */,
+				3E1F314C24533FA700643EE6 /* CreateBotResponse.swift in Sources */,
 				3ECFCAB8228967BD00313419 /* ClearHistoryRequest.swift in Sources */,
 				3E00CAF521DC9E6B0029B1FC /* MapRoutingResponse.swift in Sources */,
 				3EA156A021CE1CAE004B1346 /* DeleteMessageRequest.swift in Sources */,
 				3E24084A21F5C844001F32F1 /* CMFile+CoreDataProperties.swift in Sources */,
 				3E5AAECE221937560085C03D /* QueueOfEditMessages+CoreDataClass.swift in Sources */,
+				3E1F3153245344BB00643EE6 /* CreateBotCallbacks.swift in Sources */,
 				3EA1569621CE1C3C004B1346 /* SendTextMessageRequest.swift in Sources */,
 				3EBBEDE92174C39B00F5CDC7 /* ThreadParticipants.swift in Sources */,
 				3E24084C21F5C844001F32F1 /* CMImage+CoreDataClass.swift in Sources */,
 				3E24084E21F5C844001F32F1 /* CMImage+CoreDataProperties.swift in Sources */,
 				3EBBEDDD2174C2F000F5CDC7 /* LinkedUser.swift in Sources */,
 				3E8ADC7323B352AB00E3538D /* ChatMessageVOTypes.swift in Sources */,
+				3E1F31512453418A00643EE6 /* AddBotCommandResponse.swift in Sources */,
+				3E1F316424534A3B00643EE6 /* BotVO.swift in Sources */,
 				3EACCEFE245186B1003A97D9 /* ResponseModelDelegates.swift in Sources */,
 				3EBADE8B23E6B7A3009BC821 /* DiskStatus.swift in Sources */,
 				3E5AAEEC221950B10085C03D /* QueueOfWaitUploadFilesResponse.swift in Sources */,
@@ -1667,7 +1735,9 @@
 				3E78AA9D218479DF002A6EC0 /* UploadFile.swift in Sources */,
 				3E581EDC241D85E0006EA0EF /* GetAllUnreadMessageCountRequest.swift in Sources */,
 				3E8D87D2221858290092B440 /* QueueOfWaitFileMessagesResponse.swift in Sources */,
+				3E1F314F245340F500643EE6 /* AddBotCommandRequest.swift in Sources */,
 				3E3F17792133D0A90029E4D4 /* EnumsAndStructs.swift in Sources */,
+				3E1F31602453487B00643EE6 /* StartStopBotResponse.swift in Sources */,
 				3E17D212244A4A49009142F8 /* ContactEventTypes.swift in Sources */,
 				3E581EF2241E09B5006EA0EF /* IsPublicThreadNameAvailableCallbacks.swift in Sources */,
 				3EA1568621CE1BA0004B1346 /* GetHistoryRequest.swift in Sources */,
@@ -1690,6 +1760,7 @@
 				3EE0694C2212A3100099068F /* PhoneContact+CoreDataProperties.swift in Sources */,
 				3EBBEDD92174C2A200F5CDC7 /* BlockedUser.swift in Sources */,
 				3EB5201B22ABC1AB00B7EA45 /* CMUserRole+CoreDataClass.swift in Sources */,
+				3E1F31582453467300643EE6 /* StartBotCallback.swift in Sources */,
 				3E17D2672450AF53009142F8 /* ParticipantManagementMethods.swift in Sources */,
 				3E581EAE241864ED006EA0EF /* JoinPublicThreadCallbacks.swift in Sources */,
 				3E3D785E23D5F12C005797A4 /* GetContactNotSeenDurationCallback.swift in Sources */,
@@ -1705,6 +1776,7 @@
 				3E8D87E3221861920092B440 /* QueueOfFileMessages+CoreDataProperties.swift in Sources */,
 				3EA1569A21CE1C68004B1346 /* ReplyTextMessageRequest.swift in Sources */,
 				3EA1569021CE1BFC004B1346 /* AddParticipantsRequest.swift in Sources */,
+				3E1F313D24533DA500643EE6 /* BotManagementMethods.swift in Sources */,
 				3E5AAEF222195A510085C03D /* QueueOfUploadImages+CoreDataClass.swift in Sources */,
 				3EB5204922ABE7E300B7EA45 /* CacheEnums.swift in Sources */,
 				3EB2EAE122BF9A4D00848C62 /* UserRolesResponse.swift in Sources */,
@@ -1734,6 +1806,7 @@
 				3EA1568821CE1BB7004B1346 /* CreateThreadRequest.swift in Sources */,
 				3EB5208122ABF4DC00B7EA45 /* SpamPrivateThread.swift in Sources */,
 				3E17D21E244A4B74009142F8 /* StringExtentions.swift in Sources */,
+				3E1F314924533EAC00643EE6 /* CreateBotRequest.swift in Sources */,
 				3E17D256244F0905009142F8 /* AddContactRequest.swift in Sources */,
 				3E78AA99218479CB002A6EC0 /* UploadFileResponse.swift in Sources */,
 				3EBBEDF82174C6CD00F5CDC7 /* ContactResponse.swift in Sources */,
@@ -1748,6 +1821,7 @@
 				3E56EDD523BCE07100FED6CD /* CreateThreadWithFileMessageRequest.swift in Sources */,
 				3E1F70572405648600FAF460 /* MessageType.swift in Sources */,
 				3E3315A723B206CC0070A3D1 /* BotEventModel.swift in Sources */,
+				3E1F31552453455500643EE6 /* AddBotCommandCallback.swift in Sources */,
 				3E8ADC7D23B3556300E3538D /* ServiceAddresses.swift in Sources */,
 				3E8ADCFD23B7845200E3538D /* PinThreadCallback.swift in Sources */,
 				3E10995623C365240034093E /* CreateThreadMessageInput.swift in Sources */,
@@ -1760,6 +1834,7 @@
 				3EA1567A21CE1B0B004B1346 /* RemoveContactsRequest.swift in Sources */,
 				3E11F56D21DA1A02004B3B2C /* GetFileRequest.swift in Sources */,
 				3EB5208722ABF53D00B7EA45 /* ClearHistoryCallback.swift in Sources */,
+				3E1F315C2453482800643EE6 /* StartStopBotRequest.swift in Sources */,
 				3E2ADA5123D5A5AE00331407 /* CMPinMessage+CoreDataClass.swift in Sources */,
 				3E5AAEE92219509C0085C03D /* QueueOfWaitUploadImagesResponse.swift in Sources */,
 				3EA1569C21CE1C7C004B1346 /* ForwardMessageRequest.swift in Sources */,
@@ -1806,6 +1881,7 @@
 				3EA1567121CE1A92004B1346 /* GetContactsRequest.swift in Sources */,
 				3E35336623D4502200731774 /* UnpinMessageCallback.swift in Sources */,
 				3E400DB123EFE2A8000DA873 /* UpdateChatProfileCallback.swift in Sources */,
+				3E1F315A2453467E00643EE6 /* StopBotCallback.swift in Sources */,
 				3E734CE521D11016009F4D38 /* CacheDataModel.xcdatamodeld in Sources */,
 				3EB5206122ABF20000B7EA45 /* GetThreadsCallbacks.swift in Sources */,
 				3EA1569221CE1C15004B1346 /* RemoveParticipantsRequest.swift in Sources */,
@@ -2073,7 +2149,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 0.6.4.1;
+				MARKETING_VERSION = 0.6.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.fanapSoft.FanapPodChatSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2107,7 +2183,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 0.6.4.1;
+				MARKETING_VERSION = 0.6.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.fanapSoft.FanapPodChatSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

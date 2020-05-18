@@ -107,13 +107,16 @@ public class Chat {
         
         getDeviceIdWithToken { (deviceIdStr) in
             self.deviceId = deviceIdStr
-            
             log.info("get deviceId successfully = \(self.deviceId ?? "error!!")", context: "Chat")
             
             DispatchQueue.main.async {
                 self.CreateAsync()
             }
         }
+//        self.deviceId = "1234567890"
+//        DispatchQueue.main.async {
+//            self.CreateAsync()
+//        }
         
         if checkIfDeviceHasFreeSpace(needSpaceInMB: self.deviecLimitationSpaceMB, turnOffTheCache: true) {
 //            self.enableCache = false
@@ -394,6 +397,12 @@ public class Chat {
     public var updateChatProfileCallbackToUser:         callbackTypeAlias?
     public var joinPublicThreadCallbackToUser:              callbackTypeAlias?
     public var isPublicThreadNameAvailableCallbackToUser:   callbackTypeAlias?
+    
+    // Bot callBacks
+    public var addBotCommandCallbackToUser: callbackTypeAlias?
+    public var createBotCallbackToUser:     callbackTypeAlias?
+    public var startBotCallbackToUser:      callbackTypeAlias?
+    public var stopBotCallbackToUser:       callbackTypeAlias?
     
     
     

@@ -227,13 +227,13 @@ extension Cache {
             do {
                 if let result = try context.fetch(fetchRequest) as? [CMParticipant] {
                     if (result.count > 0) {
-                        result.first!.updateObject(with: myParticipant, isAdminRequest: isAdminRequest)
+                        result.first!.updateObject(with: myParticipant, inThreadId: threadId, isAdminRequest: isAdminRequest)
                         participantObjectToReturn = result.first!
                         saveContext(subject: "Update CMParticipant -update existing object-")
                     } else {
                         let theParticipantEntity = NSEntityDescription.entity(forEntityName: "CMParticipant", in: context)
                         let theParticipant = CMParticipant(entity: theParticipantEntity!, insertInto: context)
-                        theParticipant.updateObject(with: myParticipant, isAdminRequest: isAdminRequest)
+                        theParticipant.updateObject(with: myParticipant, inThreadId: threadId, isAdminRequest: isAdminRequest)
                         participantObjectToReturn = theParticipant
                         saveContext(subject: "Update CMParticipant -create a new object-")
                     }
@@ -611,7 +611,11 @@ extension Cache {
                         }
                         if !foundPrevious {
                             gaps.msgIds.append(message.id as! Int)
-                            gaps.prevIds.append(message.previousId as! Int)
+                            if let pId = message.previousId as? Int {
+                                gaps.prevIds.append(pId)
+                            } else {
+                                gaps.prevIds.append(0)
+                            }
                         }
                     }
                 }

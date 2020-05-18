@@ -238,6 +238,10 @@ extension Cache {
             }
         }
         
+        let firstNameSort   = NSSortDescriptor(key: "firstName", ascending: ascending)
+        let lastNameSort    = NSSortDescriptor(key: "lastName", ascending: ascending)
+        fetchRequest.sortDescriptors = [lastNameSort, firstNameSort]
+        
         do {
             if let result = try context.fetch(fetchRequest) as? [CMContact] {
                 
@@ -584,6 +588,12 @@ extension Cache {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMParticipant")
         let threadPredicate = NSPredicate(format: "threadId == %i", threadId)
         fetchRequest.predicate = threadPredicate
+        
+        let nameSort   = NSSortDescriptor(key: "contactName", ascending: ascending)
+        let lastNameSort    = NSSortDescriptor(key: "lastName", ascending: ascending)
+        let firstNameSort    = NSSortDescriptor(key: "firstName", ascending: ascending)
+        fetchRequest.sortDescriptors = [nameSort, lastNameSort, firstNameSort]
+        
         do {
             if let result = try context.fetch(fetchRequest) as? [CMParticipant] {
                 if (result.count > 0) {
