@@ -386,7 +386,7 @@ extension Chat {
                                                                  count:             searchContactsInput.size ?? 50,
                                                                  email:             searchContactsInput.email,
                                                                  firstName:         searchContactsInput.firstName,
-                                                                 id:                nil,
+                                                                 id:                searchContactsInput.id,
                                                                  lastName:          searchContactsInput.lastName,
                                                                  offset:            searchContactsInput.offset ?? 0,
                                                                  search:            searchContactsInput.query,
@@ -433,6 +433,9 @@ extension Chat {
         }
         if let ownerId = searchContactsInput.ownerId {
             params["ownerId"] = JSON(ownerId)
+        }
+        if let id = searchContactsInput.id {
+            params["id"] = JSON(id)
         }
         
         Networking.sharedInstance.requesttWithJSONresponse(from:            url,
