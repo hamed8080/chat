@@ -29,13 +29,18 @@ extension String {
     
     func convertToJSON() -> JSON {
         if let dataFromStringMsg = self.data(using: .utf8, allowLossyConversion: false) {
-            do {
-                let msg = try JSON(data: dataFromStringMsg)
+            if let msg = try? JSON(data: dataFromStringMsg) {
                 return msg
-            } catch {
-                //                log.error("error to convert income message String to JSON", context: "formatStringToJSON")
+            } else {
                 return []
             }
+//            do {
+//                let msg = try JSON(data: dataFromStringMsg)
+//                return msg
+//            } catch {
+//                //                log.error("error to convert income message String to JSON", context: "formatStringToJSON")
+//                return []
+//            }
         } else {
             //            log.error("error to get message from server", context: "formatStringToJSON")
             return []

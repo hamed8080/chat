@@ -59,13 +59,21 @@ extension Chat {
                                                  hasError:              false)
                 if FileManager.default.fileExists(atPath: filePath) {
                     let fileURL = URL(fileURLWithPath: filePath)
-                    do {
-                        let data = try Data(contentsOf: fileURL)
+                    if let data = try? Data(contentsOf: fileURL) {
                         hasFileOntheCache = true
                         cacheResponse(data, response)
-                    } catch {
-                        fatalError("cannot get the fileData from imagPath")
+                    } else {
+                        delegate?.chatError(errorCode: 1000,
+                                            errorMessage: "cannot read file data from local path",
+                                            errorResult: nil)
                     }
+//                    do {
+//                        let data = try Data(contentsOf: fileURL)
+//                        hasFileOntheCache = true
+//                        cacheResponse(data, response)
+//                    } catch {
+//                        fatalError("cannot get the fileData from imagPath")
+//                    }
                 }
             }
         }
@@ -165,13 +173,21 @@ extension Chat {
                                                   hasError:              false)
                 if FileManager.default.fileExists(atPath: imagePath) {
                     let imagURL = URL(fileURLWithPath: imagePath)
-                    do {
-                        let data = try Data(contentsOf: imagURL)
+                    if let data = try? Data(contentsOf: imagURL) {
                         hasImageOnTheCache = true
                         cacheResponse(data, response)
-                    } catch {
-                        fatalError("cannot get the fileData from imagPath")
+                    } else {
+                        delegate?.chatError(errorCode: 1000,
+                                            errorMessage: "cannot read image data from local path",
+                                            errorResult: nil)
                     }
+//                    do {
+//                        let data = try Data(contentsOf: imagURL)
+//                        hasImageOnTheCache = true
+//                        cacheResponse(data, response)
+//                    } catch {
+//                        fatalError("cannot get the fileData from imagPath")
+//                    }
                 }
             }
         }

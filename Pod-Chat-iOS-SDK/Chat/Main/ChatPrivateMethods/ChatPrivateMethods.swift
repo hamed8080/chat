@@ -92,12 +92,20 @@ extension Chat {
                 if let dataFromMsgString = responseStr.data(using: .utf8, allowLossyConversion: false) {
                     
                     var msg: JSON
-                    do {
-                        // convert Data to JSON
-                        msg = try JSON(data: dataFromMsgString)
-                    } catch {
-                        fatalError("Cannot convert Data to JSON")
+                    if let jsonString = try? JSON(data: dataFromMsgString) {
+                        msg = jsonString
+                    } else {
+                        self.asyncError(errorCode: 1000,
+                                        errorMessage: "cannot convert StringData to JSON on 'getDeviceIdWithToken' methodResponse",
+                                        errorEvent: nil)
+                        return
                     }
+//                    do {
+//                        // convert Data to JSON
+//                        msg = try JSON(data: dataFromMsgString)
+//                    } catch {
+//                        fatalError("Cannot convert Data to JSON")
+//                    }
                     
                     // loop through devices
                     if let devices = msg["devices"].array {
@@ -200,13 +208,21 @@ extension Chat {
                 if let dataFromMsgString = responseStr.data(using: .utf8, allowLossyConversion: false) {
                     
                     var msg: JSON
-                    do {
-                        // convert Data to JSON
-                        msg = try JSON(data: dataFromMsgString)
-                    } catch {
-                        fatalError("Cannot convert Data to JSON")
+                    if let jsonString = try? JSON(data: dataFromMsgString) {
+                        msg = jsonString
+                    } else {
+                        self.asyncError(errorCode: 1000,
+                                        errorMessage: "cannot convert StringData to JSON on 'generateEncryptionKey' methodResponse",
+                                        errorEvent: nil)
+                        return
                     }
-                    print("***********2: \(msg)")
+//                    do {
+//                        // convert Data to JSON
+//                        msg = try JSON(data: dataFromMsgString)
+//                    } catch {
+//                        fatalError("Cannot convert Data to JSON")
+//                    }
+                    
                     let myJson: JSON = ["hasError":     false,
                                         "errorCode":    0,
                                         "errorMessage": "",
@@ -315,12 +331,20 @@ extension Chat {
                 if let dataFromMsgString = responseStr.data(using: .utf8, allowLossyConversion: false) {
                     
                     var msg: JSON
-                    do {
-                        // convert Data to JSON
-                        msg = try JSON(data: dataFromMsgString)
-                    } catch {
-                        fatalError("Cannot convert Data to JSON")
+                    if let jsonString = try? JSON(data: dataFromMsgString) {
+                        msg = jsonString
+                    } else {
+                        self.asyncError(errorCode: 1000,
+                                        errorMessage: "cannot convert StringData to JSON on 'getEncryptionKey' methodResponse",
+                                        errorEvent: nil)
+                        return
                     }
+//                    do {
+//                        // convert Data to JSON
+//                        msg = try JSON(data: dataFromMsgString)
+//                    } catch {
+//                        fatalError("Cannot convert Data to JSON")
+//                    }
                     let myJson: JSON = ["hasError":     false,
                                         "errorCode":    0,
                                         "errorMessage": "",
