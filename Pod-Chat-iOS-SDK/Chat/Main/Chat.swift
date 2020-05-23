@@ -13,6 +13,7 @@ import Alamofire
 import SwiftyJSON
 //import UIKit
 //import Contacts
+import Sentry
 
 
 public class Chat {
@@ -48,6 +49,8 @@ public class Chat {
                                  localImageCustomPath:      URL?,
                                  localFileCustomPath:       URL?,
                                  deviecLimitationSpaceMB:   Int64?) {
+        
+        startCrashAnalitics()
         
         self.socketAddress      = socketAddress
         self.ssoHost            = ssoHost
@@ -122,6 +125,13 @@ public class Chat {
 //            self.enableCache = false
         }
         
+    }
+    
+    private func startCrashAnalitics() {
+        SentrySDK.start(options: [
+            "dsn": "https://a06c7828c36d47c7bbb24605ba5d0d26@o376741.ingest.sentry.io/5198368",
+            "debug": true // Helpful to see what's going on. (Enabled debug when first installing is always helpful)
+        ])
     }
     
     // the delegate property that the user class should make itself to be implment this delegat.
