@@ -52,7 +52,7 @@ open class SendLocationMessageRequest {
         self.textMessage    = textMessage
         self.threadId       = threadId
         
-        self.messageType    = MessageType.picture
+        self.messageType    = MessageType.PICTURE
         
         self.typeCode               = typeCode
         self.uniqueId               = uniqueId ?? UUID().uuidString
@@ -91,7 +91,7 @@ open class SendLocationMessageRequest {
         self.systemMetadata = sendMessageMetadata
         self.repliedTo      = sendMessageRepliedTo
         
-        self.messageType    = MessageType.picture
+        self.messageType    = MessageType.PICTURE
         
         self.typeCode               = typeCode
         self.uniqueId               = uniqueId ?? UUID().uuidString

@@ -1051,7 +1051,7 @@ extension Chat {
                                                  uniqueId:          sendLocationMessageRequest.uniqueId)
             
             let messageInput = SendTextMessageRequestModel(content:         sendLocationMessageRequest.textMessage ?? "",
-                                                           messageType:     MessageType.picture,
+                                                           messageType:     MessageType.PICTURE,
                                                            metadata:        nil,
                                                            repliedTo:       sendLocationMessageRequest.repliedTo,
                                                            systemMetadata:  nil,
@@ -1218,7 +1218,7 @@ extension Chat {
         // this will call when all data were uploaded and it will sends the textMessage
         func sendMessage(withMetadata: JSON) {
             let sendMessageParamModel = SendTextMessageRequestModel(content:        sendFileMessageInput.messageInput.textMessage,
-                                                                    messageType:    MessageType.file,
+                                                                    messageType:    MessageType.FILE,
                                                                     metadata:       "\(withMetadata)",
                                                                     repliedTo:      sendFileMessageInput.messageInput.repliedTo,
                                                                     systemMetadata: sendFileMessageInput.messageInput.metadata,
@@ -1598,7 +1598,7 @@ extension Chat {
                        seen:            @escaping (SendMessageModel)->() ) {
         
         let message = SendTextMessageRequestModel(content:          fileMessages.content ?? "",
-                                                  messageType:      MessageType.file,
+                                                  messageType:      MessageType.FILE,
                                                   metadata:         fileMessages.metadata,
                                                   repliedTo:        fileMessages.repliedTo,
                                                   systemMetadata:   nil,
