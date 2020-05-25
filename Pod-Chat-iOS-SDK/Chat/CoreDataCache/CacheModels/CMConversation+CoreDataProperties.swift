@@ -47,6 +47,7 @@ extension CMConversation {
     @NSManaged public var title:        String?
     @NSManaged public var type:         NSNumber?
     @NSManaged public var unreadCount:  NSNumber?
+    @NSManaged public var userGroupHash: String?
     
     @NSManaged public var dummyForwardInfo: CMForwardInfo?
     @NSManaged public var dummyMessage:     NSSet?

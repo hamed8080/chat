@@ -52,6 +52,7 @@
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="type" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="unreadCount" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="userGroupHash" optional="YES" attributeType="String"/>
         <relationship name="dummyForwardInfo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMForwardInfo" inverseName="conversation" inverseEntity="CMForwardInfo"/>
         <relationship name="dummyMessage" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="conversation" inverseEntity="CMMessage"/>
         <relationship name="dummyUserRoles" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMUserRole" inverseName="conversation" inverseEntity="CMUserRole"/>
@@ -206,28 +207,31 @@
         <attribute name="lastName" optional="YES" attributeType="String"/>
     </entity>
     <entity name="QueueOfEditMessages" representedClassName=".QueueOfEditMessages" syncable="YES">
-        <attribute name="content" optional="YES" attributeType="String"/>
         <attribute name="messageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="messageType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="textMessage" optional="YES" attributeType="String"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="typeCode" optional="YES" attributeType="String"/>
         <attribute name="uniqueId" optional="YES" attributeType="String"/>
     </entity>
     <entity name="QueueOfFileMessages" representedClassName=".QueueOfFileMessages" syncable="YES">
-        <attribute name="content" optional="YES" attributeType="String"/>
+        <attribute name="fileExtension" optional="YES" attributeType="String"/>
         <attribute name="fileName" optional="YES" attributeType="String"/>
         <attribute name="fileToSend" optional="YES" attributeType="Binary"/>
         <attribute name="hC" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="imageToSend" optional="YES" attributeType="Binary"/>
+        <attribute name="isPublic" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="messageType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="mimeType" optional="YES" attributeType="String"/>
         <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="textMessage" optional="YES" attributeType="String"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="typeCode" optional="YES" attributeType="String"/>
         <attribute name="uniqueId" optional="YES" attributeType="String"/>
+        <attribute name="userGroupHash" optional="YES" attributeType="String"/>
         <attribute name="wC" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="xC" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="yC" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
@@ -241,11 +245,11 @@
         <attribute name="uniqueId" optional="YES" attributeType="String"/>
     </entity>
     <entity name="QueueOfTextMessages" representedClassName=".QueueOfTextMessages" syncable="YES">
-        <attribute name="content" optional="YES" attributeType="String"/>
         <attribute name="messageType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="systemMetadata" optional="YES" attributeType="String"/>
+        <attribute name="textMessage" optional="YES" attributeType="String"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="typeCode" optional="YES" attributeType="String"/>
         <attribute name="uniqueId" optional="YES" attributeType="String"/>
@@ -255,11 +259,11 @@
         <attribute name="fileExtension" optional="YES" attributeType="String"/>
         <attribute name="fileName" optional="YES" attributeType="String"/>
         <attribute name="fileSize" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="isPublic" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="mimeType" optional="YES" attributeType="String"/>
-        <attribute name="originalFileName" optional="YES" attributeType="String"/>
-        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="typeCode" optional="YES" attributeType="String"/>
         <attribute name="uniqueId" optional="YES" attributeType="String"/>
+        <attribute name="userGroupHash" optional="YES" attributeType="String"/>
     </entity>
     <entity name="QueueOfUploadImages" representedClassName=".QueueOfUploadImages" syncable="YES">
         <attribute name="dataToSend" optional="YES" attributeType="Binary"/>
@@ -267,11 +271,11 @@
         <attribute name="fileName" optional="YES" attributeType="String"/>
         <attribute name="fileSize" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="hC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="isPublic" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="mimeType" optional="YES" attributeType="String"/>
-        <attribute name="originalFileName" optional="YES" attributeType="String"/>
-        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="typeCode" optional="YES" attributeType="String"/>
         <attribute name="uniqueId" optional="YES" attributeType="String"/>
+        <attribute name="userGroupHash" optional="YES" attributeType="String"/>
         <attribute name="wC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="xC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="yC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
@@ -279,7 +283,7 @@
     <elements>
         <element name="CMBlockedContact" positionX="-461.90234375" positionY="-78.6953125" width="128" height="105"/>
         <element name="CMContact" positionX="-307.48828125" positionY="-144.9375" width="128" height="238"/>
-        <element name="CMConversation" positionX="30.32421875" positionY="-129.10546875" width="128" height="598"/>
+        <element name="CMConversation" positionX="30.32421875" positionY="-129.10546875" width="128" height="613"/>
         <element name="CMCurrentUserRoles" positionX="387" positionY="189" width="128" height="73"/>
         <element name="CMFile" positionX="-462.546875" positionY="425.40625" width="128" height="88"/>
         <element name="CMForwardInfo" positionX="432.46484375" positionY="513.06640625" width="128" height="103"/>
@@ -295,10 +299,10 @@
         <element name="MessageGaps" positionX="-459.22265625" positionY="620.73828125" width="128" height="90"/>
         <element name="PhoneContact" positionX="-459.39453125" positionY="-191.34765625" width="128" height="103"/>
         <element name="QueueOfEditMessages" positionX="1209.28125" positionY="-34.71875" width="128" height="163"/>
-        <element name="QueueOfFileMessages" positionX="1220.84375" positionY="275.875" width="128" height="268"/>
+        <element name="QueueOfFileMessages" positionX="1220.84375" positionY="275.875" width="128" height="313"/>
         <element name="QueueOfForwardMessages" positionX="1214.4296875" positionY="135.15234375" width="128" height="133"/>
         <element name="QueueOfTextMessages" positionX="1210.796875" positionY="-206.65625" width="128" height="163"/>
-        <element name="QueueOfUploadFiles" positionX="1079.53125" positionY="19.48046875" width="128" height="178"/>
-        <element name="QueueOfUploadImages" positionX="1076.33203125" positionY="-208.8203125" width="128" height="238"/>
+        <element name="QueueOfUploadFiles" positionX="1079.53125" positionY="19.48046875" width="128" height="28"/>
+        <element name="QueueOfUploadImages" positionX="1076.33203125" positionY="-208.8203125" width="128" height="28"/>
     </elements>
 </model>

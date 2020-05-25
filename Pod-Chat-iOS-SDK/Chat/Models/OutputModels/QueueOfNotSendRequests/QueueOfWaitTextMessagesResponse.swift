@@ -11,7 +11,7 @@ import SwiftyJSON
 
 open class QueueOfWaitTextMessagesModel {
     
-    let content:        String?
+    let textMessage:    String?
     let messageType:    MessageType
     let metadata:       String?
     let repliedTo:      Int?
@@ -21,7 +21,7 @@ open class QueueOfWaitTextMessagesModel {
     let typeCode:       String?
     let uniqueId:       String?
     
-    init(content:           String?,
+    init(textMessage:       String?,
          messageType:       MessageType,
          metadata:          String?,
          repliedTo:         Int?,
@@ -30,7 +30,7 @@ open class QueueOfWaitTextMessagesModel {
          typeCode:          String?,
          uniqueId:          String?) {
         
-        self.content        = content
+        self.textMessage    = textMessage
         self.messageType    = messageType
         self.metadata       = metadata
         self.repliedTo      = repliedTo
@@ -41,7 +41,7 @@ open class QueueOfWaitTextMessagesModel {
     }
     
     init(sendMessageInputModel: SendTextMessageRequest) {
-        self.content        = sendMessageInputModel.textMessage
+        self.textMessage    = sendMessageInputModel.textMessage
         self.messageType    = sendMessageInputModel.messageType
         self.metadata       = (sendMessageInputModel.metadata != nil) ? "\(sendMessageInputModel.metadata!)" : nil
         self.repliedTo      = sendMessageInputModel.repliedTo
@@ -53,7 +53,7 @@ open class QueueOfWaitTextMessagesModel {
     
     
     public func returnDataAsJSON() -> JSON {
-        let result: JSON = ["content":          content ?? NSNull(),
+        let result: JSON = ["textMessage":      textMessage ?? NSNull(),
                             "messageType":      messageType,
                             "metadata":         metadata ?? NSNull(),
                             "repliedTo":        repliedTo ?? NSNull(),

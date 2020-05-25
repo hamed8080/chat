@@ -11,14 +11,70 @@ import SwiftyJSON
 
 open class UploadImageRequest: UploadRequest {
     
+    /// initializer of Uploading Image request model
+    public init(dataToSend:     Data,
+                fileExtension:  String?,
+                fileName:       String?,
+                mimeType:       String?,
+                xC:             Int?,
+                yC:             Int?,
+                hC:             Int?,
+                wC:             Int?,
+                userGroupHash:  String,
+                typeCode:       String?,
+                uniqueId:       String?) {
+        super.init(typeCode: typeCode, uniqueId: uniqueId)
+        
+        self.dataToSend     = dataToSend
+        self.fileExtension  = fileExtension
+        self.fileName       = fileName ?? "\(NSUUID().uuidString))"
+        self.fileSize       = Int64(dataToSend.count)
+        self.mimeType       = mimeType ?? ""
+        self.xC             = xC
+        self.yC             = yC
+        self.hC             = hC
+        self.wC             = wC
+        self.userGroupHash  = userGroupHash
+    }
+    
+    /// initializer of Uploading Public Image request model
+    public init(dataToSend:     Data,
+                fileExtension:  String?,
+                fileName:       String?,
+                isPublic:       Bool,
+                mimeType:       String?,
+                xC:             Int?,
+                yC:             Int?,
+                hC:             Int?,
+                wC:             Int?,
+                typeCode:       String?,
+                uniqueId:       String?) {
+        super.init(typeCode: typeCode, uniqueId: uniqueId)
+        
+        self.dataToSend     = dataToSend
+        self.fileExtension  = fileExtension
+        self.fileName       = fileName ?? "\(NSUUID().uuidString))"
+        self.fileSize       = Int64(dataToSend.count)
+        self.isPublic       = isPublic
+        self.mimeType       = mimeType ?? ""
+        self.xC             = xC
+        self.yC             = yC
+        self.hC             = hC
+        self.wC             = wC
+    }
+    
+    
     func convertContentToParameters() -> Parameters {
         
         var content: Parameters = [:]
         content["fileName"]         = JSON(self.fileName)
-        content["uniqueId"]         = JSON(self.uniqueId)
-        content["fileSize"]         = JSON(self.fileSize)
-        content["originalFileName"] = JSON(self.originalFileName)
-        content["threadId"]         = JSON(self.threadId ?? 0)
+        
+        if let isPublic_ = isPublic {
+            content["isPublic"]    = JSON(isPublic_)
+        }
+        if let userGroupHash_ = userGroupHash {
+            content["userGroupHash"]    = JSON(userGroupHash_)
+        }
         
         if let xC_ = self.xC {
             content["xC"] = JSON(xC_)

@@ -211,7 +211,7 @@ extension Chat {
          now user knows which messages didn't send correctly, and can handle them
          */
         if enableCache {
-            let messageObjectToSendToQueue = QueueOfWaitEditMessagesModel(content:      editMessageInput.textMessage,
+            let messageObjectToSendToQueue = QueueOfWaitEditMessagesModel(textMessage:  editMessageInput.textMessage,
                                                                           messageType:  editMessageInput.messageType,
                                                                           metadata:     nil,
                                                                           repliedTo:    editMessageInput.repliedTo,
@@ -796,7 +796,7 @@ extension Chat {
          now user knows which messages didn't send correctly, and can handle them
          */
         if enableCache {
-            let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(content:          replyMessageInput.textMessage,
+            let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(textMessage:      replyMessageInput.textMessage,
                                                                           messageType:      replyMessageInput.messageType,
                                                                           metadata:         (replyMessageInput.metadata != nil) ? "\(replyMessageInput.metadata!)" : nil,
                                                                           repliedTo:        replyMessageInput.repliedTo,
@@ -1037,16 +1037,15 @@ extension Chat {
             downloadProgress(myProgress)
         }) { (imageData) in
             
-            let uploadInput = UploadRequestModel(dataToSend:        (imageData as! Data),
+            let uploadInput = UploadImageRequest(dataToSend:        (imageData as! Data),
                                                  fileExtension:     nil,
                                                  fileName:          sendLocationMessageRequest.mapImageName,
                                                  mimeType:          "image/png",
-                                                 originalFileName:  nil,
-                                                 threadId:          sendLocationMessageRequest.threadId,
                                                  xC:                nil,
                                                  yC:                nil,
                                                  hC:                nil,
                                                  wC:                nil,
+                                                 userGroupHash:     sendLocationMessageRequest.userGroupHash,
                                                  typeCode:          sendLocationMessageRequest.typeCode ?? self.generalTypeCode,
                                                  uniqueId:          sendLocationMessageRequest.uniqueId)
             
@@ -1125,37 +1124,43 @@ extension Chat {
          */
         if enableCache {
             if let file = sendFileMessageInput.uploadInput as? UploadFileRequestModel {
-                let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      sendFileMessageInput.messageInput.textMessage,
+                let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(textMessage:  sendFileMessageInput.messageInput.textMessage,
                                                                               messageType:  sendFileMessageInput.messageInput.messageType,
-                                                                              fileName:     file.fileName,
+                                                                              fileExtension:    file.fileExtension,
+                                                                              fileName:         file.fileName,
+                                                                              isPublic:         file.isPublic,
                                                                               metadata:     (sendFileMessageInput.messageInput.metadata != nil) ? "\(sendFileMessageInput.messageInput.metadata!)" : nil,
-                                                                              mimeType:     sendFileMessageInput.uploadInput.mimeType,
+                                                                              mimeType:         file.mimeType,
                                                                               repliedTo:    sendFileMessageInput.messageInput.repliedTo,
                                                                               threadId:     sendFileMessageInput.messageInput.threadId,
-                                                                              xC:           nil,
-                                                                              yC:           nil,
-                                                                              hC:           nil,
-                                                                              wC:           nil,
-                                                                              fileToSend:   file.dataToSend,
-                                                                              imageToSend:  nil,
+                                                                              userGroupHash:    file.userGroupHash,
+                                                                              xC:               nil,
+                                                                              yC:               nil,
+                                                                              hC:               nil,
+                                                                              wC:               nil,
+                                                                              fileToSend:       file.dataToSend,
+                                                                              imageToSend:      nil,
                                                                               typeCode:     sendFileMessageInput.messageInput.typeCode,
                                                                               uniqueId:     sendFileMessageInput.messageInput.uniqueId)
                 Chat.cacheDB.saveFileMessageToWaitQueue(fileMessage: messageObjectToSendToQueue)
                 
-            } else if let image = sendFileMessageInput.uploadInput as? UploadImageRequestModel {
-                let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      sendFileMessageInput.messageInput.textMessage,
+            } else if let image = sendFileMessageInput.uploadInput as? UploadImageRequest {
+                let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(textMessage:  sendFileMessageInput.messageInput.textMessage,
                                                                               messageType:  sendFileMessageInput.messageInput.messageType,
-                                                                              fileName:     nil,
+                                                                              fileExtension:    image.fileExtension,
+                                                                              fileName:         image.fileName,
+                                                                              isPublic:         image.isPublic,
                                                                               metadata:     (sendFileMessageInput.messageInput.metadata != nil) ? "\(sendFileMessageInput.messageInput.metadata!)" : nil,
-                                                                              mimeType:     sendFileMessageInput.uploadInput.mimeType,
+                                                                              mimeType:         image.mimeType,
                                                                               repliedTo:    sendFileMessageInput.messageInput.repliedTo,
                                                                               threadId:     sendFileMessageInput.messageInput.threadId,
-                                                                              xC:           image.xC,
-                                                                              yC:           image.yC,
-                                                                              hC:           image.hC,
-                                                                              wC:           image.wC,
-                                                                              fileToSend:   nil,
-                                                                              imageToSend:  image.dataToSend,
+                                                                              userGroupHash:    image.userGroupHash,
+                                                                              xC:               image.xC,
+                                                                              yC:               image.yC,
+                                                                              hC:               image.hC,
+                                                                              wC:               image.wC,
+                                                                              fileToSend:       nil,
+                                                                              imageToSend:      image.dataToSend,
                                                                               typeCode:     sendFileMessageInput.messageInput.typeCode,
                                                                               uniqueId:     sendFileMessageInput.messageInput.uniqueId)
                 Chat.cacheDB.saveFileMessageToWaitQueue(fileMessage: messageObjectToSendToQueue)
@@ -1167,47 +1172,71 @@ extension Chat {
         
         var metadata: JSON = [:]
         
-        if let image = sendFileMessageInput.uploadInput as? UploadImageRequestModel {
-            let uploadRequest = UploadImageRequestModel(dataToSend:         image.dataToSend,
-                                                        fileExtension:      fileExtension,
-                                                        fileName:           image.fileName,
-                                                        mimeType:           image.mimeType,
-                                                        originalFileName:   image.originalFileName,
-                                                        threadId:           image.threadId,
-                                                        xC:                 image.xC,
-                                                        yC:                 image.yC,
-                                                        hC:                 image.hC,
-                                                        wC:                 image.wC,
-                                                        typeCode:           nil,
-                                                        uniqueId:           image.uniqueId)
+        if let image = sendFileMessageInput.uploadInput as? UploadImageRequest {
+            let uploadRequest: UploadImageRequest!
+            if let userGroupHash = image.userGroupHash {
+                uploadRequest = UploadImageRequest(dataToSend:      image.dataToSend,
+                                                   fileExtension:   image.fileExtension,
+                                                   fileName:        image.fileName,
+                                                   mimeType:        image.mimeType,
+                                                   xC:              image.xC,
+                                                   yC:              image.yC,
+                                                   hC:              image.hC,
+                                                   wC:              image.wC,
+                                                   userGroupHash:   userGroupHash,
+                                                   typeCode:        image.typeCode,
+                                                   uniqueId:        image.uniqueId)
+            } else {
+                uploadRequest = UploadImageRequest(dataToSend:      image.dataToSend,
+                                                   fileExtension:   image.fileExtension,
+                                                   fileName:        image.fileName,
+                                                   isPublic:        true,
+                                                   mimeType:        image.mimeType,
+                                                   xC:              image.xC,
+                                                   yC:              image.yC,
+                                                   hC:              image.hC,
+                                                   wC:              image.wC,
+                                                   typeCode:        image.typeCode,
+                                                   uniqueId:        image.uniqueId)
+            }
             
             uploadImage(inputModel: uploadRequest, uniqueId: { _ in }, progress: { (progress) in
                 uploadProgress(progress)
             }) { (response) in
                 let myResponse: UploadImageModel = response as! UploadImageModel
                 metadata["file"] = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
-                metadata["file"]["originalName"] = JSON(uploadRequest.originalFileName)
+                metadata["file"]["originalName"] = JSON(uploadRequest.fileName)
                 metadata["file"]["mimeType"]    = JSON(uploadRequest.mimeType)
                 metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
                 sendMessage(withMetadata: metadata)
             }
             
         } else if let file = sendFileMessageInput.uploadInput as? UploadFileRequestModel {
-            let uploadRequest = UploadFileRequestModel(dataToSend:      file.dataToSend,
-                                                       fileExtension:   fileExtension,
-                                                       fileName:        file.fileName,
-                                                       mimeType:        file.mimeType,
-                                                       originalFileName: file.originalFileName,
-                                                       threadId:        file.threadId,
-                                                       typeCode:        nil,
-                                                       uniqueId:        file.uniqueId)
+            let uploadRequest: UploadFileRequest!
+            if let userGroupHash = file.userGroupHash {
+                uploadRequest = UploadFileRequest(dataToSend:       file.dataToSend,
+                                                  fileExtension:    file.fileExtension,
+                                                  fileName:         file.fileName,
+                                                  mimeType:         file.mimeType,
+                                                  userGroupHash:    userGroupHash,
+                                                  typeCode:         file.typeCode,
+                                                  uniqueId:         file.uniqueId)
+            } else {
+                uploadRequest = UploadFileRequest(dataToSend:       file.dataToSend,
+                                                  fileExtension:    file.fileExtension,
+                                                  fileName:         file.fileName,
+                                                  isPublic:         true,
+                                                  mimeType:         file.mimeType,
+                                                  typeCode:         file.typeCode,
+                                                  uniqueId:         file.uniqueId)
+            }
             
             uploadFile(inputModel: uploadRequest, uniqueId: { _ in }, progress: { (progress) in
                 uploadProgress(progress)
             }) { (response) in
                 let myResponse: UploadFileModel = response as! UploadFileModel
                 metadata["file"]    = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
-                metadata["file"]["originalName"] = JSON(uploadRequest.originalFileName)
+                metadata["file"]["originalName"] = JSON(uploadRequest.fileName)
                 metadata["file"]["mimeType"]    = JSON(uploadRequest.mimeType)
                 metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
                 sendMessage(withMetadata: metadata)
@@ -1323,7 +1352,7 @@ extension Chat {
          now user knows which messages didn't send correctly, and can handle them
          */
         if enableCache {
-            let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(content:          sendTextMessageInput.textMessage,
+            let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(textMessage:      sendTextMessageInput.textMessage,
                                                                           messageType:      sendTextMessageInput.messageType,
                                                                           metadata:         (sendTextMessageInput.metadata != nil) ? "\(sendTextMessageInput.metadata!)" : nil,
                                                                           repliedTo:        sendTextMessageInput.repliedTo,
@@ -1522,14 +1551,15 @@ extension Chat {
                        seen:            @escaping (SendMessageModel)->() ) {
         
         for txt in textMessages {
-            let input = SendTextMessageRequestModel(content:        txt.content!,
-                                                    messageType:    txt.messageType,
-                                                    metadata:       txt.metadata,
-                                                    repliedTo:      txt.repliedTo,
-                                                    systemMetadata: txt.systemMetadata,
-                                                    threadId:       txt.threadId!,
-                                                    typeCode:       txt.typeCode,
-                                                    uniqueId:       txt.uniqueId)
+            let input = SendTextMessageRequest(messageType:     txt.messageType,
+                                               metadata:        txt.metadata,
+                                               repliedTo:       txt.repliedTo,
+                                               systemMetadata:  txt.systemMetadata,
+                                               textMessage:     txt.textMessage!,
+                                               threadId:        txt.threadId!,
+                                               typeCode:        txt.typeCode,
+                                               uniqueId:        txt.uniqueId)
+            
             sendTextMessage(inputModel: input, uniqueId: { (sendTextMessageUniqueId) in
                 uniqueId(sendTextMessageUniqueId)
             }, onSent: { (sentResponse) in
@@ -1548,13 +1578,13 @@ extension Chat {
                        completion:      @escaping (EditMessageModel)->()) {
         
         for editMsg in editMessages {
-            let input = EditTextMessageRequestModel(content:    editMsg.content!,
-                                                    messageType: editMsg.messageType,
-                                                    metadata:   editMsg.metadata,
-                                                    repliedTo:  editMsg.repliedTo,
-                                                    messageId:  editMsg.messageId!,
-                                                    typeCode:   editMsg.typeCode,
-                                                    uniqueId:   editMsg.uniqueId)
+            let input = EditTextMessageRequest(messageType: editMsg.messageType,
+                                               repliedTo:   editMsg.repliedTo,
+                                               messageId:   editMsg.messageId!,
+                                               textMessage: editMsg.textMessage!,
+                                               typeCode:    editMsg.typeCode,
+                                               uniqueId:    editMsg.uniqueId)
+                                                    
             editMessage(inputModel: input, uniqueId: { (editTextMessageUniqueId) in
                 uniqueId(editTextMessageUniqueId)
             }) { (editMessageResponse) in
@@ -1571,11 +1601,11 @@ extension Chat {
                        seen:            @escaping (SendMessageModel)->() ) {
         
         for frwrdMsg in forwardMessages {
-            let input = ForwardMessageRequestModel(messageIds:  [frwrdMsg.messageId!],
-                                                    metadata:   frwrdMsg.metadata,
-                                                    repliedTo:  frwrdMsg.repliedTo,
-                                                    threadId:   frwrdMsg.threadId!,
-                                                    typeCode:   frwrdMsg.typeCode)
+            let input = ForwardMessageRequest(messageIds:   [frwrdMsg.messageId!],
+                                              metadata:     frwrdMsg.metadata,
+                                              repliedTo:    frwrdMsg.repliedTo,
+                                              threadId:     frwrdMsg.threadId!,
+                                              typeCode:     frwrdMsg.typeCode)
             forwardMessage(inputModel: input, uniqueIds: { (forwardMessageUniqueIds) in
                 uniqueIds(forwardMessageUniqueIds)
             }, onSent: { (sentResponse) in
@@ -1597,39 +1627,69 @@ extension Chat {
                        deliver:         @escaping (SendMessageModel)->(),
                        seen:            @escaping (SendMessageModel)->() ) {
         
-        let message = SendTextMessageRequestModel(content:          fileMessages.content ?? "",
-                                                  messageType:      MessageType.FILE,
-                                                  metadata:         fileMessages.metadata,
-                                                  repliedTo:        fileMessages.repliedTo,
-                                                  systemMetadata:   nil,
-                                                  threadId:         fileMessages.threadId!,
-                                                  typeCode:         fileMessages.typeCode,
-                                                  uniqueId:         fileMessages.uniqueId)
+        let message = SendTextMessageRequest(messageType:       MessageType.FILE,
+                                             metadata:          fileMessages.metadata,
+                                             repliedTo:         fileMessages.repliedTo,
+                                             systemMetadata:    nil,
+                                             textMessage:       fileMessages.textMessage ?? "",
+                                             threadId:          fileMessages.threadId!,
+                                             typeCode:          fileMessages.typeCode,
+                                             uniqueId:          fileMessages.uniqueId)
         
-        var upload: UploadRequestModel? = nil
+        var upload: UploadRequest? = nil
         if let fileData = fileMessages.fileToSend {
-            upload = UploadRequestModel(dataToSend:         fileData,
-                                        fileExtension:      nil,
-                                        fileName:           fileMessages.fileName,
-                                        mimeType:           fileMessages.mimeType,
-                                        originalFileName:   fileMessages.fileName,
-                                        threadId:           fileMessages.threadId,
-                                        typeCode:           fileMessages.typeCode,
-                                        uniqueId:           nil)
+            let input: UploadFileRequest!
+            if let userGroupHash = fileMessages.userGroupHash {
+                input = UploadFileRequest(dataToSend:       fileData,
+                                          fileExtension:    fileMessages.fileExtension,
+                                          fileName:         fileMessages.fileName,
+                                          mimeType:         fileMessages.mimeType,
+                                          userGroupHash:    userGroupHash,
+                                          typeCode:         fileMessages.typeCode,
+                                          uniqueId:         fileMessages.uniqueId)
+            } else {
+                input = UploadFileRequest(dataToSend:       fileData,
+                                          fileExtension:    fileMessages.fileExtension,
+                                          fileName:         fileMessages.fileName,
+                                          isPublic:         true,
+                                          mimeType:         fileMessages.mimeType,
+                                          typeCode:         fileMessages.typeCode,
+                                          uniqueId:         fileMessages.uniqueId)
+            }
+            upload = input
+            
         } else if let imageData = fileMessages.imageToSend {
-            upload = UploadRequestModel(dataToSend:         imageData,
-                                        fileExtension:      nil,
-                                        fileName:           fileMessages.fileName,
-                                        mimeType:           fileMessages.mimeType,
-                                        originalFileName:   fileMessages.fileName,
-                                        threadId:           fileMessages.threadId!,
-                                        xC:                 fileMessages.xC,
-                                        yC:                 fileMessages.yC,
-                                        hC:                 fileMessages.hC,
-                                        wC:                 fileMessages.wC,
-                                        typeCode:           fileMessages.typeCode,
-                                        uniqueId:           nil)
+            let input: UploadImageRequest!
+            if let userGroupHash = fileMessages.userGroupHash {
+                input = UploadImageRequest(dataToSend:      imageData,
+                                           fileExtension:   fileMessages.fileExtension,
+                                           fileName:        fileMessages.fileName,
+                                           mimeType:        fileMessages.mimeType,
+                                           xC:              fileMessages.xC,
+                                           yC:              fileMessages.yC,
+                                           hC:              fileMessages.hC,
+                                           wC:              fileMessages.wC,
+                                           userGroupHash:   userGroupHash,
+                                           typeCode:        fileMessages.typeCode,
+                                           uniqueId:        fileMessages.uniqueId)
+            } else {
+                input = UploadImageRequest(dataToSend:      imageData,
+                                           fileExtension:   fileMessages.fileExtension,
+                                           fileName:        fileMessages.fileName,
+                                           isPublic:        true,
+                                           mimeType:        fileMessages.mimeType,
+                                           xC:              fileMessages.xC,
+                                           yC:              fileMessages.yC,
+                                           hC:              fileMessages.hC,
+                                           wC:              fileMessages.wC,
+                                           typeCode:        fileMessages.typeCode,
+                                           uniqueId:        fileMessages.uniqueId)
+            }
+            upload = input
+            
         }
+        
+        
         if let theUpload = upload {
             let input = SendFileMessageRequestModel(messageInput: message, uploadInput: theUpload)
             sendFileMessage(inputModel: input, uploadUniqueId: { (thUploadUniqueId) in
@@ -1654,18 +1714,33 @@ extension Chat {
                        uploadProgress:  @escaping (Float)->(),
                        completion:      @escaping (UploadImageModel)->()) {
         
-        let input = UploadImageRequestModel(dataToSend:     uploadImageObj.dataToSend!,
-                                            fileExtension:  uploadImageObj.fileExtension,
-                                            fileName:       uploadImageObj.fileName,
-                                            mimeType:       uploadImageObj.mimeType,
-                                            originalFileName: nil,
-                                            threadId:       uploadImageObj.threadId!,
-                                            xC:             uploadImageObj.xC,
-                                            yC:             uploadImageObj.yC,
-                                            hC:             uploadImageObj.hC,
-                                            wC:             uploadImageObj.wC,
-                                            typeCode:       uploadImageObj.typeCode,
-                                            uniqueId:       uploadImageObj.uniqueId)
+        let input: UploadImageRequest!
+        if let userHash = uploadImageObj.userGroupHash {
+            input = UploadImageRequest(dataToSend:      uploadImageObj.dataToSend!,
+                                       fileExtension:   uploadImageObj.fileExtension,
+                                       fileName:        uploadImageObj.fileName,
+                                       mimeType:        uploadImageObj.mimeType,
+                                       xC:              uploadImageObj.xC,
+                                       yC:              uploadImageObj.yC,
+                                       hC:              uploadImageObj.hC,
+                                       wC:              uploadImageObj.wC,
+                                       userGroupHash:   userHash,
+                                       typeCode:        uploadImageObj.typeCode,
+                                       uniqueId:        uploadImageObj.uniqueId)
+        } else {
+            input = UploadImageRequest(dataToSend:      uploadImageObj.dataToSend!,
+                                       fileExtension:   uploadImageObj.fileExtension,
+                                       fileName:        uploadImageObj.fileName,
+                                       isPublic:        true,
+                                       mimeType:        uploadImageObj.mimeType,
+                                       xC:              uploadImageObj.xC,
+                                       yC:              uploadImageObj.yC,
+                                       hC:              uploadImageObj.hC,
+                                       wC:              uploadImageObj.wC,
+                                       typeCode:        uploadImageObj.typeCode,
+                                       uniqueId:        uploadImageObj.uniqueId)
+        }
+        
         uploadImage(inputModel: input, uniqueId: { (uploadUniqueId) in
             uniqueId(uploadUniqueId)
         }, progress: { (theUploadProgress) in
@@ -1676,27 +1751,36 @@ extension Chat {
         
     }
     
-    public func resend(uploadFileObj:   [QueueOfWaitUploadFilesModel],
+    public func resend(uploadFileObj:   QueueOfWaitUploadFilesModel,
                        uniqueId:        @escaping (String)->(),
                        uploadProgress:  @escaping (Float)->(),
                        completion:      @escaping (UploadFileModel)->()) {
         
-        for upld in uploadFileObj {
-            let input = UploadFileRequestModel(dataToSend:      upld.dataToSend!,
-                                               fileExtension:   upld.fileExtension,
-                                               fileName:        upld.fileName,
-                                               mimeType:        upld.mimeType,
-                                               originalFileName: nil,
-                                               threadId:        upld.threadId!,
-                                               typeCode:        upld.typeCode,
-                                               uniqueId:        upld.uniqueId)
-            uploadFile(inputModel: input, uniqueId: { (uploadUniqueId) in
-                uniqueId(uploadUniqueId)
-            }, progress: { (theUploadProgress) in
-                uploadProgress(theUploadProgress)
-            }) { (uploadResponse) in
-                completion(uploadResponse as! UploadFileModel)
-            }
+        let input: UploadFileRequest!
+        if let userHash = uploadFileObj.userGroupHash {
+            input = UploadFileRequest(dataToSend:       uploadFileObj.dataToSend!,
+                                      fileExtension:    uploadFileObj.fileExtension,
+                                      fileName:         uploadFileObj.fileName,
+                                      mimeType:         uploadFileObj.mimeType,
+                                      userGroupHash:    userHash,
+                                      typeCode:         uploadFileObj.typeCode,
+                                      uniqueId:         uploadFileObj.uniqueId)
+        } else {
+            input = UploadFileRequest(dataToSend:       uploadFileObj.dataToSend!,
+                                      fileExtension:    uploadFileObj.fileExtension,
+                                      fileName:         uploadFileObj.fileName,
+                                      isPublic:         true,
+                                      mimeType:         uploadFileObj.mimeType,
+                                      typeCode:         uploadFileObj.typeCode,
+                                      uniqueId:         uploadFileObj.uniqueId)
+        }
+        
+        uploadFile(inputModel: input, uniqueId: { (uploadUniqueId) in
+            uniqueId(uploadUniqueId)
+        }, progress: { (theUploadProgress) in
+            uploadProgress(theUploadProgress)
+        }) { (uploadResponse) in
+            completion(uploadResponse as! UploadFileModel)
         }
         
     }

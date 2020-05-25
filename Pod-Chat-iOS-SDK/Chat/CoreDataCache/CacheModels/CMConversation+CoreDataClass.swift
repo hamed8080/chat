@@ -178,6 +178,7 @@ public class CMConversation: NSManagedObject {
                                                  type:                  type,
                                                  unreadCount:           unreadCount,
                                                  uniqueName:            nil,
+                                                 userGroupHash:         self.userGroupHash,
                                                  inviter:               (showInviter)       ? inviter       : nil,
                                                  lastMessageVO:         (showLastMessageVO) ? lastMessage   : nil,
                                                  participants:          (showParticipants)  ? participants  : nil,
@@ -266,6 +267,9 @@ public class CMConversation: NSManagedObject {
         }
         if let unreadCount = conversation.unreadCount as NSNumber? {
             self.unreadCount = unreadCount
+        }
+        if let userGroupHash = conversation.userGroupHash {
+            self.userGroupHash  = userGroupHash
         }
     }
     

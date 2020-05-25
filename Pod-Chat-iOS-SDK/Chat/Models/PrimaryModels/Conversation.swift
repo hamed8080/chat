@@ -43,6 +43,7 @@ open class Conversation {
     public var type:                            Int?
     public var unreadCount:                     Int?
     public var uniqueName:                      String?
+    public var userGroupHash:                   String?
     
     public var inviter:                         Participant?
     public var lastMessageVO:                   Message?
@@ -81,6 +82,7 @@ open class Conversation {
         self.type                           = messageContent["type"].int
         self.unreadCount                    = messageContent["unreadCount"].int
         self.uniqueName                     = messageContent["uniqueName"].string
+        self.userGroupHash                  = messageContent["userGroupHash"].string
         
         if (messageContent["inviter"] != JSON.null) {
             self.inviter = Participant(messageContent: messageContent["inviter"], threadId: id)
@@ -136,6 +138,7 @@ open class Conversation {
                 type:           Int?,
                 unreadCount:    Int?,
                 uniqueName:     String?,
+                userGroupHash:  String?,
                 inviter:        Participant?,
                 lastMessageVO:  Message?,
                 participants:   [Participant]?,
@@ -172,6 +175,7 @@ open class Conversation {
         self.type           = type
         self.unreadCount    = unreadCount
         self.uniqueName     = uniqueName
+        self.userGroupHash  = userGroupHash
         
         self.inviter        = inviter
         self.lastMessageVO  = lastMessageVO
@@ -212,6 +216,7 @@ open class Conversation {
         self.type           = theConversation.type
         self.unreadCount    = theConversation.unreadCount
         self.uniqueName     = theConversation.uniqueName
+        self.userGroupHash  = theConversation.userGroupHash
         
         self.inviter        = theConversation.inviter
         self.lastMessageVO  = theConversation.lastMessageVO
@@ -265,6 +270,7 @@ open class Conversation {
                             "type":                         type ?? NSNull(),
                             "unreadCount":                  unreadCount ?? NSNull(),
                             "uniqueName":                   uniqueName ?? NSNull(),
+                            "userGroupHash":                userGroupHash ?? NSNull(),
                             "inviter":                      inviter?.formatToJSON() ?? NSNull(),
                             "lastMessageVO":                lastMessageVO?.formatToJSON() ?? NSNull(),
                             "participants":                 participantsJSON,

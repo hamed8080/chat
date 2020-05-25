@@ -171,7 +171,7 @@ extension Chat {
         
         if let uploadRequest = creatThreadWithFileMessageInput.uploadInput as? UploadImageRequestModel  {
             
-            metadata["file"]["originalName"] = JSON(uploadRequest.originalFileName)
+            metadata["file"]["originalName"] = JSON(uploadRequest.fileName)
             metadata["file"]["mimeType"]    = JSON("")
             metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
             
@@ -188,7 +188,7 @@ extension Chat {
             
         } else if let uploadRequest = creatThreadWithFileMessageInput.uploadInput as? UploadFileRequestModel {
             
-            metadata["file"]["originalName"] = JSON(uploadRequest.originalFileName)
+            metadata["file"]["originalName"] = JSON(uploadRequest.fileName)
             metadata["file"]["mimeType"]    = JSON("")
             metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
             

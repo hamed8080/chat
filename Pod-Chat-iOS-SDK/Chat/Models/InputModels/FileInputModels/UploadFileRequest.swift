@@ -11,15 +11,56 @@ import SwiftyJSON
 
 open class UploadFileRequest: UploadRequest {
     
+    /// initializer of Uploading File request model
+    public init(dataToSend:     Data,
+                fileExtension:  String?,
+                fileName:       String?,
+                mimeType:       String?,
+                userGroupHash:  String?,
+                typeCode:       String?,
+                uniqueId:       String?) {
+        
+        super.init(typeCode: typeCode, uniqueId: uniqueId)
+        
+        self.dataToSend     = dataToSend
+        self.fileExtension  = fileExtension
+        self.fileName       = fileName ?? "\(NSUUID().uuidString))"
+        self.fileSize       = Int64(dataToSend.count)
+        self.mimeType       = mimeType ?? ""
+        self.userGroupHash  = userGroupHash
+    }
+    
+    /// initializer of Uploading Public File request model
+    public init(dataToSend:     Data,
+                fileExtension:  String?,
+                fileName:       String?,
+                isPublic:       Bool,
+                mimeType:       String?,
+                typeCode:       String?,
+                uniqueId:       String?) {
+        
+        super.init(typeCode: typeCode, uniqueId: uniqueId)
+        
+        self.dataToSend     = dataToSend
+        self.fileExtension  = fileExtension
+        self.fileName       = fileName ?? "\(NSUUID().uuidString))"
+        self.fileSize       = Int64(dataToSend.count)
+        self.isPublic       = isPublic
+        self.mimeType       = mimeType ?? ""
+    }
+    
+    
     func convertContentToParameters() -> Parameters {
         
         var content: Parameters = [:]
         
         content["fileName"]         = JSON(self.fileName)
-        content["uniqueId"]         = JSON(self.uniqueId)
-        content["originalFileName"] = JSON(self.originalFileName)
-        content["fileSize"]         = JSON(self.fileSize)
-        content["threadId"]         = JSON(self.threadId ?? 0)
+        if let userGroupHash_ = userGroupHash {
+            content["userGroupHash"]    = JSON(userGroupHash_)
+        }
+        if let isPublic_ = isPublic {
+            content["isPublic"]    = JSON(isPublic_)
+        }
         
         return content
     }

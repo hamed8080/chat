@@ -87,7 +87,7 @@ class Networking {
                                                         fileInfo:       fileInfo,
                                                         fileObjectData: dataToSend as? Data,
                                                         progress:       uploadProgress,
-                                                        threadId:       (withParameters?["threadId"] as? Int),
+                                                        userGroupHash:  (withParameters?["userGroupHash"] as? String),
                                                         uniqueId:       uniqueId)
                 Chat.sharedInstance.delegate?.fileUploadEvents(model: fUploadError)
                 completion(error)

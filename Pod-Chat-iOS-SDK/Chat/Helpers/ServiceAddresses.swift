@@ -13,6 +13,7 @@ public struct SERVICE_ADDRESSES_ENUM {
     public var SSO_ADDRESS          = "http://172.16.110.76"
     public var PLATFORM_ADDRESS     = "http://172.16.106.26:8080/hamsam"
     public var FILESERVER_ADDRESS   = "http://172.16.106.26:8080/hamsam"
+    public var PODSPACE_FILESERVER_ADDRESS = "https://podspace.pod.ir"
     public var MAP_ADDRESS          = "https://api.neshan.org/v1"
     
 //    public func stringValue() -> String {
@@ -46,11 +47,17 @@ public enum SERVICES_PATH: String {
     case GET_FILE           = "/nzh/file/"
     
     // PodDrive
-    case DRIVE_UPLOAD_FILE          = "/nzh/drive/uploadFile"
+//    case DRIVE_UPLOAD_FILE          = "/nzh/drive/uploadFile"
     case DRIVE_UPLOAD_FILE_FROM_URL = "/nzh/drive/uploadFileFromUrl"
-    case DRIVE_UPLOAD_IMAGE         = "/nzh/drive/uploadImage"
+//    case DRIVE_UPLOAD_IMAGE         = "/nzh/drive/uploadImage"
     case DRIVE_DOWNLOAD_FILE        = "/nzh/drive/downloadFile"
     case DRIVE_DOWNLOAD_IMAGE       = "/nzh/drive/downloadImage"
+    
+    // PodSpace
+    case PODSPACE_UPLOAD_FILE           = "/nzh/drive/uploadFile"
+    case PODSPACE_PUBLIC_UPLOAD_FILE    = "/userGroup/uploadFile"
+    case PODSPACE_UPLOAD_IMAGE          = "/nzh/drive/uploadImage"
+    case PODSPACE_PUBLIC_UPLOAD_IMAGE   = "/userGroup/uploadImage"
     
     // Neshan Map
     case REVERSE            = "/reverse"
@@ -80,12 +87,18 @@ public enum SERVICES_PATH: String {
         case .GET_FILE:     return "/nzh/file/"
         
         // PodDrive
-        case .DRIVE_UPLOAD_FILE:            return "/nzh/drive/uploadFile"
+//        case .DRIVE_UPLOAD_FILE:            return "/nzh/drive/uploadFile"
         case .DRIVE_UPLOAD_FILE_FROM_URL:   return "/nzh/drive/uploadFileFromUrl"
-        case .DRIVE_UPLOAD_IMAGE:           return "/nzh/drive/uploadImage"
+//        case .DRIVE_UPLOAD_IMAGE:           return "/nzh/drive/uploadImage"
         case .DRIVE_DOWNLOAD_FILE:          return "/nzh/drive/downloadFile"
         case .DRIVE_DOWNLOAD_IMAGE:         return "/nzh/drive/downloadImage"
         
+        // PodSpace
+        case .PODSPACE_UPLOAD_FILE:         return "/nzh/drive/uploadFile"
+        case .PODSPACE_PUBLIC_UPLOAD_FILE:  return "/userGroup/uploadFile"
+        case .PODSPACE_UPLOAD_IMAGE:        return "/nzh/drive/uploadImage"
+        case .PODSPACE_PUBLIC_UPLOAD_IMAGE: return "/userGroup/uploadImage"
+            
         // Neshan Map
         case .REVERSE:      return "/reverse"
         case .SEARCH:       return "/search"
