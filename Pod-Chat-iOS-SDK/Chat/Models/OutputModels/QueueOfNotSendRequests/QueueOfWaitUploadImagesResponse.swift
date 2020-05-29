@@ -18,10 +18,10 @@ open class QueueOfWaitUploadImagesModel {
     let isPublic:       Bool?
     let mimeType:         String?
     let userGroupHash:  String?
-    let xC:               Int?
-    let yC:               Int?
-    let hC:               Int?
-    let wC:               Int?
+    let xC:               Int
+    let yC:               Int
+    let hC:               Int
+    let wC:               Int
     let typeCode:         String?
     let uniqueId:         String?
     
@@ -32,10 +32,10 @@ open class QueueOfWaitUploadImagesModel {
          isPublic:      Bool?,
          mimeType:      String?,
          userGroupHash: String?,
-         xC:            Int?,
-         yC:            Int?,
-         hC:            Int?,
-         wC:            Int?,
+         xC:            Int,
+         yC:            Int,
+         hC:            Int,
+         wC:            Int,
          typeCode:      String?,
          uniqueId:      String?) {
         
@@ -78,10 +78,10 @@ open class QueueOfWaitUploadImagesModel {
                             "isPublic":         isPublic ?? NSNull(),
                             "mimeType":         mimeType ?? "",
                             "userGroupHash":    userGroupHash ?? NSNull(),
-                            "xC":               xC ?? NSNull(),
-                            "yC":               yC ?? NSNull(),
-                            "hC":               hC ?? NSNull(),
-                            "wC":               wC ?? NSNull(),
+                            "xC":               xC,
+                            "yC":               yC,
+                            "hC":               hC,
+                            "wC":               wC,
                             "typeCode":         typeCode ?? NSNull(),
                             "uniqueId":         uniqueId ?? NSNull()]
         return (result, dataToSend)

@@ -30,16 +30,12 @@ class Networking {
         var uploadProgress: Float = 0
         Alamofire.upload(multipartFormData: { (multipartFormData) in
             
-            if let hasImage = isImage {
-                if (hasImage == true) {
-                    multipartFormData.append(dataToSend as! Data, withName: "image")
-                }
+            if let hasImage = isImage, (hasImage == true) {
+                multipartFormData.append(dataToSend as! Data, withName: "file")
             }
             
-            if let hasFile = isFile {
-                if (hasFile == true) {
-                    multipartFormData.append(dataToSend as! Data, withName: "file")
-                }
+            if let hasFile = isFile, (hasFile == true) {
+                multipartFormData.append(dataToSend as! Data, withName: "file")
             }
             
             if let header = withHeaders {
@@ -69,7 +65,6 @@ class Networking {
                     progress?(myProgressFloat)
                 })
                 upload.responseJSON { response in
-                    debugPrint(response)
                     for (index, item) in Chat.sharedInstance.uploadRequest.enumerated() {
                         if item.uniqueId == uniqueId {
                             Chat.sharedInstance.uploadRequest.remove(at: index)

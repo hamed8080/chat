@@ -54,7 +54,7 @@ open class UploadFileRequest: UploadRequest {
         
         var content: Parameters = [:]
         
-        content["fileName"]         = JSON(self.fileName)
+        content["filename"]         = JSON(self.fileName)
         if let userGroupHash_ = userGroupHash {
             content["userGroupHash"]    = JSON(userGroupHash_)
         }

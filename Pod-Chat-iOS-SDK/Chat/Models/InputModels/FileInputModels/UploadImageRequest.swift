@@ -16,10 +16,10 @@ open class UploadImageRequest: UploadRequest {
                 fileExtension:  String?,
                 fileName:       String?,
                 mimeType:       String?,
-                xC:             Int?,
-                yC:             Int?,
-                hC:             Int?,
-                wC:             Int?,
+                xC:             Int,
+                yC:             Int,
+                hC:             Int,
+                wC:             Int,
                 userGroupHash:  String,
                 typeCode:       String?,
                 uniqueId:       String?) {
@@ -43,10 +43,10 @@ open class UploadImageRequest: UploadRequest {
                 fileName:       String?,
                 isPublic:       Bool,
                 mimeType:       String?,
-                xC:             Int?,
-                yC:             Int?,
-                hC:             Int?,
-                wC:             Int?,
+                xC:             Int,
+                yC:             Int,
+                hC:             Int,
+                wC:             Int,
                 typeCode:       String?,
                 uniqueId:       String?) {
         super.init(typeCode: typeCode, uniqueId: uniqueId)
@@ -67,7 +67,7 @@ open class UploadImageRequest: UploadRequest {
     func convertContentToParameters() -> Parameters {
         
         var content: Parameters = [:]
-        content["fileName"]         = JSON(self.fileName)
+        content["filename"]         = JSON(self.fileName)
         
         if let isPublic_ = isPublic {
             content["isPublic"]    = JSON(isPublic_)
@@ -76,18 +76,22 @@ open class UploadImageRequest: UploadRequest {
             content["userGroupHash"]    = JSON(userGroupHash_)
         }
         
-        if let xC_ = self.xC {
-            content["xC"] = JSON(xC_)
-        }
-        if let yC_ = self.yC {
-            content["yC"] = JSON(yC_)
-        }
-        if let hC_ = self.hC {
-            content["hC"] = JSON(hC_)
-        }
-        if let wC_ = self.wC {
-            content["wC"] = JSON(wC_)
-        }
+        content["xC"] = JSON(xC)
+        content["yC"] = JSON(yC)
+        content["hC"] = JSON(hC)
+        content["wC"] = JSON(wC)
+//        if let xC_ = self.xC {
+//            content["xC"] = JSON(xC_)
+//        }
+//        if let yC_ = self.yC {
+//            content["yC"] = JSON(yC_)
+//        }
+//        if let hC_ = self.hC {
+//            content["hC"] = JSON(hC_)
+//        }
+//        if let wC_ = self.wC {
+//            content["wC"] = JSON(wC_)
+//        }
 
         return content
     }

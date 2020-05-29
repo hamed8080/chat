@@ -22,7 +22,6 @@ open class UploadFileModel: ResponseModel, ResponseModelDelegates {
         //        if let pathString = localPath {
         //            self.localPath = pathString
         //        }
-        
         if let myFile = messageContentJSON {
             self.uploadFile = FileObject(messageContent: myFile)
         } else {

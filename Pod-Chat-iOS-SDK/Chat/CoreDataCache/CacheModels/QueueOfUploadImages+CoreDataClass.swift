@@ -55,10 +55,10 @@ public class QueueOfUploadImages: NSManagedObject {
                                                                             isPublic:       isPublic,
                                                                             mimeType:       self.mimeType,
                                                                             userGroupHash:  self.userGroupHash,
-                                                                            xC:             xC,
-                                                                            yC:             yC,
-                                                                            hC:             hC,
-                                                                            wC:             wC,
+                                                                            xC:             xC ?? 0,
+                                                                            yC:             yC ?? 0,
+                                                                            hC:             hC ?? 99999,
+                                                                            wC:             wC ?? 99999,
                                                                             typeCode:       self.typeCode,
                                                                             uniqueId:       self.uniqueId)
             return queueOfWaitUploadImagesModel

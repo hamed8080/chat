@@ -266,9 +266,9 @@ extension Chat {
     /// - parameter progress:   (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (UploadFileModel)
     public func uploadFile(inputModel uploadFileInput: UploadFileRequest,
-                    uniqueId:        @escaping (String) -> (),
-                    progress:        @escaping (Float) -> (),
-                    completion:      @escaping callbackTypeAlias) {
+                           uniqueId:        @escaping (String) -> (),
+                           progress:        @escaping (Float) -> (),
+                           completion:      @escaping callbackTypeAlias) {
 
         log.verbose("Try to upload file with this parameters: \n \(uploadFileInput)", context: "Chat")
 
@@ -332,7 +332,7 @@ extension Chat {
             let myResponse: JSON = response as! JSON
             
             let hasError        = myResponse["hasError"].boolValue
-            let errorMessage    = myResponse["errorMessage"].stringValue
+            let errorMessage    = myResponse["message"].stringValue
             let errorCode       = myResponse["errorCode"].intValue
             
             if (!hasError) {
@@ -365,11 +365,10 @@ extension Chat {
                                                         uniqueId:        uploadFileInput.uniqueId)
                 Chat.sharedInstance.delegate?.fileUploadEvents(model: fUploadedEM)
                 
-                let uploadFileModel = UploadFileModel(messageContentJSON:   resultData,
-                                                        errorCode:            errorCode,
-                                                        errorMessage:         errorMessage,
-                                                        hasError:             hasError)
-                
+                let uploadFileModel = UploadFileResponse(messageContentJSON: resultData,
+                                                         errorCode:         errorCode,
+                                                         errorMessage:      errorMessage,
+                                                         hasError:          hasError)
                 completion(uploadFileModel)
             } else {
                 let fileInfo = FileInfo(fileName: uploadFileInput.fileName,
@@ -384,6 +383,11 @@ extension Chat {
                                                           userGroupHash:    uploadFileInput.userGroupHash,
                                                           uniqueId:         uploadFileInput.uniqueId)
                 Chat.sharedInstance.delegate?.fileUploadEvents(model: fUploadErrorEM)
+                let errorResponse = UploadFileResponse(messageContentJSON:  nil,
+                                                       errorCode:           errorCode,
+                                                       errorMessage:        errorMessage,
+                                                       hasError:            hasError)
+                completion(errorResponse)
             }
         }
     }
@@ -407,9 +411,9 @@ extension Chat {
     /// - parameter progress:   (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (UploadImageModel)
     public func uploadImage(inputModel uploadImageInput:   UploadImageRequest,
-                     uniqueId:      @escaping (String) -> (),
-                     progress:      @escaping (Float) -> (),
-                     completion:    @escaping callbackTypeAlias) {
+                            uniqueId:       @escaping (String) -> (),
+                            progress:       @escaping (Float) -> (),
+                            completion:     @escaping callbackTypeAlias) {
         
         log.verbose("Try to upload image with this parameters: \n \(uploadImageInput)", context: "Chat")
         
@@ -476,7 +480,7 @@ extension Chat {
         }) { (response) in
             let myResponse: JSON = response as! JSON
             let hasError        = myResponse["hasError"].boolValue
-            let errorMessage    = myResponse["errorMessage"].stringValue
+            let errorMessage    = myResponse["message"].stringValue
             let errorCode       = myResponse["errorCode"].intValue
             
             if (!hasError) {
@@ -499,11 +503,6 @@ extension Chat {
                     Chat.cacheDB.deleteWaitUploadImages(uniqueId: uploadImageInput.uniqueId)
                 }
                 
-                let uploadImageModel = UploadImageModel(messageContentJSON: resultData,
-                                                        errorCode:          errorCode,
-                                                        errorMessage:       errorMessage,
-                                                        hasError:           hasError)
-                
                 let fileInfo = FileInfo(fileName: uploadImageInput.fileName,
                                         fileSize: uploadImageInput.fileSize)
                 let fUploadedEM = FileUploadEventModel(type:            FileUploadEventTypes.UPLOADED,
@@ -517,6 +516,10 @@ extension Chat {
                                                        uniqueId:        uploadImageInput.uniqueId)
                 Chat.sharedInstance.delegate?.fileUploadEvents(model: fUploadedEM)
                 
+                let uploadImageModel = UploadImageResponse(messageContentJSON:  resultData,
+                                                           errorCode:           errorCode,
+                                                           errorMessage:        errorMessage,
+                                                           hasError:            hasError)
                 completion(uploadImageModel)
             } else {
                 let fileInfo = FileInfo(fileName: uploadImageInput.fileName,
@@ -531,6 +534,11 @@ extension Chat {
                                                           userGroupHash:    uploadImageInput.userGroupHash,
                                                           uniqueId:         uploadImageInput.uniqueId)
                 Chat.sharedInstance.delegate?.fileUploadEvents(model: fUploadErrorEM)
+                let errorResponse = UploadImageResponse(messageContentJSON: nil,
+                                                        errorCode:          errorCode,
+                                                        errorMessage:       errorMessage,
+                                                        hasError:           hasError)
+                completion(errorResponse)
             }
         }
         

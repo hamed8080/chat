@@ -21,10 +21,10 @@ open class UploadRequest {
     public let typeCode:            String? //= nil
     public let uniqueId:            String  //= ""
     
-    public var xC:                  Int?    = nil
-    public var yC:                  Int?    = nil
-    public var hC:                  Int?    = nil
-    public var wC:                  Int?    = nil
+    public var xC:                  Int     = 0
+    public var yC:                  Int     = 0
+    public var hC:                  Int     = 0
+    public var wC:                  Int     = 0
     
     
     init(typeCode:  String?,
