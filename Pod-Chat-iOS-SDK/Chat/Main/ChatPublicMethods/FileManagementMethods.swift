@@ -50,8 +50,7 @@ extension Chat {
         
         // if cache is enabled by user, first return cache result to the user
         if (getCacheResponse ?? enableCache) {
-            if let (cacheFileResult, filePath) = Chat.cacheDB.retrieveFileObject(fileId:   getFileInput.fileId,
-                                                                                  hashCode: getFileInput.hashCode) {
+            if let (cacheFileResult, filePath) = Chat.cacheDB.retrieveFileObject(hashCode: getFileInput.hashCode) {
                 hasFileOntheCache = true
                 let response = DownloadFileModel(messageContentModel:   cacheFileResult,
                                                  errorCode:             0,
@@ -77,7 +76,7 @@ extension Chat {
                 }
             }
         }
-        
+
         if (!hasFileOntheCache) || (getFileInput.serverResponse) {
             _ = checkIfDeviceHasFreeSpace(needSpaceInMB: deviecLimitationSpaceMB, turnOffTheCache: false)
             sendRequestToDownloadFile(withInputModel: getFileInput, progress: { (theProgress) in
@@ -92,10 +91,10 @@ extension Chat {
     private func sendRequestToDownloadFile(withInputModel getFileInput:   GetFileRequest,
                                            progress:       @escaping (Float) -> (),
                                            completion:     @escaping (Data?, DownloadFileModel) -> ()) {
-        
-        let url = "\(SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_FILE.rawValue)"
+
+        let url = "\(SERVICE_ADDRESSES.PODSPACE_FILESERVER_ADDRESS)\(SERVICES_PATH.DRIVE_DOWNLOAD_FILE.rawValue)"
         let method:     HTTPMethod  = HTTPMethod.get
-        Networking.sharedInstance.download(toUrl:           url,
+        Networking.sharedInstance.download(fromUrl:         url,
                                            withMethod:      method,
                                            withHeaders:     nil,
                                            withParameters:  getFileInput.convertContentToParameters()
@@ -107,14 +106,18 @@ extension Chat {
                 let fileName = responseHeader["name"].string
                 let fileType = responseHeader["type"].string
                 let theFinalFileName = "\(fileName ?? "default").\(fileType ?? "none")"
-                let uploadFile = FileObject(hashCode: getFileInput.hashCode, id: getFileInput.fileId, name: theFinalFileName)
-                
+                let uploadFile = FileObject(hashCode:   getFileInput.hashCode,
+                                            id:         getFileInput.fileId,
+                                            name:       theFinalFileName,
+                                            size:       myFile.count,
+                                            type:       fileType)
+
                 if self.enableCache {
                     if self.checkIfDeviceHasFreeSpace(needSpaceInMB: Int64(myFile.count / 1024), turnOffTheCache: true) {
                         Chat.cacheDB.saveFileObject(fileInfo: uploadFile, fileData: myFile, toLocalPath: self.localFileCustomPath)
                     }
                 }
-                
+
                 let uploadFileModel = DownloadFileModel(messageContentModel:    uploadFile,
                                                         errorCode:              0,
                                                         errorMessage:           "",
@@ -128,7 +131,7 @@ extension Chat {
                 let errorUploadFileModel = DownloadFileModel(messageContentModel: nil, errorCode: errorCode, errorMessage: errorMessage, hasError: hasError)
                 completion(nil, errorUploadFileModel)
             }
-        }
+        }
     }
     
     
@@ -165,8 +168,7 @@ extension Chat {
         
         // if cache is enabled by user, first return cache result to the user
         if (getCacheResponse ?? enableCache) {
-            if let (cacheImageResult, imagePath) = Chat.cacheDB.retrieveImageObject(hashCode:   getImageInput.hashCode,
-                                                                                    imageId:    getImageInput.imageId) {
+            if let (cacheImageResult, imagePath) = Chat.cacheDB.retrieveImageObject(hashCode:   getImageInput.hashCode) {
                 let response = DownloadImageModel(messageContentModel:   cacheImageResult,
                                                   errorCode:             0,
                                                   errorMessage:          "",
@@ -207,9 +209,9 @@ extension Chat {
                                             progress:      @escaping (Float) -> (),
                                             completion:    @escaping (Data?, DownloadImageModel) -> ()) {
         
-        let url = "\(SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_IMAGE.rawValue)"
+        let url = "\(SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.DRIVE_DOWNLOAD_IMAGE.rawValue)"
         let method:     HTTPMethod  = HTTPMethod.get
-        Networking.sharedInstance.download(toUrl:           url,
+        Networking.sharedInstance.download(fromUrl:         url,
                                            withMethod:      method,
                                            withHeaders:     nil,
                                            withParameters:  getImageInput.convertContentToParameters()
@@ -224,10 +226,10 @@ extension Chat {
                 let uploadImage = ImageObject(actualHeight: nil,
                                               actualWidth:  nil,
                                               hashCode:     getImageInput.hashCode,
-                                              height:       getImageInput.height,
+                                              height:       nil,
                                               id:           getImageInput.imageId,
                                               name:         theFinalFileName,
-                                              width:        getImageInput.width)
+                                              width:        nil)
                 
                 if self.enableCache {
                     if self.checkIfDeviceHasFreeSpace(needSpaceInMB: Int64(myData.count / 1024), turnOffTheCache: true) {
@@ -295,9 +297,9 @@ extension Chat {
 
         var url = "\(SERVICE_ADDRESSES.PODSPACE_FILESERVER_ADDRESS)"
         if let _ = uploadFileInput.userGroupHash {
-            url += "\(SERVICES_PATH.PODSPACE_UPLOAD_FILE.rawValue)"
-        } else {
             url += "\(SERVICES_PATH.PODSPACE_PUBLIC_UPLOAD_FILE.rawValue)"
+        } else {
+            url += "\(SERVICES_PATH.PODSPACE_UPLOAD_FILE.rawValue)"
         }
         
         let headers:    HTTPHeaders = ["_token_":           token,
@@ -342,10 +344,9 @@ extension Chat {
                     // save data comes from server to the Cache
                     let uploadFileObject = FileObject(messageContent: resultData)
                     Chat.cacheDB.saveFileObject(fileInfo: uploadFileObject, fileData: uploadFileInput.dataToSend, toLocalPath: self.localFileCustomPath)
-                    let getFileRequest = GetFileRequestModel(downloadable:  nil,
-                                                                fileId:        uploadFileObject.id,
-                                                                hashCode:      uploadFileObject.hashCode,
-                                                                serverResponse: true)
+                    let getFileRequest = GetFileRequest(fileId:         uploadFileObject.id,
+                                                        hashCode:       uploadFileObject.hashCode,
+                                                        serverResponse: true)
                     self.sendRequestToDownloadFile(withInputModel:  getFileRequest,
                                                     progress:        { _ in },
                                                     completion:      { (_, _) in })
@@ -444,9 +445,9 @@ extension Chat {
         
         var url = "\(SERVICE_ADDRESSES.PODSPACE_FILESERVER_ADDRESS)"
         if let _ = uploadImageInput.userGroupHash {
-            url += "\(SERVICES_PATH.PODSPACE_UPLOAD_IMAGE.rawValue)"
-        } else {
             url += "\(SERVICES_PATH.PODSPACE_PUBLIC_UPLOAD_IMAGE.rawValue)"
+        } else {
+            url += "\(SERVICES_PATH.PODSPACE_UPLOAD_IMAGE.rawValue)"
         }
         
         let headers:    HTTPHeaders = ["_token_":           token,
@@ -490,13 +491,12 @@ extension Chat {
                     // save data comes from server to the Cache
                     let uploadImageFile = ImageObject(messageContent: resultData)
                     Chat.cacheDB.saveImageObject(imageInfo: uploadImageFile, imageData: uploadImageInput.dataToSend, toLocalPath: self.localImageCustomPath)
-                    let getImageRequest = GetImageRequestModel(actual:      nil,
-                                                               downloadable: nil,
-                                                               height:      nil,
-                                                               hashCode:    uploadImageFile.hashCode,
-                                                               imageId:     uploadImageFile.id,
-                                                               width:       nil,
-                                                               serverResponse: true)
+                    let getImageRequest = GetImageRequest(imageId:  uploadImageFile.id,
+                                                          hashCode: uploadImageFile.hashCode,
+                                                          quality:  nil,
+                                                          crop:     nil,
+                                                          size:     nil,
+                                                          serverResponse: true)
                     self.sendRequestToDownloadImage(withInputModel: getImageRequest,
                                                     progress:       { _ in },
                                                     completion:     { (_, _) in })

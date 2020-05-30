@@ -11,7 +11,7 @@ import SwiftyJSON
 
 open class UploadFileRequest: UploadRequest {
     
-    /// initializer of Uploading File request model
+    /// initializer of Uploading Public File request model
     public init(dataToSend:     Data,
                 fileExtension:  String?,
                 fileName:       String?,
@@ -30,7 +30,7 @@ open class UploadFileRequest: UploadRequest {
         self.userGroupHash  = userGroupHash
     }
     
-    /// initializer of Uploading Public File request model
+    /// initializer of Uploading File request model
     public init(dataToSend:     Data,
                 fileExtension:  String?,
                 fileName:       String?,

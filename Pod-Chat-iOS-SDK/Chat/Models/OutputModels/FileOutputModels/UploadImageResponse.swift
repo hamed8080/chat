@@ -12,7 +12,7 @@ import SwiftyJSON
 open class UploadImageModel: ResponseModel, ResponseModelDelegates {
     
     //    public var localPath:           String = ""
-    public let uploadImage:     ImageObject?
+    public let uploadImage:     FileObject?
     
     public init(messageContentJSON: JSON?,
                 errorCode:      Int,
@@ -25,14 +25,14 @@ open class UploadImageModel: ResponseModel, ResponseModelDelegates {
         //        }
         
         if let content = messageContentJSON {
-            self.uploadImage = ImageObject(messageContent: content)
+            self.uploadImage = FileObject(messageContent: content)
         } else {
             uploadImage = nil
         }
         super.init(hasError: hasError, errorMessage: errorMessage, errorCode: errorCode)
     }
     
-    public init(messageContentModel: ImageObject?,
+    public init(messageContentModel: FileObject?,
                 errorCode:      Int,
                 errorMessage:   String,
                 hasError:       Bool/*,
@@ -72,10 +72,6 @@ open class UploadImageModel: ResponseModel, ResponseModelDelegates {
             imageMetadata["link"]            = JSON(link)
             imageMetadata["id"]              = JSON(upload.id)
             imageMetadata["name"]            = JSON(upload.name ?? "")
-            imageMetadata["height"]          = JSON(upload.height ?? 0)
-            imageMetadata["width"]           = JSON(upload.width ?? 0)
-            imageMetadata["actualHeight"]    = JSON(upload.actualHeight ?? 0)
-            imageMetadata["actualWidth"]     = JSON(upload.actualWidth ?? 0)
             imageMetadata["hashCode"]        = JSON(upload.hashCode)
         }
         

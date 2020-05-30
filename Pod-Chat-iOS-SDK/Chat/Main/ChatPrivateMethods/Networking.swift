@@ -91,7 +91,7 @@ class Networking {
     }
     
     
-    func download(toUrl urlStr:         String,
+    func download(fromUrl urlStr:         String,
                   withMethod:           HTTPMethod,
                   withHeaders:          HTTPHeaders?,
                   withParameters:       Parameters?,
@@ -103,8 +103,9 @@ class Networking {
         Alamofire.request(url,
                           method:       withMethod,
                           parameters:   withParameters,
+                          encoding:     URLEncoding(destination: .queryString),
                           headers:      withHeaders)
-            .downloadProgress(closure: { (downloadProgress) in
+        .downloadProgress(closure: { (downloadProgress) in
             let myProgressFloat: Float = Float(downloadProgress.fractionCompleted)
             progress?(myProgressFloat)
         })
@@ -112,7 +113,7 @@ class Networking {
             if myResponse.result.isSuccess {
                 if let downloadedData = myResponse.data {
                     if let response = myResponse.response {
-                        
+                        print("download response = \(response)")
                         var resJSON: JSON = [:]
                         
                         let headerResponse = response.allHeaderFields
@@ -130,13 +131,18 @@ class Networking {
                         } else {
                             // an error accured, so return the error:
                             let returnJSON: JSON = ["hasError": true, "errorCode": 999]
+                            Chat.sharedInstance.delegate?.chatError(errorCode:      999,
+                                                                    errorMessage:   "error on downloading File",
+                                                                    errorResult:    nil)
                             downloadReturnData(nil, returnJSON)
                         }
                         
                     }
                 }
             } else {
-                print("Failed!")
+                Chat.sharedInstance.delegate?.chatError(errorCode:      -1,
+                                                        errorMessage:   "error on downloading File",
+                                                        errorResult:    myResponse.error)
             }
         }
         

@@ -20,5 +20,7 @@ extension CMFile {
     @NSManaged public var hashCode: String?
     @NSManaged public var id:       NSNumber?
     @NSManaged public var name:     String?
+    @NSManaged public var size:     NSNumber?
+    @NSManaged public var type:     String?
     
 }

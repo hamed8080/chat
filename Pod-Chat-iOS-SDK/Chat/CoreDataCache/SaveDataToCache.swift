@@ -945,7 +945,7 @@ extension Cache {
                                 imagePath = path + "/\(fileSubPath.Images)/"
                             }
                             
-                            let myImagePath = imagePath + "\(itemInCache.id!)\(itemInCache.name ?? "default")"
+                            let myImagePath = imagePath + "\(itemInCache.hashCode!)"
                             // check if this file is exixt on the app bunde, then delete it
                             if FileManager.default.fileExists(atPath: myImagePath) {
                                 do {
@@ -986,7 +986,7 @@ extension Cache {
                 
                 createDirectory(at: imagesLocalirectory)
                 
-                let imageLocalAdress    = imagesLocalirectory.appendingPathComponent("\(imageInfo.id)\(imageInfo.name ?? "default")")
+                let imageLocalAdress    = imagesLocalirectory.appendingPathComponent("\(imageInfo.hashCode)")
                 saveDataToDirectory(data: imageData, to: imageLocalAdress)
                 
                 saveContext(subject: "Update UploadImage")
@@ -1043,9 +1043,11 @@ extension Cache {
                     if let fileId = Int(exactly: itemInCache.id ?? 0) {
                         if (fileId == fileInfo.id) {
                             
-                            tempFile = FileObject(hashCode:  itemInCache.hashCode!,
-                                                  id:        itemInCache.id as! Int,
-                                                  name:      itemInCache.name)
+                            tempFile = FileObject(hashCode: itemInCache.hashCode!,
+                                                  id:       itemInCache.id as! Int,
+                                                  name:     itemInCache.name,
+                                                  size:     itemInCache.size as? Int,
+                                                  type:     itemInCache.type)
                             
                             // the uploadFile object that we are going to create, is already exist in the Cache
                             // to update information in this object:
@@ -1060,7 +1062,7 @@ extension Cache {
                                 filePath = path + "/\(fileSubPath.Files)/"
                             }
                             
-                            let myFilePath = filePath + "\(itemInCache.id!)\(itemInCache.name ?? "default")"
+                            let myFilePath = filePath + "\(itemInCache.hashCode!)"
                             
                             if FileManager.default.fileExists(atPath: myFilePath) {
                                 do {
@@ -1097,7 +1099,7 @@ extension Cache {
                 
                 createDirectory(at: filesLocalirectory)
                 
-                let fileLocalAdress    = filesLocalirectory.appendingPathComponent("\(fileInfo.id)\(fileInfo.name ?? "default")")
+                let fileLocalAdress    = filesLocalirectory.appendingPathComponent("\(fileInfo.hashCode)")
                 saveDataToDirectory(data: fileData, to: fileLocalAdress)
                 
                 saveContext(subject: "Update UploadFile")
