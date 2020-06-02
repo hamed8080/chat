@@ -66,11 +66,12 @@ open class UploadFileModel: ResponseModel, ResponseModelDelegates {
         var fileMetadata : JSON = [:]
         
         if let upload = uploadFile {
-            let link = "\(onServiceAddress)\(SERVICES_PATH.GET_FILE.rawValue)?fileId=\(upload.id)&hashCode=\(upload.hashCode)"
-            fileMetadata["link"]        = JSON(link)
-            fileMetadata["id"]          = JSON(upload.id)
+//            let link = "\(onServiceAddress)\(SERVICES_PATH.GET_FILE.rawValue)?hashCode=\(upload.hashCode)"
+//            fileMetadata["link"]        = JSON(link)
+            fileMetadata["id"]          = JSON(0)
             fileMetadata["name"]        = JSON(upload.name ?? "")
-            fileMetadata["hashCode"]    = JSON(upload.hashCode)
+            fileMetadata["fileHash"]    = JSON(upload.hashCode)
+//            fileMetadata["type"]       = JSON()
         }
         
         return fileMetadata

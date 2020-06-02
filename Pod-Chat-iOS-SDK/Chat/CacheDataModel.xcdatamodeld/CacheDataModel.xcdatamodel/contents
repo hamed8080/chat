@@ -67,7 +67,6 @@
     </entity>
     <entity name="CMFile" representedClassName=".CMFile" syncable="YES">
         <attribute name="hashCode" optional="YES" attributeType="String"/>
-        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="size" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="type" optional="YES" attributeType="String"/>
@@ -83,8 +82,8 @@
         <attribute name="actualWidth" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="hashCode" optional="YES" attributeType="String"/>
         <attribute name="height" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="size" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="width" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
     </entity>
     <entity name="CMLinkedUser" representedClassName=".CMLinkedUser" syncable="YES">
@@ -287,7 +286,7 @@
         <element name="CMContact" positionX="-307.48828125" positionY="-144.9375" width="128" height="238"/>
         <element name="CMConversation" positionX="30.32421875" positionY="-129.10546875" width="128" height="613"/>
         <element name="CMCurrentUserRoles" positionX="387" positionY="189" width="128" height="73"/>
-        <element name="CMFile" positionX="-462.546875" positionY="425.40625" width="128" height="118"/>
+        <element name="CMFile" positionX="-462.546875" positionY="425.40625" width="128" height="103"/>
         <element name="CMForwardInfo" positionX="432.46484375" positionY="513.06640625" width="128" height="103"/>
         <element name="CMImage" positionX="-460.42578125" positionY="37.66796875" width="128" height="148"/>
         <element name="CMLinkedUser" positionX="-278.86328125" positionY="121.0546875" width="128" height="135"/>

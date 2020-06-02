@@ -1203,12 +1203,22 @@ extension Chat {
             uploadImage(inputModel: uploadRequest, uniqueId: { _ in }, progress: { (progress) in
                 uploadProgress(progress)
             }) { (response) in
-                let myResponse: UploadImageModel = response as! UploadImageModel
-                metadata["file"] = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
-                metadata["file"]["originalName"] = JSON(uploadRequest.fileName)
-                metadata["file"]["mimeType"]    = JSON(uploadRequest.mimeType)
-                metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
-                sendMessage(withMetadata: metadata)
+                let myResponse: UploadImageResponse = response as! UploadImageResponse
+                if !myResponse.hasError {
+                    metadata["file"] = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
+                    metadata["file"]["originalName"] = JSON(uploadRequest.fileName)
+                    metadata["file"]["mimeType"]    = JSON(uploadRequest.mimeType)
+                    metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
+                    metadata["fileHash"]            = JSON(myResponse.uploadImage?.hashCode ?? "")
+                    metadata["name"]                = JSON(myResponse.uploadImage?.name ?? "")
+                    metadata["id"]         = JSON(0)
+                    sendMessage(withMetadata: metadata)
+                } else {
+                    self.delegate?.chatError(errorCode:     myResponse.errorCode,
+                                             errorMessage:  myResponse.errorMessage,
+                                             errorResult:   nil)
+                    return
+                }
             }
             
         } else if let file = sendFileMessageInput.uploadInput as? UploadFileRequestModel {
@@ -1235,11 +1245,22 @@ extension Chat {
                 uploadProgress(progress)
             }) { (response) in
                 let myResponse: UploadFileModel = response as! UploadFileModel
-                metadata["file"]    = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
-                metadata["file"]["originalName"] = JSON(uploadRequest.fileName)
-                metadata["file"]["mimeType"]    = JSON(uploadRequest.mimeType)
-                metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
-                sendMessage(withMetadata: metadata)
+                if myResponse.hasError {
+                    metadata["file"]    = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
+                    metadata["file"]["originalName"] = JSON(uploadRequest.fileName)
+                    metadata["file"]["mimeType"]    = JSON(uploadRequest.mimeType)
+                    metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
+                    metadata["fileHash"]            = JSON(myResponse.uploadFile?.hashCode ?? "")
+                    metadata["name"]                = JSON(myResponse.uploadFile?.name ?? "")
+                    metadata["id"]         = JSON(0)
+                    sendMessage(withMetadata: metadata)
+                } else {
+                    self.delegate?.chatError(errorCode:     myResponse.errorCode,
+                                             errorMessage:  myResponse.errorMessage,
+                                             errorResult:   nil)
+                    return
+                }
+                
             }
             
         }

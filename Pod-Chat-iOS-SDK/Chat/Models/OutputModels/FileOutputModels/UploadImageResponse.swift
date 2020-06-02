@@ -68,11 +68,13 @@ open class UploadImageModel: ResponseModel, ResponseModelDelegates {
         var imageMetadata : JSON = [:]
         
         if let upload = uploadImage {
-            let link = "\(onServiceAddress)\(SERVICES_PATH.GET_IMAGE.rawValue)?imageId=\(upload.id)&hashCode=\(upload.hashCode)"
-            imageMetadata["link"]            = JSON(link)
-            imageMetadata["id"]              = JSON(upload.id)
-            imageMetadata["name"]            = JSON(upload.name ?? "")
-            imageMetadata["hashCode"]        = JSON(upload.hashCode)
+//            let link = "\(onServiceAddress)\(SERVICES_PATH.GET_IMAGE.rawValue)?hashCode=\(upload.hashCode)"
+//            imageMetadata["link"]            = JSON(link)
+            imageMetadata["id"]         = JSON(0)
+            imageMetadata["name"]       = JSON(upload.name ?? "")
+            imageMetadata["fileHash"]   = JSON(upload.hashCode)
+//            imageMetadata["type"]       = JSON()
+//            userGroupHash
         }
         
         return imageMetadata

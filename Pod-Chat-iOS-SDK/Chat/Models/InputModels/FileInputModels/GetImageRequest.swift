@@ -11,21 +11,21 @@ import SwiftyJSON
 
 open class GetImageRequest {
     
-    public let imageId:         Int
+//    public let imageId:         Int
     public let hashCode:        String
     public let quality:         Float?
     public let size:            String?
     public let crop:            Bool?
     public let serverResponse:  Bool
     
-    public init(imageId:        Int,
+    public init(//imageId:        Int,
                 hashCode:       String,
                 quality:        Float?,
                 crop:           Bool?,
                 size:           String?,
                 serverResponse: Bool?) {
         
-        self.imageId        = imageId
+//        self.imageId        = imageId
         self.hashCode       = hashCode
         self.quality        = quality
         self.size           = size
@@ -37,7 +37,7 @@ open class GetImageRequest {
     func convertContentToParameters() -> Parameters {
         var parameters: Parameters = [:]
         parameters["hash"] = self.hashCode
-        parameters[" "] = UUID().uuidString
+//        parameters[" "] = UUID().uuidString
         
         if let size_ = self.size {
             parameters["size"] = JSON(size_)

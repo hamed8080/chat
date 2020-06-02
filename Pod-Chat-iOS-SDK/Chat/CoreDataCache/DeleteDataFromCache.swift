@@ -1030,7 +1030,7 @@ extension Cache {
                 for itemInCache in result {
                     // delete the original file from local storage of the app, using path of the file
                     let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-                    let myImagePath = path + "/\(fileSubPath.Images)/" + "\(itemInCache.id!)\(itemInCache.name ?? "default")"
+                    let myImagePath = path + "/\(fileSubPath.Images)/" + "\(itemInCache.hashCode ?? "default")"
                     // check if this file is exixt on the app bunde, then delete it
                     if FileManager.default.fileExists(atPath: myImagePath) {
                         do {
@@ -1073,7 +1073,7 @@ extension Cache {
                 for itemInCache in result {
                     // delete the original file from local storage of the app, using path of the file
                     let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-                    let myFilePath = path + "/\(fileSubPath.Files)/" + "\(itemInCache.id!)\(itemInCache.name ?? "default")"
+                    let myFilePath = path + "/\(fileSubPath.Files)/" + "\(itemInCache.hashCode ?? "default")"
                     
                     if FileManager.default.fileExists(atPath: myFilePath) {
                         do {

@@ -11,15 +11,15 @@ import SwiftyJSON
 
 open class GetFileRequest {
     
-    public let fileId:          Int
+//    public let fileId:          Int
     public let hashCode:        String
     public let serverResponse:  Bool
     
-    public init(fileId:         Int,
+    public init(//fileId:         Int,
                 hashCode:       String,
                 serverResponse: Bool?) {
         
-        self.fileId         = fileId
+//        self.fileId         = fileId
         self.hashCode       = hashCode
         self.serverResponse = serverResponse ?? false
     }

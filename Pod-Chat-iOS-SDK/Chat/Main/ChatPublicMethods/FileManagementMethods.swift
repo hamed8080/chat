@@ -94,9 +94,11 @@ extension Chat {
 
         let url = "\(SERVICE_ADDRESSES.PODSPACE_FILESERVER_ADDRESS)\(SERVICES_PATH.DRIVE_DOWNLOAD_FILE.rawValue)"
         let method:     HTTPMethod  = HTTPMethod.get
+        let headers:    HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
+        
         Networking.sharedInstance.download(fromUrl:         url,
                                            withMethod:      method,
-                                           withHeaders:     nil,
+                                           withHeaders:     headers,
                                            withParameters:  getFileInput.convertContentToParameters()
         , progress: { (myProgress) in
             progress(myProgress)
@@ -105,11 +107,12 @@ extension Chat {
                 // save data comes from server to the Cache
                 let fileName = responseHeader["name"].string
                 let fileType = responseHeader["type"].string
+                let fileSize = responseHeader["size"].int
                 let theFinalFileName = "\(fileName ?? "default").\(fileType ?? "none")"
                 let uploadFile = FileObject(hashCode:   getFileInput.hashCode,
-                                            id:         getFileInput.fileId,
+//                                            id:         getFileInput.fileId,
                                             name:       theFinalFileName,
-                                            size:       myFile.count,
+                                            size:       fileSize ?? myFile.count,
                                             type:       fileType)
 
                 if self.enableCache {
@@ -209,11 +212,13 @@ extension Chat {
                                             progress:      @escaping (Float) -> (),
                                             completion:    @escaping (Data?, DownloadImageModel) -> ()) {
         
-        let url = "\(SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.DRIVE_DOWNLOAD_IMAGE.rawValue)"
+        let url = "\(SERVICE_ADDRESSES.PODSPACE_FILESERVER_ADDRESS)\(SERVICES_PATH.DRIVE_DOWNLOAD_IMAGE.rawValue)"
         let method:     HTTPMethod  = HTTPMethod.get
+        let headers:    HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
+        
         Networking.sharedInstance.download(fromUrl:         url,
                                            withMethod:      method,
-                                           withHeaders:     nil,
+                                           withHeaders:     headers,
                                            withParameters:  getImageInput.convertContentToParameters()
         , progress: { (myProgress) in
             progress(myProgress)
@@ -222,13 +227,15 @@ extension Chat {
                 // save data comes from server to the Cache
                 let fileName = responseHeader["name"].string
                 let fileType = responseHeader["type"].string
+                let fileSize = responseHeader["size"].int
                 let theFinalFileName = "\(fileName ?? "default").\(fileType ?? "none")"
                 let uploadImage = ImageObject(actualHeight: nil,
                                               actualWidth:  nil,
                                               hashCode:     getImageInput.hashCode,
                                               height:       nil,
-                                              id:           getImageInput.imageId,
+//                                              id:           getImageInput.imageId,
                                               name:         theFinalFileName,
+                                              size:         fileSize ?? myData.count,
                                               width:        nil)
                 
                 if self.enableCache {
@@ -344,7 +351,7 @@ extension Chat {
                     // save data comes from server to the Cache
                     let uploadFileObject = FileObject(messageContent: resultData)
                     Chat.cacheDB.saveFileObject(fileInfo: uploadFileObject, fileData: uploadFileInput.dataToSend, toLocalPath: self.localFileCustomPath)
-                    let getFileRequest = GetFileRequest(fileId:         uploadFileObject.id,
+                    let getFileRequest = GetFileRequest(//fileId:         uploadFileObject.id,
                                                         hashCode:       uploadFileObject.hashCode,
                                                         serverResponse: true)
                     self.sendRequestToDownloadFile(withInputModel:  getFileRequest,
@@ -491,7 +498,7 @@ extension Chat {
                     // save data comes from server to the Cache
                     let uploadImageFile = ImageObject(messageContent: resultData)
                     Chat.cacheDB.saveImageObject(imageInfo: uploadImageFile, imageData: uploadImageInput.dataToSend, toLocalPath: self.localImageCustomPath)
-                    let getImageRequest = GetImageRequest(imageId:  uploadImageFile.id,
+                    let getImageRequest = GetImageRequest(//imageId:  uploadImageFile.id,
                                                           hashCode: uploadImageFile.hashCode,
                                                           quality:  nil,
                                                           crop:     nil,

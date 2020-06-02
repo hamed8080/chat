@@ -30,13 +30,13 @@ class Networking {
         var uploadProgress: Float = 0
         Alamofire.upload(multipartFormData: { (multipartFormData) in
             
-            if let hasImage = isImage, (hasImage == true) {
-                multipartFormData.append(dataToSend as! Data, withName: "file")
-            }
-            
-            if let hasFile = isFile, (hasFile == true) {
-                multipartFormData.append(dataToSend as! Data, withName: "file")
-            }
+//            if let hasImage = isImage, (hasImage == true) {
+//                multipartFormData.append(dataToSend as! Data, withName: "file")
+//            }
+//            if let hasFile = isFile, (hasFile == true) {
+//                multipartFormData.append(dataToSend as! Data, withName: "file")
+//            }
+            multipartFormData.append(dataToSend as! Data, withName: "file")
             
             if let header = withHeaders {
                 for (key, value) in header {
@@ -91,7 +91,7 @@ class Networking {
     }
     
     
-    func download(fromUrl urlStr:         String,
+    func download(fromUrl urlStr:       String,
                   withMethod:           HTTPMethod,
                   withHeaders:          HTTPHeaders?,
                   withParameters:       Parameters?,
@@ -113,14 +113,16 @@ class Networking {
             if myResponse.result.isSuccess {
                 if let downloadedData = myResponse.data {
                     if let response = myResponse.response {
-                        print("download response = \(response)")
                         var resJSON: JSON = [:]
                         
                         let headerResponse = response.allHeaderFields
-                        if let contentType = headerResponse["Content-Type"] as? String {
-                            if let fileType = contentType.components(separatedBy: "/").last {
+                        if let contentType  = headerResponse["Content-Type"] as? String,
+                            let fileType    = contentType.components(separatedBy: "/").last {
                                 resJSON["type"] = JSON(fileType)
-                            }
+                        }
+                        if let contentSizeStr   = headerResponse["Content-Length"] as? String,
+                            let contentSize     = Int(contentSizeStr) {
+                                resJSON["size"] = JSON(contentSize)
                         }
                         if let contentDisposition = headerResponse["Content-Disposition"] as? String {
                             if let theFileName = contentDisposition.components(separatedBy: "=").last?.replacingOccurrences(of: "\"", with: "") {
@@ -136,7 +138,6 @@ class Networking {
                                                                     errorResult:    nil)
                             downloadReturnData(nil, returnJSON)
                         }
-                        
                     }
                 }
             } else {
