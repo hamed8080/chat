@@ -9,6 +9,7 @@
 import Foundation
 import FanapPodAsyncSDK
 import SwiftyJSON
+import UIKit
 
 // MARK: - Public Methods -
 // MARK: - Thread Management
@@ -846,6 +847,8 @@ extension Chat {
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! GetThreadsModel)
     public func updateThreadInfo(inputModel updateThreadInfoInput: UpdateThreadInfoRequest,
+                                 uploadUniqueId:    @escaping (String) -> (),
+                                 uploadProgress:    @escaping (Float) -> (),
                                  uniqueId:          @escaping (String) -> (),
                                  completion:        @escaping callbackTypeAlias) {
         
@@ -854,31 +857,73 @@ extension Chat {
         
         updateThreadInfoCallbackToUser = completion
         
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.UPDATE_THREAD_INFO.intValue(),
-                                            content:            "\(updateThreadInfoInput.convertContentToJSON())",
-                                            messageType:        nil,
-                                            metadata:           nil,
-                                            repliedTo:          nil,
-                                            systemMetadata:     nil,
-                                            subjectId:          updateThreadInfoInput.threadId,
-                                            token:              token,
-                                            tokenIssuer:        nil,
-                                            typeCode:           updateThreadInfoInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           updateThreadInfoInput.uniqueId,
-                                            uniqueIds:          nil,
-                                            isCreateThreadAndSendMessage: nil)
+        var content: JSON = updateThreadInfoInput.convertContentToJSON()
         
-        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
-                                              msgTTL:       msgTTL,
-                                              peerName:     serverName,
-                                              priority:     msgPriority,
-                                              pushMsgType:  nil)
+        func sendRequest() {
+            let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.UPDATE_THREAD_INFO.intValue(),
+                                                content:            "\(content)",
+                                                messageType:        nil,
+                                                metadata:           nil,
+                                                repliedTo:          nil,
+                                                systemMetadata:     nil,
+                                                subjectId:          updateThreadInfoInput.threadId,
+                                                token:              token,
+                                                tokenIssuer:        nil,
+                                                typeCode:           updateThreadInfoInput.typeCode ?? generalTypeCode,
+                                                uniqueId:           updateThreadInfoInput.uniqueId,
+                                                uniqueIds:          nil,
+                                                isCreateThreadAndSendMessage: nil)
+            
+            let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                                  msgTTL:       msgTTL,
+                                                  peerName:     serverName,
+                                                  priority:     msgPriority,
+                                                  pushMsgType:  nil)
+            
+            sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                    callbacks:          [(UpdateThreadInfoCallback(), updateThreadInfoInput.uniqueId)],
+                                    sentCallback:       nil,
+                                    deliverCallback:    nil,
+                                    seenCallback:       nil)
+        }
         
-        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          [(UpdateThreadInfoCallback(), updateThreadInfoInput.uniqueId)],
-                                sentCallback:       nil,
-                                deliverCallback:    nil,
-                                seenCallback:       nil)
+        if let uploadInput = updateThreadInfoInput.threadImage {
+            uploadImage(inputModel: uploadInput, uniqueId: { (uploadUId) in
+                uploadUniqueId(uploadUId)
+            }, progress: { (progress) in
+                uploadProgress(progress)
+            }) { (response) in
+                let uploadResponse = response as! UploadImageResponse
+                
+                var metadata: JSON = [:]
+                if let md = updateThreadInfoInput.metadata?.convertToJSON() {
+                    metadata = md
+                }
+                if let type = uploadResponse.uploadImage?.type {
+                    metadata["type"] = JSON(type)
+                }
+                if let name = uploadResponse.uploadImage?.name {
+                    metadata["name"] = JSON(name)
+                }
+                if let size = uploadResponse.uploadImage?.size {
+                    metadata["size"] = JSON(size)
+                }
+                if let hashCode = uploadResponse.uploadImage?.hashCode {
+                    metadata["hashCode"] = JSON(hashCode)
+                }
+                updateThreadInfoInput.metadata = "\(metadata)"
+                content = updateThreadInfoInput.convertContentToJSON()
+                
+//                content["hashCode"] = JSON(uploadResponse.uploadImage?.hashCode)
+//                let uploadJSON = uploadResponse.returnDataAsJSON()
+//                content = updateThreadInfoInput.convertContentToJSON().merged(other: uploadJSON)
+                sendRequest()
+            }
+        } else {
+            sendRequest()
+        }
+        
+        
     }
     
     
