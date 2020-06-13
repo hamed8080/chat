@@ -6,6 +6,7 @@
 //  Copyright © 1397 Mahyar Zhiani. All rights reserved.
 //
 
+import UIKit
 import Alamofire
 import SwiftyJSON
 
@@ -16,10 +17,10 @@ open class UploadImageRequest: UploadRequest {
                 fileExtension:  String?,
                 fileName:       String?,
                 mimeType:       String?,
-                xC:             Int,
-                yC:             Int,
-                hC:             Int,
-                wC:             Int,
+                xC:             Int?,
+                yC:             Int?,
+                hC:             Int?,
+                wC:             Int?,
                 userGroupHash:  String,
                 typeCode:       String?,
                 uniqueId:       String?) {
@@ -30,11 +31,15 @@ open class UploadImageRequest: UploadRequest {
         self.fileName       = fileName ?? "\(NSUUID().uuidString))"
         self.fileSize       = Int64(dataToSend.count)
         self.mimeType       = mimeType ?? ""
-        self.xC             = xC
-        self.yC             = yC
-        self.hC             = hC
-        self.wC             = wC
         self.userGroupHash  = userGroupHash
+        
+        if let image = UIImage(data: dataToSend) {
+            self.xC = xC ?? 0
+            self.yC = yC ?? 0
+            self.hC = hC ?? Int(image.size.height)
+            self.wC = wC ?? Int(image.size.width)
+        }
+        
     }
     
     /// initializer of Uploading Public Image request model
@@ -43,10 +48,10 @@ open class UploadImageRequest: UploadRequest {
                 fileName:       String?,
                 isPublic:       Bool,
                 mimeType:       String?,
-                xC:             Int,
-                yC:             Int,
-                hC:             Int,
-                wC:             Int,
+                xC:             Int?,
+                yC:             Int?,
+                hC:             Int?,
+                wC:             Int?,
                 typeCode:       String?,
                 uniqueId:       String?) {
         super.init(typeCode: typeCode, uniqueId: uniqueId)
@@ -57,10 +62,16 @@ open class UploadImageRequest: UploadRequest {
         self.fileSize       = Int64(dataToSend.count)
         self.isPublic       = isPublic
         self.mimeType       = mimeType ?? ""
-        self.xC             = xC
-        self.yC             = yC
-        self.hC             = hC
-        self.wC             = wC
+//        self.xC             = xC
+//        self.yC             = yC
+//        self.hC             = hC
+//        self.wC             = wC
+        if let image = UIImage(data: dataToSend) {
+            self.xC = xC ?? 0
+            self.yC = yC ?? 0
+            self.hC = hC ?? Int(image.size.height)
+            self.wC = wC ?? Int(image.size.width)
+        }
     }
     
     
