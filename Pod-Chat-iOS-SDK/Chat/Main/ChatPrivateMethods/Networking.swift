@@ -115,6 +115,11 @@ class Networking {
                     if let response = myResponse.response {
                         var resJSON: JSON = [:]
                         
+                        if urlStr.contains("neshan") {
+                            downloadReturnData(downloadedData, resJSON)
+                            return
+                        }
+                        
                         let headerResponse = response.allHeaderFields
                         if let contentType  = headerResponse["Content-Type"] as? String,
                             let fileType    = contentType.components(separatedBy: "/").last {
