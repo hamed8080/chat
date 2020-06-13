@@ -56,7 +56,7 @@ open class SendTextMessageRequest {
                 uniqueId:       String?) {
         
         self.textMessage    = content
-        self.content = content
+        self.content        = content
         self.messageType    = messageType
         self.metadata       = metadata
         self.repliedTo      = repliedTo

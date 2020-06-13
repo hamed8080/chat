@@ -30,6 +30,24 @@ open class UploadFileRequest: UploadRequest {
         self.userGroupHash  = userGroupHash
     }
     
+    // only use this initializer on, createThreadWithFileMessage & sendFileMessage methods
+    public init(dataToSend:     Data,
+                fileExtension:  String?,
+                fileName:       String?,
+                mimeType:       String?,
+                typeCode:       String?,
+                uniqueId:       String?) {
+        
+        super.init(typeCode: typeCode, uniqueId: uniqueId)
+        
+        self.dataToSend     = dataToSend
+        self.fileExtension  = fileExtension
+        self.fileName       = fileName ?? "\(NSUUID().uuidString))"
+        self.fileSize       = Int64(dataToSend.count)
+        self.mimeType       = mimeType ?? ""
+        self.userGroupHash  = userGroupHash
+    }
+    
     /// initializer of Uploading File request model
     public init(dataToSend:     Data,
                 fileExtension:  String?,

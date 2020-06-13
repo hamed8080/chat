@@ -44,28 +44,6 @@ open class CreateThreadRequest: RequestModelDelegates {
         self.uniqueId       = uniqueId ?? UUID().uuidString
     }
     
-    // this initializer will be deprecated soon
-    public init(description:  String?,
-                image:        String?,
-                invitees:     [Invitee],
-                metadata:     String?,
-                uniqueName:   String?,
-                title:        String,
-                type:         ThreadTypes,
-                typeCode:     String?,
-                uniqueId:     String?) {
-        
-        self.description    = description
-        self.image          = image
-        self.invitees       = invitees
-        self.metadata       = metadata
-        self.title          = title
-        self.type           = type
-        self.uniqueName     = uniqueName
-        
-        self.typeCode       = typeCode
-        self.uniqueId       = uniqueId ?? UUID().uuidString
-    }
     
     public func convertContentToJSON() -> JSON {
         var content: JSON = [:]

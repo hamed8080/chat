@@ -10,10 +10,10 @@ import Foundation
 
 open class CreateThreadWithFileMessageRequest {
     
-    public let creatThreadWithMessageInput:    CreateThreadWithMessageRequestModel
+    public let creatThreadWithMessageInput:    CreateThreadWithMessageRequest
     public let uploadInput:                    UploadRequest
     
-    public init(creatThreadWithMessageInput:   CreateThreadWithMessageRequestModel,
+    public init(creatThreadWithMessageInput:   CreateThreadWithMessageRequest,
                 uploadInput:                   UploadRequest) {
         
         self.creatThreadWithMessageInput    = creatThreadWithMessageInput

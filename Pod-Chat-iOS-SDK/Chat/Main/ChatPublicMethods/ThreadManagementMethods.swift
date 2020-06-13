@@ -155,73 +155,128 @@ extension Chat {
     /// - parameter onDelivere: (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
     /// - parameter onSeen:     (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
     public func createThreadWithFileMessage(inputModel creatThreadWithFileMessageInput: CreateThreadWithFileMessageRequest,
-                                            uploadUniqueId:     @escaping (String) -> (),
-                                            uploadProgress:     @escaping (Float) -> (),
-                                            uniqueId:           @escaping (String) -> (),
-                                            completion:         @escaping callbackTypeAlias,
-                                            onSent:             @escaping callbackTypeAlias,
-                                            onDelivered:        @escaping callbackTypeAlias,
-                                            onSeen:             @escaping callbackTypeAlias) {
+                                            uploadUniqueId:         @escaping (String) -> (),
+                                            uploadProgress:         @escaping (Float) -> (),
+                                            uniqueId:               @escaping (String) -> (),
+                                            createThreadCompletion: @escaping callbackTypeAlias,
+                                            onSent:                 @escaping callbackTypeAlias,
+                                            onDelivered:            @escaping callbackTypeAlias,
+                                            onSeen:                 @escaping callbackTypeAlias) {
         
         log.verbose("Try to Send File and CreatThreadWithMessage with this parameters: \n \(creatThreadWithFileMessageInput)", context: "Chat")
         
-        uniqueId(creatThreadWithFileMessageInput.creatThreadWithMessageInput.createThreadInput.uniqueId)
+//        uniqueId(creatThreadWithFileMessageInput.creatThreadWithMessageInput.createThreadInput.uniqueId)
         
-        var metadata: JSON = [:]
+        let createThreadInput = CreateThreadRequest(description: creatThreadWithFileMessageInput.creatThreadWithMessageInput.createThreadInput.description,
+                                                    image:      creatThreadWithFileMessageInput.creatThreadWithMessageInput.createThreadInput.image,
+                                                    invitees:   creatThreadWithFileMessageInput.creatThreadWithMessageInput.createThreadInput.invitees,
+                                                    metadata:   creatThreadWithFileMessageInput.creatThreadWithMessageInput.createThreadInput.metadata,
+                                                    title:      creatThreadWithFileMessageInput.creatThreadWithMessageInput.createThreadInput.title,
+                                                    type:       creatThreadWithFileMessageInput.creatThreadWithMessageInput.createThreadInput.type,
+                                                    uniqueName: creatThreadWithFileMessageInput.creatThreadWithMessageInput.createThreadInput.uniqueName,
+                                                    typeCode:   creatThreadWithFileMessageInput.creatThreadWithMessageInput.createThreadInput.typeCode,
+                                                    uniqueId:   creatThreadWithFileMessageInput.creatThreadWithMessageInput.createThreadInput.uniqueId)
         
-        if let uploadRequest = creatThreadWithFileMessageInput.uploadInput as? UploadImageRequestModel  {
+        self.createThread(inputModel: createThreadInput, uniqueId: { _ in }) { (response) in
             
-            metadata["file"]["originalName"] = JSON(uploadRequest.fileName)
-            metadata["file"]["mimeType"]    = JSON("")
-            metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
-            
-            uploadImage(inputModel: uploadRequest,
-                        uniqueId: { (uploadImageUniqueId) in
-                uploadUniqueId(uploadImageUniqueId)
-            }, progress: { (progress) in
-                            uploadProgress(progress)
-            }) { (response) in
-                let myResponse: UploadImageModel = response as! UploadImageModel
-                metadata["file"] = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
-                createThreadAndSendMessage(withMetadata: metadata)
-            }
-            
-        } else if let uploadRequest = creatThreadWithFileMessageInput.uploadInput as? UploadFileRequestModel {
-            
-            metadata["file"]["originalName"] = JSON(uploadRequest.fileName)
-            metadata["file"]["mimeType"]    = JSON("")
-            metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
-            
-            uploadFile(inputModel: uploadRequest,
-                       uniqueId: { (uploadFileUniqueId) in
-                uploadUniqueId(uploadFileUniqueId)
-            }, progress: { (progress) in
-                uploadProgress(progress)
-            }) { (response) in
-                let myResponse: UploadFileModel = response as! UploadFileModel
-                metadata["file"]    = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
-                createThreadAndSendMessage(withMetadata: metadata)
+            guard let createThreadResponse: ThreadModel = response as? ThreadModel else { return }
+            createThreadCompletion(createThreadResponse)
+            if let uploadRequest = creatThreadWithFileMessageInput.uploadInput as? UploadImageRequest {
+                uploadRequest.userGroupHash = createThreadResponse.thread!.userGroupHash
+                sendFileMessage(withUploadInput: uploadRequest, inThreadId: createThreadResponse.thread!.id!)
+            } else if let uploadRequest = creatThreadWithFileMessageInput.uploadInput as? UploadFileRequest {
+                uploadRequest.userGroupHash = createThreadResponse.thread!.userGroupHash
+                sendFileMessage(withUploadInput: uploadRequest, inThreadId: createThreadResponse.thread!.id!)
             }
             
         }
         
-        // this will call when all data were uploaded and it will sends the textMessage
-        func createThreadAndSendMessage(withMetadata: JSON) {
-            let createThreadSendMessageParamModel = CreateThreadWithMessageRequestModel(createThreadInput:  creatThreadWithFileMessageInput.creatThreadWithMessageInput.createThreadInput,
-                                                                                        sendMessageInput:   creatThreadWithFileMessageInput.creatThreadWithMessageInput.sendMessageInput)
-            createThreadSendMessageParamModel.sendMessageInput?.metadata = "\(withMetadata)"
+        
+        func sendFileMessage(withUploadInput: UploadRequest, inThreadId: Int) {
             
-            self.createThreadWithMessage(inputModel: createThreadSendMessageParamModel, threadUniqueId: { _ in }, messageUniqueId: { _ in }, completion: { (createThreadResponse) in
-                completion(createThreadResponse)
+            let messageInput = SendTextMessageRequest(messageType:      creatThreadWithFileMessageInput.creatThreadWithMessageInput.sendMessageInput?.messageType ?? MessageType.FILE,
+                                                      metadata:         creatThreadWithFileMessageInput.creatThreadWithMessageInput.sendMessageInput?.metadata,
+                                                      repliedTo:        nil,
+                                                      systemMetadata:   creatThreadWithFileMessageInput.creatThreadWithMessageInput.sendMessageInput?.systemMetadata,
+                                                      textMessage:      creatThreadWithFileMessageInput.creatThreadWithMessageInput.sendMessageInput?.text ?? "",
+                                                      threadId:         inThreadId,
+                                                      typeCode:         creatThreadWithFileMessageInput.creatThreadWithMessageInput.createThreadInput.typeCode,
+                                                      uniqueId:         creatThreadWithFileMessageInput.creatThreadWithMessageInput.sendMessageInput?.uniqueId)
+            let sendMessageInput = SendReplyFileMessageRequest(messageInput: messageInput, uploadInput: withUploadInput)
+            self.sendFileMessage(inputModel: sendMessageInput, uploadUniqueId: { (uploadFileUniqueId) in
+                uploadUniqueId(uploadFileUniqueId)
+            }, uploadProgress: { (progress) in
+                uploadProgress(progress)
+            }, messageUniqueId: { (messageUniqueId) in
+                uniqueId(messageUniqueId)
             }, onSent: { (sent) in
                 onSent(sent)
-            }, onDelivere: { (delivered) in
+            }, onDelivered: { (delivered) in
                 onDelivered(delivered)
             }) { (seen) in
                 onSeen(seen)
             }
-            
         }
+        
+        
+        
+        
+        
+//        var metadata: JSON = [:]
+//
+//        if let uploadRequest = creatThreadWithFileMessageInput.uploadInput as? UploadImageRequestModel  {
+//
+//            metadata["file"]["originalName"] = JSON(uploadRequest.fileName)
+//            metadata["file"]["mimeType"]    = JSON("")
+//            metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
+//
+//            uploadImage(inputModel: uploadRequest,
+//                        uniqueId: { (uploadImageUniqueId) in
+//                uploadUniqueId(uploadImageUniqueId)
+//            }, progress: { (progress) in
+//                            uploadProgress(progress)
+//            }) { (response) in
+//                let myResponse: UploadImageModel = response as! UploadImageModel
+//                metadata["file"] = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
+//                createThreadAndSendMessage(withMetadata: metadata)
+//            }
+//
+//        } else if let uploadRequest = creatThreadWithFileMessageInput.uploadInput as? UploadFileRequestModel {
+//
+//            metadata["file"]["originalName"] = JSON(uploadRequest.fileName)
+//            metadata["file"]["mimeType"]    = JSON("")
+//            metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
+//
+//            uploadFile(inputModel: uploadRequest,
+//                       uniqueId: { (uploadFileUniqueId) in
+//                uploadUniqueId(uploadFileUniqueId)
+//            }, progress: { (progress) in
+//                uploadProgress(progress)
+//            }) { (response) in
+//                let myResponse: UploadFileModel = response as! UploadFileModel
+//                metadata["file"]    = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
+//                createThreadAndSendMessage(withMetadata: metadata)
+//            }
+//
+//        }
+//
+//        // this will call when all data were uploaded and it will sends the textMessage
+//        func createThreadAndSendMessage(withMetadata: JSON) {
+//            let createThreadSendMessageParamModel = CreateThreadWithMessageRequestModel(createThreadInput:  creatThreadWithFileMessageInput.creatThreadWithMessageInput.createThreadInput,
+//                                                                                        sendMessageInput:   creatThreadWithFileMessageInput.creatThreadWithMessageInput.sendMessageInput)
+//            createThreadSendMessageParamModel.sendMessageInput?.metadata = "\(withMetadata)"
+//
+//            self.createThreadWithMessage(inputModel: createThreadSendMessageParamModel, threadUniqueId: { _ in }, messageUniqueId: { _ in }, completion: { (createThreadResponse) in
+//                completion(createThreadResponse)
+//            }, onSent: { (sent) in
+//                onSent(sent)
+//            }, onDelivere: { (delivered) in
+//                onDelivered(delivered)
+//            }) { (seen) in
+//                onSeen(seen)
+//            }
+//
+//        }
         
     }
     

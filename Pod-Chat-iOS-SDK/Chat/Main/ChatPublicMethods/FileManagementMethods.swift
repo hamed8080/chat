@@ -355,8 +355,8 @@ extension Chat {
                                                         hashCode:       uploadFileObject.hashCode,
                                                         serverResponse: true)
                     self.sendRequestToDownloadFile(withInputModel:  getFileRequest,
-                                                    progress:        { _ in },
-                                                    completion:      { (_, _) in })
+                                                   progress:        { _ in },
+                                                   completion:      { (_, _) in })
                     Chat.cacheDB.deleteWaitUploadFiles(uniqueId: uploadFileInput.uniqueId)
                 }
                 

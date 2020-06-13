@@ -42,6 +42,35 @@ open class UploadImageRequest: UploadRequest {
         
     }
     
+    // only use this initializer on, createThreadWithFileMessage & sendFileMessage methods
+    public init(dataToSend:     Data,
+                fileExtension:  String?,
+                fileName:       String?,
+                mimeType:       String?,
+                xC:             Int?,
+                yC:             Int?,
+                hC:             Int?,
+                wC:             Int?,
+                typeCode:       String?,
+                uniqueId:       String?) {
+        super.init(typeCode: typeCode, uniqueId: uniqueId)
+        
+        self.dataToSend     = dataToSend
+        self.fileExtension  = fileExtension
+        self.fileName       = fileName ?? "\(NSUUID().uuidString))"
+        self.fileSize       = Int64(dataToSend.count)
+        self.mimeType       = mimeType ?? ""
+        self.userGroupHash  = userGroupHash
+        
+        if let image = UIImage(data: dataToSend) {
+            self.xC = xC ?? 0
+            self.yC = yC ?? 0
+            self.hC = hC ?? Int(image.size.height)
+            self.wC = wC ?? Int(image.size.width)
+        }
+        
+    }
+    
     /// initializer of Uploading Public Image request model
     public init(dataToSend:     Data,
                 fileExtension:  String?,
