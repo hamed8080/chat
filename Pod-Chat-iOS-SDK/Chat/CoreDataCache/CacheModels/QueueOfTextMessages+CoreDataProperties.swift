@@ -17,7 +17,7 @@ extension QueueOfTextMessages {
         return NSFetchRequest<QueueOfTextMessages>(entityName: "QueueOfTextMessages")
     }
 
-    @NSManaged public var content:          String?
+    @NSManaged public var textMessage:      String?
     @NSManaged public var messageType:      NSNumber?
     @NSManaged public var repliedTo:        NSNumber?
     @NSManaged public var threadId:         NSNumber?

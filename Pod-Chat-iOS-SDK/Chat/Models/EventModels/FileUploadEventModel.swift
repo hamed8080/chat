@@ -19,7 +19,7 @@ open class FileUploadEventModel {
     public let fileInfo:        FileInfo?
     public let fileObjectData:  Data?
     public let progress:        Float?
-    public let threadId:        Int?
+    public let userGroupHash:   String?
     public let uniqueId:        String?
     
     init(type:          FileUploadEventTypes,
@@ -29,7 +29,7 @@ open class FileUploadEventModel {
          fileInfo:      FileInfo,
          fileObjectData: Data?,
          progress:      Float?,
-         threadId:      Int?,
+         userGroupHash: String?,
          uniqueId:      String?) {
         
         self.type           = type
@@ -39,7 +39,7 @@ open class FileUploadEventModel {
         self.fileInfo       = fileInfo
         self.fileObjectData = fileObjectData
         self.progress       = progress
-        self.threadId       = threadId
+        self.userGroupHash  = userGroupHash
         self.uniqueId       = uniqueId
     }
     
@@ -57,3 +57,43 @@ open class FileInfo {
     }
     
 }
+
+
+//open class FileInfo {
+//
+//    let id:             Int64
+//    let name:           String
+//    let hashCode:       String
+//    let description:    String
+//    let created:        String
+//    let size:           Int64
+//    let type:           String
+//
+//    init(json: JSON) {
+//        self.id             = json["id"].int64Value
+//        self.name           = json["name"].stringValue
+//        self.hashCode       = json["hashCode"].stringValue
+//        self.description    = json["description"].stringValue
+//        self.created        = json["created"].stringValue
+//        self.size           = json["size"].int64Value
+//        self.type           = json["type"].stringValue
+//    }
+//
+//    init(id:            Int64,
+//         name:          String,
+//         hashCode:      String,
+//         description:   String,
+//         created:       String,
+//         size:          Int64,
+//         type:          String) {
+//
+//        self.id             = id
+//        self.name           = name
+//        self.hashCode       = hashCode
+//        self.description    = description
+//        self.created        = created
+//        self.size           = size
+//        self.type           = type
+//    }
+//
+//}

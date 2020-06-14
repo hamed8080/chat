@@ -925,8 +925,7 @@ extension Cache {
     /// - returns:
     ///     (imageObject: ImageObject, imagePath: String)?
     ///
-    public func retrieveImageObject(hashCode:   String,
-                                    imageId:    Int) -> (imageObject: ImageObject, imagePath: String)? {
+    public func retrieveImageObject(hashCode:   String) -> (imageObject: ImageObject, imagePath: String)? {
         /*
          *
          *  -> make this properties AND together: 'hashCode', 'id'
@@ -940,7 +939,7 @@ extension Cache {
          */
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
-        let searchImage = NSPredicate(format: "hashCode == %@ AND id == %i", hashCode, imageId)
+        let searchImage = NSPredicate(format: "hashCode == %@", hashCode)
         fetchRequest.predicate = searchImage
         
         do {
@@ -949,7 +948,7 @@ extension Cache {
                 if let firstObject = result.first {
                     let imageObject = firstObject.convertCMObjectToObject()
                     let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-                    let myImagePath = path + "/\(fileSubPath.Images)/" + "\(firstObject.id ?? 0)\(firstObject.name ?? "default")"
+                    let myImagePath = path + "/\(fileSubPath.Images)/" + "\(firstObject.hashCode ?? "default")"
                     
                     return (imageObject, myImagePath)
                 } else {
@@ -989,8 +988,7 @@ extension Cache {
     /// - returns:
     ///     (uploadFileModel: UploadFileModel, filePath: String)
     ///
-    public func retrieveFileObject(fileId:      Int,
-                                   hashCode:    String) -> (fileObject: FileObject, filePath: String)? {
+    public func retrieveFileObject(hashCode:    String) -> (fileObject: FileObject, filePath: String)? {
         /*
          *
          *  -> make this properties AND together: 'hashCode', 'id'
@@ -1004,7 +1002,7 @@ extension Cache {
          */
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMFile")
-        let searchFile = NSPredicate(format: "hashCode == %@ AND id == %i", hashCode, fileId)
+        let searchFile = NSPredicate(format: "hashCode == %@", hashCode)
         fetchRequest.predicate = searchFile
         
         do {
@@ -1014,7 +1012,7 @@ extension Cache {
                     let fileObject = firstObject.convertCMObjectToObject()
                     
                     let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-                    let myFilePath = path + "/\(fileSubPath.Files)/" + "\(firstObject.id ?? 0)\(firstObject.name ?? "default")"
+                    let myFilePath = path + "/\(fileSubPath.Files)/" + "\(firstObject.hashCode ?? "default")"
                     
                     return (fileObject, myFilePath)
                 } else {

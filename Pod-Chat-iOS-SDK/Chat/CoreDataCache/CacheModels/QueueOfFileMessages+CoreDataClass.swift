@@ -17,7 +17,7 @@ public class QueueOfFileMessages: NSManagedObject {
         
         var fileToSend:     Data?
         var imageToSend:    Data?
-//        var metadata:       JSON?
+        var isPublic:       Bool?
         var repliedTo:      Int?
         var threadId:       Int?
         var messageType:    Int?
@@ -44,6 +44,9 @@ public class QueueOfFileMessages: NSManagedObject {
             if let repliedTo2 = self.repliedTo as? Int {
                 repliedTo = repliedTo2
             }
+            if let isPublic_ = self.isPublic as? Bool {
+                isPublic = isPublic_
+            }
             if let threadId2 = self.threadId as? Int {
                 threadId = threadId2
             }
@@ -62,16 +65,16 @@ public class QueueOfFileMessages: NSManagedObject {
         }
         
         func createQueueOfWaitFileMessagesModel() -> QueueOfWaitFileMessagesModel {
-            let queueOfWaitFileMessagesModel = QueueOfWaitFileMessagesModel(content:        self.content,
+            let queueOfWaitFileMessagesModel = QueueOfWaitFileMessagesModel(textMessage:        self.textMessage,
                                                                             messageType:    MessageType.getType(from: messageType ?? 1),
+                                                                            fileExtension:  self.fileExtension,
                                                                             fileName:       self.fileName,
-//                                                                            imageName:      self.imageName,
-//                                                                            metadata:       metadata,
+                                                                            isPublic:       isPublic,
                                                                             metadata:       self.metadata,
                                                                             mimeType:       self.mimeType,
                                                                             repliedTo:      repliedTo,
-//                                                                            subjectId:  subjectId,
                                                                             threadId:       threadId,
+                                                                            userGroupHash:  self.userGroupHash,
                                                                             xC:             xC,
                                                                             yC:             yC,
                                                                             hC:             hC,

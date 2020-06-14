@@ -21,8 +21,9 @@ extension CMImage {
     @NSManaged public var actualWidth:  NSNumber?
     @NSManaged public var hashCode:     String?
     @NSManaged public var height:       NSNumber?
-    @NSManaged public var id:           NSNumber?
+//    @NSManaged public var id:           NSNumber?
     @NSManaged public var name:         String?
+    @NSManaged public var size:         NSNumber?
     @NSManaged public var width:        NSNumber?
     
 }
