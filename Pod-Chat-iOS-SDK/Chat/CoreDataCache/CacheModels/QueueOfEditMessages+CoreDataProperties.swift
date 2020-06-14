@@ -17,7 +17,7 @@ extension QueueOfEditMessages {
         return NSFetchRequest<QueueOfEditMessages>(entityName: "QueueOfEditMessages")
     }
 
-    @NSManaged public var content:      String?
+    @NSManaged public var textMessage:  String?
     @NSManaged public var messageType:  NSNumber?
 //    @NSManaged public var metadata:     NSObject?
     @NSManaged public var metadata:     String?

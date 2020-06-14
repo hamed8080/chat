@@ -11,10 +11,10 @@ import SwiftyJSON
 
 open class CreateThreadWithMessageRequest: RequestModelDelegates {
     
-    public var createThreadInput:   CreateThreadRequestModel
+    public var createThreadInput:   CreateThreadRequest
     public var sendMessageInput:    CreateThreadMessageInput?
     
-    public init(createThreadInput:  CreateThreadRequestModel,
+    public init(createThreadInput:  CreateThreadRequest,
                 sendMessageInput:   CreateThreadMessageInput?) {
         
         self.createThreadInput  = createThreadInput

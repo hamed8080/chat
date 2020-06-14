@@ -921,16 +921,17 @@ extension Cache {
                 // Part1:
                 // find data that are exist in the Cache, (and the response request is containing that). and delete them
                 for itemInCache in result {
-                    if let imageId = Int(exactly: itemInCache.id!) {
-                        if (imageId == imageInfo.id) {
+                    if let imageHashCode = itemInCache.hashCode {
+                        if (imageHashCode == imageInfo.hashCode) {
                             
-                            tempImage = ImageObject(actualHeight: itemInCache.actualHeight as? Int,
-                                                    actualWidth:  itemInCache.actualWidth as? Int,
-                                                    hashCode:     itemInCache.hashCode!,
-                                                    height:       itemInCache.height as? Int,
-                                                    id:           itemInCache.id as! Int,
-                                                    name:         itemInCache.name,
-                                                    width:        itemInCache.width as? Int)
+                            tempImage = ImageObject(actualHeight:   itemInCache.actualHeight as? Int,
+                                                    actualWidth:    itemInCache.actualWidth as? Int,
+                                                    hashCode:       imageHashCode,
+                                                    height:         itemInCache.height as? Int,
+//                                                    id:           itemInCache.id as! Int,
+                                                    name:           itemInCache.name,
+                                                    size:           itemInCache.size as? Int,
+                                                    width:          itemInCache.width as? Int)
                             
                             // the uploadImage object that we are going to create, is already exist in the Cache
                             // to update information in this object:
@@ -945,7 +946,7 @@ extension Cache {
                                 imagePath = path + "/\(fileSubPath.Images)/"
                             }
                             
-                            let myImagePath = imagePath + "\(itemInCache.id!)\(itemInCache.name ?? "default")"
+                            let myImagePath = imagePath + "\(itemInCache.hashCode!)"
                             // check if this file is exixt on the app bunde, then delete it
                             if FileManager.default.fileExists(atPath: myImagePath) {
                                 do {
@@ -970,8 +971,9 @@ extension Cache {
                 theUploadImage.actualWidth  = (imageInfo.actualWidth ?? tempImage?.actualWidth) as NSNumber?
                 theUploadImage.hashCode     = imageInfo.hashCode
                 theUploadImage.height       = (imageInfo.height ?? tempImage?.height) as NSNumber?
-                theUploadImage.id           = imageInfo.id as NSNumber?
+//                theUploadImage.id           = imageInfo.id as NSNumber?
                 theUploadImage.name         = (imageInfo.name ?? tempImage?.name)
+                theUploadImage.size        = (imageInfo.width ?? tempImage?.size) as NSNumber?
                 theUploadImage.width        = (imageInfo.width ?? tempImage?.width) as NSNumber?
                 
                 // save file on app bundle
@@ -986,7 +988,7 @@ extension Cache {
                 
                 createDirectory(at: imagesLocalirectory)
                 
-                let imageLocalAdress    = imagesLocalirectory.appendingPathComponent("\(imageInfo.id)\(imageInfo.name ?? "default")")
+                let imageLocalAdress    = imagesLocalirectory.appendingPathComponent("\(imageInfo.hashCode)")
                 saveDataToDirectory(data: imageData, to: imageLocalAdress)
                 
                 saveContext(subject: "Update UploadImage")
@@ -1040,12 +1042,14 @@ extension Cache {
                 // Part1:
                 // find data that are exist in the Cache, (and the response request is containing that). and delete them
                 for itemInCache in result {
-                    if let fileId = Int(exactly: itemInCache.id ?? 0) {
-                        if (fileId == fileInfo.id) {
+                    if let fileHash = itemInCache.hashCode {
+                        if (fileHash == fileInfo.hashCode) {
                             
-                            tempFile = FileObject(hashCode:  itemInCache.hashCode!,
-                                                  id:        itemInCache.id as! Int,
-                                                  name:      itemInCache.name)
+                            tempFile = FileObject(hashCode: fileHash,
+//                                                  id:       itemInCache.id as! Int,
+                                                  name:     itemInCache.name,
+                                                  size:     itemInCache.size as? Int,
+                                                  type:     itemInCache.type)
                             
                             // the uploadFile object that we are going to create, is already exist in the Cache
                             // to update information in this object:
@@ -1060,7 +1064,7 @@ extension Cache {
                                 filePath = path + "/\(fileSubPath.Files)/"
                             }
                             
-                            let myFilePath = filePath + "\(itemInCache.id!)\(itemInCache.name ?? "default")"
+                            let myFilePath = filePath + "\(itemInCache.hashCode!)"
                             
                             if FileManager.default.fileExists(atPath: myFilePath) {
                                 do {
@@ -1082,7 +1086,7 @@ extension Cache {
                 let theUploadFile = CMFile(entity: theUploadFileEntity!, insertInto: context)
                 
                 theUploadFile.hashCode      = fileInfo.hashCode
-                theUploadFile.id            = fileInfo.id as NSNumber?
+//                theUploadFile.id            = fileInfo.id as NSNumber?
                 theUploadFile.name          = (fileInfo.name ?? tempFile?.name)
                 
                 // save file on app bundle
@@ -1097,7 +1101,7 @@ extension Cache {
                 
                 createDirectory(at: filesLocalirectory)
                 
-                let fileLocalAdress    = filesLocalirectory.appendingPathComponent("\(fileInfo.id)\(fileInfo.name ?? "default")")
+                let fileLocalAdress    = filesLocalirectory.appendingPathComponent("\(fileInfo.hashCode)")
                 saveDataToDirectory(data: fileData, to: fileLocalAdress)
                 
                 saveContext(subject: "Update UploadFile")

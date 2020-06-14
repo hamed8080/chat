@@ -16,8 +16,9 @@ open class ImageObject {
     public var actualWidth:    Int?
     public var hashCode:       String
     public var height:         Int?
-    public var id:             Int
+//    public var id:             Int
     public var name:           String?
+    public var size:           Int?
     public var width:          Int?
     
     public init(messageContent: JSON) {
@@ -25,8 +26,9 @@ open class ImageObject {
         self.actualWidth    = messageContent["actualWidth"].int
         self.hashCode       = messageContent["hashCode"].stringValue
         self.height         = messageContent["height"].int
-        self.id             = messageContent["id"].intValue
+//        self.id             = messageContent["id"].intValue
         self.name           = messageContent["name"].string
+        self.size           = messageContent["size"].int
         self.width          = messageContent["width"].int
     }
     
@@ -34,16 +36,18 @@ open class ImageObject {
                 actualWidth:   Int?,
                 hashCode:      String,
                 height:        Int?,
-                id:            Int,
+//                id:            Int,
                 name:          String?,
+                size:          Int?,
                 width:         Int?) {
         
         self.actualHeight   = actualHeight
         self.actualWidth    = actualWidth
         self.hashCode       = hashCode
         self.height         = height
-        self.id             = id
+//        self.id             = id
         self.name           = name
+        self.size           = size
         self.width          = width
     }
     
@@ -53,8 +57,9 @@ open class ImageObject {
         self.actualWidth    = theUploadImage.actualWidth
         self.hashCode       = theUploadImage.hashCode
         self.height         = theUploadImage.height
-        self.id             = theUploadImage.id
+//        self.id             = theUploadImage.id
         self.name           = theUploadImage.name
+        self.size           = theUploadImage.size
         self.width          = theUploadImage.width
     }
     
@@ -68,8 +73,9 @@ open class ImageObject {
                             "actualWidth":  actualWidth ?? NSNull(),
                             "hashCode":     hashCode,
                             "height":       height ?? NSNull(),
-                            "id":           id,
+//                            "id":           id,
                             "name":         name ?? NSNull(),
+                            "size":         size ?? NSNull(),
                             "width":        width ?? NSNull()]
         return result
     }

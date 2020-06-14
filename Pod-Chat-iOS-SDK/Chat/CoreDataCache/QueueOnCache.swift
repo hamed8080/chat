@@ -17,11 +17,11 @@ extension Cache {
     func saveTextMessageToWaitQueue(textMessage: QueueOfWaitTextMessagesModel) {
         let theWaitQueueEntity = NSEntityDescription.entity(forEntityName: "QueueOfTextMessages", in: context)
         let messageToSaveOnQueue = QueueOfTextMessages(entity: theWaitQueueEntity!, insertInto: context)
-        messageToSaveOnQueue.content    = textMessage.content
-        messageToSaveOnQueue.repliedTo  = textMessage.repliedTo as NSNumber?
-        messageToSaveOnQueue.threadId   = textMessage.threadId as NSNumber?
-        messageToSaveOnQueue.typeCode   = textMessage.typeCode
-        messageToSaveOnQueue.uniqueId   = textMessage.uniqueId
+        messageToSaveOnQueue.textMessage    = textMessage.textMessage
+        messageToSaveOnQueue.repliedTo      = textMessage.repliedTo as NSNumber?
+        messageToSaveOnQueue.threadId       = textMessage.threadId as NSNumber?
+        messageToSaveOnQueue.typeCode       = textMessage.typeCode
+        messageToSaveOnQueue.uniqueId       = textMessage.uniqueId
         
 //        if let metadata2 = textMessage.metadata {
 //            NSObject.convertJSONtoTransformable(dataToStore: metadata2) { (data) in
@@ -57,12 +57,12 @@ extension Cache {
                 if (result.count > 0) {
                     let theWaitQueueEntity = NSEntityDescription.entity(forEntityName: "QueueOfEditMessages", in: context)
                     let messageToSaveOnQueue = QueueOfEditMessages(entity: theWaitQueueEntity!, insertInto: context)
-                    messageToSaveOnQueue.content    = editMessage.content
-                    messageToSaveOnQueue.repliedTo  = editMessage.repliedTo as NSNumber?
-                    messageToSaveOnQueue.messageId  = editMessage.messageId as NSNumber?
-                    messageToSaveOnQueue.typeCode   = editMessage.typeCode
-                    messageToSaveOnQueue.uniqueId   = editMessage.uniqueId
-                    messageToSaveOnQueue.threadId   = result.first!.threadId
+                    messageToSaveOnQueue.textMessage    = editMessage.textMessage
+                    messageToSaveOnQueue.repliedTo      = editMessage.repliedTo as NSNumber?
+                    messageToSaveOnQueue.messageId      = editMessage.messageId as NSNumber?
+                    messageToSaveOnQueue.typeCode       = editMessage.typeCode
+                    messageToSaveOnQueue.uniqueId       = editMessage.uniqueId
+                    messageToSaveOnQueue.threadId       = result.first!.threadId
 //                    if let metadata2 = editMessage.metadata {
 //                        NSObject.convertJSONtoTransformable(dataToStore: metadata2) { (data) in
 //                            messageToSaveOnQueue.metadata = data
@@ -104,7 +104,7 @@ extension Cache {
     func saveFileMessageToWaitQueue(fileMessage: QueueOfWaitFileMessagesModel) {
         let theWaitQueueEntity = NSEntityDescription.entity(forEntityName: "QueueOfFileMessages", in: context)
         let messageToSaveOnQueue = QueueOfFileMessages(entity: theWaitQueueEntity!, insertInto: context)
-        messageToSaveOnQueue.content        = fileMessage.content
+        messageToSaveOnQueue.textMessage    = fileMessage.textMessage
         messageToSaveOnQueue.fileName       = fileMessage.fileName
         messageToSaveOnQueue.fileToSend     = fileMessage.fileToSend as NSData?
 //        messageToSaveOnQueue.imageName      = fileMessage.imageName
@@ -137,8 +137,9 @@ extension Cache {
         messageToSaveOnQueue.fileExtension  = image.fileExtension
         messageToSaveOnQueue.fileName       = image.fileName
         messageToSaveOnQueue.fileSize       = image.fileSize as NSNumber?
-        messageToSaveOnQueue.originalFileName = image.originalFileName
-        messageToSaveOnQueue.threadId       = image.threadId as NSNumber?
+        messageToSaveOnQueue.isPublic       = image.isPublic as NSNumber?
+        messageToSaveOnQueue.mimeType       = image.mimeType
+        messageToSaveOnQueue.userGroupHash  = image.userGroupHash
         messageToSaveOnQueue.uniqueId       = image.uniqueId
         messageToSaveOnQueue.xC             = image.xC as NSNumber?
         messageToSaveOnQueue.yC             = image.yC as NSNumber?
@@ -156,8 +157,9 @@ extension Cache {
         messageToSaveOnQueue.fileExtension  = file.fileExtension
         messageToSaveOnQueue.fileName       = file.fileName
         messageToSaveOnQueue.fileSize       = file.fileSize as NSNumber?
-        messageToSaveOnQueue.originalFileName = file.originalFileName
-        messageToSaveOnQueue.threadId       = file.threadId as NSNumber?
+        messageToSaveOnQueue.isPublic       = file.isPublic as NSNumber?
+        messageToSaveOnQueue.mimeType       = file.mimeType
+        messageToSaveOnQueue.userGroupHash  = file.userGroupHash
         messageToSaveOnQueue.uniqueId       = file.uniqueId
         
         // save function that will try to save changes that made on the Cache

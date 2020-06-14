@@ -17,50 +17,50 @@ public class QueueOfUploadImages: NSManagedObject {
         
         var dataToSend: Data?
         var fileSize:   Int64?
-        var threadId:   Int?
+        var isPublic:   Bool?
         var xC:         Int?
         var yC:         Int?
         var hC:         Int?
         var wC:         Int?
         
         func createVariables() {
-            if let dataToSend2 = self.dataToSend as Data? {
-                dataToSend = dataToSend2
+            if let dataToSend_ = self.dataToSend as Data? {
+                dataToSend = dataToSend_
             }
-            if let fileSize2 = self.fileSize as? Int64 {
-                fileSize = fileSize2
+            if let fileSize_ = self.fileSize as? Int64 {
+                fileSize = fileSize_
             }
-            if let threadId2 = self.threadId as? Int {
-                threadId = threadId2
+            if let isPublic_ = self.isPublic as? Bool {
+                isPublic = isPublic_
             }
-            if let xC2 = self.xC as? Int {
-                xC = xC2
+            if let xC_ = self.xC as? Int {
+                xC = xC_
             }
-            if let yC2 = self.yC as? Int {
-                yC = yC2
+            if let yC_ = self.yC as? Int {
+                yC = yC_
             }
-            if let hC2 = self.hC as? Int {
-                hC = hC2
+            if let hC_ = self.hC as? Int {
+                hC = hC_
             }
-            if let wC2 = self.wC as? Int {
-                wC = wC2
+            if let wC_ = self.wC as? Int {
+                wC = wC_
             }
         }
         
         func createQueueOfWaitUploadImagesModel() -> QueueOfWaitUploadImagesModel {
-            let queueOfWaitUploadImagesModel = QueueOfWaitUploadImagesModel(dataToSend:         dataToSend,
-                                                                            fileExtension:      self.fileExtension,
-                                                                            fileName:           self.fileName,
-                                                                            fileSize:           fileSize,
-                                                                            mimeType:           self.mimeType,
-                                                                            originalFileName:   self.originalFileName,
-                                                                            threadId:           threadId,
-                                                                            xC:                 xC,
-                                                                            yC:                 yC,
-                                                                            hC:                 hC,
-                                                                            wC:                 wC,
-                                                                            typeCode:           self.typeCode,
-                                                                            uniqueId:           self.uniqueId)
+            let queueOfWaitUploadImagesModel = QueueOfWaitUploadImagesModel(dataToSend:     dataToSend,
+                                                                            fileExtension:  self.fileExtension,
+                                                                            fileName:       self.fileName,
+                                                                            fileSize:       fileSize,
+                                                                            isPublic:       isPublic,
+                                                                            mimeType:       self.mimeType,
+                                                                            userGroupHash:  self.userGroupHash,
+                                                                            xC:             xC ?? 0,
+                                                                            yC:             yC ?? 0,
+                                                                            hC:             hC ?? 99999,
+                                                                            wC:             wC ?? 99999,
+                                                                            typeCode:       self.typeCode,
+                                                                            uniqueId:       self.uniqueId)
             return queueOfWaitUploadImagesModel
         }
         

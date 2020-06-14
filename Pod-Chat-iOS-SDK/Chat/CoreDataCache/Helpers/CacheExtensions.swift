@@ -16,24 +16,36 @@ extension NSObject {
      */
     
     static func convertJSONtoTransformable(dataToStore: JSON, completion: (NSData?) -> Void) {
-        do {
-            let data = try JSONSerialization.data(withJSONObject: dataToStore, options: [])
+        if let data = try? JSONSerialization.data(withJSONObject: dataToStore, options: []) {
             completion(data as NSData)
-        } catch let error as NSError {
-            print("NSJSONSerialization Error: \(error)")
+        } else {
+            print("NSJSONSerialization Error")
             completion(nil)
         }
+//        do {
+//            let data = try JSONSerialization.data(withJSONObject: dataToStore, options: [])
+//            completion(data as NSData)
+//        } catch let error as NSError {
+//            print("NSJSONSerialization Error: \(error)")
+//            completion(nil)
+//        }
     }
     
     func retrieveJSONfromTransformableData(completion: (JSON) -> Void) {
         if let data = self as? NSData {
-            do {
-                let nsJSON = try JSONSerialization.jsonObject(with: data as Data, options: [])
+            if let nsJSON = try? JSONSerialization.jsonObject(with: data as Data, options: []) {
                 completion(JSON(nsJSON))
-            } catch let error as NSError {
-                print("NSJSONSerialization Error: \(error)")
+            } else {
+                print("NSJSONSerialization Error")
                 completion(JSON.null)
             }
+//            do {
+//                let nsJSON = try JSONSerialization.jsonObject(with: data as Data, options: [])
+//                completion(JSON(nsJSON))
+//            } catch let error as NSError {
+//                print("NSJSONSerialization Error: \(error)")
+//                completion(JSON.null)
+//            }
         }
     }
     

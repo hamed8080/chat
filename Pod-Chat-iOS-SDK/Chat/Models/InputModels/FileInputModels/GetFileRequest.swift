@@ -11,28 +11,23 @@ import SwiftyJSON
 
 open class GetFileRequest {
     
-    public let downloadable:    Bool?
-    public let fileId:          Int
+//    public let fileId:          Int
     public let hashCode:        String
     public let serverResponse:  Bool
     
-    public init(downloadable:   Bool?,
-                fileId:         Int,
+    public init(//fileId:         Int,
                 hashCode:       String,
                 serverResponse: Bool?) {
         
-        self.fileId         = fileId
-        self.downloadable   = downloadable
+//        self.fileId         = fileId
         self.hashCode       = hashCode
         self.serverResponse = serverResponse ?? false
     }
     
     func convertContentToParameters() -> Parameters {
-        var parameters: Parameters = ["hashCode":   self.hashCode,
-                                      "fileId":     self.fileId]
-        if let theDownloadable = self.downloadable {
-            parameters["downloadable"] = JSON(theDownloadable)
-        }
+        var parameters: Parameters = [:]
+        parameters["hash"] = self.hashCode
+        parameters[" "] = UUID().uuidString
         return parameters
     }
     

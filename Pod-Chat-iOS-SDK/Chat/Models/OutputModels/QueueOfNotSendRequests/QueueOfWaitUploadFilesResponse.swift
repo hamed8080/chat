@@ -11,48 +11,48 @@ import SwiftyJSON
 
 open class QueueOfWaitUploadFilesModel {
     
-    let dataToSend:         Data?
-    let fileExtension:      String?
-    let fileName:           String?
-    let fileSize:           Int64?
-    let mimeType:           String
-    let originalFileName:   String?
-    let threadId:           Int?
-    let typeCode:           String?
-    let uniqueId:           String?
+    let dataToSend:     Data?
+    let fileExtension:  String?
+    let fileName:       String?
+    let fileSize:       Int64?
+    let isPublic:       Bool?
+    let mimeType:       String
+    let userGroupHash:  String?
+    let typeCode:       String?
+    let uniqueId:       String?
     
-    init(dataToSend:        Data?,
-         fileExtension:     String?,
-         fileName:          String?,
-         fileSize:          Int64?,
-         mimeType:          String?,
-         originalFileName:  String?,
-         threadId:          Int?,
-         typeCode:          String?,
-         uniqueId:          String?) {
+    init(dataToSend:    Data?,
+         fileExtension: String?,
+         fileName:      String?,
+         fileSize:      Int64?,
+         isPublic:      Bool?,
+         mimeType:      String?,
+         userGroupHash: String?,
+         typeCode:      String?,
+         uniqueId:      String?) {
         
-        self.dataToSend         = dataToSend
-        self.fileExtension      = fileExtension
-        self.fileName           = fileName
-        self.fileSize           = fileSize
-        self.mimeType           = mimeType ?? ""
-        self.originalFileName   = originalFileName
-        self.threadId           = threadId
-        self.typeCode           = typeCode
-        self.uniqueId           = uniqueId
+        self.dataToSend     = dataToSend
+        self.fileExtension  = fileExtension
+        self.fileName       = fileName
+        self.fileSize       = fileSize
+        self.isPublic       = isPublic
+        self.mimeType       = mimeType ?? ""
+        self.userGroupHash  = userGroupHash
+        self.typeCode       = typeCode
+        self.uniqueId       = uniqueId
         
     }
     
     init(fileInputModel: UploadFileRequestModel) {
-        self.dataToSend         = fileInputModel.dataToSend
-        self.fileExtension      = fileInputModel.fileExtension
-        self.fileName           = fileInputModel.fileName
-        self.fileSize           = fileInputModel.fileSize
-        self.mimeType           = fileInputModel.mimeType
-        self.originalFileName   = fileInputModel.originalFileName
-        self.threadId           = fileInputModel.threadId
-        self.typeCode           = fileInputModel.typeCode
-        self.uniqueId           = fileInputModel.uniqueId
+        self.dataToSend     = fileInputModel.dataToSend
+        self.fileExtension  = fileInputModel.fileExtension
+        self.fileName       = fileInputModel.fileName
+        self.fileSize       = fileInputModel.fileSize
+        self.isPublic       = fileInputModel.isPublic
+        self.mimeType       = fileInputModel.mimeType
+        self.userGroupHash  = fileInputModel.userGroupHash
+        self.typeCode       = fileInputModel.typeCode
+        self.uniqueId       = fileInputModel.uniqueId
     }
     
     
@@ -60,9 +60,9 @@ open class QueueOfWaitUploadFilesModel {
         let result: JSON = ["fileExtension":    fileExtension ?? NSNull(),
                             "fileName":         fileName ?? NSNull(),
                             "fileSize":         fileSize ?? NSNull(),
+                            "isPublic":         isPublic ?? NSNull(),
                             "mimeType":         mimeType,
-                            "originalFileName": originalFileName ?? NSNull(),
-                            "threadId":         threadId ?? NSNull(),
+                            "userGroupHash":    userGroupHash ?? NSNull(),
                             "typeCode":         typeCode ?? NSNull(),
                             "uniqueId":         uniqueId ?? NSNull()]
         return (result, dataToSend)

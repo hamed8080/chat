@@ -188,14 +188,13 @@ extension Chat {
                                        "width":     mapStaticImageInput.width,
                                        "height":    mapStaticImageInput.height]
         
-        Networking.sharedInstance.download(toUrl: url,
-                                           withMethod: method,
-                                           withHeaders: nil,
-                                           withParameters: parameters
+        Networking.sharedInstance.download(fromUrl:         url,
+                                           withMethod:      method,
+                                           withHeaders:     nil,
+                                           withParameters:  parameters
         , progress: { (downloadProgress) in
             progress(downloadProgress)
         }) { (myResponse, jsonResponse) in
-            print("jsonResponse ===== \n\(jsonResponse)")
             guard let image = myResponse else { print("Value is empty!!!"); return }
             completion(image)
         }

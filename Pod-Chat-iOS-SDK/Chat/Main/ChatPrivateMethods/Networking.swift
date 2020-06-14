@@ -30,17 +30,13 @@ class Networking {
         var uploadProgress: Float = 0
         Alamofire.upload(multipartFormData: { (multipartFormData) in
             
-            if let hasImage = isImage {
-                if (hasImage == true) {
-                    multipartFormData.append(dataToSend as! Data, withName: "image")
-                }
-            }
-            
-            if let hasFile = isFile {
-                if (hasFile == true) {
-                    multipartFormData.append(dataToSend as! Data, withName: "file")
-                }
-            }
+//            if let hasImage = isImage, (hasImage == true) {
+//                multipartFormData.append(dataToSend as! Data, withName: "file")
+//            }
+//            if let hasFile = isFile, (hasFile == true) {
+//                multipartFormData.append(dataToSend as! Data, withName: "file")
+//            }
+            multipartFormData.append(dataToSend as! Data, withName: "file")
             
             if let header = withHeaders {
                 for (key, value) in header {
@@ -69,7 +65,6 @@ class Networking {
                     progress?(myProgressFloat)
                 })
                 upload.responseJSON { response in
-                    debugPrint(response)
                     for (index, item) in Chat.sharedInstance.uploadRequest.enumerated() {
                         if item.uniqueId == uniqueId {
                             Chat.sharedInstance.uploadRequest.remove(at: index)
@@ -87,7 +82,7 @@ class Networking {
                                                         fileInfo:       fileInfo,
                                                         fileObjectData: dataToSend as? Data,
                                                         progress:       uploadProgress,
-                                                        threadId:       (withParameters?["threadId"] as? Int),
+                                                        userGroupHash:  (withParameters?["userGroupHash"] as? String),
                                                         uniqueId:       uniqueId)
                 Chat.sharedInstance.delegate?.fileUploadEvents(model: fUploadError)
                 completion(error)
@@ -96,7 +91,7 @@ class Networking {
     }
     
     
-    func download(toUrl urlStr:         String,
+    func download(fromUrl urlStr:       String,
                   withMethod:           HTTPMethod,
                   withHeaders:          HTTPHeaders?,
                   withParameters:       Parameters?,
@@ -108,8 +103,9 @@ class Networking {
         Alamofire.request(url,
                           method:       withMethod,
                           parameters:   withParameters,
+                          encoding:     URLEncoding(destination: .queryString),
                           headers:      withHeaders)
-            .downloadProgress(closure: { (downloadProgress) in
+        .downloadProgress(closure: { (downloadProgress) in
             let myProgressFloat: Float = Float(downloadProgress.fractionCompleted)
             progress?(myProgressFloat)
         })
@@ -117,14 +113,21 @@ class Networking {
             if myResponse.result.isSuccess {
                 if let downloadedData = myResponse.data {
                     if let response = myResponse.response {
-                        
                         var resJSON: JSON = [:]
                         
+                        if urlStr.contains("neshan") {
+                            downloadReturnData(downloadedData, resJSON)
+                            return
+                        }
+                        
                         let headerResponse = response.allHeaderFields
-                        if let contentType = headerResponse["Content-Type"] as? String {
-                            if let fileType = contentType.components(separatedBy: "/").last {
+                        if let contentType  = headerResponse["Content-Type"] as? String,
+                            let fileType    = contentType.components(separatedBy: "/").last {
                                 resJSON["type"] = JSON(fileType)
-                            }
+                        }
+                        if let contentSizeStr   = headerResponse["Content-Length"] as? String,
+                            let contentSize     = Int(contentSizeStr) {
+                                resJSON["size"] = JSON(contentSize)
                         }
                         if let contentDisposition = headerResponse["Content-Disposition"] as? String {
                             if let theFileName = contentDisposition.components(separatedBy: "=").last?.replacingOccurrences(of: "\"", with: "") {
@@ -135,13 +138,17 @@ class Networking {
                         } else {
                             // an error accured, so return the error:
                             let returnJSON: JSON = ["hasError": true, "errorCode": 999]
+                            Chat.sharedInstance.delegate?.chatError(errorCode:      999,
+                                                                    errorMessage:   "error on downloading File",
+                                                                    errorResult:    nil)
                             downloadReturnData(nil, returnJSON)
                         }
-                        
                     }
                 }
             } else {
-                print("Failed!")
+                Chat.sharedInstance.delegate?.chatError(errorCode:      -1,
+                                                        errorMessage:   "error on downloading File",
+                                                        errorResult:    myResponse.error)
             }
         }
         

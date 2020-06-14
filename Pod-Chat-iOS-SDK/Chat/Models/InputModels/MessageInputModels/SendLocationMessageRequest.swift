@@ -21,6 +21,7 @@ open class SendLocationMessageRequest {
     public let systemMetadata:  String?
     public let textMessage:     String?
     public let threadId:        Int
+    public let userGroupHash:   String
     
     public let messageType:     MessageType
     
@@ -37,6 +38,7 @@ open class SendLocationMessageRequest {
                 systemMetadata: String?,
                 textMessage:    String?,
                 threadId:       Int,
+                userGroupHash:  String,
                 typeCode:       String?,
                 uniqueId:       String?) {
         
@@ -51,8 +53,9 @@ open class SendLocationMessageRequest {
         self.systemMetadata = systemMetadata
         self.textMessage    = textMessage
         self.threadId       = threadId
+        self.userGroupHash  = userGroupHash
         
-        self.messageType    = MessageType.picture
+        self.messageType    = MessageType.PICTURE
         
         self.typeCode               = typeCode
         self.uniqueId               = uniqueId ?? UUID().uuidString
@@ -75,6 +78,7 @@ open class SendLocationMessageRequest {
                 sendMessageMetadata:    String?,
                 sendMessageRepliedTo:   Int?,
                 sendMessageTypeCode:    String?,
+                userGroupHash:          String,
                 typeCode:               String?,
                 uniqueId:               String?) {
         
@@ -86,12 +90,13 @@ open class SendLocationMessageRequest {
         
         self.mapImageName   = sendMessageImageName
         self.threadId       = sendMessageThreadId
+        self.userGroupHash  = userGroupHash
         
         self.textMessage    = sendMessageContent
         self.systemMetadata = sendMessageMetadata
         self.repliedTo      = sendMessageRepliedTo
         
-        self.messageType    = MessageType.picture
+        self.messageType    = MessageType.PICTURE
         
         self.typeCode               = typeCode
         self.uniqueId               = uniqueId ?? UUID().uuidString
