@@ -13,7 +13,13 @@ open class GetContactsRequest {
     
     public let count:       Int?
     public let offset:      Int?
-    public let query:       String?
+    
+    public let contactId:       Int?
+    public let cellphoneNumber: String?
+    public let email:           String?
+    public let order:           String?
+    public let query:           String?
+    public let summery:         Bool?
     
     public let typeCode:    String?
     public let uniqueId:    String
@@ -26,20 +32,51 @@ open class GetContactsRequest {
         
         self.count      = count
         self.offset     = offset
-        self.query      = query
+        
+        self.contactId          = nil
+        self.cellphoneNumber    = nil
+        self.email              = nil
+        self.order              = nil
+        self.query              = query
+        self.summery            = nil
         
         self.typeCode   = typeCode
         self.uniqueId   = uniqueId ?? UUID().uuidString
     }
     
-    public init(json: JSON) {
-        self.count      = json["count"].int
-        self.offset     = json["offset"].int
-        self.query      = json["query"].string
+    init(contactId:         Int?,
+         count:             Int?,
+         cellphoneNumber:   String?,
+         email:             String?,
+         offset:            Int?,
+         order:             Ordering?,
+         query:             String?,
+         summery:           Bool?,
+         typeCode:          String?,
+         uniqueId:          String?) {
         
-        self.typeCode   = json["typeCode"].string
-        self.uniqueId   = json["uniqueId"].string ?? UUID().uuidString
+        self.count      = count
+        self.offset     = offset
+        
+        self.contactId          = contactId
+        self.cellphoneNumber    = cellphoneNumber
+        self.email              = email
+        self.order              = order?.rawValue ?? nil
+        self.query              = query
+        self.summery            = summery
+        
+        self.typeCode   = typeCode
+        self.uniqueId   = uniqueId ?? UUID().uuidString
     }
+    
+//    public init(json: JSON) {
+//        self.count      = json["count"].int
+//        self.offset     = json["offset"].int
+//        self.query      = json["query"].string
+//
+//        self.typeCode   = json["typeCode"].string
+//        self.uniqueId   = json["uniqueId"].string ?? UUID().uuidString
+//    }
     
     public func convertContentToJSON() -> JSON {
         var content: JSON = [:]
@@ -49,6 +86,21 @@ open class GetContactsRequest {
         if let query = self.query {
             let theQuery = MakeCustomTextToSend(message: query).replaceSpaceEnterWithSpecificCharecters()
             content["query"] = JSON(theQuery)
+        }
+        if let contactId_ = self.contactId {
+            content["id"] = JSON(contactId_)
+        }
+        if let cellphoneNumber_ = self.cellphoneNumber {
+            content["cellphoneNumber"] = JSON(cellphoneNumber_)
+        }
+        if let email_ = self.email {
+            content["email"] = JSON(email_)
+        }
+        if let order_ = self.order {
+            content["order"] = JSON(order_)
+        }
+        if let summery_ = self.summery {
+            content["summery"] = JSON(summery_)
         }
         
         return content

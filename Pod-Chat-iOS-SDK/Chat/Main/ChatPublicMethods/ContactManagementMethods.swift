@@ -219,13 +219,17 @@ extension Chat {
         
         // if cache is enabled by user, it will return cache result to the user
         if (getCacheResponse ?? enableCache) {
-            if let cacheContacts = Chat.cacheDB.retrieveContacts(ascending:         true,
+            var isAscending = true
+            if let ord = getContactsInput.order, (ord == Ordering.descending.rawValue) {
+                isAscending = false
+            }
+            if let cacheContacts = Chat.cacheDB.retrieveContacts(ascending:         isAscending,
                                                                  cellphoneNumber:   nil,
                                                                  count:             getContactsInput.count ?? 50,
-                                                                 email:             nil,
-                                                                 firstName:         nil,
-                                                                 id:                nil,
-                                                                 lastName:          nil,
+                                                                 email:             getContactsInput.email,
+//                                                                 firstName:         nil,
+                                                                 id:                getContactsInput.contactId,
+//                                                                 lastName:          nil,
                                                                  offset:            getContactsInput.offset ?? 0,
                                                                  search:            getContactsInput.query,
                                                                  timeStamp:         cacheTimeStamp,
@@ -378,76 +382,95 @@ extension Chat {
                                cacheResponse:       @escaping (GetContactsModel) -> ()) {
         
         log.verbose("Try to request to search contact with this parameters: \n \(searchContactsInput)", context: "Chat")
-        uniqueId(searchContactsInput.uniqueId)
         
-        if (getCacheResponse ?? enableCache) {
-            if let cacheContacts = Chat.cacheDB.retrieveContacts(ascending:         true,
-                                                                 cellphoneNumber:   searchContactsInput.cellphoneNumber,
-                                                                 count:             searchContactsInput.size ?? 50,
-                                                                 email:             searchContactsInput.email,
-                                                                 firstName:         searchContactsInput.firstName,
-                                                                 id:                searchContactsInput.id,
-                                                                 lastName:          searchContactsInput.lastName,
-                                                                 offset:            searchContactsInput.offset ?? 0,
-                                                                 search:            searchContactsInput.query,
-                                                                 timeStamp:         cacheTimeStamp,
-                                                                 uniqueId:          nil) {
-                cacheResponse(cacheContacts)
-            }
+        let getContactInput = GetContactsRequest(contactId:         searchContactsInput.contactId,
+                                                 count:             searchContactsInput.count,
+                                                 cellphoneNumber:   searchContactsInput.cellphoneNumber,
+                                                 email:             searchContactsInput.email,
+                                                 offset:            searchContactsInput.offset,
+                                                 order:             searchContactsInput.order,
+                                                 query:             searchContactsInput.query,
+                                                 summery:           searchContactsInput.summery,
+                                                 typeCode:          searchContactsInput.typeCode,
+                                                 uniqueId:          searchContactsInput.uniqueId)
+        self.getContacts(inputModel: getContactInput, getCacheResponse: getCacheResponse, uniqueId: { (searchContactUniqueId) in
+            uniqueId(searchContactUniqueId)
+        }, completion: { (response) in
+            completion(response)
+        }) { (cache) in
+            cacheResponse(cache)
         }
         
-        sendSearchContactRequest(withInputModel: searchContactsInput)
-        { (contactModel) in
-            self.addContactOnCache(withInputModel: contactModel as! ContactModel)
-            let contactEventModel = ContactEventModel(type: ContactEventTypes.CONTACTS_SEARCH_RESULT_CHANGE, contacts: (contactModel as! ContactModel).contacts, contactsLastSeenDuration: nil)
-            self.delegate?.contactEvents(model: contactEventModel)
-            completion(contactModel)
-        }
+        
+//        uniqueId(searchContactsInput.uniqueId)
+//        if (getCacheResponse ?? enableCache) {
+//            if let cacheContacts = Chat.cacheDB.retrieveContacts(ascending:         true,
+//                                                                 cellphoneNumber:   searchContactsInput.cellphoneNumber,
+//                                                                 count:             searchContactsInput.size ?? 50,
+//                                                                 email:             searchContactsInput.email,
+//                                                                 firstName:         searchContactsInput.firstName,
+//                                                                 id:                searchContactsInput.id,
+//                                                                 lastName:          searchContactsInput.lastName,
+//                                                                 offset:            searchContactsInput.offset ?? 0,
+//                                                                 search:            searchContactsInput.query,
+//                                                                 timeStamp:         cacheTimeStamp,
+//                                                                 uniqueId:          nil) {
+//                cacheResponse(cacheContacts)
+//            }
+//        }
+//
+//        sendSearchContactRequest(withInputModel: searchContactsInput)
+//        { (contactModel) in
+//            self.addContactOnCache(withInputModel: contactModel as! ContactModel)
+//            let contactEventModel = ContactEventModel(type: ContactEventTypes.CONTACTS_SEARCH_RESULT_CHANGE, contacts: (contactModel as! ContactModel).contacts, contactsLastSeenDuration: nil)
+//            self.delegate?.contactEvents(model: contactEventModel)
+//            completion(contactModel)
+//        }
         
     }
     
-    private func sendSearchContactRequest(withInputModel searchContactsInput:  SearchContactsRequest,
-                                          completion:           @escaping callbackTypeAlias) {
-        
-        let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.SEARCH_CONTACTS.rawValue)"
-        let method: HTTPMethod = HTTPMethod.post
-        let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
-        var params: Parameters = [:]
-        params["size"] = JSON(searchContactsInput.size ?? 50)
-        params["offset"] = JSON(searchContactsInput.offset ?? 0)
-        params["typeCode"] = JSON(searchContactsInput.typeCode ?? generalTypeCode)
-        if let firstName = searchContactsInput.firstName {
-            params["firstName"] = JSON(firstName)
-        }
-        if let lastName = searchContactsInput.lastName {
-            params["lastName"] = JSON(lastName)
-        }
-        if let cellphoneNumber = searchContactsInput.cellphoneNumber {
-            params["cellphoneNumber"] = JSON(cellphoneNumber)
-        }
-        if let email = searchContactsInput.email {
-            params["email"] = JSON(email)
-        }
-        if let query_ = searchContactsInput.query {
-            params["q"] = JSON(query_)
-        }
-        if let ownerId = searchContactsInput.ownerId {
-            params["ownerId"] = JSON(ownerId)
-        }
-        if let id = searchContactsInput.id {
-            params["id"] = JSON(id)
-        }
-        
-        Networking.sharedInstance.requesttWithJSONresponse(from:            url,
-                                                           withMethod:      method,
-                                                           withHeaders:     headers,
-                                                           withParameters:  params)
-        { (response) in
-            let contactModel = ContactModel(messageContent: response as! JSON)
-            completion(contactModel)
-        }
-        
-    }
+//    private func sendSearchContactRequest(withInputModel searchContactsInput:  SearchContactsRequest,
+//                                          completion:           @escaping callbackTypeAlias) {
+//
+//        let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.SEARCH_CONTACTS.rawValue)"
+//        let method: HTTPMethod = HTTPMethod.post
+//        let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
+//        var params: Parameters = [:]
+//        params["size"] = JSON(searchContactsInput.size ?? 50)
+//        params["offset"] = JSON(searchContactsInput.offset ?? 0)
+//        params["typeCode"] = JSON(searchContactsInput.typeCode ?? generalTypeCode)
+//        if let firstName = searchContactsInput.firstName {
+//            params["firstName"] = JSON(firstName)
+//        }
+//        if let lastName = searchContactsInput.lastName {
+//            params["lastName"] = JSON(lastName)
+//        }
+//        if let cellphoneNumber = searchContactsInput.cellphoneNumber {
+//            params["cellphoneNumber"] = JSON(cellphoneNumber)
+//        }
+//        if let email = searchContactsInput.email {
+//            params["email"] = JSON(email)
+//        }
+//        if let query_ = searchContactsInput.query {
+//            params["q"] = JSON(query_)
+//        }
+//        if let ownerId = searchContactsInput.ownerId {
+//            params["ownerId"] = JSON(ownerId)
+//        }
+//        if let id = searchContactsInput.id {
+//            params["id"] = JSON(id)
+//        }
+//
+//        Networking.sharedInstance.requesttWithJSONresponse(from:            url,
+//                                                           withMethod:      method,
+//                                                           withHeaders:     headers,
+//                                                           withParameters:  params)
+//        { (response) in
+//            let contactModel = ContactModel(messageContent: response as! JSON)
+//            completion(contactModel)
+//        }
+//
+//    }
     
     
     
