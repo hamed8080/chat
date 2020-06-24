@@ -137,9 +137,9 @@ extension Cache {
     ///     - cellphoneNumber:  if you want to search Contact with specific cellphone number, you should fill this parameter (String?)
     ///     - count:            how many Contacts do you spect to return (Int)
     ///     - email:            if you want to search Contact with specific email address, you should fill this parameter (String?)
-    ///     - firstName:        if you want to search Contact with specific first name, you should fill this parameter (String?)
+    ///     - firstName:        if you want to search Contact with specific first name, you should fill this parameter (String?)    (deprecated)
     ///     - id:               if you want to search Contact with specific contact id, you should fill this parameter (Int?)
-    ///     - lastName:         if you want to search Contact with specific last name, you should fill this parameter (String?)
+    ///     - lastName:         if you want to search Contact with specific last name, you should fill this parameter (String?)    (deprecated)
     ///     - offset:           from what offset do you want to get the Cache response (Int)
     ///     - search:           if you want to search some term on every content of the Contact (like as: cellphoneNumber, email, firstName, lastName), you should fill this parameter (String?)
     ///     - timeStamp:        the only way to delete contact, is to check if there is a long time that some contact is not updated, we will delete it. this it the timeStamp to check (Int)
@@ -152,9 +152,9 @@ extension Cache {
                                  cellphoneNumber:   String?,
                                  count:             Int,
                                  email:             String?,
-                                 firstName:         String?,
+//                                 firstName:         String?,
                                  id:                Int?,
-                                 lastName:          String?,
+//                                 lastName:          String?,
                                  offset:            Int,
                                  search:            String?,
                                  timeStamp:         Int,
@@ -199,18 +199,18 @@ extension Cache {
                     andPredicateArr.append(theCellphoneNumberPredicate)
                 }
             }
-            if let theFirstName = firstName {
-                if (theFirstName != "") {
-                    let theFirstNamePredicate = NSPredicate(format: "firstName CONTAINS[cd] %@", theFirstName)
-                    andPredicateArr.append(theFirstNamePredicate)
-                }
-            }
-            if let theLastName = lastName {
-                if (theLastName != "") {
-                    let theLastNamePredicate = NSPredicate(format: "lastName CONTAINS[cd] %@", theLastName)
-                    andPredicateArr.append(theLastNamePredicate)
-                }
-            }
+//            if let theFirstName = firstName {
+//                if (theFirstName != "") {
+//                    let theFirstNamePredicate = NSPredicate(format: "firstName CONTAINS[cd] %@", theFirstName)
+//                    andPredicateArr.append(theFirstNamePredicate)
+//                }
+//            }
+//            if let theLastName = lastName {
+//                if (theLastName != "") {
+//                    let theLastNamePredicate = NSPredicate(format: "lastName CONTAINS[cd] %@", theLastName)
+//                    andPredicateArr.append(theLastNamePredicate)
+//                }
+//            }
             if let theEmail = email {
                 if (theEmail != "") {
                     let theEmailPredicate = NSPredicate(format: "email CONTAINS[cd] %@", theEmail)
