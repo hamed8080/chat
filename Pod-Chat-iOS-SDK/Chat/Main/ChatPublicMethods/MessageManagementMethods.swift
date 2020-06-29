@@ -1206,12 +1206,16 @@ extension Chat {
                 let myResponse: UploadImageResponse = response as! UploadImageResponse
                 if !myResponse.hasError {
                     metadata["file"] = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
+                    metadata["file"]["actualHeight"] = JSON(image.hC)
+                    metadata["file"]["actualWidth"]  = JSON(image.wC)
                     metadata["file"]["originalName"] = JSON(uploadRequest.fileName)
+                    metadata["file"]["link"]        = JSON("\(self.SERVICE_ADDRESSES.PODSPACE_FILESERVER_ADDRESS)\(SERVICES_PATH.DRIVE_DOWNLOAD_IMAGE.stringValue())?hash=\(myResponse.uploadImage?.hashCode ?? "")")
                     metadata["file"]["mimeType"]    = JSON(uploadRequest.mimeType)
+                    metadata["file"]["name"]        = JSON(uploadRequest.fileName)
                     metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
                     metadata["fileHash"]            = JSON(myResponse.uploadImage?.hashCode ?? "")
                     metadata["name"]                = JSON(myResponse.uploadImage?.name ?? "")
-                    metadata["id"]         = JSON(0)
+                    metadata["id"]                  = JSON(0)
                     sendMessage(withMetadata: metadata)
                 } else {
                     self.delegate?.chatError(errorCode:     myResponse.errorCode,
@@ -1248,7 +1252,9 @@ extension Chat {
                 if myResponse.hasError {
                     metadata["file"]    = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
                     metadata["file"]["originalName"] = JSON(uploadRequest.fileName)
+                    metadata["file"]["link"]        = JSON("\(self.SERVICE_ADDRESSES.PODSPACE_FILESERVER_ADDRESS)\(SERVICES_PATH.DRIVE_DOWNLOAD_FILE.stringValue())?hash=\(myResponse.uploadFile?.hashCode ?? "")")
                     metadata["file"]["mimeType"]    = JSON(uploadRequest.mimeType)
+                    metadata["file"]["name"]        = JSON(uploadRequest.fileName)
                     metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
                     metadata["fileHash"]            = JSON(myResponse.uploadFile?.hashCode ?? "")
                     metadata["name"]                = JSON(myResponse.uploadFile?.name ?? "")
