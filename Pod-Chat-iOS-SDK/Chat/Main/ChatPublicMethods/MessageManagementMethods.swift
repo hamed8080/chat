@@ -1204,7 +1204,7 @@ extension Chat {
                 uploadProgress(progress)
             }) { (response) in
                 let myResponse: UploadImageResponse = response as! UploadImageResponse
-                if !myResponse.hasError {
+                if !(myResponse.hasError) {
                     metadata["file"] = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
                     metadata["file"]["actualHeight"] = JSON(image.hC)
                     metadata["file"]["actualWidth"]  = JSON(image.wC)
@@ -1216,7 +1216,7 @@ extension Chat {
                     metadata["fileHash"]            = JSON(myResponse.uploadImage?.hashCode ?? "")
                     metadata["name"]                = JSON(myResponse.uploadImage?.name ?? "")
                     metadata["id"]                  = JSON(0)
-                    sendMessage(withMetadata: metadata)
+                    sendMessage(withMetadata: metadata, messageType: MessageType.POD_SPACE_PICTURE)
                 } else {
                     self.delegate?.chatError(errorCode:     myResponse.errorCode,
                                              errorMessage:  myResponse.errorMessage,
@@ -1225,7 +1225,7 @@ extension Chat {
                 }
             }
             
-        } else if let file = sendFileMessageInput.uploadInput as? UploadFileRequestModel {
+        } else if let file = sendFileMessageInput.uploadInput as? UploadFileRequest {
             let uploadRequest: UploadFileRequest!
             if let userGroupHash = file.userGroupHash {
                 uploadRequest = UploadFileRequest(dataToSend:       file.dataToSend,
@@ -1248,8 +1248,9 @@ extension Chat {
             uploadFile(inputModel: uploadRequest, uniqueId: { _ in }, progress: { (progress) in
                 uploadProgress(progress)
             }) { (response) in
-                let myResponse: UploadFileModel = response as! UploadFileModel
-                if myResponse.hasError {
+                let myResponse: UploadFileResponse = response as! UploadFileResponse
+                print("\(myResponse.hasError)")
+                if !(myResponse.hasError) {
                     metadata["file"]    = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
                     metadata["file"]["originalName"] = JSON(uploadRequest.fileName)
                     metadata["file"]["link"]        = JSON("\(self.SERVICE_ADDRESSES.PODSPACE_FILESERVER_ADDRESS)\(SERVICES_PATH.DRIVE_DOWNLOAD_FILE.stringValue())?hash=\(myResponse.uploadFile?.hashCode ?? "")")
@@ -1259,7 +1260,7 @@ extension Chat {
                     metadata["fileHash"]            = JSON(myResponse.uploadFile?.hashCode ?? "")
                     metadata["name"]                = JSON(myResponse.uploadFile?.name ?? "")
                     metadata["id"]         = JSON(0)
-                    sendMessage(withMetadata: metadata)
+                    sendMessage(withMetadata: metadata, messageType: MessageType.POD_SPACE_FILE)
                 } else {
                     self.delegate?.chatError(errorCode:     myResponse.errorCode,
                                              errorMessage:  myResponse.errorMessage,
@@ -1272,9 +1273,9 @@ extension Chat {
         }
         
         // this will call when all data were uploaded and it will sends the textMessage
-        func sendMessage(withMetadata: JSON) {
+        func sendMessage(withMetadata: JSON, messageType: MessageType) {
             let sendMessageParamModel = SendTextMessageRequestModel(content:        sendFileMessageInput.messageInput.textMessage,
-                                                                    messageType:    MessageType.FILE,
+                                                                    messageType:    messageType,
                                                                     metadata:       "\(withMetadata)",
                                                                     repliedTo:      sendFileMessageInput.messageInput.repliedTo,
                                                                     systemMetadata: sendFileMessageInput.messageInput.metadata,
