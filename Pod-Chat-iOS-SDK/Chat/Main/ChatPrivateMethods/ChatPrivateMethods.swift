@@ -910,9 +910,17 @@ extension Chat {
     private func chatErrorHandler(withMessage message: ChatMessage, messageContentAsJSON: JSON) {
         log.verbose("Message of type 'ERROR' recieved", context: "Chat")
         
-        let event = Event(level: SentryLevel.error)
-        event.message = "Message of type 'ERROR' recieved"
-        SentrySDK.capture(event: event)
+        // send log to Sentry 4.3.1
+        let event = Event(level: SentrySeverity.error)
+        event.message = "Message of type 'ERROR' recieved: \n \(message.returnToJSON())"
+        Client.shared?.send(event: event, completion: { _ in })
+        
+        
+        // send log to Sentry 5.0.5
+//        let event = Event(level: SentryLevel.error)
+//        event.message = "Message of type 'ERROR' recieved"
+//        SentrySDK.capture(event: event)
+        
 //        let b = Breadcrumb(level: SentryLevel.error, category: "iOS")
 //        b.message = ""
         

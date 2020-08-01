@@ -14,6 +14,7 @@ import SwiftyJSON
 //import UIKit
 //import Contacts
 import Sentry
+//import Firebase
 
 
 public class Chat {
@@ -128,11 +129,61 @@ public class Chat {
     }
     
     private func startCrashAnalitics() {
-        SentrySDK.start(options: [
-            "dsn": "https://a06c7828c36d47c7bbb24605ba5d0d26@o376741.ingest.sentry.io/5198368",
-            "debug": true // Helpful to see what's going on. (Enabled debug when first installing is always helpful)
-        ])
+        
+        // Config for Sentry 4.3.1
+        do {
+            Client.shared = try Client(dsn: "https://5e236d8a40be4fe99c4e8e9497682333:5a6c7f732d5746e8b28625fcbfcbe58d@chatsentryweb.sakku.cloud/4")
+            try Client.shared?.startCrashHandler()
+        } catch let error {
+            print("\(error)")
+        }
+        
+        // Config for Sentry 5.0.5
+//        SentrySDK.start(options: [
+//            "dsn": "https://a06c7828c36d47c7bbb24605ba5d0d26@o376741.ingest.sentry.io/5198368",
+//            "debug": true // Helpful to see what's going on. (Enabled debug when first installing is always helpful)
+//        ])
+//        let event = Event(level: SentryLevel.error)
+//        event.message = "Test Sentry on Sakku"
+//        SentrySDK.capture(event: event)
+//        print("send message to sentry")
     }
+    
+    func startNotification() {
+//        FirebaseApp.configure()
+//        if #available(iOS 10.0, *) {
+//          // For iOS 10 display notification (sent via APNS)
+//          UNUserNotificationCenter.current().delegate = self
+//
+//          let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+//          UNUserNotificationCenter.current().requestAuthorization(
+//            options: authOptions,
+//            completionHandler: {_, _ in })
+//        } else {
+//          let settings: UIUserNotificationSettings =
+//          UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+//          Chat.sharedInstance.registerUserNotificationSettings(settings)
+//        }
+    }
+    
+    
+    func asccessNotificationRegisterationToken() {
+//        Messaging.messaging().delegate = self
+    }
+    
+    func getNotificationToken() {
+//        InstanceID.instanceID().instanceID { (result, error) in
+//          if let error = error {
+//            print("Error fetching remote instance ID: \(error)")
+//          } else if let result = result {
+//            print("Remote instance ID token: \(result.token)")
+//            self.instanceIDTokenMessage.text  = "Remote InstanceID token: \(result.token)"
+//          }
+//        }
+    }
+    
+    
+    
     
     // the delegate property that the user class should make itself to be implment this delegat.
     // At first, the class sould confirm to ChatDelegates, and then implement the ChatDelegates methods
