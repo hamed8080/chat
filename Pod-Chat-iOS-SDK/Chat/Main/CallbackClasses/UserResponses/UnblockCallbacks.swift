@@ -23,6 +23,12 @@ extension Chat {
     func responseOfUnblockContact(withMessage message: ChatMessage) {
         log.verbose("Message of type 'UNBLOCK' recieved", context: "Chat")
         
+        if let contentAsJSON = message.content?.convertToJSON() {
+            let unblockModel = BlockedUser(messageContent: contentAsJSON)
+            let unblockEM = UserEventModel(type: UserEventTypes.UNBLOCK, blockModel: unblockModel)
+            delegate?.userEvents(model: unblockEM)
+        }
+        
         let returnData = CreateReturnData(hasError:         false,
                                           errorMessage:     "",
                                           errorCode:        0,
