@@ -2,7 +2,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "FanapPodChatSDK"
-  s.version      = "0.7.3.3"
+  s.version      = "0.8.1.0"
   s.summary      = "Fanap's POD Chat SDK"
   s.description  = "This Package is used for creating chat apps for companies whoes want to use Fanap Chat Services; This Package will use Fanap-Pod-Async-SDK"
   s.homepage     = "https://github.com/Mahyar1990/Fanap-Chat-SDK"
@@ -16,6 +16,6 @@ Pod::Spec.new do |s|
   s.frameworks  = "Foundation" , "CoreData" , "Contacts"
   s.dependency "FanapPodAsyncSDK" , '~> 0.7.1'
   s.dependency "Alamofire" , '~> 4.8.2'
-  s.dependency "Sentry" , '~> 5.0.5'
+  s.dependency "Sentry" , '~> 4.3.1'
 
 end
