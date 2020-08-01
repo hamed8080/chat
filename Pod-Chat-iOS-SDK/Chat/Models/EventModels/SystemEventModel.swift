@@ -27,14 +27,3 @@ open class SystemEventModel {
 
 
 
-open class UserEventModel {
-    
-    public let type:        UserEventTypes
-    public let blockModel:  BlockedUser
-    
-    init(type: UserEventTypes, blockModel: BlockedUser) {
-        self.type       = type
-        self.blockModel = blockModel
-    }
-    
-}

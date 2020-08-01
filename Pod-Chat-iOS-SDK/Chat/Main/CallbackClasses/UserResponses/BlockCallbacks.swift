@@ -25,7 +25,7 @@ extension Chat {
         
         if let contentAsJSON = message.content?.convertToJSON() {
             let blockModel = BlockedUser(messageContent: contentAsJSON)
-            let blockEM = UserEventModel(type: UserEventTypes.BLOCK, blockModel: blockModel)
+            let blockEM = UserEventModel(type: UserEventTypes.BLOCK, blockModel: blockModel, threadId: message.subjectId)
             delegate?.userEvents(model: blockEM)
         }
         

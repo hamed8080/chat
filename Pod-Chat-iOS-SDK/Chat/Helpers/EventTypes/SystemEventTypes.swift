@@ -16,7 +16,3 @@ public enum SystemEventTypes {
 }
 
 
-public enum UserEventTypes {
-    case BLOCK
-    case UNBLOCK
-}
