@@ -373,4 +373,9 @@ extension Chat {
         asyncClient?.asyncLogOut()
     }
     
+    
+    public func disconnectChat() {
+        asyncClient?.asyncLogOut()
+    }
+    
 }

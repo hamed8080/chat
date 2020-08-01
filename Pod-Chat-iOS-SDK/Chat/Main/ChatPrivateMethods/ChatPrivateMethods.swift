@@ -11,6 +11,7 @@ import FanapPodAsyncSDK
 import Alamofire
 import SwiftyJSON
 import SwiftyBeaver
+import Sentry
 
 // MARK: -
 // MARK: - Private Methods:
@@ -897,39 +898,64 @@ extension Chat {
             
         // a message of type 999 (ERROR) comes from Server.
         case ChatMessageVOTypes.ERROR.intValue():
-            log.verbose("Message of type 'ERROR' recieved", context: "Chat")
-            if Chat.map[message.uniqueId] != nil {
-                let returnData = CreateReturnData(hasError:         true,
-                                                  errorMessage:     message.message,
-                                                  errorCode:        message.code,
-                                                  result:           messageContentAsJSON,
-                                                  resultAsArray:    nil,
-                                                  resultAsString:   nil,
-                                                  contentCount:     0,
-                                                  subjectId:        message.subjectId)
-                
-                let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-                callback.onResultCallback(uID:      message.uniqueId,
-                                          response: returnData,
-                                          success:  { (successJSON) in
-                    self.spamPvThreadCallbackToUser?(successJSON)
-                }) { _ in }
-                Chat.map.removeValue(forKey: message.uniqueId)
-                
-                if (messageContentAsJSON["code"].intValue == 21) {
-                    isChatReady = false
-                    asyncClient?.asyncLogOut()
-                }
-                delegate?.chatError(errorCode:      message.code    ?? messageContentAsJSON["code"].int         ?? 0,
-                                    errorMessage:   message.message ?? messageContentAsJSON["message"].string   ?? "",
-                                    errorResult:    messageContentAsJSON)
-            }
+            chatErrorHandler(withMessage: message, messageContentAsJSON: messageContentAsJSON)
             break
             
         default:
             log.verbose("This type of message is not defined yet!!!\n incomes = \(message.returnToJSON())", context: "Chat")
             break
         }
+    }
+    
+    private func chatErrorHandler(withMessage message: ChatMessage, messageContentAsJSON: JSON) {
+        log.verbose("Message of type 'ERROR' recieved", context: "Chat")
+        
+        // send log to Sentry 4.3.1
+        let event = Event(level: SentrySeverity.error)
+        event.message = "Message of type 'ERROR' recieved: \n \(message.returnToJSON())"
+        Client.shared?.send(event: event, completion: { _ in })
+        
+        
+        // send log to Sentry 5.0.5
+//        let event = Event(level: SentryLevel.error)
+//        event.message = "Message of type 'ERROR' recieved"
+//        SentrySDK.capture(event: event)
+        
+//        let b = Breadcrumb(level: SentryLevel.error, category: "iOS")
+//        b.message = ""
+        
+//        SentrySDK.capture(event: event) { (scope) in
+//        }
+//        SentrySDK.addBreadcrumb(crumb: <#T##Breadcrumb#>)
+//        SentrySDK.capture(message: <#T##String#>)
+        
+        if Chat.map[message.uniqueId] != nil {
+            let returnData = CreateReturnData(hasError:         true,
+                                              errorMessage:     message.message,
+                                              errorCode:        message.code,
+                                              result:           messageContentAsJSON,
+                                              resultAsArray:    nil,
+                                              resultAsString:   nil,
+                                              contentCount:     0,
+                                              subjectId:        message.subjectId)
+            
+            let callback: CallbackProtocol = Chat.map[message.uniqueId]!
+            callback.onResultCallback(uID:      message.uniqueId,
+                                      response: returnData,
+                                      success:  { (successJSON) in
+                self.spamPvThreadCallbackToUser?(successJSON)
+            }) { _ in }
+            Chat.map.removeValue(forKey: message.uniqueId)
+            
+            if (messageContentAsJSON["code"].intValue == 21) {
+                isChatReady = false
+                asyncClient?.asyncLogOut()
+            }
+            delegate?.chatError(errorCode:      message.code    ?? messageContentAsJSON["code"].int         ?? 0,
+                                errorMessage:   message.message ?? messageContentAsJSON["message"].string   ?? "",
+                                errorResult:    messageContentAsJSON)
+        }
+        
     }
     
     
@@ -942,8 +968,8 @@ extension Chat {
                 let deliveryModel = DeliverSeenRequestModel(messageId:  message.id ?? 0,
                                                             ownerId:    messageOwner,
                                                             typeCode:   nil)
-                seen(inputModel: deliveryModel)
-//                deliver(inputModel: deliveryModel)
+//                seen(inputModel: deliveryModel)
+                deliver(inputModel: deliveryModel)
             }
         }
         

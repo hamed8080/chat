@@ -655,6 +655,44 @@ extension Cache {
     }
     
     
+    /// Delete PhoneBook Contacts:
+    /// by calling this method, it will just Remove PhoneBook Contacts From CacheDB.
+    ///
+    /// - fetch all CMContact
+    /// - loop through the contacts
+    ///     - delete their object linkedUser
+    ///     - delete the object itself
+    ///
+    /// Inputs:
+    /// it gets no parameters as input
+    ///
+    /// Outputs:
+    /// it returns no output
+    ///
+    /// - parameters:
+    ///     none
+    ///
+    /// - Returns:
+    ///     none
+    ///
+    func deletePhoneBookContacts(isCompleted: (()->())?) {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "PhoneContact")
+        do {
+            if let result = try context.fetch(fetchRequest) as? [PhoneContact] {
+                for contact in result {
+                    deleteAndSave(object: contact, withMessage: "PhoneContact Deleted")
+                }
+                isCompleted?()
+            } else {
+                isCompleted?()
+            }
+        } catch {
+            isCompleted?()
+            fatalError()
+        }
+    }
+    
+    
     /// Delete LinkedUsers:
     /// by calling this method, it will just Remove LinkedUsers From CacheDB.
     ///
@@ -1111,6 +1149,7 @@ extension Cache {
     public func deleteCacheData() {
         deleteUserInfo() {
             self.deleteContacts(isCompleted: nil)
+            self.deletePhoneBookContacts(isCompleted: nil)
             self.deleteThreads() {
                 self.deleteAllImages()
                 self.deleteAllFiles()

@@ -14,7 +14,7 @@ open class Conversation {
     
     public var admin:                           Bool?
     public var canEditInfo:                     Bool?
-    public var canSpam:                         Bool?
+    public var canSpam:                         Bool = false
     public var description:                     String?
     public var group:                           Bool?
     public var id:                              Int?
@@ -53,7 +53,7 @@ open class Conversation {
     public init(messageContent: JSON) {
         self.admin                          = messageContent["admin"].bool
         self.canEditInfo                    = messageContent["canEditInfo"].bool
-        self.canSpam                        = messageContent["canSpam"].bool
+        self.canSpam                        = messageContent["canSpam"].bool ?? false
         self.description                    = messageContent["description"].string
         self.group                          = messageContent["group"].bool
         self.id                             = messageContent["id"].int
@@ -146,7 +146,7 @@ open class Conversation {
         
         self.admin          = admin
         self.canEditInfo    = canEditInfo
-        self.canSpam        = canSpam
+        self.canSpam        = canSpam ?? false
         self.description    = description
         self.group          = group
         self.id             = id
@@ -241,7 +241,7 @@ open class Conversation {
         
         let result: JSON = ["admin":                        admin ?? NSNull(),
                             "canEditInfo":                  canEditInfo ?? NSNull(),
-                            "canSpam":                      canSpam ?? NSNull(),
+                            "canSpam":                      canSpam,
                             "description":                  description ?? NSNull(),
                             "group":                        group ?? NSNull(),
                             "id":                           id ?? NSNull(),

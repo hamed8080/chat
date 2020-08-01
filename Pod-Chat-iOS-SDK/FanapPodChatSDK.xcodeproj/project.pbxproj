@@ -96,6 +96,8 @@
 		3E24085D21F5C844001F32F1 /* CMLinkedUser+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E24082E21F5C844001F32F1 /* CMLinkedUser+CoreDataClass.swift */; };
 		3E24085E21F5C844001F32F1 /* CMLinkedUser+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E24082F21F5C844001F32F1 /* CMLinkedUser+CoreDataProperties.swift */; };
 		3E24085F21F5C844001F32F1 /* CMLinkedUser+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E24082F21F5C844001F32F1 /* CMLinkedUser+CoreDataProperties.swift */; };
+		3E25635C24D5A95B00C1CDD0 /* Sentry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E25635724D5A8F900C1CDD0 /* Sentry.framework */; };
+		3E25635D24D5A95B00C1CDD0 /* Sentry.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3E25635724D5A8F900C1CDD0 /* Sentry.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3E2ADA5123D5A5AE00331407 /* CMPinMessage+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E2ADA4F23D5A5AE00331407 /* CMPinMessage+CoreDataClass.swift */; };
 		3E2ADA5223D5A5AE00331407 /* CMPinMessage+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E2ADA5023D5A5AE00331407 /* CMPinMessage+CoreDataProperties.swift */; };
 		3E33159923AFD0EB0070A3D1 /* RemoveRoleFromUserCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E33159823AFD0EB0070A3D1 /* RemoveRoleFromUserCallback.swift */; };
@@ -188,8 +190,6 @@
 		3E78AABB2184A30A002A6EC0 /* pic.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E78AAB92184A309002A6EC0 /* pic.png */; };
 		3E78AAC72184AB6F002A6EC0 /* SyncContactsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E78AAC62184AB6F002A6EC0 /* SyncContactsTest.swift */; };
 		3E7ACC0C22C2376800042168 /* DeleteMultipleMessagesRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7ACC0B22C2376800042168 /* DeleteMultipleMessagesRequest.swift */; };
-		3E841C8C2476DE0600854197 /* Sentry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E841C892476DDEF00854197 /* Sentry.framework */; };
-		3E841C8D2476DE0600854197 /* Sentry.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3E841C892476DDEF00854197 /* Sentry.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3E8ADC4B23B24B4400E3538D /* FileUploadEventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADC4A23B24B4400E3538D /* FileUploadEventModel.swift */; };
 		3E8ADC6923B3511F00E3538D /* SendChatMessageVO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADC6823B3511F00E3538D /* SendChatMessageVO.swift */; };
 		3E8ADC6B23B3514F00E3538D /* SendAsyncMessageVO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8ADC6A23B3514F00E3538D /* SendAsyncMessageVO.swift */; };
@@ -365,6 +365,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		3E25635624D5A8F900C1CDD0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E25634F24D5A8F900C1CDD0 /* Sentry.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 63AA759B1EB8AEF500D153DE;
+			remoteInfo = Sentry;
+		};
+		3E25635824D5A8F900C1CDD0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E25634F24D5A8F900C1CDD0 /* Sentry.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 63AA76651EB8CB2F00D153DE;
+			remoteInfo = SentryTests;
+		};
+		3E25635A24D5A8F900C1CDD0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E25634F24D5A8F900C1CDD0 /* Sentry.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6387B7C21ED84F910045A84C;
+			remoteInfo = SentryStatic;
+		};
 		3E49635021D79BF300A67D19 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3E49634021D79BF300A67D19 /* FanapPodAsyncSDK.xcodeproj */;
@@ -378,20 +399,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 3ED59C16211098400026FFF5;
 			remoteInfo = FanapPodAsyncSDKTests;
-		};
-		3E841C882476DDEF00854197 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3E841C792476DDEF00854197 /* Sentry.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 63AA759B1EB8AEF500D153DE;
-			remoteInfo = Sentry;
-		};
-		3E841C8A2476DDEF00854197 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3E841C792476DDEF00854197 /* Sentry.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 63AA76651EB8CB2F00D153DE;
-			remoteInfo = SentryTests;
 		};
 		3EE025F821206E63001810FB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -458,7 +465,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				3E841C8D2476DE0600854197 /* Sentry.framework in Embed Frameworks */,
+				3E25635D24D5A95B00C1CDD0 /* Sentry.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -535,6 +542,7 @@
 		3E24082921F5C844001F32F1 /* CMContact+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMContact+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3E24082E21F5C844001F32F1 /* CMLinkedUser+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMLinkedUser+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3E24082F21F5C844001F32F1 /* CMLinkedUser+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMLinkedUser+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		3E25634F24D5A8F900C1CDD0 /* Sentry.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Sentry.xcodeproj; path = "../../../Usefull Libraries/sentry-cocoa-4.3.1/Sentry.xcodeproj"; sourceTree = "<group>"; };
 		3E2ADA4F23D5A5AE00331407 /* CMPinMessage+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMPinMessage+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3E2ADA5023D5A5AE00331407 /* CMPinMessage+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMPinMessage+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3E33159823AFD0EB0070A3D1 /* RemoveRoleFromUserCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveRoleFromUserCallback.swift; sourceTree = "<group>"; };
@@ -614,7 +622,6 @@
 		3E78AAB92184A309002A6EC0 /* pic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pic.png; sourceTree = "<group>"; };
 		3E78AAC62184AB6F002A6EC0 /* SyncContactsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncContactsTest.swift; sourceTree = "<group>"; };
 		3E7ACC0B22C2376800042168 /* DeleteMultipleMessagesRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteMultipleMessagesRequest.swift; sourceTree = "<group>"; };
-		3E841C792476DDEF00854197 /* Sentry.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Sentry.xcodeproj; path = "../../../Usefull Libraries/sentry-cocoa-5.0.5/Sentry.xcodeproj"; sourceTree = "<group>"; };
 		3E8ADC4A23B24B4400E3538D /* FileUploadEventModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadEventModel.swift; sourceTree = "<group>"; };
 		3E8ADC6823B3511F00E3538D /* SendChatMessageVO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendChatMessageVO.swift; sourceTree = "<group>"; };
 		3E8ADC6A23B3514F00E3538D /* SendAsyncMessageVO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendAsyncMessageVO.swift; sourceTree = "<group>"; };
@@ -785,7 +792,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3EFDB457236C6BB200623461 /* Alamofire.framework in Frameworks */,
-				3E841C8C2476DE0600854197 /* Sentry.framework in Frameworks */,
+				3E25635C24D5A95B00C1CDD0 /* Sentry.framework in Frameworks */,
 				3E49635421D79BFB00A67D19 /* FanapPodAsyncSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -999,6 +1006,16 @@
 			path = BotResponses;
 			sourceTree = "<group>";
 		};
+		3E25635024D5A8F900C1CDD0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3E25635724D5A8F900C1CDD0 /* Sentry.framework */,
+				3E25635924D5A8F900C1CDD0 /* SentryTests.xctest */,
+				3E25635B24D5A8F900C1CDD0 /* libSentryStatic.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		3E25909821D6C8E000CB9D7D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1014,15 +1031,6 @@
 			children = (
 				3E49635121D79BF300A67D19 /* FanapPodAsyncSDK.framework */,
 				3E49635321D79BF300A67D19 /* FanapPodAsyncSDKTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		3E841C7A2476DDEF00854197 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				3E841C892476DDEF00854197 /* Sentry.framework */,
-				3E841C8B2476DDEF00854197 /* SentryTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1408,7 +1416,7 @@
 				3EE025EF21206E63001810FB /* Chat */,
 				3EE025FA21206E63001810FB /* ChatTests */,
 				3EE025EE21206E63001810FB /* Products */,
-				3E841C792476DDEF00854197 /* Sentry.xcodeproj */,
+				3E25634F24D5A8F900C1CDD0 /* Sentry.xcodeproj */,
 				3EFDB43C236C6B9B00623461 /* Alamofire.xcodeproj */,
 				3E49634021D79BF300A67D19 /* FanapPodAsyncSDK.xcodeproj */,
 				3E25909821D6C8E000CB9D7D /* Frameworks */,
@@ -1586,8 +1594,8 @@
 					ProjectRef = 3E49634021D79BF300A67D19 /* FanapPodAsyncSDK.xcodeproj */;
 				},
 				{
-					ProductGroup = 3E841C7A2476DDEF00854197 /* Products */;
-					ProjectRef = 3E841C792476DDEF00854197 /* Sentry.xcodeproj */;
+					ProductGroup = 3E25635024D5A8F900C1CDD0 /* Products */;
+					ProjectRef = 3E25634F24D5A8F900C1CDD0 /* Sentry.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -1599,6 +1607,27 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		3E25635724D5A8F900C1CDD0 /* Sentry.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Sentry.framework;
+			remoteRef = 3E25635624D5A8F900C1CDD0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3E25635924D5A8F900C1CDD0 /* SentryTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = SentryTests.xctest;
+			remoteRef = 3E25635824D5A8F900C1CDD0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3E25635B24D5A8F900C1CDD0 /* libSentryStatic.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSentryStatic.a;
+			remoteRef = 3E25635A24D5A8F900C1CDD0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		3E49635121D79BF300A67D19 /* FanapPodAsyncSDK.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -1611,20 +1640,6 @@
 			fileType = wrapper.cfbundle;
 			path = FanapPodAsyncSDKTests.xctest;
 			remoteRef = 3E49635221D79BF300A67D19 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		3E841C892476DDEF00854197 /* Sentry.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Sentry.framework;
-			remoteRef = 3E841C882476DDEF00854197 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		3E841C8B2476DDEF00854197 /* SentryTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = SentryTests.xctest;
-			remoteRef = 3E841C8A2476DDEF00854197 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		3EFDB448236C6B9B00623461 /* Alamofire.framework */ = {
@@ -1717,7 +1732,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif which sentry-cli >/dev/null; then\nexport SENTRY_ORG=mahyar\nexport SENTRY_PROJECT=fanappodchatsdk\nexport SENTRY_AUTH_TOKEN=ca8addf08b6c4b2faded214e2914ec2cae6257f56929463b89d4b249c62b85c4\nERROR=$(sentry-cli upload-dif \"$DWARF_DSYM_FOLDER_PATH\" 2>&1 >/dev/null)\nif [ ! $? -eq 0 ]; then\necho \"warning: sentry-cli - $ERROR\"\nfi\nelse\necho \"warning: sentry-cli not installed, download from https://github.com/getsentry/sentry-cli/releases\"\nfi\n";
+			shellScript = "if which sentry-cli >/dev/null; then\nexport SENTRY_ORG=podchat\nexport SENTRY_PROJECT=ios\nexport SENTRY_AUTH_TOKEN=ac8d3b3801334c8caddb32f688f30ec947821bcf07494796bc4f9ebab2f68ca6\nERROR=$(sentry-cli upload-dif \"$DWARF_DSYM_FOLDER_PATH\" 2>&1 >/dev/null)\nif [ ! $? -eq 0 ]; then\necho \"warning: sentry-cli - $ERROR\"\nfi\nelse\necho \"warning: sentry-cli not installed, download from https://github.com/getsentry/sentry-cli/releases\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2233,7 +2248,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 0.6.5.1;
+				MARKETING_VERSION = 0.7.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.fanapSoft.FanapPodChatSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2267,7 +2282,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 0.6.5.1;
+				MARKETING_VERSION = 0.7.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.fanapSoft.FanapPodChatSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
