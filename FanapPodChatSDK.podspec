@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.source_files = "Pod-Chat-iOS-SDK/Chat/**/*.{h,swift,xcdatamodeld,m,momd}"
   s.resources = "Pod-Chat-iOS-SDK/Chat/*.xcdatamodeld"
   s.frameworks  = "Foundation" , "CoreData" , "Contacts"
-  s.dependency "FanapPodAsyncSDK" , '~> 0.7.1'
+  s.dependency "FanapPodAsyncSDK" , '~> 0.8.1'
   s.dependency "Alamofire" , '~> 4.8.2'
   s.dependency "Sentry" , '~> 4.3.1'
 
