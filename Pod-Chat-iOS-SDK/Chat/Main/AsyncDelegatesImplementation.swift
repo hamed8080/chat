@@ -250,8 +250,13 @@ extension Chat: AsyncDelegates {
          */
         
         // checkout to keep the Chat alive
-        lastReceivedMessageTimer = nil
-        lastReceivedMessageTimer = RepeatingTimer(timeInterval: (Double(self.chatPingMessageInterval) * 1.5))
+//        lastReceivedMessageTimer = nil
+//        lastReceivedMessageTimer = RepeatingTimer(timeInterval: (Double(self.chatPingMessageInterval) * 1.5))
+        
+        if let _ = lstRcvdMsgTimer {
+            lstRcvdMsgTimer!.stop()
+        }
+        lastReceivedMessageTimer(interval: (Double(self.chatPingMessageInterval) * 1.5))
         
         let chatMessage = ChatMessage(withContent: withContent.content.convertToJSON())
         receivedMessageHandler(withContent: chatMessage)

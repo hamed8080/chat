@@ -471,8 +471,14 @@ extension Chat {
      *
      */
     func runSendMessageTimer() {
-        lastSentMessageTimer = nil
-        lastSentMessageTimer = RepeatingTimer(timeInterval: TimeInterval(self.chatPingMessageInterval))
+//        lastSentMessageTimer = nil
+//        lastSentMessageTimer = RepeatingTimer(timeInterval: TimeInterval(self.chatPingMessageInterval))
+        
+        if let _ = lstSntMsgTimer {
+            lstSntMsgTimer?.stop()
+        }
+//        lastSentMessageTime = Date()
+        lastSentMessageTimer(interval: TimeInterval(self.chatPingMessageInterval))
     }
     
     
@@ -527,8 +533,10 @@ extension Chat {
                                     deliverCallback:    nil,
                                     seenCallback:       nil)
             
-        } else if (lastSentMessageTimer != nil) {
-            lastSentMessageTimer?.suspend()
+//        } else if (lastSentMessageTimer != nil) {
+//            lastSentMessageTimer?.suspend()
+        } else if let _ = lstSntMsgTimer {
+            lstSntMsgTimer!.stop()
         }
     }
     
