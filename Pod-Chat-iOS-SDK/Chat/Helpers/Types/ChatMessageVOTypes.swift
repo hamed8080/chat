@@ -64,6 +64,7 @@ public enum ChatMessageVOTypes {
     case DEFINE_BOT_COMMAND                 // 63
     case START_BOT                          // 64
     case STOP_BOT                           // 65
+    case CONTACT_SYNCED                     // 90
     case LOGOUT                             // 100
     case ERROR                              // 999
     
@@ -123,6 +124,7 @@ public enum ChatMessageVOTypes {
         case .DEFINE_BOT_COMMAND:               return 63
         case .START_BOT:                        return 64
         case .STOP_BOT:                         return 65
+        case .CONTACT_SYNCED:                   return 90
         case .LOGOUT:                           return 100
         case .ERROR:                            return 999
         }

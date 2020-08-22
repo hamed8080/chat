@@ -178,6 +178,7 @@
     <entity name="CMUser" representedClassName=".CMUser" syncable="YES">
         <attribute name="bio" optional="YES" attributeType="String"/>
         <attribute name="cellphoneNumber" optional="YES" attributeType="String"/>
+        <attribute name="contactSynced" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="coreUserId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="email" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
@@ -295,7 +296,7 @@
         <element name="CMPinMessage" positionX="341.734375" positionY="-23.5546875" width="128" height="103"/>
         <element name="CMReplyInfo" positionX="982.71484375" positionY="482.37890625" width="128" height="193"/>
         <element name="CMThreadParticipants" positionX="-459.9921875" positionY="520.90625" width="128" height="90"/>
-        <element name="CMUser" positionX="-463.83984375" positionY="196.234375" width="128" height="223"/>
+        <element name="CMUser" positionX="-463.83984375" positionY="196.234375" width="128" height="238"/>
         <element name="CMUserRole" positionX="471.12890625" positionY="272.80078125" width="128" height="120"/>
         <element name="MessageGaps" positionX="-459.22265625" positionY="620.73828125" width="128" height="90"/>
         <element name="PhoneContact" positionX="-459.39453125" positionY="-191.34765625" width="128" height="103"/>

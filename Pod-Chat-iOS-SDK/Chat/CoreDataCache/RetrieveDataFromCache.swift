@@ -41,6 +41,7 @@ extension Cache {
                 switch result.first {
                 case let (.some(first)):
                     let user = User(cellphoneNumber: first.cellphoneNumber,
+                                    contactSynced:  first.contactSynced as? Bool,
                                     coreUserId:     first.coreUserId as? Int,
                                     email:          first.email,
                                     id:             first.id as? Int,

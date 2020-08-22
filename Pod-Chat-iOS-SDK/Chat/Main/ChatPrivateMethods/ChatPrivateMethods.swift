@@ -899,6 +899,11 @@ extension Chat {
         case ChatMessageVOTypes.STOP_BOT.intValue():
             responseOfStopBot(withMessage: message)
             break
+            
+        // a message of type 90 (CONTACT_SYNCED) comes from Server.
+        case ChatMessageVOTypes.CONTACT_SYNCED.intValue():
+            responseOfUserContactSynced(withMessage: message)
+            break
         
         // a message of type 100 (LOGOUT) comes from Server.
         case ChatMessageVOTypes.LOGOUT.intValue():
@@ -1064,6 +1069,10 @@ extension Chat {
         }
     }
     
+    
+    func responseOfUserContactSynced(withMessage message: ChatMessage) {
+        Chat.cacheDB.updateUserContactSynced()
+    }
     
 }
 

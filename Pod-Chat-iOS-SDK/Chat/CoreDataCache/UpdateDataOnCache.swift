@@ -60,6 +60,26 @@ extension Cache {
     }
     
     
+    // MARK: - update UserInfo(ContactSynced):
+    /// Update CMUser Entity:
+    ///
+    /// - fetch CMUser and see if we already had this contact on the Cache or not
+    /// - if it found one, it will update it's contactSynced property
+    ///
+    public func updateUserContactSynced() {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUser")
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMUser] {
+                if (result.count > 0) {
+                    result.first!.contactSynced = true as NSNumber?
+                    saveContext(subject: "Update UserInfo -update existing object-")
+                }
+            }
+        } catch {
+            fatalError("Error on fetching list of CMUser")
+        }
+    }
+    
     
     // MARK: - update LinkedUser:
     /// Update CMLinkedUser Entity:
