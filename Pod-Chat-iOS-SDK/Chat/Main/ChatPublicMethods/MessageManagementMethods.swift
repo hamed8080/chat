@@ -1053,7 +1053,7 @@ extension Chat {
                                                            messageType:     MessageType.PICTURE,
                                                            metadata:        nil,
                                                            repliedTo:       sendLocationMessageRequest.repliedTo,
-                                                           systemMetadata:  nil,
+                                                           systemMetadata:  sendLocationMessageRequest.systemMetadata,
                                                            threadId:        sendLocationMessageRequest.threadId,
                                                            typeCode:        sendLocationMessageRequest.typeCode ?? self.generalTypeCode,
                                                            uniqueId:        sendLocationMessageRequest.uniqueId)
@@ -1249,7 +1249,6 @@ extension Chat {
                 uploadProgress(progress)
             }) { (response) in
                 let myResponse: UploadFileResponse = response as! UploadFileResponse
-                print("\(myResponse.hasError)")
                 if !(myResponse.hasError) {
                     metadata["file"]    = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
                     metadata["file"]["originalName"] = JSON(uploadRequest.fileName)
@@ -1259,7 +1258,7 @@ extension Chat {
                     metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
                     metadata["fileHash"]            = JSON(myResponse.uploadFile?.hashCode ?? "")
                     metadata["name"]                = JSON(myResponse.uploadFile?.name ?? "")
-                    metadata["id"]         = JSON(0)
+                    metadata["id"]                  = JSON(0)
                     sendMessage(withMetadata: metadata, messageType: MessageType.POD_SPACE_FILE)
                 } else {
                     self.delegate?.chatError(errorCode:     myResponse.errorCode,
@@ -1278,7 +1277,7 @@ extension Chat {
                                                                     messageType:    messageType,
                                                                     metadata:       "\(withMetadata)",
                                                                     repliedTo:      sendFileMessageInput.messageInput.repliedTo,
-                                                                    systemMetadata: sendFileMessageInput.messageInput.metadata,
+                                                                    systemMetadata: sendFileMessageInput.messageInput.systemMetadata,
                                                                     threadId:       sendFileMessageInput.messageInput.threadId,
                                                                     typeCode:       sendFileMessageInput.messageInput.typeCode ?? generalTypeCode,
                                                                     uniqueId:       sendFileMessageInput.messageInput.uniqueId)
