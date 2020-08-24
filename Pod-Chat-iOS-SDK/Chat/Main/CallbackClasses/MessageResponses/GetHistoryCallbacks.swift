@@ -109,9 +109,10 @@ extension Chat {
                     // check if there was any message on the server response that also was on the cache, then check their data, and if see any difference, send them as Edit Message Event to the client
                     for message in serverResponse {
                         var foundNewMsg = true
-                        var foundEditMsg = true
+                        var foundEditMsg = false
                         for cacheMessage in cacheHistoryResult.history {
                             if (message.id == cacheMessage.id) {
+                                foundEditMsg = true
                                 foundNewMsg = false
                                 if (message.message == cacheMessage.message)
                                     && (message.metadata == cacheMessage.metadata)
