@@ -510,6 +510,7 @@ public class Chat {
     public var updateChatProfileCallbackToUser:         callbackTypeAlias?
     public var joinPublicThreadCallbackToUser:              callbackTypeAlias?
     public var isPublicThreadNameAvailableCallbackToUser:   callbackTypeAlias?
+    public var statusPingCallbackToUser:            callbackTypeAlias?
     
     // Bot callBacks
     public var addBotCommandCallbackToUser: callbackTypeAlias?

@@ -908,6 +908,11 @@ extension Chat {
         // a message of type 100 (LOGOUT) comes from Server.
         case ChatMessageVOTypes.LOGOUT.intValue():
             break
+        
+        // a message of type 101 (STATUS_PING) comes from Server.
+        case ChatMessageVOTypes.STATUS_PING.intValue():
+            responseOfStatusPing(withMessage: message)
+            break
             
         // a message of type 999 (ERROR) comes from Server.
         case ChatMessageVOTypes.ERROR.intValue():

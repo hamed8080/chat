@@ -66,6 +66,7 @@ public enum ChatMessageVOTypes {
     case STOP_BOT                           // 65
     case CONTACT_SYNCED                     // 90
     case LOGOUT                             // 100
+    case STATUS_PING                        // 100
     case ERROR                              // 999
     
     func intValue() -> Int {
@@ -126,6 +127,7 @@ public enum ChatMessageVOTypes {
         case .STOP_BOT:                         return 65
         case .CONTACT_SYNCED:                   return 90
         case .LOGOUT:                           return 100
+        case .STATUS_PING:                      return 101
         case .ERROR:                            return 999
         }
     }
