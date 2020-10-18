@@ -1000,6 +1000,96 @@ extension Cache {
     }
     
     
+    public func saveThumbnailImageObject(imageInfo: ImageObject, imageData: Data, toLocalPath: URL?) {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMImage] {
+                
+                var tempImage: ImageObject?
+                
+                // Part1:
+                // find data that are exist in the Cache, (and the response request is containing that). and delete them
+                for itemInCache in result {
+                    if let imageHashCode = itemInCache.hashCode, let isThumbnail = itemInCache.isThumbnail as? Bool {
+                        if (imageHashCode == imageInfo.hashCode) && (isThumbnail == true) {
+                            
+                            tempImage = ImageObject(actualHeight:   itemInCache.actualHeight as? Int,
+                                                    actualWidth:    itemInCache.actualWidth as? Int,
+                                                    hashCode:       imageHashCode,
+                                                    height:         itemInCache.height as? Int,
+//                                                    id:           itemInCache.id as! Int,
+                                                    name:           itemInCache.name,
+                                                    size:           itemInCache.size as? Int,
+                                                    width:          itemInCache.width as? Int)
+                            
+                            // the uploadImage object that we are going to create, is already exist in the Cache
+                            // to update information in this object:
+                            // we will delete them first, then we will create it again later
+                            
+                            // delete the original file from local storage of the app, using path of the file
+                            var imagePath = ""
+                            if let path = toLocalPath {
+                                imagePath = path.absoluteString
+                            } else {
+                                let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+                                imagePath = path + "/\(fileSubPath.Images)/"
+                            }
+                            
+                            let myImagePath = imagePath + "\(itemInCache.hashCode!)"  + "-Thumbnail"
+                            // check if this file is exixt on the app bunde, then delete it
+                            if FileManager.default.fileExists(atPath: myImagePath) {
+                                do {
+                                    try FileManager.default.removeItem(atPath: myImagePath)
+                                } catch {
+                                    fatalError("can not delete the image from app bundle!")
+                                }
+                            }
+                            
+                            // delete the information from cache
+                            deleteAndSave(object: itemInCache, withMessage: "Delete CMImage Object")
+                        }
+                    }
+                }
+                
+                // Part2:
+                // save data comes from server to the Cache
+                let theUploadImageEntity = NSEntityDescription.entity(forEntityName: "CMImage", in: context)
+                let theUploadImage = CMImage(entity: theUploadImageEntity!, insertInto: context)
+                
+                theUploadImage.actualHeight = (imageInfo.actualHeight ?? tempImage?.actualHeight) as NSNumber?
+                theUploadImage.actualWidth  = (imageInfo.actualWidth ?? tempImage?.actualWidth) as NSNumber?
+                theUploadImage.hashCode     = imageInfo.hashCode
+                theUploadImage.height       = (imageInfo.height ?? tempImage?.height) as NSNumber?
+//                theUploadImage.id           = imageInfo.id as NSNumber?
+                theUploadImage.name         = (imageInfo.name ?? tempImage?.name)
+                theUploadImage.size         = (imageInfo.width ?? tempImage?.size) as NSNumber?
+                theUploadImage.width        = (imageInfo.width ?? tempImage?.width) as NSNumber?
+                theUploadImage.isThumbnail  = true as NSNumber
+                
+                // save file on app bundle
+                var imagesLocalirectory: URL
+                if let path = toLocalPath {
+                    imagesLocalirectory = path
+                } else {
+                    let directoryPath   = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+                    let directoryURL    = URL(fileURLWithPath: directoryPath)
+                    imagesLocalirectory = directoryURL.appendingPathComponent("\(fileSubPath.Images)")
+                }
+                
+                createDirectory(at: imagesLocalirectory)
+                
+                let imageLocalAdress    = imagesLocalirectory.appendingPathComponent("\(imageInfo.hashCode)-Thumbnail")
+                saveDataToDirectory(data: imageData, to: imageLocalAdress)
+                
+                saveContext(subject: "Update UploadImage")
+            }
+        } catch {
+            fatalError("Error on fetching list of Conversations")
+        }
+        
+    }
+    
+    
     
     // MARK: - save FileObject:
     /// Save FileObject:

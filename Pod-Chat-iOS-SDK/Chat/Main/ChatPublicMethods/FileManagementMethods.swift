@@ -208,6 +208,54 @@ extension Chat {
         
     }
     
+    public func getThimbnailImage(inputModel getImageInput:  GetImageRequest,
+                                  getCacheResponse:          Bool?,
+                                  uniqueId:      @escaping (String) -> (),
+                                  progress:      @escaping (Float) -> (),
+                                  completion:    @escaping (Data?, DownloadImageModel) -> (),
+                                  cacheResponse: @escaping (Data, DownloadImageModel) -> ()) {
+        
+        let theUniqueId = generateUUID()
+        uniqueId(theUniqueId)
+        
+        var hasImageOnTheCache = false
+        
+        // if cache is enabled by user, first return cache result to the user
+        if (getCacheResponse ?? enableCache) {
+            if let (cacheImageResult, imagePath) = Chat.cacheDB.retrieveImageThumbnailObject(hashCode:   getImageInput.hashCode) {
+                let response = DownloadImageModel(messageContentModel:   cacheImageResult,
+                                                  errorCode:             0,
+                                                  errorMessage:          "",
+                                                  hasError:              false)
+                if FileManager.default.fileExists(atPath: imagePath) {
+                    let imagURL = URL(fileURLWithPath: imagePath)
+                    if let data = try? Data(contentsOf: imagURL) {
+                        hasImageOnTheCache = true
+                        cacheResponse(data, response)
+                    } else {
+                        delegate?.chatError(errorCode: 1000,
+                                            errorMessage: "cannot read image data from local path",
+                                            errorResult: nil)
+                    }
+                }
+            }
+        }
+        let input = GetImageRequest(hashCode:   getImageInput.hashCode,
+                                    quality:    0.123,
+                                    crop:       getImageInput.crop,
+                                    size:       getImageInput.size,
+                                    serverResponse: getImageInput.serverResponse)
+        if (!hasImageOnTheCache) || (getImageInput.serverResponse) {
+            _ = checkIfDeviceHasFreeSpace(needSpaceInMB: self.deviecLimitationSpaceMB, turnOffTheCache: false)
+            sendRequestToDownloadImage(withInputModel: input, progress: { (theProgress) in
+                progress(theProgress)
+            }) { (data, imageModel) in
+                completion(data, imageModel)
+            }
+        }
+        
+    }
+    
     private func sendRequestToDownloadImage(withInputModel getImageInput: GetImageRequest,
                                             progress:      @escaping (Float) -> (),
                                             completion:    @escaping (Data?, DownloadImageModel) -> ()) {
@@ -240,7 +288,12 @@ extension Chat {
                 
                 if self.enableCache {
                     if self.checkIfDeviceHasFreeSpace(needSpaceInMB: Int64(myData.count / 1024), turnOffTheCache: true) {
-                        Chat.cacheDB.saveImageObject(imageInfo: uploadImage, imageData: myData, toLocalPath: self.localImageCustomPath)
+                        if getImageInput.quality == 0.123 {
+                            Chat.cacheDB.saveThumbnailImageObject(imageInfo: uploadImage, imageData: myData, toLocalPath: self.localImageCustomPath)
+                        } else {
+                            Chat.cacheDB.saveImageObject(imageInfo: uploadImage, imageData: myData, toLocalPath: self.localImageCustomPath)
+                        }
+                        
                     }
                 }
                 

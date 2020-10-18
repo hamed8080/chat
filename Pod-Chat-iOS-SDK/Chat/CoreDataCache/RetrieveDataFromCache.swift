@@ -946,15 +946,30 @@ extension Cache {
         do {
             if let result = try context.fetch(fetchRequest) as? [CMImage] {
                 
-                if let firstObject = result.first {
-                    let imageObject = firstObject.convertCMObjectToObject()
-                    let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-                    let myImagePath = path + "/\(fileSubPath.Images)/" + "\(firstObject.hashCode ?? "default")"
-                    
-                    return (imageObject, myImagePath)
-                } else {
-                    return nil
+                var returnValue: (imageObject: ImageObject, imagePath: String)?
+                for item in result {
+                    if let isThumbnail = item.isThumbnail as? Bool, (isThumbnail == true) {
+                        return nil
+                    } else {
+                        let imageObject = item.convertCMObjectToObject()
+                        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+                        let myImagePath = path + "/\(fileSubPath.Images)/" + "\(item.hashCode ?? "default")"
+                        
+                        returnValue = (imageObject, myImagePath)
+//                        return (imageObject, myImagePath)
+                    }
                 }
+                return returnValue
+                
+//                if let firstObject = result.first {
+//                    let imageObject = firstObject.convertCMObjectToObject()
+//                    let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+//                    let myImagePath = path + "/\(fileSubPath.Images)/" + "\(firstObject.hashCode ?? "default")"
+//
+//                    return (imageObject, myImagePath)
+//                } else {
+//                    return nil
+//                }
                 
             } else {
                 return nil
@@ -963,6 +978,39 @@ extension Cache {
             fatalError("Error on fetching list of CMImage")
         }
     }
+    
+    
+    public func retrieveImageThumbnailObject(hashCode: String) -> (imageObject: ImageObject, imagePath: String)? {
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
+        let hashCodePredicate = NSPredicate(format: "hashCode == %@", hashCode)
+        fetchRequest.predicate = hashCodePredicate
+        
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMImage] {
+                
+                var returnValue: (imageObject: ImageObject, imagePath: String)?
+                for item in result {
+                    if let isThumbnail = item.isThumbnail as? Bool, (isThumbnail == true) {
+                        let imageObject = item.convertCMObjectToObject()
+                        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+                        let myImagePath = path + "/\(fileSubPath.Images)/" + "\(item.hashCode ?? "default")"  + "-Thumbnail"
+                        
+                        returnValue = (imageObject, myImagePath)
+                    } else {
+                        return nil
+                    }
+                }
+                return returnValue
+                
+            } else {
+                return nil
+            }
+        } catch {
+            fatalError("Error on fetching list of CMImage")
+        }
+    }
+    
     
     public func isImageAvailable(hashCode: String) -> Bool? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
