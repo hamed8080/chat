@@ -275,15 +275,15 @@ extension Chat {
     /// - It has 3 callbacks as responses.
     ///
     /// - parameter inputModel:         (input) you have to send your parameters insid this model. (StatusPingRequest)
-    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! )
-    public func sendStatusPing(inputModel statusPingInput: StatusPingRequest,
-                               uniqueId:                @escaping (String) -> (),
-                               completion:              @escaping callbackTypeAlias) {
+//    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+//    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! )
+    public func sendStatusPing(inputModel statusPingInput: StatusPingRequest) {
+//                               uniqueId:                @escaping (String) -> (),
+//                               completion:              @escaping callbackTypeAlias) {
         log.verbose("Try to send Status Ping with this parameters: \n threadId = \(statusPingInput.threadId ?? 2) \n contactId = \(statusPingInput.contactId ?? 3)", context: "Chat")
-        uniqueId(statusPingInput.uniqueId)
-        
-        statusPingCallbackToUser = completion
+//        uniqueId(statusPingInput.uniqueId)
+//
+//        statusPingCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.STATUS_PING.intValue(),
                                             content:            "\(statusPingInput.convertContentToJSON())",
@@ -306,7 +306,7 @@ extension Chat {
                                               pushMsgType:  nil)
         
         sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          [(StatusPingCallback(), statusPingInput.uniqueId)],
+                                callbacks:          nil,//[(StatusPingCallback(), statusPingInput.uniqueId)],
                                 sentCallback:       nil,
                                 deliverCallback:    nil,
                                 seenCallback:       nil)

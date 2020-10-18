@@ -36,14 +36,14 @@ open class StatusPingRequest {
         self.uniqueId   = uniqueId ?? UUID().uuidString
     }
     
-    public init(insideThreadId: Bool,
+    public init(insideThread:   Bool,
                 threadId:       Int?,
                 typeCode:       String?,
                 uniqueId:       String?) {
         
         self.chat       = nil
         self.contacts   = nil
-        self.thread     = insideThreadId
+        self.thread     = insideThread
         
         self.contactId  = nil
         
