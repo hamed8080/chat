@@ -964,6 +964,46 @@ extension Cache {
         }
     }
     
+    public func isImageAvailable(hashCode: String) -> Bool? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
+        let searchImage = NSPredicate(format: "hashCode == %@", hashCode)
+        fetchRequest.predicate = searchImage
+        
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMImage] {
+                if let _ = result.first {
+                    return true
+                } else {
+                    return nil
+                }
+            } else {
+                return nil
+            }
+        } catch {
+            fatalError("Error on fetching list of CMImage")
+        }
+    }
+    
+    public func isFileAvailable(hashCode: String) -> Bool? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMFile")
+        let searchFile = NSPredicate(format: "hashCode == %@", hashCode)
+        fetchRequest.predicate = searchFile
+        
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMFile] {
+                if let _ = result.first {
+                    return true
+                } else {
+                    return nil
+                }
+            } else {
+                return nil
+            }
+        } catch {
+            fatalError("Error on fetching list of CMFile")
+        }
+    }
+    
     
     // MARK: - retrieve FileObject:
     /// Retrieve FileObject:
