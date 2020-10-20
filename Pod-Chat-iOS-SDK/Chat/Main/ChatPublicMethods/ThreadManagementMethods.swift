@@ -537,7 +537,7 @@ extension Chat {
         leaveThreadCallbackToUser = completion
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.LEAVE_THREAD.intValue(),
-                                            content:            nil,
+                                            content:            "\(leaveThreadInput.convertContentToJSON())",
                                             messageType:        nil,
                                             metadata:           nil,
                                             repliedTo:          nil,
