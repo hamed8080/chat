@@ -19,32 +19,32 @@ extension Chat {
     
     
     public func isImageAvailableOnCache(inputModel imageInput:  GetImageRequest) -> Bool {
-        if let _ = Chat.cacheDB.isImageAvailable(hashCode: imageInput.hashCode) {
-            return true
+        if let isAvailable = Chat.cacheDB.isImageAvailable(hashCode: imageInput.hashCode) {
+            return isAvailable
         } else {
             return false
         }
     }
     
     public func isFileAvailableOnCache(inputModel fileInput:  GetFileRequest) -> Bool {
-        if let _ = Chat.cacheDB.isFileAvailable(hashCode: fileInput.hashCode) {
-            return true
+        if let isAvailable = Chat.cacheDB.isFileAvailable(hashCode: fileInput.hashCode) {
+            return isAvailable
         } else {
             return false
         }
     }
     
     public func isAvailableOnCache(inputModel fileInput:  GetFileRequest) -> Bool {
-        if let _ = Chat.cacheDB.isFileAvailable(hashCode: fileInput.hashCode) {
-            return true
+        if let isAvailable = Chat.cacheDB.isFileAvailable(hashCode: fileInput.hashCode) {
+            return isAvailable
         } else {
             return false
         }
     }
     
     public func isAvailableOnCache(inputModel imageInput:  GetImageRequest) -> Bool {
-        if let _ = Chat.cacheDB.isImageAvailable(hashCode: imageInput.hashCode) {
-            return true
+        if let isAvailable = Chat.cacheDB.isImageAvailable(hashCode: imageInput.hashCode) {
+            return isAvailable
         } else {
             return false
         }
@@ -52,8 +52,8 @@ extension Chat {
     
     
     public func isThumbnailAvailableOnCache(inputModel imageInput:  GetImageRequest) -> Bool {
-        if let _ = Chat.cacheDB.isThumbnailAvailable(hashCode: imageInput.hashCode) {
-            return true
+        if let isAvailable = Chat.cacheDB.isThumbnailAvailable(hashCode: imageInput.hashCode) {
+            return isAvailable
         } else {
             return false
         }
