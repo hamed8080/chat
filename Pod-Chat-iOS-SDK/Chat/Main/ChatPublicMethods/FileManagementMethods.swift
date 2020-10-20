@@ -17,6 +17,50 @@ import Alamofire
 extension Chat {
     
     
+    
+    public func isImageAvailableOnCache(inputModel imageInput:  GetImageRequest) -> Bool {
+        if let _ = Chat.cacheDB.isImageAvailable(hashCode: imageInput.hashCode) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    public func isFileAvailableOnCache(inputModel fileInput:  GetFileRequest) -> Bool {
+        if let _ = Chat.cacheDB.isFileAvailable(hashCode: fileInput.hashCode) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    public func isAvailableOnCache(inputModel fileInput:  GetFileRequest) -> Bool {
+        if let _ = Chat.cacheDB.isFileAvailable(hashCode: fileInput.hashCode) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    public func isAvailableOnCache(inputModel imageInput:  GetImageRequest) -> Bool {
+        if let _ = Chat.cacheDB.isImageAvailable(hashCode: imageInput.hashCode) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    
+    public func isThumbnailAvailableOnCache(inputModel imageInput:  GetImageRequest) -> Bool {
+        if let _ = Chat.cacheDB.isThumbnailAvailable(hashCode: imageInput.hashCode) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    
+    
     // MARK: - Get File
     /// GetFIle:
     /// get specific file.
@@ -208,7 +252,7 @@ extension Chat {
         
     }
     
-    public func getThimbnailImage(inputModel getImageInput:  GetImageRequest,
+    public func getThumbnailImage(inputModel getImageInput:  GetImageRequest,
                                   getCacheResponse:          Bool?,
                                   uniqueId:      @escaping (String) -> (),
                                   progress:      @escaping (Float) -> (),

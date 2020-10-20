@@ -1011,22 +1011,42 @@ extension Cache {
         }
     }
     
+    public func isThumbnailAvailable(hashCode: String) -> Bool? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
+        let searchImage = NSPredicate(format: "hashCode == %@", hashCode)
+        fetchRequest.predicate = searchImage
+        var isAvailable: Bool = false
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMImage] {
+                for item in result {
+                    if let isThumbnail = item.isThumbnail as? Bool, (isThumbnail == true) {
+                        isAvailable = true
+                        break
+                    }
+                }
+            }
+            return isAvailable
+        } catch {
+            fatalError("Error on fetching list of CMImage")
+        }
+    }
     
     public func isImageAvailable(hashCode: String) -> Bool? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
         let searchImage = NSPredicate(format: "hashCode == %@", hashCode)
         fetchRequest.predicate = searchImage
-        
+        var isAvailable: Bool = false
         do {
             if let result = try context.fetch(fetchRequest) as? [CMImage] {
-                if let _ = result.first {
-                    return true
-                } else {
-                    return nil
+                for item in result {
+                    if let isThumbnail = item.isThumbnail as? Bool, (isThumbnail == true) {
+                        continue
+                    } else {
+                        isAvailable = true
+                    }
                 }
-            } else {
-                return nil
             }
+            return isAvailable
         } catch {
             fatalError("Error on fetching list of CMImage")
         }
