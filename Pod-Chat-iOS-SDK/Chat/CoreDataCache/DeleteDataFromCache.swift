@@ -1078,6 +1078,15 @@ extension Cache {
                         }
                     }
                     
+                    let thumbnailPath = path + "/\(fileSubPath.Images)/" + "\(itemInCache.hashCode ?? "default")" + "-Thumbnail"
+                    if FileManager.default.fileExists(atPath: thumbnailPath) {
+                        do {
+                            try FileManager.default.removeItem(atPath: thumbnailPath)
+                        } catch {
+                            fatalError("can not delete the image from app bundle!")
+                        }
+                    }
+                    
                     // delete the information from cache
                     deleteAndSave(object: itemInCache, withMessage: "Delete CMImage Object")
                 }

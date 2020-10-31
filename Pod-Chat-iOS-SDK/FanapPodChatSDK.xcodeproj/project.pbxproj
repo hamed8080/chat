@@ -40,6 +40,10 @@
 		3E17D248244EFFB0009142F8 /* RequestModelDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E17D247244EFFB0009142F8 /* RequestModelDelegates.swift */; };
 		3E17D256244F0905009142F8 /* AddContactRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E17D255244F0905009142F8 /* AddContactRequest.swift */; };
 		3E17D2672450AF53009142F8 /* ParticipantManagementMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E17D2662450AF53009142F8 /* ParticipantManagementMethods.swift */; };
+		3E17D28D24D61EBC00B75135 /* UserEventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E17D28C24D61EBC00B75135 /* UserEventModel.swift */; };
+		3E17D29D24D61EE200B75135 /* UserEventTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E17D29C24D61EE200B75135 /* UserEventTypes.swift */; };
+		3E17D2CC24D6280900B75135 /* FanapPodAsyncSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E17D2C924D627ED00B75135 /* FanapPodAsyncSDK.framework */; };
+		3E17D2CD24D6280900B75135 /* FanapPodAsyncSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3E17D2C924D627ED00B75135 /* FanapPodAsyncSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3E1EA58423A4ABC500B4C3F8 /* SendInteractiveMessageRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1EA58323A4ABC500B4C3F8 /* SendInteractiveMessageRequest.swift */; };
 		3E1F313D24533DA500643EE6 /* BotManagementMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F313C24533DA500643EE6 /* BotManagementMethods.swift */; };
 		3E1F314924533EAC00643EE6 /* CreateBotRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F314824533EAC00643EE6 /* CreateBotRequest.swift */; };
@@ -132,7 +136,6 @@
 		3E437D64218F49B30021C0ED /* UnblockUserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E437D63218F49B30021C0ED /* UnblockUserTest.swift */; };
 		3E437D66218F4BCB0021C0ED /* LeaveThreadTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E437D65218F4BCB0021C0ED /* LeaveThreadTest.swift */; };
 		3E437D68218F4F780021C0ED /* SpamPvThreadTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E437D67218F4F780021C0ED /* SpamPvThreadTest.swift */; };
-		3E49635421D79BFB00A67D19 /* FanapPodAsyncSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E49635121D79BF300A67D19 /* FanapPodAsyncSDK.framework */; };
 		3E52BFB323A6762800D43DAC /* AddRemoveAuditorRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E52BFB223A6762800D43DAC /* AddRemoveAuditorRequest.swift */; };
 		3E56EDD523BCE07100FED6CD /* CreateThreadWithFileMessageRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E56EDD423BCE07100FED6CD /* CreateThreadWithFileMessageRequest.swift */; };
 		3E581EA22418632B006EA0EF /* JoinPublicThreadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E581EA12418632A006EA0EF /* JoinPublicThreadRequest.swift */; };
@@ -175,6 +178,8 @@
 		3E730D2F214D4D7A00AAE838 /* GetContactsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E730D2E214D4D7A00AAE838 /* GetContactsTest.swift */; };
 		3E734CE421D11016009F4D38 /* CacheDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3EA156B721CE2419004B1346 /* CacheDataModel.xcdatamodeld */; };
 		3E734CE521D11016009F4D38 /* CacheDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3EA156B721CE2419004B1346 /* CacheDataModel.xcdatamodeld */; };
+		3E772115250CA3AB004328B5 /* StatusPingRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E772114250CA3AB004328B5 /* StatusPingRequest.swift */; };
+		3E772125250CA67F004328B5 /* StatusPingCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E772124250CA67F004328B5 /* StatusPingCallback.swift */; };
 		3E78AA95218479BA002A6EC0 /* UploadImageResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E78AA94218479BA002A6EC0 /* UploadImageResponse.swift */; };
 		3E78AA99218479CB002A6EC0 /* UploadFileResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E78AA98218479CB002A6EC0 /* UploadFileResponse.swift */; };
 		3E78AA9B218479D7002A6EC0 /* UploadImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E78AA9A218479D7002A6EC0 /* UploadImage.swift */; };
@@ -365,6 +370,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		3E17D2C824D627ED00B75135 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E17D2BF24D627ED00B75135 /* FanapPodAsyncSDK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3ED59C0D211098400026FFF5;
+			remoteInfo = FanapPodAsyncSDK;
+		};
+		3E17D2CA24D627ED00B75135 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E17D2BF24D627ED00B75135 /* FanapPodAsyncSDK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3ED59C16211098400026FFF5;
+			remoteInfo = FanapPodAsyncSDKTests;
+		};
 		3E25635624D5A8F900C1CDD0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3E25634F24D5A8F900C1CDD0 /* Sentry.xcodeproj */;
@@ -385,20 +404,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 6387B7C21ED84F910045A84C;
 			remoteInfo = SentryStatic;
-		};
-		3E49635021D79BF300A67D19 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3E49634021D79BF300A67D19 /* FanapPodAsyncSDK.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3ED59C0D211098400026FFF5;
-			remoteInfo = FanapPodAsyncSDK;
-		};
-		3E49635221D79BF300A67D19 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3E49634021D79BF300A67D19 /* FanapPodAsyncSDK.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3ED59C16211098400026FFF5;
-			remoteInfo = FanapPodAsyncSDKTests;
 		};
 		3EE025F821206E63001810FB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -466,6 +471,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				3E25635D24D5A95B00C1CDD0 /* Sentry.framework in Embed Frameworks */,
+				3E17D2CD24D6280900B75135 /* FanapPodAsyncSDK.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -503,6 +509,9 @@
 		3E17D247244EFFB0009142F8 /* RequestModelDelegates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestModelDelegates.swift; sourceTree = "<group>"; };
 		3E17D255244F0905009142F8 /* AddContactRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddContactRequest.swift; sourceTree = "<group>"; };
 		3E17D2662450AF53009142F8 /* ParticipantManagementMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantManagementMethods.swift; sourceTree = "<group>"; };
+		3E17D28C24D61EBC00B75135 /* UserEventModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEventModel.swift; sourceTree = "<group>"; };
+		3E17D29C24D61EE200B75135 /* UserEventTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEventTypes.swift; sourceTree = "<group>"; };
+		3E17D2BF24D627ED00B75135 /* FanapPodAsyncSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FanapPodAsyncSDK.xcodeproj; path = "../../Pod-Async-iOS-SDK/Pod-Async-iOS-SDK/FanapPodAsyncSDK.xcodeproj"; sourceTree = "<group>"; };
 		3E1C357D225B5E79001A343B /* Starscream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Starscream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E1C357F225B5E7D001A343B /* SwiftyBeaver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftyBeaver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E1C3581225B5E81001A343B /* SwiftyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -577,7 +586,6 @@
 		3E437D63218F49B30021C0ED /* UnblockUserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnblockUserTest.swift; sourceTree = "<group>"; };
 		3E437D65218F4BCB0021C0ED /* LeaveThreadTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaveThreadTest.swift; sourceTree = "<group>"; };
 		3E437D67218F4F780021C0ED /* SpamPvThreadTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpamPvThreadTest.swift; sourceTree = "<group>"; };
-		3E49634021D79BF300A67D19 /* FanapPodAsyncSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FanapPodAsyncSDK.xcodeproj; path = "../../Pod-Async-iOS-SDK/Pod-Async-iOS-SDK/FanapPodAsyncSDK.xcodeproj"; sourceTree = "<group>"; };
 		3E52BFB223A6762800D43DAC /* AddRemoveAuditorRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRemoveAuditorRequest.swift; sourceTree = "<group>"; };
 		3E56EDD423BCE07100FED6CD /* CreateThreadWithFileMessageRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateThreadWithFileMessageRequest.swift; sourceTree = "<group>"; };
 		3E581EA12418632A006EA0EF /* JoinPublicThreadRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinPublicThreadRequest.swift; sourceTree = "<group>"; };
@@ -609,6 +617,8 @@
 		3E730D2A214CC6F600AAE838 /* GetThreadParticipantTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetThreadParticipantTest.swift; sourceTree = "<group>"; };
 		3E730D2C214CC75400AAE838 /* CreateThreadTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateThreadTest.swift; sourceTree = "<group>"; };
 		3E730D2E214D4D7A00AAE838 /* GetContactsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetContactsTest.swift; sourceTree = "<group>"; };
+		3E772114250CA3AB004328B5 /* StatusPingRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusPingRequest.swift; sourceTree = "<group>"; };
+		3E772124250CA67F004328B5 /* StatusPingCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusPingCallback.swift; sourceTree = "<group>"; };
 		3E78AA94218479BA002A6EC0 /* UploadImageResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadImageResponse.swift; sourceTree = "<group>"; };
 		3E78AA98218479CB002A6EC0 /* UploadFileResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadFileResponse.swift; sourceTree = "<group>"; };
 		3E78AA9A218479D7002A6EC0 /* UploadImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadImage.swift; sourceTree = "<group>"; };
@@ -791,9 +801,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E17D2CC24D6280900B75135 /* FanapPodAsyncSDK.framework in Frameworks */,
 				3EFDB457236C6BB200623461 /* Alamofire.framework in Frameworks */,
 				3E25635C24D5A95B00C1CDD0 /* Sentry.framework in Frameworks */,
-				3E49635421D79BFB00A67D19 /* FanapPodAsyncSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -844,6 +854,7 @@
 				3E17D215244A4A97009142F8 /* BotEventTypes.swift */,
 				3E17D213244A4A78009142F8 /* ThreadEventTypes.swift */,
 				3E17D211244A4A49009142F8 /* ContactEventTypes.swift */,
+				3E17D29C24D61EE200B75135 /* UserEventTypes.swift */,
 			);
 			path = EventTypes;
 			sourceTree = "<group>";
@@ -890,6 +901,7 @@
 				3EA1567B21CE1B1F004B1346 /* BlockRequest.swift */,
 				3EA1567D21CE1B49004B1346 /* GetBlockedListRequest.swift */,
 				3EA1567F21CE1B5B004B1346 /* UnblockRequest.swift */,
+				3E772114250CA3AB004328B5 /* StatusPingRequest.swift */,
 				3E400DA423EFE07C000DA873 /* UpdateChatProfileRequest.swift */,
 			);
 			path = UserInputModels;
@@ -975,6 +987,15 @@
 			path = MapInputModels;
 			sourceTree = "<group>";
 		};
+		3E17D2C024D627ED00B75135 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3E17D2C924D627ED00B75135 /* FanapPodAsyncSDK.framework */,
+				3E17D2CB24D627ED00B75135 /* FanapPodAsyncSDKTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		3E1F314A24533F1200643EE6 /* BotInputModels */ = {
 			isa = PBXGroup;
 			children = (
@@ -1026,19 +1047,11 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		3E49634121D79BF300A67D19 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				3E49635121D79BF300A67D19 /* FanapPodAsyncSDK.framework */,
-				3E49635321D79BF300A67D19 /* FanapPodAsyncSDKTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		3E8ADC5C23B350DB00E3538D /* EventModels */ = {
 			isa = PBXGroup;
 			children = (
 				3E3315A423B202E30070A3D1 /* SystemEventModel.swift */,
+				3E17D28C24D61EBC00B75135 /* UserEventModel.swift */,
 				3E8ADC4A23B24B4400E3538D /* FileUploadEventModel.swift */,
 				3E3315A623B206CC0070A3D1 /* BotEventModel.swift */,
 				3E3315A823B208E00070A3D1 /* ContactEventModel.swift */,
@@ -1212,6 +1225,7 @@
 				3EB5205D22ABF1A400B7EA45 /* GetUserInfoCallback.swift */,
 				3EB5207A22ABF45E00B7EA45 /* UnblockCallbacks.swift */,
 				3E400DB023EFE2A8000DA873 /* UpdateChatProfileCallback.swift */,
+				3E772124250CA67F004328B5 /* StatusPingCallback.swift */,
 			);
 			path = UserResponses;
 			sourceTree = "<group>";
@@ -1418,7 +1432,7 @@
 				3EE025EE21206E63001810FB /* Products */,
 				3E25634F24D5A8F900C1CDD0 /* Sentry.xcodeproj */,
 				3EFDB43C236C6B9B00623461 /* Alamofire.xcodeproj */,
-				3E49634021D79BF300A67D19 /* FanapPodAsyncSDK.xcodeproj */,
+				3E17D2BF24D627ED00B75135 /* FanapPodAsyncSDK.xcodeproj */,
 				3E25909821D6C8E000CB9D7D /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -1590,8 +1604,8 @@
 					ProjectRef = 3EFDB43C236C6B9B00623461 /* Alamofire.xcodeproj */;
 				},
 				{
-					ProductGroup = 3E49634121D79BF300A67D19 /* Products */;
-					ProjectRef = 3E49634021D79BF300A67D19 /* FanapPodAsyncSDK.xcodeproj */;
+					ProductGroup = 3E17D2C024D627ED00B75135 /* Products */;
+					ProjectRef = 3E17D2BF24D627ED00B75135 /* FanapPodAsyncSDK.xcodeproj */;
 				},
 				{
 					ProductGroup = 3E25635024D5A8F900C1CDD0 /* Products */;
@@ -1607,6 +1621,20 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		3E17D2C924D627ED00B75135 /* FanapPodAsyncSDK.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FanapPodAsyncSDK.framework;
+			remoteRef = 3E17D2C824D627ED00B75135 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3E17D2CB24D627ED00B75135 /* FanapPodAsyncSDKTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = FanapPodAsyncSDKTests.xctest;
+			remoteRef = 3E17D2CA24D627ED00B75135 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		3E25635724D5A8F900C1CDD0 /* Sentry.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -1626,20 +1654,6 @@
 			fileType = archive.ar;
 			path = libSentryStatic.a;
 			remoteRef = 3E25635A24D5A8F900C1CDD0 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		3E49635121D79BF300A67D19 /* FanapPodAsyncSDK.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = FanapPodAsyncSDK.framework;
-			remoteRef = 3E49635021D79BF300A67D19 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		3E49635321D79BF300A67D19 /* FanapPodAsyncSDKTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = FanapPodAsyncSDKTests.xctest;
-			remoteRef = 3E49635221D79BF300A67D19 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		3EFDB448236C6B9B00623461 /* Alamofire.framework */ = {
@@ -1754,6 +1768,7 @@
 				3E8D87CF221856030092B440 /* QueueOfWaitTextMessagesResponse.swift in Sources */,
 				3E037C2422E2DB6E00094C80 /* MessageGaps+CoreDataProperties.swift in Sources */,
 				3EE0694A2212A3100099068F /* PhoneContact+CoreDataClass.swift in Sources */,
+				3E772115250CA3AB004328B5 /* StatusPingRequest.swift in Sources */,
 				3E581EA22418632B006EA0EF /* JoinPublicThreadRequest.swift in Sources */,
 				3EB5205822ABEEB200B7EA45 /* ChatPrivateMethods.swift in Sources */,
 				3EBBEDFC2174C9FB00F5CDC7 /* ChatProtocols.swift in Sources */,
@@ -1917,6 +1932,7 @@
 				3E437D5C218F36DA0021C0ED /* GetBlockedListResponse.swift in Sources */,
 				3EA156AA21CE1D10004B1346 /* GetMessageDeliveredSeenListRequest.swift in Sources */,
 				3E56EDD523BCE07100FED6CD /* CreateThreadWithFileMessageRequest.swift in Sources */,
+				3E17D28D24D61EBC00B75135 /* UserEventModel.swift in Sources */,
 				3E1F70572405648600FAF460 /* MessageType.swift in Sources */,
 				3E3315A723B206CC0070A3D1 /* BotEventModel.swift in Sources */,
 				3E1F31552453455500643EE6 /* AddBotCommandCallback.swift in Sources */,
@@ -1997,6 +2013,7 @@
 				3EBBEDFA2174C6E000F5CDC7 /* RemoveContactResponse.swift in Sources */,
 				3E8D87E1221861920092B440 /* QueueOfFileMessages+CoreDataClass.swift in Sources */,
 				3EB5206522ABF27000B7EA45 /* GetThreadParticipantsCallbacks.swift in Sources */,
+				3E772125250CA67F004328B5 /* StatusPingCallback.swift in Sources */,
 				3EBBEDF02174C5C800F5CDC7 /* GetThreadsResponse.swift in Sources */,
 				3EBBEE012174CBCA00F5CDC7 /* JSONExtentions.swift in Sources */,
 				3EBBEDC62174C18F00F5CDC7 /* User.swift in Sources */,
@@ -2005,6 +2022,7 @@
 				3EE6B50F22DF46A400540F17 /* SendMessageResponse.swift in Sources */,
 				3EB5204E22ABE99A00B7EA45 /* RetrieveDataFromCache.swift in Sources */,
 				3EBBEDE12174C32700F5CDC7 /* ReplyInfo.swift in Sources */,
+				3E17D29D24D61EE200B75135 /* UserEventTypes.swift in Sources */,
 				3E5AAEF422195A510085C03D /* QueueOfUploadImages+CoreDataProperties.swift in Sources */,
 				3EEA836122EEC6CB0014B075 /* DeleteMessageResponse.swift in Sources */,
 			);
@@ -2248,7 +2266,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 0.7.3.3;
+				MARKETING_VERSION = 0.8.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.fanapSoft.FanapPodChatSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2282,7 +2300,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 0.7.3.3;
+				MARKETING_VERSION = 0.8.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.fanapSoft.FanapPodChatSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

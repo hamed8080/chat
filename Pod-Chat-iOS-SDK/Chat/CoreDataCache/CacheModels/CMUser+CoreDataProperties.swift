@@ -18,6 +18,7 @@ extension CMUser {
     }
 
     @NSManaged public var cellphoneNumber:  String?
+    @NSManaged public var contactSynced:    NSNumber?
     @NSManaged public var coreUserId:       NSNumber?
     @NSManaged public var email:            String?
     @NSManaged public var id:               NSNumber?

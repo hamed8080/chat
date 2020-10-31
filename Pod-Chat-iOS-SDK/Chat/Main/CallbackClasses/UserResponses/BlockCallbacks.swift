@@ -23,6 +23,12 @@ extension Chat {
     func responseOfBlock(withMessage message: ChatMessage) {
         log.verbose("Message of type 'BLOCK' recieved", context: "Chat")
         
+        if let contentAsJSON = message.content?.convertToJSON() {
+            let blockModel = BlockedUser(messageContent: contentAsJSON)
+            let blockEM = UserEventModel(type: UserEventTypes.BLOCK, blockModel: blockModel, threadId: message.subjectId)
+            delegate?.userEvents(model: blockEM)
+        }
+        
         let returnData = CreateReturnData(hasError:         false,
                                           errorMessage:     "",
                                           errorCode:        0,

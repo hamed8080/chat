@@ -41,6 +41,7 @@ extension Cache {
                 switch result.first {
                 case let (.some(first)):
                     let user = User(cellphoneNumber: first.cellphoneNumber,
+                                    contactSynced:  first.contactSynced as? Bool,
                                     coreUserId:     first.coreUserId as? Int,
                                     email:          first.email,
                                     id:             first.id as? Int,
@@ -945,21 +946,129 @@ extension Cache {
         do {
             if let result = try context.fetch(fetchRequest) as? [CMImage] {
                 
-                if let firstObject = result.first {
-                    let imageObject = firstObject.convertCMObjectToObject()
-                    let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-                    let myImagePath = path + "/\(fileSubPath.Images)/" + "\(firstObject.hashCode ?? "default")"
-                    
-                    return (imageObject, myImagePath)
-                } else {
-                    return nil
+                var returnValue: (imageObject: ImageObject, imagePath: String)?
+                for item in result {
+                    if let isThumbnail = item.isThumbnail as? Bool, (isThumbnail == true) {
+                        return nil
+                    } else {
+                        let imageObject = item.convertCMObjectToObject()
+                        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+                        let myImagePath = path + "/\(fileSubPath.Images)/" + "\(item.hashCode ?? "default")"
+                        
+                        returnValue = (imageObject, myImagePath)
+//                        return (imageObject, myImagePath)
+                    }
                 }
+                return returnValue
+                
+//                if let firstObject = result.first {
+//                    let imageObject = firstObject.convertCMObjectToObject()
+//                    let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+//                    let myImagePath = path + "/\(fileSubPath.Images)/" + "\(firstObject.hashCode ?? "default")"
+//
+//                    return (imageObject, myImagePath)
+//                } else {
+//                    return nil
+//                }
                 
             } else {
                 return nil
             }
         } catch {
             fatalError("Error on fetching list of CMImage")
+        }
+    }
+    
+    
+    public func retrieveImageThumbnailObject(hashCode: String) -> (imageObject: ImageObject, imagePath: String)? {
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
+        let hashCodePredicate = NSPredicate(format: "hashCode == %@", hashCode)
+        fetchRequest.predicate = hashCodePredicate
+        
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMImage] {
+                
+                var returnValue: (imageObject: ImageObject, imagePath: String)?
+                for item in result {
+                    if let isThumbnail = item.isThumbnail as? Bool, (isThumbnail == true) {
+                        let imageObject = item.convertCMObjectToObject()
+                        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+                        let myImagePath = path + "/\(fileSubPath.Images)/" + "\(item.hashCode ?? "default")"  + "-Thumbnail"
+                        
+                        returnValue = (imageObject, myImagePath)
+                    } else {
+                        return nil
+                    }
+                }
+                return returnValue
+                
+            } else {
+                return nil
+            }
+        } catch {
+            fatalError("Error on fetching list of CMImage")
+        }
+    }
+    
+    public func isThumbnailAvailable(hashCode: String) -> Bool? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
+        let searchImage = NSPredicate(format: "hashCode == %@", hashCode)
+        fetchRequest.predicate = searchImage
+        var isAvailable: Bool = false
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMImage] {
+                for item in result {
+                    if let isThumbnail = item.isThumbnail as? Bool, (isThumbnail == true) {
+                        isAvailable = true
+                        break
+                    }
+                }
+            }
+            return isAvailable
+        } catch {
+            fatalError("Error on fetching list of CMImage")
+        }
+    }
+    
+    public func isImageAvailable(hashCode: String) -> Bool? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
+        let searchImage = NSPredicate(format: "hashCode == %@", hashCode)
+        fetchRequest.predicate = searchImage
+        var isAvailable: Bool = false
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMImage] {
+                for item in result {
+                    if let isThumbnail = item.isThumbnail as? Bool, (isThumbnail == true) {
+                        continue
+                    } else {
+                        isAvailable = true
+                    }
+                }
+            }
+            return isAvailable
+        } catch {
+            fatalError("Error on fetching list of CMImage")
+        }
+    }
+    
+    public func isFileAvailable(hashCode: String) -> Bool? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMFile")
+        let searchFile = NSPredicate(format: "hashCode == %@", hashCode)
+        fetchRequest.predicate = searchFile
+        
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMFile] {
+                if let _ = result.first {
+                    return true
+                } else {
+                    return nil
+                }
+            } else {
+                return nil
+            }
+        } catch {
+            fatalError("Error on fetching list of CMFile")
         }
     }
     

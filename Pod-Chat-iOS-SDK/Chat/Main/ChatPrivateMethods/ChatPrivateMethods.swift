@@ -471,8 +471,14 @@ extension Chat {
      *
      */
     func runSendMessageTimer() {
-        lastSentMessageTimer = nil
-        lastSentMessageTimer = RepeatingTimer(timeInterval: TimeInterval(self.chatPingMessageInterval))
+//        lastSentMessageTimer = nil
+//        lastSentMessageTimer = RepeatingTimer(timeInterval: TimeInterval(self.chatPingMessageInterval))
+        
+        if let _ = lstSntMsgTimer {
+            lstSntMsgTimer?.stop()
+        }
+//        lastSentMessageTime = Date()
+        lastSentMessageTimer(interval: TimeInterval(self.chatPingMessageInterval))
     }
     
     
@@ -527,8 +533,10 @@ extension Chat {
                                     deliverCallback:    nil,
                                     seenCallback:       nil)
             
-        } else if (lastSentMessageTimer != nil) {
-            lastSentMessageTimer?.suspend()
+//        } else if (lastSentMessageTimer != nil) {
+//            lastSentMessageTimer?.suspend()
+        } else if let _ = lstSntMsgTimer {
+            lstSntMsgTimer!.stop()
         }
     }
     
@@ -891,9 +899,19 @@ extension Chat {
         case ChatMessageVOTypes.STOP_BOT.intValue():
             responseOfStopBot(withMessage: message)
             break
+            
+        // a message of type 90 (CONTACT_SYNCED) comes from Server.
+        case ChatMessageVOTypes.CONTACT_SYNCED.intValue():
+            responseOfUserContactSynced(withMessage: message)
+            break
         
         // a message of type 100 (LOGOUT) comes from Server.
         case ChatMessageVOTypes.LOGOUT.intValue():
+            break
+        
+        // a message of type 101 (STATUS_PING) comes from Server.
+        case ChatMessageVOTypes.STATUS_PING.intValue():
+            responseOfStatusPing(withMessage: message)
             break
             
         // a message of type 999 (ERROR) comes from Server.
@@ -1056,6 +1074,10 @@ extension Chat {
         }
     }
     
+    
+    func responseOfUserContactSynced(withMessage message: ChatMessage) {
+        Chat.cacheDB.updateUserContactSynced()
+    }
     
 }
 

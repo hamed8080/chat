@@ -262,6 +262,57 @@ extension Chat {
         
     }
     
+    /// SendStatusPing:
+    ///
+    ///
+    /// By calling this function, a request of type 101 (STATUS_PING) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "StatusPingRequest" to this function
+    ///
+    /// Outputs:
+    /// - It has 3 callbacks as responses.
+    ///
+    /// - parameter inputModel:         (input) you have to send your parameters insid this model. (StatusPingRequest)
+//    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
+//    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! )
+    public func sendStatusPing(inputModel statusPingInput: StatusPingRequest) {
+//                               uniqueId:                @escaping (String) -> (),
+//                               completion:              @escaping callbackTypeAlias) {
+        log.verbose("Try to send Status Ping with this parameters: \n threadId = \(statusPingInput.threadId ?? 2) \n contactId = \(statusPingInput.contactId ?? 3)", context: "Chat")
+//        uniqueId(statusPingInput.uniqueId)
+//
+//        statusPingCallbackToUser = completion
+        
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.STATUS_PING.intValue(),
+                                            content:            "\(statusPingInput.convertContentToJSON())",
+                                            messageType:        nil,
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          nil,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           statusPingInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           statusPingInput.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: true)
+        
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+        
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          nil,//[(StatusPingCallback(), statusPingInput.uniqueId)],
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+    }
+    
+    
     
     /// UnblockContact:
     /// unblock a contact from blocked list.
