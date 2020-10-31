@@ -20,6 +20,7 @@ extension CMConversation {
     @NSManaged public var admin:        NSNumber?
     @NSManaged public var canEditInfo:  NSNumber?
     @NSManaged public var canSpam:      NSNumber?
+    @NSManaged public var closedThread: NSNumber?
     @NSManaged public var descriptions: String?
     @NSManaged public var group:        NSNumber?
     @NSManaged public var id:           NSNumber?

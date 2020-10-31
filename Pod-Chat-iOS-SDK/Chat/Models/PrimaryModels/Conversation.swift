@@ -15,6 +15,7 @@ open class Conversation {
     public var admin:                           Bool?
     public var canEditInfo:                     Bool?
     public var canSpam:                         Bool = false
+    public var closedThread:                    Bool = false
     public var description:                     String?
     public var group:                           Bool?
     public var id:                              Int?
@@ -54,6 +55,7 @@ open class Conversation {
         self.admin                          = messageContent["admin"].bool
         self.canEditInfo                    = messageContent["canEditInfo"].bool
         self.canSpam                        = messageContent["canSpam"].bool ?? false
+        self.closedThread                   = messageContent["closedThread"].bool ?? false
         self.description                    = messageContent["description"].string
         self.group                          = messageContent["group"].bool
         self.id                             = messageContent["id"].int
@@ -110,6 +112,7 @@ open class Conversation {
     public init(admin:          Bool?,
                 canEditInfo:    Bool?,
                 canSpam:        Bool?,
+                closedThread:   Bool?,
                 description:    String?,
                 group:          Bool?,
                 id:             Int?,
@@ -147,6 +150,7 @@ open class Conversation {
         self.admin          = admin
         self.canEditInfo    = canEditInfo
         self.canSpam        = canSpam ?? false
+        self.closedThread   = closedThread ?? false
         self.description    = description
         self.group          = group
         self.id             = id
@@ -188,6 +192,7 @@ open class Conversation {
         self.admin          = theConversation.admin
         self.canEditInfo    = theConversation.canEditInfo
         self.canSpam        = theConversation.canSpam
+        self.closedThread   = theConversation.closedThread
         self.description    = theConversation.description
         self.group          = theConversation.group
         self.id             = theConversation.id
@@ -242,6 +247,7 @@ open class Conversation {
         let result: JSON = ["admin":                        admin ?? NSNull(),
                             "canEditInfo":                  canEditInfo ?? NSNull(),
                             "canSpam":                      canSpam,
+                            "closedThread":                 closedThread,
                             "description":                  description ?? NSNull(),
                             "group":                        group ?? NSNull(),
                             "id":                           id ?? NSNull(),

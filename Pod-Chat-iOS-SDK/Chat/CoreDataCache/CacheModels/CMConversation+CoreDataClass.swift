@@ -20,6 +20,7 @@ public class CMConversation: NSManagedObject {
         var admin:                          Bool?
         var canEditInfo:                    Bool?
         var canSpam:                        Bool?
+        var closedThread:                   Bool?
         var group:                          Bool?
         var id:                             Int?
         var joinDate:                       Int?
@@ -56,6 +57,9 @@ public class CMConversation: NSManagedObject {
             }
             if let canSpam2 = self.canSpam as? Bool {
                 canSpam = canSpam2
+            }
+            if let closedThread2 = self.closedThread as? Bool {
+                closedThread = closedThread2
             }
             if let group2 = self.group as? Bool {
                 group = group2
@@ -150,6 +154,7 @@ public class CMConversation: NSManagedObject {
             let conversationModel = Conversation(admin:                 admin,
                                                  canEditInfo:           canEditInfo,
                                                  canSpam:               canSpam,
+                                                 closedThread:          closedThread,
                                                  description:           self.descriptions,
                                                  group:                 group,
                                                  id:                    id,
@@ -204,6 +209,9 @@ public class CMConversation: NSManagedObject {
         }
         if let canSpam = conversation.canSpam as NSNumber? {
             self.canSpam = canSpam
+        }
+        if let closedThread = conversation.closedThread as NSNumber? {
+            self.closedThread = closedThread
         }
         if let descriptions = conversation.description {
             self.descriptions = descriptions
