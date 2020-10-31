@@ -21,6 +21,7 @@
 		3E0A76C422AFD7C0009D669E /* MapManagementMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0A76C322AFD7C0009D669E /* MapManagementMethods.swift */; };
 		3E0A76C622AFD8B0009D669E /* UserManagementMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0A76C522AFD8B0009D669E /* UserManagementMethods.swift */; };
 		3E0A76CA22AFDBF6009D669E /* CreateReturnData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0A76C922AFDBF6009D669E /* CreateReturnData.swift */; };
+		3E0AD6DC254E240500BEEAE2 /* SafeLeaveThreadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0AD6DB254E240500BEEAE2 /* SafeLeaveThreadRequest.swift */; };
 		3E0B910022F579C300986A96 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0B90FF22F579C300986A96 /* Networking.swift */; };
 		3E0B910122F579C300986A96 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0B90FF22F579C300986A96 /* Networking.swift */; };
 		3E10995623C365240034093E /* CreateThreadMessageInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E10995523C365240034093E /* CreateThreadMessageInput.swift */; };
@@ -491,6 +492,7 @@
 		3E0A76C322AFD7C0009D669E /* MapManagementMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapManagementMethods.swift; sourceTree = "<group>"; };
 		3E0A76C522AFD8B0009D669E /* UserManagementMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManagementMethods.swift; sourceTree = "<group>"; };
 		3E0A76C922AFDBF6009D669E /* CreateReturnData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateReturnData.swift; sourceTree = "<group>"; };
+		3E0AD6DB254E240500BEEAE2 /* SafeLeaveThreadRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafeLeaveThreadRequest.swift; sourceTree = "<group>"; };
 		3E0B90FF22F579C300986A96 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		3E10995523C365240034093E /* CreateThreadMessageInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateThreadMessageInput.swift; sourceTree = "<group>"; };
 		3E10996123C3659B0034093E /* GetAllThreadsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAllThreadsRequest.swift; sourceTree = "<group>"; };
@@ -932,6 +934,7 @@
 				3E581EF3241E0C78006EA0EF /* IsPublicThreadNameAvailableRequest.swift */,
 				3E581EA12418632A006EA0EF /* JoinPublicThreadRequest.swift */,
 				3EA1569321CE1C2B004B1346 /* LeaveThreadRequest.swift */,
+				3E0AD6DB254E240500BEEAE2 /* SafeLeaveThreadRequest.swift */,
 				3EA1568B21CE1BDC004B1346 /* MuteUnmuteThreadRequest.swift */,
 				3E8ADCF023B783CC00E3538D /* PinUnpinThreadRequest.swift */,
 				3EA156A721CE1D02004B1346 /* SpamPrivateThreadRequest.swift */,
@@ -1953,6 +1956,7 @@
 				3E5AAEE92219509C0085C03D /* QueueOfWaitUploadImagesResponse.swift in Sources */,
 				3EA1569C21CE1C7C004B1346 /* ForwardMessageRequest.swift in Sources */,
 				3EB5206922ABF2E100B7EA45 /* UpdateThreadInfoCallback.swift in Sources */,
+				3E0AD6DC254E240500BEEAE2 /* SafeLeaveThreadRequest.swift in Sources */,
 				3E24084221F5C844001F32F1 /* CMForwardInfo+CoreDataProperties.swift in Sources */,
 				3EBBEDE72174C38000F5CDC7 /* ThreadHistory.swift in Sources */,
 				3EA1567C21CE1B1F004B1346 /* BlockRequest.swift in Sources */,

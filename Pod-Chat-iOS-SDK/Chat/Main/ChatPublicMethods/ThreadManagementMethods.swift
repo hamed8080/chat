@@ -564,6 +564,69 @@ extension Chat {
     }
     
     
+    /// LeaveThreadSaftly:
+    /// safe leave from a specific thread.
+    ///
+    /// By calling this function, a request of type 9 (LEAVE_THREAD) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "SafeLeaveThreadRequest" to this function
+    /// - we will check the userRole if he/she has the correct Role to add admin to the thread
+    ///
+    /// Outputs:
+    /// - It has 2 callbacks as responses
+    /// - if user has no adminRoles, we will return failed response as an event
+    ///
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (SafeLeaveThreadRequest)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ThreadModel)
+    public func leaveThreadSaftly(inputModel safeLeaveThreadInput:   SafeLeaveThreadRequest,
+                                  uniqueId:       @escaping (String) -> (),
+                                  completion:     @escaping callbackTypeAlias) {
+        
+        log.verbose("Try to request to leave saftly from thread with this parameters: \n \(safeLeaveThreadInput)", context: "Chat")
+
+        let currentRolesInput = GetCurrentUserRolesRequest(threadId: safeLeaveThreadInput.threadId,
+                                                           typeCode: safeLeaveThreadInput.typeCode,
+                                                           uniqueId: nil)
+        getCurrentUserRoles(inputModel: currentRolesInput,
+                            getCacheResponse: false)
+        { _ in
+        } completion: { (currentUserRolesResponse) in
+            let userRolesResponse = currentUserRolesResponse as! GetCurrentUserRolesModel
+            var isAdmin = false
+            
+            for item in userRolesResponse.userRoles {
+                if (item == Roles.ADD_RULE_TO_USER) || (item == Roles.THREAD_ADMIN) {
+                    isAdmin = true
+                }
+            }
+            
+            if isAdmin {
+                
+                self.leaveThread(inputModel: safeLeaveThreadInput.convertToLeaveThreadRequest())
+                { (leaveThreadUniqueId) in
+                    uniqueId(leaveThreadUniqueId)
+                } completion: { (leaveThreadResponse) in
+                    completion(leaveThreadResponse)
+                }
+
+            } else {
+                let eventModel = ThreadEventModel(type:         ThreadEventTypes.THREAD_LEAVE_SAFTLY_FAILED,
+                                                  participants: nil,
+                                                  threads:      nil,
+                                                  threadId:     safeLeaveThreadInput.threadId,
+                                                  senderId:     nil,
+                                                  unreadCount:  nil,
+                                                  pinMessage:   nil)
+                self.delegate?.threadEvents(model: eventModel)
+            }
+            
+        } cacheResponse: { _ in }
+    }
+    
+    
     // MARK: - Mute Thread
     /// MuteThread:
     /// mute a thread

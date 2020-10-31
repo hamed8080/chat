@@ -19,6 +19,7 @@ public enum ThreadEventTypes {
     case THREAD_ADD_ADMIN
     case THREAD_REMOVE_ADMIN
     case THREAD_ADD_PARTICIPANTS        // type 11
+    case THREAD_LEAVE_SAFTLY_FAILED
     case THREAD_LEAVE_PARTICIPANT       // type 9
     case THREAD_REMOVED_FROM            // type 17
     case THREAD_MUTE                    // type 19
