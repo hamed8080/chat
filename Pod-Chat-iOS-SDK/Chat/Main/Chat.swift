@@ -481,6 +481,7 @@ public class Chat {
     public var getMentionListCallbackToUser:        callbackTypeAlias?
     public var threadParticipantsCallbackToUser:    callbackTypeAlias?
     public var createThreadCallbackToUser:          callbackTypeAlias?
+    public var closeThreadCallbackToUser:           callbackTypeAlias?
     public var addParticipantsCallbackToUser:       callbackTypeAlias?
     public var removeParticipantsCallbackToUser:    callbackTypeAlias?
     public var sendCallbackToUserOnSent:            callbackTypeAlias?

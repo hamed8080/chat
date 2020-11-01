@@ -17,6 +17,60 @@ import UIKit
 extension Chat {
     
     
+    // MARK: - Close Thread
+    /// closeThread:
+    /// close a thread by Admin (only)
+    ///
+    /// By calling this function, a request of type 102 (CLOSE_THREAD) will send throut Chat-SDK,
+    /// then the response will come back as callbacks to client whose calls this function.
+    ///
+    /// Inputs:
+    /// - you have to send your parameters as "CreateThreadRequest" to this function
+    ///
+    /// Outputs:
+    /// - It has 3 callbacks as responses
+    ///
+    /// - parameter inputModel: (input) you have to send your parameters insid this model. (CloseThreadRequest)
+    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
+    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ThreadModel)
+    public func closeThread(inputModel closeThreadInput: CloseThreadRequest,
+                            uniqueId:       @escaping (String) -> (),
+                            completion:     @escaping callbackTypeAlias) {
+
+        log.verbose("Try to request to create thread participants with this parameters: \n \(closeThreadInput)", context: "Chat")
+        uniqueId(closeThreadInput.uniqueId)
+
+        closeThreadCallbackToUser = completion
+
+        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.CLOSE_THREAD.intValue(),
+                                            content:            nil,
+                                            messageType:        nil,
+                                            metadata:           nil,
+                                            repliedTo:          nil,
+                                            systemMetadata:     nil,
+                                            subjectId:          closeThreadInput.threadId,
+                                            token:              token,
+                                            tokenIssuer:        nil,
+                                            typeCode:           closeThreadInput.typeCode ?? generalTypeCode,
+                                            uniqueId:           closeThreadInput.uniqueId,
+                                            uniqueIds:          nil,
+                                            isCreateThreadAndSendMessage: nil)
+
+        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
+                                              msgTTL:       msgTTL,
+                                              peerName:     serverName,
+                                              priority:     msgPriority,
+                                              pushMsgType:  nil)
+
+        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
+                                callbacks:          [(CloseThreadCallbacks(), closeThreadInput.uniqueId)],
+                                sentCallback:       nil,
+                                deliverCallback:    nil,
+                                seenCallback:       nil)
+    }
+    
+    
+    
     // MARK: - Create Thread
     /// CreateThread:
     /// create a thread with somebody

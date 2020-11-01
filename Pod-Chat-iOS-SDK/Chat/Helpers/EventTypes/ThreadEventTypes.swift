@@ -11,6 +11,7 @@ import Foundation
 
 public enum ThreadEventTypes {
     
+    case THREAD_CLOSED
     case THREAD_UNREAD_COUNT_UPDATED    // type 31
     case THREAD_LAST_ACTIVITY_TIME      //
     case THREAD_PIN

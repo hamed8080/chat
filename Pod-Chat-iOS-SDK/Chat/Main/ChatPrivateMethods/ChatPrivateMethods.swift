@@ -914,6 +914,11 @@ extension Chat {
             responseOfStatusPing(withMessage: message)
             break
             
+        // a message of type 102 (CLOSE_THREAD) comes from Server.
+        case ChatMessageVOTypes.CLOSE_THREAD.intValue():
+            responseOfCloseThread(withMessage: message)
+            break
+            
         // a message of type 999 (ERROR) comes from Server.
         case ChatMessageVOTypes.ERROR.intValue():
             chatErrorHandler(withMessage: message, messageContentAsJSON: messageContentAsJSON)

@@ -22,6 +22,9 @@
 		3E0A76C622AFD8B0009D669E /* UserManagementMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0A76C522AFD8B0009D669E /* UserManagementMethods.swift */; };
 		3E0A76CA22AFDBF6009D669E /* CreateReturnData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0A76C922AFDBF6009D669E /* CreateReturnData.swift */; };
 		3E0AD6DC254E240500BEEAE2 /* SafeLeaveThreadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0AD6DB254E240500BEEAE2 /* SafeLeaveThreadRequest.swift */; };
+		3E0AD6ED254E364E00BEEAE2 /* CloseThreadCallbacks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0AD6EC254E364E00BEEAE2 /* CloseThreadCallbacks.swift */; };
+		3E0AD6F0254E380A00BEEAE2 /* CloseThreadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0AD6EF254E380A00BEEAE2 /* CloseThreadRequest.swift */; };
+		3E0AD6F3254F0C1D00BEEAE2 /* CloseThreadResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0AD6F2254F0C1D00BEEAE2 /* CloseThreadResponse.swift */; };
 		3E0B910022F579C300986A96 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0B90FF22F579C300986A96 /* Networking.swift */; };
 		3E0B910122F579C300986A96 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0B90FF22F579C300986A96 /* Networking.swift */; };
 		3E10995623C365240034093E /* CreateThreadMessageInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E10995523C365240034093E /* CreateThreadMessageInput.swift */; };
@@ -493,6 +496,9 @@
 		3E0A76C522AFD8B0009D669E /* UserManagementMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManagementMethods.swift; sourceTree = "<group>"; };
 		3E0A76C922AFDBF6009D669E /* CreateReturnData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateReturnData.swift; sourceTree = "<group>"; };
 		3E0AD6DB254E240500BEEAE2 /* SafeLeaveThreadRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafeLeaveThreadRequest.swift; sourceTree = "<group>"; };
+		3E0AD6EC254E364E00BEEAE2 /* CloseThreadCallbacks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseThreadCallbacks.swift; sourceTree = "<group>"; };
+		3E0AD6EF254E380A00BEEAE2 /* CloseThreadRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseThreadRequest.swift; sourceTree = "<group>"; };
+		3E0AD6F2254F0C1D00BEEAE2 /* CloseThreadResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseThreadResponse.swift; sourceTree = "<group>"; };
 		3E0B90FF22F579C300986A96 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		3E10995523C365240034093E /* CreateThreadMessageInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateThreadMessageInput.swift; sourceTree = "<group>"; };
 		3E10996123C3659B0034093E /* GetAllThreadsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAllThreadsRequest.swift; sourceTree = "<group>"; };
@@ -936,6 +942,7 @@
 				3EA1569321CE1C2B004B1346 /* LeaveThreadRequest.swift */,
 				3E0AD6DB254E240500BEEAE2 /* SafeLeaveThreadRequest.swift */,
 				3EA1568B21CE1BDC004B1346 /* MuteUnmuteThreadRequest.swift */,
+				3E0AD6EF254E380A00BEEAE2 /* CloseThreadRequest.swift */,
 				3E8ADCF023B783CC00E3538D /* PinUnpinThreadRequest.swift */,
 				3EA156A721CE1D02004B1346 /* SpamPrivateThreadRequest.swift */,
 				3EA156A521CE1CE8004B1346 /* UpdateThreadInfoRequest.swift */,
@@ -1169,6 +1176,7 @@
 				3EBBEDEF2174C5C800F5CDC7 /* GetThreadsResponse.swift */,
 				3E581EF5241E255F006EA0EF /* IsAvailableNameResponse.swift */,
 				3EA95BE622B4C022002BF483 /* MuteUnmuteThreadResponse.swift */,
+				3E0AD6F2254F0C1D00BEEAE2 /* CloseThreadResponse.swift */,
 				3E8ADCFE23B784E600E3538D /* PinUnpinThreadResponse.swift */,
 			);
 			path = ThreadOutputModels;
@@ -1258,6 +1266,7 @@
 				3E581EAD241864ED006EA0EF /* JoinPublicThreadCallbacks.swift */,
 				3EB5207E22ABF4A200B7EA45 /* LeaveThreadCallbacks.swift */,
 				3EB5207422ABF3DC00B7EA45 /* MuteThreadCallbacks.swift */,
+				3E0AD6EC254E364E00BEEAE2 /* CloseThreadCallbacks.swift */,
 				3E35336323D44D3F00731774 /* PinMessageCallback.swift */,
 				3E8ADCFC23B7845200E3538D /* PinThreadCallback.swift */,
 				3EB5208022ABF4DC00B7EA45 /* SpamPrivateThread.swift */,
@@ -1761,6 +1770,7 @@
 				3E00CAE921DC8E5A0029B1FC /* MapRouting.swift in Sources */,
 				3E8D87E5221861920092B440 /* QueueOfTextMessages+CoreDataClass.swift in Sources */,
 				3E24084021F5C844001F32F1 /* CMForwardInfo+CoreDataClass.swift in Sources */,
+				3E0AD6ED254E364E00BEEAE2 /* CloseThreadCallbacks.swift in Sources */,
 				3E3315AD23B22A3F0070A3D1 /* ThreadEventModel.swift in Sources */,
 				3E5AAEF822195A510085C03D /* QueueOfUploadFiles+CoreDataProperties.swift in Sources */,
 				3EB5205422ABED5300B7EA45 /* UpdateDataOnCache.swift in Sources */,
@@ -1786,6 +1796,7 @@
 				3E8D56DB21DBA83600B844DE /* MapSearchRequest.swift in Sources */,
 				3EB5205C22ABF0BC00B7EA45 /* GetContactsCallback.swift in Sources */,
 				3EBBEDDF2174C30800F5CDC7 /* Participant.swift in Sources */,
+				3E0AD6F0254E380A00BEEAE2 /* CloseThreadRequest.swift in Sources */,
 				3E35336823D4548200731774 /* PinUnpinMessageResponse.swift in Sources */,
 				3EA1568221CE1B70004B1346 /* SearchContactsRequest.swift in Sources */,
 				3E5AAED0221937560085C03D /* QueueOfEditMessages+CoreDataProperties.swift in Sources */,
@@ -1819,6 +1830,7 @@
 				3E2ADA5223D5A5AE00331407 /* CMPinMessage+CoreDataProperties.swift in Sources */,
 				3E3315AB23B221E90070A3D1 /* MessageEventModel.swift in Sources */,
 				3E1F314C24533FA700643EE6 /* CreateBotResponse.swift in Sources */,
+				3E0AD6F3254F0C1D00BEEAE2 /* CloseThreadResponse.swift in Sources */,
 				3ECFCAB8228967BD00313419 /* ClearHistoryRequest.swift in Sources */,
 				3E00CAF521DC9E6B0029B1FC /* MapRoutingResponse.swift in Sources */,
 				3EA156A021CE1CAE004B1346 /* DeleteMessageRequest.swift in Sources */,
