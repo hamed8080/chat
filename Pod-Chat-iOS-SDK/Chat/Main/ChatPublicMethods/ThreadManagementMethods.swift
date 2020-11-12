@@ -636,8 +636,9 @@ extension Chat {
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ThreadModel)
     public func leaveThreadSaftly(inputModel safeLeaveThreadInput:   SafeLeaveThreadRequest,
-                                  uniqueId:       @escaping (String) -> (),
-                                  completion:     @escaping callbackTypeAlias) {
+                                  uniqueId:             @escaping (String) -> (),
+                                  addAdminCallback:     @escaping callbackTypeAlias,
+                                  leaveThreadCallback:  @escaping callbackTypeAlias) {
         
         log.verbose("Try to request to leave saftly from thread with this parameters: \n \(safeLeaveThreadInput)", context: "Chat")
 
@@ -650,7 +651,7 @@ extension Chat {
         } completion: { (currentUserRolesResponse) in
             let userRolesResponse = currentUserRolesResponse as! GetCurrentUserRolesModel
             var isAdmin = false
-            
+            let roles = userRolesResponse.userRoles
             for item in userRolesResponse.userRoles {
                 if (item == Roles.ADD_RULE_TO_USER) || (item == Roles.THREAD_ADMIN) {
                     isAdmin = true
@@ -659,11 +660,20 @@ extension Chat {
             
             if isAdmin {
                 
-                self.leaveThread(inputModel: safeLeaveThreadInput.convertToLeaveThreadRequest())
-                { (leaveThreadUniqueId) in
-                    uniqueId(leaveThreadUniqueId)
-                } completion: { (leaveThreadResponse) in
-                    completion(leaveThreadResponse)
+                let setRoleModel = SetRemoveRoleModel(userId: safeLeaveThreadInput.participantId, roles: roles)
+                let adminInput = RoleRequestModel(userRoles: [setRoleModel],
+                                                  threadId: safeLeaveThreadInput.threadId,
+                                                  typeCode: nil,
+                                                  uniqueId: nil)
+                self.setRole(inputModel: adminInput) { _ in } completion: { (setAdminResponse) in
+                    addAdminCallback(setAdminResponse)
+                    self.leaveThread(inputModel: safeLeaveThreadInput.convertToLeaveThreadRequest())
+                    { (leaveThreadUniqueId) in
+                        uniqueId(leaveThreadUniqueId)
+                    } completion: { (leaveThreadResponse) in
+                        leaveThreadCallback(leaveThreadResponse)
+                    }
+                    
                 }
 
             } else {
@@ -675,6 +685,11 @@ extension Chat {
                                                   unreadCount:  nil,
                                                   pinMessage:   nil)
                 self.delegate?.threadEvents(model: eventModel)
+                let leaveThreadModel = ThreadResponse(messageContent:   JSON(),
+                                                      hasError:         true,
+                                                      errorMessage:     "Current User have no Permission to Change the ThreadAdmin",
+                                                      errorCode:        6666)
+                leaveThreadCallback(leaveThreadModel)
             }
             
         } cacheResponse: { _ in }
