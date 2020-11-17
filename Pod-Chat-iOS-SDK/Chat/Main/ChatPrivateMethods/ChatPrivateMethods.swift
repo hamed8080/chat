@@ -934,10 +934,11 @@ extension Chat {
         log.verbose("Message of type 'ERROR' recieved", context: "Chat")
         
         // send log to Sentry 4.3.1
-        let event = Event(level: SentrySeverity.error)
-        event.message = "Message of type 'ERROR' recieved: \n \(message.returnToJSON())"
-        Client.shared?.send(event: event, completion: { _ in })
-        
+        if captureSentryLogs {
+            let event = Event(level: SentrySeverity.error)
+            event.message = "Message of type 'ERROR' recieved: \n \(message.returnToJSON())"
+            Client.shared?.send(event: event, completion: { _ in })
+        }
         
         // send log to Sentry 5.0.5
 //        let event = Event(level: SentryLevel.error)

@@ -46,13 +46,17 @@ public class Chat {
                                  connectionRetryInterval:   Int,
                                  connectionCheckTimeout:    Int,
                                  messageTtl:                Int,
+                                 captureLogsOnSentry:       Bool,
                                  maxReconnectTimeInterval:  Int?,
                                  reconnectOnClose:          Bool,
                                  localImageCustomPath:      URL?,
                                  localFileCustomPath:       URL?,
                                  deviecLimitationSpaceMB:   Int64?) {
         
-        startCrashAnalitics()
+        self.captureSentryLogs = captureLogsOnSentry
+        if captureLogsOnSentry {
+            startCrashAnalitics()
+        }
         
         self.socketAddress      = socketAddress
         self.ssoHost            = ssoHost
@@ -240,6 +244,8 @@ public class Chat {
     var chatPingMessageInterval = 20
     var cacheTimeStamp          = (2 * 24) * (60 * 60)
     var deviecLimitationSpaceMB: Int64 = 100
+    
+    var captureSentryLogs = false
     
     var isChatReady     = false {
         didSet {
