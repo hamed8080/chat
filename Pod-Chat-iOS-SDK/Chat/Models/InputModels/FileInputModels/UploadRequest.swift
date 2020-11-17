@@ -16,6 +16,7 @@ open class UploadRequest {
     public var fileSize:            Int64   = 0
     public var isPublic:            Bool?   = nil
     public var mimeType:            String  = ""
+    public var originalName:        String  = ""
     public var userGroupHash:       String? = nil
     
     public let typeCode:            String? //= nil

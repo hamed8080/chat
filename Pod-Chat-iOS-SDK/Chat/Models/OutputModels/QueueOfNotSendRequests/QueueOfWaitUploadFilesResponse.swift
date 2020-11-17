@@ -17,6 +17,7 @@ open class QueueOfWaitUploadFilesModel {
     let fileSize:       Int64?
     let isPublic:       Bool?
     let mimeType:       String
+    let originalName:   String?
     let userGroupHash:  String?
     let typeCode:       String?
     let uniqueId:       String?
@@ -27,6 +28,7 @@ open class QueueOfWaitUploadFilesModel {
          fileSize:      Int64?,
          isPublic:      Bool?,
          mimeType:      String?,
+         originalName:  String?,
          userGroupHash: String?,
          typeCode:      String?,
          uniqueId:      String?) {
@@ -37,6 +39,7 @@ open class QueueOfWaitUploadFilesModel {
         self.fileSize       = fileSize
         self.isPublic       = isPublic
         self.mimeType       = mimeType ?? ""
+        self.originalName   = originalName ?? ((fileName ?? "")+(fileExtension ?? ""))
         self.userGroupHash  = userGroupHash
         self.typeCode       = typeCode
         self.uniqueId       = uniqueId
@@ -50,6 +53,7 @@ open class QueueOfWaitUploadFilesModel {
         self.fileSize       = fileInputModel.fileSize
         self.isPublic       = fileInputModel.isPublic
         self.mimeType       = fileInputModel.mimeType
+        self.originalName   = fileInputModel.originalName
         self.userGroupHash  = fileInputModel.userGroupHash
         self.typeCode       = fileInputModel.typeCode
         self.uniqueId       = fileInputModel.uniqueId
@@ -62,6 +66,7 @@ open class QueueOfWaitUploadFilesModel {
                             "fileSize":         fileSize ?? NSNull(),
                             "isPublic":         isPublic ?? NSNull(),
                             "mimeType":         mimeType,
+                            "originalName":     originalName ?? NSNull(),
                             "userGroupHash":    userGroupHash ?? NSNull(),
                             "typeCode":         typeCode ?? NSNull(),
                             "uniqueId":         uniqueId ?? NSNull()]

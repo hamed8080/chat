@@ -18,6 +18,7 @@ open class QueueOfWaitFileMessagesModel {
     let isPublic:       Bool?
     let metadata:       String?
     let mimeType:       String
+    let originalName:   String?
     let repliedTo:      Int?
     let threadId:       Int?
     let userGroupHash:  String?
@@ -38,6 +39,7 @@ open class QueueOfWaitFileMessagesModel {
          isPublic:      Bool?,
          metadata:      String?,
          mimeType:      String?,
+         originalName:  String?,
          repliedTo:     Int?,
          threadId:      Int?,
          userGroupHash: String?,
@@ -57,6 +59,7 @@ open class QueueOfWaitFileMessagesModel {
         self.isPublic       = isPublic
         self.metadata       = metadata
         self.mimeType       = mimeType ?? ""
+        self.originalName   = originalName ?? ((fileName ?? "") + (fileExtension ?? ""))
         self.repliedTo      = repliedTo
         self.threadId       = threadId
         self.userGroupHash  = userGroupHash
@@ -92,6 +95,7 @@ open class QueueOfWaitFileMessagesModel {
             self.fileToSend     = file.dataToSend
             self.isPublic       = file.isPublic
             self.mimeType       = file.mimeType
+            self.originalName   = file.originalName
             self.userGroupHash  = file.userGroupHash
         } else if let image = fileMessageInputModel.uploadInput as? UploadImageRequestModel {
             self.fileToSend     = nil
@@ -103,6 +107,7 @@ open class QueueOfWaitFileMessagesModel {
             self.imageToSend    = image.dataToSend
             self.isPublic       = image.isPublic
             self.mimeType       = image.mimeType
+            self.originalName   = image.originalName
             self.userGroupHash  = image.userGroupHash
         } else {
             self.xC             = nil
@@ -114,6 +119,7 @@ open class QueueOfWaitFileMessagesModel {
             self.imageToSend    = nil
             self.isPublic       = nil
             self.mimeType       = ""
+            self.originalName   = nil
             self.userGroupHash  = nil
         }
         
@@ -128,6 +134,7 @@ open class QueueOfWaitFileMessagesModel {
                             "isPublic":     isPublic ?? NSNull(),
                             "metadata":     metadata ?? NSNull(),
                             "mimeType":     mimeType,
+                            "originalName": originalName ?? NSNull(),
                             "repliedTo":    repliedTo ?? NSNull(),
                             "threadId":     threadId ?? NSNull(),
                             "userGroupHash": userGroupHash ?? NSNull(),

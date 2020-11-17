@@ -393,6 +393,7 @@ extension Chat {
                                                                          fileSize:      uploadFileInput.fileSize,
                                                                          isPublic:      uploadFileInput.isPublic,
                                                                          mimeType:      uploadFileInput.mimeType,
+                                                                         originalName:  uploadFileInput.originalName,
                                                                          userGroupHash: uploadFileInput.userGroupHash,
                                                                          typeCode:      uploadFileInput.typeCode,
                                                                          uniqueId:      uploadFileInput.uniqueId)
@@ -537,6 +538,7 @@ extension Chat {
                                                                           fileSize:         uploadImageInput.fileSize,
                                                                           isPublic:         uploadImageInput.isPublic,
                                                                           mimeType:         uploadImageInput.mimeType,
+                                                                          originalName:     uploadImageInput.originalName,
                                                                           userGroupHash:    uploadImageInput.userGroupHash,
                                                                           xC:               uploadImageInput.xC,
                                                                           yC:               uploadImageInput.yC,

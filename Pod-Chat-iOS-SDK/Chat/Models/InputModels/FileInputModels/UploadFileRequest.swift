@@ -16,6 +16,7 @@ open class UploadFileRequest: UploadRequest {
                 fileExtension:  String?,
                 fileName:       String?,
                 mimeType:       String?,
+                originalName:   String?,
                 userGroupHash:  String?,
                 typeCode:       String?,
                 uniqueId:       String?) {
@@ -28,6 +29,7 @@ open class UploadFileRequest: UploadRequest {
         self.fileSize       = Int64(dataToSend.count)
         self.mimeType       = mimeType ?? ""
         self.userGroupHash  = userGroupHash
+        self.originalName   = originalName ?? (self.fileName + (fileExtension ?? ""))
     }
     
     /// only use this initializer on, createThreadWithFileMessage & sendFileMessage methods
@@ -35,6 +37,7 @@ open class UploadFileRequest: UploadRequest {
                 fileExtension:  String?,
                 fileName:       String?,
                 mimeType:       String?,
+                originalName:   String?,
                 typeCode:       String?,
                 uniqueId:       String?) {
         
@@ -46,6 +49,7 @@ open class UploadFileRequest: UploadRequest {
         self.fileSize       = Int64(dataToSend.count)
         self.mimeType       = mimeType ?? ""
         self.userGroupHash  = userGroupHash
+        self.originalName   = originalName ?? (self.fileName + (fileExtension ?? ""))
     }
     
     /// initializer of Uploading Public File request model
@@ -54,6 +58,7 @@ open class UploadFileRequest: UploadRequest {
                 fileName:       String?,
                 isPublic:       Bool,
                 mimeType:       String?,
+                originalName:   String?,
                 typeCode:       String?,
                 uniqueId:       String?) {
         
@@ -65,6 +70,7 @@ open class UploadFileRequest: UploadRequest {
         self.fileSize       = Int64(dataToSend.count)
         self.isPublic       = isPublic
         self.mimeType       = mimeType ?? ""
+        self.originalName   = originalName ?? (self.fileName + (fileExtension ?? ""))
     }
     
     
@@ -72,12 +78,12 @@ open class UploadFileRequest: UploadRequest {
         
         var content: Parameters = [:]
         
-        content["filename"]         = JSON(self.fileName)
+        content["filename"] = JSON(self.fileName)
         if let userGroupHash_ = userGroupHash {
-            content["userGroupHash"]    = JSON(userGroupHash_)
+            content["userGroupHash"] = JSON(userGroupHash_)
         }
         if let isPublic_ = isPublic {
-            content["isPublic"]    = JSON(isPublic_)
+            content["isPublic"] = JSON(isPublic_)
         }
         
         return content

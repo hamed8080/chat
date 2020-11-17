@@ -54,6 +54,7 @@ public class QueueOfUploadImages: NSManagedObject {
                                                                             fileSize:       fileSize,
                                                                             isPublic:       isPublic,
                                                                             mimeType:       self.mimeType,
+                                                                            originalName:   self.originalName,
                                                                             userGroupHash:  self.userGroupHash,
                                                                             xC:             xC ?? 0,
                                                                             yC:             yC ?? 0,

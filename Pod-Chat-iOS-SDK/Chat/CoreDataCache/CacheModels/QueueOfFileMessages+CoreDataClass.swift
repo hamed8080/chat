@@ -72,6 +72,7 @@ public class QueueOfFileMessages: NSManagedObject {
                                                                             isPublic:       isPublic,
                                                                             metadata:       self.metadata,
                                                                             mimeType:       self.mimeType,
+                                                                            originalName:   self.originalName,
                                                                             repliedTo:      repliedTo,
                                                                             threadId:       threadId,
                                                                             userGroupHash:  self.userGroupHash,

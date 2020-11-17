@@ -1038,9 +1038,10 @@ extension Chat {
         }) { (imageData) in
             
             let uploadInput = UploadImageRequest(dataToSend:        (imageData as! Data),
-                                                 fileExtension:     nil,
+                                                 fileExtension:     ".png",
                                                  fileName:          sendLocationMessageRequest.mapImageName,
                                                  mimeType:          "image/png",
+                                                 originalName:      nil,
                                                  xC:                nil,
                                                  yC:                nil,
                                                  hC:                nil,
@@ -1131,6 +1132,7 @@ extension Chat {
                                                                               isPublic:         file.isPublic,
                                                                               metadata:     (sendFileMessageInput.messageInput.metadata != nil) ? "\(sendFileMessageInput.messageInput.metadata!)" : nil,
                                                                               mimeType:         file.mimeType,
+                                                                              originalName:     file.originalName,
                                                                               repliedTo:    sendFileMessageInput.messageInput.repliedTo,
                                                                               threadId:     sendFileMessageInput.messageInput.threadId,
                                                                               userGroupHash:    file.userGroupHash,
@@ -1152,6 +1154,7 @@ extension Chat {
                                                                               isPublic:         image.isPublic,
                                                                               metadata:     (sendFileMessageInput.messageInput.metadata != nil) ? "\(sendFileMessageInput.messageInput.metadata!)" : nil,
                                                                               mimeType:         image.mimeType,
+                                                                              originalName:     image.originalName,
                                                                               repliedTo:    sendFileMessageInput.messageInput.repliedTo,
                                                                               threadId:     sendFileMessageInput.messageInput.threadId,
                                                                               userGroupHash:    image.userGroupHash,
@@ -1168,8 +1171,6 @@ extension Chat {
             
         }
         
-        var fileExtension:  String  = ""
-        
         var metadata: JSON = [:]
         
         if let image = sendFileMessageInput.uploadInput as? UploadImageRequest {
@@ -1179,6 +1180,7 @@ extension Chat {
                                                    fileExtension:   image.fileExtension,
                                                    fileName:        image.fileName,
                                                    mimeType:        image.mimeType,
+                                                   originalName:    image.originalName,
                                                    xC:              image.xC,
                                                    yC:              image.yC,
                                                    hC:              image.hC,
@@ -1192,6 +1194,7 @@ extension Chat {
                                                    fileName:        image.fileName,
                                                    isPublic:        true,
                                                    mimeType:        image.mimeType,
+                                                   originalName:    image.originalName,
                                                    xC:              image.xC,
                                                    yC:              image.yC,
                                                    hC:              image.hC,
@@ -1208,10 +1211,11 @@ extension Chat {
                     metadata["file"] = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
                     metadata["file"]["actualHeight"] = JSON(image.hC)
                     metadata["file"]["actualWidth"]  = JSON(image.wC)
-                    metadata["file"]["originalName"] = JSON(uploadRequest.fileName)
+                    metadata["file"]["extension"]   = JSON(uploadRequest.fileExtension ?? "")
                     metadata["file"]["link"]        = JSON("\(self.SERVICE_ADDRESSES.PODSPACE_FILESERVER_ADDRESS)\(SERVICES_PATH.DRIVE_DOWNLOAD_IMAGE.stringValue())?hash=\(myResponse.uploadImage?.hashCode ?? "")")
                     metadata["file"]["mimeType"]    = JSON(uploadRequest.mimeType)
                     metadata["file"]["name"]        = JSON(uploadRequest.fileName)
+                    metadata["file"]["originalName"] = JSON(uploadRequest.originalName)
                     metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
                     metadata["fileHash"]            = JSON(myResponse.uploadImage?.hashCode ?? "")
                     metadata["name"]                = JSON(myResponse.uploadImage?.name ?? "")
@@ -1232,6 +1236,7 @@ extension Chat {
                                                   fileExtension:    file.fileExtension,
                                                   fileName:         file.fileName,
                                                   mimeType:         file.mimeType,
+                                                  originalName:     file.originalName,
                                                   userGroupHash:    userGroupHash,
                                                   typeCode:         file.typeCode,
                                                   uniqueId:         file.uniqueId)
@@ -1241,6 +1246,7 @@ extension Chat {
                                                   fileName:         file.fileName,
                                                   isPublic:         true,
                                                   mimeType:         file.mimeType,
+                                                  originalName:     file.originalName,
                                                   typeCode:         file.typeCode,
                                                   uniqueId:         file.uniqueId)
             }
@@ -1251,10 +1257,11 @@ extension Chat {
                 let myResponse: UploadFileResponse = response as! UploadFileResponse
                 if !(myResponse.hasError) {
                     metadata["file"]    = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
-                    metadata["file"]["originalName"] = JSON(uploadRequest.fileName)
+                    metadata["file"]["extension"]   = JSON(uploadRequest.fileExtension ?? "")
                     metadata["file"]["link"]        = JSON("\(self.SERVICE_ADDRESSES.PODSPACE_FILESERVER_ADDRESS)\(SERVICES_PATH.DRIVE_DOWNLOAD_FILE.stringValue())?hash=\(myResponse.uploadFile?.hashCode ?? "")")
                     metadata["file"]["mimeType"]    = JSON(uploadRequest.mimeType)
                     metadata["file"]["name"]        = JSON(uploadRequest.fileName)
+                    metadata["file"]["originalName"] = JSON(uploadRequest.originalName)
                     metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
                     metadata["fileHash"]            = JSON(myResponse.uploadFile?.hashCode ?? "")
                     metadata["name"]                = JSON(myResponse.uploadFile?.name ?? "")
@@ -1671,6 +1678,7 @@ extension Chat {
                                           fileExtension:    fileMessages.fileExtension,
                                           fileName:         fileMessages.fileName,
                                           mimeType:         fileMessages.mimeType,
+                                          originalName:     fileMessages.originalName,
                                           userGroupHash:    userGroupHash,
                                           typeCode:         fileMessages.typeCode,
                                           uniqueId:         fileMessages.uniqueId)
@@ -1680,6 +1688,7 @@ extension Chat {
                                           fileName:         fileMessages.fileName,
                                           isPublic:         true,
                                           mimeType:         fileMessages.mimeType,
+                                          originalName:     fileMessages.originalName,
                                           typeCode:         fileMessages.typeCode,
                                           uniqueId:         fileMessages.uniqueId)
             }
@@ -1692,6 +1701,7 @@ extension Chat {
                                            fileExtension:   fileMessages.fileExtension,
                                            fileName:        fileMessages.fileName,
                                            mimeType:        fileMessages.mimeType,
+                                           originalName:     fileMessages.originalName,
                                            xC:              fileMessages.xC ?? 0,
                                            yC:              fileMessages.yC ?? 0,
                                            hC:              fileMessages.hC ?? 99999,
@@ -1705,6 +1715,7 @@ extension Chat {
                                            fileName:        fileMessages.fileName,
                                            isPublic:        true,
                                            mimeType:        fileMessages.mimeType,
+                                           originalName:     fileMessages.originalName,
                                            xC:              fileMessages.xC ?? 0,
                                            yC:              fileMessages.yC ?? 0,
                                            hC:              fileMessages.hC ?? 99999,
@@ -1747,6 +1758,7 @@ extension Chat {
                                        fileExtension:   uploadImageObj.fileExtension,
                                        fileName:        uploadImageObj.fileName,
                                        mimeType:        uploadImageObj.mimeType,
+                                       originalName:    uploadImageObj.originalName,
                                        xC:              uploadImageObj.xC,
                                        yC:              uploadImageObj.yC,
                                        hC:              uploadImageObj.hC,
@@ -1760,6 +1772,7 @@ extension Chat {
                                        fileName:        uploadImageObj.fileName,
                                        isPublic:        true,
                                        mimeType:        uploadImageObj.mimeType,
+                                       originalName:    uploadImageObj.originalName,
                                        xC:              uploadImageObj.xC,
                                        yC:              uploadImageObj.yC,
                                        hC:              uploadImageObj.hC,
@@ -1789,6 +1802,7 @@ extension Chat {
                                       fileExtension:    uploadFileObj.fileExtension,
                                       fileName:         uploadFileObj.fileName,
                                       mimeType:         uploadFileObj.mimeType,
+                                      originalName:     uploadFileObj.originalName,
                                       userGroupHash:    userHash,
                                       typeCode:         uploadFileObj.typeCode,
                                       uniqueId:         uploadFileObj.uniqueId)
@@ -1798,6 +1812,7 @@ extension Chat {
                                       fileName:         uploadFileObj.fileName,
                                       isPublic:         true,
                                       mimeType:         uploadFileObj.mimeType,
+                                      originalName:     uploadFileObj.originalName,
                                       typeCode:         uploadFileObj.typeCode,
                                       uniqueId:         uploadFileObj.uniqueId)
         }

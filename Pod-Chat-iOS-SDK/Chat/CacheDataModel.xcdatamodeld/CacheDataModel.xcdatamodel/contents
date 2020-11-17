@@ -230,6 +230,7 @@
         <attribute name="messageType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="mimeType" optional="YES" attributeType="String"/>
+        <attribute name="originalName" optional="YES" attributeType="String"/>
         <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="textMessage" optional="YES" attributeType="String"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
@@ -265,6 +266,7 @@
         <attribute name="fileSize" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="isPublic" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="mimeType" optional="YES" attributeType="String"/>
+        <attribute name="originalName" optional="YES" attributeType="String"/>
         <attribute name="typeCode" optional="YES" attributeType="String"/>
         <attribute name="uniqueId" optional="YES" attributeType="String"/>
         <attribute name="userGroupHash" optional="YES" attributeType="String"/>
@@ -277,6 +279,7 @@
         <attribute name="hC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="isPublic" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="mimeType" optional="YES" attributeType="String"/>
+        <attribute name="originalName" optional="YES" attributeType="String"/>
         <attribute name="typeCode" optional="YES" attributeType="String"/>
         <attribute name="uniqueId" optional="YES" attributeType="String"/>
         <attribute name="userGroupHash" optional="YES" attributeType="String"/>
@@ -303,10 +306,10 @@
         <element name="MessageGaps" positionX="-459.22265625" positionY="620.73828125" width="128" height="90"/>
         <element name="PhoneContact" positionX="-459.39453125" positionY="-191.34765625" width="128" height="103"/>
         <element name="QueueOfEditMessages" positionX="1209.28125" positionY="-34.71875" width="128" height="163"/>
-        <element name="QueueOfFileMessages" positionX="1220.84375" positionY="275.875" width="128" height="313"/>
+        <element name="QueueOfFileMessages" positionX="1220.84375" positionY="275.875" width="128" height="328"/>
         <element name="QueueOfForwardMessages" positionX="1214.4296875" positionY="135.15234375" width="128" height="133"/>
         <element name="QueueOfTextMessages" positionX="1210.796875" positionY="-206.65625" width="128" height="163"/>
-        <element name="QueueOfUploadFiles" positionX="1079.53125" positionY="19.48046875" width="128" height="28"/>
-        <element name="QueueOfUploadImages" positionX="1076.33203125" positionY="-208.8203125" width="128" height="28"/>
+        <element name="QueueOfUploadFiles" positionX="1079.53125" positionY="19.48046875" width="128" height="193"/>
+        <element name="QueueOfUploadImages" positionX="1076.33203125" positionY="-208.8203125" width="128" height="253"/>
     </elements>
 </model>

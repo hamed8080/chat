@@ -11,19 +11,20 @@ import SwiftyJSON
 
 open class QueueOfWaitUploadImagesModel {
     
-    let dataToSend:       Data?
-    let fileExtension:    String?
-    let fileName:         String?
-    let fileSize:         Int64?
+    let dataToSend:     Data?
+    let fileExtension:  String?
+    let fileName:       String?
+    let fileSize:       Int64?
     let isPublic:       Bool?
-    let mimeType:         String?
+    let mimeType:       String?
+    let originalName:   String?
     let userGroupHash:  String?
-    let xC:               Int
-    let yC:               Int
-    let hC:               Int
-    let wC:               Int
-    let typeCode:         String?
-    let uniqueId:         String?
+    let xC:             Int
+    let yC:             Int
+    let hC:             Int
+    let wC:             Int
+    let typeCode:       String?
+    let uniqueId:       String?
     
     init(dataToSend:    Data?,
          fileExtension: String?,
@@ -31,6 +32,7 @@ open class QueueOfWaitUploadImagesModel {
          fileSize:      Int64?,
          isPublic:      Bool?,
          mimeType:      String?,
+         originalName:  String?,
          userGroupHash: String?,
          xC:            Int,
          yC:            Int,
@@ -45,6 +47,7 @@ open class QueueOfWaitUploadImagesModel {
         self.fileSize       = fileSize
         self.isPublic       = isPublic
         self.mimeType       = mimeType ?? ""
+        self.originalName   = originalName ?? ((fileName ?? "")+(fileExtension ?? ""))
         self.userGroupHash  = userGroupHash
         self.xC             = xC
         self.yC             = yC
@@ -61,6 +64,7 @@ open class QueueOfWaitUploadImagesModel {
         self.fileSize       = imageInputModel.fileSize
         self.isPublic       = imageInputModel.isPublic
         self.mimeType       = imageInputModel.mimeType
+        self.originalName   = imageInputModel.originalName
         self.userGroupHash  = imageInputModel.userGroupHash
         self.xC             = imageInputModel.xC
         self.yC             = imageInputModel.yC
@@ -77,6 +81,7 @@ open class QueueOfWaitUploadImagesModel {
                             "fileSize":         fileSize ?? NSNull(),
                             "isPublic":         isPublic ?? NSNull(),
                             "mimeType":         mimeType ?? "",
+                            "originalName":     originalName ?? NSNull(),
                             "userGroupHash":    userGroupHash ?? NSNull(),
                             "xC":               xC,
                             "yC":               yC,

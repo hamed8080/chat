@@ -17,6 +17,7 @@ open class UploadImageRequest: UploadRequest {
                 fileExtension:  String?,
                 fileName:       String?,
                 mimeType:       String?,
+                originalName:   String?,
                 xC:             Int?,
                 yC:             Int?,
                 hC:             Int?,
@@ -32,6 +33,7 @@ open class UploadImageRequest: UploadRequest {
         self.fileSize       = Int64(dataToSend.count)
         self.mimeType       = mimeType ?? ""
         self.userGroupHash  = userGroupHash
+        self.originalName   = originalName ?? (self.fileName + (fileExtension ?? ""))
         
         if let image = UIImage(data: dataToSend) {
             self.xC = xC ?? 0
@@ -47,6 +49,7 @@ open class UploadImageRequest: UploadRequest {
                 fileExtension:  String?,
                 fileName:       String?,
                 mimeType:       String?,
+                originalName:   String?,
                 xC:             Int?,
                 yC:             Int?,
                 hC:             Int?,
@@ -61,6 +64,7 @@ open class UploadImageRequest: UploadRequest {
         self.fileSize       = Int64(dataToSend.count)
         self.mimeType       = mimeType ?? ""
         self.userGroupHash  = userGroupHash
+        self.originalName   = originalName ?? (self.fileName + (fileExtension ?? ""))
         
         if let image = UIImage(data: dataToSend) {
             self.xC = xC ?? 0
@@ -77,6 +81,7 @@ open class UploadImageRequest: UploadRequest {
                 fileName:       String?,
                 isPublic:       Bool,
                 mimeType:       String?,
+                originalName:   String?,
                 xC:             Int?,
                 yC:             Int?,
                 hC:             Int?,
@@ -91,6 +96,7 @@ open class UploadImageRequest: UploadRequest {
         self.fileSize       = Int64(dataToSend.count)
         self.isPublic       = isPublic
         self.mimeType       = mimeType ?? ""
+        self.originalName   = originalName ?? (self.fileName + (fileExtension ?? ""))
 //        self.xC             = xC
 //        self.yC             = yC
 //        self.hC             = hC

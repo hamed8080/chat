@@ -38,6 +38,7 @@ public class QueueOfUploadFiles: NSManagedObject {
                                                                           fileSize:         fileSize,
                                                                           isPublic:         isPublic,
                                                                           mimeType:         self.mimeType,
+                                                                          originalName:     self.originalName,
                                                                           userGroupHash:    self.userGroupHash,
                                                                           typeCode:         self.typeCode,
                                                                           uniqueId:         self.uniqueId)

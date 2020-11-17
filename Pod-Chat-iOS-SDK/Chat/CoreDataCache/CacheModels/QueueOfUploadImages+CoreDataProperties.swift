@@ -23,6 +23,7 @@ extension QueueOfUploadImages {
     @NSManaged public var fileSize:         NSNumber?
     @NSManaged public var isPublic:         NSNumber?
     @NSManaged public var mimeType:         String?
+    @NSManaged public var originalName:     String?
     @NSManaged public var userGroupHash:    String?
     @NSManaged public var typeCode:         String?
     @NSManaged public var uniqueId:         String?
