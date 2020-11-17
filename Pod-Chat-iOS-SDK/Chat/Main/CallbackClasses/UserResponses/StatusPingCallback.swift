@@ -51,7 +51,7 @@ extension Chat {
                               failure:  @escaping callbackTypeAlias) {
             log.verbose("StatusPingCallback", context: "Chat")
             
-            if let content = response.result {
+            if let _ = response.result {
                 
                 // ToDo: what to do with statusPing response
                 

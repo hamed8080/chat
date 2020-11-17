@@ -22,7 +22,7 @@ public class CMContact: NSManagedObject {
         var userId:             Int?
         var time:               UInt?
         
-        var linkedUser:         LinkedUser?
+//        var linkedUser:         LinkedUser?
         
         func createVariables() {
             

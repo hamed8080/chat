@@ -17,16 +17,16 @@ public class CMUserRole: NSManagedObject {
         
         var roles:      [String]?
         var id:         Int?
-        var threadId:   Int?
+//        var threadId:   Int?
         
         func createVariables() {
             
             if let id2 = self.id as? Int {
                 id = id2
             }
-            if let threadId2 = self.threadId as? Int {
-                threadId = threadId2
-            }
+//            if let threadId2 = self.threadId as? Int {
+//                threadId = threadId2
+//            }
             
             if let roles2 = roles as [String]? {
                 roles = roles2

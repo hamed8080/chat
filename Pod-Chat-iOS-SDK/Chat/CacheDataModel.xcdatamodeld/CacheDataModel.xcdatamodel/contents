@@ -63,7 +63,7 @@
         <relationship name="pinMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMPinMessage" inverseName="message" inverseEntity="CMPinMessage"/>
     </entity>
     <entity name="CMCurrentUserRoles" representedClassName=".CMCurrentUserRoles" syncable="YES">
-        <attribute name="roles" optional="YES" attributeType="Transformable"/>
+        <attribute name="roles" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
     </entity>
     <entity name="CMFile" representedClassName=".CMFile" syncable="YES">
@@ -143,7 +143,7 @@
         <attribute name="notSeenDuration" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="online" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="receiveEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
-        <attribute name="roles" optional="YES" attributeType="Transformable"/>
+        <attribute name="roles" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer"/>
         <attribute name="sendEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
@@ -195,7 +195,7 @@
     <entity name="CMUserRole" representedClassName=".CMUserRole" syncable="YES">
         <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="roles" optional="YES" attributeType="Transformable"/>
+        <attribute name="roles" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <relationship name="conversation" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="dummyUserRoles" inverseEntity="CMConversation"/>
     </entity>
@@ -302,7 +302,7 @@
         <element name="CMReplyInfo" positionX="982.71484375" positionY="482.37890625" width="128" height="193"/>
         <element name="CMThreadParticipants" positionX="-459.9921875" positionY="520.90625" width="128" height="90"/>
         <element name="CMUser" positionX="-463.83984375" positionY="196.234375" width="128" height="238"/>
-        <element name="CMUserRole" positionX="471.12890625" positionY="272.80078125" width="128" height="120"/>
+        <element name="CMUserRole" positionX="471.12890625" positionY="272.80078125" width="128" height="118"/>
         <element name="MessageGaps" positionX="-459.22265625" positionY="620.73828125" width="128" height="90"/>
         <element name="PhoneContact" positionX="-459.39453125" positionY="-191.34765625" width="128" height="103"/>
         <element name="QueueOfEditMessages" positionX="1209.28125" positionY="-34.71875" width="128" height="163"/>
