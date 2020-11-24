@@ -396,6 +396,8 @@ extension Chat {
                     Chat.spamMap[item.uniques] = [item.call, item.call, item.call] //as? [CallbackProtocol]
                 } else if let _ = item.call as? GetMentionCallbacks {
                     Chat.mentionMap[item.uniques] = item.call
+                } else if let _ = item.call as? CallRequestCallback {
+                    Chat.callMap[item.uniques] = [item.call, item.call, item.call]
                 } else {
                     Chat.map[item.uniques] = item.call
                 }
@@ -898,6 +900,32 @@ extension Chat {
         // a message of type 65 (STOP_BOT) comes from Server.
         case ChatMessageVOTypes.STOP_BOT.intValue():
             responseOfStopBot(withMessage: message)
+            break
+            
+        // a message of type 70 (CALL_REQUEST) comes from Server.
+        case ChatMessageVOTypes.CALL_REQUEST.intValue():
+            createCallRequestComes(withMessage: message)
+            break
+            
+        // a message of type 71 (ACCEPT_CALL) comes from Server.
+        case ChatMessageVOTypes.ACCEPT_CALL.intValue():
+            // there is no response as type 71 comes from server!
+//            responseOfCallAccepted(withMessage: message)
+            break
+            
+        // a message of type 72 (REJECT_CALL) comes from Server.
+        case ChatMessageVOTypes.REJECT_CALL.intValue():
+            responseOfCallRejected(withMessage: message)
+            break
+            
+        // a message of type 73 (DELIVER_CALL_REQUEST) comes from Server.
+        case ChatMessageVOTypes.DELIVER_CALL_REQUEST.intValue():
+            responseOfCallDelivery(withMessage: message)
+            break
+            
+        // a message of type 74 (START_CALL) comes from Server.
+        case ChatMessageVOTypes.START_CALL.intValue():
+            responseOfCallStarted(withMessage: message)
             break
             
         // a message of type 90 (CONTACT_SYNCED) comes from Server.

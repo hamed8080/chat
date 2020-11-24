@@ -11,11 +11,8 @@ import FanapPodAsyncSDK
 import CoreData
 import Alamofire
 import SwiftyJSON
-//import UIKit
-//import Contacts
 import Sentry
 import Each
-//import Firebase
 
 
 public class Chat {
@@ -471,6 +468,7 @@ public class Chat {
     static var map          = [String: CallbackProtocol]()
     static var mentionMap   = [String: CallbackProtocol]()
     static var spamMap      = [String: [CallbackProtocol]]()
+    static var callMap      = [String: [CallbackProtocol]]()
     
     // property to hold array of Sent, Deliver and Seen requests that comes from client, but they have not completed yet, and response didn't come yet.
     // the keys are uniqueIds of the requests
@@ -525,6 +523,10 @@ public class Chat {
     public var startBotCallbackToUser:      callbackTypeAlias?
     public var stopBotCallbackToUser:       callbackTypeAlias?
     
+    
+    // Call CallBacks
+    public var callRequestCallbackToUser:   callbackTypeAlias?
+    public var callAcceptCallbackToUser:    callbackTypeAlias?
     
     
     // MARK: - create Async with the parameters

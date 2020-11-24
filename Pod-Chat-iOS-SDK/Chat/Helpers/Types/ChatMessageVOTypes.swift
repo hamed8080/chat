@@ -68,6 +68,23 @@ public enum ChatMessageVOTypes {
     case DEFINE_BOT_COMMAND                 // 63
     case START_BOT                          // 64
     case STOP_BOT                           // 65
+    
+    case CALL_REQUEST                       // 70
+    case ACCEPT_CALL                        // 71
+    case REJECT_CALL                        // 72
+    case DELIVER_CALL_REQUEST               // 73
+    case START_CALL                         // 74
+    case END_CALL_REQUEST                   // 75
+    case END_CALL                           // 76
+    case GET_CALLS                          // 77
+    case CALL_RECONNECT                     // 78
+    case CALL_CONNECT                       // 79
+//    case CALL_REQUEST                       // 70
+//    case CALL_ACCEPT                        // 71
+//    case CALL_REJECT                        // 72
+//    case CALL_REJECT                        // 73
+//    case CALL_START                         // 74
+    
     case CONTACT_SYNCED                     // 90
     case LOGOUT                             // 100
     case STATUS_PING                        // 101
@@ -134,6 +151,20 @@ public enum ChatMessageVOTypes {
         case .DEFINE_BOT_COMMAND:               return 63
         case .START_BOT:                        return 64
         case .STOP_BOT:                         return 65
+        case .CALL_REQUEST:                     return 70
+        case .ACCEPT_CALL:                      return 71
+        case .REJECT_CALL:                      return 72
+        case .DELIVER_CALL_REQUEST:             return 73
+        case .START_CALL:                       return 74
+        case .END_CALL_REQUEST:                 return 75
+        case .END_CALL:                         return 76
+        case .GET_CALLS:                        return 77
+        case .CALL_RECONNECT:                   return 78
+        case .CALL_CONNECT:                     return 79
+//        case .CALL_REQUEST:                     return 70
+//        case .CALL_ACCEPT:                      return 71
+//        case .CALL_REJECT:                      return 72
+//        case .CALL_START:                       return 73
         case .CONTACT_SYNCED:                   return 90
         case .LOGOUT:                           return 100
         case .STATUS_PING:                      return 101

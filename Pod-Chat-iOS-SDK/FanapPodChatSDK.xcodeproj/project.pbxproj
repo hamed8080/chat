@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -371,6 +371,27 @@
 		3EF2D3CC21A985BD005867C2 /* SeenMessageListTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF2D3CB21A985BD005867C2 /* SeenMessageListTest.swift */; };
 		3EF2D3D021A985D1005867C2 /* DeliverMessageListTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF2D3CF21A985D1005867C2 /* DeliverMessageListTest.swift */; };
 		3EFDB457236C6BB200623461 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EFDB448236C6B9B00623461 /* Alamofire.framework */; };
+		3EFF43B9256AB836004C1056 /* CallManagementMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFF43B8256AB836004C1056 /* CallManagementMethods.swift */; };
+		3EFF4461256D0C13004C1056 /* CallVO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFF4460256D0C13004C1056 /* CallVO.swift */; };
+		3EFF4465256D0C55004C1056 /* CallHistoryVO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFF4464256D0C55004C1056 /* CallHistoryVO.swift */; };
+		3EFF4468256D0C82004C1056 /* CallInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFF4467256D0C82004C1056 /* CallInfo.swift */; };
+		3EFF446B256D0C98004C1056 /* CallParticipantVO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFF446A256D0C98004C1056 /* CallParticipantVO.swift */; };
+		3EFF446E256D0CC9004C1056 /* CreateCallVO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFF446D256D0CC9004C1056 /* CreateCallVO.swift */; };
+		3EFF4471256D0CE1004C1056 /* ClientDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFF4470256D0CE1004C1056 /* ClientDTO.swift */; };
+		3EFF4474256D0D10004C1056 /* CALL_STATUS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFF4473256D0D10004C1056 /* CALL_STATUS.swift */; };
+		3EFF4477256D0D1F004C1056 /* CALL_TYPE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFF4476256D0D1F004C1056 /* CALL_TYPE.swift */; };
+		3EFF447A256D0D49004C1056 /* SendCallRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFF4479256D0D49004C1056 /* SendCallRequest.swift */; };
+		3EFF447D256D0D62004C1056 /* AcceptCallRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFF447C256D0D62004C1056 /* AcceptCallRequest.swift */; };
+		3EFF4480256D0D74004C1056 /* RejectCallRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFF447F256D0D74004C1056 /* RejectCallRequest.swift */; };
+		3EFF4486256D0E00004C1056 /* CallStartResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFF4485256D0E00004C1056 /* CallStartResponse.swift */; };
+		3EFF448A256D0E81004C1056 /* RejectCallResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFF4489256D0E81004C1056 /* RejectCallResponse.swift */; };
+		3EFF448D256D0EA4004C1056 /* DeliverCallResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFF448C256D0EA4004C1056 /* DeliverCallResponse.swift */; };
+		3EFF4490256D0EBC004C1056 /* CreateCallResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFF448F256D0EBC004C1056 /* CreateCallResponse.swift */; };
+		3EFF4496256D0F0E004C1056 /* CallRequestCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFF4495256D0F0E004C1056 /* CallRequestCallback.swift */; };
+		3EFF4499256D0F96004C1056 /* CallAcceptedCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFF4498256D0F96004C1056 /* CallAcceptedCallback.swift */; };
+		3EFF44C2256D10F6004C1056 /* HandleCallRejected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFF44C1256D10F6004C1056 /* HandleCallRejected.swift */; };
+		3EFF44C5256D1166004C1056 /* HandleCallStarted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFF44C4256D1166004C1056 /* HandleCallStarted.swift */; };
+		3EFF44C8256D1187004C1056 /* HandleCallDelivery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFF44C7256D1187004C1056 /* HandleCallDelivery.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -802,6 +823,27 @@
 		3EF2D3CB21A985BD005867C2 /* SeenMessageListTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeenMessageListTest.swift; sourceTree = "<group>"; };
 		3EF2D3CF21A985D1005867C2 /* DeliverMessageListTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliverMessageListTest.swift; sourceTree = "<group>"; };
 		3EFDB43C236C6B9B00623461 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = "../../../Usefull Libraries/Alamofire-4.8.2/Alamofire.xcodeproj"; sourceTree = "<group>"; };
+		3EFF43B8256AB836004C1056 /* CallManagementMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallManagementMethods.swift; sourceTree = "<group>"; };
+		3EFF4460256D0C13004C1056 /* CallVO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVO.swift; sourceTree = "<group>"; };
+		3EFF4464256D0C55004C1056 /* CallHistoryVO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryVO.swift; sourceTree = "<group>"; };
+		3EFF4467256D0C82004C1056 /* CallInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallInfo.swift; sourceTree = "<group>"; };
+		3EFF446A256D0C98004C1056 /* CallParticipantVO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallParticipantVO.swift; sourceTree = "<group>"; };
+		3EFF446D256D0CC9004C1056 /* CreateCallVO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCallVO.swift; sourceTree = "<group>"; };
+		3EFF4470256D0CE1004C1056 /* ClientDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientDTO.swift; sourceTree = "<group>"; };
+		3EFF4473256D0D10004C1056 /* CALL_STATUS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALL_STATUS.swift; sourceTree = "<group>"; };
+		3EFF4476256D0D1F004C1056 /* CALL_TYPE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALL_TYPE.swift; sourceTree = "<group>"; };
+		3EFF4479256D0D49004C1056 /* SendCallRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendCallRequest.swift; sourceTree = "<group>"; };
+		3EFF447C256D0D62004C1056 /* AcceptCallRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcceptCallRequest.swift; sourceTree = "<group>"; };
+		3EFF447F256D0D74004C1056 /* RejectCallRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RejectCallRequest.swift; sourceTree = "<group>"; };
+		3EFF4485256D0E00004C1056 /* CallStartResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallStartResponse.swift; sourceTree = "<group>"; };
+		3EFF4489256D0E81004C1056 /* RejectCallResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RejectCallResponse.swift; sourceTree = "<group>"; };
+		3EFF448C256D0EA4004C1056 /* DeliverCallResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliverCallResponse.swift; sourceTree = "<group>"; };
+		3EFF448F256D0EBC004C1056 /* CreateCallResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCallResponse.swift; sourceTree = "<group>"; };
+		3EFF4495256D0F0E004C1056 /* CallRequestCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallRequestCallback.swift; sourceTree = "<group>"; };
+		3EFF4498256D0F96004C1056 /* CallAcceptedCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallAcceptedCallback.swift; sourceTree = "<group>"; };
+		3EFF44C1256D10F6004C1056 /* HandleCallRejected.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandleCallRejected.swift; sourceTree = "<group>"; };
+		3EFF44C4256D1166004C1056 /* HandleCallStarted.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandleCallStarted.swift; sourceTree = "<group>"; };
+		3EFF44C7256D1187004C1056 /* HandleCallDelivery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandleCallDelivery.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -830,6 +872,7 @@
 			isa = PBXGroup;
 			children = (
 				3EB5205922ABEFB200B7EA45 /* ChatPublicMethods.swift */,
+				3EFF43B8256AB836004C1056 /* CallManagementMethods.swift */,
 				3E1F313C24533DA500643EE6 /* BotManagementMethods.swift */,
 				3E0A76B122AFD128009D669E /* ContactManagementMethods.swift */,
 				3E0A76C122AFD6F8009D669E /* FileManagementMethods.swift */,
@@ -846,6 +889,7 @@
 			isa = PBXGroup;
 			children = (
 				3EB5205722ABEEB200B7EA45 /* ChatPrivateMethods.swift */,
+				3EFF44CA256D11A9004C1056 /* HandleResponseMethods */,
 				3E0A76C922AFDBF6009D669E /* CreateReturnData.swift */,
 				3E0B90FF22F579C300986A96 /* Networking.swift */,
 				3EBADE8A23E6B7A3009BC821 /* DiskStatus.swift */,
@@ -875,6 +919,8 @@
 				3E8ADC7623B353C200E3538D /* InviteeVoIdTypes.swift */,
 				3E8ADC8223B3590300E3538D /* SignalMessageType.swift */,
 				3E8ADC7423B3538200E3538D /* ThreadTypes.swift */,
+				3EFF4473256D0D10004C1056 /* CALL_STATUS.swift */,
+				3EFF4476256D0D1F004C1056 /* CALL_TYPE.swift */,
 				3E8ADC7223B352AB00E3538D /* ChatMessageVOTypes.swift */,
 			);
 			path = Types;
@@ -1092,6 +1138,7 @@
 			children = (
 				3E17D247244EFFB0009142F8 /* RequestModelDelegates.swift */,
 				3E1F314A24533F1200643EE6 /* BotInputModels */,
+				3EFF4482256D0D98004C1056 /* CallInputModels */,
 				3E17D257244F0B44009142F8 /* ContactInputModels */,
 				3E17D25E244F8C21009142F8 /* FileInputModels */,
 				3E17D25F244F8CDB009142F8 /* MapInputModels */,
@@ -1349,6 +1396,7 @@
 			isa = PBXGroup;
 			children = (
 				3E1F3156245345D000643EE6 /* BotResponses */,
+				3EFF44BE256D0FD6004C1056 /* CallResponses */,
 				3EACCF092451F3E9003A97D9 /* ContactResponses */,
 				3EACCF072451F227003A97D9 /* MessageResponses */,
 				3EACCF052451EB74003A97D9 /* ParticipantResponses */,
@@ -1378,6 +1426,12 @@
 				3E1F316324534A3B00643EE6 /* BotVO.swift */,
 				3E1F31652453504700643EE6 /* BotInfoVO.swift */,
 				3EBBEDD82174C2A200F5CDC7 /* BlockedUser.swift */,
+				3EFF4460256D0C13004C1056 /* CallVO.swift */,
+				3EFF4464256D0C55004C1056 /* CallHistoryVO.swift */,
+				3EFF4467256D0C82004C1056 /* CallInfo.swift */,
+				3EFF446A256D0C98004C1056 /* CallParticipantVO.swift */,
+				3EFF446D256D0CC9004C1056 /* CreateCallVO.swift */,
+				3EFF4470256D0CE1004C1056 /* ClientDTO.swift */,
 				3EBBEDD22174C20200F5CDC7 /* Contact.swift */,
 				3E400DBC23EFEDDF000DA873 /* Profile.swift */,
 				3EBBEDD42174C23B00F5CDC7 /* Conversation.swift */,
@@ -1408,6 +1462,7 @@
 				3EACCEED245180AC003A97D9 /* ResponseModel.swift */,
 				3EACCEFD245186B1003A97D9 /* ResponseModelDelegates.swift */,
 				3E1F314D24533FAB00643EE6 /* BotOutputModels */,
+				3EFF4492256D0EE5004C1056 /* CallOutputModels */,
 				3EACCEFC24518353003A97D9 /* ContactOutputModels */,
 				3EACCF032451E950003A97D9 /* FileOutputModels */,
 				3EACCF022451E921003A97D9 /* MapOutputModels */,
@@ -1526,6 +1581,46 @@
 				3EFDB454236C6B9B00623461 /* Alamofire.framework */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		3EFF4482256D0D98004C1056 /* CallInputModels */ = {
+			isa = PBXGroup;
+			children = (
+				3EFF4479256D0D49004C1056 /* SendCallRequest.swift */,
+				3EFF447C256D0D62004C1056 /* AcceptCallRequest.swift */,
+				3EFF447F256D0D74004C1056 /* RejectCallRequest.swift */,
+			);
+			path = CallInputModels;
+			sourceTree = "<group>";
+		};
+		3EFF4492256D0EE5004C1056 /* CallOutputModels */ = {
+			isa = PBXGroup;
+			children = (
+				3EFF4485256D0E00004C1056 /* CallStartResponse.swift */,
+				3EFF4489256D0E81004C1056 /* RejectCallResponse.swift */,
+				3EFF448C256D0EA4004C1056 /* DeliverCallResponse.swift */,
+				3EFF448F256D0EBC004C1056 /* CreateCallResponse.swift */,
+			);
+			path = CallOutputModels;
+			sourceTree = "<group>";
+		};
+		3EFF44BE256D0FD6004C1056 /* CallResponses */ = {
+			isa = PBXGroup;
+			children = (
+				3EFF4495256D0F0E004C1056 /* CallRequestCallback.swift */,
+				3EFF4498256D0F96004C1056 /* CallAcceptedCallback.swift */,
+			);
+			path = CallResponses;
+			sourceTree = "<group>";
+		};
+		3EFF44CA256D11A9004C1056 /* HandleResponseMethods */ = {
+			isa = PBXGroup;
+			children = (
+				3EFF44C1256D10F6004C1056 /* HandleCallRejected.swift */,
+				3EFF44C4256D1166004C1056 /* HandleCallStarted.swift */,
+				3EFF44C7256D1187004C1056 /* HandleCallDelivery.swift */,
+			);
+			path = HandleResponseMethods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1744,6 +1839,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		3E13BD37247894DA00CCE1D6 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -1768,11 +1864,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				3E00CAE921DC8E5A0029B1FC /* MapRouting.swift in Sources */,
+				3EFF4461256D0C13004C1056 /* CallVO.swift in Sources */,
 				3E8D87E5221861920092B440 /* QueueOfTextMessages+CoreDataClass.swift in Sources */,
+				3EFF44C5256D1166004C1056 /* HandleCallStarted.swift in Sources */,
 				3E24084021F5C844001F32F1 /* CMForwardInfo+CoreDataClass.swift in Sources */,
 				3E0AD6ED254E364E00BEEAE2 /* CloseThreadCallbacks.swift in Sources */,
 				3E3315AD23B22A3F0070A3D1 /* ThreadEventModel.swift in Sources */,
 				3E5AAEF822195A510085C03D /* QueueOfUploadFiles+CoreDataProperties.swift in Sources */,
+				3EFF447A256D0D49004C1056 /* SendCallRequest.swift in Sources */,
 				3EB5205422ABED5300B7EA45 /* UpdateDataOnCache.swift in Sources */,
 				3E8ADC7B23B3551F00E3538D /* ChatErrors.swift in Sources */,
 				3EBBEDEB2174C44400F5CDC7 /* GetUserInfoResponse.swift in Sources */,
@@ -1783,6 +1882,7 @@
 				3EE0694A2212A3100099068F /* PhoneContact+CoreDataClass.swift in Sources */,
 				3E772115250CA3AB004328B5 /* StatusPingRequest.swift in Sources */,
 				3E581EA22418632B006EA0EF /* JoinPublicThreadRequest.swift in Sources */,
+				3EFF447D256D0D62004C1056 /* AcceptCallRequest.swift in Sources */,
 				3EB5205822ABEEB200B7EA45 /* ChatPrivateMethods.swift in Sources */,
 				3EBBEDFC2174C9FB00F5CDC7 /* ChatProtocols.swift in Sources */,
 				3E8ADC8123B358F300E3538D /* DownloaUploadActions.swift in Sources */,
@@ -1829,6 +1929,7 @@
 				3E0A76CA22AFDBF6009D669E /* CreateReturnData.swift in Sources */,
 				3E2ADA5223D5A5AE00331407 /* CMPinMessage+CoreDataProperties.swift in Sources */,
 				3E3315AB23B221E90070A3D1 /* MessageEventModel.swift in Sources */,
+				3EFF4477256D0D1F004C1056 /* CALL_TYPE.swift in Sources */,
 				3E1F314C24533FA700643EE6 /* CreateBotResponse.swift in Sources */,
 				3E0AD6F3254F0C1D00BEEAE2 /* CloseThreadResponse.swift in Sources */,
 				3ECFCAB8228967BD00313419 /* ClearHistoryRequest.swift in Sources */,
@@ -1841,6 +1942,7 @@
 				3EBBEDE92174C39B00F5CDC7 /* ThreadParticipants.swift in Sources */,
 				3E24084C21F5C844001F32F1 /* CMImage+CoreDataClass.swift in Sources */,
 				3E24084E21F5C844001F32F1 /* CMImage+CoreDataProperties.swift in Sources */,
+				3EFF44C8256D1187004C1056 /* HandleCallDelivery.swift in Sources */,
 				3EBBEDDD2174C2F000F5CDC7 /* LinkedUser.swift in Sources */,
 				3E8ADC7323B352AB00E3538D /* ChatMessageVOTypes.swift in Sources */,
 				3E1F31512453418A00643EE6 /* AddBotCommandResponse.swift in Sources */,
@@ -1854,6 +1956,7 @@
 				3EA1568021CE1B5B004B1346 /* UnblockRequest.swift in Sources */,
 				3E24083621F5C844001F32F1 /* CMReplyInfo+CoreDataProperties.swift in Sources */,
 				3EB5207122ABF38900B7EA45 /* EditMessageCallbacks.swift in Sources */,
+				3EFF448A256D0E81004C1056 /* RejectCallResponse.swift in Sources */,
 				3EB5205222ABEA4000B7EA45 /* SaveDataToCache.swift in Sources */,
 				3E8D87EB221861920092B440 /* QueueOfForwardMessages+CoreDataProperties.swift in Sources */,
 				3EBBEDF22174C5EC00F5CDC7 /* GetHistoryResponse.swift in Sources */,
@@ -1865,7 +1968,9 @@
 				3E8D87D2221858290092B440 /* QueueOfWaitFileMessagesResponse.swift in Sources */,
 				3E1F314F245340F500643EE6 /* AddBotCommandRequest.swift in Sources */,
 				3E3F17792133D0A90029E4D4 /* EnumsAndStructs.swift in Sources */,
+				3EFF4499256D0F96004C1056 /* CallAcceptedCallback.swift in Sources */,
 				3E1F31602453487B00643EE6 /* StartStopBotResponse.swift in Sources */,
+				3EFF4465256D0C55004C1056 /* CallHistoryVO.swift in Sources */,
 				3E17D212244A4A49009142F8 /* ContactEventTypes.swift in Sources */,
 				3E581EF2241E09B5006EA0EF /* IsPublicThreadNameAvailableCallbacks.swift in Sources */,
 				3EA1568621CE1BA0004B1346 /* GetHistoryRequest.swift in Sources */,
@@ -1931,6 +2036,7 @@
 				3E9853E7222C2DB900BD38D0 /* SendLocationMessageRequest.swift in Sources */,
 				3E5AAEF622195A510085C03D /* QueueOfUploadFiles+CoreDataClass.swift in Sources */,
 				3EBBEDDB2174C2C000F5CDC7 /* Invitee.swift in Sources */,
+				3EFF446B256D0C98004C1056 /* CallParticipantVO.swift in Sources */,
 				3EA1568821CE1BB7004B1346 /* CreateThreadRequest.swift in Sources */,
 				3EB5208122ABF4DC00B7EA45 /* SpamPrivateThread.swift in Sources */,
 				3E17D21E244A4B74009142F8 /* StringExtentions.swift in Sources */,
@@ -1946,6 +2052,7 @@
 				3E35336A23D4560D00731774 /* PinUnpinMessage.swift in Sources */,
 				3E437D5C218F36DA0021C0ED /* GetBlockedListResponse.swift in Sources */,
 				3EA156AA21CE1D10004B1346 /* GetMessageDeliveredSeenListRequest.swift in Sources */,
+				3EFF4486256D0E00004C1056 /* CallStartResponse.swift in Sources */,
 				3E56EDD523BCE07100FED6CD /* CreateThreadWithFileMessageRequest.swift in Sources */,
 				3E17D28D24D61EBC00B75135 /* UserEventModel.swift in Sources */,
 				3E1F70572405648600FAF460 /* MessageType.swift in Sources */,
@@ -1953,6 +2060,7 @@
 				3E1F31552453455500643EE6 /* AddBotCommandCallback.swift in Sources */,
 				3E8ADC7D23B3556300E3538D /* ServiceAddresses.swift in Sources */,
 				3E8ADCFD23B7845200E3538D /* PinThreadCallback.swift in Sources */,
+				3EFF43B9256AB836004C1056 /* CallManagementMethods.swift in Sources */,
 				3E10995623C365240034093E /* CreateThreadMessageInput.swift in Sources */,
 				3EA1569421CE1C2B004B1346 /* LeaveThreadRequest.swift in Sources */,
 				3E24083E21F5C844001F32F1 /* CMMessage+CoreDataProperties.swift in Sources */,
@@ -1999,7 +2107,9 @@
 				3E8E923122A38F2D0037CD41 /* SendSignalMessageRequest.swift in Sources */,
 				3E8ADD0123B7855500E3538D /* UnpinThreadCallback.swift in Sources */,
 				3E10996223C3659B0034093E /* GetAllThreadsRequest.swift in Sources */,
+				3EFF44C2256D10F6004C1056 /* HandleCallRejected.swift in Sources */,
 				3EB5204B22ABE83100B7EA45 /* CacheExtensions.swift in Sources */,
+				3EFF4474256D0D10004C1056 /* CALL_STATUS.swift in Sources */,
 				3E581EF6241E2560006EA0EF /* IsAvailableNameResponse.swift in Sources */,
 				3EB5205E22ABF1A400B7EA45 /* GetUserInfoCallback.swift in Sources */,
 				3EA1569E21CE1C96004B1346 /* SendReplyFileMessageRequest.swift in Sources */,
@@ -2008,7 +2118,9 @@
 				3E8ADCFF23B784E600E3538D /* PinUnpinThreadResponse.swift in Sources */,
 				3E24085221F5C844001F32F1 /* CMContact+CoreDataProperties.swift in Sources */,
 				3E8ADC6B23B3514F00E3538D /* SendAsyncMessageVO.swift in Sources */,
+				3EFF448D256D0EA4004C1056 /* DeliverCallResponse.swift in Sources */,
 				3EA1567121CE1A92004B1346 /* GetContactsRequest.swift in Sources */,
+				3EFF4468256D0C82004C1056 /* CallInfo.swift in Sources */,
 				3E35336623D4502200731774 /* UnpinMessageCallback.swift in Sources */,
 				3E400DB123EFE2A8000DA873 /* UpdateChatProfileCallback.swift in Sources */,
 				3E1F315A2453467E00643EE6 /* StopBotCallback.swift in Sources */,
@@ -2020,6 +2132,7 @@
 				3EB5207322ABF3BB00B7EA45 /* DeleteMessageCallbacks.swift in Sources */,
 				3EA156FC21CE28B4004B1346 /* Cache.swift in Sources */,
 				3E0B910022F579C300986A96 /* Networking.swift in Sources */,
+				3EFF446E256D0CC9004C1056 /* CreateCallVO.swift in Sources */,
 				3EAAFAB623A65BD100003258 /* DownloadImageResponse.swift in Sources */,
 				3E8D56DF21DBB55F00B844DE /* MapSearchResponse.swift in Sources */,
 				3EA156AC21CE1D1E004B1346 /* SendDeliverSeenRequest.swift in Sources */,
@@ -2033,14 +2146,18 @@
 				3EBBEDF02174C5C800F5CDC7 /* GetThreadsResponse.swift in Sources */,
 				3EBBEE012174CBCA00F5CDC7 /* JSONExtentions.swift in Sources */,
 				3EBBEDC62174C18F00F5CDC7 /* User.swift in Sources */,
+				3EFF4480256D0D74004C1056 /* RejectCallRequest.swift in Sources */,
 				3E24084421F5C844001F32F1 /* CMConversation+CoreDataClass.swift in Sources */,
 				3E17D214244A4A78009142F8 /* ThreadEventTypes.swift in Sources */,
 				3EE6B50F22DF46A400540F17 /* SendMessageResponse.swift in Sources */,
 				3EB5204E22ABE99A00B7EA45 /* RetrieveDataFromCache.swift in Sources */,
+				3EFF4471256D0CE1004C1056 /* ClientDTO.swift in Sources */,
 				3EBBEDE12174C32700F5CDC7 /* ReplyInfo.swift in Sources */,
 				3E17D29D24D61EE200B75135 /* UserEventTypes.swift in Sources */,
 				3E5AAEF422195A510085C03D /* QueueOfUploadImages+CoreDataProperties.swift in Sources */,
+				3EFF4490256D0EBC004C1056 /* CreateCallResponse.swift in Sources */,
 				3EEA836122EEC6CB0014B075 /* DeleteMessageResponse.swift in Sources */,
+				3EFF4496256D0F0E004C1056 /* CallRequestCallback.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2282,7 +2399,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 0.9.3.3;
+				MARKETING_VERSION = 0.9.3.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.fanapSoft.FanapPodChatSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2316,7 +2433,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 0.9.3.3;
+				MARKETING_VERSION = 0.9.3.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.fanapSoft.FanapPodChatSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
