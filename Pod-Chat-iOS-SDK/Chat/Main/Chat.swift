@@ -51,7 +51,10 @@ public class Chat {
                                  reconnectOnClose:          Bool,
                                  localImageCustomPath:      URL?,
                                  localFileCustomPath:       URL?,
-                                 deviecLimitationSpaceMB:   Int64?) {
+                                 deviecLimitationSpaceMB:   Int64?,
+                                 showDebuggingLogLevel:     ConsoleLogLevel?) {
+        
+        self.debuggingLogLevel = showDebuggingLogLevel?.logLevel() ?? LogLevel.error
         
         self.captureSentryLogs = captureLogsOnSentry
         if captureLogsOnSentry {
@@ -197,6 +200,8 @@ public class Chat {
     // create cache instance to use cache...
     static let cacheDB = Cache()
     
+    
+    var debuggingLogLevel: LogLevel = .error
     
     // MARK: - setup properties
     
@@ -539,7 +544,8 @@ public class Chat {
                                 messageTtl:                 messageTtl,
                                 connectionRetryInterval:    connectionRetryInterval,
                                 maxReconnectTimeInterval:   maxReconnectTimeInterval,
-                                reconnectOnClose:           reconnectOnClose)
+                                reconnectOnClose:           reconnectOnClose,
+                                showDebuggingLogLevel:      debuggingLogLevel)
             asyncClient?.delegate = self
             asyncClient?.createSocket()
         }
