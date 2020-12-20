@@ -646,9 +646,9 @@ extension Chat {
                                                            typeCode: safeLeaveThreadInput.typeCode,
                                                            uniqueId: nil)
         getCurrentUserRoles(inputModel: currentRolesInput,
-                            getCacheResponse: false)
-        { _ in
-        } completion: { (currentUserRolesResponse) in
+                            getCacheResponse: false,
+                            uniqueId: { _ in },
+                            completion: { (currentUserRolesResponse) in
             let userRolesResponse = currentUserRolesResponse as! GetCurrentUserRolesModel
             var isAdmin = false
             let roles = userRolesResponse.userRoles
@@ -665,15 +665,15 @@ extension Chat {
                                                   threadId: safeLeaveThreadInput.threadId,
                                                   typeCode: nil,
                                                   uniqueId: nil)
-                self.setRole(inputModel: adminInput) { _ in } completion: { (setAdminResponse) in
+                
+                self.setRole(inputModel: adminInput, uniqueId: { _ in }) { (setAdminResponse) in
                     addAdminCallback(setAdminResponse)
-                    self.leaveThread(inputModel: safeLeaveThreadInput.convertToLeaveThreadRequest())
-                    { (leaveThreadUniqueId) in
+                    self.leaveThread(inputModel: safeLeaveThreadInput.convertToLeaveThreadRequest(),
+                                     uniqueId: { (leaveThreadUniqueId) in
                         uniqueId(leaveThreadUniqueId)
-                    } completion: { (leaveThreadResponse) in
+                    }) { (leaveThreadResponse) in
                         leaveThreadCallback(leaveThreadResponse)
                     }
-                    
                 }
 
             } else {
@@ -691,8 +691,9 @@ extension Chat {
                                                       errorCode:        6666)
                 leaveThreadCallback(leaveThreadModel)
             }
-            
-        } cacheResponse: { _ in }
+                                
+        }) { _ in }
+        
     }
     
     
