@@ -349,6 +349,7 @@
 		3EBBEDFC2174C9FB00F5CDC7 /* ChatProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDFB2174C9FB00F5CDC7 /* ChatProtocols.swift */; };
 		3EBBEDFE2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEDFD2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift */; };
 		3EBBEE012174CBCA00F5CDC7 /* JSONExtentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBBEE002174CBCA00F5CDC7 /* JSONExtentions.swift */; };
+		3EBC6B0425887FFF00332F79 /* ConsoleLogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBC6B0325887FFF00332F79 /* ConsoleLogLevel.swift */; };
 		3EBEC369242B0A2200FCDE4A /* pic.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3EBEC35E242B0A2200FCDE4A /* pic.jpg */; };
 		3ECFC9A023E0502900978C96 /* GetCurrentUserRolesRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECFC99F23E0502900978C96 /* GetCurrentUserRolesRequest.swift */; };
 		3ECFC9A223E0521B00978C96 /* GetCurrentUserRolesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECFC9A123E0521B00978C96 /* GetCurrentUserRolesResponse.swift */; };
@@ -779,6 +780,7 @@
 		3EBBEDFB2174C9FB00F5CDC7 /* ChatProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatProtocols.swift; sourceTree = "<group>"; };
 		3EBBEDFD2174CA8D00F5CDC7 /* AsyncDelegatesImplementation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncDelegatesImplementation.swift; sourceTree = "<group>"; };
 		3EBBEE002174CBCA00F5CDC7 /* JSONExtentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONExtentions.swift; sourceTree = "<group>"; };
+		3EBC6B0325887FFF00332F79 /* ConsoleLogLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleLogLevel.swift; sourceTree = "<group>"; };
 		3EBEC35E242B0A2200FCDE4A /* pic.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pic.jpg; sourceTree = "<group>"; };
 		3ECFC99F23E0502900978C96 /* GetCurrentUserRolesRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentUserRolesRequest.swift; sourceTree = "<group>"; };
 		3ECFC9A123E0521B00978C96 /* GetCurrentUserRolesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentUserRolesResponse.swift; sourceTree = "<group>"; };
@@ -1427,6 +1429,7 @@
 				3E8ADC7C23B3556300E3538D /* ServiceAddresses.swift */,
 				3E8ADC8023B358F300E3538D /* DownloaUploadActions.swift */,
 				3E8ADC7023B3522500E3538D /* Roles.swift */,
+				3EBC6B0325887FFF00332F79 /* ConsoleLogLevel.swift */,
 				3E8ADC7A23B3551F00E3538D /* ChatErrors.swift */,
 				3E3F17782133D0A90029E4D4 /* EnumsAndStructs.swift */,
 				3E17D21F244A4BE8009142F8 /* Extensions */,
@@ -1980,6 +1983,7 @@
 				3E24084621F5C844001F32F1 /* CMConversation+CoreDataProperties.swift in Sources */,
 				3E0A76C422AFD7C0009D669E /* MapManagementMethods.swift in Sources */,
 				3E3D785223D5EFC0005797A4 /* GetContactNotSeenDurationRequest.swift in Sources */,
+				3EBC6B0425887FFF00332F79 /* ConsoleLogLevel.swift in Sources */,
 				3E400DC923EFEED3000DA873 /* ProfileResponse.swift in Sources */,
 				3E35336423D44D3F00731774 /* PinMessageCallback.swift in Sources */,
 				3E35336223D44C5400731774 /* PinUnpinMessageRequest.swift in Sources */,
@@ -2282,7 +2286,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 0.9.3.3;
+				MARKETING_VERSION = 0.9.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.fanapSoft.FanapPodChatSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2316,7 +2320,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 0.9.3.3;
+				MARKETING_VERSION = 0.9.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.fanapSoft.FanapPodChatSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

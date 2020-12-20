@@ -203,6 +203,8 @@ extension Chat: AsyncDelegates {
         
         peerId = asyncClient?.asyncGetPeerId()
         
+        makeChatReady()
+        
         getUserInfoTimer = nil
         getUserInfoTimer = RepeatingTimer(timeInterval: Double(2))
     }
