@@ -127,6 +127,10 @@ public class Chat {
                     self.CreateAsync()
                 }
             }
+        } else {
+            DispatchQueue.main.async {
+                self.CreateAsync()
+            }
         }
         
         if checkIfDeviceHasFreeSpace(needSpaceInMB: self.deviecLimitationSpaceMB, turnOffTheCache: true) {
