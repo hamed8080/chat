@@ -22,10 +22,31 @@ public class Chat {
     
     // MARK: - Chat initializer
     public init() {
-
+        
     }
     
-    public static let sharedInstance = Chat()
+//    public static let sharedInstance = Chat()
+    
+    struct Static {
+        public static var instance: Chat?
+    }
+    
+    open class var sharedInstance: Chat {
+        if Static.instance == nil {
+            Static.instance = Chat()
+        }
+        return Static.instance!
+    }
+    
+    
+    public func disposeChatObject() {
+        stopAllChatTimers()
+        asyncClient?.disposeAsyncObject()
+        asyncClient = nil
+        Chat.Static.instance = nil
+        print("Disposed Singleton instance")
+//        Chat.sharedInstance = nil
+    }
     
     public func createChatObject(socketAddress:             String,
                                  ssoHost:                   String,
