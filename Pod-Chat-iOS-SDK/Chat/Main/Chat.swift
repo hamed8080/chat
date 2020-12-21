@@ -22,10 +22,31 @@ public class Chat {
     
     // MARK: - Chat initializer
     public init() {
-
+        
     }
     
-    public static let sharedInstance = Chat()
+//    public static let sharedInstance = Chat()
+    
+    struct Static {
+        public static var instance: Chat?
+    }
+    
+    open class var sharedInstance: Chat {
+        if Static.instance == nil {
+            Static.instance = Chat()
+        }
+        return Static.instance!
+    }
+    
+    
+    public func disposeChatObject() {
+        stopAllChatTimers()
+        asyncClient?.disposeAsyncObject()
+        asyncClient = nil
+        Chat.Static.instance = nil
+        print("Disposed Singleton instance")
+//        Chat.sharedInstance = nil
+    }
     
     public func createChatObject(socketAddress:             String,
                                  ssoHost:                   String,
@@ -46,6 +67,7 @@ public class Chat {
                                  connectionRetryInterval:   Int,
                                  connectionCheckTimeout:    Int,
                                  messageTtl:                Int,
+                                 getDeviceIdFromToken:      Bool,
                                  captureLogsOnSentry:       Bool,
                                  maxReconnectTimeInterval:  Int?,
                                  reconnectOnClose:          Bool,
@@ -117,18 +139,20 @@ public class Chat {
         self.localImageCustomPath = localImageCustomPath
         self.localFileCustomPath = localFileCustomPath
         
-        getDeviceIdWithToken { (deviceIdStr) in
-            self.deviceId = deviceIdStr
-            log.info("get deviceId successfully = \(self.deviceId ?? "error!!")", context: "Chat")
-            
+        if getDeviceIdFromToken {
+            getDeviceIdWithToken { (deviceIdStr) in
+                self.deviceId = deviceIdStr
+                log.info("get deviceId successfully = \(self.deviceId ?? "error!!")", context: "Chat")
+                
+                DispatchQueue.main.async {
+                    self.CreateAsync()
+                }
+            }
+        } else {
             DispatchQueue.main.async {
                 self.CreateAsync()
             }
         }
-//        self.deviceId = "1234567890"
-//        DispatchQueue.main.async {
-//            self.CreateAsync()
-//        }
         
         if checkIfDeviceHasFreeSpace(needSpaceInMB: self.deviecLimitationSpaceMB, turnOffTheCache: true) {
 //            self.enableCache = false
@@ -535,20 +559,18 @@ public class Chat {
     // MARK: - create Async with the parameters
     
     public func CreateAsync() {
-        if let dId = deviceId {
-            asyncClient = Async(socketAddress:              socketAddress,
-                                serverName:                 serverName,
-                                deviceId:                   dId,
-                                appId:                      nil,
-                                peerId:                     nil,
-                                messageTtl:                 messageTtl,
-                                connectionRetryInterval:    connectionRetryInterval,
-                                maxReconnectTimeInterval:   maxReconnectTimeInterval,
-                                reconnectOnClose:           reconnectOnClose,
-                                showDebuggingLogLevel:      debuggingLogLevel)
-            asyncClient?.delegate = self
-            asyncClient?.createSocket()
-        }
+        asyncClient = Async(socketAddress:              socketAddress,
+                            serverName:                 serverName,
+                            deviceId:                   deviceId,
+                            appId:                      nil,
+                            peerId:                     nil,
+                            messageTtl:                 messageTtl,
+                            connectionRetryInterval:    connectionRetryInterval,
+                            maxReconnectTimeInterval:   maxReconnectTimeInterval,
+                            reconnectOnClose:           reconnectOnClose,
+                            showDebuggingLogLevel:      debuggingLogLevel)
+        asyncClient?.delegate = self
+        asyncClient?.createSocket()
     }
     
     public func setGetUserInfoRetryCount(value: Int) {

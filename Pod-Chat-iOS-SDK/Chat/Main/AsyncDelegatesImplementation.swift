@@ -49,6 +49,8 @@ extension Chat: AsyncDelegates {
         peerId = nil
         isChatReady = false
         delegate?.chatDisconnect()
+        
+        stopAllChatTimers()
     }
     
     /*
@@ -205,7 +207,7 @@ extension Chat: AsyncDelegates {
         
         makeChatReady()
         
-        getUserInfoTimer = nil
+        stopGetUserInfoTimer()
         getUserInfoTimer = RepeatingTimer(timeInterval: Double(2))
     }
     
@@ -255,13 +257,35 @@ extension Chat: AsyncDelegates {
 //        lastReceivedMessageTimer = nil
 //        lastReceivedMessageTimer = RepeatingTimer(timeInterval: (Double(self.chatPingMessageInterval) * 1.5))
         
-        if let _ = lstRcvdMsgTimer {
-            lstRcvdMsgTimer!.stop()
-        }
+        stopLastReceivedMessageTimer()
         lastReceivedMessageTimer(interval: (Double(self.chatPingMessageInterval) * 1.5))
         
         let chatMessage = ChatMessage(withContent: withContent.content.convertToJSON())
         receivedMessageHandler(withContent: chatMessage)
+    }
+    
+    
+    func stopAllChatTimers() {
+        stopTyping()
+        stopGetUserInfoTimer()
+        stopLastReceivedMessageTimer()
+        stopLastSentMessageTimer()
+    }
+    
+    func stopGetUserInfoTimer() {
+        getUserInfoTimer = nil
+    }
+    
+    func stopLastReceivedMessageTimer() {
+        if let _ = lstRcvdMsgTimer {
+            lstRcvdMsgTimer!.stop()
+        }
+    }
+    
+    func stopLastSentMessageTimer() {
+        if let _ = lstSntMsgTimer {
+            lstSntMsgTimer?.stop()
+        }
     }
     
     

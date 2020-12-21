@@ -474,9 +474,7 @@ extension Chat {
 //        lastSentMessageTimer = nil
 //        lastSentMessageTimer = RepeatingTimer(timeInterval: TimeInterval(self.chatPingMessageInterval))
         
-        if let _ = lstSntMsgTimer {
-            lstSntMsgTimer?.stop()
-        }
+        stopLastSentMessageTimer()
 //        lastSentMessageTime = Date()
         lastSentMessageTimer(interval: TimeInterval(self.chatPingMessageInterval))
     }
@@ -535,8 +533,8 @@ extension Chat {
             
 //        } else if (lastSentMessageTimer != nil) {
 //            lastSentMessageTimer?.suspend()
-        } else if let _ = lstSntMsgTimer {
-            lstSntMsgTimer!.stop()
+        } else {
+            stopLastSentMessageTimer()
         }
     }
     
@@ -971,10 +969,11 @@ extension Chat {
             }) { _ in }
             Chat.map.removeValue(forKey: message.uniqueId)
             
-            if (messageContentAsJSON["code"].intValue == 21) {
-                isChatReady = false
-                asyncClient?.asyncLogOut()
-            }
+            // ToDo: what to do when authenticationError comes
+//            if (messageContentAsJSON["code"].intValue == 21) {
+//                isChatReady = false
+//                asyncClient?.disposeAsyncObject()
+//            }
             delegate?.chatError(errorCode:      message.code    ?? messageContentAsJSON["code"].int         ?? 0,
                                 errorMessage:   message.message ?? messageContentAsJSON["message"].string   ?? "",
                                 errorResult:    messageContentAsJSON)

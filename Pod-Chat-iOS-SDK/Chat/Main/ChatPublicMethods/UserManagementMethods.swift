@@ -421,12 +421,14 @@ extension Chat {
     /// - this method does not any output
     public func logOut() {
         deleteCache()
-        asyncClient?.asyncLogOut()
+        stopAllChatTimers()
+        asyncClient?.disposeAsyncObject()
     }
     
     
     public func disconnectChat() {
-        asyncClient?.asyncLogOut()
+        stopAllChatTimers()
+        asyncClient?.disposeAsyncObject()
     }
     
 }
