@@ -73,6 +73,7 @@ open class UploadImageModel: ResponseModel, ResponseModelDelegates {
             imageMetadata["id"]         = JSON(0)
             imageMetadata["name"]       = JSON(upload.name ?? "")
             imageMetadata["fileHash"]   = JSON(upload.hashCode)
+            imageMetadata["hashCode"]    = JSON(upload.hashCode)
 //            imageMetadata["type"]       = JSON()
 //            userGroupHash
         }
