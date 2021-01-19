@@ -71,6 +71,7 @@ open class UploadFileModel: ResponseModel, ResponseModelDelegates {
             fileMetadata["id"]          = JSON(0)
             fileMetadata["name"]        = JSON(upload.name ?? "")
             fileMetadata["fileHash"]    = JSON(upload.hashCode)
+            fileMetadata["hashCode"]    = JSON(upload.hashCode)
 //            fileMetadata["type"]       = JSON()
         }
         
