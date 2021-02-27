@@ -72,6 +72,10 @@ public enum ChatMessageVOTypes {
     case LOGOUT                             // 100
     case STATUS_PING                        // 101
     case CLOSE_THREAD                       // 102
+    case REGISTER_ASSISTANT                 // = 107
+    case DEACTICVE_ASSISTANT                // = 108
+    case GET_ASSISTANTS                     // = 109
+    case GET_ASSISTANT_HISTORY              // = 115
     case ERROR                              // 999
     
     func intValue() -> Int {
@@ -138,6 +142,10 @@ public enum ChatMessageVOTypes {
         case .LOGOUT:                           return 100
         case .STATUS_PING:                      return 101
         case .CLOSE_THREAD:                     return 102
+        case .REGISTER_ASSISTANT:               return 107
+        case .DEACTICVE_ASSISTANT:              return 108
+        case .GET_ASSISTANTS:                   return 109
+        case .GET_ASSISTANT_HISTORY:            return 115
         case .ERROR:                            return 999
         }
     }

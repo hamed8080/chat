@@ -547,6 +547,10 @@ public class Chat {
     public var joinPublicThreadCallbackToUser:              callbackTypeAlias?
     public var isPublicThreadNameAvailableCallbackToUser:   callbackTypeAlias?
     public var statusPingCallbackToUser:            callbackTypeAlias?
+    public var registerAssistantCallbackToUser:            callbackTypeAlias?
+    public var deactiveAssistantCallbackToUser:            callbackTypeAlias?
+    public var getAssistantsCallbackToUser:            callbackTypeAlias?
+    public var getAssistantsHistoryCallbackToUser:            callbackTypeAlias?
     
     // Bot callBacks
     public var addBotCommandCallbackToUser: callbackTypeAlias?

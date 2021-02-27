@@ -917,6 +917,26 @@ extension Chat {
             responseOfCloseThread(withMessage: message)
             break
             
+        // a message of type 107 (REGISTER_ASSISTANT) comes from Server.
+        case ChatMessageVOTypes.REGISTER_ASSISTANT.intValue():
+            responseOfRegisterAssistant(withMessage: message)
+            break
+            
+        // a message of type 108 (DEACTICVE_ASSISTANT) comes from Server.
+        case ChatMessageVOTypes.DEACTICVE_ASSISTANT.intValue():
+            responseOfDeactiveAssistant(withMessage: message)
+            break
+            
+        // a message of type 109 (GET_ASSISTANTS) comes from Server.
+        case ChatMessageVOTypes.GET_ASSISTANTS.intValue():
+            responseOfGetAssistant(withMessage: message)
+            break
+            
+        // a message of type 115 (GET_ASSISTANT_HISTORY) comes from Server.
+        case ChatMessageVOTypes.GET_ASSISTANT_HISTORY.intValue():
+            responseOfGetAssistantHistory(withMessage: message)
+            break
+            
         // a message of type 999 (ERROR) comes from Server.
         case ChatMessageVOTypes.ERROR.intValue():
             chatErrorHandler(withMessage: message, messageContentAsJSON: messageContentAsJSON)
