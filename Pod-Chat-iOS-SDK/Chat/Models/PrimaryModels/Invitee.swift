@@ -31,6 +31,8 @@ open class Invitee {
             case InviteeVoIdTypes.TO_BE_USER_ID.stringValue():                  self.idType = 5
             default: break
             }
+        } else if let myIdType = messageContent["idType"].int {
+            self.idType = myIdType
         }
     }
     

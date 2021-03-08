@@ -11,40 +11,45 @@ import SwiftyJSON
 
 open class RegisterAssistantRequest {
     
-    public let assistant:   Invitee
-    public let roleTypes:   [Roles]
-    public let contactType: String
+    public let assistants: [AssistantVO]
     
     public let typeCode:    String?
     public let uniqueId:    String
     
-    public init(assistant:      Invitee,
-                roleTypes:      [Roles],
-                contactType:    String,
+    public init(assistants:     [AssistantVO],
                 typeCode:       String?,
                 uniqueId:       String?) {
         
-        self.assistant      = assistant
-        self.roleTypes      = roleTypes
-        self.contactType    = contactType
+        self.assistants = assistants
         
         self.typeCode       = typeCode
         self.uniqueId       = uniqueId ?? UUID().uuidString
     }
     
     
-    public func convertContentToJSON() -> JSON {
-        var content: JSON = [:]
+    public func convertContentToJSON() -> [JSON] {
+        var contents = [JSON]()
         
-        content["assistant"] = assistant.formatToJSON()
-        var tempRoles = [String]()
-        for item in roleTypes {
-            tempRoles.append(item.stringValue())
+        for assist in assistants {
+            var content: JSON = [:]
+            if let assistant = assist.assistant {
+                content["assistant"] = assistant.formatToJSON()
+            }
+            if let roleTypes = assist.roleTypes {
+                var tempRoles = [String]()
+                for item in roleTypes {
+                    tempRoles.append(item.stringValue())
+                }
+                content["roleTypes"] = JSON(tempRoles)
+            }
+            if let contactType = assist.contactType {
+                content["contactType"] = JSON(contactType)
+            }
+            
+            contents.append(content)
         }
-        content["roleTypes"] = JSON(tempRoles)
-        content["contactType"] = JSON(contactType)
         
-        return content
+        return contents
     }
     
 }
@@ -69,16 +74,16 @@ open class DeactiveAssistantRequest {
     }
     
     
-    public func convertContentToJSON() -> JSON {
-        var content: JSON = [:]
+    public func convertContentToJSON() -> [JSON] {
+        var contents = [JSON]()
         
-        var tempAssistants = [JSON]()
         for item in assistants {
-            tempAssistants.append(item.formatToJSON())
+            var content: JSON = [:]
+            content["assistant"] = item.formatToJSON()
+            contents.append(content)
         }
-        content["assistant"] = JSON(tempAssistants)
         
-        return content
+        return contents
     }
     
 }
