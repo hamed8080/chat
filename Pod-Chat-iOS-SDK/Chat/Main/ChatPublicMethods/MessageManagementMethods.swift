@@ -31,6 +31,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (ClearHistoryRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ClearHistoryModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func clearHistory(inputModel clearHistoryInput: ClearHistoryRequest,
                              uniqueId:          @escaping ((String) -> ()),
                              completion:        @escaping callbackTypeAlias) {
@@ -84,6 +85,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (DeleteMessageRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! DeleteMessageModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func deleteMessage(inputModel deleteMessageInput:   DeleteMessageRequest,
                               uniqueId:             @escaping ((String) -> ()),
                               completion:           @escaping callbackTypeAlias) {
@@ -136,6 +138,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (DeleteMultipleMessagesRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server.        (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! DeleteMessageModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func deleteMultipleMessages(inputModel deleteMessageInput:   DeleteMultipleMessagesRequest,
                                        uniqueIds:            @escaping (([String]) -> ()),
                                        completion:           @escaping callbackTypeAlias) {
@@ -194,6 +197,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (EditTextMessageRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! EditMessageModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func editMessage(inputModel editMessageInput:   EditTextMessageRequest,
                             uniqueId:           @escaping ((String) -> ()),
                             completion:         @escaping callbackTypeAlias) {
@@ -271,6 +275,7 @@ extension Chat {
     /// - parameter onSent:     (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
     /// - parameter onDelivere: (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
     /// - parameter onSeen:     (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func forwardMessage(inputModel forwardMessageInput: ForwardMessageRequest,
                                uniqueIds:           @escaping (([String]) -> ()),
                                onSent:              @escaping callbackTypeAlias,
@@ -336,6 +341,7 @@ extension Chat {
     
     /// GetAllUnreadMessagesCount
     ///
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func getAllUnreadMessagesCount(inputModel:       GetAllUnreadMessageCountRequest,
                                           getCacheResponse: Bool?,
                                           uniqueId:         @escaping ((String) -> ()),
@@ -405,6 +411,7 @@ extension Chat {
     /// - parameter fileMessagesNotSent:    (response) it will returns the File Messages requests that has not been Sent yet! ([QueueOfWaitFileMessagesModel])
     /// - parameter uploadImageNotSent:     (response) it will returns the Upload Image requests that has not been Sent yet! ([QueueOfWaitUploadImagesModel])
     /// - parameter uploadFileNotSent:      (response) it will returns the Upload File requests that has not been Sent yet! ([QueueOfWaitUploadFilesModel])
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func getHistory(inputModel getHistoryInput:  GetHistoryRequest,
                            getCacheResponse:            Bool?,
                            uniqueId:                @escaping ((String) -> ()),
@@ -504,6 +511,7 @@ extension Chat {
     /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! GetHistoryModel)
     /// - parameter cacheResponse:      (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetHistoryModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func getMentionList(inputModel getMentionInput:  GetMentionedRequest,
                                getCacheResponse:            Bool?,
                                uniqueId:                @escaping ((String) -> ()),
@@ -563,6 +571,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (GetMessageDeliveredSeenListRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! GetMessageDeliverList)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func messageDeliveryList(inputModel messageDeliveryListInput:   GetMessageDeliveredSeenListRequest,
                                     uniqueId:                   @escaping ((String) -> ()),
                                     completion:                 @escaping callbackTypeAlias) {
@@ -615,6 +624,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (GetMessageDeliveredSeenListRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! GetMessageSeenList)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func messageSeenList(inputModel messageSeenListInput:   GetMessageDeliveredSeenListRequest,
                                 uniqueId:               @escaping ((String) -> ()),
                                 completion:             @escaping callbackTypeAlias) {
@@ -669,6 +679,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (PinUnpinMessageRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! PinUnpinMessageModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func pinMessage(inputModel:  PinUnpinMessageRequest,
                            uniqueId:    @escaping (String) -> (),
                            completion:  @escaping callbackTypeAlias) {
@@ -720,6 +731,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (PinUnpinMessageRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! PinUnpinMessageModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func unpinMessage(inputModel:  PinUnpinMessageRequest,
                              uniqueId:    @escaping (String) -> (),
                              completion:  @escaping callbackTypeAlias) {
@@ -775,6 +787,7 @@ extension Chat {
     /// - parameter onSent:     (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
     /// - parameter onDelivere: (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
     /// - parameter onSeen:     (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func replyMessage(inputModel replyMessageInput: ReplyTextMessageRequest,
                              uniqueId:          @escaping ((String) -> ()),
                              onSent:            @escaping callbackTypeAlias,
@@ -853,6 +866,7 @@ extension Chat {
     /// - this method does not have any output
     ///
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (SendDeliverSeenRequest)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func deliver(inputModel deliverInput: SendDeliverSeenRequest) {
         
         log.verbose("Try to send deliver message for a message id with this parameters: \n messageId = \(deliverInput.messageId) , ownerId = \(deliverInput.ownerId)", context: "Chat")
@@ -898,6 +912,7 @@ extension Chat {
     /// - this method does not have any output
     ///
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (SendDeliverSeenRequest)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func seen(inputModel seenInput: SendDeliverSeenRequest) {
         
         log.verbose("Try to send seen message for a message id with this parameters: \n messageId = \(seenInput.messageId) , ownerId = \(seenInput.ownerId)", context: "Chat")
@@ -1015,6 +1030,7 @@ extension Chat {
     /// - parameter onSent:             (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
     /// - parameter onDelivere:         (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
     /// - parameter onSeen:             (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func sendLocationMessage(inputModel sendLocationMessageRequest: SendLocationMessageRequest,
                                     downloadProgress:           @escaping ((Float) -> ()),
                                     uploadUniqueId:             @escaping ((String) -> ()),
@@ -1105,6 +1121,7 @@ extension Chat {
     /// - parameter onSent:         (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
     /// - parameter onDelivere:     (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
     /// - parameter onSeen:         (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func sendFileMessage(inputModel sendFileMessageInput:   SendReplyFileMessageRequest,
                                 uploadUniqueId:         @escaping ((String) -> ()),
                                 uploadProgress:         @escaping ((Float) -> ()),
@@ -1318,6 +1335,7 @@ extension Chat {
     /// - parameter onSent:         (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
     /// - parameter onDelivere:     (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
     /// - parameter onSeen:         (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func replyFileMessage(inputModel replyFileMessageInput: SendReplyFileMessageRequest,
                                  uploadUniqueId:        @escaping ((String) -> ()),
                                  uploadProgress:        @escaping ((Float) -> ()),
@@ -1364,6 +1382,7 @@ extension Chat {
     /// - parameter onSent:     (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
     /// - parameter onDelivere: (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
     /// - parameter onSeen:     (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func sendTextMessage(inputModel sendTextMessageInput:    SendTextMessageRequest,
                                 uniqueId:               @escaping ((String) -> ()),
                                 onSent:                 @escaping callbackTypeAlias,
@@ -1536,6 +1555,7 @@ extension Chat {
     ///
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (CancelMessageRequestModel)
     /// - parameter completion: (response) it will returns a boolean value that if this request was successfull or not! (Bool)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use example project")
     public func cancelSendMessage(inputModel cancelMessageInput:   CancelMessageRequestModel,
                                   completion:           @escaping ((Bool) -> ())) {
         if enableCache {
@@ -1577,7 +1597,7 @@ extension Chat {
     
     
     // MARK: Resend/Remove Queue Methods
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use example project")
     public func resend(textMessages:    [QueueOfWaitTextMessagesModel],
                        uniqueId:        @escaping (String)->(),
                        sent:            @escaping (SendMessageModel)->(),
@@ -1607,6 +1627,7 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use example project")
     public func resend(editMessages:    [QueueOfWaitEditMessagesModel],
                        uniqueId:        @escaping (String)->(),
                        completion:      @escaping (EditMessageModel)->()) {
@@ -1628,6 +1649,7 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use example project")
     public func resend(forwardMessages: [QueueOfWaitForwardMessagesModel],
                        uniqueIds:       @escaping ([String])->(),
                        sent:            @escaping (SendMessageModel)->(),
@@ -1653,6 +1675,7 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use example project")
     public func resend(fileMessages:    QueueOfWaitFileMessagesModel,
                        uploadUniqueId:  @escaping (String)->(),
                        uploadProgress:  @escaping (Float)->(),
@@ -1747,6 +1770,7 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use example project")
     public func resend(uploadImageObj:  QueueOfWaitUploadImagesModel,
                        uniqueId:        @escaping (String)->(),
                        uploadProgress:  @escaping (Float)->(),
@@ -1791,6 +1815,7 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use example project")
     public func resend(uploadFileObj:   QueueOfWaitUploadFilesModel,
                        uniqueId:        @escaping (String)->(),
                        uploadProgress:  @escaping (Float)->(),

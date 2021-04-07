@@ -13,6 +13,7 @@ import CoreData
 
 public class QueueOfUploadFiles: NSManagedObject {
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func convertCMObjectToObject() -> QueueOfWaitUploadFilesModel {
         
         var dataToSend: Data?

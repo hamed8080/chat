@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftyJSON
-
+import FanapPodAsyncSDK
 
 extension String {
     subscript (bounds: CountableClosedRange<Int>) -> String {
@@ -45,5 +45,24 @@ extension String {
             //            log.error("error to get message from server", context: "formatStringToJSON")
             return []
         }
+    }
+    
+    func getCustomTextToSendWithRemoveSpaceAndEnter()-> String {
+        let customTextToSend = MakeCustomTextToSend(message: self)
+        return customTextToSend.replaceSpaceEnterWithSpecificCharecters()
+    }
+
+    public func removeBackSlashes()->String{
+        return self.replacingOccurrences(of: "\\\\\"", with: "\"")
+        .replacingOccurrences(of: "\\\"", with: "\"")
+        .replacingOccurrences(of: "\\\"", with: "\"")
+        .replacingOccurrences(of: "\\\"", with: "\"")
+        .replacingOccurrences(of: "\\\\\"", with: "\"")
+        .replacingOccurrences(of: "\\\"", with: "\"")
+        .replacingOccurrences(of: "\\\"", with: "\"")
+        .replacingOccurrences(of: "\"{", with: "\n{")
+        .replacingOccurrences(of: "}\"", with: "}\n")
+        .replacingOccurrences(of: "\"[", with: "\n[")
+        .replacingOccurrences(of: "]\"", with: "]\n")
     }
 }

@@ -8,6 +8,7 @@
 
 import Foundation
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class MapRoutingRequest {
     
     public let alternative:     Bool
@@ -44,7 +45,7 @@ open class MapRoutingRequest {
     
 }
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class MapRoutingRequestModel: MapRoutingRequest {
     
 }

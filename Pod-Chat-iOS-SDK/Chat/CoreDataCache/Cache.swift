@@ -16,11 +16,13 @@ public class Cache {
     var coreDataStack: CoreDataStack = CoreDataStack()
     public let context: NSManagedObjectContext
     
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init() {
         context = coreDataStack.persistentContainer.viewContext
 //        print("context of the cache created")
     }
     
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func saveContext(subject: String) {
         do {
             try context.save()
@@ -31,7 +33,7 @@ public class Cache {
         }
     }
     
-    
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteAndSave(object: NSManagedObject, withMessage message: String) {
         print("object deleted: \(message)")
         context.delete(object)

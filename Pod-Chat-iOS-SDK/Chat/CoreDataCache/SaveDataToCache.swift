@@ -36,6 +36,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func saveUserInfo(withUserObject user: User) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUser")
         do {
@@ -74,6 +75,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func saveCurrentUserRoles(withRoles: [Roles], onThreadId threadId: Int) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMCurrentUserRoles")
         fetchRequest.predicate = NSPredicate(format: "threadId == %i", threadId)
@@ -118,6 +120,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func saveContact(withContactObjects contacts: [Contact]) {
         for item in contacts {
             _ = updateCMContactEntity(withContactObject: item)
@@ -147,6 +150,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func savePhoneBookContact(contact myContact: AddContactRequest) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "PhoneContact")
         if let contactCellphoneNumber = myContact.cellphoneNumber {
@@ -204,6 +208,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func saveThread(withThreadObjects threads: [Conversation]) {
         for item in threads {
             _ = updateCMConversationEntity(withConversationObject: item)
@@ -232,6 +237,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func savePinUnpinCMConversationEntity(withThreadId id: Int, isPinned: Bool) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
         fetchRequest.predicate = NSPredicate(format: "id == %i", id)
@@ -270,6 +276,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func savePinMessage(threadId: Int, withPinMessageObject pinMessage: PinUnpinMessage) {
         deletePinMessage(threadId: threadId)
         savePinMessageOnCMConversationEntity(threadId: threadId, withPinMessageObject: pinMessage)
@@ -293,6 +300,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func savePinMessageOnCMConversationEntity(threadId: Int, withPinMessageObject pinMessage: PinUnpinMessage) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
         fetchRequest.predicate = NSPredicate(format: "id == %i", threadId)
@@ -324,6 +332,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func savePinMessageOnCMMessageEntity(messageId: Int) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMMessage")
         fetchRequest.predicate = NSPredicate(format: "id == %i", messageId)
@@ -357,6 +366,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func saveThreadParticipantObjects(whereThreadIdIs threadId: Int, withParticipants participants: [Participant], isAdminRequest: Bool) {
         for item in participants {
             _ = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: item, isAdminRequest: isAdminRequest)
@@ -365,6 +375,7 @@ extension Cache {
     
     
     // ToDo: maybe i have to delete this method, because admins has handled on the 'saveThreadParticipantObjects' method
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func updateAdminRoles(inThreadId threadId: Int, withUserRoles myUserRole: UserRole) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMParticipant")
         fetchRequest.predicate = NSPredicate(format: "id == %i AND threadId == %i", myUserRole.userId, threadId)
@@ -409,6 +420,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func saveMessageObjects(messages: [Message], getHistoryParams: JSON?) {
         /*
          *  -> check if we have 'getHistoryParams' Input or not
@@ -903,6 +915,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func saveImageObject(imageInfo: ImageObject, imageData: Data, toLocalPath: URL?) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
         do {
@@ -999,7 +1012,7 @@ extension Cache {
         
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func saveThumbnailImageObject(imageInfo: ImageObject, imageData: Data, toLocalPath: URL?) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
         do {
@@ -1113,6 +1126,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func saveFileObject(fileInfo: FileObject, fileData: Data, toLocalPath: URL?) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMFile")
         do {
@@ -1203,7 +1217,7 @@ extension Cache {
     }
     
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     private func createDirectory(at url: URL) {
         if !(FileManager.default.fileExists(atPath: url.path, isDirectory: nil)) {
             do {
@@ -1215,6 +1229,7 @@ extension Cache {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     private func saveDataToDirectory(data: Data, to url: URL) {
         do {
             try data.write(to: url)

@@ -9,6 +9,7 @@
 import Foundation
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class DeleteMultipleMessagesRequest: RequestModelDelegates {
     
     public let deleteForAll:    Bool?
@@ -55,6 +56,7 @@ open class DeleteMultipleMessagesRequest: RequestModelDelegates {
 }
 
 /// MARK: -  this class will be deprecate (use this class instead: 'DeleteMultipleMessagesRequest')
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class DeleteMultipleMessagesRequestModel: DeleteMultipleMessagesRequest {
     
 }

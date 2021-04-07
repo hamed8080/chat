@@ -8,6 +8,7 @@
 
 import Foundation
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class MapStaticImageRequest {
     
     public let center:  (lat: Double, lng: Double)
@@ -45,7 +46,7 @@ open class MapStaticImageRequest {
     
 }
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class MapStaticImageRequestModel: MapStaticImageRequest {
     
 }

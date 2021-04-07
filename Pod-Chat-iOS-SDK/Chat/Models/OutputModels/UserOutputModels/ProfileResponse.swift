@@ -9,6 +9,7 @@
 import Foundation
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class ProfileModel: ResponseModel, ResponseModelDelegates {
     
     public let profile: Profile
@@ -45,6 +46,7 @@ open class ProfileModel: ResponseModel, ResponseModelDelegates {
 }
 
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class ProfileResponse: ProfileModel {
     
 }

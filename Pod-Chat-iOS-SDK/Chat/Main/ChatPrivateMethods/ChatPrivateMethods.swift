@@ -18,7 +18,7 @@ import Sentry
 
 extension Chat {
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func checkIfDeviceHasFreeSpace(needSpaceInMB: Int64, turnOffTheCache: Bool) -> Bool {
         let availableSpace = DiskStatus.freeDiskSpaceInBytes
         if availableSpace < (needSpaceInMB * 1024 * 1024) {
@@ -45,6 +45,7 @@ extension Chat {
      *  + Outputs:
      *      - it will return the deviceId as a String as a callback
      */
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func getDeviceIdWithToken(completion: @escaping (String) -> ()) {
         /*
          *  -> send a .get request to ssoHost server to get all user registered devices
@@ -160,6 +161,7 @@ extension Chat {
      *
      */
     // TODO: save the new key into the Cache
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func generateEncryptionKey(keyAlgorithm: String?, keySize: Int?, completion: @escaping (JSON)->()) {
         /*
          *  -> send a .post request to the SSO server to generate and then get the key
@@ -268,6 +270,7 @@ extension Chat {
      *      - JSON (as completion handler)
      *
      */
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func getEncryptionKey(keyAlgorithm: String?, keySize: String?, keyId: String, completion: @escaping (JSON)->()) {
         /*
          *  -> send a .get request to the SSO server to get the secretKey with keyId
@@ -377,11 +380,12 @@ extension Chat {
      *
      *
      */
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func chatSendQueueHandler() {
         
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func sendMessageWithCallback(asyncMessageVO:    SendAsyncMessageVO,
                                  callbacks:         [(call: CallbackProtocol, uniques: String)]?,
                                  sentCallback:      (call: CallbackProtocolWith3Calls, uniques: [String])?,
@@ -443,7 +447,7 @@ extension Chat {
         }
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     private func sendRequestHandler(type: Int, content: String) {
         if isChatReady {
             sendRequestToAsync(type: type, content: content)
@@ -452,6 +456,7 @@ extension Chat {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func sendRequestToAsync(type: Int, content: String) {
         asyncClient?.pushSendData(type: type, content: content)
         runSendMessageTimer()
@@ -470,6 +475,7 @@ extension Chat {
      * + Outputs:   nothing
      *
      */
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func runSendMessageTimer() {
 //        lastSentMessageTimer = nil
 //        lastSentMessageTimer = RepeatingTimer(timeInterval: TimeInterval(self.chatPingMessageInterval))
@@ -490,6 +496,7 @@ extension Chat {
      * + Outputs:   _
      *
      */
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func ping() {
         /*
          *
@@ -559,6 +566,7 @@ extension Chat {
      *          - content:               String
      *
      */
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func receivedMessageHandler(withContent message: ChatMessage) {
         log.verbose("content of received message: \n \(message.returnToJSON())", context: "Chat")
         lastReceivedMessageTime = Date()
@@ -916,27 +924,6 @@ extension Chat {
         case ChatMessageVOTypes.CLOSE_THREAD.intValue():
             responseOfCloseThread(withMessage: message)
             break
-            
-        // a message of type 107 (REGISTER_ASSISTANT) comes from Server.
-        case ChatMessageVOTypes.REGISTER_ASSISTANT.intValue():
-            responseOfRegisterAssistant(withMessage: message)
-            break
-            
-        // a message of type 108 (DEACTICVE_ASSISTANT) comes from Server.
-        case ChatMessageVOTypes.DEACTICVE_ASSISTANT.intValue():
-            responseOfDeactiveAssistant(withMessage: message)
-            break
-            
-        // a message of type 109 (GET_ASSISTANTS) comes from Server.
-        case ChatMessageVOTypes.GET_ASSISTANTS.intValue():
-            responseOfGetAssistant(withMessage: message)
-            break
-            
-        // a message of type 115 (GET_ASSISTANT_HISTORY) comes from Server.
-        case ChatMessageVOTypes.GET_ASSISTANT_HISTORY.intValue():
-            responseOfGetAssistantHistory(withMessage: message)
-            break
-            
         // a message of type 999 (ERROR) comes from Server.
         case ChatMessageVOTypes.ERROR.intValue():
             chatErrorHandler(withMessage: message, messageContentAsJSON: messageContentAsJSON)
@@ -948,6 +935,7 @@ extension Chat {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     private func chatErrorHandler(withMessage message: ChatMessage, messageContentAsJSON: JSON) {
         log.verbose("Message of type 'ERROR' recieved", context: "Chat")
         
@@ -1001,7 +989,7 @@ extension Chat {
         
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func chatMessageHandler(threadId: Int, messageContent: JSON) {
         let message = Message(threadId: threadId, pushMessageVO: messageContent)
         
@@ -1048,7 +1036,7 @@ extension Chat {
         
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func userRemovedFromThread(id: Int?) {
         if let threadId = id {
             let tRemoveFromThreadEM = ThreadEventModel(type:            ThreadEventTypes.THREAD_REMOVED_FROM,
@@ -1066,7 +1054,7 @@ extension Chat {
         }
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func threadInfoUpdated(withMessage message: ChatMessage) {
         log.verbose("Message of type 'THREAD_INFO_UPDATED' recieved", context: "Chat")
         
@@ -1085,7 +1073,7 @@ extension Chat {
         }
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func sendContactsLastSeenDurationUpdate(withMessage message: ChatMessage) {
         if let object = message.content?.convertToJSON() {
             var users = [UserLastSeenDuration]()
@@ -1099,7 +1087,7 @@ extension Chat {
         }
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func responseOfUserContactSynced(withMessage message: ChatMessage) {
         Chat.cacheDB.updateUserContactSynced()
     }

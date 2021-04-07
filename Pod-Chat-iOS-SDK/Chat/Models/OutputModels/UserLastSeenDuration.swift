@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-open class UserLastSeenDuration {
+open class UserLastSeenDuration : Codable{
     
     public var userId: Int
     public var time:   Int
@@ -18,7 +18,8 @@ open class UserLastSeenDuration {
         self.userId = userId
         self.time   = time
     }
-    
+
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func convertDataToJSON() -> JSON {
         var result: JSON = [:]
         result["userId"]    = JSON(userId)

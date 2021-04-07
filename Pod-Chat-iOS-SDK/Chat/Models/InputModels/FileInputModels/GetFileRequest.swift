@@ -9,6 +9,7 @@
 import Alamofire
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class GetFileRequest {
     
 //    public let fileId:          Int
@@ -33,7 +34,7 @@ open class GetFileRequest {
     
 }
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class GetFileRequestModel: GetFileRequest {
     
 }

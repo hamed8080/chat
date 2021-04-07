@@ -9,6 +9,7 @@
 import FanapPodAsyncSDK
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class UpdateChatProfileRequest: RequestModelDelegates {
     
     public let bio:         String?
@@ -50,6 +51,7 @@ open class UpdateChatProfileRequest: RequestModelDelegates {
 }
 
 /// MARK: -  this class will be deprecate.  (use this class instead: 'SetProfileRequest')
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class SetProfileRequestModel: UpdateChatProfileRequest {
     
 }

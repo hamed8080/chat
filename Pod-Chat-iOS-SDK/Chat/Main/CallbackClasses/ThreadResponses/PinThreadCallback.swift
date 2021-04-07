@@ -19,6 +19,7 @@ extension Chat {
     ///    - it doesn't have direct output,
     ///    - but on the situation where the response is valid,
     ///    - it will call the "onResultCallback" callback to pinThread function (by using "pinThreadCallbackToUser")
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func responseOfPinThread(withMessage message: ChatMessage) {
         log.verbose("Message of type 'PIN_THREAD' recieved", context: "Chat")
         
@@ -57,6 +58,7 @@ extension Chat {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public class PinThreadCallbacks: CallbackProtocol {
         func onResultCallback(uID:      String,
                               response: CreateReturnData,

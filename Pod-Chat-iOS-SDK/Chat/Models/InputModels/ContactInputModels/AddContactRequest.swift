@@ -8,6 +8,7 @@
 
 import Foundation
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class AddContactRequest {
     
     public var cellphoneNumber:    String?
@@ -64,6 +65,7 @@ open class AddContactRequest {
 
 
 /// MARK: -  this class will be deprecate.  (use this class instead: 'AddContactRequest')
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class AddContactRequestModel: AddContactRequest {
     
 }

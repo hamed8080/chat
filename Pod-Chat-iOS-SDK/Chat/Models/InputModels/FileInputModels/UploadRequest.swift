@@ -8,6 +8,7 @@
 
 import Foundation
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class UploadRequest {
     
     public var dataToSend:          Data    = Data()
@@ -100,7 +101,7 @@ open class UploadRequest {
     
 }
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class UploadRequestModel: UploadRequest {
     
 }

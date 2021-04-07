@@ -34,6 +34,7 @@ extension Cache {
     /// - Returns:
     ///     UserInfoModel?
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.get(cacheType: .USER_INFO)")
     public func retrieveUserInfo() -> UserInfoModel? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUser")
         do {
@@ -85,6 +86,7 @@ extension Cache {
     /// - Returns:
     ///     GetCurrentUserRolesModel?
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.get(cacheType: .CUREENT_USER_ROLES(threadId))")
     public func retrieveCurrentUserRoles(onThreadId threadId: Int) -> GetCurrentUserRolesModel? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMCurrentUserRoles")
         fetchRequest.predicate = NSPredicate(format: "threadId == %i", threadId)
@@ -149,6 +151,7 @@ extension Cache {
     /// - Returns:
     ///     GetContactsModel?
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.get(cacheType: .GET_CASHED_CONTACTS(request))")
     public func retrieveContacts(ascending:         Bool,
                                  cellphoneNumber:   String?,
                                  count:             Int,
@@ -300,6 +303,7 @@ extension Cache {
     ///
     /// - returns:
     ///     [Contact]?
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.get(cacheType: .PHONE_CONTACTS)")
     public func retrievePhoneContacts() -> [Contact]? {
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "PhoneContact")
@@ -361,6 +365,7 @@ extension Cache {
     /// - returns:
     ///     GetThreadsModel?
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.get(cacheType: .GET_THREADS(ThreadsRequest))")
     public func retrieveThreads(ascending:  Bool,
                                 count:      Int,
                                 name:       String?,
@@ -412,6 +417,7 @@ extension Cache {
         return getThreadModelResponse
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.get(cacheType: .NEW_THREADS(count, offset))")
     public func retrieveNewThreads(count:   Int,
                                    offset:  Int) -> GetThreadsModel? {
         
@@ -445,6 +451,7 @@ extension Cache {
         return returnModel
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.get(cacheType: .GET_THREADS(ThreadsRequest))")
     func retrieveTheThreads(ascending:  Bool,
                             count:      Int,
                             name:       String?,
@@ -517,6 +524,7 @@ extension Cache {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.get(cacheType: .PIN_THREADS)")
     func retrievePinThreads(ascending:  Bool) -> [Conversation]? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
         
@@ -572,6 +580,7 @@ extension Cache {
     /// - returns:
     ///     GetThreadParticipantsModel?
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.get(cacheType: .THREAD_PARTICIPANTS(threadId, count, offset: offset, ascending))")
     public func retrieveThreadParticipants(admin:       Bool?,
                                            ascending:   Bool,
                                            count:       Int,
@@ -632,6 +641,7 @@ extension Cache {
     
     
     // ToDo: check SaveThreadParticipant method on the cache and implement the correct implementation of admin roles on that function and remove this one
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.get(cacheType: .THREAD_ADMINS(threadId))")
     func retrieveThreadAdmins(threadId: Int) -> UserRolesModel? {
         
         var userAdmin: UserRolesModel?
@@ -669,6 +679,7 @@ extension Cache {
     
     
     // MARK: - retrieve MessageHistory:
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use CacheFactory.get(cacheType: .ALL_UNREAD_COUNT)")
     public func retrieveAllUnreadMessageCount() -> Int {
         var countSum = 0
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
@@ -712,6 +723,7 @@ extension Cache {
     /// - returns:
     ///     GetHistoryModel?
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.get(cacheType: .GET_HISTORY(req))")
     public func retrieveMessageHistory(count:           Int,
                                        firstMessageId:  Int?,
                                        fromTime:        UInt?,
@@ -798,6 +810,7 @@ extension Cache {
      * every function that want to send a quesry on CMMessage Entity, will first call this function,
      * and this funciton will create the NSFetchRequest based on the input parameters to the caller
      */
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func retrieveMessageHistoryFetchRequest(fromTime:       UInt?,
                                             messageId:      Int?,
                                             messageType:    Int?,
@@ -873,6 +886,7 @@ extension Cache {
     /**
      * this method will get gaps on a specific threadId, and returns that messageIds
      */
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func retrieveMessageGaps(threadId: Int) -> [Int]? {
         /*
          *  -> search through the MessageGaps with the 'threadId'
@@ -926,6 +940,7 @@ extension Cache {
     /// - returns:
     ///     (imageObject: ImageObject, imagePath: String)?
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func retrieveImageObject(hashCode:   String) -> (imageObject: ImageObject, imagePath: String)? {
         /*
          *
@@ -979,7 +994,7 @@ extension Cache {
         }
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func retrieveImageThumbnailObject(hashCode: String) -> (imageObject: ImageObject, imagePath: String)? {
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
@@ -1011,6 +1026,7 @@ extension Cache {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func isThumbnailAvailable(hashCode: String) -> Bool? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
         let searchImage = NSPredicate(format: "hashCode == %@", hashCode)
@@ -1031,6 +1047,7 @@ extension Cache {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func isImageAvailable(hashCode: String) -> Bool? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
         let searchImage = NSPredicate(format: "hashCode == %@", hashCode)
@@ -1052,6 +1069,7 @@ extension Cache {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func isFileAvailable(hashCode: String) -> Bool? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMFile")
         let searchFile = NSPredicate(format: "hashCode == %@", hashCode)
@@ -1097,6 +1115,7 @@ extension Cache {
     /// - returns:
     ///     (uploadFileModel: UploadFileModel, filePath: String)
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func retrieveFileObject(hashCode:    String) -> (fileObject: FileObject, filePath: String)? {
         /*
          *
@@ -1136,7 +1155,7 @@ extension Cache {
         }
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func retrieveAllImagesSize() -> Int {
         
         var folderSize = 0
@@ -1162,7 +1181,7 @@ extension Cache {
         
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func retrieveAllFilesSize() -> Int {
         
         var folderSize = 0

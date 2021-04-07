@@ -9,6 +9,7 @@
 import Foundation
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class UploadImageModel: ResponseModel, ResponseModelDelegates {
     
     //    public var localPath:           String = ""
@@ -83,7 +84,7 @@ open class UploadImageModel: ResponseModel, ResponseModelDelegates {
     
 }
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class UploadImageResponse: UploadImageModel {
     
 }

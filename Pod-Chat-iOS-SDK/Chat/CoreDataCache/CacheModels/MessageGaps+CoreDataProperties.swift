@@ -13,6 +13,7 @@ import CoreData
 
 extension MessageGaps {
 
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     @nonobjc public class func fetchRequest() -> NSFetchRequest<MessageGaps> {
         return NSFetchRequest<MessageGaps>(entityName: "MessageGaps")
     }

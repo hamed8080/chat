@@ -9,6 +9,7 @@
 import Foundation
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class QueueOfWaitForwardMessagesModel {
     
 //    let messageIds: [Int]?
@@ -61,7 +62,7 @@ open class QueueOfWaitForwardMessagesModel {
     
 }
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class QueueOfWaitForwardMessagesResponse: QueueOfWaitForwardMessagesModel {
     
 }

@@ -20,6 +20,7 @@ extension Chat {
     ///    - it doesn't have direct output,
     ///    - but on the situation where the response is valid,
     ///    - it will call the "onResultCallback" callback to closeThread function (by using "closeThreadCallbackToUser")
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func responseOfCloseThread(withMessage message: ChatMessage) {
         log.verbose("Message of type 'CLOSE_THREAD' recieved", context: "Chat")
         
@@ -52,6 +53,7 @@ extension Chat {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public class CloseThreadCallbacks: CallbackProtocol {
         func onResultCallback(uID:      String,
                               response: CreateReturnData,

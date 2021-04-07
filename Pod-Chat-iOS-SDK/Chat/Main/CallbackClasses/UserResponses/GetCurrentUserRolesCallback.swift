@@ -20,6 +20,7 @@ extension Chat {
     ///    - it doesn't have direct output,
     ///    - but on the situation where the response is valid,
     ///    - it will call the "onResultCallback" callback to getCurrentUserRoles function (by using "getCurrentUserRolesCallbackToUser")
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func responseOfGetCurrentUserRoles(withMessage message: ChatMessage) {
         log.verbose("Message of type 'GET_CURRENT_USER_ROLES' recieved", context: "Chat")
         
@@ -55,6 +56,7 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public class GetCurrentUserRolesCallbacks: CallbackProtocol {
         func onResultCallback(uID:      String,
                               response: CreateReturnData,

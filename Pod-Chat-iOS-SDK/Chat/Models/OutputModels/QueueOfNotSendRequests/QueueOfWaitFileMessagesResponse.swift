@@ -9,6 +9,7 @@
 import Foundation
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class QueueOfWaitFileMessagesModel {
     
     let textMessage:    String?
@@ -149,7 +150,7 @@ open class QueueOfWaitFileMessagesModel {
     
 }
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class QueueOfWaitFileMessagesResponse: QueueOfWaitFileMessagesModel {
     
 }

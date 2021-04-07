@@ -18,6 +18,7 @@ extension Chat {
     ///    - it doesn't have direct output,
     ///    - but on the situation where the response is valid,
     ///    - it will call the "onResultCallback" callback to updateChatProfile function (by using "userInfoCallbackToUser")
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func responseOfUpdateChatProfile(withMessage message: ChatMessage) {
         log.verbose("Message of type 'SET_PROFILE' recieved", context: "Chat")
         
@@ -43,6 +44,7 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     public class UpdateChatProfileCallback: CallbackProtocol {
         
         func onResultCallback(uID:      String,

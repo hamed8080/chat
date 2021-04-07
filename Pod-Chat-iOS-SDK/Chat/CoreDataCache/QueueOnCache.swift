@@ -14,6 +14,7 @@ import CoreData
 extension Cache {
     
     // MARK: - save to the wait Queues
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func saveTextMessageToWaitQueue(textMessage: QueueOfWaitTextMessagesModel) {
         let theWaitQueueEntity = NSEntityDescription.entity(forEntityName: "QueueOfTextMessages", in: context)
         let messageToSaveOnQueue = QueueOfTextMessages(entity: theWaitQueueEntity!, insertInto: context)
@@ -41,6 +42,7 @@ extension Cache {
         saveContext(subject: "Create QueueOfTextMessages -create a new object-")
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func saveEditMessageToWaitQueue(editMessage: QueueOfWaitEditMessagesModel) {
         
         let fetchRequest = retrieveMessageHistoryFetchRequest(fromTime:     nil,
@@ -80,6 +82,7 @@ extension Cache {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func saveForwardMessageToWaitQueue(forwardMessage: QueueOfWaitForwardMessagesModel) {
         let theWaitQueueEntity = NSEntityDescription.entity(forEntityName: "QueueOfForwardMessages", in: context)
         let messageToSaveOnQueue = QueueOfForwardMessages(entity: theWaitQueueEntity!, insertInto: context)
@@ -101,6 +104,7 @@ extension Cache {
         saveContext(subject: "Create QueueOfForwardMessages -create a new object-")
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func saveFileMessageToWaitQueue(fileMessage: QueueOfWaitFileMessagesModel) {
         let theWaitQueueEntity = NSEntityDescription.entity(forEntityName: "QueueOfFileMessages", in: context)
         let messageToSaveOnQueue = QueueOfFileMessages(entity: theWaitQueueEntity!, insertInto: context)
@@ -130,6 +134,7 @@ extension Cache {
         saveContext(subject: "Create QueueOfFileMessages -create a new object-")
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func saveUploadImageToWaitQueue(image: QueueOfWaitUploadImagesModel) {
         let theWaitQueueEntity = NSEntityDescription.entity(forEntityName: "QueueOfUploadImages", in: context)
         let messageToSaveOnQueue = QueueOfUploadImages(entity: theWaitQueueEntity!, insertInto: context)
@@ -150,6 +155,7 @@ extension Cache {
         saveContext(subject: "Create QueueOfUploadImages -create a new object-")
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func saveUploadFileToWaitQueue(file: QueueOfWaitUploadFilesModel) {
         let theWaitQueueEntity = NSEntityDescription.entity(forEntityName: "QueueOfUploadFiles", in: context)
         let messageToSaveOnQueue = QueueOfUploadFiles(entity: theWaitQueueEntity!, insertInto: context)
@@ -169,6 +175,7 @@ extension Cache {
     
     
     // MARK: - retrieve items from wait Queues
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func retrieveWaitTextMessages(threadId: Int) -> [QueueOfWaitTextMessagesModel]? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfTextMessages")
         
@@ -200,6 +207,7 @@ extension Cache {
         return nil
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func retrieveWaitEditMessages(threadId: Int) -> [QueueOfWaitEditMessagesModel]? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfEditMessages")
         
@@ -225,6 +233,7 @@ extension Cache {
         return nil
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func retrieveWaitForwardMessages(threadId: Int) -> [QueueOfWaitForwardMessagesModel]? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfForwardMessages")
         
@@ -250,6 +259,7 @@ extension Cache {
         return nil
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func retrieveWaitFileMessages(threadId: Int) -> [QueueOfWaitFileMessagesModel]? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfFileMessages")
         
@@ -275,6 +285,7 @@ extension Cache {
         return nil
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func retrieveWaitUploadImages(threadId: Int) -> [QueueOfWaitUploadImagesModel]? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfUploadImages")
         
@@ -300,6 +311,7 @@ extension Cache {
         return nil
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func retrieveWaitUploadFiles(threadId: Int) -> [QueueOfWaitUploadFilesModel]? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfUploadFiles")
         
@@ -328,6 +340,7 @@ extension Cache {
     
     
     // MARK: - delete items from the wait Queues
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteWaitTextMessage(uniqueId: String) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfTextMessages")
         
@@ -346,6 +359,8 @@ extension Cache {
         }
     }
     
+
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteWaitEditMessage(uniqueId: String) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfEditMessages")
         
@@ -364,6 +379,7 @@ extension Cache {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteWaitForwardMessage(uniqueId: String) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfForwardMessages")
         
@@ -382,6 +398,7 @@ extension Cache {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteWaitFileMessage(uniqueId: String) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfFileMessages")
         
@@ -400,6 +417,7 @@ extension Cache {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteWaitUploadImages(uniqueId: String) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfUploadImages")
         
@@ -418,6 +436,7 @@ extension Cache {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteWaitUploadFiles(uniqueId: String) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfUploadFiles")
         
@@ -439,6 +458,7 @@ extension Cache {
     
     
     // MARK: - delete all items from some wait Queues
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteAllWaitTextMessage() {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfTextMessages")
         do {
@@ -452,6 +472,7 @@ extension Cache {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteAllWaitForwardMessage() {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfForwardMessages")
         do {
@@ -465,6 +486,7 @@ extension Cache {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteAllWaitFileMessage() {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfFileMessages")
         do {
@@ -478,6 +500,7 @@ extension Cache {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteAllWaitUploadImages() {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfUploadImages")
         do {
@@ -491,6 +514,7 @@ extension Cache {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteAllWaitUploadFiles() {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfUploadFiles")
         do {
@@ -504,6 +528,7 @@ extension Cache {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteAllWaitEditMessage() {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QueueOfEditMessages")
         do {
@@ -520,6 +545,7 @@ extension Cache {
     
     
     // MARK: - delete all wait Queues
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.write(cacheType: .DELETE_ALL_CACHE_DATA)")
     func deleteAllWaitQueues() {
         deleteAllWaitTextMessage()
         deleteAllWaitFileMessage()

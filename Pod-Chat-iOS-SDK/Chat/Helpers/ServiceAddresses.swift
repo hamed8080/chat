@@ -8,7 +8,7 @@
 
 import Foundation
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 public struct SERVICE_ADDRESSES_ENUM {
     public var SSO_ADDRESS          = "http://172.16.110.76"
     public var PLATFORM_ADDRESS     = "http://172.16.106.26:8080/hamsam"
@@ -60,10 +60,10 @@ public enum SERVICES_PATH: String {
     case PODSPACE_PUBLIC_UPLOAD_IMAGE   = "/userGroup/uploadImage"
     
     // Neshan Map
-    case REVERSE            = "/reverse"
-    case SEARCH             = "/search"
-    case ROUTING            = "/routing"
-    case STATIC_IMAGE       = "/static"
+    case MAP_REVERSE            = "/reverse"
+    case MAP_SEARCH             = "/search"
+    case MAP_ROUTING            = "/routing"
+    case MAP_STATIC_IMAGE       = "/static"
     
     
     public func stringValue() -> String {
@@ -100,10 +100,10 @@ public enum SERVICES_PATH: String {
         case .PODSPACE_PUBLIC_UPLOAD_IMAGE: return "/userGroup/uploadImage"
             
         // Neshan Map
-        case .REVERSE:      return "/reverse"
-        case .SEARCH:       return "/search"
-        case .ROUTING:      return "/routing"
-        case .STATIC_IMAGE: return "/static"
+        case .MAP_REVERSE:      return "/reverse"
+        case .MAP_SEARCH:       return "/search"
+        case .MAP_ROUTING:      return "/routing"
+        case .MAP_STATIC_IMAGE: return "/static"
         }
     }
     

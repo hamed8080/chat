@@ -9,8 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-
-open class Conversation {
+open class Conversation : Codable{
     
     public var admin:                           Bool?
     public var canEditInfo:                     Bool?
@@ -51,6 +50,8 @@ open class Conversation {
     public var participants:                    [Participant]?
     public var pinMessage:                      PinUnpinMessage?
     
+	
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(messageContent: JSON) {
         self.admin                          = messageContent["admin"].bool
         self.canEditInfo                    = messageContent["canEditInfo"].bool
@@ -229,11 +230,12 @@ open class Conversation {
         self.pinMessage     = theConversation.pinMessage
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatDataToMakeConversation() -> Conversation {
         return self
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatToJSON() -> JSON {
         
         var participantsJSON: [JSON] = []
@@ -287,5 +289,132 @@ open class Conversation {
         
         return result
     }
+	
+	private enum CodingKeys: String ,CodingKey{
+		case admin                            = "admin"
+		case canEditInfo                      = "canEditInfo"
+		case canSpam                          = "canSpam"
+		case closedThread                     = "closedThread"
+		case description                      = "description"
+		case group                            = "group"
+		case id                               = "id"
+		case image                            = "image"
+		case joinDate                         = "joinDate"
+		case lastMessage                      = "lastMessage"
+		case lastParticipantImage             = "lastParticipantImage"
+		case lastParticipantName              = "lastParticipantName"
+		case lastSeenMessageId                = "lastSeenMessageId"
+		case lastSeenMessageNanos             = "lastSeenMessageNanos"
+		case lastSeenMessageTime              = "lastSeenMessageTime"
+		case mentioned                        = "mentioned"
+		case metadata                         = "metadata"
+		case mute                             = "mute"
+		case participantCount                 = "participantCount"
+		case partner                          = "partner"
+		case partnerLastDeliveredMessageId    = "partnerLastDeliveredMessageId"
+		case partnerLastDeliveredMessageNanos = "partnerLastDeliveredMessageNanos"
+		case partnerLastDeliveredMessageTime  = "partnerLastDeliveredMessageTime"
+		case partnerLastSeenMessageId         = "partnerLastSeenMessageId"
+		case partnerLastSeenMessageNanos      = "partnerLastSeenMessageNanos"
+		case partnerLastSeenMessageTime       = "partnerLastSeenMessageTime"
+		case pin                              = "pin"
+		case pinned                             = "pinned"
+		case time                             = "time"
+		case title                            = "title"
+		case type                             = "type"
+		case unreadCount                      = "unreadCount"
+		case uniqueName                       = "uniqueName"
+		case userGroupHash                    = "userGroupHash"
+		case inviter                          = "inviter"
+		case participants                     = "participants"
+		case lastMessageVO                    = "lastMessageVO"
+		case pinMessageVO                     = "pinMessageVO"
+		case pinMessage = "pinMessage" // only in encode
+	}
+	
+	public required init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		self.admin  = try container.decodeIfPresent(Bool.self, forKey: .admin)
+		self.canEditInfo = try container.decodeIfPresent(Bool.self, forKey: .canEditInfo)
+		self.canSpam = try container.decodeIfPresent(Bool.self, forKey: .canSpam) ?? false
+		self.closedThread = try container.decodeIfPresent(Bool.self, forKey: .closedThread)  ?? false
+		self.description = try container.decodeIfPresent(String.self, forKey: .description)
+		self.group =  try container.decodeIfPresent(Bool.self, forKey: .group)
+		self.id = try container.decodeIfPresent(Int.self, forKey: .id)
+		self.image =  try container.decodeIfPresent(String.self, forKey: .image)
+		self.joinDate =  try container.decodeIfPresent(Int.self, forKey: .joinDate)
+		self.lastMessage  =  try container.decodeIfPresent(String.self, forKey: .lastMessage)
+		self.lastParticipantImage = try container.decodeIfPresent(String.self, forKey: .lastParticipantImage)
+		self.lastParticipantName  = try container.decodeIfPresent(String.self, forKey: .lastParticipantName)
+		self.lastSeenMessageId  =  try container.decodeIfPresent(Int.self, forKey: .lastSeenMessageId)
+		self.lastSeenMessageNanos = try container.decodeIfPresent(UInt.self, forKey: .lastSeenMessageNanos)
+		self.lastSeenMessageTime  =  try container.decodeIfPresent(UInt.self, forKey: .lastSeenMessageTime)
+		self.mentioned = try container.decodeIfPresent(Bool.self, forKey: .mentioned)
+		self.metadata  = try container.decodeIfPresent(String.self, forKey: .metadata)
+		self.mute = try container.decodeIfPresent(Bool.self, forKey: .mute)
+		self.participantCount = try container.decodeIfPresent(Int.self, forKey: .participantCount)
+		self.partner = try container.decodeIfPresent(Int.self, forKey: .partner)
+		self.partnerLastDeliveredMessageId =  try container.decodeIfPresent(Int.self, forKey: .partnerLastSeenMessageId)
+		self.partnerLastDeliveredMessageNanos   =  try container.decodeIfPresent(UInt.self, forKey: .partnerLastDeliveredMessageNanos)
+		self.partnerLastDeliveredMessageTime    = try container.decodeIfPresent(UInt.self, forKey: .partnerLastDeliveredMessageTime)
+		self.partnerLastSeenMessageId           = try container.decodeIfPresent(Int.self, forKey: .partnerLastSeenMessageId)
+		self.partnerLastSeenMessageNanos        = try container.decodeIfPresent(UInt.self, forKey: .partnerLastSeenMessageNanos)
+		self.partnerLastSeenMessageTime         = try container.decodeIfPresent(UInt.self, forKey: .partnerLastSeenMessageTime)
+		self.pin                            = try container.decodeIfPresent(Bool.self, forKey: .pin) ?? container.decodeIfPresent(Bool.self, forKey: .pinned)
+		self.time                           = try container.decodeIfPresent(UInt.self, forKey: .time)
+		self.title                          = try container.decodeIfPresent(String.self, forKey: .title)
+		self.type                           = try container.decodeIfPresent(Int.self, forKey: .type)
+		self.unreadCount                    = try container.decodeIfPresent(Int.self, forKey: .unreadCount)
+		self.uniqueName                     = try container.decodeIfPresent(String.self, forKey: .uniqueName)
+		self.userGroupHash                  = try container.decodeIfPresent(String.self, forKey: .userGroupHash)
+		
+		
+		self.inviter = try container.decodeIfPresent(Participant.self, forKey: .inviter)
+		self.participants = try container.decodeIfPresent([Participant].self, forKey: .participants)
+
+		self.lastMessageVO = try container.decodeIfPresent(Message.self, forKey: .lastMessageVO)
+		self.pinMessage = try container.decodeIfPresent(PinUnpinMessage.self, forKey: .pinMessageVO)
+	}
+	
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encodeIfPresent(admin, forKey: .admin)
+		try container.encodeIfPresent(canEditInfo, forKey: .canEditInfo)
+		try container.encodeIfPresent(canSpam, forKey: .canSpam)
+		try container.encodeIfPresent(closedThread, forKey: .closedThread)
+		try container.encodeIfPresent(description, forKey: .description)
+		try container.encodeIfPresent(group, forKey: .group)
+		try container.encodeIfPresent(id, forKey: .id)
+		try container.encodeIfPresent(image, forKey: .image)
+		try container.encodeIfPresent(joinDate, forKey: .joinDate)
+		try container.encodeIfPresent(lastMessage, forKey: .lastMessage)
+		try container.encodeIfPresent(lastParticipantImage, forKey: .lastParticipantImage)
+		try container.encodeIfPresent(lastParticipantName, forKey: .lastParticipantName)
+		try container.encodeIfPresent(lastSeenMessageId, forKey: .lastSeenMessageId)
+		try container.encodeIfPresent(lastSeenMessageNanos, forKey: .lastSeenMessageNanos)
+		try container.encodeIfPresent(lastSeenMessageTime, forKey: .lastSeenMessageTime)
+		try container.encodeIfPresent(mentioned, forKey: .mentioned)
+		try container.encodeIfPresent(metadata, forKey: .metadata)
+		try container.encodeIfPresent(mute, forKey: .mute)
+		try container.encodeIfPresent(participantCount, forKey: .participantCount)
+		try container.encodeIfPresent(partner, forKey: .partner)
+		try container.encodeIfPresent(partnerLastDeliveredMessageId, forKey: .partnerLastDeliveredMessageId)
+		try container.encodeIfPresent(partnerLastDeliveredMessageNanos, forKey: .partnerLastDeliveredMessageNanos)
+		try container.encodeIfPresent(partnerLastDeliveredMessageTime, forKey: .partnerLastDeliveredMessageTime)
+		try container.encodeIfPresent(partnerLastSeenMessageId, forKey: .partnerLastSeenMessageId)
+		try container.encodeIfPresent(partnerLastSeenMessageNanos, forKey: .partnerLastSeenMessageNanos)
+		try container.encodeIfPresent(partnerLastSeenMessageTime, forKey: .partnerLastSeenMessageTime)
+		try container.encodeIfPresent(pin, forKey: .pin)
+		try container.encodeIfPresent(time, forKey: .time)
+		try container.encodeIfPresent(title, forKey: .title)
+		try container.encodeIfPresent(type, forKey: .type)
+		try container.encodeIfPresent(unreadCount, forKey: .unreadCount)
+		try container.encodeIfPresent(uniqueName, forKey: .uniqueName)
+		try container.encodeIfPresent(userGroupHash, forKey: .userGroupHash)
+		try container.encodeIfPresent(inviter, forKey: .inviter)
+		try container.encodeIfPresent(lastMessageVO, forKey: .lastMessageVO)
+		try container.encodeIfPresent(participants, forKey: .participants)
+		try container.encodeIfPresent(pinMessage, forKey: .pinMessage)
+	}
     
 }

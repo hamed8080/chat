@@ -13,7 +13,8 @@ import CoreData
 
 extension CMCurrentUserRoles {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<CMCurrentUserRoles> {
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
+	@nonobjc public class func fetchRequest() -> NSFetchRequest<CMCurrentUserRoles> {
         return NSFetchRequest<CMCurrentUserRoles>(entityName: "CMCurrentUserRoles")
     }
 

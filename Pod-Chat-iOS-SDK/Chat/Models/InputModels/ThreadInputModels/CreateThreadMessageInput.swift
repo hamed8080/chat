@@ -9,6 +9,7 @@
 import FanapPodAsyncSDK
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class CreateThreadMessageInput: RequestModelDelegates {
     
     public let forwardedMessageIds: [String]?
@@ -102,6 +103,7 @@ open class CreateThreadMessageInput: RequestModelDelegates {
 }
 
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class MessageInput: CreateThreadMessageInput {
     
 }

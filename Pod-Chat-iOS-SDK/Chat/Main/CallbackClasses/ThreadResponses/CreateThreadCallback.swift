@@ -20,6 +20,7 @@ extension Chat {
     ///    - it doesn't have direct output,
     ///    - but on the situation where the response is valid,
     ///    - it will call the "onResultCallback" callback to createThread function (by using "createThreadCallbackToUser")
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func responseOfCreateThread(withMessage message: ChatMessage) {
         log.verbose("Message of type 'CREATE_THREAD' recieved", context: "Chat")
         
@@ -61,6 +62,7 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public class CreateThreadCallback: CallbackProtocol {
         var mySendMessageParams: SendChatMessageVO
         init(parameters: SendChatMessageVO) {

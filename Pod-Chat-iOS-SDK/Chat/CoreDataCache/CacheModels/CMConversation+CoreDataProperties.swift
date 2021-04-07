@@ -13,6 +13,7 @@ import CoreData
 
 extension CMConversation {
 
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     @nonobjc public class func fetchRequest() -> NSFetchRequest<CMConversation> {
         return NSFetchRequest<CMConversation>(entityName: "CMConversation")
     }

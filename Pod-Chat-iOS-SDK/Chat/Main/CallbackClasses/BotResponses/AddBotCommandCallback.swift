@@ -20,6 +20,7 @@ extension Chat {
     ///    - it doesn't have direct output,
     ///    - but on the situation where the response is valid,
     ///    - it will call the "onResultCallback" callback to addBotCommand function (by using "addBotCommandCallbackToUser")
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func responseOfAddBotCommand(withMessage message: ChatMessage) {
         log.verbose("Message of type 'CREATE_BOT' recieved", context: "Chat")
         
@@ -42,6 +43,7 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public class AddBotCommandCallback: CallbackProtocol {
         
         func onResultCallback(uID:      String,

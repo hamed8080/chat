@@ -33,6 +33,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.write(cacheType: .DELETE_ALL_USER)")
     public func deleteUserInfo(isCompleted: (()->())?) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUser")
         do {
@@ -75,6 +76,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.write(cacheType: .DELETE_CONTACTS(contactIds))")
     public func deleteContact(withContactIds contactIds: [Int])  {
         var orPredicatArray = [NSPredicate]()
         for item in contactIds {
@@ -122,6 +124,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteContacts(byTimeStamp timeStamp: Int) {
         let currentTime = Int(Date().timeIntervalSince1970)
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMContact")
@@ -160,6 +163,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.write(cacheType: .REMOVE_PARTICIPANTS(participantIds,threadId))")
     public func deleteParticipant(inThread: Int, withParticipantIds participantIds: [Int]) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMParticipant")
         fetchRequest.predicate = NSPredicate(format: "threadId == %i", inThread)
@@ -203,6 +207,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteThreadParticipants(inThread: Int, byTimeStamp: Int) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMParticipant")
         let currentTime = Int(Date().timeIntervalSince1970)
@@ -250,6 +255,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.write(cacheType: .DELETE_THREADS(threadIds))")
     public func deleteThreads(withThreadIds threadIds: [Int]) {
         var orPredicatArray = [NSPredicate]()
         for item in threadIds {
@@ -297,6 +303,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deletePinMessage(threadId: Int) {
         if let msgId = deletePinMessageFromCMConversationEntity(threadId: threadId) {
             deletePinMessageFromCMMessageEntity(messageId: msgId)
@@ -318,6 +325,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deletePinMessageFromCMConversationEntity(threadId: Int) -> Int? {
         var msgId: Int?
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
@@ -351,6 +359,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deletePinMessageFromCMMessageEntity(messageId: Int) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMMessage")
         fetchRequest.predicate = NSPredicate(format: "id == %i", messageId)
@@ -381,6 +390,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteAllPinMessageFromCMMessageEntity(onThreadId: Int) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMMessage")
         var predicateArray = [NSPredicate]()
@@ -425,6 +435,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.write(cacheType: .DELETE_MESSAGE(threadId,messageId))")
     public func deleteMessage(count:    Int?,
                               fromTime: UInt?,
                               messageId: Int?,
@@ -501,6 +512,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.write(cacheType: .CLEAR_ALL_HISTORY(threadId))")
     public func deleteMessage(inThread: Int, allMessages: Bool, withMessageIds messageIds: [Int]?) {
         func deleteCMMessage(message: CMMessage) {
             if let _ = message.participant {
@@ -571,6 +583,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteAllMessageGaps(inThreadId threadId: Int) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "MessageGaps")
         fetchRequest.predicate = NSPredicate(format: "threadId == %i", threadId)
@@ -605,6 +618,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.write(cacheType: .DELETE_ALL_CONTACTS)")
     public func deleteAllContacts(isCompleted: @escaping ()->()) {
         deleteContacts {
             self.deleteLinkedUsers {
@@ -634,6 +648,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteContacts(isCompleted: (()->())?) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMContact")
         do {
@@ -675,6 +690,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deletePhoneBookContacts(isCompleted: (()->())?) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "PhoneContact")
         do {
@@ -712,6 +728,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteLinkedUsers(isCompleted: @escaping ()->()) {
         let fetchLinkeUsers = NSFetchRequest<NSFetchRequestResult>(entityName: "CMLinkedUser")
         do {
@@ -747,6 +764,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.write(cacheType: .DELETE_ALL_THREADS)")
     public func deleteAllThreads(isCompleted: @escaping ()->()) {
         deleteThreads {
             self.deleteAllMessage {
@@ -779,6 +797,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteThreads(isCompleted: @escaping ()->()) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
         do {
@@ -799,6 +818,7 @@ extension Cache {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteThread(withThreadId: Int, isCompleted: @escaping ()->()) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
         fetchRequest.predicate = NSPredicate(format: "id == %i", withThreadId)
@@ -839,6 +859,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteParticipants(isCompleted: @escaping ()->()) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMParticipant")
         do {
@@ -874,6 +895,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.write(cacheType: .DELETE_ALL_MESSAGE)")
     public func deleteAllMessage(isCompleted: @escaping ()->()) {
         deleteMessages() {
             self.deleteReplyInfo {
@@ -909,6 +931,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteMessages(isCompleted: @escaping ()->()) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMMessage")
         do {
@@ -956,6 +979,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteForwardInfo(isCompleted: @escaping ()->()) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMForwardInfo")
         do {
@@ -991,6 +1015,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteReplyInfo(isCompleted: @escaping ()->()) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMReplyInfo")
         do {
@@ -1027,6 +1052,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func deleteMessageGaps(isCompleted: @escaping ()->()) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "MessageGaps")
         do {
@@ -1061,6 +1087,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use ")
     public func deleteAllImages() {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
         do {
@@ -1113,6 +1140,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func deleteAllFiles() {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMFile")
         do {
@@ -1155,6 +1183,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func deleteCacheData() {
         deleteUserInfo() {
             self.deleteContacts(isCompleted: nil)

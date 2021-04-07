@@ -13,6 +13,7 @@ import CoreData
 
 public class CMConversation: NSManagedObject {
     
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func convertCMObjectToObject(showInviter:        Bool,
                                         showLastMessageVO:  Bool,
                                         showParticipants:   Bool,
@@ -199,7 +200,7 @@ public class CMConversation: NSManagedObject {
         return model
     }
     
-    
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func updateObject(with conversation: Conversation) {
         if let admin = conversation.admin as NSNumber? {
             self.admin = admin

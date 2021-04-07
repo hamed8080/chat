@@ -10,6 +10,7 @@ import Foundation
 import SwiftyJSON
 
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 class ChatMessage {
 
     var code:           Int?
@@ -24,7 +25,8 @@ class ChatMessage {
     
     var messageId:      Int? = nil
     var participantId:  Int? = nil
-    
+	
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     init(code: Int?, content: String?, contentCount: Int?, message: String?, messageType: Int, subjectId: Int?, time: Int, type: Int, uniqueId: String) {
         self.code           = code
         self.content        = content
@@ -37,6 +39,7 @@ class ChatMessage {
         self.uniqueId       = uniqueId
     }
     
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     init(withContent: JSON) {
         self.code           = withContent["code"].int
         self.content        = withContent["content"].string
@@ -51,6 +54,7 @@ class ChatMessage {
         self.participantId  = withContent["participantId"].int ?? withContent["content"].string?.convertToJSON()["participantId"].int
     }
     
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func returnToJSON() -> JSON {
         let myReturnValue: JSON = ["code":          code ?? NSNull(),
                                    "content":       content ?? NSNull(),

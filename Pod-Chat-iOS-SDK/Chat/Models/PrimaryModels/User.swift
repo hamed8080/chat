@@ -22,7 +22,7 @@ import SwiftyJSON
  *    - sendEnable:         Bool?
  */
 
-open class User {
+open class User : Codable {
     
     
     public var cellphoneNumber: String?
@@ -38,6 +38,7 @@ open class User {
     public var username:        String?
     public var chatProfileVO:   Profile?
     
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(messageContent: JSON) {
         
         self.cellphoneNumber    = messageContent["cellphoneNumber"].string
@@ -83,6 +84,7 @@ open class User {
         self.chatProfileVO      = chatProfileVO
     }
     
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(withUserObject: User) {
         
         self.cellphoneNumber    = withUserObject.cellphoneNumber
@@ -99,6 +101,7 @@ open class User {
         self.chatProfileVO      = withUserObject.chatProfileVO
     }
     
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatToJSON() -> JSON {
         let result: JSON = ["cellphoneNumber":  cellphoneNumber ?? NSNull(),
                             "contactSynced":    contactSynced,

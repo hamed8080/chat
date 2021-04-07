@@ -8,6 +8,7 @@
 
 import Foundation
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class ForwardMessageRequest {
     
     public let messageIds:      [Int]
@@ -66,6 +67,7 @@ open class ForwardMessageRequest {
 }
 
 /// MARK: -  this class will be deprecate (use this class instead: 'ForwardMessageRequest')
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class ForwardMessageRequestModel: ForwardMessageRequest {
     
 }

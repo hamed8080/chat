@@ -9,6 +9,7 @@
 import FanapPodAsyncSDK
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class GetThreadParticipantsRequest: RequestModelDelegates {
     
     public let admin:           Bool?   // if we want to only get admins, we'll send this parameter as "true"
@@ -94,6 +95,8 @@ open class GetThreadParticipantsRequest: RequestModelDelegates {
 
 
 /// MARK: -  this class will be deprecate (use this class instead: 'GetThreadParticipantsRequest')
+
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class GetThreadParticipantsRequestModel: GetThreadParticipantsRequest {
     
 }

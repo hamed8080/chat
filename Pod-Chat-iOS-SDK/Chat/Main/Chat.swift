@@ -20,34 +20,26 @@ import Each
 
 public class Chat {
     
-    // MARK: - Chat initializer
-    public init() {
-        
-    }
+    // MARK: - Chat Private initializer
+    private init() {}
+	
+	
+    internal static var instance: Chat?
     
-//    public static let sharedInstance = Chat()
-    
-    struct Static {
-        public static var instance: Chat?
-    }
-    
-    open class var sharedInstance: Chat {
-        if Static.instance == nil {
-            Static.instance = Chat()
-        }
-        return Static.instance!
-    }
+	open class var sharedInstance: Chat {
+		if instance == nil {
+			instance = Chat()
+		}
+		return instance!
+	}
     
     
-    public func disposeChatObject() {
-        stopAllChatTimers()
-        asyncClient?.disposeAsyncObject()
-        asyncClient = nil
-        Chat.Static.instance = nil
-        print("Disposed Singleton instance")
-//        Chat.sharedInstance = nil
-    }
+	@available(*,deprecated, renamed: "dispose")
+	public func disposeChatObject() {
+		dispose()
+	}
     
+    @available(*,unavailable , renamed: "createChatObject(object:)",message: "use new createChatObject with config Object in parameter.")
     public func createChatObject(socketAddress:             String,
                                  ssoHost:                   String,
                                  platformHost:              String,
@@ -74,93 +66,9 @@ public class Chat {
                                  localImageCustomPath:      URL?,
                                  localFileCustomPath:       URL?,
                                  deviecLimitationSpaceMB:   Int64?,
-                                 showDebuggingLogLevel:     ConsoleLogLevel?) {
-        
-        self.debuggingLogLevel = showDebuggingLogLevel?.logLevel() ?? LogLevel.error
-        
-        self.captureSentryLogs = captureLogsOnSentry
-        if captureLogsOnSentry {
-            startCrashAnalitics()
-        }
-        
-        self.socketAddress      = socketAddress
-        self.ssoHost            = ssoHost
-        self.platformHost       = platformHost
-        self.fileServer         = fileServer
-        self.serverName         = serverName
-        self.token              = token
-        self.enableCache        = enableCache
-        self.mapServer          = mapServer
-        
-        if let timeStamp = cacheTimeStampInSec {
-            cacheTimeStamp = timeStamp
-        }
-        
-        if let theMapApiKey = mapApiKey {
-            self.mapApiKey = theMapApiKey
-        }
-        
-        if let theTypeCode = typeCode {
-            self.generalTypeCode = theTypeCode
-        }
-        
-        if let theMsgPriority = msgPriority {
-            self.msgPriority = theMsgPriority
-        }
-        
-        if let theMsgTTL = msgTTL {
-            self.msgTTL = theMsgTTL
-        }
-        
-        if let theHttpRequestTimeout = httpRequestTimeout {
-            self.httpRequestTimeout = theHttpRequestTimeout
-        }
-        
-        if let theActualTimingLog = actualTimingLog {
-            self.actualTimingLog = theActualTimingLog
-        }
-        
-        if let timeLimitation = deviecLimitationSpaceMB {
-            self.deviecLimitationSpaceMB = timeLimitation
-        }
-        
-        self.wsConnectionWaitTime       = wsConnectionWaitTime
-        self.connectionRetryInterval    = connectionRetryInterval
-        self.connectionCheckTimeout     = connectionCheckTimeout
-        self.messageTtl                 = messageTtl
-        self.reconnectOnClose           = reconnectOnClose
-        self.maxReconnectTimeInterval   = maxReconnectTimeInterval ?? 60
-        
-        self.SERVICE_ADDRESSES.SSO_ADDRESS          = ssoHost
-        self.SERVICE_ADDRESSES.PLATFORM_ADDRESS     = platformHost
-        self.SERVICE_ADDRESSES.FILESERVER_ADDRESS   = fileServer
-        self.SERVICE_ADDRESSES.MAP_ADDRESS          = mapServer
-        
-        self.localImageCustomPath = localImageCustomPath
-        self.localFileCustomPath = localFileCustomPath
-        
-        if getDeviceIdFromToken {
-            getDeviceIdWithToken { (deviceIdStr) in
-                self.deviceId = deviceIdStr
-                log.info("get deviceId successfully = \(self.deviceId ?? "error!!")", context: "Chat")
-                
-                DispatchQueue.main.async {
-                    self.CreateAsync()
-                }
-            }
-        } else {
-            DispatchQueue.main.async {
-                self.CreateAsync()
-            }
-        }
-        
-        if checkIfDeviceHasFreeSpace(needSpaceInMB: self.deviecLimitationSpaceMB, turnOffTheCache: true) {
-//            self.enableCache = false
-        }
-        
-    }
+                                 showDebuggingLogLevel:     ConsoleLogLevel?) {}
     
-    private func startCrashAnalitics() {
+	func startCrashAnalytics() {
         
         // Config for Sentry 4.3.1
         do {
@@ -219,7 +127,13 @@ public class Chat {
     
     // the delegate property that the user class should make itself to be implment this delegat.
     // At first, the class sould confirm to ChatDelegates, and then implement the ChatDelegates methods
-    public weak var delegate: ChatDelegates?
+	public weak var delegate: ChatDelegates?{
+		didSet{
+			if(!isCreateObjectFuncCalled){
+                print("Please call createChatObject func before set delegate")
+			}
+		}
+	}
     
     // create cache instance to use cache...
     static let cacheDB = Cache()
@@ -547,10 +461,6 @@ public class Chat {
     public var joinPublicThreadCallbackToUser:              callbackTypeAlias?
     public var isPublicThreadNameAvailableCallbackToUser:   callbackTypeAlias?
     public var statusPingCallbackToUser:            callbackTypeAlias?
-    public var registerAssistantCallbackToUser:            callbackTypeAlias?
-    public var deactiveAssistantCallbackToUser:            callbackTypeAlias?
-    public var getAssistantsCallbackToUser:            callbackTypeAlias?
-    public var getAssistantsHistoryCallbackToUser:            callbackTypeAlias?
     
     // Bot callBacks
     public var addBotCommandCallbackToUser: callbackTypeAlias?
@@ -586,6 +496,11 @@ public class Chat {
     public func getGetUserInfoRetry() -> Int {
         return getUserInfoRetry
     }
+	
+	//NewLinesAdded
+	var isCreateObjectFuncCalled = false
+	var config:ChatConfig?
+	var callbacksManager = CallbacksManager()
     
 }
 

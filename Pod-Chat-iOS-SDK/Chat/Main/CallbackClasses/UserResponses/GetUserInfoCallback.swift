@@ -21,6 +21,7 @@ extension Chat {
     ///    - it doesn't have direct output,
     ///    - but on the situation where the response is valid,
     ///    - it will call the "onResultCallback" callback to getUserInfo function (by using "userInfoCallbackToUser")
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func responseOfUserInfo(withMessage message: ChatMessage) {
         log.verbose("Message of type 'USER_INFO' recieved", context: "Chat")
         
@@ -66,6 +67,7 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public class GetUserInfoCallback: CallbackProtocol {
         
         func onResultCallback(uID:      String,

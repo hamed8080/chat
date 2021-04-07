@@ -17,7 +17,7 @@ import Alamofire
 extension Chat {
     
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFileManager.sharedInstance.isImageAvailable(hashCode)")
     public func isImageAvailableOnCache(inputModel imageInput:  GetImageRequest) -> Bool {
         if let isAvailable = Chat.cacheDB.isImageAvailable(hashCode: imageInput.hashCode) {
             return isAvailable
@@ -26,6 +26,7 @@ extension Chat {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFileManager.sharedInstance.isFileAvailable(hashCode)")
     public func isFileAvailableOnCache(inputModel fileInput:  GetFileRequest) -> Bool {
         if let isAvailable = Chat.cacheDB.isFileAvailable(hashCode: fileInput.hashCode) {
             return isAvailable
@@ -42,6 +43,7 @@ extension Chat {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFileManager.sharedInstance.isImageAvailable(hashCode)")
     public func isAvailableOnCache(inputModel imageInput:  GetImageRequest) -> Bool {
         if let isAvailable = Chat.cacheDB.isImageAvailable(hashCode: imageInput.hashCode) {
             return isAvailable
@@ -50,7 +52,7 @@ extension Chat {
         }
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFileManager.sharedInstance.isThumbnailAvailable(hashCode)")
     public func isThumbnailAvailableOnCache(inputModel imageInput:  GetImageRequest) -> Bool {
         if let isAvailable = Chat.cacheDB.isThumbnailAvailable(hashCode: imageInput.hashCode) {
             return isAvailable
@@ -80,6 +82,7 @@ extension Chat {
     /// - parameter progress:           (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
     /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Data?, UploadFileModel)
     /// - parameter cacheResponse:      (response) it will returns the response from CacheDB if user has enabled it. (UploadFileModel, String)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func getFile(inputModel getFileInput:    GetFileRequest,
                         getCacheResponse:           Bool?,
                         uniqueId:       @escaping (String) -> (),
@@ -132,6 +135,7 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     private func sendRequestToDownloadFile(withInputModel getFileInput:   GetFileRequest,
                                            progress:       @escaping (Float) -> (),
                                            completion:     @escaping (Data?, DownloadFileModel) -> ()) {
@@ -201,6 +205,7 @@ extension Chat {
     /// - parameter progress:           (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
     /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Data?, UploadImageModel)
     /// - parameter cacheResponse:      (response) it will returns the response from CacheDB if user has enabled it. (UploadImageModel, String)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func getImage(inputModel getImageInput:  GetImageRequest,
                          getCacheResponse:          Bool?,
                          uniqueId:      @escaping (String) -> (),
@@ -252,6 +257,7 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     public func getThumbnailImage(inputModel getImageInput:  GetImageRequest,
                                   getCacheResponse:          Bool?,
                                   uniqueId:      @escaping (String) -> (),
@@ -300,6 +306,7 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     private func sendRequestToDownloadImage(withInputModel getImageInput: GetImageRequest,
                                             progress:      @escaping (Float) -> (),
                                             completion:    @escaping (Data?, DownloadImageModel) -> ()) {
@@ -371,6 +378,7 @@ extension Chat {
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter progress:   (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (UploadFileModel)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func uploadFile(inputModel uploadFileInput: UploadFileRequest,
                            uniqueId:        @escaping (String) -> (),
                            progress:        @escaping (Float) -> (),
@@ -516,6 +524,7 @@ extension Chat {
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter progress:   (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (UploadImageModel)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func uploadImage(inputModel uploadImageInput:   UploadImageRequest,
                             uniqueId:       @escaping (String) -> (),
                             progress:       @escaping (Float) -> (),
@@ -653,7 +662,7 @@ extension Chat {
     
         
     // MARK: - Manage  Upload/Download  Image/File
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func manageUpload(image:             Bool,
                              file:              Bool,
                              withUniqueId:      String,
@@ -689,7 +698,7 @@ extension Chat {
         }
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func manageDownload(withUniqueId:        String,
                                withAction action:   DownloaUploadAction,
                                completion:          @escaping (String, Bool) -> ()) {
@@ -728,6 +737,7 @@ extension Chat {
     /// Outputs:
     /// -
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func getDeviceFreeSpace() {
         
     }
@@ -743,6 +753,7 @@ extension Chat {
     /// Outputs:
     /// - it has only one return value as Int that represents data as Byte
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFileManager.sharedInstance.totoalUsedSpace()")
     public func getLocalUsedSpace() -> Int {
         return getLocalImageFolderUsedSpace() + getLocalFilesFolderUsedSpace()
     }
@@ -758,6 +769,7 @@ extension Chat {
     /// Outputs:
     /// - it has only one return value as Int that represents data as Byte
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFileManager.sharedInstance.retrieveAllImagesSize()")
     public func getLocalImageFolderUsedSpace() -> Int {
         return Chat.cacheDB.retrieveAllImagesSize()
     }
@@ -773,6 +785,7 @@ extension Chat {
     /// Outputs:
     /// - it has only one return value as Int that represents data as Byte
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFileManager.sharedInstance.retrieveAllFilesSize()")
     public func getLocalFilesFolderUsedSpace() -> Int {
         return Chat.cacheDB.retrieveAllFilesSize()
     }
@@ -790,6 +803,7 @@ extension Chat {
     ///
     /// Outputs:
     /// - this method has no output
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFileManager.sharedInstance.deleteAllImages()")
     public func deleteLocalImages() {
         Chat.cacheDB.deleteAllImages()
     }
@@ -804,6 +818,7 @@ extension Chat {
     ///
     /// Outputs:
     /// - this method has no output
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFileManager.sharedInstance.deleteAllFiles()")
     public func deleteLocalFiles() {
         Chat.cacheDB.deleteAllFiles()
     }
@@ -818,6 +833,7 @@ extension Chat {
     ///
     /// Outputs:
     /// - this method has no output
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFileManager.sharedInstance.deleteAllFilesWithCache()")
     public func deleteAllLocalContent() {
         deleteLocalImages()
         deleteLocalFiles()
@@ -833,6 +849,7 @@ extension Chat {
     ///
     /// Outputs:
     /// - this method has no output
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.write(cacheType: .DELETE_ALL_CACHE_DATA)")
     public func deleteCache() {
         Chat.cacheDB.deleteCacheData()
     }

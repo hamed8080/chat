@@ -13,6 +13,7 @@ import CoreData
 
 public class CMPinMessage: NSManagedObject {
     
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func convertCMObjectToObject() -> PinUnpinMessage {
             
         var messageId:  Int?
@@ -44,7 +45,7 @@ public class CMPinMessage: NSManagedObject {
         
     }
     
-    
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func updateObject(with pinMessage: PinUnpinMessage) {
         if let messageId = pinMessage.messageId as NSNumber? {
             self.messageId = messageId

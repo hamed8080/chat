@@ -12,7 +12,8 @@ import CoreData
 
 
 extension QueueOfEditMessages {
-
+    
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     @nonobjc public class func fetchRequest() -> NSFetchRequest<QueueOfEditMessages> {
         return NSFetchRequest<QueueOfEditMessages>(entityName: "QueueOfEditMessages")
     }

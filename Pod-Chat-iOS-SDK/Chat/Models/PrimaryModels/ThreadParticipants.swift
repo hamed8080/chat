@@ -14,6 +14,7 @@ open class ThreadParticipants {
     
     public var returnData: [Participant] = []
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(participantsContent: [JSON]) {
         for item in participantsContent {
             let temp = Participant(messageContent: item, threadId: nil)
@@ -21,6 +22,7 @@ open class ThreadParticipants {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(theParticipants: [Participant]?) {
         
         if let participants = theParticipants {
@@ -30,6 +32,7 @@ open class ThreadParticipants {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(theThreadParticipants: ThreadParticipants) {
         self.returnData = theThreadParticipants.returnData
     }
@@ -38,6 +41,7 @@ open class ThreadParticipants {
         return self
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatToJSON() -> [JSON] {
         var participantsJSON: [JSON] = []
         for item in returnData {

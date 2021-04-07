@@ -33,6 +33,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (CloseThreadRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ThreadModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func closeThread(inputModel closeThreadInput: CloseThreadRequest,
                             uniqueId:       @escaping (String) -> (),
                             completion:     @escaping callbackTypeAlias) {
@@ -87,6 +88,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (CreateThreadRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ThreadModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func createThread(inputModel createThreadInput: CreateThreadRequest,
                              uniqueId:          @escaping (String) -> (),
                              completion:        @escaping callbackTypeAlias) {
@@ -143,6 +145,7 @@ extension Chat {
     /// - parameter onSent:     (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
     /// - parameter onDelivere: (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
     /// - parameter onSeen:     (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func createThreadWithMessage(inputModel creatThreadWithMessageInput: CreateThreadWithMessageRequest,
                                         threadUniqueId:     @escaping (String) -> (),
                                         messageUniqueId:    @escaping (String) -> (),
@@ -209,6 +212,7 @@ extension Chat {
     /// - parameter onSent:     (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
     /// - parameter onDelivere: (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
     /// - parameter onSeen:     (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func createThreadWithFileMessage(inputModel creatThreadWithFileMessageInput: CreateThreadWithFileMessageRequest,
                                             uploadUniqueId:         @escaping (String) -> (),
                                             uploadProgress:         @escaping (Float) -> (),
@@ -350,6 +354,7 @@ extension Chat {
     /// - this function has no output
     ///
     /// - parameter inputModel:         (input) you have to send your parameters insid this model. (GetAllThreadsRequest)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     func getAllThreads(withInputModel input:   GetAllThreadsRequest) {
         
         let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.GET_THREADS.intValue(),
@@ -398,6 +403,7 @@ extension Chat {
     /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! GetThreadsModel)
     /// - parameter cacheResponse:      (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetThreadsModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func getThreads(inputModel getThreadsInput:  GetThreadsRequest,
                            getCacheResponse:            Bool?,
                            uniqueId:            @escaping (String) -> (),
@@ -472,6 +478,7 @@ extension Chat {
     /// - parameter inputModel:         (input) you have to send your parameters insid this model. (IsPublicThreadNameAvailableRequest)
     /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! IsAvailableNameModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func isNameAvailable(inputModel isNameAvailableThreadInput: IsPublicThreadNameAvailableRequest,
                                 uniqueId:       @escaping (String) -> (),
                                 completion:     @escaping callbackTypeAlias) {
@@ -526,6 +533,7 @@ extension Chat {
     /// - parameter inputModel:         (input) you have to send your parameters insid this model. (JoinPublicThreadRequest)
     /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! ThreadModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func joinThread(inputModel joinThreadInput: JoinPublicThreadRequest,
                            uniqueId:        @escaping (String) -> (),
                            completion:      @escaping callbackTypeAlias) {
@@ -581,6 +589,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (LeaveThreadRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ThreadModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func leaveThread(inputModel leaveThreadInput:   LeaveThreadRequest,
                             uniqueId:       @escaping (String) -> (),
                             completion:     @escaping callbackTypeAlias) {
@@ -635,6 +644,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (SafeLeaveThreadRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ThreadModel)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func leaveThreadSaftly(inputModel safeLeaveThreadInput:   SafeLeaveThreadRequest,
                                   uniqueId:             @escaping (String) -> (),
                                   addAdminCallback:     @escaping callbackTypeAlias,
@@ -713,6 +723,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (MuteUnmuteThreadRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! MuteUnmuteThreadModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func muteThread(inputModel muteThreadInput: MuteUnmuteThreadRequest,
                            uniqueId:        @escaping (String) -> (),
                            completion:      @escaping callbackTypeAlias) {
@@ -766,6 +777,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (MuteUnmuteThreadRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! MuteUnmuteThreadModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func unmuteThread(inputModel unmuteThreadInput: MuteUnmuteThreadRequest,
                              uniqueId:          @escaping (String) -> (),
                              completion:        @escaping callbackTypeAlias) {
@@ -819,6 +831,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (PinUnpinThreadRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! PinUnpinThreadModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func pinThread(inputModel pinThreadInput: PinUnpinThreadRequest,
                            uniqueId:        @escaping (String) -> (),
                            completion:      @escaping callbackTypeAlias) {
@@ -873,6 +886,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (PinUnpinThreadRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! PinUnpinThreadModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func unpinThread(inputModel unpinThreadInput: PinUnpinThreadRequest,
                             uniqueId:       @escaping (String) -> (),
                             completion:     @escaping callbackTypeAlias) {
@@ -926,6 +940,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (SpamPrivateThreadRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request for 3 times!. (Any as! ThreadModel) (Any as! BlockedUserModel) (Any as! ClearHistoryModel)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func spamPvThread(inputModel spamPvThreadInput: SpamPrivateThreadRequest,
                              uniqueId:          @escaping (String) -> (),
                              completions:       @escaping callbackTypeAlias) {
@@ -979,6 +994,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (UpdateThreadInfoRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! GetThreadsModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func updateThreadInfo(inputModel updateThreadInfoInput: UpdateThreadInfoRequest,
                                  uploadUniqueId:    @escaping (String) -> (),
                                  uploadProgress:    @escaping (Float) -> (),

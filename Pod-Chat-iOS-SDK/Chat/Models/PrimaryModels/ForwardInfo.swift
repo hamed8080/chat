@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 
 
-open class ForwardInfo {
+open class ForwardInfo : Codable {
     /*
      * + forwardInfo        ForwardInfo:
      *   - conversation         Conversation?
@@ -20,6 +20,7 @@ open class ForwardInfo {
     public var conversation:   Conversation?
     public var participant:    Participant?
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(messageContent: JSON) {
         
         if (messageContent["conversation"] != JSON.null) {
@@ -32,6 +33,7 @@ open class ForwardInfo {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(conversation:  Conversation?,
                 participant:   Participant?) {
         
@@ -39,21 +41,34 @@ open class ForwardInfo {
         self.participant    = participant
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(theForwardInfo: ForwardInfo) {
         
         self.conversation   = theForwardInfo.conversation
         self.participant    = theForwardInfo.participant
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatDataToMakeForwardInfo() -> ForwardInfo {
         return self
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatToJSON() -> JSON {
         let result: JSON = ["conversation":     conversation?.formatToJSON() ?? NSNull(),
                             "participant":      participant?.formatToJSON() ?? NSNull()]
         return result
     }
-    
+	
+	private enum CodingKeys: String ,CodingKey{
+		case conversation  = "conversation"
+		case participant = "participant"
+	}
+	
+	public required init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		self.conversation  = try container.decodeIfPresent(Conversation.self, forKey: .conversation)
+		self.participant = try container.decodeIfPresent(Participant.self, forKey: .participant)
+	}
+	
 }

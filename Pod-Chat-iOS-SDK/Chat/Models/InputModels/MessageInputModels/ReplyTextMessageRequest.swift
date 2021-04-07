@@ -8,6 +8,7 @@
 
 import Foundation
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class ReplyTextMessageRequest {
     
     public let textMessage: String
@@ -66,7 +67,7 @@ open class ReplyTextMessageRequest {
     
 }
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class ReplyTextMessageRequestModel: ReplyTextMessageRequest {
     
 }

@@ -34,6 +34,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (AddContactRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ContactModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func addContact(inputModel addContactsInput:    AddContactRequest,
                            uniqueId:            @escaping (String) -> (),
                            completion:          @escaping callbackTypeAlias) {
@@ -50,6 +51,7 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     private func sendAddContactRequest(withInputModel addContactsInput:    AddContactRequest,
                                        messageUniqueId:     String,
                                        completion:          @escaping callbackTypeAlias) {
@@ -100,6 +102,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (AddContactsRequest)
     /// - parameter uniqueIds:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ContactModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func addContacts(inputModel addContactsInput:    AddContactsRequest,
                             uniqueIds:           @escaping ([String]) -> (),
                             completion:          @escaping callbackTypeAlias) {
@@ -114,6 +117,7 @@ extension Chat {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     private func sendAddContactsRequest(withInputModel addContactsInput:    AddContactsRequest,
                                         completion:          @escaping callbackTypeAlias) {
         
@@ -152,7 +156,7 @@ extension Chat {
         }
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     private func addContactOnCache(withInputModel contactModel: ContactModel) {
         if self.enableCache {
             Chat.cacheDB.saveContact(withContactObjects: contactModel.contacts)
@@ -180,6 +184,7 @@ extension Chat {
     /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! GetContactsModel)
     /// - parameter cacheResponse:      (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetContactsModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func getContacts(inputModel getContactsInput:    GetContactsRequest,
                             getCacheResponse:               Bool?,
                             uniqueId:           @escaping ((String) -> ()),
@@ -257,6 +262,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (GetNotSeenDurationRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! NotSeenDurationModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func contactNotSeenDuration(inputModel notSeenDurationInput: GetNotSeenDurationRequest,
                                        uniqueId:        @escaping (String) -> (),
                                        completion:      @escaping callbackTypeAlias) {
@@ -311,6 +317,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (RemoveContactsRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! RemoveContactModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func removeContact(inputModel removeContactsInput:  RemoveContactsRequest,
                               uniqueId:             @escaping (String) -> (),
                               completion:           @escaping callbackTypeAlias) {
@@ -327,6 +334,7 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     private func sendRemoveContactRequest(withInputModel removeContactsInput:  RemoveContactsRequest,
                                           completion:           @escaping callbackTypeAlias) {
         
@@ -348,6 +356,7 @@ extension Chat {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     private func removeContactFromCache(withInputModel removeContact: RemoveContactModel, withContactId: [Int]) {
         if self.enableCache {
             if (removeContact.result) {
@@ -375,6 +384,7 @@ extension Chat {
     /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! GetContactsModel)
     /// - parameter cacheResponse:      (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetContactsModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func searchContacts(inputModel searchContactsInput:  SearchContactsRequest,
                                getCacheResponse:                Bool?,
                                uniqueId:            @escaping ((String) -> ()),
@@ -519,6 +529,7 @@ extension Chat {
     ///
     /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! [ContactModel])
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func syncContacts(uniqueIds:     @escaping ([String]) -> (),
                              completion:    @escaping callbackTypeAlias) {
         log.verbose("Try to request to sync contact", context: "Chat")
@@ -635,6 +646,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (UpdateContactsRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ContactModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func updateContact(inputModel updateContactsInput:  UpdateContactsRequest,
                               uniqueId:             @escaping (String) -> (),
                               completion:           @escaping callbackTypeAlias) {

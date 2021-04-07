@@ -8,21 +8,22 @@
 
 import Foundation
 
-public enum MessageType {
+public enum MessageType : Int , Codable {
     
-    case TEXT
-    case VOICE
-    case PICTURE
-    case VIDEO
-    case SOUND
-    case FILE
-    case POD_SPACE_PICTURE
-    case POD_SPACE_VIDEO
-    case POD_SPACE_SOUND
-    case POD_SPACE_VOICE
-    case POD_SPACE_FILE
-    case LINK
-    
+    case TEXT              = 1
+    case VOICE             = 2
+    case PICTURE           = 3
+    case VIDEO             = 4
+    case SOUND             = 5
+    case FILE              = 6
+    case POD_SPACE_PICTURE = 7
+    case POD_SPACE_VIDEO   = 8
+    case POD_SPACE_SOUND   = 9
+    case POD_SPACE_VOICE   = 10
+    case POD_SPACE_FILE    = 11
+    case LINK              = 12
+	
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func returnIntValue() -> Int {
         switch self {
         case .TEXT:             return 1
@@ -40,6 +41,7 @@ public enum MessageType {
         }
     }
     
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public static func getType(from: Int) -> MessageType {
         switch from {
         case 1:     return MessageType.TEXT

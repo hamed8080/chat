@@ -9,12 +9,12 @@
 import Foundation
 import SwiftyJSON
 
-
-open class Profile {
+open class Profile : Codable {
     
     public var bio:         String?
     public var metadata:    String?
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(messageContent: JSON) {
         self.bio        = messageContent["bio"].string
         self.metadata   = messageContent["metadata"].string
@@ -26,15 +26,26 @@ open class Profile {
         self.metadata   = metadata
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(theProfile: Profile) {
         self.bio        = theProfile.bio
         self.metadata   = theProfile.metadata
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatToJSON() -> JSON {
         let result: JSON = ["bio":      bio ?? NSNull(),
                             "metadata": metadata ?? NSNull()]
         return result
     }
     
+	private enum CodingKeys: String ,CodingKey{
+		case bio  = "bio"
+		case metadata = "metadata"
+	}
+	public required init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		self.bio  = try container.decodeIfPresent(String.self, forKey: .bio)
+		self.metadata  = try container.decodeIfPresent(String.self, forKey: .metadata)
+	}
 }

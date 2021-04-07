@@ -8,6 +8,7 @@
 
 import Foundation
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class AddContactsRequest {
     
     public let cellphoneNumbers:    [String]
@@ -58,6 +59,7 @@ open class AddContactsRequest {
 }
 
 /// MARK: -  this class will be deprecate.  (use this class instead: 'AddContactsRequest')
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class AddContactsRequestModel: AddContactsRequest {
     
     

@@ -20,6 +20,7 @@ extension Chat {
     ///    - it doesn't have direct output,
     ///    - but on the situation where the response is valid,
     ///    - it will call the "onResultCallback" callback to sendMessage function (by using "sendCallbackToUserOnSent")
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func responseOfOnSendMessage(withMessage message: ChatMessage) {
         /**
          *
@@ -78,6 +79,7 @@ extension Chat {
     ///    - it doesn't have direct output,
     ///    - but on the situation where the response is valid,
     ///    - it will call the "onResultCallback" callback to sendMessage function (by using "sendCallbackToUserOnDeliver")
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func responseOfOnDeliveredMessage(withMessage message: ChatMessage) {
         /**
          *
@@ -197,6 +199,7 @@ extension Chat {
     ///    - it doesn't have direct output,
     ///    - but on the situation where the response is valid,
     ///    - it will call the "onResultCallback" callback to sendMessage function (by using "sendCallbackToUserOnSeen")
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func responseOfOnSeenMessage(withMessage message: ChatMessage) {
         /**
          *
@@ -326,7 +329,7 @@ extension Chat {
         
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public class SendMessageCallbacks: CallbackProtocolWith3Calls {
         var sendParams: SendChatMessageVO
         init(parameters: SendChatMessageVO) {

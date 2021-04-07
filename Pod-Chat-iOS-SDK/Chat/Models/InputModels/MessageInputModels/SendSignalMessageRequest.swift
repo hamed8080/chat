@@ -9,6 +9,7 @@
 import Foundation
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class SendSignalMessageRequest: RequestModelDelegates {
     
     public let signalType:  SignalMessageType
@@ -39,7 +40,7 @@ open class SendSignalMessageRequest: RequestModelDelegates {
     
 }
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class SendSignalMessageRequestModel: SendSignalMessageRequest {
     
 }

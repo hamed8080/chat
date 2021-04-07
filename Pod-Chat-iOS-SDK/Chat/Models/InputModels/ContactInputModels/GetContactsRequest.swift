@@ -9,6 +9,7 @@
 import FanapPodAsyncSDK
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class GetContactsRequest {
     
     public let count:       Int?
@@ -113,6 +114,7 @@ open class GetContactsRequest {
 }
 
 /// MARK: -  this class will be deprecate (use this class instead: 'GetContactsRequest')
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class GetContactsRequestModel: GetContactsRequest {
     
 }

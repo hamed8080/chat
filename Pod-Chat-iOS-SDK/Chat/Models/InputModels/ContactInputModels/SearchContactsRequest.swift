@@ -8,6 +8,7 @@
 
 import Foundation
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class SearchContactsRequest {
     
     public let cellphoneNumber: String?
@@ -51,6 +52,7 @@ open class SearchContactsRequest {
 
 
 /// MARK: -  this class will be deprecate (use this class instead: 'SearchContactsRequest')
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class SearchContactsRequestModel: SearchContactsRequest {
     
 }

@@ -21,6 +21,7 @@ open class ImageObject {
     public var size:           Int?
     public var width:          Int?
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(messageContent: JSON) {
         self.actualHeight   = messageContent["actualHeight"].int
         self.actualWidth    = messageContent["actualWidth"].int
@@ -50,7 +51,8 @@ open class ImageObject {
         self.size           = size
         self.width          = width
     }
-    
+
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(theUploadImage: ImageObject) {
         
         self.actualHeight   = theUploadImage.actualHeight
@@ -63,11 +65,12 @@ open class ImageObject {
         self.width          = theUploadImage.width
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatDataToMakeUploadImage() -> ImageObject {
         return self
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatToJSON() -> JSON {
         let result: JSON = ["actualHeight": actualHeight ?? NSNull(),
                             "actualWidth":  actualWidth ?? NSNull(),

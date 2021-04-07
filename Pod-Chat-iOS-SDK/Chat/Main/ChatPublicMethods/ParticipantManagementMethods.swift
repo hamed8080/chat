@@ -31,6 +31,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (AddParticipantsRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! AddParticipantModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func addParticipants(inputModel addParticipantsInput:   AddParticipantsRequest,
                                 uniqueId:       @escaping (String) -> (),
                                 completion:     @escaping callbackTypeAlias) {
@@ -85,6 +86,7 @@ extension Chat {
     /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! GetCurrentUserRolesModel)
     /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetCurrentUserRolesModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func getCurrentUserRoles(inputModel getCurrentUserRolesInput:    GetCurrentUserRolesRequest,
                                     getCacheResponse:   Bool?,
                                     uniqueId:           @escaping (String) -> (),
@@ -148,6 +150,7 @@ extension Chat {
     /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! GetThreadParticipantsModel)
     /// - parameter cacheResponse:      (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetThreadParticipantsModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func getThreadParticipants(inputModel getThreadParticipantsInput:    GetThreadParticipantsRequest,
                                       getCacheResponse:                         Bool?,
                                       uniqueId:             @escaping (String) -> (),
@@ -216,6 +219,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (RemoveParticipantsRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! RemoveParticipantModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func removeParticipants(inputModel removeParticipantsInput: RemoveParticipantsRequest,
                                    uniqueId:        @escaping (String) -> (),
                                    completion:      @escaping callbackTypeAlias) {
@@ -295,6 +299,7 @@ extension Chat {
    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! UserRolesModel)
    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (UserRolesModel)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
    public func setRole(inputModel setRoleInput: RoleRequestModel,
                        uniqueId:       @escaping (String) -> (),
                        completion:     @escaping callbackTypeAlias) {
@@ -347,6 +352,7 @@ extension Chat {
    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! UserRolesModel)
    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (UserRolesModel)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
    public func removeRole(inputModel removeRoleInput: RoleRequestModel,
                           uniqueId:        @escaping (String) -> (),
                           completion:      @escaping callbackTypeAlias) {
@@ -398,6 +404,7 @@ extension Chat {
    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! UserRolesModel)
    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (UserRolesModel)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
    public func setAuditor(inputModel setAuditorInput:  AddRemoveAuditorRequestModel,
                           uniqueId:        @escaping (String) -> (),
                           completion:      @escaping callbackTypeAlias) {
@@ -434,6 +441,7 @@ extension Chat {
    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! UserRolesModel)
    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (UserRolesModel)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
    public func removeAuditor(inputModel removeAuditorInput:    AddRemoveAuditorRequestModel,
                              uniqueId:         @escaping (String) -> (),
                              completion:       @escaping callbackTypeAlias) {
@@ -452,214 +460,5 @@ extension Chat {
        })
        
    }
-       
-    
-    
-    // MARK: - Assistants
-    
-    /// Register Assistant:
-    ///
-    /// By calling this function, a request of type 107 (REGISTER_ASSISTANT) will send throut Chat-SDK,
-    /// then the response will come back as callbacks to client whose calls this function.
-    ///
-    /// Inputs:
-    /// - you have to send your parameters as "RegisterAssistantRequest" to this function
-    ///
-    /// Outputs:
-    /// - It has 2 callbacks as responses.
-    ///
-    /// - parameter inputModel: (input) you have to send your parameters insid this model. (RegisterAssistantRequest)
-    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! AssistantResponse)
-    public func registerAssistant(inputModel registerAssistantInput: RegisterAssistantRequest,
-                                  uniqueId:         @escaping (String) -> (),
-                                  completions:      @escaping callbackTypeAlias) {
-        
-        log.verbose("Try to request to Register Assistant with this parameters: \n \(registerAssistantInput)", context: "Chat")
-        uniqueId(registerAssistantInput.uniqueId)
-        
-        registerAssistantCallbackToUser = completions
-        
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.REGISTER_ASSISTANT.intValue(),
-                                            content:            "\(registerAssistantInput.convertContentToJSON())",
-                                            messageType:        nil,
-                                            metadata:           nil,
-                                            repliedTo:          nil,
-                                            systemMetadata:     nil,
-                                            subjectId:          nil,
-                                            token:              token,
-                                            tokenIssuer:        nil,
-                                            typeCode:           registerAssistantInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           registerAssistantInput.uniqueId,
-                                            uniqueIds:          nil,
-                                            isCreateThreadAndSendMessage: true)
-        
-        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
-                                              msgTTL:       msgTTL,
-                                              peerName:     serverName,
-                                              priority:     msgPriority,
-                                              pushMsgType:  nil)
-        
-        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          [(AssistantCallback(), registerAssistantInput.uniqueId)],
-                                sentCallback:       nil,
-                                deliverCallback:    nil,
-                                seenCallback:       nil)
-    }
-    
-    
-    /// Deactive Assistant:
-    ///
-    /// By calling this function, a request of type 108 (DEACTICVE_ASSISTANT) will send throut Chat-SDK,
-    /// then the response will come back as callbacks to client whose calls this function.
-    ///
-    /// Inputs:
-    /// - you have to send your parameters as "DeactiveAssistantRequest" to this function
-    ///
-    /// Outputs:
-    /// - It has 2 callbacks as responses.
-    ///
-    /// - parameter inputModel: (input) you have to send your parameters insid this model. (DeactiveAssistantRequest)
-    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! AssistantResponse)
-    public func deactiveAssistant(inputModel deactiveAssistantInput: DeactiveAssistantRequest,
-                                  uniqueId:         @escaping (String) -> (),
-                                  completions:      @escaping callbackTypeAlias) {
-        
-        log.verbose("Try to request to Deactive Assistant with this parameters: \n \(deactiveAssistantInput)", context: "Chat")
-        uniqueId(deactiveAssistantInput.uniqueId)
-        
-        deactiveAssistantCallbackToUser = completions
-        
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.DEACTICVE_ASSISTANT.intValue(),
-                                            content:            "\(deactiveAssistantInput.convertContentToJSON())",
-                                            messageType:        nil,
-                                            metadata:           nil,
-                                            repliedTo:          nil,
-                                            systemMetadata:     nil,
-                                            subjectId:          nil,
-                                            token:              token,
-                                            tokenIssuer:        nil,
-                                            typeCode:           deactiveAssistantInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           deactiveAssistantInput.uniqueId,
-                                            uniqueIds:          nil,
-                                            isCreateThreadAndSendMessage: true)
-        
-        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
-                                              msgTTL:       msgTTL,
-                                              peerName:     serverName,
-                                              priority:     msgPriority,
-                                              pushMsgType:  nil)
-        
-        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          [(AssistantCallback(), deactiveAssistantInput.uniqueId)],
-                                sentCallback:       nil,
-                                deliverCallback:    nil,
-                                seenCallback:       nil)
-    }
-    
-    
-    /// Get Assistants:
-    ///
-    /// By calling this function, a request of type 109 (GET_ASSISTANTS) will send throut Chat-SDK,
-    /// then the response will come back as callbacks to client whose calls this function.
-    ///
-    /// Inputs:
-    /// - you have to send your parameters as "GetAssistantsRequest" to this function
-    ///
-    /// Outputs:
-    /// - It has 2 callbacks as responses.
-    ///
-    /// - parameter inputModel: (input) you have to send your parameters insid this model. (GetAssistantsRequest)
-    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! AssistantResponse)
-    public func getAssistants(inputModel getAssistantsInput: GetAssistantsRequest,
-                              uniqueId:         @escaping (String) -> (),
-                              completions:      @escaping callbackTypeAlias) {
-        
-        log.verbose("Try to request to Get Assistants with this parameters: \n \(getAssistantsInput)", context: "Chat")
-        uniqueId(getAssistantsInput.uniqueId)
-        
-        getAssistantsCallbackToUser = completions
-        
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.GET_ASSISTANTS.intValue(),
-                                            content:            "\(getAssistantsInput.convertContentToJSON())",
-                                            messageType:        nil,
-                                            metadata:           nil,
-                                            repliedTo:          nil,
-                                            systemMetadata:     nil,
-                                            subjectId:          nil,
-                                            token:              token,
-                                            tokenIssuer:        nil,
-                                            typeCode:           getAssistantsInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           getAssistantsInput.uniqueId,
-                                            uniqueIds:          nil,
-                                            isCreateThreadAndSendMessage: true)
-        
-        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
-                                              msgTTL:       msgTTL,
-                                              peerName:     serverName,
-                                              priority:     msgPriority,
-                                              pushMsgType:  nil)
-        
-        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          [(AssistantCallback(), getAssistantsInput.uniqueId)],
-                                sentCallback:       nil,
-                                deliverCallback:    nil,
-                                seenCallback:       nil)
-    }
-    
-    
-    /// Get Assistants History:
-    ///
-    /// By calling this function, a request of type 109 (GET_ASSISTANTS) will send throut Chat-SDK,
-    /// then the response will come back as callbacks to client whose calls this function.
-    ///
-    /// Inputs:
-    /// - you have to send your parameters as "GetAssistantsRequest" to this function
-    ///
-    /// Outputs:
-    /// - It has 2 callbacks as responses.
-    ///
-    /// - parameter inputModel: (input) you have to send your parameters insid this model. (GetAssistantsRequest)
-    /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
-    /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! AssistantActionsResponse)
-    public func getAssistantsHistory(inputModel getAssistantsHistoryInput: GetAssistantsHistoryRequest,
-                                     uniqueId:      @escaping (String) -> (),
-                                     completions:   @escaping callbackTypeAlias) {
-        
-        log.verbose("Try to request to Get Assistants History with this parameters: \n \(getAssistantsHistoryInput)", context: "Chat")
-        uniqueId(getAssistantsHistoryInput.uniqueId)
-        
-        getAssistantsHistoryCallbackToUser = completions
-        
-        let chatMessage = SendChatMessageVO(chatMessageVOType:  ChatMessageVOTypes.GET_ASSISTANT_HISTORY.intValue(),
-                                            content:            nil,
-                                            messageType:        nil,
-                                            metadata:           nil,
-                                            repliedTo:          nil,
-                                            systemMetadata:     nil,
-                                            subjectId:          nil,
-                                            token:              token,
-                                            tokenIssuer:        nil,
-                                            typeCode:           getAssistantsHistoryInput.typeCode ?? generalTypeCode,
-                                            uniqueId:           getAssistantsHistoryInput.uniqueId,
-                                            uniqueIds:          nil,
-                                            isCreateThreadAndSendMessage: true)
-        
-        let asyncMessage = SendAsyncMessageVO(content:      chatMessage.convertModelToString(),
-                                              msgTTL:       msgTTL,
-                                              peerName:     serverName,
-                                              priority:     msgPriority,
-                                              pushMsgType:  nil)
-        
-        sendMessageWithCallback(asyncMessageVO:     asyncMessage,
-                                callbacks:          [(GetAssistantHistoryCallback(), getAssistantsHistoryInput.uniqueId)],
-                                sentCallback:       nil,
-                                deliverCallback:    nil,
-                                seenCallback:       nil)
-    }
-    
-    
     
 }

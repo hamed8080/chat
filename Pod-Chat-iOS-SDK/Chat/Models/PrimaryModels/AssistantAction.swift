@@ -7,50 +7,29 @@
 //
 
 import Foundation
-import SwiftyJSON
 
 
-open class AssistantAction {
+public class AssistantAction : Decodable {
     
-    public var actionName:  String?
-    public var actionTime:  UInt?
-    public var actionType:  Int?
-    public var participant: Participant?
+    public var actionName  : String?
+    public var actionTime  : UInt?
+    public var actionType  : Int?
+    public var participant : Participant?
     
     
-    public init(messageContent: JSON) {
-        self.actionName    = messageContent["actionName"].string
-        self.actionTime    = messageContent["actionTime"].uInt
-        self.actionType    = messageContent["actionType"].int
-        
-        if messageContent["participantVO"].exists() {
-            self.participant = Participant(messageContent: messageContent["participantVO"], threadId: nil)
-        }
+    private enum CodingKeys:String,CodingKey{
+        case actionName    = "actionName"
+        case actionTime    = "actionTime"
+        case actionType    = "actionType"
+        case participantVO = "participantVO"
     }
     
-    public init(actionName:     String?,
-                actionTime:     UInt?,
-                actionType:     Int?,
-                participant:    Participant?) {
-        self.actionName     = actionName
-        self.actionTime     = actionTime
-        self.actionType     = actionType
-        self.participant    = participant
-    }
-    
-    public init(theAssistantAction: AssistantAction) {
-        self.actionName     = theAssistantAction.actionName
-        self.actionTime     = theAssistantAction.actionTime
-        self.actionType     = theAssistantAction.actionType
-        self.participant    = theAssistantAction.participant
-    }
-    
-    public func formatToJSON() -> JSON {
-        let result: JSON = ["actionName":   actionName ?? NSNull(),
-                            "actionTime":   actionTime ?? NSNull(),
-                            "actionType":   actionType ?? NSNull(),
-                            "Participant":  participant?.formatToJSON() ?? NSNull()]
-        return result
+    public required init(from decoder: Decoder) throws {
+        let container = try? decoder.container(keyedBy: CodingKeys.self)
+        actionName    = try container?.decodeIfPresent(String.self, forKey: .actionName)
+        actionTime    = try container?.decodeIfPresent(UInt.self, forKey: .actionTime)
+        actionType    = try container?.decodeIfPresent(Int.self, forKey: .actionType)
+        participant   = try container?.decodeIfPresent(Participant.self, forKey: .participantVO)
     }
     
 }

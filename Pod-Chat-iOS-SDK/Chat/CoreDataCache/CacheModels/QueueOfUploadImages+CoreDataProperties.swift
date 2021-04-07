@@ -13,6 +13,7 @@ import CoreData
 
 extension QueueOfUploadImages {
 
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     @nonobjc public class func fetchRequest() -> NSFetchRequest<QueueOfUploadImages> {
         return NSFetchRequest<QueueOfUploadImages>(entityName: "QueueOfUploadImages")
     }

@@ -8,6 +8,7 @@
 
 import Foundation
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class GetCurrentUserRolesRequest {
     
     public let threadId:    Int
@@ -29,6 +30,7 @@ open class GetCurrentUserRolesRequest {
 
 
 /// MARK: -  this class will be deprecate (use this class instead: 'GetCurrentUserRolesRequest')
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class GetCurrentUserRolesRequestModel: GetCurrentUserRolesRequest {
     
 }

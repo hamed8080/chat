@@ -9,6 +9,7 @@
 import FanapPodAsyncSDK
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class CreateThreadWithMessageRequest: RequestModelDelegates {
     
     public var createThreadInput:   CreateThreadRequest
@@ -62,6 +63,7 @@ open class CreateThreadWithMessageRequest: RequestModelDelegates {
 
 
 /// MARK: -  this class will be deprecate (use this class instead: 'ClearHistoryRequest')
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class CreateThreadWithMessageRequestModel: CreateThreadWithMessageRequest {
     
 }

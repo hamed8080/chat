@@ -20,6 +20,7 @@ extension Chat {
     ///    - it doesn't have direct output,
     ///    - but on the situation where the response is valid,
     ///    - it will call the "onResultCallback" callback to getBlockedList function (by using "getBlockedListCallbackToUser")
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func responseOfGetBlockedList(withMessage message: ChatMessage) {
         log.verbose("Message of type 'GET_BLOCKED' recieved", context: "Chat")
         
@@ -45,6 +46,7 @@ extension Chat {
     }
     
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public class GetBlockedUsersCallbacks: CallbackProtocol {
         var sendParams: SendChatMessageVO
         init(parameters: SendChatMessageVO) {

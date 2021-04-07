@@ -54,6 +54,7 @@ extension Chat {
     /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! UserInfoModel)
     /// - parameter cacheResponse:      (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (UserInfoModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func getUserInfo(getCacheResponse:   Bool?,
                             uniqueId:       @escaping ((String) -> ()),
                             completion:     @escaping callbackTypeAlias,
@@ -114,6 +115,7 @@ extension Chat {
     ///
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ProfileModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func setProfile(inputModel setProfileInput:  UpdateChatProfileRequest,
                            uniqueId:                    @escaping ((String) -> ()),
                            completion:                  @escaping callbackTypeAlias) {
@@ -169,6 +171,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (BlockRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! BlockedUserModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func blockContact(inputModel blockContactsInput:    BlockRequest,
                              uniqueId:              @escaping (String) -> (),
                              completion:            @escaping callbackTypeAlias) {
@@ -221,6 +224,7 @@ extension Chat {
     /// - parameter getCacheResponse:   (input) specify if you want to get cache response for this request (Bool?)
     /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! GetBlockedUserListModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func getBlockedContacts(inputModel getBlockedContactsInput:  GetBlockedListRequest,
                                    getCacheResponse:                    Bool?,
                                    uniqueId:                @escaping (String) -> (),
@@ -277,6 +281,7 @@ extension Chat {
     /// - parameter inputModel:         (input) you have to send your parameters insid this model. (StatusPingRequest)
 //    /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
 //    /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! )
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func sendStatusPing(inputModel statusPingInput: StatusPingRequest) {
 //                               uniqueId:                @escaping (String) -> (),
 //                               completion:              @escaping callbackTypeAlias) {
@@ -329,6 +334,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (UnblockRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! BlockedUserModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func unblockContact(inputModel unblockContactsInput:    UnblockRequest,
                                uniqueId:                @escaping (String) -> (),
                                completion:              @escaping callbackTypeAlias) {
@@ -375,6 +381,7 @@ extension Chat {
     ///
     /// Outputs:
     /// - this method does not any output
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func deleteUserInfoFromCache() {
         Chat.cacheDB.deleteUserInfo(isCompleted: nil)
     }
@@ -382,6 +389,7 @@ extension Chat {
     
     // this function will generate a UUID to use in your request if needed (specially for uniqueId)
     // and it will return the UUID as String
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func generateUUID() -> String {
         let myUUID = NSUUID().uuidString
         return myUUID
@@ -406,6 +414,7 @@ extension Chat {
     ///
     /// Outputs:
     /// - this method does not any output
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func setToken(newToken: String) {
         token = newToken
     }

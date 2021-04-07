@@ -8,6 +8,7 @@
 
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class PinUnpinMessageRequest: RequestModelDelegates {
     
     public let messageId:   Int
@@ -41,7 +42,7 @@ open class PinUnpinMessageRequest: RequestModelDelegates {
 }
 
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class PinAndUnpinMessageRequestModel: PinUnpinMessageRequest {
     
 }

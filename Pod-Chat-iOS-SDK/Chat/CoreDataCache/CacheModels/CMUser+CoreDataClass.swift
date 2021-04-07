@@ -13,6 +13,7 @@ import CoreData
 
 public class CMUser: NSManagedObject {
     
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func convertCMObjectToObject() -> User {
         
         var coreUserId:     Int?
@@ -66,7 +67,7 @@ public class CMUser: NSManagedObject {
         return model
     }
     
-    
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func updateObject(with user: User) {
         self.cellphoneNumber = user.cellphoneNumber
         self.contactSynced  = user.contactSynced as NSNumber?

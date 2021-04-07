@@ -14,6 +14,7 @@ open class MapRouting {
     
     public var routs:   [MapRoutingRout]?
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(messageContent: JSON) {
         
         if (messageContent["routs"] != JSON.null) {
@@ -27,12 +28,14 @@ open class MapRouting {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(routs: [MapRoutingRout]) {
         
         self.routs = routs
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(theMapRouting: MapRouting) {
         
         self.routs = theMapRouting.routs
@@ -43,6 +46,7 @@ open class MapRouting {
         return self
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatToJSON() -> JSON {
         
         var itemsJSON: [JSON] = []
@@ -66,6 +70,7 @@ open class MapRoutingRout {
     public var overview_polyline:   MapRoutOverviewPolyline
     public var legs:                [MapRoutLegs]
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(messageContent: JSON) {
         
         self.overview_polyline  = MapRoutOverviewPolyline(messageContent: messageContent["overview_polyline"])
@@ -92,10 +97,12 @@ open class MapRoutingRout {
         self.legs               = theMapRout.legs
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatDataToMakeMapItem() -> MapRoutingRout {
         return self
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatToJSON() -> JSON {
         
         var legsJSON: [JSON] = []
@@ -117,7 +124,8 @@ open class MapRoutingRout {
 open class MapRoutOverviewPolyline {
     
     public var points: String?
-    
+
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     init(messageContent: JSON) {
         self.points  = messageContent["points"].string
     }
@@ -126,10 +134,12 @@ open class MapRoutOverviewPolyline {
         self.points  = points.points
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatDataToMakeMapRoutOverviewPolyline() -> MapRoutOverviewPolyline {
         return self
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatToJSON() -> JSON {
         let result: JSON = ["points":   points ?? NSNull()]
         return result

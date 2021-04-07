@@ -8,16 +8,16 @@
 
 import Foundation
 
-
-public enum ThreadTypes {
+public enum ThreadTypes : Int , Encodable ,CaseIterable {
     
-    case NORMAL                 // "NORMAL"
-    case OWNER_GROUP            // "OWNER_GROUP"
-    case PUBLIC_GROUP           // "PUBLIC_GROUP"
-    case CHANNEL_GROUP          // "CHANNEL_GROUP"
-    case CHANNEL                // "CHANNEL"
-    case NOTIFICATION_CHANNEL   // "NOTIFICATION_CHANNEL"
+    case NORMAL = 0                  // "NORMAL"
+    case OWNER_GROUP  = 1          // "OWNER_GROUP"
+    case PUBLIC_GROUP   = 2         // "PUBLIC_GROUP"
+    case CHANNEL_GROUP   = 4       // "CHANNEL_GROUP"
+    case CHANNEL   = 8             // "CHANNEL"
+    case NOTIFICATION_CHANNEL = 16   // "NOTIFICATION_CHANNEL"
     
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func stringValue() -> String {
         switch self {
         case .NORMAL:               return "NORMAL"
@@ -28,7 +28,8 @@ public enum ThreadTypes {
         case .NOTIFICATION_CHANNEL: return "NOTIFICATION_CHANNEL"
         }
     }
-    
+	
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func intValue() -> Int {
         switch self {
         case .NORMAL:               return 0

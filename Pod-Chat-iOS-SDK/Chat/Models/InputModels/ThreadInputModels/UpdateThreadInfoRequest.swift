@@ -9,6 +9,7 @@
 import FanapPodAsyncSDK
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class UpdateThreadInfoRequest: RequestModelDelegates {
     
     public let description:     String? // Description for thread
@@ -68,7 +69,7 @@ open class UpdateThreadInfoRequest: RequestModelDelegates {
     
 }
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class UpdateThreadInfoRequestModel: UpdateThreadInfoRequest {
     
 }

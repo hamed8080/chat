@@ -9,6 +9,7 @@
 import Foundation
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class QueueOfWaitUploadFilesModel {
     
     let dataToSend:     Data?
@@ -75,7 +76,7 @@ open class QueueOfWaitUploadFilesModel {
     
 }
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class QueueOfWaitUploadFilesResponse: QueueOfWaitUploadFilesModel {
     
 }

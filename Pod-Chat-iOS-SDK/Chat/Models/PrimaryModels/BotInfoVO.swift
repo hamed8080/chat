@@ -15,6 +15,7 @@ open class BotInfoVO {
     public var botUserId:   Int?                // id of user equivalent to bot
     public var commandList: [String]    = []    // all commands that have been defined to this bot
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(messageContent: JSON) {
         self.botName    = messageContent["name"].string
         self.botUserId  = messageContent["botUserId"].int
@@ -33,12 +34,14 @@ open class BotInfoVO {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(theBotInfoVO: BotInfoVO) {
         self.botName        = theBotInfoVO.botName
         self.botUserId      = theBotInfoVO.botUserId
         self.commandList    = theBotInfoVO.commandList
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatToJSON() -> JSON {
         let result: JSON = ["botName":      botName ?? NSNull(),
                             "botUserId":    botUserId ?? NSNull(),

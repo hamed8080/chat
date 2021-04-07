@@ -20,6 +20,7 @@ extension Chat {
     ///    - it doesn't have direct output,
     ///    - but on the situation where the response is valid,
     ///    - it will call the "onResultCallback" callback to isPublicThreadNameAvailable function (by using "joinPublicThreadCallbackToUser")
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func responseOfIsPublicThreadNameAvailable(withMessage message: ChatMessage) {
         log.verbose("Message of type 'IS_NAME_AVAILABLE' recieved", context: "Chat")
         
@@ -44,6 +45,7 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public class IsPublicThreadNameAvailableCallbacks: CallbackProtocol {
         func onResultCallback(uID:      String,
                               response: CreateReturnData,

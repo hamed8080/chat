@@ -20,6 +20,7 @@ open class MapReverse {
     public var municipality_zone:   Int?
     public var state:               String?
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(messageContent: JSON) {
         self.address            = messageContent["address"].string
         self.city               = messageContent["city"].string
@@ -47,6 +48,7 @@ open class MapReverse {
         self.state              = state
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(theMapReverse: MapReverse) {
         
         self.address            = theMapReverse.address
@@ -58,11 +60,12 @@ open class MapReverse {
         self.state              = theMapReverse.state
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatDataToMakeMapReverse() -> MapReverse {
         return self
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatToJSON() -> JSON {
         let result: JSON = ["address": address ?? NSNull(),
                             "city":  city ?? NSNull(),

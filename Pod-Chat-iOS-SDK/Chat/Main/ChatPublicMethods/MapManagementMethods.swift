@@ -32,6 +32,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (MapReverseRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! MapReverseModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func mapReverse(inputModel mapReverseInput: MapReverseRequest,
                            uniqueId:        @escaping (String) -> (),
                            completion:      @escaping callbackTypeAlias) {
@@ -39,7 +40,7 @@ extension Chat {
         let theUniqueId = generateUUID()
         uniqueId(theUniqueId)
         
-        let url = "\(SERVICE_ADDRESSES.MAP_ADDRESS)\(SERVICES_PATH.REVERSE.rawValue)"
+        let url = "\(SERVICE_ADDRESSES.MAP_ADDRESS)\(SERVICES_PATH.MAP_REVERSE.rawValue)"
         let method:     HTTPMethod  = HTTPMethod.get
         let headers:    HTTPHeaders = ["Api-Key":   mapApiKey]
         let parameters: Parameters  = ["lat":       mapReverseInput.lat,
@@ -78,6 +79,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (MapRoutingRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! MapRoutingModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func mapRouting(inputModel mapRoutingInput: MapRoutingRequest,
                            uniqueId:        @escaping (String) -> (),
                            completion:      @escaping callbackTypeAlias) {
@@ -85,7 +87,7 @@ extension Chat {
         let theUniqueId = generateUUID()
         uniqueId(theUniqueId)
         
-        let url = "\(SERVICE_ADDRESSES.MAP_ADDRESS)\(SERVICES_PATH.ROUTING.rawValue)"
+        let url = "\(SERVICE_ADDRESSES.MAP_ADDRESS)\(SERVICES_PATH.MAP_ROUTING.rawValue)"
         let method:     HTTPMethod  = HTTPMethod.get
         let headers:    HTTPHeaders = ["Api-Key": mapApiKey]
         let parameters: Parameters  = ["origin":        "\(mapRoutingInput.origin.lat),\(mapRoutingInput.origin.lng)",
@@ -124,6 +126,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (MapSearchRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! MapSearchModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func mapSearch(inputModel mapSearchInput:   MapSearchRequest,
                           uniqueId:         @escaping (String) -> (),
                           completion:       @escaping callbackTypeAlias) {
@@ -131,7 +134,7 @@ extension Chat {
         let theUniqueId = generateUUID()
         uniqueId(theUniqueId)
         
-        let url = "\(SERVICE_ADDRESSES.MAP_ADDRESS)\(SERVICES_PATH.SEARCH.rawValue)"
+        let url = "\(SERVICE_ADDRESSES.MAP_ADDRESS)\(SERVICES_PATH.MAP_SEARCH.rawValue)"
         let method:     HTTPMethod  = HTTPMethod.get
         let headers:    HTTPHeaders = ["Api-Key": mapApiKey]
         let parameters: Parameters  = ["lat":   mapSearchInput.lat,
@@ -171,6 +174,7 @@ extension Chat {
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter progress:   (response)  it will returns the progress of the downloading request by a value between 0 and 1. (Float)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! Data)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func mapStaticImage(inputModel mapStaticImageInput: MapStaticImageRequest,
                                uniqueId:            @escaping (String) -> (),
                                progress:            @escaping (Float) -> (),
@@ -179,7 +183,7 @@ extension Chat {
         let theUniqueId = generateUUID()
         uniqueId(theUniqueId)
         
-        let url = "\(SERVICE_ADDRESSES.MAP_ADDRESS)\(SERVICES_PATH.STATIC_IMAGE.rawValue)"
+        let url = "\(SERVICE_ADDRESSES.MAP_ADDRESS)\(SERVICES_PATH.MAP_STATIC_IMAGE.rawValue)"
         let method:     HTTPMethod  = HTTPMethod.get
         let parameters: Parameters  = ["key":       mapApiKey,
                                        "type":      mapStaticImageInput.type,

@@ -9,6 +9,7 @@
 import Alamofire
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class GetImageRequest {
     
 //    public let imageId:         Int
@@ -54,7 +55,7 @@ open class GetImageRequest {
     
 }
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class GetImageRequestModel: GetImageRequest {
     
 }

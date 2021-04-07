@@ -17,6 +17,7 @@ open class FileObject {
     public var size:           Int?
     public var type:           String?
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(messageContent: JSON) {
         self.hashCode       = messageContent["hashCode"].stringValue
 //        self.id             = messageContent["id"].intValue
@@ -38,6 +39,7 @@ open class FileObject {
         self.type           = type
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(theUploadFile: FileObject) {
         
         self.hashCode       = theUploadFile.hashCode
@@ -47,11 +49,12 @@ open class FileObject {
         self.type           = theUploadFile.type
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatDataToMakeUploadImage() -> FileObject {
         return self
     }
-    
+
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatToJSON() -> JSON {
         let result: JSON = ["hashCode":     hashCode,
 //                            "id":           id,

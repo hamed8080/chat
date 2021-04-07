@@ -9,8 +9,8 @@
 import Foundation
 import SwiftyJSON
 
-
-open class Contact {
+open class Contact :Codable {
+	
     /*
      *  + ContactVO          Contact:
      *      - blocked           Bool?
@@ -39,9 +39,10 @@ open class Contact {
     public var linkedUser:      LinkedUser?
     public var notSeenDuration: Int?
     public var timeStamp:       UInt?
-//    public let uniqueId:        String?
+
     public var userId:          Int?
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(messageContent: JSON) {
         self.blocked            = messageContent["blocked"].bool
         self.cellphoneNumber    = messageContent["cellphoneNumber"].string
@@ -66,21 +67,22 @@ open class Contact {
         
     }
     
-    public init(blocked:            Bool?,
-                cellphoneNumber:    String?,
-                email:              String?,
-                firstName:          String?,
+
+    public init(blocked:            Bool? = nil,
+                cellphoneNumber:    String? = nil,
+                email:              String? = nil,
+                firstName:          String? = nil,
                 hasUser:            Bool,
-                id:                 Int?,
-                image:              String?,
-                lastName:           String?,
-                linkedUser:         LinkedUser?,
-                notSeenDuration:    Int?,
-                timeStamp:          UInt?,
+                id:                 Int? = nil,
+                image:              String? = nil,
+                lastName:           String? = nil,
+                linkedUser:         LinkedUser? = nil,
+                notSeenDuration:    Int? = nil,
+                timeStamp:          UInt? = nil,
 //                uniqueId:           String?,
-                userId:             Int?) {
+                userId:             Int? = nil) {
         
-        self.blocked            = blocked
+        self.blocked            = blocked 
         self.cellphoneNumber    = cellphoneNumber
         self.email              = email
         self.firstName          = firstName
@@ -96,6 +98,7 @@ open class Contact {
         
     }
     
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(theContact: Contact) {
         
         self.blocked            = theContact.blocked
@@ -109,7 +112,6 @@ open class Contact {
         self.linkedUser         = theContact.linkedUser
         self.notSeenDuration    = theContact.notSeenDuration
         self.timeStamp          = theContact.timeStamp
-//        self.uniqueId           = theContact.uniqueId
         self.userId             = theContact.userId
     }
     
@@ -117,22 +119,57 @@ open class Contact {
     public func formatDataToMakeContact() -> Contact {
         return self
     }
-    
-    public func formatToJSON() -> JSON {
-        let result: JSON = ["blocked":          blocked ?? NSNull(),
-                            "cellphoneNumber":  cellphoneNumber ?? NSNull(),
-                            "email":            email ?? NSNull(),
-                            "firstName":        firstName ?? NSNull(),
-                            "hasUser":          hasUser,
-                            "id":               id ?? NSNull(),
-                            "image":            image ?? NSNull(),
-                            "lastName":         lastName ?? NSNull(),
-                            "linkedUser":       linkedUser?.formatToJSON() ?? NSNull(),
-                            "notSeenDuration":  notSeenDuration ?? NSNull(),
-                            "timeStamp":        timeStamp ?? NSNull(),
-//                            "uniqueId":         uniqueId ?? NSNull(),
-                            "userId":           userId ?? NSNull()]
-        return result
-    }
-    
+
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
+	public func formatToJSON() -> JSON {
+		let result: JSON = ["blocked":          blocked ?? NSNull(),
+							"cellphoneNumber":  cellphoneNumber ?? NSNull(),
+							"email":            email ?? NSNull(),
+							"firstName":        firstName ?? NSNull(),
+							"hasUser":          hasUser,
+							"id":               id ?? NSNull(),
+							"image":            image ?? NSNull(),
+							"lastName":         lastName ?? NSNull(),
+							"linkedUser":       linkedUser?.formatToJSON() ?? NSNull(),
+							"notSeenDuration":  notSeenDuration ?? NSNull(),
+							"timeStamp":        timeStamp ?? NSNull(),
+							//                            "uniqueId":         uniqueId ?? NSNull(),
+							"userId":           userId ?? NSNull()]
+		return result
+	}
+
+	
+	private enum CodingKeys:String,CodingKey{
+		case blocked         	= "blocked"
+		case cellphoneNumber 	= "cellphoneNumber"
+		case email           	= "email"
+		case firstName       	= "firstName"
+		case lastName        	= "lastName"
+		case hasUser         	= "hasUser"
+		case id                 = "id"
+		case image           	= "profileImage"
+		case linkedUser      	= "linkedUser"
+		case notSeenDuration  	= "notSeenDuration"
+		case timeStamp          = "timeStamp"
+		case userId          	= "userId"
+	}
+	
+	public required init(from decoder: Decoder) throws {
+        guard let container    = try? decoder.container(keyedBy: CodingKeys.self) else {return}
+        blocked                = try container.decodeIfPresent(Bool.self, forKey: .blocked)
+        cellphoneNumber        = try container.decodeIfPresent(String.self, forKey: .cellphoneNumber)
+        email                  = try container.decodeIfPresent(String.self, forKey: .email)
+        firstName              = try container.decodeIfPresent(String.self, forKey: .firstName)
+        id                     = try container.decodeIfPresent(Int.self, forKey: .id)
+        image                  = try container.decodeIfPresent(String.self, forKey: .image)
+        lastName               = try container.decodeIfPresent(String.self, forKey: .lastName)
+        notSeenDuration        = try container.decodeIfPresent(Int.self, forKey: .notSeenDuration)
+        timeStamp              = try container.decodeIfPresent(UInt.self, forKey: .timeStamp)
+        userId                 = try container.decodeIfPresent(Int.self, forKey: .userId)
+        hasUser                = try container.decodeIfPresent(Bool.self, forKey: .hasUser) ?? false
+        linkedUser             = try container.decodeIfPresent(LinkedUser.self, forKey: .linkedUser)
+        if linkedUser != nil {
+            hasUser = true
+		}
+	}
 }

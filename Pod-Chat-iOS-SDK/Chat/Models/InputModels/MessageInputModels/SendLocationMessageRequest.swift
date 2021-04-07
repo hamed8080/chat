@@ -8,6 +8,7 @@
 
 import Foundation
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class SendLocationMessageRequest {
     
     public let mapCenter:       (lat: Double, lng: Double)
@@ -105,6 +106,7 @@ open class SendLocationMessageRequest {
 }
 
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class SendLocationMessageRequestModel: SendLocationMessageRequest {
     
 }

@@ -13,6 +13,7 @@ import SwiftyJSON
 
 public class QueueOfFileMessages: NSManagedObject {
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func convertCMObjectToObject() -> QueueOfWaitFileMessagesModel {
         
         var fileToSend:     Data?
