@@ -78,6 +78,10 @@ public class CacheFactory {
         case INSERT_OR_UPDATE_ASSISTANTS(_ assistants:[Assistant])
         case DELETE_ASSISTANTS(_ assistant:[Assistant])
         case MUTUAL_GROUPS(_ threads:[Conversation] , _ req:MutualGroupsRequest)
+        case TAGS(_ tags:[Tag])
+        case TAG_PARTICIPANTS(_ tagParticipants:[TagParticipant], _ tagId:Int)
+        case DELETE_TAG(_ tag:Tag)
+        case DELETE_TAG_PARTICIPANTS(_ tagParticipants: [TagParticipant])
     }
     
     public class func get(useCache: Bool = false , cacheType: ReadCacheType , completion: ((ChatResponse)->())? = nil){
@@ -317,6 +321,8 @@ public class CacheFactory {
                 CMAssistant.crud.deleteAll()
                 CacheFileManager.sharedInstance.deleteAllFiles()
                 CacheFileManager.sharedInstance.deleteAllImages()
+                CMTag.crud.deleteAll()
+                CMTagParticipant.crud.deleteAll()
                 break
             case .SYNCED_CONTACTS:
                 CMUser.crud.getAll().forEach { user in
@@ -350,6 +356,20 @@ public class CacheFactory {
                 break
             case .MUTUAL_GROUPS(_ : let conversations , _ : let req ):
                 CMMutualGroup.insertOrUpdate(conversations: conversations, req: req)
+                break
+            case .TAGS(_ : let tags):
+                CMTag.insertOrUpdate(tags: tags)
+                break
+            case .TAG_PARTICIPANTS(_ : let tagParticipants , _ : let tagId ):
+                tagParticipants.forEach { tagParticipant in
+                    CMTagParticipant.insertOrUpdate(tagParticipant: tagParticipant, tagId:tagId)
+                }
+            case .DELETE_TAG(_ : let tag):
+                CMTag.crud.deleteWith(predicate: NSPredicate(format: "id == %i", tag.id))
+                CMTagParticipant.crud.deleteWith(predicate: NSPredicate(format: "tagId == %i", tag.id))
+                break
+            case .DELETE_TAG_PARTICIPANTS(_ : let tagParticipants):
+                CMTagParticipant.crud.deleteWith(predicate: NSPredicate(format: "id IN %@", tagParticipants.map{$0.id}))
                 break
             }
         }

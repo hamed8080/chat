@@ -364,6 +364,41 @@ public extension Chat {
         ChangeThreadTypeRequestHandler.handle(request, self , completion, uniqueIdResult)
     }
     
+    //Test Status: Main ❌ - Integeration: ✅
+    func tagList(_ uniqueId:String? = nil , typeCode:String? = nil, completion:@escaping CompletionType<[Tag]>,uniqueIdResult: UniqueIdResultType = nil){
+        TagListRequestHandler.handle(uniqueId , typeCode, self , completion, uniqueIdResult)
+    }
+    
+    //Test Status: Main ❌ - Integeration: ✅
+    func createTag(_ request:CreateTagRequest ,completion:@escaping CompletionType<Tag>,uniqueIdResult: UniqueIdResultType = nil){
+        CreateTagRequestHandler.handle(request, self , completion, uniqueIdResult)
+    }
+    
+    //Test Status: Main ❌ - Integeration: ✅
+    func editTag(_ request:EditTagRequest ,completion:@escaping CompletionType<Tag>,uniqueIdResult: UniqueIdResultType = nil){
+        EditTagRequestHandler.handle(request, self , completion, uniqueIdResult)
+    }
+    
+    //Test Status: Main ❌ - Integeration: ✅
+    func deleteTag(_ request:DeleteTagRequest ,completion:@escaping CompletionType<Tag>,uniqueIdResult: UniqueIdResultType = nil){
+        DeleteTagRequestHandler.handle(request, self , completion, uniqueIdResult)
+    }
+    
+    //Test Status: Main ❌ - Integeration: ✅
+    func addTagParticipants(_ request:AddTagParticipantsRequest ,completion:@escaping CompletionType<[TagParticipant]>,uniqueIdResult: UniqueIdResultType = nil){
+        AddTagParticipantsRequestHandler.handle(request, self , completion, uniqueIdResult)
+    }
+    
+    //Test Status: Main ❌ - Integeration: ✅
+    func removeTagParticipants(_ request:RemoveTagParticipantsRequest ,completion:@escaping CompletionType<[TagParticipant]>,uniqueIdResult: UniqueIdResultType = nil){
+        RemoveTagParticipantsRequestHandler.handle(request, self , completion, uniqueIdResult)
+    }
+    
+    //Test Status: Main ❌ - Integeration: ❌
+//    func getTagParticipants(_ request:GetTagParticipantsRequest ,completion:@escaping CompletionType<[Conversation]>,uniqueIdResult: UniqueIdResultType = nil){
+//        GetTagParticipantsRequestHandler.handle(request, self , completion, uniqueIdResult)
+//    }
+    
     //Test Status: Main ✅ - Integeration: ✅
     func sendTextMessage(_ request:NewSendTextMessageRequest ,uniqueIdresult:UniqueIdResultType = nil, onSent:OnSentType = nil , onSeen:OnSeenType = nil, onDeliver:OnDeliveryType = nil){
         SendTextMessageRequestHandler.handle(request, self, onSent, onSeen, onDeliver , uniqueIdresult)
