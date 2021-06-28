@@ -8,12 +8,13 @@
 
 import Foundation
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class CreateThreadWithFileMessageRequest {
     
-    public let creatThreadWithMessageInput:    CreateThreadWithMessageRequestModel
+    public let creatThreadWithMessageInput:    CreateThreadWithMessageRequest
     public let uploadInput:                    UploadRequest
     
-    public init(creatThreadWithMessageInput:   CreateThreadWithMessageRequestModel,
+    public init(creatThreadWithMessageInput:   CreateThreadWithMessageRequest,
                 uploadInput:                   UploadRequest) {
         
         self.creatThreadWithMessageInput    = creatThreadWithMessageInput
@@ -24,6 +25,7 @@ open class CreateThreadWithFileMessageRequest {
 
 
 /// MARK: -  this class will be deprecate (use this class instead: 'CreateThreadWithFileMessageRequest')
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class CreateThreadWithFileMessageRequestModel: CreateThreadWithFileMessageRequest {
     
 }

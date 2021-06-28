@@ -20,6 +20,7 @@ extension Chat {
     ///    - it doesn't have direct output,
     ///    - but on the situation where the response is valid,
     ///    - it will call the "onResultCallback" callback to stopBot function (by using "stopBotCallbackToUser")
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func responseOfStopBot(withMessage message: ChatMessage) {
         log.verbose("Message of type 'STOP_BOT' recieved", context: "Chat")
         
@@ -42,6 +43,7 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public class StopBotCallback: CallbackProtocol {
         
         func onResultCallback(uID:      String,

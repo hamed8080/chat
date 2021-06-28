@@ -13,6 +13,7 @@ import CoreData
 
 public class CMMessage: NSManagedObject {
     
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func convertCMObjectToObject(showConversation:   Bool,
                                         showForwardInfo:    Bool,
                                         showParticipant:    Bool,
@@ -135,7 +136,7 @@ public class CMMessage: NSManagedObject {
         
     }
     
-    
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func updateObject(with message: Message) {
         if let delivered = message.delivered as NSNumber? {
             self.delivered = delivered

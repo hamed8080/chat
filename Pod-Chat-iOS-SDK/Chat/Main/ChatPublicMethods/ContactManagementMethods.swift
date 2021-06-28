@@ -34,6 +34,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (AddContactRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ContactModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func addContact(inputModel addContactsInput:    AddContactRequest,
                            uniqueId:            @escaping (String) -> (),
                            completion:          @escaping callbackTypeAlias) {
@@ -50,6 +51,7 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     private func sendAddContactRequest(withInputModel addContactsInput:    AddContactRequest,
                                        messageUniqueId:     String,
                                        completion:          @escaping callbackTypeAlias) {
@@ -100,6 +102,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (AddContactsRequest)
     /// - parameter uniqueIds:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ContactModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func addContacts(inputModel addContactsInput:    AddContactsRequest,
                             uniqueIds:           @escaping ([String]) -> (),
                             completion:          @escaping callbackTypeAlias) {
@@ -114,6 +117,7 @@ extension Chat {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     private func sendAddContactsRequest(withInputModel addContactsInput:    AddContactsRequest,
                                         completion:          @escaping callbackTypeAlias) {
         
@@ -152,7 +156,7 @@ extension Chat {
         }
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     private func addContactOnCache(withInputModel contactModel: ContactModel) {
         if self.enableCache {
             Chat.cacheDB.saveContact(withContactObjects: contactModel.contacts)
@@ -180,6 +184,7 @@ extension Chat {
     /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! GetContactsModel)
     /// - parameter cacheResponse:      (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetContactsModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func getContacts(inputModel getContactsInput:    GetContactsRequest,
                             getCacheResponse:               Bool?,
                             uniqueId:           @escaping ((String) -> ()),
@@ -219,13 +224,17 @@ extension Chat {
         
         // if cache is enabled by user, it will return cache result to the user
         if (getCacheResponse ?? enableCache) {
-            if let cacheContacts = Chat.cacheDB.retrieveContacts(ascending:         true,
+            var isAscending = true
+            if let ord = getContactsInput.order, (ord == Ordering.descending.rawValue) {
+                isAscending = false
+            }
+            if let cacheContacts = Chat.cacheDB.retrieveContacts(ascending:         isAscending,
                                                                  cellphoneNumber:   nil,
                                                                  count:             getContactsInput.count ?? 50,
-                                                                 email:             nil,
-                                                                 firstName:         nil,
-                                                                 id:                nil,
-                                                                 lastName:          nil,
+                                                                 email:             getContactsInput.email,
+//                                                                 firstName:         nil,
+                                                                 id:                getContactsInput.contactId,
+//                                                                 lastName:          nil,
                                                                  offset:            getContactsInput.offset ?? 0,
                                                                  search:            getContactsInput.query,
                                                                  timeStamp:         cacheTimeStamp,
@@ -253,6 +262,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (GetNotSeenDurationRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! NotSeenDurationModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func contactNotSeenDuration(inputModel notSeenDurationInput: GetNotSeenDurationRequest,
                                        uniqueId:        @escaping (String) -> (),
                                        completion:      @escaping callbackTypeAlias) {
@@ -307,6 +317,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (RemoveContactsRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! RemoveContactModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func removeContact(inputModel removeContactsInput:  RemoveContactsRequest,
                               uniqueId:             @escaping (String) -> (),
                               completion:           @escaping callbackTypeAlias) {
@@ -323,6 +334,7 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     private func sendRemoveContactRequest(withInputModel removeContactsInput:  RemoveContactsRequest,
                                           completion:           @escaping callbackTypeAlias) {
         
@@ -344,6 +356,7 @@ extension Chat {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     private func removeContactFromCache(withInputModel removeContact: RemoveContactModel, withContactId: [Int]) {
         if self.enableCache {
             if (removeContact.result) {
@@ -371,6 +384,7 @@ extension Chat {
     /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! GetContactsModel)
     /// - parameter cacheResponse:      (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetContactsModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func searchContacts(inputModel searchContactsInput:  SearchContactsRequest,
                                getCacheResponse:                Bool?,
                                uniqueId:            @escaping ((String) -> ()),
@@ -378,73 +392,95 @@ extension Chat {
                                cacheResponse:       @escaping (GetContactsModel) -> ()) {
         
         log.verbose("Try to request to search contact with this parameters: \n \(searchContactsInput)", context: "Chat")
-        uniqueId(searchContactsInput.uniqueId)
         
-        if (getCacheResponse ?? enableCache) {
-            if let cacheContacts = Chat.cacheDB.retrieveContacts(ascending:         true,
-                                                                 cellphoneNumber:   searchContactsInput.cellphoneNumber,
-                                                                 count:             searchContactsInput.size ?? 50,
-                                                                 email:             searchContactsInput.email,
-                                                                 firstName:         searchContactsInput.firstName,
-                                                                 id:                nil,
-                                                                 lastName:          searchContactsInput.lastName,
-                                                                 offset:            searchContactsInput.offset ?? 0,
-                                                                 search:            searchContactsInput.query,
-                                                                 timeStamp:         cacheTimeStamp,
-                                                                 uniqueId:          nil) {
-                cacheResponse(cacheContacts)
-            }
+        let getContactInput = GetContactsRequest(contactId:         searchContactsInput.contactId,
+                                                 count:             searchContactsInput.count,
+                                                 cellphoneNumber:   searchContactsInput.cellphoneNumber,
+                                                 email:             searchContactsInput.email,
+                                                 offset:            searchContactsInput.offset,
+                                                 order:             searchContactsInput.order,
+                                                 query:             searchContactsInput.query,
+                                                 summery:           searchContactsInput.summery,
+                                                 typeCode:          searchContactsInput.typeCode,
+                                                 uniqueId:          searchContactsInput.uniqueId)
+        self.getContacts(inputModel: getContactInput, getCacheResponse: getCacheResponse, uniqueId: { (searchContactUniqueId) in
+            uniqueId(searchContactUniqueId)
+        }, completion: { (response) in
+            completion(response)
+        }) { (cache) in
+            cacheResponse(cache)
         }
         
-        sendSearchContactRequest(withInputModel: searchContactsInput)
-        { (contactModel) in
-            self.addContactOnCache(withInputModel: contactModel as! ContactModel)
-            let contactEventModel = ContactEventModel(type: ContactEventTypes.CONTACTS_SEARCH_RESULT_CHANGE, contacts: (contactModel as! ContactModel).contacts, contactsLastSeenDuration: nil)
-            self.delegate?.contactEvents(model: contactEventModel)
-            completion(contactModel)
-        }
+        
+//        uniqueId(searchContactsInput.uniqueId)
+//        if (getCacheResponse ?? enableCache) {
+//            if let cacheContacts = Chat.cacheDB.retrieveContacts(ascending:         true,
+//                                                                 cellphoneNumber:   searchContactsInput.cellphoneNumber,
+//                                                                 count:             searchContactsInput.size ?? 50,
+//                                                                 email:             searchContactsInput.email,
+//                                                                 firstName:         searchContactsInput.firstName,
+//                                                                 id:                searchContactsInput.id,
+//                                                                 lastName:          searchContactsInput.lastName,
+//                                                                 offset:            searchContactsInput.offset ?? 0,
+//                                                                 search:            searchContactsInput.query,
+//                                                                 timeStamp:         cacheTimeStamp,
+//                                                                 uniqueId:          nil) {
+//                cacheResponse(cacheContacts)
+//            }
+//        }
+//
+//        sendSearchContactRequest(withInputModel: searchContactsInput)
+//        { (contactModel) in
+//            self.addContactOnCache(withInputModel: contactModel as! ContactModel)
+//            let contactEventModel = ContactEventModel(type: ContactEventTypes.CONTACTS_SEARCH_RESULT_CHANGE, contacts: (contactModel as! ContactModel).contacts, contactsLastSeenDuration: nil)
+//            self.delegate?.contactEvents(model: contactEventModel)
+//            completion(contactModel)
+//        }
         
     }
     
-    private func sendSearchContactRequest(withInputModel searchContactsInput:  SearchContactsRequest,
-                                          completion:           @escaping callbackTypeAlias) {
-        
-        let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.SEARCH_CONTACTS.rawValue)"
-        let method: HTTPMethod = HTTPMethod.post
-        let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
-        var params: Parameters = [:]
-        params["size"] = JSON(searchContactsInput.size ?? 50)
-        params["offset"] = JSON(searchContactsInput.offset ?? 0)
-        params["typeCode"] = JSON(searchContactsInput.typeCode ?? generalTypeCode)
-        if let firstName = searchContactsInput.firstName {
-            params["firstName"] = JSON(firstName)
-        }
-        if let lastName = searchContactsInput.lastName {
-            params["lastName"] = JSON(lastName)
-        }
-        if let cellphoneNumber = searchContactsInput.cellphoneNumber {
-            params["cellphoneNumber"] = JSON(cellphoneNumber)
-        }
-        if let email = searchContactsInput.email {
-            params["email"] = JSON(email)
-        }
-        if let query_ = searchContactsInput.query {
-            params["q"] = JSON(query_)
-        }
-        if let ownerId = searchContactsInput.ownerId {
-            params["ownerId"] = JSON(ownerId)
-        }
-        
-        Networking.sharedInstance.requesttWithJSONresponse(from:            url,
-                                                           withMethod:      method,
-                                                           withHeaders:     headers,
-                                                           withParameters:  params)
-        { (response) in
-            let contactModel = ContactModel(messageContent: response as! JSON)
-            completion(contactModel)
-        }
-        
-    }
+//    private func sendSearchContactRequest(withInputModel searchContactsInput:  SearchContactsRequest,
+//                                          completion:           @escaping callbackTypeAlias) {
+//
+//        let url = "\(SERVICE_ADDRESSES.PLATFORM_ADDRESS)\(SERVICES_PATH.SEARCH_CONTACTS.rawValue)"
+//        let method: HTTPMethod = HTTPMethod.post
+//        let headers: HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
+//        var params: Parameters = [:]
+//        params["size"] = JSON(searchContactsInput.size ?? 50)
+//        params["offset"] = JSON(searchContactsInput.offset ?? 0)
+//        params["typeCode"] = JSON(searchContactsInput.typeCode ?? generalTypeCode)
+//        if let firstName = searchContactsInput.firstName {
+//            params["firstName"] = JSON(firstName)
+//        }
+//        if let lastName = searchContactsInput.lastName {
+//            params["lastName"] = JSON(lastName)
+//        }
+//        if let cellphoneNumber = searchContactsInput.cellphoneNumber {
+//            params["cellphoneNumber"] = JSON(cellphoneNumber)
+//        }
+//        if let email = searchContactsInput.email {
+//            params["email"] = JSON(email)
+//        }
+//        if let query_ = searchContactsInput.query {
+//            params["q"] = JSON(query_)
+//        }
+//        if let ownerId = searchContactsInput.ownerId {
+//            params["ownerId"] = JSON(ownerId)
+//        }
+//        if let id = searchContactsInput.id {
+//            params["id"] = JSON(id)
+//        }
+//
+//        Networking.sharedInstance.requesttWithJSONresponse(from:            url,
+//                                                           withMethod:      method,
+//                                                           withHeaders:     headers,
+//                                                           withParameters:  params)
+//        { (response) in
+//            let contactModel = ContactModel(messageContent: response as! JSON)
+//            completion(contactModel)
+//        }
+//
+//    }
     
     
     
@@ -493,6 +529,7 @@ extension Chat {
     ///
     /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! [ContactModel])
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func syncContacts(uniqueIds:     @escaping ([String]) -> (),
                              completion:    @escaping callbackTypeAlias) {
         log.verbose("Try to request to sync contact", context: "Chat")
@@ -609,6 +646,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (UpdateContactsRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ContactModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func updateContact(inputModel updateContactsInput:  UpdateContactsRequest,
                               uniqueId:             @escaping (String) -> (),
                               completion:           @escaping callbackTypeAlias) {

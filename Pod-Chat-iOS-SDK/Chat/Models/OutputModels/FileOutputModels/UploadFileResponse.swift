@@ -9,6 +9,7 @@
 import Foundation
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class UploadFileModel: ResponseModel, ResponseModelDelegates {
     
     public let uploadFile:  FileObject?
@@ -22,7 +23,6 @@ open class UploadFileModel: ResponseModel, ResponseModelDelegates {
         //        if let pathString = localPath {
         //            self.localPath = pathString
         //        }
-        
         if let myFile = messageContentJSON {
             self.uploadFile = FileObject(messageContent: myFile)
         } else {
@@ -67,11 +67,13 @@ open class UploadFileModel: ResponseModel, ResponseModelDelegates {
         var fileMetadata : JSON = [:]
         
         if let upload = uploadFile {
-            let link = "\(onServiceAddress)\(SERVICES_PATH.GET_FILE.rawValue)?fileId=\(upload.id)&hashCode=\(upload.hashCode)"
-            fileMetadata["link"]        = JSON(link)
-            fileMetadata["id"]          = JSON(upload.id)
+//            let link = "\(onServiceAddress)\(SERVICES_PATH.GET_FILE.rawValue)?hashCode=\(upload.hashCode)"
+//            fileMetadata["link"]        = JSON(link)
+            fileMetadata["id"]          = JSON(0)
             fileMetadata["name"]        = JSON(upload.name ?? "")
+            fileMetadata["fileHash"]    = JSON(upload.hashCode)
             fileMetadata["hashCode"]    = JSON(upload.hashCode)
+//            fileMetadata["type"]       = JSON()
         }
         
         return fileMetadata
@@ -80,6 +82,7 @@ open class UploadFileModel: ResponseModel, ResponseModelDelegates {
 }
 
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class UploadFileResponse: UploadFileModel {
     
 }

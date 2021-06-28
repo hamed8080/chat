@@ -13,6 +13,7 @@ import CoreData
 
 extension QueueOfUploadImages {
 
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     @nonobjc public class func fetchRequest() -> NSFetchRequest<QueueOfUploadImages> {
         return NSFetchRequest<QueueOfUploadImages>(entityName: "QueueOfUploadImages")
     }
@@ -21,9 +22,10 @@ extension QueueOfUploadImages {
     @NSManaged public var fileExtension:    String?
     @NSManaged public var fileName:         String?
     @NSManaged public var fileSize:         NSNumber?
+    @NSManaged public var isPublic:         NSNumber?
     @NSManaged public var mimeType:         String?
-    @NSManaged public var originalFileName: String?
-    @NSManaged public var threadId:         NSNumber?
+    @NSManaged public var originalName:     String?
+    @NSManaged public var userGroupHash:    String?
     @NSManaged public var typeCode:         String?
     @NSManaged public var uniqueId:         String?
     @NSManaged public var xC:               NSNumber?

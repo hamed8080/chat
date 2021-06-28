@@ -25,6 +25,19 @@ extension JSON {
             self = JSON(dict)
         }
     }
+    
+    mutating func merge(other: JSON) {
+        for (key, subJson) in other {
+            self[key] = subJson
+        }
+    }
+
+    func merged(other: JSON) -> JSON {
+        var merged = self
+        merged.merge(other: other)
+        return merged
+    }
+    
 }
 
 

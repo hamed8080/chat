@@ -12,7 +12,7 @@ import CoreData
 
 
 public class CMContact: NSManagedObject {
-    
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func convertCMObjectToObject() -> Contact {
         
         var blocked:            Bool?
@@ -22,7 +22,7 @@ public class CMContact: NSManagedObject {
         var userId:             Int?
         var time:               UInt?
         
-        var linkedUser:         LinkedUser?
+//        var linkedUser:         LinkedUser?
         
         func createVariables() {
             
@@ -71,7 +71,7 @@ public class CMContact: NSManagedObject {
     
     
     
-    
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func updateObject(with contact: Contact) {
         if let blocked = contact.blocked as NSNumber? {
             self.blocked = blocked

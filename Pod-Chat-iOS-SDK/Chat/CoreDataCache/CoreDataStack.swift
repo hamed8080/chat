@@ -13,6 +13,7 @@ import CoreData
 //    private init() {}
 //    static let shared = CoreDataStack()
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 public class CoreDataStack: NSObject {
     
     // MARK: - Core Data stack

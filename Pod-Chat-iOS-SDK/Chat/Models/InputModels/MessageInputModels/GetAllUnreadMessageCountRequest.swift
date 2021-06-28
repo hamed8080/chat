@@ -9,6 +9,7 @@
 import Foundation
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class GetAllUnreadMessageCountRequest: RequestModelDelegates {
     
     public let countMuteThreads:    Bool?
@@ -47,7 +48,7 @@ open class GetAllUnreadMessageCountRequest: RequestModelDelegates {
     
 }
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class GetAllUnreadMessageCountRequestModel: GetAllUnreadMessageCountRequest {
     
 }

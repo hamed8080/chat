@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftyJSON
-
+import FanapPodAsyncSDK
 
 extension String {
     subscript (bounds: CountableClosedRange<Int>) -> String {
@@ -29,16 +29,40 @@ extension String {
     
     func convertToJSON() -> JSON {
         if let dataFromStringMsg = self.data(using: .utf8, allowLossyConversion: false) {
-            do {
-                let msg = try JSON(data: dataFromStringMsg)
+            if let msg = try? JSON(data: dataFromStringMsg) {
                 return msg
-            } catch {
-                //                log.error("error to convert income message String to JSON", context: "formatStringToJSON")
+            } else {
                 return []
             }
+//            do {
+//                let msg = try JSON(data: dataFromStringMsg)
+//                return msg
+//            } catch {
+//                //                log.error("error to convert income message String to JSON", context: "formatStringToJSON")
+//                return []
+//            }
         } else {
             //            log.error("error to get message from server", context: "formatStringToJSON")
             return []
         }
+    }
+    
+    func getCustomTextToSendWithRemoveSpaceAndEnter()-> String {
+        let customTextToSend = MakeCustomTextToSend(message: self)
+        return customTextToSend.replaceSpaceEnterWithSpecificCharecters()
+    }
+
+    public func removeBackSlashes()->String{
+        return self.replacingOccurrences(of: "\\\\\"", with: "\"")
+        .replacingOccurrences(of: "\\\"", with: "\"")
+        .replacingOccurrences(of: "\\\"", with: "\"")
+        .replacingOccurrences(of: "\\\"", with: "\"")
+        .replacingOccurrences(of: "\\\\\"", with: "\"")
+        .replacingOccurrences(of: "\\\"", with: "\"")
+        .replacingOccurrences(of: "\\\"", with: "\"")
+        .replacingOccurrences(of: "\"{", with: "\n{")
+        .replacingOccurrences(of: "}\"", with: "}\n")
+        .replacingOccurrences(of: "\"[", with: "\n[")
+        .replacingOccurrences(of: "]\"", with: "]\n")
     }
 }

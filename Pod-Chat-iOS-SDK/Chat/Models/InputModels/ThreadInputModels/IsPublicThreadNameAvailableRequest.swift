@@ -8,6 +8,7 @@
 
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class IsPublicThreadNameAvailableRequest: RequestModelDelegates {
     
     public let uniqueName:  String
@@ -50,6 +51,7 @@ open class IsPublicThreadNameAvailableRequest: RequestModelDelegates {
 
 
 /// MARK: -  this class will be deprecate (use this class instead: 'IsNameAvailableThreadRequest')
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class IsNameAvailableThreadRequestModel: IsPublicThreadNameAvailableRequest {
     
 }

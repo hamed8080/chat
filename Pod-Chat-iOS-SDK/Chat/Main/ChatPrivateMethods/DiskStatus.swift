@@ -13,25 +13,37 @@ open class DiskStatus {
     //MARK: Get raw value
     public class var totalDiskSpaceInBytes: Int64 {
         get {
-            do {
-                let systemAttributes = try FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory() as String)
+            if let systemAttributes = try? FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory() as String) {
                 let space = (systemAttributes[FileAttributeKey.systemSize] as? NSNumber)?.int64Value
                 return space!
-            } catch {
+            } else {
                 return 0
             }
+//            do {
+//                let systemAttributes = try FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory() as String)
+//                let space = (systemAttributes[FileAttributeKey.systemSize] as? NSNumber)?.int64Value
+//                return space!
+//            } catch {
+//                return 0
+//            }
         }
     }
     
     public class var freeDiskSpaceInBytes: Int64 {
         get {
-            do {
-                let systemAttributes = try FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory() as String)
+            if let systemAttributes = try? FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory() as String) {
                 let freeSpace = (systemAttributes[FileAttributeKey.systemFreeSize] as? NSNumber)?.int64Value
                 return freeSpace!
-            } catch {
+            } else {
                 return 0
             }
+//            do {
+//                let systemAttributes = try FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory() as String)
+//                let freeSpace = (systemAttributes[FileAttributeKey.systemFreeSize] as? NSNumber)?.int64Value
+//                return freeSpace!
+//            } catch {
+//                return 0
+//            }
         }
     }
     
@@ -82,5 +94,17 @@ open class DiskStatus {
         return formatter.string(fromByteCount: bytes) as String
     }
     
-    
+    class func checkIfDeviceHasFreeSpace(needSpaceInMB: Int64, turnOffTheCache: Bool , errorDelegate:ChatDelegates?) -> Bool {
+        let availableSpace = DiskStatus.freeDiskSpaceInBytes
+        if availableSpace < (needSpaceInMB * 1024 * 1024) {
+            var message = "your disk space is less than \(DiskStatus.MBFormatter(DiskStatus.freeDiskSpaceInBytes))MB."
+            if turnOffTheCache {
+                message += " " + "so, the cache will be switch OFF!"
+            }
+            errorDelegate?.chatError(errorCode: 6401, errorMessage: message, errorResult: nil)
+            return false
+        } else {
+            return true
+        }
+    }
 }

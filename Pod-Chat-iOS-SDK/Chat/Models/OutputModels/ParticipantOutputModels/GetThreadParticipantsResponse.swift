@@ -10,6 +10,7 @@ import Foundation
 import SwiftyJSON
 
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class GetThreadParticipantsModel: ResponseModel, ResponseModelDelegates {
     
     public var contentCount:    Int = 0
@@ -84,7 +85,7 @@ open class GetThreadParticipantsModel: ResponseModel, ResponseModelDelegates {
     }
 }
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class GetThreadParticipantsResponse: GetThreadParticipantsModel {
     
 }

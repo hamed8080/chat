@@ -8,6 +8,7 @@
 
 import Foundation
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class SendDeliverSeenRequest {
     
     public let messageId:   Int
@@ -27,6 +28,7 @@ open class SendDeliverSeenRequest {
 }
 
 /// MARK: -  this class will be deprecate (use this class instead: 'DeliverSeenRequest')
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class DeliverSeenRequestModel: SendDeliverSeenRequest {
     
 }

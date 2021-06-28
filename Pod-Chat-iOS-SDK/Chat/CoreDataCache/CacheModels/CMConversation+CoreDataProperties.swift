@@ -13,6 +13,7 @@ import CoreData
 
 extension CMConversation {
 
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     @nonobjc public class func fetchRequest() -> NSFetchRequest<CMConversation> {
         return NSFetchRequest<CMConversation>(entityName: "CMConversation")
     }
@@ -20,6 +21,7 @@ extension CMConversation {
     @NSManaged public var admin:        NSNumber?
     @NSManaged public var canEditInfo:  NSNumber?
     @NSManaged public var canSpam:      NSNumber?
+    @NSManaged public var closedThread: NSNumber?
     @NSManaged public var descriptions: String?
     @NSManaged public var group:        NSNumber?
     @NSManaged public var id:           NSNumber?
@@ -47,6 +49,7 @@ extension CMConversation {
     @NSManaged public var title:        String?
     @NSManaged public var type:         NSNumber?
     @NSManaged public var unreadCount:  NSNumber?
+    @NSManaged public var userGroupHash: String?
     
     @NSManaged public var dummyForwardInfo: CMForwardInfo?
     @NSManaged public var dummyMessage:     NSSet?

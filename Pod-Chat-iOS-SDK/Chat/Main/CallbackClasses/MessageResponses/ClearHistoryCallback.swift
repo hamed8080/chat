@@ -20,6 +20,7 @@ extension Chat {
     ///    - it doesn't have direct output,
     ///    - but on the situation where the response is valid,
     ///    - it will call the "onResultCallback" callback to clearHistory function (by using "clearHistoryCallbackToUser")
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func responseOfClearHistory(withMessage message: ChatMessage) {
         log.verbose("Message of type 'CLEAR_HISTORY' recieved", context: "Chat")
         
@@ -60,7 +61,7 @@ extension Chat {
         
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public class ClearHistoryCallback: CallbackProtocol {
         var mySendMessageParams: SendChatMessageVO
         init(parameters: SendChatMessageVO) {

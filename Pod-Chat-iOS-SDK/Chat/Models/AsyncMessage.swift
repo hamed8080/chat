@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 
 
-class AsyncMessage {
+class AsyncMessage : Codable {
     
     let content:    String  // String of JSON
     let id:         Int
@@ -26,6 +26,7 @@ class AsyncMessage {
         self.type       = type
     }
     
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     init(withContent: JSON) {
         self.content    = withContent["content"].stringValue
         self.id         = withContent["id"].intValue

@@ -9,6 +9,7 @@
 import Foundation
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class AddParticipantModel: ResponseModel, ResponseModelDelegates {
     
     public var thread:  Conversation?
@@ -42,7 +43,7 @@ open class AddParticipantModel: ResponseModel, ResponseModelDelegates {
     }
 }
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class AddParticipantResponse: AddParticipantModel {
     
 }

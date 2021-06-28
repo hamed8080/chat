@@ -8,6 +8,7 @@
 
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class SetRemoveRoleRequest: RequestModelDelegates {
     
     public let userRoles:       [SetRemoveRoleModel]
@@ -42,7 +43,7 @@ open class SetRemoveRoleRequest: RequestModelDelegates {
     
 }
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class RoleRequestModel: SetRemoveRoleRequest {
     
 }

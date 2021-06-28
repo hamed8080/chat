@@ -15,6 +15,7 @@ open class MapSearch {
     public var count:   Int
     public var items:   [MapItem]?
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(messageContent: JSON) {
         self.count  = messageContent["count"].intValue
         
@@ -37,17 +38,19 @@ open class MapSearch {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(theMapSearch: MapSearch) {
         
         self.count  = theMapSearch.count
         self.items  = theMapSearch.items
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatDataToMakeMapSearch() -> MapSearch {
         return self
     }
-    
+
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatToJSON() -> JSON {
         
         var itemsJSON: [JSON] = []
@@ -79,7 +82,7 @@ open class MapItem {
     
     public var location:    Location?
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(messageContent: JSON) {
         self.address    = messageContent["address"].string
         self.category   = messageContent["category"].string
@@ -108,7 +111,7 @@ open class MapItem {
         self.location   = location
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(theMapItem: MapItem) {
         self.address    = theMapItem.address
         self.category   = theMapItem.category
@@ -118,10 +121,12 @@ open class MapItem {
         self.location   = theMapItem.location
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatDataToMakeMapItem() -> MapItem {
         return self
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatToJSON() -> JSON {
         let result: JSON = ["address":  address ?? NSNull(),
                             "category": category ?? NSNull(),
@@ -144,22 +149,26 @@ open class Location {
     public let y: Double
     public let z: String?
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     init(messageContent: JSON) {
         self.x  = messageContent["x"].doubleValue
         self.y  = messageContent["y"].doubleValue
         self.z  = messageContent["z"].string
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(theLocation: Location) {
         self.x  = theLocation.x
         self.y  = theLocation.y
         self.z  = theLocation.z
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatDataToMakeLocation() -> Location {
         return self
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatToJSON() -> JSON {
         let result: JSON = ["x":    x,
                             "y":    y,

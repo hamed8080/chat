@@ -13,20 +13,27 @@ import CoreData
 
 public class CMFile: NSManagedObject {
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func convertCMObjectToObject() -> FileObject {
         
-        var id:             Int?
+//        var id:     Int?
+        var size:   Int?
         
         func createVariables() {
-            if let id2 = self.id as? Int {
-                id = id2
+//            if let id_ = self.id as? Int {
+//                id = id_
+//            }
+            if let size_ = self.size as? Int {
+                size = size_
             }
         }
         
         func createFileObjectModel() -> FileObject {
             let uploadFileModel = FileObject(hashCode:  self.hashCode!,
-                                             id:        id!,
-                                             name:      self.name)
+//                                             id:        id!,
+                                             name:      self.name,
+                                             size:      size,
+                                             type:      type)
             return uploadFileModel
         }
         

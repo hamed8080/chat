@@ -17,6 +17,52 @@ import Alamofire
 extension Chat {
     
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFileManager.sharedInstance.isImageAvailable(hashCode)")
+    public func isImageAvailableOnCache(inputModel imageInput:  GetImageRequest) -> Bool {
+        if let isAvailable = Chat.cacheDB.isImageAvailable(hashCode: imageInput.hashCode) {
+            return isAvailable
+        } else {
+            return false
+        }
+    }
+    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFileManager.sharedInstance.isFileAvailable(hashCode)")
+    public func isFileAvailableOnCache(inputModel fileInput:  GetFileRequest) -> Bool {
+        if let isAvailable = Chat.cacheDB.isFileAvailable(hashCode: fileInput.hashCode) {
+            return isAvailable
+        } else {
+            return false
+        }
+    }
+    
+    public func isAvailableOnCache(inputModel fileInput:  GetFileRequest) -> Bool {
+        if let isAvailable = Chat.cacheDB.isFileAvailable(hashCode: fileInput.hashCode) {
+            return isAvailable
+        } else {
+            return false
+        }
+    }
+    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFileManager.sharedInstance.isImageAvailable(hashCode)")
+    public func isAvailableOnCache(inputModel imageInput:  GetImageRequest) -> Bool {
+        if let isAvailable = Chat.cacheDB.isImageAvailable(hashCode: imageInput.hashCode) {
+            return isAvailable
+        } else {
+            return false
+        }
+    }
+    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFileManager.sharedInstance.isThumbnailAvailable(hashCode)")
+    public func isThumbnailAvailableOnCache(inputModel imageInput:  GetImageRequest) -> Bool {
+        if let isAvailable = Chat.cacheDB.isThumbnailAvailable(hashCode: imageInput.hashCode) {
+            return isAvailable
+        } else {
+            return false
+        }
+    }
+    
+    
+    
     // MARK: - Get File
     /// GetFIle:
     /// get specific file.
@@ -36,6 +82,7 @@ extension Chat {
     /// - parameter progress:           (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
     /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Data?, UploadFileModel)
     /// - parameter cacheResponse:      (response) it will returns the response from CacheDB if user has enabled it. (UploadFileModel, String)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func getFile(inputModel getFileInput:    GetFileRequest,
                         getCacheResponse:           Bool?,
                         uniqueId:       @escaping (String) -> (),
@@ -50,8 +97,7 @@ extension Chat {
         
         // if cache is enabled by user, first return cache result to the user
         if (getCacheResponse ?? enableCache) {
-            if let (cacheFileResult, filePath) = Chat.cacheDB.retrieveFileObject(fileId:   getFileInput.fileId,
-                                                                                  hashCode: getFileInput.hashCode) {
+            if let (cacheFileResult, filePath) = Chat.cacheDB.retrieveFileObject(hashCode: getFileInput.hashCode) {
                 hasFileOntheCache = true
                 let response = DownloadFileModel(messageContentModel:   cacheFileResult,
                                                  errorCode:             0,
@@ -59,17 +105,25 @@ extension Chat {
                                                  hasError:              false)
                 if FileManager.default.fileExists(atPath: filePath) {
                     let fileURL = URL(fileURLWithPath: filePath)
-                    do {
-                        let data = try Data(contentsOf: fileURL)
+                    if let data = try? Data(contentsOf: fileURL) {
                         hasFileOntheCache = true
                         cacheResponse(data, response)
-                    } catch {
-                        fatalError("cannot get the fileData from imagPath")
+                    } else {
+                        delegate?.chatError(errorCode: 1000,
+                                            errorMessage: "cannot read file data from local path",
+                                            errorResult: nil)
                     }
+//                    do {
+//                        let data = try Data(contentsOf: fileURL)
+//                        hasFileOntheCache = true
+//                        cacheResponse(data, response)
+//                    } catch {
+//                        fatalError("cannot get the fileData from imagPath")
+//                    }
                 }
             }
         }
-        
+
         if (!hasFileOntheCache) || (getFileInput.serverResponse) {
             _ = checkIfDeviceHasFreeSpace(needSpaceInMB: deviecLimitationSpaceMB, turnOffTheCache: false)
             sendRequestToDownloadFile(withInputModel: getFileInput, progress: { (theProgress) in
@@ -81,15 +135,18 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     private func sendRequestToDownloadFile(withInputModel getFileInput:   GetFileRequest,
                                            progress:       @escaping (Float) -> (),
                                            completion:     @escaping (Data?, DownloadFileModel) -> ()) {
-        
-        let url = "\(SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_FILE.rawValue)"
+
+        let url = "\(SERVICE_ADDRESSES.PODSPACE_FILESERVER_ADDRESS)\(SERVICES_PATH.DRIVE_DOWNLOAD_FILE.rawValue)"
         let method:     HTTPMethod  = HTTPMethod.get
-        Networking.sharedInstance.download(toUrl:           url,
+        let headers:    HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
+        
+        Networking.sharedInstance.download(fromUrl:         url,
                                            withMethod:      method,
-                                           withHeaders:     nil,
+                                           withHeaders:     headers,
                                            withParameters:  getFileInput.convertContentToParameters()
         , progress: { (myProgress) in
             progress(myProgress)
@@ -98,15 +155,20 @@ extension Chat {
                 // save data comes from server to the Cache
                 let fileName = responseHeader["name"].string
                 let fileType = responseHeader["type"].string
+                let fileSize = responseHeader["size"].int
                 let theFinalFileName = "\(fileName ?? "default").\(fileType ?? "none")"
-                let uploadFile = FileObject(hashCode: getFileInput.hashCode, id: getFileInput.fileId, name: theFinalFileName)
-                
+                let uploadFile = FileObject(hashCode:   getFileInput.hashCode,
+//                                            id:         getFileInput.fileId,
+                                            name:       theFinalFileName,
+                                            size:       fileSize ?? myFile.count,
+                                            type:       fileType)
+
                 if self.enableCache {
                     if self.checkIfDeviceHasFreeSpace(needSpaceInMB: Int64(myFile.count / 1024), turnOffTheCache: true) {
                         Chat.cacheDB.saveFileObject(fileInfo: uploadFile, fileData: myFile, toLocalPath: self.localFileCustomPath)
                     }
                 }
-                
+
                 let uploadFileModel = DownloadFileModel(messageContentModel:    uploadFile,
                                                         errorCode:              0,
                                                         errorMessage:           "",
@@ -120,7 +182,7 @@ extension Chat {
                 let errorUploadFileModel = DownloadFileModel(messageContentModel: nil, errorCode: errorCode, errorMessage: errorMessage, hasError: hasError)
                 completion(nil, errorUploadFileModel)
             }
-        }
+        }
     }
     
     
@@ -143,6 +205,7 @@ extension Chat {
     /// - parameter progress:           (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
     /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Data?, UploadImageModel)
     /// - parameter cacheResponse:      (response) it will returns the response from CacheDB if user has enabled it. (UploadImageModel, String)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func getImage(inputModel getImageInput:  GetImageRequest,
                          getCacheResponse:          Bool?,
                          uniqueId:      @escaping (String) -> (),
@@ -157,21 +220,28 @@ extension Chat {
         
         // if cache is enabled by user, first return cache result to the user
         if (getCacheResponse ?? enableCache) {
-            if let (cacheImageResult, imagePath) = Chat.cacheDB.retrieveImageObject(hashCode:   getImageInput.hashCode,
-                                                                                    imageId:    getImageInput.imageId) {
+            if let (cacheImageResult, imagePath) = Chat.cacheDB.retrieveImageObject(hashCode:   getImageInput.hashCode) {
                 let response = DownloadImageModel(messageContentModel:   cacheImageResult,
                                                   errorCode:             0,
                                                   errorMessage:          "",
                                                   hasError:              false)
                 if FileManager.default.fileExists(atPath: imagePath) {
                     let imagURL = URL(fileURLWithPath: imagePath)
-                    do {
-                        let data = try Data(contentsOf: imagURL)
+                    if let data = try? Data(contentsOf: imagURL) {
                         hasImageOnTheCache = true
                         cacheResponse(data, response)
-                    } catch {
-                        fatalError("cannot get the fileData from imagPath")
+                    } else {
+                        delegate?.chatError(errorCode: 1000,
+                                            errorMessage: "cannot read image data from local path",
+                                            errorResult: nil)
                     }
+//                    do {
+//                        let data = try Data(contentsOf: imagURL)
+//                        hasImageOnTheCache = true
+//                        cacheResponse(data, response)
+//                    } catch {
+//                        fatalError("cannot get the fileData from imagPath")
+//                    }
                 }
             }
         }
@@ -187,15 +257,67 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
+    public func getThumbnailImage(inputModel getImageInput:  GetImageRequest,
+                                  getCacheResponse:          Bool?,
+                                  uniqueId:      @escaping (String) -> (),
+                                  progress:      @escaping (Float) -> (),
+                                  completion:    @escaping (Data?, DownloadImageModel) -> (),
+                                  cacheResponse: @escaping (Data, DownloadImageModel) -> ()) {
+        
+        let theUniqueId = generateUUID()
+        uniqueId(theUniqueId)
+        
+        var hasImageOnTheCache = false
+        
+        // if cache is enabled by user, first return cache result to the user
+        if (getCacheResponse ?? enableCache) {
+            if let (cacheImageResult, imagePath) = Chat.cacheDB.retrieveImageThumbnailObject(hashCode:   getImageInput.hashCode) {
+                let response = DownloadImageModel(messageContentModel:   cacheImageResult,
+                                                  errorCode:             0,
+                                                  errorMessage:          "",
+                                                  hasError:              false)
+                if FileManager.default.fileExists(atPath: imagePath) {
+                    let imagURL = URL(fileURLWithPath: imagePath)
+                    if let data = try? Data(contentsOf: imagURL) {
+                        hasImageOnTheCache = true
+                        cacheResponse(data, response)
+                    } else {
+                        delegate?.chatError(errorCode: 1000,
+                                            errorMessage: "cannot read image data from local path",
+                                            errorResult: nil)
+                    }
+                }
+            }
+        }
+        let input = GetImageRequest(hashCode:   getImageInput.hashCode,
+                                    quality:    0.123,
+                                    crop:       getImageInput.crop,
+                                    size:       getImageInput.size,
+                                    serverResponse: getImageInput.serverResponse)
+        if (!hasImageOnTheCache) || (getImageInput.serverResponse) {
+            _ = checkIfDeviceHasFreeSpace(needSpaceInMB: self.deviecLimitationSpaceMB, turnOffTheCache: false)
+            sendRequestToDownloadImage(withInputModel: input, progress: { (theProgress) in
+                progress(theProgress)
+            }) { (data, imageModel) in
+                completion(data, imageModel)
+            }
+        }
+        
+    }
+    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     private func sendRequestToDownloadImage(withInputModel getImageInput: GetImageRequest,
                                             progress:      @escaping (Float) -> (),
                                             completion:    @escaping (Data?, DownloadImageModel) -> ()) {
         
-        let url = "\(SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.GET_IMAGE.rawValue)"
+        let url = "\(SERVICE_ADDRESSES.PODSPACE_FILESERVER_ADDRESS)\(SERVICES_PATH.DRIVE_DOWNLOAD_IMAGE.rawValue)"
         let method:     HTTPMethod  = HTTPMethod.get
-        Networking.sharedInstance.download(toUrl:           url,
+        let headers:    HTTPHeaders = ["_token_": token, "_token_issuer_": "1"]
+        
+        Networking.sharedInstance.download(fromUrl:         url,
                                            withMethod:      method,
-                                           withHeaders:     nil,
+                                           withHeaders:     headers,
                                            withParameters:  getImageInput.convertContentToParameters()
         , progress: { (myProgress) in
             progress(myProgress)
@@ -204,18 +326,25 @@ extension Chat {
                 // save data comes from server to the Cache
                 let fileName = responseHeader["name"].string
                 let fileType = responseHeader["type"].string
+                let fileSize = responseHeader["size"].int
                 let theFinalFileName = "\(fileName ?? "default").\(fileType ?? "none")"
                 let uploadImage = ImageObject(actualHeight: nil,
                                               actualWidth:  nil,
                                               hashCode:     getImageInput.hashCode,
-                                              height:       getImageInput.height,
-                                              id:           getImageInput.imageId,
+                                              height:       nil,
+//                                              id:           getImageInput.imageId,
                                               name:         theFinalFileName,
-                                              width:        getImageInput.width)
+                                              size:         fileSize ?? myData.count,
+                                              width:        nil)
                 
                 if self.enableCache {
                     if self.checkIfDeviceHasFreeSpace(needSpaceInMB: Int64(myData.count / 1024), turnOffTheCache: true) {
-                        Chat.cacheDB.saveImageObject(imageInfo: uploadImage, imageData: myData, toLocalPath: self.localImageCustomPath)
+                        if getImageInput.quality == 0.123 {
+                            Chat.cacheDB.saveThumbnailImageObject(imageInfo: uploadImage, imageData: myData, toLocalPath: self.localImageCustomPath)
+                        } else {
+                            Chat.cacheDB.saveImageObject(imageInfo: uploadImage, imageData: myData, toLocalPath: self.localImageCustomPath)
+                        }
+                        
                     }
                 }
                 
@@ -249,68 +378,76 @@ extension Chat {
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter progress:   (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (UploadFileModel)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func uploadFile(inputModel uploadFileInput: UploadFileRequest,
-                    uniqueId:        @escaping (String) -> (),
-                    progress:        @escaping (Float) -> (),
-                    completion:      @escaping callbackTypeAlias) {
+                           uniqueId:        @escaping (String) -> (),
+                           progress:        @escaping (Float) -> (),
+                           completion:      @escaping callbackTypeAlias) {
 
         log.verbose("Try to upload file with this parameters: \n \(uploadFileInput)", context: "Chat")
 
         uniqueId(uploadFileInput.uniqueId)
 
-        if (enableCache) && (uploadFileInput.threadId != nil) {
+        if (enableCache) {
             /*
                 seve this upload image on the Cache Wait Queue,
                 so if there was an situation that response of the server to this uploading doesn't come, then we know that our upload request didn't sent correctly
                 and we will send this Queue to user on the GetHistory request,
                 now user knows which upload requests didn't send correctly, and can handle them
                 */
-            let messageObjectToSendToQueue = QueueOfWaitUploadFilesModel(dataToSend:        uploadFileInput.dataToSend,
-                                                                            fileExtension:     uploadFileInput.fileExtension,
-                                                                            fileName:          uploadFileInput.fileName,
-                                                                            fileSize:          uploadFileInput.fileSize,
-                                                                            mimeType:           uploadFileInput.mimeType,
-                                                                            originalFileName:  uploadFileInput.originalFileName,
-                                                                            threadId:          uploadFileInput.threadId,
-                                                                            typeCode:          uploadFileInput.typeCode,
-                                                                            uniqueId:          uploadFileInput.uniqueId)
+            let messageObjectToSendToQueue = QueueOfWaitUploadFilesModel(dataToSend:    uploadFileInput.dataToSend,
+                                                                         fileExtension: uploadFileInput.fileExtension,
+                                                                         fileName:      uploadFileInput.fileName,
+                                                                         fileSize:      uploadFileInput.fileSize,
+                                                                         isPublic:      uploadFileInput.isPublic,
+                                                                         mimeType:      uploadFileInput.mimeType,
+                                                                         originalName:  uploadFileInput.originalName,
+                                                                         userGroupHash: uploadFileInput.userGroupHash,
+                                                                         typeCode:      uploadFileInput.typeCode,
+                                                                         uniqueId:      uploadFileInput.uniqueId)
             Chat.cacheDB.saveUploadFileToWaitQueue(file: messageObjectToSendToQueue)
         }
 
-        let url = "\(SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.UPLOAD_FILE.rawValue)"
+        var url = "\(SERVICE_ADDRESSES.PODSPACE_FILESERVER_ADDRESS)"
+        if let _ = uploadFileInput.userGroupHash {
+            url += "\(SERVICES_PATH.PODSPACE_PUBLIC_UPLOAD_FILE.rawValue)"
+        } else {
+            url += "\(SERVICES_PATH.PODSPACE_UPLOAD_FILE.rawValue)"
+        }
+        
         let headers:    HTTPHeaders = ["_token_":           token,
                                         "_token_issuer_":    "1",
                                         "Content-type":      "multipart/form-data"]
 
         var uploadProgress: Float = 0
         Networking.sharedInstance.upload(toUrl:             url,
-                                            withHeaders:       headers,
-                                            withParameters:    uploadFileInput.convertContentToParameters(),
-                                            isImage:           false,
-                                            isFile:            true,
-                                            dataToSend:        uploadFileInput.dataToSend,
-                                            uniqueId:          uploadFileInput.uniqueId,
-                                            progress:
+                                         withHeaders:       headers,
+                                         withParameters:    uploadFileInput.convertContentToParameters(),
+                                         isImage:           false,
+                                         isFile:            true,
+                                         dataToSend:        uploadFileInput.dataToSend,
+                                         uniqueId:          uploadFileInput.uniqueId,
+                                         progress:
             { (myProgress) in
                 uploadProgress = myProgress
                 let fileInfo = FileInfo(fileName: uploadFileInput.fileName,
                                         fileSize: uploadFileInput.fileSize)
                 let fUploadedEM = FileUploadEventModel(type:            FileUploadEventTypes.UPLOADING,
-                                                        errorCode:       nil,
-                                                        errorMessage:    nil,
-                                                        errorEvent:      nil,
-                                                        fileInfo:        fileInfo,
-                                                        fileObjectData:  nil,
-                                                        progress:        uploadProgress,
-                                                        threadId:        uploadFileInput.threadId,
-                                                        uniqueId:        uploadFileInput.uniqueId)
+                                                       errorCode:       nil,
+                                                       errorMessage:    nil,
+                                                       errorEvent:      nil,
+                                                       fileInfo:        fileInfo,
+                                                       fileObjectData:  nil,
+                                                       progress:        uploadProgress,
+                                                       userGroupHash:   uploadFileInput.userGroupHash,
+                                                       uniqueId:        uploadFileInput.uniqueId)
                 Chat.sharedInstance.delegate?.fileUploadEvents(model: fUploadedEM)
                 progress(myProgress)
         }) { (response) in
             let myResponse: JSON = response as! JSON
             
             let hasError        = myResponse["hasError"].boolValue
-            let errorMessage    = myResponse["errorMessage"].stringValue
+            let errorMessage    = myResponse["message"].stringValue
             let errorCode       = myResponse["errorCode"].intValue
             
             if (!hasError) {
@@ -320,13 +457,12 @@ extension Chat {
                     // save data comes from server to the Cache
                     let uploadFileObject = FileObject(messageContent: resultData)
                     Chat.cacheDB.saveFileObject(fileInfo: uploadFileObject, fileData: uploadFileInput.dataToSend, toLocalPath: self.localFileCustomPath)
-                    let getFileRequest = GetFileRequestModel(downloadable:  nil,
-                                                                fileId:        uploadFileObject.id,
-                                                                hashCode:      uploadFileObject.hashCode,
-                                                                serverResponse: true)
+                    let getFileRequest = GetFileRequest(//fileId:         uploadFileObject.id,
+                                                        hashCode:       uploadFileObject.hashCode,
+                                                        serverResponse: true)
                     self.sendRequestToDownloadFile(withInputModel:  getFileRequest,
-                                                    progress:        { _ in },
-                                                    completion:      { (_, _) in })
+                                                   progress:        { _ in },
+                                                   completion:      { (_, _) in })
                     Chat.cacheDB.deleteWaitUploadFiles(uniqueId: uploadFileInput.uniqueId)
                 }
                 
@@ -339,29 +475,33 @@ extension Chat {
                                                         fileInfo:        fileInfo,
                                                         fileObjectData:  nil,
                                                         progress:        uploadProgress,
-                                                        threadId:        uploadFileInput.threadId,
+                                                        userGroupHash:        uploadFileInput.userGroupHash,
                                                         uniqueId:        uploadFileInput.uniqueId)
                 Chat.sharedInstance.delegate?.fileUploadEvents(model: fUploadedEM)
                 
-                let uploadFileModel = UploadFileModel(messageContentJSON:   resultData,
-                                                        errorCode:            errorCode,
-                                                        errorMessage:         errorMessage,
-                                                        hasError:             hasError)
-                
+                let uploadFileModel = UploadFileResponse(messageContentJSON: resultData,
+                                                         errorCode:         errorCode,
+                                                         errorMessage:      errorMessage,
+                                                         hasError:          hasError)
                 completion(uploadFileModel)
             } else {
                 let fileInfo = FileInfo(fileName: uploadFileInput.fileName,
                                         fileSize: uploadFileInput.fileSize)
                 let fUploadErrorEM = FileUploadEventModel(type:             FileUploadEventTypes.UPLOAD_ERROR,
-                                                            errorCode:        errorCode,
-                                                            errorMessage:     errorMessage,
-                                                            errorEvent:       nil,
-                                                            fileInfo:         fileInfo,
-                                                            fileObjectData:   uploadFileInput.dataToSend,
-                                                            progress:         uploadProgress,
-                                                            threadId:         uploadFileInput.threadId,
-                                                            uniqueId:         uploadFileInput.uniqueId)
+                                                          errorCode:        errorCode,
+                                                          errorMessage:     errorMessage,
+                                                          errorEvent:       nil,
+                                                          fileInfo:         fileInfo,
+                                                          fileObjectData:   uploadFileInput.dataToSend,
+                                                          progress:         uploadProgress,
+                                                          userGroupHash:    uploadFileInput.userGroupHash,
+                                                          uniqueId:         uploadFileInput.uniqueId)
                 Chat.sharedInstance.delegate?.fileUploadEvents(model: fUploadErrorEM)
+                let errorResponse = UploadFileResponse(messageContentJSON:  nil,
+                                                       errorCode:           errorCode,
+                                                       errorMessage:        errorMessage,
+                                                       hasError:            hasError)
+                completion(errorResponse)
             }
         }
     }
@@ -384,16 +524,17 @@ extension Chat {
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter progress:   (response)  it will returns the progress of the uploading request by a value between 0 and 1. (Float)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (UploadImageModel)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func uploadImage(inputModel uploadImageInput:   UploadImageRequest,
-                     uniqueId:      @escaping (String) -> (),
-                     progress:      @escaping (Float) -> (),
-                     completion:    @escaping callbackTypeAlias) {
+                            uniqueId:       @escaping (String) -> (),
+                            progress:       @escaping (Float) -> (),
+                            completion:     @escaping callbackTypeAlias) {
         
         log.verbose("Try to upload image with this parameters: \n \(uploadImageInput)", context: "Chat")
         
         uniqueId(uploadImageInput.uniqueId)
         
-        if (enableCache) && (uploadImageInput.threadId != nil) {
+        if (enableCache) {
             /**
              seve this upload image on the Cache Wait Queue,
              so if there was an situation that response of the server to this uploading doesn't come, then we know that our upload request didn't sent correctly
@@ -404,9 +545,10 @@ extension Chat {
                                                                           fileExtension:    uploadImageInput.fileExtension,
                                                                           fileName:         uploadImageInput.fileName,
                                                                           fileSize:         uploadImageInput.fileSize,
+                                                                          isPublic:         uploadImageInput.isPublic,
                                                                           mimeType:         uploadImageInput.mimeType,
-                                                                          originalFileName: uploadImageInput.originalFileName,
-                                                                          threadId:         uploadImageInput.threadId,
+                                                                          originalName:     uploadImageInput.originalName,
+                                                                          userGroupHash:    uploadImageInput.userGroupHash,
                                                                           xC:               uploadImageInput.xC,
                                                                           yC:               uploadImageInput.yC,
                                                                           hC:               uploadImageInput.hC,
@@ -416,7 +558,13 @@ extension Chat {
             Chat.cacheDB.saveUploadImageToWaitQueue(image: messageObjectToSendToQueue)
         }
         
-        let url = "\(SERVICE_ADDRESSES.FILESERVER_ADDRESS)\(SERVICES_PATH.UPLOAD_IMAGE.rawValue)"
+        var url = "\(SERVICE_ADDRESSES.PODSPACE_FILESERVER_ADDRESS)"
+        if let _ = uploadImageInput.userGroupHash {
+            url += "\(SERVICES_PATH.PODSPACE_PUBLIC_UPLOAD_IMAGE.rawValue)"
+        } else {
+            url += "\(SERVICES_PATH.PODSPACE_UPLOAD_IMAGE.rawValue)"
+        }
+        
         let headers:    HTTPHeaders = ["_token_":           token,
                                        "_token_issuer_":    "1",
                                        "Content-type":      "multipart/form-data"]
@@ -441,14 +589,14 @@ extension Chat {
                                                        fileInfo:        fileInfo,
                                                        fileObjectData:  nil,
                                                        progress:        uploadProgress,
-                                                       threadId:        uploadImageInput.threadId,
+                                                       userGroupHash:   uploadImageInput.userGroupHash,
                                                        uniqueId:        uploadImageInput.uniqueId)
                 Chat.sharedInstance.delegate?.fileUploadEvents(model: fUploadedEM)
                 progress(myProgress)
         }) { (response) in
             let myResponse: JSON = response as! JSON
             let hasError        = myResponse["hasError"].boolValue
-            let errorMessage    = myResponse["errorMessage"].stringValue
+            let errorMessage    = myResponse["message"].stringValue
             let errorCode       = myResponse["errorCode"].intValue
             
             if (!hasError) {
@@ -458,23 +606,17 @@ extension Chat {
                     // save data comes from server to the Cache
                     let uploadImageFile = ImageObject(messageContent: resultData)
                     Chat.cacheDB.saveImageObject(imageInfo: uploadImageFile, imageData: uploadImageInput.dataToSend, toLocalPath: self.localImageCustomPath)
-                    let getImageRequest = GetImageRequestModel(actual:      nil,
-                                                               downloadable: nil,
-                                                               height:      nil,
-                                                               hashCode:    uploadImageFile.hashCode,
-                                                               imageId:     uploadImageFile.id,
-                                                               width:       nil,
-                                                               serverResponse: true)
+                    let getImageRequest = GetImageRequest(//imageId:  uploadImageFile.id,
+                                                          hashCode: uploadImageFile.hashCode,
+                                                          quality:  nil,
+                                                          crop:     nil,
+                                                          size:     nil,
+                                                          serverResponse: true)
                     self.sendRequestToDownloadImage(withInputModel: getImageRequest,
                                                     progress:       { _ in },
                                                     completion:     { (_, _) in })
                     Chat.cacheDB.deleteWaitUploadImages(uniqueId: uploadImageInput.uniqueId)
                 }
-                
-                let uploadImageModel = UploadImageModel(messageContentJSON: resultData,
-                                                        errorCode:          errorCode,
-                                                        errorMessage:       errorMessage,
-                                                        hasError:           hasError)
                 
                 let fileInfo = FileInfo(fileName: uploadImageInput.fileName,
                                         fileSize: uploadImageInput.fileSize)
@@ -485,10 +627,14 @@ extension Chat {
                                                        fileInfo:        fileInfo,
                                                        fileObjectData:  nil,
                                                        progress:        uploadProgress,
-                                                       threadId:        uploadImageInput.threadId,
+                                                       userGroupHash:   uploadImageInput.userGroupHash,
                                                        uniqueId:        uploadImageInput.uniqueId)
                 Chat.sharedInstance.delegate?.fileUploadEvents(model: fUploadedEM)
                 
+                let uploadImageModel = UploadImageResponse(messageContentJSON:  resultData,
+                                                           errorCode:           errorCode,
+                                                           errorMessage:        errorMessage,
+                                                           hasError:            hasError)
                 completion(uploadImageModel)
             } else {
                 let fileInfo = FileInfo(fileName: uploadImageInput.fileName,
@@ -500,9 +646,14 @@ extension Chat {
                                                           fileInfo:         fileInfo,
                                                           fileObjectData:   uploadImageInput.dataToSend,
                                                           progress:         uploadProgress,
-                                                          threadId:         uploadImageInput.threadId,
+                                                          userGroupHash:    uploadImageInput.userGroupHash,
                                                           uniqueId:         uploadImageInput.uniqueId)
                 Chat.sharedInstance.delegate?.fileUploadEvents(model: fUploadErrorEM)
+                let errorResponse = UploadImageResponse(messageContentJSON: nil,
+                                                        errorCode:          errorCode,
+                                                        errorMessage:       errorMessage,
+                                                        hasError:           hasError)
+                completion(errorResponse)
             }
         }
         
@@ -511,7 +662,7 @@ extension Chat {
     
         
     // MARK: - Manage  Upload/Download  Image/File
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func manageUpload(image:             Bool,
                              file:              Bool,
                              withUniqueId:      String,
@@ -547,7 +698,7 @@ extension Chat {
         }
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func manageDownload(withUniqueId:        String,
                                withAction action:   DownloaUploadAction,
                                completion:          @escaping (String, Bool) -> ()) {
@@ -586,6 +737,7 @@ extension Chat {
     /// Outputs:
     /// -
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func getDeviceFreeSpace() {
         
     }
@@ -601,6 +753,7 @@ extension Chat {
     /// Outputs:
     /// - it has only one return value as Int that represents data as Byte
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFileManager.sharedInstance.totoalUsedSpace()")
     public func getLocalUsedSpace() -> Int {
         return getLocalImageFolderUsedSpace() + getLocalFilesFolderUsedSpace()
     }
@@ -616,6 +769,7 @@ extension Chat {
     /// Outputs:
     /// - it has only one return value as Int that represents data as Byte
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFileManager.sharedInstance.retrieveAllImagesSize()")
     public func getLocalImageFolderUsedSpace() -> Int {
         return Chat.cacheDB.retrieveAllImagesSize()
     }
@@ -631,6 +785,7 @@ extension Chat {
     /// Outputs:
     /// - it has only one return value as Int that represents data as Byte
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFileManager.sharedInstance.retrieveAllFilesSize()")
     public func getLocalFilesFolderUsedSpace() -> Int {
         return Chat.cacheDB.retrieveAllFilesSize()
     }
@@ -648,6 +803,7 @@ extension Chat {
     ///
     /// Outputs:
     /// - this method has no output
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFileManager.sharedInstance.deleteAllImages()")
     public func deleteLocalImages() {
         Chat.cacheDB.deleteAllImages()
     }
@@ -662,6 +818,7 @@ extension Chat {
     ///
     /// Outputs:
     /// - this method has no output
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFileManager.sharedInstance.deleteAllFiles()")
     public func deleteLocalFiles() {
         Chat.cacheDB.deleteAllFiles()
     }
@@ -676,6 +833,7 @@ extension Chat {
     ///
     /// Outputs:
     /// - this method has no output
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFileManager.sharedInstance.deleteAllFilesWithCache()")
     public func deleteAllLocalContent() {
         deleteLocalImages()
         deleteLocalFiles()
@@ -691,6 +849,7 @@ extension Chat {
     ///
     /// Outputs:
     /// - this method has no output
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.write(cacheType: .DELETE_ALL_CACHE_DATA)")
     public func deleteCache() {
         Chat.cacheDB.deleteCacheData()
     }

@@ -20,6 +20,7 @@ extension Chat {
     ///    - it doesn't have direct output,
     ///    - but on the situation where the response is valid,
     ///    - it will call the "onResultCallback" callback to getMessageSeenList function (by using "getMessageSeenListCallbackToUser")
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func responseOfMessageSeenList(withMessage message: ChatMessage) {
         log.verbose("Message of type 'GET_MESSAGE_SEEN_PARTICIPANTS' recieved", context: "Chat")
         
@@ -43,7 +44,7 @@ extension Chat {
         }
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public class GetMessageSeenList: CallbackProtocol {
         var sendParams: SendChatMessageVO
         init(parameters: SendChatMessageVO) {

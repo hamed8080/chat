@@ -8,43 +8,41 @@
 
 import Foundation
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class SearchContactsRequest {
     
     public let cellphoneNumber: String?
+    public let contactId:       Int?
+    public let count:           Int?
     public let email:           String?
-    public let firstName:       String?
-    public let id:              Int?
-    public let lastName:        String?
     public let offset:          Int?
-    public let ownerId:         Int?
-    public let size:            Int?
+    public let order:           Ordering?
     public let query:           String?
+    public let summery:         Bool?
     
     public let typeCode:        String?
     public let uniqueId:        String
     
     
     public init(cellphoneNumber:    String?,
+                contactId:          Int?,
+                count:              Int?,
                 email:              String?,
-                firstName:          String?,
-                id:                 Int?,
-                lastName:           String?,
                 offset:             Int?,
-                ownerId:            Int?,
-                size:               Int?,
+                order:              Ordering?,
                 query:              String?,
+                summery:            Bool?,
                 typeCode:           String?,
                 uniqueId:           String?) {
         
         self.cellphoneNumber    = cellphoneNumber
+        self.contactId          = contactId
+        self.count              = count
         self.email              = email
-        self.firstName          = firstName
-        self.id                 = id
-        self.lastName           = lastName
         self.offset             = offset
-        self.ownerId            = ownerId
-        self.size               = size
+        self.order              = order
         self.query              = query
+        self.summery            = summery
         
         self.typeCode           = typeCode
         self.uniqueId           = uniqueId ?? UUID().uuidString
@@ -54,6 +52,7 @@ open class SearchContactsRequest {
 
 
 /// MARK: -  this class will be deprecate (use this class instead: 'SearchContactsRequest')
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class SearchContactsRequestModel: SearchContactsRequest {
     
 }

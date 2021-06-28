@@ -9,9 +9,10 @@
 import Foundation
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class QueueOfWaitEditMessagesModel {
     
-    let content:        String?
+    let textMessage:    String?
     let messageType:    MessageType
     let metadata:       String?
     let repliedTo:      Int?
@@ -21,7 +22,7 @@ open class QueueOfWaitEditMessagesModel {
     let typeCode:   String?
     let uniqueId:   String?
     
-    init(content:       String?,
+    init(textMessage:   String?,
          messageType:   MessageType,
          metadata:      String?,
          repliedTo:     Int?,
@@ -30,7 +31,7 @@ open class QueueOfWaitEditMessagesModel {
          typeCode:      String?,
          uniqueId:      String?) {
         
-        self.content        = content
+        self.textMessage    = textMessage
         self.messageType    = messageType
         self.metadata       = metadata
         self.repliedTo      = repliedTo
@@ -41,7 +42,7 @@ open class QueueOfWaitEditMessagesModel {
     }
     
     init(editMessageInputModel: EditTextMessageRequest) {
-        self.content        = editMessageInputModel.textMessage
+        self.textMessage    = editMessageInputModel.textMessage
         self.messageType    = editMessageInputModel.messageType
         self.repliedTo      = editMessageInputModel.repliedTo
         self.messageId      = editMessageInputModel.messageId
@@ -53,7 +54,7 @@ open class QueueOfWaitEditMessagesModel {
     
     
     public func returnDataAsJSON() -> JSON {
-        let result: JSON = ["content":      content ?? NSNull(),
+        let result: JSON = ["textMessage":  textMessage ?? NSNull(),
                             "messageType":  messageType,
                             "metadata":     metadata ?? NSNull(),
                             "repliedTo":    repliedTo ?? NSNull(),
@@ -67,6 +68,7 @@ open class QueueOfWaitEditMessagesModel {
 }
 
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class QueueOfWaitEditMessagesResponse: QueueOfWaitEditMessagesModel {
     
 }

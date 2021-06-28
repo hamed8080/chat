@@ -15,7 +15,7 @@ open class ContactEventModel {
     public let contacts:                    [Contact]?
     public let contactsLastSeenDuration:    [UserLastSeenDuration]?
     
-    init(type: ContactEventTypes, contacts: [Contact]?, contactsLastSeenDuration: [UserLastSeenDuration]?) {
+    init(type: ContactEventTypes, contacts: [Contact]? = nil, contactsLastSeenDuration: [UserLastSeenDuration]? = nil) {
         self.type                       = type
         self.contacts                   = contacts
         self.contactsLastSeenDuration   = contactsLastSeenDuration

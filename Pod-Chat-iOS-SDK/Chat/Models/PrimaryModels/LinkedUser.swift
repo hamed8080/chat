@@ -9,8 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-
-open class LinkedUser {
+open class LinkedUser :Codable {
     /*
      * + RelatedUserVO  LinkedUser:
      *   - coreUserId:      Int?
@@ -26,7 +25,7 @@ open class LinkedUser {
     public var nickname:    String?
     public var username:    String?
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(messageContent: JSON) {
         self.coreUserId = messageContent["coreUserId"].int ?? messageContent["id"].int
         self.image      = messageContent["image"].string
@@ -48,7 +47,7 @@ open class LinkedUser {
         self.username   = username
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(theLinkedUser: LinkedUser) {
         
         self.coreUserId = theLinkedUser.coreUserId
@@ -58,10 +57,12 @@ open class LinkedUser {
         self.username   = theLinkedUser.username
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatdataToMakeLinkedUser() -> LinkedUser {
         return self
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatToJSON() -> JSON {
         let result: JSON = ["coreUserId":   coreUserId ?? NSNull(),
                             "image":        image ?? NSNull(),

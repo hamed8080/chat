@@ -13,21 +13,22 @@ import CoreData
 
 public class QueueOfUploadFiles: NSManagedObject {
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func convertCMObjectToObject() -> QueueOfWaitUploadFilesModel {
         
         var dataToSend: Data?
         var fileSize:   Int64?
-        var threadId:   Int?
+        var isPublic:   Bool?
         
         func createVariables() {
-            if let dataToSend2 = self.dataToSend as Data? {
-                dataToSend = dataToSend2
+            if let dataToSend_ = self.dataToSend as Data? {
+                dataToSend = dataToSend_
             }
-            if let fileSize2 = self.fileSize as? Int64 {
-                fileSize = fileSize2
+            if let fileSize_ = self.fileSize as? Int64 {
+                fileSize = fileSize_
             }
-            if let threadId2 = self.threadId as? Int {
-                threadId = threadId2
+            if let isPublic_ = self.isPublic as? Bool {
+                isPublic = isPublic_
             }
         }
         
@@ -36,9 +37,10 @@ public class QueueOfUploadFiles: NSManagedObject {
                                                                           fileExtension:    self.fileExtension,
                                                                           fileName:         self.fileName,
                                                                           fileSize:         fileSize,
+                                                                          isPublic:         isPublic,
                                                                           mimeType:         self.mimeType,
-                                                                          originalFileName: self.originalFileName,
-                                                                          threadId:         threadId,
+                                                                          originalName:     self.originalName,
+                                                                          userGroupHash:    self.userGroupHash,
                                                                           typeCode:         self.typeCode,
                                                                           uniqueId:         self.uniqueId)
             return queueOfWaitUploadFilesModel

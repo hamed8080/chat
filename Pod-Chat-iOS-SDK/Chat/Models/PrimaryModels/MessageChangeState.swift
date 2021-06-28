@@ -22,6 +22,7 @@ open class MessageChangeState {
     public var senderId:   Int?
     public var threadId:   Int?
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(messageContent: JSON) {
         self.messageId  = messageContent["messageId"].int
         self.senderId   = messageContent["senderId"].int
@@ -37,6 +38,7 @@ open class MessageChangeState {
         self.threadId   = threadId
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(theMessageChangeState: MessageChangeState) {
         
         self.messageId  = theMessageChangeState.messageId
@@ -44,11 +46,12 @@ open class MessageChangeState {
         self.threadId   = theMessageChangeState.threadId
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatDataToMakeMessageChangeState() -> MessageChangeState {
         return self
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatToJSON() -> JSON {
         let result: JSON = ["messageId":        messageId ?? NSNull(),
                             "senderId":         senderId ?? NSNull(),

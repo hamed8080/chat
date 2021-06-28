@@ -14,6 +14,7 @@ import SwiftyJSON
 
 public class QueueOfForwardMessages: NSManagedObject {
     
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func convertCMObjectToObject() -> QueueOfWaitForwardMessagesModel {
         
 //        var metadata:       JSON?

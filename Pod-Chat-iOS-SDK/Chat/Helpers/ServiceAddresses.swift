@@ -8,11 +8,12 @@
 
 import Foundation
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 public struct SERVICE_ADDRESSES_ENUM {
     public var SSO_ADDRESS          = "http://172.16.110.76"
     public var PLATFORM_ADDRESS     = "http://172.16.106.26:8080/hamsam"
     public var FILESERVER_ADDRESS   = "http://172.16.106.26:8080/hamsam"
+    public var PODSPACE_FILESERVER_ADDRESS = "https://podspace.pod.ir"
     public var MAP_ADDRESS          = "https://api.neshan.org/v1"
     
 //    public func stringValue() -> String {
@@ -46,17 +47,23 @@ public enum SERVICES_PATH: String {
     case GET_FILE           = "/nzh/file/"
     
     // PodDrive
-    case DRIVE_UPLOAD_FILE          = "/nzh/drive/uploadFile"
+//    case DRIVE_UPLOAD_FILE          = "/nzh/drive/uploadFile"
     case DRIVE_UPLOAD_FILE_FROM_URL = "/nzh/drive/uploadFileFromUrl"
-    case DRIVE_UPLOAD_IMAGE         = "/nzh/drive/uploadImage"
+//    case DRIVE_UPLOAD_IMAGE         = "/nzh/drive/uploadImage"
     case DRIVE_DOWNLOAD_FILE        = "/nzh/drive/downloadFile"
     case DRIVE_DOWNLOAD_IMAGE       = "/nzh/drive/downloadImage"
     
+    // PodSpace
+    case PODSPACE_UPLOAD_FILE           = "/nzh/drive/uploadFile"
+    case PODSPACE_PUBLIC_UPLOAD_FILE    = "/userGroup/uploadFile"
+    case PODSPACE_UPLOAD_IMAGE          = "/nzh/drive/uploadImage"
+    case PODSPACE_PUBLIC_UPLOAD_IMAGE   = "/userGroup/uploadImage"
+    
     // Neshan Map
-    case REVERSE            = "/reverse"
-    case SEARCH             = "/search"
-    case ROUTING            = "/routing"
-    case STATIC_IMAGE       = "/static"
+    case MAP_REVERSE            = "/reverse"
+    case MAP_SEARCH             = "/search"
+    case MAP_ROUTING            = "/routing"
+    case MAP_STATIC_IMAGE       = "/static"
     
     
     public func stringValue() -> String {
@@ -80,17 +87,23 @@ public enum SERVICES_PATH: String {
         case .GET_FILE:     return "/nzh/file/"
         
         // PodDrive
-        case .DRIVE_UPLOAD_FILE:            return "/nzh/drive/uploadFile"
+//        case .DRIVE_UPLOAD_FILE:            return "/nzh/drive/uploadFile"
         case .DRIVE_UPLOAD_FILE_FROM_URL:   return "/nzh/drive/uploadFileFromUrl"
-        case .DRIVE_UPLOAD_IMAGE:           return "/nzh/drive/uploadImage"
+//        case .DRIVE_UPLOAD_IMAGE:           return "/nzh/drive/uploadImage"
         case .DRIVE_DOWNLOAD_FILE:          return "/nzh/drive/downloadFile"
         case .DRIVE_DOWNLOAD_IMAGE:         return "/nzh/drive/downloadImage"
         
+        // PodSpace
+        case .PODSPACE_UPLOAD_FILE:         return "/nzh/drive/uploadFile"
+        case .PODSPACE_PUBLIC_UPLOAD_FILE:  return "/userGroup/uploadFile"
+        case .PODSPACE_UPLOAD_IMAGE:        return "/nzh/drive/uploadImage"
+        case .PODSPACE_PUBLIC_UPLOAD_IMAGE: return "/userGroup/uploadImage"
+            
         // Neshan Map
-        case .REVERSE:      return "/reverse"
-        case .SEARCH:       return "/search"
-        case .ROUTING:      return "/routing"
-        case .STATIC_IMAGE: return "/static"
+        case .MAP_REVERSE:      return "/reverse"
+        case .MAP_SEARCH:       return "/search"
+        case .MAP_ROUTING:      return "/routing"
+        case .MAP_STATIC_IMAGE: return "/static"
         }
     }
     

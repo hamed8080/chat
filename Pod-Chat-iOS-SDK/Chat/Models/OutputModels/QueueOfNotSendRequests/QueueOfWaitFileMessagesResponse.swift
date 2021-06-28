@@ -9,15 +9,20 @@
 import Foundation
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class QueueOfWaitFileMessagesModel {
     
-    let content:        String?
+    let textMessage:    String?
     let messageType:    MessageType
+    let fileExtension:  String?
     let fileName:       String?
+    let isPublic:       Bool?
     let metadata:       String?
     let mimeType:       String
+    let originalName:   String?
     let repliedTo:      Int?
     let threadId:       Int?
+    let userGroupHash:  String?
     let xC:             Int?
     let yC:             Int?
     let hC:             Int?
@@ -28,13 +33,17 @@ open class QueueOfWaitFileMessagesModel {
     let typeCode:    String?
     let uniqueId:    String?
     
-    init(content:       String?,
+    init(textMessage:   String?,
          messageType:   MessageType,
+         fileExtension: String?,
          fileName:      String?,
+         isPublic:      Bool?,
          metadata:      String?,
          mimeType:      String?,
+         originalName:  String?,
          repliedTo:     Int?,
          threadId:      Int?,
+         userGroupHash: String?,
          xC:            Int?,
          yC:            Int?,
          hC:            Int?,
@@ -44,13 +53,17 @@ open class QueueOfWaitFileMessagesModel {
          typeCode:      String?,
          uniqueId:      String?) {
         
-        self.content        = content
+        self.textMessage    = textMessage
         self.messageType    = messageType
+        self.fileExtension  = fileExtension
         self.fileName       = fileName
+        self.isPublic       = isPublic
         self.metadata       = metadata
         self.mimeType       = mimeType ?? ""
+        self.originalName   = originalName ?? ((fileName ?? "") + (fileExtension ?? ""))
         self.repliedTo      = repliedTo
         self.threadId       = threadId
+        self.userGroupHash  = userGroupHash
         self.xC             = xC
         self.yC             = yC
         self.hC             = hC
@@ -64,10 +77,9 @@ open class QueueOfWaitFileMessagesModel {
     
     init(fileMessageInputModel: SendFileMessageRequestModel, uniqueId: String) {
         
-        self.content        = fileMessageInputModel.messageInput.textMessage
+        self.textMessage    = fileMessageInputModel.messageInput.textMessage
         self.messageType    = fileMessageInputModel.messageInput.messageType
         self.metadata       = (fileMessageInputModel.messageInput.metadata != nil) ? "\(fileMessageInputModel.messageInput.metadata!)" : nil
-        self.mimeType       = fileMessageInputModel.uploadInput.mimeType
         self.repliedTo      = fileMessageInputModel.messageInput.repliedTo
         self.threadId       = fileMessageInputModel.messageInput.threadId
         self.typeCode       = fileMessageInputModel.messageInput.typeCode
@@ -79,35 +91,54 @@ open class QueueOfWaitFileMessagesModel {
             self.yC             = nil
             self.hC             = nil
             self.wC             = nil
-            self.fileToSend     = file.dataToSend
             self.imageToSend    = nil
+            self.fileExtension  = file.fileExtension
+            self.fileToSend     = file.dataToSend
+            self.isPublic       = file.isPublic
+            self.mimeType       = file.mimeType
+            self.originalName   = file.originalName
+            self.userGroupHash  = file.userGroupHash
         } else if let image = fileMessageInputModel.uploadInput as? UploadImageRequestModel {
+            self.fileToSend     = nil
             self.xC             = image.xC
             self.yC             = image.yC
             self.hC             = image.hC
             self.wC             = image.wC
-            self.fileToSend     = nil
+            self.fileExtension  = image.fileExtension
             self.imageToSend    = image.dataToSend
+            self.isPublic       = image.isPublic
+            self.mimeType       = image.mimeType
+            self.originalName   = image.originalName
+            self.userGroupHash  = image.userGroupHash
         } else {
             self.xC             = nil
             self.yC             = nil
             self.hC             = nil
             self.wC             = nil
+            self.fileExtension  = nil
             self.fileToSend     = nil
             self.imageToSend    = nil
+            self.isPublic       = nil
+            self.mimeType       = ""
+            self.originalName   = nil
+            self.userGroupHash  = nil
         }
         
     }
     
     
     public func returnDataAsJSONAndData() -> (jsonResult: JSON, imageToSend: Data?, fileToSend: Data?) {
-        let result: JSON = ["content":      content ?? NSNull(),
+        let result: JSON = ["textMessage":  textMessage ?? NSNull(),
                             "messageType":  messageType,
+                            "fileExtension": fileExtension ?? NSNull(),
                             "fileName":     fileName ?? NSNull(),
+                            "isPublic":     isPublic ?? NSNull(),
                             "metadata":     metadata ?? NSNull(),
                             "mimeType":     mimeType,
+                            "originalName": originalName ?? NSNull(),
                             "repliedTo":    repliedTo ?? NSNull(),
                             "threadId":     threadId ?? NSNull(),
+                            "userGroupHash": userGroupHash ?? NSNull(),
                             "xC":           xC ?? NSNull(),
                             "yC":           yC ?? NSNull(),
                             "hC":           hC ?? NSNull(),
@@ -119,7 +150,7 @@ open class QueueOfWaitFileMessagesModel {
     
 }
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class QueueOfWaitFileMessagesResponse: QueueOfWaitFileMessagesModel {
     
 }

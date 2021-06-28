@@ -31,6 +31,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (ClearHistoryRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! ClearHistoryModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func clearHistory(inputModel clearHistoryInput: ClearHistoryRequest,
                              uniqueId:          @escaping ((String) -> ()),
                              completion:        @escaping callbackTypeAlias) {
@@ -84,6 +85,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (DeleteMessageRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! DeleteMessageModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func deleteMessage(inputModel deleteMessageInput:   DeleteMessageRequest,
                               uniqueId:             @escaping ((String) -> ()),
                               completion:           @escaping callbackTypeAlias) {
@@ -136,6 +138,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (DeleteMultipleMessagesRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server.        (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! DeleteMessageModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func deleteMultipleMessages(inputModel deleteMessageInput:   DeleteMultipleMessagesRequest,
                                        uniqueIds:            @escaping (([String]) -> ()),
                                        completion:           @escaping callbackTypeAlias) {
@@ -194,6 +197,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (EditTextMessageRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! EditMessageModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func editMessage(inputModel editMessageInput:   EditTextMessageRequest,
                             uniqueId:           @escaping ((String) -> ()),
                             completion:         @escaping callbackTypeAlias) {
@@ -211,7 +215,7 @@ extension Chat {
          now user knows which messages didn't send correctly, and can handle them
          */
         if enableCache {
-            let messageObjectToSendToQueue = QueueOfWaitEditMessagesModel(content:      editMessageInput.textMessage,
+            let messageObjectToSendToQueue = QueueOfWaitEditMessagesModel(textMessage:  editMessageInput.textMessage,
                                                                           messageType:  editMessageInput.messageType,
                                                                           metadata:     nil,
                                                                           repliedTo:    editMessageInput.repliedTo,
@@ -271,6 +275,7 @@ extension Chat {
     /// - parameter onSent:     (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
     /// - parameter onDelivere: (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
     /// - parameter onSeen:     (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func forwardMessage(inputModel forwardMessageInput: ForwardMessageRequest,
                                uniqueIds:           @escaping (([String]) -> ()),
                                onSent:              @escaping callbackTypeAlias,
@@ -336,6 +341,7 @@ extension Chat {
     
     /// GetAllUnreadMessagesCount
     ///
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func getAllUnreadMessagesCount(inputModel:       GetAllUnreadMessageCountRequest,
                                           getCacheResponse: Bool?,
                                           uniqueId:         @escaping ((String) -> ()),
@@ -405,6 +411,7 @@ extension Chat {
     /// - parameter fileMessagesNotSent:    (response) it will returns the File Messages requests that has not been Sent yet! ([QueueOfWaitFileMessagesModel])
     /// - parameter uploadImageNotSent:     (response) it will returns the Upload Image requests that has not been Sent yet! ([QueueOfWaitUploadImagesModel])
     /// - parameter uploadFileNotSent:      (response) it will returns the Upload File requests that has not been Sent yet! ([QueueOfWaitUploadFilesModel])
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func getHistory(inputModel getHistoryInput:  GetHistoryRequest,
                            getCacheResponse:            Bool?,
                            uniqueId:                @escaping ((String) -> ()),
@@ -504,6 +511,7 @@ extension Chat {
     /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! GetHistoryModel)
     /// - parameter cacheResponse:      (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetHistoryModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func getMentionList(inputModel getMentionInput:  GetMentionedRequest,
                                getCacheResponse:            Bool?,
                                uniqueId:                @escaping ((String) -> ()),
@@ -563,6 +571,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (GetMessageDeliveredSeenListRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! GetMessageDeliverList)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func messageDeliveryList(inputModel messageDeliveryListInput:   GetMessageDeliveredSeenListRequest,
                                     uniqueId:                   @escaping ((String) -> ()),
                                     completion:                 @escaping callbackTypeAlias) {
@@ -615,6 +624,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (GetMessageDeliveredSeenListRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! GetMessageSeenList)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func messageSeenList(inputModel messageSeenListInput:   GetMessageDeliveredSeenListRequest,
                                 uniqueId:               @escaping ((String) -> ()),
                                 completion:             @escaping callbackTypeAlias) {
@@ -669,6 +679,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (PinUnpinMessageRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! PinUnpinMessageModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func pinMessage(inputModel:  PinUnpinMessageRequest,
                            uniqueId:    @escaping (String) -> (),
                            completion:  @escaping callbackTypeAlias) {
@@ -720,6 +731,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (PinUnpinMessageRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! PinUnpinMessageModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func unpinMessage(inputModel:  PinUnpinMessageRequest,
                              uniqueId:    @escaping (String) -> (),
                              completion:  @escaping callbackTypeAlias) {
@@ -775,6 +787,7 @@ extension Chat {
     /// - parameter onSent:     (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
     /// - parameter onDelivere: (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
     /// - parameter onSeen:     (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func replyMessage(inputModel replyMessageInput: ReplyTextMessageRequest,
                              uniqueId:          @escaping ((String) -> ()),
                              onSent:            @escaping callbackTypeAlias,
@@ -796,7 +809,7 @@ extension Chat {
          now user knows which messages didn't send correctly, and can handle them
          */
         if enableCache {
-            let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(content:          replyMessageInput.textMessage,
+            let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(textMessage:      replyMessageInput.textMessage,
                                                                           messageType:      replyMessageInput.messageType,
                                                                           metadata:         (replyMessageInput.metadata != nil) ? "\(replyMessageInput.metadata!)" : nil,
                                                                           repliedTo:        replyMessageInput.repliedTo,
@@ -853,6 +866,7 @@ extension Chat {
     /// - this method does not have any output
     ///
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (SendDeliverSeenRequest)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func deliver(inputModel deliverInput: SendDeliverSeenRequest) {
         
         log.verbose("Try to send deliver message for a message id with this parameters: \n messageId = \(deliverInput.messageId) , ownerId = \(deliverInput.ownerId)", context: "Chat")
@@ -898,6 +912,7 @@ extension Chat {
     /// - this method does not have any output
     ///
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (SendDeliverSeenRequest)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func seen(inputModel seenInput: SendDeliverSeenRequest) {
         
         log.verbose("Try to send seen message for a message id with this parameters: \n messageId = \(seenInput.messageId) , ownerId = \(seenInput.ownerId)", context: "Chat")
@@ -1015,6 +1030,7 @@ extension Chat {
     /// - parameter onSent:             (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
     /// - parameter onDelivere:         (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
     /// - parameter onSeen:             (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func sendLocationMessage(inputModel sendLocationMessageRequest: SendLocationMessageRequest,
                                     downloadProgress:           @escaping ((Float) -> ()),
                                     uploadUniqueId:             @escaping ((String) -> ()),
@@ -1037,24 +1053,24 @@ extension Chat {
             downloadProgress(myProgress)
         }) { (imageData) in
             
-            let uploadInput = UploadRequestModel(dataToSend:        (imageData as! Data),
-                                                 fileExtension:     nil,
+            let uploadInput = UploadImageRequest(dataToSend:        (imageData as! Data),
+                                                 fileExtension:     ".png",
                                                  fileName:          sendLocationMessageRequest.mapImageName,
                                                  mimeType:          "image/png",
-                                                 originalFileName:  nil,
-                                                 threadId:          sendLocationMessageRequest.threadId,
+                                                 originalName:      nil,
                                                  xC:                nil,
                                                  yC:                nil,
                                                  hC:                nil,
                                                  wC:                nil,
+                                                 userGroupHash:     sendLocationMessageRequest.userGroupHash,
                                                  typeCode:          sendLocationMessageRequest.typeCode ?? self.generalTypeCode,
                                                  uniqueId:          sendLocationMessageRequest.uniqueId)
             
             let messageInput = SendTextMessageRequestModel(content:         sendLocationMessageRequest.textMessage ?? "",
-                                                           messageType:     MessageType.picture,
+                                                           messageType:     MessageType.PICTURE,
                                                            metadata:        nil,
                                                            repliedTo:       sendLocationMessageRequest.repliedTo,
-                                                           systemMetadata:  nil,
+                                                           systemMetadata:  sendLocationMessageRequest.systemMetadata,
                                                            threadId:        sendLocationMessageRequest.threadId,
                                                            typeCode:        sendLocationMessageRequest.typeCode ?? self.generalTypeCode,
                                                            uniqueId:        sendLocationMessageRequest.uniqueId)
@@ -1105,6 +1121,7 @@ extension Chat {
     /// - parameter onSent:         (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
     /// - parameter onDelivere:     (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
     /// - parameter onSeen:         (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func sendFileMessage(inputModel sendFileMessageInput:   SendReplyFileMessageRequest,
                                 uploadUniqueId:         @escaping ((String) -> ()),
                                 uploadProgress:         @escaping ((Float) -> ()),
@@ -1125,37 +1142,45 @@ extension Chat {
          */
         if enableCache {
             if let file = sendFileMessageInput.uploadInput as? UploadFileRequestModel {
-                let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      sendFileMessageInput.messageInput.textMessage,
+                let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(textMessage:  sendFileMessageInput.messageInput.textMessage,
                                                                               messageType:  sendFileMessageInput.messageInput.messageType,
-                                                                              fileName:     file.fileName,
+                                                                              fileExtension:    file.fileExtension,
+                                                                              fileName:         file.fileName,
+                                                                              isPublic:         file.isPublic,
                                                                               metadata:     (sendFileMessageInput.messageInput.metadata != nil) ? "\(sendFileMessageInput.messageInput.metadata!)" : nil,
-                                                                              mimeType:     sendFileMessageInput.uploadInput.mimeType,
+                                                                              mimeType:         file.mimeType,
+                                                                              originalName:     file.originalName,
                                                                               repliedTo:    sendFileMessageInput.messageInput.repliedTo,
                                                                               threadId:     sendFileMessageInput.messageInput.threadId,
-                                                                              xC:           nil,
-                                                                              yC:           nil,
-                                                                              hC:           nil,
-                                                                              wC:           nil,
-                                                                              fileToSend:   file.dataToSend,
-                                                                              imageToSend:  nil,
+                                                                              userGroupHash:    file.userGroupHash,
+                                                                              xC:               nil,
+                                                                              yC:               nil,
+                                                                              hC:               nil,
+                                                                              wC:               nil,
+                                                                              fileToSend:       file.dataToSend,
+                                                                              imageToSend:      nil,
                                                                               typeCode:     sendFileMessageInput.messageInput.typeCode,
                                                                               uniqueId:     sendFileMessageInput.messageInput.uniqueId)
                 Chat.cacheDB.saveFileMessageToWaitQueue(fileMessage: messageObjectToSendToQueue)
                 
-            } else if let image = sendFileMessageInput.uploadInput as? UploadImageRequestModel {
-                let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(content:      sendFileMessageInput.messageInput.textMessage,
+            } else if let image = sendFileMessageInput.uploadInput as? UploadImageRequest {
+                let messageObjectToSendToQueue = QueueOfWaitFileMessagesModel(textMessage:  sendFileMessageInput.messageInput.textMessage,
                                                                               messageType:  sendFileMessageInput.messageInput.messageType,
-                                                                              fileName:     nil,
+                                                                              fileExtension:    image.fileExtension,
+                                                                              fileName:         image.fileName,
+                                                                              isPublic:         image.isPublic,
                                                                               metadata:     (sendFileMessageInput.messageInput.metadata != nil) ? "\(sendFileMessageInput.messageInput.metadata!)" : nil,
-                                                                              mimeType:     sendFileMessageInput.uploadInput.mimeType,
+                                                                              mimeType:         image.mimeType,
+                                                                              originalName:     image.originalName,
                                                                               repliedTo:    sendFileMessageInput.messageInput.repliedTo,
                                                                               threadId:     sendFileMessageInput.messageInput.threadId,
-                                                                              xC:           image.xC,
-                                                                              yC:           image.yC,
-                                                                              hC:           image.hC,
-                                                                              wC:           image.wC,
-                                                                              fileToSend:   nil,
-                                                                              imageToSend:  image.dataToSend,
+                                                                              userGroupHash:    image.userGroupHash,
+                                                                              xC:               image.xC,
+                                                                              yC:               image.yC,
+                                                                              hC:               image.hC,
+                                                                              wC:               image.wC,
+                                                                              fileToSend:       nil,
+                                                                              imageToSend:      image.dataToSend,
                                                                               typeCode:     sendFileMessageInput.messageInput.typeCode,
                                                                               uniqueId:     sendFileMessageInput.messageInput.uniqueId)
                 Chat.cacheDB.saveFileMessageToWaitQueue(fileMessage: messageObjectToSendToQueue)
@@ -1163,65 +1188,120 @@ extension Chat {
             
         }
         
-        var fileExtension:  String  = ""
-        
         var metadata: JSON = [:]
         
-        if let image = sendFileMessageInput.uploadInput as? UploadImageRequestModel {
-            let uploadRequest = UploadImageRequestModel(dataToSend:         image.dataToSend,
-                                                        fileExtension:      fileExtension,
-                                                        fileName:           image.fileName,
-                                                        mimeType:           image.mimeType,
-                                                        originalFileName:   image.originalFileName,
-                                                        threadId:           image.threadId,
-                                                        xC:                 image.xC,
-                                                        yC:                 image.yC,
-                                                        hC:                 image.hC,
-                                                        wC:                 image.wC,
-                                                        typeCode:           nil,
-                                                        uniqueId:           image.uniqueId)
+        if let image = sendFileMessageInput.uploadInput as? UploadImageRequest {
+            let uploadRequest: UploadImageRequest!
+            if let userGroupHash = image.userGroupHash {
+                uploadRequest = UploadImageRequest(dataToSend:      image.dataToSend,
+                                                   fileExtension:   image.fileExtension,
+                                                   fileName:        image.fileName,
+                                                   mimeType:        image.mimeType,
+                                                   originalName:    image.originalName,
+                                                   xC:              image.xC,
+                                                   yC:              image.yC,
+                                                   hC:              image.hC,
+                                                   wC:              image.wC,
+                                                   userGroupHash:   userGroupHash,
+                                                   typeCode:        image.typeCode,
+                                                   uniqueId:        image.uniqueId)
+            } else {
+                uploadRequest = UploadImageRequest(dataToSend:      image.dataToSend,
+                                                   fileExtension:   image.fileExtension,
+                                                   fileName:        image.fileName,
+                                                   isPublic:        true,
+                                                   mimeType:        image.mimeType,
+                                                   originalName:    image.originalName,
+                                                   xC:              image.xC,
+                                                   yC:              image.yC,
+                                                   hC:              image.hC,
+                                                   wC:              image.wC,
+                                                   typeCode:        image.typeCode,
+                                                   uniqueId:        image.uniqueId)
+            }
             
             uploadImage(inputModel: uploadRequest, uniqueId: { _ in }, progress: { (progress) in
                 uploadProgress(progress)
             }) { (response) in
-                let myResponse: UploadImageModel = response as! UploadImageModel
-                metadata["file"] = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
-                metadata["file"]["originalName"] = JSON(uploadRequest.originalFileName)
-                metadata["file"]["mimeType"]    = JSON(uploadRequest.mimeType)
-                metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
-                sendMessage(withMetadata: metadata)
+                let myResponse: UploadImageResponse = response as! UploadImageResponse
+                if !(myResponse.hasError) {
+                    metadata["file"] = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
+                    metadata["file"]["actualHeight"] = JSON(image.hC)
+                    metadata["file"]["actualWidth"]  = JSON(image.wC)
+                    metadata["file"]["extension"]   = JSON(uploadRequest.fileExtension ?? "")
+                    metadata["file"]["link"]        = JSON("\(self.SERVICE_ADDRESSES.PODSPACE_FILESERVER_ADDRESS)\(SERVICES_PATH.DRIVE_DOWNLOAD_IMAGE.stringValue())?hash=\(myResponse.uploadImage?.hashCode ?? "")")
+                    metadata["file"]["mimeType"]    = JSON(uploadRequest.mimeType)
+                    metadata["file"]["name"]        = JSON(uploadRequest.fileName)
+                    metadata["file"]["originalName"] = JSON(uploadRequest.originalName)
+                    metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
+                    metadata["fileHash"]            = JSON(myResponse.uploadImage?.hashCode ?? "")
+                    metadata["name"]                = JSON(myResponse.uploadImage?.name ?? "")
+                    metadata["id"]                  = JSON(0)
+                    sendMessage(withMetadata: metadata, messageType: MessageType.POD_SPACE_PICTURE)
+                } else {
+                    self.delegate?.chatError(errorCode:     myResponse.errorCode,
+                                             errorMessage:  myResponse.errorMessage,
+                                             errorResult:   nil)
+                    return
+                }
             }
             
-        } else if let file = sendFileMessageInput.uploadInput as? UploadFileRequestModel {
-            let uploadRequest = UploadFileRequestModel(dataToSend:      file.dataToSend,
-                                                       fileExtension:   fileExtension,
-                                                       fileName:        file.fileName,
-                                                       mimeType:        file.mimeType,
-                                                       originalFileName: file.originalFileName,
-                                                       threadId:        file.threadId,
-                                                       typeCode:        nil,
-                                                       uniqueId:        file.uniqueId)
+        } else if let file = sendFileMessageInput.uploadInput as? UploadFileRequest {
+            let uploadRequest: UploadFileRequest!
+            if let userGroupHash = file.userGroupHash {
+                uploadRequest = UploadFileRequest(dataToSend:       file.dataToSend,
+                                                  fileExtension:    file.fileExtension,
+                                                  fileName:         file.fileName,
+                                                  mimeType:         file.mimeType,
+                                                  originalName:     file.originalName,
+                                                  userGroupHash:    userGroupHash,
+                                                  typeCode:         file.typeCode,
+                                                  uniqueId:         file.uniqueId)
+            } else {
+                uploadRequest = UploadFileRequest(dataToSend:       file.dataToSend,
+                                                  fileExtension:    file.fileExtension,
+                                                  fileName:         file.fileName,
+                                                  isPublic:         true,
+                                                  mimeType:         file.mimeType,
+                                                  originalName:     file.originalName,
+                                                  typeCode:         file.typeCode,
+                                                  uniqueId:         file.uniqueId)
+            }
             
             uploadFile(inputModel: uploadRequest, uniqueId: { _ in }, progress: { (progress) in
                 uploadProgress(progress)
             }) { (response) in
-                let myResponse: UploadFileModel = response as! UploadFileModel
-                metadata["file"]    = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
-                metadata["file"]["originalName"] = JSON(uploadRequest.originalFileName)
-                metadata["file"]["mimeType"]    = JSON(uploadRequest.mimeType)
-                metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
-                sendMessage(withMetadata: metadata)
+                let myResponse: UploadFileResponse = response as! UploadFileResponse
+                if !(myResponse.hasError) {
+                    metadata["file"]    = myResponse.returnMetaData(onServiceAddress: self.SERVICE_ADDRESSES.FILESERVER_ADDRESS)
+                    metadata["file"]["extension"]   = JSON(uploadRequest.fileExtension ?? "")
+                    metadata["file"]["link"]        = JSON("\(self.SERVICE_ADDRESSES.PODSPACE_FILESERVER_ADDRESS)\(SERVICES_PATH.DRIVE_DOWNLOAD_FILE.stringValue())?hash=\(myResponse.uploadFile?.hashCode ?? "")")
+                    metadata["file"]["mimeType"]    = JSON(uploadRequest.mimeType)
+                    metadata["file"]["name"]        = JSON(uploadRequest.fileName)
+                    metadata["file"]["originalName"] = JSON(uploadRequest.originalName)
+                    metadata["file"]["size"]        = JSON(uploadRequest.fileSize)
+                    metadata["fileHash"]            = JSON(myResponse.uploadFile?.hashCode ?? "")
+                    metadata["name"]                = JSON(myResponse.uploadFile?.name ?? "")
+                    metadata["id"]                  = JSON(0)
+                    sendMessage(withMetadata: metadata, messageType: MessageType.POD_SPACE_FILE)
+                } else {
+                    self.delegate?.chatError(errorCode:     myResponse.errorCode,
+                                             errorMessage:  myResponse.errorMessage,
+                                             errorResult:   nil)
+                    return
+                }
+                
             }
             
         }
         
         // this will call when all data were uploaded and it will sends the textMessage
-        func sendMessage(withMetadata: JSON) {
+        func sendMessage(withMetadata: JSON, messageType: MessageType) {
             let sendMessageParamModel = SendTextMessageRequestModel(content:        sendFileMessageInput.messageInput.textMessage,
-                                                                    messageType:    MessageType.file,
+                                                                    messageType:    messageType,
                                                                     metadata:       "\(withMetadata)",
                                                                     repliedTo:      sendFileMessageInput.messageInput.repliedTo,
-                                                                    systemMetadata: sendFileMessageInput.messageInput.metadata,
+                                                                    systemMetadata: sendFileMessageInput.messageInput.systemMetadata,
                                                                     threadId:       sendFileMessageInput.messageInput.threadId,
                                                                     typeCode:       sendFileMessageInput.messageInput.typeCode ?? generalTypeCode,
                                                                     uniqueId:       sendFileMessageInput.messageInput.uniqueId)
@@ -1255,6 +1335,7 @@ extension Chat {
     /// - parameter onSent:         (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
     /// - parameter onDelivere:     (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
     /// - parameter onSeen:         (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func replyFileMessage(inputModel replyFileMessageInput: SendReplyFileMessageRequest,
                                  uploadUniqueId:        @escaping ((String) -> ()),
                                  uploadProgress:        @escaping ((Float) -> ()),
@@ -1301,6 +1382,7 @@ extension Chat {
     /// - parameter onSent:     (response) it will return this response if Sent Message comes from server, means that the message is sent successfully (Any as! SendMessageModel)
     /// - parameter onDelivere: (response) it will return this response if Deliver Message comes from server, means that the message is delivered to the destination (Any as! SendMessageModel)
     /// - parameter onSeen:     (response) it will return this response if Seen Message comes from server, means that the message is seen by the destination (Any as! SendMessageModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func sendTextMessage(inputModel sendTextMessageInput:    SendTextMessageRequest,
                                 uniqueId:               @escaping ((String) -> ()),
                                 onSent:                 @escaping callbackTypeAlias,
@@ -1323,7 +1405,7 @@ extension Chat {
          now user knows which messages didn't send correctly, and can handle them
          */
         if enableCache {
-            let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(content:          sendTextMessageInput.textMessage,
+            let messageObjectToSendToQueue = QueueOfWaitTextMessagesModel(textMessage:      sendTextMessageInput.textMessage,
                                                                           messageType:      sendTextMessageInput.messageType,
                                                                           metadata:         (sendTextMessageInput.metadata != nil) ? "\(sendTextMessageInput.metadata!)" : nil,
                                                                           repliedTo:        sendTextMessageInput.repliedTo,
@@ -1473,6 +1555,7 @@ extension Chat {
     ///
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (CancelMessageRequestModel)
     /// - parameter completion: (response) it will returns a boolean value that if this request was successfull or not! (Bool)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use example project")
     public func cancelSendMessage(inputModel cancelMessageInput:   CancelMessageRequestModel,
                                   completion:           @escaping ((Bool) -> ())) {
         if enableCache {
@@ -1514,7 +1597,7 @@ extension Chat {
     
     
     // MARK: Resend/Remove Queue Methods
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use example project")
     public func resend(textMessages:    [QueueOfWaitTextMessagesModel],
                        uniqueId:        @escaping (String)->(),
                        sent:            @escaping (SendMessageModel)->(),
@@ -1522,14 +1605,15 @@ extension Chat {
                        seen:            @escaping (SendMessageModel)->() ) {
         
         for txt in textMessages {
-            let input = SendTextMessageRequestModel(content:        txt.content!,
-                                                    messageType:    txt.messageType,
-                                                    metadata:       txt.metadata,
-                                                    repliedTo:      txt.repliedTo,
-                                                    systemMetadata: txt.systemMetadata,
-                                                    threadId:       txt.threadId!,
-                                                    typeCode:       txt.typeCode,
-                                                    uniqueId:       txt.uniqueId)
+            let input = SendTextMessageRequest(messageType:     txt.messageType,
+                                               metadata:        txt.metadata,
+                                               repliedTo:       txt.repliedTo,
+                                               systemMetadata:  txt.systemMetadata,
+                                               textMessage:     txt.textMessage!,
+                                               threadId:        txt.threadId!,
+                                               typeCode:        txt.typeCode,
+                                               uniqueId:        txt.uniqueId)
+            
             sendTextMessage(inputModel: input, uniqueId: { (sendTextMessageUniqueId) in
                 uniqueId(sendTextMessageUniqueId)
             }, onSent: { (sentResponse) in
@@ -1543,18 +1627,19 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use example project")
     public func resend(editMessages:    [QueueOfWaitEditMessagesModel],
                        uniqueId:        @escaping (String)->(),
                        completion:      @escaping (EditMessageModel)->()) {
         
         for editMsg in editMessages {
-            let input = EditTextMessageRequestModel(content:    editMsg.content!,
-                                                    messageType: editMsg.messageType,
-                                                    metadata:   editMsg.metadata,
-                                                    repliedTo:  editMsg.repliedTo,
-                                                    messageId:  editMsg.messageId!,
-                                                    typeCode:   editMsg.typeCode,
-                                                    uniqueId:   editMsg.uniqueId)
+            let input = EditTextMessageRequest(messageType: editMsg.messageType,
+                                               repliedTo:   editMsg.repliedTo,
+                                               messageId:   editMsg.messageId!,
+                                               textMessage: editMsg.textMessage!,
+                                               typeCode:    editMsg.typeCode,
+                                               uniqueId:    editMsg.uniqueId)
+                                                    
             editMessage(inputModel: input, uniqueId: { (editTextMessageUniqueId) in
                 uniqueId(editTextMessageUniqueId)
             }) { (editMessageResponse) in
@@ -1564,6 +1649,7 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use example project")
     public func resend(forwardMessages: [QueueOfWaitForwardMessagesModel],
                        uniqueIds:       @escaping ([String])->(),
                        sent:            @escaping (SendMessageModel)->(),
@@ -1571,11 +1657,11 @@ extension Chat {
                        seen:            @escaping (SendMessageModel)->() ) {
         
         for frwrdMsg in forwardMessages {
-            let input = ForwardMessageRequestModel(messageIds:  [frwrdMsg.messageId!],
-                                                    metadata:   frwrdMsg.metadata,
-                                                    repliedTo:  frwrdMsg.repliedTo,
-                                                    threadId:   frwrdMsg.threadId!,
-                                                    typeCode:   frwrdMsg.typeCode)
+            let input = ForwardMessageRequest(messageIds:   [frwrdMsg.messageId!],
+                                              metadata:     frwrdMsg.metadata,
+                                              repliedTo:    frwrdMsg.repliedTo,
+                                              threadId:     frwrdMsg.threadId!,
+                                              typeCode:     frwrdMsg.typeCode)
             forwardMessage(inputModel: input, uniqueIds: { (forwardMessageUniqueIds) in
                 uniqueIds(forwardMessageUniqueIds)
             }, onSent: { (sentResponse) in
@@ -1589,6 +1675,7 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use example project")
     public func resend(fileMessages:    QueueOfWaitFileMessagesModel,
                        uploadUniqueId:  @escaping (String)->(),
                        uploadProgress:  @escaping (Float)->(),
@@ -1597,39 +1684,73 @@ extension Chat {
                        deliver:         @escaping (SendMessageModel)->(),
                        seen:            @escaping (SendMessageModel)->() ) {
         
-        let message = SendTextMessageRequestModel(content:          fileMessages.content ?? "",
-                                                  messageType:      MessageType.file,
-                                                  metadata:         fileMessages.metadata,
-                                                  repliedTo:        fileMessages.repliedTo,
-                                                  systemMetadata:   nil,
-                                                  threadId:         fileMessages.threadId!,
-                                                  typeCode:         fileMessages.typeCode,
-                                                  uniqueId:         fileMessages.uniqueId)
+        let message = SendTextMessageRequest(messageType:       MessageType.FILE,
+                                             metadata:          fileMessages.metadata,
+                                             repliedTo:         fileMessages.repliedTo,
+                                             systemMetadata:    nil,
+                                             textMessage:       fileMessages.textMessage ?? "",
+                                             threadId:          fileMessages.threadId!,
+                                             typeCode:          fileMessages.typeCode,
+                                             uniqueId:          fileMessages.uniqueId)
         
-        var upload: UploadRequestModel? = nil
+        var upload: UploadRequest? = nil
         if let fileData = fileMessages.fileToSend {
-            upload = UploadRequestModel(dataToSend:         fileData,
-                                        fileExtension:      nil,
-                                        fileName:           fileMessages.fileName,
-                                        mimeType:           fileMessages.mimeType,
-                                        originalFileName:   fileMessages.fileName,
-                                        threadId:           fileMessages.threadId,
-                                        typeCode:           fileMessages.typeCode,
-                                        uniqueId:           nil)
+            let input: UploadFileRequest!
+            if let userGroupHash = fileMessages.userGroupHash {
+                input = UploadFileRequest(dataToSend:       fileData,
+                                          fileExtension:    fileMessages.fileExtension,
+                                          fileName:         fileMessages.fileName,
+                                          mimeType:         fileMessages.mimeType,
+                                          originalName:     fileMessages.originalName,
+                                          userGroupHash:    userGroupHash,
+                                          typeCode:         fileMessages.typeCode,
+                                          uniqueId:         fileMessages.uniqueId)
+            } else {
+                input = UploadFileRequest(dataToSend:       fileData,
+                                          fileExtension:    fileMessages.fileExtension,
+                                          fileName:         fileMessages.fileName,
+                                          isPublic:         true,
+                                          mimeType:         fileMessages.mimeType,
+                                          originalName:     fileMessages.originalName,
+                                          typeCode:         fileMessages.typeCode,
+                                          uniqueId:         fileMessages.uniqueId)
+            }
+            upload = input
+            
         } else if let imageData = fileMessages.imageToSend {
-            upload = UploadRequestModel(dataToSend:         imageData,
-                                        fileExtension:      nil,
-                                        fileName:           fileMessages.fileName,
-                                        mimeType:           fileMessages.mimeType,
-                                        originalFileName:   fileMessages.fileName,
-                                        threadId:           fileMessages.threadId!,
-                                        xC:                 fileMessages.xC,
-                                        yC:                 fileMessages.yC,
-                                        hC:                 fileMessages.hC,
-                                        wC:                 fileMessages.wC,
-                                        typeCode:           fileMessages.typeCode,
-                                        uniqueId:           nil)
+            let input: UploadImageRequest!
+            if let userGroupHash = fileMessages.userGroupHash {
+                input = UploadImageRequest(dataToSend:      imageData,
+                                           fileExtension:   fileMessages.fileExtension,
+                                           fileName:        fileMessages.fileName,
+                                           mimeType:        fileMessages.mimeType,
+                                           originalName:     fileMessages.originalName,
+                                           xC:              fileMessages.xC ?? 0,
+                                           yC:              fileMessages.yC ?? 0,
+                                           hC:              fileMessages.hC ?? 99999,
+                                           wC:              fileMessages.wC ?? 99999,
+                                           userGroupHash:   userGroupHash,
+                                           typeCode:        fileMessages.typeCode,
+                                           uniqueId:        fileMessages.uniqueId)
+            } else {
+                input = UploadImageRequest(dataToSend:      imageData,
+                                           fileExtension:   fileMessages.fileExtension,
+                                           fileName:        fileMessages.fileName,
+                                           isPublic:        true,
+                                           mimeType:        fileMessages.mimeType,
+                                           originalName:     fileMessages.originalName,
+                                           xC:              fileMessages.xC ?? 0,
+                                           yC:              fileMessages.yC ?? 0,
+                                           hC:              fileMessages.hC ?? 99999,
+                                           wC:              fileMessages.wC ?? 99999,
+                                           typeCode:        fileMessages.typeCode,
+                                           uniqueId:        fileMessages.uniqueId)
+            }
+            upload = input
+            
         }
+        
+        
         if let theUpload = upload {
             let input = SendFileMessageRequestModel(messageInput: message, uploadInput: theUpload)
             sendFileMessage(inputModel: input, uploadUniqueId: { (thUploadUniqueId) in
@@ -1649,23 +1770,41 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use example project")
     public func resend(uploadImageObj:  QueueOfWaitUploadImagesModel,
                        uniqueId:        @escaping (String)->(),
                        uploadProgress:  @escaping (Float)->(),
                        completion:      @escaping (UploadImageModel)->()) {
         
-        let input = UploadImageRequestModel(dataToSend:     uploadImageObj.dataToSend!,
-                                            fileExtension:  uploadImageObj.fileExtension,
-                                            fileName:       uploadImageObj.fileName,
-                                            mimeType:       uploadImageObj.mimeType,
-                                            originalFileName: nil,
-                                            threadId:       uploadImageObj.threadId!,
-                                            xC:             uploadImageObj.xC,
-                                            yC:             uploadImageObj.yC,
-                                            hC:             uploadImageObj.hC,
-                                            wC:             uploadImageObj.wC,
-                                            typeCode:       uploadImageObj.typeCode,
-                                            uniqueId:       uploadImageObj.uniqueId)
+        let input: UploadImageRequest!
+        if let userHash = uploadImageObj.userGroupHash {
+            input = UploadImageRequest(dataToSend:      uploadImageObj.dataToSend!,
+                                       fileExtension:   uploadImageObj.fileExtension,
+                                       fileName:        uploadImageObj.fileName,
+                                       mimeType:        uploadImageObj.mimeType,
+                                       originalName:    uploadImageObj.originalName,
+                                       xC:              uploadImageObj.xC,
+                                       yC:              uploadImageObj.yC,
+                                       hC:              uploadImageObj.hC,
+                                       wC:              uploadImageObj.wC,
+                                       userGroupHash:   userHash,
+                                       typeCode:        uploadImageObj.typeCode,
+                                       uniqueId:        uploadImageObj.uniqueId)
+        } else {
+            input = UploadImageRequest(dataToSend:      uploadImageObj.dataToSend!,
+                                       fileExtension:   uploadImageObj.fileExtension,
+                                       fileName:        uploadImageObj.fileName,
+                                       isPublic:        true,
+                                       mimeType:        uploadImageObj.mimeType,
+                                       originalName:    uploadImageObj.originalName,
+                                       xC:              uploadImageObj.xC,
+                                       yC:              uploadImageObj.yC,
+                                       hC:              uploadImageObj.hC,
+                                       wC:              uploadImageObj.wC,
+                                       typeCode:        uploadImageObj.typeCode,
+                                       uniqueId:        uploadImageObj.uniqueId)
+        }
+        
         uploadImage(inputModel: input, uniqueId: { (uploadUniqueId) in
             uniqueId(uploadUniqueId)
         }, progress: { (theUploadProgress) in
@@ -1676,27 +1815,39 @@ extension Chat {
         
     }
     
-    public func resend(uploadFileObj:   [QueueOfWaitUploadFilesModel],
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use example project")
+    public func resend(uploadFileObj:   QueueOfWaitUploadFilesModel,
                        uniqueId:        @escaping (String)->(),
                        uploadProgress:  @escaping (Float)->(),
                        completion:      @escaping (UploadFileModel)->()) {
         
-        for upld in uploadFileObj {
-            let input = UploadFileRequestModel(dataToSend:      upld.dataToSend!,
-                                               fileExtension:   upld.fileExtension,
-                                               fileName:        upld.fileName,
-                                               mimeType:        upld.mimeType,
-                                               originalFileName: nil,
-                                               threadId:        upld.threadId!,
-                                               typeCode:        upld.typeCode,
-                                               uniqueId:        upld.uniqueId)
-            uploadFile(inputModel: input, uniqueId: { (uploadUniqueId) in
-                uniqueId(uploadUniqueId)
-            }, progress: { (theUploadProgress) in
-                uploadProgress(theUploadProgress)
-            }) { (uploadResponse) in
-                completion(uploadResponse as! UploadFileModel)
-            }
+        let input: UploadFileRequest!
+        if let userHash = uploadFileObj.userGroupHash {
+            input = UploadFileRequest(dataToSend:       uploadFileObj.dataToSend!,
+                                      fileExtension:    uploadFileObj.fileExtension,
+                                      fileName:         uploadFileObj.fileName,
+                                      mimeType:         uploadFileObj.mimeType,
+                                      originalName:     uploadFileObj.originalName,
+                                      userGroupHash:    userHash,
+                                      typeCode:         uploadFileObj.typeCode,
+                                      uniqueId:         uploadFileObj.uniqueId)
+        } else {
+            input = UploadFileRequest(dataToSend:       uploadFileObj.dataToSend!,
+                                      fileExtension:    uploadFileObj.fileExtension,
+                                      fileName:         uploadFileObj.fileName,
+                                      isPublic:         true,
+                                      mimeType:         uploadFileObj.mimeType,
+                                      originalName:     uploadFileObj.originalName,
+                                      typeCode:         uploadFileObj.typeCode,
+                                      uniqueId:         uploadFileObj.uniqueId)
+        }
+        
+        uploadFile(inputModel: input, uniqueId: { (uploadUniqueId) in
+            uniqueId(uploadUniqueId)
+        }, progress: { (theUploadProgress) in
+            uploadProgress(theUploadProgress)
+        }) { (uploadResponse) in
+            completion(uploadResponse as! UploadFileModel)
         }
         
     }

@@ -9,6 +9,7 @@
 import Foundation
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class MapRoutingModel: ResponseModel, ResponseModelDelegates {
     
     public var result:  MapRouting
@@ -45,7 +46,7 @@ open class MapRoutingModel: ResponseModel, ResponseModelDelegates {
     
 }
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class MapRoutingResponses: MapRoutingModel {
     
 }

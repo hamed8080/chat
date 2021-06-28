@@ -22,10 +22,11 @@ import SwiftyJSON
  *    - sendEnable:         Bool?
  */
 
-open class User {
+open class User : Codable {
     
     
     public var cellphoneNumber: String?
+    public var contactSynced:   Bool
     public var coreUserId:      Int?
     public var email:           String?
     public var id:              Int?
@@ -37,10 +38,12 @@ open class User {
     public var username:        String?
     public var chatProfileVO:   Profile?
     
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(messageContent: JSON) {
         
         self.cellphoneNumber    = messageContent["cellphoneNumber"].string
         self.coreUserId         = messageContent["coreUserId"].int
+        self.contactSynced      = messageContent["contactSynced"].bool ?? false
         self.email              = messageContent["email"].string
         self.id                 = messageContent["id"].int
         self.image              = messageContent["image"].string
@@ -55,6 +58,7 @@ open class User {
     }
     
     public init(cellphoneNumber:    String?,
+                contactSynced:      Bool?,
                 coreUserId:         Int?,
                 email:              String?,
                 id:                 Int?,
@@ -67,6 +71,7 @@ open class User {
                 chatProfileVO:      Profile?) {
         
         self.cellphoneNumber    = cellphoneNumber
+        self.contactSynced      = contactSynced ?? false
         self.coreUserId         = coreUserId
         self.email              = email
         self.id                 = id
@@ -79,9 +84,11 @@ open class User {
         self.chatProfileVO      = chatProfileVO
     }
     
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(withUserObject: User) {
         
         self.cellphoneNumber    = withUserObject.cellphoneNumber
+        self.contactSynced      = withUserObject.contactSynced
         self.coreUserId         = withUserObject.coreUserId
         self.email              = withUserObject.email
         self.id                 = withUserObject.id
@@ -94,8 +101,10 @@ open class User {
         self.chatProfileVO      = withUserObject.chatProfileVO
     }
     
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatToJSON() -> JSON {
         let result: JSON = ["cellphoneNumber":  cellphoneNumber ?? NSNull(),
+                            "contactSynced":    contactSynced,
                             "coreUserId":       coreUserId ?? NSNull(),
                             "email":            email ?? NSNull(),
                             "id":               id ?? NSNull(),

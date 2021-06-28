@@ -13,11 +13,12 @@ import CoreData
 
 extension QueueOfTextMessages {
 
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     @nonobjc public class func fetchRequest() -> NSFetchRequest<QueueOfTextMessages> {
         return NSFetchRequest<QueueOfTextMessages>(entityName: "QueueOfTextMessages")
     }
 
-    @NSManaged public var content:          String?
+    @NSManaged public var textMessage:      String?
     @NSManaged public var messageType:      NSNumber?
     @NSManaged public var repliedTo:        NSNumber?
     @NSManaged public var threadId:         NSNumber?

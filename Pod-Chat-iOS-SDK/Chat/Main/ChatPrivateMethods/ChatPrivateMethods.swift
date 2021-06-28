@@ -11,13 +11,14 @@ import FanapPodAsyncSDK
 import Alamofire
 import SwiftyJSON
 import SwiftyBeaver
+import Sentry
 
 // MARK: -
 // MARK: - Private Methods:
 
 extension Chat {
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func checkIfDeviceHasFreeSpace(needSpaceInMB: Int64, turnOffTheCache: Bool) -> Bool {
         let availableSpace = DiskStatus.freeDiskSpaceInBytes
         if availableSpace < (needSpaceInMB * 1024 * 1024) {
@@ -44,6 +45,7 @@ extension Chat {
      *  + Outputs:
      *      - it will return the deviceId as a String as a callback
      */
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func getDeviceIdWithToken(completion: @escaping (String) -> ()) {
         /*
          *  -> send a .get request to ssoHost server to get all user registered devices
@@ -92,12 +94,20 @@ extension Chat {
                 if let dataFromMsgString = responseStr.data(using: .utf8, allowLossyConversion: false) {
                     
                     var msg: JSON
-                    do {
-                        // convert Data to JSON
-                        msg = try JSON(data: dataFromMsgString)
-                    } catch {
-                        fatalError("Cannot convert Data to JSON")
+                    if let jsonString = try? JSON(data: dataFromMsgString) {
+                        msg = jsonString
+                    } else {
+                        self.asyncError(errorCode: 1000,
+                                        errorMessage: "cannot convert StringData to JSON on 'getDeviceIdWithToken' methodResponse",
+                                        errorEvent: nil)
+                        return
                     }
+//                    do {
+//                        // convert Data to JSON
+//                        msg = try JSON(data: dataFromMsgString)
+//                    } catch {
+//                        fatalError("Cannot convert Data to JSON")
+//                    }
                     
                     // loop through devices
                     if let devices = msg["devices"].array {
@@ -151,6 +161,7 @@ extension Chat {
      *
      */
     // TODO: save the new key into the Cache
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func generateEncryptionKey(keyAlgorithm: String?, keySize: Int?, completion: @escaping (JSON)->()) {
         /*
          *  -> send a .post request to the SSO server to generate and then get the key
@@ -200,13 +211,21 @@ extension Chat {
                 if let dataFromMsgString = responseStr.data(using: .utf8, allowLossyConversion: false) {
                     
                     var msg: JSON
-                    do {
-                        // convert Data to JSON
-                        msg = try JSON(data: dataFromMsgString)
-                    } catch {
-                        fatalError("Cannot convert Data to JSON")
+                    if let jsonString = try? JSON(data: dataFromMsgString) {
+                        msg = jsonString
+                    } else {
+                        self.asyncError(errorCode: 1000,
+                                        errorMessage: "cannot convert StringData to JSON on 'generateEncryptionKey' methodResponse",
+                                        errorEvent: nil)
+                        return
                     }
-                    print("***********2: \(msg)")
+//                    do {
+//                        // convert Data to JSON
+//                        msg = try JSON(data: dataFromMsgString)
+//                    } catch {
+//                        fatalError("Cannot convert Data to JSON")
+//                    }
+                    
                     let myJson: JSON = ["hasError":     false,
                                         "errorCode":    0,
                                         "errorMessage": "",
@@ -251,6 +270,7 @@ extension Chat {
      *      - JSON (as completion handler)
      *
      */
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func getEncryptionKey(keyAlgorithm: String?, keySize: String?, keyId: String, completion: @escaping (JSON)->()) {
         /*
          *  -> send a .get request to the SSO server to get the secretKey with keyId
@@ -315,12 +335,20 @@ extension Chat {
                 if let dataFromMsgString = responseStr.data(using: .utf8, allowLossyConversion: false) {
                     
                     var msg: JSON
-                    do {
-                        // convert Data to JSON
-                        msg = try JSON(data: dataFromMsgString)
-                    } catch {
-                        fatalError("Cannot convert Data to JSON")
+                    if let jsonString = try? JSON(data: dataFromMsgString) {
+                        msg = jsonString
+                    } else {
+                        self.asyncError(errorCode: 1000,
+                                        errorMessage: "cannot convert StringData to JSON on 'getEncryptionKey' methodResponse",
+                                        errorEvent: nil)
+                        return
                     }
+//                    do {
+//                        // convert Data to JSON
+//                        msg = try JSON(data: dataFromMsgString)
+//                    } catch {
+//                        fatalError("Cannot convert Data to JSON")
+//                    }
                     let myJson: JSON = ["hasError":     false,
                                         "errorCode":    0,
                                         "errorMessage": "",
@@ -352,11 +380,12 @@ extension Chat {
      *
      *
      */
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func chatSendQueueHandler() {
         
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func sendMessageWithCallback(asyncMessageVO:    SendAsyncMessageVO,
                                  callbacks:         [(call: CallbackProtocol, uniques: String)]?,
                                  sentCallback:      (call: CallbackProtocolWith3Calls, uniques: [String])?,
@@ -418,7 +447,7 @@ extension Chat {
         }
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     private func sendRequestHandler(type: Int, content: String) {
         if isChatReady {
             sendRequestToAsync(type: type, content: content)
@@ -427,6 +456,7 @@ extension Chat {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func sendRequestToAsync(type: Int, content: String) {
         asyncClient?.pushSendData(type: type, content: content)
         runSendMessageTimer()
@@ -445,9 +475,14 @@ extension Chat {
      * + Outputs:   nothing
      *
      */
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func runSendMessageTimer() {
-        lastSentMessageTimer = nil
-        lastSentMessageTimer = RepeatingTimer(timeInterval: TimeInterval(self.chatPingMessageInterval))
+//        lastSentMessageTimer = nil
+//        lastSentMessageTimer = RepeatingTimer(timeInterval: TimeInterval(self.chatPingMessageInterval))
+        
+        stopLastSentMessageTimer()
+//        lastSentMessageTime = Date()
+        lastSentMessageTimer(interval: TimeInterval(self.chatPingMessageInterval))
     }
     
     
@@ -461,6 +496,7 @@ extension Chat {
      * + Outputs:   _
      *
      */
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func ping() {
         /*
          *
@@ -502,8 +538,10 @@ extension Chat {
                                     deliverCallback:    nil,
                                     seenCallback:       nil)
             
-        } else if (lastSentMessageTimer != nil) {
-            lastSentMessageTimer?.suspend()
+//        } else if (lastSentMessageTimer != nil) {
+//            lastSentMessageTimer?.suspend()
+        } else {
+            stopLastSentMessageTimer()
         }
     }
     
@@ -528,6 +566,7 @@ extension Chat {
      *          - content:               String
      *
      */
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func receivedMessageHandler(withContent message: ChatMessage) {
         log.verbose("content of received message: \n \(message.returnToJSON())", context: "Chat")
         lastReceivedMessageTime = Date()
@@ -866,40 +905,28 @@ extension Chat {
         case ChatMessageVOTypes.STOP_BOT.intValue():
             responseOfStopBot(withMessage: message)
             break
+            
+        // a message of type 90 (CONTACT_SYNCED) comes from Server.
+        case ChatMessageVOTypes.CONTACT_SYNCED.intValue():
+            responseOfUserContactSynced(withMessage: message)
+            break
         
         // a message of type 100 (LOGOUT) comes from Server.
         case ChatMessageVOTypes.LOGOUT.intValue():
             break
+        
+        // a message of type 101 (STATUS_PING) comes from Server.
+        case ChatMessageVOTypes.STATUS_PING.intValue():
+            responseOfStatusPing(withMessage: message)
+            break
             
+        // a message of type 102 (CLOSE_THREAD) comes from Server.
+        case ChatMessageVOTypes.CLOSE_THREAD.intValue():
+            responseOfCloseThread(withMessage: message)
+            break
         // a message of type 999 (ERROR) comes from Server.
         case ChatMessageVOTypes.ERROR.intValue():
-            log.verbose("Message of type 'ERROR' recieved", context: "Chat")
-            if Chat.map[message.uniqueId] != nil {
-                let returnData = CreateReturnData(hasError:         true,
-                                                  errorMessage:     message.message,
-                                                  errorCode:        message.code,
-                                                  result:           messageContentAsJSON,
-                                                  resultAsArray:    nil,
-                                                  resultAsString:   nil,
-                                                  contentCount:     0,
-                                                  subjectId:        message.subjectId)
-                
-                let callback: CallbackProtocol = Chat.map[message.uniqueId]!
-                callback.onResultCallback(uID:      message.uniqueId,
-                                          response: returnData,
-                                          success:  { (successJSON) in
-                    self.spamPvThreadCallbackToUser?(successJSON)
-                }) { _ in }
-                Chat.map.removeValue(forKey: message.uniqueId)
-                
-                if (messageContentAsJSON["code"].intValue == 21) {
-                    isChatReady = false
-                    asyncClient?.asyncLogOut()
-                }
-                delegate?.chatError(errorCode:      message.code    ?? messageContentAsJSON["code"].int         ?? 0,
-                                    errorMessage:   message.message ?? messageContentAsJSON["message"].string   ?? "",
-                                    errorResult:    messageContentAsJSON)
-            }
+            chatErrorHandler(withMessage: message, messageContentAsJSON: messageContentAsJSON)
             break
             
         default:
@@ -908,7 +935,61 @@ extension Chat {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
+    private func chatErrorHandler(withMessage message: ChatMessage, messageContentAsJSON: JSON) {
+        log.verbose("Message of type 'ERROR' recieved", context: "Chat")
+        
+        // send log to Sentry 4.3.1
+        if captureSentryLogs {
+            let event = Event(level: SentrySeverity.error)
+            event.message = "Message of type 'ERROR' recieved: \n \(message.returnToJSON())"
+            Client.shared?.send(event: event, completion: { _ in })
+        }
+        
+        // send log to Sentry 5.0.5
+//        let event = Event(level: SentryLevel.error)
+//        event.message = "Message of type 'ERROR' recieved"
+//        SentrySDK.capture(event: event)
+        
+//        let b = Breadcrumb(level: SentryLevel.error, category: "iOS")
+//        b.message = ""
+        
+//        SentrySDK.capture(event: event) { (scope) in
+//        }
+//        SentrySDK.addBreadcrumb(crumb: <#T##Breadcrumb#>)
+//        SentrySDK.capture(message: <#T##String#>)
+        
+        if Chat.map[message.uniqueId] != nil {
+            let returnData = CreateReturnData(hasError:         true,
+                                              errorMessage:     message.message,
+                                              errorCode:        message.code,
+                                              result:           messageContentAsJSON,
+                                              resultAsArray:    nil,
+                                              resultAsString:   nil,
+                                              contentCount:     0,
+                                              subjectId:        message.subjectId)
+            
+            let callback: CallbackProtocol = Chat.map[message.uniqueId]!
+            callback.onResultCallback(uID:      message.uniqueId,
+                                      response: returnData,
+                                      success:  { (successJSON) in
+                self.spamPvThreadCallbackToUser?(successJSON)
+            }) { _ in }
+            Chat.map.removeValue(forKey: message.uniqueId)
+            
+            // ToDo: what to do when authenticationError comes
+//            if (messageContentAsJSON["code"].intValue == 21) {
+//                isChatReady = false
+//                asyncClient?.disposeAsyncObject()
+//            }
+            delegate?.chatError(errorCode:      message.code    ?? messageContentAsJSON["code"].int         ?? 0,
+                                errorMessage:   message.message ?? messageContentAsJSON["message"].string   ?? "",
+                                errorResult:    messageContentAsJSON)
+        }
+        
+    }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func chatMessageHandler(threadId: Int, messageContent: JSON) {
         let message = Message(threadId: threadId, pushMessageVO: messageContent)
         
@@ -918,8 +999,8 @@ extension Chat {
                 let deliveryModel = DeliverSeenRequestModel(messageId:  message.id ?? 0,
                                                             ownerId:    messageOwner,
                                                             typeCode:   nil)
-                seen(inputModel: deliveryModel)
-//                deliver(inputModel: deliveryModel)
+//                seen(inputModel: deliveryModel)
+                deliver(inputModel: deliveryModel)
             }
         }
         
@@ -955,7 +1036,7 @@ extension Chat {
         
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func userRemovedFromThread(id: Int?) {
         if let threadId = id {
             let tRemoveFromThreadEM = ThreadEventModel(type:            ThreadEventTypes.THREAD_REMOVED_FROM,
@@ -973,7 +1054,7 @@ extension Chat {
         }
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func threadInfoUpdated(withMessage message: ChatMessage) {
         log.verbose("Message of type 'THREAD_INFO_UPDATED' recieved", context: "Chat")
         
@@ -992,7 +1073,7 @@ extension Chat {
         }
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func sendContactsLastSeenDurationUpdate(withMessage message: ChatMessage) {
         if let object = message.content?.convertToJSON() {
             var users = [UserLastSeenDuration]()
@@ -1006,6 +1087,10 @@ extension Chat {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
+    func responseOfUserContactSynced(withMessage message: ChatMessage) {
+        Chat.cacheDB.updateUserContactSynced()
+    }
     
 }
 

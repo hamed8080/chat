@@ -13,6 +13,7 @@ open class BotVO {
     public var apiToken:    String?
     public var thingVO:     ThingVO?
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(messageContent: JSON) {
         self.apiToken        = messageContent["apiToken"].string
         if let thingJSON = messageContent["thingVO"] as JSON? {
@@ -28,11 +29,13 @@ open class BotVO {
         self.thingVO    = thingVO
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(theBotVO: BotVO) {
         self.apiToken   = theBotVO.apiToken
         self.thingVO    = theBotVO.thingVO
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatToJSON() -> JSON {
         let result: JSON = ["apiToken": apiToken ?? NSNull(),
                             "thingVO":  thingVO?.formatToJSON() ?? NSNull()]
@@ -57,6 +60,7 @@ open class ThingVO {
     public var owner:               Participant?
     public var creator:             Participant?
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(messageContent: JSON) {
         self.id                 = messageContent["id"].int
         self.name               = messageContent["name"].string
@@ -104,6 +108,7 @@ open class ThingVO {
         self.chatReceiveEnable  = chatReceiveEnable
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(theThing: ThingVO) {
         self.id                 = theThing.id
         self.name               = theThing.name
@@ -117,6 +122,7 @@ open class ThingVO {
         self.chatReceiveEnable  = theThing.chatReceiveEnable
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatToJSON() -> JSON {
         let result: JSON = ["id":                   id ?? NSNull(),
                             "name":                 name ?? NSNull(),

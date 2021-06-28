@@ -36,6 +36,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func saveUserInfo(withUserObject user: User) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUser")
         do {
@@ -74,6 +75,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func saveCurrentUserRoles(withRoles: [Roles], onThreadId threadId: Int) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMCurrentUserRoles")
         fetchRequest.predicate = NSPredicate(format: "threadId == %i", threadId)
@@ -118,6 +120,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func saveContact(withContactObjects contacts: [Contact]) {
         for item in contacts {
             _ = updateCMContactEntity(withContactObject: item)
@@ -147,6 +150,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func savePhoneBookContact(contact myContact: AddContactRequest) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "PhoneContact")
         if let contactCellphoneNumber = myContact.cellphoneNumber {
@@ -204,6 +208,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func saveThread(withThreadObjects threads: [Conversation]) {
         for item in threads {
             _ = updateCMConversationEntity(withConversationObject: item)
@@ -232,6 +237,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func savePinUnpinCMConversationEntity(withThreadId id: Int, isPinned: Bool) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
         fetchRequest.predicate = NSPredicate(format: "id == %i", id)
@@ -270,6 +276,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func savePinMessage(threadId: Int, withPinMessageObject pinMessage: PinUnpinMessage) {
         deletePinMessage(threadId: threadId)
         savePinMessageOnCMConversationEntity(threadId: threadId, withPinMessageObject: pinMessage)
@@ -293,6 +300,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func savePinMessageOnCMConversationEntity(threadId: Int, withPinMessageObject pinMessage: PinUnpinMessage) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
         fetchRequest.predicate = NSPredicate(format: "id == %i", threadId)
@@ -324,6 +332,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func savePinMessageOnCMMessageEntity(messageId: Int) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMMessage")
         fetchRequest.predicate = NSPredicate(format: "id == %i", messageId)
@@ -357,6 +366,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func saveThreadParticipantObjects(whereThreadIdIs threadId: Int, withParticipants participants: [Participant], isAdminRequest: Bool) {
         for item in participants {
             _ = updateCMParticipantEntity(inThreadId: threadId, withParticipantsObject: item, isAdminRequest: isAdminRequest)
@@ -365,6 +375,7 @@ extension Cache {
     
     
     // ToDo: maybe i have to delete this method, because admins has handled on the 'saveThreadParticipantObjects' method
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func updateAdminRoles(inThreadId threadId: Int, withUserRoles myUserRole: UserRole) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMParticipant")
         fetchRequest.predicate = NSPredicate(format: "id == %i AND threadId == %i", myUserRole.userId, threadId)
@@ -409,6 +420,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func saveMessageObjects(messages: [Message], getHistoryParams: JSON?) {
         /*
          *  -> check if we have 'getHistoryParams' Input or not
@@ -903,6 +915,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func saveImageObject(imageInfo: ImageObject, imageData: Data, toLocalPath: URL?) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
         do {
@@ -921,16 +934,17 @@ extension Cache {
                 // Part1:
                 // find data that are exist in the Cache, (and the response request is containing that). and delete them
                 for itemInCache in result {
-                    if let imageId = Int(exactly: itemInCache.id!) {
-                        if (imageId == imageInfo.id) {
+                    if let imageHashCode = itemInCache.hashCode {
+                        if (imageHashCode == imageInfo.hashCode) {
                             
-                            tempImage = ImageObject(actualHeight: itemInCache.actualHeight as? Int,
-                                                    actualWidth:  itemInCache.actualWidth as? Int,
-                                                    hashCode:     itemInCache.hashCode!,
-                                                    height:       itemInCache.height as? Int,
-                                                    id:           itemInCache.id as! Int,
-                                                    name:         itemInCache.name,
-                                                    width:        itemInCache.width as? Int)
+                            tempImage = ImageObject(actualHeight:   itemInCache.actualHeight as? Int,
+                                                    actualWidth:    itemInCache.actualWidth as? Int,
+                                                    hashCode:       imageHashCode,
+                                                    height:         itemInCache.height as? Int,
+//                                                    id:           itemInCache.id as! Int,
+                                                    name:           itemInCache.name,
+                                                    size:           itemInCache.size as? Int,
+                                                    width:          itemInCache.width as? Int)
                             
                             // the uploadImage object that we are going to create, is already exist in the Cache
                             // to update information in this object:
@@ -945,7 +959,7 @@ extension Cache {
                                 imagePath = path + "/\(fileSubPath.Images)/"
                             }
                             
-                            let myImagePath = imagePath + "\(itemInCache.id!)\(itemInCache.name ?? "default")"
+                            let myImagePath = imagePath + "\(itemInCache.hashCode!)"
                             // check if this file is exixt on the app bunde, then delete it
                             if FileManager.default.fileExists(atPath: myImagePath) {
                                 do {
@@ -970,8 +984,9 @@ extension Cache {
                 theUploadImage.actualWidth  = (imageInfo.actualWidth ?? tempImage?.actualWidth) as NSNumber?
                 theUploadImage.hashCode     = imageInfo.hashCode
                 theUploadImage.height       = (imageInfo.height ?? tempImage?.height) as NSNumber?
-                theUploadImage.id           = imageInfo.id as NSNumber?
+//                theUploadImage.id           = imageInfo.id as NSNumber?
                 theUploadImage.name         = (imageInfo.name ?? tempImage?.name)
+                theUploadImage.size        = (imageInfo.width ?? tempImage?.size) as NSNumber?
                 theUploadImage.width        = (imageInfo.width ?? tempImage?.width) as NSNumber?
                 
                 // save file on app bundle
@@ -986,7 +1001,97 @@ extension Cache {
                 
                 createDirectory(at: imagesLocalirectory)
                 
-                let imageLocalAdress    = imagesLocalirectory.appendingPathComponent("\(imageInfo.id)\(imageInfo.name ?? "default")")
+                let imageLocalAdress    = imagesLocalirectory.appendingPathComponent("\(imageInfo.hashCode)")
+                saveDataToDirectory(data: imageData, to: imageLocalAdress)
+                
+                saveContext(subject: "Update UploadImage")
+            }
+        } catch {
+            fatalError("Error on fetching list of Conversations")
+        }
+        
+    }
+    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
+    public func saveThumbnailImageObject(imageInfo: ImageObject, imageData: Data, toLocalPath: URL?) {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMImage] {
+                
+                var tempImage: ImageObject?
+                
+                // Part1:
+                // find data that are exist in the Cache, (and the response request is containing that). and delete them
+                for itemInCache in result {
+                    if let imageHashCode = itemInCache.hashCode, let isThumbnail = itemInCache.isThumbnail as? Bool {
+                        if (imageHashCode == imageInfo.hashCode) && (isThumbnail == true) {
+                            
+                            tempImage = ImageObject(actualHeight:   itemInCache.actualHeight as? Int,
+                                                    actualWidth:    itemInCache.actualWidth as? Int,
+                                                    hashCode:       imageHashCode,
+                                                    height:         itemInCache.height as? Int,
+//                                                    id:           itemInCache.id as! Int,
+                                                    name:           itemInCache.name,
+                                                    size:           itemInCache.size as? Int,
+                                                    width:          itemInCache.width as? Int)
+                            
+                            // the uploadImage object that we are going to create, is already exist in the Cache
+                            // to update information in this object:
+                            // we will delete them first, then we will create it again later
+                            
+                            // delete the original file from local storage of the app, using path of the file
+                            var imagePath = ""
+                            if let path = toLocalPath {
+                                imagePath = path.absoluteString
+                            } else {
+                                let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+                                imagePath = path + "/\(fileSubPath.Images)/"
+                            }
+                            
+                            let myImagePath = imagePath + "\(itemInCache.hashCode!)"  + "-Thumbnail"
+                            // check if this file is exixt on the app bunde, then delete it
+                            if FileManager.default.fileExists(atPath: myImagePath) {
+                                do {
+                                    try FileManager.default.removeItem(atPath: myImagePath)
+                                } catch {
+                                    fatalError("can not delete the image from app bundle!")
+                                }
+                            }
+                            
+                            // delete the information from cache
+                            deleteAndSave(object: itemInCache, withMessage: "Delete CMImage Object")
+                        }
+                    }
+                }
+                
+                // Part2:
+                // save data comes from server to the Cache
+                let theUploadImageEntity = NSEntityDescription.entity(forEntityName: "CMImage", in: context)
+                let theUploadImage = CMImage(entity: theUploadImageEntity!, insertInto: context)
+                
+                theUploadImage.actualHeight = (imageInfo.actualHeight ?? tempImage?.actualHeight) as NSNumber?
+                theUploadImage.actualWidth  = (imageInfo.actualWidth ?? tempImage?.actualWidth) as NSNumber?
+                theUploadImage.hashCode     = imageInfo.hashCode
+                theUploadImage.height       = (imageInfo.height ?? tempImage?.height) as NSNumber?
+//                theUploadImage.id           = imageInfo.id as NSNumber?
+                theUploadImage.name         = (imageInfo.name ?? tempImage?.name)
+                theUploadImage.size         = (imageInfo.width ?? tempImage?.size) as NSNumber?
+                theUploadImage.width        = (imageInfo.width ?? tempImage?.width) as NSNumber?
+                theUploadImage.isThumbnail  = true as NSNumber
+                
+                // save file on app bundle
+                var imagesLocalirectory: URL
+                if let path = toLocalPath {
+                    imagesLocalirectory = path
+                } else {
+                    let directoryPath   = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+                    let directoryURL    = URL(fileURLWithPath: directoryPath)
+                    imagesLocalirectory = directoryURL.appendingPathComponent("\(fileSubPath.Images)")
+                }
+                
+                createDirectory(at: imagesLocalirectory)
+                
+                let imageLocalAdress    = imagesLocalirectory.appendingPathComponent("\(imageInfo.hashCode)-Thumbnail")
                 saveDataToDirectory(data: imageData, to: imageLocalAdress)
                 
                 saveContext(subject: "Update UploadImage")
@@ -1021,6 +1126,7 @@ extension Cache {
     /// - Returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func saveFileObject(fileInfo: FileObject, fileData: Data, toLocalPath: URL?) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMFile")
         do {
@@ -1040,12 +1146,14 @@ extension Cache {
                 // Part1:
                 // find data that are exist in the Cache, (and the response request is containing that). and delete them
                 for itemInCache in result {
-                    if let fileId = Int(exactly: itemInCache.id ?? 0) {
-                        if (fileId == fileInfo.id) {
+                    if let fileHash = itemInCache.hashCode {
+                        if (fileHash == fileInfo.hashCode) {
                             
-                            tempFile = FileObject(hashCode:  itemInCache.hashCode!,
-                                                  id:        itemInCache.id as! Int,
-                                                  name:      itemInCache.name)
+                            tempFile = FileObject(hashCode: fileHash,
+//                                                  id:       itemInCache.id as! Int,
+                                                  name:     itemInCache.name,
+                                                  size:     itemInCache.size as? Int,
+                                                  type:     itemInCache.type)
                             
                             // the uploadFile object that we are going to create, is already exist in the Cache
                             // to update information in this object:
@@ -1060,7 +1168,7 @@ extension Cache {
                                 filePath = path + "/\(fileSubPath.Files)/"
                             }
                             
-                            let myFilePath = filePath + "\(itemInCache.id!)\(itemInCache.name ?? "default")"
+                            let myFilePath = filePath + "\(itemInCache.hashCode!)"
                             
                             if FileManager.default.fileExists(atPath: myFilePath) {
                                 do {
@@ -1082,7 +1190,7 @@ extension Cache {
                 let theUploadFile = CMFile(entity: theUploadFileEntity!, insertInto: context)
                 
                 theUploadFile.hashCode      = fileInfo.hashCode
-                theUploadFile.id            = fileInfo.id as NSNumber?
+//                theUploadFile.id            = fileInfo.id as NSNumber?
                 theUploadFile.name          = (fileInfo.name ?? tempFile?.name)
                 
                 // save file on app bundle
@@ -1097,7 +1205,7 @@ extension Cache {
                 
                 createDirectory(at: filesLocalirectory)
                 
-                let fileLocalAdress    = filesLocalirectory.appendingPathComponent("\(fileInfo.id)\(fileInfo.name ?? "default")")
+                let fileLocalAdress    = filesLocalirectory.appendingPathComponent("\(fileInfo.hashCode)")
                 saveDataToDirectory(data: fileData, to: fileLocalAdress)
                 
                 saveContext(subject: "Update UploadFile")
@@ -1109,7 +1217,7 @@ extension Cache {
     }
     
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     private func createDirectory(at url: URL) {
         if !(FileManager.default.fileExists(atPath: url.path, isDirectory: nil)) {
             do {
@@ -1121,6 +1229,7 @@ extension Cache {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     private func saveDataToDirectory(data: Data, to url: URL) {
         do {
             try data.write(to: url)

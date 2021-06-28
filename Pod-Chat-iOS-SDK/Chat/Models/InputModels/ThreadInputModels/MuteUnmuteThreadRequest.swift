@@ -8,6 +8,7 @@
 
 import Foundation
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class MuteUnmuteThreadRequest {
     
     public let subjectId:   Int
@@ -27,7 +28,7 @@ open class MuteUnmuteThreadRequest {
     
 }
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class MuteAndUnmuteThreadRequestModel: MuteUnmuteThreadRequest {
     
 }

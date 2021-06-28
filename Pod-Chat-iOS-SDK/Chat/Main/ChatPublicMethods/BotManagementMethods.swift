@@ -32,6 +32,7 @@ extension Chat {
     ///     - inputModel:   (input) you have to send your parameters insid this model. (AddContactRequest)
     ///     - uniqueId:     (response) it will returns the request 'UniqueId' that will send to server. (String)
     ///     - completion:   (response) it will returns the response that comes from server to this request. (Any as! CreateBotResponse)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func createBot(inputModel createBotInput:  CreateBotRequest,
                           uniqueId:                 @escaping (String) -> (),
                           completion:               @escaping callbackTypeAlias) {
@@ -87,6 +88,7 @@ extension Chat {
     ///     - inputModel:   (input) you have to send your parameters insid this model. (AddBotCommandRequest)
     ///     - uniqueId:     (response) it will returns the request 'UniqueId' that will send to server. (String)
     ///     - completion:   (response) it will returns the response that comes from server to this request. (Any as! AddBotCommandResponse)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func addBotCommand(inputModel addBotCommandsInput:    AddBotCommandRequest,
                               uniqueId:         @escaping (String) -> (),
                               completion:       @escaping callbackTypeAlias) {
@@ -142,6 +144,7 @@ extension Chat {
     ///     - inputModel:   (input) you have to send your parameters insid this model. (StartStopBotRequest)
     ///     - uniqueId:     (response) it will returns the request 'UniqueId' that will send to server. (String)
     ///     - completion:   (response) it will returns the response that comes from server to this request. (Any as! StartStopBotResponse)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func startBot(inputModel startBotInput:  StartStopBotRequest,
                          uniqueId:      @escaping (String) -> (),
                          completion:    @escaping callbackTypeAlias) {
@@ -196,6 +199,7 @@ extension Chat {
     ///     - inputModel:   (input) you have to send your parameters insid this model. (StartStopBotRequest)
     ///     - uniqueId:     (response) it will returns the request 'UniqueId' that will send to server. (String)
     ///     - completion:   (response) it will returns the response that comes from server to this request. (Any as! StartStopBotResponse)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func stopBot(inputModel stopBotInput:    StartStopBotRequest,
                         uniqueId:       @escaping (String) -> (),
                         completion:     @escaping callbackTypeAlias) {

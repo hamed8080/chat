@@ -26,5 +26,6 @@ public protocol ChatDelegates: class {
     func messageEvents(model: MessageEventModel)
     func systemEvents(model: SystemEventModel)
     func threadEvents(model: ThreadEventModel)
+    func userEvents(model: UserEventModel)
     
 }

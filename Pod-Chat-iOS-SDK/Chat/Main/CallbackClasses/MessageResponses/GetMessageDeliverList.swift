@@ -20,6 +20,7 @@ extension Chat {
     ///    - it doesn't have direct output,
     ///    - but on the situation where the response is valid,
     ///    - it will call the "onResultCallback" callback to getMessageDeliveryList function (by using "getMessageDeliverListCallbackToUser")
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func responseOfMessageDeliveryList(withMessage message: ChatMessage) {
         log.verbose("Message of type 'GET_MESSAGE_DELEVERY_PARTICIPANTS' recieved", context: "Chat")
         
@@ -44,7 +45,7 @@ extension Chat {
         
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public class GetMessageDeliverList: CallbackProtocol {
         var sendParams: SendChatMessageVO
         init(parameters: SendChatMessageVO) {

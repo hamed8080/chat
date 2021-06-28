@@ -13,30 +13,35 @@ import CoreData
 
 public class CMImage: NSManagedObject {
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func convertCMObjectToObject() -> ImageObject {
         
         var actualHeight:   Int?
         var actualWidth:    Int?
         var height:         Int?
-        var id:             Int?
+//        var id:             Int?
+        var size:           Int?
         var width:          Int?
         
         
         func createVariables() {
-            if let actualHeight2 = self.actualHeight as? Int {
-                actualHeight = actualHeight2
+            if let actualHeight_ = self.actualHeight as? Int {
+                actualHeight = actualHeight_
             }
-            if let actualWidth2 = self.actualWidth as? Int {
-                actualWidth = actualWidth2
+            if let actualWidth_ = self.actualWidth as? Int {
+                actualWidth = actualWidth_
             }
-            if let height2 = self.height as? Int {
-                height = height2
+            if let height_ = self.height as? Int {
+                height = height_
             }
-            if let id2 = self.id as? Int {
-                id = id2
+//            if let id2 = self.id as? Int {
+//                id = id2
+//            }
+            if let size_ = self.size as? Int {
+                size = size_
             }
-            if let width2 = self.width as? Int {
-                width = width2
+            if let width_ = self.width as? Int {
+                width = width_
             }
         }
         
@@ -45,8 +50,9 @@ public class CMImage: NSManagedObject {
                                                actualWidth: actualWidth,
                                                hashCode: self.hashCode!,
                                                height: height,
-                                               id: id!,
+//                                               id: id!,
                                                name: self.name,
+                                               size: size,
                                                width: width)
             return uploadImageModel
         }

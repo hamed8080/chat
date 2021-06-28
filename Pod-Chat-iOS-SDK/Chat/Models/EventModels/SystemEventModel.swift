@@ -16,7 +16,8 @@ open class SystemEventModel {
     public let threadId:   Int?
     public let user:       Any?
     
-    init(type: SystemEventTypes, time: Int?, threadId: Int?, user: Any?) {
+
+    init(type: SystemEventTypes, time: Int? = nil, threadId: Int? = nil, user: Any? = nil) {
         self.type       = type
         self.time       = time
         self.threadId   = threadId
@@ -24,3 +25,6 @@ open class SystemEventModel {
     }
     
 }
+
+
+

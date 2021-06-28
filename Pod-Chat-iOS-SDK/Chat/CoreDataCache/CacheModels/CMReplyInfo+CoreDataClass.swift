@@ -13,6 +13,7 @@ import CoreData
 
 public class CMReplyInfo: NSManagedObject {
     
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func convertCMObjectToObject() -> ReplyInfo {
         
         var deleted:            Bool?
@@ -54,6 +55,7 @@ public class CMReplyInfo: NSManagedObject {
         return model
     }
     
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func updateObject(with replyInfo: ReplyInfo, messageId: Int) {
         self.messageId          = messageId as NSNumber?
         self.deletedd           = replyInfo.deleted as NSNumber?

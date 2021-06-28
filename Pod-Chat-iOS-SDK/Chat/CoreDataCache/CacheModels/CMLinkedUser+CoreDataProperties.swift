@@ -13,6 +13,7 @@ import CoreData
 
 extension CMLinkedUser {
 
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     @nonobjc public class func fetchRequest() -> NSFetchRequest<CMLinkedUser> {
         return NSFetchRequest<CMLinkedUser>(entityName: "CMLinkedUser")
     }

@@ -8,7 +8,7 @@
 
 import SwiftyJSON
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class PinUnpinMessageModel: ResponseModel, ResponseModelDelegates {
     
     public let pinUnpinModel:   PinUnpinMessage
@@ -35,7 +35,7 @@ open class PinUnpinMessageModel: ResponseModel, ResponseModelDelegates {
 
 }
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class PinUnpinMessageResponse: PinUnpinMessageModel {
     
 }

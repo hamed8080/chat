@@ -9,11 +9,13 @@
 import FanapPodAsyncSDK
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class UpdateThreadInfoRequest: RequestModelDelegates {
     
     public let description:     String? // Description for thread
-    public let image:           String? // URL og thread image to be set
-    public let metadata:        String? // New Metadata to be set on thread
+//    public let image:           String? // URL og thread image to be set
+    public var metadata:        String? // New Metadata to be set on thread
+    public var threadImage:     UploadImageRequest?
     public let threadId:        Int     // Id of thread
     public let title:           String? // New Title for thread
     
@@ -21,17 +23,19 @@ open class UpdateThreadInfoRequest: RequestModelDelegates {
     public let uniqueId:        String
     
     public init(description:        String?,
-                image:              String?,
+//                image:              String?,
                 metadata:           String?,
                 threadId:           Int,
+                threadImage:        UploadImageRequest?,
                 title:              String,
                 typeCode:           String?,
                 uniqueId:           String?) {
         
         self.description    = description
-        self.image          = image
+//        self.image          = image
         self.metadata       = metadata
         self.threadId       = threadId
+        self.threadImage    = threadImage
         self.title          = title
         
         self.typeCode       = typeCode
@@ -40,9 +44,9 @@ open class UpdateThreadInfoRequest: RequestModelDelegates {
     
     public func convertContentToJSON() -> JSON {
         var content: JSON = [:]
-        if let image_ = self.image {
-            content["image"] = JSON(image_)
-        }
+//        if let image_ = self.image {
+//            content["image"] = JSON(image_)
+//        }
         if let description_ = self.description {
             let theDecription = MakeCustomTextToSend(message: description_).replaceSpaceEnterWithSpecificCharecters()
             content["description"] = JSON(theDecription)
@@ -65,7 +69,7 @@ open class UpdateThreadInfoRequest: RequestModelDelegates {
     
 }
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class UpdateThreadInfoRequestModel: UpdateThreadInfoRequest {
     
 }

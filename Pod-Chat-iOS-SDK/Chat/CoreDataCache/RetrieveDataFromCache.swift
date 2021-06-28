@@ -34,6 +34,7 @@ extension Cache {
     /// - Returns:
     ///     UserInfoModel?
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.get(cacheType: .USER_INFO)")
     public func retrieveUserInfo() -> UserInfoModel? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUser")
         do {
@@ -41,6 +42,7 @@ extension Cache {
                 switch result.first {
                 case let (.some(first)):
                     let user = User(cellphoneNumber: first.cellphoneNumber,
+                                    contactSynced:  first.contactSynced as? Bool,
                                     coreUserId:     first.coreUserId as? Int,
                                     email:          first.email,
                                     id:             first.id as? Int,
@@ -84,6 +86,7 @@ extension Cache {
     /// - Returns:
     ///     GetCurrentUserRolesModel?
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.get(cacheType: .CUREENT_USER_ROLES(threadId))")
     public func retrieveCurrentUserRoles(onThreadId threadId: Int) -> GetCurrentUserRolesModel? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMCurrentUserRoles")
         fetchRequest.predicate = NSPredicate(format: "threadId == %i", threadId)
@@ -137,9 +140,9 @@ extension Cache {
     ///     - cellphoneNumber:  if you want to search Contact with specific cellphone number, you should fill this parameter (String?)
     ///     - count:            how many Contacts do you spect to return (Int)
     ///     - email:            if you want to search Contact with specific email address, you should fill this parameter (String?)
-    ///     - firstName:        if you want to search Contact with specific first name, you should fill this parameter (String?)
+    ///     - firstName:        if you want to search Contact with specific first name, you should fill this parameter (String?)    (deprecated)
     ///     - id:               if you want to search Contact with specific contact id, you should fill this parameter (Int?)
-    ///     - lastName:         if you want to search Contact with specific last name, you should fill this parameter (String?)
+    ///     - lastName:         if you want to search Contact with specific last name, you should fill this parameter (String?)    (deprecated)
     ///     - offset:           from what offset do you want to get the Cache response (Int)
     ///     - search:           if you want to search some term on every content of the Contact (like as: cellphoneNumber, email, firstName, lastName), you should fill this parameter (String?)
     ///     - timeStamp:        the only way to delete contact, is to check if there is a long time that some contact is not updated, we will delete it. this it the timeStamp to check (Int)
@@ -148,13 +151,14 @@ extension Cache {
     /// - Returns:
     ///     GetContactsModel?
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.get(cacheType: .GET_CASHED_CONTACTS(request))")
     public func retrieveContacts(ascending:         Bool,
                                  cellphoneNumber:   String?,
                                  count:             Int,
                                  email:             String?,
-                                 firstName:         String?,
+//                                 firstName:         String?,
                                  id:                Int?,
-                                 lastName:          String?,
+//                                 lastName:          String?,
                                  offset:            Int,
                                  search:            String?,
                                  timeStamp:         Int,
@@ -199,18 +203,18 @@ extension Cache {
                     andPredicateArr.append(theCellphoneNumberPredicate)
                 }
             }
-            if let theFirstName = firstName {
-                if (theFirstName != "") {
-                    let theFirstNamePredicate = NSPredicate(format: "firstName CONTAINS[cd] %@", theFirstName)
-                    andPredicateArr.append(theFirstNamePredicate)
-                }
-            }
-            if let theLastName = lastName {
-                if (theLastName != "") {
-                    let theLastNamePredicate = NSPredicate(format: "lastName CONTAINS[cd] %@", theLastName)
-                    andPredicateArr.append(theLastNamePredicate)
-                }
-            }
+//            if let theFirstName = firstName {
+//                if (theFirstName != "") {
+//                    let theFirstNamePredicate = NSPredicate(format: "firstName CONTAINS[cd] %@", theFirstName)
+//                    andPredicateArr.append(theFirstNamePredicate)
+//                }
+//            }
+//            if let theLastName = lastName {
+//                if (theLastName != "") {
+//                    let theLastNamePredicate = NSPredicate(format: "lastName CONTAINS[cd] %@", theLastName)
+//                    andPredicateArr.append(theLastNamePredicate)
+//                }
+//            }
             if let theEmail = email {
                 if (theEmail != "") {
                     let theEmailPredicate = NSPredicate(format: "email CONTAINS[cd] %@", theEmail)
@@ -299,6 +303,7 @@ extension Cache {
     ///
     /// - returns:
     ///     [Contact]?
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.get(cacheType: .PHONE_CONTACTS)")
     public func retrievePhoneContacts() -> [Contact]? {
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "PhoneContact")
@@ -360,6 +365,7 @@ extension Cache {
     /// - returns:
     ///     GetThreadsModel?
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.get(cacheType: .GET_THREADS(ThreadsRequest))")
     public func retrieveThreads(ascending:  Bool,
                                 count:      Int,
                                 name:       String?,
@@ -411,6 +417,7 @@ extension Cache {
         return getThreadModelResponse
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.get(cacheType: .NEW_THREADS(count, offset))")
     public func retrieveNewThreads(count:   Int,
                                    offset:  Int) -> GetThreadsModel? {
         
@@ -444,6 +451,7 @@ extension Cache {
         return returnModel
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.get(cacheType: .GET_THREADS(ThreadsRequest))")
     func retrieveTheThreads(ascending:  Bool,
                             count:      Int,
                             name:       String?,
@@ -516,6 +524,7 @@ extension Cache {
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.get(cacheType: .PIN_THREADS)")
     func retrievePinThreads(ascending:  Bool) -> [Conversation]? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
         
@@ -571,6 +580,7 @@ extension Cache {
     /// - returns:
     ///     GetThreadParticipantsModel?
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.get(cacheType: .THREAD_PARTICIPANTS(threadId, count, offset: offset, ascending))")
     public func retrieveThreadParticipants(admin:       Bool?,
                                            ascending:   Bool,
                                            count:       Int,
@@ -631,6 +641,7 @@ extension Cache {
     
     
     // ToDo: check SaveThreadParticipant method on the cache and implement the correct implementation of admin roles on that function and remove this one
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.get(cacheType: .THREAD_ADMINS(threadId))")
     func retrieveThreadAdmins(threadId: Int) -> UserRolesModel? {
         
         var userAdmin: UserRolesModel?
@@ -668,6 +679,7 @@ extension Cache {
     
     
     // MARK: - retrieve MessageHistory:
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use CacheFactory.get(cacheType: .ALL_UNREAD_COUNT)")
     public func retrieveAllUnreadMessageCount() -> Int {
         var countSum = 0
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
@@ -711,6 +723,7 @@ extension Cache {
     /// - returns:
     ///     GetHistoryModel?
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.use CacheFactory.get(cacheType: .GET_HISTORY(req))")
     public func retrieveMessageHistory(count:           Int,
                                        firstMessageId:  Int?,
                                        fromTime:        UInt?,
@@ -797,6 +810,7 @@ extension Cache {
      * every function that want to send a quesry on CMMessage Entity, will first call this function,
      * and this funciton will create the NSFetchRequest based on the input parameters to the caller
      */
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func retrieveMessageHistoryFetchRequest(fromTime:       UInt?,
                                             messageId:      Int?,
                                             messageType:    Int?,
@@ -872,6 +886,7 @@ extension Cache {
     /**
      * this method will get gaps on a specific threadId, and returns that messageIds
      */
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func retrieveMessageGaps(threadId: Int) -> [Int]? {
         /*
          *  -> search through the MessageGaps with the 'threadId'
@@ -925,8 +940,8 @@ extension Cache {
     /// - returns:
     ///     (imageObject: ImageObject, imagePath: String)?
     ///
-    public func retrieveImageObject(hashCode:   String,
-                                    imageId:    Int) -> (imageObject: ImageObject, imagePath: String)? {
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
+    public func retrieveImageObject(hashCode:   String) -> (imageObject: ImageObject, imagePath: String)? {
         /*
          *
          *  -> make this properties AND together: 'hashCode', 'id'
@@ -940,27 +955,138 @@ extension Cache {
          */
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
-        let searchImage = NSPredicate(format: "hashCode == %@ AND id == %i", hashCode, imageId)
+        let searchImage = NSPredicate(format: "hashCode == %@", hashCode)
         fetchRequest.predicate = searchImage
         
         do {
             if let result = try context.fetch(fetchRequest) as? [CMImage] {
                 
-                if let firstObject = result.first {
-                    let imageObject = firstObject.convertCMObjectToObject()
-                    let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-                    let myImagePath = path + "/\(fileSubPath.Images)/" + "\(firstObject.id ?? 0)\(firstObject.name ?? "default")"
-                    
-                    return (imageObject, myImagePath)
-                } else {
-                    return nil
+                var returnValue: (imageObject: ImageObject, imagePath: String)?
+                for item in result {
+                    if let isThumbnail = item.isThumbnail as? Bool, (isThumbnail == true) {
+                        return nil
+                    } else {
+                        let imageObject = item.convertCMObjectToObject()
+                        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+                        let myImagePath = path + "/\(fileSubPath.Images)/" + "\(item.hashCode ?? "default")"
+                        
+                        returnValue = (imageObject, myImagePath)
+//                        return (imageObject, myImagePath)
+                    }
                 }
+                return returnValue
+                
+//                if let firstObject = result.first {
+//                    let imageObject = firstObject.convertCMObjectToObject()
+//                    let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+//                    let myImagePath = path + "/\(fileSubPath.Images)/" + "\(firstObject.hashCode ?? "default")"
+//
+//                    return (imageObject, myImagePath)
+//                } else {
+//                    return nil
+//                }
                 
             } else {
                 return nil
             }
         } catch {
             fatalError("Error on fetching list of CMImage")
+        }
+    }
+    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
+    public func retrieveImageThumbnailObject(hashCode: String) -> (imageObject: ImageObject, imagePath: String)? {
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
+        let hashCodePredicate = NSPredicate(format: "hashCode == %@", hashCode)
+        fetchRequest.predicate = hashCodePredicate
+        
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMImage] {
+                
+                var returnValue: (imageObject: ImageObject, imagePath: String)?
+                for item in result {
+                    if let isThumbnail = item.isThumbnail as? Bool, (isThumbnail == true) {
+                        let imageObject = item.convertCMObjectToObject()
+                        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+                        let myImagePath = path + "/\(fileSubPath.Images)/" + "\(item.hashCode ?? "default")"  + "-Thumbnail"
+                        
+                        returnValue = (imageObject, myImagePath)
+                    } else {
+                        return nil
+                    }
+                }
+                return returnValue
+                
+            } else {
+                return nil
+            }
+        } catch {
+            fatalError("Error on fetching list of CMImage")
+        }
+    }
+    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
+    public func isThumbnailAvailable(hashCode: String) -> Bool? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
+        let searchImage = NSPredicate(format: "hashCode == %@", hashCode)
+        fetchRequest.predicate = searchImage
+        var isAvailable: Bool = false
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMImage] {
+                for item in result {
+                    if let isThumbnail = item.isThumbnail as? Bool, (isThumbnail == true) {
+                        isAvailable = true
+                        break
+                    }
+                }
+            }
+            return isAvailable
+        } catch {
+            fatalError("Error on fetching list of CMImage")
+        }
+    }
+    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
+    public func isImageAvailable(hashCode: String) -> Bool? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMImage")
+        let searchImage = NSPredicate(format: "hashCode == %@", hashCode)
+        fetchRequest.predicate = searchImage
+        var isAvailable: Bool = false
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMImage] {
+                for item in result {
+                    if let isThumbnail = item.isThumbnail as? Bool, (isThumbnail == true) {
+                        continue
+                    } else {
+                        isAvailable = true
+                    }
+                }
+            }
+            return isAvailable
+        } catch {
+            fatalError("Error on fetching list of CMImage")
+        }
+    }
+    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
+    public func isFileAvailable(hashCode: String) -> Bool? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMFile")
+        let searchFile = NSPredicate(format: "hashCode == %@", hashCode)
+        fetchRequest.predicate = searchFile
+        
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMFile] {
+                if let _ = result.first {
+                    return true
+                } else {
+                    return nil
+                }
+            } else {
+                return nil
+            }
+        } catch {
+            fatalError("Error on fetching list of CMFile")
         }
     }
     
@@ -989,8 +1115,8 @@ extension Cache {
     /// - returns:
     ///     (uploadFileModel: UploadFileModel, filePath: String)
     ///
-    public func retrieveFileObject(fileId:      Int,
-                                   hashCode:    String) -> (fileObject: FileObject, filePath: String)? {
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
+    public func retrieveFileObject(hashCode:    String) -> (fileObject: FileObject, filePath: String)? {
         /*
          *
          *  -> make this properties AND together: 'hashCode', 'id'
@@ -1004,7 +1130,7 @@ extension Cache {
          */
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMFile")
-        let searchFile = NSPredicate(format: "hashCode == %@ AND id == %i", hashCode, fileId)
+        let searchFile = NSPredicate(format: "hashCode == %@", hashCode)
         fetchRequest.predicate = searchFile
         
         do {
@@ -1014,7 +1140,7 @@ extension Cache {
                     let fileObject = firstObject.convertCMObjectToObject()
                     
                     let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-                    let myFilePath = path + "/\(fileSubPath.Files)/" + "\(firstObject.id ?? 0)\(firstObject.name ?? "default")"
+                    let myFilePath = path + "/\(fileSubPath.Files)/" + "\(firstObject.hashCode ?? "default")"
                     
                     return (fileObject, myFilePath)
                 } else {
@@ -1029,7 +1155,7 @@ extension Cache {
         }
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func retrieveAllImagesSize() -> Int {
         
         var folderSize = 0
@@ -1055,7 +1181,7 @@ extension Cache {
         
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func retrieveAllFilesSize() -> Int {
         
         var folderSize = 0

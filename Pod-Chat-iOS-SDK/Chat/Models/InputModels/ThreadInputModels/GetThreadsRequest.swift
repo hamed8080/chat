@@ -9,6 +9,7 @@
 import FanapPodAsyncSDK
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class GetThreadsRequest: RequestModelDelegates {
     
     public let count:                   Int?    // count of threads to be received (default value is 50)
@@ -130,7 +131,7 @@ open class GetThreadsRequest: RequestModelDelegates {
 }
 
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class GetThreadsRequestModel: GetThreadsRequest {
     
 }

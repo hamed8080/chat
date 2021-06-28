@@ -1,6 +1,3 @@
-Pod-Chat-iOS-SDK/Alamofire-4.8.0/
 .DS_Store
 xcuserdata/
-*.xcuserdata
-Pod-Chat-iOS-SDK/.DS_Store
-Pod-Chat-iOS-SDK/FanapPodChatSDK.xcodeproj/project.xcworkspace/xcuserdata/Mahyar.xcuserdatad/UserInterfaceState.xcuserstate
+*.xccheckout

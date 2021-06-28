@@ -49,6 +49,8 @@ extension Chat: AsyncDelegates {
         peerId = nil
         isChatReady = false
         delegate?.chatDisconnect()
+        
+        stopAllChatTimers()
     }
     
     /*
@@ -170,9 +172,16 @@ extension Chat: AsyncDelegates {
          *
          */
         log.verbose("content of received message: \n \(params)", context: "Chat")
-        
         let asyncMessage = AsyncMessage(withContent: params)
-        handleReceiveMessageFromAsync(withContent: asyncMessage)
+        let chatMessage = ChatMessage(withContent: asyncMessage.content.convertToJSON())
+        let uniqueIdInNewSDK = Chat.sharedInstance.callbacksManager.isUniqueIdExistInAllCllbacks(uniqueId:chatMessage.uniqueId)
+        let isSystemEvent  = chatMessage.type == NewChatMessageVOTypes.SYSTEM_MESSAGE.rawValue
+        //Only code needed in new Version release
+        if !uniqueIdInNewSDK && !isSystemEvent{
+            handleReceiveMessageFromAsync(withContent: asyncMessage)
+        }else if let data = try? params.rawData(){
+            ReceiveMessageFactory.invokeCallback(data: data)
+        }
     }
     
     
@@ -203,7 +212,9 @@ extension Chat: AsyncDelegates {
         
         peerId = asyncClient?.asyncGetPeerId()
         
-        getUserInfoTimer = nil
+        makeChatReady()
+        
+        stopGetUserInfoTimer()
         getUserInfoTimer = RepeatingTimer(timeInterval: Double(2))
     }
     
@@ -250,11 +261,38 @@ extension Chat: AsyncDelegates {
          */
         
         // checkout to keep the Chat alive
-        lastReceivedMessageTimer = nil
-        lastReceivedMessageTimer = RepeatingTimer(timeInterval: (Double(self.chatPingMessageInterval) * 1.5))
+//        lastReceivedMessageTimer = nil
+//        lastReceivedMessageTimer = RepeatingTimer(timeInterval: (Double(self.chatPingMessageInterval) * 1.5))
+        
+        stopLastReceivedMessageTimer()
+        lastReceivedMessageTimer(interval: (Double(self.chatPingMessageInterval) * 1.5))
         
         let chatMessage = ChatMessage(withContent: withContent.content.convertToJSON())
         receivedMessageHandler(withContent: chatMessage)
+    }
+    
+    
+    func stopAllChatTimers() {
+        stopTyping()
+        stopGetUserInfoTimer()
+        stopLastReceivedMessageTimer()
+        stopLastSentMessageTimer()
+    }
+    
+    func stopGetUserInfoTimer() {
+        getUserInfoTimer = nil
+    }
+    
+    func stopLastReceivedMessageTimer() {
+        if let _ = lstRcvdMsgTimer {
+            lstRcvdMsgTimer!.stop()
+        }
+    }
+    
+    func stopLastSentMessageTimer() {
+        if let _ = lstSntMsgTimer {
+            lstSntMsgTimer?.stop()
+        }
     }
     
     

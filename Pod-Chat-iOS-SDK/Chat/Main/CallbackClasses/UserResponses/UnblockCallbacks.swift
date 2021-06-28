@@ -20,8 +20,15 @@ extension Chat {
     ///    - it doesn't have direct output,
     ///    - but on the situation where the response is valid,
     ///    - it will call the "onResultCallback" callback to unblock function (by using "unblockUserCallbackToUser")
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     func responseOfUnblockContact(withMessage message: ChatMessage) {
         log.verbose("Message of type 'UNBLOCK' recieved", context: "Chat")
+        
+        if let contentAsJSON = message.content?.convertToJSON() {
+            let unblockModel = BlockedUser(messageContent: contentAsJSON)
+            let unblockEM = UserEventModel(type: UserEventTypes.UNBLOCK, blockModel: unblockModel, threadId: message.subjectId)
+            delegate?.userEvents(model: unblockEM)
+        }
         
         let returnData = CreateReturnData(hasError:         false,
                                           errorMessage:     "",
@@ -44,6 +51,7 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version.")
     public class UnblockCallbacks: CallbackProtocol {
         func onResultCallback(uID:      String,
                               response: CreateReturnData,

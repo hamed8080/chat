@@ -26,6 +26,7 @@ extension Cache {
     /// - returns:
     ///     it returns the result as 'CMContact?' Model
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func updateCMContactEntity(withContactObject myContact: Contact) -> CMContact? {
         var contactToReturn: CMContact?
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMContact")
@@ -60,6 +61,27 @@ extension Cache {
     }
     
     
+    // MARK: - update UserInfo(ContactSynced):
+    /// Update CMUser Entity:
+    ///
+    /// - fetch CMUser and see if we already had this contact on the Cache or not
+    /// - if it found one, it will update it's contactSynced property
+    ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
+    public func updateUserContactSynced() {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMUser")
+        do {
+            if let result = try context.fetch(fetchRequest) as? [CMUser] {
+                if (result.count > 0) {
+                    result.first!.contactSynced = true as NSNumber?
+                    saveContext(subject: "Update UserInfo -update existing object-")
+                }
+            }
+        } catch {
+            fatalError("Error on fetching list of CMUser")
+        }
+    }
+    
     
     // MARK: - update LinkedUser:
     /// Update CMLinkedUser Entity:
@@ -74,6 +96,7 @@ extension Cache {
     /// - returns:
     ///     it returns the result as 'CMLinkedUser?' Model
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func updateCMLinkedUserEntity(withLinkedUser myLinkedUser: LinkedUser) -> CMLinkedUser? {
         var linkedUserToReturn: CMLinkedUser?
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMLinkedUser")
@@ -115,6 +138,7 @@ extension Cache {
     /// - returns:
     ///     it returns the result as 'CMConversation?' Model
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func updateCMConversationEntity(withConversationObject myThread: Conversation) -> CMConversation? {
         var conversationToReturn: CMConversation?
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
@@ -183,6 +207,7 @@ extension Cache {
     /// - returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func updateUnreadCountOnCMConversation(withThreadId threadId: Int, unreadCount: Int?, addCount: Int?) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMConversation")
         fetchRequest.predicate = NSPredicate(format: "id == %i", threadId)
@@ -219,6 +244,7 @@ extension Cache {
     /// - returns:
     ///     it returns the result as 'CMParticipant?' Model
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func updateCMParticipantEntity(inThreadId threadId: Int, withParticipantsObject myParticipant: Participant, isAdminRequest: Bool) -> CMParticipant? {
         var participantObjectToReturn: CMParticipant?
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMParticipant")
@@ -260,6 +286,7 @@ extension Cache {
     /// - returns:
     ///     it returns the result as 'CMMessage?' Model
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func updateCMMessageEntity(withMessageObject myMessage: Message) -> CMMessage? {
         var messageObjectToReturn: CMMessage?
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMMessage")
@@ -382,6 +409,7 @@ extension Cache {
     /// - returns:
     ///     it returns the result as 'CMReplyInfo?' Model
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func updateCMReplyInfoEntity(inThreadId threadId: Int, withObject myReplyInfo: ReplyInfo, withMessageId messageId: Int) -> CMReplyInfo? {
         var replyInfoObjectToReturn: CMReplyInfo?
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMReplyInfo")
@@ -430,6 +458,7 @@ extension Cache {
     /// - returns:
     ///     it returns the result as 'CMForwardInfo?' Model
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func updateCMForwardInfoEntity(inThreadId threadId: Int, withObject myForwardInfo: ForwardInfo, withMessageId messageId: Int) -> CMForwardInfo? {
         var forwardInfoObjectToReturn: CMForwardInfo?
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMForwardInfo")
@@ -512,6 +541,7 @@ extension Cache {
     /// - returns:
     ///     it returns the result as 'CMPinMessage?' Model
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func updateCMPinMessageEntity(withObject myPinMessage: PinUnpinMessage) -> CMPinMessage? {
         var pinMessageObjectToReturn: CMPinMessage?
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMPinMessage")
@@ -556,6 +586,7 @@ extension Cache {
     /// - returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func updateMessageGapEntity(inThreadId threadId: Int, withMessageId messageId: Int, withPreviousId previousId: Int) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "MessageGaps")
         fetchRequest.predicate = NSPredicate(format: "threadId == %i", threadId)
@@ -595,6 +626,7 @@ extension Cache {
     /// - returns:
     ///     none
     ///
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func updateAllMessageGapEntity(inThreadId threadId: Int) {
         deleteAllMessageGaps(inThreadId: threadId)
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CMMessage")

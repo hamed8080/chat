@@ -20,6 +20,7 @@ extension Chat {
     ///    - it doesn't have direct output,
     ///    - but on the situation where the response is valid,
     ///    - it will call the "onResultCallback" callback to getThreadParticipants function (by using "threadParticipantsCallbackToUser")
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func responseOfThreadParticipants(withMessage message: ChatMessage) {
         log.verbose("Message of type 'THREAD_PARTICIPANTS' recieved", context: "Chat")
         
@@ -72,7 +73,7 @@ extension Chat {
         }
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public class GetThreadParticipantsCallbacks: CallbackProtocol {
         var sendParams: SendChatMessageVO
         init(parameters: SendChatMessageVO) {

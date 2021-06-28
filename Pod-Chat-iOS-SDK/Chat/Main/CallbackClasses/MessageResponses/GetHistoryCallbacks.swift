@@ -20,6 +20,7 @@ extension Chat {
     ///    - it doesn't have direct output,
     ///    - but on the situation where the response is valid,
     ///    - it will call the "onResultCallback" callback to getHistory function (by using "getHistoryCallbackToUser" or "getMentionListCallbackToUser")
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func responseOfGetHistory(withMessage message: ChatMessage) {
         log.verbose("Message of type 'GET_HISTORY' recieved", context: "Chat")
         
@@ -47,7 +48,7 @@ extension Chat {
         }
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public class GetHistoryCallbacks: CallbackProtocol {
         var sendParams: SendChatMessageVO
         init(parameters: SendChatMessageVO) {
@@ -109,9 +110,10 @@ extension Chat {
                     // check if there was any message on the server response that also was on the cache, then check their data, and if see any difference, send them as Edit Message Event to the client
                     for message in serverResponse {
                         var foundNewMsg = true
-                        var foundEditMsg = true
+                        var foundEditMsg = false
                         for cacheMessage in cacheHistoryResult.history {
                             if (message.id == cacheMessage.id) {
+                                foundEditMsg = true
                                 foundNewMsg = false
                                 if (message.message == cacheMessage.message)
                                     && (message.metadata == cacheMessage.metadata)
@@ -173,7 +175,7 @@ extension Chat {
         
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public class GetMentionCallbacks: CallbackProtocol {
         var sendParams: SendChatMessageVO
         init(parameters: SendChatMessageVO) {

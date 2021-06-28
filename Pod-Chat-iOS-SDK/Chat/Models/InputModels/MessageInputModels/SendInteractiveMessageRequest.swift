@@ -8,6 +8,7 @@
 
 import Foundation
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class SendInteractiveMessageRequest {
     
     public let textMessage:     String
@@ -60,7 +61,7 @@ open class SendInteractiveMessageRequest {
     
 }
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class SendInteractiveMessageRequestModel: SendInteractiveMessageRequest {
     
 }

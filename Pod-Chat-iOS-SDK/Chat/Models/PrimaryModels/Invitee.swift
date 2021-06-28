@@ -9,8 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-
-open class Invitee {
+open class Invitee : Codable{
     /*
      * + InviteeVO       {object}
      *    - id           {string}
@@ -20,6 +19,7 @@ open class Invitee {
     public var id:     String?
     public var idType: Int?
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(messageContent: JSON) {
         self.id = messageContent["id"].string
         if let myIdType = messageContent["idType"].string {
@@ -31,9 +31,12 @@ open class Invitee {
             case InviteeVoIdTypes.TO_BE_USER_ID.stringValue():                  self.idType = 5
             default: break
             }
+        } else if let myIdType = messageContent["idType"].int {
+            self.idType = myIdType
         }
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(id:     String?,
                 idType: String?) {
         
@@ -71,11 +74,13 @@ open class Invitee {
             case InviteeVoIdTypes.TO_BE_USER_CELLPHONE_NUMBER:  self.idType = 3
             case InviteeVoIdTypes.TO_BE_USER_USERNAME:          self.idType = 4
             case InviteeVoIdTypes.TO_BE_USER_ID:                self.idType = 5
+            case InviteeVoIdTypes.TO_BE_CORE_USER_ID:           self.idType = 6
             }
         }
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(theInvitee: Invitee) {
         
         self.id     = theInvitee.id
@@ -83,10 +88,12 @@ open class Invitee {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatDataToMakeInvitee() -> Invitee {
         return self
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatToJSON() -> JSON {
         let result: JSON = ["id":               id ?? NSNull(),
                             "idType":           idType ?? NSNull()]

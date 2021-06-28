@@ -13,6 +13,7 @@ import CoreData
 
 public class CMConversation: NSManagedObject {
     
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func convertCMObjectToObject(showInviter:        Bool,
                                         showLastMessageVO:  Bool,
                                         showParticipants:   Bool,
@@ -20,6 +21,7 @@ public class CMConversation: NSManagedObject {
         var admin:                          Bool?
         var canEditInfo:                    Bool?
         var canSpam:                        Bool?
+        var closedThread:                   Bool?
         var group:                          Bool?
         var id:                             Int?
         var joinDate:                       Int?
@@ -56,6 +58,9 @@ public class CMConversation: NSManagedObject {
             }
             if let canSpam2 = self.canSpam as? Bool {
                 canSpam = canSpam2
+            }
+            if let closedThread2 = self.closedThread as? Bool {
+                closedThread = closedThread2
             }
             if let group2 = self.group as? Bool {
                 group = group2
@@ -150,6 +155,7 @@ public class CMConversation: NSManagedObject {
             let conversationModel = Conversation(admin:                 admin,
                                                  canEditInfo:           canEditInfo,
                                                  canSpam:               canSpam,
+                                                 closedThread:          closedThread,
                                                  description:           self.descriptions,
                                                  group:                 group,
                                                  id:                    id,
@@ -178,6 +184,7 @@ public class CMConversation: NSManagedObject {
                                                  type:                  type,
                                                  unreadCount:           unreadCount,
                                                  uniqueName:            nil,
+                                                 userGroupHash:         self.userGroupHash,
                                                  inviter:               (showInviter)       ? inviter       : nil,
                                                  lastMessageVO:         (showLastMessageVO) ? lastMessage   : nil,
                                                  participants:          (showParticipants)  ? participants  : nil,
@@ -193,7 +200,7 @@ public class CMConversation: NSManagedObject {
         return model
     }
     
-    
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func updateObject(with conversation: Conversation) {
         if let admin = conversation.admin as NSNumber? {
             self.admin = admin
@@ -203,6 +210,9 @@ public class CMConversation: NSManagedObject {
         }
         if let canSpam = conversation.canSpam as NSNumber? {
             self.canSpam = canSpam
+        }
+        if let closedThread = conversation.closedThread as NSNumber? {
+            self.closedThread = closedThread
         }
         if let descriptions = conversation.description {
             self.descriptions = descriptions
@@ -266,6 +276,9 @@ public class CMConversation: NSManagedObject {
         }
         if let unreadCount = conversation.unreadCount as NSNumber? {
             self.unreadCount = unreadCount
+        }
+        if let userGroupHash = conversation.userGroupHash {
+            self.userGroupHash  = userGroupHash
         }
     }
     

@@ -9,6 +9,7 @@
 import Foundation
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class GetCurrentUserRolesModel: ResponseModel, ResponseModelDelegates {
     
     public var userRoles:       [Roles] = []
@@ -66,6 +67,7 @@ open class GetCurrentUserRolesModel: ResponseModel, ResponseModelDelegates {
 }
 
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class GetCurrentUserRolesResponse: GetCurrentUserRolesModel {
     
 }

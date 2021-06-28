@@ -31,6 +31,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (AddParticipantsRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! AddParticipantModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func addParticipants(inputModel addParticipantsInput:   AddParticipantsRequest,
                                 uniqueId:       @escaping (String) -> (),
                                 completion:     @escaping callbackTypeAlias) {
@@ -85,6 +86,7 @@ extension Chat {
     /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! GetCurrentUserRolesModel)
     /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetCurrentUserRolesModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func getCurrentUserRoles(inputModel getCurrentUserRolesInput:    GetCurrentUserRolesRequest,
                                     getCacheResponse:   Bool?,
                                     uniqueId:           @escaping (String) -> (),
@@ -148,6 +150,7 @@ extension Chat {
     /// - parameter uniqueId:           (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion:         (response) it will returns the response that comes from server to this request. (Any as! GetThreadParticipantsModel)
     /// - parameter cacheResponse:      (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (GetThreadParticipantsModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func getThreadParticipants(inputModel getThreadParticipantsInput:    GetThreadParticipantsRequest,
                                       getCacheResponse:                         Bool?,
                                       uniqueId:             @escaping (String) -> (),
@@ -216,6 +219,7 @@ extension Chat {
     /// - parameter inputModel: (input) you have to send your parameters insid this model. (RemoveParticipantsRequest)
     /// - parameter uniqueId:   (response) it will returns the request 'UniqueId' that will send to server. (String)
     /// - parameter completion: (response) it will returns the response that comes from server to this request. (Any as! RemoveParticipantModel)
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func removeParticipants(inputModel removeParticipantsInput: RemoveParticipantsRequest,
                                    uniqueId:        @escaping (String) -> (),
                                    completion:      @escaping callbackTypeAlias) {
@@ -295,6 +299,7 @@ extension Chat {
    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! UserRolesModel)
    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (UserRolesModel)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
    public func setRole(inputModel setRoleInput: RoleRequestModel,
                        uniqueId:       @escaping (String) -> (),
                        completion:     @escaping callbackTypeAlias) {
@@ -347,6 +352,7 @@ extension Chat {
    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! UserRolesModel)
    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (UserRolesModel)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
    public func removeRole(inputModel removeRoleInput: RoleRequestModel,
                           uniqueId:        @escaping (String) -> (),
                           completion:      @escaping callbackTypeAlias) {
@@ -398,6 +404,7 @@ extension Chat {
    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! UserRolesModel)
    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (UserRolesModel)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
    public func setAuditor(inputModel setAuditorInput:  AddRemoveAuditorRequestModel,
                           uniqueId:        @escaping (String) -> (),
                           completion:      @escaping callbackTypeAlias) {
@@ -434,6 +441,7 @@ extension Chat {
    /// - parameter uniqueId:       (response) it will returns the request 'UniqueId' that will send to server. (String)
    /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! UserRolesModel)
    /// - parameter cacheResponse:  (response) there is another response that comes from CacheDB to the user, if user has set 'enableCache' vaiable to be true. (UserRolesModel)
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
    public func removeAuditor(inputModel removeAuditorInput:    AddRemoveAuditorRequestModel,
                              uniqueId:         @escaping (String) -> (),
                              completion:       @escaping callbackTypeAlias) {
@@ -452,9 +460,5 @@ extension Chat {
        })
        
    }
-       
-       
-    
-    
     
 }

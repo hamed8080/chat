@@ -8,6 +8,7 @@
 
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class BlockRequest: RequestModelDelegates {
     
     public let contactId:   Int?
@@ -54,6 +55,7 @@ open class BlockRequest: RequestModelDelegates {
 
 
 /// MARK: -  this class will be deprecate (use this class instead: 'BlockContactsRequest')
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class BlockContactsRequestModel: BlockRequest {
     
 }

@@ -14,6 +14,7 @@ import SwiftyJSON
 
 public class QueueOfTextMessages: NSManagedObject {
     
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func convertCMObjectToObject() -> QueueOfWaitTextMessagesModel {
         
 //        var metadata:       JSON?
@@ -45,7 +46,7 @@ public class QueueOfTextMessages: NSManagedObject {
         }
         
         func createQueueOfWaitTextMessagesModel() -> QueueOfWaitTextMessagesModel {
-            let queueOfWaitTextMessagesModel = QueueOfWaitTextMessagesModel(content:        self.content,
+            let queueOfWaitTextMessagesModel = QueueOfWaitTextMessagesModel(textMessage:    self.textMessage,
                                                                             messageType:    MessageType.getType(from: messageType ?? 1),
 //                                                                            metadata:       metadata,
                                                                             metadata:       self.metadata,

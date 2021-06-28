@@ -9,6 +9,7 @@
 import Foundation
 import SwiftyJSON
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class SendTextMessageRequest {
     
     public let messageType:     MessageType
@@ -56,7 +57,7 @@ open class SendTextMessageRequest {
                 uniqueId:       String?) {
         
         self.textMessage    = content
-        self.content = content
+        self.content        = content
         self.messageType    = messageType
         self.metadata       = metadata
         self.repliedTo      = repliedTo
@@ -68,7 +69,7 @@ open class SendTextMessageRequest {
     
 }
 
-
+@available(*,deprecated , message:"Removed in 0.10.5.0 version.")
 open class SendTextMessageRequestModel: SendTextMessageRequest {
     
 }

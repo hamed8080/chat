@@ -20,6 +20,7 @@ extension Chat {
     ///    - it doesn't have direct output,
     ///    - but on the situation where the response is valid,
     ///    - it will call the "onResultCallback" callback to removeParticipant function (by using "removeParticipantsCallbackToUser")
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func responseOfRemoveParticipant(withMessage message: ChatMessage) {
         log.verbose("Message of type 'REMOVE_PARTICIPANT' recieved", context: "Chat")
         
@@ -72,7 +73,7 @@ extension Chat {
         
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public class RemoveParticipantsCallback: CallbackProtocol {
         var sendParams: SendChatMessageVO
         init(parameters: SendChatMessageVO) {

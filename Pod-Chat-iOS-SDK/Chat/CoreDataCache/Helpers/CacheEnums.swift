@@ -14,7 +14,7 @@ enum fileSubPath: String {
     case Images = "/Chat/Images/"
 }
 
-enum Ordering: String {
+public enum Ordering: String {
     case ascending  = "asc"
     case descending = "desc"
 }

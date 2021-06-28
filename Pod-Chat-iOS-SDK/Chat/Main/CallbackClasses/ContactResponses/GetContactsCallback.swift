@@ -19,6 +19,7 @@ extension Chat {
     ///    - it doesn't have direct output,
     ///    - but on the situation where the response is valid,
     ///    - it will call the "onResultCallback" callback to getContacts function (by using "getContactsCallbackToUser")
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func responseOfGetContacts(withMessage message: ChatMessage) {
         log.verbose("Message of type 'GET_CONTACTS' recieved", context: "Chat")
         
@@ -52,7 +53,7 @@ extension Chat {
         
     }
     
-    
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public class GetContactsCallback: CallbackProtocol {
         var sendParams: SendChatMessageVO
         init(parameters: SendChatMessageVO) {

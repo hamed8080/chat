@@ -13,17 +13,33 @@ import Alamofire
 import SwiftyJSON
 //import UIKit
 //import Contacts
+import Sentry
+import Each
+//import Firebase
 
 
 public class Chat {
     
-    // MARK: - Chat initializer
-    public init() {
-
-    }
+    // MARK: - Chat Private initializer
+    private init() {}
+	
+	
+    internal static var instance: Chat?
     
-    public static let sharedInstance = Chat()
+	open class var sharedInstance: Chat {
+		if instance == nil {
+			instance = Chat()
+		}
+		return instance!
+	}
     
+    
+	@available(*,deprecated, renamed: "dispose")
+	public func disposeChatObject() {
+		dispose()
+	}
+    
+    @available(*,unavailable , renamed: "createChatObject(object:)",message: "use new createChatObject with config Object in parameter.")
     public func createChatObject(socketAddress:             String,
                                  ssoHost:                   String,
                                  platformHost:              String,
@@ -43,94 +59,87 @@ public class Chat {
                                  connectionRetryInterval:   Int,
                                  connectionCheckTimeout:    Int,
                                  messageTtl:                Int,
+                                 getDeviceIdFromToken:      Bool,
+                                 captureLogsOnSentry:       Bool,
                                  maxReconnectTimeInterval:  Int?,
                                  reconnectOnClose:          Bool,
                                  localImageCustomPath:      URL?,
                                  localFileCustomPath:       URL?,
-                                 deviecLimitationSpaceMB:   Int64?) {
+                                 deviecLimitationSpaceMB:   Int64?,
+                                 showDebuggingLogLevel:     ConsoleLogLevel?) {}
+    
+	func startCrashAnalytics() {
         
-        self.socketAddress      = socketAddress
-        self.ssoHost            = ssoHost
-        self.platformHost       = platformHost
-        self.fileServer         = fileServer
-        self.serverName         = serverName
-        self.token              = token
-        self.enableCache        = enableCache
-        self.mapServer          = mapServer
-        
-        if let timeStamp = cacheTimeStampInSec {
-            cacheTimeStamp = timeStamp
+        // Config for Sentry 4.3.1
+        do {
+            Client.shared = try Client(dsn: "https://5e236d8a40be4fe99c4e8e9497682333:5a6c7f732d5746e8b28625fcbfcbe58d@chatsentryweb.sakku.cloud/4")
+            try Client.shared?.startCrashHandler()
+        } catch let error {
+            print("\(error)")
         }
         
-        if let theMapApiKey = mapApiKey {
-            self.mapApiKey = theMapApiKey
-        }
-        
-        if let theTypeCode = typeCode {
-            self.generalTypeCode = theTypeCode
-        }
-        
-        if let theMsgPriority = msgPriority {
-            self.msgPriority = theMsgPriority
-        }
-        
-        if let theMsgTTL = msgTTL {
-            self.msgTTL = theMsgTTL
-        }
-        
-        if let theHttpRequestTimeout = httpRequestTimeout {
-            self.httpRequestTimeout = theHttpRequestTimeout
-        }
-        
-        if let theActualTimingLog = actualTimingLog {
-            self.actualTimingLog = theActualTimingLog
-        }
-        
-        if let timeLimitation = deviecLimitationSpaceMB {
-            self.deviecLimitationSpaceMB = timeLimitation
-        }
-        
-        self.wsConnectionWaitTime       = wsConnectionWaitTime
-        self.connectionRetryInterval    = connectionRetryInterval
-        self.connectionCheckTimeout     = connectionCheckTimeout
-        self.messageTtl                 = messageTtl
-        self.reconnectOnClose           = reconnectOnClose
-        self.maxReconnectTimeInterval   = maxReconnectTimeInterval ?? 60
-        
-        self.SERVICE_ADDRESSES.SSO_ADDRESS          = ssoHost
-        self.SERVICE_ADDRESSES.PLATFORM_ADDRESS     = platformHost
-        self.SERVICE_ADDRESSES.FILESERVER_ADDRESS   = fileServer
-        self.SERVICE_ADDRESSES.MAP_ADDRESS          = mapServer
-        
-        self.localImageCustomPath = localImageCustomPath
-        self.localFileCustomPath = localFileCustomPath
-        
-        getDeviceIdWithToken { (deviceIdStr) in
-            self.deviceId = deviceIdStr
-            log.info("get deviceId successfully = \(self.deviceId ?? "error!!")", context: "Chat")
-            
-            DispatchQueue.main.async {
-                self.CreateAsync()
-            }
-        }
-//        self.deviceId = "1234567890"
-//        DispatchQueue.main.async {
-//            self.CreateAsync()
-//        }
-        
-        if checkIfDeviceHasFreeSpace(needSpaceInMB: self.deviecLimitationSpaceMB, turnOffTheCache: true) {
-//            self.enableCache = false
-        }
-        
+        // Config for Sentry 5.0.5
+//        SentrySDK.start(options: [
+//            "dsn": "https://a06c7828c36d47c7bbb24605ba5d0d26@o376741.ingest.sentry.io/5198368",
+//            "debug": true // Helpful to see what's going on. (Enabled debug when first installing is always helpful)
+//        ])
+//        let event = Event(level: SentryLevel.error)
+//        event.message = "Test Sentry on Sakku"
+//        SentrySDK.capture(event: event)
+//        print("send message to sentry")
     }
+    
+    func startNotification() {
+//        FirebaseApp.configure()
+//        if #available(iOS 10.0, *) {
+//          // For iOS 10 display notification (sent via APNS)
+//          UNUserNotificationCenter.current().delegate = self
+//
+//          let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+//          UNUserNotificationCenter.current().requestAuthorization(
+//            options: authOptions,
+//            completionHandler: {_, _ in })
+//        } else {
+//          let settings: UIUserNotificationSettings =
+//          UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+//          Chat.sharedInstance.registerUserNotificationSettings(settings)
+//        }
+    }
+    
+    
+    func asccessNotificationRegisterationToken() {
+//        Messaging.messaging().delegate = self
+    }
+    
+    func getNotificationToken() {
+//        InstanceID.instanceID().instanceID { (result, error) in
+//          if let error = error {
+//            print("Error fetching remote instance ID: \(error)")
+//          } else if let result = result {
+//            print("Remote instance ID token: \(result.token)")
+//            self.instanceIDTokenMessage.text  = "Remote InstanceID token: \(result.token)"
+//          }
+//        }
+    }
+    
+    
+    
     
     // the delegate property that the user class should make itself to be implment this delegat.
     // At first, the class sould confirm to ChatDelegates, and then implement the ChatDelegates methods
-    public weak var delegate: ChatDelegates?
+	public weak var delegate: ChatDelegates?{
+		didSet{
+			if(!isCreateObjectFuncCalled){
+                print("Please call createChatObject func before set delegate")
+			}
+		}
+	}
     
     // create cache instance to use cache...
     static let cacheDB = Cache()
     
+    
+    var debuggingLogLevel: LogLevel = .error
     
     // MARK: - setup properties
     
@@ -178,6 +187,8 @@ public class Chat {
     var chatPingMessageInterval = 20
     var cacheTimeStamp          = (2 * 24) * (60 * 60)
     var deviecLimitationSpaceMB: Int64 = 100
+    
+    var captureSentryLogs = false
     
     var isChatReady     = false {
         didSet {
@@ -282,67 +293,118 @@ public class Chat {
     
     
     var lastReceivedMessageTime:    Date?
-    var lastReceivedMessageTimer:   RepeatingTimer? {
-        didSet {
-            if (lastReceivedMessageTimer != nil) {
-                log.verbose("Chat: lastReceivedMessageTimer valueChanged: \n staus = \(self.lastReceivedMessageTimer!.state) \n timeInterval = \(self.lastReceivedMessageTimer!.timeInterval) \n lastReceivedMessageTime = \(lastReceivedMessageTime ?? Date())", context: "Chat")
-                self.lastReceivedMessageTimer?.suspend()
-                DispatchQueue.global().async {
-                    self.lastReceivedMessageTime = Date()
-                    self.lastReceivedMessageTimer?.eventHandler = {
-                        if let lastReceivedMessageTimeBanged = self.lastReceivedMessageTime {
-                            let elapsed = Int(Date().timeIntervalSince(lastReceivedMessageTimeBanged))
-                            if (elapsed >= self.connectionCheckTimeout) {
-                                DispatchQueue.main.async {
-                                    self.asyncClient?.asyncReconnectSocket()
-                                }
-                                self.lastReceivedMessageTimer?.suspend()
-                            }
-                        }
+    var lstRcvdMsgTimer: Each?
+    
+    func lastReceivedMessageTimer(interval: TimeInterval) {
+//        log.debug("Chat: lastReceivedMessageTimer is called: \n timerIsStopped = \(lstRcvdMsgTimer?.isStopped) \n timeInterval = \(interval) \n lastReceivedMessageTime = \(lastReceivedMessageTime ?? Date())", context: "Chat")
+//        DispatchQueue.global().async {
+        self.lstRcvdMsgTimer = Each(interval).seconds
+        lastReceivedMessageTime = Date()
+        self.lstRcvdMsgTimer!.perform {
+            if let lastReceivedMessageTimeBanged = self.lastReceivedMessageTime {
+                let elapsed = Int(Date().timeIntervalSince(lastReceivedMessageTimeBanged))
+                if (elapsed >= self.connectionCheckTimeout) {
+                    DispatchQueue.main.async {
+                        self.asyncClient?.asyncReconnectSocket()
                     }
-                    self.lastReceivedMessageTimer?.resume()
+                    self.lstRcvdMsgTimer!.restart()
                 }
-            } else {
-                log.verbose("Chat: lastReceivedMessageTimer valueChanged to nil.\n lastReceivedMessageTime = \(lastReceivedMessageTime ?? Date())", context: "Chat")
             }
+            return .continue
         }
+//        }
     }
     
+//    var lastReceivedMessageTime:    Date?
+//    var lastReceivedMessageTimer:   RepeatingTimer? {
+//        didSet {
+//            if (lastReceivedMessageTimer != nil) {
+//                log.verbose("Chat: lastReceivedMessageTimer valueChanged: \n staus = \(self.lastReceivedMessageTimer!.state) \n timeInterval = \(self.lastReceivedMessageTimer!.timeInterval) \n lastReceivedMessageTime = \(lastReceivedMessageTime ?? Date())", context: "Chat")
+//                self.lastReceivedMessageTimer?.suspend()
+//                DispatchQueue.global().async {
+//                    self.lastReceivedMessageTime = Date()
+//                    self.lastReceivedMessageTimer?.eventHandler = {
+//                        if let lastReceivedMessageTimeBanged = self.lastReceivedMessageTime {
+//                            let elapsed = Int(Date().timeIntervalSince(lastReceivedMessageTimeBanged))
+//                            if (elapsed >= self.connectionCheckTimeout) {
+//                                DispatchQueue.main.async {
+//                                    self.asyncClient?.asyncReconnectSocket()
+//                                }
+//                                self.lastReceivedMessageTimer?.suspend()
+//                            }
+//                        }
+//                    }
+//                    self.lastReceivedMessageTimer?.resume()
+//                }
+//            } else {
+//                log.verbose("Chat: lastReceivedMessageTimer valueChanged to nil.\n lastReceivedMessageTime = \(lastReceivedMessageTime ?? Date())", context: "Chat")
+//            }
+//        }
+//    }
+    
+    
+    
+    
+    
     var lastSentMessageTime:    Date?
-    var lastSentMessageTimer:   RepeatingTimer? {
-        didSet {
-            /*
-             * first of all, it will suspend the timer
-             * then on the background thread it will run a timer
-             * if the "isChatReady" = true (means chat is still connected)
-             * and there are "chatPingMessageInterval" seconds passed from last message that sends to chat
-             * it will send a ping message on the main thread
-             *
-             */
-            if (lastSentMessageTimer != nil) {
-                log.verbose("Chat: lastSentMessageTimer valueChanged: \n staus = \(self.lastSentMessageTimer!.state) \n timeInterval = \(self.lastSentMessageTimer!.timeInterval) \n lastSentMessageTime = \(lastSentMessageTime ?? Date())", context: "Chat")
-                self.lastSentMessageTimer?.suspend()
-                DispatchQueue.global().async {
-                    self.lastSentMessageTime = Date()
-                    self.lastSentMessageTimer?.eventHandler = {
-                        if let lastSendMessageTimeBanged = self.lastSentMessageTime {
-                            let elapsed = Int(Date().timeIntervalSince(lastSendMessageTimeBanged))
-                            if (elapsed >= self.chatPingMessageInterval) && (self.isChatReady == true) {
-                                DispatchQueue.main.async {
-                                    self.ping()
-                                }
-                                self.lastSentMessageTimer?.suspend()
-                            }
-                        }
+    var lstSntMsgTimer:         Each?
+    
+    func lastSentMessageTimer(interval: TimeInterval) {
+//        log.debug("Chat: lastSentMessageTimer callled: \n timerIsStopped = \(lstSntMsgTimer?.isStopped) \n timeInterval = \(interval) \n lastSentMessageTime = \(lastSentMessageTime ?? Date())", context: "Chat")
+//        DispatchQueue.global().async {
+        lstSntMsgTimer = Each(interval).seconds
+        lastSentMessageTime = Date()
+        lstSntMsgTimer!.perform {
+            if let lastSendMessageTimeBanged = self.lastSentMessageTime {
+                let elapsed = Int(Date().timeIntervalSince(lastSendMessageTimeBanged))
+                if (elapsed >= self.chatPingMessageInterval) && (self.isChatReady == true) {
+                    DispatchQueue.main.async {
+                        self.ping()
                     }
-                    self.lastSentMessageTimer?.resume()
+                    self.lstSntMsgTimer!.restart()
                 }
-            } else {
-                log.verbose("Chat: lastSentMessageTimer valueChanged to nil.\n lastSentMessageTime = \(lastSentMessageTime ?? Date())", context: "Chat")
             }
-            
+            return .continue
         }
+//        }
+        
     }
+    
+//    var lastSentMessageTime:    Date?
+//    var lastSentMessageTimer:   RepeatingTimer? {
+//        didSet {
+//            /*
+//             * first of all, it will suspend the timer
+//             * then on the background thread it will run a timer
+//             * if the "isChatReady" = true (means chat is still connected)
+//             * and there are "chatPingMessageInterval" seconds passed from last message that sends to chat
+//             * it will send a ping message on the main thread
+//             *
+//             */
+//            if (lastSentMessageTimer != nil) {
+//                log.verbose("Chat: lastSentMessageTimer valueChanged: \n staus = \(self.lastSentMessageTimer!.state) \n timeInterval = \(self.lastSentMessageTimer!.timeInterval) \n lastSentMessageTime = \(lastSentMessageTime ?? Date())", context: "Chat")
+//                self.lastSentMessageTimer?.suspend()
+//                DispatchQueue.global().async {
+//                    self.lastSentMessageTime = Date()
+//                    self.lastSentMessageTimer?.eventHandler = {
+//                        if let lastSendMessageTimeBanged = self.lastSentMessageTime {
+//                            let elapsed = Int(Date().timeIntervalSince(lastSendMessageTimeBanged))
+//                            if (elapsed >= self.chatPingMessageInterval) && (self.isChatReady == true) {
+//                                DispatchQueue.main.async {
+//                                    self.ping()
+//                                }
+//                                self.lastSentMessageTimer?.suspend()
+//                            }
+//                        }
+//                    }
+//                    self.lastSentMessageTimer?.resume()
+//                }
+//            } else {
+//                log.verbose("Chat: lastSentMessageTimer valueChanged to nil.\n lastSentMessageTime = \(lastSentMessageTime ?? Date())", context: "Chat")
+//            }
+//
+//        }
+//    }
     
     
     // MARK: - properties that save callbacks on themselves
@@ -368,6 +430,7 @@ public class Chat {
     public var getMentionListCallbackToUser:        callbackTypeAlias?
     public var threadParticipantsCallbackToUser:    callbackTypeAlias?
     public var createThreadCallbackToUser:          callbackTypeAlias?
+    public var closeThreadCallbackToUser:           callbackTypeAlias?
     public var addParticipantsCallbackToUser:       callbackTypeAlias?
     public var removeParticipantsCallbackToUser:    callbackTypeAlias?
     public var sendCallbackToUserOnSent:            callbackTypeAlias?
@@ -397,6 +460,7 @@ public class Chat {
     public var updateChatProfileCallbackToUser:         callbackTypeAlias?
     public var joinPublicThreadCallbackToUser:              callbackTypeAlias?
     public var isPublicThreadNameAvailableCallbackToUser:   callbackTypeAlias?
+    public var statusPingCallbackToUser:            callbackTypeAlias?
     
     // Bot callBacks
     public var addBotCommandCallbackToUser: callbackTypeAlias?
@@ -409,19 +473,18 @@ public class Chat {
     // MARK: - create Async with the parameters
     
     public func CreateAsync() {
-        if let dId = deviceId {
-            asyncClient = Async(socketAddress:              socketAddress,
-                                serverName:                 serverName,
-                                deviceId:                   dId,
-                                appId:                      nil,
-                                peerId:                     nil,
-                                messageTtl:                 messageTtl,
-                                connectionRetryInterval:    connectionRetryInterval,
-                                maxReconnectTimeInterval:   maxReconnectTimeInterval,
-                                reconnectOnClose:           reconnectOnClose)
-            asyncClient?.delegate = self
-            asyncClient?.createSocket()
-        }
+        asyncClient = Async(socketAddress:              socketAddress,
+                            serverName:                 serverName,
+                            deviceId:                   deviceId,
+                            appId:                      nil,
+                            peerId:                     nil,
+                            messageTtl:                 messageTtl,
+                            connectionRetryInterval:    connectionRetryInterval,
+                            maxReconnectTimeInterval:   maxReconnectTimeInterval,
+                            reconnectOnClose:           reconnectOnClose,
+                            showDebuggingLogLevel:      debuggingLogLevel)
+        asyncClient?.delegate = self
+        asyncClient?.createSocket()
     }
     
     public func setGetUserInfoRetryCount(value: Int) {
@@ -433,6 +496,11 @@ public class Chat {
     public func getGetUserInfoRetry() -> Int {
         return getUserInfoRetry
     }
+	
+	//NewLinesAdded
+	var isCreateObjectFuncCalled = false
+	var config:ChatConfig?
+	var callbacksManager = CallbacksManager()
     
 }
 

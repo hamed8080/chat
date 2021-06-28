@@ -10,6 +10,7 @@ import Foundation
 import SwiftyJSON
 
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class DeleteMessageModel: ResponseModel, ResponseModelDelegates {
     
     public let messageId:   Int
@@ -77,6 +78,7 @@ open class DeleteMessageModel: ResponseModel, ResponseModelDelegates {
 }
 
 
+@available(*,deprecated , message:"Removed in 0.10.5.0 version")
 open class DeleteMessageResponse: DeleteMessageModel {
     
 }

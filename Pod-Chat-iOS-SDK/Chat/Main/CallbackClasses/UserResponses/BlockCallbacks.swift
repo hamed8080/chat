@@ -20,8 +20,15 @@ extension Chat {
     ///    - it doesn't have direct output,
     ///    - but on the situation where the response is valid,
     ///    - it will call the "onResultCallback" callback to block function (by using "blockUserCallbackToUser")
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func responseOfBlock(withMessage message: ChatMessage) {
         log.verbose("Message of type 'BLOCK' recieved", context: "Chat")
+        
+        if let contentAsJSON = message.content?.convertToJSON() {
+            let blockModel = BlockedUser(messageContent: contentAsJSON)
+            let blockEM = UserEventModel(type: UserEventTypes.BLOCK, blockModel: blockModel, threadId: message.subjectId)
+            delegate?.userEvents(model: blockEM)
+        }
         
         let returnData = CreateReturnData(hasError:         false,
                                           errorMessage:     "",
@@ -56,6 +63,7 @@ extension Chat {
         
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public class BlockCallbacks: CallbackProtocol {
         func onResultCallback(uID:      String,
                               response: CreateReturnData,

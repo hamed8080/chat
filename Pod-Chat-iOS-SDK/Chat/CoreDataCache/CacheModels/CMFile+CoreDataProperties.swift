@@ -13,12 +13,15 @@ import CoreData
 
 extension CMFile {
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     @nonobjc public class func fetchRequest() -> NSFetchRequest<CMFile> {
         return NSFetchRequest<CMFile>(entityName: "CMFile")
     }
     
     @NSManaged public var hashCode: String?
-    @NSManaged public var id:       NSNumber?
+//    @NSManaged public var id:       NSNumber?
     @NSManaged public var name:     String?
+    @NSManaged public var size:     NSNumber?
+    @NSManaged public var type:     String?
     
 }

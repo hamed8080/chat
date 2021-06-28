@@ -14,6 +14,7 @@ import SwiftyJSON
 
 public class QueueOfEditMessages: NSManagedObject {
     
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func convertCMObjectToObject() -> QueueOfWaitEditMessagesModel {
         
 //        var metadata:       JSON?
@@ -44,15 +45,15 @@ public class QueueOfEditMessages: NSManagedObject {
         }
         
         func createQueueOfWaitEditMessagesModel() -> QueueOfWaitEditMessagesModel {
-            let queueOfWaitEditMessagesModel = QueueOfWaitEditMessagesModel(content:    self.content,
-                                                                            messageType: MessageType.getType(from: messageType ?? 1),
+            let queueOfWaitEditMessagesModel = QueueOfWaitEditMessagesModel(textMessage:    self.textMessage,
+                                                                            messageType:    MessageType.getType(from: messageType ?? 1),
 //                                                                            metadata:   metadata,
-                                                                            metadata:   self.metadata,
-                                                                            repliedTo:  repliedTo,
-                                                                            messageId:  messageId,
-                                                                            threadId:   threadId,
-                                                                            typeCode:   self.typeCode,
-                                                                            uniqueId:   self.uniqueId)
+                                                                            metadata:       self.metadata,
+                                                                            repliedTo:      repliedTo,
+                                                                            messageId:      messageId,
+                                                                            threadId:       threadId,
+                                                                            typeCode:       self.typeCode,
+                                                                            uniqueId:       self.uniqueId)
             return queueOfWaitEditMessagesModel
         }
         

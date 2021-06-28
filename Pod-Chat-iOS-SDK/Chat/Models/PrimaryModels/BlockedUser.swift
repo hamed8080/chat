@@ -9,8 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-
-open class BlockedUser {
+open class BlockedUser : Decodable {
     
     public var id:          Int?
     public var coreUserId:  Int?
@@ -20,6 +19,7 @@ open class BlockedUser {
     public var profileImage: String?
     public var contact:     Contact?
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(messageContent: JSON) {
         self.id             = messageContent["id"].int
         self.coreUserId     = messageContent["coreUserId"].int
@@ -47,6 +47,7 @@ open class BlockedUser {
         self.contact        = contact
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public init(theBlockedContact: BlockedUser) {
         
         self.id             = theBlockedContact.id
@@ -58,10 +59,12 @@ open class BlockedUser {
         self.contact        = theBlockedContact.contact
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatDataToMakeBlockedUser() -> BlockedUser {
         return self
     }
     
+    @available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func formatToJSON() -> JSON {
         let result: JSON = ["id":               id ?? NSNull(),
                             "coreUserId":   coreUserId ?? NSNull(),
@@ -73,6 +76,26 @@ open class BlockedUser {
         return result
     }
     
+	private enum CodingKeys:String ,CodingKey{
+        case id           = "id"
+        case coreUserId   = "coreUserId"
+        case firstName    = "firstName"
+        case lastName     = "lastName"
+        case nickName     = "nickName"
+		case profileImage = "profileImage"
+        case contact      = "contactVO"
+	}
+	
+	public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id            = try container.decodeIfPresent(Int.self, forKey: .id)
+        coreUserId    = try container.decodeIfPresent(Int.self, forKey: .coreUserId)
+        firstName     = try container.decodeIfPresent(String.self, forKey: .firstName)
+        lastName      = try container.decodeIfPresent(String.self, forKey: .lastName)
+        nickName      = try container.decodeIfPresent(String.self, forKey: .nickName)
+        profileImage  = try container.decodeIfPresent(String.self, forKey: .profileImage)
+        contact       = try container.decodeIfPresent(Contact.self, forKey: .contact)
+    }
 }
 
 

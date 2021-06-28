@@ -13,6 +13,7 @@ import CoreData
 
 public class CMParticipant: NSManagedObject {
     
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func convertCMObjectToObject() -> Participant {
         
         var admin:              Bool?
@@ -103,7 +104,7 @@ public class CMParticipant: NSManagedObject {
         return model
     }
     
-    
+	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func updateObject(with participant: Participant, inThreadId: Int, isAdminRequest: Bool) {
         
         if let auditor = participant.auditor as NSNumber? {
