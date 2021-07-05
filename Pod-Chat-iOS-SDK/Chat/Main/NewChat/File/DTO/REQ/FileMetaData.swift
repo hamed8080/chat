@@ -6,12 +6,12 @@
 //
 
 import Foundation
-public class FileMetaData:Encodable{
+public class FileMetaData:Codable{
 
-    let file     : FileDetail
-    let fileHash : String?
-    let hashCode : String?
-    let name     : String?
+    public let file     : FileDetail?
+    public let fileHash : String?
+    public let hashCode : String?
+    public let name     : String?
     
     public init(file: FileDetail, fileHash: String? , hashCode:String? , name: String?) {
         self.file     = file
@@ -21,7 +21,7 @@ public class FileMetaData:Encodable{
     }
 }
 
-public class FileDetail:Encodable{
+public class FileDetail:Codable{
     
     let actualHeight    : Int?
     let actualWidth     : Int?

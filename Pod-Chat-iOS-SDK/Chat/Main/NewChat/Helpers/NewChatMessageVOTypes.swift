@@ -80,6 +80,35 @@ public enum NewChatMessageVOTypes :Int , Codable {
     case BLOCKED_ASSISTNTS                 = 118
     case GET_USER_BOTS                     = 120
     case MUTUAL_GROUPS                     = 130
+    
+    //CALL
+    case START_CALL_REQUEST                = 70
+    case ACCEPT_CALL                       = 71 //never called from server events
+    case REJECT_CALL                       = 72
+    case DELIVERED_CALL_REQUEST            = 73
+    case CALL_STARTED                      = 74
+    case END_CALL_REQUEST                  = 75
+    case END_CALL                          = 76
+    case GET_CALLS                         = 77
+    case GROUP_CALL_REQUEST                = 91
+    case LEAVE_CALL                        = 92
+    case ADD_CALL_PARTICIPANT              = 93
+    case CALL_PARTICIPANT_JOINED           = 94
+    case REMOVE_CALL_PARTICIPANT           = 95
+    case TERMINATE_CALL                    = 96 //never called from server events
+    case MUTE_CALL_PARTICIPANT             = 97
+    case UNMUTE_CALL_PARTICIPANT           = 98
+    case ACTIVE_CALL_PARTICIPANTS          = 110
+    case CALL_SESSION_CREATED              = 111
+    case TURN_ON_VIDEO_CALL                = 113
+    case TURN_OFF_VIDEO_CALL               = 114
+    case START_RECORDING                   = 121
+    case STOP_RECORDING                    = 122
+    
+    //CALL
+    
+    
+    
     case ERROR                             = 999
     
     case UNKNOWN                           = -1

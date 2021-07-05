@@ -670,6 +670,87 @@ public extension Chat {
         MutualGroupsRequestHandler.handle(request,self,completion , cacheResponse ,uniqueIdResult)
     }
 	
+    //Call
+    
+    //Test Status: Main ❌ - Integeration: ❌
+    func requestCall(_ request:StartCallRequest, _ completion:@escaping CompletionType<CreateCall>, uniqueIdResult:UniqueIdResultType = nil){
+        StartCallRequestHandler.handle(request,self,completion ,uniqueIdResult)
+    }
+    
+    //Test Status: Main ❌ - Integeration: ❌
+    func requestGroupCall(_ request:StartCallRequest, _ completion:@escaping CompletionType<CreateCall>, uniqueIdResult:UniqueIdResultType = nil){
+        StartCallRequestHandler.handle(request,self,completion ,uniqueIdResult)
+    }
+    
+    //Test Status: Main ❌ - Integeration: ❌
+    func endCall(_ request:EndCallRequest, _ completion:@escaping CompletionType<Int>, uniqueIdResult:UniqueIdResultType = nil){
+        EndCallRequestHandler.handle(request,self,completion ,uniqueIdResult)
+    }
+    
+    //Test Status: Main ❌ - Integeration: ❌
+    func addCallPartcipant(_ request:AddCallParticipantsRequest, _ completion:@escaping CompletionType<[CallParticipant]>, uniqueIdResult:UniqueIdResultType = nil){
+        AddCallParticipantRequestHandler.handle(request,self,completion ,uniqueIdResult)
+    }
+    
+    //Test Status: Main ❌ - Integeration: ❌
+    func removeCallPartcipant(_ request:RemoveCallParticipantsRequest, _ completion:@escaping CompletionType<[CallParticipant]>, uniqueIdResult:UniqueIdResultType = nil){
+        RemoveCallParticipantRequestHandler.handle(request,self,completion ,uniqueIdResult)
+    }
+    
+    //Test Status: Main ❌ - Integeration: ❌
+    func acceptCall(_ request:EndCallRequest, uniqueIdResult:UniqueIdResultType = nil){
+        AcceptCallRequestHandler.handle(request,self,uniqueIdResult)
+    }
+    
+    //Test Status: Main ❌ - Integeration: ❌
+    func turnOnVideoCall(_ request:TurnOnVideoCallRequest, _ completion:@escaping CompletionType<[CallParticipant]>, uniqueIdResult:UniqueIdResultType = nil){
+        TurnONVideoCallRequestHandler.handle(request,self,completion ,uniqueIdResult)
+    }
+    
+    //Test Status: Main ❌ - Integeration: ❌
+    func turnOffVideoCall(_ request:TurnOffVideoCallRequest, _ completion:@escaping CompletionType<[CallParticipant]>, uniqueIdResult:UniqueIdResultType = nil){
+        TurnOffVideoCallRequestHandler.handle(request,self,completion ,uniqueIdResult)
+    }
+    
+    //Test Status: Main ❌ - Integeration: ❌
+    func muteCall(_ request:MuteCallRequest, _ completion:@escaping CompletionType<[CallParticipant]>, uniqueIdResult:UniqueIdResultType = nil){
+        MuteCallRequestHandler.handle(request,self,completion ,uniqueIdResult)
+    }
+    
+    //Test Status: Main ❌ - Integeration: ❌
+    func unmuteCall(_ request:UNMuteCallRequest, _ completion:@escaping CompletionType<[CallParticipant]>, uniqueIdResult:UniqueIdResultType = nil){
+        UNMuteCallRequestHandler.handle(request,self,completion ,uniqueIdResult)
+    }
+    
+    //Test Status: Main ❌ - Integeration: ❌
+    func terminateCall(_ request:TerminateCallRequest, _ completion:@escaping CompletionType<[CallParticipant]>, uniqueIdResult:UniqueIdResultType = nil){
+        TerminateCallRequestHandler.handle(request,self,completion ,uniqueIdResult)
+    }
+    
+    //Test Status: Main ❌ - Integeration: ❌
+    func activeCallParticipants(_ request:ActiveCallParticipantsRequest, _ completion:@escaping CompletionType<[CallParticipant]>, uniqueIdResult:UniqueIdResultType = nil){
+        ActiveCallParticipantsRequestHandler.handle(request,self,completion ,uniqueIdResult)
+    }
+    
+    //Test Status: Main ❌ - Integeration: ❌
+    func startRecording(_ request:StartCallRecordingRequest, _ completion:@escaping CompletionType<Participant>, uniqueIdResult:UniqueIdResultType = nil){
+        StartCallRecordingRequestHandler.handle(request,self,completion ,uniqueIdResult)
+    }
+    
+    //Test Status: Main ❌ - Integeration: ❌
+    func stopRecording(_ request:StopCallRecordingRequest, _ completion:@escaping CompletionType<Participant>, uniqueIdResult:UniqueIdResultType = nil){
+        StopCallRecordingRequestHandler.handle(request,self,completion ,uniqueIdResult)
+    }
+
+    //Test Status: Main ❌ - Integeration: ❌
+    func callsHistory(_ request:CallsHistoryRequest, _ completion:@escaping PaginationCompletionType<[Call]>, uniqueIdResult:UniqueIdResultType = nil){
+        CallsHistoryRequestHandler.handle(request,self,completion ,uniqueIdResult)
+    }
+
+    //Call
+    
+    
+    
 	// REST API Request
     func restApiRequest<T:Decodable>(_ encodableRequest:BaseRequest ,
 											 decodeType:T.Type,

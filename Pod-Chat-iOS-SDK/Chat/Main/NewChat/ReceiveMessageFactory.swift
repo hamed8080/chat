@@ -224,6 +224,57 @@ class ReceiveMessageFactory{
             case .CHANGE_THREAD_TYPE:
                 ChangeThreadTypeResposneHandler.handle(chatMessage, asyncMessage)
                 break
+            case .START_CALL_REQUEST:
+                StartCallRequestResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .REJECT_CALL:
+                RejectCallResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .DELIVERED_CALL_REQUEST:
+                DeliverCallResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .CALL_STARTED:
+                CallStartedResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .CALL_PARTICIPANT_JOINED:
+                CallParticipantJoinedResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .REMOVE_CALL_PARTICIPANT:
+                RemoveCallParticipantResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .MUTE_CALL_PARTICIPANT:
+                MuteCallParticipantResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .UNMUTE_CALL_PARTICIPANT:
+                UNMuteCallParticipantResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .TURN_ON_VIDEO_CALL:
+                TurnOnVideoCallResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .TURN_OFF_VIDEO_CALL:
+                TurnOffVideoCallResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .LEAVE_CALL:
+                LeaveCallResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .CALL_SESSION_CREATED:
+                CallSessionCreatedResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .START_RECORDING:
+                StartCallRecordingResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .STOP_RECORDING:
+                StopCallRecordingResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .END_CALL:
+                EndCallResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .ACTIVE_CALL_PARTICIPANTS:
+                ActiveCallParticipantsResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .GET_CALLS:
+                GetCallsResponseHandler.handle(chatMessage, asyncMessage)
+                break
 			case .ERROR:
 				ErrorResponseHandler.handle(chatMessage , asyncMessage)
 				break
