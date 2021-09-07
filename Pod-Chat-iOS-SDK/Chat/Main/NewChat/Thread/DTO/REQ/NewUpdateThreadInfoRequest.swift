@@ -10,7 +10,7 @@ public class NewUpdateThreadInfoRequest: BaseRequest {
 	
 	public let description : String?
 	public var metadata    : String?
-	public var threadImage : UploadImageRequest?
+	public var threadImage : NewUploadImageRequest?
 	public let threadId    : Int
 	public let title       : String?
 	
@@ -18,7 +18,7 @@ public class NewUpdateThreadInfoRequest: BaseRequest {
     public init(description          : String?              = nil,
                 metadata             : String?              = nil,
                 threadId             : Int,
-                threadImage          : UploadImageRequest?  = nil,
+                threadImage          : NewUploadImageRequest?  = nil,
                 title                : String,
                 uniqueId             : String?              = nil,
                 typeCode             : String?              = nil
@@ -34,8 +34,8 @@ public class NewUpdateThreadInfoRequest: BaseRequest {
 	
 	private enum CodingKeys : String , CodingKey{
 		case description = "description"
-		case name = "name"
-		case metadata = "metadata"
+        case name        = "name"
+        case metadata    = "metadata"
 	}
 	
 	public override func encode(to encoder: Encoder) throws {

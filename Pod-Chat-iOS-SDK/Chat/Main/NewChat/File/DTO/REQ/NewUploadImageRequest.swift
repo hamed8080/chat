@@ -25,7 +25,8 @@ public class NewUploadImageRequest : NewUploadFileRequest{
                 originalName:   String?  = nil,
                 userGroupHash:  String?  = nil,
                 typeCode:       String?  = nil,
-                uniqueId:       String?  = nil) {
+                uniqueId:       String?  = nil,
+                isPublic:       Bool?    = nil) {
         self.xC = xC
         self.yC = yC
         self.hC = hC
@@ -33,6 +34,7 @@ public class NewUploadImageRequest : NewUploadFileRequest{
         super.init(data: data,
                    fileExtension:fileExtension,
                    fileName:fileName,
+                   isPublic: isPublic,
                    mimeType:mimeType,
                    originalName:originalName,
                    userGroupHash:userGroupHash,

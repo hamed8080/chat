@@ -22,7 +22,6 @@ public typealias UploadFileProgressType             = (UploadFileProgress? , Cha
 public typealias UploadCompletionType               = (NewUploadFileResponse? , FileMetaData? , ChatError?)->()
 public typealias UniqueIdResultType                 = ( (String)->() )?
 public typealias UniqueIdsResultType                = ( ([String])->() )?
-public typealias UploadProgressType                 = (Float) -> ()
 public typealias DownloadProgressType               = (DownloadFileProgress) -> ()
 public typealias DownloadFileCompletionType         = (Data?, FileModel?  ,ChatError?)->()
 public typealias DownloadImageCompletionType        = (Data?, ImageModel? ,ChatError?)->()
@@ -279,8 +278,8 @@ public extension Chat {
     }
 	
     //Test Status: Main ✅ - Integeration: ❌  because of sandbox problem - Sandbox: ✅
-	func updateThreadInfo(_ request:NewUpdateThreadInfoRequest , uniqueIdResult: UniqueIdResultType = nil, uploadProgress:@escaping UploadProgressType,completion:@escaping CompletionType<Conversation>){
-		UpdateThreadInfoRequestHandler(self , request ,uploadProgress ,completion , uniqueIdResult ,.UPDATE_THREAD_INFO).handle()
+	func updateThreadInfo(_ request:NewUpdateThreadInfoRequest , uniqueIdResult: UniqueIdResultType = nil, uploadProgress:@escaping UploadFileProgressType,completion:@escaping CompletionType<Conversation>){
+        UpdateThreadInfoRequestHandler.handle(self , request ,uploadProgress ,completion , uniqueIdResult)
 	}
 	
     //Test Status: Main ✅ - Integeration: ❌ because of sandbox problem - Sandbox: ✅
