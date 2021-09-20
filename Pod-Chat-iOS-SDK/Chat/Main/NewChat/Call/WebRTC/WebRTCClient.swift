@@ -24,7 +24,7 @@ public class WebRTCClient : NSObject , RTCPeerConnectionDelegate , RTCDataChanne
     
 	private var peerConnectionFactory :RTCPeerConnectionFactory
 	private var peerConnection        :RTCPeerConnection?
-	private var config                :WebRTCConfig
+	private var config                :WebRTCConfigOld
 	private var delegate              :WebRTCClientDelegate?
     private var localVideoTrack       :RTCVideoTrack?
     private var remoteVideoTrack      :RTCVideoTrack?
@@ -50,7 +50,7 @@ public class WebRTCClient : NSObject , RTCPeerConnectionDelegate , RTCDataChanne
 		}
 	}
 		
-	public init(config:WebRTCConfig , delegate:WebRTCClientDelegate? = nil) {
+	public init(config:WebRTCConfigOld , delegate:WebRTCClientDelegate? = nil) {
 		self.delegate                       = delegate
 		self.config                         = config
         RTCInitializeSSL()
@@ -373,6 +373,8 @@ extension WebRTCClient{
             break            
         case .CLOSE:
             break
+        case .GET_KEY_FRAME:
+            break
         case .STOP_ALL:
             break
         case .STOP:
@@ -385,6 +387,7 @@ extension WebRTCClient{
 enum WebRTCMessageType:String,Decodable {
     case CREATE_SESSION     = "CREATE_SESSION"
     case SESSION_REFRESH    = "SESSION_REFRESH"
+    case GET_KEY_FRAME      = "GET_KEY_FRAME"
     case ADD_ICE_CANDIDATE  = "ADD_ICE_CANDIDATE"
     case PROCESS_SDP_ANSWER = "PROCESS_SDP_ANSWER"
     case CLOSE              = "CLOSE"

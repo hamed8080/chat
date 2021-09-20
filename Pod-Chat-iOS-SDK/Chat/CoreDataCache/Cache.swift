@@ -26,8 +26,10 @@ public class Cache {
     func saveContext(subject: String) {
         do {
             try context.save()
+            context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
             log.verbose("\(subject), has Saved Successfully on CoreData Cache", context: "Cache on ChatSDK")
-        } catch {
+        } catch let nsError as NSError {
+            print("error is:\(nsError.userInfo.debugDescription)")
             log.error("\(subject), Error to save data on CoreData Cache", context: "Cache on ChatSDK")
             fatalError("\(subject), Error to save data on CoreData Cache")
         }

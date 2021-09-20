@@ -28,64 +28,79 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
     private var localDataChannel    :RTCDataChannel?
     private var remoteDataChannel   :RTCDataChannel?
     private var isFrontCamera       :Bool                       = true
-    private var remoteVideoRenderer :RTCVideoRenderer?
-    
+    private var videoSource         :RTCVideoSource?
+    private var iceQueue            :[(pc:RTCPeerConnection,ice:RTCIceCandidate)] = []
     private var signalingClient     :SignalingClient?
     
     private let rtcAudioSession =  RTCAudioSession.sharedInstance()
-    private let audioQueue = DispatchQueue(label: "audio")
+    private let audioQueue      = DispatchQueue(label: "audio")
     
     
-    private lazy var mediaConstarints:[String:[String:String]] =
-        [
-            config.topicVideoSend : [kRTCMediaConstraintsOfferToReceiveVideo :kRTCMediaConstraintsValueFalse,
-                                     kRTCMediaConstraintsOfferToReceiveAudio :kRTCMediaConstraintsValueFalse],
-            
-            config.topicVideoReceive : [kRTCMediaConstraintsOfferToReceiveVideo :kRTCMediaConstraintsValueTrue,
-                                        kRTCMediaConstraintsOfferToReceiveAudio :kRTCMediaConstraintsValueFalse],
-            
-            config.topicAudioSend : [kRTCMediaConstraintsOfferToReceiveVideo :kRTCMediaConstraintsValueFalse,
-                                     kRTCMediaConstraintsOfferToReceiveAudio :kRTCMediaConstraintsValueFalse],
-            
-            config.topicAudioReceive : [kRTCMediaConstraintsOfferToReceiveVideo :kRTCMediaConstraintsValueFalse,
-                                        kRTCMediaConstraintsOfferToReceiveAudio :kRTCMediaConstraintsValueTrue]
-        ]
+    var mediaConstraints:[String:[String:String]] = [:]
+    
+    static let TOPIC_VIDEO_SEND     = [kRTCMediaConstraintsOfferToReceiveVideo :kRTCMediaConstraintsValueFalse, kRTCMediaConstraintsOfferToReceiveAudio :kRTCMediaConstraintsValueFalse]
+    static let TOPIC_VIDEO_RECEIVE  = [kRTCMediaConstraintsOfferToReceiveVideo :kRTCMediaConstraintsValueTrue, kRTCMediaConstraintsOfferToReceiveAudio :kRTCMediaConstraintsValueFalse]
+    static let TOPIC_VOICE_SEND     = [kRTCMediaConstraintsOfferToReceiveVideo :kRTCMediaConstraintsValueFalse,kRTCMediaConstraintsOfferToReceiveAudio :kRTCMediaConstraintsValueFalse]
+    static let TOPIC_VOICE_RECEIVE  = [kRTCMediaConstraintsOfferToReceiveVideo :kRTCMediaConstraintsValueFalse, kRTCMediaConstraintsOfferToReceiveAudio :kRTCMediaConstraintsValueTrue]
 		
     public init(config:WebRTCConfig  , delegate:WebRTCClientDelegate? = nil) {
 		self.delegate                       = delegate
 		self.config                         = config
-        print(config)
         RTCInitializeSSL()
-        
-        self.pcfs.updateValue(RTCPeerConnectionFactory(encoderFactory: RTCDefaultVideoEncoderFactory.default, decoderFactory: RTCDefaultVideoDecoderFactory.default), forKey: config.topicVideoSend)
-        self.pcfs.updateValue(RTCPeerConnectionFactory(encoderFactory: RTCDefaultVideoEncoderFactory.default, decoderFactory: RTCDefaultVideoDecoderFactory.default), forKey: config.topicVideoReceive)
-        self.pcfs.updateValue(RTCPeerConnectionFactory(encoderFactory: RTCDefaultVideoEncoderFactory.default, decoderFactory: RTCDefaultVideoDecoderFactory.default), forKey: config.topicAudioSend)
-        self.pcfs.updateValue(RTCPeerConnectionFactory(encoderFactory: RTCDefaultVideoEncoderFactory.default, decoderFactory: RTCDefaultVideoDecoderFactory.default), forKey: config.topicAudioReceive)
-        
+        print(config)
         super.init()
+        appendConstraintForTopic(topic: config.topicVideoSend, constraints: WebRTCClientNew.TOPIC_VIDEO_SEND)
+        appendConstraintForTopic(topic: config.topicVideoReceive, constraints: WebRTCClientNew.TOPIC_VIDEO_RECEIVE)
+        appendConstraintForTopic(topic: config.topicAudioSend, constraints: WebRTCClientNew.TOPIC_VOICE_SEND)
+        appendConstraintForTopic(topic: config.topicAudioReceive, constraints: WebRTCClientNew.TOPIC_VOICE_RECEIVE)
+        
+        createPeerCpnnectionFactoryForTopic(topic: config.topicVideoSend)
+        createPeerCpnnectionFactoryForTopic(topic: config.topicVideoReceive)
+        createPeerCpnnectionFactoryForTopic(topic: config.topicAudioSend)
+        createPeerCpnnectionFactoryForTopic(topic: config.topicAudioReceive)
         
         let rtcConfig                            = RTCConfiguration()
         rtcConfig.sdpSemantics                   = .unifiedPlan
         rtcConfig.continualGatheringPolicy       = .gatherContinually
         rtcConfig.iceServers                     = [RTCIceServer(urlStrings: config.iceServers,username: config.userName!,credential: config.password!)]
-        let sendVideoConstraints                 = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: mediaConstarints[config.topicVideoSend])
-        let receiveVideoConstraints              = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: mediaConstarints[config.topicVideoReceive])
         
-        let sendAudioConstraints                 = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: mediaConstarints[config.topicAudioSend])
-        let receiveAudioConstraints              = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: mediaConstarints[config.topicAudioReceive])
-        
-        createPeerConnection(config.topicVideoSend, rtcConfig: rtcConfig, constraints: sendVideoConstraints)
-        createPeerConnection(config.topicVideoReceive, rtcConfig: rtcConfig, constraints: receiveVideoConstraints)
-        createPeerConnection(config.topicAudioSend, rtcConfig: rtcConfig, constraints: sendAudioConstraints)
-        createPeerConnection(config.topicAudioReceive, rtcConfig: rtcConfig, constraints: receiveAudioConstraints)
+        createPeerConnection(config.topicVideoSend, rtcConfig: rtcConfig)
+        createPeerConnection(config.topicVideoReceive, rtcConfig: rtcConfig)
+        createPeerConnection(config.topicAudioSend, rtcConfig: rtcConfig)
+        createPeerConnection(config.topicAudioReceive, rtcConfig: rtcConfig)
         createMediaSenders()
         configureAudioSession()
         WebRTCClientNew.instance            = self
         createSession()
+    
+        // Console output
+        RTCSetMinDebugLogLevel(RTCLoggingSeverity.info)
+
+        // File output
+//        let path = Bundle.main.bundlePath
+//        print("path is\(path)")
+//        let logFile = RTCFileLogger(dirPath: path, maxFileSize: 100 * 1024)
+//        logFile.severity = .info
+//        logFile.start()
 	}
     
-    private func createPeerConnection(_ topic:String , rtcConfig:RTCConfiguration , constraints:RTCMediaConstraints){
-        if let pcf = pcfs[topic],let pc = pcf.peerConnection(with: rtcConfig, constraints: constraints, delegate: nil) {
+    func appendConstraintForTopic(topic:String? , constraints:[String:String]){
+        if let topic = topic {
+            mediaConstraints[topic] = constraints
+        }
+    }
+    
+    func createPeerCpnnectionFactoryForTopic(topic:String?){
+        if let topic = topic{
+            pcfs.updateValue(RTCPeerConnectionFactory(encoderFactory: RTCDefaultVideoEncoderFactory.default, decoderFactory: RTCDefaultVideoDecoderFactory.default), forKey: topic)
+        }
+    }
+    
+    private func createPeerConnection(_ topic:String? , rtcConfig:RTCConfiguration){
+        if let topic = topic,
+           let pcf = pcfs[topic],
+           let constraints = mediaConstraints[topic],
+           let pc = pcf.peerConnection(with: rtcConfig, constraints: .init(mandatoryConstraints: constraints, optionalConstraints: constraints), delegate: nil) {
             pc.delegate     = self
             peerConnections.updateValue(pc, forKey: topic)
         }else{
@@ -108,9 +123,10 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
     /** Called when connction state change in RTCPeerConnectionDelegate. */
     private func setDisconnectedState(peerConnection:RTCPeerConnection){
         print("--- \(getPCName(peerConnection)) disconnected ---")
-        peerConnections[getTopicForPeerConnection(peerConnection)]?.close()
-        peerConnections.removeValue(forKey: getTopicForPeerConnection(peerConnection))
-        // self.dataChannel = nil
+        if let topicName = getTopicForPeerConnection(peerConnection) {
+            peerConnections[topicName]?.close()
+            peerConnections.removeValue(forKey: topicName)
+        }
         self.delegate?.didDisconnectWebRTC()
     }
     
@@ -135,7 +151,8 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
 	}
     
     public func getLocalSDPWithOffer(topic:String ,onSuccess:@escaping (RTCSessionDescription)->Void){
-        let constraints = RTCMediaConstraints.init(mandatoryConstraints: mediaConstarints[topic]!, optionalConstraints: nil)
+        guard let mediaConstraint = mediaConstraints[topic] else{return}
+        let constraints = RTCMediaConstraints.init(mandatoryConstraints: mediaConstraint, optionalConstraints: nil)
         guard let pp = peerConnections[topic] else{
             print("error peerconection is null")
             return
@@ -165,6 +182,15 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
         send(data)
     }
     
+    public func close(){
+        peerConnections.forEach { key , peerConnection in
+            peerConnection.close()
+        }
+        let close = CloseSessionReq(token: Chat.sharedInstance.token)
+        guard let data = try? JSONEncoder().encode(close) else {return}
+        send(data)
+    }
+    
     public func send(_ data:Data){
         if let content = String(data: data, encoding: .utf8){
             Chat.sharedInstance.prepareToSendAsync(content,peerName: config.peerName)
@@ -174,7 +200,8 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
     }
     
     public func getAnswerSDP(topic:String , onSuccess:@escaping (RTCSessionDescription)->Void){
-        let constraints = RTCMediaConstraints.init(mandatoryConstraints: mediaConstarints[topic]!, optionalConstraints: nil)
+        guard let mediaConstraint = mediaConstraints[topic] else{return}
+        let constraints = RTCMediaConstraints.init(mandatoryConstraints: mediaConstraint, optionalConstraints: nil)
         let pp = peerConnections[topic]
         pp?.answer(for: constraints, completionHandler: { sdp, error in
             error?.printError(message: "error get answer SDP From SDK")
@@ -186,60 +213,47 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
         })
     }
     
-    public func sendAnswerToPeer(_ sdp:RTCSessionDescription){
-        // FIXME: - Fix topic to dynamic and mediaType and Topic
-        let sendSDPOffer = SendOfferSDPReq(id: "SEND_SDP_OFFER", brokerAddress: config.brokerAddress, token: Chat.sharedInstance.token, topic: config.topicVideoReceive, sdpOffer: sdp.sdp , mediaType: .VIDEO)
-        guard let data = try? JSONEncoder().encode(sendSDPOffer) else {return}
-        send(data)
-    }
-    
     private func createMediaSenders(){
         let streamId = "stream"
         
         //Send Audio
-        if let audioTrack = createAudioTrack(){
-            peerConnections[config.topicAudioSend]?.add(audioTrack, streamIds: [streamId])
+        if let audioTrack = createAudioTrack() , let topicAudioSend = config.topicAudioSend {
+            peerConnections[topicAudioSend]?.add(audioTrack, streamIds: [streamId])
         }
         
         //Receive Audio
-        var error:NSError?
-        let transciver = peerConnections[config.topicAudioReceive]?.addTransceiver(of: .audio)
-        transciver?.setDirection(.recvOnly, error: &error)
-        if let remoteAudioTrack = transciver?.receiver.track as? RTCAudioTrack {
-            peerConnections[config.topicAudioReceive]?.add(remoteAudioTrack, streamIds: [streamId])
-            remoteAudioTrack.isEnabled = true
+        if let topicAudioReceive = config.topicAudioReceive{
+            var error:NSError?
+            let transciver = peerConnections[topicAudioReceive]?.addTransceiver(of: .audio)
+            transciver?.setDirection(.recvOnly, error: &error)
+            if let remoteAudioTrack = transciver?.receiver.track as? RTCAudioTrack {
+                peerConnections[topicAudioReceive]?.add(remoteAudioTrack, streamIds: [streamId])
+                remoteAudioTrack.isEnabled = true
+            }
         }
         
         //Video
-        if let videoTrack   = createVideoTrack(){
+        if let topicVideoSend = config.topicVideoSend, let videoTrack   = createVideoTrack(){
             localVideoTrack  = videoTrack
-//            peerConnections[config.topicVideoReceive]?.add(videoTrack, streamIds: [streamId])
-            peerConnections[config.topicVideoSend]?.add(videoTrack, streamIds: [streamId])
-        }
-//        let transceiver = peerConnectionSend?.addTransceiver(with: videoTrack)
-//        var error:NSError?
-//        transceiver?.setDirection(.sendOnly, error: &error)
-        let videoReceivetransciver = peerConnections[config.topicVideoReceive]?.addTransceiver(of: .video)
-        videoReceivetransciver?.setDirection(.recvOnly, error: &error)
-        if let remoteVideoTrack = videoReceivetransciver?.receiver.track as? RTCVideoTrack{
-            peerConnections[config.topicVideoReceive]?.add(remoteVideoTrack, streamIds: [streamId])
-            self.remoteVideoTrack = remoteVideoTrack
+            peerConnections[topicVideoSend]?.add(videoTrack, streamIds: [streamId])
+//            peerConnections[config.topicVideoSend]?.setBweMinBitrateBps(80000, currentBitrateBps: 80000, maxBitrateBps: 80000)
         }
         
-//        remoteVideoTrack = peerConnections[config.topicVideoReceive]?.transceivers.first { $0.mediaType == .video }?.receiver.track as? RTCVideoTrack
-       
-        
-        
-        //Data Channel
-//        if let dataChannel = createDataChannel() {
-//            dataChannel.delegate = self
-//            self.localDataChannel = dataChannel
-//        }
+        if let topicVideoReceive = config.topicVideoReceive{
+            var error:NSError?
+            let videoReceivetransciver = peerConnections[topicVideoReceive]?.addTransceiver(of: .video)
+            videoReceivetransciver?.setDirection(.recvOnly, error: &error)
+            if let remoteVideoTrack = videoReceivetransciver?.receiver.track as? RTCVideoTrack{
+                peerConnections[topicVideoReceive]?.add(remoteVideoTrack, streamIds: [streamId])
+                self.remoteVideoTrack = remoteVideoTrack
+            }
+        }
     }
     
     private func createVideoTrack()->RTCVideoTrack?{
-        guard let pcfSendVideo = pcfs[config.topicVideoSend] else {return nil}
+        guard let topicVideoSend = config.topicVideoSend, let pcfSendVideo = pcfs[topicVideoSend] else {return nil}
         let videoSource = pcfSendVideo.videoSource()
+        self.videoSource = videoSource
         #if targetEnvironment(simulator)
         self.videoCapturer = RTCFileVideoCapturer(delegate: videoSource)
         #else
@@ -251,50 +265,62 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
     }
     
     private func createAudioTrack()->RTCAudioTrack?{
-        guard let pcfAudioSend = pcfs[config.topicAudioSend] else{return nil}
-        let audioConstrains = RTCMediaConstraints(mandatoryConstraints: mediaConstarints[config.topicAudioSend], optionalConstraints: nil)
+        guard let topicAudioSend = config.topicAudioSend ,let mediaConstraint = mediaConstraints[topicAudioSend],let pcfAudioSend = pcfs[topicAudioSend] else{return nil}
+        let audioConstrains = RTCMediaConstraints(mandatoryConstraints:mediaConstraint, optionalConstraints: nil)
         let audioSource = pcfAudioSend.audioSource(with: audioConstrains)
         let audioTrack = pcfAudioSend.audioTrack(with: audioSource, trackId: "audio0")
         return audioTrack
     }
     
-//    private func createDataChannel()->RTCDataChannel?{
-//        let config = RTCDataChannelConfiguration()
-//        guard let dataChannel = peerConnectionSend?.dataChannel(forLabel: "WebRTCData", configuration: config) else{
-//            print("warning: Couldn't create data channel")
-//            return nil
-//        }
-//        return dataChannel
-//    }
+    private func generateSendKeyFrame(){
+        guard let format = getCameraFormat() , let maxFrameRate = format.videoSupportedFrameRateRanges.last?.maxFrameRate else {return}
+        let desc = CMVideoFormatDescriptionGetDimensions(format.formatDescription)
+        localVideoTrack?.source.adaptOutputFormat(toWidth: desc.width - 5, height: desc.height - 5, fps: Int32(maxFrameRate))
+        Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self]timer in
+            guard let self = self else{return}
+            self.localVideoTrack?.source.adaptOutputFormat(toWidth: desc.width + 5, height: desc.height + 5, fps: Int32(maxFrameRate))
+        }
+    }
     
-    public func startCaptureLocalVideo(renderer:RTCVideoRenderer){
-        
-        guard let capturer = videoCapturer as? RTCCameraVideoCapturer,
-        let frontCamera = RTCCameraVideoCapturer.captureDevices().first(where: {$0.position == (isFrontCamera ? .front : .back) }),
+    public func startCaptureLocalVideo(renderer:RTCVideoRenderer , fileName:String){
+        if let capturer =  videoCapturer as? RTCCameraVideoCapturer{
+            guard let selectedCamera = RTCCameraVideoCapturer.captureDevices().first(where: {$0.position == (isFrontCamera ? .front : .back) }),
+                  let format = getCameraFormat(),
+                  let maxFrameRate = format.videoSupportedFrameRateRanges.last?.maxFrameRate
+            else{return}
+            capturer.startCapture(with: selectedCamera, format: format, fps: Int(maxFrameRate))
+            localVideoTrack?.add(renderer)
+        }else if let capturer = videoCapturer as? RTCFileVideoCapturer{
+            capturer.startCapturing(fromFileNamed: fileName , onError: { error in
+                error.printError(message: "error on read from mp4 file \(error.localizedDescription)")
+            })
+            localVideoTrack?.add(renderer)
+        }
+    }
+    
+    private func getCameraFormat()->AVCaptureDevice.Format?{
+        guard let frontCamera = RTCCameraVideoCapturer.captureDevices().first(where: {$0.position == (isFrontCamera ? .front : .back) }) else {return nil}
         let format = RTCCameraVideoCapturer.supportedFormats(for: frontCamera).last(where: { format in
-           let width =  CMVideoFormatDescriptionGetDimensions(format.formatDescription).width == 1280
-           let height =  CMVideoFormatDescriptionGetDimensions(format.formatDescription).height == 720
-            return width && height
-        }),// TODO:- must chose resulation from configVideo
-        let maxFrameRate = format.videoSupportedFrameRateRanges.last?.maxFrameRate
-        else{return}
-        
-        capturer.startCapture(with: frontCamera, format: format, fps: Int(maxFrameRate))
-        localVideoTrack?.add(renderer)
+           CMVideoFormatDescriptionGetDimensions(format.formatDescription).width == 1280 && CMVideoFormatDescriptionGetDimensions(format.formatDescription).height == 720
+        })
+        return format
     }
     
     public func switchCameraPosition(renderer:RTCVideoRenderer){
         if let capturer = videoCapturer as? RTCCameraVideoCapturer{
             capturer.stopCapture {
                 self.isFrontCamera.toggle()
-                self.startCaptureLocalVideo(renderer:renderer)
+                self.startCaptureLocalVideo(renderer:renderer,fileName: "")
             }
         }
     }
     
     public func renderRemoteVideo(_ renderer:RTCVideoRenderer){
-//        remoteVideoRenderer = renderer
         remoteVideoTrack?.add(renderer)
+    }
+    
+    deinit {
+        print("deinit called")
     }
 }
 
@@ -340,8 +366,9 @@ extension WebRTCClientNew{
 	
 	public func peerConnection(_ peerConnection: RTCPeerConnection, didGenerate candidate: RTCIceCandidate) {
         print("\(getPCName(peerConnection)) did generate candidate")
+        guard let topicName = getTopicForPeerConnection(peerConnection) else{return}
         let sendIceCandidate = SendCandidateReq(token: Chat.sharedInstance.token,
-                                                topic: getTopicForPeerConnection(peerConnection),
+                                                topic: topicName,
                                                 candidate: IceCandidate(from: candidate).replaceSpaceSdpIceCandidate)
         guard let data = try? JSONEncoder().encode(sendIceCandidate) else {return}
         self.send(data)
@@ -361,20 +388,36 @@ extension WebRTCClientNew{
     }
     
     private func getPCName(_ peerConnection:RTCPeerConnection)->String{
-        let topic   = getTopicForPeerConnection(peerConnection)
+        guard let topic = getTopicForPeerConnection(peerConnection) else {return ""}
         let isSend  = isSendTopic(topic: topic)
         let isVideo = topic == config.topicVideoSend ||  topic == config.topicVideoReceive
         return "peerConnection\(isSend ? "Send" : "Receive")\(isVideo ? "Video" : "Audio")"
     }
     
-    private func getTopicForPeerConnection(_ peerConnection:RTCPeerConnection)->String{
-        if peerConnection == peerConnections[config.topicVideoSend] { return config.topicVideoSend }
-        else if peerConnection == peerConnections[config.topicVideoReceive] { return config.topicVideoReceive }
-        else if peerConnection == peerConnections[config.topicAudioSend] { return config.topicAudioSend }
-        else if peerConnection == peerConnections[config.topicAudioReceive] { return config.topicAudioReceive }
-        return "NotFindPeerName"
+    private func getTopicForPeerConnection(_ peerConnection:RTCPeerConnection)->String?{
+        if
+            let topicVideoSend = config.topicVideoSend, peerConnection == peerConnections[topicVideoSend] { return config.topicVideoSend }
+        else
+        if let  topicVideoReceive = config.topicVideoReceive, peerConnection == peerConnections[topicVideoReceive] { return config.topicVideoReceive }
+        else
+        if let topicAudioSend = config.topicAudioSend,  peerConnection == peerConnections[topicAudioSend] { return config.topicAudioSend }
+        else
+        if let topicAudioReceive = config.topicAudioReceive, peerConnection == peerConnections[topicAudioReceive] { return config.topicAudioReceive }
+        else{
+            print("topic not found!")
+            return nil
+        }
     }
     
+    public func setCameraIsOn(_ isCameraOn:Bool){
+        guard let topicVideoSend = config.topicVideoSend else {return}
+        peerConnections[topicVideoSend]?.senders.first?.track?.isEnabled = isCameraOn
+    }
+    
+    public func setMute(_ isMute:Bool){
+        guard let topicAudioSend = config.topicAudioSend else {return}
+        peerConnections[topicAudioSend]?.senders.first?.track?.isEnabled = !isMute
+    }
 }
 
 // MARK: - RTCDataChannelDelegate
@@ -418,26 +461,13 @@ extension WebRTCClientNew{
             Chat.sharedInstance.sotpAllSignalingServerCall(peerName: config.peerName)
             break
         case .ADD_ICE_CANDIDATE:
-            do{
-                let candidate = try JSONDecoder().decode(RemoteCandidateRes.self, from: data)
-                let pp = peerConnections[candidate.topic]
-                pp?.add(candidate.rtcIceCandidate, completionHandler: { error in
-                    error?.printError(message: "error on add ICE candidiate with :\(candidate.candidate)")
-                })
-            }catch{
-                error.printError(message: "error decode ICE JSON")
-            }
+            addIceToPeerConnection(data)
             break
         case .PROCESS_SDP_ANSWER:
-            do{
-                let remoteSDP = try JSONDecoder().decode(RemoteSDPRes.self, from: data)
-                let pp = peerConnections[remoteSDP.topic]
-                pp?.setRemoteDescription(remoteSDP.rtcSDP, completionHandler: { error in
-                    error?.printError(message: "error in setRemoteDescroptoin with sdp: \(remoteSDP.rtcSDP)")
-                })
-            }catch{
-                error.printError(message: "error in decode PROCESS_SDP_ANSWER")
-            }
+            addSDPAnswerToPeerConnection(data)
+            break
+        case .GET_KEY_FRAME:
+            generateSendKeyFrame()
             break
         case .CLOSE:
             break
@@ -446,6 +476,47 @@ extension WebRTCClientNew{
             break
         case .STOP:
             break
+        }
+    }
+    
+    func addSDPAnswerToPeerConnection(_ data:Data){
+        guard let remoteSDP = try? JSONDecoder().decode(RemoteSDPRes.self, from: data)else{
+            print("error in decode PROCESS_SDP_ANSWER: \(String(data: data, encoding: .utf8) ?? "")")
+            return
+        }
+        let pp = peerConnections[remoteSDP.topic]
+        pp?.setRemoteDescription(remoteSDP.rtcSDP, completionHandler: { error in
+            error?.printError(message: "error in setRemoteDescroptoin with sdp: \(remoteSDP.rtcSDP)")
+        })
+    }
+    
+    ///check if remote descriptoin already seted otherwise add it in to queue until set remote description then add ice to peer connection
+    func addIceToPeerConnection(_ data:Data){
+        guard let candidate = try? JSONDecoder().decode(RemoteCandidateRes.self, from: data) else{
+            print("error decode candiadte \(String(data:data, encoding:.utf8) ?? "")")
+            return
+        }
+        guard let pp = peerConnections[candidate.topic] else {
+            print("error finding peerConnection\(candidate.topic)")
+            return
+        }
+        let rtcIce = candidate.rtcIceCandidate
+        if pp.remoteDescription != nil{
+            pp.add(rtcIce, completionHandler: { error in
+                error?.printError(message: "\(error.debugDescription) error on add ICE candidiate with :\(candidate.candidate)")
+            })
+        }else{
+            iceQueue.append((pp, rtcIce))
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+                if pp.remoteDescription != nil{
+                    pp.add(rtcIce){ error in
+                        error?.printError(message: "\(error.debugDescription) error on add ICE candidiate with :\(rtcIce.sdp)")
+                    }
+                    self.iceQueue.remove(at: self.iceQueue.firstIndex{ $0.ice == rtcIce}!)
+                    print("one ice added to peerconnection from queue and remainig in queu is\(self.iceQueue.count)")
+                    timer.invalidate()
+                }
+            }
         }
     }
 }
@@ -488,21 +559,26 @@ extension WebRTCClientNew{
 extension WebRTCClientNew{
     
     public func setOffers(){
-        getLocalSDPWithOffer(topic: config.topicVideoSend , onSuccess: { rtcSession in
-            self.sendOfferToPeer(rtcSession, topic: self.config.topicVideoSend, mediaType: .VIDEO)
-        })
+        if let topicSendVideo = config.topicVideoSend {
+            getOfferAndSendToPeer(topic: topicSendVideo, mediaType: .VIDEO)
+        }
         
-        getLocalSDPWithOffer(topic: config.topicVideoReceive , onSuccess: { rtcSession in
-            self.sendOfferToPeer(rtcSession, topic: self.config.topicVideoReceive, mediaType: .AUDIO)
-        })
+        if let topicVideoReceive = config.topicVideoReceive {
+            getOfferAndSendToPeer(topic: topicVideoReceive, mediaType: .VIDEO)
+        }
         
-        getLocalSDPWithOffer(topic: config.topicAudioSend , onSuccess: { rtcSession in
-            self.sendOfferToPeer(rtcSession, topic: self.config.topicAudioSend, mediaType: .AUDIO)
-        })
+        if let topicAudioSend = config.topicAudioSend {
+            getOfferAndSendToPeer(topic: topicAudioSend, mediaType: .AUDIO)
+        }
         
-        getLocalSDPWithOffer(topic: config.topicAudioReceive , onSuccess: { rtcSession in
-            self.sendOfferToPeer(rtcSession, topic: self.config.topicAudioReceive, mediaType: .AUDIO)
-        })
+        if let topicAudioReceive = config.topicAudioReceive {
+            getOfferAndSendToPeer(topic: topicAudioReceive, mediaType: .AUDIO)
+        }
     }
     
+    func getOfferAndSendToPeer(topic:String,mediaType:Mediatype){
+        getLocalSDPWithOffer(topic: topic , onSuccess: { rtcSession in
+            self.sendOfferToPeer(rtcSession, topic: topic , mediaType:mediaType )
+        })
+    }
 }

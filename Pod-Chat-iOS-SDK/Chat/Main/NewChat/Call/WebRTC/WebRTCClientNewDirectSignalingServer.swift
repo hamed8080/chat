@@ -17,7 +17,7 @@ public class WebRTCClientNewDirectServer : NSObject , RTCPeerConnectionDelegate 
     private var peerConnectionFactoryReceive  :RTCPeerConnectionFactory
 	private var peerConnectionSend            :RTCPeerConnection?
     private var peerConnectionReceive         :RTCPeerConnection?
-	private var config                        :WebRTCConfig
+	private var config                        :WebRTCConfigOld
 	private var delegate                      :WebRTCClientDelegate?
     private var localVideoTrack               :RTCVideoTrack?
     private var remoteVideoTrack              :RTCVideoTrack?
@@ -55,7 +55,7 @@ public class WebRTCClientNewDirectServer : NSObject , RTCPeerConnectionDelegate 
         }
     }
 		
-	public init(config:WebRTCConfig , delegate:WebRTCClientDelegate? = nil) {
+	public init(config:WebRTCConfigOld , delegate:WebRTCClientDelegate? = nil) {
 		self.delegate                       = delegate
 		self.config                         = config
         RTCInitializeSSL()
@@ -417,6 +417,8 @@ extension WebRTCClientNewDirectServer : SignalingClientDelegate{
             break
         case .CLOSE:
             break
+        case .GET_KEY_FRAME:
+            break        
         case .STOP_ALL:
             break
         case .STOP:

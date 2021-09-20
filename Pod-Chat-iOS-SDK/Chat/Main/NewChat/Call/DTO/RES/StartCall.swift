@@ -15,6 +15,15 @@ public struct StartCall:Codable {
     public let callImage        : String?
     public var callId           : Int?
     
+    public init(certificateFile: String, clientDTO: ClientDTO, chatDataDto: ChatDataDTO, callName: String?, callImage: String?, callId: Int? = nil) {
+        self.certificateFile = certificateFile
+        self.clientDTO       = clientDTO
+        self.chatDataDto     = chatDataDto
+        self.callName        = callName
+        self.callImage       = callImage
+        self.callId          = callId
+    }
+    
     
     private enum CodingKeys:String , CodingKey{
         

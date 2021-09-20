@@ -15,6 +15,16 @@ public struct ChatDataDTO :Codable {
     public let brokerAddress      : String
     public let brokerAddressWeb   : String
     public let kurentoAddress     : String
+    
+    public init(sendMetaData: String, screenShare: String, reciveMetaData: String, turnAddress: String, brokerAddress: String, brokerAddressWeb: String, kurentoAddress: String) {
+        self.sendMetaData     = sendMetaData
+        self.screenShare      = screenShare
+        self.reciveMetaData   = reciveMetaData
+        self.turnAddress      = turnAddress
+        self.brokerAddress    = brokerAddress
+        self.brokerAddressWeb = brokerAddressWeb
+        self.kurentoAddress   = kurentoAddress
+    }
 
     private enum CodingKeys:String , CodingKey{
         case sendMetaData       = "sendMetaData"
