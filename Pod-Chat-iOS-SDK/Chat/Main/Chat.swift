@@ -350,24 +350,21 @@ public class Chat {
     var lstSntMsgTimer:         Each?
     
     func lastSentMessageTimer(interval: TimeInterval) {
-//        log.debug("Chat: lastSentMessageTimer callled: \n timerIsStopped = \(lstSntMsgTimer?.isStopped) \n timeInterval = \(interval) \n lastSentMessageTime = \(lastSentMessageTime ?? Date())", context: "Chat")
-//        DispatchQueue.global().async {
-        lstSntMsgTimer = Each(interval).seconds
-        lastSentMessageTime = Date()
-        lstSntMsgTimer!.perform {
-            if let lastSendMessageTimeBanged = self.lastSentMessageTime {
-                let elapsed = Int(Date().timeIntervalSince(lastSendMessageTimeBanged))
-                if (elapsed >= self.chatPingMessageInterval) && (self.isChatReady == true) {
-                    DispatchQueue.main.async {
+        /// Do Not move DispatchQueue to perform clousure its not work on heavy work load with multiple call such as when we start Call. if we move to perform ping not worked and whole system sopped!.
+        DispatchQueue.main.async {
+            self.lstSntMsgTimer = Each(interval).seconds
+            self.lastSentMessageTime = Date()
+            self.lstSntMsgTimer!.perform {
+                if let lastSendMessageTimeBanged = self.lastSentMessageTime {
+                    let elapsed = Int(Date().timeIntervalSince(lastSendMessageTimeBanged))
+                    if (elapsed >= self.chatPingMessageInterval) && (self.isChatReady == true) {
                         self.ping()
+                        self.lstSntMsgTimer!.restart()
                     }
-                    self.lstSntMsgTimer!.restart()
                 }
+                return .continue
             }
-            return .continue
         }
-//        }
-        
     }
     
 //    var lastSentMessageTime:    Date?

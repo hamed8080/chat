@@ -423,6 +423,10 @@ extension WebRTCClientNewDirectServer : SignalingClientDelegate{
             break
         case .STOP:
             break
+        case .SESSION_NEW_CREATED:
+            break
+        case .UNKOWN:
+            break
         }
     }
     

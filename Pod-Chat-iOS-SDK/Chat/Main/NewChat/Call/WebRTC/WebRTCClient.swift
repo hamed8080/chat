@@ -379,20 +379,35 @@ extension WebRTCClient{
             break
         case .STOP:
             break
+        case .SESSION_NEW_CREATED:
+            break
+        case .UNKOWN:
+            break
         }
         print( "call on Message\n:" +  String(data: data, encoding: .utf8)!)
     }
 }
 
 enum WebRTCMessageType:String,Decodable {
-    case CREATE_SESSION     = "CREATE_SESSION"
-    case SESSION_REFRESH    = "SESSION_REFRESH"
-    case GET_KEY_FRAME      = "GET_KEY_FRAME"
-    case ADD_ICE_CANDIDATE  = "ADD_ICE_CANDIDATE"
-    case PROCESS_SDP_ANSWER = "PROCESS_SDP_ANSWER"
-    case CLOSE              = "CLOSE"
-    case STOP_ALL           = "STOPALL"
-    case STOP               = "STOP"
+    case CREATE_SESSION      = "CREATE_SESSION"
+    case SESSION_NEW_CREATED = "SESSION_NEW_CREATED"
+    case SESSION_REFRESH     = "SESSION_REFRESH"
+    case GET_KEY_FRAME       = "GET_KEY_FRAME"
+    case ADD_ICE_CANDIDATE   = "ADD_ICE_CANDIDATE"
+    case PROCESS_SDP_ANSWER  = "PROCESS_SDP_ANSWER"
+    case CLOSE               = "CLOSE"
+    case STOP_ALL            = "STOPALL"
+    case STOP                = "STOP"
+    case UNKOWN
+    
+    //prevent crash when new case added from server side
+    public init(from decoder: Decoder) throws {
+        guard let value = try? decoder.singleValueContainer().decode(String.self) else{
+            self = .UNKOWN
+            return
+        }
+        self = WebRTCMessageType(rawValue: value) ?? .UNKOWN
+    }
 }
 struct WebRTCAsyncMessage:Decodable {
     let id:WebRTCMessageType

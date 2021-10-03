@@ -65,12 +65,12 @@ public class WebRTCClientNewLocalSignaling : NSObject , RTCPeerConnectionDelegat
         
         
         if #available(iOS 13.0, *) {
-            let provider = NativeWebSocketProvider(url: URL(string: "ws://192.168.1.9:8080")!)
+            let provider = NativeWebSocketProvider(url: URL(string: "ws://192.168.1.4:8080")!)
             signalingClient = SignalingClient(webSocketProvider: provider)
             signalingClient?.delegate = self
             signalingClient?.connect()
         }else{
-            let provider = StarScreamWebSocketProvider(url: URL(string: "ws://192.168.1.9:8080")!)
+            let provider = StarScreamWebSocketProvider(url: URL(string: "ws://192.168.1.4:8080")!)
             signalingClient = SignalingClient(webSocketProvider: provider)
             signalingClient?.delegate = self
             signalingClient?.connect()

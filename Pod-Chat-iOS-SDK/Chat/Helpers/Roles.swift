@@ -23,7 +23,7 @@ public enum Roles: String , Codable {
     case EDIT_THREAD              = "EDIT_THREAD"
     case THREAD_ADMIN             = "THREAD_ADMIN"
     case OWNERSHIP                = "OWNERSHIP"
-    case unknown
+    case unknown                
     
 	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     func stringValue() -> String {

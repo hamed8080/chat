@@ -18,6 +18,7 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
     //PeerConnectionFactroies
     private var pcfs                :[String:RTCPeerConnectionFactory] = [:]
     private var peerConnections     :[String:RTCPeerConnection]        = [:]
+    private var answerReceived      :[String:RTCPeerConnection]        = [:]
     
     
     private var config              :WebRTCConfig
@@ -61,6 +62,7 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
         
         let rtcConfig                            = RTCConfiguration()
         rtcConfig.sdpSemantics                   = .unifiedPlan
+        rtcConfig.iceTransportPolicy             = .relay
         rtcConfig.continualGatheringPolicy       = .gatherContinually
         rtcConfig.iceServers                     = [RTCIceServer(urlStrings: config.iceServers,username: config.userName!,credential: config.password!)]
         
@@ -92,7 +94,9 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
     
     func createPeerCpnnectionFactoryForTopic(topic:String?){
         if let topic = topic{
-            pcfs.updateValue(RTCPeerConnectionFactory(encoderFactory: RTCDefaultVideoEncoderFactory.default, decoderFactory: RTCDefaultVideoDecoderFactory.default), forKey: topic)
+            let encoder = RTCDefaultVideoEncoderFactory.default
+            let decoder = RTCDefaultVideoDecoderFactory.default
+            pcfs.updateValue(RTCPeerConnectionFactory(encoderFactory: encoder, decoderFactory: decoder), forKey: topic)
         }
     }
     
@@ -100,11 +104,11 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
         if let topic = topic,
            let pcf = pcfs[topic],
            let constraints = mediaConstraints[topic],
-           let pc = pcf.peerConnection(with: rtcConfig, constraints: .init(mandatoryConstraints: constraints, optionalConstraints: constraints), delegate: nil) {
+           let pc = pcf.peerConnection(with: rtcConfig, constraints: .init(mandatoryConstraints: constraints, optionalConstraints: ["DtlsSrtpKeyAgreement":kRTCMediaConstraintsValueTrue]), delegate: nil) {
             pc.delegate     = self
             peerConnections.updateValue(pc, forKey: topic)
         }else{
-            print("cant create peerConnection check configration and initialization")
+            customPrint("can't create peerConnection check configration and initialization",isGuardNil: true)
         }
     }
     
@@ -112,36 +116,27 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
         let session = CreateSessionReq(brokerAddress: config.brokerAddress, token: Chat.sharedInstance.token)
         if let data = try? JSONEncoder().encode(session){
             send(data)
+        }else{
+            customPrint("can't create session decoder was nil",isGuardNil: true)
         }
     }
 	
     private func setConnectedState(peerConnection:RTCPeerConnection){
-        print("--- \(getPCName(peerConnection)) connected ---")
+        customPrint("--- \(getPCName(peerConnection)) connected ---" , isSuccess: true)
         delegate?.didConnectWebRTC()
     }
 	
     /** Called when connction state change in RTCPeerConnectionDelegate. */
     private func setDisconnectedState(peerConnection:RTCPeerConnection){
-        print("--- \(getPCName(peerConnection)) disconnected ---")
+        customPrint("--- \(getPCName(peerConnection)) disconnected ---")
         if let topicName = getTopicForPeerConnection(peerConnection) {
             peerConnections[topicName]?.close()
             peerConnections.removeValue(forKey: topicName)
+        }else{
+            customPrint("can't find topic name for peerconnection\(peerConnection)",isGuardNil: true)
         }
         self.delegate?.didDisconnectWebRTC()
     }
-    
-	public func sendMessage(_ message:String){
-		sendData(message.data(using: .utf8)!,isBinary: false)
-	}
-    
-    /// Called when connction state change in RTCPeerConnectionDelegate.
-    /// - Parameters:
-    ///   - data: data to send to peer
-    ///   - isBinary: Indicate data is string(UTF-8) or not if you pass true means data in not string and its a stream.
-	public func sendData(_ data:Data , isBinary:Bool = true){
-		guard let remoteDataChannel = remoteDataChannel else{print("remote data channel is nil"); return}
-		remoteDataChannel.sendData(data,isBinary: isBinary)
-	}
     
     /// Client can call this to dissconnect from peer.
     public func disconnect(){
@@ -151,17 +146,28 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
 	}
     
     public func getLocalSDPWithOffer(topic:String ,onSuccess:@escaping (RTCSessionDescription)->Void){
-        guard let mediaConstraint = mediaConstraints[topic] else{return}
+        guard let mediaConstraint = mediaConstraints[topic] else{
+            customPrint("can't find mediaConstraint to get local offer",isGuardNil: true)
+            return
+        }
         let constraints = RTCMediaConstraints.init(mandatoryConstraints: mediaConstraint, optionalConstraints: nil)
         guard let pp = peerConnections[topic] else{
-            print("error peerconection is null")
+            customPrint("can't find peerConnection in map to get local offer",isGuardNil: true)
             return
         }
         pp.offer(for: constraints, completionHandler: { sdp, error in
-            error?.printError(message: "error get offer SDP from SDK")
-            guard let sdp = sdp else {return}
+            if let error = error{
+                self.customPrint("can't get offer SDP from SDK",error, isGuardNil: true)
+            }
+            guard let sdp = sdp else {
+                self.customPrint("sdp was nil with no error!", isGuardNil: true)
+                return
+            }
             pp.setLocalDescription(sdp, completionHandler: { (error) in
-                error?.printError(message: "error setLocalDescription for offer")
+                if let error = error{
+                    self.customPrint("error setLocalDescription for offer",error, isGuardNil: true)
+                    return
+                }
                 onSuccess(sdp)
             })
         })
@@ -176,7 +182,7 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
                                            sdpOffer: sdp ,
                                            mediaType: mediaType)
         guard let data = try? JSONEncoder().encode(sendSDPOffer) else {
-            print("error to encode SDP offer")
+            self.customPrint("error to encode SDP offer", isGuardNil: true)
             return
         }
         send(data)
@@ -187,15 +193,19 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
             peerConnection.close()
         }
         let close = CloseSessionReq(token: Chat.sharedInstance.token)
-        guard let data = try? JSONEncoder().encode(close) else {return}
+        guard let data = try? JSONEncoder().encode(close) else {
+            self.customPrint("error to encode close session request ", isGuardNil: true)
+            return
+        }
         send(data)
+        WebRTCClientNew.instance = nil
     }
     
     public func send(_ data:Data){
         if let content = String(data: data, encoding: .utf8){
             Chat.sharedInstance.prepareToSendAsync(content,peerName: config.peerName)
         }else{
-            print("cant convert data to string")
+            self.customPrint("cant convert data to string in send", isGuardNil: true)
         }
     }
     
@@ -204,21 +214,23 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
         let constraints = RTCMediaConstraints.init(mandatoryConstraints: mediaConstraint, optionalConstraints: nil)
         let pp = peerConnections[topic]
         pp?.answer(for: constraints, completionHandler: { sdp, error in
-            error?.printError(message: "error get answer SDP From SDK")
+            if let error = error {
+                self.customPrint("error get answer SDP From SDK",error, isGuardNil: true)
+            }
             guard let sdp = sdp else {return}
             pp?.setLocalDescription(sdp, completionHandler: { (error) in
-                error?.printError(message: "error setLocalDescription for answer")
+                if let error = error{
+                    self.customPrint("error setLocalDescription for answer",error, isGuardNil: true)
+                }
                 onSuccess(sdp)
             })
         })
     }
     
     private func createMediaSenders(){
-        let streamId = "stream"
-        
         //Send Audio
         if let audioTrack = createAudioTrack() , let topicAudioSend = config.topicAudioSend {
-            peerConnections[topicAudioSend]?.add(audioTrack, streamIds: [streamId])
+            peerConnections[topicAudioSend]?.add(audioTrack, streamIds: [config.topicAudioSend ?? ""])
         }
         
         //Receive Audio
@@ -227,7 +239,7 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
             let transciver = peerConnections[topicAudioReceive]?.addTransceiver(of: .audio)
             transciver?.setDirection(.recvOnly, error: &error)
             if let remoteAudioTrack = transciver?.receiver.track as? RTCAudioTrack {
-                peerConnections[topicAudioReceive]?.add(remoteAudioTrack, streamIds: [streamId])
+                peerConnections[topicAudioReceive]?.add(remoteAudioTrack, streamIds: [config.topicAudioReceive ?? ""])
                 remoteAudioTrack.isEnabled = true
             }
         }
@@ -235,7 +247,7 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
         //Video
         if let topicVideoSend = config.topicVideoSend, let videoTrack   = createVideoTrack(){
             localVideoTrack  = videoTrack
-            peerConnections[topicVideoSend]?.add(videoTrack, streamIds: [streamId])
+            peerConnections[topicVideoSend]?.add(videoTrack, streamIds: [config.topicVideoSend ?? ""])
 //            peerConnections[config.topicVideoSend]?.setBweMinBitrateBps(80000, currentBitrateBps: 80000, maxBitrateBps: 80000)
         }
         
@@ -244,14 +256,17 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
             let videoReceivetransciver = peerConnections[topicVideoReceive]?.addTransceiver(of: .video)
             videoReceivetransciver?.setDirection(.recvOnly, error: &error)
             if let remoteVideoTrack = videoReceivetransciver?.receiver.track as? RTCVideoTrack{
-                peerConnections[topicVideoReceive]?.add(remoteVideoTrack, streamIds: [streamId])
+                peerConnections[topicVideoReceive]?.add(remoteVideoTrack, streamIds: [config.topicVideoReceive ?? ""])
                 self.remoteVideoTrack = remoteVideoTrack
             }
         }
     }
     
     private func createVideoTrack()->RTCVideoTrack?{
-        guard let topicVideoSend = config.topicVideoSend, let pcfSendVideo = pcfs[topicVideoSend] else {return nil}
+        guard let topicVideoSend = config.topicVideoSend, let pcfSendVideo = pcfs[topicVideoSend] else {
+            self.customPrint("topic or peerconectionfactory in createVideoTrack was nuil maybe it was audio call!")
+            return nil
+        }
         let videoSource = pcfSendVideo.videoSource()
         self.videoSource = videoSource
         #if targetEnvironment(simulator)
@@ -265,7 +280,10 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
     }
     
     private func createAudioTrack()->RTCAudioTrack?{
-        guard let topicAudioSend = config.topicAudioSend ,let mediaConstraint = mediaConstraints[topicAudioSend],let pcfAudioSend = pcfs[topicAudioSend] else{return nil}
+        guard let topicAudioSend = config.topicAudioSend ,let mediaConstraint = mediaConstraints[topicAudioSend],let pcfAudioSend = pcfs[topicAudioSend] else{
+            self.customPrint("topic or peerconectionfactory in createVideoTrack was nil maybe it was video call without audio!")
+            return nil
+        }
         let audioConstrains = RTCMediaConstraints(mandatoryConstraints:mediaConstraint, optionalConstraints: nil)
         let audioSource = pcfAudioSend.audioSource(with: audioConstrains)
         let audioTrack = pcfAudioSend.audioTrack(with: audioSource, trackId: "audio0")
@@ -273,12 +291,24 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
     }
     
     private func generateSendKeyFrame(){
-        guard let format = getCameraFormat() , let maxFrameRate = format.videoSupportedFrameRateRanges.last?.maxFrameRate else {return}
-        let desc = CMVideoFormatDescriptionGetDimensions(format.formatDescription)
-        localVideoTrack?.source.adaptOutputFormat(toWidth: desc.width - 5, height: desc.height - 5, fps: Int32(maxFrameRate))
+//        guard let format = getCameraFormat() , let maxFrameRate = format.videoSupportedFrameRateRanges.last?.maxFrameRate else {
+//            self.customPrint("get camera descripton for gereate key frame was nil!",isGuardNil:true)
+//            return
+//        }
+//        let desc = CMVideoFormatDescriptionGetDimensions(format.formatDescription)
+        self.customPrint("resize to get key frame")
+//        localVideoTrack?.isEnabled = false
+        localVideoTrack?.source.adaptOutputFormat(toWidth: 1280 + 50, height: 720, fps: Int32(15))
         Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self]timer in
-            guard let self = self else{return}
-            self.localVideoTrack?.source.adaptOutputFormat(toWidth: desc.width + 5, height: desc.height + 5, fps: Int32(maxFrameRate))
+            guard let self = self else{
+                self?.customPrint("self was nil in timer generate keyFrame!",isGuardNil:true)
+                return
+            }
+            DispatchQueue.main.async {
+                self.customPrint("resize to normal generate key frame")
+//                self.localVideoTrack?.isEnabled = true
+                self.localVideoTrack?.source.adaptOutputFormat(toWidth: 1280, height: 720, fps: Int32(15))
+            }
         }
     }
     
@@ -287,19 +317,25 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
             guard let selectedCamera = RTCCameraVideoCapturer.captureDevices().first(where: {$0.position == (isFrontCamera ? .front : .back) }),
                   let format = getCameraFormat(),
                   let maxFrameRate = format.videoSupportedFrameRateRanges.last?.maxFrameRate
-            else{return}
+            else{
+                self.customPrint("error happend to startCaptureLocalVideo",isGuardNil:true)
+                return
+            }
             capturer.startCapture(with: selectedCamera, format: format, fps: Int(maxFrameRate))
             localVideoTrack?.add(renderer)
         }else if let capturer = videoCapturer as? RTCFileVideoCapturer{
             capturer.startCapturing(fromFileNamed: fileName , onError: { error in
-                error.printError(message: "error on read from mp4 file \(error.localizedDescription)")
+                self.customPrint("error on read from mp4 file" , error,isGuardNil:true)
             })
             localVideoTrack?.add(renderer)
         }
     }
     
     private func getCameraFormat()->AVCaptureDevice.Format?{
-        guard let frontCamera = RTCCameraVideoCapturer.captureDevices().first(where: {$0.position == (isFrontCamera ? .front : .back) }) else {return nil}
+        guard let frontCamera = RTCCameraVideoCapturer.captureDevices().first(where: {$0.position == (isFrontCamera ? .front : .back) }) else {
+            self.customPrint("error to find front camera" ,isGuardNil:true)
+            return nil
+        }
         let format = RTCCameraVideoCapturer.supportedFormats(for: frontCamera).last(where: { format in
            CMVideoFormatDescriptionGetDimensions(format.formatDescription).width == 1280 && CMVideoFormatDescriptionGetDimensions(format.formatDescription).height == 720
         })
@@ -315,12 +351,20 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
         }
     }
     
+    var renderer:RTCVideoRenderer?
     public func renderRemoteVideo(_ renderer:RTCVideoRenderer){
+        self.renderer = renderer
         remoteVideoTrack?.add(renderer)
     }
     
     deinit {
-        print("deinit called")
+        customPrint("deinit webrtc client called")
+    }
+    
+    func customPrint(_ message:String , _ error:Error? = nil , isSuccess:Bool = false ,isGuardNil:Bool = false){
+        let errorMessage = error != nil ? " with error:\(error?.localizedDescription ?? "")" : ""
+        let icon = isGuardNil ? "❌" : isSuccess ? "✅" : ""
+        print("\(icon) \(message) \(errorMessage)")
     }
 }
 
@@ -328,29 +372,32 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
 extension WebRTCClientNew{
 	
     public func peerConnection(_ peerConnection: RTCPeerConnection, didChange stateChanged: RTCSignalingState) {
-        print("\(getPCName(peerConnection))  signaling state changed: \(String(describing: stateChanged.stringValue))")
+        customPrint("\(getPCName(peerConnection))  signaling state changed: \(String(describing: stateChanged.stringValue))")
 	}
 	
     public func peerConnection(_ peerConnection: RTCPeerConnection, didAdd stream: RTCMediaStream) {
-		print("\(getPCName(peerConnection)) did add stream")
+        customPrint("\(getPCName(peerConnection)) did add stream")
 	}
 	
     public func peerConnection(_ peerConnection: RTCPeerConnection, didRemove stream: RTCMediaStream) {
-		print("\(getPCName(peerConnection)) did remove stream")
+        customPrint("\(getPCName(peerConnection)) did remove stream")
 	}
 	
     public func peerConnectionShouldNegotiate(_ peerConnection: RTCPeerConnection) {
-		print("\(getPCName(peerConnection)) should negotiate")
+        customPrint("\(getPCName(peerConnection)) should negotiate")
 	}
 	
     public func peerConnection(_ peerConnection: RTCPeerConnection, didChange newState: RTCIceConnectionState) {
         DispatchQueue.main.async { [weak self] in
-            guard let self = self else{ return }
-            print("\(self.getPCName(peerConnection)) new connection state: \(String(describing:newState.stringValue))")
+            guard let self = self else{
+                self?.customPrint("self was nil in peerconnection didchange state",isGuardNil: true)
+                return
+            }
+            self.customPrint("\(self.getPCName(peerConnection)) connection state changed to: \(String(describing:newState.stringValue))")
             switch newState {
                 case .connected, .completed:
                     self.setConnectedState(peerConnection: peerConnection)
-            case .closed , .disconnected , .failed :
+            case .disconnected:
                 self.setDisconnectedState(peerConnection:peerConnection)
                 break
             default:
@@ -361,25 +408,49 @@ extension WebRTCClientNew{
 	}
 	
     public func peerConnection(_ peerConnection: RTCPeerConnection, didChange newState: RTCIceGatheringState) {
-		print("\(getPCName(peerConnection)) did change new state")
+        customPrint("\(getPCName(peerConnection)) did change new state")
 	}
 	
 	public func peerConnection(_ peerConnection: RTCPeerConnection, didGenerate candidate: RTCIceCandidate) {
-        print("\(getPCName(peerConnection)) did generate candidate")
-        guard let topicName = getTopicForPeerConnection(peerConnection) else{return}
-        let sendIceCandidate = SendCandidateReq(token: Chat.sharedInstance.token,
-                                                topic: topicName,
-                                                candidate: IceCandidate(from: candidate).replaceSpaceSdpIceCandidate)
-        guard let data = try? JSONEncoder().encode(sendIceCandidate) else {return}
-        self.send(data)
+        let relayStr = candidate.sdp.contains("typ relay") ? "Yes ✅✅✅✅✅✅" : "No ⛔️⛔️⛔️⛔️⛔️⛔️⛔️"
+        customPrint("\(getPCName(peerConnection)) did generate ICE Candidate is relayType:\(relayStr)")
+        sendIceIfAnswerPresent(peerConnection, candidate)
 	}
+    
+    private func sendIceIfAnswerPresent(_ peerConnection:RTCPeerConnection, _ candidate:RTCIceCandidate){
+        
+        guard let topicName = getTopicForPeerConnection(peerConnection) else{
+            customPrint("can't find topic name to send ICE Candidate" , isGuardNil: true)
+            return
+        }
+        DispatchQueue.main.async {
+            Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) {[weak self] timer in
+                guard let self = self else {return}
+                if  self.peerConnections[topicName]?.remoteDescription != nil{
+                    let sendIceCandidate = SendCandidateReq(token: Chat.sharedInstance.token,
+                                                            topic: topicName,
+                                                            candidate: IceCandidate(from: candidate).replaceSpaceSdpIceCandidate)
+                    guard let data = try? JSONEncoder().encode(sendIceCandidate) else {
+                        self.customPrint("cannot encode genereated ice to send to server!" , isGuardNil: true)
+                        return
+                    }
+                    self.customPrint("ice sended to server")
+                    self.send(data)
+                    timer.invalidate()
+                }else{
+                    let pcName  = self.getPCName(peerConnection)
+                    self.customPrint("answer is not present yet for \(pcName) timer will fire in 0.5 second" , isGuardNil: true)
+                }
+            }
+        }
+    }
 	
     public func peerConnection(_ peerConnection: RTCPeerConnection, didRemove candidates: [RTCIceCandidate]) {
-		print("\(getPCName(peerConnection)) did remove candidate(s)")
+		customPrint("\(getPCName(peerConnection)) did remove candidate(s)")
 	}
 	
 	public func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
-		print("\(getPCName(peerConnection)) did open data channel \(dataChannel)")
+        customPrint("\(getPCName(peerConnection)) did open data channel \(dataChannel)")
 		self.remoteDataChannel = dataChannel
 	}
     
@@ -404,18 +475,24 @@ extension WebRTCClientNew{
         else
         if let topicAudioReceive = config.topicAudioReceive, peerConnection == peerConnections[topicAudioReceive] { return config.topicAudioReceive }
         else{
-            print("topic not found!")
+            customPrint("topic not found!",isGuardNil: true)
             return nil
         }
     }
     
     public func setCameraIsOn(_ isCameraOn:Bool){
-        guard let topicVideoSend = config.topicVideoSend else {return}
+        guard let topicVideoSend = config.topicVideoSend else {
+            customPrint("topicVideoSend was nil! setCameraIsOn not working!",isGuardNil: true)
+            return
+        }
         peerConnections[topicVideoSend]?.senders.first?.track?.isEnabled = isCameraOn
     }
     
     public func setMute(_ isMute:Bool){
-        guard let topicAudioSend = config.topicAudioSend else {return}
+        guard let topicAudioSend = config.topicAudioSend else {
+            customPrint("topicAudioSend was nil! setMute not working!",isGuardNil: true)
+            return
+        }
         peerConnections[topicAudioSend]?.senders.first?.track?.isEnabled = !isMute
     }
 }
@@ -434,19 +511,7 @@ extension WebRTCClientNew {
 	}
 
     public func dataChannelDidChangeState(_ dataChannel: RTCDataChannel) {
-		print("data channel did change state")
-		switch dataChannel.readyState {
-			case .closed:
-				print("closed")
-			case .closing:
-				print("closing")
-			case .connecting:
-				print("connecting")
-			case .open:
-				print("open")
-			@unknown default:
-				fatalError()
-		}
+        customPrint("data channel did changeed state to \(dataChannel.readyState)")
 	}
 }
 
@@ -454,10 +519,13 @@ extension WebRTCClientNew {
 extension WebRTCClientNew{
 
     func messageReceived(_ message:AsyncMessage){
-        guard let data = message.content.data(using: .utf8) ,  let ms = try? JSONDecoder().decode(WebRTCAsyncMessage.self, from: data) else {return}
-        print("on Message:\(String(data:data,encoding:.utf8) ?? "")")
+        guard let data = message.content.data(using: .utf8) ,  let ms = try? JSONDecoder().decode(WebRTCAsyncMessage.self, from: data) else {
+            customPrint("can't decode data from webrtc servers",isGuardNil: true)
+            return
+        }
+        customPrint("on Call message received\(String(data:data,encoding:.utf8) ?? "")")
         switch ms.id {
-        case .SESSION_REFRESH,.CREATE_SESSION:
+        case .SESSION_REFRESH,.CREATE_SESSION,.SESSION_NEW_CREATED:
             Chat.sharedInstance.sotpAllSignalingServerCall(peerName: config.peerName)
             break
         case .ADD_ICE_CANDIDATE:
@@ -465,9 +533,20 @@ extension WebRTCClientNew{
             break
         case .PROCESS_SDP_ANSWER:
             addSDPAnswerToPeerConnection(data)
+            startSendKeyFrame()
             break
         case .GET_KEY_FRAME:
-            generateSendKeyFrame()
+//            var count:Double = 0
+//            Timer.scheduledTimer(withTimeInterval: 4, repeats: true) { timer in
+//
+//                if count < 5{
+//                    self.generateSendKeyFrame()
+//                }else{
+//                    timer.invalidate()
+//                    return
+//                }
+//                count  = count + 1
+//            }
             break
         case .CLOSE:
             break
@@ -476,44 +555,74 @@ extension WebRTCClientNew{
             break
         case .STOP:
             break
+        case .UNKOWN:
+            customPrint("a message received from unkown type form webrtc server",isGuardNil: true)
+            break
+        }
+    }
+    
+    
+    
+    public func startSendKeyFrame(){
+        var count:Double = 0
+        DispatchQueue.main.async {
+            Timer.scheduledTimer(withTimeInterval: 10, repeats: true) {[weak self] timer in
+                guard let self = self else {return}
+                if count < 500{
+                    self.generateSendKeyFrame()
+                }else{
+                    timer.invalidate()
+                    return
+                }
+                count  = count + 1
+            }
         }
     }
     
     func addSDPAnswerToPeerConnection(_ data:Data){
         guard let remoteSDP = try? JSONDecoder().decode(RemoteSDPRes.self, from: data)else{
-            print("error in decode PROCESS_SDP_ANSWER: \(String(data: data, encoding: .utf8) ?? "")")
+            self.customPrint("error decode prosessAnswer",isGuardNil: true)
             return
         }
         let pp = peerConnections[remoteSDP.topic]
+        pp?.statistics(completionHandler: { report in
+        })
         pp?.setRemoteDescription(remoteSDP.rtcSDP, completionHandler: { error in
-            error?.printError(message: "error in setRemoteDescroptoin with sdp: \(remoteSDP.rtcSDP)")
+            if let error = error{
+                self.customPrint("error in setRemoteDescroptoin with sdp: \(remoteSDP.rtcSDP)",error,isGuardNil: true)
+            }
         })
     }
     
     ///check if remote descriptoin already seted otherwise add it in to queue until set remote description then add ice to peer connection
     func addIceToPeerConnection(_ data:Data){
         guard let candidate = try? JSONDecoder().decode(RemoteCandidateRes.self, from: data) else{
-            print("error decode candiadte \(String(data:data, encoding:.utf8) ?? "")")
+            self.customPrint("error decode ice candidate received from server!",isGuardNil: true)
             return
         }
         guard let pp = peerConnections[candidate.topic] else {
-            print("error finding peerConnection\(candidate.topic)")
+            self.customPrint("error finding topic or peerconnection",isGuardNil: true)
             return
         }
         let rtcIce = candidate.rtcIceCandidate
         if pp.remoteDescription != nil{
             pp.add(rtcIce, completionHandler: { error in
-                error?.printError(message: "\(error.debugDescription) error on add ICE candidiate with :\(candidate.candidate)")
+                if let error = error {
+                    self.customPrint("error on add ICE candidate " , error,isGuardNil: true)
+                }
             })
         }else{
             iceQueue.append((pp, rtcIce))
-            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) {[weak self] timer in
+                guard let self = self else {return}
                 if pp.remoteDescription != nil{
                     pp.add(rtcIce){ error in
-                        error?.printError(message: "\(error.debugDescription) error on add ICE candidiate with :\(rtcIce.sdp)")
+                        if let error = error {
+                            self.customPrint("error on add ICE Candidate with ICE:\(rtcIce.sdp)", error,isGuardNil: true)
+                        }
                     }
                     self.iceQueue.remove(at: self.iceQueue.firstIndex{ $0.ice == rtcIce}!)
-                    print("one ice added to peerconnection from queue and remainig in queu is\(self.iceQueue.count)")
+                    self.customPrint("ICE added to peerconnection from queue and remainig in queu is\(self.iceQueue.count)")
                     timer.invalidate()
                 }
             }
@@ -530,7 +639,7 @@ extension WebRTCClientNew{
             try self.rtcAudioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
             try self.rtcAudioSession.setMode(AVAudioSessionModeVoiceChat)
         } catch let error {
-            debugPrint("Error changeing AVAudioSession category: \(error)")
+            customPrint("error changeing AVAudioSession category",error,isGuardNil: true)
         }
         self.rtcAudioSession.unlockForConfiguration()
     }
@@ -538,6 +647,7 @@ extension WebRTCClientNew{
     public func setSpeaker(on:Bool){
         self.audioQueue.async { [weak self] in
             guard let self = self else {
+                self?.customPrint("self was nil set speaker mode!",isGuardNil: true)
                 return
             }
             
@@ -547,7 +657,7 @@ extension WebRTCClientNew{
                 try self.rtcAudioSession.overrideOutputAudioPort(on ? .speaker : .none)
                 if on{ try self.rtcAudioSession.setActive(true) }
             } catch let error {
-                debugPrint("Couldn't force audio to speaker: \(error)")
+                self.customPrint("can't change audio speaker",error,isGuardNil: true)
             }
             self.rtcAudioSession.unlockForConfiguration()
         }

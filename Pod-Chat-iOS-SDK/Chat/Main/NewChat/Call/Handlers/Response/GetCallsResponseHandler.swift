@@ -16,7 +16,7 @@ class GetCallsResponseHandler {
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
         guard let data = chatMessage.content?.data(using: .utf8) else {return}
         guard let calls = try? JSONDecoder().decode([Call].self, from: data) else{return}
-        callback(.init(uniqueId:chatMessage.uniqueId , result: calls))
+        callback(.init(uniqueId:chatMessage.uniqueId , result: calls,contentCount: chatMessage.contentCount ?? 0))
         chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
     }
 }

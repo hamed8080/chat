@@ -11,18 +11,18 @@ public struct ClientDTO :Codable {
     public let clientId      : String
     public let topicReceive  : String
     public let topicSend     : String
-    public let brokerAddress : String
     public let desc          : String
     public let sendKey       : String
     public let video         : Bool
     public let mute          : Bool
+    public let userId        : Int
     
     
-    public init(clientId: String, topicReceive: String, topicSend: String, brokerAddress: String, desc: String, sendKey: String, video: Bool, mute: Bool) {
+    public init(clientId: String, topicReceive: String, topicSend: String, userId: Int, desc: String, sendKey: String, video: Bool, mute: Bool) {
         self.clientId      = clientId
         self.topicReceive  = topicReceive
         self.topicSend     = topicSend
-        self.brokerAddress = brokerAddress
+        self.userId        = userId
         self.desc          = desc
         self.sendKey       = sendKey
         self.video         = video
