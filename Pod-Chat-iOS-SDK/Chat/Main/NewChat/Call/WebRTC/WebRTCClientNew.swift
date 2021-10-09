@@ -13,7 +13,7 @@ import FanapPodAsyncSDK
 // MARK: - Pay attention, this class use many extensions inside a files not be here.
 public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataChannelDelegate{
     
-    static var instance             :WebRTCClientNew?           = nil//for call methods when new message arrive from server
+    public static var instance             :WebRTCClientNew?           = nil//for call methods when new message arrive from server
     
     //PeerConnectionFactroies
     private var pcfs                :[String:RTCPeerConnectionFactory] = [:]
@@ -130,21 +130,24 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
 	
     /** Called when connction state change in RTCPeerConnectionDelegate. */
     private func setDisconnectedState(peerConnection:RTCPeerConnection){
-        customPrint("--- \(getPCName(peerConnection)) disconnected ---")
-        if let topicName = getTopicForPeerConnection(peerConnection) {
-            peerConnections[topicName]?.close()
-            peerConnections.removeValue(forKey: topicName)
-        }else{
-            customPrint("can't find topic name for peerconnection\(peerConnection)",isGuardNil: true)
-        }
+        customPrint("--- \(getPCName(peerConnection)) disconnected ---" , isGuardNil: true)
         self.delegate?.didDisconnectWebRTC()
     }
     
     /// Client can call this to dissconnect from peer.
-    public func disconnect(){
+    public func clearResourceAndCloseConnection(){
         peerConnections.forEach { key,pc in
             pc.close()
         }
+        peerConnections.removeAll()
+        let close = CloseSessionReq(token: Chat.sharedInstance.token)
+        guard let data = try? JSONEncoder().encode(close) else {
+            self.customPrint("error to encode close session request ", isGuardNil: true)
+            return
+        }
+        send(data)
+        pcfs.removeAll()
+        WebRTCClientNew.instance = nil
 	}
     
     public func getLocalSDPWithOffer(topic:String ,onSuccess:@escaping (RTCSessionDescription)->Void){
@@ -188,19 +191,6 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
             return
         }
         send(data)
-    }
-    
-    public func close(){
-        peerConnections.forEach { key , peerConnection in
-            peerConnection.close()
-        }
-        let close = CloseSessionReq(token: Chat.sharedInstance.token)
-        guard let data = try? JSONEncoder().encode(close) else {
-            self.customPrint("error to encode close session request ", isGuardNil: true)
-            return
-        }
-        send(data)
-        WebRTCClientNew.instance = nil
     }
     
     public func send(_ data:Data){
@@ -266,7 +256,7 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
     
     private func createVideoTrack()->RTCVideoTrack?{
         guard let topicVideoSend = config.topicVideoSend, let pcfSendVideo = pcfs[topicVideoSend] else {
-            self.customPrint("topic or peerconectionfactory in createVideoTrack was nuil maybe it was audio call!")
+            self.customPrint("topic or peerconectionfactory in createVideoTrack was nuil maybe it was audio call!",isGuardNil: true)
             return nil
         }
         let videoSource = pcfSendVideo.videoSource()
@@ -283,7 +273,7 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
     
     private func createAudioTrack()->RTCAudioTrack?{
         guard let topicAudioSend = config.topicAudioSend ,let mediaConstraint = mediaConstraints[topicAudioSend],let pcfAudioSend = pcfs[topicAudioSend] else{
-            self.customPrint("topic or peerconectionfactory in createVideoTrack was nil maybe it was video call without audio!")
+            self.customPrint("topic or peerconectionfactory in createAudioTrack or media constarint audio send not found!",isGuardNil: true)
             return nil
         }
         let audioConstrains = RTCMediaConstraints(mandatoryConstraints:mediaConstraint, optionalConstraints: nil)
@@ -384,8 +374,17 @@ extension WebRTCClientNew{
 		   let topicReceiveVideo = config.topicVideoReceive,
 		   peerConnection == peerConnections[topicReceiveVideo]
 		{
+            customPrint("\(getPCName(peerConnection)) did add stream video track")
 			videoTrack.add(renderer)
 		}
+        
+        if let audioTrack = stream.audioTracks.first,
+           let topicReceiveAudio = config.topicAudioReceive,
+           peerConnection == peerConnections[topicReceiveAudio]
+        {
+            customPrint("\(getPCName(peerConnection)) did add stream audio track")
+            peerConnection.add(audioTrack, streamIds: [topicReceiveAudio])
+        }
 	}
 	
     public func peerConnection(_ peerConnection: RTCPeerConnection, didRemove stream: RTCMediaStream) {
@@ -408,6 +407,9 @@ extension WebRTCClientNew{
                     self.setConnectedState(peerConnection: peerConnection)
             case .disconnected:
                 self.setDisconnectedState(peerConnection:peerConnection)
+                break
+            case .failed:
+                self.reconnectAndGetOffer(peerConnection)
                 break
             default:
                 break
@@ -653,6 +655,7 @@ extension WebRTCClientNew{
 extension WebRTCClientNew{
     
     private func configureAudioSession() {
+        self.customPrint("configure audio session")
         self.rtcAudioSession.lockForConfiguration()
         do {
             try self.rtcAudioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
@@ -665,6 +668,7 @@ extension WebRTCClientNew{
     
     public func setSpeaker(on:Bool){
         self.audioQueue.async { [weak self] in
+            self?.customPrint("request to setSpeaker:\(on)")
             guard let self = self else {
                 self?.customPrint("self was nil set speaker mode!",isGuardNil: true)
                 return
@@ -709,5 +713,15 @@ extension WebRTCClientNew{
         getLocalSDPWithOffer(topic: topic , onSuccess: { rtcSession in
             self.sendOfferToPeer(rtcSession, topic: topic , mediaType:mediaType )
         })
+    }
+    
+    func reconnectAndGetOffer(_ peerConnection:RTCPeerConnection){
+        guard let topic = getTopicForPeerConnection(peerConnection)else{
+            customPrint("can't find topic to reconnect peerconnection",isGuardNil: true)
+            return
+        }
+        customPrint("restart to get new SDP and send offer")
+        let mediaType:Mediatype = topic == config.topicVideoSend ||  topic == config.topicVideoReceive ? .VIDEO : .AUDIO
+        self.getOfferAndSendToPeer(topic: topic, mediaType: mediaType)
     }
 }

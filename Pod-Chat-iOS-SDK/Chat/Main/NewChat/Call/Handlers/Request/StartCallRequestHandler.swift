@@ -21,6 +21,23 @@ class StartCallRequestHandler {
 								uniqueIdResult: uniqueIdResult){ response in
 			completion(response.result as? CreateCall,response.uniqueId , response.error)
 		}
+        startTimerTimeout()
 	}
+    
+    ///if newtork is unstable and async server cant respond with type CALL_SESSION_CREATED then we must end call  for starter to close UI
+    class func startTimerTimeout(){
+        let chat = Chat.sharedInstance
+        Timer.scheduledTimer(withTimeInterval: chat.config?.callTimeout ?? 0, repeats: false) { timer in
+            if chat.callState == .Requested{
+                if chat.config?.isDebuggingLogEnabled == true{
+                    print("cancel call after \(chat.config?.callTimeout ?? 0) second no response back from server with type CALL_SESSION_CREATED")
+                }
+                
+                NotificationCenter.default.post(name: END_CALL_NAME_OBJECT ,object: 0)
+                chat.callState = .Ended
+            }
+            timer.invalidate()
+        }
+    }
 	
 }
