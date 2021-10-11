@@ -32,7 +32,8 @@ public struct WebRTCConfig {
 
     public let peerName                  : String
     public let iceServers                : [String]
-    public let brokerAddress             : String
+    public let turnAddress               : String
+    public let brokerAddressWeb          : String
     public let topicVideoSend            : String?
     public let topicVideoReceive         : String?
     public let topicAudioSend            : String?
@@ -49,11 +50,12 @@ public struct WebRTCConfig {
 	
     public init(peerName                        : String,
                 iceServers                      : [String],
+                turnAddress                     : String,
                 topicVideoSend                  : String?,
                 topicVideoReceive               : String?,
                 topicAudioSend                  : String?,
                 topicAudioReceive               : String?,
-                brokerAddress                   : String,
+                brokerAddressWeb                : String,
                 dataChannel                     : Bool          = false,
                 customFrameCapturer             : Bool          = false,
                 userName                        : String?       = nil,
@@ -62,15 +64,24 @@ public struct WebRTCConfig {
 	) {
         self.peerName                     = peerName
         self.iceServers                   = iceServers
+        self.turnAddress                  = turnAddress
         self.topicVideoSend               = topicVideoSend
         self.topicVideoReceive            = topicVideoReceive
         self.topicAudioSend               = topicAudioSend
         self.topicAudioReceive            = topicAudioReceive
-        self.brokerAddress                = brokerAddress
+        self.brokerAddressWeb             = brokerAddressWeb
         self.dataChannel                  = dataChannel
         self.customFrameCapturer          = customFrameCapturer
         self.userName                     = userName
         self.password                     = password
         self.videoConfig                  = videoConfig
 	}
+    
+    var firstBorokerAddressWeb:String{
+        if let firstBrokerAddressWeb = brokerAddressWeb.split(separator: ",").first{
+            return String(firstBrokerAddressWeb)
+        }else{
+            return ""
+        }
+    }
 }

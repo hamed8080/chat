@@ -25,5 +25,23 @@ class StartCallRequestResponseHandler {
         
         chat.callbacksManager.callRequestArriveDelegate?(createCall,chatMessage.uniqueId)
 		NotificationCenter.default.post(name: RECEIVE_CALL_NAME_OBJECT ,object: createCall)
+        chat.callState = .Requested
+        startTimerTimeout()
+    }
+    
+    ///maybe starter of call after start call request disconnected we need to close ui on the receiver side
+    class func startTimerTimeout(){
+        let chat = Chat.sharedInstance
+        Timer.scheduledTimer(withTimeInterval: chat.config?.callTimeout ?? 0, repeats: false) { timer in
+            if chat.callState == .Requested{
+                if chat.config?.isDebuggingLogEnabled == true{
+                    print("cancel call after \(chat.config?.callTimeout ?? 0) second")
+                }
+                
+                NotificationCenter.default.post(name: END_CALL_NAME_OBJECT ,object: 0)
+                chat.callState = .Ended
+            }
+            timer.invalidate()
+        }
     }
 }

@@ -10,6 +10,7 @@ struct CloseSessionReq: Codable {
    
     var id            :String = "CLOSE"
     var token         :String
+    var uniqueId:String      = UUID().uuidString
     
     public init(token: String) {
         self.token         = token

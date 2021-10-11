@@ -12,16 +12,14 @@ public struct ChatDataDTO :Codable {
     public let screenShare        : String
     public let reciveMetaData     : String
     public let turnAddress        : String
-    public let brokerAddress      : String
     public let brokerAddressWeb   : String
     public let kurentoAddress     : String
     
-    public init(sendMetaData: String, screenShare: String, reciveMetaData: String, turnAddress: String, brokerAddress: String, brokerAddressWeb: String, kurentoAddress: String) {
+    public init(sendMetaData: String, screenShare: String, reciveMetaData: String, turnAddress: String, brokerAddressWeb: String, kurentoAddress: String) {
         self.sendMetaData     = sendMetaData
         self.screenShare      = screenShare
         self.reciveMetaData   = reciveMetaData
         self.turnAddress      = turnAddress
-        self.brokerAddress    = brokerAddress
         self.brokerAddressWeb = brokerAddressWeb
         self.kurentoAddress   = kurentoAddress
     }
@@ -31,7 +29,6 @@ public struct ChatDataDTO :Codable {
         case screenShare        = "screenShare"
         case reciveMetaData     = "reciveMetaData"
         case turnAddress        = "turnAddress"
-        case brokerAddress      = "brokerAddress"
         case brokerAddressWeb   = "brokerAddressWeb"
         case kurentoAddress     = "kurentoAddress"
     }
@@ -48,14 +45,8 @@ public struct ChatDataDTO :Codable {
             turnAddress = ""
         }
         
-        if let firstBrokerAddress = try container.decode(String.self, forKey: .brokerAddress).split(separator: ",").first{
-            brokerAddress    = String(firstBrokerAddress)
-        }else{
-            brokerAddress = ""
-        }
-        
-        if let firstBrokerAddressWeb = try container.decode(String.self, forKey: .brokerAddressWeb).split(separator: ",").first{
-            brokerAddressWeb    = String(firstBrokerAddressWeb)
+        if let brokerAddressWeb = try? container.decode(String.self, forKey: .brokerAddressWeb){
+            self.brokerAddressWeb    = brokerAddressWeb
         }else{
             brokerAddressWeb    = ""
         }

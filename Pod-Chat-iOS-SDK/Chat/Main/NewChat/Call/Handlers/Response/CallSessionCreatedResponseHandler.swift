@@ -23,6 +23,7 @@ class CallSessionCreatedResponseHandler {
 		if let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId){
 			callback(.init(uniqueId:chatMessage.uniqueId , result: createCall))
 		}
+        chat.callState = .Created
 		NotificationCenter.default.post(name: CALL_SESSION_CREATED_NAME_OBJECT ,object: createCall)
 		startTimerTimeout(createCall)
     }
@@ -31,7 +32,7 @@ class CallSessionCreatedResponseHandler {
 	class func startTimerTimeout(_ createCall:CreateCall){
 		let chat = Chat.sharedInstance
 		Timer.scheduledTimer(withTimeInterval: chat.config?.callTimeout ?? 0, repeats: false) { timer in
-			if chat.callState == .Requested{
+			if chat.callState == .Created{
 				if chat.config?.isDebuggingLogEnabled == true{
 					print("cancel call after \(chat.config?.callTimeout ?? 0) second waiting to accept by user")
 				}

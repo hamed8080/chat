@@ -17,6 +17,7 @@ struct SendOfferSDPReq: Codable {
     private var useComedia              = true
     private var useSrtp                 = false
 
+    var unqiueId                        = UUID().uuidString
     
     public init(id: String = "RECIVE_SDP_OFFER", brokerAddress: String, token: String,topic:String,sdpOffer:String , mediaType:Mediatype) {
         self.id            = id

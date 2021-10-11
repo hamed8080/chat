@@ -71,7 +71,7 @@ public class WebRTCClient : NSObject , RTCPeerConnectionDelegate , RTCDataChanne
 	}
     
     private func createSession(){
-        let session = CreateSessionReq(brokerAddress: config.brokerAddress, token: Chat.sharedInstance.token)
+        let session = CreateSessionReq(turnAddress: "", brokerAddress: config.brokerAddress, token: Chat.sharedInstance.token)
         if let data = try? JSONEncoder().encode(session){
             send(data)
         }

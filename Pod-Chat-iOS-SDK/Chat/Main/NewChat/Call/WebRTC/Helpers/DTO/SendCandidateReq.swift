@@ -12,12 +12,14 @@ struct SendCandidateReq: Codable {
     var token         :String
     var topic         :String
     var candidate     :IceCandidate
+    var unqiueId      :String
     
     public init(id: String = "ADD_ICE_CANDIDATE", token: String,topic:String,candidate:IceCandidate) {
         self.id            = id
         self.token         = token
         self.topic         = topic
         self.candidate     = candidate
+        self.unqiueId      = UUID().uuidString
     }
     
     private enum CodingKeys:String,CodingKey{
@@ -25,6 +27,7 @@ struct SendCandidateReq: Codable {
          case token         = "token"
          case topic         = "topic"
          case candidate     = "candidateDto"
+         case unqiueId      = "unqiueId"
     }
     
 }

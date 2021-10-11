@@ -115,7 +115,7 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
     }
     
     private func createSession(){
-        let session = CreateSessionReq(brokerAddress: config.brokerAddress, token: Chat.sharedInstance.token)
+        let session = CreateSessionReq(turnAddress: config.turnAddress, brokerAddress: config.brokerAddressWeb, token: Chat.sharedInstance.token)
         if let data = try? JSONEncoder().encode(session){
             send(data)
         }else{
@@ -181,7 +181,7 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
     public func sendOfferToPeer(_ sdp:RTCSessionDescription,topic:String, mediaType:Mediatype){
         let sdp = MakeCustomTextToSend(message: sdp.sdp).replaceSpaceEnterWithSpecificCharecters()
         let sendSDPOffer = SendOfferSDPReq(id: isSendTopic(topic: topic) ? "SEND_SDP_OFFER" : "RECIVE_SDP_OFFER" ,
-                                           brokerAddress: config.brokerAddress,
+                                           brokerAddress: config.firstBorokerAddressWeb,
                                            token: Chat.sharedInstance.token,
                                            topic: topic,
                                            sdpOffer: sdp ,

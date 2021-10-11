@@ -8,6 +8,7 @@
 import Foundation
 enum CallState:String{
 	case Requested        = "Requested"
+    case Created          = "Created"
 	case Canceled         = "Canceled"
 	case Started          = "Started"
 	case Ended            = "Ended"
