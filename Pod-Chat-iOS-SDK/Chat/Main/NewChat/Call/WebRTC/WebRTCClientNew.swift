@@ -31,10 +31,12 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
     private var isFrontCamera       :Bool                       = true
     private var videoSource         :RTCVideoSource?
     private var iceQueue            :[(pc:RTCPeerConnection,ice:RTCIceCandidate)] = []
-    private var signalingClient     :SignalingClient?
+    var targetLocalVideoWidth:Int32 = 640
+    var targetLocalVideoHight:Int32 = 480
     
-    private let rtcAudioSession =  RTCAudioSession.sharedInstance()
-    private let audioQueue      = DispatchQueue(label: "audio")
+    private let rtcAudioSession     = RTCAudioSession.sharedInstance()
+    private let audioQueue          = DispatchQueue(label: "audio")
+    var renderer                    : RTCVideoRenderer? = nil
     
     
     var mediaConstraints:[String:[String:String]] = [:]
@@ -77,16 +79,21 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
         createSession()
     
         // Console output
-        RTCSetMinDebugLogLevel(RTCLoggingSeverity.info)
+//        RTCSetMinDebugLogLevel(RTCLoggingSeverity.info)
 		
 
         // File output
-//        let path = Bundle.main.bundlePath
-//        print("path is\(path)")
-//        let logFile = RTCFileLogger(dirPath: path, maxFileSize: 100 * 1024)
-//        logFile.severity = .info
-//        logFile.start()
+        if let dir = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true){
+            let logFilePath = "WEBRTC-LOG"
+            let url = dir.appendingPathComponent(logFilePath)
+            customPrint("created path for log is :\(url.path)")
+            
+            logFile = RTCFileLogger(dirPath: url.path, maxFileSize: 100 * 1024)
+            logFile?.severity = .info
+            logFile?.start()
+        }
 	}
+    var logFile:RTCFileLogger? = nil
     
     func appendConstraintForTopic(topic:String? , constraints:[String:String]){
         if let topic = topic {
@@ -98,7 +105,11 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
         if let topic = topic{
             let encoder = RTCDefaultVideoEncoderFactory.default
             let decoder = RTCDefaultVideoDecoderFactory.default
-            pcfs.updateValue(RTCPeerConnectionFactory(encoderFactory: encoder, decoderFactory: decoder), forKey: topic)
+            let pcf = RTCPeerConnectionFactory(encoderFactory: encoder, decoderFactory: decoder)
+            let op = RTCPeerConnectionFactoryOptions()
+//            op.disableEncryption = true
+            pcf.setOptions(op)
+            pcfs.updateValue(pcf, forKey: topic)
         }
     }
     
@@ -137,25 +148,31 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
     /// Client can call this to dissconnect from peer.
     public func clearResourceAndCloseConnection(){
         peerConnections.forEach { key,pc in
+            customPrint("--- closing \(key) ---" , isGuardNil: true)
             pc.close()
         }
         peerConnections.removeAll()
         let close = CloseSessionReq(token: Chat.sharedInstance.token)
         guard let data = try? JSONEncoder().encode(close) else {
-            self.customPrint("error to encode close session request ", isGuardNil: true)
+            customPrint("error to encode close session request ", isGuardNil: true)
             return
         }
+        logFile?.stop()
         send(data)
         pcfs.removeAll()
+        renderer = nil
+        localVideoTrack = nil
+        remoteVideoTrack = nil
+        (videoCapturer as? RTCCameraVideoCapturer)?.stopCapture()
         WebRTCClientNew.instance = nil
-	}
+    }
     
     public func getLocalSDPWithOffer(topic:String ,onSuccess:@escaping (RTCSessionDescription)->Void){
         guard let mediaConstraint = mediaConstraints[topic] else{
             customPrint("can't find mediaConstraint to get local offer",isGuardNil: true)
             return
         }
-        let constraints = RTCMediaConstraints.init(mandatoryConstraints: mediaConstraint, optionalConstraints: nil)
+        let constraints = RTCMediaConstraints.init(mandatoryConstraints: mediaConstraint, optionalConstraints: ["DtlsSrtpKeyAgreement":kRTCMediaConstraintsValueFalse])
         guard let pp = peerConnections[topic] else{
             customPrint("can't find peerConnection in map to get local offer",isGuardNil: true)
             return
@@ -290,7 +307,7 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
 //        let desc = CMVideoFormatDescriptionGetDimensions(format.formatDescription)
         self.customPrint("resize to get key frame")
 //        localVideoTrack?.isEnabled = false
-        localVideoTrack?.source.adaptOutputFormat(toWidth: 1280 + 50, height: 720, fps: Int32(15))
+        localVideoTrack?.source.adaptOutputFormat(toWidth: targetLocalVideoWidth + 50, height: targetLocalVideoHight, fps: Int32(60))
         Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self]timer in
             guard let self = self else{
                 self?.customPrint("self was nil in timer generate keyFrame!",isGuardNil:true)
@@ -299,7 +316,7 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
             DispatchQueue.main.async {
                 self.customPrint("resize to normal generate key frame")
 //                self.localVideoTrack?.isEnabled = true
-                self.localVideoTrack?.source.adaptOutputFormat(toWidth: 1280, height: 720, fps: Int32(15))
+                self.localVideoTrack?.source.adaptOutputFormat(toWidth: self.targetLocalVideoWidth, height: self.targetLocalVideoHight, fps: Int32(60))
             }
         }
     }
@@ -313,7 +330,9 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
                 self.customPrint("error happend to startCaptureLocalVideo",isGuardNil:true)
                 return
             }
-            capturer.startCapture(with: selectedCamera, format: format, fps: Int(maxFrameRate))
+            DispatchQueue.global(qos: .background).async {
+                capturer.startCapture(with: selectedCamera, format: format, fps: Int(maxFrameRate))
+            }
             localVideoTrack?.add(renderer)
         }else if let capturer = videoCapturer as? RTCFileVideoCapturer{
             capturer.startCapturing(fromFileNamed: fileName , onError: { error in
@@ -323,13 +342,14 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
         }
     }
     
+
     private func getCameraFormat()->AVCaptureDevice.Format?{
         guard let frontCamera = RTCCameraVideoCapturer.captureDevices().first(where: {$0.position == (isFrontCamera ? .front : .back) }) else {
             self.customPrint("error to find front camera" ,isGuardNil:true)
             return nil
         }
         let format = RTCCameraVideoCapturer.supportedFormats(for: frontCamera).last(where: { format in
-           CMVideoFormatDescriptionGetDimensions(format.formatDescription).width == 1280 && CMVideoFormatDescriptionGetDimensions(format.formatDescription).height == 720
+           CMVideoFormatDescriptionGetDimensions(format.formatDescription).width == targetLocalVideoWidth && CMVideoFormatDescriptionGetDimensions(format.formatDescription).height == targetLocalVideoHight
         })
         return format
     }
@@ -343,7 +363,7 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
         }
     }
     
-    var renderer:RTCVideoRenderer?
+
     public func renderRemoteVideo(_ renderer:RTCVideoRenderer){
         self.renderer = renderer
         remoteVideoTrack?.add(renderer)

@@ -178,14 +178,14 @@ public class WebRTCClientNewLocalSignaling : NSObject , RTCPeerConnectionDelegat
         
         guard let capturer = videoCapturer as? RTCCameraVideoCapturer,
         let frontCamera = RTCCameraVideoCapturer.captureDevices().first(where: {$0.position == (isFrontCamera ? .front : .back) }),
-        let format = RTCCameraVideoCapturer.supportedFormats(for: frontCamera).last(where: { format in
-           let width =  CMVideoFormatDescriptionGetDimensions(format.formatDescription).width == 1920
-           let height =  CMVideoFormatDescriptionGetDimensions(format.formatDescription).height == 1080
-            return width && height
-        }),// TODO:- must chose resulation from configVideo
+              let format = (RTCCameraVideoCapturer.supportedFormats(for: frontCamera).sorted { (f1, f2) -> Bool in
+                  let width1 = CMVideoFormatDescriptionGetDimensions(f1.formatDescription).width
+                  let width2 = CMVideoFormatDescriptionGetDimensions(f2.formatDescription).width
+                  return width1 < width2
+              }).last,// TODO:- must chose resulation from configVideo
         let maxFrameRate = format.videoSupportedFrameRateRanges.last?.maxFrameRate
         else{return}
-        
+        print("selected width is\(CMVideoFormatDescriptionGetDimensions(format.formatDescription).width)")
         capturer.startCapture(with: frontCamera, format: format, fps: Int(maxFrameRate))
         localVideoTrack?.add(renderer)
     }
