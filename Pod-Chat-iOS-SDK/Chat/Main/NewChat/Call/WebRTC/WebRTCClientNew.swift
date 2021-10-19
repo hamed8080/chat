@@ -33,6 +33,7 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
     private var iceQueue            :[(pc:RTCPeerConnection,ice:RTCIceCandidate)] = []
     var targetLocalVideoWidth:Int32 = 640
     var targetLocalVideoHight:Int32 = 480
+    var targetFPS            :Int32 = 30
     
     private let rtcAudioSession     = RTCAudioSession.sharedInstance()
     private let audioQueue          = DispatchQueue(label: "audio")
@@ -307,7 +308,7 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
 //        let desc = CMVideoFormatDescriptionGetDimensions(format.formatDescription)
         self.customPrint("resize to get key frame")
 //        localVideoTrack?.isEnabled = false
-        localVideoTrack?.source.adaptOutputFormat(toWidth: targetLocalVideoWidth + 50, height: targetLocalVideoHight, fps: Int32(60))
+        localVideoTrack?.source.adaptOutputFormat(toWidth: targetLocalVideoWidth + 50, height: targetLocalVideoHight, fps: targetFPS)
         Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self]timer in
             guard let self = self else{
                 self?.customPrint("self was nil in timer generate keyFrame!",isGuardNil:true)
@@ -316,7 +317,7 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
             DispatchQueue.main.async {
                 self.customPrint("resize to normal generate key frame")
 //                self.localVideoTrack?.isEnabled = true
-                self.localVideoTrack?.source.adaptOutputFormat(toWidth: self.targetLocalVideoWidth, height: self.targetLocalVideoHight, fps: Int32(60))
+                self.localVideoTrack?.source.adaptOutputFormat(toWidth: self.targetLocalVideoWidth, height: self.targetLocalVideoHight, fps: self.targetFPS)
             }
         }
     }
@@ -324,14 +325,14 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
     public func startCaptureLocalVideo(renderer:RTCVideoRenderer , fileName:String){
         if let capturer =  videoCapturer as? RTCCameraVideoCapturer{
             guard let selectedCamera = RTCCameraVideoCapturer.captureDevices().first(where: {$0.position == (isFrontCamera ? .front : .back) }),
-                  let format = getCameraFormat(),
-                  let maxFrameRate = format.videoSupportedFrameRateRanges.last?.maxFrameRate
+                  let format = getCameraFormat()
             else{
                 self.customPrint("error happend to startCaptureLocalVideo",isGuardNil:true)
                 return
             }
+            self.customPrint("target fps :\(targetFPS)")
             DispatchQueue.global(qos: .background).async {
-                capturer.startCapture(with: selectedCamera, format: format, fps: Int(maxFrameRate))
+                capturer.startCapture(with: selectedCamera, format: format, fps: Int(self.targetFPS))
             }
             localVideoTrack?.add(renderer)
         }else if let capturer = videoCapturer as? RTCFileVideoCapturer{
@@ -349,7 +350,9 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
             return nil
         }
         let format = RTCCameraVideoCapturer.supportedFormats(for: frontCamera).last(where: { format in
-           CMVideoFormatDescriptionGetDimensions(format.formatDescription).width == targetLocalVideoWidth && CMVideoFormatDescriptionGetDimensions(format.formatDescription).height == targetLocalVideoHight
+            let maxFrameRate = format.videoSupportedFrameRateRanges.first(where: { $0.maxFrameRate <= Float64(targetFPS) })?.maxFrameRate ?? Float64(targetFPS)
+            self.targetFPS = Int32(maxFrameRate)
+           return CMVideoFormatDescriptionGetDimensions(format.formatDescription).width == targetLocalVideoWidth && CMVideoFormatDescriptionGetDimensions(format.formatDescription).height == targetLocalVideoHight && Int32(maxFrameRate) <= targetFPS
         })
         return format
     }
