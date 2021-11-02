@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import FanapPodAsyncSDK
+
 class MessageResponseHandler: ResponseHandler {
     
-    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
         
 		let chat = Chat.sharedInstance
         if chat.config?.enableCache == true, let data = chatMessage.content?.data(using: .utf8) , let message = try? JSONDecoder().decode(Message.self, from: data){

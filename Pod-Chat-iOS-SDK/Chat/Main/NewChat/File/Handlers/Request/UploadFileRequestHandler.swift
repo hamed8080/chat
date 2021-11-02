@@ -37,7 +37,7 @@ class UploadFileRequestHandler{
                 uploadCompletion?(nil,nil,chatError)
             } else if let data = data , let uploadResponse = try? JSONDecoder().decode(NewUploadFileResponse.self, from: data){
                 if FanapPodChatSDK.Chat.sharedInstance.config?.isDebuggingLogEnabled == true {
-                    print("file uploaded successfully:\(String(data:data , encoding:.utf8) ?? "")")
+                    Chat.sharedInstance.logger?.log(title: "file uploaded successfully", message: "\(String(data:data , encoding:.utf8) ?? "")")
                 }
                 guard let fileServer = chat.config?.fileServer else{return}
                 let link = "\(fileServer)\(SERVICES_PATH.DRIVE_DOWNLOAD_FILE.rawValue)?hash=\(uploadResponse.fileMetaDataResponse?.hashCode ?? "")"

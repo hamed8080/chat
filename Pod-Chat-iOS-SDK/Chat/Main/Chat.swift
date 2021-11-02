@@ -127,7 +127,7 @@ public class Chat {
     
     // the delegate property that the user class should make itself to be implment this delegat.
     // At first, the class sould confirm to ChatDelegates, and then implement the ChatDelegates methods
-	public weak var delegate: ChatDelegates?{
+	public weak var delegate: NewChatDelegate?{
 		didSet{
 			if(!isCreateObjectFuncCalled){
                 print("Please call createChatObject func before set delegate")
@@ -501,7 +501,8 @@ public class Chat {
 	var isCreateObjectFuncCalled = false
 	var config:ChatConfig?
 	var callbacksManager = CallbacksManager()
-    
+    internal var asyncManager                   :AsyncManager                   = AsyncManager()
+    internal var logger                                : Logger?
 }
 
 

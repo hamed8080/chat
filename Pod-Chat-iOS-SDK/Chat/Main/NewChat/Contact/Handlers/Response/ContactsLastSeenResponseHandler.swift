@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import FanapPodAsyncSDK
+
 class ContactsLastSeenResponseHandler {
 	
-	static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+	static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
 		let chat = Chat.sharedInstance
 		guard let data = chatMessage.content?.data(using: .utf8) else {return}
 		guard let users = try? JSONDecoder().decode([UserLastSeenDuration].self, from: data) else{return}

@@ -18,11 +18,11 @@ public class DeviceIdRequestHandler {
         let url = config.ssoHost + SERVICES_PATH.SSO_DEVICES.rawValue
         RequestManager.request(ofType:DevicesResposne.self, bodyData: nil , url: url, method: .get, headers: headers) { devicesResponse , error in
             if let error = error {
-                chat.delegate?.chatError(errorCode: error.errorCode ?? 0, errorMessage: error.message ?? "", errorResult: nil)
+                chat.delegate?.chatError(error: error)
             }
             if let device = devicesResponse?.devices?.first(where: {$0.current == true}){
                 chat.config?.deviceId = device.uid
-                chat.CreateAsync()
+                chat.asyncManager.createAsync()
             }
         }
     }

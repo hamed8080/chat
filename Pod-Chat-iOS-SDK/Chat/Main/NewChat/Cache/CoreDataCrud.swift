@@ -64,9 +64,9 @@ open class CoreDataCrud<T:NSFetchRequestResult> {
             req.predicate = predicate
             let deleteReq = NSBatchDeleteRequest(fetchRequest: req)
             try PSM.shared.context.execute(deleteReq)
-            print("saved successfully from deleteWith execute")
+            Chat.sharedInstance.logger?.log(title: "CHAT_SDK:", message: "saved successfully from deleteWith execute")
         }catch{
-            print("error in deleteWith happened\(error)")
+            Chat.sharedInstance.logger?.log(title: "error in deleteWith happened", message: "\(error)")
         }
         
     }
@@ -75,9 +75,9 @@ open class CoreDataCrud<T:NSFetchRequestResult> {
         do{
             let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest())
             try PSM.shared.context.execute(deleteRequest)
-            print("saved successfully from deleteAll execute")
+            Chat.sharedInstance.logger?.log(title: "saved successfully from deleteAll execute")
         }catch{
-            print("error in deleteAll happened\(error)")
+            Chat.sharedInstance.logger?.log(title: "error in deleteAll happened", message: "\(error)")
         }
     }
     

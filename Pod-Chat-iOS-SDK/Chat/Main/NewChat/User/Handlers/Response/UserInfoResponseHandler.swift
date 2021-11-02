@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import FanapPodAsyncSDK
+
 class UserInfoResponseHandler: ResponseHandler{
 	
-	static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+	static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
 		
 		let chat = Chat.sharedInstance
         chat.delegate?.systemEvents(model: .init(type: .SERVER_TIME, time: chatMessage.time))

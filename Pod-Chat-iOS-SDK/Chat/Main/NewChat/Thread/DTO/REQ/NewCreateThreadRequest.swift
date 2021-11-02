@@ -49,10 +49,10 @@ public class NewCreateThreadRequest: BaseRequest {
 	
 	public override func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encodeIfPresent(title.getCustomTextToSendWithRemoveSpaceAndEnter(), forKey: .title)
+		try container.encodeIfPresent(title, forKey: .title)
 		try container.encodeIfPresent(image, forKey: .image)
-		try container.encodeIfPresent(description?.getCustomTextToSendWithRemoveSpaceAndEnter(), forKey: .description)
-		try container.encodeIfPresent(metadata?.getCustomTextToSendWithRemoveSpaceAndEnter(), forKey: .metadata)
+		try container.encodeIfPresent(description, forKey: .description)
+		try container.encodeIfPresent(metadata, forKey: .metadata)
 		try container.encodeIfPresent(uniqueName, forKey: .uniqueName)
 		try container.encodeIfPresent(type, forKey: .type)
 		try container.encodeIfPresent(invitees, forKey: .invitees)

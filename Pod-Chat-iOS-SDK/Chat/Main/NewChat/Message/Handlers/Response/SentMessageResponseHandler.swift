@@ -6,12 +6,14 @@
 //
 
 import Foundation
+import FanapPodAsyncSDK
+
 class SentMessageResponseHandler: ResponseHandler {
     
-    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
         
 		let chat = Chat.sharedInstance
-        if let callback =  Chat.sharedInstance.callbacksManager.getSentCallback(chatMessage.uniqueId) {
+        if let callback = Chat.sharedInstance.callbacksManager.getSentCallback(chatMessage.uniqueId) {
             chat.delegate?.messageEvents(model: .init(type: .MESSAGE_SEND, chatMessage: chatMessage))
             let message = Message(threadId: chatMessage.subjectId, pushMessageVO: chatMessage.content?.convertToJSON() ?? [:])
             let messageResponse = SentMessageResponse(isSent: true, messageId: message.id, threadId: chatMessage.subjectId, message: message, participantId: chatMessage.participantId)

@@ -10,11 +10,10 @@ import FanapPodAsyncSDK
 
 class ReceiveMessageFactory{
 	
-	class func invokeCallback(data:Data) {
-		guard let asyncMessage = try? JSONDecoder().decode(AsyncMessage.self, from: data) else {return}
-		guard let chatMessageData  = asyncMessage.content.data(using: .utf8) else{return}
+    class func invokeCallback(asyncMessage: NewAsyncMessage) {
+		guard let chatMessageData  = asyncMessage.content?.data(using: .utf8) else{return}
 		guard let chatMessage =  try? JSONDecoder().decode(NewChatMessage.self, from: chatMessageData) else{return}
-		asyncMessage.printAsyncJson(receive:true)
+        Chat.sharedInstance.logger?.log(title: "on Receive Message", jsonString: asyncMessage.string)
 		
 		switch chatMessage.type {
 			
@@ -229,9 +228,9 @@ class ReceiveMessageFactory{
 				ErrorResponseHandler.handle(chatMessage , asyncMessage)
 				break
             case .UNKNOWN:
-                print("an unknown message type received from the server not implemented in SDK!")
+                Chat.sharedInstance.logger?.log(title: "CHAT_SDK:", message: "an unknown message type received from the server not implemented in SDK!")
 			@unknown default :
-				print("an message received with unknowned type value. investigate to fix or leave that.")
+                Chat.sharedInstance.logger?.log(title: "CHAT_SDK:", message: "an message received with unknowned type value. investigate to fix or leave that.")
 		}
 		
 	}

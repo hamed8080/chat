@@ -18,7 +18,7 @@ class DownloadMapStaticImageRequestHandler {
 	{
         uniqueIdResult?(req.uniqueId)
 		guard let mapApiKey = config.mapApiKey else{
-            print("❌ map api key was null set it through config!")
+            Chat.sharedInstance.logger?.log(title: "CHAT_SDK:", message: "❌ map api key was null set it through config!")
             return
         }
 		req.key = mapApiKey

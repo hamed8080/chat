@@ -6,10 +6,12 @@
 //
 
 import Foundation
+import FanapPodAsyncSDK
+
 class MuteThreadResponseHandler: ResponseHandler {
 
 
-	static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+	static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
         
 		let chat = Chat.sharedInstance
         let type:ThreadEventTypes = chatMessage.type == .MUTE_THREAD ? .THREAD_MUTE : .THREAD_UNMUTE

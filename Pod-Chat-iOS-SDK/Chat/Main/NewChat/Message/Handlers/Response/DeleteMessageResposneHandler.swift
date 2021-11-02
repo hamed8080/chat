@@ -6,10 +6,11 @@
 //
 
 import Foundation
+import FanapPodAsyncSDK
 
 class DeleteMessageResposneHandler: ResponseHandler {
     
-    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
 		
 		let chat = Chat.sharedInstance
         chat.delegate?.messageEvents(model: .init(type: .MESSAGE_DELETE, chatMessage: chatMessage))

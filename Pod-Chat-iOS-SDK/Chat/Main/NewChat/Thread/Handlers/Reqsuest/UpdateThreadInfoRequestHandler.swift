@@ -202,7 +202,7 @@ public class UpdateThreadInfoRequestHandler  {
         guard let fileServer = chat.config?.fileServer else {return}
         let url = "\(fileServer)\(SERVICES_PATH.DRIVE_DOWNLOAD_IMAGE.rawValue)"
         let method:     HTTPMethod  = HTTPMethod.get
-        let headers:    HTTPHeaders = ["_token_": chat.token, "_token_issuer_": "1"]
+        let headers:    HTTPHeaders = ["_token_": chat.config?.token ?? "", "_token_issuer_": "1"]
         
         Networking.sharedInstance.download(fromUrl:         url,
                                            withMethod:      method,
@@ -226,15 +226,14 @@ public class UpdateThreadInfoRequestHandler  {
                                               size:         fileSize ?? myData.count,
                                               width:        nil)
                 
-                if chat.enableCache {
-                    if chat.checkIfDeviceHasFreeSpace(needSpaceInMB: Int64(myData.count / 1024), turnOffTheCache: true) {
-                        if getImageInput.quality == 0.123 {
-                            Chat.cacheDB.saveThumbnailImageObject(imageInfo: uploadImage, imageData: myData, toLocalPath: chat.localImageCustomPath)
-                        } else {
-                            Chat.cacheDB.saveImageObject(imageInfo: uploadImage, imageData: myData, toLocalPath: chat.localImageCustomPath)
-                        }
-                        
-                    }
+                if chat.config?.enableCache == true {
+//                    if UpdateThreadInfoRequestHandler.checkIfDeviceHasFreeSpace(needSpaceInMB: Int64(myData.count / 1024), turnOffTheCache: true) {
+//                        if getImageInput.quality == 0.123 {
+//                            Chat.cacheDB.saveThumbnailImageObject(imageInfo: uploadImage, imageData: myData, toLocalPath: chat.config?.localImageCustomPath)
+//                        } else {
+//                            Chat.cacheDB.saveImageObject(imageInfo: uploadImage, imageData: myData, toLocalPath: chat.config?.localImageCustomPath)
+//                        }
+//                    }
                 }
                 
                 let uploadImageModel = DownloadImageModel(messageContentModel: uploadImage, errorCode: 0, errorMessage: "", hasError: false)
@@ -246,6 +245,20 @@ public class UpdateThreadInfoRequestHandler  {
                                                                hasError:            responseHeader["hasError"].bool ?? false)
                 completion(nil, errorUploadImageModel)
             }
+        }
+    }
+    
+    class func checkIfDeviceHasFreeSpace(needSpaceInMB: Int64, turnOffTheCache: Bool , errorDelegate:ChatDelegates?) -> Bool {
+        let availableSpace = DiskStatus.freeDiskSpaceInBytes
+        if availableSpace < (needSpaceInMB * 1024 * 1024) {
+            var message = "your disk space is less than \(DiskStatus.MBFormatter(DiskStatus.freeDiskSpaceInBytes))MB."
+            if turnOffTheCache {
+                message += " " + "so, the cache will be switch OFF!"
+            }
+            errorDelegate?.chatError(errorCode: 6401, errorMessage: message, errorResult: nil)
+            return false
+        } else {
+            return true
         }
     }
     

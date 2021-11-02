@@ -172,16 +172,9 @@ extension Chat: AsyncDelegates {
          *
          */
         log.verbose("content of received message: \n \(params)", context: "Chat")
+        
         let asyncMessage = AsyncMessage(withContent: params)
-        let chatMessage = ChatMessage(withContent: asyncMessage.content.convertToJSON())
-        let uniqueIdInNewSDK = Chat.sharedInstance.callbacksManager.isUniqueIdExistInAllCllbacks(uniqueId:chatMessage.uniqueId)
-        let isSystemEvent  = chatMessage.type == NewChatMessageVOTypes.SYSTEM_MESSAGE.rawValue
-        //Only code needed in new Version release
-        if !uniqueIdInNewSDK && !isSystemEvent{
-            handleReceiveMessageFromAsync(withContent: asyncMessage)
-        }else if let data = try? params.rawData(){
-            ReceiveMessageFactory.invokeCallback(data: data)
-        }
+        handleReceiveMessageFromAsync(withContent: asyncMessage)
     }
     
     

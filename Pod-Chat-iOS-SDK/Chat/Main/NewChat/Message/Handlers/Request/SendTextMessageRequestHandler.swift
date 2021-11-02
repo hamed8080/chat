@@ -19,7 +19,7 @@ class SendTextMessageRequestHandler {
         
         let sendChatMessageVO = NewSendChatMessageVO(type:  ChatMessageVOTypes.MESSAGE.intValue(),
                                                      token: token,
-                                                     content:  req.textMessage.getCustomTextToSendWithRemoveSpaceAndEnter(),
+                                                     content:  req.textMessage,
                                                      messageType: req.messageType.rawValue,
                                                      metadata: req.metadata,
                                                      repliedTo: req.repliedTo,

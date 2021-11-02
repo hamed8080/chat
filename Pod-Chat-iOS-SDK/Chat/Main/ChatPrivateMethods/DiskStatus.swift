@@ -101,7 +101,11 @@ open class DiskStatus {
             if turnOffTheCache {
                 message += " " + "so, the cache will be switch OFF!"
             }
-            errorDelegate?.chatError(errorCode: 6401, errorMessage: message, errorResult: nil)
+            if Chat.sharedInstance.config?.useNewSDK == true{
+                (errorDelegate as? NewChatDelegate)?.chatError(error: .init(code: .OUT_OF_STORAGE, message: "out of storage!"))
+            }else{
+                errorDelegate?.chatError(errorCode: 6401, errorMessage: message, errorResult: nil)
+            }
             return false
         } else {
             return true

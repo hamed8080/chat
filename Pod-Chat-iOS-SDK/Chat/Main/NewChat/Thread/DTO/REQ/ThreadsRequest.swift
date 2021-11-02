@@ -35,20 +35,15 @@ public class ThreadsRequest : BaseRequest {
                 typeCode             : String?   = nil
     )
 	{
-		self.count                = 	count
-		self.offset               = 		offset
-		if let name = name {
-			self.name = MakeCustomTextToSend(message: name).replaceSpaceEnterWithSpecificCharecters()
-		}
-		if let metadataCriteria = metadataCriteria{
-			self.metadataCriteria = MakeCustomTextToSend(message: metadataCriteria).replaceSpaceEnterWithSpecificCharecters()
-		}
-		
-		self.new                  = 		new
-		self.threadIds            = 		threadIds
-		self.creatorCoreUserId    = 		creatorCoreUserId
-		self.partnerCoreUserId    = 		partnerCoreUserId
-		self.partnerCoreContactId = 		partnerCoreContactId
+		self.count                = count
+		self.offset               = offset
+        self.name                 = name
+        self.metadataCriteria     = metadataCriteria
+		self.new                  = new
+		self.threadIds            = threadIds
+		self.creatorCoreUserId    = creatorCoreUserId
+		self.partnerCoreUserId    = partnerCoreUserId
+		self.partnerCoreContactId = partnerCoreContactId
         super.init(uniqueId: uniqueId, typeCode: typeCode)
 	}
 	

@@ -9,7 +9,15 @@
 import Foundation
 import SwiftyJSON
 
-open class Message : Codable {
+open class Message : Codable , Hashable {
+    
+    public static func == (lhs: Message, rhs: Message) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
     
     public var deletable:   Bool?
     public var delivered:   Bool?

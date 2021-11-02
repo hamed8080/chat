@@ -1,3 +1,5 @@
 .DS_Store
 xcuserdata/
 *.xccheckout
+Pod-Chat-iOS-SDK/Frameworks
+Pod-Chat-iOS-SDK/Frameworks/**

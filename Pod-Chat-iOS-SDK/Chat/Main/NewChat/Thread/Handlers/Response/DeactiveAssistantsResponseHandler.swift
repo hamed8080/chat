@@ -10,7 +10,7 @@ import FanapPodAsyncSDK
 
 public class DeactiveAssistantsResponseHandler : ResponseHandler {
     
-    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
 		let chat = Chat.sharedInstance
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
         guard let data = chatMessage.content?.data(using: .utf8) else {return}

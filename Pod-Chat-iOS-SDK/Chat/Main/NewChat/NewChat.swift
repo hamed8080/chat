@@ -89,12 +89,17 @@ public extension Chat {
     }
 	
 	func initialize(){
+        logger = Logger(isDebuggingLogEnabled: config?.isDebuggingLogEnabled ?? false)
 		if config?.captureLogsOnSentry == true {
 			startCrashAnalytics()
 		}
 		
 		if config?.getDeviceIdFromToken == false{
-            CreateAsync()
+            if config?.useNewSDK == true{
+                asyncManager.createAsync()
+            }else{
+                CreateAsync()
+            }
 		}else{
             DeviceIdRequestHandler.getDeviceIdAndCreateAsync(chat: self)
 		}
@@ -106,6 +111,7 @@ public extension Chat {
 		stopAllChatTimers()
 		asyncClient?.disposeAsyncObject()
 		asyncClient = nil
+        asyncManager.disposeObject()
 		Chat.instance = nil
 		print("Disposed Singleton instance")
 	}
@@ -690,9 +696,7 @@ public extension Chat {
         ) { [weak self] response , error in
              guard let weakSelf = self else{return}
              if let error = error {
-                 weakSelf.delegate?.chatError(errorCode: error.errorCode ?? 0 ,
-                                              errorMessage: error.message ?? "",
-                                              errorResult: error.content)
+                weakSelf.delegate?.chatError(error: error)
                 completion(.init(error: error))
              }
             if let response = response{
@@ -742,7 +746,6 @@ public extension Chat {
 		
 		
 		callbacksManager.addCallback(uniqueId: uniqueId , callback: completion ,onSent: onSent , onDelivered: onDelivered , onSeen: onSeen)
-		asyncMessage.printAsyncJson()
 		sendToAsync(asyncMessageVO: asyncMessage)
 	}
     
@@ -764,7 +767,6 @@ public extension Chat {
                                               pushMsgType: pushMsgType
         )
         
-		asyncMessage.printAsyncJson()
         callbacksManager.addCallback(uniqueId: uniqueId , callback: completion ,onSent: onSent , onDelivered: onDelivered , onSeen: onSeen)
         sendToAsync(asyncMessageVO: asyncMessage)
     }
@@ -780,17 +782,21 @@ public extension Chat {
 	}
 	
 	internal func sendToAsync(asyncMessageVO:NewSendAsyncMessageVO){
-		guard let content = asyncMessageVO.convertCodableToString() else { return }
-		asyncClient?.pushSendData(type: asyncMessageVO.pushMsgType ?? 3, content: content)
-		runSendMessageTimer()
+        guard let content = try? JSONEncoder().encode(asyncMessageVO) else { return }
+        logger?.log(title: "send Message", jsonString: asyncMessageVO.string ?? "")
+        asyncManager.sendData(type: AsyncMessageTypes(rawValue: asyncMessageVO.pushMsgType ?? 3)! , data: content)        
 	}
     
     func setToken(newToken: String , reCreateObject:Bool = false) {
         token = newToken
         config?.token = newToken
         if reCreateObject{
-            CreateAsync()
+            asyncManager.createAsync()
         }
     }
+    
+    internal func setUser(user:User){
+        self.userInfo = user
+    }
+    
 }
-

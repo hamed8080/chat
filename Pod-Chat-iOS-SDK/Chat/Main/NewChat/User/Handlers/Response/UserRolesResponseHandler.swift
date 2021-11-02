@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import FanapPodAsyncSDK
+
 class UserRolesResponseHandler: ResponseHandler {
     
-    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
         
 		let chat = Chat.sharedInstance
         let adminEvent = ThreadEventModel(type: .THREAD_ADD_ADMIN, chatMessage: chatMessage)

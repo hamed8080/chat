@@ -6,10 +6,12 @@
 //
 
 import Foundation
+import FanapPodAsyncSDK
+
 class PinThreadResponseHandler: ResponseHandler {
 
 
-	static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+	static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
 		
 		let chat = Chat.sharedInstance
         let type:ThreadEventTypes = chatMessage.type == .PIN_THREAD ? .THREAD_PIN : .THREAD_UNPIN
