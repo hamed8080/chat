@@ -7,7 +7,9 @@
 
 import Foundation
 public enum ClientType:Int, Codable {
-    case WEB     = 1
-    case ANDROID = 2
-    case DESKTOP = 3
+	case WEB     	= 1
+	case ANDROID 	= 2
+	case DESKTOP 	= 3
+	case IOS         = 4
+	
 }

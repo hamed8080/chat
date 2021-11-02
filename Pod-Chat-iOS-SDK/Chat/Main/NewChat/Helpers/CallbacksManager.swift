@@ -15,6 +15,7 @@ class CallbacksManager{
     private var seenCallbacks        : [String : OnSeenType]                          = [:]
     private var uploadTasks          : [String : URLSessionTask]                      = [:]
     private var downloadTasks        : [String : URLSessionTask]                      = [:]
+	public var callRequestArriveDelegate:((CreateCall)->())? = nil
 	
     func addCallback(uniqueId    : String ,
                      callback    : ((ChatResponse)->())? = nil,
