@@ -6,21 +6,43 @@
 //
 
 import Foundation
-public struct CallParticipant:Codable{
+public struct CallParticipant:Codable,Hashable{
     
-    public let id           : Int
+    public static func == (lhs: CallParticipant, rhs: CallParticipant) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    
+   
+    public var id           : String = UUID().uuidString //only for use swiftui
     public let joinTime     : Int
     public let leaveTime    : Int
     public let userId       : Int
     public let sendTopic    : String
     public let receiveTopic : String
-    public let active       : Bool
+    public let active       : Bool?
     public let callStatus   : CallStatus
-    public let participant  : Participant
+    public let participant  : Participant?
+    public let mute         : Bool
+    public let video        : Bool?
+    
+    public init(joinTime: Int, leaveTime: Int, userId: Int, sendTopic: String, receiveTopic: String, active: Bool, callStatus: CallStatus, mute:Bool , video:Bool? = nil, participant: Participant? = nil) {
+        self.joinTime     = joinTime
+        self.leaveTime    = leaveTime
+        self.userId       = userId
+        self.sendTopic    = sendTopic
+        self.receiveTopic = receiveTopic
+        self.active       = active
+        self.callStatus   = callStatus
+        self.participant  = participant
+        self.mute         = mute
+        self.video        = video
+    }
     
     private enum CodingKeys:String,CodingKey{
-        
-        case id           = "id"
         case joinTime     = "joinTime"
         case leaveTime    = "leaveTime"
         case userId       = "userId"
@@ -29,5 +51,7 @@ public struct CallParticipant:Codable{
         case active       = "active"
         case callStatus   = "callStatus"
         case participant  = "participantVO"
+        case mute         = "mute"
+        case video        = "video"
     }
 }

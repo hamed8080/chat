@@ -8,15 +8,18 @@
 import Foundation
 import FanapPodAsyncSDK
 
+fileprivate let STARTED_CALL_NAME        = "STARTED_CALL_NAME"
+public var STARTED_CALL_NAME_OBJECT = Notification.Name.init(STARTED_CALL_NAME)
+
 class CallStartedResponseHandler {
     
     static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
         
         let chat = Chat.sharedInstance
-        guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
         guard let data = chatMessage.content?.data(using: .utf8) else {return}
-        guard let callStarted = try? JSONDecoder().decode(StartCall.self, from: data) else{return}
-        callback(.init(uniqueId:chatMessage.uniqueId , result: callStarted))
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        guard var callStarted = try? JSONDecoder().decode(StartCall.self, from: data) else{return}
+        callStarted.callId = chatMessage.subjectId
+        chat.callbacksManager.callStartedDelegate?(callStarted,chatMessage.uniqueId)
+        NotificationCenter.default.post(name: STARTED_CALL_NAME_OBJECT ,object: callStarted)
     }
 }

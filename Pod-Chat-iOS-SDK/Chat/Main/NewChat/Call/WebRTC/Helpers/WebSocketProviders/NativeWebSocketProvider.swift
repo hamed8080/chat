@@ -36,14 +36,15 @@ class NativeWebSocketProvider : NSObject , WebSocketProvider{
 			guard let self = self else { return }
 			
 			switch message {
+                case .success(.string(let string)):
+                    self.delegate?.webSocketDidReciveData(self, didReceive: string.data(using: .utf8)!)
+                    break
 				case .success(.data(let data)):
 					self.delegate?.webSocketDidReciveData(self, didReceive: data)
-					self.readMessage()
-					
+					break
 				case .success:
 					debugPrint("Warning: Expected to receive data format but received a string. Check the websocket server config.")
-					self.readMessage()
-					
+                    break
 				case .failure:
 					self.disconnect()
 			}

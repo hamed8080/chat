@@ -13,7 +13,7 @@ class MuteCallRequestHandler {
                        _ completion: @escaping CompletionType<[CallParticipant]> ,
                        _ uniqueIdResult: UniqueIdResultType = nil
     ){
-        chat.prepareToSendAsync(req:req,
+        chat.prepareToSendAsync(req:req.userIds,
                                 clientSpecificUniqueId: req.uniqueId,
                                 typeCode: req.typeCode,
                                 subjectId: req.callId,

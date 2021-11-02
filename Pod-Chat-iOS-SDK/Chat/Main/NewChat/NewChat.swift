@@ -672,7 +672,7 @@ public extension Chat {
 	
     //Call
     
-    //Test Status: Main ❌ - Integeration: ❌
+    //Test Status: Main ❌ - Integeration: ✅
     func requestCall(_ request:StartCallRequest, _ completion:@escaping CompletionType<CreateCall>, uniqueIdResult:UniqueIdResultType = nil){
         StartCallRequestHandler.handle(request,self,completion ,uniqueIdResult)
     }
@@ -682,7 +682,13 @@ public extension Chat {
         StartCallRequestHandler.handle(request,self,completion ,uniqueIdResult)
     }
     
-    //Test Status: Main ❌ - Integeration: ❌
+    //Test Status: Main ❌ - Integeration: ✅
+    // MARK:- only SDK can call this method
+    internal func callReceived(_ request:CallReceivedRequest){
+        CallReceivedRequestHandler.handle(request,self)
+    }
+    
+    //Test Status: Main ❌ - Integeration: ✅
     func endCall(_ request:EndCallRequest, _ completion:@escaping CompletionType<Int>, uniqueIdResult:UniqueIdResultType = nil){
         EndCallRequestHandler.handle(request,self,completion ,uniqueIdResult)
     }
@@ -697,27 +703,32 @@ public extension Chat {
         RemoveCallParticipantRequestHandler.handle(request,self,completion ,uniqueIdResult)
     }
     
-    //Test Status: Main ❌ - Integeration: ❌
-    func acceptCall(_ request:EndCallRequest, uniqueIdResult:UniqueIdResultType = nil){
+    //Test Status: Main ❌ - Integeration: ✅
+    func acceptCall(_ request:AcceptCallRequest, uniqueIdResult:UniqueIdResultType = nil){
         AcceptCallRequestHandler.handle(request,self,uniqueIdResult)
     }
     
-    //Test Status: Main ❌ - Integeration: ❌
+    //Test Status: Main ❌ - Integeration: ✅
+    func rejectCall(_ request:RejectCallRequest, uniqueIdResult:UniqueIdResultType = nil){
+        RejectCallRequestHandler.handle(request,self,uniqueIdResult)
+    }
+    
+    //Test Status: Main ❌ - Integeration: ✅
     func turnOnVideoCall(_ request:TurnOnVideoCallRequest, _ completion:@escaping CompletionType<[CallParticipant]>, uniqueIdResult:UniqueIdResultType = nil){
         TurnONVideoCallRequestHandler.handle(request,self,completion ,uniqueIdResult)
     }
     
-    //Test Status: Main ❌ - Integeration: ❌
+    //Test Status: Main ❌ - Integeration: ✅
     func turnOffVideoCall(_ request:TurnOffVideoCallRequest, _ completion:@escaping CompletionType<[CallParticipant]>, uniqueIdResult:UniqueIdResultType = nil){
         TurnOffVideoCallRequestHandler.handle(request,self,completion ,uniqueIdResult)
     }
     
-    //Test Status: Main ❌ - Integeration: ❌
+    //Test Status: Main ❌ - Integeration: ✅
     func muteCall(_ request:MuteCallRequest, _ completion:@escaping CompletionType<[CallParticipant]>, uniqueIdResult:UniqueIdResultType = nil){
         MuteCallRequestHandler.handle(request,self,completion ,uniqueIdResult)
     }
     
-    //Test Status: Main ❌ - Integeration: ❌
+    //Test Status: Main ❌ - Integeration: ✅
     func unmuteCall(_ request:UNMuteCallRequest, _ completion:@escaping CompletionType<[CallParticipant]>, uniqueIdResult:UniqueIdResultType = nil){
         UNMuteCallRequestHandler.handle(request,self,completion ,uniqueIdResult)
     }
@@ -727,7 +738,7 @@ public extension Chat {
         TerminateCallRequestHandler.handle(request,self,completion ,uniqueIdResult)
     }
     
-    //Test Status: Main ❌ - Integeration: ❌
+    //Test Status: Main ❌ - Integeration: ✅
     func activeCallParticipants(_ request:ActiveCallParticipantsRequest, _ completion:@escaping CompletionType<[CallParticipant]>, uniqueIdResult:UniqueIdResultType = nil){
         ActiveCallParticipantsRequestHandler.handle(request,self,completion ,uniqueIdResult)
     }
@@ -742,7 +753,7 @@ public extension Chat {
         StopCallRecordingRequestHandler.handle(request,self,completion ,uniqueIdResult)
     }
 
-    //Test Status: Main ❌ - Integeration: ❌
+    //Test Status: Main ❌ - Integeration: ✅
     func callsHistory(_ request:CallsHistoryRequest, _ completion:@escaping PaginationCompletionType<[Call]>, uniqueIdResult:UniqueIdResultType = nil){
         CallsHistoryRequestHandler.handle(request,self,completion ,uniqueIdResult)
     }

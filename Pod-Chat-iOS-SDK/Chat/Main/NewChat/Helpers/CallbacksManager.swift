@@ -9,13 +9,22 @@ import Foundation
 
 class CallbacksManager{
 	
-    private var callbacks            : [String : (ChatResponse)->()]                  = [:]
-    private var sentCallbacks        : [String : OnSentType]                          = [:]
-    private var deliveredCallbacks   : [String : OnDeliveryType]                      = [:]
-    private var seenCallbacks        : [String : OnSeenType]                          = [:]
-    private var uploadTasks          : [String : URLSessionTask]                      = [:]
-    private var downloadTasks        : [String : URLSessionTask]                      = [:]
-	public var callRequestArriveDelegate:((CreateCall)->())? = nil
+    private var callbacks                               : [String : (ChatResponse)->()]                  = [:]
+    private var sentCallbacks                           : [String : OnSentType]                          = [:]
+    private var deliveredCallbacks                      : [String : OnDeliveryType]                      = [:]
+    private var seenCallbacks                           : [String : OnSeenType]                          = [:]
+    private var uploadTasks                             : [String : URLSessionTask]                      = [:]
+    private var downloadTasks                           : [String : URLSessionTask]                      = [:]
+	public var callRequestArriveDelegate                : ((CreateCall,String)->())?                     = nil
+    public var callRejectedDelegate                     : ((Call,String)->())?                           = nil
+    public var callStartedDelegate                      : ((StartCall,String)->())?                      = nil
+    public var callEndDelegate                          : ((Int,String)->())?                            = nil
+    public var muteCallParticipantsDelegate             : (([CallParticipant],String)->())?              = nil
+    public var unMuteCallParticipantsDelegate           : (([CallParticipant],String)->())?              = nil
+    public var trunOnVideoCallParticipantsDelegate      : (([CallParticipant],String)->())?              = nil
+    public var trunOffVideoCallParticipantsDelegate     : (([CallParticipant],String)->())?              = nil
+    
+    
 	
     func addCallback(uniqueId    : String ,
                      callback    : ((ChatResponse)->())? = nil,

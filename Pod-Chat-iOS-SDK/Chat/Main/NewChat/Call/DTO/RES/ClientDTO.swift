@@ -14,4 +14,6 @@ public struct ClientDTO :Codable {
     public let brokerAddress : String
     public let desc          : String
     public let sendKey       : String
+    public let video         : Bool
+    public let mute          : Bool
 }

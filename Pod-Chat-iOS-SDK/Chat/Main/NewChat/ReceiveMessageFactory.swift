@@ -228,7 +228,7 @@ class ReceiveMessageFactory{
                 StartCallRequestResponseHandler.handle(chatMessage, asyncMessage)
                 break
             case .REJECT_CALL:
-                RejectCallResponseHandler.handle(chatMessage, asyncMessage)
+                CallRejectedResponseHandler.handle(chatMessage, asyncMessage)
                 break
             case .DELIVERED_CALL_REQUEST:
                 DeliverCallResponseHandler.handle(chatMessage, asyncMessage)

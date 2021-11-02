@@ -8,13 +8,16 @@
 import Foundation
 import FanapPodAsyncSDK
 
+fileprivate let END_CALL_NAME        = "END_CALL_NAME"
+public var END_CALL_NAME_OBJECT = Notification.Name.init(END_CALL_NAME)
+
 class EndCallResponseHandler {
     
     static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
         
         let chat = Chat.sharedInstance
-        guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
-        callback(.init(uniqueId:chatMessage.uniqueId , result: chatMessage.subjectId))
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        guard let callId = chatMessage.subjectId else{return}
+        chat.callbacksManager.callEndDelegate?(callId,chatMessage.uniqueId)
+        NotificationCenter.default.post(name: END_CALL_NAME_OBJECT ,object: callId)
     }
 }

@@ -16,7 +16,7 @@ public struct SendClient : Codable {
     public let desc                  : String?
 
     
-    public init(id: String? = nil, type: ClientType = .ANDROID, deviceId: String? = nil, mute: Bool = true, video: Bool = false, desc: String? = nil) {
+    public init(id: String? = nil, type: ClientType = .IOS, deviceId: String? = nil, mute: Bool = true, video: Bool = false, desc: String? = nil) {
         self.id       = id
         self.type     = type
         self.deviceId = deviceId

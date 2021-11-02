@@ -38,7 +38,11 @@ class PSM {
                 print("saved successfuly")
             } catch {
                 let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                #if DEBUG
+                    print("error occured in save database  \(nserror), \(nserror.userInfo)")
+                #else
+                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                #endif
             }
         }else{
             print("no changes find on context so nothing to save!")

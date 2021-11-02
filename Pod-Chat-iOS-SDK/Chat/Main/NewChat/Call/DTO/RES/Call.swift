@@ -18,7 +18,7 @@ public struct Call : Codable , Equatable {
     
     public let id : Int
     public let creatorId          : Int
-    public let type               : Int
+    public let type               : CallType
     public let createTime         : Int?
     public let startTime          : Int?
     public let endTime            : Int?
@@ -27,9 +27,13 @@ public struct Call : Codable , Equatable {
     public let callParticipants   : [Participant]?
     public let partnerParticipant : Participant?
     
+    public var isIncomingCall:Bool{
+        return creatorId != Chat.sharedInstance.getCurrentUser()?.id
+    }
+    
     public init(id                 : Int,
                 creatorId          : Int,
-                type               : Int,
+                type               : CallType,
                 isGroup            : Bool,
                 createTime         : Int?            = nil,
                 startTime          : Int?            = nil,

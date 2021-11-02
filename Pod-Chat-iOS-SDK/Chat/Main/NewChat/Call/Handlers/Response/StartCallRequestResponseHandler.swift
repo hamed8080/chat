@@ -18,7 +18,11 @@ class StartCallRequestResponseHandler {
         let chat = Chat.sharedInstance
         guard let data = chatMessage.content?.data(using: .utf8) else {return}
 		guard let createCall = try? JSONDecoder().decode(CreateCall.self, from: data) else{return}
-		chat.callbacksManager.callRequestArriveDelegate?(createCall)
+        
+        //SEND type 73 . This mean client receive call and showing ringing mode on call creator.        
+        chat.callReceived(.init(callId: createCall.callId))
+        
+        chat.callbacksManager.callRequestArriveDelegate?(createCall,chatMessage.uniqueId)
 		NotificationCenter.default.post(name: RECEIVE_CALL_NAME_OBJECT ,object: createCall)
     }
 }
