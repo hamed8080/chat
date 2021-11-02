@@ -227,8 +227,8 @@ class ReceiveMessageFactory{
             case .START_CALL_REQUEST , .GROUP_CALL_REQUEST:
                 StartCallRequestResponseHandler.handle(chatMessage, asyncMessage)
                 break
-            case .REJECT_CALL:
-                CallRejectedResponseHandler.handle(chatMessage, asyncMessage)
+            case .CANCEL_CALL:
+                CallCanceledResponseHandler.handle(chatMessage, asyncMessage)
                 break
             case .DELIVERED_CALL_REQUEST:
                 DeliverCallResponseHandler.handle(chatMessage, asyncMessage)

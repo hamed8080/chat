@@ -499,6 +499,7 @@ public class Chat {
 	var config:ChatConfig?
 	var callbacksManager = CallbacksManager()
     internal var asyncManager                   :AsyncManager                   = AsyncManager()
+	var callState:CallState? = nil
     
 }
 

@@ -50,6 +50,7 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
         RTCInitializeSSL()
         print(config)
         super.init()
+		Chat.sharedInstance.callState = .InitializeWEBRTC
         appendConstraintForTopic(topic: config.topicVideoSend, constraints: WebRTCClientNew.TOPIC_VIDEO_SEND)
         appendConstraintForTopic(topic: config.topicVideoReceive, constraints: WebRTCClientNew.TOPIC_VIDEO_RECEIVE)
         appendConstraintForTopic(topic: config.topicAudioSend, constraints: WebRTCClientNew.TOPIC_VOICE_SEND)
@@ -77,6 +78,7 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
     
         // Console output
         RTCSetMinDebugLogLevel(RTCLoggingSeverity.info)
+		
 
         // File output
 //        let path = Bundle.main.bundlePath
@@ -253,7 +255,7 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
         
         if let topicVideoReceive = config.topicVideoReceive{
             var error:NSError?
-            let videoReceivetransciver = peerConnections[topicVideoReceive]?.addTransceiver(of: .video)
+			let videoReceivetransciver = peerConnections[topicVideoReceive]?.addTransceiver(of: .video)
             videoReceivetransciver?.setDirection(.recvOnly, error: &error)
             if let remoteVideoTrack = videoReceivetransciver?.receiver.track as? RTCVideoTrack{
                 peerConnections[topicVideoReceive]?.add(remoteVideoTrack, streamIds: [config.topicVideoReceive ?? ""])
@@ -377,6 +379,13 @@ extension WebRTCClientNew{
 	
     public func peerConnection(_ peerConnection: RTCPeerConnection, didAdd stream: RTCMediaStream) {
         customPrint("\(getPCName(peerConnection)) did add stream")
+		if let videoTrack = stream.videoTracks.first,
+		   let renderer = renderer,
+		   let topicReceiveVideo = config.topicVideoReceive,
+		   peerConnection == peerConnections[topicReceiveVideo]
+		{
+			videoTrack.add(renderer)
+		}
 	}
 	
     public func peerConnection(_ peerConnection: RTCPeerConnection, didRemove stream: RTCMediaStream) {
@@ -523,17 +532,18 @@ extension WebRTCClientNew{
             customPrint("can't decode data from webrtc servers",isGuardNil: true)
             return
         }
-        customPrint("on Call message received\(String(data:data,encoding:.utf8) ?? "")")
+        customPrint("on Call message received\n\(String(data:data,encoding:.utf8) ?? "")")
         switch ms.id {
         case .SESSION_REFRESH,.CREATE_SESSION,.SESSION_NEW_CREATED:
-            Chat.sharedInstance.sotpAllSignalingServerCall(peerName: config.peerName)
+			DispatchQueue.main.async {
+				Chat.sharedInstance.sotpAllSignalingServerCall(peerName: self.config.peerName)
+			}
             break
         case .ADD_ICE_CANDIDATE:
             addIceToPeerConnection(data)
             break
         case .PROCESS_SDP_ANSWER:
             addSDPAnswerToPeerConnection(data)
-            startSendKeyFrame()
             break
         case .GET_KEY_FRAME:
 //            var count:Double = 0
@@ -580,54 +590,63 @@ extension WebRTCClientNew{
     }
     
     func addSDPAnswerToPeerConnection(_ data:Data){
-        guard let remoteSDP = try? JSONDecoder().decode(RemoteSDPRes.self, from: data)else{
-            self.customPrint("error decode prosessAnswer",isGuardNil: true)
-            return
-        }
-        let pp = peerConnections[remoteSDP.topic]
-        pp?.statistics(completionHandler: { report in
-        })
-        pp?.setRemoteDescription(remoteSDP.rtcSDP, completionHandler: { error in
-            if let error = error{
-                self.customPrint("error in setRemoteDescroptoin with sdp: \(remoteSDP.rtcSDP)",error,isGuardNil: true)
-            }
-        })
+		DispatchQueue.main.async { [weak self] in
+			guard let self = self else{
+				self?.customPrint("self was nil on add remote SDP Answer ",isGuardNil: true)
+				return
+			}
+			guard let remoteSDP = try? JSONDecoder().decode(RemoteSDPRes.self, from: data)else{
+				self.customPrint("error decode prosessAnswer",isGuardNil: true)
+				return
+			}
+			let pp = self.peerConnections[remoteSDP.topic]
+			pp?.statistics(completionHandler: { report in
+			})
+			pp?.setRemoteDescription(remoteSDP.rtcSDP, completionHandler: { error in
+				if let error = error{
+					self.customPrint("error in setRemoteDescroptoin with sdp: \(remoteSDP.rtcSDP)",error,isGuardNil: true)
+				}
+			})
+		}
     }
     
-    ///check if remote descriptoin already seted otherwise add it in to queue until set remote description then add ice to peer connection
-    func addIceToPeerConnection(_ data:Data){
-        guard let candidate = try? JSONDecoder().decode(RemoteCandidateRes.self, from: data) else{
-            self.customPrint("error decode ice candidate received from server!",isGuardNil: true)
-            return
-        }
-        guard let pp = peerConnections[candidate.topic] else {
-            self.customPrint("error finding topic or peerconnection",isGuardNil: true)
-            return
-        }
-        let rtcIce = candidate.rtcIceCandidate
-        if pp.remoteDescription != nil{
-            pp.add(rtcIce, completionHandler: { error in
-                if let error = error {
-                    self.customPrint("error on add ICE candidate " , error,isGuardNil: true)
-                }
-            })
-        }else{
-            iceQueue.append((pp, rtcIce))
-            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) {[weak self] timer in
-                guard let self = self else {return}
-                if pp.remoteDescription != nil{
-                    pp.add(rtcIce){ error in
-                        if let error = error {
-                            self.customPrint("error on add ICE Candidate with ICE:\(rtcIce.sdp)", error,isGuardNil: true)
-                        }
-                    }
-                    self.iceQueue.remove(at: self.iceQueue.firstIndex{ $0.ice == rtcIce}!)
-                    self.customPrint("ICE added to peerconnection from queue and remainig in queu is\(self.iceQueue.count)")
-                    timer.invalidate()
-                }
-            }
-        }
-    }
+	///check if remote descriptoin already seted otherwise add it in to queue until set remote description then add ice to peer connection
+	func addIceToPeerConnection(_ data:Data){
+		guard let candidate = try? JSONDecoder().decode(RemoteCandidateRes.self, from: data) else{
+			self.customPrint("error decode ice candidate received from server!",isGuardNil: true)
+			return
+		}
+		guard let pp = peerConnections[candidate.topic] else {
+			self.customPrint("error finding topic or peerconnection",isGuardNil: true)
+			return
+		}
+		let rtcIce = candidate.rtcIceCandidate
+		if pp.remoteDescription != nil{
+			setRemoteIceOnMainThread(pp, rtcIce)
+		}else{
+			iceQueue.append((pp, rtcIce))
+			Timer.scheduledTimer(withTimeInterval: 1, repeats: true) {[weak self] timer in
+				guard let self = self else {return}
+				if pp.remoteDescription != nil{
+					self.setRemoteIceOnMainThread(pp, rtcIce)
+					self.iceQueue.remove(at: self.iceQueue.firstIndex{ $0.ice == rtcIce}!)
+					self.customPrint("ICE added to peerconnection from queue and remainig in queu is\(self.iceQueue.count)")
+					timer.invalidate()
+				}
+			}
+		}
+	}
+	
+	private func setRemoteIceOnMainThread(_ peerCnnection:RTCPeerConnection , _ rtcIce:RTCIceCandidate ){
+		DispatchQueue.main.async { [weak self] in
+			guard let self = self else {return}
+			peerCnnection.add(rtcIce){ error in
+				if let error = error {
+					self.customPrint("error on add ICE Candidate with ICE:\(rtcIce.sdp)", error,isGuardNil: true)
+				}
+			}
+		}
+	}
 }
 
 // configure audio session

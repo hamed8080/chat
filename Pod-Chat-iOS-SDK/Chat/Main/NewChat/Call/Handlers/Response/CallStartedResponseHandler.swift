@@ -21,5 +21,6 @@ class CallStartedResponseHandler {
         callStarted.callId = chatMessage.subjectId
         chat.callbacksManager.callStartedDelegate?(callStarted,chatMessage.uniqueId)
         NotificationCenter.default.post(name: STARTED_CALL_NAME_OBJECT ,object: callStarted)
+		chat.callState = .Started
     }
 }

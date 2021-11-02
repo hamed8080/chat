@@ -84,7 +84,7 @@ public enum NewChatMessageVOTypes :Int , Codable {
     //CALL
     case START_CALL_REQUEST                = 70
     case ACCEPT_CALL                       = 71 //never called from server events
-    case REJECT_CALL                       = 72
+    case CANCEL_CALL                       = 72
     case DELIVERED_CALL_REQUEST            = 73
     case CALL_STARTED                      = 74
     case END_CALL_REQUEST                  = 75

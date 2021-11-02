@@ -1,5 +1,5 @@
 //
-//  CallRejectedResponseHandler.swift
+//  CallCanceledResponseHandler.swift
 //  FanapPodChatSDK
 //
 //  Created by Hamed Hosseini on 6/29/21.
@@ -8,10 +8,10 @@
 import Foundation
 
 
-fileprivate let REJECTED_CALL_NAME        = "REJECTED_CALL_NAME"
-public var REJECTED_CALL_NAME_OBJECT = Notification.Name.init(REJECTED_CALL_NAME)
+fileprivate let CANCELED_CALL_NAME        = "CANCELED_CALL_NAME"
+public var CANCELED_CALL_NAME_OBJECT = Notification.Name.init(CANCELED_CALL_NAME)
 
-class CallRejectedResponseHandler {
+class CallCanceledResponseHandler {
     
     static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
         
@@ -19,6 +19,6 @@ class CallRejectedResponseHandler {
         guard let data = chatMessage.content?.data(using: .utf8) else {return}
         guard let call = try? JSONDecoder().decode(Call.self, from: data) else{return}
         chat.callbacksManager.callRejectedDelegate?(call,chatMessage.uniqueId)
-        NotificationCenter.default.post(name: REJECTED_CALL_NAME_OBJECT ,object: call)
+        NotificationCenter.default.post(name: CANCELED_CALL_NAME_OBJECT ,object: call)
     }
 }

@@ -42,6 +42,7 @@ public struct ChatConfig {
     var isDebuggingLogEnabled           : Bool    = false
     var enableNotificationLogObserver   : Bool    = false
     var useNewSDK                       : Bool    = false
+	var callTimeout				        :TimeInterval = 45
     
     //Memberwise Initializer
     public init(socketAddress				: String,
@@ -74,7 +75,8 @@ public struct ChatConfig {
                 showDebuggingLogLevel		: LogLevel = LogLevel.error,
                 isDebuggingLogEnabled       : Bool = false,
                 enableNotificationLogObserver: Bool = false,
-                useNewSDK                   : Bool = false
+                useNewSDK                   : Bool = false,
+				callTimeout			        : TimeInterval = 45
                 ) {
         CacheFactory.write(cacheType: .DELETE_ALL_CONTACTS)
         CacheFactory.save()
@@ -108,5 +110,6 @@ public struct ChatConfig {
         self.isDebuggingLogEnabled      = isDebuggingLogEnabled
         self.enableNotificationLogObserver = enableNotificationLogObserver
         self.useNewSDK                  = useNewSDK
+		self.callTimeout                = callTimeout
     }
 }

@@ -709,8 +709,9 @@ public extension Chat {
     }
     
     //Test Status: Main ❌ - Integeration: ✅
-    func rejectCall(_ request:RejectCallRequest, uniqueIdResult:UniqueIdResultType = nil){
-        RejectCallRequestHandler.handle(request,self,uniqueIdResult)
+	/// You can use this function to reject or cancel a call when not accepted by anyone or any other reason!
+    func cancelCall(_ request:CancelCallRequest, uniqueIdResult:UniqueIdResultType = nil){
+        CancelCallRequestHandler.handle(request,self,uniqueIdResult)
     }
     
     //Test Status: Main ❌ - Integeration: ✅

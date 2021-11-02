@@ -19,5 +19,6 @@ class EndCallResponseHandler {
         guard let callId = chatMessage.subjectId else{return}
         chat.callbacksManager.callEndDelegate?(callId,chatMessage.uniqueId)
         NotificationCenter.default.post(name: END_CALL_NAME_OBJECT ,object: callId)
+		chat.callState = .Ended
     }
 }

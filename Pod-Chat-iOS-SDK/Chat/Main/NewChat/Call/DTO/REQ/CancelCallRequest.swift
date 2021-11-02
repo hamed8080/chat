@@ -1,12 +1,12 @@
 //
-//  RejectCallRequest.swift
+//  CancelCallRequest.swift
 //  FanapPodChatSDK
 //
 //  Created by Hamed Hosseini on 6/29/21.
 //
 
 import Foundation
-public class RejectCallRequest:BaseRequest{
+public class CancelCallRequest:BaseRequest{
     
     let call : Call
     
