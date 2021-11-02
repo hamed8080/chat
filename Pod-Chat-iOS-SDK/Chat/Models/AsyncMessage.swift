@@ -17,6 +17,7 @@ class AsyncMessage : Codable {
     let senderId:   Int
     let senderName: String?
     let type:       Int
+    let peerName:   String?
     
     init(content: String, id: Int, senderId: Int, senderName: String?, type: Int) {
         self.content    = content
@@ -24,6 +25,7 @@ class AsyncMessage : Codable {
         self.senderId   = senderId
         self.senderName = senderName
         self.type       = type
+        self.peerName   = nil
     }
     
 	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
@@ -33,6 +35,7 @@ class AsyncMessage : Codable {
         self.senderId   = withContent["senderId"].intValue
         self.senderName = withContent["senderName"].string
         self.type       = withContent["type"].intValue
+        self.peerName   = withContent["peerName"].string
     }
     
 }

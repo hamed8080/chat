@@ -28,7 +28,10 @@ extension RTCDefaultVideoEncoderFactory{
 		if TARGET_OS_SIMULATOR != 0{
 			return RTCSimluatorVideoEncoderFactory()
 		}
-		return RTCDefaultVideoEncoderFactory()
+        
+		let encoder =  RTCDefaultVideoEncoderFactory()
+        encoder.preferredCodec = RTCVideoCodecInfo(name: kRTCVideoCodecVp8Name)
+        return encoder
 	}
 	
 }

@@ -16,4 +16,5 @@ protocol WebSocketProvider:AnyObject{
 	var delegate:WebSocketProviderDelegate? {get set}
 	func connect()
 	func send(data:Data)
+    func send(text:String)
 }

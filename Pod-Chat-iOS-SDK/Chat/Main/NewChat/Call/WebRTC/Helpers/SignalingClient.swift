@@ -13,6 +13,7 @@ protocol SignalingClientDelegate:AnyObject {
     func signalClientDidDisconnect(_ signalClient: SignalingClient)
     func signalClient(_ signalClient: SignalingClient, didReceiveRemoteSdp sdp: RTCSessionDescription)
     func signalClient(_ signalClient: SignalingClient, didReceiveCandidate candidate: RTCIceCandidate)
+    func receiveMeassge(data: Data)
 }
 class SignalingClient :  WebSocketProviderDelegate {
 	
@@ -25,36 +26,30 @@ class SignalingClient :  WebSocketProviderDelegate {
 		self.webSocket = webSocketProvider
 	}
 
-	private func connect(){
+    func connect(){
 		webSocket.delegate = self
 		webSocket.connect()
 	}
     
-    public class func connectSocket(socketSignalingAddress:String,delegate:SignalingClientDelegate) -> SignalingClient?{
-        if let url  = URL(string: socketSignalingAddress){
-            let signalingClient:SignalingClient
-            if #available(iOS 13.0, *) {
-                signalingClient = SignalingClient(webSocketProvider: NativeWebSocketProvider(url: url))
-            } else {
-                signalingClient = SignalingClient(webSocketProvider: StarScreamWebSocketProvider(url: url))
-            }
-            signalingClient.delegate = delegate
-            signalingClient.connect()
-            return signalingClient
-        }
-        return nil
-    }
-    
     public func send(_ rtcSdp:RTCSessionDescription){
         let signalingMessage = SignalingMessage(sdp: SessionDescription(from: rtcSdp))
         guard let data = try? encoder.encode(signalingMessage) else {return}
-        webSocket.send(data: data)
+//        webSocket.send(data: data)
+        send(data: data)
     }
 
     public func send(_ rtcICE:RTCIceCandidate){
         let signalingMessage = SignalingMessage(ice: IceCandidate(from: rtcICE))
         guard let data = try? encoder.encode(signalingMessage) else {return}
-        webSocket.send(data: data)
+//        webSocket.send(data: data)
+        send(data: data)
+    }
+    
+    public func send(data:Data){
+        if let string = String(data: data, encoding: .utf8){
+            print("text send to socket is:\(string)")
+            webSocket.send(text: string)
+        }
     }
     
 	func webSocketDidConnect(_ webSocket: WebSocketProvider) {
@@ -71,6 +66,7 @@ class SignalingClient :  WebSocketProviderDelegate {
 	}
 
 	func webSocketDidReciveData(_ webSocket: WebSocketProvider, didReceive data: Data) {
+        delegate?.receiveMeassge(data: data)
         let signalingMessage: SignalingMessage
         do {
             signalingMessage = try self.decoder.decode(SignalingMessage.self, from: data)
@@ -79,15 +75,15 @@ class SignalingClient :  WebSocketProviderDelegate {
             debugPrint("Warning: Could not decode incoming signalingMessage: \(error)")
             return
         }
-        
+
         let isSdpType = signalingMessage.sdp != nil
-        
+
         if isSdpType {
             //sdp type
             print("message received remote sdp")
             guard let remoteSDP = signalingMessage.sdp?.rtcSessionDescription else {return}
             self.delegate?.signalClient(self, didReceiveRemoteSdp: remoteSDP)
-        }else{
+        }else if signalingMessage.ice != nil {
             //ice type
             print("did receive remote ice")
             guard let iceCandidate = signalingMessage.ice else{return}

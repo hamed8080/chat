@@ -808,6 +808,7 @@ public extension Chat {
 									subjectId:Int? = nil,
                                     plainText:Bool = false,
                                     pushMsgType:Int? = nil,
+                                    peerName:String? = nil,
 									messageType:NewChatMessageVOTypes ,
 									uniqueIdResult:((String)->())? = nil,
 									completion: ((ChatResponse)->())? = nil,
@@ -830,7 +831,7 @@ public extension Chat {
 		guard let chatMessageContent = chatMessage.convertCodableToString() else{return}
 		let asyncMessage = NewSendAsyncMessageVO(content:     chatMessageContent,
 											  ttl: config.msgTTL,
-											  peerName:     config.serverName,
+											  peerName:    peerName ?? config.serverName,
 											  priority:     config.msgPriority,
                                               pushMsgType: pushMsgType
 		)
@@ -844,6 +845,7 @@ public extension Chat {
     func prepareToSendAsync(_ chatMessage:NewSendChatMessageVO,
                             uniqueId:String,
                             pushMsgType:Int? = nil,
+                            peerName:String? = nil,
                             uniqueIdResult:UniqueIdResultType = nil,
                             completion: ((ChatResponse)->())? = nil,
                             onSent: OnSentType? = nil,
@@ -854,13 +856,25 @@ public extension Chat {
         guard let chatMessageContent = chatMessage.convertCodableToString() , let config = config  else{return}
         let asyncMessage = NewSendAsyncMessageVO(content:     chatMessageContent,
                                               ttl: config.msgTTL,
-                                              peerName:     config.serverName,
+                                              peerName:    peerName ?? config.serverName,
                                               priority:     config.msgPriority,
                                               pushMsgType: pushMsgType
         )
         
 		asyncMessage.printAsyncJson()
         callbacksManager.addCallback(uniqueId: uniqueId , callback: completion ,onSent: onSent , onDelivered: onDelivered , onSeen: onSeen)
+        sendToAsync(asyncMessageVO: asyncMessage)
+    }
+    
+    //Use only for webrtc call
+    internal func prepareToSendAsync(_ content: String,peerName:String? = nil){
+        guard let config = config  else{return}
+        let asyncMessage = NewSendAsyncMessageVO(content:     content,
+                                              ttl: config.msgTTL,
+                                              peerName:  peerName ?? config.serverName,
+                                              priority:  config.msgPriority
+        )        
+        asyncMessage.printAsyncJson()
         sendToAsync(asyncMessageVO: asyncMessage)
     }
 	
@@ -891,4 +905,19 @@ public extension Chat {
         self.userInfo = user
     }
     
+    func sotpAllSignalingServerCall(peerName:String){
+        let close = StopAllSessionReq(token: Chat.sharedInstance.token)
+        guard let data = try? JSONEncoder().encode(close) else {return}
+        if let content = String(data: data, encoding: .utf8){
+            prepareToSendAsync(content,peerName: peerName)
+        }
+    }
+    
+    func closeSignalingServerCall(peerName:String){
+        let close = CloseSessionReq(token: Chat.sharedInstance.token)
+        guard let data = try? JSONEncoder().encode(close) else {return}
+        if let content = String(data: data, encoding: .utf8){
+            prepareToSendAsync(content,peerName: peerName)
+        }
+    }
 }

@@ -13,7 +13,7 @@ class NativeWebSocketProvider : NSObject , WebSocketProvider{
 	var delegate: WebSocketProviderDelegate?
 	private let url:URL
 	private var socket: URLSessionWebSocketTask?
-	private lazy var urlSession: URLSession = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
+    private lazy var urlSession: URLSession = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
 	
 	init(url:URL) {
 		self.url = url
@@ -21,31 +21,36 @@ class NativeWebSocketProvider : NSObject , WebSocketProvider{
 	}
 	
 	public func connect() {
-		let socket = urlSession.webSocketTask(with: url)
-		socket.resume()
-		self.socket = socket
-		self.readMessage()
+        self.socket = urlSession.webSocketTask(with: url)
+        self.socket?.resume()
+        self.readMessage()
 	}
 	
 	func send(data: Data) {
 		self.socket?.send(.data(data)) { _ in }
 	}
+    
+    func send(text: String) {
+        self.socket?.send(.string(text)) {_ in}
+    }
 	
 	private func readMessage() {
-		self.socket?.receive { [weak self] message in
-			guard let self = self else { return }
-			
+		self.socket?.receive { message in
 			switch message {
-                case .success(.string(let string)):
-                    self.delegate?.webSocketDidReciveData(self, didReceive: string.data(using: .utf8)!)
+                case .success(let message):
+                    switch message {
+                    case .data(let data):
+                        self.delegate?.webSocketDidReciveData(self, didReceive: data)
+                        self.readMessage()
+                        break
+                    case .string(let string):
+                        self.delegate?.webSocketDidReciveData(self, didReceive: string.data(using: .utf8)!)
+                        self.readMessage()
+                        break
+                    }
                     break
-				case .success(.data(let data)):
-					self.delegate?.webSocketDidReciveData(self, didReceive: data)
-					break
-				case .success:
-					debugPrint("Warning: Expected to receive data format but received a string. Check the websocket server config.")
-                    break
-				case .failure:
+				case .failure(let error):
+                    print("error on socket\(error)")
 					self.disconnect()
 			}
 		}
@@ -68,4 +73,8 @@ extension NativeWebSocketProvider: URLSessionDelegate , URLSessionWebSocketDeleg
 	func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
 		delegate?.webSocketDidDisconnect(self)
 	}
+        
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        completionHandler(.useCredential, URLCredential(trust: challenge.protectionSpace.serverTrust!))
+    }
 }

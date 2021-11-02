@@ -224,7 +224,7 @@ class ReceiveMessageFactory{
             case .CHANGE_THREAD_TYPE:
                 ChangeThreadTypeResposneHandler.handle(chatMessage, asyncMessage)
                 break
-            case .START_CALL_REQUEST:
+            case .START_CALL_REQUEST , .GROUP_CALL_REQUEST:
                 StartCallRequestResponseHandler.handle(chatMessage, asyncMessage)
                 break
             case .REJECT_CALL:

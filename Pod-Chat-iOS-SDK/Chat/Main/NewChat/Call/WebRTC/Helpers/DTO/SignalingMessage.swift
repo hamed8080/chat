@@ -7,6 +7,7 @@
 
 import Foundation
 import WebRTC
+import FanapPodAsyncSDK
 
 enum SdpType:String , Codable {
     case offer
@@ -76,6 +77,13 @@ struct IceCandidate:Codable {
         self.sdpMid         = rtcIce.sdpMid
     }
     
+    
+    var replaceSpaceSdpIceCandidate:IceCandidate{
+        let newICEReplaceSpace = RTCIceCandidate(sdp: MakeCustomTextToSend(message: candidate).replaceSpaceEnterWithSpecificCharecters(), sdpMLineIndex: sdpMLineIndex, sdpMid: sdpMid)
+        let newIceCandidate = IceCandidate(from: newICEReplaceSpace)
+        return newIceCandidate
+    }
+    
     var rtcIceCandidate: RTCIceCandidate {
         return RTCIceCandidate(sdp: self.candidate, sdpMLineIndex: self.sdpMLineIndex, sdpMid: self.sdpMid)
     }
@@ -83,17 +91,30 @@ struct IceCandidate:Codable {
 
 struct SignalingMessage:Codable {
   
+    let type         : String?
+    let uniqueId     : String?
     let sdp          : SessionDescription?
     let ice          : IceCandidate?
     
     internal init(sdp: SessionDescription) {
-        self.sdp = sdp
-        self.ice = nil
+        self.sdp            = sdp
+        self.ice            = nil
+        self.uniqueId       = nil
+        self.type           = nil
     }
     
     internal init(ice: IceCandidate?) {
-        self.sdp = nil
-        self.ice = ice
+        self.sdp            = nil
+        self.ice            = ice
+        self.uniqueId       = nil
+        self.type           = nil
+    }
+    
+    private enum CodingKeys : String , CodingKey{
+        case  type      = "id"
+        case  sdp       = "sdp"
+        case  ice       = "ice"
+        case  uniqueId  = "uniqueId"
     }
     
 }

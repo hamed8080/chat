@@ -7,6 +7,7 @@
 
 import Foundation
 import WebRTC
+import FanapPodAsyncSDK
 
 public protocol WebRTCClientDelegate {
 	func didIceConnectionStateChanged(iceConnectionState: RTCIceConnectionState)
@@ -17,22 +18,26 @@ public protocol WebRTCClientDelegate {
 }
 
 // MARK: - Pay attention, this class use many extensions inside a files not be here.
-public class WebRTCClient : NSObject , RTCPeerConnectionDelegate , RTCDataChannelDelegate ,SignalingClientDelegate{
+public class WebRTCClient : NSObject , RTCPeerConnectionDelegate , RTCDataChannelDelegate{
     
-	
+    static var instance:WebRTCClient? = nil//for call methods when new message arrive from server
+    
 	private var peerConnectionFactory :RTCPeerConnectionFactory
 	private var peerConnection        :RTCPeerConnection?
 	private var config                :WebRTCConfig
 	private var delegate              :WebRTCClientDelegate?
-    private var signalingClient       :SignalingClient?
     private var localVideoTrack       :RTCVideoTrack?
     private var remoteVideoTrack      :RTCVideoTrack?
     private var videoCapturer         :RTCVideoCapturer?
     private var localDataChannel      :RTCDataChannel?
     private var remoteDataChannel     :RTCDataChannel?
     private var isFrontCamera         :Bool = true
-    private let mediaConstrains       :[String:String]       = [kRTCMediaConstraintsOfferToReceiveAudio: kRTCMediaConstraintsValueTrue,
-                                                                kRTCMediaConstraintsOfferToReceiveVideo: kRTCMediaConstraintsValueTrue]
+    private var remoteVideoRenderer   :RTCVideoRenderer?
+//    private let mediaConstrains       :[String:String]       = [kRTCMediaConstraintsOfferToReceiveAudio: kRTCMediaConstraintsValueTrue,
+//                                                                kRTCMediaConstraintsOfferToReceiveVideo: kRTCMediaConstraintsValueTrue]
+    
+    private let mediaConstrains       :[String:String]       = [kRTCMediaConstraintsOfferToReceiveVideo: kRTCMediaConstraintsValueTrue ,
+                                                                kRTCMediaConstraintsOfferToReceiveAudio: kRTCMediaConstraintsValueFalse]
     
 	
 	private (set) var isConnected     :Bool = false{
@@ -55,14 +60,22 @@ public class WebRTCClient : NSObject , RTCPeerConnectionDelegate , RTCDataChanne
         let rtcConfig                       = RTCConfiguration()
         rtcConfig.sdpSemantics              = .unifiedPlan
         rtcConfig.continualGatheringPolicy  = .gatherContinually
-        rtcConfig.iceServers                = [RTCIceServer(urlStrings: config.iceServers)]
-        let constraints                     = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: ["DtlsSrtpKeyAgreement":kRTCMediaConstraintsValueTrue])
+        rtcConfig.iceServers                = [RTCIceServer(urlStrings: config.iceServers,username: config.userName,credential: config.password)]
+        let constraints                     = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
         
         peerConnection                      = peerConnectionFactory.peerConnection(with: rtcConfig, constraints: constraints, delegate: nil)
-        signalingClient                     = SignalingClient.connectSocket(socketSignalingAddress: config.socketSignalingAddress, delegate: self)
         createMediaSenders()
         peerConnection?.delegate            = self
+        createSession()
+        WebRTCClient.instance               = self
 	}
+    
+    private func createSession(){
+        let session = CreateSessionReq(brokerAddress: config.brokerAddress, token: Chat.sharedInstance.token)
+        if let data = try? JSONEncoder().encode(session){
+            send(data)
+        }
+    }
 	
 	private func setConnectedState(){
 		DispatchQueue.main.async {
@@ -102,7 +115,7 @@ public class WebRTCClient : NSObject , RTCPeerConnectionDelegate , RTCDataChanne
 		peerConnection.close()
 	}
     
-    public func getLocalSDPWithOffer(onSuccess:@escaping (RTCSessionDescription)->Void){
+    public func getLocalSDPWithOffer(isSend:Bool,onSuccess:@escaping (RTCSessionDescription)->Void){
         let constraints = RTCMediaConstraints.init(mandatoryConstraints: mediaConstrains, optionalConstraints: nil)
         peerConnection?.offer(for: constraints, completionHandler: { sdp, error in
             if let error = error{
@@ -117,8 +130,23 @@ public class WebRTCClient : NSObject , RTCPeerConnectionDelegate , RTCDataChanne
         })
     }
     
-    public func sendOfferToPeer(_ sdp:RTCSessionDescription){
-        signalingClient?.send(sdp)
+    public func sendOfferToPeer(_ sdp:RTCSessionDescription,isSend:Bool){
+        // FIXME: - Fix topic to dynamic and mediaType and Topic
+        let sdp = MakeCustomTextToSend(message: sdp.sdp).replaceSpaceEnterWithSpecificCharecters()
+        let sendSDPOffer = SendOfferSDPReq(id: isSend ? "SEND_SDP_OFFER" : "RECIVE_SDP_OFFER" ,
+                                           brokerAddress: config.brokerAddress,
+                                           token: Chat.sharedInstance.token,
+                                           topic: isSend ? config.topicVideoSend : config.topicVideoReceive,
+                                           sdpOffer: sdp ,
+                                           mediaType: .VIDEO)
+        guard let data = try? JSONEncoder().encode(sendSDPOffer) else {return}
+        send(data) // signaling server - peerConnection
+    }
+    
+    public func send(_ data:Data){
+        if let content = String(data: data, encoding: .utf8){
+            Chat.sharedInstance.prepareToSendAsync(content,peerName: config.peerName)
+        }
     }
     
     public func getAnswerSDP(onSuccess:@escaping (RTCSessionDescription)->Void){
@@ -137,15 +165,18 @@ public class WebRTCClient : NSObject , RTCPeerConnectionDelegate , RTCDataChanne
     }
     
     public func sendAnswerToPeer(_ sdp:RTCSessionDescription){
-        signalingClient?.send(sdp)
+        // FIXME: - Fix topic to dynamic and mediaType and Topic
+        let sendSDPOffer = SendOfferSDPReq(id: "SEND_SDP_OFFER", brokerAddress: config.brokerAddress, token: Chat.sharedInstance.token, topic: config.topicVideoReceive, sdpOffer: sdp.sdp , mediaType: .VIDEO)
+        guard let data = try? JSONEncoder().encode(sendSDPOffer) else {return}
+        send(data)
     }
     
     private func createMediaSenders(){
         let streamId = "stream"
         
         //Audio
-        let audioTrack = createAudioTrack()
-        peerConnection?.add(audioTrack, streamIds: [streamId])
+//        let audioTrack = createAudioTrack()
+//        peerConnection?.add(audioTrack, streamIds: [streamId])
         
         //Video
         let videoTrack   = createVideoTrack()
@@ -159,6 +190,12 @@ public class WebRTCClient : NSObject , RTCPeerConnectionDelegate , RTCDataChanne
             dataChannel.delegate = self
             self.localDataChannel = dataChannel
         }
+    }
+    
+    public func closeSignalingServerCall(){
+        let close = CloseSessionReq(token: Chat.sharedInstance.token)
+        guard let data = try? JSONEncoder().encode(close) else {return}
+        send(data)
     }
     
     private func createVideoTrack()->RTCVideoTrack{
@@ -216,6 +253,7 @@ public class WebRTCClient : NSObject , RTCPeerConnectionDelegate , RTCDataChanne
     }
     
     public func renderRemoteVideo(_ renderer:RTCVideoRenderer){
+//        remoteVideoRenderer = renderer
         remoteVideoTrack?.add(renderer)
     }
 }
@@ -229,6 +267,10 @@ extension WebRTCClient{
 	
     public func peerConnection(_ peerConnection: RTCPeerConnection, didAdd stream: RTCMediaStream) {
 		print("peerConnection did add stream")
+//        if let track = stream.videoTracks.first , let renderer = remoteVideoRenderer {
+//            print("video track faund")
+//            track.add(renderer)
+//        }
 	}
 	
     public func peerConnection(_ peerConnection: RTCPeerConnection, didRemove stream: RTCMediaStream) {
@@ -262,7 +304,10 @@ extension WebRTCClient{
 	
 	public func peerConnection(_ peerConnection: RTCPeerConnection, didGenerate candidate: RTCIceCandidate) {
 		print("peerConnection did generate candidate")
-        signalingClient?.send(candidate)
+        // FIXME: - Fix topic to dynamic
+        let sendIceCandidate = SendCandidateReq(id: "ADD_ICE_CANDIDATE", token: Chat.sharedInstance.token, topic: config.topicVideoSend, candidate: IceCandidate(from: candidate))
+        guard let data = try? JSONEncoder().encode(sendIceCandidate) else {return}
+        send(data)
 	}
 	
     public func peerConnection(_ peerConnection: RTCPeerConnection, didRemove candidates: [RTCIceCandidate]) {
@@ -305,26 +350,47 @@ extension WebRTCClient {
 	}
 }
 
-// MARK: - SignalingClientDelegate
-extension WebRTCClient {
+//MARK: - OnReceive Message from Async Server
+extension WebRTCClient{
     
-    func signalClientDidConnect(_ signalClient: SignalingClient) {
-        
+    func messageReceived(_ message:AsyncMessage){
+        guard let data = message.content.data(using: .utf8) ,  let ms = try? JSONDecoder().decode(WebRTCAsyncMessage.self, from: data) else {return}
+        switch ms.id {
+        case .SESSION_REFRESH,.CREATE_SESSION:
+            //nothing to do for now
+            break
+        case .ADD_ICE_CANDIDATE:
+            guard let candidate = try? JSONDecoder().decode(RemoteCandidateRes.self, from: data) else {return}
+            peerConnection?.add(candidate.rtcIceCandidate, completionHandler: { error in
+                if let error = error {
+                    print(error)
+                }
+            })
+            break
+        case .PROCESS_SDP_ANSWER:
+            guard let remoteSDP = try? JSONDecoder().decode(RemoteSDPRes.self, from: data) else{return}
+            peerConnection?.setRemoteDescription(remoteSDP.rtcSDP, completionHandler: { error in })
+            break            
+        case .CLOSE:
+            break
+        case .STOP_ALL:
+            break
+        case .STOP:
+            break
+        }
+        print( "call on Message\n:" +  String(data: data, encoding: .utf8)!)
     }
-    
-    func signalClientDidDisconnect(_ signalClient: SignalingClient) {
-        
-    }
-    
-    func signalClient(_ signalClient: SignalingClient, didReceiveRemoteSdp remoteSDP: RTCSessionDescription) {
-        peerConnection?.setRemoteDescription(remoteSDP, completionHandler: { error in })
-    }
-    
-    func signalClient(_ signalClient: SignalingClient, didReceiveCandidate candidate: RTCIceCandidate) {
-        peerConnection?.add(candidate, completionHandler: { error in
-            if let error = error {
-                print(error)
-            }
-        })
-    }
+}
+
+enum WebRTCMessageType:String,Decodable {
+    case CREATE_SESSION     = "CREATE_SESSION"
+    case SESSION_REFRESH    = "SESSION_REFRESH"
+    case ADD_ICE_CANDIDATE  = "ADD_ICE_CANDIDATE"
+    case PROCESS_SDP_ANSWER = "PROCESS_SDP_ANSWER"
+    case CLOSE              = "CLOSE"
+    case STOP_ALL           = "STOPALL"
+    case STOP               = "STOP"
+}
+struct WebRTCAsyncMessage:Decodable {
+    let id:WebRTCMessageType
 }
