@@ -10,9 +10,8 @@ import FanapPodAsyncSDK
 
 class ReceiveMessageFactory{
 	
-	class func invokeCallback(data:Data) {
-		guard let asyncMessage = try? JSONDecoder().decode(AsyncMessage.self, from: data) else {return}
-		guard let chatMessageData  = asyncMessage.content.data(using: .utf8) else{return}
+    class func invokeCallback(asyncMessage: NewAsyncMessage) {
+		guard let chatMessageData  = asyncMessage.content?.data(using: .utf8) else{return}
 		guard let chatMessage =  try? JSONDecoder().decode(NewChatMessage.self, from: chatMessageData) else{return}
 		asyncMessage.printAsyncJson(receive:true)
 		

@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import FanapPodAsyncSDK
+
 class AddParticipantResponseHandler: ResponseHandler {
 	
-	static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
 
 		let chat = Chat.sharedInstance
         chat.delegate?.threadEvents(model: .init(type: .THREAD_LAST_ACTIVITY_TIME, chatMessage: chatMessage))

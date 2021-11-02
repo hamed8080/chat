@@ -7,10 +7,11 @@
 
 import Foundation
 import FanapPodAsyncSDK
+import FanapPodAsyncSDK
 
 class SystemMessageResponseHandler : ResponseHandler {
     
-    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
 		
 		let chat = Chat.sharedInstance
         log.verbose("Message of type 'SYSTEM_MESSAGE' revieved", context: "Chat")

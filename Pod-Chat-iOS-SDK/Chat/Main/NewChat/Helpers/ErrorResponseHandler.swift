@@ -7,12 +7,13 @@
 
 import Foundation
 import Sentry
+import FanapPodAsyncSDK
 
 class ErrorResponseHandler  : ResponseHandler{
 	
 	private init(){}
 	
-	static func handle(_ chatMessage:NewChatMessage , _ asyncMessage:AsyncMessage) {
+    static func handle(_ chatMessage:NewChatMessage , _ asyncMessage: NewAsyncMessage) {
 		let chat = Chat.sharedInstance
 		guard let config = chat.config else {return}
 		print("Message of type 'ERROR' recieved")
@@ -41,9 +42,7 @@ class ErrorResponseHandler  : ResponseHandler{
 			}
             
             callback(.init(uniqueId: chatMessage.uniqueId, error: .init(message: message, errorCode: code,hasError:true ,content: content)))
-			chat.delegate?.chatError(errorCode:   code,
-									 errorMessage: message ,
-									 errorResult:    content)
+            chat.delegate?.chatError(error: .init(errorCode: code, message: message,content: content))            
 			chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
 		}
 	}

@@ -8,7 +8,7 @@
 import Foundation
 extension Encodable{
 	
-	func convertCodableToString()->String? {
+	public func convertCodableToString()->String? {
 		if let data = try? JSONEncoder().encode(self){
 			return String(data: data, encoding: .utf8)
 		}else{
@@ -27,7 +27,7 @@ extension Encodable{
 	
 	//only for print data for log and debugging in xcode
 	func printAsyncJson(receive:Bool = false){
-        if FanapPodChatSDK.Chat.sharedInstance.config?.isDebuggingLogEnabled == false {return}
+        if Chat.sharedInstance.config?.isDebuggingLogEnabled == false {return}
         do{
             
             let data = try JSONEncoder().encode(self)

@@ -46,11 +46,6 @@ extension String {
             return []
         }
     }
-    
-    func getCustomTextToSendWithRemoveSpaceAndEnter()-> String {
-        let customTextToSend = MakeCustomTextToSend(message: self)
-        return customTextToSend.replaceSpaceEnterWithSpecificCharecters()
-    }
 
     public func removeBackSlashes()->String{
         return self.replacingOccurrences(of: "\\\\\"", with: "\"")

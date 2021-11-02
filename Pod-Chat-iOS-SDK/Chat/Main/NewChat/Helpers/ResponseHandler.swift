@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import FanapPodAsyncSDK
+
 protocol ResponseHandler {
-	static func handle(_ chatMessage:NewChatMessage ,_ asyncMessage:AsyncMessage)
+    static func handle(_ chatMessage:NewChatMessage ,_ asyncMessage: NewAsyncMessage)
 }

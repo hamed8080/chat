@@ -26,7 +26,7 @@ public class NewUpdateChatProfile: BaseRequest {
 	
 	public override func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encodeIfPresent(bio?.getCustomTextToSendWithRemoveSpaceAndEnter(), forKey: .bio)
-		try container.encodeIfPresent(metadata?.getCustomTextToSendWithRemoveSpaceAndEnter(), forKey: .metadata)
+		try container.encodeIfPresent(bio, forKey: .bio)
+		try container.encodeIfPresent(metadata, forKey: .metadata)
 	}
 }

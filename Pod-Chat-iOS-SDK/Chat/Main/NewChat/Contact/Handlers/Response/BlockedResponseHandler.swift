@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import FanapPodAsyncSDK
+
 class BlockedResponseHandler {
 	
-	static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+	static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
 
 		let chat = Chat.sharedInstance
 		guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}

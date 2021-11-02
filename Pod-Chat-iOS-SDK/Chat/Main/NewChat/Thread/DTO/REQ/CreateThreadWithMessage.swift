@@ -87,9 +87,9 @@ public class CreateThreadMessage : Encodable{
         try container.encodeIfPresent(forwardedMessageIds, forKey: .forwardedMessageIds)
         try container.encodeIfPresent(forwardedUniqueIds, forKey: .forwardedUniqueIds)
         try container.encodeIfPresent(repliedTo, forKey: .repliedTo)
-        try container.encodeIfPresent(text?.getCustomTextToSendWithRemoveSpaceAndEnter(), forKey: .text)
-        try container.encodeIfPresent(metadata?.getCustomTextToSendWithRemoveSpaceAndEnter(), forKey: .metadata)
-        try container.encodeIfPresent(systemMetadata?.getCustomTextToSendWithRemoveSpaceAndEnter(), forKey: .systemMetadata)
+        try container.encodeIfPresent(text, forKey: .text)
+        try container.encodeIfPresent(metadata, forKey: .metadata)
+        try container.encodeIfPresent(systemMetadata, forKey: .systemMetadata)
         try container.encodeIfPresent(messageType , forKey: .messageType)
     }
 
