@@ -70,7 +70,7 @@ public class WebRTCClientNewCheckTurn : NSObject , RTCPeerConnectionDelegate , R
     
     private func setConnectedState(){
         DispatchQueue.main.async {
-            print("--- on connected ---")
+            Chat.sharedInstance.logger?.log(title: "--- on connected ---")
             self.delegate?.didConnectWebRTC()
         }
     }
@@ -79,7 +79,7 @@ public class WebRTCClientNewCheckTurn : NSObject , RTCPeerConnectionDelegate , R
     private func setDisconnectedState(){
         DispatchQueue.main.async {
             self.isConnected = false
-            print("--- on dis connected ---")
+            Chat.sharedInstance.logger?.log(title: "--- on dis connected ---")
             self.peerConnection?.close()
             self.peerConnection = nil
 //            self.dataChannel = nil
@@ -90,7 +90,7 @@ public class WebRTCClientNewCheckTurn : NSObject , RTCPeerConnectionDelegate , R
     private func createDataChannel(){
         let config = RTCDataChannelConfiguration()
         guard let dataChannel = peerConnection?.dataChannel(forLabel: "WebRTCData", configuration: config) else{
-            print("warning: Couldn't create data channel")
+            Chat.sharedInstance.logger?.log(title: "warning: Couldn't create data channel")
             return
         }
         dataChannel.sendData("test".data(using: .utf8) ??  Data())
@@ -100,7 +100,7 @@ public class WebRTCClientNewCheckTurn : NSObject , RTCPeerConnectionDelegate , R
         peerConnection?.offer(for: .init(mandatoryConstraints: nil, optionalConstraints: nil), completionHandler: { sdp, error in
             error?.printError(message: "error in genreate sdp offer")
             if let sdp = sdp{
-                print("generated sdp offer is\(sdp.sdp)")
+                Chat.sharedInstance.logger?.log(title: "generated sdp offer is\(sdp.sdp)")
                 self.peerConnection?.setLocalDescription(sdp, completionHandler: { error in
                     error?.printError(message: "error to set sdp to local description")
                 })
@@ -127,7 +127,7 @@ public class WebRTCClientNewCheckTurn : NSObject , RTCPeerConnectionDelegate , R
     }
 
     public func peerConnection(_ peerConnection: RTCPeerConnection, didChange newState: RTCIceConnectionState) {
-        print("connection state changed to \(newState.stringValue)")
+        Chat.sharedInstance.logger?.log(title: "connection state changed to \(newState.stringValue)")
     }
 
     public func peerConnection(_ peerConnection: RTCPeerConnection, didChange newState: RTCIceGatheringState) {
@@ -135,9 +135,9 @@ public class WebRTCClientNewCheckTurn : NSObject , RTCPeerConnectionDelegate , R
 
     public func peerConnection(_ peerConnection: RTCPeerConnection, didGenerate candidate: RTCIceCandidate) {
         if candidate.sdp.contains("typ relay"){
-            print("connected to turn ice:\(candidate.sdp)")
+            Chat.sharedInstance.logger?.log(title: "connected to turn ice:\(candidate.sdp)")
         }else{
-            print("can't connect to turn ice:\(candidate.sdp)")
+            Chat.sharedInstance.logger?.log(title: "can't connect to turn ice:\(candidate.sdp)")
         }
     }
 
@@ -145,12 +145,12 @@ public class WebRTCClientNewCheckTurn : NSObject , RTCPeerConnectionDelegate , R
     }
 
     public func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
-        print("did open data channel \(dataChannel)")
+        Chat.sharedInstance.logger?.log(title: "did open data channel \(dataChannel)")
         self.remoteDataChannel = dataChannel
     }
 
     public func dataChannelDidChangeState(_ dataChannel: RTCDataChannel) {
-        print("data channel state \(dataChannel.readyState)")
+        Chat.sharedInstance.logger?.log(title: "data channel state \(dataChannel.readyState)")
     }
 
     public func dataChannel(_ dataChannel: RTCDataChannel, didReceiveMessageWith buffer: RTCDataBuffer) {

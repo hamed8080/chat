@@ -15,7 +15,7 @@ class MapSearchRequestHandler {
                        _ completion: @escaping CompletionType<[NewMapItem]>,
                        _ uniqueIdResult: UniqueIdResultType = nil){
 		guard  let config = chat.config, let mapApiKey = config.mapApiKey else {
-            print("❌ map api key was null set it through config!")
+            Chat.sharedInstance.logger?.log(title: "CHAT_SDK:", message: "❌ map api key was null set it through config!")
             return            
         }
 		let url = "\(config.mapServer)\(SERVICES_PATH.MAP_SEARCH.rawValue)"

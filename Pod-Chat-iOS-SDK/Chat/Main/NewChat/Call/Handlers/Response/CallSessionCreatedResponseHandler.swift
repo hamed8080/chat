@@ -34,7 +34,7 @@ class CallSessionCreatedResponseHandler {
 		Timer.scheduledTimer(withTimeInterval: chat.config?.callTimeout ?? 0, repeats: false) { timer in
 			if chat.callState == .Created{
 				if chat.config?.isDebuggingLogEnabled == true{
-					print("cancel call after \(chat.config?.callTimeout ?? 0) second waiting to accept by user")
+                    Chat.sharedInstance.logger?.log(title: "cancel call after \(chat.config?.callTimeout ?? 0) second waiting to accept by user")
 				}
 				let call = Call(id: createCall.callId,
 								creatorId: 0,

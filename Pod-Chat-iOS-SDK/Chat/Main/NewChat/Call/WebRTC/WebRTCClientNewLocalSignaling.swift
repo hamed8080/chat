@@ -79,7 +79,7 @@ public class WebRTCClientNewLocalSignaling : NSObject , RTCPeerConnectionDelegat
 	
 	private func setConnectedState(){
 		DispatchQueue.main.async {
-			print("--- on connected ---")
+            Chat.sharedInstance.logger?.log(title: "--- on connected ---")
 			self.delegate?.didConnectWebRTC()
 		}
 	}
@@ -88,7 +88,7 @@ public class WebRTCClientNewLocalSignaling : NSObject , RTCPeerConnectionDelegat
 	private func setDisconnectedState(){
 		DispatchQueue.main.async {
             self.isConnected = false
-			print("--- on dis connected ---")
+            Chat.sharedInstance.logger?.log(title: "--- on dis connected ---")
 			self.peerConnection?.close()
 			self.peerConnection = nil
 //			self.dataChannel = nil
@@ -98,7 +98,7 @@ public class WebRTCClientNewLocalSignaling : NSObject , RTCPeerConnectionDelegat
     
     /// Client can call this to dissconnect from peer.
 	public func disconnect(){
-		guard let peerConnection = self.peerConnection else{print("peer connection already is nil"); return}
+		guard let peerConnection = self.peerConnection else{Chat.sharedInstance.logger?.log(title: "peer connection already is nil"); return}
 		peerConnection.close()
 	}
     
@@ -106,7 +106,7 @@ public class WebRTCClientNewLocalSignaling : NSObject , RTCPeerConnectionDelegat
         let constraints = RTCMediaConstraints.init(mandatoryConstraints: mediaConstrains, optionalConstraints: nil)
         peerConnection?.offer(for: constraints, completionHandler: { sdp, error in
             if let error = error{
-                print("error make offer\(error.localizedDescription)")
+                Chat.sharedInstance.logger?.log(title: "error make offer\(error.localizedDescription)")
                 return
             }
             guard let sdp = sdp else {return}
@@ -125,7 +125,7 @@ public class WebRTCClientNewLocalSignaling : NSObject , RTCPeerConnectionDelegat
         let constraints = RTCMediaConstraints.init(mandatoryConstraints: mediaConstrains, optionalConstraints: nil)
         peerConnection?.answer(for: constraints, completionHandler: { sdp, error in
             if let error = error{
-                print("error make offer\(error.localizedDescription)")
+                Chat.sharedInstance.logger?.log(title: "error make offer\(error.localizedDescription)")
                 return
             }
             
@@ -185,7 +185,7 @@ public class WebRTCClientNewLocalSignaling : NSObject , RTCPeerConnectionDelegat
               }).last,// TODO:- must chose resulation from configVideo
         let maxFrameRate = format.videoSupportedFrameRateRanges.last?.maxFrameRate
         else{return}
-        print("selected width is\(CMVideoFormatDescriptionGetDimensions(format.formatDescription).width)")
+        Chat.sharedInstance.logger?.log(title: "selected width is\(CMVideoFormatDescriptionGetDimensions(format.formatDescription).width)")
         capturer.startCapture(with: frontCamera, format: format, fps: Int(maxFrameRate))
         localVideoTrack?.add(renderer)
     }
@@ -216,23 +216,23 @@ public class WebRTCClientNewLocalSignaling : NSObject , RTCPeerConnectionDelegat
 extension WebRTCClientNewLocalSignaling{
 	
     public func peerConnection(_ peerConnection: RTCPeerConnection, didChange stateChanged: RTCSignalingState) {
-        print("peerConnection signaling state changed: \(String(describing: stateChanged.stringValue))")
+        Chat.sharedInstance.logger?.log(title: "peerConnection signaling state changed: \(String(describing: stateChanged.stringValue))")
 	}
 	
     public func peerConnection(_ peerConnection: RTCPeerConnection, didAdd stream: RTCMediaStream) {
-		print("peerConnection did add stream")
+        Chat.sharedInstance.logger?.log(title: "peerConnection did add stream")
 	}
 	
     public func peerConnection(_ peerConnection: RTCPeerConnection, didRemove stream: RTCMediaStream) {
-		print("peerConnection did remove stream")
+        Chat.sharedInstance.logger?.log(title: "peerConnection did remove stream")
 	}
 	
     public func peerConnectionShouldNegotiate(_ peerConnection: RTCPeerConnection) {
-		print("peerConnection should negotiate")
+        Chat.sharedInstance.logger?.log(title: "peerConnection should negotiate")
 	}
 	
     public func peerConnection(_ peerConnection: RTCPeerConnection, didChange newState: RTCIceConnectionState) {
-        print("peerConnection new connection state: \(String(describing:newState.stringValue))")
+        Chat.sharedInstance.logger?.log(title: "peerConnection new connection state: \(String(describing:newState.stringValue))")
 		switch newState {
 			case .connected, .completed:
 				if !self.isConnected {
@@ -249,20 +249,20 @@ extension WebRTCClientNewLocalSignaling{
 	}
 	
     public func peerConnection(_ peerConnection: RTCPeerConnection, didChange newState: RTCIceGatheringState) {
-		print("peerConnection did change new state")
+        Chat.sharedInstance.logger?.log(title: "peerConnection did change new state")
 	}
 	
 	public func peerConnection(_ peerConnection: RTCPeerConnection, didGenerate candidate: RTCIceCandidate) {
-        print("peerConnection did generate candidate")
+        Chat.sharedInstance.logger?.log(title: "peerConnection did generate candidate")
         signalingClient?.send(candidate)
 	}
 	
     public func peerConnection(_ peerConnection: RTCPeerConnection, didRemove candidates: [RTCIceCandidate]) {
-		print("peerConnection did remove candidate(s)")
+        Chat.sharedInstance.logger?.log(title: "peerConnection did remove candidate(s)")
 	}
 	
 	public func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
-		print("peerConnection did open data channel \(dataChannel)")
+        Chat.sharedInstance.logger?.log(title: "peerConnection did open data channel \(dataChannel)")
 		self.remoteDataChannel = dataChannel
 	}
 }
@@ -281,16 +281,16 @@ extension WebRTCClientNewLocalSignaling {
 	}
 
     public func dataChannelDidChangeState(_ dataChannel: RTCDataChannel) {
-		print("data channel did change state")
+		Chat.sharedInstance.logger?.log(title: "data channel did change state")
 		switch dataChannel.readyState {
 			case .closed:
-				print("closed")
+                Chat.sharedInstance.logger?.log(title: "closed")
 			case .closing:
-				print("closing")
+                Chat.sharedInstance.logger?.log(title: "closing")
 			case .connecting:
-				print("connecting")
+                Chat.sharedInstance.logger?.log(title: "connecting")
 			case .open:
-				print("open")
+                Chat.sharedInstance.logger?.log(title: "open")
 			@unknown default:
 				fatalError()
 		}

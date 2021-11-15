@@ -46,6 +46,10 @@ class UserInfoRequestHandler {
                     }
                 }
             }
+        }else {
+            // it mean chat was connected before and reconnected again
+            Chat.sharedInstance.delegate?.chatState(state: .CHAT_READY, currentUser: Chat.sharedInstance.userInfo, error: nil)
+            Chat.sharedInstance.asyncManager.sendPingTimer()
         }
     }
 }

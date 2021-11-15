@@ -47,7 +47,7 @@ class SignalingClient :  WebSocketProviderDelegate {
     
     public func send(data:Data){
         if let string = String(data: data, encoding: .utf8){
-            print("text send to socket is:\(string)")
+            Chat.sharedInstance.logger?.log(title: "text send to socket is", message: string)
             webSocket.send(text: string)
         }
     }
@@ -80,12 +80,12 @@ class SignalingClient :  WebSocketProviderDelegate {
 
         if isSdpType {
             //sdp type
-            print("message received remote sdp")
+            Chat.sharedInstance.logger?.log(title: "message received remote sdp")
             guard let remoteSDP = signalingMessage.sdp?.rtcSessionDescription else {return}
             self.delegate?.signalClient(self, didReceiveRemoteSdp: remoteSDP)
         }else if signalingMessage.ice != nil {
             //ice type
-            print("did receive remote ice")
+            Chat.sharedInstance.logger?.log(title: "did receive remote ice")
             guard let iceCandidate = signalingMessage.ice else{return}
             self.delegate?.signalClient(self, didReceiveCandidate: iceCandidate.rtcIceCandidate)
         }

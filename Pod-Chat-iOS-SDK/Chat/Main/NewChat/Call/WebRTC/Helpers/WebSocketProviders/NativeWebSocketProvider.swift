@@ -50,7 +50,7 @@ class NativeWebSocketProvider : NSObject , WebSocketProvider{
                     }
                     break
 				case .failure(let error):
-                    print("error on socket\(error)")
+                    Chat.sharedInstance.logger?.log(title: "error on socket", message: "\(error)")
 					self.disconnect()
 			}
 		}

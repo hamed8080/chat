@@ -27,9 +27,10 @@ internal class AsyncManager: NewAsyncDelegate{
                                           peerId: nil,
                                           messageTtl: chatConfig.messageTtl,
                                           connectionRetryInterval: TimeInterval(chatConfig.connectionRetryInterval),
-                                          reconnectCount: Int.max,
+                                          connectionCheckTimeout: TimeInterval(chatConfig.connectionCheckTimeout),
+                                          reconnectCount: chatConfig.reconnectCount,
                                           reconnectOnClose: chatConfig.reconnectOnClose,
-                                          isDebuggingLogEnabled: chatConfig.isDebuggingLogEnabled)
+                                          isDebuggingLogEnabled: chatConfig.isDebuggingAsyncEnable)
             asyncClient = NewAsync(config: asyncConfig, delegate: self)
             asyncClient?.createSocket()
         }
@@ -37,6 +38,16 @@ internal class AsyncManager: NewAsyncDelegate{
     
     public func asyncMessage(asyncMessage: NewAsyncMessage){
         ReceiveMessageFactory.invokeCallback(asyncMessage: asyncMessage)
+        
+        // FIXME:  needs to Map webrtcPeerIds With ServerNames like["KuretoAdmin1":13631820 , "KuretoAdmin2":13631821 ,...]
+        let webrtcSenderPeerIds:[Int64] =  [13631820,13631821,101130994,101131106,101131185]
+        let webrtcPeerNames     =  ["KuretoAdmin1,KuretoAdmin2"]
+        
+        if webrtcSenderPeerIds.contains(asyncMessage.senderId ?? 0) || webrtcPeerNames.contains(asyncMessage.peerName ?? ""){
+            //call webrtc
+            WebRTCClientNew.instance?.messageReceived(asyncMessage)
+            return
+        }
     }
     
     public func asyncStateChanged(asyncState: AsyncSocketState, error: AsyncError?) {

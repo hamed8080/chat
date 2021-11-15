@@ -500,7 +500,8 @@ public class Chat {
 	var callbacksManager = CallbacksManager()
     internal var asyncManager                   :AsyncManager                   = AsyncManager()
 	var callState:CallState? = nil
-    
+    internal var logger                                : Logger?
+
 }
 
 

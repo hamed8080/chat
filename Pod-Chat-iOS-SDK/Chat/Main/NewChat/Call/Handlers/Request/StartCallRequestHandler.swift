@@ -30,7 +30,7 @@ class StartCallRequestHandler {
         Timer.scheduledTimer(withTimeInterval: chat.config?.callTimeout ?? 0, repeats: false) { timer in
             if chat.callState == .Requested{
                 if chat.config?.isDebuggingLogEnabled == true{
-                    print("cancel call after \(chat.config?.callTimeout ?? 0) second no response back from server with type CALL_SESSION_CREATED")
+                    Chat.sharedInstance.logger?.log(title: "cancel call after \(chat.config?.callTimeout ?? 0) second no response back from server with type CALL_SESSION_CREATED")
                 }
                 
                 NotificationCenter.default.post(name: END_CALL_NAME_OBJECT ,object: 0)

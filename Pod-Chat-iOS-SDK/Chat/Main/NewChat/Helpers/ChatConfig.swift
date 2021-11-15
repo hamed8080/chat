@@ -27,8 +27,9 @@ public struct ChatConfig {
 	var httpRequestTimeout        		: Int    = 20
 	var actualTimingLog          		: Bool   = false
 	var wsConnectionWaitTime      		: Double = 0.0
-	var connectionRetryInterval   		: Int    = 10000
-	var connectionCheckTimeout    		: Int    = 10000
+    var reconnectCount                  : Int    = 5
+	var connectionRetryInterval   		: Int    = 5
+	var connectionCheckTimeout    		: Int    = 20
 	var messageTtl                	    : Int    = 10000
 	var captureLogsOnSentry       		: Bool   = false
 	var maxReconnectTimeInterval  		: Int    = 60
@@ -40,6 +41,7 @@ public struct ChatConfig {
 	var showDebuggingLogLevel     		: LogLevel = LogLevel.error
     var deviceId                        : String? = nil
     var isDebuggingLogEnabled           : Bool    = false
+    var isDebuggingAsyncEnable          : Bool    = false
     var enableNotificationLogObserver   : Bool    = false
     var useNewSDK                       : Bool    = false
 	var callTimeout				        :TimeInterval = 45
@@ -62,8 +64,9 @@ public struct ChatConfig {
                 httpRequestTimeout			: Int = 20,
                 actualTimingLog				: Bool = false,
                 wsConnectionWaitTime		: Double = 0.0,
-                connectionRetryInterval		: Int = 10000,
-                connectionCheckTimeout		: Int = 10000,
+                reconnectCount              : Int = 5,
+                connectionRetryInterval		: Int = 5,
+                connectionCheckTimeout		: Int = 20,
                 messageTtl					: Int = 10000,
                 captureLogsOnSentry			: Bool = false,
                 maxReconnectTimeInterval	: Int = 60,
@@ -74,6 +77,7 @@ public struct ChatConfig {
                 getDeviceIdFromToken		: Bool = false,
                 showDebuggingLogLevel		: LogLevel = LogLevel.error,
                 isDebuggingLogEnabled       : Bool = false,
+                isDebuggingAsyncEnable      : Bool = false,
                 enableNotificationLogObserver: Bool = false,
                 useNewSDK                   : Bool = false,
 				callTimeout			        : TimeInterval = 45
@@ -101,6 +105,7 @@ public struct ChatConfig {
 		self.messageTtl 				= messageTtl
 		self.captureLogsOnSentry 		= captureLogsOnSentry
 		self.maxReconnectTimeInterval 	= maxReconnectTimeInterval
+        self.reconnectCount             = reconnectCount
 		self.reconnectOnClose 			= reconnectOnClose
 		self.localImageCustomPath		= localImageCustomPath
 		self.localFileCustomPath 		= localFileCustomPath
@@ -108,6 +113,7 @@ public struct ChatConfig {
 		self.getDeviceIdFromToken		= getDeviceIdFromToken
 		self.showDebuggingLogLevel 		= showDebuggingLogLevel
         self.isDebuggingLogEnabled      = isDebuggingLogEnabled
+        self.isDebuggingAsyncEnable     = isDebuggingAsyncEnable
         self.enableNotificationLogObserver = enableNotificationLogObserver
         self.useNewSDK                  = useNewSDK
 		self.callTimeout                = callTimeout

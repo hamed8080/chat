@@ -46,7 +46,7 @@ class SyncContactsRequestHandler {
 			uniqueIdsResult?(uniqueIds)
 
 		},errorResult:{error in
-			print("authorize error\(error)")
+            Chat.sharedInstance.logger?.log(title: "authorize error", message: "\(error)")
 		})
 	}
 	

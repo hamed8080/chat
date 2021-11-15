@@ -6,14 +6,14 @@
 //
 
 import Foundation
-
+import FanapPodAsyncSDK
 
 fileprivate let CANCELED_CALL_NAME        = "CANCELED_CALL_NAME"
 public var CANCELED_CALL_NAME_OBJECT = Notification.Name.init(CANCELED_CALL_NAME)
 
 class CallCanceledResponseHandler {
     
-    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
         
         let chat = Chat.sharedInstance
         guard let data = chatMessage.content?.data(using: .utf8) else {return}

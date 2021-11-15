@@ -150,9 +150,9 @@ class CacheFileManager{
         if !(FileManager.default.fileExists(atPath: directory, isDirectory: nil)) {
             do {
                 try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
-                print("directory created at:\n \(url)")
+                Chat.sharedInstance.logger?.log(title: "directory created at:\n \(url)")
             } catch {
-                print("error on creating Directory \n\(error.localizedDescription)")
+                Chat.sharedInstance.logger?.log(title: "error on creating Directory \n\(error.localizedDescription)")
             }
         }
     }
@@ -161,7 +161,7 @@ class CacheFileManager{
         do {
             try data.write(to: url)
         } catch {
-            print("error when try to write data on documentDirectory \n\(error.localizedDescription)")
+            Chat.sharedInstance.logger?.log(title: "error when try to write data on documentDirectory \n\(error.localizedDescription)")
         }
     }
     

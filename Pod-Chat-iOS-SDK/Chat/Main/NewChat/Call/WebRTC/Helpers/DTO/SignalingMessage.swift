@@ -79,7 +79,7 @@ struct IceCandidate:Codable {
     
     
     var replaceSpaceSdpIceCandidate:IceCandidate{
-        let newICEReplaceSpace = RTCIceCandidate(sdp: MakeCustomTextToSend(message: candidate).replaceSpaceEnterWithSpecificCharecters(), sdpMLineIndex: sdpMLineIndex, sdpMid: sdpMid)
+        let newICEReplaceSpace = RTCIceCandidate(sdp: candidate, sdpMLineIndex: sdpMLineIndex, sdpMid: sdpMid)
         let newIceCandidate = IceCandidate(from: newICEReplaceSpace)
         return newIceCandidate
     }

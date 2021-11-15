@@ -108,7 +108,7 @@ public class WebRTCClientNewDirectServer : NSObject , RTCPeerConnectionDelegate 
 	
     private func setConnectedState(isSend:Bool){
 		DispatchQueue.main.async {
-            print("--- on connected\(isSend ? "Send"  : "Receive") ---")
+            Chat.sharedInstance.logger?.log(title: "--- on connected\(isSend ? "Send"  : "Receive") ---")
 			self.delegate?.didConnectWebRTC()
 		}
 	}
@@ -116,7 +116,7 @@ public class WebRTCClientNewDirectServer : NSObject , RTCPeerConnectionDelegate 
     /** Called when connction state change in RTCPeerConnectionDelegate. */
     private func setDisconnectedState(isSend:Bool){
 		DispatchQueue.main.async {
-            print("--- on peerConnection\(isSend ? "Send" : "Receive") disconnected ---")
+            Chat.sharedInstance.logger?.log(title: "--- on peerConnection\(isSend ? "Send" : "Receive") disconnected ---")
             if isSend{
                 self.isSendPeerConnected = false
                 self.peerConnectionSend?.close()
@@ -140,13 +140,13 @@ public class WebRTCClientNewDirectServer : NSObject , RTCPeerConnectionDelegate 
     ///   - data: data to send to peer
     ///   - isBinary: Indicate data is string(UTF-8) or not if you pass true means data in not string and its a stream.
 	public func sendData(_ data:Data , isBinary:Bool = true){
-		guard let remoteDataChannel = remoteDataChannel else{print("remote data channel is nil"); return}
+		guard let remoteDataChannel = remoteDataChannel else{Chat.sharedInstance.logger?.log(title: "remote data channel is nil"); return}
 		remoteDataChannel.sendData(data,isBinary: isBinary)
 	}
     
     /// Client can call this to dissconnect from peer.
 	public func disconnect(){
-		guard let peerConnection = self.peerConnectionSend else{print("peer connection already is nil"); return}
+		guard let peerConnection = self.peerConnectionSend else{Chat.sharedInstance.logger?.log(title: "peer connection already is nil"); return}
 		peerConnection.close()
 	}
     
@@ -155,7 +155,7 @@ public class WebRTCClientNewDirectServer : NSObject , RTCPeerConnectionDelegate 
         let pp = isSend ? peerConnectionSend : peerConnectionReceive
         pp?.offer(for: constraints, completionHandler: { sdp, error in
             if let error = error{
-                print("error make offer\(error.localizedDescription)")
+                Chat.sharedInstance.logger?.log(title: "error make offer\(error.localizedDescription)")
                 return
             }
             guard let sdp = sdp else {return}
@@ -182,7 +182,7 @@ public class WebRTCClientNewDirectServer : NSObject , RTCPeerConnectionDelegate 
         let constraints = RTCMediaConstraints.init(mandatoryConstraints: sendMediaConstrains, optionalConstraints: nil)
 //        peerConnectionSend?.answer(for: constraints, completionHandler: { sdp, error in
 //            if let error = error{
-//                print("error make offer\(error.localizedDescription)")
+//                Chat.sharedInstance.logger?.log(title: "error make offer\(error.localizedDescription)")
 //                return
 //            }
 //
@@ -248,7 +248,7 @@ public class WebRTCClientNewDirectServer : NSObject , RTCPeerConnectionDelegate 
 //    private func createDataChannel()->RTCDataChannel?{
 //        let config = RTCDataChannelConfiguration()
 //        guard let dataChannel = peerConnectionSend?.dataChannel(forLabel: "WebRTCData", configuration: config) else{
-//            print("warning: Couldn't create data channel")
+//            Chat.sharedInstance.logger?.log(title: "warning: Couldn't create data channel")
 //            return nil
 //        }
 //        return dataChannel
@@ -289,23 +289,23 @@ public class WebRTCClientNewDirectServer : NSObject , RTCPeerConnectionDelegate 
 extension WebRTCClientNewDirectServer{
 	
     public func peerConnection(_ peerConnection: RTCPeerConnection, didChange stateChanged: RTCSignalingState) {
-        print("peerConnection\(peerConnection == peerConnectionSend ? "Send" : "Receive")  signaling state changed: \(String(describing: stateChanged.stringValue))")
+        Chat.sharedInstance.logger?.log(title: "peerConnection\(peerConnection == peerConnectionSend ? "Send" : "Receive")  signaling state changed: \(String(describing: stateChanged.stringValue))")
 	}
 	
     public func peerConnection(_ peerConnection: RTCPeerConnection, didAdd stream: RTCMediaStream) {
-		print("peerConnection\(peerConnection == peerConnectionSend ? "Send" : "Receive") did add stream")
+        Chat.sharedInstance.logger?.log(title: "peerConnection\(peerConnection == peerConnectionSend ? "Send" : "Receive") did add stream")
 	}
 	
     public func peerConnection(_ peerConnection: RTCPeerConnection, didRemove stream: RTCMediaStream) {
-		print("peerConnection\(peerConnection == peerConnectionSend ? "Send" : "Receive") did remove stream")
+        Chat.sharedInstance.logger?.log(title: "peerConnection\(peerConnection == peerConnectionSend ? "Send" : "Receive") did remove stream")
 	}
 	
     public func peerConnectionShouldNegotiate(_ peerConnection: RTCPeerConnection) {
-		print("peerConnection\(peerConnection == peerConnectionSend ? "Send" : "Receive") should negotiate")
+        Chat.sharedInstance.logger?.log(title: "peerConnection\(peerConnection == peerConnectionSend ? "Send" : "Receive") should negotiate")
 	}
 	
     public func peerConnection(_ peerConnection: RTCPeerConnection, didChange newState: RTCIceConnectionState) {
-        print("peerConnection\(peerConnection == peerConnectionSend ? "Send" : "Receive") new connection state: \(String(describing:newState.stringValue))")
+        Chat.sharedInstance.logger?.log(title: "peerConnection\(peerConnection == peerConnectionSend ? "Send" : "Receive") new connection state: \(String(describing:newState.stringValue))")
         let isSend = peerConnection  == peerConnectionSend
         if isSend{
             switch newState {
@@ -339,11 +339,11 @@ extension WebRTCClientNewDirectServer{
 	}
 	
     public func peerConnection(_ peerConnection: RTCPeerConnection, didChange newState: RTCIceGatheringState) {
-		print("peerConnection\(peerConnection == peerConnectionSend ? "Send" : "Receive") did change new state")
+        Chat.sharedInstance.logger?.log(title: "peerConnection\(peerConnection == peerConnectionSend ? "Send" : "Receive") did change new state")
 	}
 	
 	public func peerConnection(_ peerConnection: RTCPeerConnection, didGenerate candidate: RTCIceCandidate) {
-        print("peerConnection\(peerConnection == peerConnectionSend ? "Send" : "Receive") did generate candidate")
+        Chat.sharedInstance.logger?.log(title: "peerConnection\(peerConnection == peerConnectionSend ? "Send" : "Receive") did generate candidate")
         let isSend = peerConnection == peerConnectionSend
         let sendIceCandidate = SendCandidateReq(id: "ADD_ICE_CANDIDATE", token: Chat.sharedInstance.token, topic: isSend ? config.topicVideoSend :  config.topicVideoReceive , candidate: IceCandidate(from: candidate))
         guard let data = try? JSONEncoder().encode(sendIceCandidate) else {return}
@@ -351,11 +351,11 @@ extension WebRTCClientNewDirectServer{
 	}
 	
     public func peerConnection(_ peerConnection: RTCPeerConnection, didRemove candidates: [RTCIceCandidate]) {
-		print("peerConnection\(peerConnection == peerConnectionSend ? "Send" : "Receive") did remove candidate(s)")
+        Chat.sharedInstance.logger?.log(title: "peerConnection\(peerConnection == peerConnectionSend ? "Send" : "Receive") did remove candidate(s)")
 	}
 	
 	public func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
-		print("peerConnection\(peerConnection == peerConnectionSend ? "Send" : "Receive") did open data channel \(dataChannel)")
+        Chat.sharedInstance.logger?.log(title: "peerConnection\(peerConnection == peerConnectionSend ? "Send" : "Receive") did open data channel \(dataChannel)")
 		self.remoteDataChannel = dataChannel
 	}
 }
@@ -374,16 +374,16 @@ extension WebRTCClientNewDirectServer {
 	}
 
     public func dataChannelDidChangeState(_ dataChannel: RTCDataChannel) {
-		print("data channel did change state")
+        Chat.sharedInstance.logger?.log(title: "data channel did change state")
 		switch dataChannel.readyState {
 			case .closed:
-				print("closed")
+                Chat.sharedInstance.logger?.log(title: "closed")
 			case .closing:
-				print("closing")
+                Chat.sharedInstance.logger?.log(title: "closing")
 			case .connecting:
-				print("connecting")
+                Chat.sharedInstance.logger?.log(title: "connecting")
 			case .open:
-				print("open")
+                Chat.sharedInstance.logger?.log(title: "open")
 			@unknown default:
 				fatalError()
 		}
@@ -393,7 +393,7 @@ extension WebRTCClientNewDirectServer {
 extension WebRTCClientNewDirectServer : SignalingClientDelegate{
     func receiveMeassge(data: Data) {
         
-        print("on Message:\(String(data:data,encoding:.utf8) ?? "")")
+        Chat.sharedInstance.logger?.log(title: "on Message:\(String(data:data,encoding:.utf8) ?? "")")
         guard let ms = try? JSONDecoder().decode(WebRTCAsyncMessage.self, from: data) else {return}
         switch ms.id {
         case .SESSION_REFRESH,.CREATE_SESSION:
@@ -406,7 +406,7 @@ extension WebRTCClientNewDirectServer : SignalingClientDelegate{
             let pp = candidate.topic == config.topicVideoSend ? peerConnectionSend : peerConnectionReceive
             pp?.add(candidate.rtcIceCandidate, completionHandler: { error in
                 if let error = error {
-                    print(error)
+                    Chat.sharedInstance.logger?.log(title: "CHAT_SDK:", message: "\(error)")
                 }
             })
             break

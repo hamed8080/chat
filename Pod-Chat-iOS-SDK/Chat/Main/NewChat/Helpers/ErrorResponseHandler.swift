@@ -14,9 +14,10 @@ class ErrorResponseHandler  : ResponseHandler{
 	private init(){}
 	
     static func handle(_ chatMessage:NewChatMessage , _ asyncMessage: NewAsyncMessage) {
-		let chat = Chat.sharedInstance
+        Chat.sharedInstance.logger?.log(title: "Message of type 'ERROR' recieved" ,jsonString: asyncMessage.string)
+        let chat = Chat.sharedInstance
 		guard let config = chat.config else {return}
-		print("Message of type 'ERROR' recieved")
+        
 		
 		// send log to Sentry 4.3.1
 		if config.captureLogsOnSentry {

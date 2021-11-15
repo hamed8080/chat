@@ -10,6 +10,6 @@ import Foundation
 extension Error{
     
     func printError(message:String? = nil){
-        print(message ?? " localizedError:" +  localizedDescription)
+        Chat.sharedInstance.logger?.log(title: "CHAT_SDK:", message:  message ?? " localizedError:" +  localizedDescription)
     }
 }

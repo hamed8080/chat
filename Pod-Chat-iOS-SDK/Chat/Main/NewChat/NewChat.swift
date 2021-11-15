@@ -89,6 +89,7 @@ public extension Chat {
     }
 	
 	func initialize(){
+        logger = Logger(isDebuggingLogEnabled: config?.isDebuggingLogEnabled ?? false)
 		if config?.captureLogsOnSentry == true {
 			startCrashAnalytics()
 		}
@@ -839,7 +840,6 @@ public extension Chat {
 		
 		
 		callbacksManager.addCallback(uniqueId: uniqueId , callback: completion ,onSent: onSent , onDelivered: onDelivered , onSeen: onSeen)
-		asyncMessage.printAsyncJson()
 		sendToAsync(asyncMessageVO: asyncMessage)
 	}
     
@@ -862,7 +862,6 @@ public extension Chat {
                                               pushMsgType: pushMsgType
         )
         
-		asyncMessage.printAsyncJson()
         callbacksManager.addCallback(uniqueId: uniqueId , callback: completion ,onSent: onSent , onDelivered: onDelivered , onSeen: onSeen)
         sendToAsync(asyncMessageVO: asyncMessage)
     }
@@ -875,7 +874,6 @@ public extension Chat {
                                               peerName:  peerName ?? config.serverName,
                                               priority:  config.msgPriority
         )        
-        asyncMessage.printAsyncJson()
         sendToAsync(asyncMessageVO: asyncMessage)
     }
 	
@@ -891,6 +889,7 @@ public extension Chat {
 	
 	internal func sendToAsync(asyncMessageVO:NewSendAsyncMessageVO){
         guard let content = try? JSONEncoder().encode(asyncMessageVO) else { return }
+        logger?.log(title: "send Message", jsonString: asyncMessageVO.string ?? "")
         asyncManager.sendData(type: AsyncMessageTypes(rawValue: asyncMessageVO.pushMsgType ?? 3)! , data: content)        
 	}
     

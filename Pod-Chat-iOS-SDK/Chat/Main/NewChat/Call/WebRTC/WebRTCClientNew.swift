@@ -84,7 +84,7 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
 		
 
         // File output
-        if let dir = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true){
+        if Chat.sharedInstance.config?.isDebuggingLogEnabled == true , let dir = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true){
             let logFilePath = "WEBRTC-LOG"
             let url = dir.appendingPathComponent(logFilePath)
             customPrint("created path for log is :\(url.path)")
@@ -197,7 +197,7 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
     }
     
     public func sendOfferToPeer(_ sdp:RTCSessionDescription,topic:String, mediaType:Mediatype){
-        let sdp = MakeCustomTextToSend(message: sdp.sdp).replaceSpaceEnterWithSpecificCharecters()
+        let sdp = sdp.sdp
         let sendSDPOffer = SendOfferSDPReq(id: isSendTopic(topic: topic) ? "SEND_SDP_OFFER" : "RECIVE_SDP_OFFER" ,
                                            brokerAddress: config.firstBorokerAddressWeb,
                                            token: Chat.sharedInstance.token,
@@ -379,7 +379,7 @@ public class WebRTCClientNew : NSObject , RTCPeerConnectionDelegate , RTCDataCha
     func customPrint(_ message:String , _ error:Error? = nil , isSuccess:Bool = false ,isGuardNil:Bool = false){
         let errorMessage = error != nil ? " with error:\(error?.localizedDescription ?? "")" : ""
         let icon = isGuardNil ? "❌" : isSuccess ? "✅" : ""
-        print("\(icon) \(message) \(errorMessage)")
+        Chat.sharedInstance.logger?.log(title: "CHAT_SDK:\(icon)", message: "\(message) \(errorMessage)")
     }
 }
 
@@ -552,8 +552,8 @@ extension WebRTCClientNew {
 //MARK: - OnReceive Message from Async Server
 extension WebRTCClientNew{
 
-    func messageReceived(_ message:AsyncMessage){
-        guard let data = message.content.data(using: .utf8) ,  let ms = try? JSONDecoder().decode(WebRTCAsyncMessage.self, from: data) else {
+    func messageReceived(_ message:NewAsyncMessage){
+        guard let content = message.content, let data = content.data(using: .utf8) ,  let ms = try? JSONDecoder().decode(WebRTCAsyncMessage.self, from: data) else {
             customPrint("can't decode data from webrtc servers",isGuardNil: true)
             return
         }
@@ -652,10 +652,11 @@ extension WebRTCClientNew{
 			iceQueue.append((pp, rtcIce))
 			Timer.scheduledTimer(withTimeInterval: 1, repeats: true) {[weak self] timer in
 				guard let self = self else {return}
+                let pcName = self.getPCName(pp)
 				if pp.remoteDescription != nil{
 					self.setRemoteIceOnMainThread(pp, rtcIce)
 					self.iceQueue.remove(at: self.iceQueue.firstIndex{ $0.ice == rtcIce}!)
-					self.customPrint("ICE added to peerconnection from queue and remainig in queu is\(self.iceQueue.count)")
+					self.customPrint("ICE added to \(pcName) from Queue and remaining in Queue is: \(self.iceQueue.count)")
 					timer.invalidate()
 				}
 			}

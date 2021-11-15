@@ -35,7 +35,7 @@ class StartCallRequestResponseHandler {
         Timer.scheduledTimer(withTimeInterval: chat.config?.callTimeout ?? 0, repeats: false) { timer in
             if chat.callState == .Requested{
                 if chat.config?.isDebuggingLogEnabled == true{
-                    print("cancel call after \(chat.config?.callTimeout ?? 0) second")
+                    Chat.sharedInstance.logger?.log(title: "cancel call after \(chat.config?.callTimeout ?? 0) second")
                 }
                 
                 NotificationCenter.default.post(name: END_CALL_NAME_OBJECT ,object: 0)

@@ -35,17 +35,17 @@ class PSM {
         if context.hasChanges {
             do {
                 try context.save()
-                print("saved successfuly")
+                Chat.sharedInstance.logger?.log(title: "saved successfully", jsonString: nil)
             } catch {
                 let nserror = error as NSError
                 #if DEBUG
-                    print("error occured in save database  \(nserror), \(nserror.userInfo)")
+                    Chat.sharedInstance.logger?.log(title: "error occured in save database", message: "\(nserror), \(nserror.userInfo)")
                 #else
                     fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
                 #endif
             }
         }else{
-            print("no changes find on context so nothing to save!")
+            Chat.sharedInstance.logger?.log(title: "CHAT_SDK:", message: "no changes find on context so nothing to save!")
         }
     }
 }
