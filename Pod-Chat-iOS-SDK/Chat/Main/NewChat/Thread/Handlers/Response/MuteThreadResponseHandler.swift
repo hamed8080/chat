@@ -21,6 +21,9 @@ class MuteThreadResponseHandler: ResponseHandler {
 		guard let threadId = try? JSONDecoder().decode(Int.self, from: data) else{return}
         let resposne = MuteThreadResponse(threadId: threadId)
 		callback(.init(uniqueId:chatMessage.uniqueId , result: resposne))
-		chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .MUTE_THREAD)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .UNMUTE_THREAD)
+        CacheFactory.write(cacheType: .MUTE_UNMUTE_THREAD(threadId))
+        PSM.shared.save()
 	}
 }

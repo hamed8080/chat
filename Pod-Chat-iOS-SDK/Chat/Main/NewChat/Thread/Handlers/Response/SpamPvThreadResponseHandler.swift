@@ -17,6 +17,6 @@ class SpamPvThreadResponseHandler: ResponseHandler {
         guard let data = chatMessage.content?.data(using: .utf8) else {return}
         guard let blockedUser = try? JSONDecoder().decode(BlockedUser.self, from: data) else{return}
         callback(.init(uniqueId:chatMessage.uniqueId , result: blockedUser))
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .SPAM_PV_THREAD)
     }
 }

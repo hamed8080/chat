@@ -20,6 +20,6 @@ class CreateThreadResponseHandler: ResponseHandler {
 		callback(.init(uniqueId: chatMessage.uniqueId ,result: newThread))
         CacheFactory.write(cacheType: .THREADS([newThread]))
         PSM.shared.save()
-		chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .CREATE_THREAD)
 	}
 }

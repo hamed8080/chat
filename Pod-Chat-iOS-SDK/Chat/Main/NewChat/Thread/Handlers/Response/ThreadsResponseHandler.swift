@@ -21,7 +21,7 @@ class ThreadsResponseHandler: ResponseHandler {
         callback(.init(uniqueId: chatMessage.uniqueId , result: conversations,contentCount: chatMessage.contentCount ?? 0))
 		CacheFactory.write(cacheType: .THREADS(conversations))
 		PSM.shared.save()
-		chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .GET_THREADS)
 		
 	}
 }

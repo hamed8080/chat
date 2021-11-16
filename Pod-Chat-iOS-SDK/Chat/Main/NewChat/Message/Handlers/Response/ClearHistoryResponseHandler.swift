@@ -19,7 +19,7 @@ class ClearHistoryResponseHandler: ResponseHandler {
         if let threadId = chatMessage.subjectId{
             CacheFactory.write(cacheType: .CLEAR_ALL_HISTORY(threadId))//no need to call save context becaudse use excute
         }
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .CLEAR_HISTORY)
     }
 }
 

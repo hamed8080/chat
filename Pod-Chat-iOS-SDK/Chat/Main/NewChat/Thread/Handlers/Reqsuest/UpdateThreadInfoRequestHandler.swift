@@ -68,7 +68,7 @@ public class UpdateThreadInfoRequestHandler  {
                                               peerName:     config.serverName,
                                               priority:     config.msgPriority)
 
-        chat.callbacksManager.addCallback(uniqueId: calculatedUniqueId){ response in
+        chat.callbacksManager.addCallback(uniqueId: calculatedUniqueId, requesType: .UPDATE_THREAD_INFO){ response in
             self.completion(response.result as? Conversation , response.uniqueId, response.error)
         }
         chat.sendToAsync(asyncMessageVO: asyncMessage)
@@ -227,13 +227,13 @@ public class UpdateThreadInfoRequestHandler  {
                                               width:        nil)
                 
                 if chat.config?.enableCache == true {
-//                    if UpdateThreadInfoRequestHandler.checkIfDeviceHasFreeSpace(needSpaceInMB: Int64(myData.count / 1024), turnOffTheCache: true) {
-//                        if getImageInput.quality == 0.123 {
-//                            Chat.cacheDB.saveThumbnailImageObject(imageInfo: uploadImage, imageData: myData, toLocalPath: chat.config?.localImageCustomPath)
-//                        } else {
-//                            Chat.cacheDB.saveImageObject(imageInfo: uploadImage, imageData: myData, toLocalPath: chat.config?.localImageCustomPath)
-//                        }
-//                    }
+                    if UpdateThreadInfoRequestHandler.checkIfDeviceHasFreeSpace(needSpaceInMB: Int64(myData.count / 1024), turnOffTheCache: true, errorDelegate: chat.delegate) {
+                        if getImageInput.quality == 0.123 {
+                            Chat.cacheDB.saveThumbnailImageObject(imageInfo: uploadImage, imageData: myData, toLocalPath: chat.config?.localImageCustomPath)
+                        } else {
+                            Chat.cacheDB.saveImageObject(imageInfo: uploadImage, imageData: myData, toLocalPath: chat.config?.localImageCustomPath)
+                        }
+                    }
                 }
                 
                 let uploadImageModel = DownloadImageModel(messageContentModel: uploadImage, errorCode: 0, errorMessage: "", hasError: false)
@@ -255,7 +255,11 @@ public class UpdateThreadInfoRequestHandler  {
             if turnOffTheCache {
                 message += " " + "so, the cache will be switch OFF!"
             }
-            errorDelegate?.chatError(errorCode: 6401, errorMessage: message, errorResult: nil)
+            if Chat.sharedInstance.config?.useNewSDK == true{
+                (errorDelegate as? NewChatDelegate)?.chatError(error: .init(code: .OUT_OF_STORAGE, message: message))
+            }else{
+                errorDelegate?.chatError(errorCode: 6401, errorMessage: message, errorResult: nil)
+            }
             return false
         } else {
             return true

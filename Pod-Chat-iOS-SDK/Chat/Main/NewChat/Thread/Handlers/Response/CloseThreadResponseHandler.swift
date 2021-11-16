@@ -16,7 +16,7 @@ class CloseThreadResponseHandler : ResponseHandler {
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
         guard let threadId = chatMessage.subjectId else {return}
         callback(.init(uniqueId: chatMessage.uniqueId , result: threadId))
-		chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .CLOSE_THREAD)
 	}
 	
 }

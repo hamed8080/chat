@@ -18,7 +18,7 @@ public class RegisterAssistantsResponseHandler : ResponseHandler {
         callback(.init(uniqueId:chatMessage.uniqueId , result: assistants))
         CacheFactory.write(cacheType: .INSERT_OR_UPDATE_ASSISTANTS(assistants))
         CacheFactory.save()
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .REGISTER_ASSISTANT)
     }
     
 }

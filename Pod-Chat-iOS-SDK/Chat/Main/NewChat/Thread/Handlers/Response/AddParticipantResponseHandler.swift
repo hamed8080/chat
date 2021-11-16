@@ -21,6 +21,6 @@ class AddParticipantResponseHandler: ResponseHandler {
         CacheFactory.write(cacheType: .PARTICIPANTS(conversation.participants, conversation.id))
         PSM.shared.save()
         chat.delegate?.threadEvents(model: .init(type: .THREAD_ADD_PARTICIPANTS, chatMessage: chatMessage , participants: conversation.participants))
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .ADD_PARTICIPANT)
 	}
 }

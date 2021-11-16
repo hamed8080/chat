@@ -18,7 +18,7 @@ class SystemMessageResponseHandler : ResponseHandler {
         if let data = chatMessage.content?.data(using: .utf8) , let eventMessageModel = try? JSONDecoder().decode(SystemEventMessageModel.self, from: data ){
             chat.delegate?.systemEvents(model: .init(type: eventMessageModel.smt, time: chatMessage.time, threadId: chatMessage.subjectId, user: eventMessageModel))
         }
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .SYSTEM_MESSAGE)
     }
     
 }

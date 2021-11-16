@@ -16,6 +16,6 @@ public class AssistantsHistoryResponseHandler : ResponseHandler {
         guard let data = chatMessage.content?.data(using: .utf8) else {return}
         guard let assistantsActions = try? JSONDecoder().decode([AssistantAction].self, from: data) else{return}
         callback(.init(uniqueId:chatMessage.uniqueId , result: assistantsActions))
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .GET_ASSISTANT_HISTORY)
     }
 }

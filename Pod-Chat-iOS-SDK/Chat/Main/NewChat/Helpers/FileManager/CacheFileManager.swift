@@ -11,9 +11,13 @@ import Foundation
 enum FileManagerPaths: String {
     case Files = "/Chat/Files/"
     case Images = "/Chat/Images/"
+    
+    var ImagesForGroup:String{
+        return "\(FileManagerPaths.Images.rawValue.dropFirst())"
+    }
 }
 
-class CacheFileManager{
+public class CacheFileManager{
     
     public static let sharedInstance = CacheFileManager()
     private let rootPath :String
@@ -30,13 +34,13 @@ class CacheFileManager{
         
         let predicate = NSPredicate(format: "hashCode == %@", hashCode , NSNumber(value: false))
         if let findedFile = CMFile.crud.fetchWith(predicate)?.first , let fileModel = findedFile.getCodable(){
-            let filePath = rootPath + "/\(FileManagerPaths.Images.rawValue)/" + "\(findedFile.hashCode ?? "default")"
+            let filePath = rootPath + "/\(FileManagerPaths.Files.rawValue)/" + "\(findedFile.hashCode ?? "default")"
             return ( fileModel , filePath)
         }
         return nil
     }
     
-    func getImage(hashCode:String)->(image:ImageModel,path:String)?{
+   public func getImage(hashCode:String)->(image:ImageModel,path:String)?{
         
         let predicate = NSPredicate(format: "hashCode == %@ AND isThumbnail == %@", hashCode , NSNumber(value: false))
         if let findedImage = CMImage.crud.fetchWith(predicate)?.first, let imageModel = findedImage.getCodable(){
@@ -46,21 +50,13 @@ class CacheFileManager{
         return nil
     }
     
-    func getThumbnail(hashCode:String)->(image:ImageModel,path:String)?{
-        let predicate = NSPredicate(format: "hashCode == %@ AND isThumbnail == %@", hashCode , NSNumber(value: true))
+    public func getThumbnail(hashCode:String)->(image:ImageModel,path:String)?{
+        let predicate = NSPredicate(format: "hashCode == %@ AND isThumbnail == %@", hashCode + "-Thumbnail" , NSNumber(value: true))
         if let findedImage = CMImage.crud.fetchWith(predicate)?.first, let imageModel = findedImage.getCodable(){
             let imagePath = rootPath + "/\(FileManagerPaths.Images.rawValue)/" + "\(hashCode + "-Thumbnail")"
             return (imageModel, imagePath)
         }
         return nil
-    }
-    
-    public func isImageAvailable(hashCode: String) -> Bool {
-        return getImage(hashCode: hashCode) != nil
-    }
-    
-    public func isFileAvailable(hashCode: String) -> Bool {
-        return getFile(hashCode: hashCode) != nil
     }
     
     public func retrieveAllImagesSize() -> UInt64 {
@@ -115,7 +111,7 @@ class CacheFileManager{
         return retrieveAllFilesSize() + retrieveAllImagesSize()
     }
     
-    func getDataOfFileWith(filePath:String)->Data?{
+    public func getDataOfFileWith(filePath:String)->Data?{
         let fileURL = URL(fileURLWithPath: filePath)
         if FileManager.default.fileExists(atPath: filePath) , let data = try? Data(contentsOf: fileURL) {
             return data
@@ -144,6 +140,60 @@ class CacheFileManager{
         writeDataAt(url: url, data: data)
     }
     
+    public func deleteImageFromCache(fileHashCode:String){
+        let url = URL(fileURLWithPath: rootPath + "/\(FileManagerPaths.Images.rawValue)").appendingPathComponent("\(fileHashCode)")
+        if FileManager.default.fileExists(atPath: url.absoluteString){
+            try? FileManager.default.removeItem(at: url)
+        }
+        CMImage.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", fileHashCode))
+        PSM.shared.save()
+    }
+    
+    public func saveImageProfile(url:String, data:Data, group:String){
+        
+        let urlHash = url.md5 ?? ""
+        if Chat.sharedInstance.config?.enableCache == true{
+            createDirectoryForGroupIfNotExist(paths: .Images, group: group)
+            if let filePath = appGroupContainerUrl(group: group)?
+                .appendingPathComponent(FileManagerPaths.Images.ImagesForGroup, isDirectory: true)
+                .appendingPathComponent(urlHash, isDirectory: false){
+                Chat.sharedInstance.logger?.log(title: "create file at", message: filePath.path)
+                writeDataAt(url: filePath, data: data)
+            }
+        }
+    }
+    
+    public func getImageProfileCache(url:String,group:String)->Data?{
+        let urlHash = url.md5  ?? ""
+        if let container = appGroupContainerUrl(group: group){
+            let imagePath = container
+                .appendingPathComponent(FileManagerPaths.Images.ImagesForGroup, isDirectory: true)
+                .appendingPathComponent(urlHash, isDirectory: false)
+            return getDataOfFileWith(filePath: imagePath.path)
+        }
+        return nil
+    }
+    
+    func appGroupContainerUrl(group:String)->URL?{
+        return FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: group)
+    }
+    
+    func createDirectoryForGroupIfNotExist(paths:FileManagerPaths, group:String){
+        let fileManager = FileManager.default
+        if let container = appGroupContainerUrl(group: group){
+            var isDir : ObjCBool = true
+            let imageDirectoryPath = container.appendingPathComponent(paths.ImagesForGroup, isDirectory: true)
+            if !(fileManager.fileExists(atPath: imageDirectoryPath.path, isDirectory: &isDir)) {
+                do {
+                    try fileManager.createDirectory(at: imageDirectoryPath, withIntermediateDirectories: true, attributes: nil)
+                    Chat.sharedInstance.logger?.log(title: "directory created at:\n \(imageDirectoryPath.path)")
+                } catch {
+                    Chat.sharedInstance.logger?.log(title: "error on creating Directory \n\(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
     func createDirectoryIfNotExist(paths:FileManagerPaths){
         let directory = rootPath + paths.rawValue
         let url = URL(fileURLWithPath: directory)
@@ -161,7 +211,7 @@ class CacheFileManager{
         do {
             try data.write(to: url)
         } catch {
-            Chat.sharedInstance.logger?.log(title: "error when try to write data on documentDirectory \n\(error.localizedDescription)")
+            Chat.sharedInstance.logger?.log(title: "error when try to write data on url:\(url.path) \n\(error.localizedDescription)")
         }
     }
     

@@ -18,6 +18,6 @@ class BlockedResponseHandler {
 		guard let blockedResult = try? JSONDecoder().decode(BlockedUser.self, from: data) else{return}
 		callback(.init(uniqueId: chatMessage.uniqueId ,result: blockedResult))
         chat.delegate?.userEvents(model: .init(type: .UNBLOCK, blockModel: blockedResult, threadId: chatMessage.subjectId))
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .BLOCK)
 	}
 }

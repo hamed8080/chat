@@ -20,6 +20,6 @@ class CurrentUserRolesResponseHandler: ResponseHandler {
 		callback(.init(uniqueId: chatMessage.uniqueId ,result: userRoles))
         CacheFactory.write(cacheType: .CURRENT_USER_ROLES( userRoles , chatMessage.subjectId))
         PSM.shared.save()
-		chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .GET_CURRENT_USER_ROLES)
 	}
 }

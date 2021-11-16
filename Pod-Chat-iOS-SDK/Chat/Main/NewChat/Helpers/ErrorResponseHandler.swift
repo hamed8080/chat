@@ -44,7 +44,7 @@ class ErrorResponseHandler  : ResponseHandler{
             
             callback(.init(uniqueId: chatMessage.uniqueId, error: .init(message: message, errorCode: code,hasError:true ,content: content)))
             chat.delegate?.chatError(error: .init(errorCode: code, message: message,content: content))            
-			chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+            chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .ERROR)
 		}
 	}
 }

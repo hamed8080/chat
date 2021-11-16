@@ -17,7 +17,7 @@ class MessageSeenByUsersResponseHandler: ResponseHandler {
 		guard let data = chatMessage.content?.data(using: .utf8) else {return}
 		guard let history = try? JSONDecoder().decode([Participant].self, from: data) else{return}
         callback(.init(uniqueId: chatMessage.uniqueId ,result: history , contentCount: chatMessage.contentCount ?? 0))
-		chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .GET_MESSAGE_SEEN_PARTICIPANTS)
 	}
 }
 

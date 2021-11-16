@@ -17,7 +17,7 @@ class AllUnreadMessageCountResponseHandler: ResponseHandler {
         guard let data = chatMessage.content?.data(using: .utf8) else {return}
         guard let unreadCount = try? JSONDecoder().decode(Int.self, from: data) else{return}
         callback(.init(uniqueId: chatMessage.uniqueId , result: unreadCount))
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .ALL_UNREAD_MESSAGE_COUNT)
     }
 }
 

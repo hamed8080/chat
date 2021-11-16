@@ -26,7 +26,7 @@ class ForwardMessagesRequestHandler {
                                                      typeCode:req.typeCode,
                                                      uniqueId: "\(req.uniqueIds)")
         req.uniqueIds.forEach { uniqueId in
-            chat.callbacksManager.addCallback(uniqueId: uniqueId, callback: nil, onSent: onSent, onDelivered: onDeliver, onSeen: onSeen)
+            chat.callbacksManager.addCallback(uniqueId: uniqueId, requesType: .FORWARD_MESSAGE, callback: nil, onSent: onSent, onDelivered: onDeliver, onSeen: onSeen)
         }
         chat.prepareToSendAsync(sendChatMessageVO, uniqueId: req.uniqueId)
         CacheFactory.write(cacheType: .FORWARD_MESSAGE_QUEUE(req))
