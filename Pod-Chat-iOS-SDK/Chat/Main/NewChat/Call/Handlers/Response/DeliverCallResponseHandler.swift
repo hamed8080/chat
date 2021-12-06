@@ -17,6 +17,6 @@ class DeliverCallResponseHandler {
         guard let data = chatMessage.content?.data(using: .utf8) else {return}
         guard let call = try? JSONDecoder().decode(Call.self, from: data) else{return}
         callback(.init(uniqueId:chatMessage.uniqueId , result: call))
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .DELIVERED_CALL_REQUEST)
     }
 }

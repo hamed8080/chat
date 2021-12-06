@@ -16,6 +16,6 @@ class StartBotResponseHandler: ResponseHandler{
 		guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
 		guard let botName = chatMessage.content else {return}
 		callback(.init(uniqueId: chatMessage.uniqueId ,result: botName))
-		chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .START_BOT)
 	}
 }

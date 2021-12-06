@@ -17,6 +17,6 @@ class SetProfileResponseHandler: ResponseHandler{
 		guard let data = chatMessage.content?.data(using: .utf8) else {return}
 		guard let profile = try? JSONDecoder().decode(Profile.self, from: data) else {return}
 		callback(.init(uniqueId:chatMessage.uniqueId , result: profile))
-		chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .SET_PROFILE)
 	}
 }

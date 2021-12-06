@@ -21,6 +21,6 @@ class ChangeThreadTypeResposneHandler: ResponseHandler {
             let thread = try? JSONDecoder().decode(Conversation.self, from: data)
             callback(.init(uniqueId:chatMessage.uniqueId , result: thread))
         }
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .CHANGE_THREAD_TYPE)
     }
 }

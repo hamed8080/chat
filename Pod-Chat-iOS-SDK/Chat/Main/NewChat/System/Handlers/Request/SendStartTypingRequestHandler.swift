@@ -10,12 +10,16 @@ import FanapPodAsyncSDK
 class SendStartTypingRequestHandler{
     
     static var isTypingCount = 0
-    static var threadId:Int? = nil
     static var timer :RepeatingTimer? = nil
+    static var timerCheckUserStoppedTyping:Timer? = nil
     
-    class func handle(_ threadId:Int , _ chat:Chat){
+    class func handle(_ threadId:Int , _ chat:Chat, onEndStartTyping:(()->())? = nil ){
+        if isSendingIsTypingStarted(){
+            stopTimerWhenUserIsNotTyping()
+            return
+        }
         isTypingCount  = 0
-        timer = RepeatingTimer(timeInterval: 2.0)
+        timer = RepeatingTimer(timeInterval: 1.0)
         timer?.eventHandler = {
             if (self.isTypingCount < 30) {
                 self.isTypingCount += 1
@@ -27,10 +31,23 @@ class SendStartTypingRequestHandler{
             }
         }
         timer?.resume()
+        stopTimerWhenUserIsNotTyping()
+    }
+    
+    class func isSendingIsTypingStarted()->Bool{
+        return timer != nil
+    }
+    
+    class func stopTimerWhenUserIsNotTyping(){
+        timerCheckUserStoppedTyping?.invalidate()
+        timerCheckUserStoppedTyping = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { timer in
+            SendStartTypingRequestHandler.stopTyping()
+        })
     }
     
     class func stopTyping(){
         timer?.suspend()
         timer = nil
+        isTypingCount = 0
     }
 }

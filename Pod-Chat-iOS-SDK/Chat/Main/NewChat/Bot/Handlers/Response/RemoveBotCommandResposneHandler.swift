@@ -16,6 +16,6 @@ class RemoveBotCommandResposneHandler: ResponseHandler{
 		guard let data = chatMessage.content?.data(using: .utf8) else {return}
 		guard let botInfo = try? JSONDecoder().decode(BotInfo.self, from: data) else{return}
         callback(.init(uniqueId:chatMessage.uniqueId , result: botInfo))
-		chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .REMOVE_BOT_COMMANDS)
 	}
 }

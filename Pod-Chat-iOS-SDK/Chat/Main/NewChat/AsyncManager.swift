@@ -38,7 +38,6 @@ internal class AsyncManager: NewAsyncDelegate{
     
     public func asyncMessage(asyncMessage: NewAsyncMessage){
         ReceiveMessageFactory.invokeCallback(asyncMessage: asyncMessage)
-        
         // FIXME:  needs to Map webrtcPeerIds With ServerNames like["KuretoAdmin1":13631820 , "KuretoAdmin2":13631821 ,...]
         let webrtcSenderPeerIds:[Int64] =  [13631820,13631821,101130994,101131106,101131185]
         let webrtcPeerNames     =  ["KuretoAdmin1,KuretoAdmin2"]

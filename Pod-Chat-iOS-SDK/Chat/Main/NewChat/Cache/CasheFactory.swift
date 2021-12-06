@@ -74,10 +74,11 @@ public class CacheFactory {
         case DELETE_EDIT_TEXT_MESSAGE(_ uniqueId:String)
         case DELETE_FORWARD_MESSAGE(_ uniqueId:String)
         case DELETE_WAIT_FILE_MESSAGE(_ uniqueId:String)
-        case ADD_THREAD_UNREAD_COUNT(_ threadId:Int)
+        case SET_THREAD_UNREAD_COUNT(_ threadId:Int, _ unreadCount:Int )
         case INSERT_OR_UPDATE_ASSISTANTS(_ assistants:[Assistant])
         case DELETE_ASSISTANTS(_ assistant:[Assistant])
         case MUTUAL_GROUPS(_ threads:[Conversation] , _ req:MutualGroupsRequest)
+        case MUTE_UNMUTE_THREAD(_ threadId:Int)
     }
     
     public class func get(useCache: Bool = false , cacheType: ReadCacheType , completion: ((ChatResponse)->())? = nil){
@@ -335,9 +336,9 @@ public class CacheFactory {
             case .DELETE_WAIT_FILE_MESSAGE(_ : let uniqueId):
                 QueueOfFileMessages.crud.deleteWith(predicate: NSPredicate(format: "uniqueId == %@", uniqueId))
                 break
-            case .ADD_THREAD_UNREAD_COUNT(_ : let threadId):
+            case .SET_THREAD_UNREAD_COUNT(_ : let threadId, _ : let unreadCount):
                 if let conversation = CMConversation.crud.find(keyWithFromat: "id == %i", value: threadId){
-                    conversation.unreadCount = NSNumber(value: (conversation.unreadCount as? Int ?? 0) + 1)
+                    conversation.unreadCount = NSNumber(value: (unreadCount))
                 }
                 break
             case .INSERT_OR_UPDATE_ASSISTANTS(_ : let assistants):
@@ -350,6 +351,12 @@ public class CacheFactory {
                 break
             case .MUTUAL_GROUPS(_ : let conversations , _ : let req ):
                 CMMutualGroup.insertOrUpdate(conversations: conversations, req: req)
+                break
+            case .MUTE_UNMUTE_THREAD(_ : let threadId):
+                if let conversation = CMConversation.crud.find(keyWithFromat: "id == %i", value: threadId){
+                    let isMute = !( (conversation.mute as? Bool) ?? false)
+                    conversation.mute = NSNumber(booleanLiteral: isMute)
+                }
                 break
             }
         }

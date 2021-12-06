@@ -14,6 +14,6 @@ class ContactsSyncedResponseHandler: ResponseHandler {
 		let chat = Chat.sharedInstance
         CacheFactory.write(cacheType: .SYNCED_CONTACTS)
         CacheFactory.save()
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .CONTACT_SYNCED)
     }
 }

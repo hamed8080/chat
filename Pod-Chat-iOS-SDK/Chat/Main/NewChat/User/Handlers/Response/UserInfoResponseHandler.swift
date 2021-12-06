@@ -20,6 +20,6 @@ class UserInfoResponseHandler: ResponseHandler{
 		callback(.init(uniqueId: chatMessage.uniqueId ,result: user))
         CacheFactory.write(cacheType: .USER_INFO(user))
         PSM.shared.save()
-		chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .USER_INFO)
 	}
 }

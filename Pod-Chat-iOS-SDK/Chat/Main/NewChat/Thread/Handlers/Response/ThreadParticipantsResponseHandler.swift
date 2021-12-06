@@ -20,6 +20,6 @@ class ThreadParticipantsResponseHandler : ResponseHandler{
         callback(.init(uniqueId: chatMessage.uniqueId , result: participants , contentCount: chatMessage.contentCount ?? 0))
         CacheFactory.write(cacheType: .PARTICIPANTS(participants, chatMessage.subjectId))
         PSM.shared.save()
-		chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .THREAD_PARTICIPANTS)
 	}
 }

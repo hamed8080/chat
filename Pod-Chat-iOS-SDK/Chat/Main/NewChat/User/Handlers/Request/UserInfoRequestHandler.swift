@@ -42,7 +42,7 @@ class UserInfoRequestHandler {
                     }else{
                         //reach to max retry
                         timer.invalidate()
-                        Chat.sharedInstance.delegate?.chatError(error: .init(code: .ERROR_RAEAY_CHAT,message: error?.message))
+                        Chat.sharedInstance.delegate?.chatError(error: .init(code: .ERROR_RAEDY_CHAT,message: error?.message))
                     }
                 }
             }

@@ -12,7 +12,7 @@ import FanapPodAsyncSDK
 public enum ChatErrorCodes:String{
     case ASYNC_ERROR      = "ASYNC_ERROR"
     case OUT_OF_STORAGE   = "OUT_OF_STORAGE"
-    case ERROR_RAEAY_CHAT = "ERROR_RAEAY_CHAT"
+    case ERROR_RAEDY_CHAT = "ERROR_RAEDY_CHAT"
     case UNDEFINED
 }
 

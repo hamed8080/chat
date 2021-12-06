@@ -21,7 +21,7 @@ public class UpdateThreadInfoResponseHandler : ResponseHandler {
         callback(.init(uniqueId:chatMessage.uniqueId , result: conversation))
         CacheFactory.write(cacheType: .THREADS([conversation]))
         PSM.shared.save()
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .THREAD_INFO_UPDATED)
     }
     
 }

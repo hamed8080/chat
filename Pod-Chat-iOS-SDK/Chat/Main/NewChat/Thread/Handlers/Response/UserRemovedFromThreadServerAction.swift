@@ -17,6 +17,6 @@ class UserRemovedFromThreadServerAction: ResponseHandler {
         if chat.config?.enableCache == true , let threadId = chatMessage.subjectId {
             CacheFactory.write(cacheType: .DELETE_THREADS([threadId]))
         }
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .REMOVED_FROM_THREAD)
     }
 }

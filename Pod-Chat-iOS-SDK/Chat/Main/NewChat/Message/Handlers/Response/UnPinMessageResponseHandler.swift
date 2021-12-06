@@ -20,7 +20,7 @@ class UnPinMessageResponseHandler: ResponseHandler {
         callback(.init(uniqueId:chatMessage.uniqueId , result: pinResponse))
         CacheFactory.write(cacheType: .UNPIN_MESSAGE(pinResponse, chatMessage.subjectId))
         PSM.shared.save()
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .UNPIN_MESSAGE)
     }
 }
 

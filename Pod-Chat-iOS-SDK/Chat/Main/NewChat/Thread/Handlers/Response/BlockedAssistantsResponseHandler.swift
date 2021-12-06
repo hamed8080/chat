@@ -16,6 +16,6 @@ public class BlockedAssistantsResponseHandler : ResponseHandler {
         guard let data = chatMessage.content?.data(using: .utf8) else {return}
         guard let assistants = try? JSONDecoder().decode([Assistant].self, from: data) else{return}
         callback(.init(uniqueId:chatMessage.uniqueId , result: assistants))
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .BLOCK_ASSISTANT)
     }
 }

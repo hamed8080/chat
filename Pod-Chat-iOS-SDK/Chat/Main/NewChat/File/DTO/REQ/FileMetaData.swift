@@ -23,17 +23,17 @@ public class FileMetaData:Codable{
 
 public class FileDetail:Codable{
     
-    let actualHeight    : Int?
-    let actualWidth     : Int?
-    let `extension`     : String?
-    let link            : String
-    let mimeType        : String
-    let name            : String
-    let originalName    : String
-    let size            : Int64
-    let fileHash        : String?
-    let hashCode        : String?
-    let parentHash      : String?
+    public let actualHeight    : Int?
+    public let actualWidth     : Int?
+    public let `extension`     : String?
+    public let link            : String
+    public let mimeType        : String
+    public let name            : String
+    public let originalName    : String
+    public let size            : Int64
+    public let fileHash        : String?
+    public let hashCode        : String?
+    public let parentHash      : String?
     
     public init(fileExtension: String?, link: String, mimeType: String, name: String, originalName: String, size: Int64 ,fileHash:String? = nil,hashCode:String? = nil,parentHash:String? = nil , actualHeight: Int? = nil, actualWidth: Int? = nil) {
         self.actualHeight = actualHeight

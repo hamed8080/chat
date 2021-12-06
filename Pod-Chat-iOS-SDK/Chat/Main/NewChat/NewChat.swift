@@ -515,7 +515,7 @@ public extension Chat {
         SendStartTypingRequestHandler.stopTyping()
     }
     
-    internal func newSendSignalMessage(req: NewSendSignalMessageRequest) {
+    func newSendSignalMessage(req: NewSendSignalMessageRequest) {
         prepareToSendAsync(req: req,
                            clientSpecificUniqueId: req.uniqueId,
                            subjectId: req.threadId,
@@ -839,8 +839,7 @@ public extension Chat {
 		)
 		
 		
-		callbacksManager.addCallback(uniqueId: uniqueId , callback: completion ,onSent: onSent , onDelivered: onDelivered , onSeen: onSeen)
-		sendToAsync(asyncMessageVO: asyncMessage)
+		callbacksManager.addCallback(uniqueId: uniqueId, requesType: messageType, callback: completion ,onSent: onSent , onDelivered: onDelivered , onSeen: onSeen)
 	}
     
     func prepareToSendAsync(_ chatMessage:NewSendChatMessageVO,
@@ -861,8 +860,8 @@ public extension Chat {
                                               priority:     config.msgPriority,
                                               pushMsgType: pushMsgType
         )
-        
-        callbacksManager.addCallback(uniqueId: uniqueId , callback: completion ,onSent: onSent , onDelivered: onDelivered , onSeen: onSeen)
+        guard let rawType =  chatMessage.messageType, let messageType = NewChatMessageVOTypes(rawValue: rawType) else {return}
+        callbacksManager.addCallback(uniqueId: uniqueId, requesType: messageType, callback: completion ,onSent: onSent , onDelivered: onDelivered , onSeen: onSeen)
         sendToAsync(asyncMessageVO: asyncMessage)
     }
     

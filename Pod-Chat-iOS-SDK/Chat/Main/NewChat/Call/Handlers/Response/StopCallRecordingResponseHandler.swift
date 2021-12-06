@@ -17,6 +17,6 @@ class StopCallRecordingResponseHandler {
         guard let data = chatMessage.content?.data(using: .utf8) else {return}
         guard let participant = try? JSONDecoder().decode(Participant.self, from: data) else{return}
         callback(.init(uniqueId:chatMessage.uniqueId , result: participant))
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .STOP_RECORDING)
     }
 }

@@ -18,6 +18,6 @@ class ContactNotSeenDurationHandler: ResponseHandler {
         guard let data = chatMessage.content?.data(using: .utf8) else {return}
         guard let contacts = try? JSONDecoder().decode(ContactNotSeenDurationRespoonse.self, from: data) else{return}
         callback(.init(uniqueId: chatMessage.uniqueId, result: contacts))
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .GET_NOT_SEEN_DURATION)
     }
 }

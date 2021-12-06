@@ -22,6 +22,6 @@ class LeaveThreadResponseHandler: ResponseHandler {
 		callback(.init(uniqueId: chatMessage.uniqueId ,result: conversation))
         CacheFactory.write(cacheType: .LEAVE_THREAD(conversation))
         PSM.shared.save()
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .LEAVE_THREAD)
 	}
 }

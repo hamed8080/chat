@@ -20,7 +20,7 @@ class ContactsResponseHandler: ResponseHandler {
         callback(.init(uniqueId: chatMessage.uniqueId ,result: contacts , contentCount: chatMessage.contentCount ?? contacts.count))
         CacheFactory.write(cacheType: .CASHE_CONTACTS(contacts))
 		PSM.shared.save()
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .GET_CONTACTS)
     }
     
 }

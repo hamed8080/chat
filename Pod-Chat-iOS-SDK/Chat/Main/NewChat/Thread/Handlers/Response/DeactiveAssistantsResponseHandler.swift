@@ -18,7 +18,7 @@ public class DeactiveAssistantsResponseHandler : ResponseHandler {
         callback(.init(uniqueId:chatMessage.uniqueId , result: assistants))
         CacheFactory.write(cacheType: .DELETE_ASSISTANTS(assistants))
         CacheFactory.save()
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .DEACTICVE_ASSISTANT)
     }
     
 }

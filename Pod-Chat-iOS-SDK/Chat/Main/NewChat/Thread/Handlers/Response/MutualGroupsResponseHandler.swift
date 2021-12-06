@@ -16,6 +16,6 @@ class MutualGroupsResponseHandler: ResponseHandler {
         guard let data = chatMessage.content?.data(using: .utf8) else {return}
         guard let mutalGroups = try? JSONDecoder().decode([Conversation].self, from: data) else{return}
         callback(.init(uniqueId:chatMessage.uniqueId , result: mutalGroups))
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .MUTUAL_GROUPS)
     }
 }

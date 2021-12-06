@@ -18,7 +18,7 @@ class BlockedContactsResponseHandler: ResponseHandler {
         guard let data = chatMessage.content?.data(using: .utf8) else {return}
         guard let blockedContacts = try? JSONDecoder().decode([BlockedUser].self, from: data) else{return}
         callback(.init(uniqueId:chatMessage.uniqueId , result: blockedContacts))
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .GET_BLOCKED)
     }
     
 }
