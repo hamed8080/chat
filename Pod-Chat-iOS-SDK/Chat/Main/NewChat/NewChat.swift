@@ -840,6 +840,7 @@ public extension Chat {
 		
 		
 		callbacksManager.addCallback(uniqueId: uniqueId, requesType: messageType, callback: completion ,onSent: onSent , onDelivered: onDelivered , onSeen: onSeen)
+        sendToAsync(asyncMessageVO: asyncMessage)
 	}
     
     func prepareToSendAsync(_ chatMessage:NewSendChatMessageVO,
