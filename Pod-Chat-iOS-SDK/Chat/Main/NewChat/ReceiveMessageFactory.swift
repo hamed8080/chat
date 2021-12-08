@@ -275,9 +275,13 @@ class ReceiveMessageFactory{
             case .GET_CALLS:
                 GetCallsResponseHandler.handle(chatMessage, asyncMessage)
                 break
+            case .CALL_CLIENT_ERRORS:
+                CallClientErrorResponseHandler.handle(chatMessage, asyncMessage)
+                break
 			case .ERROR:
 				ErrorResponseHandler.handle(chatMessage , asyncMessage)
 				break
+            
             case .UNKNOWN:
                 Chat.sharedInstance.logger?.log(title: "CHAT_SDK:", message: "an unknown message type received from the server not implemented in SDK!")
 			@unknown default :

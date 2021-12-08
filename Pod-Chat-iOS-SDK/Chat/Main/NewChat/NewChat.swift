@@ -760,6 +760,9 @@ public extension Chat {
         CallsHistoryRequestHandler.handle(request,self,completion ,uniqueIdResult)
     }
 
+    func sendCallClientError(_ request:CallClientErrorRequest,_ completion:@escaping CompletionType<CallError>, uniqueIdResult:UniqueIdResultType = nil){
+        SendCallClientErrorRequestHandler.handle(request,self,completion ,uniqueIdResult)
+    }
     //Call
     
     

@@ -17,6 +17,7 @@ public protocol ChatDelegates: class {
     func chatReconnect()
     func chatReady(withUserInfo: User)
     func chatState(state: AsyncStateType)
+    func callError(error:CallError)
     
     func chatError(errorCode: Int, errorMessage: String, errorResult: Any?)
     
