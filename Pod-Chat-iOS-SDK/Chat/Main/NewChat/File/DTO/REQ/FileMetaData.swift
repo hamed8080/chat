@@ -13,7 +13,7 @@ public class FileMetaData:Codable{
     public let hashCode : String?
     public let name     : String?
     
-    public init(file: FileDetail, fileHash: String? , hashCode:String? , name: String?) {
+    public init(file: FileDetail, fileHash: String? = nil , hashCode:String? = nil , name: String? = nil) {
         self.file     = file
         self.fileHash = fileHash
         self.name     = name

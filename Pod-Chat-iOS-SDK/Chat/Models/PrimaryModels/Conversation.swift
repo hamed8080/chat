@@ -118,82 +118,82 @@ open class Conversation : Codable , Hashable{
         
     }
     
-    public init(admin:          Bool?,
-                canEditInfo:    Bool?,
-                canSpam:        Bool?,
-                closedThread:   Bool?,
-                description:    String?,
-                group:          Bool?,
-                id:             Int?,
-                image:          String?,
-                joinDate:       Int?,
-                lastMessage:    String?,
-                lastParticipantImage:   String?,
-                lastParticipantName:    String?,
-                lastSeenMessageId:      Int?,
-                lastSeenMessageNanos:   UInt?,
-                lastSeenMessageTime:    UInt?,
-                mentioned:              Bool?,
-                metadata:               String?,
-                mute:                   Bool?,
-                participantCount:       Int?,
-                partner:                Int?,
-                partnerLastDeliveredMessageId:      Int?,
-                partnerLastDeliveredMessageNanos:   UInt?,
-                partnerLastDeliveredMessageTime:    UInt?,
-                partnerLastSeenMessageId:       Int?,
-                partnerLastSeenMessageNanos:    UInt?,
-                partnerLastSeenMessageTime:     UInt?,
-                pin:            Bool?,
-                time:           UInt?,
-                title:          String?,
-                type:           Int?,
-                unreadCount:    Int?,
-                uniqueName:     String?,
-                userGroupHash:  String?,
-                inviter:        Participant?,
-                lastMessageVO:  Message?,
-                participants:   [Participant]?,
-                pinMessage:     PinUnpinMessage?) {
+    public init(admin                            : Bool?             = nil,
+                canEditInfo                      : Bool?             = nil,
+                canSpam                          : Bool?             = nil,
+                closedThread                     : Bool?             = nil,
+                description                      : String?           = nil,
+                group                            : Bool?             = nil,
+                id                               : Int?              = nil,
+                image                            : String?           = nil,
+                joinDate                         : Int?              = nil,
+                lastMessage                      : String?           = nil,
+                lastParticipantImage             : String?           = nil,
+                lastParticipantName              : String?           = nil,
+                lastSeenMessageId                : Int?              = nil,
+                lastSeenMessageNanos             : UInt?             = nil,
+                lastSeenMessageTime              : UInt?             = nil,
+                mentioned                        : Bool?             = nil,
+                metadata                         : String?           = nil,
+                mute                             : Bool?             = nil,
+                participantCount                 : Int?              = nil,
+                partner                          : Int?              = nil,
+                partnerLastDeliveredMessageId    : Int?              = nil,
+                partnerLastDeliveredMessageNanos : UInt?             = nil,
+                partnerLastDeliveredMessageTime  : UInt?             = nil,
+                partnerLastSeenMessageId         : Int?              = nil,
+                partnerLastSeenMessageNanos      : UInt?             = nil,
+                partnerLastSeenMessageTime       : UInt?             = nil,
+                pin                              : Bool?             = nil,
+                time                             : UInt?             = nil,
+                title                            : String?           = nil,
+                type                             : Int?              = nil,
+                unreadCount                      : Int?              = nil,
+                uniqueName                       : String?           = nil,
+                userGroupHash                    : String?           = nil,
+                inviter                          : Participant?      = nil,
+                lastMessageVO                    : Message?          = nil,
+                participants                     : [Participant]?    = nil,
+                pinMessage                       : PinUnpinMessage?  = nil) {
         
-        self.admin          = admin
-        self.canEditInfo    = canEditInfo
-        self.canSpam        = canSpam ?? false
-        self.closedThread   = closedThread ?? false
-        self.description    = description
-        self.group          = group
-        self.id             = id
-        self.image          = image
-        self.joinDate       = joinDate
-        self.lastMessage    = lastMessage
-        self.lastParticipantImage   = lastParticipantImage
-        self.lastParticipantName    = lastParticipantName
-        self.lastSeenMessageId      = lastSeenMessageId
-        self.lastSeenMessageNanos   = lastSeenMessageNanos
-        self.lastSeenMessageTime    = lastSeenMessageTime
-        self.mentioned              = mentioned
-        self.metadata               = metadata
-        self.mute                   = mute
-        self.participantCount       = participantCount
-        self.partner                = partner
-        self.partnerLastDeliveredMessageId      = partnerLastDeliveredMessageId
-        self.partnerLastDeliveredMessageNanos   = partnerLastDeliveredMessageNanos
-        self.partnerLastDeliveredMessageTime    = partnerLastDeliveredMessageTime
-        self.partnerLastSeenMessageId       = partnerLastSeenMessageId
-        self.partnerLastSeenMessageNanos    = partnerLastSeenMessageNanos
-        self.partnerLastSeenMessageTime     = partnerLastSeenMessageTime
-        self.pin            = pin
-        self.time           = time
-        self.title          = title
-        self.type           = type
-        self.unreadCount    = unreadCount
-        self.uniqueName     = uniqueName
-        self.userGroupHash  = userGroupHash
+        self.admin                            = admin
+        self.canEditInfo                      = canEditInfo
+        self.canSpam                          = canSpam ?? false
+        self.closedThread                     = closedThread ?? false
+        self.description                      = description
+        self.group                            = group
+        self.id                               = id
+        self.image                            = image
+        self.joinDate                         = joinDate
+        self.lastMessage                      = lastMessage
+        self.lastParticipantImage             = lastParticipantImage
+        self.lastParticipantName              = lastParticipantName
+        self.lastSeenMessageId                = lastSeenMessageId
+        self.lastSeenMessageNanos             = lastSeenMessageNanos
+        self.lastSeenMessageTime              = lastSeenMessageTime
+        self.mentioned                        = mentioned
+        self.metadata                         = metadata
+        self.mute                             = mute
+        self.participantCount                 = participantCount
+        self.partner                          = partner
+        self.partnerLastDeliveredMessageId    = partnerLastDeliveredMessageId
+        self.partnerLastDeliveredMessageNanos = partnerLastDeliveredMessageNanos
+        self.partnerLastDeliveredMessageTime  = partnerLastDeliveredMessageTime
+        self.partnerLastSeenMessageId         = partnerLastSeenMessageId
+        self.partnerLastSeenMessageNanos      = partnerLastSeenMessageNanos
+        self.partnerLastSeenMessageTime       = partnerLastSeenMessageTime
+        self.pin                              = pin
+        self.time                             = time
+        self.title                            = title
+        self.type                             = type
+        self.unreadCount                      = unreadCount
+        self.uniqueName                       = uniqueName
+        self.userGroupHash                    = userGroupHash
         
-        self.inviter        = inviter
-        self.lastMessageVO  = lastMessageVO
-        self.participants   = participants
-        self.pinMessage     = pinMessage
+        self.inviter                          = inviter
+        self.lastMessageVO                    = lastMessageVO
+        self.participants                     = participants
+        self.pinMessage                       = pinMessage
     }
     
     public init(theConversation: Conversation) {
@@ -341,47 +341,44 @@ open class Conversation : Codable , Hashable{
 	}
 	
 	public required init(from decoder: Decoder) throws {
-		let container = try decoder.container(keyedBy: CodingKeys.self)
-		self.admin  = try container.decodeIfPresent(Bool.self, forKey: .admin)
-		self.canEditInfo = try container.decodeIfPresent(Bool.self, forKey: .canEditInfo)
-		self.canSpam = try container.decodeIfPresent(Bool.self, forKey: .canSpam) ?? false
-		self.closedThread = try container.decodeIfPresent(Bool.self, forKey: .closedThread)  ?? false
-		self.description = try container.decodeIfPresent(String.self, forKey: .description)
-		self.group =  try container.decodeIfPresent(Bool.self, forKey: .group)
-		self.id = try container.decodeIfPresent(Int.self, forKey: .id)
-		self.image =  try container.decodeIfPresent(String.self, forKey: .image)
-		self.joinDate =  try container.decodeIfPresent(Int.self, forKey: .joinDate)
-		self.lastMessage  =  try container.decodeIfPresent(String.self, forKey: .lastMessage)
-		self.lastParticipantImage = try container.decodeIfPresent(String.self, forKey: .lastParticipantImage)
-		self.lastParticipantName  = try container.decodeIfPresent(String.self, forKey: .lastParticipantName)
-		self.lastSeenMessageId  =  try container.decodeIfPresent(Int.self, forKey: .lastSeenMessageId)
-		self.lastSeenMessageNanos = try container.decodeIfPresent(UInt.self, forKey: .lastSeenMessageNanos)
-		self.lastSeenMessageTime  =  try container.decodeIfPresent(UInt.self, forKey: .lastSeenMessageTime)
-		self.mentioned = try container.decodeIfPresent(Bool.self, forKey: .mentioned)
-		self.metadata  = try container.decodeIfPresent(String.self, forKey: .metadata)
-		self.mute = try container.decodeIfPresent(Bool.self, forKey: .mute)
-		self.participantCount = try container.decodeIfPresent(Int.self, forKey: .participantCount)
-		self.partner = try container.decodeIfPresent(Int.self, forKey: .partner)
-		self.partnerLastDeliveredMessageId =  try container.decodeIfPresent(Int.self, forKey: .partnerLastSeenMessageId)
-		self.partnerLastDeliveredMessageNanos   =  try container.decodeIfPresent(UInt.self, forKey: .partnerLastDeliveredMessageNanos)
-		self.partnerLastDeliveredMessageTime    = try container.decodeIfPresent(UInt.self, forKey: .partnerLastDeliveredMessageTime)
-		self.partnerLastSeenMessageId           = try container.decodeIfPresent(Int.self, forKey: .partnerLastSeenMessageId)
-		self.partnerLastSeenMessageNanos        = try container.decodeIfPresent(UInt.self, forKey: .partnerLastSeenMessageNanos)
-		self.partnerLastSeenMessageTime         = try container.decodeIfPresent(UInt.self, forKey: .partnerLastSeenMessageTime)
-		self.pin                            = try container.decodeIfPresent(Bool.self, forKey: .pin) ?? container.decodeIfPresent(Bool.self, forKey: .pinned)
-		self.time                           = try container.decodeIfPresent(UInt.self, forKey: .time)
-		self.title                          = try container.decodeIfPresent(String.self, forKey: .title)
-		self.type                           = try container.decodeIfPresent(Int.self, forKey: .type)
-		self.unreadCount                    = try container.decodeIfPresent(Int.self, forKey: .unreadCount)
-		self.uniqueName                     = try container.decodeIfPresent(String.self, forKey: .uniqueName)
-		self.userGroupHash                  = try container.decodeIfPresent(String.self, forKey: .userGroupHash)
-		
-		
-		self.inviter = try container.decodeIfPresent(Participant.self, forKey: .inviter)
-		self.participants = try container.decodeIfPresent([Participant].self, forKey: .participants)
-
-		self.lastMessageVO = try container.decodeIfPresent(Message.self, forKey: .lastMessageVO)
-		self.pinMessage = try container.decodeIfPresent(PinUnpinMessage.self, forKey: .pinMessageVO)
+        let container                         = try decoder.container(keyedBy: CodingKeys.self)
+        self.admin                            = try container.decodeIfPresent(Bool.self, forKey: .admin)
+        self.canEditInfo                      = try container.decodeIfPresent(Bool.self, forKey: .canEditInfo)
+        self.canSpam                          = try container.decodeIfPresent(Bool.self, forKey: .canSpam) ?? false
+        self.closedThread                     = try container.decodeIfPresent(Bool.self, forKey: .closedThread)  ?? false
+        self.description                      = try container.decodeIfPresent(String.self, forKey: .description)
+        self.group                            = try container.decodeIfPresent(Bool.self, forKey: .group)
+        self.id                               = try container.decodeIfPresent(Int.self, forKey: .id)
+        self.image                            = try container.decodeIfPresent(String.self, forKey: .image)
+        self.joinDate                         = try container.decodeIfPresent(Int.self, forKey: .joinDate)
+        self.lastMessage                      = try container.decodeIfPresent(String.self, forKey: .lastMessage)
+        self.lastParticipantImage             = try container.decodeIfPresent(String.self, forKey: .lastParticipantImage)
+        self.lastParticipantName              = try container.decodeIfPresent(String.self, forKey: .lastParticipantName)
+        self.lastSeenMessageId                = try container.decodeIfPresent(Int.self, forKey: .lastSeenMessageId)
+        self.lastSeenMessageNanos             = try container.decodeIfPresent(UInt.self, forKey: .lastSeenMessageNanos)
+        self.lastSeenMessageTime              = try container.decodeIfPresent(UInt.self, forKey: .lastSeenMessageTime)
+        self.mentioned                        = try container.decodeIfPresent(Bool.self, forKey: .mentioned)
+        self.metadata                         = try container.decodeIfPresent(String.self, forKey: .metadata)
+        self.mute                             = try container.decodeIfPresent(Bool.self, forKey: .mute)
+        self.participantCount                 = try container.decodeIfPresent(Int.self, forKey: .participantCount)
+        self.partner                          = try container.decodeIfPresent(Int.self, forKey: .partner)
+        self.partnerLastDeliveredMessageId    = try container.decodeIfPresent(Int.self, forKey: .partnerLastSeenMessageId)
+        self.partnerLastDeliveredMessageNanos = try container.decodeIfPresent(UInt.self, forKey: .partnerLastDeliveredMessageNanos)
+        self.partnerLastDeliveredMessageTime  = try container.decodeIfPresent(UInt.self, forKey: .partnerLastDeliveredMessageTime)
+        self.partnerLastSeenMessageId         = try container.decodeIfPresent(Int.self, forKey: .partnerLastSeenMessageId)
+        self.partnerLastSeenMessageNanos      = try container.decodeIfPresent(UInt.self, forKey: .partnerLastSeenMessageNanos)
+        self.partnerLastSeenMessageTime       = try container.decodeIfPresent(UInt.self, forKey: .partnerLastSeenMessageTime)
+        self.pin                              = try container.decodeIfPresent(Bool.self, forKey: .pin) ?? container.decodeIfPresent(Bool.self, forKey: .pinned)
+        self.time                             = try container.decodeIfPresent(UInt.self, forKey: .time)
+        self.title                            = try container.decodeIfPresent(String.self, forKey: .title)
+        self.type                             = try container.decodeIfPresent(Int.self, forKey: .type)
+        self.unreadCount                      = try container.decodeIfPresent(Int.self, forKey: .unreadCount)
+        self.uniqueName                       = try container.decodeIfPresent(String.self, forKey: .uniqueName)
+        self.userGroupHash                    = try container.decodeIfPresent(String.self, forKey: .userGroupHash)
+        self.inviter                          = try container.decodeIfPresent(Participant.self, forKey: .inviter)
+        self.participants                     = try container.decodeIfPresent([Participant].self, forKey: .participants)
+        self.lastMessageVO                    = try container.decodeIfPresent(Message.self, forKey: .lastMessageVO)
+        self.pinMessage                       = try container.decodeIfPresent(PinUnpinMessage.self, forKey: .pinMessageVO)
 	}
 	
 	public func encode(to encoder: Encoder) throws {
