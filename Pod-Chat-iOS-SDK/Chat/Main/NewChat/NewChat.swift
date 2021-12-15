@@ -892,7 +892,7 @@ public extension Chat {
 	
 	internal func sendToAsync(asyncMessageVO:NewSendAsyncMessageVO){
         guard let content = try? JSONEncoder().encode(asyncMessageVO) else { return }
-        logger?.log(title: "send Message", jsonString: asyncMessageVO.string ?? "")
+        logger?.log(title: "send Message", jsonString: asyncMessageVO.string ?? "", receive: false)
         asyncManager.sendData(type: AsyncMessageTypes(rawValue: asyncMessageVO.pushMsgType ?? 3)! , data: content)        
 	}
     

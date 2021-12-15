@@ -24,12 +24,6 @@ extension Encodable{
 		return dictionary
 	}
     
-    func notifyObserverIfEnabled(json:String , receive:Bool){
-        if Chat.sharedInstance.config?.enableNotificationLogObserver == true{
-            NotificationCenter.default.post(name: Notification.Name("log"),object: LogResult(json: json, receive: receive))
-        }
-    }
-    
     func convertToGETMethodQueeyString(url:String)->String?{
         var queryStringUrl = url
         if let parameters = try? self.asDictionary() , parameters.count > 0{
