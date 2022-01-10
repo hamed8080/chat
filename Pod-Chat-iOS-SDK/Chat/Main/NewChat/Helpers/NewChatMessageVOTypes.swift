@@ -80,6 +80,7 @@ public enum NewChatMessageVOTypes :Int , Codable {
     case BLOCKED_ASSISTNTS                 = 118
     case GET_USER_BOTS                     = 120
     case MUTUAL_GROUPS                     = 130
+    case ADD_CONTACT                       = 200
     case ERROR                             = 999
     
     case UNKNOWN                           = -1

@@ -14,14 +14,13 @@ class AddContactRequestHandler{
                       _ chat:Chat,
                       _ completion: @escaping CompletionType<[Contact]>,
                       _ uniqueIdResult:UniqueIdResultType = nil){
-        
-        guard let config = chat.config else {return}
-        let url = "\(config.platformHost)\(SERVICES_PATH.ADD_CONTACTS.rawValue)"
-        let headers: HTTPHeaders    = ["_token_": config.token, "_token_issuer_": "1"]
-        chat.restApiRequest(req, decodeType: NewContactResponse.self,url: url , headers: headers , uniqueIdResult: uniqueIdResult) { response in
+        chat.prepareToSendAsync(req: req,
+                                clientSpecificUniqueId: req.uniqueId,
+                                typeCode: req.typeCode ,
+                                messageType: .ADD_CONTACT,
+                                uniqueIdResult: uniqueIdResult){response in
             let contactResponse = response.result as? NewContactResponse
-            addToCacheIfEnabled(chat: chat, contactsResponse: contactResponse)
-            completion(contactResponse?.contacts , response.uniqueId , response.error)
+            completion(contactResponse?.contacts , response.uniqueId, response.error)
         }
     }
     
