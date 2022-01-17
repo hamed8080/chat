@@ -48,7 +48,6 @@ extension CMParticipant{
             model.blocked          = participant.blocked as NSNumber?
             model.contactId        = participant.contactId as NSNumber?
             model.coreUserId       = participant.coreUserId as NSNumber?
-            model.id               = participant.id as NSNumber?
             model.myFriend         = participant.myFriend as NSNumber?
             model.sendEnable       = participant.sendEnable as NSNumber?
             model.notSeenDuration  = participant.notSeenDuration as NSNumber?
@@ -56,6 +55,7 @@ extension CMParticipant{
             model.receiveEnable    = participant.receiveEnable as NSNumber?
             model.time             = Int(Date().timeIntervalSince1970) as NSNumber?
         }
+        model.id               = participant.id as NSNumber?
 		model.cellphoneNumber  = participant.cellphoneNumber
 		model.contactFirstName = participant.contactFirstName
 		model.contactName      = participant.contactName
@@ -85,6 +85,19 @@ extension CMParticipant{
         }else{
             CMParticipant.crud.insert { cmLinkedUserEntity in
 				let cmParticipant = convertParticipantToCM(participant: participant,fromMainMethod: fromMainMethod, threadId: threadId, entity: cmLinkedUserEntity)
+                resultEntity?(cmParticipant)
+            }
+        }
+    }
+    
+    public class func insertOrUpdate(participant:Participant,resultEntity:((CMParticipant)->())? = nil){
+        
+        if let id = participant.id , let findedEntity = CMParticipant.crud.fetchWith(NSPredicate(format:"id == %i", id))?.first{
+            let cmParticipant = convertParticipantToCM(participant: participant , fromMainMethod: false, threadId: nil, entity: findedEntity)
+            resultEntity?(cmParticipant)
+        }else{
+            CMParticipant.crud.insert { cmLinkedUserEntity in
+                let cmParticipant = convertParticipantToCM(participant: participant,fromMainMethod: false, threadId: nil, entity: cmLinkedUserEntity)
                 resultEntity?(cmParticipant)
             }
         }
