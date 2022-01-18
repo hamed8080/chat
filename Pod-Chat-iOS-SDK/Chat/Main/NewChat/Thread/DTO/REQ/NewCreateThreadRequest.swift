@@ -10,7 +10,7 @@ public class NewCreateThreadRequest: BaseRequest {
 	
 	public let description: String?
 	public let image:       String?
-	public let invitees:    [Invitee]
+	public let invitees:    [Invitee]?
 	public let metadata:    String?
 	public let title:       String
 	public let type:        ThreadTypes?
@@ -18,7 +18,7 @@ public class NewCreateThreadRequest: BaseRequest {
 	
 	public init(description:    String? = nil,
 				image:          String? = nil,
-				invitees:       [Invitee],
+				invitees:       [Invitee]? = nil,
 				metadata:       String? = nil,
 				title:          String,
 				type:           ThreadTypes? = nil,
