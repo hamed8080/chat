@@ -242,6 +242,9 @@ class ReceiveMessageFactory{
             case .REMOVE_TAG_PARTICIPANTS:
                 RemoveTagParticipantsResponseHandler.handle(chatMessage, asyncMessage)
                 break
+            case .ADD_CONTACT:
+                BatchAddContactsResponseHandler.handle(chatMessage, asyncMessage)
+                break
 			case .ERROR:
 				ErrorResponseHandler.handle(chatMessage , asyncMessage)
 				break
