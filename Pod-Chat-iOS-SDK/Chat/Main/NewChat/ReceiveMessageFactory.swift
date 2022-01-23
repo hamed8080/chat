@@ -278,6 +278,24 @@ class ReceiveMessageFactory{
             case .CALL_CLIENT_ERRORS:
                 CallClientErrorResponseHandler.handle(chatMessage, asyncMessage)
                 break
+            case .TAG_LIST:
+                TagListResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .CREATE_TAG:
+                CreateTagResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .EDIT_TAG:
+                EditTagResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .DELETE_TAG:
+                DeleteTagResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .ADD_TAG_PARTICIPANTS:
+                AddTagParticipantsResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .REMOVE_TAG_PARTICIPANTS:
+                RemoveTagParticipantsResponseHandler.handle(chatMessage, asyncMessage)
+                break
 			case .ERROR:
 				ErrorResponseHandler.handle(chatMessage , asyncMessage)
 				break

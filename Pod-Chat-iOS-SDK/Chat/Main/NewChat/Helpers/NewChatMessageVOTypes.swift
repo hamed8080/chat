@@ -108,7 +108,13 @@ public enum NewChatMessageVOTypes :Int , Codable {
     
     //CALL
     
-    
+    case CREATE_TAG                        = 140
+    case EDIT_TAG                          = 141
+    case DELETE_TAG                        = 142
+    case ADD_TAG_PARTICIPANTS              = 143
+    case REMOVE_TAG_PARTICIPANTS           = 144
+    case TAG_LIST                          = 145
+    case GET_TAG_PARTICIPANTS              = -4
     
     case ERROR                             = 999
     
