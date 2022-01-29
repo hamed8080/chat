@@ -715,7 +715,7 @@ public extension Chat {
     
     //Test Status: Main ❌ - Integeration: ❌
     func requestGroupCall(_ request:StartCallRequest, _ completion:@escaping CompletionType<CreateCall>, uniqueIdResult:UniqueIdResultType = nil){
-        StartCallRequestHandler.handle(request,self,completion ,uniqueIdResult)
+        StartCallGroupRequestHandler.handle(request,self,completion ,uniqueIdResult)
     }
     
     //Test Status: Main ❌ - Integeration: ✅

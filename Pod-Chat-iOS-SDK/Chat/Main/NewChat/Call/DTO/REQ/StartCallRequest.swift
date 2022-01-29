@@ -8,34 +8,36 @@
 import Foundation
 public class StartCallRequest:BaseRequest{
     
-    let threadId : Int?
-    let invitees : [Invitee]?
-    let type     : CallType
-    let client   : SendClient
-
+    let threadId                : Int?
+    let invitees                : [Invitee]?
+    let type                    : CallType
+    let client                  : SendClient
+    let createCallThreadRequest : CreateCallThreadRequest?
     
     public init(client:SendClient,threadId: Int, type: CallType, typeCode:String? = nil, uniqueId:String? = nil) {
-        self.threadId = threadId
-        self.invitees = nil
-        self.type     = type
-        self.client   = client
+        self.threadId                = threadId
+        self.invitees                = nil
+        self.type                    = type
+        self.client                  = client
+        self.createCallThreadRequest = nil
         super.init(uniqueId: uniqueId, typeCode: typeCode)
     }
     
-    public init(client:SendClient, invitees: [Invitee], type: CallType, typeCode:String? = nil, uniqueId:String? = nil) {
-        self.threadId = nil
-        self.invitees = invitees
-        self.type     = type
-        self.client   = client
+    public init(client:SendClient, invitees: [Invitee], type: CallType, createCallThreadRequest:CreateCallThreadRequest? = nil, typeCode:String? = nil, uniqueId:String? = nil) {
+        self.threadId                = nil
+        self.invitees                = invitees
+        self.type                    = type
+        self.client                  = client
+        self.createCallThreadRequest = createCallThreadRequest
         super.init(uniqueId: uniqueId, typeCode: typeCode)
     }
-    
     
     private enum CodingKeys:String ,CodingKey{
-        case threadId = "threadId"
-        case invitees = "invitees"
-        case type     = "type"
-        case client   = "creatorClientDto"
+        case threadId                = "threadId"
+        case invitees                = "invitees"
+        case type                    = "type"
+        case client                  = "creatorClientDto"
+        case createCallThreadRequest = "createCallThreadRequest"
     }
     
     public override func encode(to encoder: Encoder) throws {
@@ -44,5 +46,6 @@ public class StartCallRequest:BaseRequest{
         try container.encodeIfPresent(threadId, forKey: .threadId)
         try container.encodeIfPresent(invitees, forKey: .invitees)
         try container.encodeIfPresent(type, forKey: .type)
+        try container.encodeIfPresent(createCallThreadRequest, forKey: .createCallThreadRequest)
     }
 }
