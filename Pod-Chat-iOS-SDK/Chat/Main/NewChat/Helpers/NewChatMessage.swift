@@ -19,8 +19,9 @@ struct NewChatMessage : Decodable {
     let time               : Int
     let type               : NewChatMessageVOTypes
     let uniqueId           : String
-    var messageId          : Int? = nil
-    var participantId      : Int? = nil
+    var messageId          : Int?    = nil
+    var participantId      : Int?    = nil
+    var typeCode           : String? = nil
     
     private enum CodingKeys:String , CodingKey{
         case code
@@ -34,6 +35,7 @@ struct NewChatMessage : Decodable {
         case uniqueId
         case messageId
         case participantId
+        case typeCode
     }
     
     init(from decoder: Decoder) throws {
@@ -46,6 +48,7 @@ struct NewChatMessage : Decodable {
         subjectId         = try? container.decode(Int.self, forKey : .subjectId)
         time              = try  container.decode(Int.self, forKey : .time)
         type              = try  container.decode(NewChatMessageVOTypes.self, forKey : .type)
+        typeCode          = try container.decodeIfPresent(String.self, forKey : .typeCode)
         if let uniqueId = try container.decodeIfPresent(String.self, forKey: .uniqueId){
             self.uniqueId = uniqueId
         }else{
