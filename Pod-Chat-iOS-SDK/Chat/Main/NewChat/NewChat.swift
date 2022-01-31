@@ -144,7 +144,7 @@ public extension Chat {
 	
     //Test Status: Main ✅ - Integeration: ✅
 	func removeContact(_ request:NewRemoveContactsRequest,completion:@escaping CompletionType<Bool>,uniqueIdResult: UniqueIdResultType = nil){
-		RemoveContactRequestHandler.handle(request,self,completion,uniqueIdResult)
+		BatchRemoveContactRequestHandler.handle(request,self,completion,uniqueIdResult)
 	}
 	
     //Test Status: Main ✅ - Integeration: ✅

@@ -249,6 +249,9 @@ class ReceiveMessageFactory{
             case .ADD_CONTACT:
                 BatchAddContactsResponseHandler.handle(chatMessage, asyncMessage)
                 break
+            case .REMOVE_CONTACTS:
+                BatchDeleteContactsResponseHandler.handle(chatMessage, asyncMessage)
+                break
             case .GET_TAG_PARTICIPANTS:
                 //TODO: Need to be add by server
                 break
