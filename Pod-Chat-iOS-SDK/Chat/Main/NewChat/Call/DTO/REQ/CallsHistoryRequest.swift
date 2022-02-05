@@ -15,8 +15,16 @@ public class CallsHistoryRequest:BaseRequest{
     public let name              : String?
     public let creatorCoreUserId : Int?
     public let creatorSsoId      : Int?
+    public let threadId          : Int?
     
-    public init(count: Int = 50, offset: Int = 0 , callIds: [Int]? = nil, type: CallType? = nil, name: String? = nil, creatorCoreUserId: Int? = nil, creatorSsoId: Int? = nil) {
+    public init(count             : Int        = 50,
+                offset            : Int        = 0,
+                callIds           : [Int]?     = nil,
+                type              : CallType?  = nil,
+                name              : String?    = nil,
+                creatorCoreUserId : Int?       = nil,
+                creatorSsoId      : Int?       = nil,
+                threadId          : Int?       = nil) {
         self.count             = count
         self.offset            = offset
         self.callIds           = callIds
@@ -24,6 +32,7 @@ public class CallsHistoryRequest:BaseRequest{
         self.name              = name
         self.creatorCoreUserId = creatorCoreUserId
         self.creatorSsoId      = creatorSsoId
+        self.threadId          = threadId
     }
     
     private enum CodingKeys :String , CodingKey{
@@ -34,6 +43,7 @@ public class CallsHistoryRequest:BaseRequest{
         case name               = "name"
         case creatorCoreUserId  = "creatorCoreUserId"
         case creatorSsoId       = "creatorSsoId"
+        case threadId           = "threadId"
     }
     
     public override func encode(to encoder: Encoder) throws {
@@ -45,6 +55,7 @@ public class CallsHistoryRequest:BaseRequest{
         try container.encodeIfPresent(name, forKey: .name)
         try container.encodeIfPresent(creatorSsoId, forKey: .creatorSsoId)
         try container.encodeIfPresent(creatorCoreUserId, forKey: .creatorCoreUserId)
+        try container.encodeIfPresent(threadId, forKey: .threadId)
     }
     
 }

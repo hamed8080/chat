@@ -26,6 +26,7 @@ public struct Call : Codable , Equatable {
     public let isGroup            : Bool
     public let callParticipants   : [Participant]?
     public let partnerParticipant : Participant?
+    public let conversation       : Conversation?
     
     public var isIncomingCall:Bool{
         return creatorId != Chat.sharedInstance.getCurrentUser()?.id
@@ -40,7 +41,9 @@ public struct Call : Codable , Equatable {
                 endTime            : Int?            = nil,
                 status             : CallStatus?     = nil,
                 callParticipants   : [Participant]?  = nil,
-                partnerParticipant : Participant?    = nil) {
+                partnerParticipant : Participant?    = nil,
+                conversation       : Conversation?   = nil) {
+        
         self.id                 = id
         self.creatorId          = creatorId
         self.type               = type
@@ -51,6 +54,7 @@ public struct Call : Codable , Equatable {
         self.isGroup            = isGroup
         self.callParticipants   = callParticipants
         self.partnerParticipant = partnerParticipant
+        self.conversation       = conversation
     }
     
     private enum CodingKeys:String , CodingKey{
@@ -64,5 +68,6 @@ public struct Call : Codable , Equatable {
         case isGroup            = "group"
         case callParticipants   = "callParticipants"
         case partnerParticipant = "partnerParticipantVO"
+        case conversation       = "conversationVO"
     }
 }
