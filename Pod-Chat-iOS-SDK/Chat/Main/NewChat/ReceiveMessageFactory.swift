@@ -278,6 +278,9 @@ class ReceiveMessageFactory{
             case .CALL_CLIENT_ERRORS:
                 CallClientErrorResponseHandler.handle(chatMessage, asyncMessage)
                 break
+            case .GET_CALLS_TO_JOIN:
+                GetCallsResponseHandler.handle(chatMessage, asyncMessage)
+                break
             case .TAG_LIST:
                 TagListResponseHandler.handle(chatMessage, asyncMessage)
                 break

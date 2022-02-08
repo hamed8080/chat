@@ -104,6 +104,7 @@ public enum NewChatMessageVOTypes :Int , Codable {
     case TURN_OFF_VIDEO_CALL               = 114
     case START_RECORDING                   = 121
     case STOP_RECORDING                    = 122
+    case GET_CALLS_TO_JOIN                 = 129
     case CALL_CLIENT_ERRORS                = 153
     
     //CALL

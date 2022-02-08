@@ -798,6 +798,10 @@ public extension Chat {
     func sendCallClientError(_ request:CallClientErrorRequest,_ completion:@escaping CompletionType<CallError>, uniqueIdResult:UniqueIdResultType = nil){
         SendCallClientErrorRequestHandler.handle(request,self,completion ,uniqueIdResult)
     }
+    
+    func getCallsToJoin(_ request:GetJoinCallsRequest, _ completion:@escaping CompletionType<[Call]>, uniqueIdResult:UniqueIdResultType = nil){
+        CallsToJoinRequestHandler.handle(request,self,completion ,uniqueIdResult)
+    }
     //Call
     
     
