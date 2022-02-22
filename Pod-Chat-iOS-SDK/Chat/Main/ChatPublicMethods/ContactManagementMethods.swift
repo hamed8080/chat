@@ -531,6 +531,7 @@ extension Chat {
     /// - parameter completion:     (response) it will returns the response that comes from server to this request. (Any as! [ContactModel])
 	@available(*,deprecated , message:"Removed in 0.10.5.0 version. use new version of method")
     public func syncContacts(uniqueIds:     @escaping ([String]) -> (),
+                             syncedPart:  @escaping callbackTypeAlias,
                              completion:    @escaping callbackTypeAlias) {
         log.verbose("Try to request to sync contact", context: "Chat")
         
@@ -606,26 +607,62 @@ extension Chat {
         }
         
         if cellPhones.count > 0 {
-            let addContactsModel = AddContactsRequestModel(cellphoneNumbers:    cellPhones,
-                                                           emails:              emails,
-                                                           firstNames:          firstNames,
-                                                           lastNames:           lastNames,
-                                                           typeCode:            nil,
-                                                           uniqueIds:       contactUniqueIds)
-                    
-            addContacts(inputModel: addContactsModel, uniqueIds: { (resUniqueIds) in
-                uniqueIds(resUniqueIds)
-            }) { (myResponse) in
-
-                Chat.cacheDB.savePhoneBookContacts(contacts: addContactsModel)
-                completion(myResponse)
+            Chat.contactsPsrts = splitContactsToSync(cellphoneNumbers: cellPhones, emails: emails, firstNames: firstNames, lastNames: lastNames, uniqueIds: contactUniqueIds)
+            startMultipartAddContactRequest(index: 0) { part in
+                syncedPart(part)
+            } completed: {
+                //fully completed with or without error
+                let allSyncedContacts = AddContactsRequestModel(cellphoneNumbers: cellPhones, emails: emails, firstNames: firstNames, lastNames: lastNames, typeCode: nil, uniqueIds: contactUniqueIds)
+                completion(allSyncedContacts)
             }
+
         } else {
             let contactModel = ContactModel(contentCount: 0, messageContent: [], hasError: false, errorMessage: "", errorCode: 0)
             completion(contactModel)
         }
-        
-        
+    }
+
+    static let chunkCount = 50
+    func splitContactsToSync(cellphoneNumbers:[String], emails:[String], firstNames:[String], lastNames:[String], uniqueIds:[String]) -> [AddContactsRequestModel]{
+        let cellphoneNumbers = cellphoneNumbers.chunked(into: Chat.chunkCount)
+        let emails           = emails.chunked(into: Chat.chunkCount)
+        let firstNames       = firstNames.chunked(into: Chat.chunkCount)
+        let lastNames        = lastNames.chunked(into: Chat.chunkCount)
+        let uniqueIds        = uniqueIds.chunked(into: Chat.chunkCount)
+        var chunks:[AddContactsRequestModel] = []
+        for (index, element) in cellphoneNumbers.enumerated(){
+            let chunk = AddContactsRequestModel(
+                cellphoneNumbers:    Array(cellphoneNumbers[index]),
+                emails:              Array(emails[index]),
+                firstNames:          Array(firstNames[index]),
+                lastNames:           Array(lastNames[index]),
+                typeCode:            nil,
+                uniqueIds:           Array(uniqueIds[index])
+            )
+            chunks.append(chunk)
+        }
+        return chunks
+    }
+    
+    static var contactsPsrts:[AddContactsRequestModel] = []
+    static var contactSyncIndex = 0
+    func startMultipartAddContactRequest(index:Int = 0, completedPart:@escaping (Any)->(), completed: @escaping ()->()){
+        if index <= Chat.contactsPsrts.count - 1{
+            let chunk = Chat.contactsPsrts[index]
+            addContacts(inputModel: chunk) { uniqueIds in
+                
+            } completion: { myResponse in
+                completedPart(myResponse)
+                Chat.contactSyncIndex += 1
+                Chat.cacheDB.savePhoneBookContacts(contacts: chunk)
+                self.startMultipartAddContactRequest(index: Chat.contactSyncIndex,completedPart: completedPart, completed: completed)
+            }
+        }else {
+            //completed
+            Chat.contactsPsrts = []
+            Chat.contactSyncIndex = 0
+            completed()
+        }
     }
     
     
