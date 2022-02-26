@@ -30,6 +30,11 @@ public class CacheFileManager{
         }
     }
     
+    public func getFileUrl(_ hashCode:String?)->URL?{
+        let filePath = rootPath + "/\(FileManagerPaths.Files.rawValue)/" + "\(hashCode ?? "default")"
+        return URL(fileURLWithPath: filePath)
+    }
+    
     func getFile(hashCode:String)->(file:FileModel,path:String)?{
         
         let predicate = NSPredicate(format: "hashCode == %@", hashCode , NSNumber(value: false))

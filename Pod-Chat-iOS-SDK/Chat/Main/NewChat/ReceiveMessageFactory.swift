@@ -13,6 +13,10 @@ class ReceiveMessageFactory{
     class func invokeCallback(asyncMessage: NewAsyncMessage) {
 		guard let chatMessageData  = asyncMessage.content?.data(using: .utf8) else{return}
 		guard let chatMessage =  try? JSONDecoder().decode(NewChatMessage.self, from: chatMessageData) else{return}
+        if let typeCode = chatMessage.typeCode, typeCode != Chat.sharedInstance.config?.typeCode {
+            Chat.sharedInstance.logger?.log(title: "mismatch typeCode", message: "expected typeCode is:\(Chat.sharedInstance.config?.typeCode ?? "") but receive: \(chatMessage.typeCode ?? "")")
+            return
+        }
         Chat.sharedInstance.logger?.log(title: "on Receive Message", jsonString: asyncMessage.string)
 		
 		switch chatMessage.type {
@@ -299,12 +303,16 @@ class ReceiveMessageFactory{
             case .REMOVE_TAG_PARTICIPANTS:
                 RemoveTagParticipantsResponseHandler.handle(chatMessage, asyncMessage)
                 break
+            case .GET_TAG_PARTICIPANTS:
+                //TODO: Need to be add by server
+                break
 			case .ERROR:
 				ErrorResponseHandler.handle(chatMessage , asyncMessage)
 				break
             
             case .UNKNOWN:
                 Chat.sharedInstance.logger?.log(title: "CHAT_SDK:", message: "an unknown message type received from the server not implemented in SDK!")
+                break
 			@unknown default :
                 Chat.sharedInstance.logger?.log(title: "CHAT_SDK:", message: "an message received with unknowned type value. investigate to fix or leave that.")
 		}
