@@ -153,8 +153,8 @@ public extension Chat {
 	}
 	
     //Test Status: Main ✅ - Integeration: ✅
-	func syncContacts(completion:@escaping CompletionType<[Contact]>, uniqueIdsResult: UniqueIdsResultType = nil){
-		SyncContactsRequestHandler.handle(self,completion,uniqueIdsResult)
+	func syncContacts(syncedPart: CompletionType<[Contact]>? = nil, completion:CompletionType<Bool>? = nil, uniqueIdsResult: UniqueIdsResultType = nil){
+		SyncContactsRequestHandler.handle(self,syncedPart,completion,uniqueIdsResult)
 	}
 	
     //Test Status: Main ✅ - Integeration: ✅

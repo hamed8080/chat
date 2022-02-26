@@ -12,7 +12,8 @@ class SyncContactsRequestHandler {
 	private init(){}
 	
     class func handle(_ chat:Chat,
-                      _ completion:@escaping CompletionType<[Contact]>,
+                      _ syncedPart: CompletionType<[Contact]>? = nil,
+                      _ completion: CompletionType<Bool>? = nil,
                       _ uniqueIdsResult:UniqueIdsResultType = nil) {
 		
 		var contactsToSync:[NewAddContactRequest] = []
@@ -32,17 +33,15 @@ class SyncContactsRequestHandler {
 			contactsToSync.forEach { contact in
                 uniqueIds.append(contact.uniqueId)
 			}
-			if contactsToSync.count <= 0 {return}
+            
+            //No new contact or changes found
+			if contactsToSync.count <= 0 {
+                completion?(true, nil, nil)
+                return
+            }
 
-            chat.addContacts(contactsToSync) { response,uniqueIds,error  in
-				if let error = error {
-                    completion(response, nil, error)
-                }else {
-                    PhoneContact.updateOrInsertPhoneBooks(contacts:contactsToSync)
-                    PSM.shared.save()
-                    completion(response,nil,nil)
-                }
-			}
+            contactsPsrts = splitContactsToSync(contactsToSync)
+            startMultipartAddContactRequest(index: 0, completedPart: syncedPart, completed: completion)
 			uniqueIdsResult?(uniqueIds)
 
 		},errorResult:{error in
@@ -82,4 +81,37 @@ class SyncContactsRequestHandler {
 			}
 		}
 	}
+    
+    
+    static let chunkCount = 50
+    class func splitContactsToSync(_ contacts:[NewAddContactRequest]) -> [[NewAddContactRequest]]{
+        return contacts.chunked(into: Chat.chunkCount)
+    }
+    
+    static var contactsPsrts:[[NewAddContactRequest]] = []
+    static var contactSyncIndex = 0
+    class func startMultipartAddContactRequest(index:Int = 0, completedPart: CompletionType<[Contact]>?, completed: CompletionType<Bool>?){
+        if index <= contactsPsrts.count - 1{
+            let chunk = contactsPsrts[index]
+            
+            Chat.sharedInstance.addContacts(chunk) { response,uniqueIds,error  in
+                
+                if let error = error {
+                    completedPart?(response, nil, error)
+                }else {
+                    PhoneContact.updateOrInsertPhoneBooks(contacts:chunk)
+                    PSM.shared.save()
+                    completedPart?(response,nil,nil)
+                }
+                contactSyncIndex += 1
+                startMultipartAddContactRequest(index: contactSyncIndex,completedPart: completedPart, completed: completed)
+            }
+        }else {
+            //completed
+            completed?(true, nil, nil)
+            contactsPsrts = []
+            contactSyncIndex = 0            
+        }
+    }
+    
 }
