@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import FanapPodAsyncSDK
+
 class ChangeThreadTypeResposneHandler: ResponseHandler {
     
-    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
         
 		let chat = Chat.sharedInstance
         chat.delegate?.threadEvents(model: .init(type: .THREAD_REMOVED_FROM, chatMessage: chatMessage))
@@ -19,6 +21,6 @@ class ChangeThreadTypeResposneHandler: ResponseHandler {
             let thread = try? JSONDecoder().decode(Conversation.self, from: data)
             callback(.init(uniqueId:chatMessage.uniqueId , result: thread))
         }
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .CHANGE_THREAD_TYPE)
     }
 }

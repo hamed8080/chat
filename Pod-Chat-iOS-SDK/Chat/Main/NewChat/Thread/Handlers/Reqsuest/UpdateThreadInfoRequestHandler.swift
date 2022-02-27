@@ -71,5 +71,4 @@ public class UpdateThreadInfoRequestHandler  {
             Chat.cacheDB.saveUploadImageToWaitQueue(image: messageObjectToSendToQueue)
         }
     }
-    
 }

@@ -22,6 +22,10 @@ public enum MessageType : Int , Codable {
     case POD_SPACE_VOICE   = 10
     case POD_SPACE_FILE    = 11
     case LINK              = 12
+    case END_CALL          = 13
+    case START_CALL        = 14
+    case STICKER           = 15
+    case LOCATION          = 16
 	
 	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func returnIntValue() -> Int {
@@ -38,6 +42,10 @@ public enum MessageType : Int , Codable {
         case .POD_SPACE_VOICE:  return 10
         case .POD_SPACE_FILE:   return 11
         case .LINK:             return 12
+        case .END_CALL:         return 13
+        case .START_CALL:       return 14
+        case .STICKER:          return 15
+        case .LOCATION:         return 16
         }
     }
     
@@ -56,6 +64,10 @@ public enum MessageType : Int , Codable {
         case 10:    return MessageType.POD_SPACE_VOICE
         case 11:    return MessageType.POD_SPACE_FILE
         case 12:    return MessageType.LINK
+        case 13:    return MessageType.END_CALL
+        case 14:    return MessageType.START_CALL
+        case 15:    return MessageType.STICKER
+        case 16:    return MessageType.LOCATION
         default:    return MessageType.TEXT
         }
     }

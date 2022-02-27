@@ -6,10 +6,12 @@
 //
 
 import Foundation
+import FanapPodAsyncSDK
+
 class LastSeenResponseHandler : ResponseHandler{
 
 
-    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
 		
 		let chat = Chat.sharedInstance
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
@@ -22,6 +24,6 @@ class LastSeenResponseHandler : ResponseHandler{
            let threadId = chatMessage.subjectId {
             Chat.cacheDB.updateUnreadCountOnCMConversation(withThreadId: threadId, unreadCount: count, addCount: nil)
         }
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .LAST_SEEN_UPDATED)
     }
 }

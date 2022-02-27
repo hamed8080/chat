@@ -15,7 +15,6 @@ class LogoutRequestHandler{
                                 messageType: .LOGOUT)
         CacheFactory.write(cacheType: .DELETE_ALL_CACHE_DATA)
         CacheFactory.save()
-        chat.stopAllChatTimers()
-        chat.asyncClient?.disposeAsyncObject()
+        chat.dispose()
     }
 }

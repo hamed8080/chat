@@ -6,10 +6,11 @@
 //
 
 import Foundation
+import FanapPodAsyncSDK
 
 class ClearHistoryResponseHandler: ResponseHandler {
     
-    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
 		let chat = Chat.sharedInstance
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
         guard let data = chatMessage.content?.data(using: .utf8) else {return}
@@ -18,7 +19,7 @@ class ClearHistoryResponseHandler: ResponseHandler {
         if let threadId = chatMessage.subjectId{
             CacheFactory.write(cacheType: .CLEAR_ALL_HISTORY(threadId))//no need to call save context becaudse use excute
         }
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .CLEAR_HISTORY)
     }
 }
 

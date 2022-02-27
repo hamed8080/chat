@@ -25,4 +25,31 @@ class UserInfoRequestHandler {
             cacheResponse?(response.cacheResponse as? User , response.uniqueId, nil)
         }
 	}
+    
+    
+    class func getUserForChatReady(){
+        var count    = 0
+        let maxRetry = 5
+        if Chat.sharedInstance.userInfo == nil{
+            Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { timer in
+                UserInfoRequestHandler.handle(.init(), Chat.sharedInstance){ user, uniqueId, error in
+                    if let user = user {
+                        Chat.sharedInstance.delegate?.chatState(state: .CHAT_READY, currentUser: user, error: nil)
+                        Chat.sharedInstance.setUser(user: user)
+                        timer.invalidate()
+                    }else if count < maxRetry{
+                        count += 1
+                    }else{
+                        //reach to max retry
+                        timer.invalidate()
+                        Chat.sharedInstance.delegate?.chatError(error: .init(code: .ERROR_RAEDY_CHAT,message: error?.message))
+                    }
+                }
+            }
+        }else {
+            // it mean chat was connected before and reconnected again
+            Chat.sharedInstance.delegate?.chatState(state: .CHAT_READY, currentUser: Chat.sharedInstance.userInfo, error: nil)
+            Chat.sharedInstance.asyncManager.sendPingTimer()
+        }
+    }
 }

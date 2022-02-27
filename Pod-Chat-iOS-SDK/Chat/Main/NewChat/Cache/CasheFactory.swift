@@ -33,6 +33,7 @@ public class CacheFactory {
         case GET_ASSISTANTS(_ count:Int, _ offset:Int)
         case GET_BLOCKED_ASSISTANTS(_ count:Int, _ offset:Int)
         case GET_MUTUAL_GROUPS(_ req:MutualGroupsRequest)
+        case TAGS
     }
     
     public enum WriteCacheType {
@@ -74,10 +75,15 @@ public class CacheFactory {
         case DELETE_EDIT_TEXT_MESSAGE(_ uniqueId:String)
         case DELETE_FORWARD_MESSAGE(_ uniqueId:String)
         case DELETE_WAIT_FILE_MESSAGE(_ uniqueId:String)
-        case ADD_THREAD_UNREAD_COUNT(_ threadId:Int)
+        case SET_THREAD_UNREAD_COUNT(_ threadId:Int, _ unreadCount:Int )
         case INSERT_OR_UPDATE_ASSISTANTS(_ assistants:[Assistant])
         case DELETE_ASSISTANTS(_ assistant:[Assistant])
         case MUTUAL_GROUPS(_ threads:[Conversation] , _ req:MutualGroupsRequest)
+        case MUTE_UNMUTE_THREAD(_ threadId:Int)
+        case TAGS(_ tags:[Tag])
+        case TAG_PARTICIPANTS(_ tagParticipants:[TagParticipant], _ tagId:Int)
+        case DELETE_TAG(_ tag:Tag)
+        case DELETE_TAG_PARTICIPANTS(_ tagParticipants: [TagParticipant])
     }
     
     public class func get(useCache: Bool = false , cacheType: ReadCacheType , completion: ((ChatResponse)->())? = nil){
@@ -184,6 +190,10 @@ public class CacheFactory {
             case .GET_MUTUAL_GROUPS(_ :let req):
                 let conversations = CMMutualGroup.getMutualGroups(req)
                 completion?(.init(cacheResponse:conversations))
+                break
+            case .TAGS:
+                let tags = CMTag.crud.getAll()
+                completion?(.init(cacheResponse:tags.map{$0.getCodable()}))
                 break
             }
         }
@@ -317,6 +327,8 @@ public class CacheFactory {
                 CMAssistant.crud.deleteAll()
                 CacheFileManager.sharedInstance.deleteAllFiles()
                 CacheFileManager.sharedInstance.deleteAllImages()
+                CMTag.crud.deleteAll()
+                CMTagParticipant.crud.deleteAll()
                 break
             case .SYNCED_CONTACTS:
                 CMUser.crud.getAll().forEach { user in
@@ -335,9 +347,9 @@ public class CacheFactory {
             case .DELETE_WAIT_FILE_MESSAGE(_ : let uniqueId):
                 QueueOfFileMessages.crud.deleteWith(predicate: NSPredicate(format: "uniqueId == %@", uniqueId))
                 break
-            case .ADD_THREAD_UNREAD_COUNT(_ : let threadId):
+            case .SET_THREAD_UNREAD_COUNT(_ : let threadId, _ : let unreadCount):
                 if let conversation = CMConversation.crud.find(keyWithFromat: "id == %i", value: threadId){
-                    conversation.unreadCount = NSNumber(value: (conversation.unreadCount as? Int ?? 0) + 1)
+                    conversation.unreadCount = NSNumber(value: (unreadCount))
                 }
                 break
             case .INSERT_OR_UPDATE_ASSISTANTS(_ : let assistants):
@@ -350,6 +362,27 @@ public class CacheFactory {
                 break
             case .MUTUAL_GROUPS(_ : let conversations , _ : let req ):
                 CMMutualGroup.insertOrUpdate(conversations: conversations, req: req)
+                break
+            case .MUTE_UNMUTE_THREAD(_ : let threadId):
+                if let conversation = CMConversation.crud.find(keyWithFromat: "id == %i", value: threadId){
+                    let isMute = !( (conversation.mute as? Bool) ?? false)
+                    conversation.mute = NSNumber(booleanLiteral: isMute)
+                }
+            case .TAGS(_ : let tags):
+                CMTag.insertOrUpdate(tags: tags)
+                break
+            case .TAG_PARTICIPANTS(_ : let tagParticipants , _ : let tagId ):
+                tagParticipants.forEach { tagParticipant in
+                    CMTagParticipant.insertOrUpdate(tagParticipant: tagParticipant, tagId:tagId){ tagParticipant in
+                        CMTag.addParticipant(tagId: tagId, tagParticipant: tagParticipant)
+                    }
+                }
+            case .DELETE_TAG(_ : let tag):
+                CMTag.crud.deleteWith(predicate: NSPredicate(format: "id == %i", tag.id))
+                CMTagParticipant.crud.deleteWith(predicate: NSPredicate(format: "tagId == %i", tag.id))
+                break
+            case .DELETE_TAG_PARTICIPANTS(_ : let tagParticipants):
+                CMTagParticipant.crud.deleteWith(predicate: NSPredicate(format: "id IN %@", tagParticipants.map{$0.id}))
                 break
             }
         }

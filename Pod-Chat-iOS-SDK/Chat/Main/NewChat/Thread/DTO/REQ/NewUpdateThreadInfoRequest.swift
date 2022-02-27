@@ -40,9 +40,9 @@ public class NewUpdateThreadInfoRequest: BaseRequest {
 	
 	public override func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encodeIfPresent(description?.getCustomTextToSendWithRemoveSpaceAndEnter(), forKey: .description)
-		try container.encodeIfPresent(title?.getCustomTextToSendWithRemoveSpaceAndEnter(), forKey: .name)
-		try container.encodeIfPresent(metadata?.getCustomTextToSendWithRemoveSpaceAndEnter() , forKey: .metadata)
+		try container.encodeIfPresent(description, forKey: .description)
+		try container.encodeIfPresent(title, forKey: .name)
+		try container.encodeIfPresent(metadata , forKey: .metadata)
 	}
 	
 }

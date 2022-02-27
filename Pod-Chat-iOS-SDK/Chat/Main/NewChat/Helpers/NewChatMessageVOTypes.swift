@@ -80,6 +80,16 @@ public enum NewChatMessageVOTypes :Int , Codable {
     case BLOCKED_ASSISTNTS                 = 118
     case GET_USER_BOTS                     = 120
     case MUTUAL_GROUPS                     = 130
+    
+    case CREATE_TAG                        = 140
+    case EDIT_TAG                          = 141
+    case DELETE_TAG                        = 142
+    case ADD_TAG_PARTICIPANTS              = 143
+    case REMOVE_TAG_PARTICIPANTS           = 144
+    case TAG_LIST                          = 145
+    case GET_TAG_PARTICIPANTS              = -4
+    
+    
     case ERROR                             = 999
     
     case UNKNOWN                           = -1

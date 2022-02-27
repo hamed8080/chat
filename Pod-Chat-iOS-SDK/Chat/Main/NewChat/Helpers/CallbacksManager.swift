@@ -10,6 +10,7 @@ import Foundation
 class CallbacksManager{
 	
     private var callbacks            : [String : (ChatResponse)->()]                  = [:]
+    private var callbacksRequestType : [String : NewChatMessageVOTypes]               = [:]
     private var sentCallbacks        : [String : OnSentType]                          = [:]
     private var deliveredCallbacks   : [String : OnDeliveryType]                      = [:]
     private var seenCallbacks        : [String : OnSeenType]                          = [:]
@@ -17,6 +18,7 @@ class CallbacksManager{
     private var downloadTasks        : [String : URLSessionTask]                      = [:]
 	
     func addCallback(uniqueId    : String ,
+                     requesType  : NewChatMessageVOTypes,
                      callback    : ((ChatResponse)->())? = nil,
                      onSent      : OnSentType? = nil ,
                      onDelivered : OnDeliveryType? = nil ,
@@ -34,10 +36,13 @@ class CallbacksManager{
         if let onSeen = onSeen{
             seenCallbacks[uniqueId] = onSeen
         }
+        callbacksRequestType[uniqueId] = requesType
     }
     
-	func removeCallback(uniqueId:String){
-		callbacks.removeValue(forKey: uniqueId)
+    func removeCallback(uniqueId:String, requestType:NewChatMessageVOTypes){
+        if callbacksRequestType[uniqueId] == requestType || requestType == .ERROR {
+            callbacks.removeValue(forKey: uniqueId)
+        }
 	}
     
     func removeSentCallback(uniqueId:String){

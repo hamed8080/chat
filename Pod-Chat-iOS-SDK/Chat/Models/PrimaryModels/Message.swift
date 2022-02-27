@@ -9,7 +9,15 @@
 import Foundation
 import SwiftyJSON
 
-open class Message : Codable {
+open class Message : Codable , Hashable {
+    
+    public static func == (lhs: Message, rhs: Message) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
     
     public var deletable:   Bool?
     public var delivered:   Bool?
@@ -82,28 +90,28 @@ open class Message : Codable {
         
     }
     
-    public init(threadId:       Int?,
-                deletable:      Bool?,
-                delivered:      Bool?,
-                editable:       Bool?,
-                edited:         Bool?,
-                id:             Int?,
-                mentioned:      Bool?,
-                message:        String?,
-                messageType:    Int?,
-                metadata:       String?,
-                ownerId:        Int?,
-                pinned:         Bool?,
-                previousId:     Int?,
-                seen:           Bool?,
-                systemMetadata: String?,
-                time:           UInt?,
-                timeNanos:      UInt?,
-                uniqueId:       String?,
-                conversation:   Conversation?,
-                forwardInfo:    ForwardInfo?,
-                participant:    Participant?,
-                replyInfo:      ReplyInfo?) {
+    public init(threadId:       Int? = nil,
+                deletable:      Bool? = nil,
+                delivered:      Bool? = nil,
+                editable:       Bool? = nil,
+                edited:         Bool? = nil,
+                id:             Int? = nil,
+                mentioned:      Bool? = nil,
+                message:        String? = nil,
+                messageType:    Int? = nil,
+                metadata:       String? = nil,
+                ownerId:        Int? = nil,
+                pinned:         Bool? = nil,
+                previousId:     Int? = nil,
+                seen:           Bool? = nil,
+                systemMetadata: String? = nil,
+                time:           UInt? = nil,
+                timeNanos:      UInt? = nil,
+                uniqueId:       String? = nil,
+                conversation:   Conversation? = nil,
+                forwardInfo:    ForwardInfo? = nil,
+                participant:    Participant? = nil,
+                replyInfo:      ReplyInfo? = nil) {
         
         self.threadId       = threadId
         self.deletable      = deletable
@@ -268,4 +276,11 @@ open class Message : Codable {
 		try container.encodeIfPresent(replyInfo, forKey: .replyInfo)
 		
 	}
+    
+    //FIXME: need fix with object decoding in this calss with FileMetaData for proerty metadata
+    public var metaData:FileMetaData?{
+        guard let metadata = metadata?.data(using: .utf8),
+              let metaData = try? JSONDecoder().decode(FileMetaData.self, from: metadata) else{return nil}
+        return metaData
+    }
 }

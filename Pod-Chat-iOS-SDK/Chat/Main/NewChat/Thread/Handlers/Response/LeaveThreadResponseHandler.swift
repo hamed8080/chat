@@ -6,10 +6,12 @@
 //
 
 import Foundation
+import FanapPodAsyncSDK
+
 class LeaveThreadResponseHandler: ResponseHandler {
 
 
-	static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+	static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
 		
 		let chat = Chat.sharedInstance
         chat.delegate?.threadEvents(model: .init(type: .THREAD_LEAVE_PARTICIPANT, chatMessage: chatMessage))
@@ -20,6 +22,6 @@ class LeaveThreadResponseHandler: ResponseHandler {
 		callback(.init(uniqueId: chatMessage.uniqueId ,result: conversation))
         CacheFactory.write(cacheType: .LEAVE_THREAD(conversation))
         PSM.shared.save()
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .LEAVE_THREAD)
 	}
 }

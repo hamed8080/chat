@@ -10,7 +10,7 @@ public class NewCreateThreadRequest: BaseRequest {
 	
 	public let description: String?
 	public let image:       String?
-	public let invitees:    [Invitee]
+	public let invitees:    [Invitee]?
 	public let metadata:    String?
 	public let title:       String
 	public let type:        ThreadTypes?
@@ -18,7 +18,7 @@ public class NewCreateThreadRequest: BaseRequest {
 	
 	public init(description:    String? = nil,
 				image:          String? = nil,
-				invitees:       [Invitee],
+				invitees:       [Invitee]? = nil,
 				metadata:       String? = nil,
 				title:          String,
 				type:           ThreadTypes? = nil,
@@ -49,10 +49,10 @@ public class NewCreateThreadRequest: BaseRequest {
 	
 	public override func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encodeIfPresent(title.getCustomTextToSendWithRemoveSpaceAndEnter(), forKey: .title)
+		try container.encodeIfPresent(title, forKey: .title)
 		try container.encodeIfPresent(image, forKey: .image)
-		try container.encodeIfPresent(description?.getCustomTextToSendWithRemoveSpaceAndEnter(), forKey: .description)
-		try container.encodeIfPresent(metadata?.getCustomTextToSendWithRemoveSpaceAndEnter(), forKey: .metadata)
+		try container.encodeIfPresent(description, forKey: .description)
+		try container.encodeIfPresent(metadata, forKey: .metadata)
 		try container.encodeIfPresent(uniqueName, forKey: .uniqueName)
 		try container.encodeIfPresent(type, forKey: .type)
 		try container.encodeIfPresent(invitees, forKey: .invitees)

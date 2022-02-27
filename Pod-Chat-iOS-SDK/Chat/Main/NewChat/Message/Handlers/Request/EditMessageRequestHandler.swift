@@ -16,7 +16,7 @@ class EditMessageRequestHandler {
         guard let token = chat.config?.token else {return}
         let sendChatMessageVO = NewSendChatMessageVO(type:  ChatMessageVOTypes.EDIT_MESSAGE.intValue(),
                                                      token: token,
-                                                     content:  req.textMessage.getCustomTextToSendWithRemoveSpaceAndEnter(),
+                                                     content:  req.textMessage,
                                                      messageType: req.messageType.rawValue,
                                                      metadata: req.metadata,
                                                      repliedTo: req.repliedTo,

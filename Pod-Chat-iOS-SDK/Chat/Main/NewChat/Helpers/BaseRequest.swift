@@ -20,6 +20,6 @@ public  class BaseRequest: Encodable{
 	}
 	
 	public func encode(to encoder: Encoder) throws {
-		//this empty method must prevent encode values
+		//this empty method must prevent encode values it's send through Chat.sendToAsync and fill typeCode and uniqueId automatically
 	}
 }

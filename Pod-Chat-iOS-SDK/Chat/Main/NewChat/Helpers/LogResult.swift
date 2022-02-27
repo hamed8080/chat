@@ -7,6 +7,14 @@
 
 import Foundation
 public struct LogResult{
-   public var json:String
-   public var receive:Bool
+    
+    
+    public var json     :String
+    public var receive  :Bool
+    
+    public init(json: String, receive: Bool) {
+        self.json       = json
+        self.receive    = receive
+    }
+    
 }

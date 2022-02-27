@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import FanapPodAsyncSDK
+
 class BlockedResponseHandler {
 	
-	static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+	static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
 
 		let chat = Chat.sharedInstance
 		guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
@@ -16,6 +18,6 @@ class BlockedResponseHandler {
 		guard let blockedResult = try? JSONDecoder().decode(BlockedUser.self, from: data) else{return}
 		callback(.init(uniqueId: chatMessage.uniqueId ,result: blockedResult))
         chat.delegate?.userEvents(model: .init(type: .UNBLOCK, blockModel: blockedResult, threadId: chatMessage.subjectId))
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .BLOCK)
 	}
 }

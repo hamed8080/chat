@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import FanapPodAsyncSDK
+
 class RemoveParticipantResponseHandler: ResponseHandler {
 	
-	static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+	static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
 
 		let chat = Chat.sharedInstance
         chat.delegate?.threadEvents(model: .init(type: .THREAD_REMOVE_PARTICIPANTS, chatMessage: chatMessage))
@@ -19,6 +21,6 @@ class RemoveParticipantResponseHandler: ResponseHandler {
         callback(.init(uniqueId:chatMessage.uniqueId,result: participants))
         CacheFactory.write(cacheType: .REMOVE_PARTICIPANTS(participants: participants , threadId: chatMessage.subjectId))
         PSM.shared.save()
-		chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)        
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .REMOVE_PARTICIPANT)        
 	}
 }

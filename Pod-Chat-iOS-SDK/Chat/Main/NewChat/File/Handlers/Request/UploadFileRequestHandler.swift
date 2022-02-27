@@ -43,7 +43,7 @@ class UploadFileRequestHandler{
                     return
                 }
                 if FanapPodChatSDK.Chat.sharedInstance.config?.isDebuggingLogEnabled == true {
-                    print("file uploaded successfully:\(String(data:data , encoding:.utf8) ?? "")")
+                    Chat.sharedInstance.logger?.log(title: "file uploaded successfully", message: "\(String(data:data , encoding:.utf8) ?? "")")
                 }
                 let link = "\(fileServer)\(SERVICES_PATH.FILES.rawValue)/\(uploadResponse.result?.hash ?? "")"
                 let fileDetail   = FileDetail(fileExtension: req.fileExtension,

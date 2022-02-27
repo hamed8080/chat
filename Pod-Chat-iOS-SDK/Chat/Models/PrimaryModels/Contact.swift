@@ -9,8 +9,16 @@
 import Foundation
 import SwiftyJSON
 
-open class Contact :Codable {
+open class Contact :Codable , Hashable{
 	
+    public static func == (lhs: Contact, rhs: Contact) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    
     /*
      *  + ContactVO          Contact:
      *      - blocked           Bool?

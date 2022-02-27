@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import FanapPodAsyncSDK
+
 class UserInfoResponseHandler: ResponseHandler{
 	
-	static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+	static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
 		
 		let chat = Chat.sharedInstance
         chat.delegate?.systemEvents(model: .init(type: .SERVER_TIME, time: chatMessage.time))
@@ -18,6 +20,6 @@ class UserInfoResponseHandler: ResponseHandler{
 		callback(.init(uniqueId: chatMessage.uniqueId ,result: user))
         CacheFactory.write(cacheType: .USER_INFO(user))
         PSM.shared.save()
-		chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .USER_INFO)
 	}
 }

@@ -10,7 +10,7 @@ import FanapPodAsyncSDK
 
 public class DeactiveAssistantsResponseHandler : ResponseHandler {
     
-    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
 		let chat = Chat.sharedInstance
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
         guard let data = chatMessage.content?.data(using: .utf8) else {return}
@@ -18,7 +18,7 @@ public class DeactiveAssistantsResponseHandler : ResponseHandler {
         callback(.init(uniqueId:chatMessage.uniqueId , result: assistants))
         CacheFactory.write(cacheType: .DELETE_ASSISTANTS(assistants))
         CacheFactory.save()
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .DEACTICVE_ASSISTANT)
     }
     
 }

@@ -26,7 +26,7 @@ class SendFileMessageRequest {
         chat.uploadFile(req: req , uploadUniqueIdResult: uploadUniqueIdResult , uploadProgress: uploadProgress) { uploadFileResponse , fileMetaData , error in
             //completed upload file
             if let error = error{
-                chat.delegate?.chatError(errorCode: error.errorCode ?? 0, errorMessage: error.message ?? "" , errorResult: nil)
+                chat.delegate?.chatError(error: error)
             }else{
                 guard let stringMetaData = fileMetaData.convertCodableToString() else{return}
                 textMessage.metadata = stringMetaData

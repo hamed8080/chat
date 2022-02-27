@@ -6,11 +6,13 @@
 //
 
 import Foundation
+import FanapPodAsyncSDK
+
 class BotMessageResponseHandler: ResponseHandler {
     
-    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
 		let chat = Chat.sharedInstance
         chat.delegate?.botEvents(model: .init(type: .BOT_MESSAGE, message:chatMessage.content))
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .BOT_MESSAGE)
     }
 }

@@ -65,7 +65,7 @@ public class ContactsRequest : BaseRequest {
 		try? container.encodeIfPresent(email, forKey: .email)
 		try? container.encodeIfPresent(order, forKey: .order)
 		try? container.encodeIfPresent(summery, forKey: .summery)
-		try? container.encodeIfPresent(query?.getCustomTextToSendWithRemoveSpaceAndEnter(), forKey: .query)
+		try? container.encodeIfPresent(query, forKey: .query)
 	}
 	
 }

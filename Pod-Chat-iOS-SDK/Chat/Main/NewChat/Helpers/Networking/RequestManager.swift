@@ -16,7 +16,7 @@ class RequestManager{
                               completion:  @escaping CompletionTypeWithoutUniqueId<D>
     ){
         
-        guard let url = URL(string: url) else { print("could not open url, it was nil"); return }
+        guard let url = URL(string: url) else { Chat.sharedInstance.logger?.log(title: "could not open url, it was nil"); return }
         
         let session                    = URLSession(configuration : .default)
         var urlRequest                 = URLRequest(url : url)
@@ -55,7 +55,7 @@ class RequestManager{
             output += " Expected DecodeType:\(String(describing: D.self))\n"
             output += "End  Of  Request============================================================================================\n"
             output += "\n"
-            print(output)
+            Chat.sharedInstance.logger?.log(title: "CHAT_SDK:", message: output)
         }
     }
     
@@ -67,7 +67,7 @@ class RequestManager{
             output += " With Data Result in Body:\(String(data:data ?? Data() , encoding:.utf8) ?? "nil")\n"
             output += "End  Of  Response============================================================================================\n"
             output += "\n"
-            print(output)
+            Chat.sharedInstance.logger?.log(title: "CHAT_SDK:", message: output)
         }
     }
 }

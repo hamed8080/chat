@@ -12,7 +12,7 @@ import SwiftyJSON
 
 public class UpdateThreadInfoResponseHandler : ResponseHandler {
     
-    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
 		let chat = Chat.sharedInstance
         chat.delegate?.threadEvents(model: .init(type: .THREAD_INFO_UPDATED, chatMessage: chatMessage))
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
@@ -21,7 +21,7 @@ public class UpdateThreadInfoResponseHandler : ResponseHandler {
         callback(.init(uniqueId:chatMessage.uniqueId , result: conversation))
         CacheFactory.write(cacheType: .THREADS([conversation]))
         PSM.shared.save()
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .THREAD_INFO_UPDATED)
     }
     
 }

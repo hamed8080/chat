@@ -6,10 +6,12 @@
 //
 
 import Foundation
+import FanapPodAsyncSDK
+
 class CurrentUserRolesResponseHandler: ResponseHandler {
 
 
-	static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+	static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
 		
 		let chat = Chat.sharedInstance
 		guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
@@ -18,6 +20,6 @@ class CurrentUserRolesResponseHandler: ResponseHandler {
 		callback(.init(uniqueId: chatMessage.uniqueId ,result: userRoles))
         CacheFactory.write(cacheType: .CURRENT_USER_ROLES( userRoles , chatMessage.subjectId))
         PSM.shared.save()
-		chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .GET_CURRENT_USER_ROLES)
 	}
 }

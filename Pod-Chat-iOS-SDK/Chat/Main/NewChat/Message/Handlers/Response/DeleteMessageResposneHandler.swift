@@ -6,10 +6,11 @@
 //
 
 import Foundation
+import FanapPodAsyncSDK
 
 class DeleteMessageResposneHandler: ResponseHandler {
     
-    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+    static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
 		
 		let chat = Chat.sharedInstance
         chat.delegate?.messageEvents(model: .init(type: .MESSAGE_DELETE, chatMessage: chatMessage))
@@ -20,7 +21,7 @@ class DeleteMessageResposneHandler: ResponseHandler {
         guard let deleteMessage = try? JSONDecoder().decode(DeleteMessage.self, from: data) else {return}
         callback(.init(uniqueId: chatMessage.uniqueId , result: deleteMessage))
         CacheFactory.write(cacheType: .DELETE_MESSAGE(threadId, messageId: deleteMessage.messageId)) // no need save context use exceute
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .DELETE_MESSAGE)
     }
 }
 

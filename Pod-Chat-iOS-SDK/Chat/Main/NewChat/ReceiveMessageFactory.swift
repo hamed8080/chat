@@ -10,11 +10,14 @@ import FanapPodAsyncSDK
 
 class ReceiveMessageFactory{
 	
-	class func invokeCallback(data:Data) {
-		guard let asyncMessage = try? JSONDecoder().decode(AsyncMessage.self, from: data) else {return}
-		guard let chatMessageData  = asyncMessage.content.data(using: .utf8) else{return}
+    class func invokeCallback(asyncMessage: NewAsyncMessage) {
+		guard let chatMessageData  = asyncMessage.content?.data(using: .utf8) else{return}
 		guard let chatMessage =  try? JSONDecoder().decode(NewChatMessage.self, from: chatMessageData) else{return}
-		asyncMessage.printAsyncJson(receive:true)
+        if let typeCode = chatMessage.typeCode, typeCode != Chat.sharedInstance.config?.typeCode {
+            Chat.sharedInstance.logger?.log(title: "mismatch typeCode", message: "expected typeCode is:\(Chat.sharedInstance.config?.typeCode ?? "") but receive: \(chatMessage.typeCode ?? "")")
+            return
+        }
+        Chat.sharedInstance.logger?.log(title: "on Receive Message", jsonString: asyncMessage.string)
 		
 		switch chatMessage.type {
 			
@@ -225,13 +228,35 @@ class ReceiveMessageFactory{
             case .CHANGE_THREAD_TYPE:
                 ChangeThreadTypeResposneHandler.handle(chatMessage, asyncMessage)
                 break
+            case .TAG_LIST:
+                TagListResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .CREATE_TAG:
+                CreateTagResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .EDIT_TAG:
+                EditTagResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .DELETE_TAG:
+                DeleteTagResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .ADD_TAG_PARTICIPANTS:
+                AddTagParticipantsResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .REMOVE_TAG_PARTICIPANTS:
+                RemoveTagParticipantsResponseHandler.handle(chatMessage, asyncMessage)
+                break
+            case .GET_TAG_PARTICIPANTS:
+                //TODO: Need to be add by server
+                break
 			case .ERROR:
 				ErrorResponseHandler.handle(chatMessage , asyncMessage)
 				break
             case .UNKNOWN:
-                print("an unknown message type received from the server not implemented in SDK!")
+                Chat.sharedInstance.logger?.log(title: "CHAT_SDK:", message: "an unknown message type received from the server not implemented in SDK!")
+                break
 			@unknown default :
-				print("an message received with unknowned type value. investigate to fix or leave that.")
+                Chat.sharedInstance.logger?.log(title: "CHAT_SDK:", message: "an message received with unknowned type value. investigate to fix or leave that.")
 		}
 		
 	}

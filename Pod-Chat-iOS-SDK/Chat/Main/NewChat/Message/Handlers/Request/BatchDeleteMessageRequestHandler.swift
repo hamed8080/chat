@@ -14,7 +14,7 @@ class BatchDeleteMessageRequestHandler {
 					   _ uniqueIdResult: UniqueIdResultType = nil
 	){
 		req.uniqueIds.forEach { uniqueId in
-			chat.callbacksManager.addCallback(uniqueId: uniqueId, callback: { response in
+			chat.callbacksManager.addCallback(uniqueId: uniqueId, requesType: .DELETE_MESSAGE,  callback: { response in
                 completion(response.result as? DeleteMessage , response.uniqueId ,response.error)
             })
 		}

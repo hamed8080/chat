@@ -6,16 +6,18 @@
 //
 
 import Foundation
+import FanapPodAsyncSDK
+
 class JoinThreadResponseHandler : ResponseHandler {
 	
-	static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: AsyncMessage) {
+	static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
 		
 		let chat = Chat.sharedInstance
 		guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
 		guard let data = chatMessage.content?.data(using: .utf8) else {return}
 		guard let conversation = try? JSONDecoder().decode(Conversation.self, from: data) else{return}
 		callback(.init(uniqueId: chatMessage.uniqueId ,result: conversation))
-		chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .JOIN_THREAD)
 	}
 	
 }
