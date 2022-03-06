@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import MobileCoreServices
+
 public class NewUploadFileRequest: BaseRequest {
     
     public var data                   : Data
@@ -34,11 +36,20 @@ public class NewUploadFileRequest: BaseRequest {
         let fileName        = fileName ?? "\(NSUUID().uuidString)"
         self.fileName       = fileName
         self.fileSize       = Int64(data.count)
-        self.mimeType       = mimeType ?? ""
+        self.mimeType       = mimeType ?? NewUploadFileRequest.guessMimeType(fileExtension, fileName)
         self.userGroupHash  = userGroupHash
         self.originalName   = originalName ?? fileName + (fileExtension ?? "")
         self.isPublic       = userGroupHash != nil ? false : isPublic//if send file iniside the thread we need to set is isPublic to false
         super.init(uniqueId: uniqueId, typeCode: typeCode)
+    }
+    
+    class func guessMimeType(_ fileExtension:String?, _ fileName:String?)->String{
+        let ext = fileExtension ?? URL(fileURLWithPath: fileName ?? "").pathExtension
+        if let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, ext as NSString, nil)?.takeRetainedValue(),
+           let mimetype = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassMIMEType)?.takeRetainedValue() {
+            return mimetype as String
+        }
+        return "application/octet-stream"
     }
     
     private enum CodingKeys : String , CodingKey{
@@ -48,7 +59,7 @@ public class NewUploadFileRequest: BaseRequest {
     
     public override func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent("\(isPublic != nil ? "true" : "false")", forKey: .isPublic)//dont send bool it crash when send and encode to dictionary
+        try container.encodeIfPresent("\(isPublic != nil && isPublic  == true ? "true" : "false")", forKey: .isPublic)//dont send bool it crash when send and encode to dictionary
         try container.encodeIfPresent(fileName, forKey: .filename)
     }
 }

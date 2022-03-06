@@ -26,16 +26,28 @@ public class FileDetail:Codable{
     public let actualHeight    : Int?
     public let actualWidth     : Int?
     public let `extension`     : String?
-    public let link            : String
-    public let mimeType        : String
-    public let name            : String
-    public let originalName    : String
-    public let size            : Int64
+    public let link            : String?
+    public let mimeType        : String?
+    public let name            : String?
+    public let originalName    : String?
+    public let size            : Int64?
     public let fileHash        : String?
     public let hashCode        : String?
     public let parentHash      : String?
     
-    public init(fileExtension: String?, link: String, mimeType: String, name: String, originalName: String, size: Int64 ,fileHash:String? = nil,hashCode:String? = nil,parentHash:String? = nil , actualHeight: Int? = nil, actualWidth: Int? = nil) {
+    public init(
+                fileExtension       : String?  = nil,
+                link                : String?  = nil,
+                mimeType            : String?  = nil,
+                name                : String?  = nil,
+                originalName        : String?  = nil,
+                size                : Int64?   = nil,
+                fileHash            : String?  = nil,
+                hashCode            : String?  = nil,
+                parentHash          : String?  = nil,
+                actualHeight        : Int?     = nil,
+                actualWidth         : Int?     = nil
+    ) {
         self.actualHeight = actualHeight
         self.actualWidth  = actualWidth
         self.extension    = fileExtension

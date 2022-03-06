@@ -24,8 +24,9 @@ class ProgressImplementation : NSObject ,URLSessionDataDelegate , URLSessionTask
     }
 
     //MARK:- Upload progress Delegates
-   func urlSession(_ session: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
+    func urlSession(_ session: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
         let percent = ( Float(totalBytesSent) / Float(totalBytesExpectedToSend) ) * 100
+        Chat.sharedInstance.logger?.log(title: "Upload progress:\(percent)")
         uploadProgress?(UploadFileProgress(percent: Int64(percent), totalSize: totalBytesExpectedToSend, bytesSend: totalBytesSent),nil)
     }
     //MARK:- END Upload progress Delegates
@@ -35,6 +36,7 @@ class ProgressImplementation : NSObject ,URLSessionDataDelegate , URLSessionTask
         self.response = response as? HTTPURLResponse
         downloadFileProgress.totalSize = response.expectedContentLength
         downloadProgress?(downloadFileProgress)
+        Chat.sharedInstance.logger?.log(title: "Download progress:\(downloadFileProgress.percent)")
         completionHandler(.allow)
     }
     

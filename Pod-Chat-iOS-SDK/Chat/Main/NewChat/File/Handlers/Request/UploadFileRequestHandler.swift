@@ -36,7 +36,7 @@ class UploadFileRequestHandler{
             if let data = data , let chatError = try? JSONDecoder().decode(ChatError.self, from: data) , chatError.hasError == true{
                 uploadCompletion?(nil,nil,chatError)
             } else if let data = data , let uploadResponse = try? JSONDecoder().decode(PodspaceFileUploadResponse.self, from: data){
-                print("response is:\(String(data: data, encoding: .utf8) ?? "") ")
+                Chat.sharedInstance.logger?.log(title:"response is:\(String(data: data, encoding: .utf8) ?? "") ")
                 if uploadResponse.error != nil {
                     let error = ChatError(message: "\(uploadResponse.error ?? "") - \(uploadResponse.message ??  "")", errorCode: uploadResponse.errorType?.rawValue , hasError: true)
                     uploadCompletion?(nil,nil,error)
