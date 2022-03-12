@@ -6,17 +6,25 @@
 //
 
 import Foundation
+
+public enum ImageSize:String,Encodable{
+    case SMALL  = "SMALL"
+    case MEDIUM = "MEDIUM"
+    case LARG   = "LARG"
+    case ACTUAL = "ACTUAL"
+}
+
 public class ImageRequest: BaseRequest {
     
     public let hashCode                  :String
-    public let forceToDownloadFromServer :Bool
+    public var forceToDownloadFromServer :Bool
     public let quality                   :Float?
-    public let size                      :Int?
+    public let size                      :ImageSize?
     public let crop                      :Bool?
     public let isThumbnail               :Bool
     public let checkUserGroupAccess      :Bool
     
-    public init(hashCode:String,checkUserGroupAccess:Bool = true,forceToDownloadFromServer:Bool = false , isThumbnail :Bool = false , quality:Float? = nil , size:Int? = nil , crop:Bool? = nil) {
+    public init(hashCode:String,checkUserGroupAccess:Bool = true,forceToDownloadFromServer:Bool = false , isThumbnail :Bool = false , quality:Float? = nil , size:ImageSize? = nil , crop:Bool? = nil) {
         self.hashCode                  = hashCode
         self.forceToDownloadFromServer = forceToDownloadFromServer
         self.size                      = size

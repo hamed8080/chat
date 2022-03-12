@@ -18,7 +18,6 @@ public class UpdateThreadInfoRequestHandler  {
                       _ uploadProgress :@escaping UploadFileProgressType ,
                       _ completion     :@escaping CompletionType<Conversation> ,
                       _ uniqueIdResult :UniqueIdResultType = nil){
-        guard let config = chat.config else {return}
         uniqueIdResult?(req.uniqueId)
         
         if let image = req.threadImage{
@@ -28,16 +27,16 @@ public class UpdateThreadInfoRequestHandler  {
                 if let error = error{
                     completion(nil,nil,error)
                 }else{
-                    updateThreadInfo(config,req,fileMetaData,completion)
+                    updateThreadInfo(req,fileMetaData,completion)
                 }
             }
         }else{
             //update directly without metadata
-            updateThreadInfo(config,req,nil,completion)
+            updateThreadInfo(req,nil,completion)
         }
     }
     
-    class func updateThreadInfo(_ config:ChatConfig,_ req:NewUpdateThreadInfoRequest,_ fileMetaData:FileMetaData? = nil,_ completion:@escaping CompletionType<Conversation>) {
+    class func updateThreadInfo(_ req:NewUpdateThreadInfoRequest,_ fileMetaData:FileMetaData? = nil,_ completion:@escaping CompletionType<Conversation>) {
         if let fileMetaData = fileMetaData {
             req.metadata = fileMetaData.convertCodableToString()
         }

@@ -13,18 +13,17 @@ class EditMessageRequestHandler {
                        _ completion:CompletionType<Message>? = nil,
                        _ uniqueIdResult: UniqueIdResultType  = nil
     ){
-        guard let token = chat.config?.token else {return}
-        let sendChatMessageVO = NewSendChatMessageVO(type:  ChatMessageVOTypes.EDIT_MESSAGE.intValue(),
-                                                     token: token,
-                                                     content:  req.textMessage,
-                                                     messageType: req.messageType.rawValue,
-                                                     metadata: req.metadata,
-                                                     repliedTo: req.repliedTo,
-                                                     subjectId: req.messageId,
-                                                     typeCode:req.typeCode,
-                                                     uniqueId: req.uniqueId)
-        
-        chat.prepareToSendAsync(sendChatMessageVO, uniqueId: req.uniqueId , uniqueIdResult: uniqueIdResult){ response in
+
+        chat.prepareToSendAsync(req                    : req.textMessage,
+                                clientSpecificUniqueId : req.uniqueId,
+                                typeCode               : req.typeCode,
+                                subjectId              : req.messageId,
+                                plainText              : true,
+                                messageType            : .EDIT_MESSAGE,
+                                messageMessageType     : req.messageType,
+                                metadata               : req.metadata,
+                                repliedTo              : req.repliedTo,
+                                uniqueIdResult         : uniqueIdResult){ response in
             completion?(response.result as? Message ,response.uniqueId , response.error)
         }
         CacheFactory.write(cacheType: .EDIT_MESSAGE_QUEUE(req))

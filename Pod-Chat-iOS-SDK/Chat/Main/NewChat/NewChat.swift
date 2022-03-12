@@ -744,31 +744,39 @@ public extension Chat {
 	}
 	
 	// SOCKET Request
-	func prepareToSendAsync(req:Encodable? = nil ,
-									clientSpecificUniqueId:String? = nil ,
-									typeCode:String? = nil ,
+    func prepareToSendAsync(        req                                    : Encodable?              = nil,
+                                    clientSpecificUniqueId                 : String?                 = nil,
+                                    typeCode                               : String?                 = nil,
 									//this sometimes use to send threadId with subjectId Key must fix from server to get threadId
-									subjectId:Int? = nil,
-                                    plainText:Bool = false,
-                                    pushMsgType:Int? = nil,
-									messageType:NewChatMessageVOTypes ,
-									uniqueIdResult:((String)->())? = nil,
-									completion: ((ChatResponse)->())? = nil,
-									onSent: OnSentType? = nil,
-									onDelivered: OnDeliveryType? = nil,
-									onSeen: OnSeenType? = nil
+                                    subjectId                              : Int?                    = nil,
+                                    plainText                              : Bool                    = false,
+                                    pushMsgType                            : Int?                    = nil,
+                                    messageType                            : NewChatMessageVOTypes,
+                                    messageMessageType                     : MessageType?            = nil,
+                                    metadata                               : String?                 = nil,
+                                    systemMetadata                         : String?                 = nil,
+                                    repliedTo                              : Int?                    = nil,                                    
+                                    uniqueIdResult                         : ((String)->())?         = nil,
+                                    completion                             : ((ChatResponse)->())?   = nil,
+                                    onSent                                 : OnSentType?             = nil,
+                                    onDelivered                            : OnDeliveryType?         = nil,
+                                    onSeen                                 : OnSeenType?             = nil
                                     ){
 		guard let config = config else {return}
 		let uniqueId = clientSpecificUniqueId ?? UUID().uuidString
 		uniqueIdResult?(uniqueId)
 		let typeCode = typeCode ?? config.typeCode ?? "default"
 		
-		let chatMessage = NewSendChatMessageVO(type:  messageType.rawValue,
-											token:              config.token,
-											content:            getContent(req , plainText),
-											subjectId: subjectId,
-											typeCode:           typeCode,
-											uniqueId:           uniqueId)
+        let chatMessage = NewSendChatMessageVO(type                            : messageType.rawValue,
+                                            token                              : config.token,
+                                            content                            : getContent(req , plainText),
+                                            messageType                        : messageMessageType?.rawValue,
+                                            metadata                           : metadata,
+                                            repliedTo                          : repliedTo,
+                                            systemMetadata                     : systemMetadata,
+                                            subjectId                          : subjectId,
+                                            typeCode                           : typeCode,
+                                            uniqueId                           : uniqueId)
 		
 		guard let chatMessageContent = chatMessage.convertCodableToString() else{return}
 		let asyncMessage = NewSendAsyncMessageVO(content:     chatMessageContent,
@@ -782,28 +790,6 @@ public extension Chat {
 		callbacksManager.addCallback(uniqueId: uniqueId, requesType: messageType, callback: completion ,onSent: onSent , onDelivered: onDelivered , onSeen: onSeen)
 		sendToAsync(asyncMessageVO: asyncMessage)
 	}
-    
-    func prepareToSendAsync(_ chatMessage:NewSendChatMessageVO,
-                            uniqueId:String,
-                            pushMsgType:Int? = nil,
-                            uniqueIdResult:UniqueIdResultType = nil,
-                            completion: ((ChatResponse)->())? = nil,
-                            onSent: OnSentType? = nil,
-                            onDelivered: OnDeliveryType? = nil,
-                            onSeen: OnSeenType? = nil
-                            ){
-        uniqueIdResult?(uniqueId)
-        guard let chatMessageContent = chatMessage.convertCodableToString() , let config = config  else{return}
-        let asyncMessage = NewSendAsyncMessageVO(content:     chatMessageContent,
-                                              ttl: config.msgTTL,
-                                              peerName:     config.serverName,
-                                              priority:     config.msgPriority,
-                                              pushMsgType: pushMsgType
-        )
-        guard let rawType =  chatMessage.messageType, let messageType = NewChatMessageVOTypes(rawValue: rawType) else {return}
-        callbacksManager.addCallback(uniqueId: uniqueId, requesType: messageType, callback: completion ,onSent: onSent , onDelivered: onDelivered , onSeen: onSeen)
-        sendToAsync(asyncMessageVO: asyncMessage)
-    }
 	
 	private func getContent(_ req:Encodable? , _ plainText:Bool)->String?{
 		var content:String? = nil

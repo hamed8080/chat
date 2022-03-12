@@ -10,7 +10,7 @@ public class FileRequest: BaseRequest {
     
     public let hashCode                  :String
     public let checkUserGroupAccess      :Bool
-    public let forceToDownloadFromServer :Bool
+    public var forceToDownloadFromServer :Bool
     
     public init(hashCode:String , checkUserGroupAccess:Bool = true  ,forceToDownloadFromServer:Bool = false  ) {
         self.hashCode                  = hashCode

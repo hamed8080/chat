@@ -17,18 +17,23 @@ class ForwardMessagesRequestHandler {
     ){
         
         uniqueIdsResult?(req.uniqueIds) //do not remove this line it use batch uniqueIds
-        guard let token = chat.config?.token else {return}
         
-        let sendChatMessageVO = NewSendChatMessageVO(type:  ChatMessageVOTypes.FORWARD_MESSAGE.intValue(),
-                                                     token: token,
-                                                     content: "\(req.messageIds)",
-                                                     subjectId: req.threadId,
-                                                     typeCode:req.typeCode,
-                                                     uniqueId: "\(req.uniqueIds)")
+        chat.prepareToSendAsync(req                    : "\(req.messageIds)",
+                                clientSpecificUniqueId : "\(req.uniqueIds)",
+                                typeCode               : req.typeCode,
+                                subjectId              : req.threadId,
+                                plainText              : true,
+                                messageType            : .FORWARD_MESSAGE,
+                                uniqueIdResult         : nil,
+                                completion             : nil,
+                                onSent                 : onSent,
+                                onDelivered            : onDeliver,
+                                onSeen                 : onSeen)
+        
+        
         req.uniqueIds.forEach { uniqueId in
             chat.callbacksManager.addCallback(uniqueId: uniqueId, requesType: .FORWARD_MESSAGE, callback: nil, onSent: onSent, onDelivered: onDeliver, onSeen: onSeen)
         }
-        chat.prepareToSendAsync(sendChatMessageVO, uniqueId: req.uniqueId)
         CacheFactory.write(cacheType: .FORWARD_MESSAGE_QUEUE(req))
         PSM.shared.save()
     }

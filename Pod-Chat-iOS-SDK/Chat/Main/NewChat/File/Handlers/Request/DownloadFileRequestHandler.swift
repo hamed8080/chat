@@ -16,6 +16,12 @@ class DownloadFileRequestHandler{
                         _ cacheResponse    :DownloadFileCompletionType?  = nil){
        
         uniqueIdResult?(req.uniqueId)
+        
+        /// check if file exist on cache or not if it doesn't exist force to download it become true
+        if CacheFileManager.sharedInstance.getFile(hashCode: req.hashCode)  == nil{
+            req.forceToDownloadFromServer = true
+        }
+        
         if req.forceToDownloadFromServer == true , let token = Chat.sharedInstance.config?.token ,let fileServer = Chat.sharedInstance.config?.fileServer{
             let url = "\(fileServer)\(SERVICES_PATH.FILES.rawValue)/\(req.hashCode)"
             let headers:[String :String] = ["Authorization": "Bearer \(token)"]
