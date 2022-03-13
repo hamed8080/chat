@@ -16,15 +16,27 @@ class DownloadFileRequestHandler{
                         _ cacheResponse    :DownloadFileCompletionType?  = nil){
        
         uniqueIdResult?(req.uniqueId)
+        
+        /// check if file exist on cache or not if it doesn't exist force to download it become true
+        if CacheFileManager.sharedInstance.getFile(hashCode: req.hashCode)  == nil{
+            req.forceToDownloadFromServer = true
+        }
+        
         if req.forceToDownloadFromServer == true , let token = Chat.sharedInstance.config?.token ,let fileServer = Chat.sharedInstance.config?.fileServer{
-            let url = "\(fileServer)\(SERVICES_PATH.DRIVE_DOWNLOAD_FILE.rawValue)"
-            let headers:[String :String] = ["_token_": token, "_token_issuer_": "1"]
+            let url = "\(fileServer)\(SERVICES_PATH.FILES.rawValue)/\(req.hashCode)"
+            let headers:[String :String] = ["Authorization": "Bearer \(token)"]
             DownloadManager.download(url: url,uniqueId: req.uniqueId , headers: headers , parameters: try? req.asDictionary(), downloadProgress: downloadProgress) { data, response, error in
                 if let response = response as? HTTPURLResponse , (200...300).contains(response.statusCode) , let headers = response.allHeaderFields as? [String : Any]{
                     if let data = data , let error = try? JSONDecoder().decode(ChatError.self, from: data) , error.hasError == true{
                         completion?(nil,nil,error)
                         return
                     }
+                    if let data = data ,let podspaceError = try? JSONDecoder().decode(PodspaceFileUploadResponse.self, from: data){
+                        let error = ChatError(message: podspaceError.message, errorCode: podspaceError.errorType?.rawValue, hasError: true)
+                        completion?(nil,nil, error)
+                        return
+                    }
+                    
                     var name:String? = nil
                     if let fileName = (headers["Content-Disposition"] as? String)?.replacingOccurrences(of: "\"", with: "").split(separator: "=").last{
                         name = String(fileName)

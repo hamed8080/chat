@@ -28,6 +28,9 @@ class GetHistoryRequestHandler {
                                 uniqueIdResult: uniqueIdResult){ response in
             let pagination = Pagination(count: req.count, offset: req.offset, totalCount: response.contentCount)
             completion(response.result as? [Message] ,response.uniqueId , pagination , response.error)
+            if req.readOnly == false{
+                saveMessagesToCache(response.result as? [Message], cacheResponse)
+            }
         }
         
         CacheFactory.get(useCache: cacheResponse != nil , cacheType: .GET_HISTORY(req)){ response in
@@ -57,5 +60,12 @@ class GetHistoryRequestHandler {
         CacheFactory.get(useCache: uploadImageNotSentRequests != nil , cacheType: .UPLOAD_IMAGE_REQUESTS(req.threadId)){ response in
             forwardMessageNotSentRequests?(response.cacheResponse as? [NewForwardMessageRequest]  , req.uniqueId , nil)
         }
+    }
+    
+    class func saveMessagesToCache(_ messages:[Message]?, _ cacheResponse:CompletionType<[Message]>?){
+        messages?.forEach({ message in
+            CacheFactory.write(cacheType: .MESSAGE(message))
+        })
+        PSM.shared.save()
     }
 }

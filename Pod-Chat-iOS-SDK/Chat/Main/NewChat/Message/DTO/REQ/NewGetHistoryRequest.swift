@@ -32,7 +32,11 @@ public class NewGetHistoryRequest: BaseRequest {
     public var unreadMentioned  : Bool?
     public var lastMessageTime  : UInt?
     public var historyEndTime   : UInt?
+    public var readOnly         : Bool = false
     
+    
+    /// - Parameters:
+    ///   - readOnly: This property prevent to write to cache when you only need to view messages of a thread pass true if you need to only view messages.
     public init(threadId         : Int,
                 count            : Int?                     = nil ,
                 fromTime         : UInt?                    = nil ,
@@ -57,6 +61,7 @@ public class NewGetHistoryRequest: BaseRequest {
                 unreadMentioned  : Bool?                    = nil ,
                 lastMessageTime  : UInt?                    = nil ,
                 historyEndTime   : UInt?                    = nil ,
+                readOnly         : Bool                     = false,
                 uniqueId         : String?                  = nil ,
                 typeCode         : String?                  = nil
     ) {
@@ -84,6 +89,7 @@ public class NewGetHistoryRequest: BaseRequest {
         self.unreadMentioned  = unreadMentioned
         self.lastMessageTime  = lastMessageTime
         self.historyEndTime   = historyEndTime
+        self.readOnly         = readOnly
         super.init(uniqueId: uniqueId, typeCode: typeCode)
     }
     

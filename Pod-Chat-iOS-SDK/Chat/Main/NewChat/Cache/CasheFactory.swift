@@ -255,7 +255,7 @@ public class CacheFactory {
                 QueueOfTextMessages.crud.deleteWith(predicate: NSPredicate(format: "uniqueId == %@", uniqueId))
                 break
             case .MESSAGE(_ :let message):
-                CMMessage.insertOrUpdate(message: message, threadId: message.threadId)
+                CMMessage.insertOrUpdate(message: message)
                 break
             case .EDIT_MESSAGE_QUEUE(_ :let req):
                 QueueOfEditMessages.insert(request: req)

@@ -15,19 +15,21 @@ class SendTextMessageRequestHandler {
                        _ onDeliver:  OnDeliveryType ,
                        _ uniqueIdResult: UniqueIdResultType = nil
     ){
-        guard let token = chat.config?.token else {return}
-        
-        let sendChatMessageVO = NewSendChatMessageVO(type:  ChatMessageVOTypes.MESSAGE.intValue(),
-                                                     token: token,
-                                                     content:  req.textMessage,
-                                                     messageType: req.messageType.rawValue,
-                                                     metadata: req.metadata,
-                                                     repliedTo: req.repliedTo,
-                                                     systemMetadata: req.systemMetadata,
-                                                     subjectId: req.threadId,
-                                                     typeCode:req.typeCode,
-                                                     uniqueId: req.uniqueId)
-        chat.prepareToSendAsync(sendChatMessageVO, uniqueId: req.uniqueId , uniqueIdResult:uniqueIdResult , completion: nil,onSent: onSent , onDelivered: onDeliver, onSeen: onSeen)
+        chat.prepareToSendAsync(req                    : req.textMessage,
+                                clientSpecificUniqueId : req.uniqueId,
+                                typeCode               : req.typeCode,
+                                subjectId              : req.threadId,
+                                plainText              : true,
+                                messageType            : .MESSAGE,
+                                messageMessageType     : req.messageType,
+                                metadata               : req.metadata,
+                                systemMetadata         : req.systemMetadata,
+                                repliedTo              : req.repliedTo,
+                                uniqueIdResult         : uniqueIdResult,
+                                completion             : nil,
+                                onSent                 : onSent,
+                                onDelivered            : onDeliver,
+                                onSeen                 : onSeen)
         CacheFactory.write(cacheType: .SEND_TXET_MESSAGE_QUEUE(req))
         PSM.shared.save()
     }

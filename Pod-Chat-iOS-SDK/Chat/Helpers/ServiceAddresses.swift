@@ -59,6 +59,14 @@ public enum SERVICES_PATH: String {
     case PODSPACE_UPLOAD_IMAGE          = "/nzh/drive/uploadImage"
     case PODSPACE_PUBLIC_UPLOAD_IMAGE   = "/userGroup/uploadImage"
     
+    //To Thread withUserGrouphash
+    case UPLOAD_FILE_WITH_USER_GROUP   = "/api/usergroups/{userGroupHash}/files"
+    case UPLOAD_IMAGE_WITH_USER_GROUP  = "/api/usergroups/{userGroupHash}/images"
+    
+    //Public
+    case FILES         = "/api/files"
+    case IMAGES        = "/api/images"
+    
     // Neshan Map
     case MAP_REVERSE            = "/reverse"
     case MAP_SEARCH             = "/search"
@@ -98,6 +106,14 @@ public enum SERVICES_PATH: String {
         case .PODSPACE_PUBLIC_UPLOAD_FILE:  return "/userGroup/uploadFile"
         case .PODSPACE_UPLOAD_IMAGE:        return "/nzh/drive/uploadImage"
         case .PODSPACE_PUBLIC_UPLOAD_IMAGE: return "/userGroup/uploadImage"
+        
+        //To Thread withUserGrouphash
+        case .UPLOAD_FILE_WITH_USER_GROUP:   return "/api/usergroups/{userGroupHash}/files"
+        case .UPLOAD_IMAGE_WITH_USER_GROUP:  return "/api/usergroups/{userGroupHash}/images"
+            
+        // PUBLIC PodSpace
+        case .FILES:                 return "/api/files/"
+        case .IMAGES:                return "/api/images/"
             
         // Neshan Map
         case .MAP_REVERSE:      return "/reverse"

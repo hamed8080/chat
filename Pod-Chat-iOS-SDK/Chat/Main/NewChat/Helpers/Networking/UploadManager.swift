@@ -72,7 +72,7 @@ class UploadManager{
         let lineBreak = "\r\n"
         var fieldString = "--\(boundary + lineBreak)"
         fieldString += "Content-Disposition: form-data; name=\"\(name)\"\(lineBreak + lineBreak)"
-        fieldString += "\(value + lineBreak)"
+        fieldString += value + lineBreak
         return fieldString.data(using: .utf8)
     }
 }
