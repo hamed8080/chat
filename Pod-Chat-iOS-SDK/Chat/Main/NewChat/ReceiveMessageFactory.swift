@@ -259,7 +259,7 @@ class ReceiveMessageFactory{
                 TurnOffVideoCallResponseHandler.handle(chatMessage, asyncMessage)
                 break
             case .LEAVE_CALL:
-                LeaveCallResponseHandler.handle(chatMessage, asyncMessage)
+                CallParticipantLeftResponseHandler.handle(chatMessage, asyncMessage)
                 break
             case .CALL_SESSION_CREATED:
                 CallSessionCreatedResponseHandler.handle(chatMessage, asyncMessage)

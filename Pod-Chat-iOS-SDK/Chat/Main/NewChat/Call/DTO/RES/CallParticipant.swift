@@ -18,18 +18,29 @@ public struct CallParticipant:Codable,Hashable{
     
    
     public var id           : String = UUID().uuidString //only for use swiftui
-    public let joinTime     : Int
-    public let leaveTime    : Int
-    public let userId       : Int
+    public let joinTime     : Int?
+    public let leaveTime    : Int?
+    public let userId       : Int?
     public let sendTopic    : String
-    public let receiveTopic : String
+    public let receiveTopic : String?
     public let active       : Bool?
-    public let callStatus   : CallStatus
+    public let callStatus   : CallStatus?
     public let participant  : Participant?
-    public let mute         : Bool
+    public var mute         : Bool
     public let video        : Bool?
     
-    public init(joinTime: Int, leaveTime: Int, userId: Int, sendTopic: String, receiveTopic: String, active: Bool, callStatus: CallStatus, mute:Bool , video:Bool? = nil, participant: Participant? = nil) {
+    public init(
+        sendTopic    : String,
+        receiveTopic : String?       = nil,
+        joinTime     : Int?          = nil,
+        leaveTime    : Int?          = nil,
+        userId       : Int?          = nil,
+        active       : Bool          = true,
+        callStatus   : CallStatus?   = nil,
+        mute         : Bool          = false,
+        video        : Bool?         = nil,
+        participant  : Participant?  = nil
+    ) {
         self.joinTime     = joinTime
         self.leaveTime    = leaveTime
         self.userId       = userId
@@ -54,4 +65,5 @@ public struct CallParticipant:Codable,Hashable{
         case mute         = "mute"
         case video        = "video"
     }
+
 }
