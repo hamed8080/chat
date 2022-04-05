@@ -40,6 +40,9 @@ public struct WebRTCConfig {
     public let userName                  : String?
     public let password                  : String?
     
+    ///File for simulator
+    public let fileName                  : String?
+    
     
     public let videoConfig               : VideoConfig?
 	
@@ -55,7 +58,8 @@ public struct WebRTCConfig {
                 customFrameCapturer             : Bool          = false,
                 userName                        : String?       = nil,
                 password                        : String?       = nil,
-                videoConfig                     : VideoConfig?  = nil
+                videoConfig                     : VideoConfig?  = nil,
+                fileName                        : String?       = nil
 	) {
         self.peerName                     = peerName
         self.iceServers                   = iceServers
@@ -68,6 +72,7 @@ public struct WebRTCConfig {
         self.userName                     = userName
         self.password                     = password
         self.videoConfig                  = videoConfig
+        self.fileName                     = fileName
 	}
     
     var firstBorokerAddressWeb:String{
@@ -78,7 +83,7 @@ public struct WebRTCConfig {
         }
     }
     
-    public init(startCall:StartCall, isSendVideoEnabled:Bool){
+    public init(startCall:StartCall, isSendVideoEnabled:Bool, fileName:String? = nil){
         peerName            =  startCall.chatDataDto.kurentoAddress
         iceServers          =  ["turn:\(startCall.chatDataDto.turnAddress)?transport=udp", "turn:\(startCall.chatDataDto.turnAddress)?transport=tcp"]//"stun:46.32.6.188:3478"
         turnAddress         =  startCall.chatDataDto.turnAddress
@@ -90,6 +95,7 @@ public struct WebRTCConfig {
         userName            =  "mkhorrami"
         password            =  "mkh_123456"
         videoConfig         =  nil
+        self.fileName       = fileName
     }
     
     public var topicVideoSend:String?{

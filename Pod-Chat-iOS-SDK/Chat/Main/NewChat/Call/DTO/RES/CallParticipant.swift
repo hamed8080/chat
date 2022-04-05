@@ -27,7 +27,7 @@ public struct CallParticipant:Codable,Hashable{
     public let callStatus   : CallStatus?
     public let participant  : Participant?
     public var mute         : Bool
-    public let video        : Bool?
+    public var video        : Bool?
     
     public init(
         sendTopic    : String,

@@ -9,16 +9,16 @@ import Foundation
 public struct ClientDTO :Codable {
     
     public let clientId      : String
-    public let topicReceive  : String
+    public let topicReceive  : String?
     public let topicSend     : String
-    public let desc          : String
-    public let sendKey       : String
+    public let desc          : String?
+    public let sendKey       : String?
     public let video         : Bool
     public let mute          : Bool
     public let userId        : Int
     
     
-    public init(clientId: String, topicReceive: String, topicSend: String, userId: Int, desc: String, sendKey: String, video: Bool, mute: Bool) {
+    public init(clientId: String, topicReceive: String?, topicSend: String, userId: Int, desc: String?, sendKey: String?, video: Bool, mute: Bool) {
         self.clientId      = clientId
         self.topicReceive  = topicReceive
         self.topicSend     = topicSend

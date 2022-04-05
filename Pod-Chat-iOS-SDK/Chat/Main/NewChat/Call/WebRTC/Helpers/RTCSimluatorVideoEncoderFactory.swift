@@ -30,7 +30,7 @@ extension RTCDefaultVideoEncoderFactory{
 		}
         
 		let encoder =  RTCDefaultVideoEncoderFactory()
-        encoder.preferredCodec = RTCVideoCodecInfo(name: kRTCVideoCodecVp8Name)
+        encoder.preferredCodec = RTCVideoCodecInfo(name: kRTCVideoCodecH264Name)
         return encoder
 	}
 	
