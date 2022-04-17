@@ -89,6 +89,8 @@ public enum NewChatMessageVOTypes :Int , Codable {
     case TAG_LIST                          = 145
     case GET_TAG_PARTICIPANTS              = -4
     
+    case EXPORT_CHATS                      = 152
+    
     
     case ERROR                             = 999
     

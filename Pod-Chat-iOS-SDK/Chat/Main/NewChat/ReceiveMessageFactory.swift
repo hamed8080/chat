@@ -249,6 +249,9 @@ class ReceiveMessageFactory{
             case .GET_TAG_PARTICIPANTS:
                 //TODO: Need to be add by server
                 break
+            case .EXPORT_CHATS:
+                ExportResponseHandler.handle(chatMessage, asyncMessage)
+                break
 			case .ERROR:
 				ErrorResponseHandler.handle(chatMessage , asyncMessage)
 				break

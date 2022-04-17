@@ -704,6 +704,12 @@ public extension Chat {
     func mutualGroups(_ request:MutualGroupsRequest, _ completion:@escaping PaginationCompletionType<[Conversation]> ,cacheResponse :PaginationCacheResponseType<[Conversation]>? = nil , uniqueIdResult:UniqueIdResultType){
         MutualGroupsRequestHandler.handle(request,self,completion , cacheResponse ,uniqueIdResult)
     }
+    
+    //Test Status: Main ✅ - Integeration: ✅
+    /// Evry time you call this function old export file for thread will be deleted and is replaced with new one, except that it remain in document directory of application and untouch.
+    func exportChat(_ request:NewGetHistoryRequest,localIdentifire:String = "en_US", _ completion:@escaping CompletionType<URL>, uniqueIdResult:UniqueIdResultType = nil){
+        ExportRequestHandler.handle(request,localIdentifire, self,completion,uniqueIdResult)
+    }
 	
 	// REST API Request
     func restApiRequest<T:Decodable>(_ encodableRequest:BaseRequest ,

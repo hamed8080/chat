@@ -9,8 +9,8 @@ import Foundation
 public class NewGetHistoryRequest: BaseRequest {
     
     public let threadId         : Int
-    public let offset           : Int
-    public let count            : Int
+    public var offset           : Int
+    public var count            : Int
     public let fromTime         : UInt?
     public let fromTimeNanos    : UInt?
     public let messageId        : Int?
