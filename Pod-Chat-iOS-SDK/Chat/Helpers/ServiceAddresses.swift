@@ -67,6 +67,10 @@ public enum SERVICES_PATH: String {
     case FILES         = "/api/files"
     case IMAGES        = "/api/images"
     
+    //DECRYPTION
+    case DEFINE                       = "/srv/encryption/keys/define"
+    case GENERATE_PRIVATE_KEY         = "/srv/encryption/keys/{keyId}"
+    
     // Neshan Map
     case MAP_REVERSE            = "/reverse"
     case MAP_SEARCH             = "/search"
@@ -120,6 +124,9 @@ public enum SERVICES_PATH: String {
         case .MAP_SEARCH:       return "/search"
         case .MAP_ROUTING:      return "/routing"
         case .MAP_STATIC_IMAGE: return "/static"
+            
+        case .DEFINE:                 return "/srv/encryption/keys/define"
+        case .GENERATE_PRIVATE_KEY:   return "/srv/encryption/keys/{keyId}"
         }
     }
     

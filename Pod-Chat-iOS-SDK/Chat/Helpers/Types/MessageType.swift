@@ -26,6 +26,7 @@ public enum MessageType : Int , Codable {
     case START_CALL        = 14
     case STICKER           = 15
     case LOCATION          = 16
+    case ENCRPTED_TEXT     = 17
 	
 	@available(*,deprecated , message:"Removed in 0.10.5.0 version")
     public func returnIntValue() -> Int {
@@ -46,6 +47,7 @@ public enum MessageType : Int , Codable {
         case .START_CALL:       return 14
         case .STICKER:          return 15
         case .LOCATION:         return 16
+        case .ENCRPTED_TEXT:    return 17
         }
     }
     
@@ -68,6 +70,7 @@ public enum MessageType : Int , Codable {
         case 14:    return MessageType.START_CALL
         case 15:    return MessageType.STICKER
         case 16:    return MessageType.LOCATION
+        case 17:    return MessageType.ENCRPTED_TEXT
         default:    return MessageType.TEXT
         }
     }

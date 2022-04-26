@@ -11,7 +11,11 @@ import FanapPodAsyncSDK
 class MessageResponseHandler: ResponseHandler {
     
     static func handle(_ chatMessage: NewChatMessage, _ asyncMessage: NewAsyncMessage) {
-        
+
+        if EncryptedMessageResponseHandler.isEncryptedMessage(chatMessage){
+            EncryptedMessageResponseHandler.tryToDecrypt(chatMessage)
+            return
+        }
 		let chat = Chat.sharedInstance
         if chat.config?.enableCache == true, let data = chatMessage.content?.data(using: .utf8) , let message = try? JSONDecoder().decode(Message.self, from: data){
             if message.threadId == nil{

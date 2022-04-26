@@ -15,6 +15,7 @@ public struct ChatConfig {
 	var platformHost	              	: String
 	var fileServer	                    : String
 	var podSpaceFileServerAddress 		: String  = "https://podspace.pod.ir"
+    var encryptionAddress               : String  = "https://api.pod.ir"
 	var serverName                	    : String
 	var token                     	    : String
 	var mapApiKey                 	    : String?
