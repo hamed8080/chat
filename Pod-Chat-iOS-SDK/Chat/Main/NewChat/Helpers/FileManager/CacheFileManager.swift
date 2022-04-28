@@ -35,7 +35,7 @@ public class CacheFileManager{
         return URL(fileURLWithPath: filePath)
     }
     
-    func getFile(hashCode:String)->(file:FileModel,path:String)?{
+    public func getFile(hashCode:String)->(file:FileModel,path:String)?{
         
         let predicate = NSPredicate(format: "hashCode == %@", hashCode , NSNumber(value: false))
         if let findedFile = CMFile.crud.fetchWith(predicate)?.first , let fileModel = findedFile.getCodable(){
