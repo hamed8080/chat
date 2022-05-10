@@ -43,7 +43,7 @@ Chat.sharedInstance.delegate = self
 
 ## Usage 
 ```swift
-let req = NewSendTextMessageRequest(threadId: threadId, textMessage: "Hello World!", messageType: .TEXT)
+let req = SendTextMessageRequest(threadId: threadId, textMessage: "Hello World!", messageType: .TEXT)
 
 Chat.sharedInstance.sendTextMessage(req, uniqueIdresult: nil) { sentResult, uniqueId , error in
     print(sentResult ?? "")
