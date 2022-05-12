@@ -117,11 +117,11 @@ extension CMMessage{
         }else{
             var predicateArray = [NSPredicate]()
             predicateArray.append(NSPredicate(format: "threadId == %i", req.threadId))
-            if let formTime = req.fromTime {
-                predicateArray.append(NSPredicate(format: "time >= %i", formTime))
+            if let formTime = req.fromTime as? NSNumber {
+                predicateArray.append(NSPredicate(format: "time >= %@", formTime))
             }
-            if let toTime = req.toTime {
-                predicateArray.append(NSPredicate(format: "time <= %i", toTime))
+            if let toTime = req.toTime as? NSNumber{
+                predicateArray.append(NSPredicate(format: "time <= %@", toTime))
             }
             if let query = req.query , query != "" {
                 predicateArray.append(NSPredicate(format: "message CONTAINS[cd] %@", query))

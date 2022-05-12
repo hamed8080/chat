@@ -18,7 +18,7 @@ class DownloadImageRequestHandler{
         uniqueIdResult?(req.uniqueId)
         
         /// check if file exist on cache or not if it doesn't exist force to download it become true
-        if CacheFileManager.sharedInstance.getFile(hashCode: req.hashCode)  == nil{
+        if CacheFileManager.sharedInstance.getImage(hashCode: req.hashCode)  == nil{
             req.forceToDownloadFromServer = true
         }
         
