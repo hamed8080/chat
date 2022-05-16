@@ -43,7 +43,7 @@ public class CacheFactory {
         case GET_BLOCKED_USERS
         case PARTICIPANTS(_ participants:[Participant]? , _ threadId:Int?)
         case REMOVE_PARTICIPANTS(participants:[Participant]? , threadId:Int?)
-        case LEAVE_THREAD(_ conversation:Conversation)
+        case LEAVE_THREAD(_ threadId:Int)
         case CURRENT_USER_ROLES(_ roles:[Roles] , _ threadId:Int?)
         case USER_INFO(_ user:User)
         case PIN_MESSAGE(_ pinMessage:PinUnpinMessage, _ threadId:Int?)
@@ -216,13 +216,10 @@ public class CacheFactory {
             case .REMOVE_PARTICIPANTS(_: let participants, _: let threadId):
                 CMParticipant.deleteParticipants(participants: participants , threadId: threadId)
                 break
-            case .LEAVE_THREAD(_ : let conversation):
-                if let threadId = conversation.id{
-                    CMParticipant.crud.deleteWith(predicate: NSPredicate(format: "threadId == %i" , threadId))
-                    CMConversation.crud.deleteWith(predicate: NSPredicate(format: "id == %i" , threadId))
-                }
-                break
-                
+            case .LEAVE_THREAD(_ : let threadId):
+                CMParticipant.crud.deleteWith(predicate: NSPredicate(format: "threadId == %i" , threadId))
+                CMConversation.crud.deleteWith(predicate: NSPredicate(format: "id == %i" , threadId))
+                break                
             case .CURRENT_USER_ROLES(_ :let roles, _ :let threadId):
                 if let threadId = threadId{
                     CMCurrentUserRoles.insertOrUpdate(roles: roles, threadId: threadId)
@@ -387,6 +384,7 @@ public class CacheFactory {
             }
         }
     }
+    
     class func save(){
         PSM.shared.save()
     }

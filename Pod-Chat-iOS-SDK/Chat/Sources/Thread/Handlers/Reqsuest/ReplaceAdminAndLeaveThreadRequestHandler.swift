@@ -9,7 +9,7 @@ import Foundation
 class ReplaceAdminAndLeaveThreadRequestHandler {
     class func handle(_ request:SafeLeaveThreadRequest,
                       _ chat :Chat,
-                      _ completion:@escaping CompletionType<Conversation>,
+                      _ completion:@escaping CompletionType<User>,
                       _ newAdminCompletion:CompletionType<[UserRole]>? = nil,
                       _ uniqueIdResult: UniqueIdResultType = nil) {
         let currentUserRolseReq = CurrentUserRolesRequest(threadId: request.threadId , typeCode: request.typeCode)
