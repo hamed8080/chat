@@ -272,12 +272,12 @@ public class Chat {
 	}
 	
     //Test Status: Main ✅ - Integeration: ✅
-    public func leaveThread(_ request:LeaveThreadRequest ,completion:@escaping CompletionType<Conversation>,uniqueIdResult: UniqueIdResultType = nil){
+    public func leaveThread(_ request:LeaveThreadRequest ,completion:@escaping CompletionType<User>,uniqueIdResult: UniqueIdResultType = nil){
 		LeaveThreadRequestHandler.handle(request, self , completion , uniqueIdResult)
 	}
     
     //Test Status: Main ✅ - Integeration: ✅
-    public func leaveThreadSaftly(_ request:SafeLeaveThreadRequest, completion:@escaping CompletionType<Conversation> , newAdminCompletion:CompletionType<[UserRole]>? = nil,uniqueIdResult: UniqueIdResultType = nil){
+    public func leaveThreadSaftly(_ request:SafeLeaveThreadRequest, completion:@escaping CompletionType<User> , newAdminCompletion:CompletionType<[UserRole]>? = nil,uniqueIdResult: UniqueIdResultType = nil){
         ReplaceAdminAndLeaveThreadRequestHandler.handle(request,self,completion,newAdminCompletion,uniqueIdResult)
     }
 	

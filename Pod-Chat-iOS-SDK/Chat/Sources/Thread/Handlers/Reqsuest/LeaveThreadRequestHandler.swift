@@ -10,7 +10,7 @@ class LeaveThreadRequestHandler {
 	
 	class func handle( _ req:LeaveThreadRequest,
 					   _ chat:Chat,
-					   _ completion: @escaping CompletionType<Conversation>,
+					   _ completion: @escaping CompletionType<User>,
 					   _ uniqueIdResult: UniqueIdResultType = nil
 	){
 		chat.prepareToSendAsync(req: req,
@@ -19,7 +19,7 @@ class LeaveThreadRequestHandler {
 								subjectId: req.threadId,
 								messageType: .LEAVE_THREAD,
                                 uniqueIdResult: uniqueIdResult){ response in
-            completion(response.result as? Conversation , response.uniqueId, response.error)
+            completion(response.result as? User , response.uniqueId, response.error)
         }
 	}
 }

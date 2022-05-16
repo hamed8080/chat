@@ -74,8 +74,12 @@ open class CoreDataCrud<T:NSFetchRequestResult> {
     public func deleteAll(){
         do{
             let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest())
-            try PSM.shared.context.execute(deleteRequest)
-            Chat.sharedInstance.logger?.log(title: "saved successfully from deleteAll execute")
+            deleteRequest.resultType = .resultTypeObjectIDs
+            let batchDelete = try PSM.shared.context.execute(deleteRequest) as? NSBatchDeleteResult
+            guard let deletedResult = batchDelete?.result as? [NSManagedObjectID] else {return}
+            let deletedObjects :[AnyHashable:Any] = [NSDeletedObjectsKey : deletedResult]
+            NSManagedObjectContext.mergeChanges(fromRemoteContextSave: deletedObjects, into: [PSM.shared.context])
+            Chat.sharedInstance.logger?.log(title: "saved successfully from deleteAll execute for table \(entityName)")
         }catch{
             Chat.sharedInstance.logger?.log(title: "error in deleteAll happened", message: "\(error)")
         }
