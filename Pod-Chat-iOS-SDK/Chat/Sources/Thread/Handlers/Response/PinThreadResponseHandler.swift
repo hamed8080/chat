@@ -16,10 +16,14 @@ class PinThreadResponseHandler: ResponseHandler {
 		let chat = Chat.sharedInstance
         let type:ThreadEventTypes = chatMessage.type == .PIN_THREAD ? .THREAD_PIN : .THREAD_UNPIN
         chat.delegate?.chatEvent(event: .Thread(.init(type: type, chatMessage: chatMessage)))
-		guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
+		
 		guard let data = chatMessage.content?.data(using: .utf8) else {return}
 		guard let threadId = try? JSONDecoder().decode(Int.self, from: data) else{return}
         let resposne = PinThreadResponse(threadId: threadId)
+        CacheFactory.write(cacheType: .PIN_UNPIN_THREAD(threadId))
+        CacheFactory.save()
+        
+        guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
         callback(.init(uniqueId: chatMessage.uniqueId , result: resposne))
         chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .PIN_THREAD)
 	}

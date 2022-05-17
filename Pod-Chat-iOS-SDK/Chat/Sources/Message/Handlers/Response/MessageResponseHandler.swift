@@ -13,6 +13,12 @@ class MessageResponseHandler: ResponseHandler {
     static func handle(_ chatMessage: ChatMessage, _ asyncMessage: AsyncMessage) {
         
 		let chat = Chat.sharedInstance
+        
+        chat.delegate?.chatEvent(event: .Message(.init(type: .MESSAGE_NEW, chatMessage: chatMessage)))
+        chat.delegate?.chatEvent(event: .Thread(.init(type: .THREAD_LAST_ACTIVITY_TIME, chatMessage: chatMessage)))
+        chat.delegate?.chatEvent(event: .Thread(.init(type:.THREAD_UNREAD_COUNT_UPDATED, chatMessage: chatMessage)))
+        CacheFactory.save()
+        
         if chat.config?.enableCache == true, let data = chatMessage.content?.data(using: .utf8) , let message = try? JSONDecoder().decode(Message.self, from: data){
             if message.threadId == nil{
                 message.threadId = chatMessage.subjectId ?? message.conversation?.id
@@ -26,9 +32,5 @@ class MessageResponseHandler: ResponseHandler {
                 CacheFactory.write(cacheType: .SET_THREAD_UNREAD_COUNT(threadId, message.conversation?.unreadCount ?? 0))
             }
         }
-        chat.delegate?.chatEvent(event: .Message(.init(type: .MESSAGE_NEW, chatMessage: chatMessage)))
-        chat.delegate?.chatEvent(event: .Thread(.init(type: .THREAD_LAST_ACTIVITY_TIME, chatMessage: chatMessage)))
-        chat.delegate?.chatEvent(event: .Thread(.init(type:.THREAD_UNREAD_COUNT_UPDATED, chatMessage: chatMessage)))        
-        CacheFactory.save()
     }
 }

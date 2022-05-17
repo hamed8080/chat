@@ -15,6 +15,8 @@ class UploadImageRequestHandler{
                            _ uploadUniqueIdResult :UniqueIdResultType = nil){
         
         uploadUniqueIdResult?(req.uniqueId)
+        let chatDelegate = Chat.sharedInstance.delegate
+
         guard let fileServer = chat.config?.fileServer else {return}
         let imagePath:Routes = req.userGroupHash != nil ? .UPLOAD_IMAGE_WITH_USER_GROUP : .IMAGES
         let url = fileServer + imagePath.rawValue.replacingOccurrences(of: "{userGroupHash}", with: req.userGroupHash ?? "")
@@ -38,6 +40,7 @@ class UploadImageRequestHandler{
                 if uploadResponse.error != nil {
                     let error = ChatError(message: "\(uploadResponse.error ?? "") - \(uploadResponse.message ??  "")", errorCode: uploadResponse.errorType?.rawValue , hasError: true)
                     uploadCompletion?(nil,nil,error)
+                    chatDelegate?.chatEvent(event: .File(.init(type:.UPLOAD_ERROR, error: error)))
                     return
                 }
                 if FanapPodChatSDK.Chat.sharedInstance.config?.isDebuggingLogEnabled == true {
@@ -60,9 +63,11 @@ class UploadImageRequestHandler{
                 uploadCompletion?(uploadResponse.result ,fileMetaData , nil)
                 CacheFactory.write(cacheType: .DELETE_UPLOAD_IMAGE_QUEUE(req.uniqueId))
                 PSM.shared.save()
+                chatDelegate?.chatEvent(event: .File(.init(type:.UPLOADED, uploadFileRequest: req)))
             }else if let error = error {
                 let error = ChatError(message: "\(ChatErrorCodes.NETWORK_ERROR.rawValue) \(error)", errorCode: 6200, hasError: true)
                 uploadCompletion?(nil,nil,error)
+                chatDelegate?.chatEvent(event: .File(.init(type:.UPLOAD_ERROR, error: error)))
             }
         }
     }

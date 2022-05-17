@@ -80,6 +80,7 @@ public class CacheFactory {
         case DELETE_ASSISTANTS(_ assistant:[Assistant])
         case MUTUAL_GROUPS(_ threads:[Conversation] , _ req:MutualGroupsRequest)
         case MUTE_UNMUTE_THREAD(_ threadId:Int)
+        case PIN_UNPIN_THREAD(_ threadId:Int)
         case TAGS(_ tags:[Tag])
         case TAG_PARTICIPANTS(_ tagParticipants:[TagParticipant], _ tagId:Int)
         case DELETE_TAG(_ tag:Tag)
@@ -364,6 +365,12 @@ public class CacheFactory {
                 if let conversation = CMConversation.crud.find(keyWithFromat: "id == %i", value: threadId){
                     let isMute = !( (conversation.mute as? Bool) ?? false)
                     conversation.mute = NSNumber(booleanLiteral: isMute)
+                }
+                
+            case .PIN_UNPIN_THREAD(_ : let threadId):
+                if let conversation = CMConversation.crud.find(keyWithFromat: "id == %i", value: threadId){
+                    let isPin = !( (conversation.pin as? Bool) ?? false)
+                    conversation.pin = NSNumber(booleanLiteral: isPin)
                 }
             case .TAGS(_ : let tags):
                 CMTag.insertOrUpdate(tags: tags)

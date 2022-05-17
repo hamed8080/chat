@@ -37,7 +37,7 @@ class DownloadManager{
         }
         request.url     = urlObj
         request.httpMethod = method.rawValue
-        let delegate = ProgressImplementation(downloadProgress: downloadProgress){ data,response,error in
+        let delegate = ProgressImplementation(uniqueId: uniqueId, downloadProgress: downloadProgress){ data,response,error in
             DispatchQueue.main.async {
                 completion(data, response , error)
                 Chat.sharedInstance.callbacksManager.removeDownloadTask(uniqueId: uniqueId)

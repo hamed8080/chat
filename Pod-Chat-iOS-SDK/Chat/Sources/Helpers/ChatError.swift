@@ -26,11 +26,13 @@ public struct ChatError:Decodable{
     public var userInfo  : [String:Any]?      = nil
     public var rawError  : Error?             = nil
     public var code      : ChatErrorCodes     = .UNDEFINED
+    public var banError  : BanError?          = nil
     
     internal enum CodingKeys:String , CodingKey{
         case hasError     = "hasError"
         case errorMessage = "errorMessage"
         case errorCode    = "errorCode"
+        case code         = "code"
         case content      = "content"
         case message      = "message"
     }
@@ -60,7 +62,19 @@ public struct ChatError:Decodable{
         if let msg = try containser?.decodeIfPresent(String.self, forKey: .message){
             message = msg
         }
+        if let errorCode = try containser?.decodeIfPresent(Int.self, forKey: .code),
+           errorCode == 208,
+           let data = message?.data(using: .utf8),
+           let banError = try? JSONDecoder().decode(BanError.self, from: data) {
+            self.banError = banError
+        }
     }
+}
+
+public class BanError:Decodable {
+    private let errorMessage:String?
+    private let duration:Int?
+    private let uniqueId:String?
 }
 
 extension AsyncError{

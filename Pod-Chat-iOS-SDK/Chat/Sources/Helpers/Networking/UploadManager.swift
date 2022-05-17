@@ -27,7 +27,7 @@ class UploadManager{
         })
         request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        let delegate = ProgressImplementation(uploadProgress: uploadProgress)
+        let delegate = ProgressImplementation(uniqueId: uniqueId, uploadProgress: uploadProgress)
         let session = URLSession(configuration: .default, delegate:delegate, delegateQueue: nil)
         let uploadTask = session.uploadTask(with: request, from: body as Data){ data,response,error in
             DispatchQueue.main.async {

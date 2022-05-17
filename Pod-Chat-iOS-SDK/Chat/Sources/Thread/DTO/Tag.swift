@@ -30,3 +30,24 @@ public struct Tag : Codable {
         case tagParticipants = "tagParticipantVOList"
     }
 }
+
+public struct TagEventModel{
+ 
+    let tag:Tag?
+    let tagParticipants:[TagParticipant]?
+    let type:TagEventType
+    
+    public init(tag: Tag? = nil, tagParticipants: [TagParticipant]? = nil, type: TagEventType) {
+        self.tag             = tag
+        self.tagParticipants = tagParticipants
+        self.type            = type
+    }
+}
+
+public enum TagEventType{
+    case CREATE_TAG
+    case DELETE_TAG
+    case EDIT_TAG
+    case ADD_TAG_PARTICIPANT
+    case REMOVE_TAG_PARTICIPANT
+}

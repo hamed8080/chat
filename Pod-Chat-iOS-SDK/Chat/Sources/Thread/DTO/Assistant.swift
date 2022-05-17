@@ -54,3 +54,16 @@ open class Assistant : Codable {
     }
     
 }
+
+public struct AssistantEventModel{
+    let assistants:[Assistant]
+    let type:AssistantEventType
+}
+
+public enum AssistantEventType{
+    case REGISTER_ASSISTANT
+    case BLOCK_ASSISTANT
+    case UNBLOCK_ASSISTANT
+    case DEACTIVE_ASSISTANTS
+    
+}

@@ -15,12 +15,15 @@ class ThreadsResponseHandler: ResponseHandler {
 		
 		let chat = Chat.sharedInstance
         chat.delegate?.chatEvent(event: .Thread(.init(type: .THREADS_LIST_CHANGE, chatMessage: chatMessage)))
-		guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
+		
 		guard let data = chatMessage.content?.data(using: .utf8) else {return}
 		guard let conversations = try? JSONDecoder().decode([Conversation].self, from: data) else{return}
-        callback(.init(uniqueId: chatMessage.uniqueId , result: conversations,contentCount: chatMessage.contentCount ?? 0))
+        
 		CacheFactory.write(cacheType: .THREADS(conversations))
 		PSM.shared.save()
+        
+        guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
+        callback(.init(uniqueId: chatMessage.uniqueId , result: conversations,contentCount: chatMessage.contentCount ?? 0))
         chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .GET_THREADS)
 		
 	}
