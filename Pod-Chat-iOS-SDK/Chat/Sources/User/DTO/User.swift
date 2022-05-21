@@ -22,20 +22,27 @@ open class User : Codable {
     public var sendEnable:      Bool?
     public var username:        String?
     public var chatProfileVO:   Profile?
+    public var ssoId:           String?
+    public var lastName:        String?
+    public var firstName:       String?
     
-    
-    public init(cellphoneNumber:    String?,
-                contactSynced:      Bool?,
-                coreUserId:         Int?,
-                email:              String?,
-                id:                 Int?,
-                image:              String?,
-                lastSeen:           Int?,
-                name:               String?,
-                receiveEnable:      Bool?,
-                sendEnable:         Bool?,
-                username:           String?,
-                chatProfileVO:      Profile?) {
+    public init(
+                cellphoneNumber : String?   = nil,
+                contactSynced   : Bool?     = nil,
+                coreUserId      : Int?      = nil,
+                email           : String?   = nil,
+                id              : Int?      = nil,
+                image           : String?   = nil,
+                lastSeen        : Int?      = nil,
+                name            : String?   = nil,
+                receiveEnable   : Bool?     = nil,
+                sendEnable      : Bool?     = nil,
+                username        : String?   = nil,
+                ssoId           : String?   = nil,
+                firstName       : String?   = nil,
+                lastName        : String?   = nil,
+                chatProfileVO   : Profile?  = nil
+    ) {
         
         self.cellphoneNumber    = cellphoneNumber
         self.contactSynced      = contactSynced ?? false
@@ -48,6 +55,9 @@ open class User : Codable {
         self.receiveEnable      = receiveEnable
         self.sendEnable         = sendEnable
         self.username           = username
+        self.ssoId              = ssoId
+        self.lastName           = lastName
+        self.firstName          = firstName
         self.chatProfileVO      = chatProfileVO
     }
     
@@ -64,6 +74,9 @@ open class User : Codable {
         case sendEnable      = "sendEnable"
         case username        = "username"
         case chatProfileVO   = "chatProfileVO"
+        case ssoId           = "ssoId"
+        case firstName       = "firstName"
+        case lastName        = "lastName"
     }
     
     public required init(from decoder: Decoder) throws {
@@ -81,6 +94,9 @@ open class User : Codable {
         sendEnable      = try container.decodeIfPresent(Bool.self, forKey    : .sendEnable)
         username        = try container.decodeIfPresent(String.self, forKey  : .username)
         chatProfileVO   = try container.decodeIfPresent(Profile.self, forKey : .chatProfileVO)
+        ssoId           = try container.decodeIfPresent(String.self, forKey  : .ssoId)
+        lastName        = try container.decodeIfPresent(String.self, forKey  : .lastName)
+        firstName       = try container.decodeIfPresent(String.self, forKey  : .firstName)
         
     }
     

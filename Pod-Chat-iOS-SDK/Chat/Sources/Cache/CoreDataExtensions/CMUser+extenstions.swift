@@ -23,6 +23,9 @@ extension CMUser{
                     receiveEnable:  receiveEnable as? Bool,
                     sendEnable:     sendEnable as? Bool,
                     username:       username,
+                    ssoId:          ssoId,
+                    firstName:      firstName,
+                    lastName:       lastName,
                     chatProfileVO:  Profile(bio: bio, metadata: metadata))
     }
     
@@ -42,6 +45,9 @@ extension CMUser{
         model.username        = user.username
         model.bio             = user.chatProfileVO?.bio
         model.metadata        = user.chatProfileVO?.metadata
+        model.ssoId           = user.ssoId
+        model.firstName       = model.firstName
+        model.lastName        = user.lastName
         
         return model
     }
