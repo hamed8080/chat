@@ -8,9 +8,6 @@
 import Foundation
 import FanapPodAsyncSDK
 
-fileprivate let CALL_SESSION_CREATED_NAME        = "CALL_SESSION_CREATED_NAME"
-public var CALL_SESSION_CREATED_NAME_OBJECT = Notification.Name.init(CALL_SESSION_CREATED_NAME)
-
 class CallSessionCreatedResponseHandler {
     
     static func handle(_ chatMessage: ChatMessage, _ asyncMessage: AsyncMessage) {
@@ -19,12 +16,13 @@ class CallSessionCreatedResponseHandler {
 		
         guard let data = chatMessage.content?.data(using: .utf8) else {return}
         guard let createCall = try? JSONDecoder().decode(CreateCall.self, from: data) else{return}
+        chat.delegate?.chatEvent(event: .Call(CallEventModel(type:.CALL_CREATE(createCall))))
+        
+        guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else{return}
+        callback(.init(uniqueId:chatMessage.uniqueId , result: createCall))
         chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .CALL_SESSION_CREATED)
-		if let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId){
-			callback(.init(uniqueId:chatMessage.uniqueId , result: createCall))
-		}
+        
         chat.callState = .Created
-		NotificationCenter.default.post(name: CALL_SESSION_CREATED_NAME_OBJECT ,object: createCall)
 		startTimerTimeout(createCall)
     }
 	

@@ -13,10 +13,12 @@ class RejectCallResponseHandler {
     static func handle(_ chatMessage: ChatMessage, _ asyncMessage: AsyncMessage) {
         
         let chat = Chat.sharedInstance
-        guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
+        
         guard let data = chatMessage.content?.data(using: .utf8) else {return}
         guard let createCall = try? JSONDecoder().decode(CreateCall.self, from: data) else{return}
+        chat.delegate?.chatEvent(event: .Call(.init(type: .CALL_REJECTED(createCall))))
+        
+        guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
         callback(.init(uniqueId:chatMessage.uniqueId , result: createCall))
-//        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: )
     }
 }

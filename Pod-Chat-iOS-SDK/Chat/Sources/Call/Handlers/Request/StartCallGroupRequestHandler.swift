@@ -21,6 +21,7 @@ class StartCallGroupRequestHandler {
                                 uniqueIdResult: uniqueIdResult){ response in
             completion(response.result as? CreateCall,response.uniqueId , response.error)
         }
+        
         startTimerTimeout()
     }
     
@@ -32,8 +33,7 @@ class StartCallGroupRequestHandler {
                 if chat.config?.isDebuggingLogEnabled == true{
                     Chat.sharedInstance.logger?.log(title: "cancel call after \(chat.config?.callTimeout ?? 0) second no response back from server with type CALL_SESSION_CREATED")
                 }
-                
-                NotificationCenter.default.post(name: END_CALL_NAME_OBJECT ,object: 0)
+                chat.delegate?.chatEvent(event: .Call(CallEventModel(type: .CALL_ENDED(nil))))
                 chat.callState = .Ended
             }
             timer.invalidate()

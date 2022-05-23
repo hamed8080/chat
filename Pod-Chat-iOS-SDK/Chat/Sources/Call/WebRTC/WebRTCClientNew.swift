@@ -10,13 +10,6 @@ import WebRTC
 import FanapPodAsyncSDK
 import Darwin
 
-fileprivate let CALL_PARTICIPANT_IS_SPEAKING_NAME        = "CALL_PARTICIPANT_IS_SPEAKING_NAME"
-public var CALL_PARTICIPANT_IS_SPEAKING_NAME_OBJECT = Notification.Name.init(CALL_PARTICIPANT_IS_SPEAKING_NAME)
-
-fileprivate let CALL_PARTICIPANT_STOPPED_SPEAKING_NAME        = "CALL_PARTICIPANT_STOPPED_SPEAKING_NAME"
-public var CALL_PARTICIPANT_STOPPED_SPEAKING_NAME_OBJECT = Notification.Name.init(CALL_PARTICIPANT_STOPPED_SPEAKING_NAME)
-
-
 // MARK: - Pay attention, this class use many extensions inside a files not be here.
 public class WebRTCClientNew : NSObject, RTCPeerConnectionDelegate, RTCDataChannelDelegate{
     
@@ -284,14 +277,14 @@ public class WebRTCClientNew : NSObject, RTCPeerConnectionDelegate, RTCDataChann
                         let level = (stat.values["audioLevel"] as? Double) ?? .zero
                         print("topic:\(topic) for call participant:\(user.callParticipant?.participant?.name ?? user.callParticipant?.participant?.username ?? "") audio level:\(level)")
                         if level > 0.01, let callParticipant = self.userFor(topic: topic)?.callParticipant{
-                            NotificationCenter.default.post(name: CALL_PARTICIPANT_IS_SPEAKING_NAME_OBJECT ,object: callParticipant)
+                            Chat.sharedInstance.delegate?.chatEvent(event: .Call(CallEventModel(type: .CALL_PARTICIPANT_START_SPEAKING(callParticipant))))
                             if let index = self.indexFor(topic: topic){
                                 self.usersRTC[index].setUsetIsSpeaking()
                             }
                         }else if let callParticipant = self.userFor(topic: topic)?.callParticipant,
                                  let lastSpeakingTime = user.lastTimeSpeaking,
                                  lastSpeakingTime.timeIntervalSince1970 + 2 < Date().timeIntervalSince1970 {
-                            NotificationCenter.default.post(name: CALL_PARTICIPANT_STOPPED_SPEAKING_NAME_OBJECT ,object: callParticipant)
+                            Chat.sharedInstance.delegate?.chatEvent(event: .Call(CallEventModel(type: .CALL_PARTICIPANT_STOP_SPEAKING(callParticipant))))                            
                         }
                     }
                 })
@@ -607,7 +600,7 @@ extension WebRTCClientNew{
         case .STOP:
             break
         case .UNKOWN:
-            customPrint("a message received from unkown type form webrtc server",isGuardNil: true)
+            customPrint("a message received from unkown type form webrtc server" + (message.content ?? ""),isGuardNil: true)
             break
         }
     }

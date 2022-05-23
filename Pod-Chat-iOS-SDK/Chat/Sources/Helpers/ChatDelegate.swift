@@ -13,8 +13,6 @@ public protocol ChatDelegate:class{
     func chatState(state:ChatState, currentUser:User?, error:ChatError?)    
     func chatError(error:ChatError)
     func chatEvent(event:ChatEventType)
-    func callError(error:CallError)
-
 }
 
 public enum ChatEventType{
@@ -27,4 +25,5 @@ public enum ChatEventType{
     case User(UserEventModel)
     case Assistant(AssistantEventModel)
     case Tag(TagEventModel)
+    case Call(CallEventModel)
 }

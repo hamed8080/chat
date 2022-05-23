@@ -64,6 +64,7 @@ public class Chat {
     public func createChatObject(config:ChatConfig){
 		isCreateObjectFuncCalled = true
         self.config = config
+        token = self.config?.token
 		initialize()
 	}
 	
