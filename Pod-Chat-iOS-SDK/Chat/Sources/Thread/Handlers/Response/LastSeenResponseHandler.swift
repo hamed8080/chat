@@ -17,15 +17,18 @@ class LastSeenResponseHandler : ResponseHandler{
         
         guard let data = chatMessage.content?.data(using: .utf8) else {return}
         guard let conversations = try? JSONDecoder().decode(Conversation.self, from: data) else{return}
-        
-        chat.delegate?.chatEvent(event: .Thread(.init(type: .THREAD_UNREAD_COUNT_UPDATED, chatMessage: chatMessage)))
-        chat.delegate?.chatEvent(event: .Thread(.init(type: .THREAD_LAST_ACTIVITY_TIME, chatMessage: chatMessage)))    
-        if let count = ThreadEventModel(type: .THREAD_LAST_ACTIVITY_TIME, chatMessage: chatMessage).unreadCount,
-           let threadId = chatMessage.subjectId {
-            CacheFactory.write(cacheType: .SET_THREAD_UNREAD_COUNT(threadId, count))
+        let unreadCount = try? JSONDecoder().decode(UnreadCount.self, from: chatMessage.content?.data(using: .utf8) ?? Data())
+        chat.delegate?.chatEvent(event: .Thread(.THREAD_LAST_ACTIVITY_TIME(time: chatMessage.time, threadId: chatMessage.subjectId)))
+        if let unreadCount = unreadCount, let threadId = chatMessage.subjectId {
+            chat.delegate?.chatEvent(event: .Thread(.THREAD_UNREAD_COUNT_UPDATED(threadId:threadId, count:unreadCount.unreadCount)))
+            CacheFactory.write(cacheType: .SET_THREAD_UNREAD_COUNT(threadId, unreadCount.unreadCount))
         }
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
         callback(.init(uniqueId: chatMessage.uniqueId ,result: conversations))
         chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .LAST_SEEN_UPDATED)
     }
+}
+
+struct UnreadCount:Decodable{
+    let unreadCount:Int
 }

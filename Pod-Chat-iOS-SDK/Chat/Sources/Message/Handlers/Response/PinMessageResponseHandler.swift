@@ -13,10 +13,10 @@ class PinMessageResponseHandler: ResponseHandler {
     static func handle(_ chatMessage: ChatMessage, _ asyncMessage: AsyncMessage) {
         
 		let chat = Chat.sharedInstance
-        chat.delegate?.chatEvent(event: .Thread( ThreadEventModel(type: .MESSAGE_PIN, chatMessage: chatMessage)))
-        
         guard let data = chatMessage.content?.data(using: .utf8) else {return}
         guard let pinResponse = try? JSONDecoder().decode(PinUnpinMessage.self, from: data) else{return}
+        chat.delegate?.chatEvent(event: .Thread(.MESSAGE_PIN(threadId: chatMessage.subjectId, pinResponse)))
+        
         CacheFactory.write(cacheType: .PIN_MESSAGE(pinResponse, chatMessage.subjectId))
         PSM.shared.save()
         

@@ -30,13 +30,13 @@ class DownloadImageRequestHandler{
                 if let response = response as? HTTPURLResponse , (200...300).contains(response.statusCode) , let headers = response.allHeaderFields as? [String : Any]{
                     if let data = data , let error = try? JSONDecoder().decode(ChatError.self, from: data) , error.hasError == true{
                         completion?(nil,nil,error)
-                        chatDelegate?.chatEvent(event: .File(.init(type:.DOWNLOAD_ERROR, error: error)))
+                        chatDelegate?.chatEvent(event: .File(.DOWNLOAD_ERROR(error)))
                         return
                     }
                     if let data = data ,let podspaceError = try? JSONDecoder().decode(PodspaceFileUploadResponse.self, from: data){
                         let error = ChatError(message: podspaceError.message, errorCode: podspaceError.errorType?.rawValue, hasError: true)
                         completion?(nil,nil, error)
-                        chatDelegate?.chatEvent(event: .File(.init(type:.DOWNLOAD_ERROR, error: error)))
+                        chatDelegate?.chatEvent(event: .File(.DOWNLOAD_ERROR(error)))
                         return
                     }
                     
@@ -53,14 +53,14 @@ class DownloadImageRequestHandler{
                         CacheFileManager.sharedInstance.saveImage(imageModel, req.isThumbnail , data)
                     }
                     completion?(data,imageModel ,nil)
-                    chatDelegate?.chatEvent(event: .File(.init(type:.DOWNLOADED, downloadImageRequest: req)))
+                    chatDelegate?.chatEvent(event: .File(.IMAGE_DOWNLOADED(req)))
                 }else {
                     let headers = (response as? HTTPURLResponse)?.allHeaderFields as? [String:Any]
                     let message = (headers?["errorMessage"] as? String) ?? ""
                     let code    = (headers?["errorCode"] as? Int) ?? 999
                     let error = ChatError(message: message, errorCode: code , hasError: true, content: nil)
                     completion?(nil,nil,error)
-                    chatDelegate?.chatEvent(event: .File(.init(type:.DOWNLOAD_ERROR, error: error)))
+                    chatDelegate?.chatEvent(event: .File(.DOWNLOAD_ERROR(error)))
                 }
             }
         }

@@ -13,13 +13,15 @@ class DeleteMessageResposneHandler: ResponseHandler {
     static func handle(_ chatMessage: ChatMessage, _ asyncMessage: AsyncMessage) {
 		
 		let chat = Chat.sharedInstance
-        chat.delegate?.chatEvent(event: .Message(.init(type: .MESSAGE_DELETE, chatMessage: chatMessage)))
-        chat.delegate?.chatEvent(event: .Thread(.init(type: .THREAD_LAST_ACTIVITY_TIME, chatMessage: chatMessage)))        
         
         guard let data = chatMessage.content?.data(using: .utf8) else {return}
+        guard let deleteMessage = try? JSONDecoder().decode(Message.self, from: data) else {return}
+        
+        chat.delegate?.chatEvent(event: .Message(.MESSAGE_DELETE(deleteMessage)))
+        chat.delegate?.chatEvent(event: .Thread(.THREAD_LAST_ACTIVITY_TIME(time: chatMessage.time, threadId: chatMessage.subjectId)))
         guard let threadId = chatMessage.subjectId else {return}
-        guard let deleteMessage = try? JSONDecoder().decode(DeleteMessage.self, from: data) else {return}
-        CacheFactory.write(cacheType: .DELETE_MESSAGE(threadId, messageId: deleteMessage.messageId))
+        
+        CacheFactory.write(cacheType: .DELETE_MESSAGE(threadId, messageId: deleteMessage.id ?? 0))
         CacheFactory.save()
         
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}

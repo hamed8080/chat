@@ -14,9 +14,11 @@ class EditMessageResponseHandler: ResponseHandler {
 		
 		let chat = Chat.sharedInstance
         
-        chat.delegate?.chatEvent(event: .Message(.init(type: .MESSAGE_EDIT, chatMessage: chatMessage)))
-        chat.delegate?.chatEvent(event: .Thread(.init(type: .THREAD_LAST_ACTIVITY_TIME, chatMessage: chatMessage)))
         let message = Message(chatMessage: chatMessage)
+        
+        chat.delegate?.chatEvent(event: .Message(.MESSAGE_EDIT(message)))
+        chat.delegate?.chatEvent(event: .Thread(.THREAD_LAST_ACTIVITY_TIME(time:chatMessage.time, threadId: chatMessage.subjectId)))
+        
         CacheFactory.write(cacheType: .DELETE_EDIT_MESSAGE_QUEUE(message))
         CacheFactory.write(cacheType: .MESSAGE(message))
         PSM.shared.save()

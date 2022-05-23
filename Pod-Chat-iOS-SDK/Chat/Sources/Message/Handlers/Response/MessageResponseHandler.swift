@@ -14,12 +14,16 @@ class MessageResponseHandler: ResponseHandler {
         
 		let chat = Chat.sharedInstance
         
-        chat.delegate?.chatEvent(event: .Message(.init(type: .MESSAGE_NEW, chatMessage: chatMessage)))
-        chat.delegate?.chatEvent(event: .Thread(.init(type: .THREAD_LAST_ACTIVITY_TIME, chatMessage: chatMessage)))
-        chat.delegate?.chatEvent(event: .Thread(.init(type:.THREAD_UNREAD_COUNT_UPDATED, chatMessage: chatMessage)))
+        guard let data = chatMessage.content?.data(using: .utf8) , let message = try? JSONDecoder().decode(Message.self, from: data) else{return}
+        chat.delegate?.chatEvent(event: .Message(.MESSAGE_NEW(message)))
+        
+        chat.delegate?.chatEvent(event: .Thread(.THREAD_LAST_ACTIVITY_TIME(time: chatMessage.time, threadId: chatMessage.subjectId)))
+        let unreadCount = try? JSONDecoder().decode(UnreadCount.self, from: chatMessage.content?.data(using: .utf8) ?? Data())
+        chat.delegate?.chatEvent(event: .Thread(.THREAD_UNREAD_COUNT_UPDATED(threadId: chatMessage.subjectId ?? 0, count: unreadCount?.unreadCount ?? 0)))
         CacheFactory.save()
         
-        if chat.config?.enableCache == true, let data = chatMessage.content?.data(using: .utf8) , let message = try? JSONDecoder().decode(Message.self, from: data){
+        if chat.config?.enableCache == true{
+            
             if message.threadId == nil{
                 message.threadId = chatMessage.subjectId ?? message.conversation?.id
             }

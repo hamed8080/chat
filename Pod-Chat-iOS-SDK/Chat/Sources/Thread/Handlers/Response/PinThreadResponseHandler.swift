@@ -14,11 +14,15 @@ class PinThreadResponseHandler: ResponseHandler {
 	static func handle(_ chatMessage: ChatMessage, _ asyncMessage: AsyncMessage) {
 		
 		let chat = Chat.sharedInstance
-        let type:ThreadEventTypes = chatMessage.type == .PIN_THREAD ? .THREAD_PIN : .THREAD_UNPIN
-        chat.delegate?.chatEvent(event: .Thread(.init(type: type, chatMessage: chatMessage)))
 		
 		guard let data = chatMessage.content?.data(using: .utf8) else {return}
 		guard let threadId = try? JSONDecoder().decode(Int.self, from: data) else{return}
+        if chatMessage.type == .PIN_THREAD{
+            chat.delegate?.chatEvent(event: .Thread(.THREAD_PIN(threadId: threadId)))
+        }else if chatMessage.type == .UNPIN_THREAD{
+            chat.delegate?.chatEvent(event: .Thread(.THREAD_UNPIN(threadId: threadId)))
+        }
+        
         let resposne = PinThreadResponse(threadId: threadId)
         CacheFactory.write(cacheType: .PIN_UNPIN_THREAD(threadId))
         CacheFactory.save()

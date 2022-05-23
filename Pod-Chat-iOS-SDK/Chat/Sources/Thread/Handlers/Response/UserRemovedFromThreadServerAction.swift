@@ -12,9 +12,10 @@ class UserRemovedFromThreadServerAction: ResponseHandler {
     
     static func handle(_ chatMessage: ChatMessage, _ asyncMessage: AsyncMessage) {
 		let chat = Chat.sharedInstance
-        chat.delegate?.chatEvent(event: .Thread(.init(type: .THREAD_REMOVED_FROM, chatMessage: chatMessage)))
+        guard let threadId = chatMessage.subjectId else {return}
+        chat.delegate?.chatEvent(event: .Thread(.THREAD_REMOVED_FROM(threadId: threadId)))
         
-        if chat.config?.enableCache == true , let threadId = chatMessage.subjectId {
+        if chat.config?.enableCache == true{
             CacheFactory.write(cacheType: .DELETE_THREADS([threadId]))
         }
         chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .REMOVED_FROM_THREAD)

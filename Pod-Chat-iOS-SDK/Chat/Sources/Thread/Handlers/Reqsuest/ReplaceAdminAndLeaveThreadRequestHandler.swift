@@ -24,7 +24,7 @@ class ReplaceAdminAndLeaveThreadRequestHandler {
                     }
                 }
             }else{
-                chat.delegate?.chatEvent(event: .Thread(.init(type: .THREAD_LEAVE_SAFTLY_FAILED, threadId: request.threadId)))
+                chat.delegate?.chatEvent(event: .Thread(.THREAD_LEAVE_SAFTLY_FAILED(threadId: request.threadId)))
                 completion(nil,nil,ChatError(message: "Current User have no Permission to Change the ThreadAdmin", errorCode: 6666, hasError: true))
             }
         }

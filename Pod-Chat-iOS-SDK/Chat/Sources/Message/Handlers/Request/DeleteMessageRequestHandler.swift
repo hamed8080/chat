@@ -10,7 +10,7 @@ class DeleteMessageRequestHandler {
 	
 	class func handle( _ req:DeleteMessageRequest,
 					   _ chat:Chat,
-					   _ completion:@escaping CompletionType<DeleteMessage>,
+					   _ completion:@escaping CompletionType<Message>,
 					   _ uniqueIdResult: UniqueIdResultType = nil
 	){
 		chat.prepareToSendAsync(req: req,
@@ -19,7 +19,7 @@ class DeleteMessageRequestHandler {
 								subjectId: req.messageId,
 								messageType: .DELETE_MESSAGE,
                                 uniqueIdResult: uniqueIdResult){ response in
-            completion(response.result as? DeleteMessage ,response.uniqueId , response.error)
+            completion(response.result as? Message ,response.uniqueId , response.error)
         }
 	}
 }

@@ -64,7 +64,7 @@ public class Chat {
     public func createChatObject(config:ChatConfig){
 		isCreateObjectFuncCalled = true
         self.config = config
-        token = self.config?.token
+        self.token  = config.token
 		initialize()
 	}
 	
@@ -96,7 +96,7 @@ public class Chat {
 	}
 	
     //Test Status: Main ✅ - Integeration: ✅
-    public func getBlockedContacts(_ request:BlockedListRequest , completion:@escaping PaginationCompletionType<[BlockedUser]>,uniqueIdResult: UniqueIdResultType = nil){
+    public func getBlockedContacts(_ request:BlockedListRequest , completion:@escaping PaginationCompletionType<[BlockedContact]>,uniqueIdResult: UniqueIdResultType = nil){
 		GetBlockedContactsRequestHandler.handle(request,self,completion , uniqueIdResult)
 	}
 	
@@ -136,12 +136,12 @@ public class Chat {
 	}
 	
     //Test Status: Main ✅ - Integeration: ✅
-    public func blockContact(_ request:BlockRequest,completion:@escaping CompletionType<BlockedUser>,uniqueIdResult: UniqueIdResultType = nil){
+    public func blockContact(_ request:BlockRequest,completion:@escaping CompletionType<BlockedContact>,uniqueIdResult: UniqueIdResultType = nil){
 		BlockContactRequestHandler.handle(request,self,completion , uniqueIdResult)
 	}
 	
     //Test Status: Main ✅ - Integeration: ✅
-    public func unBlockContact(_ request:UnBlockRequest,completion:@escaping CompletionType<BlockedUser>,uniqueIdResult:UniqueIdResultType = nil){
+    public func unBlockContact(_ request:UnBlockRequest,completion:@escaping CompletionType<BlockedContact>,uniqueIdResult:UniqueIdResultType = nil){
 		UnBlockContactRequestHandler.handle(request,self,completion , uniqueIdResult)
 	}
 	
@@ -253,7 +253,7 @@ public class Chat {
 	}
     
     //Test Status: Main ✅ - Integeration: ❌  because of sandbox problem - Sandbox: ✅
-    public func spamPvThread(_ request: SpamThreadRequest , completion:@escaping CompletionType<BlockedUser> , uniqueIdResult: UniqueIdResultType = nil){
+    public func spamPvThread(_ request: SpamThreadRequest , completion:@escaping CompletionType<BlockedContact> , uniqueIdResult: UniqueIdResultType = nil){
         SpamThreadRequestHandler.handle( request , self ,completion , uniqueIdResult)
     }
 	
@@ -464,12 +464,12 @@ public class Chat {
 	}
 	
     //Test Status: Main ✅ - Integeration: ✅
-    public func deleteMessage(_ request:DeleteMessageRequest ,completion:@escaping CompletionType<DeleteMessage>,uniqueIdResult: UniqueIdResultType = nil){
+    public func deleteMessage(_ request:DeleteMessageRequest ,completion:@escaping CompletionType<Message>,uniqueIdResult: UniqueIdResultType = nil){
 		DeleteMessageRequestHandler.handle(request, self , completion , uniqueIdResult)
 	}
 	
     //Test Status: Main ✅ - Integeration: ✅
-    public func deleteMultipleMessages(_ request:BatchDeleteMessageRequest ,completion:@escaping CompletionType<DeleteMessage>,uniqueIdResult: UniqueIdResultType = nil){
+    public func deleteMultipleMessages(_ request:BatchDeleteMessageRequest ,completion:@escaping CompletionType<Message>,uniqueIdResult: UniqueIdResultType = nil){
 		BatchDeleteMessageRequestHandler.handle(request, self , completion , uniqueIdResult)
 	}
 	

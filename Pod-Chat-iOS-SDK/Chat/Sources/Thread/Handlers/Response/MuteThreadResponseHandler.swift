@@ -14,11 +14,15 @@ class MuteThreadResponseHandler: ResponseHandler {
 	static func handle(_ chatMessage: ChatMessage, _ asyncMessage: AsyncMessage) {
         
 		let chat = Chat.sharedInstance
-        let type:ThreadEventTypes = chatMessage.type == .MUTE_THREAD ? .THREAD_MUTE : .THREAD_UNMUTE
-        chat.delegate?.chatEvent(event: .Thread(.init(type: type, chatMessage: chatMessage)))
-		
+        
 		guard let data = chatMessage.content?.data(using: .utf8) else {return}
 		guard let threadId = try? JSONDecoder().decode(Int.self, from: data) else{return}
+        if chatMessage.type == . MUTE_THREAD{
+            chat.delegate?.chatEvent(event: .Thread(.THREAD_MUTE(threadId: threadId)))
+        }else if chatMessage.type == .UNMUTE_THREAD{
+            chat.delegate?.chatEvent(event: .Thread(.THREAD_UNMUTE(threadId: threadId)))
+        }
+        
         let resposne = MuteThreadResponse(threadId: threadId)
         
         CacheFactory.write(cacheType: .MUTE_UNMUTE_THREAD(threadId))

@@ -13,11 +13,10 @@ class CreateThreadResponseHandler: ResponseHandler {
 	static func handle(_ chatMessage: ChatMessage, _ asyncMessage: AsyncMessage) {
 		
 		let chat = Chat.sharedInstance
-        
-        chat.delegate?.chatEvent(event: .Thread(.init(type: .THREAD_NEW, chatMessage: chatMessage)))
+        guard let data = chatMessage.content?.data(using: .utf8) else {return}
+        guard let newThread = try? JSONDecoder().decode(Conversation.self, from: data) else{return}        
+        chat.delegate?.chatEvent(event: .Thread(.THREAD_NEW(newThread)))
 		
-		guard let data = chatMessage.content?.data(using: .utf8) else {return}
-		guard let newThread = try? JSONDecoder().decode(Conversation.self, from: data) else{return}
         CacheFactory.write(cacheType: .THREADS([newThread]))
         PSM.shared.save()
         

@@ -13,8 +13,9 @@ class ChangeThreadTypeResposneHandler: ResponseHandler {
     static func handle(_ chatMessage: ChatMessage, _ asyncMessage: AsyncMessage) {
         
 		let chat = Chat.sharedInstance
-        chat.delegate?.chatEvent(event: .Thread(.init(type: .THREAD_REMOVED_FROM, chatMessage: chatMessage)))
+        
         if chat.config?.enableCache == true , let threadId = chatMessage.subjectId {
+            chat.delegate?.chatEvent(event: .Thread(.THREAD_REMOVED_FROM(threadId: threadId)))
             CacheFactory.write(cacheType: .DELETE_THREADS([threadId]))
         }
         if let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) , let data = chatMessage.content?.data(using: .utf8){

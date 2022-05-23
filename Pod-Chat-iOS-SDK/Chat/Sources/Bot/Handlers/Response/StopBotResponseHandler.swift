@@ -15,7 +15,7 @@ class StopBotResponseHandler: ResponseHandler{
 		let chat = Chat.sharedInstance
 		
 		guard let botName = chatMessage.content else {return}
-        chat.delegate?.chatEvent(event: .Bot(.init(type: .STOP_BOT, botName: botName)))
+        chat.delegate?.chatEvent(event: .Bot(.STOP_BOT(botName)))
         
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
 		callback(.init(uniqueId: chatMessage.uniqueId ,result: botName))

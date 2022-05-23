@@ -15,7 +15,7 @@ class SeenMessageResponseHandler: ResponseHandler {
         let chat = Chat.sharedInstance
         
         let message = Message(chatMessage: chatMessage)
-        chat.delegate?.chatEvent(event: .Message(.init(type: .MESSAGE_SEEN, chatMessage: chatMessage)))
+        chat.delegate?.chatEvent(event: .Message(.MESSAGE_SEEN(message)))
         CacheFactory.write(cacheType: .MESSAGE(message))
         CacheFactory.save()
         

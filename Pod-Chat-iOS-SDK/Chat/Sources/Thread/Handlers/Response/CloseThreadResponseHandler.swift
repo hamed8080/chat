@@ -12,9 +12,9 @@ class CloseThreadResponseHandler : ResponseHandler {
 	
 	static func handle(_ chatMessage: ChatMessage, _ asyncMessage: AsyncMessage) {
 		let chat = Chat.sharedInstance
-        chat.delegate?.chatEvent(event: .Thread(.init(type: .THREAD_CLOSED, chatMessage: chatMessage)))
         
         guard let threadId = chatMessage.subjectId else {return}
+        chat.delegate?.chatEvent(event: .Thread(.THREAD_CLOSED(threadId: threadId)))
         CacheFactory.write(cacheType: .THREADS([.init(id: threadId)]))
         CacheFactory.save()
         

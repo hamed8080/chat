@@ -14,7 +14,7 @@ class ContactsLastSeenResponseHandler {
 		let chat = Chat.sharedInstance
 		guard let data = chatMessage.content?.data(using: .utf8) else {return}
 		guard let users = try? JSONDecoder().decode([UserLastSeenDuration].self, from: data) else{return}
-        chat.delegate?.chatEvent(event: .Contact(.init(type: .CONTACTS_LAST_SEEN, contactsLastSeenDuration: users)))
+        chat.delegate?.chatEvent(event: .Contact(.CONTACTS_LAST_SEEN(users)))
         chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .CONTACTS_LAST_SEEN)
 	}
 }
