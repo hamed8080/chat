@@ -6,11 +6,11 @@
 //
 
 import Foundation
-struct SystemEventMessageModel : Codable {
+public struct SystemEventMessageModel : Codable {
     
-    let coreUserId :Int64
-    let smt        :SystemEventTypes
-    let userId     :Int
-    let ssoId      :String
-    let user       :String
+    public let coreUserId :Int64
+    public let smt        :SMT
+    public let userId     :Int
+    public let ssoId      :String
+    public let user       :String
 }

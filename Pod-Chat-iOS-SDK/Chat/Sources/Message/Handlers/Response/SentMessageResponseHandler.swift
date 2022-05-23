@@ -14,7 +14,7 @@ class SentMessageResponseHandler: ResponseHandler {
         
 		let chat = Chat.sharedInstance
         let message = Message(chatMessage: chatMessage)
-        chat.delegate?.chatEvent(event: .Message( .init(type: .MESSAGE_SEND, chatMessage: chatMessage)))
+        chat.delegate?.chatEvent(event: .Message(.MESSAGE_SEND(message)))
         CacheFactory.write(cacheType: .DELETE_SEND_TXET_MESSAGE_QUEUE(chatMessage.uniqueId))
         CacheFactory.write(cacheType: .DELETE_FORWARD_MESSAGE_QUEUE(chatMessage.uniqueId))
         CacheFactory.write(cacheType: .DELETE_FILE_MESSAGE_QUEUE(chatMessage.uniqueId))

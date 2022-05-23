@@ -12,7 +12,7 @@ class BlockContactRequestHandler {
     
     class func handle( _ req:BlockRequest ,
                        _ chat:Chat,
-                       _ completion: @escaping CompletionType<BlockedUser> ,
+                       _ completion: @escaping CompletionType<BlockedContact> ,
                        _ uniqueIdResult: UniqueIdResultType = nil
     ){
         
@@ -22,7 +22,7 @@ class BlockContactRequestHandler {
                                 messageType: .BLOCK,
                                 uniqueIdResult: uniqueIdResult,
                                 completion: { response in
-                                    completion(response.result as? BlockedUser,response.uniqueId , response.error)
+                                    completion(response.result as? BlockedContact,response.uniqueId , response.error)
                                 }
         )
     }

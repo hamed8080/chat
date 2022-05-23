@@ -18,8 +18,8 @@ class AddParticipantResponseHandler: ResponseHandler {
 		guard let conversation = try? JSONDecoder().decode(Conversation.self, from: data) else{return}
         CacheFactory.write(cacheType: .PARTICIPANTS(conversation.participants, conversation.id))
         PSM.shared.save()
-        chat.delegate?.chatEvent(event: .Thread(.init(type: .THREAD_LAST_ACTIVITY_TIME, chatMessage: chatMessage)))
-        chat.delegate?.chatEvent(event: .Thread(.init(type: .THREAD_ADD_PARTICIPANTS, chatMessage: chatMessage , participants: conversation.participants)))
+        chat.delegate?.chatEvent(event: .Thread(.THREAD_LAST_ACTIVITY_TIME(time: chatMessage.time, threadId: chatMessage.subjectId)))
+        chat.delegate?.chatEvent(event: .Thread(.THREAD_ADD_PARTICIPANTS(thread:conversation, conversation.participants)))
         
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
         callback(.init(uniqueId:chatMessage.uniqueId , result: conversation))

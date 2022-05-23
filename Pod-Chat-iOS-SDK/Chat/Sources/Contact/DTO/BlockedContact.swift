@@ -1,5 +1,5 @@
 //
-//  BlockedUser.swift
+//  BlockedContact.swift
 //  FanapPodChatSDK
 //
 //  Created by Hamed Hosseini on 11/1/21.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-open class BlockedUser : Decodable {
+open class BlockedContact : Decodable {
     
     public var id:          Int?
     public var coreUserId:  Int?

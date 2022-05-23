@@ -14,10 +14,11 @@ public class UpdateThreadInfoResponseHandler : ResponseHandler {
     
     static func handle(_ chatMessage: ChatMessage, _ asyncMessage: AsyncMessage) {
 		let chat = Chat.sharedInstance
-        chat.delegate?.chatEvent(event: .Thread(.init(type: .THREAD_INFO_UPDATED, chatMessage: chatMessage)))
+        
         
         guard let data = chatMessage.content?.data(using: .utf8) else {return}
         guard let conversation = try? JSONDecoder().decode(Conversation.self, from: data) else{return}
+        chat.delegate?.chatEvent(event: .Thread(.THREAD_INFO_UPDATED(conversation)))
         
         CacheFactory.write(cacheType: .THREADS([conversation]))
         PSM.shared.save()

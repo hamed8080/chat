@@ -15,8 +15,8 @@ class BlockedResponseHandler {
 		let chat = Chat.sharedInstance
 		
 		guard let data = chatMessage.content?.data(using: .utf8) else {return}
-		guard let blockedResult = try? JSONDecoder().decode(BlockedUser.self, from: data) else{return}
-        chat.delegate?.chatEvent(event: .User(.init(type: .UNBLOCK, blockModel: blockedResult, threadId: chatMessage.subjectId)))
+		guard let blockedResult = try? JSONDecoder().decode(BlockedContact.self, from: data) else{return}
+        chat.delegate?.chatEvent(event: .Contact(.BLOCKED(blockedResult, id: chatMessage.subjectId)))
         
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
 		callback(.init(uniqueId: chatMessage.uniqueId ,result: blockedResult))        

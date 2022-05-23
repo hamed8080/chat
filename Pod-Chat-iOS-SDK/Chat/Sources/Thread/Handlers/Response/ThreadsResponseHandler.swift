@@ -10,14 +10,13 @@ import FanapPodAsyncSDK
 
 class ThreadsResponseHandler: ResponseHandler {
 
-
 	static func handle(_ chatMessage: ChatMessage, _ asyncMessage: AsyncMessage) {
 		
 		let chat = Chat.sharedInstance
-        chat.delegate?.chatEvent(event: .Thread(.init(type: .THREADS_LIST_CHANGE, chatMessage: chatMessage)))
-		
+        
 		guard let data = chatMessage.content?.data(using: .utf8) else {return}
 		guard let conversations = try? JSONDecoder().decode([Conversation].self, from: data) else{return}
+        chat.delegate?.chatEvent(event: .Thread(.THREADS_LIST_CHANGE(conversations)))
         
 		CacheFactory.write(cacheType: .THREADS(conversations))
 		PSM.shared.save()

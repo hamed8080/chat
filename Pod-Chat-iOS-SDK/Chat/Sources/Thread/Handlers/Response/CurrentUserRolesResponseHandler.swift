@@ -17,7 +17,7 @@ class CurrentUserRolesResponseHandler: ResponseHandler {
 		
 		guard let data = chatMessage.content?.data(using: .utf8) else {return}
 		guard let userRoles = try? JSONDecoder().decode([Roles].self, from: data) else{return}
-        chat.delegate?.chatEvent(event: .User(.init(type: .ROLES, threadId: chatMessage.subjectId, roles: userRoles)))
+        chat.delegate?.chatEvent(event: .User(.ROLES(userRoles, id:chatMessage.subjectId)))
         CacheFactory.write(cacheType: .CURRENT_USER_ROLES( userRoles , chatMessage.subjectId))
         PSM.shared.save()
         

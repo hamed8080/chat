@@ -11,7 +11,7 @@ class GetBlockedContactsRequestHandler {
 
 	class func handle( _ req:BlockedListRequest ,
 					   _ chat:Chat,
-					   _ completion: @escaping PaginationCompletionType<[BlockedUser]>,
+					   _ completion: @escaping PaginationCompletionType<[BlockedContact]>,
 					   _ uniqueIdResult: UniqueIdResultType = nil
 	){
 		
@@ -21,7 +21,7 @@ class GetBlockedContactsRequestHandler {
 								messageType: .GET_BLOCKED,
                                 uniqueIdResult: uniqueIdResult){response in
             let pagination = Pagination(count: req.count, offset: req.offset, totalCount: response.contentCount)
-            completion(response.result as? [BlockedUser] , response.uniqueId , pagination , response.error)
+            completion(response.result as? [BlockedContact] , response.uniqueId , pagination , response.error)
         }
         
 //    TODO: must ad to core data cache

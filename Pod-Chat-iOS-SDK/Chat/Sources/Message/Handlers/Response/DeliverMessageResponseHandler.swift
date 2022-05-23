@@ -14,7 +14,7 @@ class DeliverMessageResponseHandler: ResponseHandler {
 		let chat = Chat.sharedInstance
         let message = Message(chatMessage: chatMessage)
         
-        chat.delegate?.chatEvent(event: .Message(.init(type: .MESSAGE_DELIVERY, chatMessage: chatMessage)))
+        chat.delegate?.chatEvent(event: .Message(.MESSAGE_DELIVERY(message)))
         
         CacheFactory.write(cacheType: .MESSAGE(message))
         CacheFactory.save()
