@@ -10,13 +10,15 @@ import Foundation
 open class UserEventModel {
     
     public let type:        UserEventTypes
-    public let blockModel:  BlockedUser
+    public let blockModel:  BlockedUser?
     public let threadId:    Int?
+    public let roles:[Roles]?
     
-    init(type: UserEventTypes, blockModel: BlockedUser, threadId: Int?) {
+    init(type: UserEventTypes, blockModel: BlockedUser? = nil, threadId: Int? = nil, roles:[Roles]? = nil) {
         self.type       = type
         self.blockModel = blockModel
         self.threadId   = threadId
+        self.roles      = roles
     }
     
 }
@@ -24,4 +26,5 @@ open class UserEventModel {
 public enum UserEventTypes {
     case BLOCK
     case UNBLOCK
+    case ROLES
 }

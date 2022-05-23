@@ -20,9 +20,11 @@ public protocol ChatDelegate:class{
 public enum ChatEventType{
     case Bot(BotEventModel)
     case Contact(ContactEventModel)
-    case File(FileUploadEventModel)
+    case File(FileEventModel)
     case System(SystemEventModel)
     case Message(MessageEventModel)
     case Thread(ThreadEventModel)
     case User(UserEventModel)
+    case Assistant(AssistantEventModel)
+    case Tag(TagEventModel)
 }

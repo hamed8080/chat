@@ -22,6 +22,9 @@ extension CMUser {
     @NSManaged public var receiveEnable:    NSNumber?
     @NSManaged public var sendEnable:       NSNumber?
     @NSManaged public var username:         String?
+    @NSManaged public var ssoId:            String?
+    @NSManaged public var firstName:        String?
+    @NSManaged public var lastName:         String?
     
     @NSManaged public var bio:              String?
     @NSManaged public var metadata:         String?

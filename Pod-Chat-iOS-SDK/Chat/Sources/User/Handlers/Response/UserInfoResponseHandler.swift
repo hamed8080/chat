@@ -14,12 +14,13 @@ class UserInfoResponseHandler: ResponseHandler{
 		
 		let chat = Chat.sharedInstance
         chat.delegate?.chatEvent(event: .System( .init(type: .SERVER_TIME, time: chatMessage.time)))
-        guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
-		guard let data = chatMessage.content?.data(using: .utf8) else {return}
-		guard let user = try? JSONDecoder().decode(User.self, from: data) else {return}
-		callback(.init(uniqueId: chatMessage.uniqueId ,result: user))
+        guard let data = chatMessage.content?.data(using: .utf8) else {return}
+        guard let user = try? JSONDecoder().decode(User.self, from: data) else {return}
         CacheFactory.write(cacheType: .USER_INFO(user))
         PSM.shared.save()
+        
+        guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
+		callback(.init(uniqueId: chatMessage.uniqueId ,result: user))        
         chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .USER_INFO)
 	}
 }

@@ -16,8 +16,14 @@ class ProgressImplementation : NSObject ,URLSessionDataDelegate , URLSessionTask
     private var downloadCompletion:((Data?,HTTPURLResponse?,Error?)->())? = nil
     private var downloadFileProgress = DownloadFileProgress(percent: 0, totalSize: 0, bytesRecivied: 0)
     private var response:HTTPURLResponse?
+    private var uniqueId:String
     
-    init(uploadProgress:UploadFileProgressType? = nil , downloadProgress:DownloadProgressType? = nil ,downloadCompletion:((Data?,HTTPURLResponse?,Error?)->())? = nil){
+    private var delegate:ChatDelegate?{
+        return Chat.sharedInstance.delegate
+    }
+    
+    init(uniqueId:String, uploadProgress:UploadFileProgressType? = nil , downloadProgress:DownloadProgressType? = nil ,downloadCompletion:((Data?,HTTPURLResponse?,Error?)->())? = nil){
+        self.uniqueId           = uniqueId
         self.uploadProgress     = uploadProgress
         self.downloadProgress   = downloadProgress
         self.downloadCompletion = downloadCompletion
@@ -28,6 +34,7 @@ class ProgressImplementation : NSObject ,URLSessionDataDelegate , URLSessionTask
         let percent = ( Float(totalBytesSent) / Float(totalBytesExpectedToSend) ) * 100
         Chat.sharedInstance.logger?.log(title: "Upload progress:\(percent)")
         uploadProgress?(UploadFileProgress(percent: Int64(percent), totalSize: totalBytesExpectedToSend, bytesSend: totalBytesSent),nil)
+        delegate?.chatEvent(event: .File(.init(type: .UPLOADING, uniqueId: uniqueId)))
     }
     //MARK:- END Upload progress Delegates
     
@@ -38,6 +45,7 @@ class ProgressImplementation : NSObject ,URLSessionDataDelegate , URLSessionTask
         downloadProgress?(downloadFileProgress)
         Chat.sharedInstance.logger?.log(title: "Download progress:\(downloadFileProgress.percent)")
         completionHandler(.allow)
+        delegate?.chatEvent(event: .File(.init(type: .DOWNLOADING, uniqueId: uniqueId)))
     }
     
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {

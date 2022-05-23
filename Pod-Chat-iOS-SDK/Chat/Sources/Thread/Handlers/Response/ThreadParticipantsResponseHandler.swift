@@ -13,13 +13,17 @@ class ThreadParticipantsResponseHandler : ResponseHandler{
 	static func handle(_ chatMessage: ChatMessage, _ asyncMessage: AsyncMessage) {
 		
 		let chat = Chat.sharedInstance
-        chat.delegate?.chatEvent(event: .Thread(.init(type: .THREAD_PARTICIPANTS_LIST_CHANGE, chatMessage: chatMessage)))
-        guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
+        
+        
 		guard let data = chatMessage.content?.data(using: .utf8) else {return}
 		guard let participants = try? JSONDecoder().decode([Participant].self, from: data) else{return}
-        callback(.init(uniqueId: chatMessage.uniqueId , result: participants , contentCount: chatMessage.contentCount ?? 0))
+        chat.delegate?.chatEvent(event: .Thread(.init(type: .THREAD_PARTICIPANTS_LIST_CHANGE, chatMessage: chatMessage, participants: participants)))
         CacheFactory.write(cacheType: .PARTICIPANTS(participants, chatMessage.subjectId))
         PSM.shared.save()
+        
+        guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
+        callback(.init(uniqueId: chatMessage.uniqueId , result: participants , contentCount: chatMessage.contentCount ?? 0))
+        
         chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .THREAD_PARTICIPANTS)
 	}
 }
