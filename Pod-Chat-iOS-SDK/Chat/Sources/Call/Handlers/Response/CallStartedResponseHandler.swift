@@ -16,10 +16,10 @@ class CallStartedResponseHandler {
         guard let data = chatMessage.content?.data(using: .utf8) else {return}
         
         guard var callStarted = try? JSONDecoder().decode(StartCall.self, from: data) else{return}
-        chat.delegate?.chatEvent(event: .Call(CallEventModel(type: .CALL_STARTED(callStarted))))
-        chat.callState = .Started
-        
         callStarted.callId = chatMessage.subjectId
+        chat.delegate?.chatEvent(event: .Call(CallEventModel(type: .CALL_STARTED(callStarted))))
+        
+        chat.callState = .Started
         chat.callbacksManager.callStartedDelegate?(callStarted,chatMessage.uniqueId)
     }
 }
