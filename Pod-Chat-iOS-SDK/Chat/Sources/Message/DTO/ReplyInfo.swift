@@ -59,11 +59,12 @@ open class ReplyInfo : Codable {
 		self.metadata  = try container.decodeIfPresent(String.self, forKey: .metadata)
 		self.repliedToMessageId  = try container.decodeIfPresent(Int.self, forKey: .repliedToMessageId)
 		self.systemMetadata  = try container.decodeIfPresent(String.self, forKey: .systemMetadata)
-		self.repliedToMessageNanos  = try container.decode(UInt.self, forKey: .repliedToMessageNanos)
-		self.repliedToMessageTime =  try container.decode(UInt.self, forKey: .repliedToMessageTime)
-		self.participant = try container.decode(Participant.self, forKey: .participant)
-		guard let repliedToMessageTime = repliedToMessageTime , let repliedToMessageNanos = repliedToMessageNanos else {return}
-		self.time = ((UInt(repliedToMessageTime / 1000)) * 1000000000 ) + repliedToMessageNanos
+		self.repliedToMessageNanos  = try container.decodeIfPresent(UInt.self, forKey: .repliedToMessageNanos)
+		self.repliedToMessageTime =  try container.decodeIfPresent(UInt.self, forKey: .repliedToMessageTime)
+		self.participant = try container.decodeIfPresent(Participant.self, forKey: .participant)
+        if let repliedToMessageTime = repliedToMessageTime , let repliedToMessageNanos = repliedToMessageNanos {
+            self.time = ((UInt(repliedToMessageTime / 1000)) * 1000000000 ) + repliedToMessageNanos
+        }
 	}
     
 	
