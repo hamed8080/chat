@@ -18,7 +18,6 @@ public class BlockedAssistantsRequestHandler  {
     ){
         chat.prepareToSendAsync(req: req,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode,
                                 messageType:.BLOCKED_ASSISTNTS,
                                 uniqueIdResult: uniqueIdResult
         ){ response in

@@ -24,7 +24,6 @@ public class UploadImageRequest : UploadFileRequest{
                 mimeType:       String?  = nil,
                 originalName:   String?  = nil,
                 userGroupHash:  String?  = nil,
-                typeCode:       String?  = nil,
                 uniqueId:       String?  = nil,
                 isPublic:       Bool?    = nil) {
         self.xC = xC
@@ -38,7 +37,6 @@ public class UploadImageRequest : UploadFileRequest{
                    mimeType:mimeType,
                    originalName:originalName,
                    userGroupHash:userGroupHash,
-                   typeCode:typeCode,
                    uniqueId:uniqueId
                    )
     }

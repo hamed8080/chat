@@ -42,7 +42,6 @@ public class UpdateThreadInfoRequestHandler  {
         }
         Chat.sharedInstance.prepareToSendAsync(req: req,
                                                clientSpecificUniqueId: req.uniqueId,
-                                               typeCode: req.typeCode,
                                                subjectId: req.threadId ,
                                                messageType: .UPDATE_THREAD_INFO){uniqueId in
             

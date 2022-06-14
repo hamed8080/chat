@@ -12,10 +12,10 @@ public class MapReverseRequest :BaseRequest {
     public let lat:     Double
     public let lng:     Double
     
-    public init(lat:Double,lng:Double ,uniqueId: String? = nil, typeCode: String? = nil) {
+    public init(lat:Double,lng:Double ,uniqueId: String? = nil) {
         self.lat    = lat
         self.lng    = lng
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
     
     private enum CodingKeys :String , CodingKey{

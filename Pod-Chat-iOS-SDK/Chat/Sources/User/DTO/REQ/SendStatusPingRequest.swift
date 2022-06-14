@@ -21,22 +21,22 @@ public class SendStatusPingRequest : BaseRequest{
 	public let statusType:StatusPingType
 	public let id:Int?
 	
-	public init(statusType:StatusPingType,uniqueId:String? = nil , typeCode:String? = nil){
+	public init(statusType:StatusPingType,uniqueId:String? = nil){
 		self.id = nil
 		self.statusType = statusType
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
-	public init(statusType:StatusPingType , contactId:Int,uniqueId: String? = nil, typeCode: String? = nil){
+	public init(statusType:StatusPingType , contactId:Int,uniqueId: String? = nil){
 		self.id = contactId
 		self.statusType = statusType
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
-	public init(statusType:StatusPingType , threadId:Int,uniqueId: String? = nil, typeCode: String? = nil){
+	public init(statusType:StatusPingType , threadId:Int,uniqueId: String? = nil){
 		self.id = threadId
 		self.statusType = statusType
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
 	private enum CodingKeys : String ,CodingKey{

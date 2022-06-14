@@ -15,7 +15,6 @@ class LeaveThreadRequestHandler {
 	){
 		chat.prepareToSendAsync(req: req,
 								clientSpecificUniqueId: req.uniqueId,
-								typeCode: req.typeCode ,
 								subjectId: req.threadId,
 								messageType: .LEAVE_THREAD,
                                 uniqueIdResult: uniqueIdResult){ response in

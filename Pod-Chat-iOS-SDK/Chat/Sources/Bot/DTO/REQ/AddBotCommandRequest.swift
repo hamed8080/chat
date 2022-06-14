@@ -11,7 +11,7 @@ public class AddBotCommandRequest: BaseRequest {
 	public let botName			: String
 	public var commandList		: [String] = []
 	
-	public init(botName: String, commandList: [String],typeCode: String? = nil, uniqueId: String? = nil) {
+	public init(botName: String, commandList: [String], uniqueId: String? = nil) {
 		
 		self.botName    = botName
 		for command in commandList {
@@ -21,7 +21,7 @@ public class AddBotCommandRequest: BaseRequest {
 				self.commandList.append("/\(command)")
 			}
 		}
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
 	private enum CodingKeys : String , CodingKey{

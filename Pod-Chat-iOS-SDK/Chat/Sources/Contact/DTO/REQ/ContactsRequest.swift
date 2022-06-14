@@ -30,8 +30,7 @@ public class ContactsRequest : BaseRequest {
                  order                : Ordering?  = nil,
                  query                : String?    = nil,
                  summery              : Bool?      = nil,
-                 uniqueId             : String?    = nil,
-                 typeCode             : String?    = nil
+                 uniqueId             : String?    = nil
                  ) {
 		
 		self.size     		 	= count
@@ -42,7 +41,7 @@ public class ContactsRequest : BaseRequest {
 		self.order             	= order?.rawValue ?? nil
 		self.query             	= query
 		self.summery           	= summery
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
 	private enum CodingKeys:String ,CodingKey{

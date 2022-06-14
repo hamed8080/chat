@@ -23,12 +23,12 @@ public class MapRoutingRequest : BaseRequest {
 	private  let destination:Cordinate
 	private  let origin:Cordinate
 	
-	public init(alternative: Bool?, origin: Cordinate, destination: Cordinate,uniqueId: String? = nil, typeCode: String? = nil) {
+	public init(alternative: Bool?, origin: Cordinate, destination: Cordinate,uniqueId: String? = nil) {
 		
 		self.alternative = alternative ?? true
 		self.destination = origin
 		self.origin      = destination
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
 	private enum CodingKeys:String , CodingKey{

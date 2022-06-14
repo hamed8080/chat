@@ -11,9 +11,9 @@ public class IsThreadNamePublicRequest: BaseRequest {
 	
 	public let name:String
 	
-	public init(name:String ,typeCode : String? = nil,uniqueId: String? = nil){
+	public init(name:String, uniqueId: String? = nil){
 		self.name = name
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
 	private enum CodingKeys:String,CodingKey{

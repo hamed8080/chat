@@ -34,7 +34,6 @@ public class LocationMessageRequest : BaseRequest {
                 repliedTo      : Int?       = nil,
                 systemMetadata : String?    = nil,
                 textMessage    : String?    = nil,
-                typeCode       : String?    = nil,
                 uniqueId       : String?    = nil) {
         
         self.mapCenter      = mapCenter
@@ -51,6 +50,6 @@ public class LocationMessageRequest : BaseRequest {
         self.userGroupHash  = userGroupHash
         
         self.messageType    = MessageType.PICTURE
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
 }

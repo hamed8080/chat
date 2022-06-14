@@ -11,10 +11,10 @@ public class BlockedListRequest : BaseRequest {
 	public let count:       Int
 	public let offset:      Int
 	
-	public init (count: Int = 50 , offset: Int = 0,uniqueId:String? = nil , typeCode:String? = nil){
+	public init (count: Int = 50 , offset: Int = 0,uniqueId:String? = nil){
 		self.count      = count
 		self.offset     = offset
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
 	private enum CodingKeys: String , CodingKey{

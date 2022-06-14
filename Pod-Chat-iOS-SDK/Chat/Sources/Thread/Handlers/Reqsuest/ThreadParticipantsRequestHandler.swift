@@ -16,7 +16,6 @@ class ThreadParticipantsRequestHandler {
 	){
 		chat.prepareToSendAsync(req: req,
 								clientSpecificUniqueId: req.uniqueId,
-								typeCode: req.typeCode ,
 								subjectId: req.threadId,
 								messageType: .THREAD_PARTICIPANTS,
                                 uniqueIdResult: uniqueIdResult){ response in

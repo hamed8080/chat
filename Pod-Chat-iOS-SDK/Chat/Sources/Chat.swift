@@ -45,8 +45,8 @@ public class Chat {
     
     var isCreateObjectFuncCalled                 = false
     var config                : ChatConfig?
-    var callbacksManager                         = CallbacksManager()
-    internal var asyncManager : AsyncManager     = AsyncManager()
+    let callbacksManager                         = CallbacksManager()
+    internal let asyncManager : AsyncManager     = AsyncManager()
     internal var logger       : Logger?
     public private (set) var userInfo              : User?
     var token                 : String?  = nil
@@ -222,8 +222,8 @@ public class Chat {
     
     //Test Status: Main ✅ - Integeration: ✅
     //may remove in future release and provide a substitution way and move request to Object model and class AddParticipantRequest
-    public func addParticipant(_ contactIds:[Int], threadId:Int, uniqueId:String,typeCode:String, completion:@escaping CompletionType<Conversation> , uniqueIdResult: UniqueIdResultType = nil){
-        AddParticipantsRequestHandler.handle(contactIds, threadId, uniqueId, typeCode, self, completion, uniqueIdResult)
+    public func addParticipant(_ contactIds:[Int], threadId:Int, uniqueId:String, completion:@escaping CompletionType<Conversation> , uniqueIdResult: UniqueIdResultType = nil){
+        AddParticipantsRequestHandler.handle(contactIds, threadId, uniqueId, self, completion, uniqueIdResult)
     }
     
     //Test Status: Main ✅ - Integeration: ✅
@@ -343,8 +343,8 @@ public class Chat {
     }
     
     //Test Status: Main ❌ - Integeration: ✅
-    public func tagList(_ uniqueId:String? = nil , typeCode:String? = nil, completion:@escaping CompletionType<[Tag]>,uniqueIdResult: UniqueIdResultType = nil){
-        TagListRequestHandler.handle(uniqueId , typeCode, self , completion, uniqueIdResult)
+    public func tagList(_ uniqueId:String? = nil, completion:@escaping CompletionType<[Tag]>,uniqueIdResult: UniqueIdResultType = nil){
+        TagListRequestHandler.handle(uniqueId, self , completion, uniqueIdResult)
     }
     
     //Test Status: Main ❌ - Integeration: ✅
@@ -725,7 +725,6 @@ public class Chat {
 	// SOCKET Request
     func prepareToSendAsync(        req                                    : Encodable?              = nil,
                                     clientSpecificUniqueId                 : String?                 = nil,
-                                    typeCode                               : String?                 = nil,
 									//this sometimes use to send threadId with subjectId Key must fix from server to get threadId
                                     subjectId                              : Int?                    = nil,
                                     plainText                              : Bool                    = false,
@@ -744,7 +743,6 @@ public class Chat {
 		guard let config = config else {return}
 		let uniqueId = clientSpecificUniqueId ?? UUID().uuidString
 		uniqueIdResult?(uniqueId)
-		let typeCode = typeCode ?? config.typeCode ?? "default"
 		
         let chatMessage = SendChatMessageVO(type                               : messageType.rawValue,
                                             token                              : config.token,
@@ -754,7 +752,7 @@ public class Chat {
                                             repliedTo                          : repliedTo,
                                             systemMetadata                     : systemMetadata,
                                             subjectId                          : subjectId,
-                                            typeCode                           : typeCode,
+                                            typeCode                           : config.typeCode,
                                             uniqueId                           : uniqueId)
 		
 		guard let chatMessageContent = chatMessage.convertCodableToString() else{return}

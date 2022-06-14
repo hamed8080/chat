@@ -11,17 +11,17 @@ public class RemoveParticipantsRequest : BaseRequest {
 	public let participantIds:  [Int]
 	public let threadId:        Int
 	
-	public init(participantId:Int , threadId:Int ,uniqueId: String? = nil, typeCode: String? = nil) {
+	public init(participantId:Int , threadId:Int ,uniqueId: String? = nil) {
         self.threadId       = threadId
 		self.participantIds = [participantId]
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
 	
-	public init(participantIds:[Int] , threadId:Int ,uniqueId: String? = nil, typeCode: String? = nil) {
+	public init(participantIds:[Int] , threadId:Int ,uniqueId: String? = nil) {
         self.threadId       = threadId
 		self.participantIds = participantIds
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
 }

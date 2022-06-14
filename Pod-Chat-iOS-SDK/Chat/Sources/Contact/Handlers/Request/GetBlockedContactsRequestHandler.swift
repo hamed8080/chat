@@ -17,7 +17,6 @@ class GetBlockedContactsRequestHandler {
 		
 		chat.prepareToSendAsync(req: req,
 								clientSpecificUniqueId: req.uniqueId,
-								typeCode: req.typeCode ,
 								messageType: .GET_BLOCKED,
                                 uniqueIdResult: uniqueIdResult){response in
             let pagination = Pagination(count: req.count, offset: req.offset, totalCount: response.contentCount)

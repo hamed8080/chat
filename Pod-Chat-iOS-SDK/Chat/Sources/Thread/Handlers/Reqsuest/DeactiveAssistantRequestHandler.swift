@@ -17,7 +17,6 @@ public class DeactiveAssistantRequestHandler  {
     ){
         chat.prepareToSendAsync(req: req.assistants,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode,
                                 messageType:.DEACTICVE_ASSISTANT,
                                 uniqueIdResult: uniqueIdResult
         ){ response in

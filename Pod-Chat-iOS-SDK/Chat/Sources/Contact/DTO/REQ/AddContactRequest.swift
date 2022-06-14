@@ -22,7 +22,6 @@ public class AddContactRequest : BaseRequest {
                 firstName          : String? = nil,
                 lastName           : String? = nil,
                 ownerId            : Int?    = nil,
-                typeCode           : String? = "default",
                 uniqueId           : String? = nil) {
         
         self.cellphoneNumber    = cellphoneNumber
@@ -31,7 +30,7 @@ public class AddContactRequest : BaseRequest {
         self.lastName           = lastName
         self.ownerId            = ownerId
         self.username           = nil
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
     
     /// Add Contact with username
@@ -40,7 +39,6 @@ public class AddContactRequest : BaseRequest {
                 lastName:   String?,
                 ownerId:    Int?,
                 username:   String?,
-                typeCode:   String?,
                 uniqueId:   String?) {
         
         self.cellphoneNumber    = nil
@@ -49,7 +47,7 @@ public class AddContactRequest : BaseRequest {
         self.lastName           = lastName
         self.ownerId            = ownerId
         self.username           = username
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
     
     
@@ -73,6 +71,6 @@ public class AddContactRequest : BaseRequest {
         try container.encodeIfPresent(ownerId, forKey: .ownerId)
         try container.encodeIfPresent(username, forKey: .username)
         try container.encodeIfPresent(uniqueId, forKey: .uniqueId)
-        try container.encodeIfPresent(typeCode, forKey: .typeCode)
+        try container.encodeIfPresent(Chat.sharedInstance.config?.typeCode, forKey: .typeCode)
     }
 }

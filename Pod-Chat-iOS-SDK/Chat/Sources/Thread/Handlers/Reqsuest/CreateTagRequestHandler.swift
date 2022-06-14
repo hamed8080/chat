@@ -15,7 +15,6 @@ class CreateTagRequestHandler {
     ){
         chat.prepareToSendAsync(req: req,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode ,
                                 messageType: .CREATE_TAG,
                                 uniqueIdResult: uniqueIdResult){ response in
             completion(response.result as? Tag , response.uniqueId, response.error )

@@ -29,7 +29,6 @@ public class UploadFileRequest: BaseRequest {
                 mimeType:       String?  = nil,
                 originalName:   String?  = nil,
                 userGroupHash:  String?  = nil,
-                typeCode:       String?  = nil,
                 uniqueId:       String?  = nil) {
         self.data           = data
         self.fileExtension  = fileExtension
@@ -40,7 +39,7 @@ public class UploadFileRequest: BaseRequest {
         self.userGroupHash  = userGroupHash
         self.originalName   = originalName ?? fileName + (fileExtension ?? "")
         self.isPublic       = userGroupHash != nil ? false : isPublic//if send file iniside the thread we need to set is isPublic to false
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
     
     class func guessMimeType(_ fileExtension:String?, _ fileName:String?)->String{

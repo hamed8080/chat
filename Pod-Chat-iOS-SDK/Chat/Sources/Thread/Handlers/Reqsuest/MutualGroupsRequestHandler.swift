@@ -16,7 +16,6 @@ class MutualGroupsRequestHandler {
     ){
         chat.prepareToSendAsync(req: req,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode,
                                 messageType:.MUTUAL_GROUPS,
                                 uniqueIdResult: uniqueIdResult
         ){ response in

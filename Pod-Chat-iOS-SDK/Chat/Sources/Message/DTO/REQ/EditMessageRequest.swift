@@ -21,7 +21,6 @@ public class EditMessageRequest: BaseRequest {
                 textMessage:    String,
                 repliedTo:      Int?    = nil,
                 metadata:       String? = nil,
-                typeCode:       String? = nil,
                 uniqueId:       String? = nil
     ) {
         self.threadId       = threadId
@@ -30,7 +29,7 @@ public class EditMessageRequest: BaseRequest {
         self.messageId      = messageId
         self.textMessage    = textMessage
         self.metadata       = metadata
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
     
 }

@@ -14,7 +14,6 @@ public class ReplyMessageRequest : SendTextMessageRequest {
                 messageType    : MessageType,
                 metadata       : String?        = nil,
                 systemMetadata : String?        = nil,
-                typeCode       : String?        = nil,
                 uniqueId       : String?        = nil
     ) {
 
@@ -24,7 +23,6 @@ public class ReplyMessageRequest : SendTextMessageRequest {
                    metadata: metadata,
                    repliedTo: repliedTo,
                    systemMetadata: systemMetadata,
-                   typeCode: typeCode,
                    uniqueId: uniqueId)
     }
     

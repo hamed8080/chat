@@ -16,7 +16,6 @@ class UnMuteThreadRequestHandler {
 		
 		chat.prepareToSendAsync(req: nil,
 								clientSpecificUniqueId: request.uniqueId,
-								typeCode: request.typeCode,
 								subjectId: request.threadId ,
 								messageType: .UNMUTE_THREAD,
                                 uniqueIdResult: uniqueIdResult){ response in

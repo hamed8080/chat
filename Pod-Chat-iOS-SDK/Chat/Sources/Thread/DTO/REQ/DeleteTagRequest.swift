@@ -10,8 +10,8 @@ public class DeleteTagRequest: BaseRequest {
 	
     public var id    : Int
 	
-    public init(id:Int, uniqueId: String? = nil, typeCode: String? = nil){
+    public init(id:Int, uniqueId: String? = nil){
         self.id     = id
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 }

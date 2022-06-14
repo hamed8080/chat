@@ -23,7 +23,6 @@ public class CreateThreadRequest: BaseRequest {
 				title:          String,
 				type:           ThreadTypes? = nil,
 				uniqueName:     String? = nil,
-                typeCode:       String? = nil,
                 uniqueId:       String? = nil
                 ) {
 		
@@ -34,7 +33,7 @@ public class CreateThreadRequest: BaseRequest {
 		self.title          = title
 		self.type           = type
 		self.uniqueName     = uniqueName
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
 	private enum CodingKeys: String ,CodingKey{

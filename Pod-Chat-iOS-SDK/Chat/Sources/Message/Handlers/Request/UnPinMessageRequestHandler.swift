@@ -15,7 +15,6 @@ class UnPinMessageRequestHandler {
     ){
         chat.prepareToSendAsync(req: req,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode ,
                                 subjectId: req.messageId,
                                 messageType: .UNPIN_MESSAGE,
                                 uniqueIdResult: uniqueIdResult){ response in

@@ -13,11 +13,11 @@ public class ThreadParticipantsRequest : BaseRequest {
 	public let threadId         :Int
     public var admin            :Bool = false
 	
-	public init (threadId:Int,offset:Int = 0, count:Int = 50 ,uniqueId:String? = nil , typeCode:String? = nil){
+	public init (threadId:Int,offset:Int = 0, count:Int = 50 ,uniqueId:String? = nil){
         self.count    = count
         self.offset   = offset
 		self.threadId = threadId
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
 	private enum CodingKeys:String ,CodingKey{

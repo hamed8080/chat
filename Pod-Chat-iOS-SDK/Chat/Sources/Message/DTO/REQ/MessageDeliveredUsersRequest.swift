@@ -12,11 +12,11 @@ public class MessageDeliveredUsersRequest : BaseRequest{
 	let offset:Int
 	let count:Int
 	
-	public init (messageId:Int,count:Int = 50 , offset:Int = 0,uniqueId: String? = nil, typeCode: String? = nil){
+	public init (messageId:Int,count:Int = 50 , offset:Int = 0,uniqueId: String? = nil){
 		self.messageId = messageId
         self.offset    = offset
         self.count     = count
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
 	private enum CodingKeys:String , CodingKey{

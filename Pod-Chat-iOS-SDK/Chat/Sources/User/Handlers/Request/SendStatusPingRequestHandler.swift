@@ -11,7 +11,6 @@ class SendStatusPingRequestHandler {
 	class func handle(_ req:SendStatusPingRequest,_ chat:Chat ){
 		chat.prepareToSendAsync(req: req,
 								clientSpecificUniqueId: req.uniqueId,
-								typeCode: req.typeCode ,
 								messageType: .STATUS_PING)
 	}
 }

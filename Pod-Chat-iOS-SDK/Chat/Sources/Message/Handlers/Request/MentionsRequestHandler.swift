@@ -16,7 +16,6 @@ class MentionsRequestHandler {
 	){
 		chat.prepareToSendAsync(req: req,
 								clientSpecificUniqueId: req.uniqueId,
-								typeCode: req.typeCode ,
 								subjectId: req.threadId,
 								messageType: .GET_HISTORY,
                                 uniqueIdResult: uniqueIdResult){ response in

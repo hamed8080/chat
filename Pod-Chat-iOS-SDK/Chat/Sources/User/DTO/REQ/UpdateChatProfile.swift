@@ -12,11 +12,11 @@ public class UpdateChatProfile: BaseRequest {
 	public let bio:         String?
 	public let metadata:    String?
 	
-	public init(bio: String?, metadata:String? = nil,uniqueId:String? = nil , typeCode:String? = nil) {
+	public init(bio: String?, metadata:String? = nil,uniqueId:String? = nil) {
 		
 		self.bio        = bio
 		self.metadata   = metadata
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
 	private enum CodingKeys : String , CodingKey{

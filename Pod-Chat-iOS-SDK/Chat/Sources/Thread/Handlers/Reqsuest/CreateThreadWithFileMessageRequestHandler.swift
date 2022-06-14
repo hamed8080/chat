@@ -23,7 +23,6 @@ class CreateThreadWithFileMessageRequestHandler {
         
         chat.prepareToSendAsync(req: request,
                                 clientSpecificUniqueId: request.uniqueId,
-                                typeCode: request.typeCode ,
                                 messageType: .CREATE_THREAD,
                                 uniqueIdResult: nil){ response in
             

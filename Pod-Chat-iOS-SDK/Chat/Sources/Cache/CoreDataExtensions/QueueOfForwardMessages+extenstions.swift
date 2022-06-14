@@ -16,7 +16,6 @@ extension QueueOfForwardMessages{
         return ForwardMessageRequest(
             threadId:threadId,
             messageId: messageId,
-            typeCode: typeCode,
             uniqueId: uniqueId
         )
     }
@@ -27,7 +26,7 @@ extension QueueOfForwardMessages{
         model.threadId       = request.threadId as NSNumber?
         model.messageId      = messageId as NSNumber?
         model.repliedTo      = nil
-        model.typeCode       = request.typeCode
+        model.typeCode       = Chat.sharedInstance.config?.typeCode
         model.uniqueId       = request.uniqueId
         
         return model

@@ -15,7 +15,6 @@ class CloseThreadRequestHandler {
 	){
 		chat.prepareToSendAsync(req: nil,
 								clientSpecificUniqueId: req.uniqueId,
-								typeCode: req.typeCode ,
 								subjectId: req.threadId,
 								messageType: .CLOSE_THREAD,
                                 uniqueIdResult: uniqueIdResult){ response in

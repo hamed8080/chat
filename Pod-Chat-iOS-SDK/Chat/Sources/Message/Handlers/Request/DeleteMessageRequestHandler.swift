@@ -15,7 +15,6 @@ class DeleteMessageRequestHandler {
 	){
 		chat.prepareToSendAsync(req: req,
 								clientSpecificUniqueId: req.uniqueId,
-								typeCode: req.typeCode ,
 								subjectId: req.messageId,
 								messageType: .DELETE_MESSAGE,
                                 uniqueIdResult: uniqueIdResult){ response in

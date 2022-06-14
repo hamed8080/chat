@@ -18,7 +18,6 @@ public class GetAssistantsRequestHandler  {
     ){
         chat.prepareToSendAsync(req: req,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode,
                                 messageType:.GET_ASSISTANTS,
                                 uniqueIdResult: uniqueIdResult
         ){ response in

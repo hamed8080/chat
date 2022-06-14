@@ -36,7 +36,6 @@ class SendLocationMessageRequestHandler {
                                                     fileName:  request.mapImageName,
                                                     mimeType: "image/png",
                                                     userGroupHash: request.userGroupHash,
-                                                    typeCode: request.typeCode,
                                                     uniqueId: request.uniqueId)
             
             let textMessage = SendTextMessageRequest(threadId: request.threadId,
@@ -44,7 +43,6 @@ class SendLocationMessageRequestHandler {
                                       messageType: .POD_SPACE_PICTURE,
                                       repliedTo: request.repliedTo,
                                       systemMetadata: request.systemMetadata,
-                                      typeCode: request.typeCode,
                                       uniqueId: request.uniqueId)
             
             chat.sendFileMessage(textMessage: textMessage,

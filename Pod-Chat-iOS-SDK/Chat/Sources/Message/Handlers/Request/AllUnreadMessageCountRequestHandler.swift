@@ -16,7 +16,6 @@ class AllUnreadMessageCountRequestHandler {
 	){
 		chat.prepareToSendAsync(req: req,
 								clientSpecificUniqueId: req.uniqueId,
-								typeCode: req.typeCode ,
 								messageType: .ALL_UNREAD_MESSAGE_COUNT,
                                 uniqueIdResult: uniqueIdResult){ response in
             completion(response.result as? Int,response.uniqueId , response.error)

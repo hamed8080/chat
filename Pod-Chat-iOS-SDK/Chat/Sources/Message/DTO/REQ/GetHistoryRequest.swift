@@ -62,8 +62,7 @@ public class GetHistoryRequest: BaseRequest {
                 lastMessageTime  : UInt?                    = nil ,
                 historyEndTime   : UInt?                    = nil ,
                 readOnly         : Bool                     = false,
-                uniqueId         : String?                  = nil ,
-                typeCode         : String?                  = nil
+                uniqueId         : String?                  = nil
     ) {
         self.threadId         = threadId
         self.count            = count ?? 50
@@ -90,7 +89,7 @@ public class GetHistoryRequest: BaseRequest {
         self.lastMessageTime  = lastMessageTime
         self.historyEndTime   = historyEndTime
         self.readOnly         = readOnly
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
     
     private enum CodingKeys : String , CodingKey{

@@ -28,7 +28,6 @@ extension QueueOfFileMessages{
                                                       mimeType: mimeType,
                                                       originalName: originalName,
                                                       userGroupHash: userGroupHash,
-                                                      typeCode: typeCode,
                                                       uniqueId: uniqueId)
             return ( uploadRequest , textMessageRequest)
         }else{
@@ -40,7 +39,6 @@ extension QueueOfFileMessages{
                                                       mimeType: mimeType,
                                                       originalName: originalName,
                                                       userGroupHash: userGroupHash,
-                                                      typeCode: typeCode,
                                                       uniqueId: uniqueId)
             return ( uploadRequest , textMessageRequest)
         }
@@ -64,7 +62,7 @@ extension QueueOfFileMessages{
         model.mimeType      = request.mimeType
         model.originalName  = request.originalName
         model.userGroupHash = request.userGroupHash
-        model.typeCode      = request.typeCode
+        model.typeCode      = Chat.sharedInstance.config?.typeCode
       
         return model
     }
@@ -91,7 +89,7 @@ extension QueueOfFileMessages{
         model.yC            = request.yC as NSNumber?
         model.hC            = request.hC as NSNumber?
         model.wC            = request.wC as NSNumber?
-        model.typeCode      = request.typeCode
+        model.typeCode      = Chat.sharedInstance.config?.typeCode
         
         return model
     }

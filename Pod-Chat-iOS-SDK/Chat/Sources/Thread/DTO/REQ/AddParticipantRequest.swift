@@ -12,18 +12,18 @@ public class AddParticipantRequest: BaseRequest {
 	private let idType      : InviteeTypes
 	public  var threadId    : Int
 	
-	public init(userName:String , threadId:Int,uniqueId: String? = nil, typeCode: String? = nil){
+	public init(userName:String , threadId:Int,uniqueId: String? = nil){
 		idType = .TO_BE_USER_USERNAME
 		self.id = userName
 		self.threadId = threadId
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
     
-    public init (coreUserId:Int,threadId:Int,uniqueId: String? = nil, typeCode: String? = nil){
+    public init (coreUserId:Int,threadId:Int,uniqueId: String? = nil){
         idType = .TO_BE_CORE_USER_ID
         self.id = "\(coreUserId)"
         self.threadId = threadId
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
     
 	private enum CodingKeys:String , CodingKey{

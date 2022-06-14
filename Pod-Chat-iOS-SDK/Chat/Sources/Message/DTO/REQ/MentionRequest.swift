@@ -18,13 +18,12 @@ public class MentionRequest : BaseRequest {
 				 onlyUnreadMention:Bool,
 				 count:Int = 50 ,
 				 offset:Int = 0,
-                 uniqueId: String? = nil,
-                 typeCode: String? = nil){
+                 uniqueId: String? = nil){
 		self.count = count
 		self.offset = offset
 		self.threadId = threadId
 		self.onlyUnreadMention = onlyUnreadMention
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
 	private enum CodingKeys : String , CodingKey{

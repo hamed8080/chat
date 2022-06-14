@@ -11,7 +11,6 @@ class DeliverRequestHandler {
     class func handle( _ req:MessageDeliverRequest, _ chat:Chat , _ uniqueIdResult:UniqueIdResultType = nil){
 		chat.prepareToSendAsync(req: req.messageId,
 								clientSpecificUniqueId: req.uniqueId,
-								typeCode: req.typeCode ,
                                 plainText:true,
                                 messageType: .DELIVERY,
 								uniqueIdResult: uniqueIdResult,

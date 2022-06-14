@@ -17,7 +17,6 @@ class GetThreadsRequestHandler {
 		
 		chat.prepareToSendAsync(req: req,
 								clientSpecificUniqueId: req.uniqueId,
-								typeCode: req.typeCode ,
 								messageType: .GET_THREADS,
 								uniqueIdResult: uniqueIdResult){ response in
             let threads = response.result as? [Conversation]

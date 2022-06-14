@@ -27,7 +27,6 @@ public class CreateThreadWithMessage : CreateThreadRequest {
                    title: title,
                    type: type,
                    uniqueName: uniqueName,
-                   typeCode: nil,
                    uniqueId: nil)
 
     }

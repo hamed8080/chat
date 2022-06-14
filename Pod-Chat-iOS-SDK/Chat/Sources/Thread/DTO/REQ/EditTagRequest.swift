@@ -11,10 +11,10 @@ public class EditTagRequest: BaseRequest {
 	public var name  : String
     public var id    : Int
 	
-    public init(id:Int,tagName:String,uniqueId: String? = nil, typeCode: String? = nil){
+    public init(id:Int,tagName:String,uniqueId: String? = nil){
         self.id     = id
         self.name   = tagName
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
     
     

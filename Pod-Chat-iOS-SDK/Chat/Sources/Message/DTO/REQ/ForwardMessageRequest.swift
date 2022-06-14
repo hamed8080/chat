@@ -15,7 +15,6 @@ public class ForwardMessageRequest: BaseRequest {
     
     public init(threadId:Int,
                 messageIds:     [Int],
-                typeCode:       String? = nil,
                 uniqueId:       String? = nil
     ) {
         self.threadId       = threadId
@@ -25,12 +24,11 @@ public class ForwardMessageRequest: BaseRequest {
             uniqueIds.append(UUID().uuidString)
         }
         self.uniqueIds = uniqueIds
-        super.init(uniqueId: nil, typeCode: typeCode)
+        super.init(uniqueId: nil)
     }
     
     public init(threadId:Int,
                 messageId:      Int,
-                typeCode:       String? = nil,
                 uniqueId:       String? = nil
     ) {
         self.threadId       = threadId
@@ -40,7 +38,7 @@ public class ForwardMessageRequest: BaseRequest {
             uniqueIds.append(UUID().uuidString)
         }
         self.uniqueIds = uniqueIds
-        super.init(uniqueId: nil, typeCode: typeCode)
+        super.init(uniqueId: nil)
     }
     
 }

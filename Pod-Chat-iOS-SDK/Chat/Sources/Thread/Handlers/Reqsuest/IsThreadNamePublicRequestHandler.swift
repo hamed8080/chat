@@ -16,7 +16,6 @@ class IsThreadNamePublicRequestHandler {
 		
 		chat.prepareToSendAsync(req: req,
 								clientSpecificUniqueId: req.uniqueId,
-								typeCode: req.typeCode ,
 								messageType: .IS_NAME_AVAILABLE,
                                 uniqueIdResult: uniqueIdResult){ response in
             let threadNameResponse = response.result as? PublicThreadNameAvailableResponse

@@ -16,7 +16,6 @@ class UserInfoRequestHandler {
 	){
 		chat.prepareToSendAsync(req: nil,
 								clientSpecificUniqueId: req.uniqueId,
-								typeCode: req.typeCode ,
 								messageType: .USER_INFO,
                                 uniqueIdResult: uniqueIdResult){ response in
             completion(response.result as? User , response.uniqueId , response.error)

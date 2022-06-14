@@ -17,7 +17,6 @@ public class UnBlockAssistatRequestHandler  {
     ){
         chat.prepareToSendAsync(req: req.assistants,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode,
                                 messageType:.UNBLOCK_ASSISTANT,
                                 uniqueIdResult: uniqueIdResult
         ){ response in

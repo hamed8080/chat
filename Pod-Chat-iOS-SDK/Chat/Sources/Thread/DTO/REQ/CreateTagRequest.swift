@@ -10,9 +10,9 @@ public class CreateTagRequest: BaseRequest {
 	
 	public var name  : String
 	
-	public init(tagName:String,uniqueId: String? = nil, typeCode: String? = nil){
+	public init(tagName:String,uniqueId: String? = nil){
         self.name   = tagName
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
     
     

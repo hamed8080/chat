@@ -11,9 +11,9 @@ public class RemoveTagParticipantsRequest: BaseRequest {
     public var tagId             : Int
     public var tagParticipants   : [TagParticipant]
 	
-    public init(tagId:Int,tagParticipants:[TagParticipant], uniqueId: String? = nil, typeCode: String? = nil){
+    public init(tagId:Int,tagParticipants:[TagParticipant], uniqueId: String? = nil){
         self.tagId           = tagId
         self.tagParticipants = tagParticipants
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 }

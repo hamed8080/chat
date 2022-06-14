@@ -16,7 +16,6 @@ class UnPinThreadRequestHandler {
         
         chat.prepareToSendAsync(req: nil,
                                 clientSpecificUniqueId: request.uniqueId,
-                                typeCode: request.typeCode,
                                 subjectId: request.threadId ,
                                 messageType: .UNPIN_THREAD,
                                 uniqueIdResult: uniqueIdResult){ response in

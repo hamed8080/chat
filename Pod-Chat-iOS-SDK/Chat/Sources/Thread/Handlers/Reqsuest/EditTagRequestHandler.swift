@@ -15,7 +15,6 @@ class EditTagRequestHandler {
     ){
         chat.prepareToSendAsync(req: req,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode ,
                                 subjectId: req.id,
                                 messageType: .EDIT_TAG,
                                 uniqueIdResult: uniqueIdResult){ response in

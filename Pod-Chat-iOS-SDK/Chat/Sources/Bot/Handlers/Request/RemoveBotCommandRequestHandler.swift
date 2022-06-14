@@ -15,7 +15,6 @@ class RemoveBotCommandRequestHandler {
 	){
 		chat.prepareToSendAsync(req: req,
 								clientSpecificUniqueId: req.uniqueId,
-								typeCode: req.typeCode ,
 								messageType: .REMOVE_BOT_COMMANDS,
                                 uniqueIdResult: uniqueIdResult){ response in
             completion(response.result as? BotInfo,response.uniqueId , response.error)

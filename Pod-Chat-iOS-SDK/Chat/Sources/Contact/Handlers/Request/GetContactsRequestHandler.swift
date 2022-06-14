@@ -17,7 +17,6 @@ class GetContactsRequestHandler {
 	){
 		chat.prepareToSendAsync(req: req,
 								clientSpecificUniqueId: req.uniqueId,
-								typeCode: req.typeCode,
 								messageType: .GET_CONTACTS,
 								uniqueIdResult: uniqueIdResult) { response in
             let pagination = Pagination(count: req.size, offset: req.offset, totalCount: response.contentCount)

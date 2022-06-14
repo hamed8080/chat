@@ -16,7 +16,6 @@ class CreateThreadRequestHandler {
         
         chat.prepareToSendAsync(req: req,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode ,
                                 messageType: .CREATE_THREAD,
                                 uniqueIdResult: uniqueIdResult){ response in
             completion(response.result as? Conversation  , response.uniqueId , response.error )

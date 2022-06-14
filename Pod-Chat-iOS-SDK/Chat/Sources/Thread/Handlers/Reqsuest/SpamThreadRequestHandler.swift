@@ -15,7 +15,6 @@ class SpamThreadRequestHandler {
     ){
         chat.prepareToSendAsync(req: nil ,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode ,
                                 subjectId: req.threadId,
                                 messageType: .SPAM_PV_THREAD,
                                 uniqueIdResult: uniqueIdResult){ response in

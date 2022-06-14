@@ -16,13 +16,12 @@ public class MapSearchRequest : BaseRequest {
     public init(lat:    Double,
                 lng:    Double,
                 term:   String,
-                typeCode: String? = nil,
                 uniqueId: String? = nil) {
         
         self.lat    = lat
         self.lng    = lng
         self.term   = term
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
     
     private enum CodingKeys:String , CodingKey{

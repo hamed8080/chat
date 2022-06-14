@@ -13,11 +13,11 @@ public class ChangeThreadTypeRequest: BaseRequest {
     public var type           : ThreadTypes
 	
 
-    public init(threadId:Int, type:ThreadTypes , uniqueName:String? = nil, uniqueId: String? = nil, typeCode: String? = nil) {
+    public init(threadId:Int, type:ThreadTypes , uniqueName:String? = nil, uniqueId: String? = nil) {
         self.type       = type
         self.threadId   = threadId
         self.uniqueName = uniqueName
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
     
 	private enum CodingKeys:String , CodingKey{

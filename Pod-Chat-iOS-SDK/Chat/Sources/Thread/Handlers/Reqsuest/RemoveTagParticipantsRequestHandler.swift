@@ -15,7 +15,6 @@ class RemoveTagParticipantsRequestHandler {
     ){
         chat.prepareToSendAsync(req: req.tagParticipants,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode ,
                                 subjectId: req.tagId,
                                 messageType: .REMOVE_TAG_PARTICIPANTS,
                                 uniqueIdResult: uniqueIdResult){ response in

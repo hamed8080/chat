@@ -16,7 +16,6 @@ class CurrentUserRolesRequestHandler {
 	){
 		chat.prepareToSendAsync(req: nil,
 								clientSpecificUniqueId: req.uniqueId,
-								typeCode: req.typeCode ,
 								subjectId: req.threadId,
 								messageType: .GET_CURRENT_USER_ROLES,
                                 uniqueIdResult: uniqueIdResult){ response in

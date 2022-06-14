@@ -15,7 +15,6 @@ class NotSeenContactRequestHandler{
 		
 		chat.prepareToSendAsync(req: req,
 								clientSpecificUniqueId: req.uniqueId,
-								typeCode: req.typeCode ,
 								messageType: .GET_NOT_SEEN_DURATION,
 								uniqueIdResult: uniqueIdResult,
 								completion: { response in
