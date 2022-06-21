@@ -679,7 +679,8 @@ public class Chat {
     }
     
     //Test Status: Main ✅ - Integeration: ✅
-    /// Evry time you call this function old export file for thread will be deleted and is replaced with new one, except that it remain in document directory of application and untouch.
+    /// Every time you call this function old export file for the thread will be deleted and replaced with a new one. To manages your storage be cautious about removing the file whenever you don't need this file.
+    /// This function can only export 10000 messages.
     public func exportChat(_ request:GetHistoryRequest,localIdentifire:String = "en_US", _ completion:@escaping CompletionType<URL>, uniqueIdResult:UniqueIdResultType = nil){
         ExportRequestHandler.handle(request,localIdentifire, self,completion,uniqueIdResult)
     }
