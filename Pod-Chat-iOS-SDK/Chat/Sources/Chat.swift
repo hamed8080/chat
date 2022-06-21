@@ -277,6 +277,11 @@ public class Chat {
 	}
     
     //Test Status: Main ✅ - Integeration: ✅
+    public func deleteThread(_ request:DeleteThreadRequest, completion:@escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType = nil){
+        DeleteThreadRequestHandler.handle(request, self, completion)
+    }
+    
+    //Test Status: Main ✅ - Integeration: ✅
     public func leaveThreadSaftly(_ request:SafeLeaveThreadRequest, completion:@escaping CompletionType<User> , newAdminCompletion:CompletionType<[UserRole]>? = nil,uniqueIdResult: UniqueIdResultType = nil){
         ReplaceAdminAndLeaveThreadRequestHandler.handle(request,self,completion,newAdminCompletion,uniqueIdResult)
     }

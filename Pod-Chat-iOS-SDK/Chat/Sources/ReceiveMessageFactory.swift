@@ -251,6 +251,9 @@ class ReceiveMessageFactory{
             case .EXPORT_CHATS:
                 ExportResponseHandler.handle(chatMessage, asyncMessage)
                 break
+            case .DELETE_THREAD:
+                DeleteThreadResponseHandler.handle(chatMessage, asyncMessage)
+                break
 			case .ERROR:
 				ErrorResponseHandler.handle(chatMessage , asyncMessage)
 				break

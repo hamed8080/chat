@@ -28,4 +28,5 @@ public enum ThreadEventTypes {
     case THREAD_REMOVE_PARTICIPANTS([Participant])
     case MESSAGE_PIN(threadId:Int?, PinUnpinMessage)
     case MESSAGE_UNPIN(threadId:Int?, PinUnpinMessage)
+    case THREAD_DELETED(threadId:Int, participant:Participant?)
 }
