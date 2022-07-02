@@ -11,8 +11,7 @@ import FanapPodAsyncSDK
 class ReceiveMessageFactory{
 	
     class func invokeCallback(asyncMessage: AsyncMessage) {
-		guard let chatMessageData  = asyncMessage.content?.data(using: .utf8) else{return}
-		guard let chatMessage =  try? JSONDecoder().decode(ChatMessage.self, from: chatMessageData) else{return}
+        guard let chatMessage = asyncMessage.chatMessage else{return}
         if let typeCode = chatMessage.typeCode, typeCode != Chat.sharedInstance.config?.typeCode {
             Chat.sharedInstance.logger?.log(title: "mismatch typeCode", message: "expected typeCode is:\(Chat.sharedInstance.config?.typeCode ?? "") but receive: \(chatMessage.typeCode ?? "")")
             return
@@ -22,113 +21,113 @@ class ReceiveMessageFactory{
 		switch chatMessage.type {
 			
 			case .ADD_PARTICIPANT:
-				AddParticipantResponseHandler.handle(chatMessage , asyncMessage)
+				AddParticipantResponseHandler.handle(asyncMessage)
 				break
 			case .ALL_UNREAD_MESSAGE_COUNT:
-				AllUnreadMessageCountResponseHandler.handle(chatMessage , asyncMessage)
+				AllUnreadMessageCountResponseHandler.handle(asyncMessage)
 				break
 			case .BLOCK:
-				BlockedResponseHandler.handle(chatMessage , asyncMessage)
+				BlockedResponseHandler.handle(asyncMessage)
 				break
 			case .BOT_MESSAGE:
-                BotMessageResponseHandler.handle(chatMessage , asyncMessage)
+                BotMessageResponseHandler.handle(asyncMessage)
 				break
 			case .CHANGE_TYPE://TODO: not implemented yet!
 				break
 			case .CLEAR_HISTORY:
-                ClearHistoryResponseHandler.handle(chatMessage , asyncMessage)
+                ClearHistoryResponseHandler.handle(asyncMessage)
 				break
 			case .CLOSE_THREAD:
-				CloseThreadResponseHandler.handle(chatMessage , asyncMessage)
+				CloseThreadResponseHandler.handle(asyncMessage)
 				break
 			case .CONTACTS_LAST_SEEN:
-                ContactsLastSeenResponseHandler.handle(chatMessage , asyncMessage)
+                ContactsLastSeenResponseHandler.handle(asyncMessage)
 				break
 			case .CREATE_BOT:
-				CreateBotResponseHandler.handle(chatMessage , asyncMessage)
+				CreateBotResponseHandler.handle(asyncMessage)
 				break
 			case .CREATE_THREAD:
-				CreateThreadResponseHandler.handle(chatMessage , asyncMessage)
+				CreateThreadResponseHandler.handle(asyncMessage)
 				break
 			case .DEFINE_BOT_COMMAND:
-				CreateBotCommandResposneHandler.handle(chatMessage , asyncMessage)
+				CreateBotCommandResposneHandler.handle(asyncMessage)
 				break
 			case .DELETE_MESSAGE:
-                DeleteMessageResposneHandler.handle(chatMessage , asyncMessage)
+                DeleteMessageResposneHandler.handle(asyncMessage)
 				break
 			case .DELIVERY:
-                DeliverMessageResponseHandler.handle(chatMessage , asyncMessage)
+                DeliverMessageResponseHandler.handle(asyncMessage)
 				break
 			case .EDIT_MESSAGE:
-                EditMessageResponseHandler.handle(chatMessage , asyncMessage)
+                EditMessageResponseHandler.handle(asyncMessage)
 				break
 			case .FORWARD_MESSAGE:
 				break
 			case .GET_BLOCKED:
-				BlockedContactsResponseHandler.handle(chatMessage , asyncMessage)
+				BlockedContactsResponseHandler.handle(asyncMessage)
 				break
 			case .GET_CONTACTS:
-				ContactsResponseHandler.handle(chatMessage , asyncMessage)
+				ContactsResponseHandler.handle(asyncMessage)
 				break
 			case .GET_CURRENT_USER_ROLES:
-                CurrentUserRolesResponseHandler.handle(chatMessage , asyncMessage)
+                CurrentUserRolesResponseHandler.handle(asyncMessage)
 				break
 			case .GET_HISTORY:
-				HistoryResponseHandler.handle(chatMessage , asyncMessage)
+				HistoryResponseHandler.handle(asyncMessage)
 				break
 			case .GET_MESSAGE_DELEVERY_PARTICIPANTS:
-				MessageDeliveredUsersResponseHandler.handle(chatMessage , asyncMessage)
+				MessageDeliveredUsersResponseHandler.handle(asyncMessage)
 				break
 			case .GET_MESSAGE_SEEN_PARTICIPANTS:
-				MessageSeenByUsersResponseHandler.handle(chatMessage , asyncMessage)
+				MessageSeenByUsersResponseHandler.handle(asyncMessage)
 				break
 			case .GET_NOT_SEEN_DURATION:
-				ContactNotSeenDurationHandler.handle(chatMessage , asyncMessage)
+				ContactNotSeenDurationHandler.handle(asyncMessage)
 				break
 			case .GET_REPORT_REASONS://TODO: not implemented yet!
 				break
 			case .GET_STATUS://TODO: not implemented yet!
 				break
 			case .GET_THREADS:
-				ThreadsResponseHandler.handle(chatMessage , asyncMessage)
+				ThreadsResponseHandler.handle(asyncMessage)
 				break
 			case .IS_NAME_AVAILABLE:
-				IsPublicThreadNameAvailableResponseHandler.handle(chatMessage , asyncMessage)
+				IsPublicThreadNameAvailableResponseHandler.handle(asyncMessage)
 				break
 			case .JOIN_THREAD:
-				JoinThreadResponseHandler.handle(chatMessage , asyncMessage)
+				JoinThreadResponseHandler.handle(asyncMessage)
 				break
 			case .LAST_SEEN_UPDATED:
 				break
 			case .LEAVE_THREAD:
-                LeaveThreadResponseHandler.handle(chatMessage , asyncMessage)
+                LeaveThreadResponseHandler.handle(asyncMessage)
 				break
 			case .LOGOUT:
 				break
 			case .MESSAGE:
-                MessageResponseHandler.handle(chatMessage , asyncMessage)
+                MessageResponseHandler.handle(asyncMessage)
 				break
 			case .MUTE_THREAD:
-				MuteThreadResponseHandler.handle(chatMessage, asyncMessage)
+				MuteThreadResponseHandler.handle(asyncMessage)
 				break
 			case .PING:
 				break
 			case .PIN_MESSAGE:
-                PinMessageResponseHandler.handle(chatMessage, asyncMessage)
+                PinMessageResponseHandler.handle(asyncMessage)
 				break
 			case .PIN_THREAD:
-				PinThreadResponseHandler.handle(chatMessage, asyncMessage)
+				PinThreadResponseHandler.handle(asyncMessage)
 				break
 			case .RELATION_INFO://TODO: not implemented yet!
 				break
 			case .REMOVED_FROM_THREAD:
-                UserRemovedFromThreadServerAction.handle(chatMessage, asyncMessage)
+                UserRemovedFromThreadServerAction.handle(asyncMessage)
 				break
 			case .REMOVE_PARTICIPANT:
-				RemoveParticipantResponseHandler.handle(chatMessage, asyncMessage)
+				RemoveParticipantResponseHandler.handle(asyncMessage)
 				break
 			case .REMOVE_ROLE_FROM_USER:
-                UserRemoveRolesResponseHandler.handle(chatMessage , asyncMessage)
+                UserRemoveRolesResponseHandler.handle(asyncMessage)
 				break
 			case .RENAME://TODO: not implemented yet!
 				break
@@ -139,123 +138,123 @@ class ReceiveMessageFactory{
 			case .REPORT_USER:
 				break
 			case .SEEN:
-                SeenMessageResponseHandler.handle(chatMessage , asyncMessage)
+                SeenMessageResponseHandler.handle(asyncMessage)
 				break
 			case .SENT:
-                SentMessageResponseHandler.handle(chatMessage , asyncMessage)
+                SentMessageResponseHandler.handle(asyncMessage)
 				break
 			case .SET_PROFILE:
-				SetProfileResponseHandler.handle(chatMessage , asyncMessage)
+				SetProfileResponseHandler.handle(asyncMessage)
 				break
 			case .SET_RULE_TO_USER:
-                UserRolesResponseHandler.handle(chatMessage , asyncMessage)
+                UserRolesResponseHandler.handle(asyncMessage)
 				break
 			case .SPAM_PV_THREAD:
-                SpamPvThreadResponseHandler.handle(chatMessage , asyncMessage)
+                SpamPvThreadResponseHandler.handle(asyncMessage)
 				break
 			case .START_BOT:
-				StartBotResponseHandler.handle(chatMessage , asyncMessage)
+				StartBotResponseHandler.handle(asyncMessage)
 				break
 			case .STATUS_PING:
 				//never triggered because no reponse back from server
-				StatusPingResponseHandler.handle(chatMessage , asyncMessage)
+				StatusPingResponseHandler.handle(asyncMessage)
 				break
 			case .STOP_BOT:
-				StopBotResponseHandler.handle(chatMessage , asyncMessage)
+				StopBotResponseHandler.handle(asyncMessage)
 				break
 			case .SYSTEM_MESSAGE:
-                SystemMessageResponseHandler.handle(chatMessage , asyncMessage)
+                SystemMessageResponseHandler.handle(asyncMessage)
 				break
 			case .THREAD_INFO_UPDATED:
-                UpdateThreadInfoResponseHandler.handle(chatMessage, asyncMessage)
+                UpdateThreadInfoResponseHandler.handle(asyncMessage)
 				break
 			case .THREAD_PARTICIPANTS:
-				ThreadParticipantsResponseHandler.handle(chatMessage , asyncMessage)
+				ThreadParticipantsResponseHandler.handle(asyncMessage)
 				break
 			case .UNBLOCK:
-				UnBlockResponseHandler.handle(chatMessage , asyncMessage)
+				UnBlockResponseHandler.handle(asyncMessage)
 				break
 			case .UNMUTE_THREAD:
 				//same as Mute response no neeed new class to handle it
-				MuteThreadResponseHandler.handle(chatMessage, asyncMessage)
+				MuteThreadResponseHandler.handle(asyncMessage)
 				break
 			case .UNPIN_MESSAGE:
-                UnPinMessageResponseHandler.handle(chatMessage, asyncMessage)
+                UnPinMessageResponseHandler.handle(asyncMessage)
 				break
 			case .UNPIN_THREAD:
 				//same as Pin response no neeed new class to handle it
-				PinThreadResponseHandler.handle(chatMessage, asyncMessage)
+				PinThreadResponseHandler.handle(asyncMessage)
 				break
             case .CONTACT_SYNCED:
-                ContactsSyncedResponseHandler.handle(chatMessage, asyncMessage)
+                ContactsSyncedResponseHandler.handle(asyncMessage)
                 break
 			case .UPDATE_THREAD_INFO:
-                UpdateThreadInfoResponseHandler.handle(chatMessage, asyncMessage)
+                UpdateThreadInfoResponseHandler.handle(asyncMessage)
 				break
 			case .USER_INFO:
-				UserInfoResponseHandler.handle(chatMessage, asyncMessage)
+				UserInfoResponseHandler.handle(asyncMessage)
 				break
             case .REGISTER_ASSISTANT:
-                RegisterAssistantsResponseHandler.handle(chatMessage, asyncMessage)
+                RegisterAssistantsResponseHandler.handle(asyncMessage)
                 break
             case .DEACTICVE_ASSISTANT:
-                DeactiveAssistantsResponseHandler.handle(chatMessage, asyncMessage)
+                DeactiveAssistantsResponseHandler.handle(asyncMessage)
                 break
             case .GET_ASSISTANTS:
-                AssistantsResponseHandler.handle(chatMessage, asyncMessage)
+                AssistantsResponseHandler.handle(asyncMessage)
                 break
             case .GET_ASSISTANT_HISTORY:
-                AssistantsHistoryResponseHandler.handle(chatMessage, asyncMessage)
+                AssistantsHistoryResponseHandler.handle(asyncMessage)
                 break
             case .BLOCKED_ASSISTNTS:
-                BlockedAssistantsResponseHandler.handle(chatMessage, asyncMessage)
+                BlockedAssistantsResponseHandler.handle(asyncMessage)
                 break
             case .BLOCK_ASSISTANT , .UNBLOCK_ASSISTANT:
-                BlockUnblockAssistantsResponseHandler.handle(chatMessage, asyncMessage)
+                BlockUnblockAssistantsResponseHandler.handle(asyncMessage)
                 break
             case .MUTUAL_GROUPS:
-                MutualGroupsResponseHandler.handle(chatMessage, asyncMessage)
+                MutualGroupsResponseHandler.handle(asyncMessage)
                 break
 			case .USER_STATUS: //TODO: not implemented yet!
 				break
             case .REMOVE_BOT_COMMANDS:
-                RemoveBotCommandResposneHandler.handle(chatMessage, asyncMessage)
+                RemoveBotCommandResposneHandler.handle(asyncMessage)
                 break
             case .GET_USER_BOTS:
-                UserBotsResposneHandler.handle(chatMessage, asyncMessage)
+                UserBotsResposneHandler.handle(asyncMessage)
                 break
             case .CHANGE_THREAD_TYPE:
-                ChangeThreadTypeResposneHandler.handle(chatMessage, asyncMessage)
+                ChangeThreadTypeResposneHandler.handle(asyncMessage)
                 break
             case .TAG_LIST:
-                TagListResponseHandler.handle(chatMessage, asyncMessage)
+                TagListResponseHandler.handle(asyncMessage)
                 break
             case .CREATE_TAG:
-                CreateTagResponseHandler.handle(chatMessage, asyncMessage)
+                CreateTagResponseHandler.handle(asyncMessage)
                 break
             case .EDIT_TAG:
-                EditTagResponseHandler.handle(chatMessage, asyncMessage)
+                EditTagResponseHandler.handle(asyncMessage)
                 break
             case .DELETE_TAG:
-                DeleteTagResponseHandler.handle(chatMessage, asyncMessage)
+                DeleteTagResponseHandler.handle(asyncMessage)
                 break
             case .ADD_TAG_PARTICIPANTS:
-                AddTagParticipantsResponseHandler.handle(chatMessage, asyncMessage)
+                AddTagParticipantsResponseHandler.handle(asyncMessage)
                 break
             case .REMOVE_TAG_PARTICIPANTS:
-                RemoveTagParticipantsResponseHandler.handle(chatMessage, asyncMessage)
+                RemoveTagParticipantsResponseHandler.handle(asyncMessage)
                 break
             case .GET_TAG_PARTICIPANTS:
                 //TODO: Need to be add by server
                 break
             case .EXPORT_CHATS:
-                ExportResponseHandler.handle(chatMessage, asyncMessage)
+                ExportResponseHandler.handle(asyncMessage)
                 break
             case .DELETE_THREAD:
-                DeleteThreadResponseHandler.handle(chatMessage, asyncMessage)
+                DeleteThreadResponseHandler.handle(asyncMessage)
                 break
 			case .ERROR:
-				ErrorResponseHandler.handle(chatMessage , asyncMessage)
+				ErrorResponseHandler.handle(asyncMessage)
 				break
             case .UNKNOWN:
                 Chat.sharedInstance.logger?.log(title: "CHAT_SDK:", message: "an unknown message type received from the server not implemented in SDK!")

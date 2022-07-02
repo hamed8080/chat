@@ -10,10 +10,9 @@ import FanapPodAsyncSDK
 
 class ChangeThreadTypeResposneHandler: ResponseHandler {
     
-    static func handle(_ chatMessage: ChatMessage, _ asyncMessage: AsyncMessage) {
-        
-		let chat = Chat.sharedInstance
-        
+    static func handle( _ asyncMessage: AsyncMessage) {
+        guard let chatMessage = asyncMessage.chatMessage else {return}
+        let chat = Chat.sharedInstance
         if chat.config?.enableCache == true , let threadId = chatMessage.subjectId {
             chat.delegate?.chatEvent(event: .Thread(.THREAD_REMOVED_FROM(threadId: threadId)))
             CacheFactory.write(cacheType: .DELETE_THREADS([threadId]))

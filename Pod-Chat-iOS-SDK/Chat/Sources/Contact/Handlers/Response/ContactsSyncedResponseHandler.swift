@@ -10,7 +10,8 @@ import FanapPodAsyncSDK
 
 class ContactsSyncedResponseHandler: ResponseHandler {
     
-    static func handle(_ chatMessage: ChatMessage, _ asyncMessage: AsyncMessage) {
+    static func handle(_ asyncMessage: AsyncMessage) {
+        guard let chatMessage = asyncMessage.chatMessage else {return}
 		let chat = Chat.sharedInstance
         CacheFactory.write(cacheType: .SYNCED_CONTACTS)
         CacheFactory.save()

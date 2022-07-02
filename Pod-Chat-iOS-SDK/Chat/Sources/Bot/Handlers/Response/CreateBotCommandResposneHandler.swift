@@ -10,8 +10,8 @@ import FanapPodAsyncSDK
 
 class CreateBotCommandResposneHandler: ResponseHandler{
 	
-	static func handle(_ chatMessage: ChatMessage, _ asyncMessage: AsyncMessage) {
-		
+	static func handle(_ asyncMessage: AsyncMessage) {
+        guard let chatMessage = asyncMessage.chatMessage else {return}
 		let chat = Chat.sharedInstance
         guard let data = chatMessage.content?.data(using: .utf8) else {return}
         guard let botInfo = try? JSONDecoder().decode(BotInfo.self, from: data) else{return}

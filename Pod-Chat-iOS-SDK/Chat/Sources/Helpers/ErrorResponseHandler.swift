@@ -13,7 +13,7 @@ class ErrorResponseHandler  : ResponseHandler{
 	
 	private init(){}
 	
-    static func handle(_ chatMessage:ChatMessage , _ asyncMessage: AsyncMessage) {
+    static func handle(_ asyncMessage: AsyncMessage) {
         Chat.sharedInstance.logger?.log(title: "Message of type 'ERROR' recieved" ,jsonString: asyncMessage.string)
         let chat = Chat.sharedInstance
 		guard let config = chat.config else {return}
@@ -27,7 +27,7 @@ class ErrorResponseHandler  : ResponseHandler{
 		}
 		
 		
-		if let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId){
+        if let chatMessage = asyncMessage.chatMessage, let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId){
 			let code:Int
 			let message:String
 			let content:String

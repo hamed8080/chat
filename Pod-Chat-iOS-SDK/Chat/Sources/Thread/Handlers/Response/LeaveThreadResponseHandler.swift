@@ -11,9 +11,10 @@ import FanapPodAsyncSDK
 class LeaveThreadResponseHandler: ResponseHandler {
 
 
-	static func handle(_ chatMessage: ChatMessage, _ asyncMessage: AsyncMessage) {
-		
+	static func handle(_ asyncMessage: AsyncMessage) {
+        guard let chatMessage = asyncMessage.chatMessage else {return}
 		let chat = Chat.sharedInstance
+        
         guard let data = chatMessage.content?.data(using: .utf8) else {return}
         guard let user = try? JSONDecoder().decode(User.self, from: data) else{return}
         

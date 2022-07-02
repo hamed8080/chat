@@ -10,11 +10,9 @@ import FanapPodAsyncSDK
 
 class UserRolesResponseHandler: ResponseHandler {
     
-    static func handle(_ chatMessage: ChatMessage, _ asyncMessage: AsyncMessage) {
-        
-		let chat = Chat.sharedInstance
-        
-        
+    static func handle(_ asyncMessage: AsyncMessage) {
+        guard let chatMessage = asyncMessage.chatMessage else {return}
+		let chat = Chat.sharedInstance        
         
         guard let threadId = chatMessage.subjectId else{ return }
         chat.delegate?.chatEvent(event: .Thread(.THREAD_LAST_ACTIVITY_TIME(time: chatMessage.time, threadId: threadId)))
