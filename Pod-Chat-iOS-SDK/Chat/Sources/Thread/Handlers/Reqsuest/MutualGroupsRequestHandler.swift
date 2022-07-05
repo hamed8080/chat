@@ -19,7 +19,7 @@ class MutualGroupsRequestHandler {
                                 messageType:.MUTUAL_GROUPS,
                                 uniqueIdResult: uniqueIdResult
         ){ response in
-            let pagination = Pagination(count: req.count, offset: req.offset, totalCount: response.contentCount)
+            let pagination = PaginationWithContentCount(count: req.count, offset: req.offset, totalCount: response.contentCount)
             completion(response.result as? [Conversation] ,response.uniqueId , pagination , response.error)
             
             // insert to mutual cache only for this method beacuse we need request and id and idType to be cache
@@ -31,7 +31,7 @@ class MutualGroupsRequestHandler {
         
         
         CacheFactory.get(useCache: cacheResponse != nil , cacheType: .GET_MUTUAL_GROUPS(req)){ response in
-            let pagination = Pagination(count: req.count, offset: req.offset, totalCount: CMMutualGroup.crud.getTotalCount())
+            let pagination = PaginationWithContentCount(count: req.count, offset: req.offset, totalCount: CMMutualGroup.crud.getTotalCount())
             cacheResponse?(response.cacheResponse as? [Conversation] , response.uniqueId , pagination , nil)
         }
     }

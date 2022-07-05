@@ -20,13 +20,14 @@ class GetThreadsRequestHandler {
 								messageType: .GET_THREADS,
 								uniqueIdResult: uniqueIdResult){ response in
             let threads = response.result as? [Conversation]
-            let pagination = Pagination(count: req.count, offset: req.offset, totalCount: response.contentCount)
+            let pagination = Pagination(hasNext: threads?.count ?? 0 >= req.count, count: req.count, offset: req.offset)
             completion(threads ,response.uniqueId , pagination , response.error)
         }
 		
         CacheFactory.get(useCache: cacheResponse != nil , cacheType: .GET_THREADS(req)){ response in
-            let pagination = Pagination(count: req.count, offset: req.offset, totalCount: CMConversation.crud.getTotalCount())
-            cacheResponse?(response.cacheResponse as? [Conversation] ,response.uniqueId , pagination , nil)
+            let cachedResponse = response.cacheResponse as? [Conversation]
+            let pagination = Pagination(hasNext: cachedResponse?.count ?? 0 >= req.count, count: req.count, offset: req.offset)
+            cacheResponse?(cachedResponse ,response.uniqueId , pagination , nil)
         }
 	}
 }

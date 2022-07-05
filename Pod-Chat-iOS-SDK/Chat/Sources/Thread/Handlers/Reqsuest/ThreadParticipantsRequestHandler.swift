@@ -19,13 +19,13 @@ class ThreadParticipantsRequestHandler {
 								subjectId: req.threadId,
 								messageType: .THREAD_PARTICIPANTS,
                                 uniqueIdResult: uniqueIdResult){ response in
-            let pagination = Pagination(count: req.count, offset: req.offset , totalCount: response.contentCount)
+            let pagination = PaginationWithContentCount(count: req.count, offset: req.offset , totalCount: response.contentCount)
             completion(response.result as? [Participant]  , response.uniqueId , pagination , response.error)
         }
         
         CacheFactory.get(useCache: cacheResponse != nil , cacheType: .GET_THREAD_PARTICIPANTS(req)){ response in
             let predicate = NSPredicate(format: "threadId == %i", req.threadId)
-            let pagination = Pagination(count: req.count, offset: req.offset, totalCount: CMParticipant.crud.getTotalCount(predicate: predicate))
+            let pagination = PaginationWithContentCount(count: req.count, offset: req.offset, totalCount: CMParticipant.crud.getTotalCount(predicate: predicate))
             cacheResponse?(response.cacheResponse as? [Participant] , response.uniqueId , pagination, nil)
         }
 	}

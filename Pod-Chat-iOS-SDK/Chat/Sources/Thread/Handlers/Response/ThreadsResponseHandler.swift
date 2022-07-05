@@ -22,7 +22,7 @@ class ThreadsResponseHandler: ResponseHandler {
 		PSM.shared.save()
         
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
-        callback(.init(uniqueId: chatMessage.uniqueId , result: conversations,contentCount: chatMessage.contentCount ?? 0))
+        callback(.init(uniqueId: chatMessage.uniqueId , result: conversations))
         chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .GET_THREADS)
 		
 	}

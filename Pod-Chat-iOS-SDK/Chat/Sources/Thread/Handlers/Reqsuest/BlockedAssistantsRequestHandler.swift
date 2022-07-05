@@ -21,12 +21,12 @@ public class BlockedAssistantsRequestHandler  {
                                 messageType:.BLOCKED_ASSISTNTS,
                                 uniqueIdResult: uniqueIdResult
         ){ response in
-            let pagination = Pagination(count: req.count, offset: req.offset, totalCount: response.contentCount)
+            let pagination = PaginationWithContentCount(count: req.count, offset: req.offset, totalCount: response.contentCount)
             completion(response.result as? [Assistant] ,response.uniqueId , pagination , response.error)
         }
         
         CacheFactory.get(useCache: cacheResponse != nil , cacheType: .GET_BLOCKED_ASSISTANTS(req.count, req.offset)){ response in
-            let pagination = Pagination(count: req.count, offset: req.offset, totalCount: CMAssistant.crud.getTotalCount())
+            let pagination = PaginationWithContentCount(count: req.count, offset: req.offset, totalCount: CMAssistant.crud.getTotalCount())
             cacheResponse?(response.cacheResponse as? [Assistant] ,response.uniqueId , pagination , nil)
         }
     }

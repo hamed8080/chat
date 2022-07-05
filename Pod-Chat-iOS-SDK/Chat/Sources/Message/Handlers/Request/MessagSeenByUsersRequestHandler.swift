@@ -17,7 +17,7 @@ class MessagSeenByUsersRequestHandler {
 								clientSpecificUniqueId: req.uniqueId,
 								messageType: .GET_MESSAGE_SEEN_PARTICIPANTS,
                                 uniqueIdResult: uniqueIdResult){ response in
-            let pagination = Pagination(count: req.count, offset: req.offset, totalCount: response.contentCount)
+            let pagination = PaginationWithContentCount(count: req.count, offset: req.offset, totalCount: response.contentCount)
             completion(response.result as? [Participant] ,response.uniqueId , pagination, response.error)
         }
 	}

@@ -531,7 +531,7 @@ public class Chat {
         prepareToSendAsync(req: req,
                            clientSpecificUniqueId: req.uniqueId,
                            subjectId: req.threadId,
-                           pushMsgType: 4,
+                           pushMsgType: 3,
                            messageType: .SYSTEM_MESSAGE )
     }
     

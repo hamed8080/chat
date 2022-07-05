@@ -25,8 +25,9 @@ class GetHistoryRequestHandler {
                                 subjectId: req.threadId,
                                 messageType: .GET_HISTORY,
                                 uniqueIdResult: uniqueIdResult){ response in
-            let pagination = Pagination(count: req.count, offset: req.offset, totalCount: response.contentCount)
-            completion(response.result as? [Message] ,response.uniqueId , pagination , response.error)
+            let messages = response.result as? [Message]
+            let pagination = Pagination(hasNext: messages?.count ?? 0 >= req.count, count: req.count, offset: req.offset)
+            completion(messages, response.uniqueId, pagination, response.error)
             if req.readOnly == false{
                 saveMessagesToCache(response.result as? [Message], cacheResponse)
             }
