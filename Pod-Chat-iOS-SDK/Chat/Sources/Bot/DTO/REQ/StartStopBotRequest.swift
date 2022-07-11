@@ -11,10 +11,10 @@ public class StartStopBotRequest: BaseRequest {
 	public let botName:     String
 	public let threadId:    Int
 	
-	public init(botName: String, threadId:Int, typeCode: String? = nil, uniqueId: String? = nil) {
+	public init(botName: String, threadId:Int, uniqueId: String? = nil) {
 		self.botName = botName
 		self.threadId = threadId
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
 	private enum CodingKeys : String , CodingKey{

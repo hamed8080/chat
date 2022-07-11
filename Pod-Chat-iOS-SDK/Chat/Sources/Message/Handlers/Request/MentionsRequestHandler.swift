@@ -16,17 +16,16 @@ class MentionsRequestHandler {
 	){
 		chat.prepareToSendAsync(req: req,
 								clientSpecificUniqueId: req.uniqueId,
-								typeCode: req.typeCode ,
 								subjectId: req.threadId,
 								messageType: .GET_HISTORY,
                                 uniqueIdResult: uniqueIdResult){ response in
-            let pagination = Pagination(count: req.count, offset: req.offset, totalCount: response.contentCount)
+            let pagination = PaginationWithContentCount(count: req.count, offset: req.offset, totalCount: response.contentCount)
             completion(response.result as? [Message]  ,response.uniqueId , pagination, response.error)
         }
         
         CacheFactory.get(useCache: cacheResponse != nil ,  cacheType: .MENTIONS){ response in
             let predicate = NSPredicate(format: "threadId == %i", req.threadId)
-            let pagination = Pagination(count: req.count, offset: req.offset, totalCount:CMMessage.crud.getTotalCount(predicate: predicate))
+            let pagination = PaginationWithContentCount(count: req.count, offset: req.offset, totalCount:CMMessage.crud.getTotalCount(predicate: predicate))
             cacheResponse?(response.cacheResponse as? [Message], response.uniqueId , pagination , nil)
         }
 	}

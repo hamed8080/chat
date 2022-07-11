@@ -10,7 +10,8 @@ import FanapPodAsyncSDK
 
 class CloseThreadResponseHandler : ResponseHandler {
 	
-	static func handle(_ chatMessage: ChatMessage, _ asyncMessage: AsyncMessage) {
+	static func handle(_ asyncMessage: AsyncMessage) {
+        guard let chatMessage = asyncMessage.chatMessage else {return}
 		let chat = Chat.sharedInstance
         
         guard let threadId = chatMessage.subjectId else {return}

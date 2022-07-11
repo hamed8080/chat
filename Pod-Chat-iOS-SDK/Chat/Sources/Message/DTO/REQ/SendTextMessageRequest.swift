@@ -21,7 +21,6 @@ public class SendTextMessageRequest : BaseRequest {
                 metadata       : String?        = nil,
                 repliedTo      : Int?           = nil,
                 systemMetadata : String?        = nil,
-                typeCode       : String?        = nil,
                 uniqueId       : String?        = nil
     ) {
         self.messageType    = messageType
@@ -30,7 +29,7 @@ public class SendTextMessageRequest : BaseRequest {
         self.systemMetadata = systemMetadata
         self.textMessage    = textMessage
         self.threadId       = threadId
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
     
     

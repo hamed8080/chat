@@ -10,8 +10,8 @@ public class RegisterAssistantRequest : BaseRequest{
     
     public let assistants: [Assistant]
     
-    public init(assistants: [Assistant], typeCode: String? = nil, uniqueId: String? = nil) {
+    public init(assistants: [Assistant], uniqueId: String? = nil) {
         self.assistants = assistants
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
 }

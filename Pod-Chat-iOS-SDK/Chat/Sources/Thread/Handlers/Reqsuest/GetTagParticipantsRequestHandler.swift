@@ -15,7 +15,6 @@ class GetTagParticipantsRequestHandler {
     ){
         chat.prepareToSendAsync(req: req,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode ,
                                 subjectId: req.id,
                                 messageType: .GET_TAG_PARTICIPANTS,
                                 uniqueIdResult: uniqueIdResult){ response in

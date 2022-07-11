@@ -14,12 +14,11 @@ public class DeleteMessageRequest: BaseRequest {
 	
 	public init(deleteForAll:   Bool? = false,
 				messageId:      Int,
-				typeCode:       String? = nil,
 				uniqueId:       String? = nil) {
 		
 		self.deleteForAll   = deleteForAll ?? false
 		self.messageId      = messageId
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
 	private enum CodingKeys : String , CodingKey{

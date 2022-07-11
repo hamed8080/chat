@@ -16,13 +16,12 @@ public class AssistantsRequest : BaseRequest{
     public init(contactType : String,
                 count       : Int       = 50,
                 offset      : Int       = 0,
-                typeCode    : String?   = nil,
                 uniqueId    : String?   = nil
     ) {
         self.contactType                     = contactType
         self.count                           = count
         self.offset                          = offset
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
        
     }
     

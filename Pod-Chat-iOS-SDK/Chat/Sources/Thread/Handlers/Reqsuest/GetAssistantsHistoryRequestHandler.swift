@@ -17,7 +17,6 @@ public class GetAssistantsHistoryRequestHandler  {
         let req = BaseRequest()
         chat.prepareToSendAsync(req: req,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode,
                                 messageType:.GET_ASSISTANT_HISTORY,
                                 uniqueIdResult: uniqueIdResult
         ){ response in

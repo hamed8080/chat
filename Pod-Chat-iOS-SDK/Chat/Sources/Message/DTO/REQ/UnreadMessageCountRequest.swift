@@ -10,9 +10,9 @@ public class UnreadMessageCountRequest: BaseRequest{
 	
 	let countMutedThreads:Bool
 	
-	public init (countMutedThreads:Bool = false,uniqueId:String? = nil , typeCode:String? = nil){
+	public init (countMutedThreads:Bool = false,uniqueId:String? = nil){
 		self.countMutedThreads = countMutedThreads
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
 	private enum CodingKeys : String , CodingKey {

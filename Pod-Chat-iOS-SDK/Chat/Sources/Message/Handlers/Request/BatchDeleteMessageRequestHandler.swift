@@ -20,7 +20,6 @@ class BatchDeleteMessageRequestHandler {
 		}
 		chat.prepareToSendAsync(req: req,
 								clientSpecificUniqueId: req.uniqueId,
-								typeCode: req.typeCode ,
 								messageType: .DELETE_MESSAGE,
                                 uniqueIdResult: uniqueIdResult){ response in
             completion(response.result as? Message , response.uniqueId , response.error)

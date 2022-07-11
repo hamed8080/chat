@@ -15,7 +15,6 @@ class StartBotRequestHandler {
 	){
 		chat.prepareToSendAsync(req: req,
 								clientSpecificUniqueId: req.uniqueId,
-								typeCode: req.typeCode ,
 								subjectId: req.threadId,
 								messageType: .START_BOT,
                                 uniqueIdResult: uniqueIdResult){ response in

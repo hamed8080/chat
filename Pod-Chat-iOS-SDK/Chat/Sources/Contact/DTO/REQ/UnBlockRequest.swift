@@ -17,12 +17,11 @@ public class UnBlockRequest: BaseRequest {
 	public init(contactId: Int? = nil,
 				threadId:   Int? = nil,
 				userId:     Int? = nil,
-                typeCode: String? = nil,
                 uniqueId: String? = nil) {
 		self.contactId  = contactId
 		self.threadId   = threadId
 		self.userId     = userId
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
 	private enum CodingKeys : String ,CodingKey{

@@ -16,7 +16,6 @@ class MuteThreadRequestHandler {
 		
 		chat.prepareToSendAsync(req: req,
 								clientSpecificUniqueId: req.uniqueId,
-								typeCode: req.typeCode ,
 								subjectId: req.threadId,
 								messageType: .MUTE_THREAD,
                                 uniqueIdResult: uniqueIdResult){ response in

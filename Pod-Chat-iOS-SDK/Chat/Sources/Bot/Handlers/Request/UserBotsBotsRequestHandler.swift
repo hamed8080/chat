@@ -15,7 +15,6 @@ class UserBotsBotsRequestHandler {
 	){
 		chat.prepareToSendAsync(req: req,
 								clientSpecificUniqueId: req.uniqueId,
-								typeCode: req.typeCode ,
 								messageType: .GET_USER_BOTS,
                                 uniqueIdResult: uniqueIdResult){ response in
             completion(response.result as? [BotInfo],response.uniqueId , response.error)

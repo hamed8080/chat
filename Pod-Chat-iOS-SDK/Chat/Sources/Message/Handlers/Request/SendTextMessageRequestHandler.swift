@@ -17,7 +17,6 @@ class SendTextMessageRequestHandler {
     ){
         chat.prepareToSendAsync(req                    : req.textMessage,
                                 clientSpecificUniqueId : req.uniqueId,
-                                typeCode               : req.typeCode,
                                 subjectId              : req.threadId,
                                 plainText              : true,
                                 messageType            : .MESSAGE,

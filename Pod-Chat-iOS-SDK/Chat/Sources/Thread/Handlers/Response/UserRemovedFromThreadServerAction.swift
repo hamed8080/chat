@@ -10,7 +10,8 @@ import FanapPodAsyncSDK
 
 class UserRemovedFromThreadServerAction: ResponseHandler {
     
-    static func handle(_ chatMessage: ChatMessage, _ asyncMessage: AsyncMessage) {
+    static func handle(_ asyncMessage: AsyncMessage) {
+        guard let chatMessage = asyncMessage.chatMessage else {return}
 		let chat = Chat.sharedInstance
         guard let threadId = chatMessage.subjectId else {return}
         chat.delegate?.chatEvent(event: .Thread(.THREAD_REMOVED_FROM(threadId: threadId)))

@@ -15,7 +15,6 @@ class AddTagParticipantsRequestHandler {
     ){
         chat.prepareToSendAsync(req: req.threadIds,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode,
                                 subjectId: req.tagId,
                                 messageType: .ADD_TAG_PARTICIPANTS,
                                 uniqueIdResult: uniqueIdResult){ response in

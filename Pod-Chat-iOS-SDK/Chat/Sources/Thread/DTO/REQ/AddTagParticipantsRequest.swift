@@ -11,10 +11,10 @@ public class AddTagParticipantsRequest: BaseRequest {
     public var tagId           : Int
     public var threadIds       : [Int]
 	
-    public init(tagId:Int , threadIds:[Int], uniqueId: String? = nil, typeCode: String? = nil){
+    public init(tagId:Int , threadIds:[Int], uniqueId: String? = nil){
         self.threadIds  = threadIds
         self.tagId      = tagId
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
     
 }

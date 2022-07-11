@@ -80,6 +80,7 @@ internal class AsyncManager: AsyncDelegate{
     
     internal func sendPingTimer(){
         chatServerPingTimer?.invalidate()
+        chatServerPingTimer = nil
         chatServerPingTimer = Timer.scheduledTimer(withTimeInterval: 20, repeats: true) {[weak self] timer in
             guard let self = self else{return}
             if let lastSentMessageDate = self.lastSentMessageDate , Date().timeIntervalSince1970 - (lastSentMessageDate.timeIntervalSince1970 + 20) > 20{

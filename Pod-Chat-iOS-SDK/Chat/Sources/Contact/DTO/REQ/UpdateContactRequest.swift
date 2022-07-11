@@ -22,8 +22,7 @@ public class UpdateContactRequest : BaseRequest {
 				id:                 Int,
 				lastName:           String,
 				username:           String,
-				uniqueId:		    String? = nil,
-				typeCode:		    String? = nil
+				uniqueId:		    String? = nil
 				) {
 		
 		self.cellphoneNumber    = cellphoneNumber
@@ -32,7 +31,7 @@ public class UpdateContactRequest : BaseRequest {
 		self.id                 = id
 		self.lastName           = lastName
 		self.username           = username
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
     
     private enum CodingKeys :String , CodingKey{
@@ -54,7 +53,7 @@ public class UpdateContactRequest : BaseRequest {
         try container.encode(id, forKey: .id)
         try container.encode(lastName, forKey: .lastName)
         try container.encode(username, forKey: .username)
-        try container.encode(typeCode, forKey: .typeCode)
+        try container.encode(Chat.sharedInstance.config?.typeCode, forKey: .typeCode)
         try container.encode(uniqueId, forKey: .uniqueId)
     }
 

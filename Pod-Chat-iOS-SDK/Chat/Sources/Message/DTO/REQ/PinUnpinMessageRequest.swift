@@ -12,10 +12,10 @@ public class PinUnpinMessageRequest: BaseRequest {
 	public let messageId:   Int
 	public let notifyAll:   Bool
 	
-	public init(messageId:  Int, notifyAll:  Bool = false, typeCode: String? = nil, uniqueId: String? = nil) {
+	public init(messageId:  Int, notifyAll:  Bool = false, uniqueId: String? = nil) {
 		self.messageId  = messageId
 		self.notifyAll  = notifyAll
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
 	private enum CodingKeys : String , CodingKey{

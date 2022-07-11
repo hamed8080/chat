@@ -20,7 +20,6 @@ extension QueueOfUploadFiles{
                                                  mimeType: mimeType,
                                                  originalName: originalName,
                                                  userGroupHash: userGroupHash,
-                                                 typeCode: typeCode,
                                                  uniqueId: uniqueId)
         return uploadRequest
     }
@@ -36,7 +35,7 @@ extension QueueOfUploadFiles{
         model.mimeType      = request.mimeType
         model.originalName  = request.originalName
         model.userGroupHash = request.userGroupHash
-        model.typeCode      = request.typeCode
+        model.typeCode      = Chat.sharedInstance.config?.typeCode
         model.fileSize      = request.fileSize as NSNumber?
         model.uniqueId      = request.uniqueId
         

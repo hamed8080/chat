@@ -16,7 +16,6 @@ class AddParticipantsRequestHandler {
         guard let firstAddRequest = req.first else {return}
         chat.prepareToSendAsync(req: req,
                                 clientSpecificUniqueId: firstAddRequest.uniqueId,
-                                typeCode: firstAddRequest.typeCode ,
                                 subjectId: firstAddRequest.threadId,
                                 messageType: .ADD_PARTICIPANT,
                                 uniqueIdResult: uniqueIdResult){ response in
@@ -28,14 +27,12 @@ class AddParticipantsRequestHandler {
     class func handle( _ contactIds:[Int],
                        _ threadId:Int,
                        _ uniqueId:String,
-                       _ typeCode:String,
                        _ chat:Chat,
                        _ completion: @escaping  CompletionType<Conversation>,
                        _ uniqueIdResult: UniqueIdResultType = nil
     ){
         chat.prepareToSendAsync(req: contactIds,
                                 clientSpecificUniqueId: uniqueId,
-                                typeCode: typeCode ,
                                 subjectId: threadId,
                                 messageType: .ADD_PARTICIPANT,
                                 uniqueIdResult: uniqueIdResult){ response in

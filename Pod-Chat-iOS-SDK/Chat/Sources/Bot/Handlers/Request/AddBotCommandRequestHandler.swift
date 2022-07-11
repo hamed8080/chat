@@ -15,7 +15,6 @@ class AddBotCommandRequestHandler {
 	){
 		chat.prepareToSendAsync(req: req,
 								clientSpecificUniqueId: req.uniqueId,
-								typeCode: req.typeCode ,
 								messageType: .DEFINE_BOT_COMMAND,
                                 uniqueIdResult: uniqueIdResult){ response in
             completion(response.result as? BotInfo,response.uniqueId , response.error)

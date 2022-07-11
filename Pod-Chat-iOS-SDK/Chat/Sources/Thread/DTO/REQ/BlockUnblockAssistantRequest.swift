@@ -10,9 +10,9 @@ public class BlockUnblockAssistantRequest: BaseRequest {
     
     internal let assistants : [Assistant]
     
-    public required init (assistants:[Assistant], uniqueId:String? = nil , typeCode:String? = nil){
+    public required init (assistants:[Assistant], uniqueId:String? = nil){
         self.assistants = assistants
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
     
 }

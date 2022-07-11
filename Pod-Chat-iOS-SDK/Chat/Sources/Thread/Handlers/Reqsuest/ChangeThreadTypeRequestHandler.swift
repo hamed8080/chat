@@ -16,7 +16,6 @@ class ChangeThreadTypeRequestHandler {
         
         chat.prepareToSendAsync(req: req,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode ,
                                 subjectId: req.threadId,
                                 messageType: .CHANGE_THREAD_TYPE,
                                 uniqueIdResult: uniqueIdResult){ response in

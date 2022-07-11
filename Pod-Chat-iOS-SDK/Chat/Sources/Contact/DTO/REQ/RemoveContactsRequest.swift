@@ -9,10 +9,10 @@ import Foundation
 public class RemoveContactsRequest : BaseRequest{
 
     public let contactId:   Int
-    public init(contactId:  Int, typeCode: String? = nil, uniqueId: String? = nil) {
+    public init(contactId:  Int, uniqueId: String? = nil) {
         
         self.contactId  = contactId
-        super.init(uniqueId: nil, typeCode: typeCode)
+        super.init(uniqueId: nil)
     }
     
     private enum CodingKeys:String ,CodingKey{
@@ -23,7 +23,7 @@ public class RemoveContactsRequest : BaseRequest{
     public override func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try? container.encode(contactId, forKey: .contactId)
-        try? container.encode(typeCode, forKey: .typeCode)
+        try? container.encodeIfPresent(Chat.sharedInstance.config?.typeCode, forKey: .typeCode)
     }
     
 }

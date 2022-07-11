@@ -6,20 +6,32 @@
 //
 
 import Foundation
-public struct Pagination : Decodable{
+
+
+public class Pagination{
     
-    public let hasNext    :Bool
-    public let totalCount :Int
-    public let count      :Int
-    public let offset     :Int
-    public let nextOffset :Int?
+    public var hasNext    :Bool
+    public var count      :Int
+    public var offset     :Int
     
-    public init(count:Int = 50 , offset:Int = 0 ,totalCount:Int? = 0){
-        hasNext          = (totalCount ?? 0) >  (count + offset)
+    public init(hasNext:Bool, count:Int = 50 , offset:Int = 0){
+        self.hasNext     = hasNext
         self.count       = count
         self.offset      = offset
+    }
+
+}
+
+public class PaginationWithContentCount:Pagination{
+
+    public var totalCount :Int
+    public var nextOffset :Int?
+    
+    public init(count:Int = 50 , offset:Int = 0 ,totalCount:Int? = 0){
+        let hasNext = (totalCount ?? 0) >  (count + offset)        
         self.totalCount  = totalCount ?? 0
         self.nextOffset  = offset + count > self.totalCount ? nil : offset + count
+        super.init(hasNext: hasNext, count: count, offset: offset)
     }
     
 }

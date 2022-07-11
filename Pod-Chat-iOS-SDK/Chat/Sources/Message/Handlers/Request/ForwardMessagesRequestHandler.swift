@@ -20,7 +20,6 @@ class ForwardMessagesRequestHandler {
         
         chat.prepareToSendAsync(req                    : "\(req.messageIds)",
                                 clientSpecificUniqueId : "\(req.uniqueIds)",
-                                typeCode               : req.typeCode,
                                 subjectId              : req.threadId,
                                 plainText              : true,
                                 messageType            : .FORWARD_MESSAGE,

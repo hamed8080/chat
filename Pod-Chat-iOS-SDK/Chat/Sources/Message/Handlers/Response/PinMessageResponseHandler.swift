@@ -10,9 +10,10 @@ import FanapPodAsyncSDK
 
 class PinMessageResponseHandler: ResponseHandler {
     
-    static func handle(_ chatMessage: ChatMessage, _ asyncMessage: AsyncMessage) {
-        
+    static func handle(_ asyncMessage: AsyncMessage) {
+        guard let chatMessage = asyncMessage.chatMessage else {return}
 		let chat = Chat.sharedInstance
+        
         guard let data = chatMessage.content?.data(using: .utf8) else {return}
         guard let pinResponse = try? JSONDecoder().decode(PinUnpinMessage.self, from: data) else{return}
         chat.delegate?.chatEvent(event: .Thread(.MESSAGE_PIN(threadId: chatMessage.subjectId, pinResponse)))

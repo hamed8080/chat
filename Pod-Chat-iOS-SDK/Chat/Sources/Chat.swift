@@ -45,8 +45,8 @@ public class Chat {
     
     var isCreateObjectFuncCalled                 = false
     var config                : ChatConfig?
-    var callbacksManager                         = CallbacksManager()
-    internal var asyncManager : AsyncManager     = AsyncManager()
+    let callbacksManager                         = CallbacksManager()
+    internal let asyncManager : AsyncManager     = AsyncManager()
     internal var logger       : Logger?
     public private (set) var userInfo              : User?
     var token                 : String?  = nil
@@ -223,8 +223,8 @@ public class Chat {
     
     //Test Status: Main ✅ - Integeration: ✅
     //may remove in future release and provide a substitution way and move request to Object model and class AddParticipantRequest
-    public func addParticipant(_ contactIds:[Int], threadId:Int, uniqueId:String,typeCode:String, completion:@escaping CompletionType<Conversation> , uniqueIdResult: UniqueIdResultType = nil){
-        AddParticipantsRequestHandler.handle(contactIds, threadId, uniqueId, typeCode, self, completion, uniqueIdResult)
+    public func addParticipant(_ contactIds:[Int], threadId:Int, uniqueId:String, completion:@escaping CompletionType<Conversation> , uniqueIdResult: UniqueIdResultType = nil){
+        AddParticipantsRequestHandler.handle(contactIds, threadId, uniqueId, self, completion, uniqueIdResult)
     }
     
     //Test Status: Main ✅ - Integeration: ✅
@@ -276,6 +276,11 @@ public class Chat {
     public func leaveThread(_ request:LeaveThreadRequest ,completion:@escaping CompletionType<User>,uniqueIdResult: UniqueIdResultType = nil){
 		LeaveThreadRequestHandler.handle(request, self , completion , uniqueIdResult)
 	}
+    
+    //Test Status: Main ✅ - Integeration: ✅
+    public func deleteThread(_ request:DeleteThreadRequest, completion:@escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType = nil){
+        DeleteThreadRequestHandler.handle(request, self, completion)
+    }
     
     //Test Status: Main ✅ - Integeration: ✅
     public func leaveThreadSaftly(_ request:SafeLeaveThreadRequest, completion:@escaping CompletionType<User> , newAdminCompletion:CompletionType<[UserRole]>? = nil,uniqueIdResult: UniqueIdResultType = nil){
@@ -344,8 +349,8 @@ public class Chat {
     }
     
     //Test Status: Main ❌ - Integeration: ✅
-    public func tagList(_ uniqueId:String? = nil , typeCode:String? = nil, completion:@escaping CompletionType<[Tag]>,uniqueIdResult: UniqueIdResultType = nil){
-        TagListRequestHandler.handle(uniqueId , typeCode, self , completion, uniqueIdResult)
+    public func tagList(_ uniqueId:String? = nil, completion:@escaping CompletionType<[Tag]>,uniqueIdResult: UniqueIdResultType = nil){
+        TagListRequestHandler.handle(uniqueId, self , completion, uniqueIdResult)
     }
     
     //Test Status: Main ❌ - Integeration: ✅
@@ -527,7 +532,7 @@ public class Chat {
         prepareToSendAsync(req: req,
                            clientSpecificUniqueId: req.uniqueId,
                            subjectId: req.threadId,
-                           pushMsgType: 4,
+                           pushMsgType: 3,
                            messageType: .SYSTEM_MESSAGE )
     }
     
@@ -680,7 +685,8 @@ public class Chat {
     }
     
     //Test Status: Main ✅ - Integeration: ✅
-    /// Evry time you call this function old export file for thread will be deleted and is replaced with new one, except that it remain in document directory of application and untouch.
+    /// Every time you call this function old export file for the thread will be deleted and replaced with a new one. To manages your storage be cautious about removing the file whenever you don't need this file.
+    /// This function can only export 10000 messages.
     public func exportChat(_ request:GetHistoryRequest,localIdentifire:String = "en_US", _ completion:@escaping CompletionType<URL>, uniqueIdResult:UniqueIdResultType = nil){
         ExportRequestHandler.handle(request,localIdentifire, self,completion,uniqueIdResult)
     }
@@ -826,7 +832,6 @@ public class Chat {
 	// SOCKET Request
     func prepareToSendAsync(        req                                    : Encodable?              = nil,
                                     clientSpecificUniqueId                 : String?                 = nil,
-                                    typeCode                               : String?                 = nil,
 									//this sometimes use to send threadId with subjectId Key must fix from server to get threadId
                                     subjectId                              : Int?                    = nil,
                                     plainText                              : Bool                    = false,
@@ -846,7 +851,6 @@ public class Chat {
 		guard let config = config else {return}
 		let uniqueId = clientSpecificUniqueId ?? UUID().uuidString
 		uniqueIdResult?(uniqueId)
-		let typeCode = typeCode ?? config.typeCode ?? "default"
 		
         let chatMessage = SendChatMessageVO(type                               : messageType.rawValue,
                                             token                              : config.token,
@@ -856,7 +860,7 @@ public class Chat {
                                             repliedTo                          : repliedTo,
                                             systemMetadata                     : systemMetadata,
                                             subjectId                          : subjectId,
-                                            typeCode                           : typeCode,
+                                            typeCode                           : config.typeCode,
                                             uniqueId                           : uniqueId)
 		
 		guard let chatMessageContent = chatMessage.convertCodableToString() else{return}

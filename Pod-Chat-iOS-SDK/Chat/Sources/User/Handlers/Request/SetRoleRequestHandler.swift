@@ -14,7 +14,6 @@ class SetRoleRequestHandler{
                       _ uniqueIdResult:UniqueIdResultType){
         chat.prepareToSendAsync(req: request.userRoles,
                                 clientSpecificUniqueId: request.uniqueId,
-                                typeCode: request.typeCode ,
                                 subjectId:request.threadId,
                                 messageType: .SET_RULE_TO_USER,
                                 uniqueIdResult:uniqueIdResult

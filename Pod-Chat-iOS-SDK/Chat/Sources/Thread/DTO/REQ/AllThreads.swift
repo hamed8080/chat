@@ -10,9 +10,9 @@ public class AllThreads : BaseRequest{
     
     private let summary:Bool
     
-    public init( summary:Bool = false , uniqueId: String? = nil, typeCode: String? = nil) {
+    public init( summary:Bool = false , uniqueId: String? = nil) {
         self.summary = summary
-        super.init(uniqueId: uniqueId, typeCode: typeCode)        
+        super.init(uniqueId: uniqueId)
     }
     
     private enum CodingKeys :String ,CodingKey{

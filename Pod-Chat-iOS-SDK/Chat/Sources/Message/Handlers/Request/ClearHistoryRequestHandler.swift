@@ -15,7 +15,6 @@ class ClearHistoryRequestHandler {
     ){
         chat.prepareToSendAsync(req: nil,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode ,
                                 subjectId: req.threadId,
                                 messageType: .CLEAR_HISTORY,
                                 uniqueIdResult: uniqueIdResult){ response in

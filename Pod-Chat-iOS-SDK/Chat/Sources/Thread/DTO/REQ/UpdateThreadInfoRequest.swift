@@ -20,8 +20,7 @@ public class UpdateThreadInfoRequest: BaseRequest {
                 threadId             : Int,
                 threadImage          : UploadImageRequest?  = nil,
                 title                : String,
-                uniqueId             : String?              = nil,
-                typeCode             : String?              = nil
+                uniqueId             : String?              = nil
     ) {
 		
 		self.description    = description
@@ -29,7 +28,7 @@ public class UpdateThreadInfoRequest: BaseRequest {
 		self.threadId       = threadId
 		self.threadImage    = threadImage
 		self.title          = title
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
 	private enum CodingKeys : String , CodingKey{

@@ -11,10 +11,10 @@ public class LeaveThreadRequest: BaseRequest {
     public let threadId     : Int
     public let clearHistory : Bool?
 	
-	public init(threadId:Int, clearHistory:Bool? = false, typeCode: String? = nil, uniqueId: String? = nil) {
+	public init(threadId:Int, clearHistory:Bool? = false, uniqueId: String? = nil) {
 		self.clearHistory = clearHistory
 		self.threadId     = threadId
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
 	private enum CodingKeys : String , CodingKey {

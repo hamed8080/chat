@@ -14,7 +14,7 @@ public class SendSignalMessageRequest: BaseRequest {
     public init(signalType: SignalMessageType,threadId:Int,uniqueId:String? = nil) {
         self.signalType = signalType
         self.threadId   = threadId
-        super.init(uniqueId: uniqueId, typeCode: nil)
+        super.init(uniqueId: uniqueId)
     }
     
     private enum CodingKeys:String,CodingKey{

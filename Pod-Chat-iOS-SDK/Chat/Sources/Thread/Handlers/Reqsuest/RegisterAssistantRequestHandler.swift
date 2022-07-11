@@ -17,7 +17,6 @@ public class RegisterAssistantRequestHandler  {
     ){
         chat.prepareToSendAsync(req: req.assistants,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode,
                                 messageType:.REGISTER_ASSISTANT,
                                 uniqueIdResult: uniqueIdResult
         ){ response in

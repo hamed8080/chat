@@ -15,7 +15,6 @@ class CreateBotRequestHandler {
 	){
         chat.prepareToSendAsync(req: req.botName,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode ,
                                 plainText:true,
                                 messageType: .CREATE_BOT,
                                 uniqueIdResult: uniqueIdResult)

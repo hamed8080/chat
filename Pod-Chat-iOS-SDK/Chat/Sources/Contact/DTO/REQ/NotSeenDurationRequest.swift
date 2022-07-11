@@ -10,9 +10,9 @@ public class NotSeenDurationRequest: BaseRequest {
 	
 	public let userIds     : [Int]
 
-	public init(userIds: [Int],uniqueId: String? = nil, typeCode: String? = nil) {
+	public init(userIds: [Int],uniqueId: String? = nil) {
 		self.userIds    = userIds
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 
 	private enum CodingKeys: String ,CodingKey{

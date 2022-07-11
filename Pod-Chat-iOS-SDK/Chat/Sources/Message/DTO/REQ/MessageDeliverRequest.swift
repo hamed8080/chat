@@ -10,9 +10,9 @@ public class MessageDeliverRequest: BaseRequest {
 	
 	let messageId :String
 	
-	public init(messageId:Int,uniqueId:String? = nil , typeCode:String? = nil) {
+	public init(messageId:Int,uniqueId:String? = nil) {
 		self.messageId = "\(messageId)"
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
 }

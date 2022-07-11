@@ -10,8 +10,8 @@ public class JoinPublicThreadRequest: BaseRequest {
 	
 	public var threadName:String
 	
-	public init(threadName:String,uniqueId: String? = nil, typeCode: String? = nil){
+	public init(threadName:String,uniqueId: String? = nil){
 		self.threadName = threadName
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 }

@@ -18,7 +18,6 @@ class UnBlockContactRequestHandler {
         
         chat.prepareToSendAsync(req: req,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode ,
                                 messageType: .UNBLOCK,
                                 uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? BlockedContact,response.uniqueId , response.error)

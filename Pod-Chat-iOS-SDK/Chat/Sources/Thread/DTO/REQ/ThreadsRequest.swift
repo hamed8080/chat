@@ -31,8 +31,7 @@ public class ThreadsRequest : BaseRequest {
                 partnerCoreUserId    : Int?      = nil,
                 partnerCoreContactId : Int?      = nil,
                 metadataCriteria     : String?   = nil,
-                uniqueId             : String?   = nil,
-                typeCode             : String?   = nil
+                uniqueId             : String?   = nil
     )
 	{
 		self.count                = count
@@ -44,7 +43,7 @@ public class ThreadsRequest : BaseRequest {
 		self.creatorCoreUserId    = creatorCoreUserId
 		self.partnerCoreUserId    = partnerCoreUserId
 		self.partnerCoreContactId = partnerCoreContactId
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
 	private enum CodingKeys :String ,CodingKey{

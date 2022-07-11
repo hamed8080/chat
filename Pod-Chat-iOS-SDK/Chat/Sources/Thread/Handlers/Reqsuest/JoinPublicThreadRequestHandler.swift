@@ -15,7 +15,6 @@ class JoinPublicThreadRequestHandler {
 	){
         chat.prepareToSendAsync(req: req.threadName,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode,
                                 plainText: true,
                                 messageType:.JOIN_THREAD,
                                 uniqueIdResult: uniqueIdResult

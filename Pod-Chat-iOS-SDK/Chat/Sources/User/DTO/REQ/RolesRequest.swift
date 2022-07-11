@@ -11,17 +11,17 @@ public class RolesRequest: BaseRequest {
     public let userRoles:       [UserRoleRequest]
     public let threadId:        Int
     
-    public init(userRoles:[UserRoleRequest], threadId:Int , uniqueId: String? = nil, typeCode: String? = nil) {
+    public init(userRoles:[UserRoleRequest], threadId:Int , uniqueId: String? = nil) {
         self.userRoles  = userRoles
         self.threadId   = threadId
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
 }
 
 public class AuditorRequest:RolesRequest{
     
-    public init(userRoleRequest: UserRoleRequest, threadId: Int, uniqueId: String? = nil, typeCode: String? = nil) {
-        super.init(userRoles: [userRoleRequest], threadId: threadId, uniqueId: uniqueId, typeCode: typeCode)
+    public init(userRoleRequest: UserRoleRequest, threadId: Int, uniqueId: String? = nil) {
+        super.init(userRoles: [userRoleRequest], threadId: threadId, uniqueId: uniqueId)
     }
     
 }

@@ -11,9 +11,9 @@ public class MuteUnmuteThreadRequest : BaseRequest{
 	
 	public let threadId:   Int
 	
-	public init(threadId:  Int , typeCode: String? = nil, uniqueId: String? = nil) {
+	public init(threadId:  Int , uniqueId: String? = nil) {
 		self.threadId  = threadId
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
 }

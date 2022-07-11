@@ -15,7 +15,6 @@ class DeleteTagRequestHandler {
     ){
         chat.prepareToSendAsync(req: req,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode ,
                                 subjectId: req.id,
                                 messageType: .DELETE_TAG,
                                 uniqueIdResult: uniqueIdResult){ response in

@@ -16,7 +16,6 @@ class EditMessageRequestHandler {
 
         chat.prepareToSendAsync(req                    : req.textMessage,
                                 clientSpecificUniqueId : req.uniqueId,
-                                typeCode               : req.typeCode,
                                 subjectId              : req.messageId,
                                 plainText              : true,
                                 messageType            : .EDIT_MESSAGE,

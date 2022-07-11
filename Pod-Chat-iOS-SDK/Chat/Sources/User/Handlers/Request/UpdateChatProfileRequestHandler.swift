@@ -15,7 +15,6 @@ class UpdateChatProfileRequestHandler {
     ){
         chat.prepareToSendAsync(req: req,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode ,
                                 messageType: .SET_PROFILE,
                                 uniqueIdResult: uniqueIdResult){ response in
             completion(response.result as? Profile,response.uniqueId , response.error)

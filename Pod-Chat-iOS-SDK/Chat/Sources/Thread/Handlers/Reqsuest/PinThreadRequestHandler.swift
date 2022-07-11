@@ -16,7 +16,6 @@ class PinThreadRequestHandler {
 		
 		chat.prepareToSendAsync(req: nil,
 								clientSpecificUniqueId: request.uniqueId,
-								typeCode: request.typeCode,
 								subjectId: request.threadId ,
 								messageType: .PIN_THREAD,
                                 uniqueIdResult: uniqueIdResult){ response in

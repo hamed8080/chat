@@ -13,7 +13,7 @@ public class BatchDeleteMessageRequest: BaseRequest {
 	let messageIds:[Int]
 	let uniqueIds:[String]
 	
-	public init(threadId:Int, messageIds:[Int], deleteForAll:Bool = false , uniqueIds:[String]? = nil, typeCode: String? = nil, uniqueId: String? = nil) {
+	public init(threadId:Int, messageIds:[Int], deleteForAll:Bool = false , uniqueIds:[String]? = nil, uniqueId: String? = nil) {
 		self.threadId = threadId
 		self.deleteForAll = deleteForAll
 		if let uniqueIds = uniqueIds {
@@ -26,7 +26,7 @@ public class BatchDeleteMessageRequest: BaseRequest {
 			self.uniqueIds = generatedUniqeIds
 		}
 		self.messageIds = messageIds
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
 	}
 	
 	private enum CodingKeys : String , CodingKey{

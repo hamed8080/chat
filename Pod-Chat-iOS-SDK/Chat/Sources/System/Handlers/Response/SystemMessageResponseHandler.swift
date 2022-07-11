@@ -11,9 +11,10 @@ import FanapPodAsyncSDK
 
 class SystemMessageResponseHandler : ResponseHandler {
     
-    static func handle(_ chatMessage: ChatMessage, _ asyncMessage: AsyncMessage) {
-		
+    static func handle(_ asyncMessage: AsyncMessage) {
+        guard let chatMessage = asyncMessage.chatMessage else {return}
 		let chat = Chat.sharedInstance
+        
         if let data = chatMessage.content?.data(using: .utf8) , let eventMessageModel = try? JSONDecoder().decode(SystemEventMessageModel.self, from: data ){
             chat.delegate?.chatEvent(event: .System(.SYSTEM_MESSAGE(message: eventMessageModel, time: chatMessage.time, id: chatMessage.subjectId)))
         }

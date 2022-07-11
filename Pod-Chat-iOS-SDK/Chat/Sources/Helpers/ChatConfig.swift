@@ -19,7 +19,7 @@ public struct ChatConfig {
 	var token                     	    : String
 	var mapApiKey                 	    : String?
 	var mapServer                 	    : String  =  "https://api.neshan.org/v1"
-	var typeCode                  	    : String? = "default"
+	var typeCode                  	    : String = "default"
 	var enableCache               	    : Bool    = false
 	var cacheTimeStampInSec      		: Int     = (2 * 24) * (60 * 60)
 	var msgPriority               	    : Int    = 1
@@ -55,7 +55,7 @@ public struct ChatConfig {
                 podSpaceFileServerAddress	: String = "https://podspace.pod.ir",
                 mapApiKey					: String? = nil,
                 mapServer					: String = "https://api.neshan.org/v1",
-                typeCode					: String? = "default",
+                typeCode					: String = "default",
                 enableCache					: Bool = false,
                 cacheTimeStampInSec			: Int = (2 * 24) * (60 * 60),
                 msgPriority					: Int = 1,

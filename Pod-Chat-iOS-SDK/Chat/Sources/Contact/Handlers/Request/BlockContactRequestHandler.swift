@@ -18,7 +18,6 @@ class BlockContactRequestHandler {
         
         chat.prepareToSendAsync(req: req,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode ,
                                 messageType: .BLOCK,
                                 uniqueIdResult: uniqueIdResult,
                                 completion: { response in

@@ -14,7 +14,6 @@ class RemoveRoleRequestHandler{
                       _ uniqueIdResult:UniqueIdResultType){
         chat.prepareToSendAsync(req: request.userRoles,
                                 clientSpecificUniqueId: request.uniqueId,
-                                typeCode: request.typeCode ,
                                 subjectId:request.threadId,
                                 messageType: .REMOVE_ROLE_FROM_USER,
                                 uniqueIdResult:uniqueIdResult
