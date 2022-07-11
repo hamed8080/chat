@@ -11,10 +11,10 @@ public class CallClientErrorRequest:BaseRequest{
     let code       : CallClientErrorType
     let callId     : Int
     
-    public init(callId:Int, code:CallClientErrorType, typeCode:String? = nil, uniqueId:String? = nil) {
+    public init(callId:Int, code:CallClientErrorType, uniqueId:String? = nil) {
         self.callId     = callId
         self.code       = code
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
 
     private enum CodingKeys:String,CodingKey{

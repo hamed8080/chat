@@ -15,7 +15,6 @@ class EndCallRequestHandler {
     ){
         chat.prepareToSendAsync(req: nil,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode,
                                 subjectId: req.callId,
                                 messageType: .END_CALL_REQUEST,
                                 uniqueIdResult: uniqueIdResult){ response in

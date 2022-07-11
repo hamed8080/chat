@@ -13,12 +13,12 @@ class CreateSessionReq: BaseRequest {
     var turnAddress   :String
     var token         :String
     
-    public init(id: String = "CREATE_SESSION", turnAddress:String, brokerAddress: String, token: String,uniqueId:String? = nil , typeCode:String? = nil) {
+    public init(id: String = "CREATE_SESSION", turnAddress:String, brokerAddress: String, token: String,uniqueId:String? = nil) {
         self.id            = id
         self.turnAddress   = turnAddress
         self.brokerAddress = brokerAddress
         self.token         = token
-        super.init(uniqueId:uniqueId,typeCode:typeCode)
+        super.init(uniqueId:uniqueId)
     }
     
     private enum CodingKeys:String,CodingKey{

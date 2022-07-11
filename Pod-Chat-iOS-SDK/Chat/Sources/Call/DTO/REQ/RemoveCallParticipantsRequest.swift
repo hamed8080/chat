@@ -11,10 +11,10 @@ public class RemoveCallParticipantsRequest:BaseRequest{
     let callId      : Int
     var userIds     : [Int]
     
-    public init(callId: Int, userIds:[Int], typeCode:String? = nil, uniqueId:String? = nil) {
+    public init(callId: Int, userIds:[Int], uniqueId:String? = nil) {
         self.callId       = callId
         self.userIds      = userIds
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
 
     public override func encode(to encoder: Encoder) throws {

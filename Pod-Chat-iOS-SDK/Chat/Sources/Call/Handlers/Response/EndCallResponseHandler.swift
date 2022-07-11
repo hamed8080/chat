@@ -10,8 +10,8 @@ import FanapPodAsyncSDK
 
 class EndCallResponseHandler {
     
-    static func handle(_ chatMessage: ChatMessage, _ asyncMessage: AsyncMessage) {
-        
+    static func handle(_ asyncMessage: AsyncMessage) {
+        guard let chatMessage = asyncMessage.chatMessage else {return}
         let chat = Chat.sharedInstance
         guard let callId = chatMessage.subjectId else{return}
         chat.delegate?.chatEvent(event: .Call(CallEventModel(type: .CALL_ENDED(callId))))

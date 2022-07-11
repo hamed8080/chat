@@ -14,7 +14,6 @@ class ActiveCallParticipantsRequestHandler {
                        _ uniqueIdResult: UniqueIdResultType = nil
     ){
         chat.prepareToSendAsync(clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode,
                                 subjectId: req.callId,
                                 messageType: .ACTIVE_CALL_PARTICIPANTS,
                                 uniqueIdResult: uniqueIdResult){ response in

@@ -15,7 +15,6 @@ class MuteCallRequestHandler {
     ){
         chat.prepareToSendAsync(req:req.userIds,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode,
                                 subjectId: req.callId,
                                 messageType: .MUTE_CALL_PARTICIPANT,
                                 uniqueIdResult: uniqueIdResult){ response in

@@ -12,7 +12,6 @@ class CallReceivedRequestHandler {
                        _ chat:Chat
     ){
         chat.prepareToSendAsync(clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode,
                                 subjectId: req.callId,
                                 messageType: .DELIVERED_CALL_REQUEST)
     }

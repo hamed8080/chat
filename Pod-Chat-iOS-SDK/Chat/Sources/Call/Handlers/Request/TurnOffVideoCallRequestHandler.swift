@@ -14,7 +14,6 @@ class TurnOffVideoCallRequestHandler {
                        _ uniqueIdResult: UniqueIdResultType = nil
     ){
         chat.prepareToSendAsync(clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode,
                                 subjectId: req.callId,
                                 messageType: .TURN_OFF_VIDEO_CALL,
                                 uniqueIdResult: uniqueIdResult){ response in

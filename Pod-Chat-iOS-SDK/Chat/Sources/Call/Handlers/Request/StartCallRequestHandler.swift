@@ -16,7 +16,6 @@ class StartCallRequestHandler {
 		chat.callState = .Requested
 		chat.prepareToSendAsync(req: req,
 								clientSpecificUniqueId: req.uniqueId,
-								typeCode: req.typeCode ,
 								messageType: .START_CALL_REQUEST,
 								uniqueIdResult: uniqueIdResult){ response in
 			completion(response.result as? CreateCall,response.uniqueId , response.error)

@@ -10,9 +10,9 @@ public class CancelCallRequest:BaseRequest{
     
     let call : Call
     
-    public init(call:Call, typeCode:String? = nil, uniqueId:String? = nil) {
+    public init(call:Call, uniqueId:String? = nil) {
         self.call      = call
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
     
 }

@@ -15,7 +15,6 @@ class SendCallClientErrorRequestHandler {
     ){
         chat.prepareToSendAsync(req:req,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode,
                                 subjectId: req.callId,
                                 messageType: .CALL_CLIENT_ERRORS,
                                 uniqueIdResult: uniqueIdResult){ response in

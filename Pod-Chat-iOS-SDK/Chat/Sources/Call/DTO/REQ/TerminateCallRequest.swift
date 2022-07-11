@@ -10,8 +10,8 @@ public class TerminateCallRequest:BaseRequest{
     
     let callId      : Int
     
-    public init(callId: Int, typeCode:String? = nil, uniqueId:String? = nil) {
+    public init(callId: Int, uniqueId:String? = nil) {
         self.callId       = callId
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
 }

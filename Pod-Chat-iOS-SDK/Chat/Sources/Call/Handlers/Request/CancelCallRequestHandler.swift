@@ -14,7 +14,6 @@ class CancelCallRequestHandler {
     ){
         chat.prepareToSendAsync(req:req.call,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode,
                                 subjectId: req.call.id,
                                 messageType: .CANCEL_CALL,
                                 uniqueIdResult: uniqueIdResult)

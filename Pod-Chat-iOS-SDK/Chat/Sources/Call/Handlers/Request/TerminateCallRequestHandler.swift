@@ -14,7 +14,6 @@ class TerminateCallRequestHandler {
                        _ uniqueIdResult: UniqueIdResultType = nil
     ){
         chat.prepareToSendAsync(clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode,
                                 subjectId: req.callId,
                                 messageType: .TERMINATE_CALL,
                                 uniqueIdResult: uniqueIdResult){ response in

@@ -15,7 +15,6 @@ class UNMuteCallRequestHandler {
     ){
         chat.prepareToSendAsync(req:req.userIds,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode,
                                 subjectId: req.callId,
                                 messageType: .UNMUTE_CALL_PARTICIPANT,
                                 uniqueIdResult: uniqueIdResult){ response in

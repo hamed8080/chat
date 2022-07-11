@@ -21,14 +21,13 @@ public class GetJoinCallsRequest:BaseRequest{
                   count     : Int        = 50,
                   name      : String?    = nil,
                   type      : CallType?  = nil,
-                  typeCode  : String?    = nil,
                   uniqueId  : String?    = nil) {
         self.offset    = offset
         self.count     = count
         self.name      = name
         self.type      = type
         self.threadIds = threadIds
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
     
     

@@ -11,9 +11,9 @@ public class AcceptCallRequest:BaseRequest{
     let client     : SendClient
     let callId     : Int
     
-    public init(callId:Int,client:SendClient,typeCode:String? = nil, uniqueId:String? = nil) {
+    public init(callId:Int,client:SendClient, uniqueId:String? = nil) {
         self.callId       = callId
         self.client       = client
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
 }

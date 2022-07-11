@@ -14,7 +14,6 @@ class AcceptCallRequestHandler {
     ){
         chat.prepareToSendAsync(req: req.client,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode,
                                 subjectId: req.callId,
                                 messageType: .ACCEPT_CALL,
                                 uniqueIdResult: uniqueIdResult)

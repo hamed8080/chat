@@ -14,7 +14,6 @@ class StartCallRecordingRequestHandler {
                        _ uniqueIdResult: UniqueIdResultType = nil
     ){
         chat.prepareToSendAsync(clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode,
                                 subjectId: req.callId,
                                 messageType: .START_RECORDING,
                                 uniqueIdResult: uniqueIdResult){ response in

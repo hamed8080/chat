@@ -14,7 +14,6 @@ class StopCallRecordingRequestHandler {
                        _ uniqueIdResult: UniqueIdResultType = nil
     ){
         chat.prepareToSendAsync(clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode,
                                 subjectId: req.callId,
                                 messageType: .STOP_RECORDING,
                                 uniqueIdResult: uniqueIdResult){ response in

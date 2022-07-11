@@ -14,22 +14,22 @@ public class StartCallRequest:BaseRequest{
     let client                  : SendClient
     let createCallThreadRequest : CreateCallThreadRequest?
     
-    public init(client:SendClient,threadId: Int, type: CallType, typeCode:String? = nil, uniqueId:String? = nil) {
+    public init(client:SendClient,threadId: Int, type: CallType, uniqueId:String? = nil) {
         self.threadId                = threadId
         self.invitees                = nil
         self.type                    = type
         self.client                  = client
         self.createCallThreadRequest = nil
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
     
-    public init(client:SendClient, invitees: [Invitee], type: CallType, createCallThreadRequest:CreateCallThreadRequest? = nil, typeCode:String? = nil, uniqueId:String? = nil) {
+    public init(client:SendClient, invitees: [Invitee], type: CallType, createCallThreadRequest:CreateCallThreadRequest? = nil, uniqueId:String? = nil) {
         self.threadId                = nil
         self.invitees                = invitees
         self.type                    = type
         self.client                  = client
         self.createCallThreadRequest = createCallThreadRequest
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
     
     private enum CodingKeys:String ,CodingKey{

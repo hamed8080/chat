@@ -13,19 +13,19 @@ public class AddCallParticipantsRequest:BaseRequest{
     var userNames  : [Invitee]? = nil
     var coreuserIds: [Invitee]? = nil
     
-    public init(callId: Int? = nil, typeCode:String? = nil, uniqueId:String? = nil) {
+    public init(callId: Int? = nil, uniqueId:String? = nil) {
         self.callId     = callId
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
     
-    public init(callId: Int? = nil, contactIds:[Int], typeCode:String? = nil, uniqueId:String? = nil) {
+    public init(callId: Int? = nil, contactIds:[Int], uniqueId:String? = nil) {
         self.callId       = callId
         self.contactIds   = contactIds
         
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
     
-    public init(callId: Int? = nil,userNames:[String], typeCode:String? = nil, uniqueId:String? = nil) {
+    public init(callId: Int? = nil,userNames:[String], uniqueId:String? = nil) {
         self.callId     = callId
         var invitess:[Invitee] = []
         userNames.forEach { userame in
@@ -33,10 +33,10 @@ public class AddCallParticipantsRequest:BaseRequest{
         }
         self.userNames  = invitess
         
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
     
-    public init(callId: Int? = nil,coreUserIds:[Int], typeCode:String? = nil, uniqueId:String? = nil) {
+    public init(callId: Int? = nil,coreUserIds:[Int], uniqueId:String? = nil) {
         self.callId     = callId
         var invitess:[Invitee] = []
         coreUserIds.forEach { coreuserId in
@@ -44,7 +44,7 @@ public class AddCallParticipantsRequest:BaseRequest{
         }
         self.coreuserIds  = invitess
         
-        super.init(uniqueId: uniqueId, typeCode: typeCode)
+        super.init(uniqueId: uniqueId)
     }
 
     public override func encode(to encoder: Encoder) throws {

@@ -15,7 +15,6 @@ class RemoveCallParticipantRequestHandler {
     ){
         chat.prepareToSendAsync(req: req,
                                 clientSpecificUniqueId: req.uniqueId,
-                                typeCode: req.typeCode,
                                 subjectId: req.callId,
                                 messageType: .REMOVE_CALL_PARTICIPANT,
                                 uniqueIdResult: uniqueIdResult){ response in

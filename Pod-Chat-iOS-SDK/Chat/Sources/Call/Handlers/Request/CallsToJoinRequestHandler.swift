@@ -15,7 +15,6 @@ class CallsToJoinRequestHandler {
 	){
 		chat.prepareToSendAsync(req: req,
 								clientSpecificUniqueId: req.uniqueId,
-								typeCode: req.typeCode ,
 								messageType: .GET_CALLS_TO_JOIN,
 								uniqueIdResult: uniqueIdResult){ response in
 			completion(response.result as? [Call],response.uniqueId , response.error)
