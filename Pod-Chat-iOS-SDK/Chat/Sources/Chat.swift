@@ -1,41 +1,15 @@
 import FanapPodAsyncSDK
 import Sentry
 import Foundation
-import Alamofire
-
-
-
-public struct ChatResponse{
-    public var uniqueId        : String? = nil
-    public var result          : Any?
-    public var cacheResponse   : Any?
-    public var error           : ChatError?
-    public var contentCount    : Int = 0
-}
-
-public typealias CompletionTypeWithoutUniqueId<T>   = ( T? , ChatError? )->()
-public typealias CompletionType<T>                  = ( T? , String? , ChatError? )->()
-public typealias PaginationCompletionType<T>        = ( T? , String? , Pagination? , ChatError? )->()
-public typealias CacheResponseType<T>               = ( T? , String? , ChatError? )->()
-public typealias PaginationCacheResponseType<T>     = ( T? , String? , Pagination? , ChatError? )->()
-public typealias UploadFileProgressType             = (UploadFileProgress? , ChatError?)->()
-public typealias UploadCompletionType               = (UploadFileResponse? , FileMetaData? , ChatError?)->()
-public typealias UniqueIdResultType                 = ( (String)->() )?
-public typealias UniqueIdsResultType                = ( ([String])->() )?
-public typealias DownloadProgressType               = (DownloadFileProgress) -> ()
-public typealias DownloadFileCompletionType         = (Data?, FileModel?  ,ChatError?)->()
-public typealias DownloadImageCompletionType        = (Data?, ImageModel? ,ChatError?)->()
-public typealias OnSeenType                         = ((SeenMessageResponse?    , String? , ChatError? ) -> ())?
-public typealias OnDeliveryType                     = ((DeliverMessageResponse? , String? , ChatError? ) -> ())?
-public typealias OnSentType                         = ((SentMessageResponse?    , String? , ChatError? ) -> ())?
 
 public class Chat {
     
     // MARK: - Chat Private initializer
     private init() {}
     
-    internal static var instance: Chat?
-    
+    private static var instance: Chat?
+
+    /// Singleton instance of chat SDK.
     open class var sharedInstance: Chat {
         if instance == nil {
             instance = Chat()
@@ -43,14 +17,17 @@ public class Chat {
         return instance!
     }
     
-    var isCreateObjectFuncCalled                 = false
+    private var isCreateObjectFuncCalled                 = false
     var config                : ChatConfig?
     let callbacksManager                         = CallbacksManager()
     internal let asyncManager : AsyncManager     = AsyncManager()
     internal var logger       : Logger?
+
+    /// Current user info of the application it'll be filled after chat is in the ``ChatState/CHAT_READY``  state.
     public private (set) var userInfo              : User?
     var token                 : String?  = nil
-    
+
+    /// Delegate to send events.
     public weak var delegate: ChatDelegate?{
         didSet{
             if(!isCreateObjectFuncCalled){
@@ -59,15 +36,17 @@ public class Chat {
         }
     }
     
-	//**************************** Intitializers ****************************
+    /// Create chat object and connecting to async server.
+    /// - Parameter config: Configuration of chat object.
     public func createChatObject(config:ChatConfig){
 		isCreateObjectFuncCalled = true
         self.config = config
         self.token  = config.token
 		initialize()
 	}
-	
-	func initialize(){
+
+    /// Create logger and then connect to async server.
+	private func initialize(){
         logger = Logger(isDebuggingLogEnabled: config?.isDebuggingLogEnabled ?? false)
 		if config?.captureLogsOnSentry == true {
 			startCrashAnalytics()
@@ -81,70 +60,133 @@ public class Chat {
 		
 		_ = DiskStatus.checkIfDeviceHasFreeSpace(needSpaceInMB: config?.deviecLimitationSpaceMB ?? 100, turnOffTheCache: true, errorDelegate: delegate)
 	}
-	
+
+    /// Closing the async socket if it is open and setting the chat shared instance to nil.
+    /// You should take into consideration that if you need to work with this instance you should call the ``createChatObject(config:)`` method again.
     public func dispose() {
         asyncManager.disposeObject()
 		Chat.instance = nil
 		print("Disposed Singleton instance")
 	}
 	//**************************** Intitializers ****************************
-	
-    //Test Status: Main ✅ - Integeration: ✅
-    public func getContacts(_ request:ContactsRequest,completion:@escaping PaginationCompletionType<[Contact]>,cacheResponse:PaginationCacheResponseType<[Contact]>? = nil,uniqueIdResult: UniqueIdResultType = nil){
-		GetContactsRequestHandler.handle(request,self,completion,cacheResponse,uniqueIdResult)
+
+    /// Get contacts of current user.
+    /// - Parameters:
+    ///   - request: The request.
+    ///   - completion: The answer of the request.
+    ///   - cacheResponse: Reponse from cache database.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func getContacts(_ request:ContactsRequest, completion:@escaping PaginationCompletionType<[Contact]>, cacheResponse:PaginationCacheResponseType<[Contact]>? = nil, uniqueIdResult: UniqueIdResultType = nil){
+		GetContactsRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
 	}
 	
-    //Test Status: Main ✅ - Integeration: ✅
-    public func getBlockedContacts(_ request:BlockedListRequest , completion:@escaping PaginationCompletionType<[BlockedContact]>,uniqueIdResult: UniqueIdResultType = nil){
-		GetBlockedContactsRequestHandler.handle(request,self,completion , uniqueIdResult)
+    /// Get the list of blocked contacts.
+    /// - Parameters:
+    ///   - request: The request.
+    ///   - completion: The answer is the list of blocked contacts.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func getBlockedContacts(_ request:BlockedListRequest, completion:@escaping PaginationCompletionType<[BlockedContact]>, uniqueIdResult: UniqueIdResultType = nil){
+		GetBlockedContactsRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
 	
-    //Test Status: Main ✅ - Integeration: ✅
-    public func addContact(_ request:AddContactRequest,completion:@escaping CompletionType<[Contact]>, uniqueIdResult: UniqueIdResultType = nil){
-        AddContactRequestHandler.handle(request,self,completion,uniqueIdResult)
+    /// Add a new contact.
+    /// - Parameters:
+    ///   - request: The request.
+    ///   - completion: The answer of the request if the contact is added successfully.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func addContact(_ request:AddContactRequest, completion:@escaping CompletionType<[Contact]>, uniqueIdResult: UniqueIdResultType = nil){
+        AddContactRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
 	
-    //Test Status: Main ✅ - Integeration: ✅
-    public func addContacts(_ request:[AddContactRequest],completion:@escaping CompletionType<[Contact]>,uniqueIdsResult:UniqueIdsResultType = nil){
-        AddContactsRequestHandler.handle(request,self,completion,uniqueIdsResult)
+    /// Add multiple contacts at once.
+    /// - Parameters:
+    ///   - request: The request.
+    ///   - completion: The answer of the request if the contacts are added successfully.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func addContacts(_ request:[AddContactRequest], completion:@escaping CompletionType<[Contact]>, uniqueIdsResult:UniqueIdsResultType = nil){
+        AddContactsRequestHandler.handle(request, self, completion, uniqueIdsResult)
 	}
 	
-    //Test Status: Main ✅ - Integeration: ✅
-    public func contactNotSeen(_ request:NotSeenDurationRequest,completion:@escaping CompletionType<[UserLastSeenDuration]>,uniqueIdResult: UniqueIdResultType = nil){
+    /// Check the last time a user opened the application.
+    /// - Parameters:
+    ///   - request: The request with userIds.
+    ///   - completion: List of last seen users with time attached to each item.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func contactNotSeen(_ request:NotSeenDurationRequest, completion:@escaping CompletionType<[UserLastSeenDuration]>, uniqueIdResult: UniqueIdResultType = nil){
 		NotSeenContactRequestHandler.handle(request, self, completion , uniqueIdResult)
 	}
 	
-    //Test Status: Main ✅ - Integeration: ✅
-    public func removeContact(_ request:RemoveContactsRequest,completion:@escaping CompletionType<Bool>,uniqueIdResult: UniqueIdResultType = nil){
-		RemoveContactRequestHandler.handle(request,self,completion,uniqueIdResult)
+
+    /// Remove a contact from your circle of contacts.
+    /// - Parameters:
+    ///   - request: The request with userIds.
+    ///   - completion: The answer if the contact has been successfully deleted.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func removeContact(_ request:RemoveContactsRequest, completion:@escaping CompletionType<Bool>, uniqueIdResult: UniqueIdResultType = nil){
+		RemoveContactRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
 	
-    //Test Status: Main ✅ - Integeration: ✅
+    /// Search inside contacts.
+    ///
+    /// You could search inside the list of contacts by email, cell phone number, or a query or a specific id.
+    /// - Parameters:
+    ///   - request: The request.
+    ///   - completion: The answer if the contact has been successfully deleted.
+    ///   - cacheResponse: Reponse from cache database.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     public func searchContacts(_ request:ContactsRequest, completion:@escaping PaginationCompletionType<[Contact]>, cacheResponse: PaginationCacheResponseType<[Contact]>? = nil, uniqueIdResult: UniqueIdResultType = nil){
         getContacts(request, completion: completion, cacheResponse:cacheResponse, uniqueIdResult: uniqueIdResult)
 	}
 	
-    //Test Status: Main ✅ - Integeration: ✅
+
+    /// Sync contacts with server.
+    ///
+    /// If a new contact is added to your device it'll sync the unsynced contacts.
+    /// - Parameters:
+    ///   - completion: The answer of synced contacts.
+    ///   - uniqueIdsResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     public func syncContacts(completion:@escaping CompletionType<[Contact]>, uniqueIdsResult: UniqueIdsResultType = nil){
-		SyncContactsRequestHandler.handle(self,completion,uniqueIdsResult)
+		SyncContactsRequestHandler.handle(self, completion, uniqueIdsResult)
 	}
 	
-    //Test Status: Main ✅ - Integeration: ✅
+
+    /// Update a particular contact.
+    ///
+    /// Update name or other details of a contact.
+    /// - Parameters:
+    ///   - req: The request of what you need to be updated.
+    ///   - completion: The list of updated contacts.
+    ///   - uniqueIdsResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     public func updateContact(_ req: UpdateContactRequest, completion: @escaping CompletionType<[Contact]>, uniqueIdsResult:UniqueIdResultType = nil ){
-		UpdateContactRequestHandler.handle(req,self,completion,uniqueIdsResult)
+		UpdateContactRequestHandler.handle(req, self, completion, uniqueIdsResult)
 	}
 	
-    //Test Status: Main ✅ - Integeration: ✅
-    public func blockContact(_ request:BlockRequest,completion:@escaping CompletionType<BlockedContact>,uniqueIdResult: UniqueIdResultType = nil){
-		BlockContactRequestHandler.handle(request,self,completion , uniqueIdResult)
+
+    /// Block a specific contact.
+    /// - Parameters:
+    ///   - request: You could block contact with userId, contactId or you could block a thread.
+    ///   - completion: Reponse of blocked request.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func blockContact(_ request:BlockRequest, completion:@escaping CompletionType<BlockedContact>, uniqueIdResult: UniqueIdResultType = nil){
+		BlockContactRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
 	
-    //Test Status: Main ✅ - Integeration: ✅
+
+    /// Unblock a blcked contact.
+    /// - Parameters:
+    ///   - request: You could unblock contact with userId, contactId or you could unblock a thread.
+    ///   - completion: Reponse of before blocked request.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     public func unBlockContact(_ request:UnBlockRequest,completion:@escaping CompletionType<BlockedContact>,uniqueIdResult:UniqueIdResultType = nil){
 		UnBlockContactRequestHandler.handle(request,self,completion , uniqueIdResult)
 	}
 	
-    //Test Status: Neshan API ✅
+
+    /// Convert latitude and longitude to a human-readable address.
+    /// - Parameters:
+    ///   - request: Request of getting address.
+    ///   - completion: Response of reverse address.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     public func mapReverse(_ request:MapReverseRequest,completion:@escaping CompletionType<MapReverse>,uniqueIdResult: UniqueIdResultType = nil){
 		MapReverseRequestHandler.handle(request,self,completion,uniqueIdResult)
 	}
@@ -764,7 +806,7 @@ public class Chat {
 		guard let chatMessageContent = chatMessage.convertCodableToString() else{return}
 		let asyncMessage = SendAsyncMessageVO(content:     chatMessageContent,
 											  ttl: config.msgTTL,
-											  peerName:     config.serverName,
+                                              peerName:     config.asyncConfig.serverName,
 											  priority:     config.msgPriority,
                                               pushMsgType: pushMsgType
 		)

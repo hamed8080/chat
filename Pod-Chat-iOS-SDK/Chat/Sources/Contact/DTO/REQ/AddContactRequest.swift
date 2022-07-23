@@ -34,12 +34,12 @@ public class AddContactRequest : BaseRequest {
     }
     
     /// Add Contact with username
-    public init(email:      String?,
-                firstName:  String?,
-                lastName:   String?,
-                ownerId:    Int?,
-                username:   String?,
-                uniqueId:   String?) {
+    public init(email:      String? = nil,
+                firstName:  String? = nil,
+                lastName:   String? = nil,
+                ownerId:    Int?    = nil,
+                username:   String? = nil,
+                uniqueId:   String? = nil) {
         
         self.cellphoneNumber    = nil
         self.email              = email

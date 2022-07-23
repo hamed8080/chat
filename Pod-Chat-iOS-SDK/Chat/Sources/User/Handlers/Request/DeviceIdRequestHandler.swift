@@ -21,7 +21,7 @@ public class DeviceIdRequestHandler {
                 chat.delegate?.chatError(error: error)
             }
             if let device = devicesResponse?.devices?.first(where: {$0.current == true}){
-                chat.config?.deviceId = device.uid
+                chat.config?.asyncConfig.deviceId = device.uid ?? UUID().uuidString
                 chat.asyncManager.createAsync()
             }
         }

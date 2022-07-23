@@ -19,18 +19,7 @@ internal class AsyncManager: AsyncDelegate{
     }
     
     public func createAsync() {
-        if let chatConfig = Chat.sharedInstance.config{
-            let asyncConfig = AsyncConfig(socketAddress: chatConfig.socketAddress,
-                                          serverName: chatConfig.serverName,
-                                          deviceId: chatConfig.deviceId ?? UUID().uuidString,
-                                          appId: "PodChat",
-                                          peerId: nil,
-                                          messageTtl: chatConfig.messageTtl,
-                                          connectionRetryInterval: TimeInterval(chatConfig.connectionRetryInterval),
-                                          connectionCheckTimeout: TimeInterval(chatConfig.connectionCheckTimeout),
-                                          reconnectCount: chatConfig.reconnectCount,
-                                          reconnectOnClose: chatConfig.reconnectOnClose,
-                                          isDebuggingLogEnabled: chatConfig.isDebuggingAsyncEnable)
+        if let asyncConfig = Chat.sharedInstance.config?.asyncConfig{
             asyncClient = Async(config: asyncConfig, delegate: self)
             asyncClient?.createSocket()
         }
