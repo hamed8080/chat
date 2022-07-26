@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum SMT : Int ,Codable{
+public enum SMT : Int,Codable, SafeDecodable {
     case IS_TYPING      = 1
     case RECORD_VOICE   = 2
     case UPLOAD_PICTURE = 3
@@ -15,4 +15,5 @@ public enum SMT : Int ,Codable{
     case UPLOAD_SOUND   = 5
     case UPLOAD_FILE    = 6
     case SERVER_TIME    = -1
+    case UNKNOWN
 }

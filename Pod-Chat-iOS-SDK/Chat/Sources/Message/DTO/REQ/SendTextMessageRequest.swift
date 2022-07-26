@@ -15,7 +15,7 @@ public class SendTextMessageRequest : BaseRequest {
     public let textMessage:     String
     public var threadId:        Int
     
-    public init(threadId       : Int,
+    public init(threadId       : Int? = nil,
                 textMessage    : String,
                 messageType    : MessageType,
                 metadata       : String?        = nil,
@@ -28,7 +28,7 @@ public class SendTextMessageRequest : BaseRequest {
         self.repliedTo      = repliedTo
         self.systemMetadata = systemMetadata
         self.textMessage    = textMessage
-        self.threadId       = threadId
+        self.threadId       = threadId ?? -1
         super.init(uniqueId: uniqueId)
     }
     

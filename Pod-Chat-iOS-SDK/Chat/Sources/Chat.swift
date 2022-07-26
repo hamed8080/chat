@@ -115,7 +115,6 @@ public class Chat {
     public func contactNotSeen(_ request:NotSeenDurationRequest, completion:@escaping CompletionType<[UserLastSeenDuration]>, uniqueIdResult: UniqueIdResultType = nil){
 		NotSeenContactRequestHandler.handle(request, self, completion , uniqueIdResult)
 	}
-	
 
     /// Remove a contact from your circle of contacts.
     /// - Parameters:
@@ -137,7 +136,6 @@ public class Chat {
     public func searchContacts(_ request:ContactsRequest, completion:@escaping PaginationCompletionType<[Contact]>, cacheResponse: PaginationCacheResponseType<[Contact]>? = nil, uniqueIdResult: UniqueIdResultType = nil){
         getContacts(request, completion: completion, cacheResponse:cacheResponse, uniqueIdResult: uniqueIdResult)
 	}
-	
 
     /// Sync contacts with server.
     ///
@@ -148,7 +146,6 @@ public class Chat {
     public func syncContacts(completion:@escaping CompletionType<[Contact]>, uniqueIdsResult: UniqueIdsResultType = nil){
 		SyncContactsRequestHandler.handle(self, completion, uniqueIdsResult)
 	}
-	
 
     /// Update a particular contact.
     ///
@@ -160,7 +157,6 @@ public class Chat {
     public func updateContact(_ req: UpdateContactRequest, completion: @escaping CompletionType<[Contact]>, uniqueIdsResult:UniqueIdResultType = nil ){
 		UpdateContactRequestHandler.handle(req, self, completion, uniqueIdsResult)
 	}
-	
 
     /// Block a specific contact.
     /// - Parameters:
@@ -170,83 +166,155 @@ public class Chat {
     public func blockContact(_ request:BlockRequest, completion:@escaping CompletionType<BlockedContact>, uniqueIdResult: UniqueIdResultType = nil){
 		BlockContactRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
-	
 
     /// Unblock a blcked contact.
     /// - Parameters:
     ///   - request: You could unblock contact with userId, contactId or you could unblock a thread.
     ///   - completion: Reponse of before blocked request.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func unBlockContact(_ request:UnBlockRequest,completion:@escaping CompletionType<BlockedContact>,uniqueIdResult:UniqueIdResultType = nil){
+    public func unBlockContact(_ request:UnBlockRequest, completion:@escaping CompletionType<BlockedContact>, uniqueIdResult:UniqueIdResultType = nil){
 		UnBlockContactRequestHandler.handle(request,self,completion , uniqueIdResult)
 	}
-	
 
     /// Convert latitude and longitude to a human-readable address.
     /// - Parameters:
     ///   - request: Request of getting address.
     ///   - completion: Response of reverse address.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func mapReverse(_ request:MapReverseRequest,completion:@escaping CompletionType<MapReverse>,uniqueIdResult: UniqueIdResultType = nil){
-		MapReverseRequestHandler.handle(request,self,completion,uniqueIdResult)
+    public func mapReverse(_ request:MapReverseRequest, completion:@escaping CompletionType<MapReverse>, uniqueIdResult: UniqueIdResultType = nil){
+		MapReverseRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
-	
-    //Test Status: Neshan API ✅
-    public func mapSearch(_ request:MapSearchRequest,completion:@escaping CompletionType<[MapItem]>,uniqueIdResult: UniqueIdResultType = nil){
-		MapSearchRequestHandler.handle(request,self, completion , uniqueIdResult)
+
+    /// Search for Items inside an area.
+    /// - Parameters:
+    ///   - request: Request of area.
+    ///   - completion: Reponse of founded items.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func mapSearch(_ request:MapSearchRequest, completion:@escaping CompletionType<[MapItem]>, uniqueIdResult: UniqueIdResultType = nil){
+		MapSearchRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
-	
-    //Test Status: Neshan API ✅
-    public func mapRouting(_ request:MapRoutingRequest,completion:@escaping CompletionType<[Route]>,uniqueIdResult: UniqueIdResultType = nil){
-		MapRoutingRequestHandler.handle(request,self, completion , uniqueIdResult)
+
+    /// Find a route between two places.
+    /// - Parameters:
+    ///   - request: The request that contains origin and destination.
+    ///   - completion: Response of request.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func mapRouting(_ request:MapRoutingRequest, completion:@escaping CompletionType<[Route]>, uniqueIdResult: UniqueIdResultType = nil){
+		MapRoutingRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
-	
-    //Test Status: Neshan API ✅
+
+    /// Convert a location to an image.
+    /// - Parameters:
+    ///   - request: The request size and location.
+    ///   - completion: Data of image.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     public func mapStaticImage(_ request:MapStaticImageRequest,completion:@escaping CompletionType<Data>,uniqueIdResult: UniqueIdResultType = nil){
-		MapStaticImageRequestHandler.handle(request,self,completion , uniqueIdResult)
+		MapStaticImageRequestHandler.handle(request,self, completion, uniqueIdResult)
 	}
-	
-    //Test Status: Main ✅ - Integeration: ✅
-    public func getThreads(_ request:ThreadsRequest,completion:@escaping PaginationCompletionType<[Conversation]>, cacheResponse: PaginationCacheResponseType<[Conversation]>? = nil ,  uniqueIdResult: UniqueIdResultType = nil){
-		GetThreadsRequestHandler.handle(request, self , completion , cacheResponse , uniqueIdResult)
+
+    /// Get list of threads.
+    /// - Parameters:
+    ///   - request: The request of list of threads.
+    ///   - completion: Response of list of threads that came with pagination.
+    ///   - cacheResponse: Threads list that came from the cache.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func getThreads(_ request:ThreadsRequest, completion:@escaping PaginationCompletionType<[Conversation]>, cacheResponse: PaginationCacheResponseType<[Conversation]>? = nil,  uniqueIdResult: UniqueIdResultType = nil){
+		GetThreadsRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
 	}
-    
-    //Test Status: Main ✅ - Integeration: ✅
-    public func getAllThreads(request:AllThreads , completion:@escaping CompletionType<[Conversation]> , cacheResponse:CacheResponseType<[Conversation]>? = nil ,uniqueIdResult: UniqueIdResultType = nil){
+
+    /// Getting the all threads.
+    /// - Parameters:
+    ///   - request: <#request description#>
+    ///   - completion: <#completion description#>
+    ///   - cacheResponse: <#cacheResponse description#>
+    ///   - uniqueIdResult: <#uniqueIdResult description#>
+    public func getAllThreads(request:AllThreads, completion:@escaping CompletionType<[Conversation]>, cacheResponse:CacheResponseType<[Conversation]>? = nil, uniqueIdResult: UniqueIdResultType = nil){
         GetAllThreadsRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
     }
-	
-    //Test Status: Main ✅ - Integeration: ✅
-    public func isThreadNamePublic(_ request:IsThreadNamePublicRequest,completion:@escaping CompletionType<String>,uniqueIdResult: UniqueIdResultType = nil){
-		IsThreadNamePublicRequestHandler.handle(request, self , completion , uniqueIdResult)
+
+    /// Check name for the public thread is not occupied.
+    /// - Parameters:
+    ///   - request: The request for the name of the thread to check.
+    ///   - completion: If thread name is free for using as public it will not be nil.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func isThreadNamePublic(_ request:IsThreadNamePublicRequest, completion:@escaping CompletionType<String>, uniqueIdResult: UniqueIdResultType = nil){
+		IsThreadNamePublicRequestHandler.handle(request, self, completion, uniqueIdResult)
+	}
+
+    /// Mute a thread when a new event happens.
+    /// - Parameters:
+    ///   - request: The request with a thread id.
+    ///   - completion: Response of mute thread.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func muteThread(_ request:MuteUnmuteThreadRequest, completion:@escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType = nil){
+		MuteThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
 	
-    //Test Status: Main ✅ - Integeration: ✅
-    public func muteThread(_ request:MuteUnmuteThreadRequest,completion:@escaping CompletionType<Int>,uniqueIdResult: UniqueIdResultType = nil){
-		MuteThreadRequestHandler.handle(request, self , completion , uniqueIdResult)
+    /// UNMute a thread.
+    /// - Parameters:
+    ///   - request: The request with a thread id.
+    ///   - completion: Response of unmute thread.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func unmuteThread(_ request:MuteUnmuteThreadRequest, completion:@escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType = nil){
+		UnMuteThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
 	
-    //Test Status: Main ✅ - Integeration: ✅
-    public func unmuteThread(_ request:MuteUnmuteThreadRequest,completion:@escaping CompletionType<Int>,uniqueIdResult: UniqueIdResultType = nil){
-		UnMuteThreadRequestHandler.handle(request, self , completion , uniqueIdResult)
+    /// Pin a thread.
+    /// - Parameters:
+    ///   - request: The request with a thread id.
+    ///   - completion: Response of pin thread.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func pinThread(_ request:PinUnpinThreadRequest, completion:@escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType = nil){
+		PinThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
 	
-    //Test Status: Main ✅ - Integeration: ✅
-    public func pinThread(_ request:PinUnpinThreadRequest,completion:@escaping CompletionType<Int>,uniqueIdResult: UniqueIdResultType = nil){
-		PinThreadRequestHandler.handle(request, self , completion , uniqueIdResult)
+    /// UNPin a thread.
+    /// - Parameters:
+    ///   - request: The request with a thread id.
+    ///   - completion: Response of unpin thread.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func unpinThread(_ request:PinUnpinThreadRequest, completion:@escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType = nil){
+		UnPinThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
 	
-    //Test Status: Main ✅ - Integeration: ✅
-    public func unpinThread(_ request:PinUnpinThreadRequest,completion:@escaping CompletionType<Int>,uniqueIdResult: UniqueIdResultType = nil){
-		UnPinThreadRequestHandler.handle(request, self , completion , uniqueIdResult)
-	}
-	
-    //Test Status: Main ✅ - Integeration: ✅
+    /// Create a thread.
+    /// - Parameters:
+    ///   - request: The request of create a thread.
+    ///   - completion: Response to create thread which contains a ``Conversation`` that includes threadId and other properties.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     public func createThread(_ request:CreateThreadRequest, completion:@escaping CompletionType<Conversation> ,uniqueIdResult: UniqueIdResultType = nil){
 		CreateThreadRequestHandler.handle(request, self , completion , uniqueIdResult)
 	}
-	
-    //Test Status: Main ✅ - Integeration: ✅
+
+    /// Create thread with a message.
+    /// - Parameters:
+    ///   - request: The request with a message and threadId.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    ///   - onSent: Call when message is snet.
+    ///   - onDelivery:  Call when message deliverd but not seen yet.
+    ///   - onSeen: Call when message is seen.
+    ///   - completion: Response of request and created thread.
+    public func createThreadWithMessage(_ request:CreateThreadWithMessage ,
+                                        uniqueIdResult: UniqueIdResultType = nil,
+                                        onSent:OnSentType = nil,
+                                        onDelivery:OnDeliveryType = nil,
+                                        onSeen: OnSentType = nil,
+                                        completion:@escaping CompletionType<Conversation>){
+        CreateThreadWithMessageRequestHandler.handle(request, self , completion , uniqueIdResult)
+    }
+
+    /// Create thread and send a file message.
+    /// - Parameters:
+    ///   - request: Request of craete thread.
+    ///   - textMessage: Text message.
+    ///   - uploadFile: File request.
+    ///   - uploadProgress: Track the progress of uploading.
+    ///   - onSent: Call when message is snet.
+    ///   - onSeen: Call when message is seen.
+    ///   - onDeliver: Call when message deliverd but not seen yet.
+    ///   - createThreadCompletion: Call when the thread is created, and it's called before uploading gets completed
+    ///   - uploadUniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    ///   - messageUniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     public func createThreadWithFileMessage(_ request:CreateThreadRequest,
                                      textMessage:SendTextMessageRequest,
                                      uploadFile:UploadFileRequest,
@@ -259,164 +327,245 @@ public class Chat {
                                      messageUniqueIdResult: UniqueIdResultType = nil
                          
     ){
-        CreateThreadWithFileMessageRequestHandler.handle(self , request, textMessage, uploadFile,uploadProgress , onSent,onSeen,onDeliver ,createThreadCompletion,uploadUniqueIdResult,messageUniqueIdResult)
+        CreateThreadWithFileMessageRequestHandler.handle(self, request, textMessage, uploadFile, uploadProgress, onSent, onSeen,onDeliver, createThreadCompletion, uploadUniqueIdResult, messageUniqueIdResult)
     }
-    
-    //Test Status: Main ✅ - Integeration: ✅
-    //may remove in future release and provide a substitution way and move request to Object model and class AddParticipantRequest
-    public func addParticipant(_ contactIds:[Int], threadId:Int, uniqueId:String, completion:@escaping CompletionType<Conversation> , uniqueIdResult: UniqueIdResultType = nil){
-        AddParticipantsRequestHandler.handle(contactIds, threadId, uniqueId, self, completion, uniqueIdResult)
+
+    /// Add participant to a thread.
+    /// - Parameters:
+    ///   - request: Fill in the appropriate initializer.
+    ///   - completion: Reponse of request.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func addParticipant(_ request:AddParticipantRequest, completion:@escaping CompletionType<Conversation>, uniqueIdResult: UniqueIdResultType = nil){
+		AddParticipantsRequestHandler.handle([request], self, completion, uniqueIdResult)
+	}
+	
+    /// Add participants to a thread.
+    /// - Parameters:
+    ///   - request: Fill in the appropriate initializer.
+    ///   - completion: Reponse of request.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func addParticipants(_ request:[AddParticipantRequest], completion:@escaping CompletionType<Conversation>, uniqueIdResult: UniqueIdResultType = nil){
+		AddParticipantsRequestHandler.handle(request, self, completion, uniqueIdResult)
+
+	}
+
+    /// Remove participants from a thread.
+    /// - Parameters:
+    ///   - request: List of participants id and threadId.
+    ///   - completion: Result of deleted participants.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func removeParticipants(_ request: RemoveParticipantsRequest, completion:@escaping CompletionType<[Participant]>, uniqueIdResult: UniqueIdResultType = nil){
+		RemoveParticipantsRequestHandler.handle(request, self, completion, uniqueIdResult)
+	}
+
+    /// Join to a public thread.
+    /// - Parameters:
+    ///   - request: Thread name of public thread.
+    ///   - completion: Detail of public thread as a ``Conversation`` object.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func joinThread(_ request:JoinPublicThreadRequest, completion:@escaping CompletionType<Conversation>, uniqueIdResult: UniqueIdResultType = nil){
+		JoinPublicThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
+	}
+	
+    /// Close a thread.
+    ///
+    /// With the closing, a thread participants of it can't send a message to it.
+    /// - Parameters:
+    ///   - request: Thread Id of the thread you want to be closed.
+    ///   - completion: The id of the thread which closed.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func closeThread(_ request:CloseThreadRequest, completion:@escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType = nil){
+		CloseThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
+	}
+
+    /// Mark a thread as an spam
+    ///
+    /// A spammed thread can't send a message anymore.
+    /// - Parameters:
+    ///   - request: Request to spam a thread.
+    ///   - completion: Response of request.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func spamPvThread(_ request: SpamThreadRequest, completion:@escaping CompletionType<BlockedContact>, uniqueIdResult: UniqueIdResultType = nil){
+        SpamThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
-    
-    //Test Status: Main ✅ - Integeration: ✅
-    public func addParticipant(_ request:AddParticipantRequest, completion:@escaping CompletionType<Conversation> , uniqueIdResult: UniqueIdResultType = nil){
-		AddParticipantsRequestHandler.handle([request], self , completion , uniqueIdResult)
+
+    /// Update details of a thread.
+    /// - Parameters:
+    ///   - request: The request might contain an image, title, description, and a threadId.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    ///   - uploadProgress: Upload progrees if you update image of the thread.
+    ///   - completion: Response of update.
+    public func updateThreadInfo(_ request:UpdateThreadInfoRequest, uniqueIdResult: UniqueIdResultType = nil, uploadProgress:@escaping UploadFileProgressType, completion:@escaping CompletionType<Conversation>){
+        UpdateThreadInfoRequestHandler.handle(self, request, uploadProgress, completion, uniqueIdResult)
 	}
-	
-    //Test Status: Main ✅ - Integeration: ✅
-    public func addParticipants(_ request:[AddParticipantRequest],completion:@escaping CompletionType<Conversation>, uniqueIdResult: UniqueIdResultType = nil){
-		AddParticipantsRequestHandler.handle(request, self , completion , uniqueIdResult)
+
+    /// Leave a thread.
+    /// - Parameters:
+    ///   - request: The threadId if the thread with option to clear it's content.
+    ///   - completion: The response of the left thread..
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func leaveThread(_ request:LeaveThreadRequest, completion:@escaping CompletionType<User>, uniqueIdResult: UniqueIdResultType = nil){
+		LeaveThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
-	
-    //Test Status: Main ✅ - Integeration: ✅
-    public func removeParticipants(_ request: RemoveParticipantsRequest,completion:@escaping CompletionType<[Participant]>, uniqueIdResult: UniqueIdResultType = nil){
-		RemoveParticipantsRequestHandler.handle(request, self , completion , uniqueIdResult)
-	}
-	
-    //Test Status: Main ✅ - Integeration: ✅
-    public func joinThread(_ request:JoinPublicThreadRequest ,completion:@escaping CompletionType<Conversation>,uniqueIdResult: UniqueIdResultType = nil){
-		JoinPublicThreadRequestHandler.handle(request, self , completion , uniqueIdResult)
-	}
-	
-    //Test Status: Main ✅ - Integeration: ❌ because of sandbox problem - Sandbox: ✅
-    public func closeThread(_ request:CloseThreadRequest ,completion:@escaping CompletionType<Int>,uniqueIdResult: UniqueIdResultType = nil){
-		CloseThreadRequestHandler.handle(request, self , completion , uniqueIdResult)
-	}
-    
-    //Test Status: Main ✅ - Integeration: ❌  because of sandbox problem - Sandbox: ✅
-    public func spamPvThread(_ request: SpamThreadRequest , completion:@escaping CompletionType<BlockedContact> , uniqueIdResult: UniqueIdResultType = nil){
-        SpamThreadRequestHandler.handle( request , self ,completion , uniqueIdResult)
-    }
-	
-    //Test Status: Main ✅ - Integeration: ❌  because of sandbox problem - Sandbox: ✅
-    public func updateThreadInfo(_ request:UpdateThreadInfoRequest , uniqueIdResult: UniqueIdResultType = nil, uploadProgress:@escaping UploadFileProgressType,completion:@escaping CompletionType<Conversation>){
-        UpdateThreadInfoRequestHandler.handle(self , request ,uploadProgress ,completion , uniqueIdResult)
-	}
-	
-    //Test Status: Main ✅ - Integeration: ❌ because of sandbox problem - Sandbox: ✅
-    public func createThreadWithMessage(_ request:CreateThreadWithMessage ,
-					uniqueIdResult: UniqueIdResultType = nil,
-					onSent:OnSentType = nil,
-					onDelivery:OnDeliveryType = nil,
-					onSeen: OnSentType = nil,
-					completion:@escaping CompletionType<Conversation>){
-		CreateThreadWithMessageRequestHandler.handle(request, self , completion , uniqueIdResult)
-	}
-	
-    //Test Status: Main ✅ - Integeration: ✅
-    public func leaveThread(_ request:LeaveThreadRequest ,completion:@escaping CompletionType<User>,uniqueIdResult: UniqueIdResultType = nil){
-		LeaveThreadRequestHandler.handle(request, self , completion , uniqueIdResult)
-	}
-    
-    //Test Status: Main ✅ - Integeration: ✅
+
+    /// Delete a thread if you are admin in this thread.
+    /// - Parameters:
+    ///   - request: The request that contains thread id.
+    ///   - completion: Result of request.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     public func deleteThread(_ request:DeleteThreadRequest, completion:@escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType = nil){
         DeleteThreadRequestHandler.handle(request, self, completion)
     }
-    
-    //Test Status: Main ✅ - Integeration: ✅
-    public func leaveThreadSaftly(_ request:SafeLeaveThreadRequest, completion:@escaping CompletionType<User> , newAdminCompletion:CompletionType<[UserRole]>? = nil,uniqueIdResult: UniqueIdResultType = nil){
-        ReplaceAdminAndLeaveThreadRequestHandler.handle(request,self,completion,newAdminCompletion,uniqueIdResult)
+
+    /// Leave a thrad with replaceing admin.
+    /// - Parameters:
+    ///   - request: The request that contains threadId and participantId of new admin.
+    ///   - completion: Result of request.
+    ///   - newAdminCompletion: Result of new admin.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func leaveThreadSaftly(_ request:SafeLeaveThreadRequest, completion:@escaping CompletionType<User>, newAdminCompletion:CompletionType<[UserRole]>? = nil, uniqueIdResult: UniqueIdResultType = nil){
+        ReplaceAdminAndLeaveThreadRequestHandler.handle(request, self, completion, newAdminCompletion, uniqueIdResult)
     }
-	
-    //Test Status: Main ✅ - Integeration: ✅
-    public func createBot(_ request:CreateBotRequest ,completion:@escaping CompletionType<Bot>,uniqueIdResult: UniqueIdResultType = nil){
-		CreateBotRequestHandler.handle(request, self , completion , uniqueIdResult)
-	}
-	
-    //Test Status: Main ✅ - Integeration: ✅
-    public func addBotCommand(_ request:AddBotCommandRequest ,completion:@escaping CompletionType<BotInfo>,uniqueIdResult: UniqueIdResultType = nil){
-		AddBotCommandRequestHandler.handle(request, self , completion , uniqueIdResult)
-	}
-    
-    //Test Status: Main ✅ - Integeration: ✅
-    public func removeBotCommand(_ request:RemoveBotCommandRequest ,completion:@escaping CompletionType<BotInfo>,uniqueIdResult: UniqueIdResultType = nil){
-        RemoveBotCommandRequestHandler.handle(request, self , completion , uniqueIdResult)
+
+    /// Get thread participants.
+    /// - Parameters:
+    ///   - request: The request that contain threadId and count and offset.
+    ///   - completion: Pagination list of participants.
+    ///   - cacheResponse: Cache response of participants inside a thread.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func getThreadParticipants(_ request:ThreadParticipantsRequest, completion:@escaping PaginationCompletionType<[Participant]>, cacheResponse: PaginationCacheResponseType<[Participant]>? = nil, uniqueIdResult: UniqueIdResultType = nil){
+        ThreadParticipantsRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
     }
-    
-    //Test Status: Main ✅ - Integeration: ✅
-    public func getUserBots(_ request:GetUserBotsRequest ,completion:@escaping CompletionType<[BotInfo]>,uniqueIdResult: UniqueIdResultType = nil){
-        UserBotsBotsRequestHandler.handle(request, self , completion , uniqueIdResult)
+
+    /// Get thread participants.
+    ///
+    /// It's the same ``Chat/getThreadParticipants(_:completion:cacheResponse:uniqueIdResult:)`` only return admins.
+    /// - Parameters:
+    ///   - request: The request that contain threadId and count and offset.
+    ///   - completion: Pagination list of participants.
+    ///   - cacheResponse: Cache response of participants inside a thread.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func getThreadAdmins(_ request:ThreadParticipantsRequest, completion:@escaping PaginationCompletionType<[Participant]>, cacheResponse: PaginationCacheResponseType<[Participant]>? = nil, uniqueIdResult: UniqueIdResultType = nil){
+        request.admin = true
+        ThreadParticipantsRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
     }
-	
-    //Test Status: Main ✅ - Integeration: ✅
-    public func startBot(_ request:StartStopBotRequest ,completion:@escaping CompletionType<String> ,uniqueIdResult: UniqueIdResultType = nil){
-		StartBotRequestHandler.handle(request, self , completion , uniqueIdResult)
+
+    /// Change a type of thread.
+    /// - Parameters:
+    ///   - request: The request that contains threadId and type of desierd thread.
+    ///   - completion: Response of the request.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func changeThreadType(_ request:ChangeThreadTypeRequest, completion:@escaping CompletionType<Conversation>, uniqueIdResult: UniqueIdResultType = nil){
+        ChangeThreadTypeRequestHandler.handle(request, self, completion, uniqueIdResult)
+    }
+
+    /// Create Bot.
+    /// - Parameters:
+    ///   - request: The request that contains the name bot.
+    ///   - completion: The responser of the request.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func createBot(_ request:CreateBotRequest, completion:@escaping CompletionType<Bot>, uniqueIdResult: UniqueIdResultType = nil){
+		CreateBotRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
-	
-    //Test Status: Main ✅ - Integeration: ✅
-    public func stopBot(_ request:StartStopBotRequest , completion:@escaping CompletionType<String> , uniqueIdResult: UniqueIdResultType = nil){
-		StopBotRequestHandler.handle(request, self , completion , uniqueIdResult)
+
+    /// Add commands to a bot.
+    /// - Parameters:
+    ///   - request: The request that contains the name bot and list of commands.
+    ///   - completion: The responser of the request.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func addBotCommand(_ request:AddBotCommandRequest, completion:@escaping CompletionType<BotInfo>, uniqueIdResult: UniqueIdResultType = nil){
+		AddBotCommandRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
-	
-    //Test Status: Main ✅ - Integeration: ✅
-    public func getUserInfo(_ request:UserInfoRequest ,completion:@escaping CompletionType<User> ,cacheResponse: CacheResponseType<User>? = nil,uniqueIdResult: UniqueIdResultType = nil){
-		UserInfoRequestHandler.handle(request, self , completion , cacheResponse , uniqueIdResult)
+
+    /// Remove commands from a bot.
+    /// - Parameters:
+    ///   - request: The request that contains the name bot and list of commands.
+    ///   - completion: The responser of the request.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func removeBotCommand(_ request:RemoveBotCommandRequest, completion:@escaping CompletionType<BotInfo>, uniqueIdResult: UniqueIdResultType = nil){
+        RemoveBotCommandRequestHandler.handle(request, self, completion, uniqueIdResult)
+    }
+
+    /// Get all user bots.
+    /// - Parameters:
+    ///   - request: Request if want to have different uniqueId.
+    ///   - completion: List of user bots.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func getUserBots(_ request:GetUserBotsRequest, completion:@escaping CompletionType<[BotInfo]>, uniqueIdResult: UniqueIdResultType = nil){
+        UserBotsBotsRequestHandler.handle(request, self, completion, uniqueIdResult)
+    }
+
+    /// Start a bot.
+    /// - Parameters:
+    ///   - request: The request with threadName and a threadId.
+    ///   - completion: Name of a bot if it starts successfully.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func startBot(_ request:StartStopBotRequest, completion:@escaping CompletionType<String>, uniqueIdResult: UniqueIdResultType = nil){
+		StartBotRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
-	
-    //Test Status: Main ✅ - Integeration: ✅
-    public func setProfile(_ request:UpdateChatProfile ,completion:@escaping CompletionType<Profile>,uniqueIdResult: UniqueIdResultType = nil){
-		UpdateChatProfileRequestHandler.handle(request, self , completion , uniqueIdResult)
+
+    /// Stop a bot.
+    /// - Parameters:
+    ///   - request: The request with threadName and a threadId.
+    ///   - completion: Name of a bot if it stopped successfully.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func stopBot(_ request:StartStopBotRequest, completion:@escaping CompletionType<String>, uniqueIdResult: UniqueIdResultType = nil){
+		StopBotRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
-	
-    //Test Status: Main ✅ - Integeration: ✅
+
+    /// Getting current user details.
+    /// - Parameters:
+    ///   - request: The request:
+    ///   - completion: Response of the request.
+    ///   - cacheResponse: cache response for the current user.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func getUserInfo(_ request:UserInfoRequest, completion:@escaping CompletionType<User>, cacheResponse: CacheResponseType<User>? = nil, uniqueIdResult: UniqueIdResultType = nil){
+		UserInfoRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
+	}
+
+    /// Update current user details.
+    /// - Parameters:
+    ///   - request: The request that contains bio and metadata.
+    ///   - completion: New profile response.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func setProfile(_ request:UpdateChatProfile, completion:@escaping CompletionType<Profile>, uniqueIdResult: UniqueIdResultType = nil){
+		UpdateChatProfileRequestHandler.handle(request, self, completion, uniqueIdResult)
+	}
+
+    /// <#Description#>
+    /// - Parameter request: <#request description#>
     public func sendStatusPing(_ request:SendStatusPingRequest){
 		SendStatusPingRequestHandler.handle(request, self)
 	}
-	
-    //Test Status: Main ✅ - Integeration: ✅
-    public func getThreadParticipants(_ request:ThreadParticipantsRequest ,completion:@escaping PaginationCompletionType<[Participant]>, cacheResponse: PaginationCacheResponseType<[Participant]>? = nil,uniqueIdResult: UniqueIdResultType = nil){
-		ThreadParticipantsRequestHandler.handle(request, self , completion , cacheResponse , uniqueIdResult)
-	}
-    
-    //Test Status: Main ✅ - Integeration: ✅
-    public func getThreadAdmins(_ request:ThreadParticipantsRequest ,completion:@escaping PaginationCompletionType<[Participant]>, cacheResponse: PaginationCacheResponseType<[Participant]>? = nil,uniqueIdResult: UniqueIdResultType = nil){
-        request.admin = true
-        ThreadParticipantsRequestHandler.handle(request, self , completion , cacheResponse , uniqueIdResult)
-    }
-    
-    //Test Status: Main ✅ - Integeration: ✅
-    public func changeThreadType(_ request:ChangeThreadTypeRequest ,completion:@escaping CompletionType<Conversation>,uniqueIdResult: UniqueIdResultType = nil){
-        ChangeThreadTypeRequestHandler.handle(request, self , completion, uniqueIdResult)
+
+    //Test Status: Main ❌ - Integeration: ✅
+    public func tagList(_ uniqueId:String? = nil, completion:@escaping CompletionType<[Tag]>, uniqueIdResult: UniqueIdResultType = nil){
+        TagListRequestHandler.handle(uniqueId, self, completion, uniqueIdResult)
     }
     
     //Test Status: Main ❌ - Integeration: ✅
-    public func tagList(_ uniqueId:String? = nil, completion:@escaping CompletionType<[Tag]>,uniqueIdResult: UniqueIdResultType = nil){
-        TagListRequestHandler.handle(uniqueId, self , completion, uniqueIdResult)
+    public func createTag(_ request:CreateTagRequest, completion:@escaping CompletionType<Tag>, uniqueIdResult: UniqueIdResultType = nil){
+        CreateTagRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
     
     //Test Status: Main ❌ - Integeration: ✅
-    public func createTag(_ request:CreateTagRequest ,completion:@escaping CompletionType<Tag>,uniqueIdResult: UniqueIdResultType = nil){
-        CreateTagRequestHandler.handle(request, self , completion, uniqueIdResult)
+    public func editTag(_ request:EditTagRequest, completion:@escaping CompletionType<Tag>, uniqueIdResult: UniqueIdResultType = nil){
+        EditTagRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
     
     //Test Status: Main ❌ - Integeration: ✅
-    public func editTag(_ request:EditTagRequest ,completion:@escaping CompletionType<Tag>,uniqueIdResult: UniqueIdResultType = nil){
-        EditTagRequestHandler.handle(request, self , completion, uniqueIdResult)
+    public func deleteTag(_ request:DeleteTagRequest, completion:@escaping CompletionType<Tag>, uniqueIdResult: UniqueIdResultType = nil){
+        DeleteTagRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
     
     //Test Status: Main ❌ - Integeration: ✅
-    public func deleteTag(_ request:DeleteTagRequest ,completion:@escaping CompletionType<Tag>,uniqueIdResult: UniqueIdResultType = nil){
-        DeleteTagRequestHandler.handle(request, self , completion, uniqueIdResult)
+    public func addTagParticipants(_ request:AddTagParticipantsRequest, completion:@escaping CompletionType<[TagParticipant]>, uniqueIdResult: UniqueIdResultType = nil){
+        AddTagParticipantsRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
     
     //Test Status: Main ❌ - Integeration: ✅
-    public func addTagParticipants(_ request:AddTagParticipantsRequest ,completion:@escaping CompletionType<[TagParticipant]>,uniqueIdResult: UniqueIdResultType = nil){
-        AddTagParticipantsRequestHandler.handle(request, self , completion, uniqueIdResult)
-    }
-    
-    //Test Status: Main ❌ - Integeration: ✅
-    public func removeTagParticipants(_ request:RemoveTagParticipantsRequest ,completion:@escaping CompletionType<[TagParticipant]>,uniqueIdResult: UniqueIdResultType = nil){
-        RemoveTagParticipantsRequestHandler.handle(request, self , completion, uniqueIdResult)
+    public func removeTagParticipants(_ request:RemoveTagParticipantsRequest, completion:@escaping CompletionType<[TagParticipant]>, uniqueIdResult: UniqueIdResultType = nil){
+        RemoveTagParticipantsRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
     
     //Test Status: Main ❌ - Integeration: ❌
@@ -425,13 +574,13 @@ public class Chat {
 //    }
     
     //Test Status: Main ✅ - Integeration: ✅
-    public func sendTextMessage(_ request:SendTextMessageRequest ,uniqueIdresult:UniqueIdResultType = nil, onSent:OnSentType = nil , onSeen:OnSeenType = nil, onDeliver:OnDeliveryType = nil){
-        SendTextMessageRequestHandler.handle(request, self, onSent, onSeen, onDeliver , uniqueIdresult)
+    public func sendTextMessage(_ request:SendTextMessageRequest, uniqueIdresult:UniqueIdResultType = nil, onSent:OnSentType = nil, onSeen:OnSeenType = nil,  onDeliver:OnDeliveryType = nil){
+        SendTextMessageRequestHandler.handle(request, self, onSent, onSeen, onDeliver, uniqueIdresult)
     }
     
     //Test Status: Main ✅ - Integeration: ✅
-    public func replyMessage(_ request:ReplyMessageRequest ,uniqueIdresult:UniqueIdResultType = nil, onSent:OnSentType = nil , onSeen:OnSeenType = nil, onDeliver:OnDeliveryType = nil){
-        SendTextMessageRequestHandler.handle(request, self, onSent, onSeen, onDeliver , uniqueIdresult)
+    public func replyMessage(_ request:ReplyMessageRequest, uniqueIdresult:UniqueIdResultType = nil, onSent:OnSentType = nil, onSeen:OnSeenType = nil, onDeliver:OnDeliveryType = nil){
+        SendTextMessageRequestHandler.handle(request, self, onSent, onSeen, onDeliver, uniqueIdresult)
     }
     
     //Test Status: Main ✅ - Integeration: ✅
@@ -449,16 +598,16 @@ public class Chat {
                               uploadUniqueIdResult: UniqueIdResultType = nil,
                               messageUniqueIdResult: UniqueIdResultType = nil
                               ){
-        SendLocationMessageRequestHandler.handle(self,request, downloadProgress, uploadProgress ,onSent,onSeen , onDeliver , uploadUniqueIdResult , messageUniqueIdResult)
+        SendLocationMessageRequestHandler.handle(self, request, downloadProgress, uploadProgress, onSent,onSeen, onDeliver, uploadUniqueIdResult, messageUniqueIdResult)
     }
     
     //Test Status: Main ✅ - Integeration: ✅
-    public func editMessage(_ request:EditMessageRequest , completion: CompletionType<Message>? = nil ,uniqueIdResult:UniqueIdResultType = nil){
-        EditMessageRequestHandler.handle(request, self, completion ,uniqueIdResult)
+    public func editMessage(_ request:EditMessageRequest, completion: CompletionType<Message>? = nil, uniqueIdResult:UniqueIdResultType = nil){
+        EditMessageRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
     
     //Test Status: Main ✅ - Integeration: ✅
-    public func forwardMessages(_ request:ForwardMessageRequest ,  onSent:OnSentType = nil , onSeen:OnSeenType = nil, onDeliver:OnDeliveryType = nil ,uniqueIdsResult:UniqueIdsResultType = nil){
+    public func forwardMessages(_ request:ForwardMessageRequest, onSent:OnSentType = nil, onSeen:OnSeenType = nil, onDeliver:OnDeliveryType = nil, uniqueIdsResult:UniqueIdsResultType = nil){
         ForwardMessagesRequestHandler.handle(request, self, onSent, onSeen, onDeliver, uniqueIdsResult)
     }
     
@@ -495,73 +644,73 @@ public class Chat {
     }
 	
     //Test Status: Main ✅ - Integeration: ✅
-    public func pinMessage(_ request:PinUnpinMessageRequest ,completion:@escaping CompletionType<PinUnpinMessage> , uniqueIdResult: UniqueIdResultType = nil){
-		PinMessageRequestHandler.handle(request, self , completion , uniqueIdResult)
+    public func pinMessage(_ request:PinUnpinMessageRequest, completion:@escaping CompletionType<PinUnpinMessage>, uniqueIdResult: UniqueIdResultType = nil){
+		PinMessageRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
 	
     //Test Status: Main ✅ - Integeration: ✅
-    public func unpinMessage(_ request:PinUnpinMessageRequest ,completion:@escaping CompletionType<PinUnpinMessage> ,uniqueIdResult: UniqueIdResultType = nil){
-		UnPinMessageRequestHandler.handle(request, self , completion , uniqueIdResult)
+    public func unpinMessage(_ request:PinUnpinMessageRequest, completion:@escaping CompletionType<PinUnpinMessage>, uniqueIdResult: UniqueIdResultType = nil){
+		UnPinMessageRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
 	
     //Test Status: Main ✅ - Integeration: ✅
-    public func clearHistory(_ request:ClearHistoryRequest ,completion:@escaping CompletionType<Int>,uniqueIdResult: UniqueIdResultType = nil){
-		ClearHistoryRequestHandler.handle(request, self , completion , uniqueIdResult)
+    public func clearHistory(_ request:ClearHistoryRequest, completion:@escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType = nil){
+		ClearHistoryRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
 	
     //Test Status: Main ✅ - Integeration: ✅
-    public func deleteMessage(_ request:DeleteMessageRequest ,completion:@escaping CompletionType<Message>,uniqueIdResult: UniqueIdResultType = nil){
-		DeleteMessageRequestHandler.handle(request, self , completion , uniqueIdResult)
+    public func deleteMessage(_ request:DeleteMessageRequest, completion:@escaping CompletionType<Message>, uniqueIdResult: UniqueIdResultType = nil){
+		DeleteMessageRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
 	
     //Test Status: Main ✅ - Integeration: ✅
-    public func deleteMultipleMessages(_ request:BatchDeleteMessageRequest ,completion:@escaping CompletionType<Message>,uniqueIdResult: UniqueIdResultType = nil){
-		BatchDeleteMessageRequestHandler.handle(request, self , completion , uniqueIdResult)
+    public func deleteMultipleMessages(_ request:BatchDeleteMessageRequest, completion:@escaping CompletionType<Message>, uniqueIdResult: UniqueIdResultType = nil){
+		BatchDeleteMessageRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
 	
     //Test Status: Main ✅ - Integeration: ✅
-    public func allUnreadMessageCount(_ request:UnreadMessageCountRequest ,completion:@escaping CompletionType<Int>, cacheResponse: CacheResponseType<Int>? = nil ,uniqueIdResult: UniqueIdResultType = nil){
-		AllUnreadMessageCountRequestHandler.handle(request, self , completion , cacheResponse , uniqueIdResult)
+    public func allUnreadMessageCount(_ request:UnreadMessageCountRequest, completion:@escaping CompletionType<Int>, cacheResponse: CacheResponseType<Int>? = nil, uniqueIdResult: UniqueIdResultType = nil){
+		AllUnreadMessageCountRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
 	}
 	
     //Test Status: Main ✅ - Integeration: ✅
-    public func getMentions(_ request:MentionRequest ,completion:@escaping PaginationCompletionType<[Message]> ,cacheResponse: PaginationCacheResponseType<[Message]>? = nil, uniqueIdResult: UniqueIdResultType = nil){
-		MentionsRequestHandler.handle(request, self , completion, cacheResponse, uniqueIdResult)
+    public func getMentions(_ request:MentionRequest, completion:@escaping PaginationCompletionType<[Message]>, cacheResponse: PaginationCacheResponseType<[Message]>? = nil, uniqueIdResult: UniqueIdResultType = nil){
+		MentionsRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
 	}
 	
     //Test Status: Main ✅ - Integeration: ✅
-    public func messageDeliveryParticipants(_ request:MessageDeliveredUsersRequest ,completion:@escaping PaginationCacheResponseType<[Participant]> ,uniqueIdResult: UniqueIdResultType = nil){
-		MessageDeliveryParticipantsRequestHandler.handle(request, self , completion , uniqueIdResult)
+    public func messageDeliveryParticipants(_ request:MessageDeliveredUsersRequest, completion:@escaping PaginationCacheResponseType<[Participant]>, uniqueIdResult: UniqueIdResultType = nil){
+		MessageDeliveryParticipantsRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
 	
     //Test Status: Main ✅ - Integeration: ✅
-    public func messageSeenByUsers(_ request:MessageSeenByUsersRequest , completion:@escaping PaginationCacheResponseType<[Participant]> , uniqueIdResult: UniqueIdResultType = nil){
-		MessagSeenByUsersRequestHandler.handle(request, self , completion , uniqueIdResult)
+    public func messageSeenByUsers(_ request:MessageSeenByUsersRequest, completion:@escaping PaginationCacheResponseType<[Participant]>, uniqueIdResult: UniqueIdResultType = nil){
+		MessagSeenByUsersRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
 	
     //Test Status: Main ✅ - Integeration: ❌ because of sandbox problem - Sandbox: ✅
-    public func deliver(_ request:MessageDeliverRequest ,uniqueIdResult: UniqueIdResultType = nil){
-		DeliverRequestHandler.handle(request,self,uniqueIdResult)
+    public func deliver(_ request:MessageDeliverRequest, uniqueIdResult: UniqueIdResultType = nil){
+		DeliverRequestHandler.handle(request, self, uniqueIdResult)
 	}
 	
     //Test Status: Main ✅ - Integeration: ❌ because of sandbox problem - Sandbox: ✅
-    public func seen(_ request:MessageSeenRequest , uniqueIdResult: UniqueIdResultType = nil){
-		SeenRequestHandler.handle(request,self,uniqueIdResult)
+    public func seen(_ request:MessageSeenRequest, uniqueIdResult: UniqueIdResultType = nil){
+		SeenRequestHandler.handle(request, self, uniqueIdResult)
 	}
 	
     //Test Status: Main ✅ - Integeration: ✅
-    public func getCurrentUserRoles(_ request:CurrentUserRolesRequest ,completion:@escaping CompletionType<[Roles]> , cacheResponse: CacheResponseType<[Roles]>? = nil, uniqueIdResult: UniqueIdResultType = nil){
-		CurrentUserRolesRequestHandler.handle(request, self , completion , cacheResponse , uniqueIdResult)
+    public func getCurrentUserRoles(_ request:CurrentUserRolesRequest, completion:@escaping CompletionType<[Roles]>, cacheResponse: CacheResponseType<[Roles]>? = nil, uniqueIdResult: UniqueIdResultType = nil){
+		CurrentUserRolesRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
 	}
     
     //Test Status: Main ✅ - Integeration: ❌ because of sandbox problem - Sandbox: ✅
-    public func cancelMessage(_ request:CancelMessageRequest ,completion: @escaping CompletionType<Bool>){
-        CancelMessageRequestHandler.handle(self ,request, completion)
+    public func cancelMessage(_ request:CancelMessageRequest, completion: @escaping CompletionType<Bool>){
+        CancelMessageRequestHandler.handle(self, request, completion)
     }
     
     //Test Status: Main ✅ - Integeration: ❌ because of sandbox problem - Sandbox: ✅
     public func snedStartTyping(threadId:Int){
-        SendStartTypingRequestHandler.handle(threadId , self)
+        SendStartTypingRequestHandler.handle(threadId, self)
     }
     
     //Test Status: Main ✅ - Integeration: ❌ because of sandbox problem - Sandbox: ✅
@@ -656,48 +805,48 @@ public class Chat {
     }
     
     //Test Status: Main ✅ - Integeration: ❌ because of sandbox problem - Sandbox: ✅
-    public func manageUpload(uniqueId:String , action:DownloaUploadAction , isImage:Bool,completion:((String,Bool)->())? = nil){
-        ManageUploadRequestHandler.handle(uniqueId, action, isImage,completion)
+    public func manageUpload(uniqueId:String, action:DownloaUploadAction, isImage:Bool, completion:((String,Bool)->())? = nil){
+        ManageUploadRequestHandler.handle(uniqueId, action, isImage, completion)
     }
     
     //Test Status: Main ✅ - Integeration: ❌ because of sandbox problem - Sandbox: ✅
-    public func manageDownload(uniqueId:String , action:DownloaUploadAction , isImage:Bool ,completion:((String,Bool)->())? = nil){
-        ManageDownloadRequestHandler.handle(uniqueId, action, isImage,completion)
+    public func manageDownload(uniqueId:String, action:DownloaUploadAction, isImage:Bool, completion:((String,Bool)->())? = nil){
+        ManageDownloadRequestHandler.handle(uniqueId, action, isImage, completion)
     }
     
     //Test Status: Main ✅ - Integeration: ✅
-    public func registerAssistat(_ request:RegisterAssistantRequest , completion:@escaping CompletionType<[Assistant]> , uniqueIdResult : UniqueIdResultType = nil){
+    public func registerAssistat(_ request:RegisterAssistantRequest, completion:@escaping CompletionType<[Assistant]>, uniqueIdResult : UniqueIdResultType = nil){
         RegisterAssistantRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
     
     //Test Status: Main ✅ - Integeration: ✅
-    public func deactiveAssistant(_ request:DeactiveAssistantRequest, completion:@escaping CompletionType<[Assistant]> , uniqueIdResult : UniqueIdResultType = nil){
+    public func deactiveAssistant(_ request:DeactiveAssistantRequest, completion:@escaping CompletionType<[Assistant]>, uniqueIdResult : UniqueIdResultType = nil){
         DeactiveAssistantRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
     
     //Test Status: Main ✅ - Integeration: ✅
-    public func getAssistats(_ request:AssistantsRequest , completion:@escaping PaginationCompletionType<[Assistant]>,cacheResponse: PaginationCompletionType<[Assistant]>? = nil , uniqueIdResult : UniqueIdResultType = nil){
-        GetAssistantsRequestHandler.handle(request,self,completion,cacheResponse,uniqueIdResult)
+    public func getAssistats(_ request:AssistantsRequest, completion:@escaping PaginationCompletionType<[Assistant]>, cacheResponse: PaginationCompletionType<[Assistant]>? = nil, uniqueIdResult : UniqueIdResultType = nil){
+        GetAssistantsRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
     }
     
     //Test Status: Main ✅ - Integeration: ✅
-    public func getAssistatsHistory(_ completion:@escaping CompletionType<[AssistantAction]> , uniqueIdResult : UniqueIdResultType = nil){
+    public func getAssistatsHistory(_ completion:@escaping CompletionType<[AssistantAction]>, uniqueIdResult : UniqueIdResultType = nil){
         GetAssistantsHistoryRequestHandler.handle(self, completion, uniqueIdResult)
     }
     
     //Test Status: Main ✅ - Integeration: ✅
-    public func getBlockedAssistants(_ request:BlockedAssistantsRequest,_ completion:@escaping PaginationCompletionType<[Assistant]>, cacheResponse: PaginationCacheResponseType<[Assistant]>? = nil  , uniqueIdResult : UniqueIdResultType = nil){
-        BlockedAssistantsRequestHandler.handle(request,self,completion,cacheResponse,uniqueIdResult)
+    public func getBlockedAssistants(_ request:BlockedAssistantsRequest, _ completion:@escaping PaginationCompletionType<[Assistant]>, cacheResponse: PaginationCacheResponseType<[Assistant]>? = nil,  uniqueIdResult : UniqueIdResultType = nil){
+        BlockedAssistantsRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
     }
     
     //Test Status: Main ✅ - Integeration: ✅
-    public func blockAssistants(_ request:BlockUnblockAssistantRequest,_ completion:@escaping CompletionType<[Assistant]> , uniqueIdResult : UniqueIdResultType = nil){
-        BlockAssistantRequestHandler.handle(request,self,completion,uniqueIdResult)
+    public func blockAssistants(_ request:BlockUnblockAssistantRequest, _ completion:@escaping CompletionType<[Assistant]>, uniqueIdResult : UniqueIdResultType = nil){
+        BlockAssistantRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
     
     //Test Status: Main ✅ - Integeration: ✅
-    public func unblockAssistants(_ request:BlockUnblockAssistantRequest,_ completion:@escaping CompletionType<[Assistant]> , uniqueIdResult : UniqueIdResultType = nil){
-        UnBlockAssistatRequestHandler.handle(request,self,completion,uniqueIdResult)
+    public func unblockAssistants(_ request:BlockUnblockAssistantRequest, _ completion:@escaping CompletionType<[Assistant]>, uniqueIdResult : UniqueIdResultType = nil){
+        UnBlockAssistatRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
     
     //Test Status: Main ✅ - Integeration: ✅
@@ -706,30 +855,30 @@ public class Chat {
     }
     
     //Test Status: Main ✅ - Integeration: ✅
-    public func removeRoles(_ request:RolesRequest, _ completion:@escaping CompletionType<[UserRole]> , uniqueIdResult:UniqueIdResultType){
-        RemoveRoleRequestHandler.handle(self,request,completion,uniqueIdResult)
+    public func removeRoles(_ request:RolesRequest, _ completion:@escaping CompletionType<[UserRole]>, uniqueIdResult:UniqueIdResultType){
+        RemoveRoleRequestHandler.handle(self, request, completion, uniqueIdResult)
     }
     
     //Test Status: Main ✅ - Integeration: ✅
-    public func setAuditor(_ request:AuditorRequest, _ completion:@escaping CompletionType<[UserRole]> , uniqueIdResult:UniqueIdResultType){
-        SetRoleRequestHandler.handle(self,request,completion,uniqueIdResult)
+    public func setAuditor(_ request:AuditorRequest, _ completion:@escaping CompletionType<[UserRole]>, uniqueIdResult:UniqueIdResultType){
+        SetRoleRequestHandler.handle(self, request, completion, uniqueIdResult)
     }
     
     //Test Status: Main ✅ - Integeration: ✅
-    public func removeAuditor(_ request:AuditorRequest, _ completion:@escaping CompletionType<[UserRole]> , uniqueIdResult:UniqueIdResultType){
-        RemoveRoleRequestHandler.handle(self,request,completion,uniqueIdResult)
+    public func removeAuditor(_ request:AuditorRequest, _ completion:@escaping CompletionType<[UserRole]>, uniqueIdResult:UniqueIdResultType){
+        RemoveRoleRequestHandler.handle(self, request, completion, uniqueIdResult)
     }
     
     //Test Status: Main ✅ - Integeration: ✅
-    public func mutualGroups(_ request:MutualGroupsRequest, _ completion:@escaping PaginationCompletionType<[Conversation]> ,cacheResponse :PaginationCacheResponseType<[Conversation]>? = nil , uniqueIdResult:UniqueIdResultType){
-        MutualGroupsRequestHandler.handle(request,self,completion , cacheResponse ,uniqueIdResult)
+    public func mutualGroups(_ request:MutualGroupsRequest, _ completion:@escaping PaginationCompletionType<[Conversation]>, cacheResponse :PaginationCacheResponseType<[Conversation]>? = nil, uniqueIdResult:UniqueIdResultType){
+        MutualGroupsRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
     }
     
     //Test Status: Main ✅ - Integeration: ✅
     /// Every time you call this function old export file for the thread will be deleted and replaced with a new one. To manages your storage be cautious about removing the file whenever you don't need this file.
     /// This function can only export 10000 messages.
-    public func exportChat(_ request:GetHistoryRequest,localIdentifire:String = "en_US", _ completion:@escaping CompletionType<URL>, uniqueIdResult:UniqueIdResultType = nil){
-        ExportRequestHandler.handle(request,localIdentifire, self,completion,uniqueIdResult)
+    public func exportChat(_ request:GetHistoryRequest, localIdentifire:String = "en_US", _ completion:@escaping CompletionType<URL>, uniqueIdResult:UniqueIdResultType = nil){
+        ExportRequestHandler.handle(request, localIdentifire, self, completion, uniqueIdResult)
     }
 	
 	// REST API Request

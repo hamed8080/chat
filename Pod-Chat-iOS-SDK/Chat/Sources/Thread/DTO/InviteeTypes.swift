@@ -7,14 +7,19 @@
 
 import Foundation
 
-public enum InviteeTypes : Int , Codable , CaseIterable {
+public enum InviteeTypes : Int , Codable , SafeDecodable {
     
-    case TO_BE_USER_SSO_ID           = 1
-    case TO_BE_USER_CONTACT_ID       = 2
-    case TO_BE_USER_CELLPHONE_NUMBER = 3
-    case TO_BE_USER_USERNAME         = 4
-    case TO_BE_USER_ID               = 5
-    case TO_BE_CORE_USER_ID          = 6
+    case SSO_ID                = 1
+    case CONTACT_ID            = 2
+    case CELLPHONE_NUMBER      = 3
+    case USERNAME              = 4
+    case USER_ID               = 5
+    case CORE_USER_ID          = 6
+
+    /// Only when can't decode a type.
+    ///
+    /// Do not remove or move this property to the top of the enum, it must be the last enum because it uses ``SafeDecodable`` to decode the last item if no match found.
+    case UNKNOWN
 }
 
 

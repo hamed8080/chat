@@ -7,7 +7,8 @@
 
 import Foundation
 
-public enum ThreadTypes : Int , Encodable ,CaseIterable {
+/// Type of thread.
+public enum ThreadTypes : Int, Codable, SafeDecodable {
     
     /// This type can be P2P only 2 user or can be a Private group.
     /// - If it's a Private Group only the admin can add participants to it.
@@ -46,6 +47,11 @@ public enum ThreadTypes : Int , Encodable ,CaseIterable {
     /// - Only the current user can send message to this thread.
     case SELF_THREAD            = 128
 
+
+    /// Only when can't decode a type.
+    ///
+    /// Do not remove or move this property to the top of the enum, it must be the last enum because it uses ``SafeDecodable`` to decode the last item if no match found.
+    case UNKNOWN
 }
 
 

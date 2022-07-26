@@ -6,7 +6,7 @@
 //
 
 import Foundation
-public enum ChatMessageVOTypes :Int , Codable {
+public enum ChatMessageVOTypes :Int, Codable, SafeDecodable{
     case CREATE_THREAD                     = 1
     case MESSAGE                           = 2
     case SENT                              = 3
@@ -94,15 +94,12 @@ public enum ChatMessageVOTypes :Int , Codable {
     
     
     case ERROR                             = 999
-    
-    case UNKNOWN                           = -1
-    
-    //prevent crash when new case added from server side
-    public init(from decoder: Decoder) throws {
-        guard let value = try? decoder.singleValueContainer().decode(Int.self) else{
-            self = .UNKNOWN
-            return
-        }
-        self = ChatMessageVOTypes(rawValue: value) ?? .UNKNOWN
-    }
+
+
+
+
+    /// Only when can't decode a type.
+    ///
+    /// Do not remove or move this property to the top of the enum, it must be the last enum because it uses ``SafeDecodable`` to decode the last item if no match found.
+    case UNKNOWN
 }

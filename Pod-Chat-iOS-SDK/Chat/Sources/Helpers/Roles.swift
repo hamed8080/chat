@@ -8,7 +8,7 @@
 import Foundation
 
 
-public enum Roles: String , Codable {
+public enum Roles: String, Codable, SafeDecodable {
     
     case CHANGE_THREAD_INFO       = "CHANGE_THREAD_INFO"
     case POST_CHANNEL_MESSAGE     = "POST_CHANNEL_MESSAGE"
@@ -22,16 +22,12 @@ public enum Roles: String , Codable {
     case EDIT_THREAD              = "EDIT_THREAD"
     case THREAD_ADMIN             = "THREAD_ADMIN"
     case OWNERSHIP                = "OWNERSHIP"
-    case unknown
-    
-    //prevent crash when new case added from server side
-    public init(from decoder: Decoder) throws {
-        guard let value = try? decoder.singleValueContainer().decode(String.self) else{
-            self = .unknown
-            return
-        }
-        self = Roles(rawValue: value) ?? .unknown
-    }
+
+
+    /// Only when can't decode a type.
+    ///
+    /// Do not remove or move this property to the top of the enum, it must be the last enum because it uses ``SafeDecodable`` to decode the last item if no match found.
+    case UNKNOWN
 }
 
 

@@ -6,7 +6,7 @@
 //
 import Foundation
 
-public enum SignalMessageType:Int , Encodable  , Decodable{
+public enum SignalMessageType: Int, Encodable, SafeDecodable{
     
     case IS_TYPING      = 1
     case RECORD_VOICE   = 2
@@ -14,16 +14,11 @@ public enum SignalMessageType:Int , Encodable  , Decodable{
     case UPLOAD_VIDEO   = 4
     case UPLOAD_SOUND   = 5
     case UPLOAD_FILE    = 6
-    case unknown
-    
-    //prevent crash when new case added from server side
-    public init(from decoder: Decoder) throws {
-        guard let value = try? decoder.singleValueContainer().decode(Int.self) else{
-            self = .unknown
-            return
-        }
-        self = SignalMessageType(rawValue: value) ?? .unknown
-    }
+
+    /// Only when can't decode a type.
+    ///
+    /// Do not remove or move this property to the top of the enum, it must be the last enum because it uses ``SafeDecodable`` to decode the last item if no match found.
+    case UNKNOWN
     
 }
 

@@ -11,12 +11,15 @@ public class ThreadParticipantsRequest : BaseRequest {
 	public let count            :Int
 	public let offset           :Int
 	public let threadId         :Int
+
+    /// If it set to true the request only contains the list of admins of a thread.
     public var admin            :Bool = false
 	
-	public init (threadId:Int,offset:Int = 0, count:Int = 50 ,uniqueId:String? = nil){
+    public init (threadId:Int, offset:Int = 0, count:Int = 50, admin:Bool = false, uniqueId:String? = nil){
         self.count    = count
         self.offset   = offset
 		self.threadId = threadId
+        self.admin    = admin
         super.init(uniqueId: uniqueId)
 	}
 	
@@ -30,6 +33,6 @@ public class ThreadParticipantsRequest : BaseRequest {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 		try? container.encodeIfPresent(count, forKey: .count)
 		try? container.encodeIfPresent(offset, forKey: .offset)
-        try? container.encodeIfPresent(admin, forKey: .admin)//for get thread admins only
+        try? container.encodeIfPresent(admin, forKey: .admin)
 	}
 }

@@ -47,7 +47,7 @@ open class Conversation : Codable , Hashable{
     public var pin                              : Bool?
     public var time                             : UInt?
     public var title                            : String?
-    public var type                             : Int?
+    public var type                             : ThreadTypes?
     public var unreadCount                      : Int?
     public var uniqueName                       : String?
     public var userGroupHash                    : String?
@@ -85,7 +85,7 @@ open class Conversation : Codable , Hashable{
                 pin                              : Bool?             = nil,
                 time                             : UInt?             = nil,
                 title                            : String?           = nil,
-                type                             : Int?              = nil,
+                type                             : ThreadTypes?              = nil,
                 unreadCount                      : Int?              = nil,
                 uniqueName                       : String?           = nil,
                 userGroupHash                    : String?           = nil,
@@ -249,7 +249,7 @@ open class Conversation : Codable , Hashable{
         self.pin                              = try container.decodeIfPresent(Bool.self, forKey: .pin) ?? container.decodeIfPresent(Bool.self, forKey: .pinned)
         self.time                             = try container.decodeIfPresent(UInt.self, forKey: .time)
         self.title                            = try container.decodeIfPresent(String.self, forKey: .title)
-        self.type                             = try container.decodeIfPresent(Int.self, forKey: .type)
+        self.type                             = try container.decodeIfPresent(ThreadTypes.self, forKey: .type)
         self.unreadCount                      = try container.decodeIfPresent(Int.self, forKey: .unreadCount)
         self.uniqueName                       = try container.decodeIfPresent(String.self, forKey: .uniqueName)
         self.userGroupHash                    = try container.decodeIfPresent(String.self, forKey: .userGroupHash)

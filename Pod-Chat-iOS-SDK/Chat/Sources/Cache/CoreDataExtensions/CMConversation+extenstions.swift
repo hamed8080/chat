@@ -41,7 +41,7 @@ extension CMConversation{
 							pin: pin as? Bool,
 							time: time as? UInt,
 							title: title,
-							type: type as? Int,
+							type: ThreadTypes(rawValue: type as? Int ?? -1) ,
 							unreadCount: unreadCount as? Int,
 							uniqueName: nil,
 							userGroupHash: userGroupHash,
@@ -82,7 +82,7 @@ extension CMConversation{
 		model.pin                              = conversation.pin as NSNumber?
 		model.time                             = conversation.time as NSNumber?
 		model.title                            = conversation.title
-		model.type                             = conversation.type as NSNumber?
+        model.type                             = conversation.type?.rawValue as NSNumber?
 		model.unreadCount                      = conversation.unreadCount as NSNumber?
 		model.userGroupHash                    = conversation.userGroupHash
 		if let inviter = conversation.inviter {
