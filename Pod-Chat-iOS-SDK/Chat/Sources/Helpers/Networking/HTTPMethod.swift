@@ -6,7 +6,8 @@
 //
 
 import Foundation
-public enum HTTPMethod: String {
+
+internal enum HTTPMethod: String {
     case options = "OPTIONS"
     case get     = "GET"
     case head    = "HEAD"

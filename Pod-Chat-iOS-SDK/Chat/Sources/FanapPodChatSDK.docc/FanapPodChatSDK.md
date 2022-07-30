@@ -13,10 +13,17 @@ Please check out the figure below to find out how the Chat SDK works behind the 
 ### Essentials
 
 - <doc:GettingStarted>
+- <doc:ManagingThreads>
+- <doc:ManagingMessages>
+- <doc:ManagingContacts>
+- <doc:ManagingProfile>
+- <doc:ManagingTags>
+- <doc:ManagingBots>
+- <doc:ManagingAssistants>
+- <doc:ManagingMaps>
+
+### Important classes
 - ``Chat``
-
-### Essentials
-
 - ``ChatDelegate``
 - ``CacheFactory``
 - ``Conversation``
