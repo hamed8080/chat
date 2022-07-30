@@ -50,6 +50,7 @@ extension CMConversation {
     @NSManaged public var lastMessageVO:    CMMessage?
     @NSManaged public var participants:     NSOrderedSet?
     @NSManaged public var pinMessage:       CMPinMessage?
+    @NSManaged public var isArchive:       NSNumber?
 
 }
 

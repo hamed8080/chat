@@ -91,6 +91,8 @@ public enum ChatMessageVOTypes :Int , Codable {
     case GET_TAG_PARTICIPANTS              = -4
     
     case EXPORT_CHATS                      = 152
+    case ARCHIVE_THREAD                    = 223
+    case UNARCHIVE_THREAD                  = 224
     
     
     case ERROR                             = 999

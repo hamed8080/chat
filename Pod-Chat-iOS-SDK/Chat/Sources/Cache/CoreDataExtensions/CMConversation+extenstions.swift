@@ -48,12 +48,15 @@ extension CMConversation{
 							inviter: inviter?.getCodable(),
                             lastMessageVO: lastMessageVO?.getCodable(),
 							participants:participants?.compactMap{$0 as? CMParticipant}.map{$0.getCodable()},
-							pinMessage: pinMessage?.getCodable())
+							pinMessage: pinMessage?.getCodable(),
+                            isArchive: isArchive as? Bool
+        )
     }
     
     class func convertConversationToCM(conversation:Conversation  ,entity:CMConversation? = nil) -> CMConversation{
         let model             = entity ?? CMConversation()
 		model.admin                            = conversation.admin as NSNumber?
+        model.isArchive                        = conversation.isArchive as NSNumber?
 		model.canEditInfo                      = conversation.canEditInfo as NSNumber?
 		model.canSpam                          = conversation.canSpam as NSNumber
 		model.closedThread                     = conversation.closedThread as NSNumber

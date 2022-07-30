@@ -689,6 +689,14 @@ public class Chat {
     public func exportChat(_ request:GetHistoryRequest,localIdentifire:String = "en_US", _ completion:@escaping CompletionType<URL>, uniqueIdResult:UniqueIdResultType = nil){
         ExportRequestHandler.handle(request,localIdentifire, self,completion,uniqueIdResult)
     }
+
+    public func archiveThread(_ request:ArchiveThreadRequest, _ completion:@escaping CompletionType<Int>, uniqueIdResult:UniqueIdResultType = nil){
+        ArchiveThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
+    }
+
+    public func unarchiveThread(_ request:UnarchiveThreadRequest, _ completion:@escaping CompletionType<Int>, uniqueIdResult:UniqueIdResultType = nil){
+        UnarchiveThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
+    }
 	
 	// REST API Request
     func restApiRequest<T:Decodable>(_ encodableRequest:BaseRequest ,
