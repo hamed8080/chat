@@ -66,4 +66,8 @@ public struct CallParticipant:Codable,Hashable{
         case video        = "video"
     }
 
+    var topics:(topicVideo:String,topicAudio:String){
+        return ("Vi-\(sendTopic)","Vo-\(sendTopic)")
+    }
+
 }

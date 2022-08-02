@@ -57,7 +57,7 @@ public class WebRTCClientNew : NSObject, RTCPeerConnectionDelegate, RTCDataChann
             let op = RTCPeerConnectionFactoryOptions()
             //            op.disableEncryption = true
             pcf.setOptions(op)
-            if let index = indexFor(topic: topic){
+            if let index = usersRTC.indexFor(topic: topic){
                 usersRTC[index].setPeerFactory(pcf)
             }
         }
@@ -65,11 +65,11 @@ public class WebRTCClientNew : NSObject, RTCPeerConnectionDelegate, RTCDataChann
 
     private func createPeerConnection(_ topic:String?){
         if let topic = topic,
-           let pcf = userFor(topic: topic)?.pf,
-           let constraints = userFor(topic: topic)?.constraints,
+           let pcf = usersRTC.userFor(topic: topic)?.pf,
+           let constraints = usersRTC.userFor(topic: topic)?.constraints,
            let pc = pcf.peerConnection(with: rtcConfig, constraints: .init(mandatoryConstraints: constraints, optionalConstraints: ["DtlsSrtpKeyAgreement":kRTCMediaConstraintsValueTrue]), delegate: nil) {
             pc.delegate     = self
-            if let index = indexFor(topic: topic){
+            if let index = usersRTC.indexFor(topic: topic){
                 usersRTC[index].setPeerConnection(pc)
             }
         }else{
@@ -105,42 +105,35 @@ public class WebRTCClientNew : NSObject, RTCPeerConnectionDelegate, RTCDataChann
     /// order is matter in this function
     public func addCallParticipant(_ callParticipant:CallParticipant, direction:RTCDirection){
         
-        createTopic(topic: topics(callParticipant).topicVideo, direction: direction, renderer: TARGET_OS_SIMULATOR != 0 ? RTCEAGLVideoView(frame: .zero) : RTCMTLVideoView(frame: .zero) )
-        createTopic(topic: topics(callParticipant).topicAudio, direction: direction)
+        createTopic(topic: callParticipant.topics.topicVideo, direction: direction, renderer: TARGET_OS_SIMULATOR != 0 ? RTCEAGLVideoView(frame: .zero) : RTCMTLVideoView(frame: .zero) )
+        createTopic(topic: callParticipant.topics.topicAudio, direction: direction)
         
         //create media senders for both audio and video senders
-        if userFor(topic: config.topicVideoSend ?? "")?.videoTrack == nil{
+        if usersRTC.userFor(topic: config.topicVideoSend ?? "")?.videoTrack == nil{
             createMediaSenders()
         }
         
         if direction == .RECEIVE{
-            addReceiveVideoStream(topic: topics(callParticipant).topicVideo)
-            addReceiveAudioStream(topic: topics(callParticipant).topicAudio)
-            getOfferAndSendToPeer(topic: topics(callParticipant).topicVideo)
-            getOfferAndSendToPeer(topic: topics(callParticipant).topicAudio)
+            addReceiveVideoStream(topic: callParticipant.topics.topicVideo)
+            addReceiveAudioStream(topic: callParticipant.topics.topicAudio)
+            getOfferAndSendToPeer(topic: callParticipant.topics.topicVideo)
+            getOfferAndSendToPeer(topic: callParticipant.topics.topicAudio)
         }
         
-        if let index = indexFor(topic: topics(callParticipant).topicVideo){
+        if let index = usersRTC.indexFor(topic: callParticipant.topics.topicVideo){
             usersRTC[index].setCallParticipant(callParticipant)
             usersRTC[index].setVideo(on: callParticipant.video ?? false)
         }
         
-        if let index = indexFor(topic: topics(callParticipant).topicAudio){
+        if let index = usersRTC.indexFor(topic: callParticipant.topics.topicAudio){
             usersRTC[index].setCallParticipant(callParticipant)
             usersRTC[index].setMute(mute: callParticipant.mute)
         }
     }
     
     public func removeCallParticipant(_ callParticipant:CallParticipant){
-        removeTopic(topic: topics(callParticipant).topicVideo)
-        removeTopic(topic: topics(callParticipant).topicAudio)
-    }
-    
-    func removeTopic(topic:String){
-        if let index = indexFor(topic: topic){
-            usersRTC[index].pc?.close()
-            usersRTC.remove(at: index)
-        }
+        usersRTC.removeTopic(topic: callParticipant.topics.topicVideo)
+        usersRTC.removeTopic(topic: callParticipant.topics.topicAudio)
     }
     
     private func setConnectedState(peerConnection:RTCPeerConnection){
@@ -173,12 +166,12 @@ public class WebRTCClientNew : NSObject, RTCPeerConnectionDelegate, RTCDataChann
     }
     
     public func getLocalSDPWithOffer(topic:String ,onSuccess:@escaping (RTCSessionDescription)->Void){
-        guard let mediaConstraint = userFor(topic: topic)?.constraints else{
+        guard let mediaConstraint = usersRTC.userFor(topic: topic)?.constraints else{
             customPrint("can't find mediaConstraint to get local offer",isGuardNil: true)
             return
         }
         let constraints = RTCMediaConstraints.init(mandatoryConstraints: mediaConstraint, optionalConstraints: ["DtlsSrtpKeyAgreement":kRTCMediaConstraintsValueFalse])
-        guard let pp = userFor(topic: topic)?.pc else{
+        guard let pp = usersRTC.userFor(topic: topic)?.pc else{
             customPrint("can't find peerConnection in map to get local offer",isGuardNil: true)
             return
         }
@@ -190,6 +183,8 @@ public class WebRTCClientNew : NSObject, RTCPeerConnectionDelegate, RTCDataChann
                 self.customPrint("sdp was nil with no error!", isGuardNil: true)
                 return
             }
+            let tt = topic
+            dump(sdp)
             pp.setLocalDescription(sdp, completionHandler: { (error) in
                 if let error = error{
                     self.customPrint("error setLocalDescription for offer",error, isGuardNil: true)
@@ -202,7 +197,7 @@ public class WebRTCClientNew : NSObject, RTCPeerConnectionDelegate, RTCDataChann
     
     public func sendOfferToPeer(_ sdp:RTCSessionDescription,topic:String){
         let sdp = sdp.sdp
-        let mediaType:Mediatype = userFor(topic: topic)?.isVideoTopic ?? false ? .VIDEO : .AUDIO
+        let mediaType:Mediatype = usersRTC.userFor(topic: topic)?.isVideoTopic ?? false ? .VIDEO : .AUDIO
         let sendSDPOffer = SendOfferSDPReq(id: isSendTopic(topic: topic) ? "SEND_SDP_OFFER" : "RECIVE_SDP_OFFER" ,
                                            brokerAddress: config.firstBorokerAddressWeb,
                                            token: Chat.sharedInstance.token ?? "",
@@ -226,23 +221,23 @@ public class WebRTCClientNew : NSObject, RTCPeerConnectionDelegate, RTCDataChann
     
     private func createMediaSenders(){
         //Send Audio
-        if let audioTrack = createAudioTrack() , let topicAudioSend = config.topicAudioSend, let index = indexFor(topic: topicAudioSend){
+        if let audioTrack = createAudioTrack() , let topicAudioSend = config.topicAudioSend, let index = usersRTC.indexFor(topic: topicAudioSend){
             usersRTC[index].setAudioTrack(audioTrack)
             usersRTC[index].pc?.add(audioTrack, streamIds: [topicAudioSend])
         }
         
         //Video
-        if let topicVideoSend = config.topicVideoSend, let videoTrack = createVideoTrack(), let index = indexFor(topic: topicVideoSend){
-            usersRTC[index].videoTrack = videoTrack
+        if let topicVideoSend = config.topicVideoSend, let videoTrack = createVideoTrack(), let index = usersRTC.indexFor(topic: topicVideoSend){
+            usersRTC[index].setVideoTrack(videoTrack)
             usersRTC[index].pc?.add(videoTrack, streamIds: [topicVideoSend])
-            if let renderer = userFor(topic: topicVideoSend)?.renderer{
+            if let renderer = usersRTC.userFor(topic: topicVideoSend)?.renderer{
                 startCaptureLocalVideo(renderer: renderer)
             }
         }
     }
     
     public func addReceiveVideoStream(topic:String){
-        if let index = indexFor(topic: topic){
+        if let index = usersRTC.indexFor(topic: topic){
             var error:NSError?
             let videoReceivetransciver = usersRTC[index].pc?.addTransceiver(of: .video)
             videoReceivetransciver?.setDirection(.recvOnly, error: &error)
@@ -257,7 +252,7 @@ public class WebRTCClientNew : NSObject, RTCPeerConnectionDelegate, RTCDataChann
     }
     
     public func addReceiveAudioStream(topic:String){
-        if let index = indexFor(topic: topic){
+        if let index = usersRTC.indexFor(topic: topic){
             var error:NSError?
             let transciver = usersRTC[index].pc?.addTransceiver(of: .audio)
             transciver?.setDirection(.recvOnly, error: &error)
@@ -271,17 +266,17 @@ public class WebRTCClientNew : NSObject, RTCPeerConnectionDelegate, RTCDataChann
     
     func monitorAudioLevelFor(topic:String){
         Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { timer in
-            if let user = self.userFor(topic: topic){
+            if let user = self.usersRTC.userFor(topic: topic){
                 user.pc?.statistics(completionHandler: { report in
                     report.statistics.values.filter({$0.type == "track"}).forEach { stat in
                         let level = (stat.values["audioLevel"] as? Double) ?? .zero
                         print("topic:\(topic) for call participant:\(user.callParticipant?.participant?.name ?? user.callParticipant?.participant?.username ?? "") audio level:\(level)")
-                        if level > 0.01, let callParticipant = self.userFor(topic: topic)?.callParticipant{
+                        if level > 0.01, let callParticipant = self.usersRTC.userFor(topic: topic)?.callParticipant{
                             Chat.sharedInstance.delegate?.chatEvent(event: .Call(CallEventModel(type: .CALL_PARTICIPANT_START_SPEAKING(callParticipant))))
-                            if let index = self.indexFor(topic: topic){
+                            if let index = self.usersRTC.indexFor(topic: topic){
                                 self.usersRTC[index].setUsetIsSpeaking()
                             }
-                        }else if let callParticipant = self.userFor(topic: topic)?.callParticipant,
+                        }else if let callParticipant = self.usersRTC.userFor(topic: topic)?.callParticipant,
                                  let lastSpeakingTime = user.lastTimeSpeaking,
                                  lastSpeakingTime.timeIntervalSince1970 + 2 < Date().timeIntervalSince1970 {
                             Chat.sharedInstance.delegate?.chatEvent(event: .Call(CallEventModel(type: .CALL_PARTICIPANT_STOP_SPEAKING(callParticipant))))                            
@@ -295,7 +290,7 @@ public class WebRTCClientNew : NSObject, RTCPeerConnectionDelegate, RTCDataChann
     }
     
     private func createVideoTrack()->RTCVideoTrack?{
-        guard let topicVideoSend = config.topicVideoSend, let pcfSendVideo = userFor(topic: topicVideoSend)?.pf else {
+        guard let topicVideoSend = config.topicVideoSend, let pcfSendVideo = usersRTC.userFor(topic: topicVideoSend)?.pf else {
             self.customPrint("topic or peerconectionfactory in createVideoTrack was nuil maybe it was audio call!",isGuardNil: true)
             return nil
         }
@@ -311,7 +306,7 @@ public class WebRTCClientNew : NSObject, RTCPeerConnectionDelegate, RTCDataChann
     }
     
     private func createAudioTrack()->RTCAudioTrack?{
-        guard let topicAudioSend = config.topicAudioSend ,let mediaConstraint = userFor(topic: topicAudioSend)?.constraints, let pcfAudioSend = userFor(topic: topicAudioSend)?.pf else{
+        guard let topicAudioSend = config.topicAudioSend ,let mediaConstraint = usersRTC.userFor(topic: topicAudioSend)?.constraints, let pcfAudioSend = usersRTC.userFor(topic: topicAudioSend)?.pf else{
             self.customPrint("topic or peerconectionfactory in createAudioTrack or media constarint audio send not found!",isGuardNil: true)
             return nil
         }
@@ -365,7 +360,7 @@ public class WebRTCClientNew : NSObject, RTCPeerConnectionDelegate, RTCDataChann
     }
     
     func addRendererToLocalVideoTrack(_ renderer:RTCVideoRenderer){
-        if let topic = config.topicVideoSend ,let index = indexFor(topic: topic){
+        if let topic = config.topicVideoSend ,let index = usersRTC.indexFor(topic: topic){
             usersRTC[index].videoTrack?.add(renderer)
         }
     }
@@ -380,14 +375,6 @@ public class WebRTCClientNew : NSObject, RTCPeerConnectionDelegate, RTCDataChann
         Chat.sharedInstance.logger?.log(title: "CHAT_SDK:\(icon)", message: "\(message) \(errorMessage)")
     }
     
-    func userFor(topic:String)->UserRCT?{
-        return usersRTC.first(where: {$0.topic == topic})
-    }
-    
-    func indexFor(topic:String)->Int?{
-        return usersRTC.firstIndex(where: {$0.topic == topic})
-    }
-    
     func saveLogsToFile(){
         if Chat.sharedInstance.config?.isDebuggingLogEnabled == true , let dir = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true){
             let logFilePath = "WEBRTC-LOG"
@@ -398,10 +385,6 @@ public class WebRTCClientNew : NSObject, RTCPeerConnectionDelegate, RTCDataChann
             logFile?.severity = .info
             logFile?.start()
         }
-    }
-    
-    private func topics(_ callParticipant:CallParticipant)->(topicVideo:String,topicAudio:String){
-        return ("Vi-\(callParticipant.sendTopic)","Vo-\(callParticipant.sendTopic)")
     }
     
     public func updateCallParticipant(callParticipants:[CallParticipant]?){
@@ -426,7 +409,7 @@ extension WebRTCClientNew{
     
     public func peerConnection(_ peerConnection: RTCPeerConnection, didAdd stream: RTCMediaStream) {
         customPrint("\(getPCName(peerConnection)) did add stream")
-        if let videoTrack = stream.videoTracks.first, let topic = getTopicForPeerConnection(peerConnection), let renderer = userFor(topic: topic)?.renderer
+        if let videoTrack = stream.videoTracks.first, let topic = getTopicForPeerConnection(peerConnection), let renderer = usersRTC.userFor(topic: topic)?.renderer
         {
             customPrint("\(getPCName(peerConnection)) did add stream video track topic: \(topic)")
             videoTrack.add(renderer)
@@ -435,7 +418,7 @@ extension WebRTCClientNew{
         if let audioTrack = stream.audioTracks.first,let topic = getTopicForPeerConnection(peerConnection)
         {
             customPrint("\(getPCName(peerConnection)) did add stream audio track topic: \(topic)")
-            userFor(topic: topic)?.pc?.add(audioTrack, streamIds: [topic])
+            usersRTC.userFor(topic: topic)?.pc?.add(audioTrack, streamIds: [topic])
         }
     }
     
@@ -489,7 +472,7 @@ extension WebRTCClientNew{
         DispatchQueue.main.async {
             Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) {[weak self] timer in
                 guard let self = self else {return}
-                if self.userFor(topic: topicName)?.pc?.remoteDescription != nil{
+                if self.usersRTC.userFor(topic: topicName)?.pc?.remoteDescription != nil{
                     let sendIceCandidate = SendCandidateReq(token: Chat.sharedInstance.token ?? "",
                                                             topic: topicName,
                                                             candidate: IceCandidate(from: candidate).replaceSpaceSdpIceCandidate)
@@ -515,7 +498,7 @@ extension WebRTCClientNew{
     public func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
         customPrint("\(getPCName(peerConnection)) did open data channel \(dataChannel)")
         let topic = getPCName(peerConnection)
-        var user = userFor(topic: topic)
+        var user = usersRTC.userFor(topic: topic)
         user?.dataChannel = dataChannel
     }
     
@@ -526,7 +509,7 @@ extension WebRTCClientNew{
     private func getPCName(_ peerConnection:RTCPeerConnection)->String{
         guard let topic = getTopicForPeerConnection(peerConnection) else {return ""}
         let isSend  = isSendTopic(topic: topic)
-        let isVideo = userFor(topic: topic)?.isVideoTopic ?? false
+        let isVideo = usersRTC.userFor(topic: topic)?.isVideoTopic ?? false
         return "peerConnection\(isSend ? "Send" : "Receive")\(isVideo ? "Video" : "Audio") topic:\(topic)"
     }
     
@@ -535,7 +518,7 @@ extension WebRTCClientNew{
     }
     
     public func setCameraIsOn(_ isCameraOn:Bool){
-        if let topicVideoSend = config.topicVideoSend, let index = indexFor(topic: topicVideoSend){
+        if let topicVideoSend = config.topicVideoSend, let index = usersRTC.indexFor(topic: topicVideoSend){
             usersRTC[index].setVideo(on: isCameraOn)
         }else{
             customPrint("can not change camera state!",isGuardNil: true)
@@ -543,7 +526,7 @@ extension WebRTCClientNew{
     }
     
     public func setMute(_ isMute:Bool){
-        if let topicAudioSend = config.topicAudioSend, let index = indexFor(topic: topicAudioSend){
+        if let topicAudioSend = config.topicAudioSend, let index = usersRTC.indexFor(topic: topicAudioSend){
             usersRTC[index].setMute(mute: isMute)
         }else{
             customPrint("can not change micrphone state!",isGuardNil: true)
@@ -615,7 +598,7 @@ extension WebRTCClientNew{
                 self.customPrint("error decode prosessAnswer",isGuardNil: true)
                 return
             }
-            let pp = self.userFor(topic: remoteSDP.topic)?.pc
+            let pp = self.usersRTC.userFor(topic: remoteSDP.topic)?.pc
             pp?.statistics(completionHandler: { report in
             })
             pp?.setRemoteDescription(remoteSDP.rtcSDP, completionHandler: { error in
@@ -634,7 +617,7 @@ extension WebRTCClientNew{
         }
         
         let rtcIce = candidate.rtcIceCandidate
-        guard let pp = userFor(topic: candidate.topic)?.pc else {
+        guard let pp = usersRTC.userFor(topic: candidate.topic)?.pc else {
             self.customPrint("error finding topic or peerconnection",isGuardNil: true)
             return
         }
@@ -728,5 +711,23 @@ extension WebRTCClientNew{
         }
         customPrint("restart to get new SDP and send offer")
         self.getOfferAndSendToPeer(topic: topic)
+    }
+}
+
+extension Array where Element == UserRCT{
+
+    func userFor(topic:String)->UserRCT?{
+        return first(where: {$0.topic == topic})
+    }
+
+    func indexFor(topic:String)->Int?{
+        return firstIndex(where: {$0.topic == topic})
+    }
+
+    mutating func removeTopic(topic:String){
+        if let index = indexFor(topic: topic){
+            self[index].pc?.close()
+            self.remove(at: index)
+        }
     }
 }
