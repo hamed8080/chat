@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Alamofire
 
 public class DeviceIdRequestHandler {
     
@@ -14,7 +13,7 @@ public class DeviceIdRequestHandler {
     
     public class func getDeviceIdAndCreateAsync(chat:Chat){
         guard let config = chat.config else{return}
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(config.token)"]
+        let headers: [String : String] = ["Authorization": "Bearer \(config.token)"]
         let url = config.ssoHost + Routes.SSO_DEVICES.rawValue
         RequestManager.request(ofType:DevicesResposne.self, bodyData: nil , url: url, method: .get, headers: headers) { devicesResponse , error in
             if let error = error {

@@ -1,6 +1,6 @@
 //
 //  CacheFileManager.swift
-//  Alamofire
+//  FanapPodChatSDK
 //
 //  Created by Hamed Hosseini on 4/2/21.
 //

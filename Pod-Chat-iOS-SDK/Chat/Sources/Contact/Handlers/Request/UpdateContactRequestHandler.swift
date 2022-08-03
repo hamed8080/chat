@@ -7,7 +7,6 @@
 
 import Foundation
 import Contacts
-import Alamofire
 
 class UpdateContactRequestHandler {
 	
@@ -18,7 +17,7 @@ class UpdateContactRequestHandler {
 		
 		guard let config = chat.config else {return}
 		let url = "\(config.platformHost)\(Routes.UPDATE_CONTACTS.rawValue)"
-		let headers: HTTPHeaders = ["_token_": config.token, "_token_issuer_": "1"]
+        let headers: [String : String] = ["_token_": config.token, "_token_issuer_": "1"]
 		chat.restApiRequest(req, decodeType: ContactResponse.self, url: url,bodyParameter: true, method: .post ,headers: headers , uniqueIdResult: uniqueIdResult){ response in
             let contactResponse = response.result as? ContactResponse
 			insertOrUpdateCache(chat: chat, contactsResponse: contactResponse)
