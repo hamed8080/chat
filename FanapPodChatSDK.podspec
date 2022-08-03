@@ -24,7 +24,6 @@ Pod::Spec.new do |s|
 #       ss.dependency "Sentry" , '~> 4.3.1'
 #   end
    
-  s.dependency "Alamofire" , '~> 4.8.2'
   s.dependency "Sentry" , '~> 4.3.1'
 
 end

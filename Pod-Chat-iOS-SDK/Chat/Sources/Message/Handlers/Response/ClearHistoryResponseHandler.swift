@@ -1,6 +1,6 @@
 //
 //  ClearHistoryResponseHandler.swift
-//  Alamofire
+//  FanapPodChatSDK
 //
 //  Created by Hamed Hosseini on 2/26/21.
 //

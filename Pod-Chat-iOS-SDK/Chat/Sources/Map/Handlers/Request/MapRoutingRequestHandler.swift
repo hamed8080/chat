@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Alamofire
 
 class MapRoutingRequestHandler {
 	
@@ -20,7 +19,7 @@ class MapRoutingRequestHandler {
             return            
         }
         let url = "\(config.mapServer)\(Routes.MAP_ROUTING.rawValue)"
-        let headers:  HTTPHeaders = ["Api-Key":  mapApiKey]
+        let headers:  [String : String] = ["Api-Key":  mapApiKey]
         chat.restApiRequest(req,
                             decodeType: MapRoutingResponse.self,
                             url: url,

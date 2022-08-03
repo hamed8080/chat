@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Alamofire
 
 class AddContactRequestHandler{
     
@@ -17,7 +16,7 @@ class AddContactRequestHandler{
         
         guard let config = chat.config else {return}
         let url = "\(config.platformHost)\(Routes.ADD_CONTACTS.rawValue)"
-        let headers: HTTPHeaders    = ["_token_": config.token, "_token_issuer_": "1"]
+        let headers: [String : String] = ["_token_": config.token, "_token_issuer_": "1"]
         chat.restApiRequest(req, decodeType: ContactResponse.self,url: url , headers: headers , uniqueIdResult: uniqueIdResult) { response in
             let contactResponse = response.result as? ContactResponse
             addToCacheIfEnabled(chat: chat, contactsResponse: contactResponse)

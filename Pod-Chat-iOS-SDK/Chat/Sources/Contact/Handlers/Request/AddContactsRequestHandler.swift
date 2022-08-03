@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Alamofire
 
 class AddContactsRequestHandler{
     
@@ -18,7 +17,7 @@ class AddContactsRequestHandler{
         guard let config = chat.config else {return}
         uniqueIdsResult?(req.map{$0.uniqueId})
         let url = "\(config.platformHost)\(Routes.ADD_CONTACTS.rawValue)"
-        let headers: [String:String]    = ["_token_": config.token, "_token_issuer_": "1"]
+        let headers: [String : String]    = ["_token_": config.token, "_token_issuer_": "1"]
         var urlComp = URLComponents(string: url)!
         urlComp.queryItems = []
         req.forEach { contact in

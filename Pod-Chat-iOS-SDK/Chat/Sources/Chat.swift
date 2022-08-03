@@ -1,9 +1,6 @@
 import FanapPodAsyncSDK
 import Sentry
 import Foundation
-import Alamofire
-
-
 
 public struct ChatResponse{
     public var uniqueId        : String? = nil

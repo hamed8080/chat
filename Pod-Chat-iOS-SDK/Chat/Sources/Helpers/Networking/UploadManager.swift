@@ -1,6 +1,6 @@
 //
 //  UploadManager.swift
-//  Alamofire
+//  FanapPodChatSDK
 //
 //  Created by Hamed Hosseini on 4/1/21.
 //
