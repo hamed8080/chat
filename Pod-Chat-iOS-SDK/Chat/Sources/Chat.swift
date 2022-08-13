@@ -597,89 +597,85 @@ public class Chat {
 //        GetTagParticipantsRequestHandler.handle(request, self , completion, uniqueIdResult)
 //    }
 
-    /// <#Description#>
+    /// Send a plain text message to a thread.
     /// - Parameters:
-    ///   - request: <#request description#>
+    ///   - request: The request that contains text message and id of the thread.
     ///   - uniqueIdresult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    ///   - onSent: <#onSent description#>
-    ///   - onSeen: <#onSeen description#>
-    ///   - onDeliver: <#onDeliver description#>
-    public func sendTextMessage(_ request:SendTextMessageRequest, uniqueIdresult:UniqueIdResultType = nil, onSent:OnSentType = nil, onSeen:OnSeenType = nil,  onDeliver:OnDeliveryType = nil){
+    ///   - onSent: Is called when a message sent successfully.
+    ///   - onSeen: Is called when a message, have seen by a participant successfully.
+    ///   - onDeliver: Is called when a message, have delivered to a participant successfully.
+    public func sendTextMessage(_ request:SendTextMessageRequest, uniqueIdresult:UniqueIdResultType = nil, onSent:OnSentType = nil, onSeen:OnSeenType = nil, onDeliver:OnDeliveryType = nil){
         SendTextMessageRequestHandler.handle(request, self, onSent, onSeen, onDeliver, uniqueIdresult)
     }
 
-    /// <#Description#>
+    /// Edit a message.
     /// - Parameters:
-    ///   - request: <#request description#>
-    ///   - uniqueIdresult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    ///   - onSent: <#onSent description#>
-    ///   - onSeen: <#onSeen description#>
-    ///   - onDeliver: <#onDeliver description#>
-    public func replyMessage(_ request:ReplyMessageRequest, uniqueIdresult:UniqueIdResultType = nil, onSent:OnSentType = nil, onSeen:OnSeenType = nil, onDeliver:OnDeliveryType = nil){
-        SendTextMessageRequestHandler.handle(request, self, onSent, onSeen, onDeliver, uniqueIdresult)
-    }
-
-    /// <#Description#>
-    public func logOut() {
-        LogoutRequestHandler.handle(self)
-    }
-
-    /// <#Description#>
-    /// - Parameters:
-    ///   - request: <#request description#>
-    ///   - uploadProgress: <#uploadProgress description#>
-    ///   - downloadProgress: <#downloadProgress description#>
-    ///   - onSent: <#onSent description#>
-    ///   - onSeen: <#onSeen description#>
-    ///   - onDeliver: <#onDeliver description#>
-    ///   - uploadUniqueIdResult: <#uploadUniqueIdResult description#>
-    ///   - messageUniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func sendLocationMessage( _ request:LocationMessageRequest,
-                              uploadProgress:UploadFileProgressType? = nil,
-                              downloadProgress:DownloadProgressType? = nil,
-                              onSent:OnSentType = nil,
-                              onSeen:OnSeenType = nil,
-                              onDeliver:OnDeliveryType = nil,
-                              uploadUniqueIdResult: UniqueIdResultType = nil,
-                              messageUniqueIdResult: UniqueIdResultType = nil
-                              ){
-        SendLocationMessageRequestHandler.handle(self, request, downloadProgress, uploadProgress, onSent,onSeen, onDeliver, uploadUniqueIdResult, messageUniqueIdResult)
-    }
-
-    /// <#Description#>
-    /// - Parameters:
-    ///   - request: <#request description#>
-    ///   - completion: <#completion description#>
+    ///   - request: The request that contains threadId and messageId and new text for the message you want to edit.
+    ///   - completion: The result of edited message.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     public func editMessage(_ request:EditMessageRequest, completion: CompletionType<Message>? = nil, uniqueIdResult:UniqueIdResultType = nil){
         EditMessageRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
-    /// <#Description#>
+    /// Reply to a message.
     /// - Parameters:
-    ///   - request: <#request description#>
-    ///   - onSent: <#onSent description#>
-    ///   - onSeen: <#onSeen description#>
-    ///   - onDeliver: <#onDeliver description#>
+    ///   - request: The request contains the id of the message you want to reply to, and id of the thread, and a text message.
+    ///   - uniqueIdresult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    ///   - onSent: Is called when a message sent successfully.
+    ///   - onSeen: Is called when a message, have seen by a participant successfully.
+    ///   - onDeliver: Is called when a message, have delivered to a participant successfully.
+    public func replyMessage(_ request:ReplyMessageRequest, uniqueIdresult:UniqueIdResultType = nil, onSent:OnSentType = nil, onSeen:OnSeenType = nil, onDeliver:OnDeliveryType = nil){
+        SendTextMessageRequestHandler.handle(request, self, onSent, onSeen, onDeliver, uniqueIdresult)
+    }
+
+    /// Send a location.
+    /// - Parameters:
+    ///   - request: The request that gets a threadId and a location and a ``Conversation/userGroupHash``.
+    ///   - uploadProgress: Progress of uploading an image of the location to the thread.
+    ///   - downloadProgress: Download progess of image.
+    ///   - onSent: Is called when a message sent successfully.
+    ///   - onSeen: Is called when a message, have seen by a participant successfully.
+    ///   - onDeliver: Is called when a message, have delivered to a participant successfully.
+    ///   - uploadUniqueIdResult: Unique id of upload file you could cancel an upload if you need it.
+    ///   - messageUniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func sendLocationMessage( _ request:LocationMessageRequest,
+                                     uploadProgress:UploadFileProgressType? = nil,
+                                     downloadProgress:DownloadProgressType? = nil,
+                                     onSent:OnSentType = nil,
+                                     onSeen:OnSeenType = nil,
+                                     onDeliver:OnDeliveryType = nil,
+                                     uploadUniqueIdResult: UniqueIdResultType = nil,
+                                     messageUniqueIdResult: UniqueIdResultType = nil
+    ){
+        SendLocationMessageRequestHandler.handle(self, request, downloadProgress, uploadProgress, onSent,onSeen, onDeliver, uploadUniqueIdResult, messageUniqueIdResult)
+
+    }
+
+    /// Forwrad messages to a thread.
+    /// - Parameters:
+    ///   - request: The request that contains messageId list and a destination threadId.
+    ///   - onSent: Is called when a message sent successfully.
+    ///   - onSeen: Is called when a message, have seen by a participant successfully.
+    ///   - onDeliver: Is called when a message, have delivered to a participant successfully.
     ///   - uniqueIdsResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     public func forwardMessages(_ request:ForwardMessageRequest, onSent:OnSentType = nil, onSeen:OnSeenType = nil, onDeliver:OnDeliveryType = nil, uniqueIdsResult:UniqueIdsResultType = nil){
         ForwardMessagesRequestHandler.handle(request, self, onSent, onSeen, onDeliver, uniqueIdsResult)
     }
 
-    /// <#Description#>
+    /// Get list of messages inside a thread.
     /// - Parameters:
-    ///   - request: <#request description#>
-    ///   - completion: <#completion description#>
-    ///   - cacheResponse: <#cacheResponse description#>
-    ///   - textMessageNotSentRequests: <#textMessageNotSentRequests description#>
-    ///   - editMessageNotSentRequests: <#editMessageNotSentRequests description#>
-    ///   - forwardMessageNotSentRequests: <#forwardMessageNotSentRequests description#>
-    ///   - fileMessageNotSentRequests: <#fileMessageNotSentRequests description#>
-    ///   - uploadFileNotSentRequests: <#uploadFileNotSentRequests description#>
-    ///   - uploadImageNotSentRequests: <#uploadImageNotSentRequests description#>
+    ///   - request: The threadId and other filter properties.
+    ///   - completion: The response which can contains llist of messages.
+    ///   - cacheResponse: The cache response.
+    ///   - textMessageNotSentRequests: A list of messages that failed to sent.
+    ///   - editMessageNotSentRequests: A list of edit messages that failed to sent.
+    ///   - forwardMessageNotSentRequests: A list of forward messages that failed to sent.
+    ///   - fileMessageNotSentRequests: A list of file messages that failed to sent.
+    ///   - uploadFileNotSentRequests: A list of upload files  that failed to sent.
+    ///   - uploadImageNotSentRequests: A list of upload images that failed to sent.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func getHistory(_ request:GetHistoryRequest ,
-                    completion:@escaping PaginationCompletionType<[Message]> ,
+    public func getHistory(_ request:GetHistoryRequest,
+                    completion:@escaping PaginationCompletionType<[Message]>,
                     cacheResponse: CacheResponseType<[Message]>? = nil,
                     textMessageNotSentRequests: CompletionType<[SendTextMessageRequest]>? = nil,
                     editMessageNotSentRequests: CompletionType<[EditMessageRequest]>? = nil,
@@ -689,11 +685,11 @@ public class Chat {
                     uploadImageNotSentRequests: CompletionType<[UploadImageRequest]>? = nil,
                     uniqueIdResult: UniqueIdResultType = nil){
         GetHistoryRequestHandler.handle(request,
-                                        self ,
+                                        self,
                                         completion,
-                                        cacheResponse ,
-                                        textMessageNotSentRequests ,
-                                        editMessageNotSentRequests ,
+                                        cacheResponse,
+                                        textMessageNotSentRequests,
+                                        editMessageNotSentRequests,
                                         forwardMessageNotSentRequests,
                                         fileMessageNotSentRequests,
                                         uploadFileNotSentRequests,
@@ -701,59 +697,59 @@ public class Chat {
                                         uniqueIdResult)
     }
 
-    /// <#Description#>
+    /// Get list of messages with hashtags.
     /// - Parameters:
-    ///   - request: <#request description#>
-    ///   - completion: <#completion description#>
-    ///   - cacheResponse: <#cacheResponse description#>
+    ///   - request: A request that containst a threadId and hashtag name.
+    ///   - completion: The response of messages.
+    ///   - cacheResponse: The cache response.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func getHashtagList(_ request:GetHistoryRequest ,
-                    completion:@escaping PaginationCompletionType<[Message]> ,
+    public func getHashtagList(_ request:GetHistoryRequest,
+                    completion:@escaping PaginationCompletionType<[Message]>,
                     cacheResponse: CacheResponseType<[Message]>? = nil,
                     uniqueIdResult: UniqueIdResultType = nil){
-        GetHistoryRequestHandler.handle(request,self,completion,cacheResponse,nil,nil,nil,nil,nil,nil,uniqueIdResult)
+        GetHistoryRequestHandler.handle(request, self, completion, cacheResponse, nil, nil, nil, nil, nil, nil, uniqueIdResult)
     }
 
-    /// <#Description#>
+    /// Pin a message inside a thread.
     /// - Parameters:
-    ///   - request: <#request description#>
-    ///   - completion: <#completion description#>
+    ///   - request: The request that contains messageId.
+    ///   - completion: The response of pinned thread.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     public func pinMessage(_ request:PinUnpinMessageRequest, completion:@escaping CompletionType<PinUnpinMessage>, uniqueIdResult: UniqueIdResultType = nil){
 		PinMessageRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
 
-    /// <#Description#>
+    /// UnPin a message inside a thread.
     /// - Parameters:
-    ///   - request: <#request description#>
-    ///   - completion: <#completion description#>
+    ///   - request: The request that contains messageId.
+    ///   - completion: The response of unpinned thread.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     public func unpinMessage(_ request:PinUnpinMessageRequest, completion:@escaping CompletionType<PinUnpinMessage>, uniqueIdResult: UniqueIdResultType = nil){
 		UnPinMessageRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
 
-    /// <#Description#>
+    /// Clear all messages inside a thread for user.
     /// - Parameters:
-    ///   - request: <#request description#>
-    ///   - completion: <#completion description#>
+    ///   - request: The request that  contains a threadId.
+    ///   - completion: A threadId if the result was a success.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     public func clearHistory(_ request:ClearHistoryRequest, completion:@escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType = nil){
-		ClearHistoryRequestHandler.handle(request, self, completion, uniqueIdResult)
-	}
+        ClearHistoryRequestHandler.handle(request, self, completion, uniqueIdResult)
+    }
 
-    /// <#Description#>
+    /// Delete a message if it's ``Message/deletable``.
     /// - Parameters:
-    ///   - request: <#request description#>
-    ///   - completion: <#completion description#>
+    ///   - request: The delete request with a messageId.
+    ///   - completion: The response of deleted message.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     public func deleteMessage(_ request:DeleteMessageRequest, completion:@escaping CompletionType<Message>, uniqueIdResult: UniqueIdResultType = nil){
 		DeleteMessageRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
 
-    /// <#Description#>
+    /// Delete multiple messages at once.
     /// - Parameters:
-    ///   - request: <#request description#>
-    ///   - completion: <#completion description#>
+    ///   - request: The delete request with list of messagesId.
+    ///   - completion: List of deleted messages.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     public func deleteMultipleMessages(_ request:BatchDeleteMessageRequest, completion:@escaping CompletionType<Message>, uniqueIdResult: UniqueIdResultType = nil){
 		BatchDeleteMessageRequestHandler.handle(request, self, completion, uniqueIdResult)
@@ -840,6 +836,11 @@ public class Chat {
     /// <#Description#>
     public func sendStopTyping(){
         SendStartTypingRequestHandler.stopTyping()
+    }
+
+    /// <#Description#>
+    public func logOut() {
+        LogoutRequestHandler.handle(self)
     }
 
     /// <#Description#>
