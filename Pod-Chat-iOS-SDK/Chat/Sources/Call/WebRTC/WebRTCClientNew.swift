@@ -43,7 +43,7 @@ public class WebRTCClientNew : NSObject, RTCPeerConnectionDelegate, RTCDataChann
         WebRTCClientNew.instance            = self
         
         // Console output
-        //        RTCSetMinDebugLogLevel(RTCLoggingSeverity.info)
+        RTCSetMinDebugLogLevel(RTCLoggingSeverity.info)
         
         // File output
         saveLogsToFile()
@@ -183,8 +183,6 @@ public class WebRTCClientNew : NSObject, RTCPeerConnectionDelegate, RTCDataChann
                 self.customPrint("sdp was nil with no error!", isGuardNil: true)
                 return
             }
-            let tt = topic
-            dump(sdp)
             pp.setLocalDescription(sdp, completionHandler: { (error) in
                 if let error = error{
                     self.customPrint("error setLocalDescription for offer",error, isGuardNil: true)
@@ -258,7 +256,7 @@ public class WebRTCClientNew : NSObject, RTCPeerConnectionDelegate, RTCDataChann
             transciver?.setDirection(.recvOnly, error: &error)
             if let remoteAudioTrack = transciver?.receiver.track as? RTCAudioTrack {
                 usersRTC[index].setAudioTrack(remoteAudioTrack)
-                usersRTC[index].pc?.add(remoteAudioTrack, streamIds: [config.topicAudioReceive ?? ""])
+                usersRTC[index].pc?.add(remoteAudioTrack, streamIds: [topic])
                 monitorAudioLevelFor(topic: topic)
             }
         }
