@@ -166,3 +166,24 @@ Chat.sharedInstance.deleteMultipleMessages(.init(threadId: 123456, messageIds: m
     // Write your code
 }
 ```
+
+### Number of unread messages
+
+For retrieving the number of unread messages count use the method ``Chat/deleteMultipleMessages(_:completion:uniqueIdResult:)`` like this:
+
+```swift
+Chat.sharedInstance.deleteMultipleMessages(.init(countMutedThreads: true)) { unreadCount, uniqueId, error in
+    // Write your code
+}
+```
+
+
+### Get the list of messages that you are mentioned
+
+For retrieving the list of messages that you have mentioned in a thread use the method ``Chat/getMentions(_:completion:uniqueIdResult:)`` like this:
+
+```swift
+Chat.sharedInstance.getMentions(.init(threadId: 123456, onlyUnreadMention: false)) { unreadCount, uniqueId, error in
+// Write your code
+}
+```

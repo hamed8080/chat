@@ -755,21 +755,21 @@ public class Chat {
 		BatchDeleteMessageRequestHandler.handle(request, self, completion, uniqueIdResult)
 	}
 
-    /// <#Description#>
+    /// Get the number of unread message count.
     /// - Parameters:
-    ///   - request: <#request description#>
-    ///   - completion: <#completion description#>
-    ///   - cacheResponse: <#cacheResponse description#>
+    ///   - request: The request can contain property to aggregate mute threads unread count.
+    ///   - completion: The number of unread message count.
+    ///   - cacheResponse: The number of unread message count in cache.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     public func allUnreadMessageCount(_ request:UnreadMessageCountRequest, completion:@escaping CompletionType<Int>, cacheResponse: CacheResponseType<Int>? = nil, uniqueIdResult: UniqueIdResultType = nil){
 		AllUnreadMessageCountRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
 	}
 
-    /// <#Description#>
+    /// Get messages that you have mentioned in a thread.
     /// - Parameters:
-    ///   - request: <#request description#>
-    ///   - completion: <#completion description#>
-    ///   - cacheResponse: <#cacheResponse description#>
+    ///   - request: The request that contains a threadId.
+    ///   - completion: The response contains a list of messages that you have mentioned.
+    ///   - cacheResponse: The cache response of mentioned messages inside a thread.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     public func getMentions(_ request:MentionRequest, completion:@escaping PaginationCompletionType<[Message]>, cacheResponse: PaginationCacheResponseType<[Message]>? = nil, uniqueIdResult: UniqueIdResultType = nil){
 		MentionsRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
