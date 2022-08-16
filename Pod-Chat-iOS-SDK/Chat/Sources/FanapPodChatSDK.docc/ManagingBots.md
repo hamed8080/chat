@@ -1,6 +1,8 @@
 # Managing Bots
 For creating, add/remove command, user bots, start/stop.
 
+![How chat bots work behind the scene.](bot-flow.png)
+
 ### Create Bot
 
 For creating a bot use method ``Chat/createBot(_:completion:uniqueIdResult:)`` like this:

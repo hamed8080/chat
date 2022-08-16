@@ -307,3 +307,12 @@ Chat.sharedInstance.changeThreadType(.init(threadId: 123456, type: .CHANNEL)) { 
     }
 }
 ```
+
+### Mutual groups
+For getting the list of threads that are mutuals between the current user and desired user, use method ``Chat/mutualGroups(_:_:cacheResponse:uniqueIdResult:)`` like this:
+```swift
+let user = Invitee(id: 123456, idType: CONTACT_ID)
+Chat.sharedInstance.mutualGroups(.init(toBeUser: user)) { mutualThreads, uniqueId, pagination, error in
+    // Write your code
+}
+```

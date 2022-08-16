@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol SafeDecodable: Decodable & CaseIterable & RawRepresentable where RawValue: Decodable, AllCases: BidirectionalCollection { }
+public protocol SafeDecodable: Decodable & CaseIterable & RawRepresentable where RawValue: Decodable, AllCases: BidirectionalCollection { }
 
 
 extension SafeDecodable {

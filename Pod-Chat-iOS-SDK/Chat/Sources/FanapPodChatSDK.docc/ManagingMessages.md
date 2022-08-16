@@ -180,10 +180,109 @@ Chat.sharedInstance.deleteMultipleMessages(.init(countMutedThreads: true)) { unr
 
 ### Get the list of messages that you are mentioned
 
-For retrieving the list of messages that you have mentioned in a thread use the method ``Chat/getMentions(_:completion:uniqueIdResult:)`` like this:
+For retrieving the list of messages that you have mentioned in a thread use the method ``Chat/getMentions(_:completion:cacheResponse:uniqueIdResult:)`` like this:
 
 ```swift
-Chat.sharedInstance.getMentions(.init(threadId: 123456, onlyUnreadMention: false)) { unreadCount, uniqueId, error in
-// Write your code
+Chat.sharedInstance.getMentions(.init(threadId: 123456, onlyUnreadMention: false)) { messages, uniqueId, pagination, error in
+    // Write your code
+}
+```
+
+### List of participants who delivered the message to them.
+
+For retrieving the list of participants who the message delivered to them, use the method ``Chat/messageDeliveryParticipants(_:completion:uniqueIdResult:)`` like this:
+
+```swift
+Chat.sharedInstance.messageDeliveryParticipants(.init(messageId: 123456)) { participants, uniqueId, pagination, error in
+    // Write your code
+}
+```
+
+### List of participants who have seen the message.
+
+For retrieving the list of participants who the message delivered to them, use the method ``Chat/messageSeenByUsers(_:completion:uniqueIdResult:)`` like this:
+
+```swift
+Chat.sharedInstance.messageSeenByUsers(.init(messageId: 123456)) { participants, uniqueId, pagination, error in
+    // Write your code
+}
+```
+
+### List of participants who have seen the message.
+
+For retrieving the list of participants who the message delivered to them, use the method ``Chat/messageSeenByUsers(_:completion:uniqueIdResult:)`` like this:
+
+```swift
+Chat.sharedInstance.messageSeenByUsers(.init(messageId: 123456)) { participants, uniqueId, pagination, error in
+    // Write your code
+}
+```
+
+### Send seen of a message.
+
+For the time that your user opens a thread in your application, that is your responsibility to inform the other participants to tell them you have seen the message. For this matter, use the method ``Chat/seen(_:uniqueIdResult:)`` like this:
+
+>Important: Sending a delivery of a message is Chat-SDK responsibility and it will happen automatically.
+```swift
+Chat.sharedInstance.seen(.init(messageId: 123456))
+```
+
+### Cancel a message.
+
+Cancel a message happens when a message is not sent by the SDK and canceling it will delete it from a cache of SDK respectively. For this call the method ``Chat/cancelMessage(_:completion:)`` like this:
+
+```swift
+Chat.sharedInstance.cancelMessage(.init(uniqueId: "XYZ...")){ isCanceled, uniqueId, error in
+    // Write your code
+}
+```
+
+
+### Send user is typing.
+
+For sending an event to participants of a thread that you are typing in a thread call the method ``Chat/snedStartTyping(threadId:)`` like this:
+
+```swift
+Chat.sharedInstance.snedStartTyping(threadId: 123456)
+```
+
+
+### Send user stop typing.
+
+For sending an event to participants of a thread that you have stopped typing in a thread call the method ``Chat/sendStopTyping()`` like this:
+
+```swift
+Chat.sharedInstance.sendStopTyping()
+```
+
+### Tell the server user has logged out.
+
+For sending an event to the server that the user with the device has logged out call the method ``Chat/logOut()`` like this:
+
+```swift
+Chat.sharedInstance.logOut()
+```
+
+### Send a signal event
+
+For sending an event to the server that the user is doing some acitons call the method ``Chat/sendSignalMessage(req:)`` like this:
+
+```swift
+Chat.sharedInstance.sendSignalMessage(.init(signalType: .RECORD_VOICE, threadId: 123456))
+```
+
+### Export Messages in CSV
+
+To export a messages of a thread inside a `CSV` file, call the method ``Chat/exportChat(_:localIdentifire:_:uniqueIdResult:)`` like this:
+>Important: Please remove the created file after you have finished the use of this file.
+
+>Note: Every time you call this function it will remove the older file.
+
+>Note: This function only can export up to 10000 message at each call.
+
+```swift
+let req = GetHistoryRequest(threadId: 123456, fromTime: UInt(startDate.millisecondsSince1970), toTime: UInt(endDate.millisecondsSince1970))
+Chat.sharedInstance.exportChat(req){ url, uniqueId, error in
+    // Write your code
 }
 ```

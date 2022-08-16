@@ -16,6 +16,8 @@ Please check out the figure below to find out how the Chat SDK works behind the 
 - <doc:ManagingThreads>
 - <doc:ManagingMessages>
 - <doc:ManagingContacts>
+- <doc:ManagingFiles>
+- <doc:ManagingUsers>
 - <doc:ManagingProfile>
 - <doc:ManagingTags>
 - <doc:ManagingBots>

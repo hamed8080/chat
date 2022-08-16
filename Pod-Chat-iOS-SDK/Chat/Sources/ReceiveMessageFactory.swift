@@ -259,8 +259,6 @@ class ReceiveMessageFactory{
             case .UNKNOWN:
                 Chat.sharedInstance.logger?.log(title: "CHAT_SDK:", message: "an unknown message type received from the server not implemented in SDK!")
                 break
-			@unknown default :
-                Chat.sharedInstance.logger?.log(title: "CHAT_SDK:", message: "an message received with unknowned type value. investigate to fix or leave that.")
 		}
 		
 	}

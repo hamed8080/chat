@@ -51,7 +51,11 @@ open class CoreDataCrud<T:NSFetchRequestResult> {
     public func find(keyWithFromat:String, value:CVarArg)->T?{
         let req = getFetchRequest()
         req.predicate = NSPredicate(format: "\(keyWithFromat)", value)
-        return (try? PSM.shared.context.fetch(req).first) as? T
+        do {
+            return try PSM.shared.context.fetch(req).first
+        } catch {
+            return nil
+        }
     }
     
     public func delete(entity:NSManagedObject){
