@@ -256,6 +256,9 @@ class ReceiveMessageFactory{
 			case .ERROR:
 				ErrorResponseHandler.handle(asyncMessage)
 				break
+            case .CUSTOMER_INFO:
+                CustomerInfoResponseHandler.handle(asyncMessage)
+                break
             case .UNKNOWN:
                 Chat.sharedInstance.logger?.log(title: "CHAT_SDK:", message: "an unknown message type received from the server not implemented in SDK!")
                 break
