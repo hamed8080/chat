@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Alamofire
 
 class MapReverseRequestHandler {
 	
@@ -20,7 +19,7 @@ class MapReverseRequestHandler {
             return
         }
 		let url = "\(config.mapServer)\(Routes.MAP_REVERSE.rawValue)"
-		let headers:  HTTPHeaders = ["Api-Key":  mapApiKey]
+        let headers: [String : String] = ["Api-Key":  mapApiKey]
 		chat.restApiRequest(req,
 							decodeType: MapReverse.self,
 							url: url,

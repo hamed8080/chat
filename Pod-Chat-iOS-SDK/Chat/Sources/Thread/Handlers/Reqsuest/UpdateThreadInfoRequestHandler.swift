@@ -7,9 +7,6 @@
 
 import Foundation
 import FanapPodAsyncSDK
-import Alamofire
-
-
 
 public class UpdateThreadInfoRequestHandler  {
     

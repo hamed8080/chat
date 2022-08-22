@@ -1,9 +1,6 @@
 import FanapPodAsyncSDK
 import Sentry
 import Foundation
-import Alamofire
-
-
 
 public struct ChatResponse{
     public var uniqueId        : String? = nil
@@ -532,7 +529,7 @@ public class Chat {
         prepareToSendAsync(req: req,
                            clientSpecificUniqueId: req.uniqueId,
                            subjectId: req.threadId,
-                           pushMsgType: 3,
+                           pushMsgType: .MESSAGE,
                            messageType: .SYSTEM_MESSAGE )
     }
     
@@ -835,7 +832,7 @@ public class Chat {
 									//this sometimes use to send threadId with subjectId Key must fix from server to get threadId
                                     subjectId                              : Int?                    = nil,
                                     plainText                              : Bool                    = false,
-                                    pushMsgType                            : Int?                    = nil,
+                                    pushMsgType                            : AsyncMessageTypes?      = nil,
                                     peerName                               : String?                 = nil,
                                     messageType                            : ChatMessageVOTypes,
                                     messageMessageType                     : MessageType?            = nil,
@@ -901,7 +898,7 @@ public class Chat {
 	internal func sendToAsync(asyncMessageVO:SendAsyncMessageVO){
         guard let content = try? JSONEncoder().encode(asyncMessageVO) else { return }
         logger?.log(title: "send Message", jsonString: asyncMessageVO.string ?? "", receive: false)
-        asyncManager.sendData(type: AsyncMessageTypes(rawValue: asyncMessageVO.pushMsgType ?? 3)! , data: content)        
+        asyncManager.sendData(type: asyncMessageVO.pushMsgType ?? .MESSAGE, data: content)
 	}
     
     public func setToken(newToken: String , reCreateObject:Bool = false) {

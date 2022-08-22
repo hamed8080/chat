@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Alamofire
 
 class MapSearchRequestHandler {
 	
@@ -19,7 +18,7 @@ class MapSearchRequestHandler {
             return            
         }
 		let url = "\(config.mapServer)\(Routes.MAP_SEARCH.rawValue)"
-		let headers:  HTTPHeaders = ["Api-Key":  mapApiKey]
+        let headers:  [String : String] = ["Api-Key":  mapApiKey]
 		chat.restApiRequest(req,
 							decodeType: MapSearchResponse.self,
 							url: url,
