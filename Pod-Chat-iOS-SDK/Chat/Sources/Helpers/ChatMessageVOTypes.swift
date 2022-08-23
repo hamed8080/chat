@@ -107,6 +107,7 @@ public enum ChatMessageVOTypes :Int , Codable {
     case STOP_RECORDING                    = 122
     case GET_CALLS_TO_JOIN                 = 129
     case CALL_CLIENT_ERRORS                = 153
+    case RENEW_CALL_REQUEST                = 227
     
     //CALL
     

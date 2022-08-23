@@ -784,6 +784,10 @@ public class Chat {
     public func getCallsToJoin(_ request:GetJoinCallsRequest, _ completion:@escaping CompletionType<[Call]>, uniqueIdResult:UniqueIdResultType = nil){
         CallsToJoinRequestHandler.handle(request,self,completion ,uniqueIdResult)
     }
+
+    public func renewCallRequest(_ request:RenewCallRequest, _ completion:@escaping CompletionType<CreateCall>, uniqueIdResult:UniqueIdResultType = nil){
+        RenewCallRequestHandler.handle(request, self, completion, uniqueIdResult)
+    }
     //Call
     
     

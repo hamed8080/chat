@@ -283,6 +283,9 @@ class ReceiveMessageFactory{
             case .GET_CALLS_TO_JOIN:
                 GetCallsResponseHandler.handle(asyncMessage)
                 break
+            case .RENEW_CALL_REQUEST:
+                RenewCallRequestResponseHandler.handle(asyncMessage)
+                break
             case .TAG_LIST:
                 TagListResponseHandler.handle(asyncMessage)
                 break
