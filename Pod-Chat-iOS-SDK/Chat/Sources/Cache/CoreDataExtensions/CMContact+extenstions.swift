@@ -68,7 +68,6 @@ extension CMContact{
 	public class func getContacts(req:ContactsRequest?)->[Contact]{
 		guard let req = req else { return [] }
 		let fetchRequest = crud.fetchRequest()
-		let ascending = req.order != Ordering.descending.rawValue
 		if let id = req.id {
 			fetchRequest.predicate =  NSPredicate(format: "id == %i", id)
 		} else if req.isAutoGenratedUniqueId == false {
@@ -98,10 +97,21 @@ extension CMContact{
 				fetchRequest.predicate = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.or, subpredicates: orPredicatArray)
 			}
 		}
-		
-		let firstNameSort   = NSSortDescriptor(key: "firstName", ascending: ascending)
-		let lastNameSort    = NSSortDescriptor(key: "lastName", ascending: ascending)
-		fetchRequest.sortDescriptors = [lastNameSort, firstNameSort]
+
+        var sorts:[NSSortDescriptor] = []
+        if let order = req.order?.first(where: {$0.first?.key == ContactsOrderFiled.user.rawValue}){
+            let isAscending = order.first?.value == Ordering.ascending.rawValue
+            sorts.append(NSSortDescriptor(key: "hasUser", ascending: isAscending))
+        }
+        if let order = req.order?.first(where: {$0.first?.key == ContactsOrderFiled.firstName.rawValue}){
+            let isAscending = order.first?.value == Ordering.ascending.rawValue
+            sorts.append(NSSortDescriptor(key: "firstName", ascending: isAscending))
+        }
+        if let order = req.order?.first(where: {$0.first?.key == ContactsOrderFiled.lastName.rawValue}){
+            let isAscending = order.first?.value == Ordering.ascending.rawValue
+            sorts.append(NSSortDescriptor(key: "lastName", ascending: isAscending))
+        }
+		fetchRequest.sortDescriptors = sorts
         fetchRequest.fetchLimit = req.size
         fetchRequest.fetchOffset = req.offset
 		let contacts = CMContact.crud.fetchWith(fetchRequest)?.map{$0.getCodable()}

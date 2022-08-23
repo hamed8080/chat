@@ -14,6 +14,12 @@ class AddContactRequestHandler{
                       _ completion: @escaping CompletionType<[Contact]>,
                       _ uniqueIdResult:UniqueIdResultType = nil){
 
+//        let batch = BatchAddContactsRequest(firstNameList: [req.firstName],
+//                                            lastNameList: [req.lastName],
+//                                            cellphoneNumberList: [req.cellphoneNumber],
+//                                            emailList: [req.email],
+//                                            userNameList: [req.username],
+//                                            uniqueIdList: [req.uniqueId])
         chat.prepareToSendAsync(req: req,
                                 clientSpecificUniqueId: req.uniqueId,
                                 messageType: .ADD_CONTACT,

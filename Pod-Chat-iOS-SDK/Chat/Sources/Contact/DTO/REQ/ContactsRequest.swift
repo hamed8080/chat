@@ -9,6 +9,12 @@ import Foundation
 
 import FanapPodAsyncSDK
 
+public enum ContactsOrderFiled: String, Encodable {
+    case firstName = "firstName"
+    case lastName = "lastName"
+    case user = "user"
+}
+
 public class ContactsRequest : BaseRequest {
 	
 	public var size       		: Int = 50
@@ -17,7 +23,9 @@ public class ContactsRequest : BaseRequest {
 	public let id       			: Int? //contact id to client app can query and find a contact in cache core data with id
 	public let cellphoneNumber 		: String?
 	public let email           	: String?
-	public let order           	: String?
+
+    /// Order by default on the server side is on the `[fisrtName, lastName, isPodUser]` otherwise it is up to you to choose the right ordering.
+    public let order           	: [[String: String]]?
 	public let query           	: String?
 	public var summery         	: Bool? = nil
 	
@@ -27,7 +35,7 @@ public class ContactsRequest : BaseRequest {
                  cellphoneNumber      : String?    = nil,
                  email                : String?    = nil,
                  offset               : Int        = 0 ,
-                 order                : Ordering?  = nil,
+                 order                : [[ContactsOrderFiled : Ordering]]?  = nil,
                  query                : String?    = nil,
                  summery              : Bool?      = nil,
                  uniqueId             : String?    = nil
@@ -38,7 +46,10 @@ public class ContactsRequest : BaseRequest {
 		self.id         	    = id
 		self.cellphoneNumber   	= cellphoneNumber
 		self.email             	= email
-		self.order             	= order?.rawValue ?? nil
+        let orders = order?.map{ dictionary in
+            [ dictionary.first?.key.rawValue ?? "" : dictionary.first?.value.rawValue ?? "" ]
+        }
+        self.order             	= orders
 		self.query             	= query
 		self.summery           	= summery
         super.init(uniqueId: uniqueId)
@@ -66,5 +77,7 @@ public class ContactsRequest : BaseRequest {
 		try? container.encodeIfPresent(summery, forKey: .summery)
 		try? container.encodeIfPresent(query, forKey: .query)
 	}
+// TODO: Add query dictionary
+//    try? container.encodeIfPresent(query, forKey: .query)
 	
 }
