@@ -41,8 +41,8 @@ public class AddContactRequest : BaseRequest {
                 username:   String?,
                 uniqueId:   String?) {
         
-        self.cellphoneNumber    = ""
-        self.email              = email ?? ""
+        self.cellphoneNumber    = nil
+        self.email              = email
         self.firstName          = firstName
         self.lastName           = lastName
         self.ownerId            = ownerId

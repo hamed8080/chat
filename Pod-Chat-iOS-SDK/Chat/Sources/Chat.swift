@@ -97,6 +97,7 @@ public class Chat {
 	}
 	
     //Test Status: Main ✅ - Integeration: ✅
+    // FIXME: The core server has a really big problem in terms of the batch insert with `userNameList,emailList` it needs to be fixed by the server side. Adding batch is ok if only send in the array list of `cellphoneNumberList` not a list with mixed data.
     public func addContact(_ request:AddContactRequest,completion:@escaping CompletionType<[Contact]>, uniqueIdResult: UniqueIdResultType = nil){
         AddContactRequestHandler.handle(request,self,completion,uniqueIdResult)
 	}
@@ -122,6 +123,7 @@ public class Chat {
 	}
 	
     //Test Status: Main ✅ - Integeration: ✅
+    // FIXME: The core server has a really big problem in terms of the batch insert with `userNameList,emailList` it needs to be fixed by the server side. Adding batch is ok if only send in the array list of `cellphoneNumberList` not a list with mixed data.
 	public func syncContacts(syncedPart: CompletionType<[Contact]>? = nil, completion:CompletionType<Bool>? = nil, uniqueIdsResult: UniqueIdsResultType = nil){
 		SyncContactsRequestHandler.handle(self,syncedPart,completion,uniqueIdsResult)
 	}
