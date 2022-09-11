@@ -6,5 +6,7 @@
 //
 
 import Foundation
+
+/// Remove the bot commands request.
 public class RemoveBotCommandRequest: AddBotCommandRequest {
 }

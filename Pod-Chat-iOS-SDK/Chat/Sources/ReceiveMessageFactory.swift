@@ -8,6 +8,7 @@
 import Foundation
 import FanapPodAsyncSDK
 
+/// A factory class that delivers a message that is received to the client completion handler or an event delegate.
 class ReceiveMessageFactory{
 	
     class func invokeCallback(asyncMessage: AsyncMessage) {

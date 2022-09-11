@@ -8,27 +8,34 @@
 import Foundation
 import FanapPodAsyncSDK
 
+/// AsyncManager intermediate between chat and async socket server.
 internal class AsyncManager: AsyncDelegate{
-    
+
+    /// Async client.
     private (set) var asyncClient               :Async?
+
+    /// Last message date that was received from the server to manage ping status.
     private var lastSentMessageDate             :Date?                          = Date()
+
+    /// A timer to check the connection status every 20 seconds.
     private (set) var chatServerPingTimer       :Timer?                         = nil
 
-    public init(){
-        
-    }
-    
+    public init(){}
+
+    /// Create an async connection.
     public func createAsync() {
         if let asyncConfig = Chat.sharedInstance.config?.asyncConfig{
             asyncClient = Async(config: asyncConfig, delegate: self)
             asyncClient?.createSocket()
         }
     }
-    
+
+    /// A delegate method that receives a message.
     public func asyncMessage(asyncMessage: AsyncMessage){
         ReceiveMessageFactory.invokeCallback(asyncMessage: asyncMessage)
     }
-    
+
+    /// A delegate that tells the status of the async connection.
     public func asyncStateChanged(asyncState: AsyncSocketState, error: AsyncError?) {
         Chat.sharedInstance.delegate?.chatState(state: asyncState.chatState, currentUser: nil, error: error?.chatError)
         if asyncState == .ASYNC_READY{
@@ -37,27 +44,31 @@ internal class AsyncManager: AsyncDelegate{
             chatServerPingTimer?.invalidate()
         }
     }
-    
+
+    /// It will be only used whenever a client implements a custom async class by itself.
     public func asyncMessageSent(message: Data) {
-        ///nothing to do it's usefel when some client directly use async SDK
     }
-    
+
+    /// A delegate to raise an error.
     public func asyncError(error: AsyncError) {
         Chat.sharedInstance.delegate?.chatError(error: .init(code: .ASYNC_ERROR, message: error.message, userInfo: error.userInfo, rawError: error.rawError))
     }
-    
+
+    /// A public method to completely destroy the async object.
     public func disposeObject(){
         asyncClient?.disposeObject()
         asyncClient = nil
         chatServerPingTimer?.invalidate()
         chatServerPingTimer = nil
     }
-    
+
+    /// The sendData delegate will inform if a send event occurred by the async socket.
     public func sendData(type: AsyncMessageTypes, data: Data){
         asyncClient?.sendData(type: type, data: data)
         sendPingTimer()
     }
-    
+
+    /// A timer that repeats ping the `Chat server` every 20 seconds.
     internal func sendPingTimer(){
         chatServerPingTimer?.invalidate()
         chatServerPingTimer = nil
@@ -69,8 +80,8 @@ internal class AsyncManager: AsyncDelegate{
         }
     }
     
-    ///It's differ from ping in async SDK you need to send ping to chat server to chat server to keep peerId
-    ///If you don't send ping to chat server it clear peerId within 30s to 1 minute and chat server cannot send messages to client like new chat inside thread
+    /// It's different from ping in async SDK you need to send a ping to the chat server to keep peerId
+    /// If you don't send a ping to the chat server it clears peerId within the 30s to 1 minute and the chat server cannot send messages to the client like new chat inside the thread
     private func sendChatServerPing(){
         Chat.sharedInstance.prepareToSendAsync(messageType: .PING)
     }

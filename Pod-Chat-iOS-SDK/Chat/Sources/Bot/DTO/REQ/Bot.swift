@@ -6,8 +6,14 @@
 //
 
 import Foundation
+
+/// A bot object.
 public class Bot : Codable {
+
+    ///
 	public var apiToken  : String?
+
+    ///
 	public var thing     : Thing?
 	
 	private enum CodingKeys : String , CodingKey{
