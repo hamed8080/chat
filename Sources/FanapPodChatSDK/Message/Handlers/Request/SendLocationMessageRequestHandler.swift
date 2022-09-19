@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import UIKit
+
 class SendLocationMessageRequestHandler {
     
     class func handle(_ chat:Chat,

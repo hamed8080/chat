@@ -16,10 +16,12 @@ class PSM {
      lazy var persistentContainer: NSPersistentContainer = {
         let modelName = "CacheDataModel"
         var modelURL: URL
-        if let bundle = Bundle(identifier: "org.cocoapods.FanapPodChatSDK") {
-            modelURL = bundle.url(forResource: modelName, withExtension: "momd")!
+         if let bundleUrl = Bundle(identifier: "org.cocoapods.FanapPodChatSDK")?.url(forResource: modelName, withExtension: "momd") {
+            modelURL = bundleUrl
+        } else if let moduleUrl = Bundle.module.url(forResource: modelName, withExtension: "momd"){
+            modelURL = moduleUrl
         } else {
-            modelURL = Bundle(for: Chat.self).url(forResource: modelName, withExtension: "momd")!
+            modelURL = Bundle.main.url(forResource: modelName, withExtension: "momd")!
         }
         guard let mom = NSManagedObjectModel(contentsOf: modelURL) else { fatalError("Error initializing mom from: \(modelURL)") }
         let container = NSPersistentContainer(name: modelName ,managedObjectModel: mom )

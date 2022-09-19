@@ -19,7 +19,7 @@ open class CoreDataCrud<T:NSFetchRequestResult> {
         return NSFetchRequest(entityName: entityName)
     }
     
-    public func getInsertEntity()->T{
+    public func getInsertEntity() -> T {
         return NSEntityDescription.insertNewObject(forEntityName: entityName, into: PSM.shared.context) as! T
     }
     

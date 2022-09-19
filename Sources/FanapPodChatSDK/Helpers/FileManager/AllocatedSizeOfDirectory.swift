@@ -5,8 +5,9 @@
 //  Created by Hamed Hosseini on 4/2/21.
 //
 
-public extension FileManager {
+import Foundation
 
+public extension FileManager {
     /// Calculate the allocated size of a directory and all its contents on the volume.
     ///
     /// As there's no simple way to get this information from the file system the method
@@ -17,9 +18,8 @@ public extension FileManager {
     /// - note: There are a couple of oddities that are not taken into account (like symbolic links, meta data of
     /// directories, hard links, ...).
     func allocatedSizeOfDirectory(at directoryURL: URL) throws -> UInt64 {
-
         // The error handler simply stores the error and stops traversal
-        var enumeratorError: Error? = nil
+        var enumeratorError: Error?
         func errorHandler(_: URL, error: Error) -> Bool {
             enumeratorError = error
             return false
@@ -36,7 +36,6 @@ public extension FileManager {
 
         // Perform the traversal.
         for item in enumerator {
-
             // Bail out on errors from the errorHandler.
             if enumeratorError != nil { break }
 
@@ -52,16 +51,13 @@ public extension FileManager {
     }
 }
 
-
-fileprivate let allocatedSizeResourceKeys: Set<URLResourceKey> = [
+private let allocatedSizeResourceKeys: Set<URLResourceKey> = [
     .isRegularFileKey,
     .fileAllocatedSizeKey,
     .totalFileAllocatedSizeKey,
 ]
 
-
-fileprivate extension URL {
-
+private extension URL {
     func regularFileAllocatedSize() throws -> UInt64 {
         let resourceValues = try self.resourceValues(forKeys: allocatedSizeResourceKeys)
 
