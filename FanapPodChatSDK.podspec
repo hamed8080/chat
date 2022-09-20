@@ -2,19 +2,19 @@
 Pod::Spec.new do |s|
 
   s.name         = "FanapPodChatSDK"
-  s.version      = "0.10.3.1"
+  s.version      = "1.1.0"
   s.summary      = "Fanap's POD Chat SDK"
   s.description  = "This Package is used for creating chat apps for companies whoes want to use Fanap Chat Services; This Package will use Fanap-Pod-Async-SDK"
-  s.homepage     = "https://github.com/FanapSoft/pod-chat-ios-sdk"
+  s.homepage     = "https://pubgi.fanapsoft.ir/chat/ios/fanappodchatsdk"
   s.license      = "MIT"
   s.author       = { "Hamed Hosseini" => "hamed8080@gmail.com" }
   s.platform     = :ios, "10.0"
   s.swift_versions = "4.0"
-  s.source       = { :git => "https://github.com/FanapSoft/pod-chat-ios-sdk.git", :tag => s.version }
+  s.source       = { :git => "https://pubgi.fanapsoft.ir/chat/ios/fanappodchatsdk.git", :tag => s.version }
   s.source_files = "Sources/FanapPodChatSDK/**/*.{h,swift,xcdatamodeld,m,momd}"
   s.resources = "Sources/FanapPodChatSDK/*.xcdatamodeld"
   s.frameworks  = "Foundation" , "CoreData" , "Contacts"
-  s.dependency "FanapPodAsyncSDK" , '~> 0.10.0.2'
+  s.dependency "FanapPodAsyncSDK" , '~> 1.1.0'
 
 #   s.dependency 'FanapPodAsyncSDK'
 #   s.subspec 'FanapPodAsyncSDK' do |ss|
