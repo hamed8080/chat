@@ -16,7 +16,7 @@ class PSM {
      lazy var persistentContainer: NSPersistentContainer = {
         let modelName = "CacheDataModel"
         var modelURL: URL
-         if let bundleUrl = Bundle(identifier: "org.cocoapods.FanapPodChatSDK")?.url(forResource: modelName, withExtension: "momd") {
+        if let bundleUrl = Bundle(identifier: "org.cocoapods.FanapPodChatSDK")?.url(forResource: modelName, withExtension: "momd") {
             modelURL = bundleUrl
         } else if let moduleUrl = Bundle.module.url(forResource: modelName, withExtension: "momd"){
             modelURL = moduleUrl

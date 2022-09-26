@@ -12,3 +12,8 @@ xcuserdata
 *.xcodeproj
 swift-format.xcodeproj/
 Package.resolved
+
+### DOCC
+./docs
+./.docs
+./public

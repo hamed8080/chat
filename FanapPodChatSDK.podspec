@@ -15,15 +15,6 @@ Pod::Spec.new do |s|
   s.resources = "Sources/FanapPodChatSDK/*.xcdatamodeld"
   s.frameworks  = "Foundation" , "CoreData" , "Contacts"
   s.dependency "FanapPodAsyncSDK" , '~> 1.1.0'
-
-#   s.dependency 'FanapPodAsyncSDK'
-#   s.subspec 'FanapPodAsyncSDK' do |ss|
-#       ss.source_files         = 'Users/hamedhosseini/Desktop/WorkSpace/ios/Fanap/Fanap-Async-SDK/**/*.{h,swift,xcdatamodeld,m,momd}'
-#       ss.resources            = "Users/hamedhosseini/Desktop/WorkSpace/ios/Fanap/Fanap-Async-SDK/*.xcdatamodeld"
-#       ss.dependency "Starscream" , '~> 3.0.5'
-#       ss.dependency "Sentry" , '~> 4.3.1'
-#   end
-   
   s.dependency "Sentry" , '~> 4.3.1'
 
 end

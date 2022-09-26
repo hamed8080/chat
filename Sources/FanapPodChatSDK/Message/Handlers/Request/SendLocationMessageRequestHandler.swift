@@ -6,7 +6,9 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
+#endif
 
 class SendLocationMessageRequestHandler {
     
@@ -30,10 +32,17 @@ class SendLocationMessageRequestHandler {
         
         DownloadMapStaticImageRequestHandler.handle(req: mapStaticReq, config:config , downloadProgress: downloadProgress){ response in
         
-            guard let data = response.result as? Data , let image = UIImage(data: data) else{return}
+            guard let data = response.result as? Data else{return}
+            var hC = 0
+            var wC = 0
+#if canImport(UIKit)
+            let image = UIImage(data: data) ?? UIImage()
+            hC = Int(image.size.height)
+            wC = Int(image.size.width)
+#endif
             let imageRequest = UploadImageRequest(data: data,
-                                                    hC: Int(image.size.height),
-                                                    wC: Int(image.size.width),
+                                                    hC: hC,
+                                                    wC: wC,
                                                     fileExtension: ".png",
                                                     fileName:  request.mapImageName,
                                                     mimeType: "image/png",

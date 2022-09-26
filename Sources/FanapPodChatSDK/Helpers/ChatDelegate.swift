@@ -8,7 +8,7 @@
 import Foundation
 import FanapPodAsyncSDK
 
-public protocol ChatDelegate:class{
+public protocol ChatDelegate: AnyObject {
         
     func chatState(state:ChatState, currentUser:User?, error:ChatError?)    
     func chatError(error:ChatError)

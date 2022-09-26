@@ -6,7 +6,8 @@
 //
 
 import Foundation
-import MobileCoreServices
+import CoreServices
+import UniformTypeIdentifiers
 
 public class UploadFileRequest: BaseRequest {
     
@@ -44,11 +45,13 @@ public class UploadFileRequest: BaseRequest {
     
     class func guessMimeType(_ fileExtension:String?, _ fileName:String?)->String{
         let ext = fileExtension ?? URL(fileURLWithPath: fileName ?? "").pathExtension
-        if let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, ext as NSString, nil)?.takeRetainedValue(),
-           let mimetype = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassMIMEType)?.takeRetainedValue() {
-            return mimetype as String
+        var mimeType:String? = nil
+        if #available(iOS 14.0, *){
+            mimeType = UTType(filenameExtension: ext)?.preferredMIMEType
+        } else if let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, ext as NSString, nil)?.takeRetainedValue(){
+            mimeType = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassMIMEType)?.takeRetainedValue() as? String
         }
-        return "application/octet-stream"
+        return mimeType ?? "application/octet-stream"
     }
     
     private enum CodingKeys : String , CodingKey{

@@ -13,15 +13,22 @@ let package = Package(
         .library(name: "FanapPodChatSDK", targets: ["FanapPodChatSDK"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/getsentry/sentry-cocoa.git", .upToNextMajor(from: "4.5.0")),
-        .package(path: "../FanapPodAsyncSDK"),
+        .package(url: "https://github.com/getsentry/sentry-cocoa.git", .upToNextMinor(from: "4.5.0")),
+        .package(url: "https://pubgi.fanapsoft.ir/chat/ios/fanappodasyncsdk.git", .upToNextMinor(from: "1.1.0")),
+        .package(url: "https://github.com/apple/swift-docc-plugin", branch: "main"),
     ],
     targets: [
-        .target(name: "FanapPodChatSDK", dependencies: [
-            "FanapPodAsyncSDK",
-            .product(name: "Sentry", package: "sentry-cocoa"),
-        ],
-        swiftSettings: [.unsafeFlags(["-suppress-warnings"])]),
-        .testTarget(name: "FanapPodChatSDKTests", dependencies: ["FanapPodChatSDK"]),
+        .target(
+            name: "FanapPodChatSDK",
+            dependencies: [
+                .product(name: "FanapPodAsyncSDK",
+                         package: "fanappodasyncsdk"),
+                .product(name: "Sentry",
+                         package: "sentry-cocoa"),
+            ],
+            resources: [.process("Resources")]
+        ),
+        .testTarget(name: "FanapPodChatSDKTests",
+                    dependencies: ["FanapPodChatSDK"], path: "Tests"),
     ]
 )
