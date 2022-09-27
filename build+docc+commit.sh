@@ -5,7 +5,7 @@ BUNDLE_ID="ir.fanap.${TARGET_NAME}"
 BUNDLE_VERSION="1.0.0"
 DOCC_FILE_PATH="/Users/hamed/Desktop/Workspace/ios/Fanap/FanapPodChatSDK/Sources/FanapPodChatSDK/FanapPodChatSDK.docc"
 DOCC_HOST_BASE_PATH="fanappodchatsdk"
-DOCC_OUTPUT_FOLDER="./docs"
+DOCC_OUTPUT_FOLDER="./.docs"
 DOCC_SYMBOL_GRAPHS=".build/symbol-graphs/"
 DOCC_SYMBOL_GRAPHS_OUTPUT=".build/swift-docc-symbol-graphs"
 BRANCH_NAME="gl-pages"
@@ -49,11 +49,11 @@ swift package --allow-writing-to-directory $DOCC_OUTPUT_FOLDER \
 ### Save the current commit we've just built documentation from in a variable
 CURRENT_COMMIT_HASH=$(git rev-parse --short HEAD)
 
-## Commit and push our changes to the $BRANCH_NAME branch
-mv docs "$BRANCH_NAME/"
+## Commit our changes to the $BRANCH_NAME branch
+mv $DOCC_OUTPUT_FOLDER "$BRANCH_NAME/"
 cd $BRANCH_NAME #move to worktree directory
-echo "worktree docs path: ${PWD}/docs"
-git add docs
+echo "worktree documentation path: ${PWD}/$DOCC_OUTPUT_FOLDER"
+git add $DOCC_OUTPUT_FOLDER
 
 if [ -n "$(git status --porcelain)" ]; then
     echo "Documentation changes found. Committing the changes to the '$BRANCH_NAME' branch."
