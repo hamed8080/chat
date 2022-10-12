@@ -3,7 +3,7 @@
 TARGET_NAME="FanapPodChatSDK"
 BUNDLE_ID="ir.fanap.${TARGET_NAME}"
 BUNDLE_VERSION="1.0.0"
-DOCC_FILE_PATH="/Users/hamed/Desktop/Workspace/ios/Fanap/FanapPodChatSDK/Sources/FanapPodChatSDK/FanapPodChatSDK.docc"
+DOCC_FILE_PATH="${pwd}/Sources/FanapPodChatSDK/FanapPodChatSDK.docc"
 DOCC_HOST_BASE_PATH="fanappodchatsdk"
 DOCC_OUTPUT_FOLDER="./.docs"
 DOCC_SYMBOL_GRAPHS=".build/symbol-graphs/"

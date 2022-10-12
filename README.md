@@ -57,9 +57,9 @@ Chat.sharedInstance.sendTextMessage(req, uniqueIdresult: nil) { sentResult, uniq
 <br/>
 
 ## Documentation
-For more information about how to use Chat SDK visit [Documentation](https://docs.pod.ir/v0.10.5.0/Chat/ios/9560/installation) 
+For more information about how to use Chat SDK visit [Documentation](https://hamed8080.gitlab.io/fanappodchatsdk/documentation/fanappodchatsdk/) 
 <br/>
 <br/>
 
 ## Developer Application 
-For more example and usage you can use [developer implementation app](https://github.com/hamed8080/ChatImplementation)
+For more example and usage you can use [developer implementation app](https://pubgi.fanapsoft.ir/chat/ios/chatapplication)
