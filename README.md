@@ -3,9 +3,6 @@
 <br />
 <br />
 
-[![Swift](https://img.shields.io/badge/Swift-5+-orange?style=flat-square)](https://img.shields.io/badge/-Orange?style=flat-square)
-[![Platforms](https://img.shields.io/badge/Platforms-iOS-yellowgreen?style=flat-square)](https://img.shields.io/badge/Platforms-macOS_iOS_tvOS_watchOS_Linux_Windows-Green?style=flat-square)
-
 Fanap's POD Chat Service - iOS SDK
 ## Features
 
@@ -13,6 +10,7 @@ Fanap's POD Chat Service - iOS SDK
 - [x] Caching system
 - [x] Static file response
 - [x] Downlaod / Upload File or Data or Image resumebble
+- [x] Manage threads and messages 
 
 ## Installation
 
