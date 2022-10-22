@@ -1,22 +1,20 @@
 //
-//  StatusPingResponseHandler.swift
-//  FanapPodChatSDK
+// StatusPingResponseHandler.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 2/24/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import FanapPodAsyncSDK
+import Foundation
 
-class StatusPingResponseHandler: ResponseHandler{
-	
-	static func handle(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else {return}
-		let chat = Chat.sharedInstance
-        
-		guard let _ = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
-		guard let _ = chatMessage.content?.data(using: .utf8) else {return}
-		//no need to call callback
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .STATUS_PING)
-	}
+class StatusPingResponseHandler: ResponseHandler {
+    static func handle(_ asyncMessage: AsyncMessage) {
+        guard let chatMessage = asyncMessage.chatMessage else { return }
+        let chat = Chat.sharedInstance
+
+        if chat.callbacksManager.getCallBack(chatMessage.uniqueId) == nil { return }
+        if chatMessage.content?.data(using: .utf8) == nil { return }
+        // no need to call callback
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .statusPing)
+    }
 }

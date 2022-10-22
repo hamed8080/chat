@@ -1,9 +1,8 @@
 //
-//  AllocatedSizeOfDirectory.swift
-//  FanapPodChatSDK
+// AllocatedSizeOfDirectory.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 4/2/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
 
@@ -26,10 +25,10 @@ public extension FileManager {
         }
 
         // We have to enumerate all directory contents, including subdirectories.
-        let enumerator = self.enumerator(at: directoryURL,
-                                         includingPropertiesForKeys: Array(allocatedSizeResourceKeys),
-                                         options: [],
-                                         errorHandler: errorHandler)!
+        let enumerator = enumerator(at: directoryURL,
+                                    includingPropertiesForKeys: Array(allocatedSizeResourceKeys),
+                                    options: [],
+                                    errorHandler: errorHandler)!
 
         // We'll sum up content size here:
         var accumulatedSize: UInt64 = 0
@@ -40,8 +39,9 @@ public extension FileManager {
             if enumeratorError != nil { break }
 
             // Add up individual file sizes.
-            let contentItemURL = item as! URL
-            accumulatedSize += try contentItemURL.regularFileAllocatedSize()
+            if let contentItemURL = item as? URL {
+                accumulatedSize += try contentItemURL.regularFileAllocatedSize()
+            }
         }
 
         // Rethrow errors from errorHandler.
@@ -59,7 +59,7 @@ private let allocatedSizeResourceKeys: Set<URLResourceKey> = [
 
 private extension URL {
     func regularFileAllocatedSize() throws -> UInt64 {
-        let resourceValues = try self.resourceValues(forKeys: allocatedSizeResourceKeys)
+        let resourceValues = try resourceValues(forKeys: allocatedSizeResourceKeys)
 
         // We only look at regular files.
         guard resourceValues.isRegularFile ?? false else {

@@ -1,23 +1,21 @@
 //
-//  ChatState.swift
-//  FanapPodChatSDK
+// ChatState.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 11/1/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import FanapPodAsyncSDK
-public enum ChatState:String{
-    case CONNECTING  = "CONNECTING"
-    case CONNECTED   = "CONNECTED"
-    case CLOSED      = "CLOSED"
-    case ASYNC_READY = "ASYNC_READY"
-    case CHAT_READY  = "CHAT_READY"
+import Foundation
+public enum ChatState: String {
+    case connecting
+    case connected
+    case closed
+    case asyncReady
+    case chatReady
 }
 
-extension AsyncSocketState{
-    
-    var chatState:ChatState{
-        return ChatState(rawValue: rawValue) ?? ChatState.CLOSED
+extension AsyncSocketState {
+    var chatState: ChatState {
+        ChatState(rawValue: rawValue) ?? ChatState.closed
     }
 }

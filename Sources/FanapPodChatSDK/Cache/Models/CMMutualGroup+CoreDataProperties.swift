@@ -1,17 +1,14 @@
 //
-//  CMMutualGroup.h
-//  FanapPodChatSDK
+// CMMutualGroup+CoreDataProperties.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 11/1/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-
-import Foundation
 import CoreData
+import Foundation
 
-public class CMMutualGroup : NSManagedObject {
-
-    @NSManaged public var mutualId:String?
-    @NSManaged public var idType:NSNumber?
-    @NSManaged public var conversation : CMConversation?
+public class CMMutualGroup: NSManagedObject {
+    @NSManaged public var mutualId: String?
+    @NSManaged public var idType: NSNumber?
+    @NSManaged public var conversation: CMConversation?
 }

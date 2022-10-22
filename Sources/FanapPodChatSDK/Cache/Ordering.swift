@@ -1,14 +1,12 @@
 //
-//  CoreDataCrud.swift
-//  FanapPodChatSDK
+// Ordering.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 2/9/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
 
 public enum Ordering: String {
-    case ascending  = "asc"
-    case descending = "desc"
+    case asc
+    case desc
 }
-

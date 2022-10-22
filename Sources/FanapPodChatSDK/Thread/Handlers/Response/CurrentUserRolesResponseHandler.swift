@@ -1,28 +1,25 @@
 //
-//  CurrentUserRolesResponseHandler.swift
-//  FanapPodChatSDK
+// CurrentUserRolesResponseHandler.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 2/20/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import FanapPodAsyncSDK
+import Foundation
 
 class CurrentUserRolesResponseHandler: ResponseHandler {
+    static func handle(_ asyncMessage: AsyncMessage) {
+        guard let chatMessage = asyncMessage.chatMessage else { return }
+        let chat = Chat.sharedInstance
 
-
-	static func handle(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else {return}
-		let chat = Chat.sharedInstance
-		
-		guard let data = chatMessage.content?.data(using: .utf8) else {return}
-		guard let userRoles = try? JSONDecoder().decode([Roles].self, from: data) else{return}
-        chat.delegate?.chatEvent(event: .User(.ROLES(userRoles, id:chatMessage.subjectId)))
-        CacheFactory.write(cacheType: .CURRENT_USER_ROLES( userRoles , chatMessage.subjectId))
+        guard let data = chatMessage.content?.data(using: .utf8) else { return }
+        guard let userRoles = try? JSONDecoder().decode([Roles].self, from: data) else { return }
+        chat.delegate?.chatEvent(event: .user(.roles(userRoles, id: chatMessage.subjectId)))
+        CacheFactory.write(cacheType: .currentUserRoles(userRoles, chatMessage.subjectId))
         PSM.shared.save()
-        
-        guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
-        callback(.init(uniqueId: chatMessage.uniqueId ,result: userRoles))
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .GET_CURRENT_USER_ROLES)
-	}
+
+        guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
+        callback(.init(uniqueId: chatMessage.uniqueId, result: userRoles))
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .getCurrentUserRoles)
+    }
 }

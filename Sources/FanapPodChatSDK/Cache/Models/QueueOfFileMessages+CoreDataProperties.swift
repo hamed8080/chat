@@ -1,36 +1,32 @@
 //
-//  QueueOfFileMessages.h
-//  FanapPodChatSDK
+// QueueOfFileMessages+CoreDataProperties.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 11/1/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import CoreData
+import Foundation
 
+public extension QueueOfFileMessages {
+    @NSManaged var textMessage: String?
+    @NSManaged var fileExtension: String?
+    @NSManaged var fileName: String?
+    @NSManaged var isPublic: NSNumber?
+    @NSManaged var messageType: NSNumber?
+    @NSManaged var metadata: String?
+    @NSManaged var mimeType: String?
+    @NSManaged var originalName: String?
+    @NSManaged var repliedTo: NSNumber?
+    @NSManaged var threadId: NSNumber?
+    @NSManaged var userGroupHash: String?
+    @NSManaged var xC: NSNumber?
+    @NSManaged var yC: NSNumber?
+    @NSManaged var hC: NSNumber?
+    @NSManaged var wC: NSNumber?
 
-extension QueueOfFileMessages {
+    @NSManaged var typeCode: String?
+    @NSManaged var uniqueId: String?
 
-    @NSManaged public var textMessage:  String?
-    @NSManaged public var fileExtension: String?
-    @NSManaged public var fileName:     String?
-    @NSManaged public var isPublic:     NSNumber?
-    @NSManaged public var messageType:  NSNumber?
-    @NSManaged public var metadata:     String?
-    @NSManaged public var mimeType:     String?
-    @NSManaged public var originalName: String?
-    @NSManaged public var repliedTo:    NSNumber?
-    @NSManaged public var threadId:     NSNumber?
-    @NSManaged public var userGroupHash: String?
-    @NSManaged public var xC:           NSNumber?
-    @NSManaged public var yC:           NSNumber?
-    @NSManaged public var hC:           NSNumber?
-    @NSManaged public var wC:           NSNumber?
-    
-    @NSManaged public var typeCode:     String?
-    @NSManaged public var uniqueId:     String?
-    
-    @NSManaged public var fileToSend:   NSData?
-    @NSManaged public var imageToSend:  NSData?
-
+    @NSManaged var fileToSend: NSData?
+    @NSManaged var imageToSend: NSData?
 }

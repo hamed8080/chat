@@ -1,19 +1,18 @@
 //
-//  FileEventType.swift
-//  FanapPodChatSDK
+// FileEventType.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 3/3/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
 
-public enum FileEventType{
-    case NOT_STARTED
-    case DOWNLOADING(uniqueId:String)
-    case DOWNLOADED(FileRequest)
-    case IMAGE_DOWNLOADED(ImageRequest)
-    case DOWNLOAD_ERROR(ChatError)
-    case UPLOADING(uniqueId:String)
-    case UPLOADED(UploadFileRequest)
-    case UPLOAD_ERROR(ChatError)
+public enum FileEventType {
+    case notStarted
+    case downloading(uniqueId: String)
+    case downloaded(FileRequest)
+    case imageDownloaded(ImageRequest)
+    case downloadError(ChatError)
+    case uploading(uniqueId: String)
+    case uploaded(UploadFileRequest)
+    case uploadError(ChatError)
 }

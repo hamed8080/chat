@@ -1,27 +1,22 @@
 //
-//  RemoveThreadFromTagRequestHandler.swift
-//  FanapPodChatSDK
+// RemoveTagParticipantsRequestHandler.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 3/3/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
 class RemoveTagParticipantsRequestHandler {
-    
-    class func handle( _ req:RemoveTagParticipantsRequest ,
-                       _ chat:Chat,
-                       _ completion: @escaping  CompletionType<[TagParticipant]>,
-                       _ uniqueIdResult: UniqueIdResultType = nil
-    ){
+    class func handle(_ req: RemoveTagParticipantsRequest,
+                      _ chat: Chat,
+                      _ completion: @escaping CompletionType<[TagParticipant]>,
+                      _ uniqueIdResult: UniqueIdResultType = nil)
+    {
         chat.prepareToSendAsync(req: req.tagParticipants,
                                 clientSpecificUniqueId: req.uniqueId,
                                 subjectId: req.tagId,
-                                messageType: .REMOVE_TAG_PARTICIPANTS,
-                                uniqueIdResult: uniqueIdResult){ response in
-            completion(response.result as? [TagParticipant] , response.uniqueId, response.error )
+                                messageType: .removeTagParticipants,
+                                uniqueIdResult: uniqueIdResult) { response in
+            completion(response.result as? [TagParticipant], response.uniqueId, response.error)
         }
     }
-    
 }
-
-

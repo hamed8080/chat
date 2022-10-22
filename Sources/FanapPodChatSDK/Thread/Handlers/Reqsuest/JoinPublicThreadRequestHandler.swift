@@ -1,27 +1,22 @@
 //
-//  JoinPublicThreadRequestHandler.swift
-//  FanapPodChatSDK
+// JoinPublicThreadRequestHandler.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 3/3/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
 class JoinPublicThreadRequestHandler {
-	
-	class func handle( _ req:JoinPublicThreadRequest,
-					   _ chat:Chat,
-					   _ completion: @escaping CompletionType<Conversation> ,
-					   _ uniqueIdResult: UniqueIdResultType = nil
-	){
+    class func handle(_ req: JoinPublicThreadRequest,
+                      _ chat: Chat,
+                      _ completion: @escaping CompletionType<Conversation>,
+                      _ uniqueIdResult: UniqueIdResultType = nil)
+    {
         chat.prepareToSendAsync(req: req.threadName,
                                 clientSpecificUniqueId: req.uniqueId,
                                 plainText: true,
-                                messageType:.JOIN_THREAD,
-                                uniqueIdResult: uniqueIdResult
-        ){ response in
-            completion(response.result as? Conversation ,response.uniqueId , response.error)
+                                messageType: .joinThread,
+                                uniqueIdResult: uniqueIdResult) { response in
+            completion(response.result as? Conversation, response.uniqueId, response.error)
         }
-	}
+    }
 }
-
-	

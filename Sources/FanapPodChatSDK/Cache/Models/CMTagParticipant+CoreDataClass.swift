@@ -1,13 +1,10 @@
 //
-//  CMTagParticipant+CoreDataClass.swift
-//  FanapPodChatSDK
+// CMTagParticipant+CoreDataClass.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 6/23/21.
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import CoreData
+import Foundation
 
-
-public class CMTagParticipant: NSManagedObject {
-    
-}
+public class CMTagParticipant: NSManagedObject {}

@@ -1,19 +1,16 @@
 //
-//  CMTagParticipant.swift
-//  FanapPodChatSDK
+// CMTagParticipant+CoreDataProperties.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 6/23/21.
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import CoreData
+import Foundation
 
-
-extension CMTagParticipant {
-    
-    @NSManaged public var id                    : NSNumber?
-    @NSManaged public var active                : NSNumber?
-    @NSManaged public var tagId                 : NSNumber?
-    @NSManaged public var threadId              : NSNumber?
-    @NSManaged public var conversation          : CMConversation?
-    
+public extension CMTagParticipant {
+    @NSManaged var id: NSNumber?
+    @NSManaged var active: NSNumber?
+    @NSManaged var tagId: NSNumber?
+    @NSManaged var threadId: NSNumber?
+    @NSManaged var conversation: CMConversation?
 }

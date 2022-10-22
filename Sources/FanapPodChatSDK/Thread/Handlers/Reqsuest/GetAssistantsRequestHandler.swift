@@ -1,34 +1,30 @@
 //
-//  GetAssistantsRequestHandler.swift
-//  FanapPodChatSDK
+// GetAssistantsRequestHandler.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 2/23/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import FanapPodAsyncSDK
+import Foundation
 
-public class GetAssistantsRequestHandler  {
-    
-    class func handle( _ req:AssistantsRequest,
-                       _ chat:Chat,
-                       _ completion: @escaping PaginationCompletionType<[Assistant]> ,
-                       _ cacheResponse: PaginationCompletionType<[Assistant]>? = nil ,
-                       _ uniqueIdResult: UniqueIdResultType = nil
-    ){
+public class GetAssistantsRequestHandler {
+    class func handle(_ req: AssistantsRequest,
+                      _ chat: Chat,
+                      _ completion: @escaping PaginationCompletionType<[Assistant]>,
+                      _ cacheResponse: PaginationCompletionType<[Assistant]>? = nil,
+                      _ uniqueIdResult: UniqueIdResultType = nil)
+    {
         chat.prepareToSendAsync(req: req,
                                 clientSpecificUniqueId: req.uniqueId,
-                                messageType:.GET_ASSISTANTS,
-                                uniqueIdResult: uniqueIdResult
-        ){ response in
+                                messageType: .getAssistants,
+                                uniqueIdResult: uniqueIdResult) { response in
             let pagination = PaginationWithContentCount(count: req.count, offset: req.offset, totalCount: response.contentCount)
-            completion(response.result as? [Assistant] ,response.uniqueId , pagination , response.error)
+            completion(response.result as? [Assistant], response.uniqueId, pagination, response.error)
         }
-        
-        CacheFactory.get(useCache: cacheResponse != nil , cacheType: .GET_ASSISTANTS(req.count, req.offset)){ response in
+
+        CacheFactory.get(useCache: cacheResponse != nil, cacheType: .getAssistants(req.count, req.offset)) { response in
             let pagination = PaginationWithContentCount(count: req.count, offset: req.offset, totalCount: CMAssistant.crud.getTotalCount())
-            cacheResponse?(response.cacheResponse as? [Assistant] ,response.uniqueId , pagination , nil)
+            cacheResponse?(response.cacheResponse as? [Assistant], response.uniqueId, pagination, nil)
         }
     }
-    
 }

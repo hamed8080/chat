@@ -1,20 +1,17 @@
 //
-//  CMLinkedUser.h
-//  FanapPodChatSDK
+// CMLinkedUser+CoreDataProperties.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 11/1/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import CoreData
+import Foundation
 
-extension CMLinkedUser {
-    
-    @NSManaged public var coreUserId:   NSNumber?
-    @NSManaged public var image:        String?
-    @NSManaged public var name:         String?
-    @NSManaged public var nickname:     String?
-    @NSManaged public var username:     String?
-    @NSManaged public var dummyContact: CMContact?
-
+public extension CMLinkedUser {
+    @NSManaged var coreUserId: NSNumber?
+    @NSManaged var image: String?
+    @NSManaged var name: String?
+    @NSManaged var nickname: String?
+    @NSManaged var username: String?
+    @NSManaged var dummyContact: CMContact?
 }

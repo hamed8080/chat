@@ -1,18 +1,15 @@
 //
-//  CMPinMessage.h
-//  FanapPodChatSDK
+// CMPinMessage+CoreDataProperties.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 11/1/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import CoreData
+import Foundation
 
-extension CMPinMessage {
-
-    @NSManaged public var messageId:    NSNumber?
-    @NSManaged public var text:         String?
-    @NSManaged public var notifyAll:    NSNumber?
-    @NSManaged public var message:      CMMessage?
-
+public extension CMPinMessage {
+    @NSManaged var messageId: NSNumber?
+    @NSManaged var text: String?
+    @NSManaged var notifyAll: NSNumber?
+    @NSManaged var message: CMMessage?
 }

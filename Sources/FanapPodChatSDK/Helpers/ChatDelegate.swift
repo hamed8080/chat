@@ -1,28 +1,26 @@
 //
-//  ChatDelegate.swift
-//  FanapPodChatSDK
+// ChatDelegate.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 11/1/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import FanapPodAsyncSDK
+import Foundation
 
 public protocol ChatDelegate: AnyObject {
-        
-    func chatState(state:ChatState, currentUser:User?, error:ChatError?)    
-    func chatError(error:ChatError)
-    func chatEvent(event:ChatEventType)
+    func chatState(state: ChatState, currentUser: User?, error: ChatError?)
+    func chatError(error: ChatError)
+    func chatEvent(event: ChatEventType)
 }
 
-public enum ChatEventType{
-    case Bot(BotEventTypes)
-    case Contact(ContactEventTypes)
-    case File(FileEventType)
-    case System(SystemEventTypes)
-    case Message(MessageEventTypes)
-    case Thread(ThreadEventTypes)
-    case User(UserEventTypes)
-    case Assistant(AssistantEventModel)
-    case Tag(TagEventModel)
+public enum ChatEventType {
+    case bot(BotEventTypes)
+    case contact(ContactEventTypes)
+    case file(FileEventType)
+    case system(SystemEventTypes)
+    case message(MessageEventTypes)
+    case thread(ThreadEventTypes)
+    case user(UserEventTypes)
+    case assistant(AssistantEventModel)
+    case tag(TagEventModel)
 }

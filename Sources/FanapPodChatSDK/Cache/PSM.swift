@@ -1,4 +1,10 @@
 //
+// PSM.swift
+// Copyright (c) 2022 FanapPodChatSDK
+//
+// Created by Hamed Hosseini on 9/27/22.
+
+//
 //  PSM.swift
 //  FanapPodChatSDK
 //
@@ -8,24 +14,23 @@
 import CoreData
 
 class PSM {
-    
-    private init(){}
+    private init() {}
     static let shared = PSM()
     lazy var context: NSManagedObjectContext = persistentContainer.viewContext
-    
-     lazy var persistentContainer: NSPersistentContainer = {
+
+    lazy var persistentContainer: NSPersistentContainer = {
         let modelName = "CacheDataModel"
         var modelURL: URL
         if let bundleUrl = Bundle(identifier: "org.cocoapods.FanapPodChatSDK")?.url(forResource: modelName, withExtension: "momd") {
             modelURL = bundleUrl
-        } else if let moduleUrl = Bundle.module.url(forResource: modelName, withExtension: "momd"){
+        } else if let moduleUrl = Bundle.module.url(forResource: modelName, withExtension: "momd") {
             modelURL = moduleUrl
         } else {
             modelURL = Bundle.main.url(forResource: modelName, withExtension: "momd")!
         }
         guard let mom = NSManagedObjectModel(contentsOf: modelURL) else { fatalError("Error initializing mom from: \(modelURL)") }
-        let container = NSPersistentContainer(name: modelName ,managedObjectModel: mom )
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+        let container = NSPersistentContainer(name: modelName, managedObjectModel: mom)
+        container.loadPersistentStores(completionHandler: { _, error in
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
@@ -33,7 +38,7 @@ class PSM {
         return container
     }()
 
-   func save() {
+    func save() {
         if context.hasChanges {
             do {
                 try context.save()
@@ -46,7 +51,7 @@ class PSM {
                     fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
                 #endif
             }
-        }else{
+        } else {
             Chat.sharedInstance.logger?.log(title: "CHAT_SDK:", message: "no changes find on context so nothing to save!")
         }
     }

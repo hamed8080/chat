@@ -1,20 +1,18 @@
 //
-//  ContactsSyncedResponseHandler.swift
-//  FanapPodChatSDK
+// ContactsSyncedResponseHandler.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 4/6/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import FanapPodAsyncSDK
+import Foundation
 
 class ContactsSyncedResponseHandler: ResponseHandler {
-    
     static func handle(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else {return}
-		let chat = Chat.sharedInstance
-        CacheFactory.write(cacheType: .SYNCED_CONTACTS)
+        guard let chatMessage = asyncMessage.chatMessage else { return }
+        let chat = Chat.sharedInstance
+        CacheFactory.write(cacheType: .syncedContacts)
         CacheFactory.save()
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .CONTACT_SYNCED)
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .contactSynced)
     }
 }

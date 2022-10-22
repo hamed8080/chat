@@ -1,68 +1,64 @@
 //
-//  AddContactRequest.swift
-//  FanapPodChatSDK
+// AddContactRequest.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 3/12/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
 
-public class AddContactRequest : BaseRequest {
-    
-    public var cellphoneNumber:    String?
-    public var email:              String?
-    public var firstName:          String?
-    public var lastName:           String?
-    public var ownerId:            Int?
-    public var username:           String?
+public class AddContactRequest: BaseRequest {
+    public var cellphoneNumber: String?
+    public var email: String?
+    public var firstName: String?
+    public var lastName: String?
+    public var ownerId: Int?
+    public var username: String?
 
-    
-    public init(cellphoneNumber    : String? = nil,
-                email              : String? = nil,
-                firstName          : String? = nil,
-                lastName           : String? = nil,
-                ownerId            : Int?    = nil,
-                uniqueId           : String? = nil) {
-        
-        self.cellphoneNumber    = cellphoneNumber
-        self.email              = email
-        self.firstName          = firstName
-        self.lastName           = lastName
-        self.ownerId            = ownerId
-        self.username           = nil
+    public init(cellphoneNumber: String? = nil,
+                email: String? = nil,
+                firstName: String? = nil,
+                lastName: String? = nil,
+                ownerId: Int? = nil,
+                uniqueId: String? = nil)
+    {
+        self.cellphoneNumber = cellphoneNumber
+        self.email = email
+        self.firstName = firstName
+        self.lastName = lastName
+        self.ownerId = ownerId
+        username = nil
         super.init(uniqueId: uniqueId)
     }
-    
+
     /// Add Contact with username
-    public init(email:      String? = nil,
-                firstName:  String? = nil,
-                lastName:   String? = nil,
-                ownerId:    Int?    = nil,
-                username:   String? = nil,
-                uniqueId:   String? = nil) {
-        
-        self.cellphoneNumber    = nil
-        self.email              = email
-        self.firstName          = firstName
-        self.lastName           = lastName
-        self.ownerId            = ownerId
-        self.username           = username
+    public init(email: String? = nil,
+                firstName: String? = nil,
+                lastName: String? = nil,
+                ownerId: Int? = nil,
+                username: String? = nil,
+                uniqueId: String? = nil)
+    {
+        cellphoneNumber = nil
+        self.email = email
+        self.firstName = firstName
+        self.lastName = lastName
+        self.ownerId = ownerId
+        self.username = username
         super.init(uniqueId: uniqueId)
     }
-    
-    
-    private enum CodingKeys : String , CodingKey{
-        case cellphoneNumber = "cellphoneNumber"
-        case email           = "email"
-        case firstName       = "firstName"
-        case lastName        = "lastName"
-        case ownerId         = "ownerId"
-        case username        = "username"
-        case uniqueId        = "uniqueId"
-        case typeCode        = "typeCode"
+
+    private enum CodingKeys: String, CodingKey {
+        case cellphoneNumber
+        case email
+        case firstName
+        case lastName
+        case ownerId
+        case username
+        case uniqueId
+        case typeCode
     }
-    
-    public override func encode(to encoder: Encoder) throws {
+
+    override public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(cellphoneNumber, forKey: .cellphoneNumber)
         try container.encode(email, forKey: .email)

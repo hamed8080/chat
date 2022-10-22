@@ -1,24 +1,19 @@
 //
-//  QueueOfTextMessages.h
-//  FanapPodChatSDK
+// QueueOfTextMessages+CoreDataProperties.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 11/1/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-
-import Foundation
 import CoreData
+import Foundation
 
-
-extension QueueOfTextMessages {
-
-    @NSManaged public var textMessage:      String?
-    @NSManaged public var messageType:      NSNumber?
-    @NSManaged public var repliedTo:        NSNumber?
-    @NSManaged public var threadId:         NSNumber?
-    @NSManaged public var typeCode:         String?
-    @NSManaged public var uniqueId:         String?
-    @NSManaged public var metadata:         String?
-    @NSManaged public var systemMetadata:   String?
-
+public extension QueueOfTextMessages {
+    @NSManaged var textMessage: String?
+    @NSManaged var messageType: NSNumber?
+    @NSManaged var repliedTo: NSNumber?
+    @NSManaged var threadId: NSNumber?
+    @NSManaged var typeCode: String?
+    @NSManaged var uniqueId: String?
+    @NSManaged var metadata: String?
+    @NSManaged var systemMetadata: String?
 }

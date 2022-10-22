@@ -1,310 +1,253 @@
 //
-//  CasheFactory.swift
-//  FanapPodChatSDK
+// CasheFactory.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 3/2/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
 public class CacheFactory {
-    
     public enum ReadCacheType {
-        case GET_CASHED_CONTACTS(_ req:ContactsRequest?)
-        case GET_THREADS(_ req:ThreadsRequest)
-        case GET_BLOCKED_USERS
-        case GET_THREAD_PARTICIPANTS(_ req:ThreadParticipantsRequest)
-        case CUREENT_USER_ROLES(_ threadId:Int)
-        case USER_INFO
-        case ALL_UNREAD_COUNT
-        case MENTIONS
-        case GET_HISTORY(_ req: GetHistoryRequest)
-        case GET_TEXT_NOT_SENT_REQUESTS(_ threadId:Int)
-        case EDIT_MESSAGE_REQUESTS(_ threadId:Int)
-        case FORWARD_MESSAGE_REQUESTS(_ threadId:Int)
-        case FILE_MESSAGE_REQUESTS(_ threadId:Int)
-        case UPLOAD_FILE_REQUESTS(_ threadId:Int)
-        case UPLOAD_IMAGE_REQUESTS(_ threadId:Int)
-        case THREAD_ADMINS(_ threadId:Int)
-        case THREAD_PARTICIPANTS(_ threadId:Int, _ count:Int , _ offset:Int , _ ascending:Bool)
-        case PIN_THREADS
-        case NEW_THREADS(_ count:Int , _ offset:Int)
-        case PHONE_CONTACTS
-        case ALL_THREADS
-        case GET_ASSISTANTS(_ count:Int, _ offset:Int)
-        case GET_BLOCKED_ASSISTANTS(_ count:Int, _ offset:Int)
-        case GET_MUTUAL_GROUPS(_ req:MutualGroupsRequest)
-        case TAGS
+        case getCashedContacts(_ req: ContactsRequest?)
+        case getThreads(_ req: ThreadsRequest)
+        case getBlockedUsers
+        case getThreadParticipants(_ req: ThreadParticipantsRequest)
+        case cureentUserRoles(_ threadId: Int)
+        case userInfo
+        case allUnreadCount
+        case mentions
+        case getHistory(_ req: GetHistoryRequest)
+        case getTextNotSentRequests(_ threadId: Int)
+        case editMessageRequests(_ threadId: Int)
+        case forwardMessageRequests(_ threadId: Int)
+        case fileMessageRequests(_ threadId: Int)
+        case uploadFileRequests(_ threadId: Int)
+        case uploadImageRequests(_ threadId: Int)
+        case threadAdmins(_ threadId: Int)
+        case threadParticipants(_ threadId: Int, _ count: Int, _ offset: Int, _ ascending: Bool)
+        case pinThreads
+        case newThreads(_ count: Int, _ offset: Int)
+        case phoneContacts
+        case allThreads
+        case getAssistants(_ count: Int, _ offset: Int)
+        case getBlockedAssistants(_ count: Int, _ offset: Int)
+        case getMutualGroups(_ req: MutualGroupsRequest)
+        case tags
     }
-    
+
     public enum WriteCacheType {
-        case DELETE_ALL_CACHE_DATA
-        case CASHE_CONTACTS(_ contacts:[Contact])
-        case THREADS(_ threads:[Conversation])
-        case GET_BLOCKED_USERS
-        case PARTICIPANTS(_ participants:[Participant]? , _ threadId:Int?)
-        case REMOVE_PARTICIPANTS(participants:[Participant]? , threadId:Int?)
-        case LEAVE_THREAD(_ threadId:Int)
-        case CURRENT_USER_ROLES(_ roles:[Roles] , _ threadId:Int?)
-        case USER_INFO(_ user:User)
-        case PIN_MESSAGE(_ pinMessage:PinUnpinMessage, _ threadId:Int?)
-        case UNPIN_MESSAGE(_ unpinMessage:PinUnpinMessage, _ threadId:Int?)
-        case CLEAR_ALL_HISTORY(_ threadId:Int)
-        case DELETE_MESSAGE(_ threadId:Int , messageId:Int)
-        case DELETE_MESSAGES(_ threadId:Int , messageIds:[Int])
-        case SEND_TXET_MESSAGE_QUEUE(_ req:SendTextMessageRequest)
-        case DELETE_SEND_TXET_MESSAGE_QUEUE(_ uniqueId:String)
-        case MESSAGE(_ message:Message)
-        case EDIT_MESSAGE_QUEUE(_ req : EditMessageRequest)
-        case DELETE_EDIT_MESSAGE_QUEUE(_ message:Message)
-        case FORWARD_MESSAGE_QUEUE(_:ForwardMessageRequest)
-        case DELETE_FORWARD_MESSAGE_QUEUE(_ uniqueId:String)
-        case DELETE_FILE_MESSAGE_QUEUE(_ uniqueId:String)
-        case SEND_FILE_MESSAGE_QUEUE(_ req:UploadFileRequest, _ textMessage: SendTextMessageRequest)
-        case UPLOAD_FILE_QUEUE(_ req:UploadFileRequest)
-        case UPLOAD_IMAGE_QUEUE(_ req:UploadImageRequest)
-        case DELETE_UPLOAD_IMAGE_QUEUE(_ uniqueId:String)
-        case DELETE_UPLOAD_FILE_QUEUE(_ uniqueId:String)
-        case DELETE_ALL_USER
-        case DELETE_CONTACTS(_ contactIds:[Int])
-        case DELETE_THREADS(_ threadIds:[Int])
-        case DELETE_ALL_CONTACTS
-        case DELETE_ALL_THREADS
-        case DELETE_ALL_MESSAGE
-        case SYNCED_CONTACTS
-        case DELETE_WAIT_TEXT_MESSAGE(_ uniqueId:String)
-        case DELETE_EDIT_TEXT_MESSAGE(_ uniqueId:String)
-        case DELETE_FORWARD_MESSAGE(_ uniqueId:String)
-        case DELETE_WAIT_FILE_MESSAGE(_ uniqueId:String)
-        case SET_THREAD_UNREAD_COUNT(_ threadId:Int, _ unreadCount:Int )
-        case INSERT_OR_UPDATE_ASSISTANTS(_ assistants:[Assistant])
-        case DELETE_ASSISTANTS(_ assistant:[Assistant])
-        case MUTUAL_GROUPS(_ threads:[Conversation] , _ req:MutualGroupsRequest)
-        case MUTE_UNMUTE_THREAD(_ threadId:Int)
-        case PIN_UNPIN_THREAD(_ threadId:Int)
-        case TAGS(_ tags:[Tag])
-        case TAG_PARTICIPANTS(_ tagParticipants:[TagParticipant], _ tagId:Int)
-        case DELETE_TAG(_ tag:Tag)
-        case DELETE_TAG_PARTICIPANTS(_ tagParticipants: [TagParticipant])
+        case deleteAllCacheData
+        case casheContacts(_ contacts: [Contact])
+        case threads(_ threads: [Conversation])
+        case getBlockedUsers
+        case participants(_ participants: [Participant]?, _ threadId: Int?)
+        case removeParticipants(participants: [Participant]?, threadId: Int?)
+        case leaveThread(_ threadId: Int)
+        case currentUserRoles(_ roles: [Roles], _ threadId: Int?)
+        case userInfo(_ user: User)
+        case pinMessage(_ pinMessage: PinUnpinMessage, _ threadId: Int?)
+        case unpinMessage(_ unpinMessage: PinUnpinMessage, _ threadId: Int?)
+        case clearAllHistory(_ threadId: Int)
+        case deleteMessage(_ threadId: Int, messageId: Int)
+        case deleteMessages(_ threadId: Int, messageIds: [Int])
+        case sendTxetMessageQueue(_ req: SendTextMessageRequest)
+        case deleteSendTxetMessageQueue(_ uniqueId: String)
+        case message(_ message: Message)
+        case editMessageQueue(_ req: EditMessageRequest)
+        case deleteEditMessageQueue(_ message: Message)
+        case forwardMessageQueue(_: ForwardMessageRequest)
+        case deleteForwardMessageQueue(_ uniqueId: String)
+        case deleteFileMessageQueue(_ uniqueId: String)
+        case sendFileMessageQueue(_ req: UploadFileRequest, _ textMessage: SendTextMessageRequest)
+        case uploadFileQueue(_ req: UploadFileRequest)
+        case uploadImageQueue(_ req: UploadImageRequest)
+        case deleteUploadImageQueue(_ uniqueId: String)
+        case deleteUploadFileQueue(_ uniqueId: String)
+        case deleteAllUser
+        case deleteContacts(_ contactIds: [Int])
+        case deleteThreads(_ threadIds: [Int])
+        case deleteAllContacts
+        case deleteAllThreads
+        case deleteAllMessage
+        case syncedContacts
+        case deleteWaitTextMessage(_ uniqueId: String)
+        case deleteEditTextMessage(_ uniqueId: String)
+        case deleteForwardMessage(_ uniqueId: String)
+        case deleteWaitFileMessage(_ uniqueId: String)
+        case setThreadUnreadCount(_ threadId: Int, _ unreadCount: Int)
+        case insertOrUpdateAssistants(_ assistants: [Assistant])
+        case deleteAssistants(_ assistant: [Assistant])
+        case mutualGroups(_ threads: [Conversation], _ req: MutualGroupsRequest)
+        case muteUnmuteThread(_ threadId: Int)
+        case pinUnpinThread(_ threadId: Int)
+        case tags(_ tags: [Tag])
+        case tagParticipants(_ tagParticipants: [TagParticipant], _ tagId: Int)
+        case deleteTag(_ tag: Tag)
+        case deleteTagParticipants(_ tagParticipants: [TagParticipant])
     }
-    
-    public class func get(useCache: Bool = false , cacheType: ReadCacheType , completion: ((ChatResponse)->())? = nil){
-        if Chat.sharedInstance.config?.enableCache == true && useCache == true{
+
+    public class func get(useCache: Bool = false, cacheType: ReadCacheType, completion: ((ChatResponse) -> Void)? = nil) {
+        if Chat.sharedInstance.config?.enableCache == true, useCache == true {
             switch cacheType {
-            case .GET_CASHED_CONTACTS(_ :let req):
+            case let .getCashedContacts(_: req):
                 let contacts = CMContact.getContacts(req: req)
-                completion?(.init( cacheResponse: contacts))
+                completion?(.init(cacheResponse: contacts))
+            case .getBlockedUsers:
+                // completion?(.init(result: nil, cacheResponse: CMBlocked.crud.getAll().map{$0.convertCMObjectToObject()}, error: nil))
                 break
-            case .GET_BLOCKED_USERS:
-                //completion?(.init(result: nil, cacheResponse: CMBlocked.crud.getAll().map{$0.convertCMObjectToObject()}, error: nil))
-                break
-            case .GET_THREADS(_ : let req ):
+            case let .getThreads(_: req):
                 let threads = CMConversation.getThreads(req: req)
                 completion?(.init(cacheResponse: threads))
-                break
-            case .GET_THREAD_PARTICIPANTS(_ : let req):
-                let predicate:NSPredicate = req.admin ? .init(format: "threadId == %i AND admin == %@" , req.threadId , NSNumber(value:true)) : .init(format:"threadId == %i" , req.threadId)
+            case let .getThreadParticipants(_: req):
+                let predicate: NSPredicate = req.admin ? .init(format: "threadId == %i AND admin == %@", req.threadId, NSNumber(value: true)) : .init(format: "threadId == %i", req.threadId)
                 let cmParticipants = CMParticipant.crud.fetchWithOffset(count: req.count, offset: req.offset, predicate: predicate)
-                let paricipants = cmParticipants.map{$0.getCodable()}
+                let paricipants = cmParticipants.map { $0.getCodable() }
                 completion?(.init(cacheResponse: paricipants))
-                break
-            case .CUREENT_USER_ROLES(_ : let threadId):
-                let roles = CMCurrentUserRoles.crud.fetchWith(NSPredicate(format: "threadId == %i" , threadId))
+            case let .cureentUserRoles(_: threadId):
+                let roles = CMCurrentUserRoles.crud.fetchWith(NSPredicate(format: "threadId == %i", threadId))
                 completion?(.init(cacheResponse: roles?.first?.getCodable()))
-                break
-            case .USER_INFO:
+            case .userInfo:
                 let user = CMUser.crud.getAll().first?.getCodable()
                 completion?(.init(cacheResponse: user))
-                break
-            case .ALL_UNREAD_COUNT:
-                let allUnreadCount = CMConversation.crud.getAll().compactMap{ $0.unreadCount as? Int ?? 0 }.reduce(0, +)
+            case .allUnreadCount:
+                let allUnreadCount = CMConversation.crud.getAll().compactMap { $0.unreadCount as? Int ?? 0 }.reduce(0, +)
                 completion?(.init(cacheResponse: allUnreadCount))
-                break
-            case .MENTIONS:
-                let mentions = CMMessage.crud.fetchWith(NSPredicate(format: "mentioned == %@", NSNumber(value: true)))?.map{$0.getCodable()}
+            case .mentions:
+                let mentions = CMMessage.crud.fetchWith(NSPredicate(format: "mentioned == %@", NSNumber(value: true)))?.map { $0.getCodable() }
                 completion?(.init(cacheResponse: mentions))
-                break
-            case .GET_HISTORY(_ : let req):
+            case let .getHistory(_: req):
                 let fetchRequest = CMMessage.fetchRequestWithGetHistoryRequest(req: req)
-                let messages = CMMessage.crud.fetchWith(fetchRequest)?.map{$0.getCodable()}
+                let messages = CMMessage.crud.fetchWith(fetchRequest)?.map { $0.getCodable() }
                 completion?(.init(cacheResponse: messages))
-                break
-            case .GET_TEXT_NOT_SENT_REQUESTS(_: let threadId):
-                let requests = QueueOfTextMessages.crud.fetchWith(NSPredicate(format: "threadId == %i" , threadId))?.compactMap{$0.getCodable()}
+            case let .getTextNotSentRequests(_: threadId):
+                let requests = QueueOfTextMessages.crud.fetchWith(NSPredicate(format: "threadId == %i", threadId))?.compactMap { $0.getCodable() }
                 completion?(.init(cacheResponse: requests))
-                break
-            case .EDIT_MESSAGE_REQUESTS(_ : let threadId):
-                let requests = QueueOfEditMessages.crud.fetchWith(NSPredicate(format: "threadId == %i" , threadId))?.compactMap{$0.getCodable()}
+            case let .editMessageRequests(_: threadId):
+                let requests = QueueOfEditMessages.crud.fetchWith(NSPredicate(format: "threadId == %i", threadId))?.compactMap { $0.getCodable() }
                 completion?(.init(cacheResponse: requests))
-                break
-            case .FORWARD_MESSAGE_REQUESTS(_: let threadId):
-                let requests = QueueOfForwardMessages.crud.fetchWith(NSPredicate(format: "threadId == %i" , threadId))?.compactMap{$0.getCodable()}
+            case let .forwardMessageRequests(_: threadId):
+                let requests = QueueOfForwardMessages.crud.fetchWith(NSPredicate(format: "threadId == %i", threadId))?.compactMap { $0.getCodable() }
                 completion?(.init(cacheResponse: requests))
-                break
-            case .FILE_MESSAGE_REQUESTS(_: let threadId):
-                let requests = QueueOfFileMessages.crud.fetchWith(NSPredicate(format: "threadId == %i" , threadId))?.compactMap{$0.getCodable()}
+            case let .fileMessageRequests(_: threadId):
+                let requests = QueueOfFileMessages.crud.fetchWith(NSPredicate(format: "threadId == %i", threadId))?.compactMap { $0.getCodable() }
                 completion?(.init(cacheResponse: requests))
-                break
-            case .UPLOAD_FILE_REQUESTS(_: let threadId):
-                let requests = QueueOfUploadFiles.crud.fetchWith(NSPredicate(format: "uniqueId == %i" , threadId))?.compactMap{$0.getCodable()}
+            case let .uploadFileRequests(_: threadId):
+                let requests = QueueOfUploadFiles.crud.fetchWith(NSPredicate(format: "uniqueId == %i", threadId))?.compactMap { $0.getCodable() }
                 completion?(.init(cacheResponse: requests))
-                break
-            case .UPLOAD_IMAGE_REQUESTS(_: let threadId):
-                let requests = QueueOfUploadImages.crud.fetchWith(NSPredicate(format: "uniqueId == %i" , threadId))?.compactMap{$0.getCodable()}
+            case let .uploadImageRequests(_: threadId):
+                let requests = QueueOfUploadImages.crud.fetchWith(NSPredicate(format: "uniqueId == %i", threadId))?.compactMap { $0.getCodable() }
                 completion?(.init(cacheResponse: requests))
-                break
-            case .THREAD_ADMINS(_: let threadId):
-                let admins = CMParticipant.crud.fetchWith(NSPredicate(format: "threadId == %i", threadId))?.filter{$0.roles != nil}
-                completion?(.init(cacheResponse:admins))
-                break
-            case .THREAD_PARTICIPANTS(_: let threadId, _:let count , _:let offset , _:let ascending):
-                let nameSort        = NSSortDescriptor(key: "contactName", ascending: ascending)
-                let lastNameSort    = NSSortDescriptor(key: "lastName", ascending: ascending)
-                let firstNameSort   = NSSortDescriptor(key: "firstName", ascending: ascending)
-                let sorts = [nameSort , lastNameSort, firstNameSort]
-                let participants = CMParticipant.crud.fetchWithOffset(count: count, offset: offset, predicate: NSPredicate(format: "threadId == %i", threadId) , sortDescriptor: sorts)
-                completion?(.init(cacheResponse:participants))
-                break
-            case .PIN_THREADS:
-                let pinThredas = CMConversation.crud.fetchWith(NSPredicate(format:"pin == %@", NSNumber(value: true)))
-                completion?(.init(cacheResponse:pinThredas))
-                break
-            case .NEW_THREADS(_:let count , _:let offset):
+            case let .threadAdmins(_: threadId):
+                let admins = CMParticipant.crud.fetchWith(NSPredicate(format: "threadId == %i", threadId))?.filter { $0.roles != nil }
+                completion?(.init(cacheResponse: admins))
+            case let .threadParticipants(_: threadId, _: count, _: offset, _: ascending):
+                let nameSort = NSSortDescriptor(key: "contactName", ascending: ascending)
+                let lastNameSort = NSSortDescriptor(key: "lastName", ascending: ascending)
+                let firstNameSort = NSSortDescriptor(key: "firstName", ascending: ascending)
+                let sorts = [nameSort, lastNameSort, firstNameSort]
+                let participants = CMParticipant.crud.fetchWithOffset(count: count, offset: offset, predicate: NSPredicate(format: "threadId == %i", threadId), sortDescriptor: sorts)
+                completion?(.init(cacheResponse: participants))
+            case .pinThreads:
+                let pinThredas = CMConversation.crud.fetchWith(NSPredicate(format: "pin == %@", NSNumber(value: true)))
+                completion?(.init(cacheResponse: pinThredas))
+            case let .newThreads(_: count, _: offset):
                 let threads = CMConversation.crud.fetchWithOffset(count: count, offset: offset, predicate: NSPredicate(format: "unreadCount > %i", 0))
-                completion?(.init(cacheResponse:threads))
-                break
-            case .PHONE_CONTACTS:
+                completion?(.init(cacheResponse: threads))
+            case .phoneContacts:
                 let phoneContacts = PhoneContact.crud.getAll()
-                completion?(.init(cacheResponse:phoneContacts))
-                break
-            case .ALL_THREADS:
+                completion?(.init(cacheResponse: phoneContacts))
+            case .allThreads:
                 let threads = CMConversation.crud.getAll()
-                completion?(.init(cacheResponse:threads))
-                break
-            case .GET_ASSISTANTS(_ :let count, _ :let offset):
+                completion?(.init(cacheResponse: threads))
+            case let .getAssistants(_: count, _: offset):
                 let assistants = CMAssistant.crud.fetchWithOffset(count: count, offset: offset, predicate: nil)
-                completion?(.init(cacheResponse:assistants.map{$0.getCodable()}))
-                break
-            case .GET_BLOCKED_ASSISTANTS(_ :let count, _ :let offset):
-                let assistants = CMAssistant.crud.fetchWithOffset(count: count, offset: offset, predicate: NSPredicate(format: "block == %@",NSNumber(value: true)))
-                completion?(.init(cacheResponse:assistants.map{$0.getCodable()}))
-                break
-            case .GET_MUTUAL_GROUPS(_ :let req):
+                completion?(.init(cacheResponse: assistants.map { $0.getCodable() }))
+            case let .getBlockedAssistants(_: count, _: offset):
+                let assistants = CMAssistant.crud.fetchWithOffset(count: count, offset: offset, predicate: NSPredicate(format: "block == %@", NSNumber(value: true)))
+                completion?(.init(cacheResponse: assistants.map { $0.getCodable() }))
+            case let .getMutualGroups(_: req):
                 let conversations = CMMutualGroup.getMutualGroups(req)
-                completion?(.init(cacheResponse:conversations))
-                break
-            case .TAGS:
+                completion?(.init(cacheResponse: conversations))
+            case .tags:
                 let tags = CMTag.crud.getAll()
-                completion?(.init(cacheResponse:tags.map{$0.getCodable()}))
-                break
+                completion?(.init(cacheResponse: tags.map { $0.getCodable() }))
             }
         }
     }
-    
-    public class func write(cacheType: WriteCacheType){
-        if Chat.sharedInstance.config?.enableCache == true{
+
+    public class func write(cacheType: WriteCacheType) {
+        if Chat.sharedInstance.config?.enableCache == true {
             switch cacheType {
-            case .CASHE_CONTACTS(contacts: let contacts):
+            case let .casheContacts(contacts: contacts):
                 CMContact.insertOrUpdate(contacts: contacts)
+            case .getBlockedUsers:
                 break
-            case .GET_BLOCKED_USERS:
-                break
-            case .THREADS(_ : let threads):
+            case let .threads(_: threads):
                 CMConversation.insertOrUpdate(conversations: threads)
-                break
-            case .PARTICIPANTS(_ : let participants , _ : let threadId):
-                CMParticipant.insertOrUpdateParicipants(participants: participants ,fromMainMethod: true, threadId: threadId)
-                break
-            case .REMOVE_PARTICIPANTS(_: let participants, _: let threadId):
-                CMParticipant.deleteParticipants(participants: participants , threadId: threadId)
-                break
-            case .LEAVE_THREAD(_ : let threadId):
-                CMParticipant.crud.deleteWith(predicate: NSPredicate(format: "threadId == %i" , threadId))
-                CMConversation.crud.deleteWith(predicate: NSPredicate(format: "id == %i" , threadId))
-                break                
-            case .CURRENT_USER_ROLES(_ :let roles, _ :let threadId):
-                if let threadId = threadId{
+            case let .participants(_: participants, _: threadId):
+                CMParticipant.insertOrUpdateParicipants(participants: participants, fromMainMethod: true, threadId: threadId)
+            case let .removeParticipants(_: participants, _: threadId):
+                CMParticipant.deleteParticipants(participants: participants, threadId: threadId)
+            case let .leaveThread(_: threadId):
+                CMParticipant.crud.deleteWith(predicate: NSPredicate(format: "threadId == %i", threadId))
+                CMConversation.crud.deleteWith(predicate: NSPredicate(format: "id == %i", threadId))
+            case let .currentUserRoles(_: roles, _: threadId):
+                if let threadId = threadId {
                     CMCurrentUserRoles.insertOrUpdate(roles: roles, threadId: threadId)
                 }
-                break
-            case .USER_INFO(_ : let user):
+            case let .userInfo(_: user):
                 CMUser.insertOrUpdate(user: user, resultEntity: nil)
-                break
-            case .PIN_MESSAGE(_ : let pinMessage , _: let threadId):
-                CMPinMessage.pinMessage(pinMessage: pinMessage , threadId: threadId)
-                break
-            case .UNPIN_MESSAGE(_ : let unpinMessage, _: let threadId):
-                CMPinMessage.unpinMessage(pinMessage: unpinMessage , threadId: threadId)
-                break
-            case .CLEAR_ALL_HISTORY(_: let threadId):
-                CMMessage.crud.deleteWith(predicate: NSPredicate(format:"threadId == %i" , threadId))
-                break
-            case .DELETE_MESSAGE(_ :let threadId , _ :let messageId):
-                CMMessage.crud.deleteWith(predicate: NSPredicate(format:"threadId == %i AND id == %i" , threadId , messageId))
-                break
-            case .DELETE_MESSAGES(_ :let threadId , _ :let messageIds):
-                CMMessage.crud.fetchWith(NSPredicate(format:"threadId == %i AND id IN %@" , threadId , messageIds))?.forEach({ entity in
+            case let .pinMessage(_: pinMessage, _: threadId):
+                CMPinMessage.pinMessage(pinMessage: pinMessage, threadId: threadId)
+            case let .unpinMessage(_: unpinMessage, _: threadId):
+                CMPinMessage.unpinMessage(pinMessage: unpinMessage, threadId: threadId)
+            case let .clearAllHistory(_: threadId):
+                CMMessage.crud.deleteWith(predicate: NSPredicate(format: "threadId == %i", threadId))
+            case let .deleteMessage(_: threadId, _: messageId):
+                CMMessage.crud.deleteWith(predicate: NSPredicate(format: "threadId == %i AND id == %i", threadId, messageId))
+            case let .deleteMessages(_: threadId, _: messageIds):
+                CMMessage.crud.fetchWith(NSPredicate(format: "threadId == %i AND id IN %@", threadId, messageIds))?.forEach { entity in
                     CMMessage.crud.delete(entity: entity)
-                })
-                break
-            case .SEND_TXET_MESSAGE_QUEUE(_ :let req):
+                }
+            case let .sendTxetMessageQueue(_: req):
                 QueueOfTextMessages.insert(request: req)
-                break
-            case .DELETE_SEND_TXET_MESSAGE_QUEUE(_ :let uniqueId):
+            case let .deleteSendTxetMessageQueue(_: uniqueId):
                 QueueOfTextMessages.crud.deleteWith(predicate: NSPredicate(format: "uniqueId == %@", uniqueId))
-                break
-            case .MESSAGE(_ :let message):
+            case let .message(_: message):
                 CMMessage.insertOrUpdate(message: message)
-                break
-            case .EDIT_MESSAGE_QUEUE(_ :let req):
+            case let .editMessageQueue(_: req):
                 QueueOfEditMessages.insert(request: req)
-                break
-            case .DELETE_EDIT_MESSAGE_QUEUE(_ : let message):
-                guard let messageId = message.id ,  let threadId = message.conversation?.id else{return}
-                QueueOfEditMessages.crud.deleteWith(predicate: NSPredicate(format: "messageId == %i AND threadId == %i", messageId , threadId))
-                break
-            case .FORWARD_MESSAGE_QUEUE(_ : let req):
+            case let .deleteEditMessageQueue(_: message):
+                guard let messageId = message.id, let threadId = message.conversation?.id else { return }
+                QueueOfEditMessages.crud.deleteWith(predicate: NSPredicate(format: "messageId == %i AND threadId == %i", messageId, threadId))
+            case let .forwardMessageQueue(_: req):
                 QueueOfForwardMessages.insert(request: req)
-                break
-            case .DELETE_FORWARD_MESSAGE_QUEUE(_ : let uniqueId):
+            case let .deleteForwardMessageQueue(_: uniqueId):
                 QueueOfForwardMessages.crud.deleteWith(predicate: NSPredicate(format: "uniqueId == %@", uniqueId))
-                break
-            case .SEND_FILE_MESSAGE_QUEUE(_ : let req, _ : let textMessage):
+            case let .sendFileMessageQueue(_: req, _: textMessage):
                 QueueOfFileMessages.insert(request: req, textMessage: textMessage)
-                break
-            case .DELETE_FILE_MESSAGE_QUEUE(_ : let uniqueId):
-                QueueOfFileMessages.crud.deleteWith(predicate: NSPredicate(format:  "uniqueId == %@", uniqueId))
-                break
-            case .UPLOAD_FILE_QUEUE(_ : let req):
+            case let .deleteFileMessageQueue(_: uniqueId):
+                QueueOfFileMessages.crud.deleteWith(predicate: NSPredicate(format: "uniqueId == %@", uniqueId))
+            case let .uploadFileQueue(_: req):
                 QueueOfUploadFiles.insert(request: req)
-                break
-            case .UPLOAD_IMAGE_QUEUE(_ : let req):
+            case let .uploadImageQueue(_: req):
                 QueueOfUploadImages.insert(request: req)
-                break
-            case .DELETE_UPLOAD_IMAGE_QUEUE(_ : let uniqueId):
-                QueueOfUploadImages.crud.deleteWith(predicate: NSPredicate(format:  "uniqueId == %@", uniqueId))
-                break
-            case .DELETE_UPLOAD_FILE_QUEUE(_ : let uniqueId):
-                QueueOfUploadFiles.crud.deleteWith(predicate: NSPredicate(format:  "uniqueId == %@", uniqueId))
-                break
-            case .DELETE_ALL_USER:
+            case let .deleteUploadImageQueue(_: uniqueId):
+                QueueOfUploadImages.crud.deleteWith(predicate: NSPredicate(format: "uniqueId == %@", uniqueId))
+            case let .deleteUploadFileQueue(_: uniqueId):
+                QueueOfUploadFiles.crud.deleteWith(predicate: NSPredicate(format: "uniqueId == %@", uniqueId))
+            case .deleteAllUser:
                 CMUser.crud.deleteAll()
-                break
-            case .DELETE_CONTACTS(_ :let contactIds):
+            case let .deleteContacts(_: contactIds):
                 CMContact.crud.deleteWith(predicate: NSPredicate(format: "id IN %@", contactIds))
-                break
-            case .DELETE_THREADS(_:let threadIds):
+            case let .deleteThreads(_: threadIds):
                 CMConversation.crud.deleteWith(predicate: NSPredicate(format: "id IN %@", threadIds))
-                break
-            case .DELETE_ALL_CONTACTS:
+            case .deleteAllContacts:
                 CMContact.crud.deleteAll()
-                break
-            case .DELETE_ALL_THREADS:
+            case .deleteAllThreads:
                 CMConversation.crud.deleteAll()
-                break
-            case .DELETE_ALL_MESSAGE:
+            case .deleteAllMessage:
                 CMMessage.crud.deleteAll()
-                break
-            case .DELETE_ALL_CACHE_DATA:
+            case .deleteAllCacheData:
                 CMUser.crud.deleteAll()
                 CMContact.crud.deleteAll()
                 PhoneContact.crud.deleteAll()
@@ -327,72 +270,58 @@ public class CacheFactory {
                 CacheFileManager.sharedInstance.deleteAllImages()
                 CMTag.crud.deleteAll()
                 CMTagParticipant.crud.deleteAll()
-                break
-            case .SYNCED_CONTACTS:
+            case .syncedContacts:
                 CMUser.crud.getAll().forEach { user in
                     user.contactSynced = NSNumber(value: true)
                 }
-                break
-            case .DELETE_WAIT_TEXT_MESSAGE(_ : let uniqueId):
+            case let .deleteWaitTextMessage(_: uniqueId):
                 QueueOfTextMessages.crud.deleteWith(predicate: NSPredicate(format: "uniqueId == %@", uniqueId))
-                break
-            case .DELETE_EDIT_TEXT_MESSAGE(_ : let uniqueId):
+            case let .deleteEditTextMessage(_: uniqueId):
                 QueueOfEditMessages.crud.deleteWith(predicate: NSPredicate(format: "uniqueId == %@", uniqueId))
-                break
-            case .DELETE_FORWARD_MESSAGE(_ : let uniqueId):
+            case let .deleteForwardMessage(_: uniqueId):
                 QueueOfForwardMessages.crud.deleteWith(predicate: NSPredicate(format: "uniqueId == %@", uniqueId))
-                break
-            case .DELETE_WAIT_FILE_MESSAGE(_ : let uniqueId):
+            case let .deleteWaitFileMessage(_: uniqueId):
                 QueueOfFileMessages.crud.deleteWith(predicate: NSPredicate(format: "uniqueId == %@", uniqueId))
-                break
-            case .SET_THREAD_UNREAD_COUNT(_ : let threadId, _ : let unreadCount):
-                if let conversation = CMConversation.crud.find(keyWithFromat: "id == %i", value: threadId){
-                    conversation.unreadCount = NSNumber(value: (unreadCount))
+            case let .setThreadUnreadCount(_: threadId, _: unreadCount):
+                if let conversation = CMConversation.crud.find(keyWithFromat: "id == %i", value: threadId) {
+                    conversation.unreadCount = NSNumber(value: unreadCount)
                 }
-                break
-            case .INSERT_OR_UPDATE_ASSISTANTS(_ : let assistants):
-                CMAssistant.insertOrUpdate(assistants:assistants)
-                break
-            case .DELETE_ASSISTANTS(_ : let assistants):
+            case let .insertOrUpdateAssistants(_: assistants):
+                CMAssistant.insertOrUpdate(assistants: assistants)
+            case let .deleteAssistants(_: assistants):
                 assistants.forEach { assistant in
                     CMAssistant.crud.deleteWith(predicate: NSPredicate(format: "inviteeId == %i", assistant.participant?.id ?? -1))
                 }
-                break
-            case .MUTUAL_GROUPS(_ : let conversations , _ : let req ):
+            case let .mutualGroups(_: conversations, _: req):
                 CMMutualGroup.insertOrUpdate(conversations: conversations, req: req)
-                break
-            case .MUTE_UNMUTE_THREAD(_ : let threadId):
-                if let conversation = CMConversation.crud.find(keyWithFromat: "id == %i", value: threadId){
-                    let isMute = !( (conversation.mute as? Bool) ?? false)
+            case let .muteUnmuteThread(_: threadId):
+                if let conversation = CMConversation.crud.find(keyWithFromat: "id == %i", value: threadId) {
+                    let isMute = !((conversation.mute as? Bool) ?? false)
                     conversation.mute = NSNumber(booleanLiteral: isMute)
                 }
-                
-            case .PIN_UNPIN_THREAD(_ : let threadId):
-                if let conversation = CMConversation.crud.find(keyWithFromat: "id == %i", value: threadId){
-                    let isPin = !( (conversation.pin as? Bool) ?? false)
+            case let .pinUnpinThread(_: threadId):
+                if let conversation = CMConversation.crud.find(keyWithFromat: "id == %i", value: threadId) {
+                    let isPin = !((conversation.pin as? Bool) ?? false)
                     conversation.pin = NSNumber(booleanLiteral: isPin)
                 }
-            case .TAGS(_ : let tags):
+            case let .tags(_: tags):
                 CMTag.insertOrUpdate(tags: tags)
-                break
-            case .TAG_PARTICIPANTS(_ : let tagParticipants , _ : let tagId ):
+            case let .tagParticipants(_: tagParticipants, _: tagId):
                 tagParticipants.forEach { tagParticipant in
-                    CMTagParticipant.insertOrUpdate(tagParticipant: tagParticipant, tagId:tagId){ tagParticipant in
+                    CMTagParticipant.insertOrUpdate(tagParticipant: tagParticipant, tagId: tagId) { tagParticipant in
                         CMTag.addParticipant(tagId: tagId, tagParticipant: tagParticipant)
                     }
                 }
-            case .DELETE_TAG(_ : let tag):
+            case let .deleteTag(_: tag):
                 CMTag.crud.deleteWith(predicate: NSPredicate(format: "id == %i", tag.id))
                 CMTagParticipant.crud.deleteWith(predicate: NSPredicate(format: "tagId == %i", tag.id))
-                break
-            case .DELETE_TAG_PARTICIPANTS(_ : let tagParticipants):
-                CMTagParticipant.crud.deleteWith(predicate: NSPredicate(format: "id IN %@", tagParticipants.map{$0.id}))
-                break
+            case let .deleteTagParticipants(_: tagParticipants):
+                CMTagParticipant.crud.deleteWith(predicate: NSPredicate(format: "id IN %@", tagParticipants.map(\.id)))
             }
         }
     }
-    
-    class func save(){
+
+    class func save() {
         PSM.shared.save()
     }
 }

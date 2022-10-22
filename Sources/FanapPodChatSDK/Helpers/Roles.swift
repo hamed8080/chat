@@ -1,39 +1,32 @@
 //
-//  Roles.h
-//  FanapPodChatSDK
+// Roles.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 11/1/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
 
-
 public enum Roles: String, Codable, SafeDecodable {
-    
-    case CHANGE_THREAD_INFO       = "CHANGE_THREAD_INFO"
-    case POST_CHANNEL_MESSAGE     = "POST_CHANNEL_MESSAGE"
-    case EDIT_MESSAGE_OF_OTHERS   = "EDIT_MESSAGE_OF_OTHERS"
-    case DELETE_MESSAGE_OF_OTHERS = "DELETE_MESSAGE_OF_OTHERS"
-    case ADD_NEW_USER             = "ADD_NEW_USER"
-    case REMOVE_USER              = "REMOVE_USER"
-    case ADD_RULE_TO_USER         = "ADD_RULE_TO_USER"
-    case REMOVE_ROLE_FROM_USER    = "REMOVE_ROLE_FROM_USER"
-    case READ_THREAD              = "READ_THREAD"
-    case EDIT_THREAD              = "EDIT_THREAD"
-    case THREAD_ADMIN             = "THREAD_ADMIN"
-    case OWNERSHIP                = "OWNERSHIP"
-
+    case changeThreadInfo = "CHANGE_THREAD_INFO"
+    case postChannelMessage = "POST_CHANNEL_MESSAGE"
+    case editMessageOfOthers = "EDIT_MESSAGE_OF_OTHERS"
+    case deleteMessageOfOthers = "DELETE_MESSAGE_OF_OTHERS"
+    case addNewUser = "ADD_NEW_USER"
+    case removeUser = "REMOVE_USER"
+    case addRuleToUser = "ADD_RULE_TO_USER"
+    case removeRoleFromUser = "REMOVE_ROLE_FROM_USER"
+    case readThread = "READ_THREAD"
+    case editThread = "EDIT_THREAD"
+    case threadAdmin = "THREAD_ADMIN"
+    case ownership = "OWNERSHIP"
 
     /// Only when can't decode a type.
     ///
     /// Do not remove or move this property to the top of the enum, it must be the last enum because it uses ``SafeDecodable`` to decode the last item if no match found.
-    case UNKNOWN
+    case unknown
 }
 
-
-public enum RoleOperations:String {
-    
-    case Add         =  "add"
-    case Remove      =  "remove"
+public enum RoleOperations: String {
+    case add
+    case remove
 }
-

@@ -1,19 +1,18 @@
 //
-//  SMT.swift
-//  FanapPodChatSDK
+// SMT.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 3/3/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
 
-public enum SMT : Int,Codable, SafeDecodable {
-    case IS_TYPING      = 1
-    case RECORD_VOICE   = 2
-    case UPLOAD_PICTURE = 3
-    case UPLOAD_VIDEO   = 4
-    case UPLOAD_SOUND   = 5
-    case UPLOAD_FILE    = 6
-    case SERVER_TIME    = -1
-    case UNKNOWN
+public enum SMT: Int, Codable, SafeDecodable {
+    case isTyping = 1
+    case recordVoice = 2
+    case uploadPicture = 3
+    case uploadVideo = 4
+    case uploadSound = 5
+    case uploadFile = 6
+    case serverTime = -1
+    case unknown
 }

@@ -1,17 +1,14 @@
 //
-//  MessageGaps.h
-//  FanapPodChatSDK
+// MessageGaps+CoreDataProperties.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 11/1/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-
-import Foundation
 import CoreData
+import Foundation
 
-
-extension MessageGaps {
-    @NSManaged public var messageId:    NSNumber?
-    @NSManaged public var threadId:     NSNumber?
-    @NSManaged public var previousId:   NSNumber?
+public extension MessageGaps {
+    @NSManaged var messageId: NSNumber?
+    @NSManaged var threadId: NSNumber?
+    @NSManaged var previousId: NSNumber?
 }

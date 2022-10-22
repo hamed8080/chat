@@ -1,17 +1,15 @@
 //
-//  CloseThreadRequest.swift
-//  FanapPodChatSDK
+// CloseThreadRequest.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 3/3/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class CloseThreadRequest : BaseRequest {
-	
-	public var threadId:Int
-	
-	public init(threadId:Int,uniqueId:String? = nil){
-		self.threadId = threadId
+public class CloseThreadRequest: BaseRequest {
+    public var threadId: Int
+
+    public init(threadId: Int, uniqueId: String? = nil) {
+        self.threadId = threadId
         super.init(uniqueId: uniqueId)
-	}
+    }
 }

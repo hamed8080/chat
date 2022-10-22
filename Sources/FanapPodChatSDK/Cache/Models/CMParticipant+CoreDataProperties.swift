@@ -1,98 +1,91 @@
 //
-//  CMParticipant.h
-//  FanapPodChatSDK
+// CMParticipant+CoreDataProperties.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 11/1/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import CoreData
+import Foundation
 
-
-extension CMParticipant {
-    @NSManaged public var admin:            NSNumber?
-    @NSManaged public var auditor:          NSNumber?
-    @NSManaged public var blocked:          NSNumber?
-    @NSManaged public var cellphoneNumber:  String?
-    @NSManaged public var contactFirstName: String?
-    @NSManaged public var contactId:        NSNumber?
-    @NSManaged public var contactName:      String?
-    @NSManaged public var contactLastName:  String?
-    @NSManaged public var coreUserId:       NSNumber?
-    @NSManaged public var email:            String?
-    @NSManaged public var firstName:        String?
-    @NSManaged public var id:               NSNumber?
-    @NSManaged public var image:            String?
-    @NSManaged public var keyId:            String?
-    @NSManaged public var lastName:         String?
-    @NSManaged public var myFriend:         NSNumber?
-    @NSManaged public var name:             String?
-    @NSManaged public var notSeenDuration:  NSNumber?
-    @NSManaged public var online:           NSNumber?
-    @NSManaged public var receiveEnable:    NSNumber?
-    @NSManaged public var roles:            [String]?
-    @NSManaged public var sendEnable:       NSNumber?
-    @NSManaged public var threadId:         NSNumber?
-    @NSManaged public var time:             NSNumber?
-    @NSManaged public var username:         String?
-    @NSManaged public var bio:              String?
-    @NSManaged public var metadata:         String?
-    @NSManaged public var dummyConversationInviter:         NSSet?
-    @NSManaged public var dummyConversationParticipants:    NSSet?
-    @NSManaged public var dummyForwardInfo:                 CMForwardInfo?
-    @NSManaged public var dummyMessage:                     NSSet?
-    @NSManaged public var dummyReplyInfo:                   CMReplyInfo?
-
+public extension CMParticipant {
+    @NSManaged var admin: NSNumber?
+    @NSManaged var auditor: NSNumber?
+    @NSManaged var blocked: NSNumber?
+    @NSManaged var cellphoneNumber: String?
+    @NSManaged var contactFirstName: String?
+    @NSManaged var contactId: NSNumber?
+    @NSManaged var contactName: String?
+    @NSManaged var contactLastName: String?
+    @NSManaged var coreUserId: NSNumber?
+    @NSManaged var email: String?
+    @NSManaged var firstName: String?
+    @NSManaged var id: NSNumber?
+    @NSManaged var image: String?
+    @NSManaged var keyId: String?
+    @NSManaged var lastName: String?
+    @NSManaged var myFriend: NSNumber?
+    @NSManaged var name: String?
+    @NSManaged var notSeenDuration: NSNumber?
+    @NSManaged var online: NSNumber?
+    @NSManaged var receiveEnable: NSNumber?
+    @NSManaged var roles: [String]?
+    @NSManaged var sendEnable: NSNumber?
+    @NSManaged var threadId: NSNumber?
+    @NSManaged var time: NSNumber?
+    @NSManaged var username: String?
+    @NSManaged var bio: String?
+    @NSManaged var metadata: String?
+    @NSManaged var dummyConversationInviter: NSSet?
+    @NSManaged var dummyConversationParticipants: NSSet?
+    @NSManaged var dummyForwardInfo: CMForwardInfo?
+    @NSManaged var dummyMessage: NSSet?
+    @NSManaged var dummyReplyInfo: CMReplyInfo?
 }
 
-
 // MARK: Generated accessors for dummyConversationInviter
-extension CMParticipant {
 
+public extension CMParticipant {
     @objc(addDummyConversationInviterObject:)
-    @NSManaged public func addToDummyConversationInviter(_ value: CMConversation)
+    @NSManaged func addToDummyConversationInviter(_ value: CMConversation)
 
     @objc(removeDummyConversationInviterObject:)
-    @NSManaged public func removeFromDummyConversationInviter(_ value: CMConversation)
+    @NSManaged func removeFromDummyConversationInviter(_ value: CMConversation)
 
     @objc(addDummyConversationInviter:)
-    @NSManaged public func addToDummyConversationInviter(_ values: NSSet)
+    @NSManaged func addToDummyConversationInviter(_ values: NSSet)
 
     @objc(removeDummyConversationInviter:)
-    @NSManaged public func removeFromDummyConversationInviter(_ values: NSSet)
-
+    @NSManaged func removeFromDummyConversationInviter(_ values: NSSet)
 }
 
 // MARK: Generated accessors for dummyConversationParticipants
-extension CMParticipant {
 
+public extension CMParticipant {
     @objc(addDummyConversationParticipantsObject:)
-    @NSManaged public func addToDummyConversationParticipants(_ value: CMConversation)
+    @NSManaged func addToDummyConversationParticipants(_ value: CMConversation)
 
     @objc(removeDummyConversationParticipantsObject:)
-    @NSManaged public func removeFromDummyConversationParticipants(_ value: CMConversation)
+    @NSManaged func removeFromDummyConversationParticipants(_ value: CMConversation)
 
     @objc(addDummyConversationParticipants:)
-    @NSManaged public func addToDummyConversationParticipants(_ values: NSSet)
+    @NSManaged func addToDummyConversationParticipants(_ values: NSSet)
 
     @objc(removeDummyConversationParticipants:)
-    @NSManaged public func removeFromDummyConversationParticipants(_ values: NSSet)
-
+    @NSManaged func removeFromDummyConversationParticipants(_ values: NSSet)
 }
 
 // MARK: Generated accessors for dummyMessage
-extension CMParticipant {
 
+public extension CMParticipant {
     @objc(addDummyMessageObject:)
-    @NSManaged public func addToDummyMessage(_ value: CMMessage)
+    @NSManaged func addToDummyMessage(_ value: CMMessage)
 
     @objc(removeDummyMessageObject:)
-    @NSManaged public func removeFromDummyMessage(_ value: CMMessage)
+    @NSManaged func removeFromDummyMessage(_ value: CMMessage)
 
     @objc(addDummyMessage:)
-    @NSManaged public func addToDummyMessage(_ values: NSSet)
+    @NSManaged func addToDummyMessage(_ values: NSSet)
 
     @objc(removeDummyMessage:)
-    @NSManaged public func removeFromDummyMessage(_ values: NSSet)
-
+    @NSManaged func removeFromDummyMessage(_ values: NSSet)
 }

@@ -1,27 +1,24 @@
 //
-//  CMContact.h
-//  FanapPodChatSDK
+// CMContact+CoreDataProperties.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 11/1/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import CoreData
+import Foundation
 
-extension CMContact {
-    
-    @NSManaged public var blocked:          NSNumber?
-    @NSManaged public var cellphoneNumber:  String?
-    @NSManaged public var email:            String?
-    @NSManaged public var firstName:        String?
-    @NSManaged public var hasUser:          NSNumber?
-    @NSManaged public var id:               NSNumber?
-    @NSManaged public var image:            String?
-    @NSManaged public var lastName:         String?
-    @NSManaged public var notSeenDuration:  NSNumber?
-    @NSManaged public var time:             NSNumber?
-    @NSManaged public var uniqueId:         String?
-    @NSManaged public var userId:           NSNumber?
-    @NSManaged public var linkedUser:       CMLinkedUser?
-
+public extension CMContact {
+    @NSManaged var blocked: NSNumber?
+    @NSManaged var cellphoneNumber: String?
+    @NSManaged var email: String?
+    @NSManaged var firstName: String?
+    @NSManaged var hasUser: NSNumber?
+    @NSManaged var id: NSNumber?
+    @NSManaged var image: String?
+    @NSManaged var lastName: String?
+    @NSManaged var notSeenDuration: NSNumber?
+    @NSManaged var time: NSNumber?
+    @NSManaged var uniqueId: String?
+    @NSManaged var userId: NSNumber?
+    @NSManaged var linkedUser: CMLinkedUser?
 }

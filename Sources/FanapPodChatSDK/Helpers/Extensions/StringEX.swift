@@ -1,23 +1,21 @@
 //
-//  StringEX.swift
-//  FanapPodChatSDK
+// StringEX.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 11/22/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import CommonCrypto
 import CryptoKit
+import Foundation
 
-extension String{
-    
-    var md5:String?{
+extension String {
+    var md5: String? {
         if #available(iOS 13.0, *) {
             let digest = Insecure.MD5.hash(data: self.data(using: .utf8) ?? Data())
             return digest.map { String(format: "%02hhx", $0) }.joined()
         } else {
             let length = Int(CC_MD5_DIGEST_LENGTH)
-            let messageData = self.data(using:.utf8)!
+            let messageData = data(using: .utf8)!
             var digestData = Data(count: length)
 
             _ = digestData.withUnsafeMutableBytes { digestBytes -> UInt8 in
@@ -32,7 +30,7 @@ extension String{
             return digestData.map { String(format: "%02hhx", $0) }.joined()
         }
     }
-    
+
 //    func convertToJSON() -> JSON {
 //        if let dataFromStringMsg = self.data(using: .utf8, allowLossyConversion: false) {
 //            if let msg = try? JSON(data: dataFromStringMsg) {
@@ -45,17 +43,17 @@ extension String{
 //        }
 //    }
 
-    public func removeBackSlashes()->String{
-        return self.replacingOccurrences(of: "\\\\\"", with: "\"")
-        .replacingOccurrences(of: "\\\"", with: "\"")
-        .replacingOccurrences(of: "\\\"", with: "\"")
-        .replacingOccurrences(of: "\\\"", with: "\"")
-        .replacingOccurrences(of: "\\\\\"", with: "\"")
-        .replacingOccurrences(of: "\\\"", with: "\"")
-        .replacingOccurrences(of: "\\\"", with: "\"")
-        .replacingOccurrences(of: "\"{", with: "\n{")
-        .replacingOccurrences(of: "}\"", with: "}\n")
-        .replacingOccurrences(of: "\"[", with: "\n[")
-        .replacingOccurrences(of: "]\"", with: "]\n")
+    public func removeBackSlashes() -> String {
+        replacingOccurrences(of: "\\\\\"", with: "\"")
+            .replacingOccurrences(of: "\\\"", with: "\"")
+            .replacingOccurrences(of: "\\\"", with: "\"")
+            .replacingOccurrences(of: "\\\"", with: "\"")
+            .replacingOccurrences(of: "\\\\\"", with: "\"")
+            .replacingOccurrences(of: "\\\"", with: "\"")
+            .replacingOccurrences(of: "\\\"", with: "\"")
+            .replacingOccurrences(of: "\"{", with: "\n{")
+            .replacingOccurrences(of: "}\"", with: "}\n")
+            .replacingOccurrences(of: "\"[", with: "\n[")
+            .replacingOccurrences(of: "]\"", with: "]\n")
     }
 }

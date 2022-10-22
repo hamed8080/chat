@@ -1,29 +1,23 @@
 //
-//  UnBlockContactRequestHandler.swift
-//  FanapPodChatSDK
+// UnBlockContactRequestHandler.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 2/17/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import Contacts
+import Foundation
 
 class UnBlockContactRequestHandler {
-    
-    class func handle( _ req:UnBlockRequest ,
-                       _ chat:Chat,
-                       _ completion: @escaping  CompletionType<BlockedContact>,
-                       _ uniqueIdResult: UniqueIdResultType = nil
-    ){
-        
+    class func handle(_ req: UnBlockRequest,
+                      _ chat: Chat,
+                      _ completion: @escaping CompletionType<BlockedContact>,
+                      _ uniqueIdResult: UniqueIdResultType = nil)
+    {
         chat.prepareToSendAsync(req: req,
                                 clientSpecificUniqueId: req.uniqueId,
-                                messageType: .UNBLOCK,
+                                messageType: .unblock,
                                 uniqueIdResult: uniqueIdResult) { response in
-            completion(response.result as? BlockedContact,response.uniqueId , response.error)
+            completion(response.result as? BlockedContact, response.uniqueId, response.error)
         }
-        
     }
-    
-    
 }

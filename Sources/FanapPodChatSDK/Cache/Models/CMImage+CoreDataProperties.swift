@@ -1,22 +1,19 @@
 //
-//  CMImage.h
-//  FanapPodChatSDK
+// CMImage+CoreDataProperties.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 11/1/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import CoreData
+import Foundation
 
-extension CMImage {
-    
-    @NSManaged public var actualHeight: NSNumber?
-    @NSManaged public var actualWidth:  NSNumber?
-    @NSManaged public var hashCode:     String?
-    @NSManaged public var height:       NSNumber?
-    @NSManaged public var isThumbnail:  NSNumber?
-    @NSManaged public var name:         String?
-    @NSManaged public var size:         NSNumber?
-    @NSManaged public var width:        NSNumber?
-    
+public extension CMImage {
+    @NSManaged var actualHeight: NSNumber?
+    @NSManaged var actualWidth: NSNumber?
+    @NSManaged var hashCode: String?
+    @NSManaged var height: NSNumber?
+    @NSManaged var isThumbnail: NSNumber?
+    @NSManaged var name: String?
+    @NSManaged var size: NSNumber?
+    @NSManaged var width: NSNumber?
 }

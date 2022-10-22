@@ -1,29 +1,27 @@
 //
-//  SendStartTypingRequestHandler.swift
-//  FanapPodChatSDK
+// SendStartTypingRequestHandler.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 3/15/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import FanapPodAsyncSDK
-class SendStartTypingRequestHandler{
-    
+import Foundation
+class SendStartTypingRequestHandler {
     static var isTypingCount = 0
-    static var timer :Timer? = nil
-    static var timerCheckUserStoppedTyping:Timer? = nil
-    
-    class func handle(_ threadId:Int , _ chat:Chat, onEndStartTyping:(()->())? = nil ){
-        if isSendingIsTypingStarted(){
+    static var timer: Timer?
+    static var timerCheckUserStoppedTyping: Timer?
+
+    class func handle(_ threadId: Int, _: Chat, onEndStartTyping _: (() -> Void)? = nil) {
+        if isSendingIsTypingStarted() {
             stopTimerWhenUserIsNotTyping()
             return
         }
-        isTypingCount  = 0
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true){ _ in
-            if (self.isTypingCount < 30) {
+        isTypingCount = 0
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+            if self.isTypingCount < 30 {
                 self.isTypingCount += 1
                 DispatchQueue.main.async {
-                    Chat.sharedInstance.sendSignalMessage(req: .init(signalType: .IS_TYPING , threadId:threadId))
+                    Chat.sharedInstance.sendSignalMessage(req: .init(signalType: .isTyping, threadId: threadId))
                 }
             } else {
                 stopTyping()
@@ -31,19 +29,19 @@ class SendStartTypingRequestHandler{
         }
         stopTimerWhenUserIsNotTyping()
     }
-    
-    class func isSendingIsTypingStarted()->Bool{
-        return timer != nil
+
+    class func isSendingIsTypingStarted() -> Bool {
+        timer != nil
     }
-    
-    class func stopTimerWhenUserIsNotTyping(){
+
+    class func stopTimerWhenUserIsNotTyping() {
         timerCheckUserStoppedTyping?.invalidate()
-        timerCheckUserStoppedTyping = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { timer in
+        timerCheckUserStoppedTyping = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { _ in
             SendStartTypingRequestHandler.stopTyping()
         })
     }
-    
-    class func stopTyping(){
+
+    class func stopTyping() {
         timer?.invalidate()
         timer = nil
         isTypingCount = 0

@@ -1,27 +1,25 @@
 //
-//  CreateTagResponseHandler.swift
-//  FanapPodChatSDK
+// CreateTagResponseHandler.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 2/22/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import FanapPodAsyncSDK
+import Foundation
 
 class CreateTagResponseHandler: ResponseHandler {
-	
-	static func handle(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else {return}
-		let chat = Chat.sharedInstance
-		
-		guard let data = chatMessage.content?.data(using: .utf8) else {return}
-		guard let tag = try? JSONDecoder().decode(Tag.self, from: data) else{return}
-        chat.delegate?.chatEvent(event: .Tag(.init(tag: tag, type: .CREATE_TAG)))
-        CacheFactory.write(cacheType: .TAGS([tag]))
+    static func handle(_ asyncMessage: AsyncMessage) {
+        guard let chatMessage = asyncMessage.chatMessage else { return }
+        let chat = Chat.sharedInstance
+
+        guard let data = chatMessage.content?.data(using: .utf8) else { return }
+        guard let tag = try? JSONDecoder().decode(Tag.self, from: data) else { return }
+        chat.delegate?.chatEvent(event: .tag(.init(tag: tag, type: .createTag)))
+        CacheFactory.write(cacheType: .tags([tag]))
         PSM.shared.save()
-        
-        guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
-		callback(.init(uniqueId:chatMessage.uniqueId , result: tag))
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .CREATE_TAG)
-	}
+
+        guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
+        callback(.init(uniqueId: chatMessage.uniqueId, result: tag))
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .createTag)
+    }
 }

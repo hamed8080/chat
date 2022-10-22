@@ -1,18 +1,17 @@
 //
-//  CMAssistant.h
-//  FanapPodChatSDK
+// CMAssistant+CoreDataProperties.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 11/1/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import CoreData
+import Foundation
 
-extension CMAssistant {
-    @NSManaged public var inviteeId   : NSNumber? //inviteeId == participant.Id
-    @NSManaged public var contactType : String?
-    @NSManaged public var assistant   : NSData?
-    @NSManaged public var participant : CMParticipant?
-    @NSManaged public var roles       : [String]?
-    @NSManaged public var block       : NSNumber
+public extension CMAssistant {
+    @NSManaged var inviteeId: NSNumber? // inviteeId == participant.Id
+    @NSManaged var contactType: String?
+    @NSManaged var assistant: NSData?
+    @NSManaged var participant: CMParticipant?
+    @NSManaged var roles: [String]?
+    @NSManaged var block: NSNumber
 }

@@ -1,35 +1,33 @@
 //
-//  CMMessage.h
-//  FanapPodChatSDK
+// CMMessage+CoreDataProperties.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 11/1/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import CoreData
+import Foundation
 
-extension CMMessage {
-    @NSManaged public var deletable:        NSNumber?
-    @NSManaged public var delivered:        NSNumber?
-    @NSManaged public var editable:         NSNumber?
-    @NSManaged public var edited:           NSNumber?
-    @NSManaged public var id:               NSNumber?
-    @NSManaged public var mentioned:        NSNumber?
-    @NSManaged public var message:          String?
-    @NSManaged public var messageType:      NSNumber?
-    @NSManaged public var metadata:         String?
-    @NSManaged public var ownerId:          NSNumber?
-    @NSManaged public var pinned:           NSNumber?
-    @NSManaged public var previousId:       NSNumber?
-    @NSManaged public var seen:             NSNumber?
-    @NSManaged public var systemMetadata:   String?
-    @NSManaged public var threadId:         NSNumber?
-    @NSManaged public var time:             NSNumber?
-    @NSManaged public var uniqueId:         String?
-    @NSManaged public var conversation:     CMConversation?
-    @NSManaged public var dummyConversationLastMessageVO: CMConversation?
-    @NSManaged public var forwardInfo:      CMForwardInfo?
-    @NSManaged public var participant:      CMParticipant?
-    @NSManaged public var replyInfo:        CMReplyInfo?
-    
+public extension CMMessage {
+    @NSManaged var deletable: NSNumber?
+    @NSManaged var delivered: NSNumber?
+    @NSManaged var editable: NSNumber?
+    @NSManaged var edited: NSNumber?
+    @NSManaged var id: NSNumber?
+    @NSManaged var mentioned: NSNumber?
+    @NSManaged var message: String?
+    @NSManaged var messageType: NSNumber?
+    @NSManaged var metadata: String?
+    @NSManaged var ownerId: NSNumber?
+    @NSManaged var pinned: NSNumber?
+    @NSManaged var previousId: NSNumber?
+    @NSManaged var seen: NSNumber?
+    @NSManaged var systemMetadata: String?
+    @NSManaged var threadId: NSNumber?
+    @NSManaged var time: NSNumber?
+    @NSManaged var uniqueId: String?
+    @NSManaged var conversation: CMConversation?
+    @NSManaged var dummyConversationLastMessageVO: CMConversation?
+    @NSManaged var forwardInfo: CMForwardInfo?
+    @NSManaged var participant: CMParticipant?
+    @NSManaged var replyInfo: CMReplyInfo?
 }

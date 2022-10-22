@@ -1,24 +1,21 @@
 //
-//  QueueOfUploadFiles.h
-//  FanapPodChatSDK
+// QueueOfUploadFiles+CoreDataProperties.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 11/1/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import CoreData
+import Foundation
 
-
-extension QueueOfUploadFiles {
-    @NSManaged public var dataToSend:       NSData?
-    @NSManaged public var fileExtension:    String?
-    @NSManaged public var fileName:         String?
-    @NSManaged public var fileSize:         NSNumber?
-    @NSManaged public var isPublic:         NSNumber?
-    @NSManaged public var mimeType:         String?
-    @NSManaged public var originalName:     String?
-    @NSManaged public var userGroupHash:    String?
-    @NSManaged public var typeCode:         String?
-    @NSManaged public var uniqueId:         String?
-
+public extension QueueOfUploadFiles {
+    @NSManaged var dataToSend: NSData?
+    @NSManaged var fileExtension: String?
+    @NSManaged var fileName: String?
+    @NSManaged var fileSize: NSNumber?
+    @NSManaged var isPublic: NSNumber?
+    @NSManaged var mimeType: String?
+    @NSManaged var originalName: String?
+    @NSManaged var userGroupHash: String?
+    @NSManaged var typeCode: String?
+    @NSManaged var uniqueId: String?
 }

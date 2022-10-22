@@ -1,32 +1,30 @@
 //
-//  ThreadEventTypes.swift
-//  FanapPodChatSDK
+// ThreadEventTypes.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 3/3/21.
-//
-
+// Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
 
 public enum ThreadEventTypes {
-    case THREAD_CLOSED(threadId:Int)
-    case THREAD_UNREAD_COUNT_UPDATED(threadId:Int, count:Int)
-    case THREAD_LAST_ACTIVITY_TIME(time:Int, threadId:Int?)
-    case THREAD_PIN(threadId:Int)
-    case THREAD_UNPIN(threadId:Int)
-    case THREAD_INFO_UPDATED(Conversation)
-    case THREAD_USER_ROLE(threadId:Int, roles:[UserRole])
-    case THREAD_ADD_PARTICIPANTS(thread:Conversation, [Participant]?)
-    case THREAD_LEAVE_SAFTLY_FAILED(threadId:Int)
-    case THREAD_LEAVE_PARTICIPANT(User)
-    case THREAD_REMOVED_FROM(threadId:Int)
-    case THREAD_MUTE(threadId:Int)
-    case THREAD_UNMUTE(threadId:Int)
-    case THREADS_LIST_CHANGE([Conversation])
-    case THREAD_PARTICIPANTS_LIST_CHANGE(threadId:Int?, [Participant])
-    case THREAD_NEW(Conversation)
-    case THREAD_REMOVE_PARTICIPANTS([Participant])
-    case MESSAGE_PIN(threadId:Int?, PinUnpinMessage)
-    case MESSAGE_UNPIN(threadId:Int?, PinUnpinMessage)
-    case THREAD_DELETED(threadId:Int, participant:Participant?)
+    case threadClosed(threadId: Int)
+    case threadUnreadCountUpdated(threadId: Int, count: Int)
+    case threadLastActivityTime(time: Int, threadId: Int?)
+    case threadPin(threadId: Int)
+    case threadUnpin(threadId: Int)
+    case threadInfoUpdated(Conversation)
+    case threadUserRole(threadId: Int, roles: [UserRole])
+    case threadAddParticipants(thread: Conversation, [Participant]?)
+    case threadLeaveSaftlyFailed(threadId: Int)
+    case threadLeaveParticipant(User)
+    case threadRemovedFrom(threadId: Int)
+    case threadMute(threadId: Int)
+    case threadUnmute(threadId: Int)
+    case threadsListChange([Conversation])
+    case threadParticipantsListChange(threadId: Int?, [Participant])
+    case threadNew(Conversation)
+    case threadRemoveParticipants([Participant])
+    case messagePin(threadId: Int?, PinUnpinMessage)
+    case messageUnpin(threadId: Int?, PinUnpinMessage)
+    case threadDeleted(threadId: Int, participant: Participant?)
 }

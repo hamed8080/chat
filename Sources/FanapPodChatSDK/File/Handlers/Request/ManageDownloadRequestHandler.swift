@@ -1,36 +1,31 @@
 //
-//  ManageDownloadRequestHandler.swift
-//  FanapPodChatSDK
+// ManageDownloadRequestHandler.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 4/3/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-class ManageDownloadRequestHandler{
-    
-    class func handle(_ uniqueId:String ,
-                      _ action:DownloaUploadAction ,
-                      _ isImage:Bool,
-                      _ completion:((String,Bool)->())? = nil
-                      ){
-        if let task = Chat.sharedInstance.callbacksManager.getDownloadTask(uniqueId: uniqueId){
+class ManageDownloadRequestHandler {
+    class func handle(_ uniqueId: String,
+                      _ action: DownloaUploadAction,
+                      _: Bool,
+                      _ completion: ((String, Bool) -> Void)? = nil)
+    {
+        if let task = Chat.sharedInstance.callbacksManager.getDownloadTask(uniqueId: uniqueId) {
             switch action {
             case .cancel:
                 task.cancel()
-                completion?("download task with uniqueId \(uniqueId) canceled." ,true)
+                completion?("download task with uniqueId \(uniqueId) canceled.", true)
                 Chat.sharedInstance.callbacksManager.removeDownloadTask(uniqueId: uniqueId)
-                break
             case .suspend:
                 task.suspend()
-                completion?("download task with uniqueId \(uniqueId) suspend." ,true)
-                break
+                completion?("download task with uniqueId \(uniqueId) suspend.", true)
             case .resume:
                 task.resume()
-                completion?("download task with uniqueId \(uniqueId) resumed." ,true)
-                break
+                completion?("download task with uniqueId \(uniqueId) resumed.", true)
             }
-        }else{
-            completion?("download task with uniqueId \(uniqueId) failed or not found." ,false)
+        } else {
+            completion?("download task with uniqueId \(uniqueId) failed or not found.", false)
         }
     }
 }

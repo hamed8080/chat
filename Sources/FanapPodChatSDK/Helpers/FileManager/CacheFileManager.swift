@@ -1,84 +1,79 @@
 //
-//  CacheFileManager.swift
-//  FanapPodChatSDK
+// CacheFileManager.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 4/2/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
 
-
 enum FileManagerPaths: String {
-    case Files = "/Chat/Files/"
-    case Images = "/Chat/Images/"
-    
-    var ImagesForGroup:String{
-        return "\(FileManagerPaths.Images.rawValue.dropFirst())"
+    case files = "/Chat/Files/"
+    case images = "/Chat/Images/"
+
+    var imagesForGroup: String {
+        "\(FileManagerPaths.images.rawValue.dropFirst())"
     }
 }
 
-public class CacheFileManager{
-    
+public class CacheFileManager {
     public static let sharedInstance = CacheFileManager()
-    private let rootPath :String
-    
-    private init(){
+    private let rootPath: String
+
+    private init() {
         if let rootPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first {
             self.rootPath = rootPath
-        }else{
-            self.rootPath = ""
+        } else {
+            rootPath = ""
         }
     }
-    
-    public func getFileUrl(_ hashCode:String?)->URL?{
-        let filePath = rootPath + "/\(FileManagerPaths.Files.rawValue)/" + "\(hashCode ?? "default")"
+
+    public func getFileUrl(_ hashCode: String?) -> URL? {
+        let filePath = rootPath + "/\(FileManagerPaths.files.rawValue)/" + "\(hashCode ?? "default")"
         return URL(fileURLWithPath: filePath)
     }
-    
-    public func getFile(hashCode:String)->(file:FileModel,path:String)?{
-        
-        let predicate = NSPredicate(format: "hashCode == %@", hashCode , NSNumber(value: false))
-        if let findedFile = CMFile.crud.fetchWith(predicate)?.first , let fileModel = findedFile.getCodable(){
-            let filePath = rootPath + "/\(FileManagerPaths.Files.rawValue)/" + "\(findedFile.hashCode ?? "default")"
-            return ( fileModel , filePath)
+
+    public func getFile(hashCode: String) -> (file: FileModel, path: String)? {
+        let predicate = NSPredicate(format: "hashCode == %@", hashCode, NSNumber(value: false))
+        if let findedFile = CMFile.crud.fetchWith(predicate)?.first, let fileModel = findedFile.getCodable() {
+            let filePath = rootPath + "/\(FileManagerPaths.files.rawValue)/" + "\(findedFile.hashCode ?? "default")"
+            return (fileModel, filePath)
         }
         return nil
     }
-    
-   public func getImage(hashCode:String)->(image:ImageModel,path:String)?{
-        
-        let predicate = NSPredicate(format: "hashCode == %@ AND isThumbnail == %@", hashCode , NSNumber(value: false))
-        if let findedImage = CMImage.crud.fetchWith(predicate)?.first, let imageModel = findedImage.getCodable(){
-            let imagePath = rootPath + "/\(FileManagerPaths.Images.rawValue)/" + "\(findedImage.hashCode ?? "default")"
+
+    public func getImage(hashCode: String) -> (image: ImageModel, path: String)? {
+        let predicate = NSPredicate(format: "hashCode == %@ AND isThumbnail == %@", hashCode, NSNumber(value: false))
+        if let findedImage = CMImage.crud.fetchWith(predicate)?.first, let imageModel = findedImage.getCodable() {
+            let imagePath = rootPath + "/\(FileManagerPaths.images.rawValue)/" + "\(findedImage.hashCode ?? "default")"
             return (imageModel, imagePath)
         }
         return nil
     }
-    
-    public func getThumbnail(hashCode:String)->(image:ImageModel,path:String)?{
-        let predicate = NSPredicate(format: "hashCode == %@ AND isThumbnail == %@", hashCode + "-Thumbnail" , NSNumber(value: true))
-        if let findedImage = CMImage.crud.fetchWith(predicate)?.first, let imageModel = findedImage.getCodable(){
-            let imagePath = rootPath + "/\(FileManagerPaths.Images.rawValue)/" + "\(hashCode + "-Thumbnail")"
+
+    public func getThumbnail(hashCode: String) -> (image: ImageModel, path: String)? {
+        let predicate = NSPredicate(format: "hashCode == %@ AND isThumbnail == %@", hashCode + "-Thumbnail", NSNumber(value: true))
+        if let findedImage = CMImage.crud.fetchWith(predicate)?.first, let imageModel = findedImage.getCodable() {
+            let imagePath = rootPath + "/\(FileManagerPaths.images.rawValue)/" + "\(hashCode + "-Thumbnail")"
             return (imageModel, imagePath)
         }
         return nil
     }
-    
+
     public func retrieveAllImagesSize() -> UInt64 {
-        let path = rootPath + "/\(FileManagerPaths.Images.rawValue)"
+        let path = rootPath + "/\(FileManagerPaths.images.rawValue)"
         let documentsDirectoryURL = URL(fileURLWithPath: path)
         return (try? FileManager.default.allocatedSizeOfDirectory(at: documentsDirectoryURL)) ?? 0
     }
-    
+
     public func retrieveAllFilesSize() -> UInt64 {
-        let path = rootPath + "/\(FileManagerPaths.Files.rawValue)"
+        let path = rootPath + "/\(FileManagerPaths.files.rawValue)"
         let documentsDirectoryURL = URL(fileURLWithPath: path)
         return (try? FileManager.default.allocatedSizeOfDirectory(at: documentsDirectoryURL)) ?? 0
     }
-    
-    public func deleteAllFiles(){
+
+    public func deleteAllFiles() {
         CMFile.crud.getAll().forEach { file in
-            let filePath = rootPath + "/\(FileManagerPaths.Files.rawValue)/" + "\(file.hashCode ?? "default")"
+            let filePath = rootPath + "/\(FileManagerPaths.files.rawValue)/" + "\(file.hashCode ?? "default")"
             if FileManager.default.fileExists(atPath: filePath) {
                 do {
                     try FileManager.default.removeItem(atPath: filePath)
@@ -90,11 +85,10 @@ public class CacheFileManager{
         }
         PSM.shared.save()
     }
-    
-    
-    public func deleteAllImages(){
+
+    public func deleteAllImages() {
         CMImage.crud.getAll().forEach { image in
-            let imagePath = rootPath + "/\(FileManagerPaths.Images.rawValue)/" + "\(image.hashCode ?? "default")"
+            let imagePath = rootPath + "/\(FileManagerPaths.images.rawValue)/" + "\(image.hashCode ?? "default")"
             if FileManager.default.fileExists(atPath: imagePath) {
                 do {
                     try FileManager.default.removeItem(atPath: imagePath)
@@ -106,88 +100,88 @@ public class CacheFileManager{
         }
         PSM.shared.save()
     }
-    
-    func deleteAllFilesWithCache(){
+
+    func deleteAllFilesWithCache() {
         deleteAllFiles()
         deleteAllImages()
     }
-    
-    func totoalUsedSpace()->UInt64{
-        return retrieveAllFilesSize() + retrieveAllImagesSize()
+
+    func totoalUsedSpace() -> UInt64 {
+        retrieveAllFilesSize() + retrieveAllImagesSize()
     }
-    
-    public func getDataOfFileWith(filePath:String)->Data?{
+
+    public func getDataOfFileWith(filePath: String) -> Data? {
         let fileURL = URL(fileURLWithPath: filePath)
-        if FileManager.default.fileExists(atPath: filePath) , let data = try? Data(contentsOf: fileURL) {
+        if FileManager.default.fileExists(atPath: filePath), let data = try? Data(contentsOf: fileURL) {
             return data
-        }else{
+        } else {
             return nil
         }
     }
-    
-    func saveFile(_ fileModel:FileModel , _ data:Data?){
-        guard let data = data else{return}
+
+    func saveFile(_ fileModel: FileModel, _ data: Data?) {
+        guard let data = data else { return }
         CMFile.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", fileModel.hashCode))
         CMFile.insert(request: fileModel)
-        createDirectoryIfNotExist(paths: .Files)
+        createDirectoryIfNotExist(paths: .files)
         PSM.shared.save()
-        let url = URL(fileURLWithPath: rootPath + "/\(FileManagerPaths.Files.rawValue)").appendingPathComponent("\(fileModel.hashCode)")
+        let url = URL(fileURLWithPath: rootPath + "/\(FileManagerPaths.files.rawValue)").appendingPathComponent("\(fileModel.hashCode)")
         writeDataAt(url: url, data: data)
     }
-    
-    func saveImage(_ imageModel:ImageModel , _ isThumbnail:Bool , _ data:Data?){
-        guard let data = data else{return}
+
+    func saveImage(_ imageModel: ImageModel, _ isThumbnail: Bool, _ data: Data?) {
+        guard let data = data else { return }
         CMImage.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", imageModel.hashCode))
-        CMImage.insert(request: imageModel , isThumbnail:isThumbnail)
-        createDirectoryIfNotExist(paths: .Images)
+        CMImage.insert(request: imageModel, isThumbnail: isThumbnail)
+        createDirectoryIfNotExist(paths: .images)
         PSM.shared.save()
-        let url = URL(fileURLWithPath: rootPath + "/\(FileManagerPaths.Images.rawValue)").appendingPathComponent("\(imageModel.hashCode)")
+        let url = URL(fileURLWithPath: rootPath + "/\(FileManagerPaths.images.rawValue)").appendingPathComponent("\(imageModel.hashCode)")
         writeDataAt(url: url, data: data)
     }
-    
-    public func deleteImageFromCache(fileHashCode:String){
-        let url = URL(fileURLWithPath: rootPath + "/\(FileManagerPaths.Images.rawValue)").appendingPathComponent("\(fileHashCode)")
-        if FileManager.default.fileExists(atPath: url.absoluteString){
+
+    public func deleteImageFromCache(fileHashCode: String) {
+        let url = URL(fileURLWithPath: rootPath + "/\(FileManagerPaths.images.rawValue)").appendingPathComponent("\(fileHashCode)")
+        if FileManager.default.fileExists(atPath: url.absoluteString) {
             try? FileManager.default.removeItem(at: url)
         }
         CMImage.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", fileHashCode))
         PSM.shared.save()
     }
-    
-    public func saveImageProfile(url:String, data:Data, group:String){
-        
+
+    public func saveImageProfile(url: String, data: Data, group: String) {
         let urlHash = url.md5 ?? ""
-        if Chat.sharedInstance.config?.enableCache == true{
-            createDirectoryForGroupIfNotExist(paths: .Images, group: group)
+        if Chat.sharedInstance.config?.enableCache == true {
+            createDirectoryForGroupIfNotExist(paths: .images, group: group)
             if let filePath = appGroupContainerUrl(group: group)?
-                .appendingPathComponent(FileManagerPaths.Images.ImagesForGroup, isDirectory: true)
-                .appendingPathComponent(urlHash, isDirectory: false){
+                .appendingPathComponent(FileManagerPaths.images.imagesForGroup, isDirectory: true)
+                .appendingPathComponent(urlHash, isDirectory: false)
+            {
                 Chat.sharedInstance.logger?.log(title: "create file at", message: filePath.path)
                 writeDataAt(url: filePath, data: data)
             }
         }
     }
-    
-    public func getImageProfileCache(url:String,group:String)->Data?{
-        let urlHash = url.md5  ?? ""
-        if let container = appGroupContainerUrl(group: group){
+
+    public func getImageProfileCache(url: String, group: String) -> Data? {
+        let urlHash = url.md5 ?? ""
+        if let container = appGroupContainerUrl(group: group) {
             let imagePath = container
-                .appendingPathComponent(FileManagerPaths.Images.ImagesForGroup, isDirectory: true)
+                .appendingPathComponent(FileManagerPaths.images.imagesForGroup, isDirectory: true)
                 .appendingPathComponent(urlHash, isDirectory: false)
             return getDataOfFileWith(filePath: imagePath.path)
         }
         return nil
     }
-    
-    func appGroupContainerUrl(group:String)->URL?{
-        return FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: group)
+
+    func appGroupContainerUrl(group: String) -> URL? {
+        FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: group)
     }
-    
-    func createDirectoryForGroupIfNotExist(paths:FileManagerPaths, group:String){
+
+    func createDirectoryForGroupIfNotExist(paths: FileManagerPaths, group: String) {
         let fileManager = FileManager.default
-        if let container = appGroupContainerUrl(group: group){
-            var isDir : ObjCBool = true
-            let imageDirectoryPath = container.appendingPathComponent(paths.ImagesForGroup, isDirectory: true)
+        if let container = appGroupContainerUrl(group: group) {
+            var isDir: ObjCBool = true
+            let imageDirectoryPath = container.appendingPathComponent(paths.imagesForGroup, isDirectory: true)
             if !(fileManager.fileExists(atPath: imageDirectoryPath.path, isDirectory: &isDir)) {
                 do {
                     try fileManager.createDirectory(at: imageDirectoryPath, withIntermediateDirectories: true, attributes: nil)
@@ -198,8 +192,8 @@ public class CacheFileManager{
             }
         }
     }
-    
-    func createDirectoryIfNotExist(paths:FileManagerPaths){
+
+    func createDirectoryIfNotExist(paths: FileManagerPaths) {
         let directory = rootPath + paths.rawValue
         let url = URL(fileURLWithPath: directory)
         if !(FileManager.default.fileExists(atPath: directory, isDirectory: nil)) {
@@ -211,13 +205,12 @@ public class CacheFileManager{
             }
         }
     }
-    
-    func writeDataAt(url:URL , data:Data){
+
+    func writeDataAt(url: URL, data: Data) {
         do {
             try data.write(to: url)
         } catch {
             Chat.sharedInstance.logger?.log(title: "error when try to write data on url:\(url.path) \n\(error.localizedDescription)")
         }
     }
-    
 }

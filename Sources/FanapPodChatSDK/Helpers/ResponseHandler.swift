@@ -1,12 +1,11 @@
 //
-//  ResponseHandler.swift
-//  FanapPodChatSDK
+// ResponseHandler.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 2/15/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import FanapPodAsyncSDK
+import Foundation
 
 protocol ResponseHandler {
     static func handle(_ asyncMessage: AsyncMessage)

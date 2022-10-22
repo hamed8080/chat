@@ -1,14 +1,11 @@
 //
-//  MessageGaps.h
-//  FanapPodChatSDK
+// MessageGaps+CoreDataClass.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 11/1/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-
-import Foundation
 import CoreData
+import Foundation
 
 @objc(MessageGaps)
-public class MessageGaps: NSManagedObject {
-}
+public class MessageGaps: NSManagedObject {}

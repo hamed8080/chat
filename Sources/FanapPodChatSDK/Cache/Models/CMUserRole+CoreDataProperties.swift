@@ -1,36 +1,32 @@
 //
-//  CMUserRole.h
-//  FanapPodChatSDK
+// CMUserRole+CoreDataProperties.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 11/1/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-
-import Foundation
 import CoreData
+import Foundation
 
-extension CMUserRole {
-    @NSManaged public var id:           NSNumber?
-    @NSManaged public var name:         String?
-    @NSManaged public var threadId:     NSNumber?
-    @NSManaged public var roles:        NSObject?
-    @NSManaged public var conversation: NSSet?
-
+public extension CMUserRole {
+    @NSManaged var id: NSNumber?
+    @NSManaged var name: String?
+    @NSManaged var threadId: NSNumber?
+    @NSManaged var roles: NSObject?
+    @NSManaged var conversation: NSSet?
 }
 
 // MARK: Generated accessors for conversation
-extension CMUserRole {
 
+public extension CMUserRole {
     @objc(addConversationObject:)
-    @NSManaged public func addToConversation(_ value: CMConversation)
+    @NSManaged func addToConversation(_ value: CMConversation)
 
     @objc(removeConversationObject:)
-    @NSManaged public func removeFromConversation(_ value: CMConversation)
+    @NSManaged func removeFromConversation(_ value: CMConversation)
 
     @objc(addConversation:)
-    @NSManaged public func addToConversation(_ values: NSSet)
+    @NSManaged func addToConversation(_ values: NSSet)
 
     @objc(removeConversation:)
-    @NSManaged public func removeFromConversation(_ values: NSSet)
-
+    @NSManaged func removeFromConversation(_ values: NSSet)
 }

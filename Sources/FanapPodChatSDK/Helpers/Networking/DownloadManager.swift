@@ -1,33 +1,28 @@
 //
-//  DownloadManager.swift
-//  FanapPodChatSDK
+// DownloadManager.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 4/1/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-class DownloadManager{
-    
-    private init(){}
-    
-    
-    class func download(url              :String,
-                        method           :HTTPMethod = .get,
-                        uniqueId         :String,
-                        headers          :[String : String]?,
-                        parameters       :[String : Any]?,
-                        downloadProgress :DownloadProgressType?,
-                        completion       :@escaping (Data? , URLResponse? , Error?) ->()
-                        
-    ){
+class DownloadManager {
+    private init() {}
 
-        guard var urlObj = URL(string: url) else {return}
+    class func download(url: String,
+                        method: HTTPMethod = .get,
+                        uniqueId: String,
+                        headers: [String: String]?,
+                        parameters: [String: Any]?,
+                        downloadProgress: DownloadProgressType?,
+                        completion: @escaping (Data?, URLResponse?, Error?) -> Void)
+    {
+        guard var urlObj = URL(string: url) else { return }
         var request = URLRequest(url: urlObj)
-        headers?.forEach({ key ,value in
+        headers?.forEach { key, value in
             request.addValue(value, forHTTPHeaderField: key)
-        })
-        
-        if let parameters = parameters , parameters.count > 0 , method == .get{
+        }
+
+        if let parameters = parameters, parameters.count > 0, method == .get {
             var urlComp = URLComponents(string: url)!
             urlComp.queryItems = []
             parameters.forEach { key, value in
@@ -35,17 +30,17 @@ class DownloadManager{
             }
             urlObj = urlComp.url ?? urlObj
         }
-        request.url     = urlObj
+        request.url = urlObj
         request.httpMethod = method.rawValue
-        let delegate = ProgressImplementation(uniqueId: uniqueId, downloadProgress: downloadProgress){ data,response,error in
+        let delegate = ProgressImplementation(uniqueId: uniqueId, downloadProgress: downloadProgress) { data, response, error in
             DispatchQueue.main.async {
-                completion(data, response , error)
+                completion(data, response, error)
                 Chat.sharedInstance.callbacksManager.removeDownloadTask(uniqueId: uniqueId)
             }
         }
-        let session = URLSession(configuration: .default, delegate:delegate, delegateQueue: .main)
+        let session = URLSession(configuration: .default, delegate: delegate, delegateQueue: .main)
         let downloadTask = session.dataTask(with: request)
         downloadTask.resume()
-        Chat.sharedInstance.callbacksManager.addDownloadTask(task: downloadTask , uniqueId:uniqueId)
+        Chat.sharedInstance.callbacksManager.addDownloadTask(task: downloadTask, uniqueId: uniqueId)
     }
 }

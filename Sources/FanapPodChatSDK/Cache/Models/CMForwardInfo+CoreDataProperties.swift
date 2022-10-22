@@ -1,18 +1,15 @@
 //
-//  CMForwardInfo.h
-//  FanapPodChatSDK
+// CMForwardInfo+CoreDataProperties.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 11/1/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import CoreData
+import Foundation
 
-extension CMForwardInfo {
-    
-    @NSManaged public var messageId:    NSNumber?
-    @NSManaged public var conversation: CMConversation?
-    @NSManaged public var dummyMessage: CMMessage?
-    @NSManaged public var participant:  CMParticipant?
-
+public extension CMForwardInfo {
+    @NSManaged var messageId: NSNumber?
+    @NSManaged var conversation: CMConversation?
+    @NSManaged var dummyMessage: CMMessage?
+    @NSManaged var participant: CMParticipant?
 }

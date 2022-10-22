@@ -1,14 +1,12 @@
 //
-//  ContactEventTypes.swift
-//  FanapPodChatSDK
+// ContactEventTypes.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 3/3/21.
-//
-
+// Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
 
 public enum ContactEventTypes {
-    case BLOCKED(BlockedContact, id:Int?)
-    case CONTACTS_LAST_SEEN([UserLastSeenDuration])
+    case blocked(BlockedContact, id: Int?)
+    case contactsLastSeen([UserLastSeenDuration])
 }

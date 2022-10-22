@@ -1,105 +1,100 @@
 //
-//  ChatMessageVOTypes.swift
-//  FanapPodChatSDK
+// ChatMessageVOTypes.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 3/22/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public enum ChatMessageVOTypes :Int, Codable, SafeDecodable{
-    case CREATE_THREAD                     = 1
-    case MESSAGE                           = 2
-    case SENT                              = 3
-    case DELIVERY                          = 4
-    case SEEN                              = 5
-    case PING                              = 6
-    case BLOCK                             = 7
-    case UNBLOCK                           = 8
-    case LEAVE_THREAD                      = 9
-    case RENAME                            = 10// not implemented yet!
-    case ADD_PARTICIPANT                   = 11
-    case GET_STATUS                        = 12// not implemented yet!
-    case GET_CONTACTS                      = 13
-    case GET_THREADS                       = 14
-    case GET_HISTORY                       = 15
-    case CHANGE_TYPE                       = 16// not implemented yet!
-    case REMOVED_FROM_THREAD               = 17
-    case REMOVE_PARTICIPANT                = 18
-    case MUTE_THREAD                       = 19
-    case UNMUTE_THREAD                     = 20
-    case UPDATE_THREAD_INFO                = 21
-    case FORWARD_MESSAGE                   = 22
-    case USER_INFO                         = 23
-    case USER_STATUS                       = 24// not implemented yet!
-    case GET_BLOCKED                       = 25
-    case RELATION_INFO                     = 26// not implemented yet!
-    case THREAD_PARTICIPANTS               = 27
-    case EDIT_MESSAGE                      = 28
-    case DELETE_MESSAGE                    = 29
-    case THREAD_INFO_UPDATED               = 30
-    case LAST_SEEN_UPDATED                 = 31
-    case GET_MESSAGE_DELEVERY_PARTICIPANTS = 32
-    case GET_MESSAGE_SEEN_PARTICIPANTS     = 33
-    case IS_NAME_AVAILABLE                 = 34
-    case JOIN_THREAD                       = 39
-    case BOT_MESSAGE                       = 40
-    case SPAM_PV_THREAD                    = 41
-    case SET_RULE_TO_USER                  = 42
-    case REMOVE_ROLE_FROM_USER             = 43
-    case CLEAR_HISTORY                     = 44
-    case SYSTEM_MESSAGE                    = 46
-    case GET_NOT_SEEN_DURATION             = 47
-    case PIN_THREAD                        = 48
-    case UNPIN_THREAD                      = 49
-    case PIN_MESSAGE                       = 50
-    case UNPIN_MESSAGE                     = 51
-    case SET_PROFILE                       = 52
-    case CHANGE_THREAD_TYPE                = 53
-    case GET_CURRENT_USER_ROLES            = 54
-    case GET_REPORT_REASONS                = 56// not implemented yet!
-    case REPORT_THREAD                     = 57
-    case REPORT_USER                       = 58
-    case REPORT_MESSAGE                    = 59
-    case CONTACTS_LAST_SEEN                = 60
-    case ALL_UNREAD_MESSAGE_COUNT          = 61
-    case CREATE_BOT                        = 62
-    case DEFINE_BOT_COMMAND                = 63
-    case START_BOT                         = 64
-    case STOP_BOT                          = 65
-    case CONTACT_SYNCED                    = 90
-    case LOGOUT                            = 100
-    case STATUS_PING                       = 101
-    case CLOSE_THREAD                      = 102
-    case REMOVE_BOT_COMMANDS               = 104
-    case REGISTER_ASSISTANT                = 107
-    case DEACTICVE_ASSISTANT               = 108
-    case GET_ASSISTANTS                    = 109
-    case GET_ASSISTANT_HISTORY             = 115
-    case BLOCK_ASSISTANT                   = 116
-    case UNBLOCK_ASSISTANT                 = 117
-    case BLOCKED_ASSISTNTS                 = 118
-    case GET_USER_BOTS                     = 120
-    case MUTUAL_GROUPS                     = 130
-    case DELETE_THREAD                     = 151
-    
-    case CREATE_TAG                        = 140
-    case EDIT_TAG                          = 141
-    case DELETE_TAG                        = 142
-    case ADD_TAG_PARTICIPANTS              = 143
-    case REMOVE_TAG_PARTICIPANTS           = 144
-    case TAG_LIST                          = 145
-    case GET_TAG_PARTICIPANTS              = -4
-    
-    case EXPORT_CHATS                      = 152
-    
-    
-    case ERROR                             = 999
+public enum ChatMessageVOTypes: Int, Codable, SafeDecodable {
+    case createThread = 1
+    case message = 2
+    case sent = 3
+    case delivery = 4
+    case seen = 5
+    case ping = 6
+    case block = 7
+    case unblock = 8
+    case leaveThread = 9
+    case rename = 10 // not implemented yet!
+    case addParticipant = 11
+    case getStatus = 12 // not implemented yet!
+    case getContacts = 13
+    case getThreads = 14
+    case getHistory = 15
+    case changeType = 16 // not implemented yet!
+    case removedFromThread = 17
+    case removeParticipant = 18
+    case muteThread = 19
+    case unmuteThread = 20
+    case updateThreadInfo = 21
+    case forwardMessage = 22
+    case userInfo = 23
+    case userStatus = 24 // not implemented yet!
+    case getBlocked = 25
+    case relationInfo = 26 // not implemented yet!
+    case threadParticipants = 27
+    case editMessage = 28
+    case deleteMessage = 29
+    case threadInfoUpdated = 30
+    case lastSeenUpdated = 31
+    case getMessageDeleveryParticipants = 32
+    case getMessageSeenParticipants = 33
+    case isNameAvailable = 34
+    case joinThread = 39
+    case botMessage = 40
+    case spamPvThread = 41
+    case setRuleToUser = 42
+    case removeRoleFromUser = 43
+    case clearHistory = 44
+    case systemMessage = 46
+    case getNotSeenDuration = 47
+    case pinThread = 48
+    case unpinThread = 49
+    case pinMessage = 50
+    case unpinMessage = 51
+    case setProfile = 52
+    case changeThreadType = 53
+    case getCurrentUserRoles = 54
+    case getReportReasons = 56 // not implemented yet!
+    case reportThread = 57
+    case reportUser = 58
+    case reportMessage = 59
+    case contactsLastSeen = 60
+    case allUnreadMessageCount = 61
+    case createBot = 62
+    case defineBotCommand = 63
+    case startBot = 64
+    case stopBot = 65
+    case contactSynced = 90
+    case logout = 100
+    case statusPing = 101
+    case closeThread = 102
+    case removeBotCommands = 104
+    case registerAssistant = 107
+    case deacticveAssistant = 108
+    case getAssistants = 109
+    case getAssistantHistory = 115
+    case blockAssistant = 116
+    case unblockAssistant = 117
+    case blockedAssistnts = 118
+    case getUserBots = 120
+    case mutualGroups = 130
+    case deleteThread = 151
 
+    case createTag = 140
+    case editTag = 141
+    case deleteTag = 142
+    case addTagParticipants = 143
+    case removeTagParticipants = 144
+    case tagList = 145
+    case getTagParticipants = -4
 
+    case exportChats = 152
 
+    case error = 999
 
     /// Only when can't decode a type.
     ///
     /// Do not remove or move this property to the top of the enum, it must be the last enum because it uses ``SafeDecodable`` to decode the last item if no match found.
-    case UNKNOWN
+    case unknown
 }

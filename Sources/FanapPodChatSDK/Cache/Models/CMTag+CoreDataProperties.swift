@@ -1,18 +1,16 @@
 //
-//  CMTag.swift
-//  FanapPodChatSDK
+// CMTag+CoreDataProperties.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 6/23/21.
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import CoreData
+import Foundation
 
-
-extension CMTag {
-    
-    @NSManaged public var id                    : NSNumber?
-    @NSManaged public var name                  : String
-    @NSManaged public var owner                 : CMParticipant
-    @NSManaged public var active                : NSNumber
-    @NSManaged public var tagParticipants       : Set<CMTagParticipant>?
+public extension CMTag {
+    @NSManaged var id: NSNumber?
+    @NSManaged var name: String
+    @NSManaged var owner: CMParticipant
+    @NSManaged var active: NSNumber
+    @NSManaged var tagParticipants: Set<CMTagParticipant>?
 }

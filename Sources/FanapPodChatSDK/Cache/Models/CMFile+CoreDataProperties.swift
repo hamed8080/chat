@@ -1,18 +1,15 @@
 //
-//  CMFile.h
-//  FanapPodChatSDK
+// CMFile+CoreDataProperties.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 11/1/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import CoreData
+import Foundation
 
-extension CMFile {
-    
-    @NSManaged public var hashCode: String?
-    @NSManaged public var name:     String?
-    @NSManaged public var size:     NSNumber?
-    @NSManaged public var type:     String?
-    
+public extension CMFile {
+    @NSManaged var hashCode: String?
+    @NSManaged var name: String?
+    @NSManaged var size: NSNumber?
+    @NSManaged var type: String?
 }

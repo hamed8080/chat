@@ -1,22 +1,20 @@
 //
-//  FileManagerEX.swift
-//  FanapPodChatSDK
+// FileManagerEX.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by hamed on 6/21/22.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
 
-extension FileManager{
-    
-    func appendToEndOfFile(data:Data, fileurl:URL){
-        if FileManager.default.fileExists(atPath: fileurl.path){
+extension FileManager {
+    func appendToEndOfFile(data: Data, fileurl: URL) {
+        if FileManager.default.fileExists(atPath: fileurl.path) {
             do {
                 let fileHandle = try FileHandle(forWritingTo: fileurl)
                 fileHandle.seekToEndOfFile()
                 fileHandle.write(data)
                 fileHandle.closeFile()
-            }catch{
+            } catch {
                 print("Can't open file to append\(error.localizedDescription)")
             }
         }

@@ -1,30 +1,27 @@
 //
-//  DeleteThreadResponseHandler.swift
-//  FanapPodChatSDK
+// DeleteThreadResponseHandler.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 2/20/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import FanapPodAsyncSDK
+import Foundation
 
 class DeleteThreadResponseHandler: ResponseHandler {
-
-
-	static func handle(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else {return}
-		let chat = Chat.sharedInstance
-        guard let threadId = chatMessage.subjectId else {return}
-        var participant:Participant? = nil
-        if let data = chatMessage.content?.data(using: .utf8){
+    static func handle(_ asyncMessage: AsyncMessage) {
+        guard let chatMessage = asyncMessage.chatMessage else { return }
+        let chat = Chat.sharedInstance
+        guard let threadId = chatMessage.subjectId else { return }
+        var participant: Participant?
+        if let data = chatMessage.content?.data(using: .utf8) {
             participant = try? JSONDecoder().decode(Participant.self, from: data)
-            chat.delegate?.chatEvent(event: .Thread(.THREAD_DELETED(threadId: threadId, participant: participant)))
-            chat.delegate?.chatEvent(event: .Thread(.THREAD_LAST_ACTIVITY_TIME(time:chatMessage.time, threadId: chatMessage.subjectId)))
+            chat.delegate?.chatEvent(event: .thread(.threadDeleted(threadId: threadId, participant: participant)))
+            chat.delegate?.chatEvent(event: .thread(.threadLastActivityTime(time: chatMessage.time, threadId: chatMessage.subjectId)))
         }
-        CacheFactory.write(cacheType: .DELETE_THREADS([threadId]))
+        CacheFactory.write(cacheType: .deleteThreads([threadId]))
         PSM.shared.save()
-        guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId)else {return}
-		callback(.init(uniqueId: chatMessage.uniqueId ,result: threadId))
-        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .DELETE_THREAD)
-	}
+        guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
+        callback(.init(uniqueId: chatMessage.uniqueId, result: threadId))
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .deleteThread)
+    }
 }

@@ -1,31 +1,31 @@
 //
-//  ReplaceAdminAndLeaveThreadRequestHandler.swift
-//  FanapPodChatSDK
+// ReplaceAdminAndLeaveThreadRequestHandler.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 4/10/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
 class ReplaceAdminAndLeaveThreadRequestHandler {
-    class func handle(_ request:SafeLeaveThreadRequest,
-                      _ chat :Chat,
-                      _ completion:@escaping CompletionType<User>,
-                      _ newAdminCompletion:CompletionType<[UserRole]>? = nil,
-                      _ uniqueIdResult: UniqueIdResultType = nil) {
+    class func handle(_ request: SafeLeaveThreadRequest,
+                      _ chat: Chat,
+                      _ completion: @escaping CompletionType<User>,
+                      _ newAdminCompletion: CompletionType<[UserRole]>? = nil,
+                      _ uniqueIdResult: UniqueIdResultType = nil)
+    {
         let currentUserRolseReq = CurrentUserRolesRequest(threadId: request.threadId)
-        chat.getCurrentUserRoles(currentUserRolseReq) { roles, uniqueId, error in
-            let isAdmin = roles?.contains(.THREAD_ADMIN) ?? false || roles?.contains(.ADD_RULE_TO_USER) ?? false
-            if isAdmin , let roles = roles{
+        chat.getCurrentUserRoles(currentUserRolseReq) { roles, _, _ in
+            let isAdmin = roles?.contains(.threadAdmin) ?? false || roles?.contains(.addRuleToUser) ?? false
+            if isAdmin, let roles = roles {
                 let roleRequest = RolesRequest(userRoles: [.init(userId: request.participantId, roles: roles)], threadId: request.threadId)
-                chat.setRoles(roleRequest) { usersRoles, uniqueId, error in
-                    if let usersRoles = usersRoles{
-                        newAdminCompletion?(usersRoles , nil,nil)
+                chat.setRoles(roleRequest) { usersRoles, _, _ in
+                    if let usersRoles = usersRoles {
+                        newAdminCompletion?(usersRoles, nil, nil)
                         chat.leaveThread(request, completion: completion, uniqueIdResult: uniqueIdResult)
                     }
                 }
-            }else{
-                chat.delegate?.chatEvent(event: .Thread(.THREAD_LEAVE_SAFTLY_FAILED(threadId: request.threadId)))
-                completion(nil,nil,ChatError(message: "Current User have no Permission to Change the ThreadAdmin", errorCode: 6666, hasError: true))
+            } else {
+                chat.delegate?.chatEvent(event: .thread(.threadLeaveSaftlyFailed(threadId: request.threadId)))
+                completion(nil, nil, ChatError(message: "Current User have no Permission to Change the ThreadAdmin", errorCode: 6666, hasError: true))
             }
         }
     }

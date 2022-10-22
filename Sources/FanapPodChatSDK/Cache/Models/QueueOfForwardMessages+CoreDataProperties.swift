@@ -1,21 +1,17 @@
 //
-//  QueueOfForwardMessages.h
-//  FanapPodChatSDK
+// QueueOfForwardMessages+CoreDataProperties.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 11/1/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-
-import Foundation
 import CoreData
+import Foundation
 
-
-extension QueueOfForwardMessages {
-    @NSManaged public var messageId:    NSNumber?
-    @NSManaged public var metadata:     String?
-    @NSManaged public var repliedTo:    NSNumber?
-    @NSManaged public var threadId:     NSNumber?
-    @NSManaged public var typeCode:     String?
-    @NSManaged public var uniqueId:     String?
-
+public extension QueueOfForwardMessages {
+    @NSManaged var messageId: NSNumber?
+    @NSManaged var metadata: String?
+    @NSManaged var repliedTo: NSNumber?
+    @NSManaged var threadId: NSNumber?
+    @NSManaged var typeCode: String?
+    @NSManaged var uniqueId: String?
 }

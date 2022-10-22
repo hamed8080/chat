@@ -1,19 +1,17 @@
 //
-//  DeliverRequestHandler.swift
-//  FanapPodChatSDK
+// DeliverRequestHandler.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 3/3/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
 class DeliverRequestHandler {
-	
-    class func handle( _ req:MessageDeliverRequest, _ chat:Chat , _ uniqueIdResult:UniqueIdResultType = nil){
-		chat.prepareToSendAsync(req: req.messageId,
-								clientSpecificUniqueId: req.uniqueId,
-                                plainText:true,
-                                messageType: .DELIVERY,
-								uniqueIdResult: uniqueIdResult,
-								completion: nil )
-	}
+    class func handle(_ req: MessageDeliverRequest, _ chat: Chat, _ uniqueIdResult: UniqueIdResultType = nil) {
+        chat.prepareToSendAsync(req: req.messageId,
+                                clientSpecificUniqueId: req.uniqueId,
+                                plainText: true,
+                                messageType: .delivery,
+                                uniqueIdResult: uniqueIdResult,
+                                completion: nil)
+    }
 }

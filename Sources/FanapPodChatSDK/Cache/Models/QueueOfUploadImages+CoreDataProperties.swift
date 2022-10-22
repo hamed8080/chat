@@ -1,30 +1,25 @@
 //
-//  QueueOfUploadImages.h
-//  FanapPodChatSDK
+// QueueOfUploadImages+CoreDataProperties.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 11/1/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-
-import Foundation
 import CoreData
+import Foundation
 
-
-extension QueueOfUploadImages {
-
-    @NSManaged public var dataToSend:       NSData?
-    @NSManaged public var fileExtension:    String?
-    @NSManaged public var fileName:         String?
-    @NSManaged public var fileSize:         NSNumber?
-    @NSManaged public var isPublic:         NSNumber?
-    @NSManaged public var mimeType:         String?
-    @NSManaged public var originalName:     String?
-    @NSManaged public var userGroupHash:    String?
-    @NSManaged public var typeCode:         String?
-    @NSManaged public var uniqueId:         String?
-    @NSManaged public var xC:               NSNumber?
-    @NSManaged public var yC:               NSNumber?
-    @NSManaged public var hC:               NSNumber?
-    @NSManaged public var wC:               NSNumber?
-
+public extension QueueOfUploadImages {
+    @NSManaged var dataToSend: NSData?
+    @NSManaged var fileExtension: String?
+    @NSManaged var fileName: String?
+    @NSManaged var fileSize: NSNumber?
+    @NSManaged var isPublic: NSNumber?
+    @NSManaged var mimeType: String?
+    @NSManaged var originalName: String?
+    @NSManaged var userGroupHash: String?
+    @NSManaged var typeCode: String?
+    @NSManaged var uniqueId: String?
+    @NSManaged var xC: NSNumber?
+    @NSManaged var yC: NSNumber?
+    @NSManaged var hC: NSNumber?
+    @NSManaged var wC: NSNumber?
 }

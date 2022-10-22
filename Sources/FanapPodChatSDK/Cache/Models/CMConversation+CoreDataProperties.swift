@@ -1,123 +1,116 @@
 //
-//  CMConversation.h
-//  FanapPodChatSDK
+// CMConversation+CoreDataProperties.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 11/1/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import CoreData
+import Foundation
 
-
-extension CMConversation {
-
-    @NSManaged public var admin:        NSNumber?
-    @NSManaged public var canEditInfo:  NSNumber?
-    @NSManaged public var canSpam:      NSNumber?
-    @NSManaged public var closedThread: NSNumber?
-    @NSManaged public var descriptions: String?
-    @NSManaged public var group:        NSNumber?
-    @NSManaged public var id:           NSNumber?
-    @NSManaged public var image:        String?
-    @NSManaged public var joinDate:     NSNumber?
-    @NSManaged public var lastMessage:  String?
-    @NSManaged public var lastParticipantImage: String?
-    @NSManaged public var lastParticipantName:  String?
-    @NSManaged public var lastSeenMessageId:    NSNumber?
-    @NSManaged public var lastSeenMessageNanos: NSNumber?
-    @NSManaged public var lastSeenMessageTime:  NSNumber?
-    @NSManaged public var mentioned:            NSNumber?
-    @NSManaged public var metadata:             String?
-    @NSManaged public var mute:                 NSNumber?
-    @NSManaged public var participantCount:     NSNumber?
-    @NSManaged public var partner:              NSNumber?
-    @NSManaged public var partnerLastDeliveredMessageId:    NSNumber?
-    @NSManaged public var partnerLastDeliveredMessageNanos: NSNumber?
-    @NSManaged public var partnerLastDeliveredMessageTime:  NSNumber?
-    @NSManaged public var partnerLastSeenMessageId:         NSNumber?
-    @NSManaged public var partnerLastSeenMessageNanos:      NSNumber?
-    @NSManaged public var partnerLastSeenMessageTime:       NSNumber?
-    @NSManaged public var pin:          NSNumber?
-    @NSManaged public var time:         NSNumber?
-    @NSManaged public var title:        String?
-    @NSManaged public var type:         NSNumber?
-    @NSManaged public var unreadCount:  NSNumber?
-    @NSManaged public var userGroupHash: String?
-    @NSManaged public var dummyForwardInfo: CMForwardInfo?
-    @NSManaged public var dummyMessage:     NSSet?
-    @NSManaged public var dummyUserRoles:   NSSet?
-    @NSManaged public var inviter:          CMParticipant?
-    @NSManaged public var lastMessageVO:    CMMessage?
-    @NSManaged public var participants:     NSOrderedSet?
-    @NSManaged public var pinMessage:       CMPinMessage?
-
+public extension CMConversation {
+    @NSManaged var admin: NSNumber?
+    @NSManaged var canEditInfo: NSNumber?
+    @NSManaged var canSpam: NSNumber?
+    @NSManaged var closedThread: NSNumber?
+    @NSManaged var descriptions: String?
+    @NSManaged var group: NSNumber?
+    @NSManaged var id: NSNumber?
+    @NSManaged var image: String?
+    @NSManaged var joinDate: NSNumber?
+    @NSManaged var lastMessage: String?
+    @NSManaged var lastParticipantImage: String?
+    @NSManaged var lastParticipantName: String?
+    @NSManaged var lastSeenMessageId: NSNumber?
+    @NSManaged var lastSeenMessageNanos: NSNumber?
+    @NSManaged var lastSeenMessageTime: NSNumber?
+    @NSManaged var mentioned: NSNumber?
+    @NSManaged var metadata: String?
+    @NSManaged var mute: NSNumber?
+    @NSManaged var participantCount: NSNumber?
+    @NSManaged var partner: NSNumber?
+    @NSManaged var partnerLastDeliveredMessageId: NSNumber?
+    @NSManaged var partnerLastDeliveredMessageNanos: NSNumber?
+    @NSManaged var partnerLastDeliveredMessageTime: NSNumber?
+    @NSManaged var partnerLastSeenMessageId: NSNumber?
+    @NSManaged var partnerLastSeenMessageNanos: NSNumber?
+    @NSManaged var partnerLastSeenMessageTime: NSNumber?
+    @NSManaged var pin: NSNumber?
+    @NSManaged var time: NSNumber?
+    @NSManaged var title: String?
+    @NSManaged var type: NSNumber?
+    @NSManaged var unreadCount: NSNumber?
+    @NSManaged var userGroupHash: String?
+    @NSManaged var dummyForwardInfo: CMForwardInfo?
+    @NSManaged var dummyMessage: NSSet?
+    @NSManaged var dummyUserRoles: NSSet?
+    @NSManaged var inviter: CMParticipant?
+    @NSManaged var lastMessageVO: CMMessage?
+    @NSManaged var participants: NSOrderedSet?
+    @NSManaged var pinMessage: CMPinMessage?
 }
 
 // MARK: Generated accessors for dummyMessage
-extension CMConversation {
 
+public extension CMConversation {
     @objc(addDummyMessageObject:)
-    @NSManaged public func addToDummyMessage(_ value: CMMessage)
+    @NSManaged func addToDummyMessage(_ value: CMMessage)
 
     @objc(removeDummyMessageObject:)
-    @NSManaged public func removeFromDummyMessage(_ value: CMMessage)
+    @NSManaged func removeFromDummyMessage(_ value: CMMessage)
 
     @objc(addDummyMessage:)
-    @NSManaged public func addToDummyMessage(_ values: NSSet)
+    @NSManaged func addToDummyMessage(_ values: NSSet)
 
     @objc(removeDummyMessage:)
-    @NSManaged public func removeFromDummyMessage(_ values: NSSet)
-
+    @NSManaged func removeFromDummyMessage(_ values: NSSet)
 }
 
 // MARK: Generated accessors for dummyUserRoles
-extension CMConversation {
 
+public extension CMConversation {
     @objc(addDummyUserRolesObject:)
-    @NSManaged public func addToDummyUserRoles(_ value: CMUserRole)
+    @NSManaged func addToDummyUserRoles(_ value: CMUserRole)
 
     @objc(removeDummyUserRolesObject:)
-    @NSManaged public func removeFromDummyUserRoles(_ value: CMUserRole)
+    @NSManaged func removeFromDummyUserRoles(_ value: CMUserRole)
 
     @objc(addDummyUserRoles:)
-    @NSManaged public func addToDummyUserRoles(_ values: NSSet)
+    @NSManaged func addToDummyUserRoles(_ values: NSSet)
 
     @objc(removeDummyUserRoles:)
-    @NSManaged public func removeFromDummyUserRoles(_ values: NSSet)
-
+    @NSManaged func removeFromDummyUserRoles(_ values: NSSet)
 }
 
 // MARK: Generated accessors for participants
-extension CMConversation {
 
+public extension CMConversation {
     @objc(insertObject:inParticipantsAtIndex:)
-    @NSManaged public func insertIntoParticipants(_ value: CMParticipant, at idx: Int)
+    @NSManaged func insertIntoParticipants(_ value: CMParticipant, at idx: Int)
 
     @objc(removeObjectFromParticipantsAtIndex:)
-    @NSManaged public func removeFromParticipants(at idx: Int)
+    @NSManaged func removeFromParticipants(at idx: Int)
 
     @objc(insertParticipants:atIndexes:)
-    @NSManaged public func insertIntoParticipants(_ values: [CMParticipant], at indexes: NSIndexSet)
+    @NSManaged func insertIntoParticipants(_ values: [CMParticipant], at indexes: NSIndexSet)
 
     @objc(removeParticipantsAtIndexes:)
-    @NSManaged public func removeFromParticipants(at indexes: NSIndexSet)
+    @NSManaged func removeFromParticipants(at indexes: NSIndexSet)
 
     @objc(replaceObjectInParticipantsAtIndex:withObject:)
-    @NSManaged public func replaceParticipants(at idx: Int, with value: CMParticipant)
+    @NSManaged func replaceParticipants(at idx: Int, with value: CMParticipant)
 
     @objc(replaceParticipantsAtIndexes:withParticipants:)
-    @NSManaged public func replaceParticipants(at indexes: NSIndexSet, with values: [CMParticipant])
+    @NSManaged func replaceParticipants(at indexes: NSIndexSet, with values: [CMParticipant])
 
     @objc(addParticipantsObject:)
-    @NSManaged public func addToParticipants(_ value: CMParticipant)
+    @NSManaged func addToParticipants(_ value: CMParticipant)
 
     @objc(removeParticipantsObject:)
-    @NSManaged public func removeFromParticipants(_ value: CMParticipant)
+    @NSManaged func removeFromParticipants(_ value: CMParticipant)
 
     @objc(addParticipants:)
-    @NSManaged public func addToParticipants(_ values: NSOrderedSet)
+    @NSManaged func addToParticipants(_ values: NSOrderedSet)
 
     @objc(removeParticipants:)
-    @NSManaged public func removeFromParticipants(_ values: NSOrderedSet)
-
+    @NSManaged func removeFromParticipants(_ values: NSOrderedSet)
 }
