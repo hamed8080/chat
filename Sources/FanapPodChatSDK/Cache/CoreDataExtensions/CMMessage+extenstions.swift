@@ -22,7 +22,7 @@ extension CMMessage{
 					   id:              id as? Int,
 					   mentioned:       mentioned as? Bool,
 					   message:         message,
-					   messageType:     messageType as? Int,
+                       messageType:     MessageType(rawValue: messageType as? Int ?? MessageType.UNKNOWN.rawValue) ,
 					   metadata:        metadata,
 					   ownerId:         ownerId as? Int,
 					   pinned:          pinned as? Bool,
@@ -48,7 +48,7 @@ extension CMMessage{
 		model.id                             = message.id as NSNumber?
 		model.mentioned                      = message.mentioned as NSNumber?
 		model.message                        = message.message
-		model.messageType                    = message.messageType as NSNumber?
+        model.messageType                    = message.messageType?.rawValue as NSNumber?
 		model.metadata                       = message.metadata
 		model.ownerId                        = message.ownerId as NSNumber?
 		model.pinned                         = message.pinned as NSNumber?

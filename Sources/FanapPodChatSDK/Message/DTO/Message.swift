@@ -24,7 +24,7 @@ open class Message : Codable , Hashable {
     public var id             : Int?
     public var mentioned      : Bool?
     public var message        : String?
-    public var messageType    : Int?
+    public var messageType    : MessageType?
     public var metadata       : String?
     public var ownerId        : Int?
     public var pinned         : Bool?
@@ -48,7 +48,7 @@ open class Message : Codable , Hashable {
                 id:             Int? = nil,
                 mentioned:      Bool? = nil,
                 message:        String? = nil,
-                messageType:    Int? = nil,
+                messageType:    MessageType? = nil,
                 metadata:       String? = nil,
                 ownerId:        Int? = nil,
                 pinned:         Bool? = nil,
@@ -122,7 +122,7 @@ open class Message : Codable , Hashable {
 		self.id  = try container.decodeIfPresent(Int.self, forKey: .id)
 		self.mentioned  = try container.decodeIfPresent(Bool.self, forKey: .mentioned)
 		self.message  = try container.decodeIfPresent(String.self, forKey: .message)
-		self.messageType  = try container.decodeIfPresent(Int.self, forKey: .messageType)
+		self.messageType  = try container.decodeIfPresent(MessageType.self, forKey: .messageType)
 		self.metadata  = try container.decodeIfPresent(String.self, forKey: .metadata)
 		self.pinned  = try container.decodeIfPresent(Bool.self, forKey: .pinned)
 		self.previousId  = try container.decodeIfPresent(Int.self, forKey: .previousId)
