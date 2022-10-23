@@ -1,0 +1,13 @@
+/* 
+  Localizable.strings
+  
+
+  Created by hamed on 10/23/22.
+  
+*/
+"message" = "پیام";
+"userName" = "نام کاربری";
+"name" = "نام";
+"hour" = "ساعت";
+"date" = "تاریخ";
+"undefined" = "تعریف نشده";

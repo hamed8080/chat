@@ -56,4 +56,8 @@ extension String {
             .replacingOccurrences(of: "\"[", with: "\n[")
             .replacingOccurrences(of: "]\"", with: "]\n")
     }
+
+    var localized: String {
+        return NSLocalizedString(self, bundle: .module, comment: "")
+    }
 }

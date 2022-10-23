@@ -4,6 +4,7 @@ import PackageDescription
 
 let package = Package(
     name: "FanapPodChatSDK",
+    defaultLocalization: "en",
     platforms: [
         .iOS(.v10),
         .macOS(.v12),

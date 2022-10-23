@@ -8,109 +8,149 @@ import AVFoundation
 import Foundation
 
 class ExportRequestHandler {
-    static var maxCount = 10000
-    static var localIdentifire = "en_US"
-
+    static var exportMessageViewModels: [any ExportMessagesProtocol] = []
     class func handle(_ req: GetHistoryRequest,
-                      _ localIdentifire: String = "en_US",
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<URL>,
                       _ uniqueIdResult: UniqueIdResultType = nil)
     {
-        req.count = 500
-        ExportRequestHandler.localIdentifire = localIdentifire
-        createFile(req.threadId)
-        getHistory(req, chat, completion, uniqueIdResult)
+        let vm = ExportMessages(request: req, completion: completion)
+        vm.start()
+        exportMessageViewModels.append(vm)
+    }
+}
+
+protocol ExportMessagesProtocol {
+    var request: GetHistoryRequest { get set }
+    var completion: CompletionType<URL> { get }
+    var threadId: Int { get }
+    var fileName: String { get }
+    var titles: String { get }
+    var fileManager: FileManager { get }
+    var rootPath: URL { get }
+    var filePath: URL { get }
+    var maxSize: Int { get }
+    var maxAvailableCount: Int { get }
+    func start()
+    func finished(success: Bool, uniqueId: String?, error: ChatError?)
+    func removeCallbacks(_ uniqueId: String?)
+    func hasNext(response: ChatResponse) -> Bool
+    func setNextOffest()
+    func addMessagesToFile(_ messages: [Message])
+    func writeToFile(_ data: Data?)
+    func createFile()
+    func deleteFileIfExist()
+    func sanitize(_ value: String) -> String
+    func convertMessageToStringRow(_ message: Message) -> String
+}
+
+class ExportMessages: ExportMessagesProtocol {
+    var request: GetHistoryRequest
+    var completion: CompletionType<URL>
+    var uniqueIdResult: UniqueIdResultType
+    var threadId: Int { request.threadId }
+    var fileName: String { "export-\(threadId).csv" }
+    var fileManager: FileManager { FileManager.default }
+    var rootPath: URL { FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first! }
+    var filePath: URL { rootPath.appendingPathComponent(fileName) }
+    let maxSize: Int = 10000
+    var maxAvailableCount: Int = 0
+    var titles: String { ["message", "userName", "name", "hour", "date"].map { $0.localized }.joined(separator: ",").appending("\r\n") }
+
+    init(request: GetHistoryRequest, completion: @escaping CompletionType<URL>, uniqueIdResult: UniqueIdResultType = nil) {
+        self.request = request
+        self.completion = completion
+        self.uniqueIdResult = uniqueIdResult
     }
 
-    class func getHistory(
-        _ req: GetHistoryRequest,
-        _ chat: Chat,
-        _ completion: @escaping CompletionType<URL>,
-        _ uniqueIdResult: UniqueIdResultType = nil
-    ) {
-        chat.prepareToSendAsync(req: req,
-                                clientSpecificUniqueId: req.uniqueId,
-                                subjectId: req.threadId,
-                                messageType: .exportChats,
-                                uniqueIdResult: uniqueIdResult) { response in
+    /// To prevent not sending a request with larger data or lower data.
+    /// If it sends with lower data it causes thousands of requests, and if sent with larger data it will download a large chunk of data which may lead to corrupt the file and network problems.
+    func start() {
+        request.count = 500
+        createFile()
+        getHistory()
+    }
 
-            if let messages = response.result as? [Message] {
-                appendToFile(messages, req)
+    func getHistory() {
+        Chat.sharedInstance.prepareToSendAsync(
+            req: request,
+            clientSpecificUniqueId: request.uniqueId,
+            subjectId: threadId,
+            messageType: .exportChats,
+            uniqueIdResult: uniqueIdResult,
+            completion: onReceive(_:)
+        )
+    }
 
-                maxCount = min(10000, response.contentCount)
-                req.offset += req.offset
-                if req.offset < maxCount {
-                    getHistory(req, chat, completion)
-                } else {
-                    let url = fileUrl(for: req.threadId)
-                    print("file exported at path:\(url?.path ?? "")")
-                    completion(url, response.uniqueId, response.error)
-                    if let uniqueId = response.uniqueId {
-                        chat.callbacksManager.removeCallback(uniqueId: uniqueId, requestType: .exportChats)
-                    }
-                }
+    func onReceive(_ response: ChatResponse) {
+        if let messages = response.result as? [Message] {
+            addMessagesToFile(messages)
+            if hasNext(response: response) {
+                getHistory()
             } else {
-                completion(nil, response.uniqueId, response.error ?? ChatError(code: .exportError, errorCode: 0, message: nil, rawError: response.error?.rawError))
+                finished(success: true, uniqueId: response.uniqueId, error: response.error)
             }
+        } else {
+            finished(uniqueId: response.uniqueId, error: response.error ?? ChatError(code: .exportError, errorCode: 0, message: nil, rawError: response.error?.rawError))
         }
     }
 
-    class func createFile(_ threadId: Int) {
-        let titles = createTitles()
-        createCVFile(threadId, titles)
+    func removeCallbacks(_ uniqueId: String?) {
+        ExportRequestHandler.exportMessageViewModels.removeAll(where: { $0.threadId == threadId })
+        guard let uniqueId = uniqueId else { return }
+        Chat.sharedInstance.callbacksManager.removeCallback(uniqueId: uniqueId, requestType: .exportChats)
     }
 
-    class func createTitles() -> String {
-        ["تاریخ", "ساعت", "نام", "نام کاربری", "متن پیام"].joined(separator: ",")
+    func finished(success: Bool = false, uniqueId: String?, error: ChatError?) {
+        completion(success ? filePath : nil, uniqueId, error)
+        removeCallbacks(uniqueId)
     }
 
-    class func appendToFile(_ messages: [Message], _ req: GetHistoryRequest) {
-        guard let fileUrl = fileUrl(for: req.threadId),
-              let data = createMessages(messages: messages).data(using: .utf8)
-        else { return }
-        FileManager.default.appendToEndOfFile(data: data, fileurl: fileUrl)
+    func addMessagesToFile(_ messages: [Message]) {
+        let string = messages.map { convertMessageToStringRow($0) }.joined()
+        writeToFile(string.data(using: .utf8))
     }
 
-    class func fileUrl(for threadId: Int) -> URL? {
-        let fileName = "export-\(threadId).csv"
-        let fm = FileManager.default
-        if let directoryUrl = fm.urls(for: .documentDirectory, in: .userDomainMask).first {
-            let fileURL = directoryUrl.appendingPathComponent(fileName)
-            return fileURL
-        }
-        return nil
+    func writeToFile(_ data: Data?) {
+        guard let data = data else { return }
+        fileManager.appendToEndOfFile(data: data, fileurl: filePath)
     }
 
-    class func createCVFile(_ threadId: Int, _ title: String) {
-        let fm = FileManager.default
-        if let fileURL = fileUrl(for: threadId) {
-            let filePath = fileURL.path
-            if fm.fileExists(atPath: filePath) {
-                try? fm.removeItem(atPath: filePath)
-            }
-            fm.createFile(atPath: filePath, contents: (title + "\r\n").data(using: .utf8))
+    func createFile() {
+        deleteFileIfExist()
+        fileManager.createFile(atPath: filePath.path, contents: titles.data(using: .utf8))
+    }
+
+    func deleteFileIfExist() {
+        if fileManager.fileExists(atPath: filePath.path) {
+            try? fileManager.removeItem(atPath: filePath.path)
         }
     }
 
-    class func sanitizeString(_ value: String) -> String {
+    func sanitize(_ value: String) -> String {
         "\"\(value.replacingOccurrences(of: "\"", with: " "))\""
     }
 
-    class func createMessages(messages: [Message]) -> String {
-        var messageRows = ""
+    func convertMessageToStringRow(_ message: Message) -> String {
+        var string = ""
+        let sender = message.participant?.name ?? message.participant?.contactName ?? "\(message.participant?.firstName ?? "") \(message.participant?.lastName ?? "")"
+        let date = Date(timeIntervalSince1970: TimeInterval(message.time ?? 0) / 1000)
+        string.append(contentsOf: "\(sanitize(message.message ?? "")),")
+        string.append(contentsOf: "\(sanitize(message.participant?.username ?? "undefined".localized)),")
+        string.append(contentsOf: "\(sanitize(sender)),")
+        string.append(contentsOf: "\(date.getTime(localIdentifire: Locale.current.identifier)),")
+        string.append(contentsOf: "\(date.getDate(localIdentifire: Locale.current.identifier))")
+        string.append(contentsOf: "\r\n")
+        return string
+    }
 
-        messages.forEach { message in
+    func hasNext(response: ChatResponse) -> Bool {
+        maxAvailableCount = min(maxSize, response.contentCount)
+        setNextOffest()
+        return request.offset < maxAvailableCount
+    }
 
-            let sender = message.participant?.contactName ?? (message.participant?.firstName ?? "") + " " + (message.participant?.lastName ?? "")
-            let date = Date(timeIntervalSince1970: TimeInterval(message.time ?? 0) / 1000)
-            messageRows.append(contentsOf: "\(date.getDate(localIdentifire: localIdentifire)),")
-            messageRows.append(contentsOf: "\(date.getTime(localIdentifire: localIdentifire)),")
-            messageRows.append(contentsOf: "\(sanitizeString(sender)),")
-            messageRows.append(contentsOf: "\(sanitizeString(message.participant?.username ?? "")),")
-            messageRows.append(contentsOf: "\(sanitizeString(message.message ?? ""))")
-            messageRows.append(contentsOf: "\r\n")
-        }
-        return messageRows
+    func setNextOffest() {
+        request.offset += request.count
     }
 }
