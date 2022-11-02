@@ -47,6 +47,7 @@ public extension CMConversation {
     @NSManaged var lastMessageVO: CMMessage?
     @NSManaged var participants: NSOrderedSet?
     @NSManaged var pinMessage: CMPinMessage?
+    @NSManaged var isArchive: NSNumber?
 }
 
 // MARK: Generated accessors for dummyMessage

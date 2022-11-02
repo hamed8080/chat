@@ -12,6 +12,7 @@ public class ThreadsRequest: BaseRequest {
     public let offset: Int
     public var name: String?
     public let new: Bool?
+    public let archived: Bool?
     public let threadIds: [Int]?
     public let creatorCoreUserId: Int?
     public let partnerCoreUserId: Int?
@@ -22,6 +23,7 @@ public class ThreadsRequest: BaseRequest {
                 offset: Int = 0,
                 name: String? = nil,
                 new: Bool? = nil,
+                archived: Bool? = nil,
                 threadIds: [Int]? = nil,
                 creatorCoreUserId: Int? = nil,
                 partnerCoreUserId: Int? = nil,
@@ -34,6 +36,7 @@ public class ThreadsRequest: BaseRequest {
         self.name = name
         self.metadataCriteria = metadataCriteria
         self.new = new
+        self.archived = archived
         self.threadIds = threadIds
         self.creatorCoreUserId = creatorCoreUserId
         self.partnerCoreUserId = partnerCoreUserId
@@ -46,6 +49,7 @@ public class ThreadsRequest: BaseRequest {
         case offset
         case name
         case new
+        case archived
         case threadIds
         case creatorCoreUserId
         case partnerCoreUserId
@@ -64,5 +68,6 @@ public class ThreadsRequest: BaseRequest {
         try? container.encodeIfPresent(partnerCoreUserId, forKey: .partnerCoreUserId)
         try? container.encodeIfPresent(partnerCoreContactId, forKey: .partnerCoreContactId)
         try? container.encodeIfPresent(metadataCriteria, forKey: .metadataCriteria)
+        try? container.encodeIfPresent(archived, forKey: .archived)
     }
 }

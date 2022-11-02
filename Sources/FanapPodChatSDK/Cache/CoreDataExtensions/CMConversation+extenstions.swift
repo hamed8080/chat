@@ -45,12 +45,14 @@ public extension CMConversation {
                      inviter: inviter?.getCodable(),
                      lastMessageVO: lastMessageVO?.getCodable(),
                      participants: participants?.compactMap { $0 as? CMParticipant }.map { $0.getCodable() },
-                     pinMessage: pinMessage?.getCodable())
+                     pinMessage: pinMessage?.getCodable(),
+                     isArchive: isArchive as? Bool)
     }
 
     internal class func convertConversationToCM(conversation: Conversation, entity: CMConversation? = nil) -> CMConversation {
         let model = entity ?? CMConversation()
         model.admin = conversation.admin as NSNumber?
+        model.isArchive = conversation.isArchive as NSNumber?
         model.canEditInfo = conversation.canEditInfo as NSNumber?
         model.canSpam = conversation.canSpam as NSNumber
         model.closedThread = conversation.closedThread as NSNumber
@@ -163,12 +165,10 @@ public extension CMConversation {
             orFetchPredicatArray.append(NSPredicate(format: "id == %i", threadId))
         }
 
-        if orFetchPredicatArray.count == 1 {
-            fetchRequest.predicate = orFetchPredicatArray.first!
-        } else if orFetchPredicatArray.count > 1 {
-            let predicateCompound = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.or, subpredicates: orFetchPredicatArray)
-            fetchRequest.predicate = predicateCompound
-        }
+        let archivePredicate = NSPredicate(format: "isArchive == %@", NSNumber(value: req.archived ?? false) )
+        orFetchPredicatArray.append(archivePredicate)
+        let orCompound = NSCompoundPredicate(type: .or, subpredicates: orFetchPredicatArray)
+        fetchRequest.predicate = orCompound
 
         let sortByTime = NSSortDescriptor(key: "time", ascending: false)
         fetchRequest.sortDescriptors = [sortByTime]

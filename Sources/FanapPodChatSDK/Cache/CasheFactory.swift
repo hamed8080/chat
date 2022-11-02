@@ -83,6 +83,7 @@ public class CacheFactory {
         case tagParticipants(_ tagParticipants: [TagParticipant], _ tagId: Int)
         case deleteTag(_ tag: Tag)
         case deleteTagParticipants(_ tagParticipants: [TagParticipant])
+        case archiveUnarchiveAhread(_ isArchive: Bool, _ threadId: Int)
     }
 
     public class func get(useCache: Bool = false, cacheType: ReadCacheType, completion: ((ChatResponse) -> Void)? = nil) {
@@ -317,6 +318,10 @@ public class CacheFactory {
                 CMTagParticipant.crud.deleteWith(predicate: NSPredicate(format: "tagId == %i", tag.id))
             case let .deleteTagParticipants(_: tagParticipants):
                 CMTagParticipant.crud.deleteWith(predicate: NSPredicate(format: "id IN %@", tagParticipants.map(\.id)))
+            case let .archiveUnarchiveAhread(_: isArchive, _: threadId):
+                if let conversation = CMConversation.crud.find(keyWithFromat: "id == %i", value: threadId) {
+                    conversation.isArchive = NSNumber(booleanLiteral: isArchive)
+                }
             }
         }
     }

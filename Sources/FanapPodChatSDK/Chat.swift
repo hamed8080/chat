@@ -1116,6 +1116,24 @@ public class Chat {
         ExportRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
+    /// Archive a thread.
+    /// - Parameters:
+    ///   - request: A request that contains the threadId.
+    ///   - completion: A response which contain the threadId of archived thread.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func archiveThread(_ request: ArchiveThreadRequest, _ completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType = nil) {
+        ArchiveThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
+    }
+
+    /// Unarchive a thread.
+    /// - Parameters:
+    ///   - request: A request that contains the threadId.
+    ///   - completion: A response which contain the threadId of unarchived thread.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func unarchiveThread(_ request: UnarchiveThreadRequest, _ completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType = nil) {
+        UnarchiveThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
+    }
+
     // REST API Request
     func restApiRequest<T: Decodable>(_ encodableRequest: BaseRequest,
                                       decodeType: T.Type,

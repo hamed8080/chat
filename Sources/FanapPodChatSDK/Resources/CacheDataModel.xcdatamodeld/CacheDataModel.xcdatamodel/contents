@@ -38,6 +38,7 @@
         <attribute name="group" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="image" optional="YES" attributeType="String"/>
+        <attribute name="isArchive" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="joinDate" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="lastMessage" optional="YES" attributeType="String"/>
         <attribute name="lastParticipantImage" optional="YES" attributeType="String"/>

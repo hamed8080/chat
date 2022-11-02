@@ -52,6 +52,7 @@ open class Conversation: Codable, Hashable {
     public var lastMessageVO: Message?
     public var participants: [Participant]?
     public var pinMessage: PinUnpinMessage?
+    public var isArchive: Bool?
 
     public init(admin: Bool? = nil,
                 canEditInfo: Bool? = nil,
@@ -89,7 +90,8 @@ open class Conversation: Codable, Hashable {
                 inviter: Participant? = nil,
                 lastMessageVO: Message? = nil,
                 participants: [Participant]? = nil,
-                pinMessage: PinUnpinMessage? = nil)
+                pinMessage: PinUnpinMessage? = nil,
+                isArchive: Bool? = nil)
     {
         self.admin = admin
         self.canEditInfo = canEditInfo
@@ -129,6 +131,7 @@ open class Conversation: Codable, Hashable {
         self.lastMessageVO = lastMessageVO
         self.participants = participants
         self.pinMessage = pinMessage
+        self.isArchive = isArchive
     }
 
     public init(theConversation: Conversation) {
@@ -170,6 +173,7 @@ open class Conversation: Codable, Hashable {
         lastMessageVO = theConversation.lastMessageVO
         participants = theConversation.participants
         pinMessage = theConversation.pinMessage
+        isArchive = theConversation.isArchive
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -212,6 +216,7 @@ open class Conversation: Codable, Hashable {
         case lastMessageVO
         case pinMessageVO
         case pinMessage // only in encode
+        case archiveThread
     }
 
     public required init(from decoder: Decoder) throws {
@@ -253,6 +258,7 @@ open class Conversation: Codable, Hashable {
         participants = try container.decodeIfPresent([Participant].self, forKey: .participants)
         lastMessageVO = try container.decodeIfPresent(Message.self, forKey: .lastMessageVO)
         pinMessage = try container.decodeIfPresent(PinUnpinMessage.self, forKey: .pinMessageVO)
+        isArchive = try container.decodeIfPresent(Bool.self, forKey: .archiveThread)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -294,5 +300,6 @@ open class Conversation: Codable, Hashable {
         try container.encodeIfPresent(lastMessageVO, forKey: .lastMessageVO)
         try container.encodeIfPresent(participants, forKey: .participants)
         try container.encodeIfPresent(pinMessage, forKey: .pinMessage)
+        try container.encodeIfPresent(isArchive, forKey: .archiveThread)
     }
 }
