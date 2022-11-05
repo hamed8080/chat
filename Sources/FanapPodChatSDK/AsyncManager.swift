@@ -35,7 +35,7 @@ internal class AsyncManager: AsyncDelegate {
         let webrtcSenderPeerIds: [Int64] = [13_631_820, 13_631_821, 101_130_994, 101_131_106, 101_131_185]
         let webrtcPeerNames = ["KuretoAdmin1,KuretoAdmin2"]
         if webrtcSenderPeerIds.contains(asyncMessage.senderId ?? 0) || webrtcPeerNames.contains(asyncMessage.peerName ?? "") {
-            WebRTCClientNew.instance?.messageReceived(asyncMessage)
+            WebRTCClient.instance?.messageReceived(asyncMessage)
         }
     }
 

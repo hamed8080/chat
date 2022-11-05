@@ -17,6 +17,8 @@ extension RTCIceConnectionState {
         case .disconnected: return "disconnected"
         case .failed: return "failed"
         case .new: return "new"
+        @unknown default:
+            return "A unknown type found in RTCIceConnectionState.swift!"
         }
     }
 }
