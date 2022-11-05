@@ -10,9 +10,9 @@ import Foundation
 class ExportRequestHandler {
     static var exportMessageViewModels: [any ExportMessagesProtocol] = []
     class func handle(_ req: GetHistoryRequest,
-                      _ chat: Chat,
+                      _: Chat,
                       _ completion: @escaping CompletionType<URL>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _: UniqueIdResultType = nil)
     {
         let vm = ExportMessages(request: req, completion: completion)
         vm.start()
@@ -55,7 +55,7 @@ class ExportMessages: ExportMessagesProtocol {
     var filePath: URL { rootPath.appendingPathComponent(fileName) }
     let maxSize: Int = 10000
     var maxAvailableCount: Int = 0
-    var titles: String { ["message", "userName", "name", "hour", "date"].map { $0.localized }.joined(separator: ",").appending("\r\n") }
+    var titles: String { ["message", "userName", "name", "hour", "date"].map(\.localized).joined(separator: ",").appending("\r\n") }
 
     init(request: GetHistoryRequest, completion: @escaping CompletionType<URL>, uniqueIdResult: UniqueIdResultType = nil) {
         self.request = request

@@ -1,9 +1,8 @@
 //
-//  ArchiveThreadResponseHandler.swift
-//  FanapPodChatSDK
+// ArchiveThreadResponseHandler.swift
+// Copyright (c) 2022 FanapPodChatSDK
 //
-//  Created by Hamed Hosseini on 2/20/21.
-//
+// Created by Hamed Hosseini on 9/27/22.
 
 import FanapPodAsyncSDK
 import Foundation

@@ -165,7 +165,7 @@ public extension CMConversation {
             orFetchPredicatArray.append(NSPredicate(format: "id == %i", threadId))
         }
 
-        let archivePredicate = NSPredicate(format: "isArchive == %@", NSNumber(value: req.archived ?? false) )
+        let archivePredicate = NSPredicate(format: "isArchive == %@", NSNumber(value: req.archived ?? false))
         orFetchPredicatArray.append(archivePredicate)
         let orCompound = NSCompoundPredicate(type: .or, subpredicates: orFetchPredicatArray)
         fetchRequest.predicate = orCompound

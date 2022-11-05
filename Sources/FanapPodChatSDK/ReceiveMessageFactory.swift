@@ -186,10 +186,8 @@ class ReceiveMessageFactory {
             DeleteThreadResponseHandler.handle(asyncMessage)
         case .archiveThread:
             ArchiveThreadResponseHandler.handle(asyncMessage)
-            break
         case .unarchiveThread:
             UNArchiveThreadResponseHandler.handle(asyncMessage)
-            break
         case .error:
             ErrorResponseHandler.handle(asyncMessage)
         case .unknown:
