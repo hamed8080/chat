@@ -1,5 +1,19 @@
+.DS_Store
 **/.DS_Store
+
+### SwiftPM ###
+.build/
+.swiftpm/
+Packages
+xcuserdata
 xcuserdata/
 *.xccheckout
+*.xcodeproj
+swift-format.xcodeproj/
+Package.resolved
+
+### DOCC
+.docs/
+
 Pod-Chat-iOS-SDK/Frameworks
 Pod-Chat-iOS-SDK/Frameworks/**

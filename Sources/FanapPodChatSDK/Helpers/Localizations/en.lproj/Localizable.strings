@@ -1,0 +1,13 @@
+/* 
+  Localizable.strings
+  
+
+  Created by hamed on 10/23/22.
+  
+*/
+"message" = "Message";
+"userName" = "User Name";
+"name" = "Name";
+"hour" = "Hour";
+"date" = "Date";
+"undefined" = "Undefined";
