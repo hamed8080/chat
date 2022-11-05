@@ -8,7 +8,7 @@ import FanapPodAsyncSDK
 import Foundation
 import WebRTC
 
-public protocol WebRTCClientDelegate {
+public protocol WebRTCClientDelegate: AnyObject {
     func didIceConnectionStateChanged(iceConnectionState: RTCIceConnectionState)
     func didReceiveData(data: Data)
     func didReceiveMessage(message: String)
@@ -24,7 +24,7 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
     private var peerConnectionFactory: RTCPeerConnectionFactory
     private var peerConnection: RTCPeerConnection?
     private var config: WebRTCConfigOld
-    private var delegate: WebRTCClientDelegate?
+    private weak var delegate: WebRTCClientDelegate?
     private var localVideoTrack: RTCVideoTrack?
     private var remoteVideoTrack: RTCVideoTrack?
     private var videoCapturer: RTCVideoCapturer?

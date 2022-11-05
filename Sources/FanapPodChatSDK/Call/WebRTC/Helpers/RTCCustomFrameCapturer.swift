@@ -16,8 +16,8 @@ class RTCCustomFrameCapturer: RTCVideoCapturer {
     }
 
     public func capture(_ sampleBuffer: CMSampleBuffer) {
-        let _pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
-        if let pixelBuffer = _pixelBuffer {
+        let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
+        if let pixelBuffer = pixelBuffer {
             let rtcPixelBuffer = RTCCVPixelBuffer(pixelBuffer: pixelBuffer)
             let timeStampNs = CMTimeGetSeconds(CMSampleBufferGetPresentationTimeStamp(sampleBuffer)) * kNanosecondsPerSecond
             let rtcVideoFrame = RTCVideoFrame(buffer: rtcPixelBuffer, rotation: RTCVideoRotation._90, timeStampNs: Int64(timeStampNs))
