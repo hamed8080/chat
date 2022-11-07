@@ -245,7 +245,7 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
             let videoReceivetransciver = usersRTC[index].pc?.addTransceiver(of: .video)
             videoReceivetransciver?.setDirection(.recvOnly, error: &error)
             if let remoteVideoTrack = videoReceivetransciver?.receiver.track as? RTCVideoTrack {
-                usersRTC[index].videoTrack = remoteVideoTrack
+                usersRTC[index].setVideoTrack(remoteVideoTrack)
                 usersRTC[index].pc?.add(remoteVideoTrack, streamIds: [topic])
                 if let renderer = usersRTC[index].renderer {
                     usersRTC[index].videoTrack?.add(renderer)
@@ -723,15 +723,15 @@ extension Array where Element == UserRCT {
 }
 
 enum WebRTCMessageType: String, Decodable {
-    case createSession
-    case sessionNewCreated
-    case sessionRefresh
-    case getKeyFrame
-    case addIceCandidate
-    case processSdpAnswer
-    case close
+    case createSession = "CREATE_SESSION"
+    case sessionNewCreated = "SESSION_NEW_CREATED"
+    case sessionRefresh = "SESSION_REFRESH"
+    case getKeyFrame = "GET_KEY_FRAME"
+    case addIceCandidate = "ADD_ICE_CANDIDATE"
+    case processSdpAnswer = "PROCESS_SDP_ANSWER"
+    case close = "CLOSE"
     case stopAll = "STOPALL"
-    case stop
+    case stop = "STOP"
     case unkown
 
     // prevent crash when new case added from server side

@@ -29,7 +29,7 @@ public struct UserRCT: Hashable {
     public var pf: RTCPeerConnectionFactory?
     public var pc: RTCPeerConnection?
     public var renderer: RTCVideoRenderer?
-    public var videoTrack: RTCVideoTrack?
+    private(set) var videoTrack: RTCVideoTrack?
     private(set) var audioTrack: RTCAudioTrack?
     public private(set) var callParticipant: CallParticipant?
     public var dataChannel: RTCDataChannel?
@@ -130,4 +130,13 @@ public struct UserRCT: Hashable {
         setAudioTrack(enable: !mute)
         callParticipant?.mute = mute
     }
+
+    public mutating func addVideoRenderer(_ renderer: RTCVideoRenderer) {
+        videoTrack?.add(renderer)
+    }
+
+    public mutating func removeVideoRenderer(_ renderer: RTCVideoRenderer) {
+        videoTrack?.remove(renderer)
+    }
+
 }
