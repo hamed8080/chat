@@ -206,7 +206,9 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
                                            token: Chat.sharedInstance.token ?? "",
                                            topic: topic,
                                            sdpOffer: sdp,
-                                           mediaType: mediaType)
+                                           mediaType: mediaType,
+                                           chatId: config.callId
+        )
         guard let data = try? JSONEncoder().encode(sendSDPOffer) else {
             customPrint("error to encode SDP offer", isGuardNil: true)
             return

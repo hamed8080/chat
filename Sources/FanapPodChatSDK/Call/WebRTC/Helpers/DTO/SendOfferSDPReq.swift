@@ -21,16 +21,18 @@ struct SendOfferSDPReq: Codable {
     private var mediaType: Mediatype
     private var useComedia = true
     private var useSrtp = false
+    var chatId: Int?
 
     var unqiueId = UUID().uuidString
 
-    public init(id: String = "RECIVE_SDP_OFFER", brokerAddress: String, token: String, topic: String, sdpOffer: String, mediaType: Mediatype) {
+    public init(id: String = "RECIVE_SDP_OFFER", brokerAddress: String, token: String, topic: String, sdpOffer: String, mediaType: Mediatype, chatId: Int?) {
         self.id = id
         self.brokerAddress = brokerAddress
         self.token = token
         self.topic = topic
         self.sdpOffer = sdpOffer
         self.mediaType = mediaType
+        self.chatId = chatId
     }
 }
 

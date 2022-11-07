@@ -6,22 +6,6 @@
 
 import Foundation
 
-public struct VideoConfig {
-    public let width: Int
-    public let height: Int
-    public let fps: Int
-    public let localVideoViewFrame: CGRect?
-    public let remoteVideoViewFrame: CGRect?
-
-    public init(width: Int = 640, height: Int = 640 * 16 / 9, fps: Int = 30, localVideoViewFrame: CGRect, remoteVideoViewFrame: CGRect) {
-        self.width = width
-        self.height = height
-        self.fps = fps
-        self.localVideoViewFrame = localVideoViewFrame
-        self.remoteVideoViewFrame = remoteVideoViewFrame
-    }
-}
-
 public struct WebRTCConfig {
     public let peerName: String
     public let iceServers: [String]
@@ -33,38 +17,10 @@ public struct WebRTCConfig {
     public let customFrameCapturer: Bool
     public let userName: String?
     public let password: String?
+    public let callId: Int?
 
     /// File for simulator
     public let fileName: String?
-
-    public let videoConfig: VideoConfig?
-
-    public init(peerName: String,
-                iceServers: [String],
-                turnAddress: String,
-                topicSend: String?,
-                topicReceive: String?,
-                brokerAddressWeb: String,
-                dataChannel: Bool = false,
-                customFrameCapturer: Bool = false,
-                userName: String? = nil,
-                password: String? = nil,
-                videoConfig: VideoConfig? = nil,
-                fileName: String? = nil)
-    {
-        self.peerName = peerName
-        self.iceServers = iceServers
-        self.turnAddress = turnAddress
-        self.topicSend = topicSend
-        self.topicReceive = topicReceive
-        self.brokerAddressWeb = brokerAddressWeb
-        self.dataChannel = dataChannel
-        self.customFrameCapturer = customFrameCapturer
-        self.userName = userName
-        self.password = password
-        self.videoConfig = videoConfig
-        self.fileName = fileName
-    }
 
     var firstBorokerAddressWeb: String {
         if let firstBrokerAddressWeb = brokerAddressWeb.split(separator: ",").first {
@@ -75,6 +31,7 @@ public struct WebRTCConfig {
     }
 
     public init(startCall: StartCall, isSendVideoEnabled _: Bool, fileName: String? = nil) {
+        callId = startCall.callId
         peerName = startCall.chatDataDto.kurentoAddress
         iceServers = ["turn:\(startCall.chatDataDto.turnAddress)?transport=udp", "turn:\(startCall.chatDataDto.turnAddress)?transport=tcp"] // "stun:46.32.6.188:3478"
         turnAddress = startCall.chatDataDto.turnAddress
@@ -85,7 +42,6 @@ public struct WebRTCConfig {
         customFrameCapturer = false
         userName = "mkhorrami"
         password = "mkh_123456"
-        videoConfig = nil
         self.fileName = fileName
     }
 
