@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.swift_versions = "4.0"
   s.source       = { :git => "https://pubgi.fanapsoft.ir/chat/ios/fanappodchatsdk.git", :tag => s.version }
   s.source_files = "Sources/FanapPodChatSDK/**/*.{h,swift,xcdatamodeld,m,momd}"
-  s.resources = "Sources/FanapPodChatSDK/*.xcdatamodeld"
+  s.resources = "Sources/FanapPodChatSDK/Resources/*.xcdatamodeld"
   s.frameworks  = "Foundation" , "CoreData" , "Contacts"
   s.dependency "FanapPodAsyncSDK" , '~> 1.1.0'
   s.dependency "Sentry" , '~> 4.3.1'

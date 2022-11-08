@@ -58,6 +58,6 @@ extension String {
     }
 
     var localized: String {
-        NSLocalizedString(self, bundle: .module, comment: "")
+        NSLocalizedString(self, bundle: Bundle.moduleBundle, comment: "")
     }
 }
