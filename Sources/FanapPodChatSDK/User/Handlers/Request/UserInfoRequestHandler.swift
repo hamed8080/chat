@@ -30,8 +30,8 @@ class UserInfoRequestHandler {
             Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { timer in
                 UserInfoRequestHandler.handle(.init(), Chat.sharedInstance) { user, _, error in
                     if let user = user {
-                        Chat.sharedInstance.delegate?.chatState(state: .chatReady, currentUser: user, error: nil)
                         Chat.sharedInstance.setUser(user: user)
+                        Chat.sharedInstance.delegate?.chatState(state: .chatReady, currentUser: user, error: nil)
                         timer.invalidate()
                     } else if count < maxRetry {
                         count += 1
