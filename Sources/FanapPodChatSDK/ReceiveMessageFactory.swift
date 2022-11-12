@@ -208,6 +208,8 @@ class ReceiveMessageFactory {
             GetCallsResponseHandler.handle(asyncMessage)
         case .renewCallRequest:
             RenewCallRequestResponseHandler.handle(asyncMessage)
+        case .callInquiry:
+            CallInquiryResponseHandler.handle(asyncMessage)
         case .tagList:
             TagListResponseHandler.handle(asyncMessage)
         case .createTag:

@@ -471,24 +471,31 @@ public extension WebRTCClient {
             customPrint("can't find topic name to send ICE Candidate", isGuardNil: true)
             return
         }
-        DispatchQueue.main.async {
-            Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] timer in
-                guard let self = self else { return }
-                if self.usersRTC.userFor(topic: topicName)?.pc?.remoteDescription != nil {
-                    let sendIceCandidate = SendCandidateReq(token: Chat.sharedInstance.token ?? "",
-                                                            topic: topicName,
-                                                            candidate: IceCandidate(from: candidate).replaceSpaceSdpIceCandidate)
-                    guard let data = try? JSONEncoder().encode(sendIceCandidate) else {
-                        self.customPrint("cannot encode genereated ice to send to server!", isGuardNil: true)
-                        return
-                    }
-                    self.customPrint("ice sended to server")
-                    self.send(data)
-                    timer.invalidate()
-                } else {
-                    let pcName = self.getPCName(peerConnection)
-                    self.customPrint("answer is not present yet for \(pcName) timer will fire in 0.5 second", isGuardNil: true)
+        DispatchQueue.main.async { [weak self] in
+            self?.recursiveTimerForRemoteSDP(0.5, topicName, candidate, peerConnection)
+        }
+    }
+
+    private func recursiveTimerForRemoteSDP(_ interval: TimeInterval, _ topicName: String, _ candidate: RTCIceCandidate, _ peerConnection: RTCPeerConnection, _ retryCount: Int = 0) {
+        let intervals: [Int] = [2, 4, 8, 12]
+        if retryCount > intervals.count - 1 { return }
+        let nextInterval = TimeInterval(intervals[retryCount])
+        Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { [weak self] _ in
+            guard let self = self else { return }
+            if self.usersRTC.userFor(topic: topicName)?.pc?.remoteDescription != nil {
+                let sendIceCandidate = SendCandidateReq(token: Chat.sharedInstance.token ?? "",
+                                                        topic: topicName,
+                                                        candidate: IceCandidate(from: candidate).replaceSpaceSdpIceCandidate)
+                guard let data = try? JSONEncoder().encode(sendIceCandidate) else {
+                    self.customPrint("cannot encode genereated ice to send to server!", isGuardNil: true)
+                    return
                 }
+                self.customPrint("ice sended to server")
+                self.send(data)
+            } else {
+                self.recursiveTimerForRemoteSDP(nextInterval, topicName, candidate, peerConnection, retryCount + 1)
+                let pcName = self.getPCName(peerConnection)
+                self.customPrint("answer is not present yet for \(pcName) timer will fire in \(nextInterval) second", isGuardNil: true)
             }
         }
     }

@@ -1312,6 +1312,15 @@ public class Chat {
         RenewCallRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
+    /// To get the status of the call and participants after a disconnect or when you need it.
+    /// - Parameters:
+    ///   - request: The callId.
+    ///   - completion: A created call with details.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func callInquery(_ request: CallInquiryRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType = nil) {
+        CallInquiryRequestHandler.handle(request, self, completion, uniqueIdResult)
+    }
+
     /// Stop all the signaling that has started before. This method is only will be called by the SDK.
     /// - Parameter peerName: Name of the peer.
     func sotpAllSignalingServerCall(peerName: String) {

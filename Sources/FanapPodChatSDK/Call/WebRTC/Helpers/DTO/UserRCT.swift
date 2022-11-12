@@ -15,7 +15,9 @@ public enum RTCDirection {
 
 /// This struct use to save state of a particular call participant which can be a single video or audio
 /// user for a call participant because in this system for each call participant we have two user and peerconnection one for audio and one for video or in the future data.
-public struct UserRCT: Hashable {
+public struct UserRCT: Hashable, Identifiable {
+
+    public var id: String { topic }
     public static func == (lhs: UserRCT, rhs: UserRCT) -> Bool {
         lhs.topic == rhs.topic
     }
