@@ -14,11 +14,11 @@ class SendLocationMessageRequestHandler {
                       _ request: LocationMessageRequest,
                       _ downloadProgress: DownloadProgressType? = nil,
                       _ uploadProgress: UploadFileProgressType? = nil,
-                      _ onSent: OnSentType = nil,
-                      _ onSeen: OnSeenType = nil,
-                      _ onDeliver: OnDeliveryType = nil,
-                      _ uploadUniqueIdResult: UniqueIdResultType = nil,
-                      _ messageUniqueIdResult: UniqueIdResultType = nil)
+                      _ onSent: OnSentType? = nil,
+                      _ onSeen: OnSeenType? = nil,
+                      _ onDeliver: OnDeliveryType? = nil,
+                      _ uploadUniqueIdResult: UniqueIdResultType? = nil,
+                      _ messageUniqueIdResult: UniqueIdResultType? = nil)
     {
         guard let config = chat.config else { return }
         let mapStaticReq = MapStaticImageRequest(center: request.mapCenter,

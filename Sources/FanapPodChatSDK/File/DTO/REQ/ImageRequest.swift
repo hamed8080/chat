@@ -13,7 +13,7 @@ public enum ImageSize: String, Encodable {
     case ACTUAL
 }
 
-public class ImageRequest: BaseRequest {
+public class ImageRequest: BaseRequest, Encodable {
     public let hashCode: String
     public var forceToDownloadFromServer: Bool
     public let quality: Float?
@@ -43,7 +43,7 @@ public class ImageRequest: BaseRequest {
         case checkUserGroupAccess
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try? container.encodeIfPresent(size, forKey: .size)
         try? container.encodeIfPresent(crop, forKey: .crop)

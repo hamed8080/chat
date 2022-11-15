@@ -5,8 +5,11 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class GetTagParticipantsRequest: BaseRequest {
+public class GetTagParticipantsRequest: BaseRequest, ChatSnedable, SubjectProtocol {
     public var id: Int
+    var subjectId: Int? { id }
+    var chatMessageType: ChatMessageVOTypes = .getTagParticipants
+    var content: String?
 
     public init(id: Int, uniqueId: String? = nil) {
         self.id = id

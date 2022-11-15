@@ -10,7 +10,7 @@ class UploadImageRequestHandler {
                            _ req: UploadImageRequest,
                            _ uploadCompletion: UploadCompletionType? = nil,
                            _ uploadProgress: UploadFileProgressType? = nil,
-                           _ uploadUniqueIdResult: UniqueIdResultType = nil)
+                           _ uploadUniqueIdResult: UniqueIdResultType? = nil)
     {
         uploadUniqueIdResult?(req.uniqueId)
         let chatDelegate = Chat.sharedInstance.delegate

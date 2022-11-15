@@ -11,12 +11,9 @@ public class BlockAssistantRequestHandler {
     class func handle(_ req: BlockUnblockAssistantRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<[Assistant]>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: req.assistants,
-                                clientSpecificUniqueId: req.uniqueId,
-                                messageType: .blockAssistant,
-                                uniqueIdResult: uniqueIdResult) { response in
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? [Assistant], response.uniqueId, response.error)
         }
     }

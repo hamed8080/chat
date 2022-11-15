@@ -6,9 +6,11 @@
 
 import Foundation
 
-public class UpdateChatProfile: BaseRequest {
+public class UpdateChatProfile: BaseRequest, ChatSnedable {
     public let bio: String?
     public let metadata: String?
+    var chatMessageType: ChatMessageVOTypes = .setProfile
+    var content: String? { convertCodableToString() }
 
     public init(bio: String?, metadata: String? = nil, uniqueId: String? = nil) {
         self.bio = bio
@@ -21,7 +23,7 @@ public class UpdateChatProfile: BaseRequest {
         case metadata
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(bio, forKey: .bio)
         try container.encodeIfPresent(metadata, forKey: .metadata)

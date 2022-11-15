@@ -10,12 +10,9 @@ class AddContactRequestHandler {
     class func handle(_ req: AddContactRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<[Contact]>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        guard let config = chat.config else { return }
-        let url = "\(config.platformHost)\(Routes.addContacts.rawValue)"
-        let headers: [String: String] = ["_token_": config.token, "_token_issuer_": "1"]
-        chat.restApiRequest(req, decodeType: ContactResponse.self, url: url, headers: headers, uniqueIdResult: uniqueIdResult) { response in
+        chat.restApiRequest(req, decodeType: ContactResponse.self, uniqueIdResult: uniqueIdResult) { response in
             let contactResponse = response.result as? ContactResponse
             addToCacheIfEnabled(chat: chat, contactsResponse: contactResponse)
             completion(contactResponse?.contacts, response.uniqueId, response.error)

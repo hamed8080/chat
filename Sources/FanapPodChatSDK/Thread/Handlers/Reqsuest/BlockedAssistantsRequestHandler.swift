@@ -12,12 +12,9 @@ public class BlockedAssistantsRequestHandler {
                       _ chat: Chat,
                       _ completion: @escaping PaginationCompletionType<[Assistant]>,
                       _ cacheResponse: PaginationCacheResponseType<[Assistant]>? = nil,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: req,
-                                clientSpecificUniqueId: req.uniqueId,
-                                messageType: .blockedAssistnts,
-                                uniqueIdResult: uniqueIdResult) { response in
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             let pagination = PaginationWithContentCount(count: req.count, offset: req.offset, totalCount: response.contentCount)
             completion(response.result as? [Assistant], response.uniqueId, pagination, response.error)
         }

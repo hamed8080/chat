@@ -31,18 +31,6 @@ extension String {
         }
     }
 
-//    func convertToJSON() -> JSON {
-//        if let dataFromStringMsg = self.data(using: .utf8, allowLossyConversion: false) {
-//            if let msg = try? JSON(data: dataFromStringMsg) {
-//                return msg
-//            } else {
-//                return []
-//            }
-//        } else {
-//            return []
-//        }
-//    }
-
     public func removeBackSlashes() -> String {
         replacingOccurrences(of: "\\\\\"", with: "\"")
             .replacingOccurrences(of: "\\\"", with: "\"")
@@ -59,5 +47,19 @@ extension String {
 
     var localized: String {
         NSLocalizedString(self, bundle: Bundle.moduleBundle, comment: "")
+    }
+
+    func toURLCompoenentString(encodable: Encodable) -> String? {
+        var queryStringUrl = self
+        if let parameters = try? encodable.asDictionary(), parameters.count > 0 {
+            var urlComp = URLComponents(string: self)!
+            urlComp.queryItems = []
+            parameters.forEach { key, value in
+                urlComp.queryItems?.append(URLQueryItem(name: key, value: "\(value)"))
+            }
+            queryStringUrl = urlComp.url?.absoluteString ?? self
+            return queryStringUrl
+        }
+        return nil
     }
 }

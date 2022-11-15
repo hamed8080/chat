@@ -12,10 +12,7 @@ class AllUnreadMessageCountRequestHandler {
                       _ cacheResponse: CacheResponseType<Int>? = nil,
                       _ uniqueIdResult: ((String) -> Void)? = nil)
     {
-        chat.prepareToSendAsync(req: req,
-                                clientSpecificUniqueId: req.uniqueId,
-                                messageType: .allUnreadMessageCount,
-                                uniqueIdResult: uniqueIdResult) { response in
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? Int, response.uniqueId, response.error)
         }
 

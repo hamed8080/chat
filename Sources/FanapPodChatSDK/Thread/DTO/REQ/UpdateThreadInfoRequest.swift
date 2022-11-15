@@ -5,12 +5,15 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class UpdateThreadInfoRequest: BaseRequest {
+public class UpdateThreadInfoRequest: BaseRequest, ChatSnedable, SubjectProtocol {
     public let description: String?
     public var metadata: String?
     public var threadImage: UploadImageRequest?
     public let threadId: Int
     public let title: String?
+    var subjectId: Int? { threadId }
+    var chatMessageType: ChatMessageVOTypes = .updateThreadInfo
+    var content: String? { convertCodableToString() }
 
     public init(description: String? = nil,
                 metadata: String? = nil,
@@ -33,7 +36,7 @@ public class UpdateThreadInfoRequest: BaseRequest {
         case metadata
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(description, forKey: .description)
         try container.encodeIfPresent(title, forKey: .name)

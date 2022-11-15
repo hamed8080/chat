@@ -7,15 +7,12 @@
 import Foundation
 class RemoveRoleRequestHandler {
     class func handle(_ chat: Chat,
-                      _ request: RolesRequest,
+                      _ req: RolesRequest,
                       _ completion: @escaping CompletionType<[UserRole]>,
-                      _ uniqueIdResult: UniqueIdResultType)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: request.userRoles,
-                                clientSpecificUniqueId: request.uniqueId,
-                                subjectId: request.threadId,
-                                messageType: .removeRoleFromUser,
-                                uniqueIdResult: uniqueIdResult) { response in
+        req.chatMessageType = .removeRoleFromUser
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? [UserRole], response.uniqueId, response.error)
         }
     }

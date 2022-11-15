@@ -5,11 +5,13 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class BatchDeleteMessageRequest: BaseRequest {
+public class BatchDeleteMessageRequest: BaseRequest, ChatSnedable {
     let threadId: Int
     let deleteForAll: Bool
     let messageIds: [Int]
     let uniqueIds: [String]
+    var chatMessageType: ChatMessageVOTypes = .deleteMessage
+    var content: String? { convertCodableToString() }
 
     public init(threadId: Int, messageIds: [Int], deleteForAll: Bool = false, uniqueIds: [String]? = nil, uniqueId: String? = nil) {
         self.threadId = threadId
@@ -33,7 +35,7 @@ public class BatchDeleteMessageRequest: BaseRequest {
         case uniqueIds
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(messageIds, forKey: .ids)
         try container.encode(deleteForAll, forKey: .deleteForAll)

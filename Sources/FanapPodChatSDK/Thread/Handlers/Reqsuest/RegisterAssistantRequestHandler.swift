@@ -11,12 +11,9 @@ public class RegisterAssistantRequestHandler {
     class func handle(_ req: RegisterAssistantRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<[Assistant]>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: req.assistants,
-                                clientSpecificUniqueId: req.uniqueId,
-                                messageType: .registerAssistant,
-                                uniqueIdResult: uniqueIdResult) { response in
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? [Assistant], response.uniqueId, response.error)
         }
     }

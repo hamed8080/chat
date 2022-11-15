@@ -6,10 +6,12 @@
 
 import Foundation
 
-public class AssistantsRequest: BaseRequest {
+public class AssistantsRequest: BaseRequest, ChatSnedable {
     public let contactType: String
     public let count: Int
     public let offset: Int
+    var chatMessageType: ChatMessageVOTypes = .getAssistants
+    var content: String? { convertCodableToString() }
 
     public init(contactType: String,
                 count: Int = 50,
@@ -28,7 +30,7 @@ public class AssistantsRequest: BaseRequest {
         case offset
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(contactType, forKey: .contactType)
         try container.encodeIfPresent(count, forKey: .count)

@@ -6,11 +6,7 @@
 
 import Foundation
 class SeenRequestHandler {
-    class func handle(_ req: MessageSeenRequest, _ chat: Chat, _ uniqueIdResult: UniqueIdResultType = nil) {
-        chat.prepareToSendAsync(req: req.messageId,
-                                clientSpecificUniqueId: req.uniqueId,
-                                plainText: true,
-                                messageType: .seen,
-                                uniqueIdResult: uniqueIdResult)
+    class func handle(_ req: MessageSeenRequest, _ chat: Chat, _ uniqueIdResult: UniqueIdResultType? = nil) {
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult)
     }
 }

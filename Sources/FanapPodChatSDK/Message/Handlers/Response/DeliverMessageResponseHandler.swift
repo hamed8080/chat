@@ -20,7 +20,7 @@ class DeliverMessageResponseHandler: ResponseHandler {
 
         if let callback = Chat.sharedInstance.callbacksManager.getDeliverCallback(chatMessage.uniqueId) {
             let messageResponse = DeliverMessageResponse(isDeliver: true, messageId: message.id, threadId: chatMessage.subjectId, message: message, participantId: chatMessage.participantId)
-            callback?(messageResponse, chatMessage.uniqueId, nil)
+            callback(messageResponse, chatMessage.uniqueId, nil)
             chat.callbacksManager.removeDeliverCallback(uniqueId: chatMessage.uniqueId)
         }
     }

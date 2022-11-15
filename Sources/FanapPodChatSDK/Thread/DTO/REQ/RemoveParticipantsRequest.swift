@@ -5,9 +5,12 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class RemoveParticipantsRequest: BaseRequest {
+public class RemoveParticipantsRequest: BaseRequest, ChatSnedable, SubjectProtocol {
     public let participantIds: [Int]
     public let threadId: Int
+    var content: String? { participantIds.convertCodableToString() }
+    var chatMessageType: ChatMessageVOTypes = .removeParticipant
+    var subjectId: Int? { threadId }
 
     public init(participantId: Int, threadId: Int, uniqueId: String? = nil) {
         self.threadId = threadId

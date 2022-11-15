@@ -11,12 +11,9 @@ class UnBlockContactRequestHandler {
     class func handle(_ req: UnBlockRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<BlockedContact>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: req,
-                                clientSpecificUniqueId: req.uniqueId,
-                                messageType: .unblock,
-                                uniqueIdResult: uniqueIdResult) { response in
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? BlockedContact, response.uniqueId, response.error)
         }
     }

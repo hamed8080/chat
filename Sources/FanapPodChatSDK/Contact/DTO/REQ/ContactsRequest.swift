@@ -8,7 +8,10 @@ import Foundation
 
 import FanapPodAsyncSDK
 
-public class ContactsRequest: BaseRequest {
+public class ContactsRequest: BaseRequest, ChatSnedable {
+    var chatMessageType: ChatMessageVOTypes = .getContacts
+    var content: String? { convertCodableToString() }
+
     public var size: Int = 50
     public var offset: Int = 0
     // use in cashe
@@ -51,7 +54,7 @@ public class ContactsRequest: BaseRequest {
         case summery
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try? container.encodeIfPresent(size, forKey: .size)
         try? container.encodeIfPresent(offset, forKey: .offset)

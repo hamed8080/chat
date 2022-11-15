@@ -14,9 +14,11 @@ public enum StatusPingType: Int, Encodable {
     case contactId
 }
 
-public class SendStatusPingRequest: BaseRequest {
+public class SendStatusPingRequest: BaseRequest, ChatSnedable {
     public let statusType: StatusPingType
     public let id: Int?
+    var chatMessageType: ChatMessageVOTypes = .statusPing
+    var content: String? { convertCodableToString() }
 
     public init(statusType: StatusPingType, uniqueId: String? = nil) {
         id = nil
@@ -41,7 +43,7 @@ public class SendStatusPingRequest: BaseRequest {
         case locationId
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
         if statusType == .chat {

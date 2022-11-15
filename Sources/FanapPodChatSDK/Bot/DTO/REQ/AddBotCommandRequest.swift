@@ -5,7 +5,10 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class AddBotCommandRequest: BaseRequest {
+public class AddBotCommandRequest: BaseRequest, ChatSnedable {
+    var chatMessageType: ChatMessageVOTypes = .defineBotCommand
+    var content: String?
+
     /// The bot name.
     public let botName: String
     public var commandList: [String] = []
@@ -32,7 +35,7 @@ public class AddBotCommandRequest: BaseRequest {
         case commandList
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(commandList, forKey: .commandList)
         try container.encode(botName, forKey: .botName)

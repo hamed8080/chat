@@ -6,12 +6,7 @@
 
 import Foundation
 class DeliverRequestHandler {
-    class func handle(_ req: MessageDeliverRequest, _ chat: Chat, _ uniqueIdResult: UniqueIdResultType = nil) {
-        chat.prepareToSendAsync(req: req.messageId,
-                                clientSpecificUniqueId: req.uniqueId,
-                                plainText: true,
-                                messageType: .delivery,
-                                uniqueIdResult: uniqueIdResult,
-                                completion: nil)
+    class func handle(_ req: MessageDeliverRequest, _ chat: Chat, _ uniqueIdResult: UniqueIdResultType? = nil) {
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult)
     }
 }

@@ -16,13 +16,9 @@ class GetHistoryRequestHandler {
                       _ fileMessageNotSentRequests: CompletionType<[(UploadFileRequest, SendTextMessageRequest)]>? = nil,
                       _ uploadFileNotSentRequests: CompletionType<[UploadFileRequest]>? = nil,
                       _ uploadImageNotSentRequests: CompletionType<[UploadImageRequest]>? = nil,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: req,
-                                clientSpecificUniqueId: req.uniqueId,
-                                subjectId: req.threadId,
-                                messageType: .getHistory,
-                                uniqueIdResult: uniqueIdResult) { response in
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             let messages = response.result as? [Message]
             let pagination = Pagination(hasNext: messages?.count ?? 0 >= req.count, count: req.count, offset: req.offset)
             completion(messages, response.uniqueId, pagination, response.error)

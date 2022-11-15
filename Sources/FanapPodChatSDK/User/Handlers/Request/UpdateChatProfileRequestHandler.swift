@@ -9,12 +9,9 @@ class UpdateChatProfileRequestHandler {
     class func handle(_ req: UpdateChatProfile,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<Profile>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: req,
-                                clientSpecificUniqueId: req.uniqueId,
-                                messageType: .setProfile,
-                                uniqueIdResult: uniqueIdResult) { response in
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? Profile, response.uniqueId, response.error)
         }
     }

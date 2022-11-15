@@ -6,16 +6,13 @@
 
 import Foundation
 class SpamThreadRequestHandler {
-    class func handle(_ req: SpamThreadRequest,
+    class func handle(_ req: GeneralThreadRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<BlockedContact>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: nil,
-                                clientSpecificUniqueId: req.uniqueId,
-                                subjectId: req.threadId,
-                                messageType: .spamPvThread,
-                                uniqueIdResult: uniqueIdResult) { response in
+        req.chatMessageType = .spamPvThread
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? BlockedContact, response.uniqueId, response.error)
         }
     }

@@ -9,13 +9,10 @@ class UnPinMessageRequestHandler {
     class func handle(_ req: PinUnpinMessageRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<PinUnpinMessage>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: req,
-                                clientSpecificUniqueId: req.uniqueId,
-                                subjectId: req.messageId,
-                                messageType: .unpinMessage,
-                                uniqueIdResult: uniqueIdResult) { response in
+        req.chatMessageType = .unpinMessage
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? PinUnpinMessage, response.uniqueId, response.error)
         }
     }

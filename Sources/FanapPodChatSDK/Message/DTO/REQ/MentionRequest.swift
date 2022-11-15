@@ -6,11 +6,14 @@
 
 import Foundation
 
-public class MentionRequest: BaseRequest {
+public class MentionRequest: BaseRequest, ChatSnedable, SubjectProtocol {
     public var count: Int = 50
     public var offset: Int = 0
     public let threadId: Int
     public let onlyUnreadMention: Bool
+    var content: String? { convertCodableToString() }
+    var subjectId: Int? { threadId }
+    var chatMessageType: ChatMessageVOTypes = .getHistory
 
     public init(threadId: Int,
                 onlyUnreadMention: Bool,
@@ -32,7 +35,7 @@ public class MentionRequest: BaseRequest {
         case allMentioned
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(count, forKey: .count)
         try container.encode(offset, forKey: .offset)

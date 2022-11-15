@@ -7,9 +7,9 @@
 import Foundation
 class LogoutRequestHandler {
     class func handle(_ chat: Chat) {
-        chat.prepareToSendAsync(req: nil,
-                                clientSpecificUniqueId: UUID().uuidString,
-                                messageType: .logout)
+        let req = BareChatSendableRequest(uniqueId: UUID().uuidString)
+        req.chatMessageType = .logout
+        chat.prepareToSendAsync(req: req)
         CacheFactory.write(cacheType: .deleteAllCacheData)
         CacheFactory.save()
         chat.dispose()

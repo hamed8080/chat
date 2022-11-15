@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class CreateThreadRequest: BaseRequest {
+public class CreateThreadRequest: BaseRequest, ChatSnedable {
     public let description: String?
     public let image: String?
     public let invitees: [Invitee]?
@@ -13,6 +13,8 @@ public class CreateThreadRequest: BaseRequest {
     public let title: String
     public let type: ThreadTypes?
     public let uniqueName: String? // only for public thread
+    var chatMessageType: ChatMessageVOTypes = .createThread
+    var content: String? { convertCodableToString() }
 
     public init(description: String? = nil,
                 image: String? = nil,
@@ -43,7 +45,7 @@ public class CreateThreadRequest: BaseRequest {
         case invitees
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(title, forKey: .title)
         try container.encodeIfPresent(image, forKey: .image)

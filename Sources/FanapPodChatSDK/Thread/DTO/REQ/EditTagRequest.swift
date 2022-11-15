@@ -5,9 +5,12 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class EditTagRequest: BaseRequest {
+public class EditTagRequest: BaseRequest, ChatSnedable, SubjectProtocol {
     public var name: String
     public var id: Int
+    var subjectId: Int? { id }
+    var chatMessageType: ChatMessageVOTypes = .editTag
+    var content: String? { convertCodableToString() }
 
     public init(id: Int, tagName: String, uniqueId: String? = nil) {
         self.id = id
@@ -19,7 +22,7 @@ public class EditTagRequest: BaseRequest {
         case name
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try? container.encode(name, forKey: .name)
     }

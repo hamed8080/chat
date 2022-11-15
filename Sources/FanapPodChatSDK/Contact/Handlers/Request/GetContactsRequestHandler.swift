@@ -11,12 +11,9 @@ class GetContactsRequestHandler {
                       _ chat: Chat,
                       _ completion: @escaping PaginationCompletionType<[Contact]>,
                       _ cacheResponse: PaginationCacheResponseType<[Contact]>? = nil,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: req,
-                                clientSpecificUniqueId: req.uniqueId,
-                                messageType: .getContacts,
-                                uniqueIdResult: uniqueIdResult) { response in
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             let pagination = PaginationWithContentCount(count: req.size, offset: req.offset, totalCount: response.contentCount)
             completion(response.result as? [Contact], response.uniqueId, pagination, response.error)
         }

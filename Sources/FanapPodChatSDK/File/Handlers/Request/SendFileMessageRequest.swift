@@ -9,12 +9,12 @@ import Foundation
 class SendFileMessageRequest {
     class func handle(_ textMessage: SendTextMessageRequest,
                       _ req: UploadFileRequest,
-                      _ onSent: OnSentType = nil,
-                      _ onSeen: OnSeenType = nil,
-                      _ onDeliver: OnDeliveryType = nil,
+                      _ onSent: OnSentType? = nil,
+                      _ onSeen: OnSeenType? = nil,
+                      _ onDeliver: OnDeliveryType? = nil,
                       _ uploadProgress: UploadFileProgressType? = nil,
-                      _ uploadUniqueIdResult: UniqueIdResultType = nil,
-                      _ messageUniqueIdResult: UniqueIdResultType = nil,
+                      _ uploadUniqueIdResult: UniqueIdResultType? = nil,
+                      _ messageUniqueIdResult: UniqueIdResultType? = nil,
                       _ chat: Chat)
     {
         CacheFactory.write(cacheType: .sendFileMessageQueue(req, textMessage))

@@ -9,13 +9,9 @@ class RemoveTagParticipantsRequestHandler {
     class func handle(_ req: RemoveTagParticipantsRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<[TagParticipant]>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: req.tagParticipants,
-                                clientSpecificUniqueId: req.uniqueId,
-                                subjectId: req.tagId,
-                                messageType: .removeTagParticipants,
-                                uniqueIdResult: uniqueIdResult) { response in
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? [TagParticipant], response.uniqueId, response.error)
         }
     }

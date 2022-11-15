@@ -84,9 +84,10 @@ public class CacheFactory {
         case deleteTag(_ tag: Tag)
         case deleteTagParticipants(_ tagParticipants: [TagParticipant])
         case archiveUnarchiveAhread(_ isArchive: Bool, _ threadId: Int)
+        case lastThreadMessageUpdated(_ threadId: Int, _ lastMessage: Message)
     }
 
-    public class func get(useCache: Bool = false, cacheType: ReadCacheType, completion: ((ChatResponse) -> Void)? = nil) {
+    public class func get(useCache: Bool = false, cacheType: ReadCacheType, completion: OnChatResponseType? = nil) {
         if Chat.sharedInstance.config?.enableCache == true, useCache == true {
             switch cacheType {
             case let .getCashedContacts(_: req):
@@ -204,7 +205,7 @@ public class CacheFactory {
             case let .clearAllHistory(_: threadId):
                 CMMessage.crud.deleteWith(predicate: NSPredicate(format: "threadId == %i", threadId))
             case let .deleteMessage(_: threadId, _: messageId):
-                CMMessage.crud.deleteWith(predicate: NSPredicate(format: "threadId == %i AND id == %i", threadId, messageId))
+                CMMessage.crud.deleteEntityWithPredicate(predicate: NSPredicate(format: "threadId == %i AND id == %i", threadId, messageId))
             case let .deleteMessages(_: threadId, _: messageIds):
                 CMMessage.crud.fetchWith(NSPredicate(format: "threadId == %i AND id IN %@", threadId, messageIds))?.forEach { entity in
                     CMMessage.crud.delete(entity: entity)
@@ -321,6 +322,14 @@ public class CacheFactory {
             case let .archiveUnarchiveAhread(_: isArchive, _: threadId):
                 if let conversation = CMConversation.crud.find(keyWithFromat: "id == %i", value: threadId) {
                     conversation.isArchive = NSNumber(booleanLiteral: isArchive)
+                }
+            case let .lastThreadMessageUpdated(_: threadId, _: lastMessage):
+                if let messageId = lastMessage.id {
+                    let req = NSPredicate(format: "id == %i AND threadId == %i", messageId, threadId)
+                    if let lastMessageEntity = CMMessage.crud.fetchWith(req)?.first {
+                        lastMessageEntity.conversation?.lastMessage = lastMessageEntity.message
+                        lastMessageEntity.conversation?.lastMessageVO = lastMessageEntity
+                    }
                 }
             }
         }

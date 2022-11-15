@@ -10,13 +10,11 @@ import Foundation
 public class GetAssistantsHistoryRequestHandler {
     class func handle(_ chat: Chat,
                       _ completion: @escaping CompletionType<[AssistantAction]>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        let req = BaseRequest()
-        chat.prepareToSendAsync(req: req,
-                                clientSpecificUniqueId: req.uniqueId,
-                                messageType: .getAssistantHistory,
-                                uniqueIdResult: uniqueIdResult) { response in
+        let req = BareChatSendableRequest()
+        req.chatMessageType = .getAssistantHistory
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? [AssistantAction], response.uniqueId, response.error)
         }
     }

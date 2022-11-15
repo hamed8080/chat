@@ -5,4 +5,11 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class UserInfoRequest: BaseRequest {}
+public class UserInfoRequest: BaseRequest, ChatSnedable {
+    var chatMessageType: ChatMessageVOTypes = .userInfo
+    var content: String?
+
+    override init(uniqueId: String? = nil) {
+        super.init(uniqueId: uniqueId)
+    }
+}

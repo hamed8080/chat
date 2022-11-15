@@ -7,7 +7,7 @@
 import Foundation
 class DownloadImageRequestHandler {
     class func download(_ req: ImageRequest,
-                        _ uniqueIdResult: UniqueIdResultType = nil,
+                        _ uniqueIdResult: UniqueIdResultType? = nil,
                         _ downloadProgress: DownloadProgressType? = nil,
                         _ completion: DownloadImageCompletionType? = nil,
                         _ cacheResponse: DownloadImageCompletionType? = nil)

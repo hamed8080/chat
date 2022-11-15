@@ -9,17 +9,14 @@ class BatchDeleteMessageRequestHandler {
     class func handle(_ req: BatchDeleteMessageRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<Message>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
         req.uniqueIds.forEach { uniqueId in
             chat.callbacksManager.addCallback(uniqueId: uniqueId, requesType: .deleteMessage, callback: { response in
                 completion(response.result as? Message, response.uniqueId, response.error)
             })
         }
-        chat.prepareToSendAsync(req: req,
-                                clientSpecificUniqueId: req.uniqueId,
-                                messageType: .deleteMessage,
-                                uniqueIdResult: uniqueIdResult) { response in
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? Message, response.uniqueId, response.error)
         }
     }

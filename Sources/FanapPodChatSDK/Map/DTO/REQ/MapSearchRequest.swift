@@ -6,7 +6,14 @@
 
 import Foundation
 
-public class MapSearchRequest: BaseRequest {
+public class MapSearchRequest: BaseRequest, RestAPIProtocol {
+    static let config = Chat.sharedInstance.config!
+    var url: String = "\(config.mapServer)\(Routes.mapSearch.rawValue)"
+    var urlString: String { url.toURLCompoenentString(encodable: self) ?? url }
+    var headers: [String: String] = ["Api-Key": config.mapApiKey!]
+    var bodyData: Data? { toData() }
+    var method: HTTPMethod = .get
+
     public let lat: Double
     public let lng: Double
     public let term: String
@@ -28,7 +35,7 @@ public class MapSearchRequest: BaseRequest {
         case term
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try? container.encode(lat, forKey: .lat)
         try? container.encode(lng, forKey: .lng)

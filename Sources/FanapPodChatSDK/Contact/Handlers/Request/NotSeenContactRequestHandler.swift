@@ -9,15 +9,11 @@ class NotSeenContactRequestHandler {
     class func handle(_ req: NotSeenDurationRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<[UserLastSeenDuration]>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: req,
-                                clientSpecificUniqueId: req.uniqueId,
-                                messageType: .getNotSeenDuration,
-                                uniqueIdResult: uniqueIdResult,
-                                completion: { response in
-                                    let contactNotSeenDusrationresponse = response.result as? ContactNotSeenDurationRespoonse
-                                    completion(contactNotSeenDusrationresponse?.notSeenDuration, response.uniqueId, response.error)
-                                })
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
+            let contactNotSeenDusrationresponse = response.result as? ContactNotSeenDurationRespoonse
+            completion(contactNotSeenDusrationresponse?.notSeenDuration, response.uniqueId, response.error)
+        }
     }
 }

@@ -5,8 +5,10 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class AllThreads: BaseRequest {
+public class AllThreads: BaseRequest, ChatSnedable {
     private let summary: Bool
+    var chatMessageType: ChatMessageVOTypes = .getThreads
+    var content: String? { convertCodableToString() }
 
     /// Init the request.
     /// - Parameters:
@@ -21,7 +23,7 @@ public class AllThreads: BaseRequest {
         case summary
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try? container.encode(summary, forKey: .summary)
     }

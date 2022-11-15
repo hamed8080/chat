@@ -7,9 +7,11 @@
 import Foundation
 
 /// Create bot request.
-public class CreateBotRequest: BaseRequest {
+public class CreateBotRequest: BaseRequest, PlainTextSendable {
     /// The name of the bot you want to create.
     public var botName: String
+    var content: String? { botName }
+    var chatMessageType: ChatMessageVOTypes = .createBot
 
     /// Initializer.
     /// - Parameters:

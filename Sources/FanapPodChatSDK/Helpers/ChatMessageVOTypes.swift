@@ -65,6 +65,8 @@ public enum ChatMessageVOTypes: Int, Codable, SafeDecodable {
     case defineBotCommand = 63
     case startBot = 64
     case stopBot = 65
+    case lastMessageDeleted = 66
+    case lastMessageEdited = 67
     case contactSynced = 90
     case logout = 100
     case statusPing = 101

@@ -12,7 +12,7 @@ public class UpdateThreadInfoRequestHandler {
                       _ req: UpdateThreadInfoRequest,
                       _ uploadProgress: @escaping UploadFileProgressType,
                       _ completion: @escaping CompletionType<Conversation>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
         uniqueIdResult?(req.uniqueId)
 
@@ -36,10 +36,7 @@ public class UpdateThreadInfoRequestHandler {
         if let fileMetaData = fileMetaData {
             req.metadata = fileMetaData.convertCodableToString()
         }
-        Chat.sharedInstance.prepareToSendAsync(req: req,
-                                               clientSpecificUniqueId: req.uniqueId,
-                                               subjectId: req.threadId,
-                                               messageType: .updateThreadInfo) { _ in
+        Chat.sharedInstance.prepareToSendAsync(req: req) { _ in
 
         } completion: { response in
             completion(response.result as? Conversation, response.uniqueId, response.error)

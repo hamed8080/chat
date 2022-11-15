@@ -7,7 +7,7 @@
 import FanapPodAsyncSDK
 import Foundation
 
-public struct SendAsyncMessageVO: Encodable {
+public struct SendAsyncMessageVO: Codable {
     public init(content: String, ttl: Int, peerName: String, priority: Int = 1, pushMsgType: AsyncMessageTypes? = nil) {
         self.content = content
         self.ttl = ttl

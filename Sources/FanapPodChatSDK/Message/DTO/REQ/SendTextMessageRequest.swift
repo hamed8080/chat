@@ -5,15 +5,18 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class SendTextMessageRequest: BaseRequest {
+public class SendTextMessageRequest: BaseRequest, Queueable, PlainTextSendable, ReplyProtocol, MessageTypeProtocol, MetadataProtocol, SystemtMetadataProtocol, SubjectProtocol {
     public let messageType: MessageType
     public var metadata: String?
     public let repliedTo: Int?
     public let systemMetadata: String?
     public let textMessage: String
     public var threadId: Int
+    public var content: String? { textMessage }
+    public var chatMessageType: ChatMessageVOTypes = .message
+    public var subjectId: Int? { threadId }
 
-    public init(threadId: Int? = nil,
+    public init(threadId: Int,
                 textMessage: String,
                 messageType: MessageType,
                 metadata: String? = nil,
@@ -26,7 +29,7 @@ public class SendTextMessageRequest: BaseRequest {
         self.repliedTo = repliedTo
         self.systemMetadata = systemMetadata
         self.textMessage = textMessage
-        self.threadId = threadId ?? -1
+        self.threadId = threadId
         super.init(uniqueId: uniqueId)
     }
 }
