@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class MapSearchRequest: BaseRequest, RestAPIProtocol {
+public class MapSearchRequest: UniqueIdManagerRequest, RestAPIProtocol {
     static let config = Chat.sharedInstance.config!
     var url: String = "\(config.mapServer)\(Routes.mapSearch.rawValue)"
     var urlString: String { url.toURLCompoenentString(encodable: self) ?? url }

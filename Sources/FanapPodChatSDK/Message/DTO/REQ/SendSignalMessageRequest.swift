@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class SendSignalMessageRequest: BaseRequest, ChatSnedable, SubjectProtocol {
+public class SendSignalMessageRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     public let signalType: SignalMessageType
     public let threadId: Int
     var subjectId: Int? { threadId }

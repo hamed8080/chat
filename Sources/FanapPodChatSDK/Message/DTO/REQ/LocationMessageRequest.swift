@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class LocationMessageRequest: BaseRequest {
+public class LocationMessageRequest: UniqueIdManagerRequest {
     public let mapCenter: Cordinate
     public let mapHeight: Int
     public let mapType: String

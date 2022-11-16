@@ -8,7 +8,7 @@ import CoreServices
 import Foundation
 import UniformTypeIdentifiers
 
-public class UploadFileRequest: BaseRequest, Encodable {
+public class UploadFileRequest: UniqueIdManagerRequest, Encodable {
     public var data: Data
     public var fileExtension: String?
     public var fileName: String = ""

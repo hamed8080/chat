@@ -64,7 +64,7 @@ protocol SubjectProtocol {
     var subjectId: Int? { get }
 }
 
-class BareChatSendableRequest: BaseRequest, ChatSnedable {
+class BareChatSendableRequest: UniqueIdManagerRequest, ChatSnedable {
     var content: String?
     var chatMessageType: ChatMessageVOTypes = .unknown
 }

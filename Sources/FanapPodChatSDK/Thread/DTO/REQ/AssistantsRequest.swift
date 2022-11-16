@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class AssistantsRequest: BaseRequest, ChatSnedable {
+public class AssistantsRequest: UniqueIdManagerRequest, ChatSnedable {
     public let contactType: String
     public let count: Int
     public let offset: Int

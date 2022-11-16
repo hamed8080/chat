@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class EditTagRequest: BaseRequest, ChatSnedable, SubjectProtocol {
+public class EditTagRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     public var name: String
     public var id: Int
     var subjectId: Int? { id }

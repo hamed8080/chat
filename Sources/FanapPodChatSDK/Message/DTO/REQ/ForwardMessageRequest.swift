@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class ForwardMessageRequest: BaseRequest, Queueable, PlainTextSendable, SubjectProtocol {
+public class ForwardMessageRequest: UniqueIdManagerRequest, Queueable, PlainTextSendable, SubjectProtocol {
     public let messageIds: [Int]
     public let threadId: Int
     public let uniqueIds: [String]

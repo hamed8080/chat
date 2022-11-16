@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class SendTextMessageRequest: BaseRequest, Queueable, PlainTextSendable, ReplyProtocol, MessageTypeProtocol, MetadataProtocol, SystemtMetadataProtocol, SubjectProtocol {
+public class SendTextMessageRequest: UniqueIdManagerRequest, Queueable, PlainTextSendable, ReplyProtocol, MessageTypeProtocol, MetadataProtocol, SystemtMetadataProtocol, SubjectProtocol {
     public let messageType: MessageType
     public var metadata: String?
     public let repliedTo: Int?

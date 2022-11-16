@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class UpdateContactRequest: BaseRequest, RestAPIProtocol, BodyRequestProtocol {
+public class UpdateContactRequest: UniqueIdManagerRequest, RestAPIProtocol, BodyRequestProtocol {
     static var config = Chat.sharedInstance.config!
     var url: String = "\(config.platformHost)\(Routes.updateContacts.rawValue)"
     var urlString: String { url }

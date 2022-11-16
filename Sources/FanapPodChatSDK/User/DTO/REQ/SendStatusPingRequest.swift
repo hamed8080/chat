@@ -14,7 +14,7 @@ public enum StatusPingType: Int, Encodable {
     case contactId
 }
 
-public class SendStatusPingRequest: BaseRequest, ChatSnedable {
+public class SendStatusPingRequest: UniqueIdManagerRequest, ChatSnedable {
     public let statusType: StatusPingType
     public let id: Int?
     var chatMessageType: ChatMessageVOTypes = .statusPing

@@ -13,7 +13,7 @@ public enum ImageSize: String, Encodable {
     case ACTUAL
 }
 
-public class ImageRequest: BaseRequest, Encodable {
+public class ImageRequest: UniqueIdManagerRequest, Encodable {
     public let hashCode: String
     public var forceToDownloadFromServer: Bool
     public let quality: Float?

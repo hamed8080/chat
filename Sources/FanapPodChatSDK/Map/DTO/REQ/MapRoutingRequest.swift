@@ -16,7 +16,7 @@ public struct Cordinate {
     }
 }
 
-public class MapRoutingRequest: BaseRequest, RestAPIProtocol {
+public class MapRoutingRequest: UniqueIdManagerRequest, RestAPIProtocol {
     static var config: ChatConfig { Chat.sharedInstance.config! }
     var url: String = "\(config.mapServer)\(Routes.mapRouting.rawValue)"
     var urlString: String { url.toURLCompoenentString(encodable: self) ?? url }

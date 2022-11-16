@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class MapStaticImageRequest: BaseRequest, Encodable {
+public class MapStaticImageRequest: UniqueIdManagerRequest, Encodable {
     public var key: String?
     public var center: String
     public var height: Int = 500

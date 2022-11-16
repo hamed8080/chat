@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class ThreadParticipantsRequest: BaseRequest, ChatSnedable, SubjectProtocol {
+public class ThreadParticipantsRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     public let count: Int
     public let offset: Int
     public let threadId: Int

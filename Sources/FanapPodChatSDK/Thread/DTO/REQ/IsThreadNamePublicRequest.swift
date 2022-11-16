@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class IsThreadNamePublicRequest: BaseRequest, ChatSnedable {
+public class IsThreadNamePublicRequest: UniqueIdManagerRequest, ChatSnedable {
     public let name: String
     var chatMessageType: ChatMessageVOTypes = .isNameAvailable
     var content: String? { convertCodableToString() }
