@@ -6,27 +6,27 @@
 
 import Foundation
 public class AddCallParticipantsRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
-    let callId: Int?
+    let callId: Int
     var contactIds: [Int]?
     var userNames: [Invitee]?
     var coreuserIds: [Invitee]?
     var content: String? { convertCodableToString() }
     var chatMessageType: ChatMessageVOTypes = .addCallParticipant
-    var subjectId: Int? { callId }
+    var subjectId: Int { callId }
 
-    public init(callId: Int? = nil, uniqueId: String? = nil) {
+    public init(callId: Int, uniqueId: String? = nil) {
         self.callId = callId
         super.init(uniqueId: uniqueId)
     }
 
-    public init(callId: Int? = nil, contactIds: [Int], uniqueId: String? = nil) {
+    public init(callId: Int, contactIds: [Int], uniqueId: String? = nil) {
         self.callId = callId
         self.contactIds = contactIds
 
         super.init(uniqueId: uniqueId)
     }
 
-    public init(callId: Int? = nil, userNames: [String], uniqueId: String? = nil) {
+    public init(callId: Int, userNames: [String], uniqueId: String? = nil) {
         self.callId = callId
         var invitess: [Invitee] = []
         userNames.forEach { userame in
@@ -37,7 +37,7 @@ public class AddCallParticipantsRequest: UniqueIdManagerRequest, ChatSnedable, S
         super.init(uniqueId: uniqueId)
     }
 
-    public init(callId: Int? = nil, coreUserIds: [Int], uniqueId: String? = nil) {
+    public init(callId: Int, coreUserIds: [Int], uniqueId: String? = nil) {
         self.callId = callId
         var invitess: [Invitee] = []
         coreUserIds.forEach { coreuserId in

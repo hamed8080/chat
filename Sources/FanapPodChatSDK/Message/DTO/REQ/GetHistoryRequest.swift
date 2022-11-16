@@ -33,7 +33,7 @@ public class GetHistoryRequest: UniqueIdManagerRequest, ChatSnedable, SubjectPro
     public var readOnly: Bool = false
 
     var chatMessageType: ChatMessageVOTypes = .getHistory
-    var subjectId: Int? { threadId }
+    var subjectId: Int { threadId }
     var content: String? { convertCodableToString() }
 
     /// - Parameters:

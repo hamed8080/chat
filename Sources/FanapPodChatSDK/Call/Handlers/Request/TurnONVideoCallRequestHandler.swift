@@ -6,11 +6,12 @@
 
 import Foundation
 class TurnONVideoCallRequestHandler {
-    class func handle(_ req: TurnOnVideoCallRequest,
+    class func handle(_ req: GeneralSubjectIdRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<[CallParticipant]>,
                       _ uniqueIdResult: UniqueIdResultType? = nil)
     {
+        req.chatMessageType = .turnOnVideoCall
         chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? [CallParticipant], response.uniqueId, response.error)
         }

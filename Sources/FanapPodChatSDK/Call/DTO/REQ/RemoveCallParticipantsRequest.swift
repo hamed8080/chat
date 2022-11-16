@@ -8,7 +8,7 @@ import Foundation
 public class RemoveCallParticipantsRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     let callId: Int
     var userIds: [Int]
-    var subjectId: Int? { callId }
+    var subjectId: Int { callId }
     var chatMessageType: ChatMessageVOTypes = .removeCallParticipant
     var content: String? { convertCodableToString() }
 

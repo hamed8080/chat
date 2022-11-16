@@ -8,7 +8,7 @@ import Foundation
 public class CallClientErrorRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     let code: CallClientErrorType
     let callId: Int
-    var subjectId: Int? { callId }
+    var subjectId: Int { callId }
     var content: String? { convertCodableToString() }
     var chatMessageType: ChatMessageVOTypes = .callClientErrors
 

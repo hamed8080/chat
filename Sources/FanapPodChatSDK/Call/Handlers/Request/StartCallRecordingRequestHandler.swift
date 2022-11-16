@@ -6,11 +6,12 @@
 
 import Foundation
 class StartCallRecordingRequestHandler {
-    class func handle(_ req: StartCallRecordingRequest,
+    class func handle(_ req: GeneralSubjectIdRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<Participant>,
                       _ uniqueIdResult: UniqueIdResultType? = nil)
     {
+        req.chatMessageType = .startRecording
         chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? Participant, response.uniqueId, response.error)
         }

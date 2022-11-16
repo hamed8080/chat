@@ -8,7 +8,7 @@ import Foundation
 public class CancelCallRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     let call: Call
     var chatMessageType: ChatMessageVOTypes = .cancelCall
-    var subjectId: Int? { call.id }
+    var subjectId: Int { call.id }
     var content: String? { call.convertCodableToString() }
 
     public init(call: Call, uniqueId: String? = nil) {

@@ -11,7 +11,7 @@ public class UpdateThreadInfoRequest: UniqueIdManagerRequest, ChatSnedable, Subj
     public var threadImage: UploadImageRequest?
     public let threadId: Int
     public let title: String?
-    var subjectId: Int? { threadId }
+    var subjectId: Int { threadId }
     var chatMessageType: ChatMessageVOTypes = .updateThreadInfo
     var content: String? { convertCodableToString() }
 

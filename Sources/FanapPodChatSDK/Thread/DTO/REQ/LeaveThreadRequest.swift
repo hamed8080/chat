@@ -8,7 +8,7 @@ import Foundation
 public class LeaveThreadRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     public let threadId: Int
     public let clearHistory: Bool?
-    var subjectId: Int? { threadId }
+    var subjectId: Int { threadId }
     var content: String? { convertCodableToString() }
     var chatMessageType: ChatMessageVOTypes = .leaveThread
 

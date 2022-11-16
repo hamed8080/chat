@@ -6,9 +6,10 @@
 
 import Foundation
 class CallReceivedRequestHandler {
-    class func handle(_ req: CallReceivedRequest,
+    class func handle(_ req: GeneralSubjectIdRequest,
                       _ chat: Chat)
     {
+        req.chatMessageType = .deliveredCallRequest
         chat.prepareToSendAsync(req: req)
     }
 }

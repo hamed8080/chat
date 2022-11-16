@@ -17,7 +17,7 @@ class CurrentUserRolesRequestHandler {
             completion(response.result as? [Roles], response.uniqueId, response.error)
         }
 
-        CacheFactory.get(useCache: cacheResponse != nil, cacheType: .cureentUserRoles(req.threadId)) { response in
+        CacheFactory.get(useCache: cacheResponse != nil, cacheType: .cureentUserRoles(req.subjectId)) { response in
             cacheResponse?(response.cacheResponse as? [Roles], req.uniqueId, nil)
         }
     }

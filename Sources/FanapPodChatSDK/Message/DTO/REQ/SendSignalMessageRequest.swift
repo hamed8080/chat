@@ -8,7 +8,7 @@ import Foundation
 public class SendSignalMessageRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     public let signalType: SignalMessageType
     public let threadId: Int
-    var subjectId: Int? { threadId }
+    var subjectId: Int { threadId }
     var chatMessageType: ChatMessageVOTypes = .systemMessage
     var content: String? { convertCodableToString() }
 

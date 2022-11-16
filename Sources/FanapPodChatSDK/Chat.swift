@@ -1144,7 +1144,7 @@ public class Chat {
 
     /// An internal method when a call has arrived.
     /// - Parameter request: A calId.
-    internal func callReceived(_ request: CallReceivedRequest) {
+    internal func callReceived(_ request: GeneralSubjectIdRequest) {
         CallReceivedRequestHandler.handle(request, self)
     }
 
@@ -1153,7 +1153,7 @@ public class Chat {
     ///   - request: A request with a callId to finish the current call.
     ///   - completion: A callId that shows a call has terminated properly.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func endCall(_ request: EndCallRequest, _ completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
+    public func endCall(_ request: GeneralSubjectIdRequest, _ completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
         EndCallRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1196,7 +1196,7 @@ public class Chat {
     ///   - request: The callId that you want to turn the camera on.
     ///   - completion: List of call participants that change during the request.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func turnOnVideoCall(_ request: TurnOnVideoCallRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType? = nil) {
+    public func turnOnVideoCall(_ request: GeneralSubjectIdRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType? = nil) {
         TurnONVideoCallRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1205,7 +1205,7 @@ public class Chat {
     ///   - request: The callId that you want to turn the camera off.
     ///   - completion: List of call participants that change during the request.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func turnOffVideoCall(_ request: TurnOffVideoCallRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType? = nil) {
+    public func turnOffVideoCall(_ request: GeneralSubjectIdRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType? = nil) {
         TurnOffVideoCallRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1232,7 +1232,7 @@ public class Chat {
     ///   - request: The callId of the call to terminate.
     ///   - completion: List of call participants that change during the request.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func terminateCall(_ request: TerminateCallRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType? = nil) {
+    public func terminateCall(_ request: GeneralSubjectIdRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType? = nil) {
         TerminateCallRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1241,7 +1241,7 @@ public class Chat {
     ///   - request: The callId of the call.
     ///   - completion: List of call participants that change during the request.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func activeCallParticipants(_ request: ActiveCallParticipantsRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType? = nil) {
+    public func activeCallParticipants(_ request: GeneralSubjectIdRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType? = nil) {
         ActiveCallParticipantsRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1250,7 +1250,7 @@ public class Chat {
     ///   - request: The callId of the call.
     ///   - completion: A participant that has started recording which is yourself.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func startRecording(_ request: StartCallRecordingRequest, _ completion: @escaping CompletionType<Participant>, uniqueIdResult: UniqueIdResultType? = nil) {
+    public func startRecording(_ request: GeneralSubjectIdRequest, _ completion: @escaping CompletionType<Participant>, uniqueIdResult: UniqueIdResultType? = nil) {
         StartCallRecordingRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1259,7 +1259,7 @@ public class Chat {
     ///   - request: The callId of the call.
     ///   - completion: A participant that has stopped recording which is yourself.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func stopRecording(_ request: StopCallRecordingRequest, _ completion: @escaping CompletionType<Participant>, uniqueIdResult: UniqueIdResultType? = nil) {
+    public func stopRecording(_ request: GeneralSubjectIdRequest, _ completion: @escaping CompletionType<Participant>, uniqueIdResult: UniqueIdResultType? = nil) {
         StopCallRecordingRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1304,7 +1304,7 @@ public class Chat {
     ///   - request: The callId.
     ///   - completion: A created call with details.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func callInquery(_ request: CallInquiryRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType? = nil) {
+    public func callInquery(_ request: GeneralSubjectIdRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType? = nil) {
         CallInquiryRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 

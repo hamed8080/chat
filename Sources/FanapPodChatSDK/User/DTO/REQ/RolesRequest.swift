@@ -9,7 +9,7 @@ public class RolesRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol
     public let userRoles: [UserRoleRequest]
     public let threadId: Int
     var content: String? { userRoles.convertCodableToString() }
-    var subjectId: Int? { threadId }
+    var subjectId: Int { threadId }
     var chatMessageType: ChatMessageVOTypes = .getCurrentUserRoles
 
     public init(userRoles: [UserRoleRequest], threadId: Int, uniqueId: String? = nil) {

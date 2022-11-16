@@ -10,7 +10,7 @@ public class AddParticipantRequest: UniqueIdManagerRequest, ChatSnedable, Subjec
     public var idType: InviteeTypes?
     public var threadId: Int
     public var contactIds: [Int]?
-    var subjectId: Int? { threadId }
+    var subjectId: Int { threadId }
     var chatMessageType: ChatMessageVOTypes = .addParticipant
     var content: String? { convertCodableToString() }
 

@@ -7,7 +7,7 @@
 import Foundation
 public class DeleteTagRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     public var id: Int
-    var subjectId: Int? { id }
+    var subjectId: Int { id }
     var chatMessageType: ChatMessageVOTypes = .deleteTag
     var content: String?
 

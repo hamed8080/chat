@@ -9,7 +9,7 @@ public class AcceptCallRequest: UniqueIdManagerRequest, ChatSnedable, SubjectPro
     let client: SendClient
     let callId: Int
     var content: String? { client.convertCodableToString() }
-    var subjectId: Int? { callId }
+    var subjectId: Int { callId }
     var chatMessageType: ChatMessageVOTypes = .acceptCall
 
     public init(callId: Int, client: SendClient, uniqueId: String? = nil) {

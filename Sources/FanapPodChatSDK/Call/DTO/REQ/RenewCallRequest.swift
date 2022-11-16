@@ -8,7 +8,7 @@ import Foundation
 public class RenewCallRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     let invitess: [Invitee]
     let callId: Int
-    var subjectId: Int? { callId }
+    var subjectId: Int { callId }
     var content: String? { invitess.convertCodableToString() }
     var chatMessageType: ChatMessageVOTypes = .renewCallRequest
 

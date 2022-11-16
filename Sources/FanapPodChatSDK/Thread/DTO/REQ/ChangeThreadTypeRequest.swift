@@ -9,7 +9,7 @@ public class ChangeThreadTypeRequest: UniqueIdManagerRequest, ChatSnedable, Subj
     public let uniqueName: String?
     public var threadId: Int
     public var type: ThreadTypes
-    var subjectId: Int? { threadId }
+    var subjectId: Int { threadId }
     var chatMessageType: ChatMessageVOTypes = .changeThreadType
     var content: String? { convertCodableToString() }
 

@@ -20,7 +20,7 @@ class StartCallRequestResponseHandler {
         startTimerTimeout(callId: createCall.callId)
 
         // SEND type 73 . This mean client receive call and showing ringing mode on call creator.
-        chat.callReceived(.init(callId: createCall.callId))
+        chat.callReceived(.init(subjectId: createCall.callId))
 
         chat.callbacksManager.callRequestArriveDelegate?(createCall, chatMessage.uniqueId)
     }

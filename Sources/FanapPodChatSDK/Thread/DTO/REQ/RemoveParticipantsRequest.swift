@@ -10,7 +10,7 @@ public class RemoveParticipantsRequest: UniqueIdManagerRequest, ChatSnedable, Su
     public let threadId: Int
     var content: String? { participantIds.convertCodableToString() }
     var chatMessageType: ChatMessageVOTypes = .removeParticipant
-    var subjectId: Int? { threadId }
+    var subjectId: Int { threadId }
 
     public init(participantId: Int, threadId: Int, uniqueId: String? = nil) {
         self.threadId = threadId

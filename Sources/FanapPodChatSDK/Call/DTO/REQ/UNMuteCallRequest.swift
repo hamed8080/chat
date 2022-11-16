@@ -8,7 +8,7 @@ import Foundation
 public class UNMuteCallRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     let callId: Int
     let userIds: [Int]
-    var subjectId: Int? { callId }
+    var subjectId: Int { callId }
     var content: String? { userIds.convertCodableToString() }
     var chatMessageType: ChatMessageVOTypes = .unmuteCallParticipant
 
