@@ -1147,10 +1147,8 @@ public class Chat {
                             onDelivered: OnDeliveryType? = nil,
                             onSeen: OnSeenType? = nil)
     {
-        guard let config = config else { return }
         uniqueIdResult?(req.uniqueId)
-        let chatMessage = SendChatMessageVO(req: req, token: config.token, typeCode: config.typeCode)
-        asyncManager.sendData(chatMessage: chatMessage)
+        asyncManager.sendData(chatMessage: req)
         callbacksManager.addCallback(uniqueId: req.uniqueId, requesType: req.chatMessageType, callback: completion, onSent: onSent, onDelivered: onDelivered, onSeen: onSeen)
     }
 

@@ -67,23 +67,26 @@ internal class AsyncManager: AsyncDelegate {
     }
 
     /// The sendData delegate will inform if a send event occurred by the async socket.
-    public func sendData(chatMessage: SendChatMessageVO) {
-        guard
-            let config = Chat.sharedInstance.config,
-            let chatMessageContent = chatMessage.convertCodableToString()
-        else { return }
-        let asyncMessage = SendAsyncMessageVO(content: chatMessageContent,
-                                              ttl: config.msgTTL,
-                                              peerName: config.asyncConfig.serverName,
-                                              priority: config.msgPriority,
-                                              pushMsgType: .message)
-        guard let data = try? JSONEncoder().encode(asyncMessage) else { return }
-        Chat.sharedInstance.logger?.log(title: "send Message", jsonString: asyncMessage.string ?? "", receive: false)
-        asyncClient?.sendData(type: .message, data: data)
+    public func sendData(chatMessage: ChatSnedable) {
+        guard let config = Chat.sharedInstance.config else { return }
+        let chatMessage = SendChatMessageVO(req: chatMessage, token: config.token, typeCode: config.typeCode)
+        sendToAsync(asyncMessage: AsyncChatServerMessage(chatMessage: chatMessage))
         sendPingTimer()
         if let queueable = chatMessage as? Queueable, let uniqueId = chatMessage.uniqueId {
             queue[uniqueId] = queueable
         }
+    }
+
+    func sendToAsync(asyncMessage: AsyncSnedable) {
+        guard let config = Chat.sharedInstance.config, let content = asyncMessage.content else { return }
+        let asyncMessage = SendAsyncMessageVO(content: content,
+                                              ttl: config.msgTTL,
+                                              peerName: asyncMessage.peerName ?? config.asyncConfig.serverName,
+                                              priority: config.msgPriority,
+                                              pushMsgType: asyncMessage.asyncMessageType)
+        guard let data = try? JSONEncoder().encode(asyncMessage) else { return }
+        Chat.sharedInstance.logger?.log(title: "send Message", jsonString: asyncMessage.string ?? "", receive: false)
+        asyncClient?.sendData(type: .message, data: data)
     }
 
     /// A timer that repeats ping the `Chat server` every 20 seconds.
