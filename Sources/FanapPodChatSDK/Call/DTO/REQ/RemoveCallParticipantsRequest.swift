@@ -5,9 +5,12 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class RemoveCallParticipantsRequest: BaseRequest {
+public class RemoveCallParticipantsRequest: BaseRequest, ChatSnedable, SubjectProtocol {
     let callId: Int
     var userIds: [Int]
+    var subjectId: Int? { callId }
+    var chatMessageType: ChatMessageVOTypes = .removeCallParticipant
+    var content: String? { convertCodableToString() }
 
     public init(callId: Int, userIds: [Int], uniqueId: String? = nil) {
         self.callId = callId
@@ -15,7 +18,7 @@ public class RemoveCallParticipantsRequest: BaseRequest {
         super.init(uniqueId: uniqueId)
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.unkeyedContainer()
         if userIds.count > 0 {
             try? container.encode(userIds)

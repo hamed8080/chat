@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class GetHistoryRequest: BaseRequest {
+public class GetHistoryRequest: BaseRequest, ChatSnedable, SubjectProtocol {
     public let threadId: Int
     public var offset: Int
     public var count: Int
@@ -31,6 +31,10 @@ public class GetHistoryRequest: BaseRequest {
     public var lastMessageTime: UInt?
     public var historyEndTime: UInt?
     public var readOnly: Bool = false
+
+    var chatMessageType: ChatMessageVOTypes = .getHistory
+    var subjectId: Int? { threadId }
+    var content: String? { convertCodableToString() }
 
     /// - Parameters:
     ///   - readOnly: This property prevent to write to cache when you only need to view messages of a thread pass true if you need to only view messages.
@@ -115,7 +119,7 @@ public class GetHistoryRequest: BaseRequest {
         case historyEndTime
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(count, forKey: .count)
         try container.encode(offset, forKey: .offset)

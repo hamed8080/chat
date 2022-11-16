@@ -6,7 +6,14 @@
 
 import Foundation
 
-public class UpdateContactRequest: BaseRequest {
+public class UpdateContactRequest: BaseRequest, RestAPIProtocol, BodyRequestProtocol {
+    static var config = Chat.sharedInstance.config!
+    var url: String = "\(config.platformHost)\(Routes.updateContacts.rawValue)"
+    var urlString: String { url }
+    var headers: [String: String] = ["_token_": config.token, "_token_issuer_": "1"]
+    var bodyData: Data? { getParameterData() }
+    var method: HTTPMethod = .post
+
     public let cellphoneNumber: String
     public let email: String
     public let firstName: String
@@ -42,7 +49,7 @@ public class UpdateContactRequest: BaseRequest {
         case uniqueId
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(cellphoneNumber, forKey: .cellphoneNumber)
         try container.encode(email, forKey: .email)

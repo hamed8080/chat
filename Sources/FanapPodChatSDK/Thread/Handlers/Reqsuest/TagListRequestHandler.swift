@@ -9,11 +9,11 @@ class TagListRequestHandler {
     class func handle(_ uniqueId: String? = nil,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<[Tag]>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(clientSpecificUniqueId: uniqueId,
-                                messageType: .tagList,
-                                uniqueIdResult: uniqueIdResult) { response in
+        let req = BareChatSendableRequest(uniqueId: uniqueId)
+        req.chatMessageType = .tagList
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? [Tag], response.uniqueId, response.error)
         }
     }

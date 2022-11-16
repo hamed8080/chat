@@ -22,20 +22,6 @@ extension Encodable {
         return dictionary
     }
 
-    func convertToGETMethodQueeyString(url: String) -> String? {
-        var queryStringUrl = url
-        if let parameters = try? asDictionary(), parameters.count > 0 {
-            var urlComp = URLComponents(string: url)!
-            urlComp.queryItems = []
-            parameters.forEach { key, value in
-                urlComp.queryItems?.append(URLQueryItem(name: key, value: "\(value)"))
-            }
-            queryStringUrl = urlComp.url?.absoluteString ?? url
-            return queryStringUrl
-        }
-        return nil
-    }
-
     func getParameterData() -> Data? {
         var parameterString = ""
         if let parameters = try? asDictionary(), parameters.count > 0 {
@@ -46,5 +32,9 @@ extension Encodable {
             return parameterString.data(using: .utf8)
         }
         return nil
+    }
+
+    func toData() -> Data? {
+        try? JSONEncoder().encode(self)
     }
 }

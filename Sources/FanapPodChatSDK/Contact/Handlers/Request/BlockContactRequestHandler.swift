@@ -11,14 +11,10 @@ class BlockContactRequestHandler {
     class func handle(_ req: BlockRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<BlockedContact>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: req,
-                                clientSpecificUniqueId: req.uniqueId,
-                                messageType: .block,
-                                uniqueIdResult: uniqueIdResult,
-                                completion: { response in
-                                    completion(response.result as? BlockedContact, response.uniqueId, response.error)
-                                })
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
+            completion(response.result as? BlockedContact, response.uniqueId, response.error)
+        }
     }
 }

@@ -5,9 +5,12 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class LeaveThreadRequest: BaseRequest {
+public class LeaveThreadRequest: BaseRequest, ChatSnedable, SubjectProtocol {
     public let threadId: Int
     public let clearHistory: Bool?
+    var subjectId: Int? { threadId }
+    var content: String? { convertCodableToString() }
+    var chatMessageType: ChatMessageVOTypes = .leaveThread
 
     public init(threadId: Int, clearHistory: Bool? = false, uniqueId: String? = nil) {
         self.clearHistory = clearHistory
@@ -19,7 +22,7 @@ public class LeaveThreadRequest: BaseRequest {
         case clearHistory
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(clearHistory, forKey: .clearHistory)
     }

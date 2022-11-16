@@ -11,17 +11,14 @@ class CreateThreadWithFileMessageRequestHandler {
                       _ textMessage: SendTextMessageRequest,
                       _ uploadFile: UploadFileRequest,
                       _ uploadProgress: UploadFileProgressType? = nil,
-                      _ onSent: OnSentType = nil,
-                      _ onSeen: OnSeenType = nil,
-                      _ onDeliver: OnDeliveryType = nil,
+                      _ onSent: OnSentType? = nil,
+                      _ onSeen: OnSeenType? = nil,
+                      _ onDeliver: OnDeliveryType? = nil,
                       _ createThreadCompletion: CompletionType<Conversation>? = nil,
-                      _ uploadUniqueIdResult: UniqueIdResultType = nil,
-                      _ messageUniqueIdResult: UniqueIdResultType = nil)
+                      _ uploadUniqueIdResult: UniqueIdResultType? = nil,
+                      _ messageUniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: request,
-                                clientSpecificUniqueId: request.uniqueId,
-                                messageType: .createThread,
-                                uniqueIdResult: nil) { response in
+        chat.prepareToSendAsync(req: request, uniqueIdResult: nil) { response in
 
             guard let thread = response.result as? Conversation, let id = thread.id else { return }
             createThreadCompletion?(thread, nil, nil)

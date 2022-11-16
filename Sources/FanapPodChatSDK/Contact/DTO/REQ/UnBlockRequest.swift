@@ -6,10 +6,12 @@
 
 import Foundation
 
-public class UnBlockRequest: BaseRequest {
+public class UnBlockRequest: BaseRequest, ChatSnedable {
     public let contactId: Int?
     public let threadId: Int?
     public let userId: Int?
+    var content: String? { convertCodableToString() }
+    var chatMessageType: ChatMessageVOTypes = .unblock
 
     public init(contactId: Int? = nil,
                 threadId: Int? = nil,
@@ -28,7 +30,7 @@ public class UnBlockRequest: BaseRequest {
         case userId
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try? container.encodeIfPresent(contactId, forKey: .contactId)
         try? container.encodeIfPresent(threadId, forKey: .threadId)

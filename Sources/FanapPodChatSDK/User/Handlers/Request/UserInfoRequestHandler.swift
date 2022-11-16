@@ -10,12 +10,9 @@ class UserInfoRequestHandler {
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<User>,
                       _ cacheResponse: CacheResponseType<User>? = nil,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: nil,
-                                clientSpecificUniqueId: req.uniqueId,
-                                messageType: .userInfo,
-                                uniqueIdResult: uniqueIdResult) { response in
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? User, response.uniqueId, response.error)
         }
         CacheFactory.get(useCache: cacheResponse != nil, cacheType: .userInfo) { response in

@@ -27,4 +27,6 @@ public enum ThreadEventTypes {
     case messagePin(threadId: Int?, PinUnpinMessage)
     case messageUnpin(threadId: Int?, PinUnpinMessage)
     case threadDeleted(threadId: Int, participant: Participant?)
+    case lastMessageDeleted(thread: Conversation)
+    case lastMessageEdited(thread: Conversation)
 }

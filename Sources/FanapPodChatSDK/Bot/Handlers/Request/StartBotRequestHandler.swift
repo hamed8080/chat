@@ -9,13 +9,9 @@ class StartBotRequestHandler {
     class func handle(_ req: StartStopBotRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<String>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: req,
-                                clientSpecificUniqueId: req.uniqueId,
-                                subjectId: req.threadId,
-                                messageType: .startBot,
-                                uniqueIdResult: uniqueIdResult) { response in
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? String, response.uniqueId, response.error)
         }
     }

@@ -7,7 +7,7 @@
 import FanapPodAsyncSDK
 import Foundation
 
-public class ThreadsRequest: BaseRequest {
+public class ThreadsRequest: BaseRequest, ChatSnedable {
     public let count: Int
     public let offset: Int
     public var name: String?
@@ -18,6 +18,8 @@ public class ThreadsRequest: BaseRequest {
     public let partnerCoreUserId: Int?
     public let partnerCoreContactId: Int?
     public var metadataCriteria: String?
+    var chatMessageType: ChatMessageVOTypes = .getThreads
+    var content: String? { convertCodableToString() }
 
     public init(count: Int = 50,
                 offset: Int = 0,
@@ -57,7 +59,7 @@ public class ThreadsRequest: BaseRequest {
         case metadataCriteria
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try? container.encode(count, forKey: .count)
         try? container.encode(offset, forKey: .offset)

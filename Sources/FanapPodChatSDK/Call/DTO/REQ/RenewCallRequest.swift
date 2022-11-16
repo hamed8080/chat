@@ -5,9 +5,12 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class RenewCallRequest: BaseRequest {
+public class RenewCallRequest: BaseRequest, ChatSnedable, SubjectProtocol {
     let invitess: [Invitee]
     let callId: Int
+    var subjectId: Int? { callId }
+    var content: String? { invitess.convertCodableToString() }
+    var chatMessageType: ChatMessageVOTypes = .renewCallRequest
 
     public init(invitees: [Invitee], callId: Int, uniqueId: String? = nil) {
         invitess = invitees

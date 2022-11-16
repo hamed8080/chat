@@ -6,7 +6,14 @@
 
 import Foundation
 
-public class AddContactRequest: BaseRequest {
+public class AddContactRequest: BaseRequest, RestAPIProtocol {
+    static let config = Chat.sharedInstance.config!
+    var url: String = "\(config.platformHost)\(Routes.addContacts.rawValue)"
+    var urlString: String { url }
+    var headers: [String: String] = ["_token_": config.token, "_token_issuer_": "1"]
+    var bodyData: Data? { toData() }
+    var method: HTTPMethod = .post
+
     public var cellphoneNumber: String?
     public var email: String?
     public var firstName: String?
@@ -58,7 +65,7 @@ public class AddContactRequest: BaseRequest {
         case typeCode
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(cellphoneNumber, forKey: .cellphoneNumber)
         try container.encode(email, forKey: .email)

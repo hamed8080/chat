@@ -10,12 +10,9 @@ class MutualGroupsRequestHandler {
                       _ chat: Chat,
                       _ completion: @escaping PaginationCompletionType<[Conversation]>,
                       _ cacheResponse: PaginationCacheResponseType<[Conversation]>? = nil,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: req,
-                                clientSpecificUniqueId: req.uniqueId,
-                                messageType: .mutualGroups,
-                                uniqueIdResult: uniqueIdResult) { response in
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             let pagination = PaginationWithContentCount(count: req.count, offset: req.offset, totalCount: response.contentCount)
             completion(response.result as? [Conversation], response.uniqueId, pagination, response.error)
 

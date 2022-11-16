@@ -11,7 +11,7 @@ class SyncContactsRequestHandler {
 
     class func handle(_ chat: Chat,
                       _ completion: @escaping CompletionType<[Contact]>,
-                      _ uniqueIdsResult: UniqueIdsResultType = nil)
+                      _ uniqueIdsResult: UniqueIdsResultType? = nil)
     {
         var contactsToSync: [AddContactRequest] = []
         authorizeContactAccess(grant: { store in

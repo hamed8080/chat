@@ -6,16 +6,13 @@
 
 import Foundation
 class UnarchiveThreadRequestHandler {
-    class func handle(_ req: UnarchiveThreadRequest,
+    class func handle(_ req: GeneralThreadRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<Int>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: req,
-                                clientSpecificUniqueId: req.uniqueId,
-                                subjectId: req.threadId,
-                                messageType: .unarchiveThread,
-                                uniqueIdResult: uniqueIdResult) { response in
+        req.chatMessageType = .unarchiveThread
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? Int, response.uniqueId, response.error)
         }
     }

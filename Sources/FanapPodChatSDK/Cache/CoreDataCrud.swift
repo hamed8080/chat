@@ -60,6 +60,12 @@ open class CoreDataCrud<T: NSFetchRequestResult> {
         PSM.shared.context.delete(entity)
     }
 
+    public func deleteEntityWithPredicate(predicate: NSPredicate) {
+        if let entity = fetchWith(predicate)?.first as? NSManagedObject {
+            delete(entity: entity)
+        }
+    }
+
     public func deleteWith(predicate: NSPredicate) {
         do {
             let req = fetchRequest()

@@ -10,9 +10,9 @@ class ReplaceAdminAndLeaveThreadRequestHandler {
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<User>,
                       _ newAdminCompletion: CompletionType<[UserRole]>? = nil,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        let currentUserRolseReq = CurrentUserRolesRequest(threadId: request.threadId)
+        let currentUserRolseReq = GeneralThreadRequest(threadId: request.threadId)
         chat.getCurrentUserRoles(currentUserRolseReq) { roles, _, _ in
             let isAdmin = roles?.contains(.threadAdmin) ?? false || roles?.contains(.addRuleToUser) ?? false
             if isAdmin, let roles = roles {

@@ -9,13 +9,9 @@ class EndCallRequestHandler {
     class func handle(_ req: EndCallRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<Int>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: nil,
-                                clientSpecificUniqueId: req.uniqueId,
-                                subjectId: req.callId,
-                                messageType: .endCallRequest,
-                                uniqueIdResult: uniqueIdResult) { response in
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? Int, response.uniqueId, response.error)
         }
     }

@@ -9,12 +9,9 @@ class StartCallRecordingRequestHandler {
     class func handle(_ req: StartCallRecordingRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<Participant>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(clientSpecificUniqueId: req.uniqueId,
-                                subjectId: req.callId,
-                                messageType: .startRecording,
-                                uniqueIdResult: uniqueIdResult) { response in
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? Participant, response.uniqueId, response.error)
         }
     }

@@ -9,13 +9,9 @@ class RenewCallRequestHandler {
     class func handle(_ req: RenewCallRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<CreateCall>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: req.invitess,
-                                clientSpecificUniqueId: req.uniqueId,
-                                subjectId: req.callId,
-                                messageType: .renewCallRequest,
-                                uniqueIdResult: uniqueIdResult) { response in
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? CreateCall, response.uniqueId, response.error)
         }
     }

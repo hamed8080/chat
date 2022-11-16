@@ -5,9 +5,12 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class CallClientErrorRequest: BaseRequest {
+public class CallClientErrorRequest: BaseRequest, ChatSnedable, SubjectProtocol {
     let code: CallClientErrorType
     let callId: Int
+    var subjectId: Int? { callId }
+    var content: String? { convertCodableToString() }
+    var chatMessageType: ChatMessageVOTypes = .callClientErrors
 
     public init(callId: Int, code: CallClientErrorType, uniqueId: String? = nil) {
         self.callId = callId
@@ -19,7 +22,7 @@ public class CallClientErrorRequest: BaseRequest {
         case code
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(code.rawValue, forKey: .code)
     }

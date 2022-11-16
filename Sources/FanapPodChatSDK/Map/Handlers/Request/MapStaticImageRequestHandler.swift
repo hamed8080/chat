@@ -10,7 +10,7 @@ class MapStaticImageRequestHandler {
     class func handle(_ req: MapStaticImageRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<Data>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
         guard let config = chat.config else { return }
         DownloadMapStaticImageRequestHandler.handle(req: req, config: config, uniqueIdResult: uniqueIdResult) { response in

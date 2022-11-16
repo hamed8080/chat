@@ -21,7 +21,7 @@ class SentMessageResponseHandler: ResponseHandler {
 
         guard let callback = Chat.sharedInstance.callbacksManager.getSentCallback(chatMessage.uniqueId) else { return }
         let messageResponse = SentMessageResponse(isSent: true, messageId: message.id, threadId: chatMessage.subjectId, message: message, participantId: chatMessage.participantId)
-        callback?(messageResponse, chatMessage.uniqueId, nil)
+        callback(messageResponse, chatMessage.uniqueId, nil)
         chat.callbacksManager.removeSentCallback(uniqueId: chatMessage.uniqueId)
     }
 }

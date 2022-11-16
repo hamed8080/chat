@@ -5,12 +5,14 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class GetJoinCallsRequest: BaseRequest {
+public class GetJoinCallsRequest: BaseRequest, ChatSnedable {
     private let offset: Int
     private let count: Int
     private let name: String?
     private let type: CallType?
     private let threadIds: [Int]
+    var content: String? { convertCodableToString() }
+    var chatMessageType: ChatMessageVOTypes = .getCallsToJoin
 
     public init(threadIds: [Int],
                 offset: Int = 0,
@@ -35,7 +37,7 @@ public class GetJoinCallsRequest: BaseRequest {
         case threadIds
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(offset, forKey: .offset)
         try container.encodeIfPresent(count, forKey: .count)

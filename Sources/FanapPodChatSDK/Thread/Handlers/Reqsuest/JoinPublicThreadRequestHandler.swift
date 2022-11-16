@@ -9,13 +9,9 @@ class JoinPublicThreadRequestHandler {
     class func handle(_ req: JoinPublicThreadRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<Conversation>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: req.threadName,
-                                clientSpecificUniqueId: req.uniqueId,
-                                plainText: true,
-                                messageType: .joinThread,
-                                uniqueIdResult: uniqueIdResult) { response in
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? Conversation, response.uniqueId, response.error)
         }
     }

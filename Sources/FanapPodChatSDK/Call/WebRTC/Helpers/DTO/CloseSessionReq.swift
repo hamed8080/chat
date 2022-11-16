@@ -11,13 +11,17 @@
 //  Created by Hamed Hosseini on 7/31/21.
 //
 import Foundation
+import FanapPodAsyncSDK
 
-struct CloseSessionReq: Codable {
+struct CloseSessionReq: Codable, AsyncSnedable {
     var id: String = "CLOSE"
     var token: String
-    var uniqueId: String = UUID().uuidString
+    var content: String? { convertCodableToString() }
+    var asyncMessageType: AsyncMessageTypes? = .message
+    var peerName: String?
 
-    public init(token: String) {
+    public init(peerName: String, token: String) {
         self.token = token
+        self.peerName = peerName
     }
 }

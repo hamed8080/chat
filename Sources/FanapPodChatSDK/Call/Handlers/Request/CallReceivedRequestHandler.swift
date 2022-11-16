@@ -9,8 +9,6 @@ class CallReceivedRequestHandler {
     class func handle(_ req: CallReceivedRequest,
                       _ chat: Chat)
     {
-        chat.prepareToSendAsync(clientSpecificUniqueId: req.uniqueId,
-                                subjectId: req.callId,
-                                messageType: .deliveredCallRequest)
+        chat.prepareToSendAsync(req: req)
     }
 }

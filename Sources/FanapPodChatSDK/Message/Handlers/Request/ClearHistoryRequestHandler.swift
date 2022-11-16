@@ -6,16 +6,13 @@
 
 import Foundation
 class ClearHistoryRequestHandler {
-    class func handle(_ req: ClearHistoryRequest,
+    class func handle(_ req: GeneralThreadRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<Int>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: nil,
-                                clientSpecificUniqueId: req.uniqueId,
-                                subjectId: req.threadId,
-                                messageType: .clearHistory,
-                                uniqueIdResult: uniqueIdResult) { response in
+        req.chatMessageType = .clearHistory
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? Int, response.uniqueId, response.error)
         }
     }

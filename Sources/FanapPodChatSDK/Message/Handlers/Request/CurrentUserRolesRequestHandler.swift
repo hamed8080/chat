@@ -6,17 +6,14 @@
 
 import Foundation
 class CurrentUserRolesRequestHandler {
-    class func handle(_ req: CurrentUserRolesRequest,
+    class func handle(_ req: GeneralThreadRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<[Roles]>,
                       _ cacheResponse: CacheResponseType<[Roles]>? = nil,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: nil,
-                                clientSpecificUniqueId: req.uniqueId,
-                                subjectId: req.threadId,
-                                messageType: .getCurrentUserRoles,
-                                uniqueIdResult: uniqueIdResult) { response in
+        req.chatMessageType = .getCurrentUserRoles
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? [Roles], response.uniqueId, response.error)
         }
 

@@ -5,12 +5,14 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class StartCallRequest: BaseRequest {
+public class StartCallRequest: BaseRequest, ChatSnedable {
     let threadId: Int?
     let invitees: [Invitee]?
     let type: CallType
     let client: SendClient
     let createCallThreadRequest: CreateCallThreadRequest?
+    var chatMessageType: ChatMessageVOTypes = .startCallRequest
+    var content: String? { convertCodableToString() }
 
     public init(client: SendClient, threadId: Int, type: CallType, uniqueId: String? = nil) {
         self.threadId = threadId
@@ -38,7 +40,7 @@ public class StartCallRequest: BaseRequest {
         case createCallThreadRequest
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(client, forKey: .client)
         try container.encodeIfPresent(threadId, forKey: .threadId)

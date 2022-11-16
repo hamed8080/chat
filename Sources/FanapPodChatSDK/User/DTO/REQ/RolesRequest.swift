@@ -5,9 +5,12 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class RolesRequest: BaseRequest {
+public class RolesRequest: BaseRequest, ChatSnedable, SubjectProtocol {
     public let userRoles: [UserRoleRequest]
     public let threadId: Int
+    var content: String? { userRoles.convertCodableToString() }
+    var subjectId: Int? { threadId }
+    var chatMessageType: ChatMessageVOTypes = .getCurrentUserRoles
 
     public init(userRoles: [UserRoleRequest], threadId: Int, uniqueId: String? = nil) {
         self.userRoles = userRoles

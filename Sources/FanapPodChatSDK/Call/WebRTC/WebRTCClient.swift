@@ -100,12 +100,8 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
 
     public func createSession() {
         configureAudioSession()
-        let session = CreateSessionReq(turnAddress: config.turnAddress, brokerAddress: config.brokerAddressWeb, token: Chat.sharedInstance.token ?? "")
-        if let data = try? JSONEncoder().encode(session) {
-            send(data)
-        } else {
-            customPrint("can't create session decoder was nil", isGuardNil: true)
-        }
+        let session = CreateSessionReq(peerName: config.peerName, turnAddress: config.turnAddress, brokerAddress: config.brokerAddressWeb, token: Chat.sharedInstance.token ?? "")
+        send(session)
     }
 
     /// order is matter in this function
@@ -158,13 +154,9 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
             customPrint("--- closing \(userRTC.topic) ---", isGuardNil: true)
             userRTC.pc?.close()
         }
-        let close = CloseSessionReq(token: Chat.sharedInstance.token ?? "")
-        guard let data = try? JSONEncoder().encode(close) else {
-            customPrint("error to encode close session request ", isGuardNil: true)
-            return
-        }
+        let close = CloseSessionReq(peerName: config.peerName, token: Chat.sharedInstance.token ?? "")
+        send(close)
         logFile?.stop()
-        send(data)
         usersRTC = []
         (videoCapturer as? RTCCameraVideoCapturer)?.stopCapture()
         WebRTCClient.instance = nil
@@ -201,27 +193,19 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
     public func sendOfferToPeer(_ sdp: RTCSessionDescription, topic: String) {
         let sdp = sdp.sdp
         let mediaType: Mediatype = usersRTC.userFor(topic: topic)?.isVideoTopic ?? false ? .video : .audio
-        let sendSDPOffer = SendOfferSDPReq(id: isSendTopic(topic: topic) ? "SEND_SDP_OFFER" : "RECIVE_SDP_OFFER",
+        let sendSDPOffer = SendOfferSDPReq(peerName: config.peerName,
+                                           id: isSendTopic(topic: topic) ? "SEND_SDP_OFFER" : "RECIVE_SDP_OFFER",
                                            brokerAddress: config.firstBorokerAddressWeb,
                                            token: Chat.sharedInstance.token ?? "",
                                            topic: topic,
                                            sdpOffer: sdp,
                                            mediaType: mediaType,
-                                           chatId: config.callId
-        )
-        guard let data = try? JSONEncoder().encode(sendSDPOffer) else {
-            customPrint("error to encode SDP offer", isGuardNil: true)
-            return
-        }
-        send(data)
+                                           chatId: config.callId)
+        send(sendSDPOffer)
     }
 
-    public func send(_ data: Data) {
-        if let content = String(data: data, encoding: .utf8) {
-            Chat.sharedInstance.prepareToSendAsync(content, peerName: config.peerName)
-        } else {
-            customPrint("cant convert data to string in send", isGuardNil: true)
-        }
+    func send(_ asyncMessage: AsyncSnedable) {
+        Chat.sharedInstance.asyncManager.sendToAsync(asyncMessage: asyncMessage)
     }
 
     private func createMediaSenders() {
@@ -483,15 +467,12 @@ public extension WebRTCClient {
         Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { [weak self] _ in
             guard let self = self else { return }
             if self.usersRTC.userFor(topic: topicName)?.pc?.remoteDescription != nil {
-                let sendIceCandidate = SendCandidateReq(token: Chat.sharedInstance.token ?? "",
+                let sendIceCandidate = SendCandidateReq(peerName: self.config.peerName,
+                                                        token: Chat.sharedInstance.token ?? "",
                                                         topic: topicName,
                                                         candidate: IceCandidate(from: candidate).replaceSpaceSdpIceCandidate)
-                guard let data = try? JSONEncoder().encode(sendIceCandidate) else {
-                    self.customPrint("cannot encode genereated ice to send to server!", isGuardNil: true)
-                    return
-                }
                 self.customPrint("ice sended to server")
-                self.send(data)
+                self.send(sendIceCandidate)
             } else {
                 self.recursiveTimerForRemoteSDP(nextInterval, topicName, candidate, peerConnection, retryCount + 1)
                 let pcName = self.getPCName(peerConnection)
@@ -572,9 +553,7 @@ extension WebRTCClient {
         customPrint("on Call message received\n\(String(data: data, encoding: .utf8) ?? "")")
         switch ms.id {
         case .sessionRefresh, .createSession, .sessionNewCreated:
-            DispatchQueue.main.async {
-                Chat.sharedInstance.sotpAllSignalingServerCall(peerName: self.config.peerName)
-            }
+            stopAllSessions()
         case .addIceCandidate:
             addIceToPeerConnection(data)
         case .processSdpAnswer:
@@ -589,6 +568,14 @@ extension WebRTCClient {
             break
         case .unkown:
             customPrint("a message received from unkown type form webrtc server" + (message.content ?? ""), isGuardNil: true)
+        }
+    }
+
+    func stopAllSessions() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            let stop = StopAllSessionReq(peerName: self.config.peerName, token: Chat.sharedInstance.token ?? "")
+            self.send(stop)
         }
     }
 

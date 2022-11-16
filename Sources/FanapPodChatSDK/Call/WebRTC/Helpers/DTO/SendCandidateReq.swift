@@ -11,20 +11,23 @@
 //  Created by Hamed Hosseini on 7/31/21.
 //
 import Foundation
+import FanapPodAsyncSDK
 
-struct SendCandidateReq: Codable {
+struct SendCandidateReq: Codable, AsyncSnedable {
     var id: String = "ADD_ICE_CANDIDATE"
     var token: String
     var topic: String
     var candidate: IceCandidate
-    var unqiueId: String
+    var asyncMessageType: AsyncMessageTypes? = .message
+    var content: String? { convertCodableToString() }
+    var peerName: String?
 
-    public init(id: String = "ADD_ICE_CANDIDATE", token: String, topic: String, candidate: IceCandidate) {
+    public init(peerName: String, id: String = "ADD_ICE_CANDIDATE", token: String, topic: String, candidate: IceCandidate) {
+        self.peerName = peerName
         self.id = id
         self.token = token
         self.topic = topic
         self.candidate = candidate
-        unqiueId = UUID().uuidString
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -32,6 +35,5 @@ struct SendCandidateReq: Codable {
         case token
         case topic
         case candidate = "candidateDto"
-        case unqiueId
     }
 }

@@ -10,7 +10,7 @@ class AddContactsRequestHandler {
     class func handle(_ req: [AddContactRequest],
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<[Contact]>,
-                      _ uniqueIdsResult: UniqueIdsResultType = nil)
+                      _ uniqueIdsResult: UniqueIdsResultType? = nil)
     {
         guard let config = chat.config else { return }
         uniqueIdsResult?(req.map(\.uniqueId))

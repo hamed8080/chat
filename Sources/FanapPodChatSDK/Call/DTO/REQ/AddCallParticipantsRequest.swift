@@ -5,11 +5,14 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class AddCallParticipantsRequest: BaseRequest {
+public class AddCallParticipantsRequest: BaseRequest, ChatSnedable, SubjectProtocol {
     let callId: Int?
     var contactIds: [Int]?
     var userNames: [Invitee]?
     var coreuserIds: [Invitee]?
+    var content: String? { convertCodableToString() }
+    var chatMessageType: ChatMessageVOTypes = .addCallParticipant
+    var subjectId: Int? { callId }
 
     public init(callId: Int? = nil, uniqueId: String? = nil) {
         self.callId = callId
@@ -45,7 +48,7 @@ public class AddCallParticipantsRequest: BaseRequest {
         super.init(uniqueId: uniqueId)
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.unkeyedContainer()
         if let contactids = contactIds, contactids.count > 0 {
             try? container.encode(contactids)

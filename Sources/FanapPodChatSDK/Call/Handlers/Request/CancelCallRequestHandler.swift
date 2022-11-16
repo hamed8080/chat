@@ -8,12 +8,8 @@ import Foundation
 class CancelCallRequestHandler {
     class func handle(_ req: CancelCallRequest,
                       _ chat: Chat,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: req.call,
-                                clientSpecificUniqueId: req.uniqueId,
-                                subjectId: req.call.id,
-                                messageType: .cancelCall,
-                                uniqueIdResult: uniqueIdResult)
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult)
     }
 }

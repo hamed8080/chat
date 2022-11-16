@@ -13,7 +13,7 @@ public extension QueueOfForwardMessages {
         guard let threadId = threadId as? Int, let messageId = messageId as? Int else { return nil }
         return ForwardMessageRequest(
             threadId: threadId,
-            messageId: messageId,
+            messageIds: [messageId],
             uniqueId: uniqueId
         )
     }

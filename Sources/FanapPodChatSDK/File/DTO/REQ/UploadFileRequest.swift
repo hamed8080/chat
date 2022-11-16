@@ -8,7 +8,7 @@ import CoreServices
 import Foundation
 import UniformTypeIdentifiers
 
-public class UploadFileRequest: BaseRequest {
+public class UploadFileRequest: BaseRequest, Encodable {
     public var data: Data
     public var fileExtension: String?
     public var fileName: String = ""
@@ -58,7 +58,7 @@ public class UploadFileRequest: BaseRequest {
         case filename
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent("\(isPublic != nil && isPublic == true ? "true" : "false")", forKey: .isPublic) // dont send bool it crash when send and encode to dictionary
         try container.encodeIfPresent(fileName, forKey: .filename)

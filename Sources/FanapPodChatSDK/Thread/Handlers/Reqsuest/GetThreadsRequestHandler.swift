@@ -10,12 +10,9 @@ class GetThreadsRequestHandler {
                       _ chat: Chat,
                       _ completion: @escaping PaginationCompletionType<[Conversation]>,
                       _ cacheResponse: PaginationCacheResponseType<[Conversation]>? = nil,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: req,
-                                clientSpecificUniqueId: req.uniqueId,
-                                messageType: .getThreads,
-                                uniqueIdResult: uniqueIdResult) { response in
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             let threads = response.result as? [Conversation]
             let pagination = Pagination(hasNext: threads?.count ?? 0 >= req.count, count: req.count, offset: req.offset)
             completion(threads, response.uniqueId, pagination, response.error)

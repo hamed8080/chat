@@ -16,7 +16,14 @@ public struct Cordinate {
     }
 }
 
-public class MapRoutingRequest: BaseRequest {
+public class MapRoutingRequest: BaseRequest, RestAPIProtocol {
+    static var config: ChatConfig { Chat.sharedInstance.config! }
+    var url: String = "\(config.mapServer)\(Routes.mapRouting.rawValue)"
+    var urlString: String { url.toURLCompoenentString(encodable: self) ?? url }
+    var headers: [String: String] = ["Api-Key": config.mapApiKey!]
+    var bodyData: Data? { toData() }
+    var method: HTTPMethod = .get
+
     public var alternative: Bool = true
     private let destination: Cordinate
     private let origin: Cordinate
@@ -34,7 +41,7 @@ public class MapRoutingRequest: BaseRequest {
         case destination
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var continer = encoder.container(keyedBy: CodingKeys.self)
         try? continer.encode("\(origin.lat),\(origin.lng)", forKey: .origin)
         try? continer.encode("\(destination.lat),\(destination.lng)", forKey: .destination)

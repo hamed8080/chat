@@ -11,8 +11,9 @@
 //  Created by Hamed Hosseini on 7/31/21.
 //
 import Foundation
+import FanapPodAsyncSDK
 
-struct SendOfferSDPReq: Codable {
+struct SendOfferSDPReq: Codable, AsyncSnedable {
     var id: String = "RECIVE_SDP_OFFER"
     var brokerAddress: String
     var token: String
@@ -22,10 +23,12 @@ struct SendOfferSDPReq: Codable {
     private var useComedia = true
     private var useSrtp = false
     var chatId: Int?
+    var peerName: String?
+    var content: String? { convertCodableToString() }
+    var asyncMessageType: AsyncMessageTypes? = .message
 
-    var unqiueId = UUID().uuidString
-
-    public init(id: String = "RECIVE_SDP_OFFER", brokerAddress: String, token: String, topic: String, sdpOffer: String, mediaType: Mediatype, chatId: Int?) {
+    public init(peerName: String, id: String = "RECIVE_SDP_OFFER", brokerAddress: String, token: String, topic: String, sdpOffer: String, mediaType: Mediatype, chatId: Int?) {
+        self.peerName = peerName
         self.id = id
         self.brokerAddress = brokerAddress
         self.token = token

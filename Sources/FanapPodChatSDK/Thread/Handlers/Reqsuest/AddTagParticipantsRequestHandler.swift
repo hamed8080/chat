@@ -9,13 +9,9 @@ class AddTagParticipantsRequestHandler {
     class func handle(_ req: AddTagParticipantsRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<[TagParticipant]>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: req.threadIds,
-                                clientSpecificUniqueId: req.uniqueId,
-                                subjectId: req.tagId,
-                                messageType: .addTagParticipants,
-                                uniqueIdResult: uniqueIdResult) { response in
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? [TagParticipant], response.uniqueId, response.error)
         }
     }

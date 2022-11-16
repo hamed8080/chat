@@ -5,8 +5,11 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class TerminateCallRequest: BaseRequest {
+public class TerminateCallRequest: BaseRequest, ChatSnedable, SubjectProtocol {
     let callId: Int
+    var subjectId: Int? { callId }
+    var content: String?
+    var chatMessageType: ChatMessageVOTypes = .terminateCall
 
     public init(callId: Int, uniqueId: String? = nil) {
         self.callId = callId

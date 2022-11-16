@@ -5,10 +5,13 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class ChangeThreadTypeRequest: BaseRequest {
+public class ChangeThreadTypeRequest: BaseRequest, ChatSnedable, SubjectProtocol {
     public let uniqueName: String?
     public var threadId: Int
     public var type: ThreadTypes
+    var subjectId: Int? { threadId }
+    var chatMessageType: ChatMessageVOTypes = .changeThreadType
+    var content: String? { convertCodableToString() }
 
     public init(threadId: Int, type: ThreadTypes, uniqueName: String? = nil, uniqueId: String? = nil) {
         self.type = type
@@ -22,7 +25,7 @@ public class ChangeThreadTypeRequest: BaseRequest {
         case uniqueName
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try? container.encode(type, forKey: .type)
         try? container.encodeIfPresent(uniqueName, forKey: .uniqueName)

@@ -10,7 +10,7 @@ class DownloadMapStaticImageRequestHandler {
     class func handle(req: MapStaticImageRequest,
                       config: ChatConfig,
                       downloadProgress: DownloadProgressType? = nil,
-                      uniqueIdResult: UniqueIdResultType = nil,
+                      uniqueIdResult: UniqueIdResultType? = nil,
                       completion: @escaping (ChatResponse) -> Void)
     {
         uniqueIdResult?(req.uniqueId)

@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class CallsHistoryRequest: BaseRequest {
+public class CallsHistoryRequest: BaseRequest, ChatSnedable {
     public let count: Int
     public let offset: Int
     public let callIds: [Int]?
@@ -14,6 +14,8 @@ public class CallsHistoryRequest: BaseRequest {
     public let creatorCoreUserId: Int?
     public let creatorSsoId: Int?
     public let threadId: Int?
+    var content: String? { convertCodableToString() }
+    var chatMessageType: ChatMessageVOTypes = .getCalls
 
     public init(count: Int = 50,
                 offset: Int = 0,
@@ -45,7 +47,7 @@ public class CallsHistoryRequest: BaseRequest {
         case threadId
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(count, forKey: .count)
         try container.encode(offset, forKey: .offset)

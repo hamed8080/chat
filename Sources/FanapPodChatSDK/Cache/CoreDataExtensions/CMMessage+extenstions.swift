@@ -10,7 +10,7 @@ import Foundation
 public extension CMMessage {
     static let crud = CoreDataCrud<CMMessage>(entityName: "CMMessage")
 
-    func getCodable() -> Message {
+    func getCodable(setCodableConversation: Bool = true) -> Message {
         Message(threadId: threadId as? Int,
                 deletable: deletable as? Bool,
                 delivered: delivered as? Bool,
@@ -29,7 +29,7 @@ public extension CMMessage {
                 time: time as? UInt,
                 timeNanos: 0,
                 uniqueId: uniqueId,
-                conversation: conversation?.getCodable(),
+                conversation: setCodableConversation == true ? conversation?.getCodable() : nil,
                 forwardInfo: forwardInfo?.getCodable(),
                 participant: participant?.getCodable(),
                 replyInfo: replyInfo?.getCodable())
@@ -84,7 +84,12 @@ public extension CMMessage {
            let findedThread = CMConversation.crud.find(keyWithFromat: "id == %i", value: threadId)
         {
             message.threadId = conversation.id
-            insertOrUpdate(message: message, conversation: findedThread, resultEntity: resultEntity)
+            insertOrUpdate(message: message, conversation: findedThread) { messageEntity in
+                findedThread.lastMessageVO = messageEntity
+                findedThread.lastMessage = messageEntity.message
+                findedThread.unreadCount = messageEntity.conversation?.unreadCount ?? 0
+                resultEntity?(messageEntity)
+            }
         }
     }
 

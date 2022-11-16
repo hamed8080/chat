@@ -84,7 +84,7 @@ public class Chat {
     ///   - completion: The answer of the request.
     ///   - cacheResponse: Reponse from cache database.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func getContacts(_ request: ContactsRequest, completion: @escaping PaginationCompletionType<[Contact]>, cacheResponse: PaginationCacheResponseType<[Contact]>? = nil, uniqueIdResult: UniqueIdResultType = nil) {
+    public func getContacts(_ request: ContactsRequest, completion: @escaping PaginationCompletionType<[Contact]>, cacheResponse: PaginationCacheResponseType<[Contact]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         GetContactsRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
     }
 
@@ -93,7 +93,7 @@ public class Chat {
     ///   - request: The request.
     ///   - completion: The answer is the list of blocked contacts.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func getBlockedContacts(_ request: BlockedListRequest, completion: @escaping PaginationCompletionType<[BlockedContact]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func getBlockedContacts(_ request: BlockedListRequest, completion: @escaping PaginationCompletionType<[BlockedContact]>, uniqueIdResult: UniqueIdResultType? = nil) {
         GetBlockedContactsRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -102,7 +102,7 @@ public class Chat {
     ///   - request: The request.
     ///   - completion: The answer of the request if the contact is added successfully.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func addContact(_ request: AddContactRequest, completion: @escaping CompletionType<[Contact]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func addContact(_ request: AddContactRequest, completion: @escaping CompletionType<[Contact]>, uniqueIdResult: UniqueIdResultType? = nil) {
         AddContactRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -111,7 +111,7 @@ public class Chat {
     ///   - request: The request.
     ///   - completion: The answer of the request if the contacts are added successfully.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func addContacts(_ request: [AddContactRequest], completion: @escaping CompletionType<[Contact]>, uniqueIdsResult: UniqueIdsResultType = nil) {
+    public func addContacts(_ request: [AddContactRequest], completion: @escaping CompletionType<[Contact]>, uniqueIdsResult: UniqueIdsResultType? = nil) {
         AddContactsRequestHandler.handle(request, self, completion, uniqueIdsResult)
     }
 
@@ -120,7 +120,7 @@ public class Chat {
     ///   - request: The request with userIds.
     ///   - completion: List of last seen users with time attached to each item.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func contactNotSeen(_ request: NotSeenDurationRequest, completion: @escaping CompletionType<[UserLastSeenDuration]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func contactNotSeen(_ request: NotSeenDurationRequest, completion: @escaping CompletionType<[UserLastSeenDuration]>, uniqueIdResult: UniqueIdResultType? = nil) {
         NotSeenContactRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -129,7 +129,7 @@ public class Chat {
     ///   - request: The request with userIds.
     ///   - completion: The answer if the contact has been successfully deleted.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func removeContact(_ request: RemoveContactsRequest, completion: @escaping CompletionType<Bool>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func removeContact(_ request: RemoveContactsRequest, completion: @escaping CompletionType<Bool>, uniqueIdResult: UniqueIdResultType? = nil) {
         RemoveContactRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -141,7 +141,7 @@ public class Chat {
     ///   - completion: The answer if the contact has been successfully deleted.
     ///   - cacheResponse: Reponse from cache database.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func searchContacts(_ request: ContactsRequest, completion: @escaping PaginationCompletionType<[Contact]>, cacheResponse: PaginationCacheResponseType<[Contact]>? = nil, uniqueIdResult: UniqueIdResultType = nil) {
+    public func searchContacts(_ request: ContactsRequest, completion: @escaping PaginationCompletionType<[Contact]>, cacheResponse: PaginationCacheResponseType<[Contact]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         getContacts(request, completion: completion, cacheResponse: cacheResponse, uniqueIdResult: uniqueIdResult)
     }
 
@@ -151,7 +151,7 @@ public class Chat {
     /// - Parameters:
     ///   - completion: The answer of synced contacts.
     ///   - uniqueIdsResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func syncContacts(completion: @escaping CompletionType<[Contact]>, uniqueIdsResult: UniqueIdsResultType = nil) {
+    public func syncContacts(completion: @escaping CompletionType<[Contact]>, uniqueIdsResult: UniqueIdsResultType? = nil) {
         SyncContactsRequestHandler.handle(self, completion, uniqueIdsResult)
     }
 
@@ -162,7 +162,7 @@ public class Chat {
     ///   - req: The request of what you need to be updated.
     ///   - completion: The list of updated contacts.
     ///   - uniqueIdsResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func updateContact(_ req: UpdateContactRequest, completion: @escaping CompletionType<[Contact]>, uniqueIdsResult: UniqueIdResultType = nil) {
+    public func updateContact(_ req: UpdateContactRequest, completion: @escaping CompletionType<[Contact]>, uniqueIdsResult: UniqueIdResultType? = nil) {
         UpdateContactRequestHandler.handle(req, self, completion, uniqueIdsResult)
     }
 
@@ -171,7 +171,7 @@ public class Chat {
     ///   - request: You could block contact with userId, contactId or you could block a thread.
     ///   - completion: Reponse of blocked request.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func blockContact(_ request: BlockRequest, completion: @escaping CompletionType<BlockedContact>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func blockContact(_ request: BlockRequest, completion: @escaping CompletionType<BlockedContact>, uniqueIdResult: UniqueIdResultType? = nil) {
         BlockContactRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -180,7 +180,7 @@ public class Chat {
     ///   - request: You could unblock contact with userId, contactId or you could unblock a thread.
     ///   - completion: Reponse of before blocked request.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func unBlockContact(_ request: UnBlockRequest, completion: @escaping CompletionType<BlockedContact>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func unBlockContact(_ request: UnBlockRequest, completion: @escaping CompletionType<BlockedContact>, uniqueIdResult: UniqueIdResultType? = nil) {
         UnBlockContactRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -189,7 +189,7 @@ public class Chat {
     ///   - request: Request of getting address.
     ///   - completion: Response of reverse address.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func mapReverse(_ request: MapReverseRequest, completion: @escaping CompletionType<MapReverse>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func mapReverse(_ request: MapReverseRequest, completion: @escaping CompletionType<MapReverse>, uniqueIdResult: UniqueIdResultType? = nil) {
         MapReverseRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -198,7 +198,7 @@ public class Chat {
     ///   - request: Request of area.
     ///   - completion: Reponse of founded items.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func mapSearch(_ request: MapSearchRequest, completion: @escaping CompletionType<[MapItem]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func mapSearch(_ request: MapSearchRequest, completion: @escaping CompletionType<[MapItem]>, uniqueIdResult: UniqueIdResultType? = nil) {
         MapSearchRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -207,7 +207,7 @@ public class Chat {
     ///   - request: The request that contains origin and destination.
     ///   - completion: Response of request.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func mapRouting(_ request: MapRoutingRequest, completion: @escaping CompletionType<[Route]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func mapRouting(_ request: MapRoutingRequest, completion: @escaping CompletionType<[Route]>, uniqueIdResult: UniqueIdResultType? = nil) {
         MapRoutingRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -216,7 +216,7 @@ public class Chat {
     ///   - request: The request size and location.
     ///   - completion: Data of image.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func mapStaticImage(_ request: MapStaticImageRequest, completion: @escaping CompletionType<Data>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func mapStaticImage(_ request: MapStaticImageRequest, completion: @escaping CompletionType<Data>, uniqueIdResult: UniqueIdResultType? = nil) {
         MapStaticImageRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -226,7 +226,7 @@ public class Chat {
     ///   - completion: Response of list of threads that came with pagination.
     ///   - cacheResponse: Threads list that came from the cache.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func getThreads(_ request: ThreadsRequest, completion: @escaping PaginationCompletionType<[Conversation]>, cacheResponse: PaginationCacheResponseType<[Conversation]>? = nil, uniqueIdResult: UniqueIdResultType = nil) {
+    public func getThreads(_ request: ThreadsRequest, completion: @escaping PaginationCompletionType<[Conversation]>, cacheResponse: PaginationCacheResponseType<[Conversation]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         GetThreadsRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
     }
 
@@ -236,7 +236,7 @@ public class Chat {
     ///   - completion: Response of list of threads that came with pagination.
     ///   - cacheResponse: Thread cache return data from disk so it contains all data in each model.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func getAllThreads(request: AllThreads, completion: @escaping CompletionType<[Conversation]>, cacheResponse: CacheResponseType<[Conversation]>? = nil, uniqueIdResult: UniqueIdResultType = nil) {
+    public func getAllThreads(request: AllThreads, completion: @escaping CompletionType<[Conversation]>, cacheResponse: CacheResponseType<[Conversation]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         GetAllThreadsRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
     }
 
@@ -245,7 +245,7 @@ public class Chat {
     ///   - request: The request for the name of the thread to check.
     ///   - completion: If thread name is free for using as public it will not be nil.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func isThreadNamePublic(_ request: IsThreadNamePublicRequest, completion: @escaping CompletionType<String>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func isThreadNamePublic(_ request: IsThreadNamePublicRequest, completion: @escaping CompletionType<String>, uniqueIdResult: UniqueIdResultType? = nil) {
         IsThreadNamePublicRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -254,7 +254,7 @@ public class Chat {
     ///   - request: The request with a thread id.
     ///   - completion: Response of mute thread.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func muteThread(_ request: MuteUnmuteThreadRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func muteThread(_ request: GeneralThreadRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
         MuteThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -263,7 +263,7 @@ public class Chat {
     ///   - request: The request with a thread id.
     ///   - completion: Response of unmute thread.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func unmuteThread(_ request: MuteUnmuteThreadRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func unmuteThread(_ request: GeneralThreadRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
         UnMuteThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -272,7 +272,7 @@ public class Chat {
     ///   - request: The request with a thread id.
     ///   - completion: Response of pin thread.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func pinThread(_ request: PinUnpinThreadRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func pinThread(_ request: GeneralThreadRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
         PinThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -281,7 +281,7 @@ public class Chat {
     ///   - request: The request with a thread id.
     ///   - completion: Response of unpin thread.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func unpinThread(_ request: PinUnpinThreadRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func unpinThread(_ request: GeneralThreadRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
         UnPinThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -290,7 +290,7 @@ public class Chat {
     ///   - request: The request of create a thread.
     ///   - completion: Response to create thread which contains a ``Conversation`` that includes threadId and other properties.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func createThread(_ request: CreateThreadRequest, completion: @escaping CompletionType<Conversation>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func createThread(_ request: CreateThreadRequest, completion: @escaping CompletionType<Conversation>, uniqueIdResult: UniqueIdResultType? = nil) {
         CreateThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -303,10 +303,10 @@ public class Chat {
     ///   - onSeen: Call when message is seen.
     ///   - completion: Response of request and created thread.
     public func createThreadWithMessage(_ request: CreateThreadWithMessage,
-                                        uniqueIdResult: UniqueIdResultType = nil,
-                                        onSent _: OnSentType = nil,
-                                        onDelivery _: OnDeliveryType = nil,
-                                        onSeen _: OnSentType = nil,
+                                        uniqueIdResult: UniqueIdResultType? = nil,
+                                        onSent _: OnSentType? = nil,
+                                        onDelivery _: OnDeliveryType? = nil,
+                                        onSeen _: OnSentType? = nil,
                                         completion: @escaping CompletionType<Conversation>)
     {
         CreateThreadWithMessageRequestHandler.handle(request, self, completion, uniqueIdResult)
@@ -328,12 +328,12 @@ public class Chat {
                                             textMessage: SendTextMessageRequest,
                                             uploadFile: UploadFileRequest,
                                             uploadProgress: UploadFileProgressType? = nil,
-                                            onSent: OnSentType = nil,
-                                            onSeen: OnSeenType = nil,
-                                            onDeliver: OnDeliveryType = nil,
+                                            onSent: OnSentType? = nil,
+                                            onSeen: OnSeenType? = nil,
+                                            onDeliver: OnDeliveryType? = nil,
                                             createThreadCompletion: CompletionType<Conversation>? = nil,
-                                            uploadUniqueIdResult: UniqueIdResultType = nil,
-                                            messageUniqueIdResult: UniqueIdResultType = nil)
+                                            uploadUniqueIdResult: UniqueIdResultType? = nil,
+                                            messageUniqueIdResult: UniqueIdResultType? = nil)
     {
         CreateThreadWithFileMessageRequestHandler.handle(self, request, textMessage, uploadFile, uploadProgress, onSent, onSeen, onDeliver, createThreadCompletion, uploadUniqueIdResult, messageUniqueIdResult)
     }
@@ -343,17 +343,8 @@ public class Chat {
     ///   - request: Fill in the appropriate initializer.
     ///   - completion: Reponse of request.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func addParticipant(_ request: AddParticipantRequest, completion: @escaping CompletionType<Conversation>, uniqueIdResult: UniqueIdResultType = nil) {
-        AddParticipantsRequestHandler.handle([request], self, completion, uniqueIdResult)
-    }
-
-    /// Add participants to a thread.
-    /// - Parameters:
-    ///   - request: Fill in the appropriate initializer.
-    ///   - completion: Reponse of request.
-    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func addParticipants(_ request: [AddParticipantRequest], completion: @escaping CompletionType<Conversation>, uniqueIdResult: UniqueIdResultType = nil) {
-        AddParticipantsRequestHandler.handle(request, self, completion, uniqueIdResult)
+    public func addParticipant(_ request: AddParticipantRequest, completion: @escaping CompletionType<Conversation>, uniqueIdResult: UniqueIdResultType? = nil) {
+        AddParticipantRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
     /// Remove participants from a thread.
@@ -361,7 +352,7 @@ public class Chat {
     ///   - request: List of participants id and threadId.
     ///   - completion: Result of deleted participants.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func removeParticipants(_ request: RemoveParticipantsRequest, completion: @escaping CompletionType<[Participant]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func removeParticipants(_ request: RemoveParticipantsRequest, completion: @escaping CompletionType<[Participant]>, uniqueIdResult: UniqueIdResultType? = nil) {
         RemoveParticipantsRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -370,7 +361,7 @@ public class Chat {
     ///   - request: Thread name of public thread.
     ///   - completion: Detail of public thread as a ``Conversation`` object.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func joinThread(_ request: JoinPublicThreadRequest, completion: @escaping CompletionType<Conversation>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func joinThread(_ request: JoinPublicThreadRequest, completion: @escaping CompletionType<Conversation>, uniqueIdResult: UniqueIdResultType? = nil) {
         JoinPublicThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -381,7 +372,7 @@ public class Chat {
     ///   - request: Thread Id of the thread you want to be closed.
     ///   - completion: The id of the thread which closed.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func closeThread(_ request: CloseThreadRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func closeThread(_ request: GeneralThreadRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
         CloseThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -392,7 +383,7 @@ public class Chat {
     ///   - request: Request to spam a thread.
     ///   - completion: Response of request.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func spamPvThread(_ request: SpamThreadRequest, completion: @escaping CompletionType<BlockedContact>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func spamPvThread(_ request: GeneralThreadRequest, completion: @escaping CompletionType<BlockedContact>, uniqueIdResult: UniqueIdResultType? = nil) {
         SpamThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -402,7 +393,7 @@ public class Chat {
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     ///   - uploadProgress: Upload progrees if you update image of the thread.
     ///   - completion: Response of update.
-    public func updateThreadInfo(_ request: UpdateThreadInfoRequest, uniqueIdResult: UniqueIdResultType = nil, uploadProgress: @escaping UploadFileProgressType, completion: @escaping CompletionType<Conversation>) {
+    public func updateThreadInfo(_ request: UpdateThreadInfoRequest, uniqueIdResult: UniqueIdResultType? = nil, uploadProgress: @escaping UploadFileProgressType, completion: @escaping CompletionType<Conversation>) {
         UpdateThreadInfoRequestHandler.handle(self, request, uploadProgress, completion, uniqueIdResult)
     }
 
@@ -411,7 +402,7 @@ public class Chat {
     ///   - request: The threadId if the thread with option to clear it's content.
     ///   - completion: The response of the left thread..
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func leaveThread(_ request: LeaveThreadRequest, completion: @escaping CompletionType<User>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func leaveThread(_ request: LeaveThreadRequest, completion: @escaping CompletionType<User>, uniqueIdResult: UniqueIdResultType? = nil) {
         LeaveThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -420,7 +411,7 @@ public class Chat {
     ///   - request: The request that contains thread id.
     ///   - completion: Result of request.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func deleteThread(_ request: DeleteThreadRequest, completion: @escaping CompletionType<Int>, uniqueIdResult _: UniqueIdResultType = nil) {
+    public func deleteThread(_ request: GeneralThreadRequest, completion: @escaping CompletionType<Int>, uniqueIdResult _: UniqueIdResultType? = nil) {
         DeleteThreadRequestHandler.handle(request, self, completion)
     }
 
@@ -430,7 +421,7 @@ public class Chat {
     ///   - completion: Result of request.
     ///   - newAdminCompletion: Result of new admin.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func leaveThreadSaftly(_ request: SafeLeaveThreadRequest, completion: @escaping CompletionType<User>, newAdminCompletion: CompletionType<[UserRole]>? = nil, uniqueIdResult: UniqueIdResultType = nil) {
+    public func leaveThreadSaftly(_ request: SafeLeaveThreadRequest, completion: @escaping CompletionType<User>, newAdminCompletion: CompletionType<[UserRole]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         ReplaceAdminAndLeaveThreadRequestHandler.handle(request, self, completion, newAdminCompletion, uniqueIdResult)
     }
 
@@ -440,7 +431,7 @@ public class Chat {
     ///   - completion: Pagination list of participants.
     ///   - cacheResponse: Cache response of participants inside a thread.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func getThreadParticipants(_ request: ThreadParticipantsRequest, completion: @escaping PaginationCompletionType<[Participant]>, cacheResponse: PaginationCacheResponseType<[Participant]>? = nil, uniqueIdResult: UniqueIdResultType = nil) {
+    public func getThreadParticipants(_ request: ThreadParticipantsRequest, completion: @escaping PaginationCompletionType<[Participant]>, cacheResponse: PaginationCacheResponseType<[Participant]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         ThreadParticipantsRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
     }
 
@@ -452,7 +443,7 @@ public class Chat {
     ///   - completion: Pagination list of participants.
     ///   - cacheResponse: Cache response of participants inside a thread.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func getThreadAdmins(_ request: ThreadParticipantsRequest, completion: @escaping PaginationCompletionType<[Participant]>, cacheResponse: PaginationCacheResponseType<[Participant]>? = nil, uniqueIdResult: UniqueIdResultType = nil) {
+    public func getThreadAdmins(_ request: ThreadParticipantsRequest, completion: @escaping PaginationCompletionType<[Participant]>, cacheResponse: PaginationCacheResponseType<[Participant]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         request.admin = true
         ThreadParticipantsRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
     }
@@ -462,7 +453,7 @@ public class Chat {
     ///   - request: The request that contains threadId and type of desierd thread.
     ///   - completion: Response of the request.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func changeThreadType(_ request: ChangeThreadTypeRequest, completion: @escaping CompletionType<Conversation>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func changeThreadType(_ request: ChangeThreadTypeRequest, completion: @escaping CompletionType<Conversation>, uniqueIdResult: UniqueIdResultType? = nil) {
         ChangeThreadTypeRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -471,7 +462,7 @@ public class Chat {
     ///   - request: The request that contains the name bot.
     ///   - completion: The responser of the request.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func createBot(_ request: CreateBotRequest, completion: @escaping CompletionType<Bot>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func createBot(_ request: CreateBotRequest, completion: @escaping CompletionType<Bot>, uniqueIdResult: UniqueIdResultType? = nil) {
         CreateBotRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -480,7 +471,7 @@ public class Chat {
     ///   - request: The request that contains the name bot and list of commands.
     ///   - completion: The responser of the request.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func addBotCommand(_ request: AddBotCommandRequest, completion: @escaping CompletionType<BotInfo>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func addBotCommand(_ request: AddBotCommandRequest, completion: @escaping CompletionType<BotInfo>, uniqueIdResult: UniqueIdResultType? = nil) {
         AddBotCommandRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -489,7 +480,7 @@ public class Chat {
     ///   - request: The request that contains the name bot and list of commands.
     ///   - completion: The responser of the request.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func removeBotCommand(_ request: RemoveBotCommandRequest, completion: @escaping CompletionType<BotInfo>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func removeBotCommand(_ request: RemoveBotCommandRequest, completion: @escaping CompletionType<BotInfo>, uniqueIdResult: UniqueIdResultType? = nil) {
         RemoveBotCommandRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -498,7 +489,7 @@ public class Chat {
     ///   - request: Request if want to have different uniqueId.
     ///   - completion: List of user bots.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func getUserBots(_ request: GetUserBotsRequest, completion: @escaping CompletionType<[BotInfo]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func getUserBots(_ request: GetUserBotsRequest, completion: @escaping CompletionType<[BotInfo]>, uniqueIdResult: UniqueIdResultType? = nil) {
         UserBotsBotsRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -507,7 +498,7 @@ public class Chat {
     ///   - request: The request with threadName and a threadId.
     ///   - completion: Name of a bot if it starts successfully.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func startBot(_ request: StartStopBotRequest, completion: @escaping CompletionType<String>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func startBot(_ request: StartStopBotRequest, completion: @escaping CompletionType<String>, uniqueIdResult: UniqueIdResultType? = nil) {
         StartBotRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -516,7 +507,7 @@ public class Chat {
     ///   - request: The request with threadName and a threadId.
     ///   - completion: Name of a bot if it stopped successfully.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func stopBot(_ request: StartStopBotRequest, completion: @escaping CompletionType<String>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func stopBot(_ request: StartStopBotRequest, completion: @escaping CompletionType<String>, uniqueIdResult: UniqueIdResultType? = nil) {
         StopBotRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -526,7 +517,7 @@ public class Chat {
     ///   - completion: Response of the request.
     ///   - cacheResponse: cache response for the current user.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func getUserInfo(_ request: UserInfoRequest, completion: @escaping CompletionType<User>, cacheResponse: CacheResponseType<User>? = nil, uniqueIdResult: UniqueIdResultType = nil) {
+    public func getUserInfo(_ request: UserInfoRequest, completion: @escaping CompletionType<User>, cacheResponse: CacheResponseType<User>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         UserInfoRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
     }
 
@@ -535,7 +526,7 @@ public class Chat {
     ///   - request: The request that contains bio and metadata.
     ///   - completion: New profile response.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func setProfile(_ request: UpdateChatProfile, completion: @escaping CompletionType<Profile>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func setProfile(_ request: UpdateChatProfile, completion: @escaping CompletionType<Profile>, uniqueIdResult: UniqueIdResultType? = nil) {
         UpdateChatProfileRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -550,7 +541,7 @@ public class Chat {
     ///   - uniqueId: The uniqueId of request if you want to set a specific one.
     ///   - completion: List of tags.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func tagList(_ uniqueId: String? = nil, completion: @escaping CompletionType<[Tag]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func tagList(_ uniqueId: String? = nil, completion: @escaping CompletionType<[Tag]>, uniqueIdResult: UniqueIdResultType? = nil) {
         TagListRequestHandler.handle(uniqueId, self, completion, uniqueIdResult)
     }
 
@@ -559,7 +550,7 @@ public class Chat {
     ///   - request: The name of the tag.
     ///   - completion: Response of the request if tag added successfully.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func createTag(_ request: CreateTagRequest, completion: @escaping CompletionType<Tag>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func createTag(_ request: CreateTagRequest, completion: @escaping CompletionType<Tag>, uniqueIdResult: UniqueIdResultType? = nil) {
         CreateTagRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -568,7 +559,7 @@ public class Chat {
     ///   - request: The id of the tag and new name of the tag.
     ///   - completion: Response of the request if tag edited successfully.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func editTag(_ request: EditTagRequest, completion: @escaping CompletionType<Tag>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func editTag(_ request: EditTagRequest, completion: @escaping CompletionType<Tag>, uniqueIdResult: UniqueIdResultType? = nil) {
         EditTagRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -577,7 +568,7 @@ public class Chat {
     ///   - request: The id of tag.
     ///   - completion: Response of the request if tag deleted successfully.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func deleteTag(_ request: DeleteTagRequest, completion: @escaping CompletionType<Tag>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func deleteTag(_ request: DeleteTagRequest, completion: @escaping CompletionType<Tag>, uniqueIdResult: UniqueIdResultType? = nil) {
         DeleteTagRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -586,7 +577,7 @@ public class Chat {
     ///   - request: The tag id and list of threads id.
     ///   - completion: The response of the request which contains list of tagParticipants added.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func addTagParticipants(_ request: AddTagParticipantsRequest, completion: @escaping CompletionType<[TagParticipant]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func addTagParticipants(_ request: AddTagParticipantsRequest, completion: @escaping CompletionType<[TagParticipant]>, uniqueIdResult: UniqueIdResultType? = nil) {
         AddTagParticipantsRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -595,12 +586,12 @@ public class Chat {
     ///   - request: The tag id and the list of tag participants id.
     ///   - completion: List of removed tag participants.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func removeTagParticipants(_ request: RemoveTagParticipantsRequest, completion: @escaping CompletionType<[TagParticipant]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func removeTagParticipants(_ request: RemoveTagParticipantsRequest, completion: @escaping CompletionType<[TagParticipant]>, uniqueIdResult: UniqueIdResultType? = nil) {
         RemoveTagParticipantsRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
     // Test Status: Main ❌ - Integeration: ❌
-//    func getTagParticipants(_ request:GetTagParticipantsRequest ,completion:@escaping CompletionType<[Conversation]>,uniqueIdResult: UniqueIdResultType = nil){
+//    func getTagParticipants(_ request:GetTagParticipantsRequest ,completion:@escaping CompletionType<[Conversation]>,uniqueIdResult: UniqueIdResultType? = nil){
 //        GetTagParticipantsRequestHandler.handle(request, self , completion, uniqueIdResult)
 //    }
 
@@ -611,7 +602,7 @@ public class Chat {
     ///   - onSent: Is called when a message sent successfully.
     ///   - onSeen: Is called when a message, have seen by a participant successfully.
     ///   - onDeliver: Is called when a message, have delivered to a participant successfully.
-    public func sendTextMessage(_ request: SendTextMessageRequest, uniqueIdresult: UniqueIdResultType = nil, onSent: OnSentType = nil, onSeen: OnSeenType = nil, onDeliver: OnDeliveryType = nil) {
+    public func sendTextMessage(_ request: SendTextMessageRequest, uniqueIdresult: UniqueIdResultType? = nil, onSent: OnSentType? = nil, onSeen: OnSeenType? = nil, onDeliver: OnDeliveryType? = nil) {
         SendTextMessageRequestHandler.handle(request, self, onSent, onSeen, onDeliver, uniqueIdresult)
     }
 
@@ -620,7 +611,7 @@ public class Chat {
     ///   - request: The request that contains threadId and messageId and new text for the message you want to edit.
     ///   - completion: The result of edited message.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func editMessage(_ request: EditMessageRequest, completion: CompletionType<Message>? = nil, uniqueIdResult: UniqueIdResultType = nil) {
+    public func editMessage(_ request: EditMessageRequest, completion: CompletionType<Message>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         EditMessageRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -631,7 +622,7 @@ public class Chat {
     ///   - onSent: Is called when a message sent successfully.
     ///   - onSeen: Is called when a message, have seen by a participant successfully.
     ///   - onDeliver: Is called when a message, have delivered to a participant successfully.
-    public func replyMessage(_ request: ReplyMessageRequest, uniqueIdresult: UniqueIdResultType = nil, onSent: OnSentType = nil, onSeen: OnSeenType = nil, onDeliver: OnDeliveryType = nil) {
+    public func replyMessage(_ request: ReplyMessageRequest, uniqueIdresult: UniqueIdResultType? = nil, onSent: OnSentType? = nil, onSeen: OnSeenType? = nil, onDeliver: OnDeliveryType? = nil) {
         SendTextMessageRequestHandler.handle(request, self, onSent, onSeen, onDeliver, uniqueIdresult)
     }
 
@@ -648,11 +639,11 @@ public class Chat {
     public func sendLocationMessage(_ request: LocationMessageRequest,
                                     uploadProgress: UploadFileProgressType? = nil,
                                     downloadProgress: DownloadProgressType? = nil,
-                                    onSent: OnSentType = nil,
-                                    onSeen: OnSeenType = nil,
-                                    onDeliver: OnDeliveryType = nil,
-                                    uploadUniqueIdResult: UniqueIdResultType = nil,
-                                    messageUniqueIdResult: UniqueIdResultType = nil)
+                                    onSent: OnSentType? = nil,
+                                    onSeen: OnSeenType? = nil,
+                                    onDeliver: OnDeliveryType? = nil,
+                                    uploadUniqueIdResult: UniqueIdResultType? = nil,
+                                    messageUniqueIdResult: UniqueIdResultType? = nil)
     {
         SendLocationMessageRequestHandler.handle(self, request, downloadProgress, uploadProgress, onSent, onSeen, onDeliver, uploadUniqueIdResult, messageUniqueIdResult)
     }
@@ -664,7 +655,7 @@ public class Chat {
     ///   - onSeen: Is called when a message, have seen by a participant successfully.
     ///   - onDeliver: Is called when a message, have delivered to a participant successfully.
     ///   - uniqueIdsResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func forwardMessages(_ request: ForwardMessageRequest, onSent: OnSentType = nil, onSeen: OnSeenType = nil, onDeliver: OnDeliveryType = nil, uniqueIdsResult: UniqueIdsResultType = nil) {
+    public func forwardMessages(_ request: ForwardMessageRequest, onSent: OnSentType? = nil, onSeen: OnSeenType? = nil, onDeliver: OnDeliveryType? = nil, uniqueIdsResult: UniqueIdsResultType? = nil) {
         ForwardMessagesRequestHandler.handle(request, self, onSent, onSeen, onDeliver, uniqueIdsResult)
     }
 
@@ -689,7 +680,7 @@ public class Chat {
                            fileMessageNotSentRequests: CompletionType<[(UploadFileRequest, SendTextMessageRequest)]>? = nil,
                            uploadFileNotSentRequests: CompletionType<[UploadFileRequest]>? = nil,
                            uploadImageNotSentRequests: CompletionType<[UploadImageRequest]>? = nil,
-                           uniqueIdResult: UniqueIdResultType = nil)
+                           uniqueIdResult: UniqueIdResultType? = nil)
     {
         GetHistoryRequestHandler.handle(request,
                                         self,
@@ -713,7 +704,7 @@ public class Chat {
     public func getHashtagList(_ request: GetHistoryRequest,
                                completion: @escaping PaginationCompletionType<[Message]>,
                                cacheResponse: CacheResponseType<[Message]>? = nil,
-                               uniqueIdResult: UniqueIdResultType = nil)
+                               uniqueIdResult: UniqueIdResultType? = nil)
     {
         GetHistoryRequestHandler.handle(request, self, completion, cacheResponse, nil, nil, nil, nil, nil, nil, uniqueIdResult)
     }
@@ -723,7 +714,7 @@ public class Chat {
     ///   - request: The request that contains messageId.
     ///   - completion: The response of pinned thread.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func pinMessage(_ request: PinUnpinMessageRequest, completion: @escaping CompletionType<PinUnpinMessage>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func pinMessage(_ request: PinUnpinMessageRequest, completion: @escaping CompletionType<PinUnpinMessage>, uniqueIdResult: UniqueIdResultType? = nil) {
         PinMessageRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -732,7 +723,7 @@ public class Chat {
     ///   - request: The request that contains messageId.
     ///   - completion: The response of unpinned thread.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func unpinMessage(_ request: PinUnpinMessageRequest, completion: @escaping CompletionType<PinUnpinMessage>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func unpinMessage(_ request: PinUnpinMessageRequest, completion: @escaping CompletionType<PinUnpinMessage>, uniqueIdResult: UniqueIdResultType? = nil) {
         UnPinMessageRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -741,7 +732,7 @@ public class Chat {
     ///   - request: The request that  contains a threadId.
     ///   - completion: A threadId if the result was a success.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func clearHistory(_ request: ClearHistoryRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func clearHistory(_ request: GeneralThreadRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
         ClearHistoryRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -750,7 +741,7 @@ public class Chat {
     ///   - request: The delete request with a messageId.
     ///   - completion: The response of deleted message.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func deleteMessage(_ request: DeleteMessageRequest, completion: @escaping CompletionType<Message>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func deleteMessage(_ request: DeleteMessageRequest, completion: @escaping CompletionType<Message>, uniqueIdResult: UniqueIdResultType? = nil) {
         DeleteMessageRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -759,7 +750,7 @@ public class Chat {
     ///   - request: The delete request with list of messagesId.
     ///   - completion: List of deleted messages.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func deleteMultipleMessages(_ request: BatchDeleteMessageRequest, completion: @escaping CompletionType<Message>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func deleteMultipleMessages(_ request: BatchDeleteMessageRequest, completion: @escaping CompletionType<Message>, uniqueIdResult: UniqueIdResultType? = nil) {
         BatchDeleteMessageRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -769,7 +760,7 @@ public class Chat {
     ///   - completion: The number of unread message count.
     ///   - cacheResponse: The number of unread message count in cache.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func allUnreadMessageCount(_ request: UnreadMessageCountRequest, completion: @escaping CompletionType<Int>, cacheResponse: CacheResponseType<Int>? = nil, uniqueIdResult: UniqueIdResultType = nil) {
+    public func allUnreadMessageCount(_ request: UnreadMessageCountRequest, completion: @escaping CompletionType<Int>, cacheResponse: CacheResponseType<Int>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         AllUnreadMessageCountRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
     }
 
@@ -779,7 +770,7 @@ public class Chat {
     ///   - completion: The response contains a list of messages that you have mentioned.
     ///   - cacheResponse: The cache response of mentioned messages inside a thread.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func getMentions(_ request: MentionRequest, completion: @escaping PaginationCompletionType<[Message]>, cacheResponse: PaginationCacheResponseType<[Message]>? = nil, uniqueIdResult: UniqueIdResultType = nil) {
+    public func getMentions(_ request: MentionRequest, completion: @escaping PaginationCompletionType<[Message]>, cacheResponse: PaginationCacheResponseType<[Message]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         MentionsRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
     }
 
@@ -788,7 +779,7 @@ public class Chat {
     ///   - request: The request that contains a message id.
     ///   - completion: List of participants.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func messageDeliveryParticipants(_ request: MessageDeliveredUsersRequest, completion: @escaping PaginationCacheResponseType<[Participant]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func messageDeliveryParticipants(_ request: MessageDeliveredUsersRequest, completion: @escaping PaginationCacheResponseType<[Participant]>, uniqueIdResult: UniqueIdResultType? = nil) {
         MessageDeliveryParticipantsRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -797,7 +788,7 @@ public class Chat {
     ///   - request: The request that contains a message id.
     ///   - completion: List of participants.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func messageSeenByUsers(_ request: MessageSeenByUsersRequest, completion: @escaping PaginationCacheResponseType<[Participant]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func messageSeenByUsers(_ request: MessageSeenByUsersRequest, completion: @escaping PaginationCacheResponseType<[Participant]>, uniqueIdResult: UniqueIdResultType? = nil) {
         MessagSeenByUsersRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -805,7 +796,7 @@ public class Chat {
     /// - Parameters:
     ///   - request: The request that contains a messageId.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    internal func deliver(_ request: MessageDeliverRequest, uniqueIdResult: UniqueIdResultType = nil) {
+    internal func deliver(_ request: MessageDeliverRequest, uniqueIdResult: UniqueIdResultType? = nil) {
         DeliverRequestHandler.handle(request, self, uniqueIdResult)
     }
 
@@ -813,7 +804,7 @@ public class Chat {
     /// - Parameters:
     ///   - request: The id of the message.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func seen(_ request: MessageSeenRequest, uniqueIdResult: UniqueIdResultType = nil) {
+    public func seen(_ request: MessageSeenRequest, uniqueIdResult: UniqueIdResultType? = nil) {
         SeenRequestHandler.handle(request, self, uniqueIdResult)
     }
 
@@ -823,7 +814,7 @@ public class Chat {
     ///   - completion: List of the roles of a user.
     ///   - cacheResponse: The cache response of roles.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func getCurrentUserRoles(_ request: CurrentUserRolesRequest, completion: @escaping CompletionType<[Roles]>, cacheResponse: CacheResponseType<[Roles]>? = nil, uniqueIdResult: UniqueIdResultType = nil) {
+    public func getCurrentUserRoles(_ request: GeneralThreadRequest, completion: @escaping CompletionType<[Roles]>, cacheResponse: CacheResponseType<[Roles]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         CurrentUserRolesRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
     }
 
@@ -854,11 +845,7 @@ public class Chat {
     /// Notify some system actions such as upload a file, record a voice and e.g.
     /// - Parameter req: A request that contains the type of request and a threadId.
     public func sendSignalMessage(req: SendSignalMessageRequest) {
-        prepareToSendAsync(req: req,
-                           clientSpecificUniqueId: req.uniqueId,
-                           subjectId: req.threadId,
-                           pushMsgType: .MESSAGE,
-                           messageType: .systemMessage)
+        prepareToSendAsync(req: req)
     }
 
     /// Downloading or getting a file from the Server / Cache.
@@ -872,7 +859,7 @@ public class Chat {
                         downloadProgress: @escaping DownloadProgressType,
                         completion: @escaping DownloadFileCompletionType,
                         cacheResponse: @escaping DownloadFileCompletionType,
-                        uniqueIdResult: UniqueIdResultType = nil)
+                        uniqueIdResult: UniqueIdResultType? = nil)
     {
         DownloadFileRequestHandler.download(req, uniqueIdResult, downloadProgress, completion, cacheResponse)
     }
@@ -888,7 +875,7 @@ public class Chat {
                          downloadProgress: @escaping DownloadProgressType,
                          completion: @escaping DownloadImageCompletionType,
                          cacheResponse: @escaping DownloadImageCompletionType,
-                         uniqueIdResult: UniqueIdResultType = nil)
+                         uniqueIdResult: UniqueIdResultType? = nil)
     {
         DownloadImageRequestHandler.download(req, uniqueIdResult, downloadProgress, completion, cacheResponse)
     }
@@ -900,7 +887,7 @@ public class Chat {
     ///   - uploadProgress: The progress of uploading file.
     ///   - uploadCompletion: The result shows whether the upload was successful or not.
     public func uploadFile(req: UploadFileRequest,
-                           uploadUniqueIdResult: UniqueIdResultType = nil,
+                           uploadUniqueIdResult: UniqueIdResultType? = nil,
                            uploadProgress: UploadFileProgressType? = nil,
                            uploadCompletion: UploadCompletionType? = nil)
     {
@@ -914,7 +901,7 @@ public class Chat {
     ///   - uploadProgress: The progress of uploading the image.
     ///   - uploadCompletion: The result shows whether the upload was successful or not.
     public func uploadImage(req: UploadImageRequest,
-                            uploadUniqueIdResult: UniqueIdResultType = nil,
+                            uploadUniqueIdResult: UniqueIdResultType? = nil,
                             uploadProgress: UploadFileProgressType? = nil,
                             uploadCompletion: UploadCompletionType? = nil)
     {
@@ -934,11 +921,11 @@ public class Chat {
     public func replyFileMessage(replyMessage: ReplyMessageRequest,
                                  uploadFile: UploadFileRequest,
                                  uploadProgress: UploadFileProgressType? = nil,
-                                 onSent: OnSentType = nil,
-                                 onSeen: OnSeenType = nil,
-                                 onDeliver: OnDeliveryType = nil,
-                                 uploadUniqueIdResult: UniqueIdResultType = nil,
-                                 messageUniqueIdResult: UniqueIdResultType = nil)
+                                 onSent: OnSentType? = nil,
+                                 onSeen: OnSeenType? = nil,
+                                 onDeliver: OnDeliveryType? = nil,
+                                 uploadUniqueIdResult: UniqueIdResultType? = nil,
+                                 messageUniqueIdResult: UniqueIdResultType? = nil)
     {
         sendFileMessage(textMessage: replyMessage,
                         uploadFile: uploadFile,
@@ -963,11 +950,11 @@ public class Chat {
     public func sendFileMessage(textMessage: SendTextMessageRequest,
                                 uploadFile: UploadFileRequest,
                                 uploadProgress: UploadFileProgressType? = nil,
-                                onSent: OnSentType = nil,
-                                onSeen: OnSeenType = nil,
-                                onDeliver: OnDeliveryType = nil,
-                                uploadUniqueIdResult: UniqueIdResultType = nil,
-                                messageUniqueIdResult: UniqueIdResultType = nil)
+                                onSent: OnSentType? = nil,
+                                onSeen: OnSeenType? = nil,
+                                onDeliver: OnDeliveryType? = nil,
+                                uploadUniqueIdResult: UniqueIdResultType? = nil,
+                                messageUniqueIdResult: UniqueIdResultType? = nil)
     {
         if let uploadRequest = uploadFile as? UploadImageRequest {
             SendImageMessageRequest.handle(textMessage, uploadRequest, onSent, onSeen, onDeliver, uploadProgress, uploadUniqueIdResult, messageUniqueIdResult, self)
@@ -1001,7 +988,7 @@ public class Chat {
     ///   - request: The request that contains list of assistants.
     ///   - completion: A list of assistant that added for the user.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func registerAssistat(_ request: RegisterAssistantRequest, completion: @escaping CompletionType<[Assistant]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func registerAssistat(_ request: RegisterAssistantRequest, completion: @escaping CompletionType<[Assistant]>, uniqueIdResult: UniqueIdResultType? = nil) {
         RegisterAssistantRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1010,7 +997,7 @@ public class Chat {
     ///   - request: A request that contains a list of activated assistants.
     ///   - completion: The result of deactivated assistants.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func deactiveAssistant(_ request: DeactiveAssistantRequest, completion: @escaping CompletionType<[Assistant]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func deactiveAssistant(_ request: DeactiveAssistantRequest, completion: @escaping CompletionType<[Assistant]>, uniqueIdResult: UniqueIdResultType? = nil) {
         DeactiveAssistantRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1020,7 +1007,7 @@ public class Chat {
     ///   - completion: The list of assistants.
     ///   - cacheResponse: The cache response of list of assistants.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func getAssistats(_ request: AssistantsRequest, completion: @escaping PaginationCompletionType<[Assistant]>, cacheResponse: PaginationCompletionType<[Assistant]>? = nil, uniqueIdResult: UniqueIdResultType = nil) {
+    public func getAssistats(_ request: AssistantsRequest, completion: @escaping PaginationCompletionType<[Assistant]>, cacheResponse: PaginationCompletionType<[Assistant]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         GetAssistantsRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
     }
 
@@ -1028,7 +1015,7 @@ public class Chat {
     /// - Parameters:
     ///   - completion: The list of actions of an assistants.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func getAssistatsHistory(_ completion: @escaping CompletionType<[AssistantAction]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func getAssistatsHistory(_ completion: @escaping CompletionType<[AssistantAction]>, uniqueIdResult: UniqueIdResultType? = nil) {
         GetAssistantsHistoryRequestHandler.handle(self, completion, uniqueIdResult)
     }
 
@@ -1038,7 +1025,7 @@ public class Chat {
     ///   - completion: List of blocked assistants.
     ///   - cacheResponse: The cached version of blocked assistants.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func getBlockedAssistants(_ request: BlockedAssistantsRequest, _ completion: @escaping PaginationCompletionType<[Assistant]>, cacheResponse: PaginationCacheResponseType<[Assistant]>? = nil, uniqueIdResult: UniqueIdResultType = nil) {
+    public func getBlockedAssistants(_ request: BlockedAssistantsRequest, _ completion: @escaping PaginationCompletionType<[Assistant]>, cacheResponse: PaginationCacheResponseType<[Assistant]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         BlockedAssistantsRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
     }
 
@@ -1047,7 +1034,7 @@ public class Chat {
     ///   - request: A list of assistants you want to block them.
     ///   - completion: List of blocked assistants.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func blockAssistants(_ request: BlockUnblockAssistantRequest, _ completion: @escaping CompletionType<[Assistant]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func blockAssistants(_ request: BlockUnblockAssistantRequest, _ completion: @escaping CompletionType<[Assistant]>, uniqueIdResult: UniqueIdResultType? = nil) {
         BlockAssistantRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1056,7 +1043,7 @@ public class Chat {
     ///   - request: A list of assistants you want to unblock them.
     ///   - completion: List of unblocked assistants.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func unblockAssistants(_ request: BlockUnblockAssistantRequest, _ completion: @escaping CompletionType<[Assistant]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func unblockAssistants(_ request: BlockUnblockAssistantRequest, _ completion: @escaping CompletionType<[Assistant]>, uniqueIdResult: UniqueIdResultType? = nil) {
         UnBlockAssistatRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1065,7 +1052,7 @@ public class Chat {
     ///   - request: A request that contains a set of roles and a threadId.
     ///   - completion: List of applied roles for a participant.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func setRoles(_ request: RolesRequest, _ completion: @escaping CompletionType<[UserRole]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func setRoles(_ request: RolesRequest, _ completion: @escaping CompletionType<[UserRole]>, uniqueIdResult: UniqueIdResultType? = nil) {
         SetRoleRequestHandler.handle(self, request, completion, uniqueIdResult)
     }
 
@@ -1074,7 +1061,7 @@ public class Chat {
     ///   - request: A request that contains a set of roles and a threadId.
     ///   - completion: List of removed roles for a participant.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func removeRoles(_ request: RolesRequest, _ completion: @escaping CompletionType<[UserRole]>, uniqueIdResult: UniqueIdResultType) {
+    public func removeRoles(_ request: RolesRequest, _ completion: @escaping CompletionType<[UserRole]>, uniqueIdResult: UniqueIdResultType? = nil) {
         RemoveRoleRequestHandler.handle(self, request, completion, uniqueIdResult)
     }
 
@@ -1083,7 +1070,7 @@ public class Chat {
     ///   - request: A request that contains a threadId and roles of user with userId.
     ///   - completion: List of roles that applied for the users.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func setAuditor(_ request: AuditorRequest, _ completion: @escaping CompletionType<[UserRole]>, uniqueIdResult: UniqueIdResultType) {
+    public func setAuditor(_ request: AuditorRequest, _ completion: @escaping CompletionType<[UserRole]>, uniqueIdResult: UniqueIdResultType? = nil) {
         SetRoleRequestHandler.handle(self, request, completion, uniqueIdResult)
     }
 
@@ -1092,7 +1079,7 @@ public class Chat {
     ///   - request: A request that contains a threadId and roles of user with userId.
     ///   - completion: List of roles that removed roles for the users.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func removeAuditor(_ request: AuditorRequest, _ completion: @escaping CompletionType<[UserRole]>, uniqueIdResult: UniqueIdResultType) {
+    public func removeAuditor(_ request: AuditorRequest, _ completion: @escaping CompletionType<[UserRole]>, uniqueIdResult: UniqueIdResultType? = nil) {
         RemoveRoleRequestHandler.handle(self, request, completion, uniqueIdResult)
     }
 
@@ -1102,7 +1089,7 @@ public class Chat {
     ///   - completion: List of threads that are mutual between the current user and desired user.
     ///   - cacheResponse: The cached version of mutual groups.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func mutualGroups(_ request: MutualGroupsRequest, _ completion: @escaping PaginationCompletionType<[Conversation]>, cacheResponse: PaginationCacheResponseType<[Conversation]>? = nil, uniqueIdResult: UniqueIdResultType) {
+    public func mutualGroups(_ request: MutualGroupsRequest, _ completion: @escaping PaginationCompletionType<[Conversation]>, cacheResponse: PaginationCacheResponseType<[Conversation]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         MutualGroupsRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
     }
 
@@ -1113,7 +1100,7 @@ public class Chat {
     ///   - localIdentifire: The locals to output.
     ///   - completion: A file url of a csv file.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func exportChat(_ request: GetHistoryRequest, _ completion: @escaping CompletionType<URL>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func exportChat(_ request: GetHistoryRequest, _ completion: @escaping CompletionType<URL>, uniqueIdResult: UniqueIdResultType? = nil) {
         ExportRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1122,7 +1109,7 @@ public class Chat {
     ///   - request: A request that contains the threadId.
     ///   - completion: A response which contain the threadId of archived thread.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func archiveThread(_ request: ArchiveThreadRequest, _ completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func archiveThread(_ request: GeneralThreadRequest, _ completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
         ArchiveThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1131,7 +1118,7 @@ public class Chat {
     ///   - request: A request that contains the threadId.
     ///   - completion: A response which contain the threadId of unarchived thread.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func unarchiveThread(_ request: UnarchiveThreadRequest, _ completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func unarchiveThread(_ request: GeneralThreadRequest, _ completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
         UnarchiveThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1142,7 +1129,7 @@ public class Chat {
     ///   - request: The request to how to start the call as an example start call with a threadId.
     ///   - completion: A response that tell you if the call is created and contains a callId and more.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func requestCall(_ request: StartCallRequest, _ completion: @escaping CompletionType<CreateCall>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func requestCall(_ request: StartCallRequest, _ completion: @escaping CompletionType<CreateCall>, uniqueIdResult: UniqueIdResultType? = nil) {
         StartCallRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1151,7 +1138,7 @@ public class Chat {
     ///   - request: A request that contains a list of people or a threadId.
     ///   - completion: A response that tell you if the call is created and contains a callId and more.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func requestGroupCall(_ request: StartCallRequest, _ completion: @escaping CompletionType<CreateCall>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func requestGroupCall(_ request: StartCallRequest, _ completion: @escaping CompletionType<CreateCall>, uniqueIdResult: UniqueIdResultType? = nil) {
         StartCallGroupRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1166,7 +1153,7 @@ public class Chat {
     ///   - request: A request with a callId to finish the current call.
     ///   - completion: A callId that shows a call has terminated properly.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func endCall(_ request: EndCallRequest, _ completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func endCall(_ request: EndCallRequest, _ completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
         EndCallRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1175,7 +1162,7 @@ public class Chat {
     ///   - request: A List of people with userNames or contactIds beside a callId.
     ///   - completion: A list of participants has been added to the current call.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func addCallPartcipant(_ request: AddCallParticipantsRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func addCallPartcipant(_ request: AddCallParticipantsRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType? = nil) {
         AddCallParticipantRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1184,7 +1171,7 @@ public class Chat {
     ///   - request: The request that contains a callId and llist of user to remove from a call.
     ///   - completion: List of removed participants from a call.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func removeCallPartcipant(_ request: RemoveCallParticipantsRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func removeCallPartcipant(_ request: RemoveCallParticipantsRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType? = nil) {
         RemoveCallParticipantRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1192,7 +1179,7 @@ public class Chat {
     /// - Parameters:
     ///   - request: The request that contains a callId and how do you want to answer the call as an example with audio or video.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func acceptCall(_ request: AcceptCallRequest, uniqueIdResult: UniqueIdResultType = nil) {
+    public func acceptCall(_ request: AcceptCallRequest, uniqueIdResult: UniqueIdResultType? = nil) {
         AcceptCallRequestHandler.handle(request, self, uniqueIdResult)
     }
 
@@ -1200,7 +1187,7 @@ public class Chat {
     /// - Parameters:
     ///   - request: A call that you want to cancel a call.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func cancelCall(_ request: CancelCallRequest, uniqueIdResult: UniqueIdResultType = nil) {
+    public func cancelCall(_ request: CancelCallRequest, uniqueIdResult: UniqueIdResultType? = nil) {
         CancelCallRequestHandler.handle(request, self, uniqueIdResult)
     }
 
@@ -1209,7 +1196,7 @@ public class Chat {
     ///   - request: The callId that you want to turn the camera on.
     ///   - completion: List of call participants that change during the request.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func turnOnVideoCall(_ request: TurnOnVideoCallRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func turnOnVideoCall(_ request: TurnOnVideoCallRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType? = nil) {
         TurnONVideoCallRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1218,7 +1205,7 @@ public class Chat {
     ///   - request: The callId that you want to turn the camera off.
     ///   - completion: List of call participants that change during the request.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func turnOffVideoCall(_ request: TurnOffVideoCallRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func turnOffVideoCall(_ request: TurnOffVideoCallRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType? = nil) {
         TurnOffVideoCallRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1227,7 +1214,7 @@ public class Chat {
     ///   - request: The callId that you want to turn the microphone off.
     ///   - completion: List of call participants that change during the request.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func muteCall(_ request: MuteCallRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func muteCall(_ request: MuteCallRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType? = nil) {
         MuteCallRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1236,7 +1223,7 @@ public class Chat {
     ///   - request: The callId that you want to turn the microphone on.
     ///   - completion: List of call participants that change during the request.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func unmuteCall(_ request: UNMuteCallRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func unmuteCall(_ request: UNMuteCallRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType? = nil) {
         UNMuteCallRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1245,7 +1232,7 @@ public class Chat {
     ///   - request: The callId of the call to terminate.
     ///   - completion: List of call participants that change during the request.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func terminateCall(_ request: TerminateCallRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func terminateCall(_ request: TerminateCallRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType? = nil) {
         TerminateCallRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1254,7 +1241,7 @@ public class Chat {
     ///   - request: The callId of the call.
     ///   - completion: List of call participants that change during the request.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func activeCallParticipants(_ request: ActiveCallParticipantsRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func activeCallParticipants(_ request: ActiveCallParticipantsRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType? = nil) {
         ActiveCallParticipantsRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1263,7 +1250,7 @@ public class Chat {
     ///   - request: The callId of the call.
     ///   - completion: A participant that has started recording which is yourself.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func startRecording(_ request: StartCallRecordingRequest, _ completion: @escaping CompletionType<Participant>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func startRecording(_ request: StartCallRecordingRequest, _ completion: @escaping CompletionType<Participant>, uniqueIdResult: UniqueIdResultType? = nil) {
         StartCallRecordingRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1272,7 +1259,7 @@ public class Chat {
     ///   - request: The callId of the call.
     ///   - completion: A participant that has stopped recording which is yourself.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func stopRecording(_ request: StopCallRecordingRequest, _ completion: @escaping CompletionType<Participant>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func stopRecording(_ request: StopCallRecordingRequest, _ completion: @escaping CompletionType<Participant>, uniqueIdResult: UniqueIdResultType? = nil) {
         StopCallRecordingRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1281,7 +1268,7 @@ public class Chat {
     ///   - request: The request that contains offset and count and some other filters.
     ///   - completion: List of calls.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func callsHistory(_ request: CallsHistoryRequest, _ completion: @escaping PaginationCompletionType<[Call]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func callsHistory(_ request: CallsHistoryRequest, _ completion: @escaping PaginationCompletionType<[Call]>, uniqueIdResult: UniqueIdResultType? = nil) {
         CallsHistoryRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1290,7 +1277,7 @@ public class Chat {
     ///   - request: The code of the error and a callId.
     ///   - completion: Shows the request has successfully arrived.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func sendCallClientError(_ request: CallClientErrorRequest, _ completion: @escaping CompletionType<CallError>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func sendCallClientError(_ request: CallClientErrorRequest, _ completion: @escaping CompletionType<CallError>, uniqueIdResult: UniqueIdResultType? = nil) {
         SendCallClientErrorRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1299,7 +1286,7 @@ public class Chat {
     ///   - request: List of threads that you are in and more filters.
     ///   - completion: List of joinable calls.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func getCallsToJoin(_ request: GetJoinCallsRequest, _ completion: @escaping CompletionType<[Call]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func getCallsToJoin(_ request: GetJoinCallsRequest, _ completion: @escaping CompletionType<[Call]>, uniqueIdResult: UniqueIdResultType? = nil) {
         CallsToJoinRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1308,7 +1295,7 @@ public class Chat {
     ///   - request: The callId and list of the participants.
     ///   - completion: A created call with details.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func renewCallRequest(_ request: RenewCallRequest, _ completion: @escaping CompletionType<CreateCall>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func renewCallRequest(_ request: RenewCallRequest, _ completion: @escaping CompletionType<CreateCall>, uniqueIdResult: UniqueIdResultType? = nil) {
         RenewCallRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1317,54 +1304,15 @@ public class Chat {
     ///   - request: The callId.
     ///   - completion: A created call with details.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func callInquery(_ request: CallInquiryRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType = nil) {
+    public func callInquery(_ request: CallInquiryRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType? = nil) {
         CallInquiryRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
-    /// Stop all the signaling that has started before. This method is only will be called by the SDK.
-    /// - Parameter peerName: Name of the peer.
-    func sotpAllSignalingServerCall(peerName: String) {
-        let close = StopAllSessionReq(token: Chat.sharedInstance.token ?? "")
-        guard let data = try? JSONEncoder().encode(close) else { return }
-        if let content = String(data: data, encoding: .utf8) {
-            prepareToSendAsync(content, peerName: peerName)
-        }
-    }
-
-    /// Close the signaling that has started before. This method is only will be called by the SDK.
-    /// - Parameter peerName: Name of the peer.
-    public func closeSignalingServerCall(peerName: String) {
-        let close = CloseSessionReq(token: Chat.sharedInstance.token ?? "")
-        guard let data = try? JSONEncoder().encode(close) else { return }
-        if let content = String(data: data, encoding: .utf8) {
-            prepareToSendAsync(content, peerName: peerName)
-        }
-    }
-
     // MARK: END Call RGION
-
-    // REST API Request
-    func restApiRequest<T: Decodable>(_ encodableRequest: BaseRequest,
-                                      decodeType: T.Type,
-                                      url: String,
-                                      bodyParameter: Bool = false,
-                                      method: HTTPMethod = .get,
-                                      headers: [String: String]? = nil,
-                                      clientSpecificUniqueId _: String? = nil,
-                                      uniqueIdResult: UniqueIdResultType = nil,
-                                      completion: @escaping ((ChatResponse) -> Void))
+    internal func restApiRequest<T: Decodable>(_ request: RestAPIProtocol, decodeType: T.Type, uniqueIdResult: UniqueIdResultType? = nil, completion: @escaping OnChatResponseType)
     {
-        uniqueIdResult?(encodableRequest.uniqueId)
-        var data = bodyParameter ? encodableRequest.getParameterData() : (try? JSONEncoder().encode(encodableRequest))
-        let url = method == .get ? encodableRequest.convertToGETMethodQueeyString(url: url) ?? url : url
-        if method == .get {
-            data = nil // pass data with queryString not inside body
-        }
-        RequestManager.request(ofType: decodeType,
-                               bodyData: data,
-                               url: url,
-                               method: method,
-                               headers: headers) { [weak self] response, error in
+        uniqueIdResult?(request.uniqueId)
+        RequestManager.request(ofType: decodeType, bodyData: request.bodyData, url: request.urlString, method: request.method, headers: request.headers) { [weak self] response, error in
             guard let weakSelf = self else { return }
             if let error = error {
                 weakSelf.delegate?.chatError(error: error)
@@ -1380,75 +1328,16 @@ public class Chat {
         }
     }
 
-    // SOCKET Request
-    func prepareToSendAsync(req: Encodable? = nil,
-                            clientSpecificUniqueId: String? = nil,
-                            // this sometimes use to send threadId with subjectId Key must fix from server to get threadId
-                            subjectId: Int? = nil,
-                            plainText: Bool = false,
-                            pushMsgType: AsyncMessageTypes? = nil,
-                            peerName: String? = nil,
-                            messageType: ChatMessageVOTypes,
-                            messageMessageType: MessageType? = nil,
-                            metadata: String? = nil,
-                            systemMetadata: String? = nil,
-                            repliedTo: Int? = nil,
-                            uniqueIdResult: ((String) -> Void)? = nil,
-                            completion: ((ChatResponse) -> Void)? = nil,
+    func prepareToSendAsync(req: ChatSnedable,
+                            uniqueIdResult: UniqueIdResultType? = nil,
+                            completion: OnChatResponseType? = nil,
                             onSent: OnSentType? = nil,
                             onDelivered: OnDeliveryType? = nil,
                             onSeen: OnSeenType? = nil)
     {
-        guard let config = config else { return }
-        let uniqueId = clientSpecificUniqueId ?? UUID().uuidString
-        uniqueIdResult?(uniqueId)
-
-        let chatMessage = SendChatMessageVO(type: messageType.rawValue,
-                                            token: config.token,
-                                            content: getContent(req, plainText),
-                                            messageType: messageMessageType?.rawValue,
-                                            metadata: metadata,
-                                            repliedTo: repliedTo,
-                                            systemMetadata: systemMetadata,
-                                            subjectId: subjectId,
-                                            typeCode: config.typeCode,
-                                            uniqueId: uniqueId)
-
-        guard let chatMessageContent = chatMessage.convertCodableToString() else { return }
-        let asyncMessage = SendAsyncMessageVO(content: chatMessageContent,
-                                              ttl: config.msgTTL,
-                                              peerName: peerName ?? config.asyncConfig.serverName,
-                                              priority: config.msgPriority,
-                                              pushMsgType: pushMsgType)
-
-        callbacksManager.addCallback(uniqueId: uniqueId, requesType: messageType, callback: completion, onSent: onSent, onDelivered: onDelivered, onSeen: onSeen)
-        sendToAsync(asyncMessageVO: asyncMessage)
-    }
-
-    // Use only for webrtc call
-    internal func prepareToSendAsync(_ content: String, peerName: String? = nil) {
-        guard let config = config else { return }
-        let asyncMessage = SendAsyncMessageVO(content: content,
-                                              ttl: config.msgTTL,
-                                              peerName: peerName ?? config.asyncConfig.serverName,
-                                              priority: config.msgPriority)
-        sendToAsync(asyncMessageVO: asyncMessage)
-    }
-
-    private func getContent(_ req: Encodable?, _ plainText: Bool) -> String? {
-        var content: String?
-        if !plainText, req != nil {
-            content = req?.convertCodableToString()
-        } else if plainText, req != nil, let stringValue = req as? String {
-            content = stringValue
-        }
-        return content
-    }
-
-    internal func sendToAsync(asyncMessageVO: SendAsyncMessageVO) {
-        guard let content = try? JSONEncoder().encode(asyncMessageVO) else { return }
-        logger?.log(title: "send Message", jsonString: asyncMessageVO.string ?? "", receive: false)
-        asyncManager.sendData(type: asyncMessageVO.pushMsgType ?? .MESSAGE, data: content)
+        uniqueIdResult?(req.uniqueId)
+        asyncManager.sendData(chatMessage: req)
+        callbacksManager.addCallback(uniqueId: req.uniqueId, requesType: req.chatMessageType, callback: completion, onSent: onSent, onDelivered: onDelivered, onSeen: onSeen)
     }
 
     public func setToken(newToken: String, reCreateObject: Bool = false) {

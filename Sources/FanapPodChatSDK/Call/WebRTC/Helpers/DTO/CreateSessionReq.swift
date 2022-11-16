@@ -11,15 +11,20 @@
 //  Created by Hamed Hosseini on 7/31/21.
 //
 import Foundation
+import FanapPodAsyncSDK
 
-class CreateSessionReq: BaseRequest {
+class CreateSessionReq: BaseRequest, AsyncSnedable {
     var id: String = "CREATE_SESSION"
     var brokerAddress: String
     var turnAddress: String
     var token: String
+    var peerName: String?
+    var content: String? { convertCodableToString() }
+    var asyncMessageType: AsyncMessageTypes? = .message
 
-    public init(id: String = "CREATE_SESSION", turnAddress: String, brokerAddress: String, token: String, uniqueId: String? = nil) {
+    public init(peerName: String, id: String = "CREATE_SESSION", turnAddress: String, brokerAddress: String, token: String, uniqueId: String? = nil) {
         self.id = id
+        self.peerName = peerName
         self.turnAddress = turnAddress
         self.brokerAddress = brokerAddress
         self.token = token
@@ -34,7 +39,7 @@ class CreateSessionReq: BaseRequest {
         case uniqueId
     }
 
-    override func encode(to encoder: Encoder) throws {
+    func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(id, forKey: .id)
         try container.encode(turnAddress, forKey: .turnAddress)

@@ -8,20 +8,14 @@ import Foundation
 class ForwardMessagesRequestHandler {
     class func handle(_ req: ForwardMessageRequest,
                       _ chat: Chat,
-                      _ onSent: OnSentType = nil,
-                      _ onSeen: OnSeenType = nil,
-                      _ onDeliver: OnDeliveryType = nil,
-                      _ uniqueIdsResult: UniqueIdsResultType = nil)
+                      _ onSent: OnSentType? = nil,
+                      _ onSeen: OnSeenType? = nil,
+                      _ onDeliver: OnDeliveryType? = nil,
+                      _ uniqueIdsResult: UniqueIdsResultType? = nil)
     {
         uniqueIdsResult?(req.uniqueIds) // do not remove this line it use batch uniqueIds
 
-        chat.prepareToSendAsync(req: "\(req.messageIds)",
-                                clientSpecificUniqueId: "\(req.uniqueIds)",
-                                subjectId: req.threadId,
-                                plainText: true,
-                                messageType: .forwardMessage,
-                                uniqueIdResult: nil,
-                                completion: nil,
+        chat.prepareToSendAsync(req: req,
                                 onSent: onSent,
                                 onDelivered: onDeliver,
                                 onSeen: onSeen)

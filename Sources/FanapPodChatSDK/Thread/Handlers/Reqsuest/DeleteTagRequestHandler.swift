@@ -9,13 +9,9 @@ class DeleteTagRequestHandler {
     class func handle(_ req: DeleteTagRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<Tag>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: req,
-                                clientSpecificUniqueId: req.uniqueId,
-                                subjectId: req.id,
-                                messageType: .deleteTag,
-                                uniqueIdResult: uniqueIdResult) { response in
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? Tag, response.uniqueId, response.error)
         }
     }

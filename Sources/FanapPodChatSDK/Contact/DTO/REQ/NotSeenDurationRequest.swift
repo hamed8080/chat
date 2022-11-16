@@ -5,8 +5,10 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class NotSeenDurationRequest: BaseRequest {
+public class NotSeenDurationRequest: BaseRequest, ChatSnedable {
     public let userIds: [Int]
+    var chatMessageType: ChatMessageVOTypes = .getNotSeenDuration
+    var content: String? { convertCodableToString() }
 
     public init(userIds: [Int], uniqueId: String? = nil) {
         self.userIds = userIds
@@ -17,7 +19,7 @@ public class NotSeenDurationRequest: BaseRequest {
         case userIds
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try? container.encode(userIds, forKey: .userIds)
     }

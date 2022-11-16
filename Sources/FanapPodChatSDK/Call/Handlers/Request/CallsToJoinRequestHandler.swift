@@ -9,12 +9,9 @@ class CallsToJoinRequestHandler {
     class func handle(_ req: GetJoinCallsRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<[Call]>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: req,
-                                clientSpecificUniqueId: req.uniqueId,
-                                messageType: .getCallsToJoin,
-                                uniqueIdResult: uniqueIdResult) { response in
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? [Call], response.uniqueId, response.error)
         }
     }

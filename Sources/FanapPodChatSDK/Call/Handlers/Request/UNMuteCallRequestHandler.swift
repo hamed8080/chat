@@ -9,13 +9,9 @@ class UNMuteCallRequestHandler {
     class func handle(_ req: UNMuteCallRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<[CallParticipant]>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: req.userIds,
-                                clientSpecificUniqueId: req.uniqueId,
-                                subjectId: req.callId,
-                                messageType: .unmuteCallParticipant,
-                                uniqueIdResult: uniqueIdResult) { response in
+        chat.prepareToSendAsync(req:req, uniqueIdResult: uniqueIdResult) { response in
             completion(response.result as? [CallParticipant], response.uniqueId, response.error)
         }
     }

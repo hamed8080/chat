@@ -7,7 +7,11 @@
 import Foundation
 
 /// Start or stop a bot request.
-public class StartStopBotRequest: BaseRequest {
+public class StartStopBotRequest: BaseRequest, ChatSnedable, SubjectProtocol {
+    var chatMessageType: ChatMessageVOTypes = .stopBot
+    var subjectId: Int? { threadId }
+    var content: String? { convertCodableToString() }
+
     /// The name of the bot.
     public let botName: String
 
@@ -29,7 +33,7 @@ public class StartStopBotRequest: BaseRequest {
         case botName
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(botName, forKey: .botName)
     }

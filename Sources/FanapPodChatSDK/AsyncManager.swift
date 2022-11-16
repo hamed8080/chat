@@ -18,6 +18,9 @@ internal class AsyncManager: AsyncDelegate {
     /// A timer to check the connection status every 20 seconds.
     private(set) var chatServerPingTimer: Timer?
 
+    /// This queue will live till application is running and this class is in memory, be careful it's not persistent on storage.
+    private(set) var queue: [String: Queueable] = [:]
+
     public init() {}
 
     /// Create an async connection.
@@ -42,15 +45,19 @@ internal class AsyncManager: AsyncDelegate {
     /// A delegate that tells the status of the async connection.
     public func asyncStateChanged(asyncState: AsyncSocketState, error: AsyncError?) {
         Chat.sharedInstance.delegate?.chatState(state: asyncState.chatState, currentUser: nil, error: error?.chatError)
-        if asyncState == .ASYNC_READY {
+        if asyncState == .asyncReady {
             UserInfoRequestHandler.getUserForChatReady()
-        } else if asyncState == .CLOSED {
+        } else if asyncState == .closed {
             chatServerPingTimer?.invalidate()
         }
     }
 
     /// It will be only used whenever a client implements a custom async class by itself.
-    public func asyncMessageSent(message _: Data) {}
+    func asyncMessageSent(message: Data?, error: AsyncError?) {
+        if let uniqueId = SendChatMessageVO(with: message)?.uniqueId, let _ = queue[uniqueId], error == nil {
+            queue.removeValue(forKey: uniqueId)
+        }
+    }
 
     /// A delegate to raise an error.
     public func asyncError(error: AsyncError) {
@@ -66,9 +73,26 @@ internal class AsyncManager: AsyncDelegate {
     }
 
     /// The sendData delegate will inform if a send event occurred by the async socket.
-    public func sendData(type: AsyncMessageTypes, data: Data) {
-        asyncClient?.sendData(type: type, data: data)
+    public func sendData(chatMessage: ChatSnedable) {
+        guard let config = Chat.sharedInstance.config else { return }
+        let chatMessage = SendChatMessageVO(req: chatMessage, token: config.token, typeCode: config.typeCode)
+        sendToAsync(asyncMessage: AsyncChatServerMessage(chatMessage: chatMessage))
         sendPingTimer()
+        if let queueable = chatMessage as? Queueable, let uniqueId = chatMessage.uniqueId {
+            queue[uniqueId] = queueable
+        }
+    }
+
+    func sendToAsync(asyncMessage: AsyncSnedable) {
+        guard let config = Chat.sharedInstance.config, let content = asyncMessage.content else { return }
+        let asyncMessage = SendAsyncMessageVO(content: content,
+                                              ttl: config.msgTTL,
+                                              peerName: asyncMessage.peerName ?? config.asyncConfig.serverName,
+                                              priority: config.msgPriority,
+                                              pushMsgType: asyncMessage.asyncMessageType)
+        guard let data = try? JSONEncoder().encode(asyncMessage) else { return }
+        Chat.sharedInstance.logger?.log(title: "send Message", jsonString: asyncMessage.string ?? "", receive: false)
+        asyncClient?.sendData(type: .message, data: data)
     }
 
     /// A timer that repeats ping the `Chat server` every 20 seconds.
@@ -86,6 +110,8 @@ internal class AsyncManager: AsyncDelegate {
     /// It's different from ping in async SDK you need to send a ping to the chat server to keep peerId
     /// If you don't send a ping to the chat server it clears peerId within the 30s to 1 minute and the chat server cannot send messages to the client like new chat inside the thread
     private func sendChatServerPing() {
-        Chat.sharedInstance.prepareToSendAsync(messageType: .ping)
+        let req = BareChatSendableRequest()
+        req.chatMessageType = .ping
+        Chat.sharedInstance.prepareToSendAsync(req: req)
     }
 }

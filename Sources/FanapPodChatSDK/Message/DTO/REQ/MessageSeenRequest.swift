@@ -5,8 +5,10 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class MessageSeenRequest: BaseRequest {
+public class MessageSeenRequest: BaseRequest, PlainTextSendable {
     let messageId: String
+    var content: String? { messageId }
+    var chatMessageType: ChatMessageVOTypes = .seen
 
     public init(messageId: Int, uniqueId: String? = nil) {
         self.messageId = "\(messageId)"

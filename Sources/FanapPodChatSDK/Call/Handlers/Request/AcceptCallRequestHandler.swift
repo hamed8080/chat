@@ -8,12 +8,8 @@ import Foundation
 class AcceptCallRequestHandler {
     class func handle(_ req: AcceptCallRequest,
                       _ chat: Chat,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: req.client,
-                                clientSpecificUniqueId: req.uniqueId,
-                                subjectId: req.callId,
-                                messageType: .acceptCall,
-                                uniqueIdResult: uniqueIdResult)
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult)
     }
 }

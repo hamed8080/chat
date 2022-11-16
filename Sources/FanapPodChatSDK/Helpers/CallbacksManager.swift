@@ -7,27 +7,26 @@
 import Foundation
 
 class CallbacksManager {
-    typealias CallParticipantCompletion = (([CallParticipant], String) -> Void)?
 
-    private var callbacks: [String: (ChatResponse) -> Void] = [:]
+    private var callbacks: [String: OnChatResponseType?] = [:]
     private var callbacksRequestType: [String: ChatMessageVOTypes] = [:]
-    private var sentCallbacks: [String: OnSentType] = [:]
-    private var deliveredCallbacks: [String: OnDeliveryType] = [:]
-    private var seenCallbacks: [String: OnSeenType] = [:]
+    private var sentCallbacks: [String: OnSentType?] = [:]
+    private var deliveredCallbacks: [String: OnDeliveryType?] = [:]
+    private var seenCallbacks: [String: OnSeenType?] = [:]
     private var uploadTasks: [String: URLSessionTask] = [:]
     private var downloadTasks: [String: URLSessionTask] = [:]
     public var callRequestArriveDelegate: ((CreateCall, String) -> Void)?
     public var callRejectedDelegate: ((Call, String) -> Void)?
     public var callStartedDelegate: ((StartCall, String) -> Void)?
     public var callEndDelegate: ((Int, String) -> Void)?
-    public var muteCallParticipantsDelegate: CallParticipantCompletion = nil
-    public var unMuteCallParticipantsDelegate: CallParticipantCompletion = nil
-    public var trunOnVideoCallParticipantsDelegate: CallParticipantCompletion = nil
-    public var trunOffVideoCallParticipantsDelegate: CallParticipantCompletion = nil
+    public var muteCallParticipantsDelegate: CallParticipantCompletion? = nil
+    public var unMuteCallParticipantsDelegate: CallParticipantCompletion? = nil
+    public var trunOnVideoCallParticipantsDelegate: CallParticipantCompletion? = nil
+    public var trunOffVideoCallParticipantsDelegate: CallParticipantCompletion? = nil
 
     func addCallback(uniqueId: String,
                      requesType: ChatMessageVOTypes,
-                     callback: ((ChatResponse) -> Void)? = nil,
+                     callback: OnChatResponseType? = nil,
                      onSent: OnSentType? = nil,
                      onDelivered: OnDeliveryType? = nil,
                      onSeen: OnSeenType? = nil)
@@ -65,20 +64,20 @@ class CallbacksManager {
         seenCallbacks.removeValue(forKey: uniqueId)
     }
 
-    func getCallBack(_ uniqueId: String) -> ((ChatResponse) -> Void)? {
-        callbacks[uniqueId]
+    func getCallBack(_ uniqueId: String) -> OnChatResponseType? {
+        callbacks[uniqueId] ?? nil
     }
 
     func getSentCallback(_ uniqueId: String) -> OnSentType? {
-        sentCallbacks[uniqueId]
+        sentCallbacks[uniqueId] ?? nil
     }
 
     func getDeliverCallback(_ uniqueId: String) -> OnDeliveryType? {
-        deliveredCallbacks[uniqueId]
+        deliveredCallbacks[uniqueId] ?? nil
     }
 
     func getSeenCallback(_ uniqueId: String) -> OnSeenType? {
-        seenCallbacks[uniqueId]
+        seenCallbacks[uniqueId] ?? nil
     }
 
     func isUniqueIdExistInAllCllbacks(uniqueId: String) -> Bool {

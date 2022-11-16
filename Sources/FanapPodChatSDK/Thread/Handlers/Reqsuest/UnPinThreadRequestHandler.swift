@@ -6,16 +6,13 @@
 
 import Foundation
 class UnPinThreadRequestHandler {
-    class func handle(_ request: PinUnpinThreadRequest,
+    class func handle(_ req: GeneralThreadRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<Int>,
-                      _ uniqueIdResult: UniqueIdResultType = nil)
+                      _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: nil,
-                                clientSpecificUniqueId: request.uniqueId,
-                                subjectId: request.threadId,
-                                messageType: .unpinThread,
-                                uniqueIdResult: uniqueIdResult) { response in
+        req.chatMessageType = .unpinThread
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             let pinResponse = response.result as? PinThreadResponse
             completion(pinResponse?.threadId, response.uniqueId, response.error)
         }

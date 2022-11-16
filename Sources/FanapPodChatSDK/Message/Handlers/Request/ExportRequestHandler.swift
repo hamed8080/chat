@@ -12,7 +12,7 @@ class ExportRequestHandler {
     class func handle(_ req: GetHistoryRequest,
                       _: Chat,
                       _ completion: @escaping CompletionType<URL>,
-                      _: UniqueIdResultType = nil)
+                      _: UniqueIdResultType? = nil)
     {
         let vm = ExportMessages(request: req, completion: completion)
         vm.start()
@@ -47,7 +47,7 @@ protocol ExportMessagesProtocol {
 class ExportMessages: ExportMessagesProtocol {
     var request: GetHistoryRequest
     var completion: CompletionType<URL>
-    var uniqueIdResult: UniqueIdResultType
+    var uniqueIdResult: UniqueIdResultType?
     var threadId: Int { request.threadId }
     var fileName: String { "export-\(threadId).csv" }
     var fileManager: FileManager { FileManager.default }
@@ -57,7 +57,7 @@ class ExportMessages: ExportMessagesProtocol {
     var maxAvailableCount: Int = 0
     var titles: String { ["message", "userName", "name", "hour", "date"].map(\.localized).joined(separator: ",").appending("\r\n") }
 
-    init(request: GetHistoryRequest, completion: @escaping CompletionType<URL>, uniqueIdResult: UniqueIdResultType = nil) {
+    init(request: GetHistoryRequest, completion: @escaping CompletionType<URL>, uniqueIdResult: UniqueIdResultType? = nil) {
         self.request = request
         self.completion = completion
         self.uniqueIdResult = uniqueIdResult
@@ -72,11 +72,9 @@ class ExportMessages: ExportMessagesProtocol {
     }
 
     func getHistory() {
+        request.chatMessageType = .exportChats
         Chat.sharedInstance.prepareToSendAsync(
             req: request,
-            clientSpecificUniqueId: request.uniqueId,
-            subjectId: threadId,
-            messageType: .exportChats,
             uniqueIdResult: uniqueIdResult,
             completion: onReceive(_:)
         )

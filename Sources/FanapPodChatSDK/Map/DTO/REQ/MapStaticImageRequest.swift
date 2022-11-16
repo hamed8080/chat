@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class MapStaticImageRequest: BaseRequest {
+public class MapStaticImageRequest: BaseRequest, Encodable {
     public var key: String?
     public var center: String
     public var height: Int = 500
@@ -38,7 +38,7 @@ public class MapStaticImageRequest: BaseRequest {
         case zoom
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(key, forKey: .key)
         try container.encodeIfPresent(center, forKey: .center)

@@ -5,10 +5,12 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class MutualGroupsRequest: BaseRequest {
+public class MutualGroupsRequest: BaseRequest, ChatSnedable {
     internal let count: Int
     internal let offset: Int
     internal let toBeUserVO: Invitee
+    var content: String? { convertCodableToString() }
+    var chatMessageType: ChatMessageVOTypes = .mutualGroups
 
     public init(toBeUser: Invitee, count: Int = 50, offset: Int = 0, uniqueId: String? = nil) {
         self.count = count
@@ -24,7 +26,7 @@ public class MutualGroupsRequest: BaseRequest {
         case idType
     }
 
-    override public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try? container.encodeIfPresent(count, forKey: .count)
         try? container.encodeIfPresent(offset, forKey: .offset)

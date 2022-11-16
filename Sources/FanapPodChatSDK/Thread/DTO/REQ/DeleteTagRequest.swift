@@ -5,8 +5,11 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class DeleteTagRequest: BaseRequest {
+public class DeleteTagRequest: BaseRequest, ChatSnedable, SubjectProtocol {
     public var id: Int
+    var subjectId: Int? { id }
+    var chatMessageType: ChatMessageVOTypes = .deleteTag
+    var content: String?
 
     public init(id: Int, uniqueId: String? = nil) {
         self.id = id

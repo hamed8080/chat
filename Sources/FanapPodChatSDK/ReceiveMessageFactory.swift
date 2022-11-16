@@ -116,6 +116,10 @@ class ReceiveMessageFactory {
             SpamPvThreadResponseHandler.handle(asyncMessage)
         case .startBot:
             StartBotResponseHandler.handle(asyncMessage)
+        case .lastMessageDeleted:
+            LastMessageDeletedHandler.handle(asyncMessage)
+        case .lastMessageEdited:
+            LastMessageEditedHandler.handle(asyncMessage)
         case .statusPing:
             // never triggered because no reponse back from server
             StatusPingResponseHandler.handle(asyncMessage)

@@ -14,7 +14,7 @@ public extension CMConversation {
                      canEditInfo: canEditInfo as? Bool,
                      canSpam: canSpam as? Bool,
                      closedThread: closedThread as? Bool,
-                     description: description,
+                     description: descriptions,
                      group: group as? Bool,
                      id: id as? Int,
                      image: image,
@@ -43,7 +43,7 @@ public extension CMConversation {
                      uniqueName: nil,
                      userGroupHash: userGroupHash,
                      inviter: inviter?.getCodable(),
-                     lastMessageVO: lastMessageVO?.getCodable(),
+                     lastMessageVO: lastMessageVO?.getCodable(setCodableConversation: false),
                      participants: participants?.compactMap { $0 as? CMParticipant }.map { $0.getCodable() },
                      pinMessage: pinMessage?.getCodable(),
                      isArchive: isArchive as? Bool)
@@ -102,10 +102,10 @@ public extension CMConversation {
             }
         }
 
-        // only when create newThread the participants propery has value in getThreads we never get that.
-        // so just insert participants to CoreData Table and not related to thread.
         if let lastMessage = conversation.lastMessageVO {
-            CMMessage.insertOrUpdate(message: lastMessage, conversation: model)
+            CMMessage.insertOrUpdate(message: lastMessage, conversation: model) { lastMessageEntity in
+                model.lastMessageVO = lastMessageEntity
+            }
         }
 
         return model
