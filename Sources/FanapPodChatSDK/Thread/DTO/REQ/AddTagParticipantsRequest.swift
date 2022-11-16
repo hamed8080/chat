@@ -8,7 +8,7 @@ import Foundation
 public class AddTagParticipantsRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     public var tagId: Int
     public var threadIds: [Int]
-    var subjectId: Int? { tagId }
+    var subjectId: Int { tagId }
     var chatMessageType: ChatMessageVOTypes = .addTagParticipants
     var content: String? { threadIds.convertCodableToString() }
 

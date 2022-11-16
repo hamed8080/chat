@@ -12,7 +12,7 @@ public class MentionRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtoc
     public let threadId: Int
     public let onlyUnreadMention: Bool
     var content: String? { convertCodableToString() }
-    var subjectId: Int? { threadId }
+    var subjectId: Int { threadId }
     var chatMessageType: ChatMessageVOTypes = .getHistory
 
     public init(threadId: Int,

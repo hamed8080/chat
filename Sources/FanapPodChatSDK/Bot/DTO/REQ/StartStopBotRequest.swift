@@ -9,7 +9,7 @@ import Foundation
 /// Start or stop a bot request.
 public class StartStopBotRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     var chatMessageType: ChatMessageVOTypes = .stopBot
-    var subjectId: Int? { threadId }
+    var subjectId: Int { threadId }
     var content: String? { convertCodableToString() }
 
     /// The name of the bot.

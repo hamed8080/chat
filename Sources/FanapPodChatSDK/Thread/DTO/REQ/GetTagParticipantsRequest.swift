@@ -7,7 +7,7 @@
 import Foundation
 public class GetTagParticipantsRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     public var id: Int
-    var subjectId: Int? { id }
+    var subjectId: Int { id }
     var chatMessageType: ChatMessageVOTypes = .getTagParticipants
     var content: String?
 

@@ -11,7 +11,7 @@ public class ThreadParticipantsRequest: UniqueIdManagerRequest, ChatSnedable, Su
     public let threadId: Int
 
     var content: String? { convertCodableToString() }
-    var subjectId: Int? { threadId }
+    var subjectId: Int { threadId }
     var chatMessageType: ChatMessageVOTypes = .threadParticipants
 
     /// If it set to true the request only contains the list of admins of a thread.

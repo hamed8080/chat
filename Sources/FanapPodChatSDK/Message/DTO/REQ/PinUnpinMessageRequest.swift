@@ -10,7 +10,7 @@ public class PinUnpinMessageRequest: UniqueIdManagerRequest, ChatSnedable, Subje
     public let messageId: Int
     public let notifyAll: Bool
     var chatMessageType: ChatMessageVOTypes = .pinMessage
-    var subjectId: Int? { messageId }
+    var subjectId: Int { messageId }
     var content: String? { convertCodableToString() }
 
     public init(messageId: Int, notifyAll: Bool = false, uniqueId: String? = nil) {

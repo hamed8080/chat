@@ -7,12 +7,11 @@
 import Foundation
 public class GeneralSubjectIdRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     var chatMessageType: ChatMessageVOTypes = .unknown
-    var subjectId: Int? { threadId }
+    var subjectId: Int
     var content: String?
-    var threadId: Int
 
-    public init(threadId: Int, uniqueId: String? = nil) {
-        self.threadId = threadId
+    public init(subjectId: Int, uniqueId: String? = nil) {
+        self.subjectId = subjectId
         super.init(uniqueId: uniqueId)
     }
 }

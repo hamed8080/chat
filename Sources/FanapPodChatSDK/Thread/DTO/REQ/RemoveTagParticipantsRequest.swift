@@ -8,7 +8,7 @@ import Foundation
 public class RemoveTagParticipantsRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     public var tagId: Int
     public var tagParticipants: [TagParticipant]
-    var subjectId: Int? { tagId }
+    var subjectId: Int { tagId }
     var content: String? { tagParticipants.convertCodableToString() }
     var chatMessageType: ChatMessageVOTypes = .removeTagParticipants
 

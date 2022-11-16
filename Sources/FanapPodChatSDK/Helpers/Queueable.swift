@@ -61,7 +61,7 @@ protocol SystemtMetadataProtocol {
 
 /// Some requests need subjectId for example for working with threads it's needed most of the time.
 protocol SubjectProtocol {
-    var subjectId: Int? { get }
+    var subjectId: Int { get }
 }
 
 class BareChatSendableRequest: UniqueIdManagerRequest, ChatSnedable {

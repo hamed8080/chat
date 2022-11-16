@@ -10,7 +10,7 @@ public class ForwardMessageRequest: UniqueIdManagerRequest, Queueable, PlainText
     public let threadId: Int
     public let uniqueIds: [String]
     var chatMessageType: ChatMessageVOTypes = .forwardMessage
-    var subjectId: Int? { threadId }
+    var subjectId: Int { threadId }
     var content: String? { "\(messageIds)" }
 
     public init(threadId: Int,

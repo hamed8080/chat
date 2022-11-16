@@ -8,7 +8,7 @@ import Foundation
 public class EditTagRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     public var name: String
     public var id: Int
-    var subjectId: Int? { id }
+    var subjectId: Int { id }
     var chatMessageType: ChatMessageVOTypes = .editTag
     var content: String? { convertCodableToString() }
 

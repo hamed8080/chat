@@ -8,7 +8,7 @@ import Foundation
 public class DeleteMessageRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     public let deleteForAll: Bool
     public let messageId: Int
-    var subjectId: Int? { messageId }
+    var subjectId: Int { messageId }
     var chatMessageType: ChatMessageVOTypes = .deleteMessage
     var content: String? { convertCodableToString() }
 

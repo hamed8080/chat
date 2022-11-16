@@ -14,7 +14,7 @@ public class SendTextMessageRequest: UniqueIdManagerRequest, Queueable, PlainTex
     public var threadId: Int
     public var content: String? { textMessage }
     public var chatMessageType: ChatMessageVOTypes = .message
-    public var subjectId: Int? { threadId }
+    public var subjectId: Int { threadId }
 
     public init(threadId: Int,
                 textMessage: String,
