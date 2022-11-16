@@ -6,7 +6,7 @@
 
 import Foundation
 class MuteThreadRequestHandler {
-    class func handle(_ req: GeneralThreadRequest,
+    class func handle(_ req: GeneralSubjectIdRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<Int>,
                       _ uniqueIdResult: UniqueIdResultType? = nil)

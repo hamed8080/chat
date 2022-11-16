@@ -253,7 +253,7 @@ public class Chat {
     ///   - request: The request with a thread id.
     ///   - completion: Response of mute thread.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func muteThread(_ request: GeneralThreadRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
+    public func muteThread(_ request: GeneralSubjectIdRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
         MuteThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -262,7 +262,7 @@ public class Chat {
     ///   - request: The request with a thread id.
     ///   - completion: Response of unmute thread.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func unmuteThread(_ request: GeneralThreadRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
+    public func unmuteThread(_ request: GeneralSubjectIdRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
         UnMuteThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -271,7 +271,7 @@ public class Chat {
     ///   - request: The request with a thread id.
     ///   - completion: Response of pin thread.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func pinThread(_ request: GeneralThreadRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
+    public func pinThread(_ request: GeneralSubjectIdRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
         PinThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -280,7 +280,7 @@ public class Chat {
     ///   - request: The request with a thread id.
     ///   - completion: Response of unpin thread.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func unpinThread(_ request: GeneralThreadRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
+    public func unpinThread(_ request: GeneralSubjectIdRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
         UnPinThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -371,7 +371,7 @@ public class Chat {
     ///   - request: Thread Id of the thread you want to be closed.
     ///   - completion: The id of the thread which closed.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func closeThread(_ request: GeneralThreadRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
+    public func closeThread(_ request: GeneralSubjectIdRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
         CloseThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -382,7 +382,7 @@ public class Chat {
     ///   - request: Request to spam a thread.
     ///   - completion: Response of request.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func spamPvThread(_ request: GeneralThreadRequest, completion: @escaping CompletionType<BlockedContact>, uniqueIdResult: UniqueIdResultType? = nil) {
+    public func spamPvThread(_ request: GeneralSubjectIdRequest, completion: @escaping CompletionType<BlockedContact>, uniqueIdResult: UniqueIdResultType? = nil) {
         SpamThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -410,7 +410,7 @@ public class Chat {
     ///   - request: The request that contains thread id.
     ///   - completion: Result of request.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func deleteThread(_ request: GeneralThreadRequest, completion: @escaping CompletionType<Int>, uniqueIdResult _: UniqueIdResultType? = nil) {
+    public func deleteThread(_ request: GeneralSubjectIdRequest, completion: @escaping CompletionType<Int>, uniqueIdResult _: UniqueIdResultType? = nil) {
         DeleteThreadRequestHandler.handle(request, self, completion)
     }
 
@@ -731,7 +731,7 @@ public class Chat {
     ///   - request: The request that  contains a threadId.
     ///   - completion: A threadId if the result was a success.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func clearHistory(_ request: GeneralThreadRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
+    public func clearHistory(_ request: GeneralSubjectIdRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
         ClearHistoryRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -813,7 +813,7 @@ public class Chat {
     ///   - completion: List of the roles of a user.
     ///   - cacheResponse: The cache response of roles.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func getCurrentUserRoles(_ request: GeneralThreadRequest, completion: @escaping CompletionType<[Roles]>, cacheResponse: CacheResponseType<[Roles]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
+    public func getCurrentUserRoles(_ request: GeneralSubjectIdRequest, completion: @escaping CompletionType<[Roles]>, cacheResponse: CacheResponseType<[Roles]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         CurrentUserRolesRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
     }
 
@@ -1108,7 +1108,7 @@ public class Chat {
     ///   - request: A request that contains the threadId.
     ///   - completion: A response which contain the threadId of archived thread.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func archiveThread(_ request: GeneralThreadRequest, _ completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
+    public func archiveThread(_ request: GeneralSubjectIdRequest, _ completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
         ArchiveThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
@@ -1117,7 +1117,7 @@ public class Chat {
     ///   - request: A request that contains the threadId.
     ///   - completion: A response which contain the threadId of unarchived thread.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func unarchiveThread(_ request: GeneralThreadRequest, _ completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
+    public func unarchiveThread(_ request: GeneralSubjectIdRequest, _ completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
         UnarchiveThreadRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 

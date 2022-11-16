@@ -6,7 +6,7 @@
 
 import Foundation
 class CurrentUserRolesRequestHandler {
-    class func handle(_ req: GeneralThreadRequest,
+    class func handle(_ req: GeneralSubjectIdRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<[Roles]>,
                       _ cacheResponse: CacheResponseType<[Roles]>? = nil,
