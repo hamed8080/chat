@@ -7,7 +7,7 @@
 import Foundation
 
 /// Remove the bot commands request.
-public class RemoveBotCommandRequest: BaseRequest, ChatSnedable {
+public class RemoveBotCommandRequest: UniqueIdManagerRequest, ChatSnedable {
     var chatMessageType: ChatMessageVOTypes = .removeBotCommands
     var content: String?
 

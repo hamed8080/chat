@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class ChangeThreadTypeRequest: BaseRequest, ChatSnedable, SubjectProtocol {
+public class ChangeThreadTypeRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     public let uniqueName: String?
     public var threadId: Int
     public var type: ThreadTypes

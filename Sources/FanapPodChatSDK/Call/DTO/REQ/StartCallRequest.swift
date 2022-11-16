@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class StartCallRequest: BaseRequest, ChatSnedable {
+public class StartCallRequest: UniqueIdManagerRequest, ChatSnedable {
     let threadId: Int?
     let invitees: [Invitee]?
     let type: CallType

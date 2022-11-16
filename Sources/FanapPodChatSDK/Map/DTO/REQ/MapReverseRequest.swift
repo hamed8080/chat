@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class MapReverseRequest: BaseRequest, RestAPIProtocol {
+public class MapReverseRequest: UniqueIdManagerRequest, RestAPIProtocol {
     static let config = Chat.sharedInstance.config!
     var url: String = "\(config.mapServer)\(Routes.mapReverse.rawValue)"
     var urlString: String { url.toURLCompoenentString(encodable: self) ?? url }

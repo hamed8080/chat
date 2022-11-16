@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class TerminateCallRequest: BaseRequest, ChatSnedable, SubjectProtocol {
+public class TerminateCallRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     let callId: Int
     var subjectId: Int? { callId }
     var content: String?

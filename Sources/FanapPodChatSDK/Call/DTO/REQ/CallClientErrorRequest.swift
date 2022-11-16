@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class CallClientErrorRequest: BaseRequest, ChatSnedable, SubjectProtocol {
+public class CallClientErrorRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     let code: CallClientErrorType
     let callId: Int
     var subjectId: Int? { callId }

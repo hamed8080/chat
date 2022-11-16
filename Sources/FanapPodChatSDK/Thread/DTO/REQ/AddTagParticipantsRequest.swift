@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class AddTagParticipantsRequest: BaseRequest, ChatSnedable, SubjectProtocol {
+public class AddTagParticipantsRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     public var tagId: Int
     public var threadIds: [Int]
     var subjectId: Int? { tagId }

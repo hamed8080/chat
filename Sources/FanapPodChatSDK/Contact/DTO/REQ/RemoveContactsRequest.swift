@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class RemoveContactsRequest: BaseRequest, RestAPIProtocol, BodyRequestProtocol {
+public class RemoveContactsRequest: UniqueIdManagerRequest, RestAPIProtocol, BodyRequestProtocol {
     static let config = Chat.sharedInstance.config!
     var url: String = "\(config.platformHost)\(Routes.removeContacts.rawValue)"
     var urlString: String { url }

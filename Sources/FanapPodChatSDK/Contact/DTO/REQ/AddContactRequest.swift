@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class AddContactRequest: BaseRequest, RestAPIProtocol {
+public class AddContactRequest: UniqueIdManagerRequest, RestAPIProtocol {
     static let config = Chat.sharedInstance.config!
     var url: String = "\(config.platformHost)\(Routes.addContacts.rawValue)"
     var urlString: String { url }

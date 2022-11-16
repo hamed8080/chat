@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class AddCallParticipantsRequest: BaseRequest, ChatSnedable, SubjectProtocol {
+public class AddCallParticipantsRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     let callId: Int?
     var contactIds: [Int]?
     var userNames: [Invitee]?

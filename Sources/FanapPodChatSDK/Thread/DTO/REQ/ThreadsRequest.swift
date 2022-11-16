@@ -7,7 +7,7 @@
 import FanapPodAsyncSDK
 import Foundation
 
-public class ThreadsRequest: BaseRequest, ChatSnedable {
+public class ThreadsRequest: UniqueIdManagerRequest, ChatSnedable {
     public let count: Int
     public let offset: Int
     public var name: String?

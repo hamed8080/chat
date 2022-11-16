@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class CreateThreadRequest: BaseRequest, ChatSnedable {
+public class CreateThreadRequest: UniqueIdManagerRequest, ChatSnedable {
     public let description: String?
     public let image: String?
     public let invitees: [Invitee]?

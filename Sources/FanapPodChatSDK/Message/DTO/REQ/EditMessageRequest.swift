@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class EditMessageRequest: BaseRequest, Queueable, PlainTextSendable, ReplyProtocol, MetadataProtocol, SubjectProtocol, MessageTypeProtocol {
+public class EditMessageRequest: UniqueIdManagerRequest, Queueable, PlainTextSendable, ReplyProtocol, MetadataProtocol, SubjectProtocol, MessageTypeProtocol {
     public var messageType: MessageType
     public let repliedTo: Int?
     public let messageId: Int

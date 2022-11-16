@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class FileRequest: BaseRequest, Encodable {
+public class FileRequest: UniqueIdManagerRequest, Encodable {
     public let hashCode: String
     public let checkUserGroupAccess: Bool
     public var forceToDownloadFromServer: Bool

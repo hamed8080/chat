@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class ActiveCallParticipantsRequest: BaseRequest, ChatSnedable, SubjectProtocol {
+public class ActiveCallParticipantsRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     let callId: Int
     var subjectId: Int? { callId }
     var chatMessageType: ChatMessageVOTypes = .activeCallParticipants

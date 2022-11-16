@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class MessageDeliverRequest: BaseRequest, PlainTextSendable {
+public class MessageDeliverRequest: UniqueIdManagerRequest, PlainTextSendable {
     let messageId: String
     var content: String? { messageId }
     var chatMessageType: ChatMessageVOTypes = .delivery

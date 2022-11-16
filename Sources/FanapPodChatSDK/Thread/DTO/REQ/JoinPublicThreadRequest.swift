@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class JoinPublicThreadRequest: BaseRequest, PlainTextSendable {
+public class JoinPublicThreadRequest: UniqueIdManagerRequest, PlainTextSendable {
     public var threadName: String
     var chatMessageType: ChatMessageVOTypes = .joinThread
     var content: String? { threadName }

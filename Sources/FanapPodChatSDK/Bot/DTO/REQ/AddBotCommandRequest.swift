@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class AddBotCommandRequest: BaseRequest, ChatSnedable {
+public class AddBotCommandRequest: UniqueIdManagerRequest, ChatSnedable {
     var chatMessageType: ChatMessageVOTypes = .defineBotCommand
     var content: String?
 

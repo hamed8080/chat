@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class UpdateChatProfile: BaseRequest, ChatSnedable {
+public class UpdateChatProfile: UniqueIdManagerRequest, ChatSnedable {
     public let bio: String?
     public let metadata: String?
     var chatMessageType: ChatMessageVOTypes = .setProfile

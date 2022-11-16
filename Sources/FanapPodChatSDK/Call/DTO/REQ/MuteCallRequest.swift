@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class MuteCallRequest: BaseRequest, ChatSnedable, SubjectProtocol {
+public class MuteCallRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     let callId: Int
     let userIds: [Int]
     var subjectId: Int? { callId }

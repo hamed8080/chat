@@ -6,7 +6,7 @@
 
 import Foundation
 class SpamThreadRequestHandler {
-    class func handle(_ req: GeneralThreadRequest,
+    class func handle(_ req: GeneralSubjectIdRequest,
                       _ chat: Chat,
                       _ completion: @escaping CompletionType<BlockedContact>,
                       _ uniqueIdResult: UniqueIdResultType? = nil)

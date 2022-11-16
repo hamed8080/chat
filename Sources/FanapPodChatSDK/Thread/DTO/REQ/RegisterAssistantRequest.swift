@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class RegisterAssistantRequest: BaseRequest, ChatSnedable {
+public class RegisterAssistantRequest: UniqueIdManagerRequest, ChatSnedable {
     public let assistants: [Assistant]
     var content: String? { assistants.convertCodableToString() }
     var chatMessageType: ChatMessageVOTypes = .registerAssistant

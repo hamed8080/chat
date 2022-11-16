@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class UserInfoRequest: BaseRequest, ChatSnedable {
+public class UserInfoRequest: UniqueIdManagerRequest, ChatSnedable {
     var chatMessageType: ChatMessageVOTypes = .userInfo
     var content: String?
 

@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class MutualGroupsRequest: BaseRequest, ChatSnedable {
+public class MutualGroupsRequest: UniqueIdManagerRequest, ChatSnedable {
     internal let count: Int
     internal let offset: Int
     internal let toBeUserVO: Invitee

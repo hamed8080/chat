@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class MessageSeenRequest: BaseRequest, PlainTextSendable {
+public class MessageSeenRequest: UniqueIdManagerRequest, PlainTextSendable {
     let messageId: String
     var content: String? { messageId }
     var chatMessageType: ChatMessageVOTypes = .seen

@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class PinUnpinMessageRequest: BaseRequest, ChatSnedable, SubjectProtocol {
+public class PinUnpinMessageRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     public let messageId: Int
     public let notifyAll: Bool
     var chatMessageType: ChatMessageVOTypes = .pinMessage

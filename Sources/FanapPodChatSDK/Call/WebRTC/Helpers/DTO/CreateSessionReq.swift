@@ -13,7 +13,7 @@
 import Foundation
 import FanapPodAsyncSDK
 
-class CreateSessionReq: BaseRequest, AsyncSnedable {
+class CreateSessionReq: UniqueIdManagerRequest, AsyncSnedable {
     var id: String = "CREATE_SESSION"
     var brokerAddress: String
     var turnAddress: String

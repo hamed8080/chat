@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class UnBlockRequest: BaseRequest, ChatSnedable {
+public class UnBlockRequest: UniqueIdManagerRequest, ChatSnedable {
     public let contactId: Int?
     public let threadId: Int?
     public let userId: Int?

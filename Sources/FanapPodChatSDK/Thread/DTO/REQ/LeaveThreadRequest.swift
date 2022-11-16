@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class LeaveThreadRequest: BaseRequest, ChatSnedable, SubjectProtocol {
+public class LeaveThreadRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
     public let threadId: Int
     public let clearHistory: Bool?
     var subjectId: Int? { threadId }

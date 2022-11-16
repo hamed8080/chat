@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class CreateTagRequest: BaseRequest, ChatSnedable {
+public class CreateTagRequest: UniqueIdManagerRequest, ChatSnedable {
     public var name: String
     var content: String? { convertCodableToString() }
     var chatMessageType: ChatMessageVOTypes = .createTag
