@@ -13,7 +13,7 @@ public class EditMessageRequest: UniqueIdManagerRequest, Queueable, PlainTextSen
     public let metadata: String?
     public let threadId: Int
     var content: String? { textMessage }
-    var subjectId: Int { threadId }
+    var subjectId: Int { messageId }
     var chatMessageType: ChatMessageVOTypes = .editMessage
 
     public init(threadId: Int,
