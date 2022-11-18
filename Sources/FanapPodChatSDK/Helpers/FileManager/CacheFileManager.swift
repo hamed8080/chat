@@ -148,6 +148,20 @@ public class CacheFileManager {
         PSM.shared.save()
     }
 
+    public func deleteFileFromCache(fileHashCode: String) {
+        let url = URL(fileURLWithPath: rootPath + "/\(FileManagerPaths.images.rawValue)").appendingPathComponent("\(fileHashCode)")
+        if FileManager.default.fileExists(atPath: url.absoluteString) {
+            try? FileManager.default.removeItem(at: url)
+        }
+        CMFile.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", fileHashCode))
+        PSM.shared.save()
+    }
+
+    public func delete(fileHashCode: String) {
+        deleteFileFromCache(fileHashCode: fileHashCode)
+        deleteImageFromCache(fileHashCode: fileHashCode)
+    }
+
     public func saveImageProfile(url: String, data: Data, group: String) {
         let urlHash = url.md5 ?? ""
         if Chat.sharedInstance.config?.enableCache == true {
