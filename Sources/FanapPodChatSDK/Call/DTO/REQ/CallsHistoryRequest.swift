@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class CallsHistoryRequest: UniqueIdManagerRequest, ChatSnedable {
+public class CallsHistoryRequest: UniqueIdManagerRequest, ChatSendable {
     public let count: Int
     public let offset: Int
     public let callIds: [Int]?

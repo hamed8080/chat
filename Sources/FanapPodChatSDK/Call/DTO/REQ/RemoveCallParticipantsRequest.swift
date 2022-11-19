@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class RemoveCallParticipantsRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
+public class RemoveCallParticipantsRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
     let callId: Int
     var userIds: [Int]
     var subjectId: Int { callId }

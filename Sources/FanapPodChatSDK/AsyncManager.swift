@@ -54,9 +54,7 @@ internal class AsyncManager: AsyncDelegate {
 
     /// It will be only used whenever a client implements a custom async class by itself.
     func asyncMessageSent(message: Data?, error: AsyncError?) {
-        if let uniqueId = SendChatMessageVO(with: message)?.uniqueId, let _ = queue[uniqueId], error == nil {
-            queue.removeValue(forKey: uniqueId)
-        }
+        removeFromQueue(message: message, error: error)
     }
 
     /// A delegate to raise an error.
@@ -73,13 +71,23 @@ internal class AsyncManager: AsyncDelegate {
     }
 
     /// The sendData delegate will inform if a send event occurred by the async socket.
-    public func sendData(chatMessage: ChatSnedable) {
+    public func sendData(sendable: ChatSendable) {
         guard let config = Chat.sharedInstance.config else { return }
-        let chatMessage = SendChatMessageVO(req: chatMessage, token: config.token, typeCode: config.typeCode)
+        let chatMessage = SendChatMessageVO(req: sendable, token: config.token, typeCode: config.typeCode)
+        addToQueue(sendable: sendable)
         sendToAsync(asyncMessage: AsyncChatServerMessage(chatMessage: chatMessage))
         sendPingTimer()
-        if let queueable = chatMessage as? Queueable, let uniqueId = chatMessage.uniqueId {
-            queue[uniqueId] = queueable
+    }
+
+    private func addToQueue(sendable: ChatSendable) {
+        if let queueable = sendable as? Queueable {
+            queue[sendable.uniqueId] = queueable
+        }
+    }
+
+    private func removeFromQueue(message: Data?, error: AsyncError?) {
+        if let uniqueId = SendChatMessageVO(with: message)?.uniqueId, queue[uniqueId] != nil, error == nil {
+            queue.removeValue(forKey: uniqueId)
         }
     }
 

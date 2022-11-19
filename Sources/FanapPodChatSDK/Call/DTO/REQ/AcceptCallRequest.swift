@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class AcceptCallRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
+public class AcceptCallRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
     let client: SendClient
     let callId: Int
     var content: String? { client.convertCodableToString() }

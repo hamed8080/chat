@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class CancelCallRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
+public class CancelCallRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
     let call: Call
     var chatMessageType: ChatMessageVOTypes = .cancelCall
     var subjectId: Int { call.id }

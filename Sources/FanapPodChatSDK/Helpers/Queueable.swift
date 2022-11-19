@@ -36,12 +36,12 @@ class AsyncChatServerMessage: AsyncSnedable {
 }
 
 /// If a message is marked as Chat Sendable, it will send the data to the async server and chat server afterward.
-protocol ChatSnedable: Encodable, UniqueIdProtocol {
+protocol ChatSendable: Encodable, UniqueIdProtocol {
     var chatMessageType: ChatMessageVOTypes { get set }
     var content: String? { get }
 }
 
-protocol PlainTextSendable: ChatSnedable {}
+protocol PlainTextSendable: ChatSendable {}
 
 protocol ReplyProtocol {
     var repliedTo: Int? { get }
@@ -64,7 +64,7 @@ protocol SubjectProtocol {
     var subjectId: Int { get }
 }
 
-class BareChatSendableRequest: UniqueIdManagerRequest, ChatSnedable {
+class BareChatSendableRequest: UniqueIdManagerRequest, ChatSendable {
     var content: String?
     var chatMessageType: ChatMessageVOTypes = .unknown
 }

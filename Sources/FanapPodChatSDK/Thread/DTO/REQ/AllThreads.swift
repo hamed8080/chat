@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class AllThreads: UniqueIdManagerRequest, ChatSnedable {
+public class AllThreads: UniqueIdManagerRequest, ChatSendable {
     private let summary: Bool
     var chatMessageType: ChatMessageVOTypes = .getThreads
     var content: String? { convertCodableToString() }

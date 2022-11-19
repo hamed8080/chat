@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class GetJoinCallsRequest: UniqueIdManagerRequest, ChatSnedable {
+public class GetJoinCallsRequest: UniqueIdManagerRequest, ChatSendable {
     private let offset: Int
     private let count: Int
     private let name: String?

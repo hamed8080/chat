@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class BatchDeleteMessageRequest: UniqueIdManagerRequest, ChatSnedable {
+public class BatchDeleteMessageRequest: UniqueIdManagerRequest, ChatSendable {
     let threadId: Int
     let deleteForAll: Bool
     let messageIds: [Int]

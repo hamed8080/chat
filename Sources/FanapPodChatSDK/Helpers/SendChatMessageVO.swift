@@ -5,6 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
+import FanapPodAsyncSDK
 
 public struct SendChatMessageVO: Codable {
     let type: Int
@@ -44,7 +45,7 @@ public struct SendChatMessageVO: Codable {
         self.uniqueId = uniqueId
     }
 
-    init(req: ChatSnedable, token: String, typeCode: String) {
+    init(req: ChatSendable, token: String, typeCode: String) {
         type = req.chatMessageType.rawValue
         content = req.content
         messageType = (req as? MessageTypeProtocol)?.messageType.rawValue
@@ -59,9 +60,9 @@ public struct SendChatMessageVO: Codable {
 
     init?(with asyncData: Data?) {
         guard let data = asyncData,
-              let asyncMessage = try? JSONDecoder().decode(SendAsyncMessageVO.self, from: data),
-              let chatContent = asyncMessage.content.data(using: .utf8),
-              let chatMessage = try? JSONDecoder().decode(SendChatMessageVO.self, from: chatContent) else { return nil }
+              let asyncMessageData = try? JSONDecoder().decode(AsyncMessage.self, from: data).content?.data(using: .utf8),
+              let asyncMessageVOData = try? JSONDecoder().decode(SendAsyncMessageVO.self, from: asyncMessageData).content.data(using: .utf8),
+              let chatMessage = try? JSONDecoder().decode(SendChatMessageVO.self, from: asyncMessageVOData) else { return nil }
         self = chatMessage
     }
 }

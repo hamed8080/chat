@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class AddParticipantRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
+public class AddParticipantRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
     public var id: String?
     public var idType: InviteeTypes?
     public var threadId: Int

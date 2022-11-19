@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class RenewCallRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
+public class RenewCallRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
     let invitess: [Invitee]
     let callId: Int
     var subjectId: Int { callId }

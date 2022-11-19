@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class DeactiveAssistantRequest: UniqueIdManagerRequest, ChatSnedable {
+public class DeactiveAssistantRequest: UniqueIdManagerRequest, ChatSendable {
     public let assistants: [Assistant]
     var content: String? { assistants.convertCodableToString() }
     var chatMessageType: ChatMessageVOTypes = .deacticveAssistant
