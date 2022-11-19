@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class UpdateThreadInfoRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
+public class UpdateThreadInfoRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
     public let description: String?
     public var metadata: String?
     public var threadImage: UploadImageRequest?

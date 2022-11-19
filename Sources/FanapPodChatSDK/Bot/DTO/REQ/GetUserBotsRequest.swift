@@ -7,7 +7,7 @@
 import Foundation
 
 /// The request to fetch the list of user bots.
-public class GetUserBotsRequest: UniqueIdManagerRequest, ChatSnedable {
+public class GetUserBotsRequest: UniqueIdManagerRequest, ChatSendable {
     var chatMessageType: ChatMessageVOTypes = .getUserBots
     var content: String?
 

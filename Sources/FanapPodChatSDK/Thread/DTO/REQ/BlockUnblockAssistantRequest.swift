@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class BlockUnblockAssistantRequest: UniqueIdManagerRequest, ChatSnedable {
+public class BlockUnblockAssistantRequest: UniqueIdManagerRequest, ChatSendable {
     internal let assistants: [Assistant]
     var chatMessageType: ChatMessageVOTypes = .blockAssistant
     var content: String? { assistants.convertCodableToString() }

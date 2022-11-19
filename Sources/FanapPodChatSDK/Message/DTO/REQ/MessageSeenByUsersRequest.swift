@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class MessageSeenByUsersRequest: UniqueIdManagerRequest, ChatSnedable {
+public class MessageSeenByUsersRequest: UniqueIdManagerRequest, ChatSendable {
     let messageId: Int
     let offset: Int
     let count: Int

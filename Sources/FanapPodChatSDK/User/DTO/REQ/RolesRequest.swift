@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class RolesRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
+public class RolesRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
     public let userRoles: [UserRoleRequest]
     public let threadId: Int
     var content: String? { userRoles.convertCodableToString() }

@@ -8,7 +8,7 @@ import Foundation
 
 import FanapPodAsyncSDK
 
-public class ContactsRequest: UniqueIdManagerRequest, ChatSnedable {
+public class ContactsRequest: UniqueIdManagerRequest, ChatSendable {
     var chatMessageType: ChatMessageVOTypes = .getContacts
     var content: String? { convertCodableToString() }
 

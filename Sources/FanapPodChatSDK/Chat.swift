@@ -1140,7 +1140,7 @@ public class Chat {
         }
     }
 
-    func prepareToSendAsync(req: ChatSnedable,
+    func prepareToSendAsync(req: ChatSendable,
                             uniqueIdResult: UniqueIdResultType? = nil,
                             completion: OnChatResponseType? = nil,
                             onSent: OnSentType? = nil,
@@ -1148,7 +1148,7 @@ public class Chat {
                             onSeen: OnSeenType? = nil)
     {
         uniqueIdResult?(req.uniqueId)
-        asyncManager.sendData(chatMessage: req)
+        asyncManager.sendData(sendable: req)
         callbacksManager.addCallback(uniqueId: req.uniqueId, requesType: req.chatMessageType, callback: completion, onSent: onSent, onDelivered: onDelivered, onSeen: onSeen)
     }
 

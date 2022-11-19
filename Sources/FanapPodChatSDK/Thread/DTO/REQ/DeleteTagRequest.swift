@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class DeleteTagRequest: UniqueIdManagerRequest, ChatSnedable, SubjectProtocol {
+public class DeleteTagRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
     public var id: Int
     var subjectId: Int { id }
     var chatMessageType: ChatMessageVOTypes = .deleteTag

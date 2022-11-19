@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public class BlockedListRequest: UniqueIdManagerRequest, ChatSnedable {
+public class BlockedListRequest: UniqueIdManagerRequest, ChatSendable {
     public let count: Int
     public let offset: Int
     var content: String? { convertCodableToString() }
