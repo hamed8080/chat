@@ -773,6 +773,16 @@ public class Chat {
         MentionsRequestHandler.handle(request, self, completion, cacheResponse, uniqueIdResult)
     }
 
+    /// Get the list of threads that you have mentioned in them.
+    /// - Parameters:
+    ///   - request: The request that contains a list of threadIds.
+    ///   - completion: The response contains a list of messages that you have mentioned.
+    ///   - cacheResponse: The cache response of mentioned messages inside a thread.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func threadsMentions(_ request: ThreadsMentionRequest, completion: @escaping CompletionType<[Message]>, uniqueIdResult: UniqueIdResultType? = nil) {
+        ThreadsMentionRequestHandler.handle(request, self, completion, uniqueIdResult)
+    }
+
     /// Retrieve the list of participants to who the message was delivered to them.
     /// - Parameters:
     ///   - request: The request that contains a message id.

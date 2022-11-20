@@ -56,6 +56,8 @@ class ReceiveMessageFactory {
             CurrentUserRolesResponseHandler.handle(asyncMessage)
         case .getHistory:
             HistoryResponseHandler.handle(asyncMessage)
+        case .mentionInUnreadMessage:
+            ThreadsMentionResponseHandler.handle(asyncMessage)
         case .getMessageDeleveryParticipants:
             MessageDeliveredUsersResponseHandler.handle(asyncMessage)
         case .getMessageSeenParticipants:

@@ -12,9 +12,7 @@ class MentionsRequestHandler {
                       _ cacheResponse: PaginationCacheResponseType<[Message]>? = nil,
                       _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req: req,
-
-                                uniqueIdResult: uniqueIdResult) { response in
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             let pagination = PaginationWithContentCount(count: req.count, offset: req.offset, totalCount: response.contentCount)
             completion(response.result as? [Message], response.uniqueId, pagination, response.error)
         }

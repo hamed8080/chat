@@ -93,6 +93,7 @@ public enum ChatMessageVOTypes: Int, Codable, SafeDecodable {
 
     case exportChats = 152
     case archiveThread = 223
+    case mentionInUnreadMessage = 232
     case unarchiveThread = 224
 
     case error = 999
