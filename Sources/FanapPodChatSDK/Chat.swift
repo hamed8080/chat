@@ -510,6 +510,24 @@ public class Chat {
         StopBotRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
+    /// Get list of commands for a bot.
+    /// - Parameters:
+    ///   - request: The request with threadName and a threadId.
+    ///   - completion: Name of a bot if it stopped successfully.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func botCommands(_ request: BotCommandsRequest, completion: @escaping CompletionType<String>, uniqueIdResult: UniqueIdResultType? = nil) {
+        StopBotRequestHandler.handle(request, self, completion, uniqueIdResult)
+    }
+
+    /// Get list of commands for a bot.
+    /// - Parameters:
+    ///   - request: The request with threadName and a threadId.
+    ///   - completion: Name of a bot if it stopped successfully.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func threadBots(_ request: BotCommandsRequest, completion: @escaping CompletionType<String>, uniqueIdResult: UniqueIdResultType? = nil) {
+        StopBotRequestHandler.handle(request, self, completion, uniqueIdResult)
+    }
+
     /// Getting current user details.
     /// - Parameters:
     ///   - request: The request:

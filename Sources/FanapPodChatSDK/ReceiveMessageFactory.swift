@@ -36,6 +36,10 @@ class ReceiveMessageFactory {
             ContactsLastSeenResponseHandler.handle(asyncMessage)
         case .createBot:
             CreateBotResponseHandler.handle(asyncMessage)
+        case .botCommands:
+            BotCommandsResponseHandler.handle(asyncMessage)
+        case .allThreadBots:
+            ThreadBotsResponseHandler.handle(asyncMessage)
         case .createThread:
             CreateThreadResponseHandler.handle(asyncMessage)
         case .defineBotCommand:
