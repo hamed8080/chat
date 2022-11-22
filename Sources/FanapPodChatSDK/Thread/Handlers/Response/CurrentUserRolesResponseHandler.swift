@@ -16,7 +16,7 @@ class CurrentUserRolesResponseHandler: ResponseHandler {
         guard let userRoles = try? JSONDecoder().decode([Roles].self, from: data) else { return }
         chat.delegate?.chatEvent(event: .user(.roles(userRoles, id: chatMessage.subjectId)))
         CacheFactory.write(cacheType: .currentUserRoles(userRoles, chatMessage.subjectId))
-        PSM.shared.save()
+        CacheFactory.save()
 
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
         callback(.init(uniqueId: chatMessage.uniqueId, result: userRoles))

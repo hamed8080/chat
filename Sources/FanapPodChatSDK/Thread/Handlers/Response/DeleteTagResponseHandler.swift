@@ -16,7 +16,7 @@ class DeleteTagResponseHandler: ResponseHandler {
         guard let tag = try? JSONDecoder().decode(Tag.self, from: data) else { return }
         chat.delegate?.chatEvent(event: .tag(.init(tag: tag, type: .deleteTag)))
         CacheFactory.write(cacheType: .deleteTag(tag))
-        PSM.shared.save()
+        CacheFactory.save()
 
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
         callback(.init(uniqueId: chatMessage.uniqueId, result: tag))

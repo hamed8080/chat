@@ -16,7 +16,7 @@ class EditTagResponseHandler: ResponseHandler {
         guard let tag = try? JSONDecoder().decode(Tag.self, from: data) else { return }
         chat.delegate?.chatEvent(event: .tag(.init(tag: tag, type: .editTag)))
         CacheFactory.write(cacheType: .tags([tag]))
-        PSM.shared.save()
+        CacheFactory.save()
 
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
         callback(.init(uniqueId: chatMessage.uniqueId, result: tag))

@@ -24,6 +24,6 @@ class UpdateContactRequestHandler {
         if let contacts = contactsResponse?.contacts {
             CMContact.insertOrUpdate(contacts: contacts)
         }
-        PSM.shared.save()
+        CacheFactory.save()
     }
 }

@@ -8,10 +8,11 @@ import CoreData
 import Foundation
 
 public extension QueueOfForwardMessages {
-    @NSManaged var messageId: NSNumber?
+    @NSManaged var messageIds: String?
     @NSManaged var metadata: String?
     @NSManaged var repliedTo: NSNumber?
+    @NSManaged var fromThreadId: NSNumber?
     @NSManaged var threadId: NSNumber?
     @NSManaged var typeCode: String?
-    @NSManaged var uniqueId: String?
+    @NSManaged var uniqueIds: String?
 }

@@ -19,7 +19,7 @@ class DeleteThreadResponseHandler: ResponseHandler {
             chat.delegate?.chatEvent(event: .thread(.threadLastActivityTime(time: chatMessage.time, threadId: chatMessage.subjectId)))
         }
         CacheFactory.write(cacheType: .deleteThreads([threadId]))
-        PSM.shared.save()
+        CacheFactory.save()
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
         callback(.init(uniqueId: chatMessage.uniqueId, result: threadId))
         chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .deleteThread)

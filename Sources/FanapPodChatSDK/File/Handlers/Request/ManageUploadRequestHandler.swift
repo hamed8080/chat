@@ -16,12 +16,8 @@ class ManageUploadRequestHandler {
             case .cancel:
                 task.cancel()
                 completion?("upload task with uniqueId \(uniqueId) canceled.", true)
-                Chat.sharedInstance.callbacksManager.removeUploadTask(uniqueId: uniqueId)
-                if isImage {
-                    CacheFactory.write(cacheType: .deleteUploadImageQueue(uniqueId))
-                } else {
-                    CacheFactory.write(cacheType: .deleteUploadFileQueue(uniqueId))
-                }
+                Chat.sharedInstance.callbacksManager.removeUploadTask(uniqueId: uniqueId)                
+                CacheFactory.write(cacheType: .deleteQueue(uniqueId))
                 CacheFactory.save()
             case .suspend:
                 task.suspend()

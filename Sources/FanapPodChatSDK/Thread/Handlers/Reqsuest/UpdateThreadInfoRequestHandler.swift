@@ -45,7 +45,7 @@ public class UpdateThreadInfoRequestHandler {
 
     private class func saveToCashe(req: UpdateThreadInfoRequest) {
         if let imageRequest = req.threadImage, Chat.sharedInstance.config?.enableCache == true {
-            CacheFactory.write(cacheType: .uploadImageQueue(imageRequest))
+            CacheFactory.write(cacheType: .sendFileMessageQueue(imageRequest, nil))
         }
     }
 }

@@ -18,7 +18,7 @@ class SendImageMessageRequest {
                       _ chat: Chat)
     {
         CacheFactory.write(cacheType: .sendFileMessageQueue(req, textMessage))
-        PSM.shared.save()
+        CacheFactory.save()
         messageUniqueIdResult?(textMessage.uniqueId)
         chat.uploadImage(req: req, uploadUniqueIdResult: uploadUniqueIdResult, uploadProgress: uploadProgress) { _, fileMetaData, error in
             // completed upload file

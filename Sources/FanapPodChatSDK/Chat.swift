@@ -668,8 +668,6 @@ public class Chat {
     ///   - editMessageNotSentRequests: A list of edit messages that failed to sent.
     ///   - forwardMessageNotSentRequests: A list of forward messages that failed to sent.
     ///   - fileMessageNotSentRequests: A list of file messages that failed to sent.
-    ///   - uploadFileNotSentRequests: A list of upload files  that failed to sent.
-    ///   - uploadImageNotSentRequests: A list of upload images that failed to sent.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     public func getHistory(_ request: GetHistoryRequest,
                            completion: @escaping PaginationCompletionType<[Message]>,
@@ -678,8 +676,6 @@ public class Chat {
                            editMessageNotSentRequests: CompletionType<[EditMessageRequest]>? = nil,
                            forwardMessageNotSentRequests: CompletionType<[ForwardMessageRequest]>? = nil,
                            fileMessageNotSentRequests: CompletionType<[(UploadFileRequest, SendTextMessageRequest)]>? = nil,
-                           uploadFileNotSentRequests: CompletionType<[UploadFileRequest]>? = nil,
-                           uploadImageNotSentRequests: CompletionType<[UploadImageRequest]>? = nil,
                            uniqueIdResult: UniqueIdResultType? = nil)
     {
         GetHistoryRequestHandler.handle(request,
@@ -690,8 +686,6 @@ public class Chat {
                                         editMessageNotSentRequests,
                                         forwardMessageNotSentRequests,
                                         fileMessageNotSentRequests,
-                                        uploadFileNotSentRequests,
-                                        uploadImageNotSentRequests,
                                         uniqueIdResult)
     }
 
@@ -706,7 +700,7 @@ public class Chat {
                                cacheResponse: CacheResponseType<[Message]>? = nil,
                                uniqueIdResult: UniqueIdResultType? = nil)
     {
-        GetHistoryRequestHandler.handle(request, self, completion, cacheResponse, nil, nil, nil, nil, nil, nil, uniqueIdResult)
+        GetHistoryRequestHandler.handle(request, self, completion, cacheResponse, nil, nil, nil, nil, uniqueIdResult)
     }
 
     /// Pin a message inside a thread.

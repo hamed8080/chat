@@ -18,7 +18,7 @@ class SendFileMessageRequest {
                       _ chat: Chat)
     {
         CacheFactory.write(cacheType: .sendFileMessageQueue(req, textMessage))
-        PSM.shared.save()
+        CacheFactory.save()
 
         messageUniqueIdResult?(textMessage.uniqueId)
         chat.uploadFile(req: req, uploadUniqueIdResult: uploadUniqueIdResult, uploadProgress: uploadProgress) { _, fileMetaData, error in

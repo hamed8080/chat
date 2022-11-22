@@ -15,7 +15,7 @@ class ContactsResponseHandler: ResponseHandler {
         guard let data = chatMessage.content?.data(using: .utf8) else { return }
         guard let contacts = try? JSONDecoder().decode([Contact].self, from: data) else { return }
         CacheFactory.write(cacheType: .casheContacts(contacts))
-        PSM.shared.save()
+        CacheFactory.save()
 
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
         callback(.init(uniqueId: chatMessage.uniqueId, result: contacts, contentCount: chatMessage.contentCount ?? contacts.count))

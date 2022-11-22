@@ -18,10 +18,8 @@ public class CacheFactory {
         case getHistory(_ req: GetHistoryRequest)
         case getTextNotSentRequests(_ threadId: Int)
         case editMessageRequests(_ threadId: Int)
-        case forwardMessageRequests(_ threadId: Int)
+        case forwardMessageRequests(_ fromThreadId: Int)
         case fileMessageRequests(_ threadId: Int)
-        case uploadFileRequests(_ threadId: Int)
-        case uploadImageRequests(_ threadId: Int)
         case threadAdmins(_ threadId: Int)
         case threadParticipants(_ threadId: Int, _ count: Int, _ offset: Int, _ ascending: Bool)
         case pinThreads
@@ -52,16 +50,13 @@ public class CacheFactory {
         case sendTxetMessageQueue(_ req: SendTextMessageRequest)
         case deleteSendTxetMessageQueue(_ uniqueId: String)
         case message(_ message: Message)
+        case deleteQueue(_ uniqueId: String)
         case editMessageQueue(_ req: EditMessageRequest)
         case deleteEditMessageQueue(_ message: Message)
         case forwardMessageQueue(_: ForwardMessageRequest)
         case deleteForwardMessageQueue(_ uniqueId: String)
         case deleteFileMessageQueue(_ uniqueId: String)
-        case sendFileMessageQueue(_ req: UploadFileRequest, _ textMessage: SendTextMessageRequest)
-        case uploadFileQueue(_ req: UploadFileRequest)
-        case uploadImageQueue(_ req: UploadImageRequest)
-        case deleteUploadImageQueue(_ uniqueId: String)
-        case deleteUploadFileQueue(_ uniqueId: String)
+        case sendFileMessageQueue(_ req: UploadFileRequest, _ textMessage: SendTextMessageRequest? = nil)
         case deleteAllUser
         case deleteContacts(_ contactIds: [Int])
         case deleteThreads(_ threadIds: [Int])
@@ -126,17 +121,11 @@ public class CacheFactory {
             case let .editMessageRequests(_: threadId):
                 let requests = QueueOfEditMessages.crud.fetchWith(NSPredicate(format: "threadId == %i", threadId))?.compactMap { $0.getCodable() }
                 completion?(.init(cacheResponse: requests))
-            case let .forwardMessageRequests(_: threadId):
-                let requests = QueueOfForwardMessages.crud.fetchWith(NSPredicate(format: "threadId == %i", threadId))?.compactMap { $0.getCodable() }
+            case let .forwardMessageRequests(_: fromThreadId):
+                let requests = QueueOfForwardMessages.crud.fetchWith(NSPredicate(format: "fromThreadId == %i", fromThreadId))?.compactMap { $0.getCodable() }
                 completion?(.init(cacheResponse: requests))
             case let .fileMessageRequests(_: threadId):
                 let requests = QueueOfFileMessages.crud.fetchWith(NSPredicate(format: "threadId == %i", threadId))?.compactMap { $0.getCodable() }
-                completion?(.init(cacheResponse: requests))
-            case let .uploadFileRequests(_: threadId):
-                let requests = QueueOfUploadFiles.crud.fetchWith(NSPredicate(format: "uniqueId == %i", threadId))?.compactMap { $0.getCodable() }
-                completion?(.init(cacheResponse: requests))
-            case let .uploadImageRequests(_: threadId):
-                let requests = QueueOfUploadImages.crud.fetchWith(NSPredicate(format: "uniqueId == %i", threadId))?.compactMap { $0.getCodable() }
                 completion?(.init(cacheResponse: requests))
             case let .threadAdmins(_: threadId):
                 let admins = CMParticipant.crud.fetchWith(NSPredicate(format: "threadId == %i", threadId))?.filter { $0.roles != nil }
@@ -216,6 +205,11 @@ public class CacheFactory {
                 QueueOfTextMessages.crud.deleteWith(predicate: NSPredicate(format: "uniqueId == %@", uniqueId))
             case let .message(_: message):
                 CMMessage.insertOrUpdate(message: message)
+            case let .deleteQueue(_: uniqueId):
+                QueueOfTextMessages.crud.deleteWith(predicate: NSPredicate(format: "uniqueId == %@", uniqueId))
+                QueueOfEditMessages.crud.deleteWith(predicate: NSPredicate(format: "uniqueId == %@", uniqueId))
+                QueueOfForwardMessages.crud.deleteWith(predicate: NSPredicate(format: "uniqueIds CONTAINS[cd] %@", uniqueId))
+                QueueOfFileMessages.crud.deleteWith(predicate: NSPredicate(format: "uniqueId == %@", uniqueId))
             case let .editMessageQueue(_: req):
                 QueueOfEditMessages.insert(request: req)
             case let .deleteEditMessageQueue(_: message):
@@ -229,14 +223,6 @@ public class CacheFactory {
                 QueueOfFileMessages.insert(request: req, textMessage: textMessage)
             case let .deleteFileMessageQueue(_: uniqueId):
                 QueueOfFileMessages.crud.deleteWith(predicate: NSPredicate(format: "uniqueId == %@", uniqueId))
-            case let .uploadFileQueue(_: req):
-                QueueOfUploadFiles.insert(request: req)
-            case let .uploadImageQueue(_: req):
-                QueueOfUploadImages.insert(request: req)
-            case let .deleteUploadImageQueue(_: uniqueId):
-                QueueOfUploadImages.crud.deleteWith(predicate: NSPredicate(format: "uniqueId == %@", uniqueId))
-            case let .deleteUploadFileQueue(_: uniqueId):
-                QueueOfUploadFiles.crud.deleteWith(predicate: NSPredicate(format: "uniqueId == %@", uniqueId))
             case .deleteAllUser:
                 CMUser.crud.deleteAll()
             case let .deleteContacts(_: contactIds):
@@ -263,8 +249,6 @@ public class CacheFactory {
                 CMPinMessage.crud.deleteAll()
                 QueueOfTextMessages.crud.deleteAll()
                 QueueOfFileMessages.crud.deleteAll()
-                QueueOfUploadImages.crud.deleteAll()
-                QueueOfUploadFiles.crud.deleteAll()
                 QueueOfEditMessages.crud.deleteAll()
                 QueueOfForwardMessages.crud.deleteAll()
                 CMAssistant.crud.deleteAll()
@@ -272,6 +256,10 @@ public class CacheFactory {
                 CacheFileManager.sharedInstance.deleteAllImages()
                 CMTag.crud.deleteAll()
                 CMTagParticipant.crud.deleteAll()
+                CMFile.crud.deleteAll()
+                CMImage.crud.deleteAll()
+                CMUserRole.crud.deleteAll()
+                PhoneContact.crud.deleteAll()
             case .syncedContacts:
                 CMUser.crud.getAll().forEach { user in
                     user.contactSynced = NSNumber(value: true)
@@ -335,7 +323,7 @@ public class CacheFactory {
         }
     }
 
-    class func save() {
+    public class func save() {        
         PSM.shared.save()
     }
 }

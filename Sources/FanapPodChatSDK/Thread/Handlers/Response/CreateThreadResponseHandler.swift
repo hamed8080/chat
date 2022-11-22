@@ -16,7 +16,7 @@ class CreateThreadResponseHandler: ResponseHandler {
         chat.delegate?.chatEvent(event: .thread(.threadNew(newThread)))
 
         CacheFactory.write(cacheType: .threads([newThread]))
-        PSM.shared.save()
+        CacheFactory.save()
 
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
         callback(.init(uniqueId: chatMessage.uniqueId, result: newThread))

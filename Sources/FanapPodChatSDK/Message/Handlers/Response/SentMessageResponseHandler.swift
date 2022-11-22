@@ -14,11 +14,8 @@ class SentMessageResponseHandler: ResponseHandler {
 
         let message = Message(chatMessage: chatMessage)
         chat.delegate?.chatEvent(event: .message(.messageSend(message)))
-        CacheFactory.write(cacheType: .deleteSendTxetMessageQueue(chatMessage.uniqueId))
-        CacheFactory.write(cacheType: .deleteForwardMessageQueue(chatMessage.uniqueId))
-        CacheFactory.write(cacheType: .deleteFileMessageQueue(chatMessage.uniqueId))
-        PSM.shared.save()
-
+        CacheFactory.write(cacheType: .deleteQueue(chatMessage.uniqueId))
+        CacheFactory.save()
         guard let callback = Chat.sharedInstance.callbacksManager.getSentCallback(chatMessage.uniqueId) else { return }
         let messageResponse = SentMessageResponse(isSent: true, messageId: message.id, threadId: chatMessage.subjectId, message: message, participantId: chatMessage.participantId)
         callback(messageResponse, chatMessage.uniqueId, nil)

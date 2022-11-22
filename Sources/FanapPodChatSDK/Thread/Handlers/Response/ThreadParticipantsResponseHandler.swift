@@ -16,7 +16,7 @@ class ThreadParticipantsResponseHandler: ResponseHandler {
         guard let participants = try? JSONDecoder().decode([Participant].self, from: data) else { return }
         chat.delegate?.chatEvent(event: .thread(.threadParticipantsListChange(threadId: chatMessage.subjectId, participants)))
         CacheFactory.write(cacheType: .participants(participants, chatMessage.subjectId))
-        PSM.shared.save()
+        CacheFactory.save()
 
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
         callback(.init(uniqueId: chatMessage.uniqueId, result: participants, contentCount: chatMessage.contentCount ?? 0))

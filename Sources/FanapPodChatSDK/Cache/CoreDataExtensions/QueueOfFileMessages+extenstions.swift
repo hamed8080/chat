@@ -41,15 +41,17 @@ public extension QueueOfFileMessages {
         }
     }
 
-    class func convertFileToCM(request: UploadFileRequest, textMessage: SendTextMessageRequest, entity: QueueOfFileMessages? = nil) -> QueueOfFileMessages {
+    class func convertFileToCM(request: UploadFileRequest, textMessage: SendTextMessageRequest? = nil, entity: QueueOfFileMessages? = nil) -> QueueOfFileMessages {
         let model = entity ?? QueueOfFileMessages()
 
-        model.textMessage = textMessage.textMessage
-        model.messageType = textMessage.messageType.rawValue as NSNumber?
-        model.metadata = textMessage.metadata
-        model.repliedTo = textMessage.repliedTo as NSNumber?
-        model.threadId = textMessage.threadId as NSNumber?
-        model.uniqueId = textMessage.uniqueId
+        if let textMessage = textMessage {
+            model.textMessage = textMessage.textMessage
+            model.messageType = textMessage.messageType.rawValue as NSNumber?
+            model.metadata = textMessage.metadata
+            model.repliedTo = textMessage.repliedTo as NSNumber?
+            model.threadId = textMessage.threadId as NSNumber?
+            model.uniqueId = textMessage.uniqueId
+        }
 
         model.imageToSend = request.data as NSData
         model.fileExtension = request.fileExtension
@@ -63,15 +65,17 @@ public extension QueueOfFileMessages {
         return model
     }
 
-    class func convertImageToCM(request: UploadImageRequest, textMessage: SendTextMessageRequest, entity: QueueOfFileMessages? = nil) -> QueueOfFileMessages {
+    class func convertImageToCM(request: UploadImageRequest, textMessage: SendTextMessageRequest? = nil, entity: QueueOfFileMessages? = nil) -> QueueOfFileMessages {
         let model = entity ?? QueueOfFileMessages()
 
-        model.textMessage = textMessage.textMessage
-        model.messageType = textMessage.messageType.rawValue as NSNumber?
-        model.metadata = textMessage.metadata
-        model.repliedTo = textMessage.repliedTo as NSNumber?
-        model.threadId = textMessage.threadId as NSNumber?
-        model.uniqueId = textMessage.uniqueId
+        if let textMessage = textMessage {
+            model.textMessage = textMessage.textMessage
+            model.messageType = textMessage.messageType.rawValue as NSNumber?
+            model.metadata = textMessage.metadata
+            model.repliedTo = textMessage.repliedTo as NSNumber?
+            model.threadId = textMessage.threadId as NSNumber?
+            model.uniqueId = textMessage.uniqueId
+        }
 
         model.imageToSend = request.data as NSData
         model.fileExtension = request.fileExtension
@@ -89,7 +93,7 @@ public extension QueueOfFileMessages {
         return model
     }
 
-    class func insert(request: UploadFileRequest, textMessage: SendTextMessageRequest, resultEntity: ((QueueOfFileMessages) -> Void)? = nil) {
+    class func insert(request: UploadFileRequest, textMessage: SendTextMessageRequest? = nil, resultEntity: ((QueueOfFileMessages) -> Void)? = nil) {
         if let entity = QueueOfFileMessages.crud.find(keyWithFromat: "uniqueId == %@", value: request.uniqueId) {
             resultEntity?(entity)
             return

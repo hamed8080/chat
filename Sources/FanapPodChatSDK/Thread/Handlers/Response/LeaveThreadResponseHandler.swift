@@ -20,7 +20,7 @@ class LeaveThreadResponseHandler: ResponseHandler {
 
         guard let threadId = chatMessage.subjectId else { return }
         CacheFactory.write(cacheType: .leaveThread(threadId))
-        PSM.shared.save()
+        CacheFactory.save()
 
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
 

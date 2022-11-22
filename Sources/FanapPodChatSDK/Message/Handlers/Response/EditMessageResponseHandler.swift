@@ -19,7 +19,7 @@ class EditMessageResponseHandler: ResponseHandler {
 
         CacheFactory.write(cacheType: .deleteEditMessageQueue(message))
         CacheFactory.write(cacheType: .message(message))
-        PSM.shared.save()
+        CacheFactory.save()
 
         guard let callback = Chat.sharedInstance.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
         callback(.init(uniqueId: chatMessage.uniqueId, result: message))

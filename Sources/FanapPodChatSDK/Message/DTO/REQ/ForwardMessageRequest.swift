@@ -7,23 +7,29 @@
 import Foundation
 public class ForwardMessageRequest: UniqueIdManagerRequest, Queueable, PlainTextSendable, SubjectProtocol {
     public let messageIds: [Int]
+    public let fromThreadId: Int
     public let threadId: Int
-    public let uniqueIds: [String]
+    public var uniqueIds: [String]
     var chatMessageType: ChatMessageVOTypes = .forwardMessage
     var subjectId: Int { threadId }
     var content: String? { "\(messageIds)" }
 
-    public init(threadId: Int,
+    public init(fromThreadId:Int,
+                threadId: Int,
                 messageIds: [Int],
-                uniqueId _: String? = nil)
+                uniqueIds: [String] = [])
     {
+        self.fromThreadId = fromThreadId
         self.threadId = threadId
         self.messageIds = messageIds
-        var uniqueIds: [String] = []
-        for _ in messageIds {
-            uniqueIds.append(UUID().uuidString)
-        }
         self.uniqueIds = uniqueIds
-        super.init(uniqueId: "\(uniqueIds)")
+        if self.uniqueIds.count == 0 {
+            var uniqueIds: [String] = []
+            for _ in messageIds {
+                uniqueIds.append(UUID().uuidString)
+            }
+            self.uniqueIds = uniqueIds
+        }
+        super.init(uniqueId: "\(self.uniqueIds)")
     }
 }
