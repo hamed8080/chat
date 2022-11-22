@@ -14,7 +14,7 @@ class UNArchiveThreadResponseHandler: ResponseHandler {
 
         guard let threadId = chatMessage.subjectId else { return }
         CacheFactory.write(cacheType: .archiveUnarchiveAhread(false, threadId))
-        PSM.shared.save()
+        CacheFactory.save()
 
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
         callback(.init(uniqueId: chatMessage.uniqueId, result: threadId))

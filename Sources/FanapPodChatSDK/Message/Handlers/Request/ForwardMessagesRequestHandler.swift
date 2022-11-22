@@ -24,6 +24,6 @@ class ForwardMessagesRequestHandler {
             chat.callbacksManager.addCallback(uniqueId: uniqueId, requesType: .forwardMessage, callback: nil, onSent: onSent, onDelivered: onDeliver, onSeen: onSeen)
         }
         CacheFactory.write(cacheType: .forwardMessageQueue(req))
-        PSM.shared.save()
+        CacheFactory.save()
     }
 }

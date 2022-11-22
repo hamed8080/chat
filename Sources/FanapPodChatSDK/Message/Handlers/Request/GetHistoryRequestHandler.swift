@@ -14,8 +14,6 @@ class GetHistoryRequestHandler {
                       _ editMessageNotSentRequests: CompletionType<[EditMessageRequest]>? = nil,
                       _ forwardMessageNotSentRequests: CompletionType<[ForwardMessageRequest]>? = nil,
                       _ fileMessageNotSentRequests: CompletionType<[(UploadFileRequest, SendTextMessageRequest)]>? = nil,
-                      _ uploadFileNotSentRequests: CompletionType<[UploadFileRequest]>? = nil,
-                      _ uploadImageNotSentRequests: CompletionType<[UploadImageRequest]>? = nil,
                       _ uniqueIdResult: UniqueIdResultType? = nil)
     {
         chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
@@ -44,22 +42,15 @@ class GetHistoryRequestHandler {
         }
 
         CacheFactory.get(useCache: fileMessageNotSentRequests != nil, cacheType: .fileMessageRequests(req.threadId)) { response in
-            forwardMessageNotSentRequests?(response.cacheResponse as? [ForwardMessageRequest], req.uniqueId, nil)
-        }
-
-        CacheFactory.get(useCache: uploadFileNotSentRequests != nil, cacheType: .uploadFileRequests(req.threadId)) { response in
-            forwardMessageNotSentRequests?(response.cacheResponse as? [ForwardMessageRequest], req.uniqueId, nil)
-        }
-
-        CacheFactory.get(useCache: uploadImageNotSentRequests != nil, cacheType: .uploadImageRequests(req.threadId)) { response in
-            forwardMessageNotSentRequests?(response.cacheResponse as? [ForwardMessageRequest], req.uniqueId, nil)
+            fileMessageNotSentRequests?(response.cacheResponse as? [(UploadFileRequest, SendTextMessageRequest)], req.uniqueId, nil)
         }
     }
 
     class func saveMessagesToCache(_ messages: [Message]?, _: CompletionType<[Message]>?) {
         messages?.forEach { message in
             CacheFactory.write(cacheType: .message(message))
+            CacheFactory.write(cacheType: .deleteQueue(message.uniqueId ?? ""))
         }
-        PSM.shared.save()
+        CacheFactory.save()
     }
 }

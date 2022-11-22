@@ -18,7 +18,7 @@ class SendTextMessageRequestHandler {
                                 onSent: onSent,
                                 onDelivered: onDeliver,
                                 onSeen: onSeen)
-        CacheFactory.write(cacheType: .sendTxetMessageQueue(req))
-        PSM.shared.save()
+        CacheFactory.write(cacheType: .deleteQueue(req.uniqueId))
+        CacheFactory.save()
     }
 }

@@ -15,6 +15,6 @@ class EditMessageRequestHandler {
             completion?(response.result as? Message, response.uniqueId, response.error)
         }
         CacheFactory.write(cacheType: .editMessageQueue(req))
-        PSM.shared.save()
+        CacheFactory.save()
     }
 }

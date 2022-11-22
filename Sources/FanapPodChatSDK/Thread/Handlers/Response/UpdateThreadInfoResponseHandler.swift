@@ -17,7 +17,7 @@ public class UpdateThreadInfoResponseHandler: ResponseHandler {
         chat.delegate?.chatEvent(event: .thread(.threadInfoUpdated(conversation)))
 
         CacheFactory.write(cacheType: .threads([conversation]))
-        PSM.shared.save()
+        CacheFactory.save()
 
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
         callback(.init(uniqueId: chatMessage.uniqueId, result: conversation))

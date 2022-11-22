@@ -21,8 +21,8 @@ class UploadImageRequestHandler {
         guard let token = chat.config?.token, let parameters = try? req.asDictionary() else { return }
         let headers = ["Authorization": "Bearer \(token)", "Content-type": "multipart/form-data"]
 
-        CacheFactory.write(cacheType: .uploadImageQueue(req))
-        PSM.shared.save()
+        CacheFactory.write(cacheType: .deleteQueue(req.uniqueId))
+        CacheFactory.save()
 
         UploadManager.upload(url: url,
                              headers: headers,
@@ -58,8 +58,8 @@ class UploadImageRequestHandler {
                                             actualWidth: req.wC)
                 let fileMetaData = FileMetaData(file: fileDetail, fileHash: uploadResponse.result?.hash, hashCode: uploadResponse.result?.hash, name: uploadResponse.result?.name)
                 uploadCompletion?(uploadResponse.result, fileMetaData, nil)
-                CacheFactory.write(cacheType: .deleteUploadImageQueue(req.uniqueId))
-                PSM.shared.save()
+                CacheFactory.write(cacheType: .deleteQueue(req.uniqueId))
+                CacheFactory.save()
                 chatDelegate?.chatEvent(event: .file(.uploaded(req)))
             } else if let error = error {
                 let error = ChatError(message: "\(ChatErrorCodes.networkError.rawValue) \(error)", errorCode: 6200, hasError: true)

@@ -16,7 +16,7 @@ class UserInfoResponseHandler: ResponseHandler {
         guard let data = chatMessage.content?.data(using: .utf8) else { return }
         guard let user = try? JSONDecoder().decode(User.self, from: data) else { return }
         CacheFactory.write(cacheType: .userInfo(user))
-        PSM.shared.save()
+        CacheFactory.save()
 
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
         callback(.init(uniqueId: chatMessage.uniqueId, result: user))

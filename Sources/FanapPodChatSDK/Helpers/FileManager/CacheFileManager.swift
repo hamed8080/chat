@@ -83,7 +83,7 @@ public class CacheFileManager {
             }
             CMFile.crud.delete(entity: file)
         }
-        PSM.shared.save()
+        CacheFactory.save()
     }
 
     public func deleteAllImages() {
@@ -98,7 +98,7 @@ public class CacheFileManager {
             }
             CMImage.crud.delete(entity: image)
         }
-        PSM.shared.save()
+        CacheFactory.save()
     }
 
     func deleteAllFilesWithCache() {
@@ -124,7 +124,7 @@ public class CacheFileManager {
         CMFile.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", fileModel.hashCode))
         CMFile.insert(request: fileModel)
         createDirectoryIfNotExist(paths: .files)
-        PSM.shared.save()
+        CacheFactory.save()
         let url = URL(fileURLWithPath: rootPath + "/\(FileManagerPaths.files.rawValue)").appendingPathComponent("\(fileModel.hashCode)")
         writeDataAt(url: url, data: data)
     }
@@ -134,7 +134,7 @@ public class CacheFileManager {
         CMImage.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", imageModel.hashCode))
         CMImage.insert(request: imageModel, isThumbnail: isThumbnail)
         createDirectoryIfNotExist(paths: .images)
-        PSM.shared.save()
+        CacheFactory.save()
         let url = URL(fileURLWithPath: rootPath + "/\(FileManagerPaths.images.rawValue)").appendingPathComponent("\(imageModel.hashCode)")
         writeDataAt(url: url, data: data)
     }
@@ -145,7 +145,7 @@ public class CacheFileManager {
             try? FileManager.default.removeItem(at: url)
         }
         CMImage.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", fileHashCode))
-        PSM.shared.save()
+        CacheFactory.save()
     }
 
     public func deleteFileFromCache(fileHashCode: String) {
@@ -154,7 +154,7 @@ public class CacheFileManager {
             try? FileManager.default.removeItem(at: url)
         }
         CMFile.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", fileHashCode))
-        PSM.shared.save()
+        CacheFactory.save()
     }
 
     public func delete(fileHashCode: String) {

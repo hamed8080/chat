@@ -99,10 +99,6 @@
         <attribute name="size" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="width" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
     </entity>
-    <entity name="CMInvitee" representedClassName="FanapPodChatSDK.CMInvitee" syncable="YES">
-        <attribute name="id" optional="YES" attributeType="String"/>
-        <attribute name="idType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-    </entity>
     <entity name="CMLinkedUser" representedClassName="FanapPodChatSDK.CMLinkedUser" syncable="YES">
         <attribute name="coreUserId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="image" optional="YES" attributeType="String"/>
@@ -209,11 +205,6 @@
         <relationship name="conversation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="tagParticipants" inverseEntity="CMConversation"/>
         <relationship name="tag" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMTag" inverseName="tagParticipants" inverseEntity="CMTag"/>
     </entity>
-    <entity name="CMThreadParticipants" representedClassName="FanapPodChatSDK.CMThreadParticipants" syncable="YES">
-        <attribute name="participantId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="threadId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="time" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-    </entity>
     <entity name="CMUser" representedClassName="FanapPodChatSDK.CMUser" syncable="YES">
         <attribute name="bio" optional="YES" attributeType="String"/>
         <attribute name="cellphoneNumber" optional="YES" attributeType="String"/>
@@ -238,11 +229,6 @@
         <attribute name="roles" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <relationship name="conversation" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="dummyUserRoles" inverseEntity="CMConversation"/>
-    </entity>
-    <entity name="MessageGaps" representedClassName="FanapPodChatSDK.MessageGaps" syncable="YES">
-        <attribute name="messageId" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="previousId" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="threadId" attributeType="Integer 64" usesScalarValueType="NO"/>
     </entity>
     <entity name="PhoneContact" representedClassName="FanapPodChatSDK.PhoneContact" syncable="YES">
         <attribute name="cellphoneNumber" optional="YES" attributeType="String"/>
@@ -282,12 +268,13 @@
         <attribute name="yC" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <entity name="QueueOfForwardMessages" representedClassName="FanapPodChatSDK.QueueOfForwardMessages" syncable="YES">
-        <attribute name="messageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="fromThreadId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="messageIds" optional="YES" attributeType="String"/>
         <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="typeCode" optional="YES" attributeType="String"/>
-        <attribute name="uniqueId" optional="YES" attributeType="String"/>
+        <attribute name="uniqueIds" optional="YES" attributeType="String"/>
     </entity>
     <entity name="QueueOfTextMessages" representedClassName="FanapPodChatSDK.QueueOfTextMessages" syncable="YES">
         <attribute name="messageType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
@@ -298,33 +285,5 @@
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="typeCode" optional="YES" attributeType="String"/>
         <attribute name="uniqueId" optional="YES" attributeType="String"/>
-    </entity>
-    <entity name="QueueOfUploadFiles" representedClassName="FanapPodChatSDK.QueueOfUploadFiles" syncable="YES">
-        <attribute name="dataToSend" optional="YES" attributeType="Binary"/>
-        <attribute name="fileExtension" optional="YES" attributeType="String"/>
-        <attribute name="fileName" optional="YES" attributeType="String"/>
-        <attribute name="fileSize" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="isPublic" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
-        <attribute name="mimeType" optional="YES" attributeType="String"/>
-        <attribute name="originalName" optional="YES" attributeType="String"/>
-        <attribute name="typeCode" optional="YES" attributeType="String"/>
-        <attribute name="uniqueId" optional="YES" attributeType="String"/>
-        <attribute name="userGroupHash" optional="YES" attributeType="String"/>
-    </entity>
-    <entity name="QueueOfUploadImages" representedClassName="FanapPodChatSDK.QueueOfUploadImages" syncable="YES">
-        <attribute name="dataToSend" optional="YES" attributeType="Binary"/>
-        <attribute name="fileExtension" optional="YES" attributeType="String"/>
-        <attribute name="fileName" optional="YES" attributeType="String"/>
-        <attribute name="fileSize" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="hC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="isPublic" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
-        <attribute name="mimeType" optional="YES" attributeType="String"/>
-        <attribute name="originalName" optional="YES" attributeType="String"/>
-        <attribute name="typeCode" optional="YES" attributeType="String"/>
-        <attribute name="uniqueId" optional="YES" attributeType="String"/>
-        <attribute name="userGroupHash" optional="YES" attributeType="String"/>
-        <attribute name="wC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="xC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="yC" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
     </entity>
 </model>

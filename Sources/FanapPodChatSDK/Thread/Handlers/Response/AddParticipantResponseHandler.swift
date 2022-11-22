@@ -15,7 +15,7 @@ class AddParticipantResponseHandler: ResponseHandler {
         guard let data = chatMessage.content?.data(using: .utf8) else { return }
         guard let conversation = try? JSONDecoder().decode(Conversation.self, from: data) else { return }
         CacheFactory.write(cacheType: .participants(conversation.participants, conversation.id))
-        PSM.shared.save()
+        CacheFactory.save()
         chat.delegate?.chatEvent(event: .thread(.threadLastActivityTime(time: chatMessage.time, threadId: chatMessage.subjectId)))
         chat.delegate?.chatEvent(event: .thread(.threadAddParticipants(thread: conversation, conversation.participants)))
 

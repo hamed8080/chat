@@ -23,7 +23,7 @@ class MuteThreadResponseHandler: ResponseHandler {
         let resposne = MuteThreadResponse(threadId: threadId)
 
         CacheFactory.write(cacheType: .muteUnmuteThread(threadId))
-        PSM.shared.save()
+        CacheFactory.save()
 
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
         callback(.init(uniqueId: chatMessage.uniqueId, result: resposne))

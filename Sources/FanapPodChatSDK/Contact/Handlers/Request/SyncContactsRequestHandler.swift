@@ -37,7 +37,7 @@ class SyncContactsRequestHandler {
                     completion(response, nil, error)
                 } else {
                     PhoneContact.updateOrInsertPhoneBooks(contacts: contactsToSync)
-                    PSM.shared.save()
+                    CacheFactory.save()
                     completion(response, nil, nil)
                 }
             }

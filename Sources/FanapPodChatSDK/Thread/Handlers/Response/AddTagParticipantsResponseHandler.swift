@@ -18,7 +18,7 @@ class AddTagParticipantsResponseHandler: ResponseHandler {
         if let tagId = chatMessage.subjectId {
             CacheFactory.write(cacheType: .tagParticipants(tagParticipants, tagId))
         }
-        PSM.shared.save()
+        CacheFactory.save()
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
         callback(.init(uniqueId: chatMessage.uniqueId, result: tagParticipants))
         chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .addTagParticipants)

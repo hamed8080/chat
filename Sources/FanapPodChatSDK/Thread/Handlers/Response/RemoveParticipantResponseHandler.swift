@@ -15,7 +15,7 @@ class RemoveParticipantResponseHandler: ResponseHandler {
         guard let data = chatMessage.content?.data(using: .utf8) else { return }
         guard let participants = try? JSONDecoder().decode([Participant].self, from: data) else { return }
         CacheFactory.write(cacheType: .removeParticipants(participants: participants, threadId: chatMessage.subjectId))
-        PSM.shared.save()
+        CacheFactory.save()
         chat.delegate?.chatEvent(event: .thread(.threadRemoveParticipants(participants)))
         chat.delegate?.chatEvent(event: .thread(.threadLastActivityTime(time: chatMessage.time, threadId: chatMessage.subjectId)))
 

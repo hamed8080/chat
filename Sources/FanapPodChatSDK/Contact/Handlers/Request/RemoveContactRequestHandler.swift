@@ -22,7 +22,7 @@ class RemoveContactRequestHandler {
     private class func removeFromCacheIfExist(chat _: Chat, removeContactResponse: RemoveContactResponse?, contactId: Int) {
         if removeContactResponse?.deteled == true {
             CacheFactory.write(cacheType: .deleteContacts([contactId]))
-            PSM.shared.save()
+            CacheFactory.save()
         }
     }
 }

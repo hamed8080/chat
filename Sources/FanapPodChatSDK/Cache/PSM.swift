@@ -25,7 +25,7 @@ class PSM {
         return container
     }()
 
-    func save() {
+    internal func save() {
         if context.hasChanges {
             do {
                 try context.save()

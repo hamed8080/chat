@@ -17,7 +17,7 @@ class PinMessageResponseHandler: ResponseHandler {
         chat.delegate?.chatEvent(event: .thread(.messagePin(threadId: chatMessage.subjectId, pinResponse)))
 
         CacheFactory.write(cacheType: .pinMessage(pinResponse, chatMessage.subjectId))
-        PSM.shared.save()
+        CacheFactory.save()
 
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
         callback(.init(uniqueId: chatMessage.uniqueId, result: pinResponse))

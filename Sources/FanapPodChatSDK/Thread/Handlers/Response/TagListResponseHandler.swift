@@ -16,7 +16,7 @@ class TagListResponseHandler: ResponseHandler {
         guard let tags = try? JSONDecoder().decode([Tag].self, from: data) else { return }
 
         CacheFactory.write(cacheType: .tags(tags))
-        PSM.shared.save()
+        CacheFactory.save()
 
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
         callback(.init(uniqueId: chatMessage.uniqueId, result: tags))
