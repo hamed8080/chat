@@ -171,7 +171,8 @@ public extension CMConversation {
         fetchRequest.predicate = orCompound
 
         let sortByTime = NSSortDescriptor(key: "time", ascending: false)
-        fetchRequest.sortDescriptors = [sortByTime]
+        let sortByPin = NSSortDescriptor(key: "pin", ascending: false)
+        fetchRequest.sortDescriptors = [sortByPin, sortByTime]
         let threads = crud.fetchWith(fetchRequest)?.compactMap { $0.getCodable() } ?? []
         return threads
     }

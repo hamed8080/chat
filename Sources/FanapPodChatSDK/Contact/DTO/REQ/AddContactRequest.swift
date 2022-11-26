@@ -11,7 +11,7 @@ public class AddContactRequest: UniqueIdManagerRequest, RestAPIProtocol {
     var url: String = "\(config.platformHost)\(Routes.addContacts.rawValue)"
     var urlString: String { url }
     var headers: [String: String] = ["_token_": config.token, "_token_issuer_": "1"]
-    var bodyData: Data? { toData() }
+    var bodyData: Data? { getParameterData() }
     var method: HTTPMethod = .post
 
     public var cellphoneNumber: String?

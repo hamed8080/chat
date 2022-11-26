@@ -25,11 +25,14 @@ public extension CMTagParticipant {
         model.threadId = tagParticipant.threadId as NSNumber?
 
         if let conversation = tagParticipant.conversation {
-            CMConversation.insertOrUpdate(conversations: [conversation]) { resultEntity in
-                model.conversation = resultEntity
+            if let threadId = conversation.id, let threadEnitity = CMConversation.crud.find(keyWithFromat: "id == %i", value: threadId) {
+                model.conversation = threadEnitity
+            } else {
+                CMConversation.insertOrUpdate(conversations: [conversation]) { resultEntity in
+                    model.conversation = resultEntity
+                }
             }
         }
-
         return model
     }
 
