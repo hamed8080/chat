@@ -117,7 +117,7 @@ public extension CMMessage {
             fetchRequest.predicate = NSPredicate(format: "uniqueId IN %@", uniqueIds)
         } else {
             var predicateArray = [NSPredicate]()
-            predicateArray.append(NSPredicate(format: "threadId == %i", req.threadId))
+            predicateArray.append(NSPredicate(format: "conversation.id == %i", req.threadId))
             if let formTime = req.fromTime as? NSNumber {
                 predicateArray.append(NSPredicate(format: "time >= %@", formTime))
             }

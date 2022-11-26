@@ -13,8 +13,12 @@ public extension CMMutualGroup {
         let model = entity ?? CMMutualGroup()
         model.idType = req.toBeUserVO.idType as NSNumber?
         model.mutualId = req.toBeUserVO.id
-        CMConversation.insertOrUpdate(conversations: [conversation]) { conversationEntity in
-            model.conversation = conversationEntity
+        if let threadId = conversation.id, let threadEnitity = CMConversation.crud.find(keyWithFromat: "id == %i", value: threadId) {
+            model.conversation = threadEnitity
+        } else {
+            CMConversation.insertOrUpdate(conversations: [conversation]) { resultEntity in
+                model.conversation = resultEntity
+            }
         }
         return model
     }
