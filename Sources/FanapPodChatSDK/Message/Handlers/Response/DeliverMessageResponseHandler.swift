@@ -11,16 +11,14 @@ class DeliverMessageResponseHandler: ResponseHandler {
     static func handle(_ asyncMessage: AsyncMessage) {
         guard let chatMessage = asyncMessage.chatMessage else { return }
         let chat = Chat.sharedInstance
-        let message = Message(chatMessage: chatMessage)
 
-        chat.delegate?.chatEvent(event: .message(.messageDelivery(message)))
-
-        CacheFactory.write(cacheType: .message(message))
-        CacheFactory.save()
-
-        if let callback = Chat.sharedInstance.callbacksManager.getDeliverCallback(chatMessage.uniqueId) {
-            let messageResponse = DeliverMessageResponse(isDeliver: true, messageId: message.id, threadId: chatMessage.subjectId, message: message, participantId: chatMessage.participantId)
-            callback(messageResponse, chatMessage.uniqueId, nil)
+        // TODO: Must fix when a message send it recieve deliver below code not working and deserialize
+        if let data = chatMessage.content?.data(using: .utf8), let deliverResponse = try? JSONDecoder().decode(DeliverMessageResponse.self, from: data) {
+            chat.delegate?.chatEvent(event: .message(.messageDelivery(deliverResponse)))
+            CacheFactory.write(cacheType: .messageDeliveredToUser(deliverResponse))
+            CacheFactory.save()
+            guard let callback = Chat.sharedInstance.callbacksManager.getDeliverCallback(chatMessage.uniqueId) else { return }
+            callback(deliverResponse, chatMessage.uniqueId, nil)
             chat.callbacksManager.removeDeliverCallback(uniqueId: chatMessage.uniqueId)
         }
     }

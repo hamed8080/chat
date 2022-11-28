@@ -12,14 +12,13 @@ class SeenMessageResponseHandler: ResponseHandler {
         guard let chatMessage = asyncMessage.chatMessage else { return }
         let chat = Chat.sharedInstance
 
-        let message = Message(chatMessage: chatMessage)
-        chat.delegate?.chatEvent(event: .message(.messageSeen(message)))
-        CacheFactory.write(cacheType: .message(message))
-        CacheFactory.save()
-
-        guard let callback = Chat.sharedInstance.callbacksManager.getSeenCallback(chatMessage.uniqueId) else { return }
-        let messageResponse = SeenMessageResponse(isSeen: true, messageId: message.id, threadId: chatMessage.subjectId, message: message, participantId: chatMessage.participantId)
-        callback(messageResponse, chatMessage.uniqueId, nil)
-        chat.callbacksManager.removeSeenCallback(uniqueId: chatMessage.uniqueId)
+        if let data = chatMessage.content?.data(using: .utf8), let seenResponse = try? JSONDecoder().decode(SeenMessageResponse.self, from: data) {
+            chat.delegate?.chatEvent(event: .message(.messageSeen(seenResponse)))
+            CacheFactory.write(cacheType: .messageSeenByUser(seenResponse))
+            CacheFactory.save()
+            guard let callback = Chat.sharedInstance.callbacksManager.getSeenCallback(chatMessage.uniqueId) else { return }
+            callback(seenResponse, chatMessage.uniqueId, nil)
+            chat.callbacksManager.removeSeenCallback(uniqueId: chatMessage.uniqueId)
+        }
     }
 }

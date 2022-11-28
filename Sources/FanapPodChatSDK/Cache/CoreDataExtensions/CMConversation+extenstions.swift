@@ -176,4 +176,18 @@ public extension CMConversation {
         let threads = crud.fetchWith(fetchRequest)?.compactMap { $0.getCodable() } ?? []
         return threads
     }
+
+    class func updateLastSeen(threadId: Int, messageId: Int) {
+        if let conversation = CMConversation.crud.find(keyWithFromat: "id == %i", value: threadId) {
+            let oldMessageSeenId = conversation.lastSeenMessageId as? Int
+            conversation.lastSeenMessageId = NSNumber(value: messageId)
+            if let oldMessageSeenId = oldMessageSeenId,
+               messageId > oldMessageSeenId,
+               let unreadCount = conversation.unreadCount as? Int,
+               unreadCount > 0
+            {
+                conversation.unreadCount = NSNumber(value: unreadCount - 1)
+            }
+        }
+    }
 }

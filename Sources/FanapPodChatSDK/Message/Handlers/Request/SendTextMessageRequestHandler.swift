@@ -18,7 +18,7 @@ class SendTextMessageRequestHandler {
                                 onSent: onSent,
                                 onDelivered: onDeliver,
                                 onSeen: onSeen)
-        CacheFactory.write(cacheType: .deleteQueue(req.uniqueId))
+        CacheFactory.write(cacheType: .sendTxetMessageQueue(req))
         CacheFactory.save()
     }
 }

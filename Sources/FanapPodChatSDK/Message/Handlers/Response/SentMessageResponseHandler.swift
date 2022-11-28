@@ -11,14 +11,15 @@ class SentMessageResponseHandler: ResponseHandler {
     static func handle(_ asyncMessage: AsyncMessage) {
         guard let chatMessage = asyncMessage.chatMessage else { return }
         let chat = Chat.sharedInstance
-
-        let message = Message(chatMessage: chatMessage)
-        chat.delegate?.chatEvent(event: .message(.messageSend(message)))
-        CacheFactory.write(cacheType: .deleteQueue(chatMessage.uniqueId))
-        CacheFactory.save()
-        guard let callback = Chat.sharedInstance.callbacksManager.getSentCallback(chatMessage.uniqueId) else { return }
-        let messageResponse = SentMessageResponse(isSent: true, messageId: message.id, threadId: chatMessage.subjectId, message: message, participantId: chatMessage.participantId)
-        callback(messageResponse, chatMessage.uniqueId, nil)
-        chat.callbacksManager.removeSentCallback(uniqueId: chatMessage.uniqueId)
+        if let stringMessageId = chatMessage.content, let messageId = Int(stringMessageId), let threadId = chatMessage.subjectId {
+            let sentResponse = SentMessageResponse(isSent: true, threadId: threadId, messageId: messageId, messageTime: UInt(chatMessage.time))
+            chat.delegate?.chatEvent(event: .message(.messageSent(sentResponse)))
+            CacheFactory.write(cacheType: .messageSentToUser(sentResponse))
+            CacheFactory.write(cacheType: .deleteQueue(chatMessage.uniqueId))
+            CacheFactory.save()
+            guard let callback = Chat.sharedInstance.callbacksManager.getSentCallback(chatMessage.uniqueId) else { return }
+            callback(sentResponse, chatMessage.uniqueId, nil)
+            chat.callbacksManager.removeSentCallback(uniqueId: chatMessage.uniqueId)
+        }
     }
 }

@@ -8,9 +8,9 @@ import Foundation
 
 public enum MessageEventTypes {
     case messageNew(Message)
-    case messageSend(Message)
-    case messageDelivery(Message)
-    case messageSeen(Message)
+    case messageSent(SentMessageResponse)
+    case messageDelivery(DeliverMessageResponse)
+    case messageSeen(SeenMessageResponse)
     case messageEdit(Message)
     case messageDelete(Message)
 }

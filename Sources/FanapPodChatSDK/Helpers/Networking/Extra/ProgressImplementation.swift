@@ -15,9 +15,7 @@ class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSessionTaskDe
     private var response: HTTPURLResponse?
     private var uniqueId: String
 
-    private var delegate: ChatDelegate? {
-        Chat.sharedInstance.delegate
-    }
+    private weak var delegate: ChatDelegate? = Chat.sharedInstance.delegate
 
     init(uniqueId: String, uploadProgress: UploadFileProgressType? = nil, downloadProgress: DownloadProgressType? = nil, downloadCompletion: ((Data?, HTTPURLResponse?, Error?) -> Void)? = nil) {
         self.uniqueId = uniqueId
