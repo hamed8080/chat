@@ -6,6 +6,7 @@
 
 import Foundation
 public class EditMessageRequest: UniqueIdManagerRequest, Queueable, PlainTextSendable, ReplyProtocol, MetadataProtocol, SubjectProtocol, MessageTypeProtocol {
+    public var queueTime: Date = Date()
     public var messageType: MessageType
     public let repliedTo: Int?
     public let messageId: Int

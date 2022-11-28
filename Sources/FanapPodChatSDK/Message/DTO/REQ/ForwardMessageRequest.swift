@@ -6,6 +6,7 @@
 
 import Foundation
 public class ForwardMessageRequest: UniqueIdManagerRequest, Queueable, PlainTextSendable, SubjectProtocol {
+    public var queueTime: Date = Date()
     public let messageIds: [Int]
     public let fromThreadId: Int
     public let threadId: Int

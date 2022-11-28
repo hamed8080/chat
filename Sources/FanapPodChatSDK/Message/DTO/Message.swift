@@ -48,7 +48,7 @@ open class Message: Codable, Hashable {
                 message: String? = nil,
                 messageType: MessageType? = nil,
                 metadata: String? = nil,
-                ownerId _: Int? = nil,
+                ownerId: Int? = nil,
                 pinned: Bool? = nil,
                 previousId: Int? = nil,
                 seen: Bool? = nil,
@@ -71,7 +71,7 @@ open class Message: Codable, Hashable {
         self.message = message
         self.messageType = messageType
         self.metadata = metadata
-        ownerId = participant?.id
+        self.ownerId = ownerId ?? participant?.id
         self.pinned = pinned
         self.previousId = previousId
         self.seen = seen

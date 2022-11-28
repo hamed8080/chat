@@ -6,12 +6,14 @@
 
 import Foundation
 public class MessageSeenRequest: UniqueIdManagerRequest, PlainTextSendable {
-    let messageId: String
-    var content: String? { messageId }
+    let messageId: Int
+    let threadId: Int
+    var content: String? { "\(messageId)" }
     var chatMessageType: ChatMessageVOTypes = .seen
 
-    public init(messageId: Int, uniqueId: String? = nil) {
-        self.messageId = "\(messageId)"
+    public init(threadId: Int, messageId: Int, uniqueId: String? = nil) {
+        self.messageId = messageId
+        self.threadId = threadId
         super.init(uniqueId: uniqueId)
     }
 }

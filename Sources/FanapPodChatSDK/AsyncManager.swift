@@ -19,7 +19,7 @@ internal class AsyncManager: AsyncDelegate {
     private(set) var chatServerPingTimer: Timer?
 
     /// This queue will live till application is running and this class is in memory, be careful it's not persistent on storage.
-    private(set) var queue: [String: Queueable] = [:]
+    private var queue: [String: Queueable] = [:]
 
     public init() {}
 
@@ -40,6 +40,7 @@ internal class AsyncManager: AsyncDelegate {
         if webrtcSenderPeerIds.contains(asyncMessage.senderId ?? 0) || webrtcPeerNames.contains(asyncMessage.peerName ?? "") {
             WebRTCClient.instance?.messageReceived(asyncMessage)
         }
+        removeFromQueue(asyncMessage: asyncMessage)
     }
 
     /// A delegate that tells the status of the async connection.
@@ -53,9 +54,7 @@ internal class AsyncManager: AsyncDelegate {
     }
 
     /// It will be only used whenever a client implements a custom async class by itself.
-    func asyncMessageSent(message: Data?, error: AsyncError?) {
-        removeFromQueue(message: message, error: error)
-    }
+    func asyncMessageSent(message: Data?, error: AsyncError?) {}
 
     /// A delegate to raise an error.
     public func asyncError(error: AsyncError) {
@@ -85,9 +84,22 @@ internal class AsyncManager: AsyncDelegate {
         }
     }
 
-    private func removeFromQueue(message: Data?, error: AsyncError?) {
-        if let uniqueId = SendChatMessageVO(with: message)?.uniqueId, queue[uniqueId] != nil, error == nil {
+    private func removeFromQueue(asyncMessage: AsyncMessage) {
+        if let uniqueId = SendChatMessageVO(with: asyncMessage)?.uniqueId, queue[uniqueId] != nil {
             queue.removeValue(forKey: uniqueId)
+        }
+    }
+
+    /// Send queueable each one by one after ``ChatState.chatReady`` with 2 seconds interval between each message to prevent server rejection.
+    func sendQueuesOnReconnect() {
+        var interval: TimeInterval = 0
+        queue.sorted{$0.value.queueTime < $1.value.queueTime}.forEach { key, item in
+            if let sendable = item as? ChatSendable {
+                Timer.scheduledTimer(withTimeInterval: interval + 2, repeats: false) { [weak self] timer in
+                    self?.sendData(sendable: sendable)
+                }
+            }
+            interval += 2
         }
     }
 

@@ -29,6 +29,7 @@ class UserInfoRequestHandler {
                     if let user = user {
                         Chat.sharedInstance.setUser(user: user)
                         Chat.sharedInstance.delegate?.chatState(state: .chatReady, currentUser: user, error: nil)
+                        Chat.sharedInstance.asyncManager.sendQueuesOnReconnect()
                         timer.invalidate()
                     } else if count < maxRetry {
                         count += 1
@@ -42,6 +43,7 @@ class UserInfoRequestHandler {
         } else {
             // it mean chat was connected before and reconnected again
             Chat.sharedInstance.delegate?.chatState(state: .chatReady, currentUser: Chat.sharedInstance.userInfo, error: nil)
+            Chat.sharedInstance.asyncManager.sendQueuesOnReconnect()
             Chat.sharedInstance.asyncManager.sendPingTimer()
         }
     }

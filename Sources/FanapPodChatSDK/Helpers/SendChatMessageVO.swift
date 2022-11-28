@@ -9,14 +9,14 @@ import FanapPodAsyncSDK
 
 public struct SendChatMessageVO: Codable {
     let type: Int
-    let token: String
+    let token: String?
     var content: String?
     var messageType: Int?
     var metadata: String?
     var repliedTo: Int?
     var systemMetadata: String?
     var subjectId: Int?
-    var tokenIssuer: Int = 1
+    var tokenIssuer: Int? = 1
     var typeCode: String?
     var uniqueId: String?
 
@@ -63,6 +63,12 @@ public struct SendChatMessageVO: Codable {
               let asyncMessageData = try? JSONDecoder().decode(AsyncMessage.self, from: data).content?.data(using: .utf8),
               let asyncMessageVOData = try? JSONDecoder().decode(SendAsyncMessageVO.self, from: asyncMessageData).content.data(using: .utf8),
               let chatMessage = try? JSONDecoder().decode(SendChatMessageVO.self, from: asyncMessageVOData) else { return nil }
+        self = chatMessage
+    }
+
+    init?(with asyncMessage: AsyncMessage?) {
+        guard let data = asyncMessage?.content?.data(using: .utf8),
+              let chatMessage = try? JSONDecoder().decode(SendChatMessageVO.self, from: data) else { return nil }
         self = chatMessage
     }
 }

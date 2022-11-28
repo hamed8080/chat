@@ -80,6 +80,10 @@ public class CacheFactory {
         case deleteTagParticipants(_ tagParticipants: [TagParticipant])
         case archiveUnarchiveAhread(_ isArchive: Bool, _ threadId: Int)
         case lastThreadMessageUpdated(_ threadId: Int, _ lastMessage: Message)
+        case lastThreadMessageSeen(_ threadId: Int, _ messageId: Int)
+        case messageSentToUser(_ sentResponse: SentMessageResponse)
+        case messageDeliveredToUser(_ deliverResponse: DeliverMessageResponse)
+        case messageSeenByUser(_ seenResponse: SeenMessageResponse)
     }
 
     public class func get(useCache: Bool = false, cacheType: ReadCacheType, completion: OnChatResponseType? = nil) {
@@ -192,11 +196,11 @@ public class CacheFactory {
             case let .unpinMessage(_: unpinMessage, _: threadId):
                 CMPinMessage.unpinMessage(pinMessage: unpinMessage, threadId: threadId)
             case let .clearAllHistory(_: threadId):
-                CMMessage.crud.deleteWith(predicate: NSPredicate(format: "threadId == %i", threadId))
+                CMMessage.crud.deleteWith(predicate: NSPredicate(format: "conversation.id == %i OR threadId == %i", threadId, threadId))
             case let .deleteMessage(_: threadId, _: messageId):
-                CMMessage.crud.deleteEntityWithPredicate(predicate: NSPredicate(format: "threadId == %i AND id == %i", threadId, messageId))
+                CMMessage.crud.deleteEntityWithPredicate(predicate: NSPredicate(format: "conversation.id == %i OR threadId == %i AND id == %i", threadId, threadId, messageId))
             case let .deleteMessages(_: threadId, _: messageIds):
-                CMMessage.crud.fetchWith(NSPredicate(format: "threadId == %i AND id IN %@", threadId, messageIds))?.forEach { entity in
+                CMMessage.crud.fetchWith(NSPredicate(format: "conversation.id == %i OR threadId == %i AND id IN %@", threadId, threadId, messageIds))?.forEach { entity in
                     CMMessage.crud.delete(entity: entity)
                 }
             case let .sendTxetMessageQueue(_: req):
@@ -319,6 +323,14 @@ public class CacheFactory {
                         lastMessageEntity.conversation?.lastMessageVO = lastMessageEntity
                     }
                 }
+            case let .lastThreadMessageSeen(_: threadId, _: messageId):
+                CMConversation.updateLastSeen(threadId: threadId, messageId: messageId)
+            case let .messageSentToUser(_: sentResponse):
+                CMMessage.messageSentToUserToUser(sentResponse)
+            case let .messageDeliveredToUser(_: deliverResponse):
+                CMMessage.deliveredToUser(deliverResponse)
+            case let .messageSeenByUser(_: seenResponse):
+                CMMessage.updateSeenByUser(seenResponse)
             }
         }
     }

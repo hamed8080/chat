@@ -8,7 +8,9 @@ import Foundation
 import FanapPodAsyncSDK
 
 /// If a message is marked as Queueable, it can be resent automatically by SDK whenever chat is in `chatReady` state.
-protocol Queueable {}
+protocol Queueable {
+    var queueTime: Date { get set }
+}
 
 protocol UniqueIdProtocol {
     var uniqueId: String { get }
