@@ -16,8 +16,8 @@ class MessageResponseHandler: ResponseHandler {
         chat.delegate?.chatEvent(event: .message(.messageNew(message)))
 
         chat.delegate?.chatEvent(event: .thread(.threadLastActivityTime(time: chatMessage.time, threadId: chatMessage.subjectId)))
-        let unreadCount = try? JSONDecoder().decode(UnreadCount.self, from: chatMessage.content?.data(using: .utf8) ?? Data())
-        chat.delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(threadId: chatMessage.subjectId ?? 0, count: unreadCount?.unreadCount ?? 0)))
+        let unreadCount = message.conversation?.unreadCount ?? 0
+        chat.delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(threadId: chatMessage.subjectId ?? 0, count: unreadCount)))
 
         if chat.config?.enableCache == true {
             if message.threadId == nil {

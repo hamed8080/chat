@@ -72,7 +72,8 @@ class ReceiveMessageFactory {
             IsPublicThreadNameAvailableResponseHandler.handle(asyncMessage)
         case .joinThread:
             JoinThreadResponseHandler.handle(asyncMessage)
-        case .lastSeenUpdated:
+        case .lastMssageSeenUpdated:
+            LastSeenResponseHandler.handle(asyncMessage)
             break
         case .leaveThread:
             LeaveThreadResponseHandler.handle(asyncMessage)

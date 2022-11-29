@@ -36,7 +36,7 @@ public enum ChatMessageVOTypes: Int, Codable, SafeDecodable {
     case editMessage = 28
     case deleteMessage = 29
     case threadInfoUpdated = 30
-    case lastSeenUpdated = 31
+    case lastMssageSeenUpdated = 31
     case getMessageDeleveryParticipants = 32
     case getMessageSeenParticipants = 33
     case isNameAvailable = 34
