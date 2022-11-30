@@ -19,19 +19,17 @@ class MessageResponseHandler: ResponseHandler {
         let unreadCount = message.conversation?.unreadCount ?? 0
         chat.delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(threadId: chatMessage.subjectId ?? 0, count: unreadCount)))
 
-        if chat.config?.enableCache == true {
-            if message.threadId == nil {
-                message.threadId = chatMessage.subjectId ?? message.conversation?.id
-            }
-            CacheFactory.write(cacheType: .message(message))
+        if message.threadId == nil {
+            message.threadId = chatMessage.subjectId ?? message.conversation?.id
+        }
+        CacheFactory.write(cacheType: .message(message))
 
-            // Check that we are not the sender of the message and message come from another person.
-            if let messageId = message.id, message.participant?.id != Chat.sharedInstance.userInfo?.id {
-                chat.deliver(.init(messageId: messageId))
-            }
-            if let threadId = message.threadId {
-                CacheFactory.write(cacheType: .setThreadUnreadCount(threadId, message.conversation?.unreadCount ?? 0))
-            }
+        // Check that we are not the sender of the message and message come from another person.
+        if let messageId = message.id, message.participant?.id != Chat.sharedInstance.userInfo?.id {
+            chat.deliver(.init(messageId: messageId))
+        }
+        if let threadId = message.threadId {
+            CacheFactory.write(cacheType: .setThreadUnreadCount(threadId, message.conversation?.unreadCount ?? 0))
         }
         CacheFactory.save()
     }

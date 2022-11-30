@@ -325,6 +325,8 @@ public class CacheFactory {
                 }
             case let .lastThreadMessageSeen(_: threadId, _: messageId):
                 CMConversation.updateLastSeen(threadId: threadId, messageId: messageId)
+                // After sending seen message to the server we should update all prior messages to seen and deliver mode in a thread.
+                CMMessage.updateSeenByUser(.init(messageState: .seen, threadId: threadId, messageId: messageId))
             case let .messageSentToUser(_: sentResponse):
                 CMMessage.messageSentToUserToUser(sentResponse)
             case let .messageDeliveredToUser(_: deliverResponse):

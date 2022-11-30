@@ -9,8 +9,6 @@ class SeenRequestHandler {
     class func handle(_ req: MessageSeenRequest, _ chat: Chat, _ uniqueIdResult: UniqueIdResultType? = nil) {
         chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult)
         CacheFactory.write(cacheType: .lastThreadMessageSeen(req.threadId, req.messageId))
-        if PSM.shared.context.hasChanges {
-            CacheFactory.save()
-        }
+        CacheFactory.save()        
     }
 }

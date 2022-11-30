@@ -38,7 +38,7 @@ public extension CMMessage {
     class func convertMesageToCM(message: Message, entity: CMMessage? = nil, conversation: CMConversation?) -> CMMessage {
         let model = entity ?? CMMessage()
         model.deletable = message.deletable as NSNumber?
-        model.delivered = message.delivered as NSNumber?
+        model.delivered = message.delivered as NSNumber? ?? model.delivered
         model.editable = message.editable as NSNumber?
         model.edited = message.edited as NSNumber?
         model.id = message.id as NSNumber?
@@ -49,7 +49,7 @@ public extension CMMessage {
         model.ownerId = message.ownerId as NSNumber?
         model.pinned = message.pinned as NSNumber?
         model.previousId = message.previousId as NSNumber?
-        model.seen = message.seen as NSNumber?
+        model.seen = message.seen as NSNumber? ?? model.seen
         model.systemMetadata = message.systemMetadata
         model.threadId = message.threadId as NSNumber?
         model.time = message.time as NSNumber?
@@ -78,29 +78,16 @@ public extension CMMessage {
         return model
     }
 
-    class func insertOrUpdate(message: Message, resultEntity: ((CMMessage) -> Void)? = nil) {
-        if let conversation = message.conversation,
-           let threadId = conversation.id,
-           let findedThread = CMConversation.crud.find(keyWithFromat: "id == %i", value: threadId)
-        {
-            message.threadId = conversation.id
-            insertOrUpdate(message: message, conversation: findedThread) { messageEntity in
-                findedThread.lastMessageVO = messageEntity
-                findedThread.lastMessage = messageEntity.message
-                findedThread.unreadCount = messageEntity.conversation?.unreadCount ?? 0
-                resultEntity?(messageEntity)
-            }
-        }
-    }
-
-    class func insertOrUpdate(message: Message, conversation: CMConversation?, resultEntity: ((CMMessage) -> Void)? = nil) {
+    class func insertOrUpdate(message: Message, conversation: CMConversation? = nil , resultEntity: ((CMMessage) -> Void)? = nil) {
         if let id = message.id, let findedEntity = CMMessage.crud.find(keyWithFromat: "id == %i", value: id) {
             let cmMessage = convertMesageToCM(message: message, entity: findedEntity, conversation: conversation)
             resultEntity?(cmMessage)
-        } else {
-            CMMessage.crud.insert { cmMessage in
-                let cmMessage = convertMesageToCM(message: message, entity: cmMessage, conversation: conversation)
-                resultEntity?(cmMessage)
+        } else if let conversation = message.conversation {
+            CMConversation.insertOrUpdate(conversations: [conversation]) { conversationEntity in
+                CMMessage.crud.insert { cmMessage in
+                    let cmMessage = convertMesageToCM(message: message, entity: cmMessage, conversation: conversationEntity)
+                    resultEntity?(cmMessage)
+                }
             }
         }
     }
@@ -149,7 +136,7 @@ public extension CMMessage {
 
     class func updateSeenByUser(_ seenResponse: MessageResponse) {
         if let messageId = seenResponse.messageId, let threadId = seenResponse.threadId {
-            CMMessage.crud.fetchWith(NSPredicate(format: "(conversation.id == %i OR threadId == %i) AND id <= %i", threadId, threadId, messageId))?.forEach{ messageEntity in
+            CMMessage.crud.fetchWith(NSPredicate(format: "(conversation.id == %i OR threadId == %i) AND id <= %i AND seen == NULL", threadId, threadId, messageId))?.forEach{ messageEntity in
                 messageEntity.delivered =  NSNumber(booleanLiteral: true)
                 messageEntity.seen =  NSNumber(booleanLiteral: true)
             }
