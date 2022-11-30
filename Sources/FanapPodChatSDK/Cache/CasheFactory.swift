@@ -81,9 +81,9 @@ public class CacheFactory {
         case archiveUnarchiveAhread(_ isArchive: Bool, _ threadId: Int)
         case lastThreadMessageUpdated(_ threadId: Int, _ lastMessage: Message)
         case lastThreadMessageSeen(_ threadId: Int, _ messageId: Int)
-        case messageSentToUser(_ sentResponse: SentMessageResponse)
-        case messageDeliveredToUser(_ deliverResponse: DeliverMessageResponse)
-        case messageSeenByUser(_ seenResponse: SeenMessageResponse)
+        case messageSentToUser(_ sentResponse: MessageResponse)
+        case messageDeliveredToUser(_ deliverResponse: MessageResponse)
+        case messageSeenByUser(_ seenResponse: MessageResponse)
     }
 
     public class func get(useCache: Bool = false, cacheType: ReadCacheType, completion: OnChatResponseType? = nil) {

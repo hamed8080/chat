@@ -25,7 +25,8 @@ class MessageResponseHandler: ResponseHandler {
             }
             CacheFactory.write(cacheType: .message(message))
 
-            if let messageId = message.id, message.participant?.id != nil { // check message has participant id and not a system broadcast message
+            // Check that we are not the sender of the message and message come from another person.
+            if let messageId = message.id, message.participant?.id != Chat.sharedInstance.userInfo?.id {
                 chat.deliver(.init(messageId: messageId))
             }
             if let threadId = message.threadId {

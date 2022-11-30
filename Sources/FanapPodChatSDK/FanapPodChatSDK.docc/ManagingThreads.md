@@ -126,10 +126,10 @@ Chat.sharedInstance.joinThread(.init(threadName: "MyPublicThreadName")) { thread
 ```
 
 ### Close a thread
-Admin of a thread can close a thread to prevent participants send a message. The Thread must be one of types: ``ThreadTypes/CHANNEL``, ``ThreadTypes/CHANNEL_GROUP``,  ``ThreadTypes/NORMAL``.
+Admin of a thread can close a thread to prevent participants send a message. The Thread must be one of types: ``ThreadTypes/channel``, ``ThreadTypes/channelGroup``,  ``ThreadTypes/normal``.
 Use mehod ``Chat/closeThread(_:completion:uniqueIdResult:)`` like below:
 
->Tip: Keep in mine ``ThreadTypes/NORMAL`` must be a group, not a P2P thread.
+>Tip: Keep in mine ``ThreadTypes/normal`` must be a group, not a P2P thread.
 
 ```swift
 Chat.sharedInstance.closeThread(.init(threadId: 123456)) { closedThreadId, uniqueId, error in
@@ -195,7 +195,7 @@ Chat.sharedInstance.leaveThreadSaftly(req) { user, uniqueId, error in
 ```
 
 ### Delete a thread
-If you have a ``Roles/OWNERSHIP`` access for this thread you could completely delete the thread. ``Chat/deleteThread(_:completion:uniqueIdResult:)``.
+If you have a ``Roles/ownership`` access for this thread you could completely delete the thread. ``Chat/deleteThread(_:completion:uniqueIdResult:)``.
 
 >Important: Following things will happen if you delete a thread:
 - All members are deleted from the channel or group and will receive a message about it.

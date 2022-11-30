@@ -29,7 +29,7 @@ public class Chat {
     internal let asyncManager: AsyncManager = .init()
     internal var logger: Logger?
 
-    /// Current user info of the application it'll be filled after chat is in the ``ChatState/CHAT_READY``  state.
+    /// Current user info of the application it'll be filled after chat is in the ``ChatState/chatReady``  state.
     public private(set) var userInfo: User?
     var token: String?
 

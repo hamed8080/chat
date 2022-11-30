@@ -1,6 +1,21 @@
 # Managing Messages
 You could Add, delete, edit, reply, forward and so many more.
 
+### Message States
+![How chat sdk works behind the scene.](message-flow.png)
+
+Each message has 5 phases to send to the opposite person or in a group thread.
+1. Stage waiting to send it to the chat server but there isn't any response yet, so the message just has a uniqueId, not an ``Message/id``.
+2. In this stage, the message is added to a queue in the cache with the power of **CoreData**, to live there for resending, if the message wasn't sent to the server.
+3. In stage 3, the server receives the message and will respond with types ``ChatMessageVOTypes/sent`` and ``ChatMessageVOTypes/message`` at the same time.
+4. When another person receives the message, it should send the **deliver** event to the sender, which is done behind the scene by the chat SDK.
+5. When another person opens the thread and sees the message, it should send a seen with type ``ChatMessageVOTypes/seen`` response to the sender.
+
+>Important: After a message has been sent to the server, it will be deleted automatically from the cache.
+
+>Important: If the device is in runtime mode and the app wasn't terminated by the user or OS a queue exists to resend messages automatically when chat SDK is in ``ChatState/chatReady`` state again, by two second time interval one by one.
+
+
 ### Send Text Message
 
 To send a simple text message insisde a thread call the method ``Chat/sendTextMessage(_:uniqueIdresult:onSent:onSeen:onDeliver:)`` like this:
@@ -87,7 +102,7 @@ Chat.sharedInstance.forwardMessages(req) { uniqueId in
 
 ### Get History
 
-A list of messages of a thread for this reason call method ``Chat/getHistory(_:completion:cacheResponse:textMessageNotSentRequests:editMessageNotSentRequests:forwardMessageNotSentRequests:fileMessageNotSentRequests:uploadFileNotSentRequests:uploadImageNotSentRequests:uniqueIdResult:)`` like this:
+A list of messages of a thread for this reason call method ``Chat/getHistory(_:completion:cacheResponse:textMessageNotSentRequests:editMessageNotSentRequests:forwardMessageNotSentRequests:fileMessageNotSentRequests:uniqueIdResult:)`` like this:
 >Important: Messages those didn't send properly will inform you of the appropriate closures.
 ```swift
 let req = GetHistoryRequest(threadId: 123456, count: 100, offset: 0)
@@ -273,7 +288,7 @@ Chat.sharedInstance.sendSignalMessage(.init(signalType: .RECORD_VOICE, threadId:
 
 ### Export Messages in CSV
 
-To export a messages of a thread inside a `CSV` file, call the method ``Chat/exportChat(_:localIdentifire:_:uniqueIdResult:)`` like this:
+To export a messages of a thread inside a `CSV` file, call the method ``Chat/exportChat(_:_:uniqueIdResult:)`` like this:
 >Important: Please remove the created file after you have finished the use of this file.
 
 >Note: Every time you call this function it will remove the older file.

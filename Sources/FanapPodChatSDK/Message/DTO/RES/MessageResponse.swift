@@ -5,13 +5,22 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
+
+public enum MessageResposneState {
+    case sent
+    case delivered
+    case seen
+}
+
 public class MessageResponse: Decodable {
     public var threadId: Int?
     public var participantId: Int?
     public var messageId: Int?
     public var messageTime: UInt?
+    public var messageState: MessageResposneState?
 
-    public init(threadId: Int? = nil, participantId: Int? = nil, messageId: Int? = nil, messageTime: UInt? = nil) {
+    public init(messageState: MessageResposneState, threadId: Int? = nil, participantId: Int? = nil, messageId: Int? = nil, messageTime: UInt? = nil) {
+        self.messageState = messageState
         self.threadId = threadId
         self.participantId = participantId
         self.messageId = messageId
@@ -31,49 +40,5 @@ public class MessageResponse: Decodable {
         self.participantId = try container.decodeIfPresent(Int.self, forKey: .participantId)
         self.messageId = try container.decodeIfPresent(Int.self, forKey: .messageId)
         self.messageTime = try container.decodeIfPresent(UInt.self, forKey: .messageTime)
-    }
-}
-
-public class SentMessageResponse: MessageResponse {
-    public var isSent: Bool
-
-    public init(isSent: Bool, threadId: Int? = nil, messageId: Int? = nil, messageTime: UInt? = nil) {
-        self.isSent = isSent
-        super.init(threadId: threadId, participantId: nil, messageId: messageId, messageTime: messageTime)
-    }
-
-    required public init(from decoder: Decoder) throws {
-        isSent = true
-        try super.init(from: decoder)
-    }
-}
-
-public class DeliverMessageResponse: MessageResponse {
-    public var isDeliver: Bool
-
-
-    public init(isDeliver: Bool, threadId: Int? = nil, messageId: Int? = nil, messageTime: UInt? = nil) {
-        self.isDeliver = isDeliver
-        super.init(threadId: threadId, messageId: messageId, messageTime: messageTime)
-    }
-
-    required public init(from decoder: Decoder) throws {
-        isDeliver = true
-        try super.init(from: decoder)
-    }
-}
-
-public class SeenMessageResponse: MessageResponse {
-    public var isSeen: Bool
-
-
-    public init(isSeen: Bool, threadId: Int? = nil, messageId: Int? = nil, messageTime: UInt? = nil) {
-        self.isSeen = isSeen
-        super.init(threadId: threadId, messageId: messageId, messageTime: messageTime)
-    }
-
-    required public init(from decoder: Decoder) throws {
-        isSeen = true
-        try super.init(from: decoder)
     }
 }
