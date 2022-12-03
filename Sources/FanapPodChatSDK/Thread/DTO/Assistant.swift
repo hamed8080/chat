@@ -52,15 +52,3 @@ open class Assistant: Codable {
         try container.encodeIfPresent(roleTypes, forKey: .roleTypes)
     }
 }
-
-public struct AssistantEventModel {
-    let assistants: [Assistant]
-    let type: AssistantEventType
-}
-
-public enum AssistantEventType {
-    case registerAssistant
-    case blockAssistant
-    case unblockAssistant
-    case deactiveAssistants
-}

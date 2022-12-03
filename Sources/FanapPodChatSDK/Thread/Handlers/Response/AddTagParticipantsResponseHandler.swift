@@ -14,7 +14,7 @@ class AddTagParticipantsResponseHandler: ResponseHandler {
 
         guard let data = chatMessage.content?.data(using: .utf8) else { return }
         guard let tagParticipants = try? JSONDecoder().decode([TagParticipant].self, from: data) else { return }
-        chat.delegate?.chatEvent(event: .tag(.init(tagParticipants: tagParticipants, type: .addTagParticipant)))
+        chat.delegate?.chatEvent(event: .tag(.addTagParticipant(tagParticipants)))
         if let tagId = chatMessage.subjectId {
             CacheFactory.write(cacheType: .tagParticipants(tagParticipants, tagId))
         }

@@ -14,7 +14,7 @@ public class DeactiveAssistantsResponseHandler: ResponseHandler {
 
         guard let data = chatMessage.content?.data(using: .utf8) else { return }
         guard let assistants = try? JSONDecoder().decode([Assistant].self, from: data) else { return }
-        chat.delegate?.chatEvent(event: .assistant(.init(assistants: assistants, type: .deactiveAssistants)))
+        chat.delegate?.chatEvent(event: .assistant(.deactiveAssistants(assistants)))
         CacheFactory.write(cacheType: .deleteAssistants(assistants))
         CacheFactory.save()
 

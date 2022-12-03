@@ -14,7 +14,7 @@ class EditTagResponseHandler: ResponseHandler {
 
         guard let data = chatMessage.content?.data(using: .utf8) else { return }
         guard let tag = try? JSONDecoder().decode(Tag.self, from: data) else { return }
-        chat.delegate?.chatEvent(event: .tag(.init(tag: tag, type: .editTag)))
+        chat.delegate?.chatEvent(event: .tag(.editTag(tag)))
         CacheFactory.write(cacheType: .tags([tag]))
         CacheFactory.save()
 

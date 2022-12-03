@@ -14,6 +14,11 @@ public class BlockUnblockAssistantsResponseHandler: ResponseHandler {
 
         guard let data = chatMessage.content?.data(using: .utf8) else { return }
         guard let assistants = try? JSONDecoder().decode([Assistant].self, from: data) else { return }
+        if asyncMessage.chatMessage?.type == .blockAssistant {
+            chat.delegate?.chatEvent(event: .assistant(.blockAssistant(assistants)))
+        } else if asyncMessage.chatMessage?.type == .unblockAssistant {
+            chat.delegate?.chatEvent(event: .assistant(.unblockAssistant(assistants)))
+        }
         CacheFactory.write(cacheType: .insertOrUpdateAssistants(assistants))
         CacheFactory.save()
 

@@ -14,7 +14,7 @@ class RemoveTagParticipantsResponseHandler: ResponseHandler {
 
         guard let data = chatMessage.content?.data(using: .utf8) else { return }
         guard let tagParticipants = try? JSONDecoder().decode([TagParticipant].self, from: data) else { return }
-        chat.delegate?.chatEvent(event: .tag(.init(tagParticipants: tagParticipants, type: .removeTagParticipant)))
+        chat.delegate?.chatEvent(event: .tag(.removeTagParticipant(tagParticipants)))
         CacheFactory.write(cacheType: .deleteTagParticipants(tagParticipants))
         CacheFactory.save()
 

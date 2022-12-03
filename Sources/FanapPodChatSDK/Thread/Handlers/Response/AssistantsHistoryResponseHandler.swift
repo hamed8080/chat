@@ -14,6 +14,7 @@ public class AssistantsHistoryResponseHandler: ResponseHandler {
 
         guard let data = chatMessage.content?.data(using: .utf8) else { return }
         guard let assistantsActions = try? JSONDecoder().decode([AssistantAction].self, from: data) else { return }
+        chat.delegate?.chatEvent(event: .assistant(.assistantActions(assistantsActions)))
 
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
         callback(.init(uniqueId: chatMessage.uniqueId, result: assistantsActions))
