@@ -11,9 +11,8 @@ class DeliverMessageResponseHandler: ResponseHandler {
     static func handle(_ asyncMessage: AsyncMessage) {
         guard let chatMessage = asyncMessage.chatMessage else { return }
         let chat = Chat.sharedInstance
-
-        // TODO: Must fix when a message send it recieve deliver below code not working and deserialize
-        if let data = chatMessage.content?.data(using: .utf8), let deliverResponse = try? JSONDecoder().decode(DeliverMessageResponse.self, from: data) {
+        if let data = chatMessage.content?.data(using: .utf8), let deliverResponse = try? JSONDecoder().decode(MessageResponse.self, from: data) {
+            deliverResponse.messageState = .delivered
             chat.delegate?.chatEvent(event: .message(.messageDelivery(deliverResponse)))
             CacheFactory.write(cacheType: .messageDeliveredToUser(deliverResponse))
             CacheFactory.save()

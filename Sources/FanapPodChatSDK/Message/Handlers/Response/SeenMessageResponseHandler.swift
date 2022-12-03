@@ -12,7 +12,8 @@ class SeenMessageResponseHandler: ResponseHandler {
         guard let chatMessage = asyncMessage.chatMessage else { return }
         let chat = Chat.sharedInstance
 
-        if let data = chatMessage.content?.data(using: .utf8), let seenResponse = try? JSONDecoder().decode(SeenMessageResponse.self, from: data) {
+        if let data = chatMessage.content?.data(using: .utf8), let seenResponse = try? JSONDecoder().decode(MessageResponse.self, from: data) {
+            seenResponse.messageState = .seen
             chat.delegate?.chatEvent(event: .message(.messageSeen(seenResponse)))
             CacheFactory.write(cacheType: .messageSeenByUser(seenResponse))
             CacheFactory.save()

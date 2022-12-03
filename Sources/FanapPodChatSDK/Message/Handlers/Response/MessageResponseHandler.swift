@@ -16,21 +16,20 @@ class MessageResponseHandler: ResponseHandler {
         chat.delegate?.chatEvent(event: .message(.messageNew(message)))
 
         chat.delegate?.chatEvent(event: .thread(.threadLastActivityTime(time: chatMessage.time, threadId: chatMessage.subjectId)))
-        let unreadCount = try? JSONDecoder().decode(UnreadCount.self, from: chatMessage.content?.data(using: .utf8) ?? Data())
-        chat.delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(threadId: chatMessage.subjectId ?? 0, count: unreadCount?.unreadCount ?? 0)))
+        let unreadCount = message.conversation?.unreadCount ?? 0
+        chat.delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(threadId: chatMessage.subjectId ?? 0, count: unreadCount)))
 
-        if chat.config?.enableCache == true {
-            if message.threadId == nil {
-                message.threadId = chatMessage.subjectId ?? message.conversation?.id
-            }
-            CacheFactory.write(cacheType: .message(message))
+        if message.threadId == nil {
+            message.threadId = chatMessage.subjectId ?? message.conversation?.id
+        }
+        CacheFactory.write(cacheType: .message(message))
 
-            if let messageId = message.id, message.participant?.id != nil { // check message has participant id and not a system broadcast message
-                chat.deliver(.init(messageId: messageId))
-            }
-            if let threadId = message.threadId {
-                CacheFactory.write(cacheType: .setThreadUnreadCount(threadId, message.conversation?.unreadCount ?? 0))
-            }
+        // Check that we are not the sender of the message and message come from another person.
+        if let messageId = message.id, message.participant?.id != Chat.sharedInstance.userInfo?.id {
+            chat.deliver(.init(messageId: messageId))
+        }
+        if let threadId = message.threadId {
+            CacheFactory.write(cacheType: .setThreadUnreadCount(threadId, message.conversation?.unreadCount ?? 0))
         }
         CacheFactory.save()
     }

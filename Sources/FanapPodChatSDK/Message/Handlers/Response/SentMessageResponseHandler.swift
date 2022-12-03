@@ -12,7 +12,7 @@ class SentMessageResponseHandler: ResponseHandler {
         guard let chatMessage = asyncMessage.chatMessage else { return }
         let chat = Chat.sharedInstance
         if let stringMessageId = chatMessage.content, let messageId = Int(stringMessageId), let threadId = chatMessage.subjectId {
-            let sentResponse = SentMessageResponse(isSent: true, threadId: threadId, messageId: messageId, messageTime: UInt(chatMessage.time))
+            let sentResponse = MessageResponse(messageState: .sent, threadId: threadId, messageId: messageId, messageTime: UInt(chatMessage.time))
             chat.delegate?.chatEvent(event: .message(.messageSent(sentResponse)))
             CacheFactory.write(cacheType: .messageSentToUser(sentResponse))
             CacheFactory.write(cacheType: .deleteQueue(chatMessage.uniqueId))

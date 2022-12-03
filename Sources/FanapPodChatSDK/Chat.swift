@@ -30,7 +30,7 @@ public class Chat {
     internal var logger: Logger?
     var callState: CallState?
 
-    /// Current user info of the application it'll be filled after chat is in the ``ChatState/CHAT_READY``  state.
+    /// Current user info of the application it'll be filled after chat is in the ``ChatState/chatReady``  state.
     public private(set) var userInfo: User?
     var token: String?
 
