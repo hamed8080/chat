@@ -21,6 +21,6 @@ public enum ChatEventType {
     case message(MessageEventTypes)
     case thread(ThreadEventTypes)
     case user(UserEventTypes)
-    case assistant(AssistantEventModel)
-    case tag(TagEventModel)
+    case assistant(AssistantEventTypes)
+    case tag(TagEventTypes)
 }

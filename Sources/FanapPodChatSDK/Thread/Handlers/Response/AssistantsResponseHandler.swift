@@ -14,6 +14,7 @@ public class AssistantsResponseHandler: ResponseHandler {
 
         guard let data = chatMessage.content?.data(using: .utf8) else { return }
         guard let assistants = try? JSONDecoder().decode([Assistant].self, from: data) else { return }
+        chat.delegate?.chatEvent(event: .assistant(.assistants(assistants)))
         CacheFactory.write(cacheType: .insertOrUpdateAssistants(assistants))
         CacheFactory.save()
 
