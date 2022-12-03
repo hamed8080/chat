@@ -13,7 +13,10 @@ class CallCanceledResponseHandler {
         let chat = Chat.sharedInstance
         guard let data = chatMessage.content?.data(using: .utf8) else { return }
         guard let call = try? JSONDecoder().decode(Call.self, from: data) else { return }
-        chat.delegate?.chatEvent(event: .call(CallEventModel(type: .callCanceled(call))))
-        chat.callbacksManager.callRejectedDelegate?(call, chatMessage.uniqueId)
+        chat.delegate?.chatEvent(event: .call(.callCanceled(call)))
+
+        guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
+        callback(.init(uniqueId: chatMessage.uniqueId, result: call))
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .cancelCall)
     }
 }

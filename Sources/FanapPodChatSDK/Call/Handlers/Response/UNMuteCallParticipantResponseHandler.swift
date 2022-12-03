@@ -13,7 +13,10 @@ class UNMuteCallParticipantResponseHandler {
         let chat = Chat.sharedInstance
         guard let data = chatMessage.content?.data(using: .utf8) else { return }
         guard let callParticipants = try? JSONDecoder().decode([CallParticipant].self, from: data) else { return }
-        chat.delegate?.chatEvent(event: .call(CallEventModel(type: .callParticipantUnmute(callParticipants))))
-        chat.callbacksManager.unMuteCallParticipantsDelegate?(callParticipants, chatMessage.uniqueId)
+        chat.delegate?.chatEvent(event: .call(.callParticipantUnmute(callParticipants)))
+
+        guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
+        callback(.init(uniqueId: chatMessage.uniqueId, result: callParticipants))
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .unmuteCallParticipant)
     }
 }

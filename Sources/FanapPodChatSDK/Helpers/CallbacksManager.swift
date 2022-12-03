@@ -15,14 +15,6 @@ class CallbacksManager {
     private var seenCallbacks: [String: OnSeenType?] = [:]
     private var uploadTasks: [String: URLSessionTask] = [:]
     private var downloadTasks: [String: URLSessionTask] = [:]
-    public var callRequestArriveDelegate: ((CreateCall, String) -> Void)?
-    public var callRejectedDelegate: ((Call, String) -> Void)?
-    public var callStartedDelegate: ((StartCall, String) -> Void)?
-    public var callEndDelegate: ((Int, String) -> Void)?
-    public var muteCallParticipantsDelegate: CallParticipantCompletion? = nil
-    public var unMuteCallParticipantsDelegate: CallParticipantCompletion? = nil
-    public var trunOnVideoCallParticipantsDelegate: CallParticipantCompletion? = nil
-    public var trunOffVideoCallParticipantsDelegate: CallParticipantCompletion? = nil
 
     func addCallback(uniqueId: String,
                      requesType: ChatMessageVOTypes,

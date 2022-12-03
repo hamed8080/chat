@@ -14,7 +14,7 @@ class DeliverCallResponseHandler {
 
         guard let data = chatMessage.content?.data(using: .utf8) else { return }
         guard let call = try? JSONDecoder().decode(Call.self, from: data) else { return }
-        chat.delegate?.chatEvent(event: .call(CallEventModel(type: .callDelivered(call))))
+        chat.delegate?.chatEvent(event: .call(.callDelivered(call)))
 
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
         callback(.init(uniqueId: chatMessage.uniqueId, result: call))

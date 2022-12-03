@@ -26,7 +26,7 @@ class StartCallRequestHandler {
                 if chat.config?.isDebuggingLogEnabled == true {
                     Chat.sharedInstance.logger?.log(title: "cancel call after \(chat.config?.callTimeout ?? 0) second no response back from server with type CALL_SESSION_CREATED")
                 }
-                chat.delegate?.chatEvent(event: .call(CallEventModel(type: .callEnded(nil))))
+                chat.delegate?.chatEvent(event: .call(.callEnded(nil)))
                 chat.callState = .ended
             }
             timer.invalidate()

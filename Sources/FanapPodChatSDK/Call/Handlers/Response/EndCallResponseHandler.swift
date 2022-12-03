@@ -12,8 +12,11 @@ class EndCallResponseHandler {
         guard let chatMessage = asyncMessage.chatMessage else { return }
         let chat = Chat.sharedInstance
         guard let callId = chatMessage.subjectId else { return }
-        chat.delegate?.chatEvent(event: .call(CallEventModel(type: .callEnded(callId))))
+        chat.delegate?.chatEvent(event: .call(.callEnded(callId)))
         chat.callState = .ended
-        chat.callbacksManager.callEndDelegate?(callId, chatMessage.uniqueId)
+
+        guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
+        callback(.init(uniqueId: chatMessage.uniqueId, result: callId))
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .endCallRequest)
     }
 }

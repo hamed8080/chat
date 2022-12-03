@@ -112,6 +112,7 @@ public enum ChatMessageVOTypes: Int, Codable, SafeDecodable {
     case terminateCall = 96 // never called from server events
     case muteCallParticipant = 97
     case unmuteCallParticipant = 98
+    case cancelGroupCall = 99
     case activeCallParticipants = 110
     case callSessionCreated = 111
     case turnOnVideoCall = 113

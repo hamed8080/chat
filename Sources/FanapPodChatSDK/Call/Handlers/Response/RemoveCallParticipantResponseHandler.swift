@@ -14,7 +14,7 @@ class RemoveCallParticipantResponseHandler {
 
         guard let data = chatMessage.content?.data(using: .utf8) else { return }
         guard let callPartitipants = try? JSONDecoder().decode([CallParticipant].self, from: data) else { return }
-        chat.delegate?.chatEvent(event: .call(CallEventModel(type: .callParticipantsRemoved(callPartitipants))))
+        chat.delegate?.chatEvent(event: .call(.callParticipantsRemoved(callPartitipants)))
 
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
         callback(.init(uniqueId: chatMessage.uniqueId, result: callPartitipants))

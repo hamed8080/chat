@@ -10,6 +10,7 @@ class CancelCallRequestHandler {
                       _ chat: Chat,
                       _ uniqueIdResult: UniqueIdResultType? = nil)
     {
+        chat.callState = .canceled
         chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult)
     }
 }

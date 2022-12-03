@@ -14,7 +14,7 @@ class RejectCallResponseHandler {
 
         guard let data = chatMessage.content?.data(using: .utf8) else { return }
         guard let createCall = try? JSONDecoder().decode(CreateCall.self, from: data) else { return }
-        chat.delegate?.chatEvent(event: .call(.init(type: .callRejected(createCall))))
+        chat.delegate?.chatEvent(event: .call(.callRejected(createCall)))
 
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
         callback(.init(uniqueId: chatMessage.uniqueId, result: createCall))

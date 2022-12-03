@@ -261,7 +261,7 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
                         let level = (stat.values["audioLevel"] as? Double) ?? .zero
                         print("topic:\(topic) for call participant:\(user.callParticipant?.participant?.name ?? user.callParticipant?.participant?.username ?? "") audio level:\(level)")
                         if level > 0.01, let callParticipant = self.usersRTC.userFor(topic: topic)?.callParticipant {
-                            Chat.sharedInstance.delegate?.chatEvent(event: .call(CallEventModel(type: .callParticipantStartSpeaking(callParticipant))))
+                            Chat.sharedInstance.delegate?.chatEvent(event: .call(.callParticipantStartSpeaking(callParticipant)))
                             if let index = self.usersRTC.indexFor(topic: topic) {
                                 self.usersRTC[index].setUsetIsSpeaking()
                             }
@@ -269,7 +269,7 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
                                   let lastSpeakingTime = user.lastTimeSpeaking,
                                   lastSpeakingTime.timeIntervalSince1970 + 2 < Date().timeIntervalSince1970
                         {
-                            Chat.sharedInstance.delegate?.chatEvent(event: .call(CallEventModel(type: .callParticipantStopSpeaking(callParticipant))))
+                            Chat.sharedInstance.delegate?.chatEvent(event: .call(.callParticipantStopSpeaking(callParticipant)))
                         }
                     }
                 })

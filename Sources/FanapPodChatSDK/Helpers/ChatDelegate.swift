@@ -23,5 +23,5 @@ public enum ChatEventType {
     case user(UserEventTypes)
     case assistant(AssistantEventModel)
     case tag(TagEventModel)
-    case call(CallEventModel)
+    case call(CallEventTypes)
 }

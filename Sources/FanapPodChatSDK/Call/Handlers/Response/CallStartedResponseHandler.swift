@@ -15,9 +15,12 @@ class CallStartedResponseHandler {
 
         guard var callStarted = try? JSONDecoder().decode(StartCall.self, from: data) else { return }
         callStarted.callId = chatMessage.subjectId
-        chat.delegate?.chatEvent(event: .call(CallEventModel(type: .callStarted(callStarted))))
+        chat.delegate?.chatEvent(event: .call(.callStarted(callStarted)))
 
         chat.callState = .started
-        chat.callbacksManager.callStartedDelegate?(callStarted, chatMessage.uniqueId)
+
+        guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
+        callback(.init(uniqueId: chatMessage.uniqueId, result: callStarted))
+        chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .startCallRequest)
     }
 }

@@ -13,7 +13,7 @@ class CallClientErrorResponseHandler {
         let chat = Chat.sharedInstance
         guard let data = chatMessage.content?.data(using: .utf8) else { return }
         guard let callClientError = try? JSONDecoder().decode(CallError.self, from: data) else { return }
-        chat.delegate?.chatEvent(event: .call(CallEventModel(type: .callClientError(callClientError))))
+        chat.delegate?.chatEvent(event: .call(.callClientError(callClientError)))
 
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
         callback(.init(uniqueId: chatMessage.uniqueId, result: callClientError))
