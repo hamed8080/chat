@@ -13,7 +13,7 @@
 import Foundation
 import WebRTC
 
-struct RemoteCandidateRes: Codable {
+public struct RemoteCandidateRes: Codable {
     let id: String
     let candidate: IceCandidate
     let topic: String

@@ -8,11 +8,11 @@ import Foundation
 class UNMuteCallRequestHandler {
     class func handle(_ req: UNMuteCallRequest,
                       _ chat: Chat,
-                      _ completion: @escaping CompletionType<[CallParticipant]>,
+                      _ completion: CompletionType<[CallParticipant]>? = nil,
                       _ uniqueIdResult: UniqueIdResultType? = nil)
     {
         chat.prepareToSendAsync(req:req, uniqueIdResult: uniqueIdResult) { response in
-            completion(response.result as? [CallParticipant], response.uniqueId, response.error)
+            completion?(response.result as? [CallParticipant], response.uniqueId, response.error)
         }
     }
 }

@@ -13,7 +13,7 @@
 import Foundation
 import WebRTC
 
-struct RemoteSDPRes: Codable {
+public struct RemoteSDPRes: Codable {
     var id: String = "PROCESS_SDP_ANSWER"
     var topic: String
     var sdpAnswer: String

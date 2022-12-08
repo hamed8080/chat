@@ -36,4 +36,8 @@ public struct CreateCall: Codable {
         case callId
         case group
     }
+
+    public var title: String? {
+        return conversation?.title ?? creator.name
+    }
 }

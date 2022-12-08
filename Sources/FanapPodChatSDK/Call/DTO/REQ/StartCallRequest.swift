@@ -6,26 +6,48 @@
 
 import Foundation
 public class StartCallRequest: UniqueIdManagerRequest, ChatSendable {
-    let threadId: Int?
-    let invitees: [Invitee]?
-    let type: CallType
-    let client: SendClient
-    let createCallThreadRequest: CreateCallThreadRequest?
-    var chatMessageType: ChatMessageVOTypes = .startCallRequest
-    var content: String? { convertCodableToString() }
+    public let threadId: Int?
+    public let invitees: [Invitee]?
+    public let type: CallType
+    public let client: SendClient
+    public let createCallThreadRequest: CreateCallThreadRequest?
+    public var chatMessageType: ChatMessageVOTypes = .startCallRequest
+    public var content: String? { convertCodableToString() }
+    public var thread: Conversation?
+    public var contacts: [Contact]?
+    public var isVideoOn: Bool { type == .videoCall }
+    public var groupName: String = "group"
+    public var isThreadCall: Bool { thread != nil}
+    public var isContactCall: Bool { contacts != nil }
+    public var isGroupCall: Bool { contacts?.count ?? 0 > 1 || thread?.group == true}
+    public var callDetail: CreateCallThreadRequest? { .init(title: groupName) }
 
-    public init(client: SendClient, threadId: Int, type: CallType, uniqueId: String? = nil) {
-        self.threadId = threadId
-        invitees = nil
-        self.type = type
-        self.client = client
-        createCallThreadRequest = nil
-        super.init(uniqueId: uniqueId)
+    public var titleOfCalling: String {
+        if isThreadCall {
+            return thread?.title ?? groupName
+        } else if isContactCall {
+            return contacts?.first?.linkedUser?.username ?? "\(contacts?.first?.firstName ?? "") \(contacts?.first?.lastName ?? "")"
+        } else if isGroupCall {
+            return groupName
+        } else {
+            return ""
+        }
     }
 
-    public init(client: SendClient, invitees: [Invitee], type: CallType, createCallThreadRequest: CreateCallThreadRequest? = nil, uniqueId: String? = nil) {
-        threadId = nil
-        self.invitees = invitees
+    public init(client: SendClient,
+                contacts: [Contact]? = nil,
+                thread: Conversation? = nil,
+                threadId: Int? = nil,
+                invitees: [Invitee]? = nil,
+                type: CallType,
+                groupName: String = "group",
+                createCallThreadRequest: CreateCallThreadRequest? = nil,
+                uniqueId: String? = nil) {
+        self.contacts = contacts
+        self.groupName = groupName
+        self.invitees = invitees ?? contacts?.map { Invitee(id: "\($0.id ?? 0)", idType: .contactId) }
+        self.threadId = threadId ?? thread?.id
+        self.thread = thread
         self.type = type
         self.client = client
         self.createCallThreadRequest = createCallThreadRequest

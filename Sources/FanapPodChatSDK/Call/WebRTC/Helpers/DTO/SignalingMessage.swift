@@ -65,7 +65,7 @@ struct SessionDescription: Codable {
     }
 }
 
-struct IceCandidate: Codable {
+public struct IceCandidate: Codable {
     let candidate: String
     let sdpMLineIndex: Int32
     let sdpMid: String?
