@@ -6,7 +6,7 @@
 
 import Foundation
 public class SendTextMessageRequest: UniqueIdManagerRequest, Queueable, PlainTextSendable, ReplyProtocol, MessageTypeProtocol, MetadataProtocol, SystemtMetadataProtocol, SubjectProtocol {
-    public var queueTime: Date = Date()
+    public var queueTime: Date = .init()
     public let messageType: MessageType
     public var metadata: String?
     public let repliedTo: Int?

@@ -6,7 +6,7 @@
 
 import Foundation
 public class ForwardMessageRequest: UniqueIdManagerRequest, Queueable, PlainTextSendable, SubjectProtocol {
-    public var queueTime: Date = Date()
+    public var queueTime: Date = .init()
     public let messageIds: [Int]
     public let fromThreadId: Int
     public let threadId: Int
@@ -15,7 +15,7 @@ public class ForwardMessageRequest: UniqueIdManagerRequest, Queueable, PlainText
     var subjectId: Int { threadId }
     var content: String? { "\(messageIds)" }
 
-    public init(fromThreadId:Int,
+    public init(fromThreadId: Int,
                 threadId: Int,
                 messageIds: [Int],
                 uniqueIds: [String] = [])

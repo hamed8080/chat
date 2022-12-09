@@ -78,7 +78,7 @@ public extension CMMessage {
         return model
     }
 
-    class func insertOrUpdate(message: Message, conversation: CMConversation? = nil , resultEntity: ((CMMessage) -> Void)? = nil) {
+    class func insertOrUpdate(message: Message, conversation: CMConversation? = nil, resultEntity: ((CMMessage) -> Void)? = nil) {
         if let id = message.id, let findedEntity = CMMessage.crud.find(keyWithFromat: "id == %i", value: id) {
             let cmMessage = convertMesageToCM(message: message, entity: findedEntity, conversation: conversation)
             resultEntity?(cmMessage)
@@ -125,20 +125,20 @@ public extension CMMessage {
 
     /// When a message is sent successfully the id of the message will be filled in the type 2 response
     /// so we know that the message is added on the server side properly.
-    class func messageSentToUserToUser(_ sentResponse: MessageResponse) {}
+    class func messageSentToUserToUser(_: MessageResponse) {}
 
-    class func deliveredToUser(_ deliverResponse: MessageResponse){
+    class func deliveredToUser(_ deliverResponse: MessageResponse) {
         if let messageId = deliverResponse.messageId, let threadId = deliverResponse.threadId {
             let messageEntity = CMMessage.crud.fetchWith(NSPredicate(format: "(conversation.id == %i OR threadId == %i) AND id == %i", threadId, threadId, messageId))?.first
-            messageEntity?.delivered =  NSNumber(booleanLiteral: true)
+            messageEntity?.delivered = NSNumber(booleanLiteral: true)
         }
     }
 
     class func updateSeenByUser(_ seenResponse: MessageResponse) {
         if let messageId = seenResponse.messageId, let threadId = seenResponse.threadId {
-            CMMessage.crud.fetchWith(NSPredicate(format: "(conversation.id == %i OR threadId == %i) AND id <= %i AND seen == NULL", threadId, threadId, messageId))?.forEach{ messageEntity in
-                messageEntity.delivered =  NSNumber(booleanLiteral: true)
-                messageEntity.seen =  NSNumber(booleanLiteral: true)
+            CMMessage.crud.fetchWith(NSPredicate(format: "(conversation.id == %i OR threadId == %i) AND id <= %i AND seen == NULL", threadId, threadId, messageId))?.forEach { messageEntity in
+                messageEntity.delivered = NSNumber(booleanLiteral: true)
+                messageEntity.seen = NSNumber(booleanLiteral: true)
             }
         }
     }

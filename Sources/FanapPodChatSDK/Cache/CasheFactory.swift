@@ -337,7 +337,7 @@ public class CacheFactory {
         }
     }
 
-    public class func save() {        
+    public class func save() {
         PSM.shared.save()
     }
 }

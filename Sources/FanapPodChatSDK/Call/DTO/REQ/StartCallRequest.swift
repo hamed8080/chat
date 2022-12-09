@@ -17,9 +17,9 @@ public class StartCallRequest: UniqueIdManagerRequest, ChatSendable {
     public var contacts: [Contact]?
     public var isVideoOn: Bool { type == .videoCall }
     public var groupName: String = "group"
-    public var isThreadCall: Bool { thread != nil}
+    public var isThreadCall: Bool { thread != nil }
     public var isContactCall: Bool { contacts != nil }
-    public var isGroupCall: Bool { contacts?.count ?? 0 > 1 || thread?.group == true}
+    public var isGroupCall: Bool { contacts?.count ?? 0 > 1 || thread?.group == true }
     public var callDetail: CreateCallThreadRequest? { .init(title: groupName) }
 
     public var titleOfCalling: String {
@@ -42,7 +42,8 @@ public class StartCallRequest: UniqueIdManagerRequest, ChatSendable {
                 type: CallType,
                 groupName: String = "group",
                 createCallThreadRequest: CreateCallThreadRequest? = nil,
-                uniqueId: String? = nil) {
+                uniqueId: String? = nil)
+    {
         self.contacts = contacts
         self.groupName = groupName
         self.invitees = invitees ?? contacts?.map { Invitee(id: "\($0.id ?? 0)", idType: .contactId) }

@@ -15,6 +15,8 @@ extension RTCSignalingState {
         case .haveRemoteOffer: return "haveRemoteOffer"
         case .haveRemotePrAnswer: return "haveRemotePrAnswer"
         case .stable: return "stable"
+        @unknown default:
+            return "unknownState"
         }
     }
 }

@@ -57,7 +57,7 @@ public protocol VideoRTCProtocol: UserRTCProtocol {
     func getCameraFormat() -> AVCaptureDevice.Format?
     func switchCameraPosition()
     func addReceiveStream()
-    func createMediaSenderTrack(_ fileName: String? )
+    func createMediaSenderTrack(_ fileName: String?)
 }
 
 public class UserRTC: UserRTCProtocol, Hashable, Identifiable {
@@ -79,10 +79,10 @@ public class UserRTC: UserRTCProtocol, Hashable, Identifiable {
         hasher.combine(topic)
     }
 
-    init(direction: RTCDirection, topic: String, config: WebRTCConfig, delegate: RTCPeerConnectionDelegate, customConstraint: [String:String], videoDecoder: RTCVideoDecoderFactory? = nil, videoEncoder: RTCVideoEncoderFactory? = nil) {
+    init(direction: RTCDirection, topic: String, config: WebRTCConfig, delegate: RTCPeerConnectionDelegate, customConstraint: [String: String], videoDecoder: RTCVideoDecoderFactory? = nil, videoEncoder: RTCVideoEncoderFactory? = nil) {
         self.direction = direction
         self.topic = topic
-        self.pf = RTCPeerConnectionFactory(encoderFactory: videoEncoder, decoderFactory: videoDecoder)
+        pf = RTCPeerConnectionFactory(encoderFactory: videoEncoder, decoderFactory: videoDecoder)
         let op = RTCPeerConnectionFactoryOptions()
         // op.disableEncryption = true
         pf?.setOptions(op)
@@ -134,7 +134,7 @@ public class UserRTC: UserRTCProtocol, Hashable, Identifiable {
             iceTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
                 if self?.pc?.remoteDescription != nil {
                     self?.setRemoteIceOnMainThread(rtcIce)
-                    self?.iceQueue.removeAll(where: {$0 == rtcIce })
+                    self?.iceQueue.removeAll(where: { $0 == rtcIce })
                     print("ICE added to \(self?.topic ?? "") from Queue and remaining in Queue is: \(self?.iceQueue.count ?? 0)")
                     timer.invalidate()
                 }
@@ -196,7 +196,7 @@ public class AudioRTC: UserRTC, AudioRTCProtocol {
     }
 
     public func monitorAudioLevelFor(callParticipant: CallParticipant) {
-        speakingMonitorTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] timer in
+        speakingMonitorTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
             self?.pc?.statistics { report in
                 report.statistics.values.filter { $0.type == "track" }.forEach { stat in
                     DispatchQueue.main.async {
@@ -223,7 +223,7 @@ public class AudioRTC: UserRTC, AudioRTCProtocol {
         lastTimeSpeaking = nil
     }
 
-    public override func close() {
+    override public func close() {
         super.close()
         speakingMonitorTimer?.invalidate()
         speakingMonitorTimer = nil
@@ -240,9 +240,9 @@ public class VideoRTC: UserRTC, VideoRTCProtocol {
     public var targetFPS: Int = 15
 
     init(direction: RTCDirection, topic: String, config: WebRTCConfig, delegate: RTCPeerConnectionDelegate) {
-        self.renderer = TARGET_OS_SIMULATOR != 0 ? RTCEAGLVideoView(frame: .zero) : RTCMTLVideoView(frame: .zero)
+        renderer = TARGET_OS_SIMULATOR != 0 ? RTCEAGLVideoView(frame: .zero) : RTCMTLVideoView(frame: .zero)
         let custom: [String: String] = direction == .receive ? [kRTCMediaConstraintsOfferToReceiveVideo: kRTCMediaConstraintsValueTrue] : [:]
-        super.init(direction: direction, topic: topic, config: config, delegate: delegate, customConstraint: custom, videoDecoder: RTCDefaultVideoDecoderFactory.default , videoEncoder: RTCDefaultVideoEncoderFactory.default)
+        super.init(direction: direction, topic: topic, config: config, delegate: delegate, customConstraint: custom, videoDecoder: RTCDefaultVideoDecoderFactory.default, videoEncoder: RTCDefaultVideoEncoderFactory.default)
     }
 
     public func addVideoRenderer(_ renderer: RTCVideoRenderer) {
@@ -255,7 +255,7 @@ public class VideoRTC: UserRTC, VideoRTCProtocol {
 
     public func createMediaSenderTrack(_ fileName: String? = nil) {
         if track == nil {
-            guard let videoSource = pf?.videoSource() else  { return }
+            guard let videoSource = pf?.videoSource() else { return }
             if TARGET_OS_SIMULATOR != 0 {
                 videoCapturer = RTCFileVideoCapturer(delegate: videoSource)
             } else {
@@ -271,13 +271,14 @@ public class VideoRTC: UserRTC, VideoRTCProtocol {
 
     private func startCaptureLocalVideo(_ fileName: String? = nil) {
         if let videoCapturer = videoCapturer as? RTCCameraVideoCapturer,
-            let selectedCamera = RTCCameraVideoCapturer.captureDevices().first(where: { $0.position == (isFrontCamera ? .front : .back) }),
-           let format = getCameraFormat() {
+           let selectedCamera = RTCCameraVideoCapturer.captureDevices().first(where: { $0.position == (isFrontCamera ? .front : .back) }),
+           let format = getCameraFormat()
+        {
             DispatchQueue.global(qos: .background).async {
                 videoCapturer.startCapture(with: selectedCamera, format: format, fps: self.targetFPS)
             }
         } else if let videoCapturer = videoCapturer as? RTCFileVideoCapturer {
-            videoCapturer.startCapturing(fromFileNamed: fileName ?? "") { error in }
+            videoCapturer.startCapturing(fromFileNamed: fileName ?? "") { _ in }
         }
         if let renderer = renderer {
             addVideoRenderer(renderer)
@@ -312,7 +313,7 @@ public class VideoRTC: UserRTC, VideoRTCProtocol {
         }
     }
 
-    public override func close() {
+    override public func close() {
         super.close()
         (videoCapturer as? RTCCameraVideoCapturer)?.stopCapture()
     }

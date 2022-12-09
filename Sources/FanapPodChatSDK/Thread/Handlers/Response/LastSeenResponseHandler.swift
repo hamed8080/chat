@@ -32,7 +32,7 @@ struct LastSeenMessageResponse: Decodable {
 
     init(from decoder: Decoder) throws {
         let container = try? decoder.container(keyedBy: CodingKeys.self)
-        self.unreadCount = try container?.decodeIfPresent(Int.self, forKey: .unreadCount)
-        self.id = try container?.decodeIfPresent(Int.self, forKey: .id)
+        unreadCount = try container?.decodeIfPresent(Int.self, forKey: .unreadCount)
+        id = try container?.decodeIfPresent(Int.self, forKey: .id)
     }
 }

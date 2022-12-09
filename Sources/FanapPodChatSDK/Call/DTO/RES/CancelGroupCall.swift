@@ -6,7 +6,6 @@
 
 import Foundation
 public struct CancelGroupCall: Codable {
-
     public let userId: Int
     public let mute: Bool
     public let joinTime: Int?

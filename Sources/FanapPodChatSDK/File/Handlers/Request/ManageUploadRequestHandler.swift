@@ -8,7 +8,7 @@ import Foundation
 class ManageUploadRequestHandler {
     class func handle(_ uniqueId: String,
                       _ action: DownloaUploadAction,
-                      _ isImage: Bool,
+                      _: Bool,
                       _ completion: ((String, Bool) -> Void)? = nil)
     {
         if let task = Chat.sharedInstance.callbacksManager.getUploadTask(uniqueId: uniqueId) {
@@ -16,7 +16,7 @@ class ManageUploadRequestHandler {
             case .cancel:
                 task.cancel()
                 completion?("upload task with uniqueId \(uniqueId) canceled.", true)
-                Chat.sharedInstance.callbacksManager.removeUploadTask(uniqueId: uniqueId)                
+                Chat.sharedInstance.callbacksManager.removeUploadTask(uniqueId: uniqueId)
                 CacheFactory.write(cacheType: .deleteQueue(uniqueId))
                 CacheFactory.save()
             case .suspend:

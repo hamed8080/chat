@@ -11,7 +11,7 @@ class UNMuteCallRequestHandler {
                       _ completion: CompletionType<[CallParticipant]>? = nil,
                       _ uniqueIdResult: UniqueIdResultType? = nil)
     {
-        chat.prepareToSendAsync(req:req, uniqueIdResult: uniqueIdResult) { response in
+        chat.prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { response in
             completion?(response.result as? [CallParticipant], response.uniqueId, response.error)
         }
     }

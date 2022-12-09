@@ -7,7 +7,6 @@
 import Foundation
 
 class CallbacksManager {
-
     private var callbacks: [String: OnChatResponseType?] = [:]
     private var callbacksRequestType: [String: ChatMessageVOTypes] = [:]
     private var sentCallbacks: [String: OnSentType?] = [:]

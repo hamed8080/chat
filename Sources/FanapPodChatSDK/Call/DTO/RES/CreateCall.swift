@@ -38,6 +38,6 @@ public struct CreateCall: Codable {
     }
 
     public var title: String? {
-        return conversation?.title ?? creator.name
+        conversation?.title ?? creator.name
     }
 }

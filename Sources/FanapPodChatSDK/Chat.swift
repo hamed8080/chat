@@ -1305,6 +1305,7 @@ public class Chat {
     }
 
     // MARK: END Call RGION
+
     internal func restApiRequest<T: Decodable>(_ request: RestAPIProtocol, decodeType: T.Type, uniqueIdResult: UniqueIdResultType? = nil, completion: @escaping OnChatResponseType)
     {
         uniqueIdResult?(request.uniqueId)

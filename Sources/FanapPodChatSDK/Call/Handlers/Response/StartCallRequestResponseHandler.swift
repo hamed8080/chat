@@ -22,7 +22,6 @@ class StartCallRequestResponseHandler {
         // SEND type 73 . This mean client receive call and showing ringing mode on call creator.
         chat.callReceived(.init(subjectId: createCall.callId))
 
-
         guard let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
         callback(.init(uniqueId: chatMessage.uniqueId, result: createCall))
         chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .startCallRequest)

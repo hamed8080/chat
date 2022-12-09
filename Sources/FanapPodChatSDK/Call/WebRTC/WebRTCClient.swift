@@ -30,29 +30,38 @@ open class CallParticipantUserRTC: CallParticipantUserRTCProtocol, Identifiable,
     public static func == (lhs: CallParticipantUserRTC, rhs: CallParticipantUserRTC) -> Bool {
         lhs.callParticipant == rhs.callParticipant
     }
-    public var id: Int {callParticipant.userId ?? callParticipant.participant?.id ?? -1}
+
+    public var id: Int { callParticipant.userId ?? callParticipant.participant?.id ?? -1 }
     public var callParticipant: CallParticipant
     public var audioRTC: AudioRTC
     public var videoRTC: VideoRTC
     public var isMe: Bool { callParticipant.userId == Chat.sharedInstance.userInfo?.id }
 
-    required public init(callParticipant: CallParticipant, config: WebRTCConfig, delegate: RTCPeerConnectionDelegate) {
+    public required init(callParticipant: CallParticipant, config: WebRTCConfig, delegate: RTCPeerConnectionDelegate) {
         self.callParticipant = callParticipant
         let direction: RTCDirection = callParticipant.userId == Chat.sharedInstance.userInfo?.id ? .send : .receive
-        self.audioRTC = AudioRTC(direction: direction, topic: callParticipant.topics.topicAudio, config: config, delegate: delegate)
-        self.videoRTC = VideoRTC(direction: direction, topic: callParticipant.topics.topicVideo, config: config, delegate: delegate)
+        audioRTC = AudioRTC(direction: direction, topic: callParticipant.topics.topicAudio, config: config, delegate: delegate)
+        videoRTC = VideoRTC(direction: direction, topic: callParticipant.topics.topicVideo, config: config, delegate: delegate)
     }
 
     public func peerConnectionForTopic(topic: String) -> RTCPeerConnection? {
-        if audioRTC.topic == topic { return audioRTC.pc }
-        else if videoRTC.topic == topic { return videoRTC.pc }
-        else { return nil }
+        if audioRTC.topic == topic {
+            return audioRTC.pc
+        } else if videoRTC.topic == topic {
+            return videoRTC.pc
+        } else {
+            return nil
+        }
     }
 
     public func uerRTC(topic: String) -> UserRTCProtocol? {
-        if audioRTC.topic == topic { return audioRTC }
-        else if videoRTC.topic == topic { return videoRTC }
-        else { return nil }
+        if audioRTC.topic == topic {
+            return audioRTC
+        } else if videoRTC.topic == topic {
+            return videoRTC
+        } else {
+            return nil
+        }
     }
 
     public func addStreams() {
@@ -63,16 +72,16 @@ open class CallParticipantUserRTC: CallParticipantUserRTCProtocol, Identifiable,
         }
     }
 
-    func getAudioOffer(_ completion: ((String, RTCSessionDescription, String, Mediatype)->())?) {
+    func getAudioOffer(_ completion: ((String, RTCSessionDescription, String, Mediatype) -> Void)?) {
         audioRTC.getLocalSDPWithOffer { [weak self] rtcSession in
-            guard let self = self else {return}
+            guard let self = self else { return }
             completion?(self.isMe ? "SEND_SDP_OFFER" : "RECIVE_SDP_OFFER", rtcSession, self.audioRTC.topic, .audio)
         }
     }
 
-    func getVideoOffer(_ completion: ((String, RTCSessionDescription, String, Mediatype)->())? ) {
+    func getVideoOffer(_ completion: ((String, RTCSessionDescription, String, Mediatype) -> Void)?) {
         videoRTC.getLocalSDPWithOffer { [weak self] rtcSession in
-            guard let self = self else {return}
+            guard let self = self else { return }
             completion?(self.isMe ? "SEND_SDP_OFFER" : "RECIVE_SDP_OFFER", rtcSession, self.videoRTC.topic, .video)
         }
     }
@@ -117,7 +126,7 @@ open class CallParticipantUserRTC: CallParticipantUserRTCProtocol, Identifiable,
     }
 
     func isVideoTopic(topic: String) -> Bool {
-        return topic.contains("Vi-")
+        topic.contains("Vi-")
     }
 
     public func close() {
@@ -141,7 +150,7 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
     private var answerReceived: [String: RTCPeerConnection] = [:]
     private var config: WebRTCConfig
     private var delegate: WebRTCClientDelegate?
-    private(set) public var callParticipantsUserRTC: [CallParticipantUserRTC] = []
+    public private(set) var callParticipantsUserRTC: [CallParticipantUserRTC] = []
     var logFile: RTCFileLogger?
 
     private let rtcAudioSession = RTCAudioSession.sharedInstance()
@@ -209,7 +218,7 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
     /// Client can call this to dissconnect from peer.
     public func clearResourceAndCloseConnection() {
         callParticipantsUserRTC.forEach { callParticipantUserRTC in
-            if let index = callParticipantsUserRTC.firstIndex(where: {$0 == callParticipantUserRTC}) {
+            if let index = callParticipantsUserRTC.firstIndex(where: { $0 == callParticipantUserRTC }) {
                 callParticipantsUserRTC[index].close()
             }
         }
@@ -392,10 +401,10 @@ public extension WebRTCClient {
     var meCallParticipntUserRCT: CallParticipantUserRTC? { callParticipantsUserRTC.first(where: { $0.isMe }) }
 
     func callParticipntUserRCT(_ topic: String) -> CallParticipantUserRTC? {
-        return callParticipantsUserRTC.first(where: { $0.callParticipant.sendTopic == rawTopicName(topic: topic) })
+        callParticipantsUserRTC.first(where: { $0.callParticipant.sendTopic == rawTopicName(topic: topic) })
     }
 
-    func rawTopicName(topic :String) -> String {
+    func rawTopicName(topic: String) -> String {
         topic.replacingOccurrences(of: "Vi-", with: "").replacingOccurrences(of: "Vo-", with: "")
     }
 }

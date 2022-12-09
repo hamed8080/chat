@@ -3,10 +3,9 @@
 // Copyright (c) 2022 FanapPodChatSDK
 //
 // Created by Hamed Hosseini on 9/27/22.
-
-/// TLDR 'Persistance Service Manager'
 import CoreData
 
+/// TLDR 'Persistance Service Manager'
 class PSM {
     private init() {}
     static let shared = PSM()

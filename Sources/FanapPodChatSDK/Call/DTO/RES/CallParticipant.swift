@@ -6,9 +6,10 @@
 
 import Foundation
 public struct CallParticipant: Codable, Equatable {
-    static public func == (lhs: CallParticipant, rhs: CallParticipant) -> Bool {
-        return lhs.userId == rhs.userId
+    public static func == (lhs: CallParticipant, rhs: CallParticipant) -> Bool {
+        lhs.userId == rhs.userId
     }
+
     public var joinTime: Int?
     public var leaveTime: Int?
     public var userId: Int?
@@ -59,16 +60,16 @@ public struct CallParticipant: Codable, Equatable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.joinTime = try container.decodeIfPresent(Int.self, forKey: .joinTime)
-        self.leaveTime = try container.decodeIfPresent(Int.self, forKey: .leaveTime)
-        self.userId = try container.decodeIfPresent(Int.self, forKey: .userId)
-        self.sendTopic = try container.decode(String.self, forKey: .sendTopic)
-        self.receiveTopic = try container.decodeIfPresent(String.self, forKey: .receiveTopic)
-        self.active = try container.decodeIfPresent(Bool.self, forKey: .active) ?? true
-        self.callStatus = try container.decodeIfPresent(CallStatus.self, forKey: .callStatus)
-        self.participant = try container.decodeIfPresent(Participant.self, forKey: .participant)
-        self.mute = try container.decode(Bool.self, forKey: .mute)
-        self.video = try container.decodeIfPresent(Bool.self, forKey: .video)
+        joinTime = try container.decodeIfPresent(Int.self, forKey: .joinTime)
+        leaveTime = try container.decodeIfPresent(Int.self, forKey: .leaveTime)
+        userId = try container.decodeIfPresent(Int.self, forKey: .userId)
+        sendTopic = try container.decode(String.self, forKey: .sendTopic)
+        receiveTopic = try container.decodeIfPresent(String.self, forKey: .receiveTopic)
+        active = try container.decodeIfPresent(Bool.self, forKey: .active) ?? true
+        callStatus = try container.decodeIfPresent(CallStatus.self, forKey: .callStatus)
+        participant = try container.decodeIfPresent(Participant.self, forKey: .participant)
+        mute = try container.decode(Bool.self, forKey: .mute)
+        video = try container.decodeIfPresent(Bool.self, forKey: .video)
     }
 
     public var topics: (topicVideo: String, topicAudio: String) {
@@ -76,11 +77,11 @@ public struct CallParticipant: Codable, Equatable {
     }
 }
 
-extension CallParticipant {
-    public mutating func update(_ newCallParticipant: CallParticipant) {
-        self.joinTime = newCallParticipant.joinTime
-        self.leaveTime = newCallParticipant.leaveTime
-        self.callStatus = newCallParticipant.callStatus
-        self.participant = newCallParticipant.participant
+public extension CallParticipant {
+    mutating func update(_ newCallParticipant: CallParticipant) {
+        joinTime = newCallParticipant.joinTime
+        leaveTime = newCallParticipant.leaveTime
+        callStatus = newCallParticipant.callStatus
+        participant = newCallParticipant.participant
     }
 }

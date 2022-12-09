@@ -54,7 +54,7 @@ internal class AsyncManager: AsyncDelegate {
     }
 
     /// It will be only used whenever a client implements a custom async class by itself.
-    func asyncMessageSent(message: Data?, error: AsyncError?) {}
+    func asyncMessageSent(message _: Data?, error _: AsyncError?) {}
 
     /// A delegate to raise an error.
     public func asyncError(error: AsyncError) {
@@ -93,9 +93,9 @@ internal class AsyncManager: AsyncDelegate {
     /// Send queueable each one by one after ``ChatState.chatReady`` with 2 seconds interval between each message to prevent server rejection.
     func sendQueuesOnReconnect() {
         var interval: TimeInterval = 0
-        queue.sorted{$0.value.queueTime < $1.value.queueTime}.forEach { key, item in
+        queue.sorted { $0.value.queueTime < $1.value.queueTime }.forEach { _, item in
             if let sendable = item as? ChatSendable {
-                Timer.scheduledTimer(withTimeInterval: interval + 2, repeats: false) { [weak self] timer in
+                Timer.scheduledTimer(withTimeInterval: interval + 2, repeats: false) { [weak self] _ in
                     self?.sendData(sendable: sendable)
                 }
             }

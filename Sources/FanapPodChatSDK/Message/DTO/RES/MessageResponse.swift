@@ -34,11 +34,11 @@ public class MessageResponse: Decodable {
         case messageTime
     }
 
-    required public init(from decoder: Decoder) throws {
+    public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.threadId = try container.decodeIfPresent(Int.self, forKey: .threadId)
-        self.participantId = try container.decodeIfPresent(Int.self, forKey: .participantId)
-        self.messageId = try container.decodeIfPresent(Int.self, forKey: .messageId)
-        self.messageTime = try container.decodeIfPresent(UInt.self, forKey: .messageTime)
+        threadId = try container.decodeIfPresent(Int.self, forKey: .threadId)
+        participantId = try container.decodeIfPresent(Int.self, forKey: .participantId)
+        messageId = try container.decodeIfPresent(Int.self, forKey: .messageId)
+        messageTime = try container.decodeIfPresent(UInt.self, forKey: .messageTime)
     }
 }
