@@ -4,8 +4,8 @@
 //
 // Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import FanapPodAsyncSDK
+import Foundation
 
 /// If a message is marked as Queueable, it can be resent automatically by SDK whenever chat is in `chatReady` state.
 protocol Queueable {

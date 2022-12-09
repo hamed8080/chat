@@ -74,7 +74,6 @@ class ReceiveMessageFactory {
             JoinThreadResponseHandler.handle(asyncMessage)
         case .lastMssageSeenUpdated:
             LastSeenResponseHandler.handle(asyncMessage)
-            break
         case .leaveThread:
             LeaveThreadResponseHandler.handle(asyncMessage)
         case .logout:

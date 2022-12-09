@@ -4,8 +4,8 @@
 //
 // Created by Hamed Hosseini on 9/27/22.
 
-import Foundation
 import FanapPodAsyncSDK
+import Foundation
 
 public struct SendChatMessageVO: Codable {
     let type: Int
