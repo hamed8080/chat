@@ -216,6 +216,8 @@ class ReceiveMessageFactory {
             CallInquiryResponseHandler.handle(asyncMessage)
         case .cancelGroupCall:
             GroupCallCancelResponseHandler.handle(asyncMessage)
+        case .callStickerSystemMessage:
+            CallSystemStickerMessageResponseHandler.handle(asyncMessage)
         case .tagList:
             TagListResponseHandler.handle(asyncMessage)
         case .createTag:

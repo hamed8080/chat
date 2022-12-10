@@ -121,6 +121,7 @@ public enum ChatMessageVOTypes: Int, Codable, SafeDecodable {
     case stopRecording = 122
     case getCallsToJoin = 129
     case callClientErrors = 153
+    case callStickerSystemMessage = 225
     case renewCallRequest = 227
     case callInquiry = 228
 

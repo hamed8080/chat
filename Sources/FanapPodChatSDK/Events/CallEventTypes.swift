@@ -27,4 +27,5 @@ public enum CallEventTypes {
     case callClientError(CallError)
     case callParticipantStartSpeaking(CallParticipant)
     case callParticipantStopSpeaking(CallParticipant)
+    case sticker(StickerResponse)
 }

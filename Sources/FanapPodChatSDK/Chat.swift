@@ -1304,6 +1304,15 @@ public class Chat {
         CallInquiryRequestHandler.handle(request, self, completion, uniqueIdResult)
     }
 
+    /// Send a sticker during the call..
+    /// - Parameters:
+    ///   - request: The callId and a sticker.
+    ///   - completion: Response of the send.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func sendCallSticker(_ request: CallStickerRequest, _ completion: CompletionType<StickerResponse>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
+        CallSystemStickerMessageRequestHandler.handle(request, self, completion, uniqueIdResult)
+    }
+
     // MARK: END Call RGION
 
     internal func restApiRequest<T: Decodable>(_ request: RestAPIProtocol, decodeType: T.Type, uniqueIdResult: UniqueIdResultType? = nil, completion: @escaping OnChatResponseType)
