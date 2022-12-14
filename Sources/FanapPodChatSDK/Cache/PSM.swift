@@ -24,21 +24,21 @@ class PSM {
         return container
     }()
 
-    internal func save() {
+    internal func save(_ logger: Logger? = nil) {
         if context.hasChanges {
             do {
                 try context.save()
-                Chat.sharedInstance.logger?.log(title: "saved successfully", jsonString: nil)
+                logger?.log(title: "saved successfully", jsonString: nil)
             } catch {
                 let nserror = error as NSError
                 #if DEBUG
-                    Chat.sharedInstance.logger?.log(title: "error occured in save database", message: "\(nserror), \(nserror.userInfo)")
+                    logger?.log(title: "error occured in save database", message: "\(nserror), \(nserror.userInfo)")
                 #else
                     fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
                 #endif
             }
         } else {
-            Chat.sharedInstance.logger?.log(title: "CHAT_SDK:", message: "no changes find on context so nothing to save!")
+            logger?.log(title: "CHAT_SDK:", message: "no changes find on context so nothing to save!")
         }
     }
 }

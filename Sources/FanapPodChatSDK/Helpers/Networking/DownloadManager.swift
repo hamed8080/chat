@@ -6,15 +6,18 @@
 
 import Foundation
 class DownloadManager {
-    private init() {}
+    private let callbackManager: CallbacksManager
+    init(callbackManager: CallbacksManager) {
+        self.callbackManager = callbackManager
+    }
 
-    class func download(url: String,
-                        method: HTTPMethod = .get,
-                        uniqueId: String,
-                        headers: [String: String]?,
-                        parameters: [String: Any]?,
-                        downloadProgress: DownloadProgressType?,
-                        completion: @escaping (Data?, URLResponse?, Error?) -> Void)
+    func download(url: String,
+                  method: HTTPMethod = .get,
+                  uniqueId: String,
+                  headers: [String: String]?,
+                  parameters: [String: Any]?,
+                  downloadProgress: DownloadProgressType?,
+                  completion: @escaping (Data?, URLResponse?, Error?) -> Void)
     {
         guard var urlObj = URL(string: url) else { return }
         var request = URLRequest(url: urlObj)
@@ -32,15 +35,15 @@ class DownloadManager {
         }
         request.url = urlObj
         request.httpMethod = method.rawValue
-        let delegate = ProgressImplementation(uniqueId: uniqueId, downloadProgress: downloadProgress) { data, response, error in
+        let delegate = ProgressImplementation(uniqueId: uniqueId, downloadProgress: downloadProgress) { [weak self] data, response, error in
             DispatchQueue.main.async {
                 completion(data, response, error)
-                Chat.sharedInstance.callbacksManager.removeDownloadTask(uniqueId: uniqueId)
+                self?.callbackManager.removeDownloadTask(uniqueId: uniqueId)
             }
         }
         let session = URLSession(configuration: .default, delegate: delegate, delegateQueue: .main)
         let downloadTask = session.dataTask(with: request)
         downloadTask.resume()
-        Chat.sharedInstance.callbacksManager.addDownloadTask(task: downloadTask, uniqueId: uniqueId)
+        callbackManager.addDownloadTask(task: downloadTask, uniqueId: uniqueId)
     }
 }

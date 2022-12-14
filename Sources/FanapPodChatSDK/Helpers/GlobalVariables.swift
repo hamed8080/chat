@@ -7,10 +7,9 @@
 import Foundation
 
 public typealias CompletionTypeWithoutUniqueId<T> = (T?, ChatError?) -> Void
-public typealias CompletionType<T> = (T?, String?, ChatError?) -> Void
-public typealias PaginationCompletionType<T> = (T?, String?, Pagination?, ChatError?) -> Void
-public typealias CacheResponseType<T> = (T?, String?, ChatError?) -> Void
-public typealias PaginationCacheResponseType<T> = (T?, String?, Pagination?, ChatError?) -> Void
+public typealias CompletionType<T: Decodable> = (ChatResponse<T>) -> Void
+public typealias CompletionTypeNoneDecodeable<T> = (ChatResponse<T>) -> Void
+public typealias CacheResponseType<T> = (ChatResponse<T>) -> Void
 public typealias UploadFileProgressType = (UploadFileProgress?, ChatError?) -> Void
 public typealias UploadCompletionType = (UploadFileResponse?, FileMetaData?, ChatError?) -> Void
 public typealias UniqueIdResultType = (String) -> Void
@@ -21,4 +20,3 @@ public typealias DownloadImageCompletionType = (Data?, ImageModel?, ChatError?) 
 public typealias OnSeenType = (MessageResponse?, String?, ChatError?) -> Void
 public typealias OnDeliveryType = (MessageResponse?, String?, ChatError?) -> Void
 public typealias OnSentType = (MessageResponse?, String?, ChatError?) -> Void
-public typealias OnChatResponseType = (ChatResponse) -> Void

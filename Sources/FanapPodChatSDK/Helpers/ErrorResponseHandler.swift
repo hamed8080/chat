@@ -8,14 +8,10 @@ import FanapPodAsyncSDK
 import Foundation
 import Sentry
 
-class ErrorResponseHandler: ResponseHandler {
-    private init() {}
-
-    static func handle(_ asyncMessage: AsyncMessage) {
-        Chat.sharedInstance.logger?.log(title: "Message of type 'ERROR' recieved", jsonString: asyncMessage.string)
-        let chat = Chat.sharedInstance
-        guard let config = chat.config else { return }
-
+// Event
+extension Chat {
+    func onError(_ asyncMessage: AsyncMessage) {
+        logger?.log(title: "Message of type 'ERROR' recieved", jsonString: asyncMessage.string)
         // send log to Sentry 4.3.1
         if config.captureLogsOnSentry {
             let event = Event(level: SentrySeverity.error)
@@ -23,7 +19,7 @@ class ErrorResponseHandler: ResponseHandler {
             Client.shared?.send(event: event, completion: { _ in })
         }
 
-        if let chatMessage = asyncMessage.chatMessage, let callback = chat.callbacksManager.getCallBack(chatMessage.uniqueId) {
+        if let chatMessage = asyncMessage.chatMessage, let callback: CompletionType<Voidcodable> = callbacksManager.getCallBack(chatMessage.uniqueId) {
             let code: Int
             let message: String
             let content: String
@@ -39,8 +35,8 @@ class ErrorResponseHandler: ResponseHandler {
             }
 
             callback(.init(uniqueId: chatMessage.uniqueId, error: .init(message: message, errorCode: code, hasError: true, content: content)))
-            chat.delegate?.chatError(error: .init(errorCode: code, message: message, content: content))
-            chat.callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .error)
+            delegate?.chatError(error: .init(errorCode: code, message: message, content: content))
+            callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .error)
         }
     }
 }

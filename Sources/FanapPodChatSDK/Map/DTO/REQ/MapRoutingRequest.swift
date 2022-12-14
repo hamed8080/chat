@@ -16,14 +16,7 @@ public struct Cordinate {
     }
 }
 
-public class MapRoutingRequest: UniqueIdManagerRequest, RestAPIProtocol {
-    static var config: ChatConfig { Chat.sharedInstance.config! }
-    var url: String = "\(config.mapServer)\(Routes.mapRouting.rawValue)"
-    var urlString: String { url.toURLCompoenentString(encodable: self) ?? url }
-    var headers: [String: String] = ["Api-Key": config.mapApiKey!]
-    var bodyData: Data? { toData() }
-    var method: HTTPMethod = .get
-
+public class MapRoutingRequest: UniqueIdManagerRequest, Encodable {
     public var alternative: Bool = true
     private let destination: Cordinate
     private let origin: Cordinate

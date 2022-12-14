@@ -16,10 +16,14 @@ enum FileManagerPaths: String {
 }
 
 public class CacheFileManager {
-    public static let sharedInstance = CacheFileManager()
     private let rootPath: String
+    var cache: CacheFactory!
+    private let logger: Logger?
+    private let enableCache: Bool
 
-    private init() {
+    public init(logger: Logger? = nil, enableCache: Bool) {
+        self.logger = logger
+        self.enableCache = enableCache
         if let rootPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first {
             self.rootPath = rootPath
         } else {
@@ -83,7 +87,7 @@ public class CacheFileManager {
             }
             CMFile.crud.delete(entity: file)
         }
-        CacheFactory.save()
+        cache.save()
     }
 
     public func deleteAllImages() {
@@ -98,7 +102,7 @@ public class CacheFileManager {
             }
             CMImage.crud.delete(entity: image)
         }
-        CacheFactory.save()
+        cache.save()
     }
 
     func deleteAllFilesWithCache() {
@@ -121,20 +125,20 @@ public class CacheFileManager {
 
     func saveFile(_ fileModel: FileModel, _ data: Data?) {
         guard let data = data else { return }
-        CMFile.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", fileModel.hashCode))
+        CMFile.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", fileModel.hashCode), logger)
         CMFile.insert(request: fileModel)
         createDirectoryIfNotExist(paths: .files)
-        CacheFactory.save()
+        cache.save()
         let url = URL(fileURLWithPath: rootPath + "/\(FileManagerPaths.files.rawValue)").appendingPathComponent("\(fileModel.hashCode)")
         writeDataAt(url: url, data: data)
     }
 
     func saveImage(_ imageModel: ImageModel, _ isThumbnail: Bool, _ data: Data?) {
         guard let data = data else { return }
-        CMImage.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", imageModel.hashCode))
+        CMImage.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", imageModel.hashCode), logger)
         CMImage.insert(request: imageModel, isThumbnail: isThumbnail)
         createDirectoryIfNotExist(paths: .images)
-        CacheFactory.save()
+        cache.save()
         let url = URL(fileURLWithPath: rootPath + "/\(FileManagerPaths.images.rawValue)").appendingPathComponent("\(imageModel.hashCode)")
         writeDataAt(url: url, data: data)
     }
@@ -144,8 +148,8 @@ public class CacheFileManager {
         if FileManager.default.fileExists(atPath: url.absoluteString) {
             try? FileManager.default.removeItem(at: url)
         }
-        CMImage.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", fileHashCode))
-        CacheFactory.save()
+        CMImage.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", fileHashCode), logger)
+        cache.save()
     }
 
     public func deleteFileFromCache(fileHashCode: String) {
@@ -153,8 +157,8 @@ public class CacheFileManager {
         if FileManager.default.fileExists(atPath: url.absoluteString) {
             try? FileManager.default.removeItem(at: url)
         }
-        CMFile.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", fileHashCode))
-        CacheFactory.save()
+        CMFile.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", fileHashCode), logger)
+        cache.save()
     }
 
     public func delete(fileHashCode: String) {
@@ -164,13 +168,13 @@ public class CacheFileManager {
 
     public func saveImageProfile(url: String, data: Data, group: String) {
         let urlHash = url.md5 ?? ""
-        if Chat.sharedInstance.config?.enableCache == true {
+        if enableCache == true {
             createDirectoryForGroupIfNotExist(paths: .images, group: group)
             if let filePath = appGroupContainerUrl(group: group)?
                 .appendingPathComponent(FileManagerPaths.images.imagesForGroup, isDirectory: true)
                 .appendingPathComponent(urlHash, isDirectory: false)
             {
-                Chat.sharedInstance.logger?.log(title: "create file at", message: filePath.path)
+                logger?.log(title: "create file at", message: filePath.path)
                 writeDataAt(url: filePath, data: data)
             }
         }
@@ -199,9 +203,9 @@ public class CacheFileManager {
             if !(fileManager.fileExists(atPath: imageDirectoryPath.path, isDirectory: &isDir)) {
                 do {
                     try fileManager.createDirectory(at: imageDirectoryPath, withIntermediateDirectories: true, attributes: nil)
-                    Chat.sharedInstance.logger?.log(title: "directory created at:\n \(imageDirectoryPath.path)")
+                    logger?.log(title: "directory created at:\n \(imageDirectoryPath.path)")
                 } catch {
-                    Chat.sharedInstance.logger?.log(title: "error on creating Directory \n\(error.localizedDescription)")
+                    logger?.log(title: "error on creating Directory \n\(error.localizedDescription)")
                 }
             }
         }
@@ -213,9 +217,9 @@ public class CacheFileManager {
         if !(FileManager.default.fileExists(atPath: directory, isDirectory: nil)) {
             do {
                 try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
-                Chat.sharedInstance.logger?.log(title: "directory created at:\n \(url)")
+                logger?.log(title: "directory created at:\n \(url)")
             } catch {
-                Chat.sharedInstance.logger?.log(title: "error on creating Directory \n\(error.localizedDescription)")
+                logger?.log(title: "error on creating Directory \n\(error.localizedDescription)")
             }
         }
     }
@@ -224,7 +228,7 @@ public class CacheFileManager {
         do {
             try data.write(to: url)
         } catch {
-            Chat.sharedInstance.logger?.log(title: "error when try to write data on url:\(url.path) \n\(error.localizedDescription)")
+            logger?.log(title: "error when try to write data on url:\(url.path) \n\(error.localizedDescription)")
         }
     }
 }

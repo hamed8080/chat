@@ -72,11 +72,3 @@ class BareChatSendableRequest: UniqueIdManagerRequest, ChatSendable {
 }
 
 protocol BodyRequestProtocol {}
-
-protocol RestAPIProtocol: UniqueIdProtocol, Encodable {
-    var urlString: String { get }
-    var url: String { get }
-    var headers: [String: String] { get }
-    var bodyData: Data? { get }
-    var method: HTTPMethod { get }
-}

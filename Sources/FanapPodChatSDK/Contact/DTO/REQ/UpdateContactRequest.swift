@@ -6,20 +6,14 @@
 
 import Foundation
 
-public class UpdateContactRequest: UniqueIdManagerRequest, RestAPIProtocol, BodyRequestProtocol {
-    static var config = Chat.sharedInstance.config!
-    var url: String = "\(config.platformHost)\(Routes.updateContacts.rawValue)"
-    var urlString: String { url }
-    var headers: [String: String] = ["_token_": config.token, "_token_issuer_": "1"]
-    var bodyData: Data? { getParameterData() }
-    var method: HTTPMethod = .post
-
+public class UpdateContactRequest: UniqueIdManagerRequest, Encodable, BodyRequestProtocol {
     public let cellphoneNumber: String
     public let email: String
     public let firstName: String
     public let id: Int
     public let lastName: String
     public let username: String
+    internal var typeCode: String?
 
     public init(cellphoneNumber: String,
                 email: String,
@@ -57,7 +51,7 @@ public class UpdateContactRequest: UniqueIdManagerRequest, RestAPIProtocol, Body
         try container.encode(id, forKey: .id)
         try container.encode(lastName, forKey: .lastName)
         try container.encode(username, forKey: .username)
-        try container.encode(Chat.sharedInstance.config?.typeCode, forKey: .typeCode)
+        try container.encode(typeCode, forKey: .typeCode)
         try container.encode(uniqueId, forKey: .uniqueId)
     }
 }

@@ -28,7 +28,7 @@ public extension QueueOfEditMessages {
         model.messageType = request.messageType.rawValue as NSNumber?
         model.textMessage = request.textMessage
         model.repliedTo = request.repliedTo as NSNumber?
-        model.typeCode = Chat.sharedInstance.config?.typeCode
+        model.typeCode = request.typeCode
         model.uniqueId = request.uniqueId
         model.metadata = request.metadata
 

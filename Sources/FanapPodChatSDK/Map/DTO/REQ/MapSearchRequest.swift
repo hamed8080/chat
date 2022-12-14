@@ -6,14 +6,7 @@
 
 import Foundation
 
-public class MapSearchRequest: UniqueIdManagerRequest, RestAPIProtocol {
-    static let config = Chat.sharedInstance.config!
-    var url: String = "\(config.mapServer)\(Routes.mapSearch.rawValue)"
-    var urlString: String { url.toURLCompoenentString(encodable: self) ?? url }
-    var headers: [String: String] = ["Api-Key": config.mapApiKey!]
-    var bodyData: Data? { toData() }
-    var method: HTTPMethod = .get
-
+public class MapSearchRequest: UniqueIdManagerRequest, Encodable {
     public let lat: Double
     public let lng: Double
     public let term: String

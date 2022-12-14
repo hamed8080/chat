@@ -16,6 +16,7 @@ public class EditMessageRequest: UniqueIdManagerRequest, Queueable, PlainTextSen
     var content: String? { textMessage }
     var subjectId: Int { messageId }
     var chatMessageType: ChatMessageVOTypes = .editMessage
+    internal var typeCode: String?
 
     public init(threadId: Int,
                 messageType: MessageType,

@@ -6,15 +6,20 @@
 
 import Foundation
 class UploadManager {
-    class func upload(url: String,
-                      headers: [String: String]?,
-                      parameters: [String: Any]?,
-                      fileData: Data?,
-                      fileName: String,
-                      mimetype: String?,
-                      uniqueId: String,
-                      uploadProgress: UploadFileProgressType?,
-                      completion: @escaping (Data?, URLResponse?, Error?) -> Void)
+    private var callbackManager: CallbacksManager
+    init(callbackManager: CallbacksManager) {
+        self.callbackManager = callbackManager
+    }
+
+    func upload(url: String,
+                headers: [String: String]?,
+                parameters: [String: Any]?,
+                fileData: Data?,
+                fileName: String,
+                mimetype: String?,
+                uniqueId: String,
+                uploadProgress: UploadFileProgressType?,
+                completion: @escaping (Data?, URLResponse?, Error?) -> Void)
     {
         guard let url = URL(string: url) else { return }
         var request = URLRequest(url: url)
@@ -27,17 +32,17 @@ class UploadManager {
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         let delegate = ProgressImplementation(uniqueId: uniqueId, uploadProgress: uploadProgress)
         let session = URLSession(configuration: .default, delegate: delegate, delegateQueue: nil)
-        let uploadTask = session.uploadTask(with: request, from: body as Data) { data, response, error in
+        let uploadTask = session.uploadTask(with: request, from: body as Data) { [weak self] data, response, error in
             DispatchQueue.main.async {
                 completion(data, response, error)
-                Chat.sharedInstance.callbacksManager.removeUploadTask(uniqueId: uniqueId)
+                self?.callbackManager.removeUploadTask(uniqueId: uniqueId)
             }
         }
         uploadTask.resume()
-        Chat.sharedInstance.callbacksManager.addUploadTask(task: uploadTask, uniqueId: uniqueId)
+        callbackManager.addUploadTask(task: uploadTask, uniqueId: uniqueId)
     }
 
-    class func multipartFormDatas(parameters: [String: Any]?, fileName: String, mimeType: String?, fileData: Data?, boundary: String) -> NSMutableData {
+    func multipartFormDatas(parameters: [String: Any]?, fileName: String, mimeType: String?, fileData: Data?, boundary: String) -> NSMutableData {
         let httpBody = NSMutableData()
         parameters?.forEach { key, value in
             if let value = value as? String, let data = convertFormField(named: key, value: value, boundary: boundary) {
@@ -53,7 +58,7 @@ class UploadManager {
         return httpBody
     }
 
-    class func convertFileData(fieldName: String, fileName: String, mimeType: String?, fileData: Data, boundary: String) -> Data {
+    func convertFileData(fieldName: String, fileName: String, mimeType: String?, fileData: Data, boundary: String) -> Data {
         let data = NSMutableData()
         let lineBreak = "\r\n"
         let mimeType = mimeType ?? "content-type header"
@@ -65,7 +70,7 @@ class UploadManager {
         return data as Data
     }
 
-    class func convertFormField(named name: String, value: String, boundary: String) -> Data? {
+    func convertFormField(named name: String, value: String, boundary: String) -> Data? {
         let lineBreak = "\r\n"
         var fieldString = "--\(boundary + lineBreak)"
         fieldString += "Content-Disposition: form-data; name=\"\(name)\"\(lineBreak + lineBreak)"

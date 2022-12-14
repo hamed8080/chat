@@ -45,10 +45,10 @@ public extension CMContact {
         return model
     }
 
-    class func deleteContacts(byTimeStamp timeStamp: Int) {
+    class func deleteContacts(byTimeStamp timeStamp: Int, logger: Logger? = nil) {
         let currentTime = Int(Date().timeIntervalSince1970)
         let predicate = NSPredicate(format: "time <= %i", Int(currentTime - timeStamp))
-        CMContact.crud.deleteWith(predicate: predicate)
+        CMContact.crud.deleteWith(predicate: predicate, logger)
     }
 
     class func insertOrUpdate(contacts: [Contact]) {
