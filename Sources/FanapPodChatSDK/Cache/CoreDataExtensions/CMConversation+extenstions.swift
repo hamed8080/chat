@@ -111,10 +111,10 @@ public extension CMConversation {
         return model
     }
 
-    class func deleteConversations(byTimeStamp timeStamp: Int) {
+    class func deleteConversations(byTimeStamp timeStamp: Int, logger: Logger?) {
         let currentTime = Int(Date().timeIntervalSince1970)
         let predicate = NSPredicate(format: "time <= %i", Int(currentTime - timeStamp))
-        CMContact.crud.deleteWith(predicate: predicate)
+        CMContact.crud.deleteWith(predicate: predicate, logger)
     }
 
     class func insertOrUpdate(conversations: [Conversation], resultEntity: ((CMConversation) -> Void)? = nil) {

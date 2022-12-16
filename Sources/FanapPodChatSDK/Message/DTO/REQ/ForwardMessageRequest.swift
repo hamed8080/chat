@@ -14,6 +14,7 @@ public class ForwardMessageRequest: UniqueIdManagerRequest, Queueable, PlainText
     var chatMessageType: ChatMessageVOTypes = .forwardMessage
     var subjectId: Int { threadId }
     var content: String? { "\(messageIds)" }
+    internal var typeCode: String?
 
     public init(fromThreadId: Int,
                 threadId: Int,

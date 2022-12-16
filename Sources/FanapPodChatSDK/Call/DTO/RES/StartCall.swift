@@ -6,7 +6,7 @@
 
 import Foundation
 public struct StartCall: Codable {
-    public let certificateFile: String
+    public let certificateFile: String?
     public let clientDTO: ClientDTO
     public let otherClientDtoList: [ClientDTO]?
     public let chatDataDto: ChatDataDTO
@@ -14,7 +14,7 @@ public struct StartCall: Codable {
     public let callImage: String?
     public var callId: Int?
 
-    public init(certificateFile: String, clientDTO: ClientDTO, otherClientDtoList: [ClientDTO]? = nil, chatDataDto: ChatDataDTO, callName: String?, callImage: String?, callId: Int? = nil) {
+    public init(certificateFile: String? = nil, clientDTO: ClientDTO, otherClientDtoList: [ClientDTO]? = nil, chatDataDto: ChatDataDTO, callName: String?, callImage: String?, callId: Int? = nil) {
         self.certificateFile = certificateFile
         self.clientDTO = clientDTO
         self.otherClientDtoList = otherClientDtoList

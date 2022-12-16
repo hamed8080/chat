@@ -30,7 +30,7 @@ public extension QueueOfForwardMessages {
         model.threadId = request.threadId as NSNumber?
         model.messageIds = "\(messageIds)"
         model.repliedTo = nil
-        model.typeCode = Chat.sharedInstance.config?.typeCode
+        model.typeCode = request.typeCode
         model.uniqueIds = request.uniqueId
         model.fromThreadId = request.fromThreadId as NSNumber?
         return model

@@ -19,6 +19,7 @@ public class UploadFileRequest: UniqueIdManagerRequest, Encodable {
     public var originalName: String = ""
     public var userGroupHash: String?
     public var description: String?
+    internal var typeCode: String?
 
     public init(data: Data,
                 fileExtension: String? = nil,

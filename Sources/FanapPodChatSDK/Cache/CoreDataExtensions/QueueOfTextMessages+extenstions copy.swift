@@ -26,7 +26,7 @@ public extension QueueOfTextMessages {
         model.messageType = request.messageType.rawValue as NSNumber?
         model.textMessage = request.textMessage
         model.repliedTo = request.repliedTo as NSNumber?
-        model.typeCode = Chat.sharedInstance.config?.typeCode
+        model.typeCode = request.typeCode
         model.uniqueId = request.uniqueId
         model.systemMetadata = request.systemMetadata
         model.metadata = request.metadata

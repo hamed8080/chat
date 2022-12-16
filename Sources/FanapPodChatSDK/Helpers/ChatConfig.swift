@@ -62,8 +62,6 @@ public struct ChatConfig {
         enableNotificationLogObserver: Bool = false,
         callTimeout: TimeInterval = 45
     ) {
-        CacheFactory.write(cacheType: .deleteAllContacts)
-        CacheFactory.save()
         self.asyncConfig = asyncConfig
         self.ssoHost = ssoHost
         self.platformHost = platformHost

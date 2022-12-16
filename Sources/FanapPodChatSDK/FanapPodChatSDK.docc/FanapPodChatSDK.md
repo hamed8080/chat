@@ -27,6 +27,6 @@ Please check out the figure below to find out how the Chat SDK works behind the 
 ### Important classes
 - ``Chat``
 - ``ChatDelegate``
-- ``CacheFactory``
+- ``cache``
 - ``Conversation``
 - ``Message``

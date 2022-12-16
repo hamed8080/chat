@@ -60,7 +60,7 @@ public extension QueueOfFileMessages {
         model.mimeType = request.mimeType
         model.originalName = request.originalName
         model.userGroupHash = request.userGroupHash
-        model.typeCode = Chat.sharedInstance.config?.typeCode
+        model.typeCode = request.typeCode
 
         return model
     }
@@ -88,7 +88,7 @@ public extension QueueOfFileMessages {
         model.yC = request.yC as NSNumber?
         model.hC = request.hC as NSNumber?
         model.wC = request.wC as NSNumber?
-        model.typeCode = Chat.sharedInstance.config?.typeCode
+        model.typeCode = request.typeCode
 
         return model
     }

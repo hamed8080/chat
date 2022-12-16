@@ -26,8 +26,8 @@ public struct Call: Codable, Equatable {
     public let partnerParticipant: Participant?
     public let conversation: Conversation?
 
-    public var isIncomingCall: Bool {
-        creatorId != Chat.sharedInstance.userInfo?.id
+    public func isIncomingCall(currentUserId: Int?) -> Bool {
+        creatorId != currentUserId
     }
 
     public init(id: Int,

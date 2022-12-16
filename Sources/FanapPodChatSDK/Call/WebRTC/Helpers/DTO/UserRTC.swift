@@ -38,9 +38,11 @@ public protocol AudioRTCProtocol: UserRTCProtocol {
     var isSpeaking: Bool { get set }
     var lastTimeSpeaking: Date? { get set }
     var speakingMonitorTimer: Timer? { get set }
+    var delegate: ChatDelegate? { get set }
     func participantStartSpeaking()
     func participantStopSpeaking()
     func monitorAudioLevelFor(callParticipant: CallParticipant)
+    func onSpeakingLevelChange(_ stat: Dictionary<String, RTCStatistics>.Values.Element, _ callParticipant: CallParticipant)
     func addReceiveStream()
     func createMediaSenderTrack()
 }
@@ -171,10 +173,12 @@ public class AudioRTC: UserRTC, AudioRTCProtocol {
     public var isSpeaking: Bool = false
     public var lastTimeSpeaking: Date?
     public var speakingMonitorTimer: Timer?
+    public weak var delegate: ChatDelegate?
 
-    init(direction: RTCDirection, topic: String, config: WebRTCConfig, delegate: RTCPeerConnectionDelegate) {
+    init(chatDelegate: ChatDelegate?, direction: RTCDirection, topic: String, config: WebRTCConfig, delegate: RTCPeerConnectionDelegate) {
         let custom: [String: String] = direction == .receive ? [kRTCMediaConstraintsOfferToReceiveAudio: kRTCMediaConstraintsValueTrue] : [:]
         super.init(direction: direction, topic: topic, config: config, delegate: delegate, customConstraint: custom)
+        self.delegate = chatDelegate
     }
 
     public func createMediaSenderTrack() {
@@ -200,16 +204,20 @@ public class AudioRTC: UserRTC, AudioRTCProtocol {
             self?.pc?.statistics { report in
                 report.statistics.values.filter { $0.type == "track" }.forEach { stat in
                     DispatchQueue.main.async {
-                        if (stat.values["audioLevel"] as? Double ?? .zero) > 0.01 {
-                            self?.participantStartSpeaking()
-                            Chat.sharedInstance.delegate?.chatEvent(event: .call(.callParticipantStartSpeaking(callParticipant)))
-                        } else if let lastSpeakingTime = self?.lastTimeSpeaking, lastSpeakingTime.timeIntervalSince1970 + 3 < Date().timeIntervalSince1970 {
-                            self?.participantStopSpeaking()
-                            Chat.sharedInstance.delegate?.chatEvent(event: .call(.callParticipantStopSpeaking(callParticipant)))
-                        }
+                        self?.onSpeakingLevelChange(stat, callParticipant)
                     }
                 }
             }
+        }
+    }
+
+    public func onSpeakingLevelChange(_ stat: Dictionary<String, RTCStatistics>.Values.Element, _ callParticipant: CallParticipant) {
+        if (stat.values["audioLevel"] as? Double ?? .zero) > 0.01 {
+            participantStartSpeaking()
+            delegate?.chatEvent(event: .call(.callParticipantStartSpeaking(callParticipant)))
+        } else if let lastSpeakingTime = lastTimeSpeaking, lastSpeakingTime.timeIntervalSince1970 + 3 < Date().timeIntervalSince1970 {
+            participantStopSpeaking()
+            delegate?.chatEvent(event: .call(.callParticipantStopSpeaking(callParticipant)))
         }
     }
 

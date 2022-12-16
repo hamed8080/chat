@@ -6,20 +6,14 @@
 
 import Foundation
 
-public class AddContactRequest: UniqueIdManagerRequest, RestAPIProtocol {
-    static let config = Chat.sharedInstance.config!
-    var url: String = "\(config.platformHost)\(Routes.addContacts.rawValue)"
-    var urlString: String { url }
-    var headers: [String: String] = ["_token_": config.token, "_token_issuer_": "1"]
-    var bodyData: Data? { getParameterData() }
-    var method: HTTPMethod = .post
-
+public class AddContactRequest: UniqueIdManagerRequest, Encodable {
     public var cellphoneNumber: String?
     public var email: String?
     public var firstName: String?
     public var lastName: String?
     public var ownerId: Int?
     public var username: String?
+    internal var typeCode: String?
 
     public init(cellphoneNumber: String? = nil,
                 email: String? = nil,
@@ -74,6 +68,6 @@ public class AddContactRequest: UniqueIdManagerRequest, RestAPIProtocol {
         try container.encodeIfPresent(ownerId, forKey: .ownerId)
         try container.encodeIfPresent(username, forKey: .username)
         try container.encodeIfPresent(uniqueId, forKey: .uniqueId)
-        try container.encodeIfPresent(Chat.sharedInstance.config?.typeCode, forKey: .typeCode)
+        try container.encodeIfPresent(typeCode, forKey: .typeCode)
     }
 }

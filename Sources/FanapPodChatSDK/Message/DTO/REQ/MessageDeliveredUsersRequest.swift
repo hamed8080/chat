@@ -10,7 +10,7 @@ public class MessageDeliveredUsersRequest: UniqueIdManagerRequest, ChatSendable 
     let offset: Int
     let count: Int
     var content: String? { convertCodableToString() }
-    var chatMessageType: ChatMessageVOTypes = .getMessageDeleveryParticipants
+    var chatMessageType: ChatMessageVOTypes = .messageDeliveredToParticipants
 
     public init(messageId: Int, count: Int = 50, offset: Int = 0, uniqueId: String? = nil) {
         self.messageId = messageId

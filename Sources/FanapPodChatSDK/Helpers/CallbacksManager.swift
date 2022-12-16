@@ -7,7 +7,7 @@
 import Foundation
 
 class CallbacksManager {
-    private var callbacks: [String: OnChatResponseType?] = [:]
+    private var callbacks: [String: Any] = [:]
     private var callbacksRequestType: [String: ChatMessageVOTypes] = [:]
     private var sentCallbacks: [String: OnSentType?] = [:]
     private var deliveredCallbacks: [String: OnDeliveryType?] = [:]
@@ -15,12 +15,12 @@ class CallbacksManager {
     private var uploadTasks: [String: URLSessionTask] = [:]
     private var downloadTasks: [String: URLSessionTask] = [:]
 
-    func addCallback(uniqueId: String,
-                     requesType: ChatMessageVOTypes,
-                     callback: OnChatResponseType? = nil,
-                     onSent: OnSentType? = nil,
-                     onDelivered: OnDeliveryType? = nil,
-                     onSeen: OnSeenType? = nil)
+    func addCallback<T: Decodable>(uniqueId: String,
+                                   requesType: ChatMessageVOTypes,
+                                   callback: CompletionType<T>? = nil,
+                                   onSent: OnSentType? = nil,
+                                   onDelivered: OnDeliveryType? = nil,
+                                   onSeen: OnSeenType? = nil)
     {
         if let callback = callback {
             callbacks[uniqueId] = callback
@@ -55,8 +55,8 @@ class CallbacksManager {
         seenCallbacks.removeValue(forKey: uniqueId)
     }
 
-    func getCallBack(_ uniqueId: String) -> OnChatResponseType? {
-        callbacks[uniqueId] ?? nil
+    func getCallBack<T: Decodable>(_ uniqueId: String) -> CompletionType<T>? {
+        callbacks[uniqueId] as? CompletionType<T> ?? nil
     }
 
     func getSentCallback(_ uniqueId: String) -> OnSentType? {

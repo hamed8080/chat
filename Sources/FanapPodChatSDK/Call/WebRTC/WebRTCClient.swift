@@ -10,10 +10,11 @@ import Foundation
 import WebRTC
 
 public protocol CallParticipantUserRTCProtocol {
-    init(callParticipant: CallParticipant, config: WebRTCConfig, delegate: RTCPeerConnectionDelegate)
+    init(chatDelegate: ChatDelegate?, userId: Int?, callParticipant: CallParticipant, config: WebRTCConfig, delegate: RTCPeerConnectionDelegate)
     var callParticipant: CallParticipant { get set }
     var audioRTC: AudioRTC { get set }
     var videoRTC: VideoRTC { get set }
+    var userId: Int? { get set }
     var isMe: Bool { get }
     func peerConnectionForTopic(topic: String) -> RTCPeerConnection?
     func uerRTC(topic: String) -> UserRTCProtocol?
@@ -21,6 +22,7 @@ public protocol CallParticipantUserRTCProtocol {
     func addStreams()
     func toggleMute()
     func toggleCamera()
+    func switchCameraPosition()
     func addIceCandidate(_ candidate: RemoteCandidateRes)
     func setRemoteDescription(_ remoteSDP: RemoteSDPRes)
     func close()
@@ -35,12 +37,14 @@ open class CallParticipantUserRTC: CallParticipantUserRTCProtocol, Identifiable,
     public var callParticipant: CallParticipant
     public var audioRTC: AudioRTC
     public var videoRTC: VideoRTC
-    public var isMe: Bool { callParticipant.userId == Chat.sharedInstance.userInfo?.id }
+    public var userId: Int?
+    public var isMe: Bool { callParticipant.userId == userId }
 
-    public required init(callParticipant: CallParticipant, config: WebRTCConfig, delegate: RTCPeerConnectionDelegate) {
+    public required init(chatDelegate: ChatDelegate?, userId: Int?, callParticipant: CallParticipant, config: WebRTCConfig, delegate: RTCPeerConnectionDelegate) {
+        self.userId = userId
         self.callParticipant = callParticipant
-        let direction: RTCDirection = callParticipant.userId == Chat.sharedInstance.userInfo?.id ? .send : .receive
-        audioRTC = AudioRTC(direction: direction, topic: callParticipant.topics.topicAudio, config: config, delegate: delegate)
+        let direction: RTCDirection = callParticipant.userId == userId ? .send : .receive
+        audioRTC = AudioRTC(chatDelegate: chatDelegate, direction: direction, topic: callParticipant.topics.topicAudio, config: config, delegate: delegate)
         videoRTC = VideoRTC(direction: direction, topic: callParticipant.topics.topicVideo, config: config, delegate: delegate)
     }
 
@@ -129,6 +133,12 @@ open class CallParticipantUserRTC: CallParticipantUserRTCProtocol, Identifiable,
         topic.contains("Vi-")
     }
 
+    public func switchCameraPosition() {
+        if isMe {
+            videoRTC.switchCameraPosition()
+        }
+    }
+
     public func close() {
         audioRTC.close()
         videoRTC.close()
@@ -146,30 +156,25 @@ public protocol WebRTCClientDelegate: AnyObject {
 // MARK: - Pay attention, this class use many extensions inside a files not be here.
 
 public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDelegate {
-    public static var instance: WebRTCClient? // for call methods when new message arrive from server
+    private weak var chat: Chat?
     private var answerReceived: [String: RTCPeerConnection] = [:]
     private var config: WebRTCConfig
     private var delegate: WebRTCClientDelegate?
     public private(set) var callParticipantsUserRTC: [CallParticipantUserRTC] = []
     var logFile: RTCFileLogger?
-
     private let rtcAudioSession = RTCAudioSession.sharedInstance()
     private let audioQueue = DispatchQueue(label: "audio")
 
-    public init(config: WebRTCConfig, delegate: WebRTCClientDelegate? = nil) {
-        self.delegate = delegate
+    public init(chat: Chat, config: WebRTCConfig, delegate _: WebRTCClientDelegate? = nil) {
+        self.chat = chat
         self.config = config
         RTCInitializeSSL()
         super.init()
-        Chat.sharedInstance.callState = .initializeWebrtc
-        WebRTCClient.instance = self
-
-        if Chat.sharedInstance.config?.isDebuggingLogEnabled == true {
+        self.chat?.callState = .initializeWebrtc
+        if self.chat?.config.isDebuggingLogEnabled == true {
             print(config)
-
             // Console output
             RTCSetMinDebugLogLevel(RTCLoggingSeverity.info)
-
             // File output
             saveLogsToFile()
         }
@@ -177,13 +182,13 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
 
     public func createSession() {
         configureAudioSession()
-        let session = CreateSessionReq(peerName: config.peerName, turnAddress: config.turnAddress, brokerAddress: config.brokerAddressWeb, token: Chat.sharedInstance.token ?? "")
+        let session = CreateSessionReq(peerName: config.peerName, turnAddress: config.turnAddress, brokerAddress: config.brokerAddressWeb, token: chat?.config.token ?? "")
         send(session)
     }
 
     /// Ordering is matter in this function.
     public func addCallParticipant(_ callParticipant: CallParticipant) {
-        callParticipantsUserRTC.append(.init(callParticipant: callParticipant, config: config, delegate: self))
+        callParticipantsUserRTC.append(.init(chatDelegate: chat?.delegate, userId: chat?.userInfo?.id, callParticipant: callParticipant, config: config, delegate: self))
         // create media senders for both audio and video senders
 
         if let callParticipantUserRTC = callParticipantsUserRTC.first(where: { $0.callParticipant == callParticipant }) {
@@ -222,18 +227,17 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
                 callParticipantsUserRTC[index].close()
             }
         }
-        let close = CloseSessionReq(peerName: config.peerName, token: Chat.sharedInstance.token ?? "")
+        let close = CloseSessionReq(peerName: config.peerName, token: chat?.config.token ?? "")
         send(close)
         logFile?.stop()
         callParticipantsUserRTC = []
-        WebRTCClient.instance = nil
     }
 
     public func sendOfferToPeer(idType: String, _ sdp: RTCSessionDescription, topic: String, mediaType: Mediatype) {
         let sendSDPOffer = SendOfferSDPReq(peerName: config.peerName,
                                            id: idType,
                                            brokerAddress: config.firstBorokerAddressWeb,
-                                           token: Chat.sharedInstance.token ?? "",
+                                           token: chat?.config.token ?? "",
                                            topic: topic,
                                            sdpOffer: sdp.sdp,
                                            mediaType: mediaType,
@@ -242,7 +246,7 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
     }
 
     func send(_ asyncMessage: AsyncSnedable) {
-        Chat.sharedInstance.asyncManager.sendToAsync(asyncMessage: asyncMessage)
+        chat?.asyncManager.sendToAsync(asyncMessage: asyncMessage)
     }
 
     deinit {
@@ -252,7 +256,7 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
     func customPrint(_ message: String, _ error: Error? = nil, isSuccess: Bool = false, isGuardNil: Bool = false) {
         let errorMessage = error != nil ? " with error:\(error?.localizedDescription ?? "")" : ""
         let icon = isGuardNil ? "❌" : isSuccess ? "✅" : ""
-        Chat.sharedInstance.logger?.log(title: "CHAT_SDK:\(icon)", message: "\(message) \(errorMessage)")
+        chat?.logger?.log(title: "CHAT_SDK:\(icon)", message: "\(message) \(errorMessage)")
     }
 
     func saveLogsToFile() {
@@ -343,7 +347,7 @@ public extension WebRTCClient {
             guard let self = self else { return }
             if self.callParticipntUserRCT(topicName)?.peerConnectionForTopic(topic: topicName)?.remoteDescription != nil {
                 let sendIceCandidate = SendCandidateReq(peerName: self.config.peerName,
-                                                        token: Chat.sharedInstance.token ?? "",
+                                                        token: self.chat?.config.token ?? "",
                                                         topic: topicName,
                                                         candidate: IceCandidate(from: candidate).replaceSpaceSdpIceCandidate)
                 self.customPrint("ice sended to server")
@@ -398,6 +402,10 @@ public extension WebRTCClient {
         meCallParticipntUserRCT?.toggleMute()
     }
 
+    func switchCamera() {
+        meCallParticipntUserRCT?.switchCameraPosition()
+    }
+
     var meCallParticipntUserRCT: CallParticipantUserRTC? { callParticipantsUserRTC.first(where: { $0.isMe }) }
 
     func callParticipntUserRCT(_ topic: String) -> CallParticipantUserRTC? {
@@ -430,7 +438,7 @@ public extension WebRTCClient {
 // MARK: - OnReceive Message from Async Server
 
 extension WebRTCClient {
-    func messageReceived(_ message: AsyncMessage) {
+    func onCallMessageReceived(_ message: AsyncMessage) {
         guard let content = message.content, let data = content.data(using: .utf8), let ms = try? JSONDecoder().decode(WebRTCAsyncMessage.self, from: data) else {
             customPrint("can't decode data from webrtc servers", isGuardNil: true)
             return
@@ -467,7 +475,7 @@ extension WebRTCClient {
     func stopAllSessions() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            let stop = StopAllSessionReq(peerName: self.config.peerName, token: Chat.sharedInstance.token ?? "")
+            let stop = StopAllSessionReq(peerName: self.config.peerName, token: self.chat?.config.token ?? "")
             self.send(stop)
         }
     }

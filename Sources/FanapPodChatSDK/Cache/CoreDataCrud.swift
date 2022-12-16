@@ -66,19 +66,19 @@ open class CoreDataCrud<T: NSFetchRequestResult> {
         }
     }
 
-    public func deleteWith(predicate: NSPredicate) {
+    public func deleteWith(predicate: NSPredicate, _ logger: Logger?) {
         do {
             let req = fetchRequest()
             req.predicate = predicate
             let deleteReq = NSBatchDeleteRequest(fetchRequest: req)
             try PSM.shared.context.execute(deleteReq)
-            Chat.sharedInstance.logger?.log(title: "CHAT_SDK:", message: "saved successfully from deleteWith execute")
+            logger?.log(title: "CHAT_SDK:", message: "saved successfully from deleteWith execute")
         } catch {
-            Chat.sharedInstance.logger?.log(title: "error in deleteWith happened", message: "\(error)")
+            logger?.log(title: "error in deleteWith happened", message: "\(error)")
         }
     }
 
-    public func deleteAll() {
+    public func deleteAll(_ logger: Logger?) {
         do {
             let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest())
             deleteRequest.resultType = .resultTypeObjectIDs
@@ -86,9 +86,9 @@ open class CoreDataCrud<T: NSFetchRequestResult> {
             guard let deletedResult = batchDelete?.result as? [NSManagedObjectID] else { return }
             let deletedObjects: [AnyHashable: Any] = [NSDeletedObjectsKey: deletedResult]
             NSManagedObjectContext.mergeChanges(fromRemoteContextSave: deletedObjects, into: [PSM.shared.context])
-            Chat.sharedInstance.logger?.log(title: "saved successfully from deleteAll execute for table \(entityName)")
+            logger?.log(title: "saved successfully from deleteAll execute for table \(entityName)")
         } catch {
-            Chat.sharedInstance.logger?.log(title: "error in deleteAll happened", message: "\(error)")
+            logger?.log(title: "error in deleteAll happened", message: "\(error)")
         }
     }
 

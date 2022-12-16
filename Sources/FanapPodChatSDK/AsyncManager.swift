@@ -9,6 +9,10 @@ import Foundation
 
 /// AsyncManager intermediate between chat and async socket server.
 internal class AsyncManager: AsyncDelegate {
+    private var config: ChatConfig?
+    private weak var delegate: ChatDelegate?
+    private var logger: Logger?
+    var chat: Chat!
     /// Async client.
     private(set) var asyncClient: Async?
 
@@ -16,16 +20,23 @@ internal class AsyncManager: AsyncDelegate {
     private var lastSentMessageDate: Date? = Date()
 
     /// A timer to check the connection status every 20 seconds.
-    private(set) var chatServerPingTimer: Timer?
+    private(set) var pingTimer: TimerProtocol
+    private(set) var queueTimer: TimerProtocol
 
     /// This queue will live till application is running and this class is in memory, be careful it's not persistent on storage.
     private var queue: [String: Queueable] = [:]
 
-    public init() {}
+    public init(pingTimer: TimerProtocol, queueTimer: TimerProtocol, config: ChatConfig?, delegate: ChatDelegate?, logger: Logger?) {
+        self.config = config
+        self.delegate = delegate
+        self.logger = logger
+        self.pingTimer = pingTimer
+        self.queueTimer = queueTimer
+    }
 
     /// Create an async connection.
     public func createAsync() {
-        if let asyncConfig = Chat.sharedInstance.config?.asyncConfig {
+        if let asyncConfig = config?.asyncConfig {
             asyncClient = Async(config: asyncConfig, delegate: self)
             asyncClient?.createSocket()
         }
@@ -33,23 +44,23 @@ internal class AsyncManager: AsyncDelegate {
 
     /// A delegate method that receives a message.
     public func asyncMessage(asyncMessage: AsyncMessage) {
-        ReceiveMessageFactory.invokeCallback(asyncMessage: asyncMessage)
+        chat.invokeCallback(asyncMessage: asyncMessage)
         // FIXME: needs to Map webrtcPeerIds With ServerNames like["KuretoAdmin1":13631820 , "KuretoAdmin2":13631821 ,...]
         let webrtcSenderPeerIds: [Int64] = [13_631_820, 13_631_821, 101_130_994, 101_131_106, 101_131_185]
         let webrtcPeerNames = ["KuretoAdmin1,KuretoAdmin2"]
         if webrtcSenderPeerIds.contains(asyncMessage.senderId ?? 0) || webrtcPeerNames.contains(asyncMessage.peerName ?? "") {
-            WebRTCClient.instance?.messageReceived(asyncMessage)
+            chat.webrtc?.onCallMessageReceived(asyncMessage)
         }
         removeFromQueue(asyncMessage: asyncMessage)
     }
 
     /// A delegate that tells the status of the async connection.
     public func asyncStateChanged(asyncState: AsyncSocketState, error: AsyncError?) {
-        Chat.sharedInstance.delegate?.chatState(state: asyncState.chatState, currentUser: nil, error: error?.chatError)
+        delegate?.chatState(state: asyncState.chatState, currentUser: nil, error: error?.chatError)
         if asyncState == .asyncReady {
-            UserInfoRequestHandler.getUserForChatReady()
+            chat.getUserForChatReady()
         } else if asyncState == .closed {
-            chatServerPingTimer?.invalidate()
+            pingTimer.invalidate()
         }
     }
 
@@ -58,20 +69,19 @@ internal class AsyncManager: AsyncDelegate {
 
     /// A delegate to raise an error.
     public func asyncError(error: AsyncError) {
-        Chat.sharedInstance.delegate?.chatError(error: .init(code: .asyncError, message: error.message, userInfo: error.userInfo, rawError: error.rawError))
+        delegate?.chatError(error: .init(code: .asyncError, message: error.message, userInfo: error.userInfo, rawError: error.rawError))
     }
 
     /// A public method to completely destroy the async object.
     public func disposeObject() {
         asyncClient?.disposeObject()
         asyncClient = nil
-        chatServerPingTimer?.invalidate()
-        chatServerPingTimer = nil
+        pingTimer.invalidate()
     }
 
     /// The sendData delegate will inform if a send event occurred by the async socket.
     public func sendData(sendable: ChatSendable) {
-        guard let config = Chat.sharedInstance.config else { return }
+        guard let config = config else { return }
         let chatMessage = SendChatMessageVO(req: sendable, token: config.token, typeCode: config.typeCode)
         addToQueue(sendable: sendable)
         sendToAsync(asyncMessage: AsyncChatServerMessage(chatMessage: chatMessage))
@@ -95,7 +105,7 @@ internal class AsyncManager: AsyncDelegate {
         var interval: TimeInterval = 0
         queue.sorted { $0.value.queueTime < $1.value.queueTime }.forEach { _, item in
             if let sendable = item as? ChatSendable {
-                Timer.scheduledTimer(withTimeInterval: interval + 2, repeats: false) { [weak self] _ in
+                _ = queueTimer.scheduledTimer(withTimeInterval: interval + 2, repeats: false) { [weak self] _ in
                     self?.sendData(sendable: sendable)
                 }
             }
@@ -104,22 +114,21 @@ internal class AsyncManager: AsyncDelegate {
     }
 
     func sendToAsync(asyncMessage: AsyncSnedable) {
-        guard let config = Chat.sharedInstance.config, let content = asyncMessage.content else { return }
+        guard let config = config, let content = asyncMessage.content else { return }
         let asyncMessage = SendAsyncMessageVO(content: content,
                                               ttl: config.msgTTL,
                                               peerName: asyncMessage.peerName ?? config.asyncConfig.serverName,
                                               priority: config.msgPriority,
                                               pushMsgType: asyncMessage.asyncMessageType)
         guard let data = try? JSONEncoder().encode(asyncMessage) else { return }
-        Chat.sharedInstance.logger?.log(title: "send Message", jsonString: asyncMessage.string ?? "", receive: false)
+        logger?.log(title: "send Message", jsonString: asyncMessage.string ?? "", receive: false)
         asyncClient?.sendData(type: .message, data: data)
     }
 
     /// A timer that repeats ping the `Chat server` every 20 seconds.
     internal func sendPingTimer() {
-        chatServerPingTimer?.invalidate()
-        chatServerPingTimer = nil
-        chatServerPingTimer = Timer.scheduledTimer(withTimeInterval: 20, repeats: true) { [weak self] _ in
+        pingTimer.invalidate()
+        pingTimer = pingTimer.scheduledTimer(withTimeInterval: 20, repeats: true) { [weak self] _ in
             guard let self = self else { return }
             if let lastSentMessageDate = self.lastSentMessageDate, Date().timeIntervalSince1970 - (lastSentMessageDate.timeIntervalSince1970 + 20) > 20 {
                 self.sendChatServerPing()
@@ -132,6 +141,6 @@ internal class AsyncManager: AsyncDelegate {
     private func sendChatServerPing() {
         let req = BareChatSendableRequest()
         req.chatMessageType = .ping
-        Chat.sharedInstance.prepareToSendAsync(req: req)
+        chat.prepareToSendAsync(req: req)
     }
 }
