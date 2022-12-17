@@ -22,7 +22,7 @@ extension Chat {
     {
         uniqueIdResult?(request.uniqueId)
         // Check if file exist on cache or not if it doesn't exist force to download it become true.
-        if cacheFileManager.getImage(hashCode: request.hashCode) == nil {
+        if cache.cacheFileManager.getImage(hashCode: request.hashCode) == nil {
             request.forceToDownloadFromServer = true
         }
 
@@ -35,11 +35,11 @@ extension Chat {
         }
 
         if cacheResponse != nil {
-            if request.isThumbnail, let (fileModel, path) = cacheFileManager.getThumbnail(hashCode: request.hashCode) {
-                let data = cacheFileManager.getDataOfFileWith(filePath: path)
+            if request.isThumbnail, let (fileModel, path) = cache.cacheFileManager.getThumbnail(hashCode: request.hashCode) {
+                let data = cache.cacheFileManager.getDataOfFileWith(filePath: path)
                 cacheResponse?(data, fileModel, nil)
-            } else if let (fileModel, path) = cacheFileManager.getImage(hashCode: request.hashCode) {
-                let data = cacheFileManager.getDataOfFileWith(filePath: path)
+            } else if let (fileModel, path) = cache.cacheFileManager.getImage(hashCode: request.hashCode) {
+                let data = cache.cacheFileManager.getDataOfFileWith(filePath: path)
                 cacheResponse?(data, fileModel, nil)
             }
         }
@@ -71,7 +71,7 @@ extension Chat {
             var imageModel = ImageModel(hashCode: req.hashCode, name: fileNameWithExtension, size: size)
             if config.enableCache == true {
                 imageModel.hashCode = req.isThumbnail ? (req.hashCode + "-Thumbnail") : req.hashCode
-                cacheFileManager.saveImage(imageModel, req.isThumbnail, data)
+                cache.cacheFileManager.saveImage(imageModel, req.isThumbnail, data)
             }
             completion?(data, imageModel, nil)
             let response: ChatResponse<Data?> = .init(uniqueId: req.uniqueId, result: data)

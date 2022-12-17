@@ -22,7 +22,7 @@ extension Chat {
     {
         uniqueIdResult?(request.uniqueId)
         // Check if file exist on cache or not if it doesn't exist force to download it become true.
-        if cacheFileManager.getFile(hashCode: request.hashCode) == nil {
+        if cache.cacheFileManager.getFile(hashCode: request.hashCode) == nil {
             request.forceToDownloadFromServer = true
         }
 
@@ -34,8 +34,8 @@ extension Chat {
             }
         }
 
-        if let (fileModel, path) = cacheFileManager.getFile(hashCode: request.hashCode), cacheResponse != nil {
-            let data = cacheFileManager.getDataOfFileWith(filePath: path)
+        if let (fileModel, path) = cache.cacheFileManager.getFile(hashCode: request.hashCode), cacheResponse != nil {
+            let data = cache.cacheFileManager.getDataOfFileWith(filePath: path)
             cacheResponse?(data, fileModel, nil)
         }
     }
@@ -68,7 +68,7 @@ extension Chat {
             let fileNameWithExtension = "\(name ?? "default").\(type ?? "none")"
             let fileModel = FileModel(hashCode: req.hashCode, name: fileNameWithExtension, size: size, type: type)
             if config.enableCache == true {
-                cacheFileManager.saveFile(fileModel, data)
+                cache.cacheFileManager.saveFile(fileModel, data)
             }
             completion?(data, fileModel, nil)
             let response: ChatResponse<Data?> = .init(uniqueId: req.uniqueId, result: data)
