@@ -2,7 +2,7 @@
 // CallbacksManager.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import Foundation
 
@@ -102,5 +102,13 @@ class CallbacksManager {
 
     func addUploadTask(task: URLSessionTask, uniqueId: String) {
         uploadTasks[uniqueId] = task
+    }
+
+    func invokeAndRemove<T: Decodable>(_ response: ChatResponse<T>, _ type: ChatMessageVOTypes?) {
+        guard let uniqueId = response.uniqueId,
+              let type = type,
+              let callback: CompletionType<T> = getCallBack(uniqueId) else { return }
+        callback(ChatResponse(uniqueId: response.uniqueId, result: response.result))
+        removeCallback(uniqueId: uniqueId, requestType: type)
     }
 }

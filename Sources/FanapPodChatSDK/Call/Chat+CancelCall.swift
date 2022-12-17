@@ -8,33 +8,28 @@ import FanapPodAsyncSDK
 import Foundation
 
 // Request
-extension Chat {
-    func requestCancelCall(_ req: CancelCallRequest, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        callState = .canceled
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult)
+public extension Chat {
+    /// The cancelation of a call when nobody answer the call or somthing different happen.
+    /// - Parameters:
+    ///   - request: A call that you want to cancel a call.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func cancelCall(_ request: CancelCallRequest, uniqueIdResult: UniqueIdResultType? = nil) {
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult)
     }
 }
 
 // Response
 extension Chat {
     func onCancelCall(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let call = try? JSONDecoder().decode(Call.self, from: data) else { return }
-        delegate?.chatEvent(event: .call(.callCanceled(call)))
-        guard let callback: CompletionType<Call> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(.init(uniqueId: chatMessage.uniqueId, result: call))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .cancelCall)
+        let response: ChatResponse<Call> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .call(.callCanceled(response)))
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 
     func onGroupCallCanceled(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard var cancelGroupCall = try? JSONDecoder().decode(CancelGroupCall.self, from: data) else { return }
-        cancelGroupCall.callId = chatMessage.subjectId
-        delegate?.chatEvent(event: .call(.groupCallCanceled(cancelGroupCall)))
-        guard let callback: CompletionType<CancelGroupCall> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(.init(uniqueId: chatMessage.uniqueId, result: cancelGroupCall))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .cancelGroupCall)
+        var response: ChatResponse<CancelGroupCall> = asyncMessage.toChatResponse()
+        response.result?.callId = response.subjectId
+        delegate?.chatEvent(event: .call(.groupCallCanceled(response)))
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

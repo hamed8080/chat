@@ -2,29 +2,30 @@
 // Chat+ClearHistory.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import FanapPodAsyncSDK
 import Foundation
 
 // Request
-extension Chat {
-    func requestClearHistory(_ req: GeneralSubjectIdRequest, _ completion: @escaping CompletionType<Int>, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        req.chatMessageType = .clearHistory
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+public extension Chat {
+    /// Clear all messages inside a thread for user.
+    /// - Parameters:
+    ///   - request: The request that  contains a threadId.
+    ///   - completion: A threadId if the result was a success.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func clearHistory(_ request: GeneralSubjectIdRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
+        request.chatMessageType = .clearHistory
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 
 // Response
 extension Chat {
     func onClearHistory(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let threadId = try? JSONDecoder().decode(Int.self, from: data) else { return }
-        cache.write(cacheType: .clearAllHistory(threadId))
+        let response: ChatResponse<Int> = asyncMessage.toChatResponse()
+        cache.write(cacheType: .clearAllHistory(response.result ?? 0))
         cache.save()
-        guard let callback: CompletionType<Int> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(ChatResponse(uniqueId: chatMessage.uniqueId, result: threadId))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .clearHistory)
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

@@ -8,23 +8,25 @@ import FanapPodAsyncSDK
 import Foundation
 
 // Request
-extension Chat {
-    func requestEndCall(_ req: GeneralSubjectIdRequest, _ completion: @escaping CompletionType<Int>, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        req.chatMessageType = .endCallRequest
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+public extension Chat {
+    /// To terminate a call.
+    /// - Parameters:
+    ///   - request: A request with a callId to finish the current call.
+    ///   - completion: A callId that shows a call has terminated properly.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func endCall(_ request: GeneralSubjectIdRequest, _ completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
+        request.chatMessageType = .endCallRequest
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 
 // Response
 extension Chat {
     func onCallEnded(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let callId = chatMessage.subjectId else { return }
-        delegate?.chatEvent(event: .call(.callEnded(callId)))
+        let response: ChatResponse<Int> = asyncMessage.toChatResponse()
         callState = .ended
-        guard let callback: CompletionType<Int> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(ChatResponse(uniqueId: chatMessage.uniqueId, result: callId))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .endCallRequest)
+        delegate?.chatEvent(event: .call(.callEnded(response)))
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
         webrtc?.clearResourceAndCloseConnection()
         webrtc = nil
     }

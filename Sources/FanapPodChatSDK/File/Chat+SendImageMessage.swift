@@ -2,7 +2,7 @@
 // Chat+SendImageMessage.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import Foundation
 
@@ -20,14 +20,14 @@ extension Chat {
         cache.write(cacheType: .sendFileMessageQueue(req, textMessage))
         cache.save()
         messageUniqueIdResult?(textMessage.uniqueId)
-        uploadImage(req: req, uploadUniqueIdResult: uploadUniqueIdResult, uploadProgress: uploadProgress) { [weak self] _, fileMetaData, error in
+        uploadImage(req, uploadUniqueIdResult: uploadUniqueIdResult, uploadProgress: uploadProgress) { [weak self] _, fileMetaData, error in
             // completed upload file
             if let error = error {
                 self?.delegate?.chatError(error: error)
             } else {
                 guard let stringMetaData = fileMetaData.convertCodableToString() else { return }
                 textMessage.metadata = stringMetaData
-                self?.sendTextMessage(textMessage, uniqueIdresult: messageUniqueIdResult, onSent: onSent, onSeen: onSeen, onDeliver: onDeliver)
+                self?.sendTextMessage(textMessage, uniqueIdResult: messageUniqueIdResult, onSent: onSent, onSeen: onSeen, onDeliver: onDeliver)
             }
         }
     }

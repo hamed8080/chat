@@ -2,7 +2,7 @@
 // ProgressImplementation.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import Foundation
 class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSessionTaskDelegate {
@@ -31,7 +31,8 @@ class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSessionTaskDe
         let percent = (Float(totalBytesSent) / Float(totalBytesExpectedToSend)) * 100
         logger?.log(title: "Upload progress:\(percent)")
         uploadProgress?(UploadFileProgress(percent: Int64(percent), totalSize: totalBytesExpectedToSend, bytesSend: totalBytesSent), nil)
-        delegate?.chatEvent(event: .file(.uploading(uniqueId: uniqueId)))
+        let response: ChatResponse<String> = .init(uniqueId: uniqueId, result: uniqueId)
+        delegate?.chatEvent(event: .file(.uploading(response)))
     }
 
     // MARK: - END Upload progress Delegates
@@ -44,7 +45,8 @@ class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSessionTaskDe
         downloadProgress?(downloadFileProgress)
         logger?.log(title: "Download progress:\(downloadFileProgress.percent)")
         completionHandler(.allow)
-        delegate?.chatEvent(event: .file(.downloading(uniqueId: uniqueId)))
+        let response: ChatResponse<String> = .init(uniqueId: uniqueId, result: uniqueId)
+        delegate?.chatEvent(event: .file(.downloading(response)))
     }
 
     func urlSession(_: URLSession, dataTask _: URLSessionDataTask, didReceive data: Data) {

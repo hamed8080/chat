@@ -8,22 +8,22 @@ import FanapPodAsyncSDK
 import Foundation
 
 // Request
-extension Chat {
-    func requestCallSticker(_ req: CallStickerRequest, _ completion: CompletionType<StickerResponse>? = nil, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+public extension Chat {
+    /// Send a sticker during the call..
+    /// - Parameters:
+    ///   - request: The callId and a sticker.
+    ///   - completion: Response of the send.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func sendCallSticker(_ request: CallStickerRequest, _ completion: CompletionType<StickerResponse>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 
 // Response
 extension Chat {
     func onCallSticker(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let sticker = try? JSONDecoder().decode(StickerResponse.self, from: data) else { return }
-        sticker.callId = chatMessage.subjectId
-        delegate?.chatEvent(event: .call(.sticker(sticker)))
-        guard let callback: CompletionType<StickerResponse> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(.init(uniqueId: chatMessage.uniqueId, result: sticker))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .callStickerSystemMessage)
+        let response: ChatResponse<StickerResponse> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .call(.sticker(response)))
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

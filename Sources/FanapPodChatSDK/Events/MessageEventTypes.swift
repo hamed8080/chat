@@ -2,15 +2,15 @@
 // MessageEventTypes.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/3/22
 
 import Foundation
 
 public enum MessageEventTypes {
-    case messageNew(Message)
-    case messageSent(MessageResponse)
-    case messageDelivery(MessageResponse)
-    case messageSeen(MessageResponse)
-    case messageEdit(Message)
-    case messageDelete(Message)
+    case messageNew(ChatResponse<Message>)
+    case messageSent(ChatResponse<MessageResponse>)
+    case messageDelivery(ChatResponse<MessageResponse>)
+    case messageSeen(ChatResponse<MessageResponse>)
+    case messageEdit(ChatResponse<Message>)
+    case messageDelete(ChatResponse<Message>)
 }

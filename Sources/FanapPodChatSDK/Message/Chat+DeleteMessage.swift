@@ -2,38 +2,43 @@
 // Chat+DeleteMessage.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import FanapPodAsyncSDK
 import Foundation
 
 // Request
-extension Chat {
-    func requestDeleteMessage(_ req: DeleteMessageRequest, _ completion: @escaping CompletionType<Message>, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+public extension Chat {
+    /// Delete a message if it's ``Message/deletable``.
+    /// - Parameters:
+    ///   - request: The delete request with a messageId.
+    ///   - completion: The response of deleted message.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func deleteMessage(_ request: DeleteMessageRequest, completion: @escaping CompletionType<Message>, uniqueIdResult: UniqueIdResultType? = nil) {
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 
-    func requestBatchDeleteMessage(_ req: BatchDeleteMessageRequest, _ completion: @escaping CompletionType<Message>, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        req.uniqueIds.forEach { uniqueId in
+    /// Delete multiple messages at once.
+    /// - Parameters:
+    ///   - request: The delete request with list of messagesId.
+    ///   - completion: List of deleted messages.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func deleteMultipleMessages(_ request: BatchDeleteMessageRequest, completion: @escaping CompletionType<Message>, uniqueIdResult: UniqueIdResultType? = nil) {
+        request.uniqueIds.forEach { uniqueId in
             callbacksManager.addCallback(uniqueId: uniqueId, requesType: .deleteMessage, callback: completion)
         }
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 
 // Response
 extension Chat {
     func onDeleteMessage(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let deleteMessage = try? JSONDecoder().decode(Message.self, from: data) else { return }
-        delegate?.chatEvent(event: .message(.messageDelete(deleteMessage)))
-        delegate?.chatEvent(event: .thread(.threadLastActivityTime(time: chatMessage.time, threadId: chatMessage.subjectId)))
-        guard let threadId = chatMessage.subjectId else { return }
-        cache.write(cacheType: .deleteMessage(threadId, messageId: deleteMessage.id ?? 0))
+        let response: ChatResponse<Message> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .message(.messageDelete(response)))
+        delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
+        cache.write(cacheType: .deleteMessage(response.subjectId ?? 0, messageId: response.result?.id ?? 0))
         cache.save()
-        guard let callback: CompletionType<Message> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(ChatResponse(uniqueId: chatMessage.uniqueId, result: deleteMessage))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .deleteMessage)
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

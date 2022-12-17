@@ -2,13 +2,17 @@
 // Chat+CancelMessage.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import FanapPodAsyncSDK
 import Foundation
 
-extension Chat {
-    func requestCancelMessage(_ request: CancelMessageRequest, _ completion: @escaping CompletionTypeNoneDecodeable<Bool>) {
+public extension Chat {
+    /// Cancel a message send.
+    /// - Parameters:
+    ///   - request: The uniqueId of a message.
+    ///   - completion: The result of cancelation.
+    func cancelMessage(_ request: CancelMessageRequest, completion: @escaping CompletionTypeNoneDecodeable<Bool>) {
         if config.enableCache == true {
             if let uniqueId = request.textMessageUniqueId {
                 cache.write(cacheType: .deleteWaitTextMessage(uniqueId))

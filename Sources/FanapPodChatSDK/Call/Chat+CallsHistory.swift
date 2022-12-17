@@ -8,10 +8,15 @@ import FanapPodAsyncSDK
 import Foundation
 
 // Request
-extension Chat {
-    func requestCallsHistory(_ req: CallsHistoryRequest, _ completion: @escaping CompletionType<[Call]>, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { (response: ChatResponse<[Call]>) in
-            let pagination = PaginationWithContentCount(count: req.count, offset: req.offset, totalCount: response.contentCount)
+public extension Chat {
+    /// List of the call history.
+    /// - Parameters:
+    ///   - request: The request that contains offset and count and some other filters.
+    ///   - completion: List of calls.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func callsHistory(_ request: CallsHistoryRequest, _ completion: @escaping CompletionType<[Call]>, uniqueIdResult: UniqueIdResultType? = nil) {
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult) { (response: ChatResponse<[Call]>) in
+            let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: response.contentCount)
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
     }
@@ -20,11 +25,8 @@ extension Chat {
 // Response
 extension Chat {
     func onCallsHistory(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let callback: CompletionType<[Call]> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let calls = try? JSONDecoder().decode([Call].self, from: data) else { return }
-        callback(.init(uniqueId: chatMessage.uniqueId, result: calls, contentCount: chatMessage.contentCount ?? 0))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .getCalls)
+        var response: ChatResponse<[Call]> = asyncMessage.toChatResponse()
+        response.contentCount = asyncMessage.chatMessage?.contentCount
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

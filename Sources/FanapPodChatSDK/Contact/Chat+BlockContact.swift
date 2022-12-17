@@ -2,28 +2,29 @@
 // Chat+BlockContact.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import Contacts
 import FanapPodAsyncSDK
 import Foundation
 
 // Request
-extension Chat {
-    func requestBlockContact(_ req: BlockRequest, _ completion: @escaping CompletionType<BlockedContact>, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+public extension Chat {
+    /// Block a specific contact.
+    /// - Parameters:
+    ///   - request: You could block contact with userId, contactId or you could block a thread.
+    ///   - completion: Reponse of blocked request.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func blockContact(_ request: BlockRequest, completion: @escaping CompletionType<BlockedContact>, uniqueIdResult: UniqueIdResultType? = nil) {
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 
 // Response
 extension Chat {
     func onBlockContact(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let blockedResult = try? JSONDecoder().decode(BlockedContact.self, from: data) else { return }
-        delegate?.chatEvent(event: .contact(.blocked(blockedResult, id: chatMessage.subjectId)))
-        guard let callback: CompletionType<BlockedContact> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(ChatResponse(uniqueId: chatMessage.uniqueId, result: blockedResult))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .block)
+        let response: ChatResponse<BlockedContact> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .contact(.blocked(response)))
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

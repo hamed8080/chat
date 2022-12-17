@@ -8,21 +8,22 @@ import FanapPodAsyncSDK
 import Foundation
 
 // Request
-extension Chat {
-    func requestSendCallError(_ req: CallClientErrorRequest, _ completion: @escaping CompletionType<CallError>, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+public extension Chat {
+    /// A request that shows some errors has happened on the client side during the call for example maybe the user doesn't have access to the camera when trying to turn it on.
+    /// - Parameters:
+    ///   - request: The code of the error and a callId.
+    ///   - completion: Shows the request has successfully arrived.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func sendCallClientError(_ request: CallClientErrorRequest, _ completion: @escaping CompletionType<CallError>, uniqueIdResult: UniqueIdResultType? = nil) {
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 
 // Response
 extension Chat {
     func onCallError(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let callClientError = try? JSONDecoder().decode(CallError.self, from: data) else { return }
-        delegate?.chatEvent(event: .call(.callClientError(callClientError)))
-        guard let callback: CompletionType<CallError> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(.init(uniqueId: chatMessage.uniqueId, result: callClientError))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .callClientErrors)
+        let response: ChatResponse<CallError> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .call(.callClientError(response)))
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

@@ -8,21 +8,22 @@ import FanapPodAsyncSDK
 import Foundation
 
 // Request
-extension Chat {
-    func requestAddCallParticipant(_ req: AddCallParticipantsRequest, _ completion: @escaping CompletionType<[CallParticipant]>, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+public extension Chat {
+    /// Add a new participant to a thread during the call.
+    /// - Parameters:
+    ///   - request: A List of people with userNames or contactIds beside a callId.
+    ///   - completion: A list of participants has been added to the current call.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func addCallPartcipant(_ request: AddCallParticipantsRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType? = nil) {
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 
 // Response
 extension Chat {
     func onJoinCallParticipant(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let callPartitipants = try? JSONDecoder().decode([CallParticipant].self, from: data) else { return }
-        delegate?.chatEvent(event: .call(.callParticipantJoined(callPartitipants)))
-        guard let callback: CompletionType<[CallParticipant]> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(.init(uniqueId: chatMessage.uniqueId, result: callPartitipants))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .callParticipantJoined)
+        let response: ChatResponse<[CallParticipant]> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .call(.callParticipantJoined(response)))
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

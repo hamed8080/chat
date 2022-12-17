@@ -2,39 +2,44 @@
 // Chat+BlockAssistnat.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import FanapPodAsyncSDK
 import Foundation
 
 // Request
-extension Chat {
-    func requestBlockAssistant(_ req: BlockUnblockAssistantRequest, _ completion: @escaping CompletionType<[Assistant]>, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+public extension Chat {
+    /// Block assistants.
+    /// - Parameters:
+    ///   - request: A list of assistants you want to block them.
+    ///   - completion: List of blocked assistants.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func blockAssistants(_ request: BlockUnblockAssistantRequest, _ completion: @escaping CompletionType<[Assistant]>, uniqueIdResult: UniqueIdResultType? = nil) {
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 
-    func requestUnBlockAssistant(_ req: BlockUnblockAssistantRequest, _ completion: @escaping CompletionType<[Assistant]>, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        req.chatMessageType = .unblockAssistant
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+    /// UNBlock assistants.
+    /// - Parameters:
+    ///   - request: A list of assistants you want to unblock them.
+    ///   - completion: List of unblocked assistants.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func unblockAssistants(_ request: BlockUnblockAssistantRequest, _ completion: @escaping CompletionType<[Assistant]>, uniqueIdResult: UniqueIdResultType? = nil) {
+        request.chatMessageType = .unblockAssistant
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 
 // Response
 extension Chat {
     func onBlockUnBlockAssistant(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let assistants = try? JSONDecoder().decode([Assistant].self, from: data) else { return }
+        let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse()
         if asyncMessage.chatMessage?.type == .blockAssistant {
-            delegate?.chatEvent(event: .assistant(.blockAssistant(assistants)))
+            delegate?.chatEvent(event: .assistant(.blockAssistant(response)))
         } else if asyncMessage.chatMessage?.type == .unblockAssistant {
-            delegate?.chatEvent(event: .assistant(.unblockAssistant(assistants)))
+            delegate?.chatEvent(event: .assistant(.unblockAssistant(response)))
         }
-        cache.write(cacheType: .insertOrUpdateAssistants(assistants))
+        cache.write(cacheType: .insertOrUpdateAssistants(response.result ?? []))
         cache.save()
-        guard let callback: CompletionType<[Assistant]> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(ChatResponse(uniqueId: chatMessage.uniqueId, result: assistants))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .blockAssistant)
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .unblockAssistant)
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

@@ -7,23 +7,24 @@
 import FanapPodAsyncSDK
 import Foundation
 // Request
-extension Chat {
-    func requestRemoveCallParticipant(_ req: RemoveCallParticipantsRequest, _ completion: @escaping CompletionType<[CallParticipant]>, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+public extension Chat {
+    /// Remove a participant from a call if you have access.
+    /// - Parameters:
+    ///   - request: The request that contains a callId and llist of user to remove from a call.
+    ///   - completion: List of removed participants from a call.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func removeCallPartcipant(_ request: RemoveCallParticipantsRequest, _ completion: @escaping CompletionType<[CallParticipant]>, uniqueIdResult: UniqueIdResultType? = nil) {
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 
 // Response
 extension Chat {
     func onRemoveCallParticipant(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let callParticipants = try? JSONDecoder().decode([CallParticipant].self, from: data) else { return }
-        delegate?.chatEvent(event: .call(.callParticipantsRemoved(callParticipants)))
-        guard let callback: CompletionType<[CallParticipant]> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(.init(uniqueId: chatMessage.uniqueId, result: callParticipants))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .removeCallParticipant)
-        callParticipants.forEach { callParticipant in
+        let response: ChatResponse<[CallParticipant]> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .call(.callParticipantsRemoved(response)))
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
+        response.result?.forEach { callParticipant in
             webrtc?.removeCallParticipant(callParticipant)
         }
     }

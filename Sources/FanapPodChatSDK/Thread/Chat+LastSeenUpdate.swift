@@ -2,7 +2,7 @@
 // Chat+LastSeenUpdate.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import FanapPodAsyncSDK
 import Foundation
@@ -10,11 +10,11 @@ import Foundation
 // Event
 extension Chat {
     func onLastSeenUpdate(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        let lastMessageSeenUpdated = try? JSONDecoder().decode(LastSeenMessageResponse.self, from: chatMessage.content?.data(using: .utf8) ?? Data())
-        delegate?.chatEvent(event: .thread(.threadLastActivityTime(time: chatMessage.time, threadId: chatMessage.subjectId)))
-        if let unreadCount = lastMessageSeenUpdated?.unreadCount, let threadId = lastMessageSeenUpdated?.id {
-            delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(threadId: threadId, count: unreadCount)))
+        let response: ChatResponse<LastSeenMessageResponse> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
+        if let unreadCount = response.result?.unreadCount, let threadId = response.result?.id {
+            let unreadCountInstance = UnreadCount(unreadCount: unreadCount, threadId: threadId)
+            delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: unreadCountInstance))))
             cache.write(cacheType: .setThreadUnreadCount(threadId, unreadCount))
         }
     }

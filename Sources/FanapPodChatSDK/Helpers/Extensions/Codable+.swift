@@ -1,10 +1,13 @@
 //
-// EncodableExtensions.swift
+// Codable+.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/16/22
 
 import Foundation
+
+struct Voidcodable: Codable {}
+
 extension Encodable {
     public func convertCodableToString() -> String? {
         if let data = try? JSONEncoder().encode(self) {
@@ -36,5 +39,13 @@ extension Encodable {
 
     func toData() -> Data? {
         try? JSONEncoder().encode(self)
+    }
+}
+
+public protocol SafeDecodable: Decodable, CaseIterable, RawRepresentable where RawValue: Decodable, AllCases: BidirectionalCollection {}
+
+public extension SafeDecodable {
+    init(from decoder: Decoder) throws {
+        self = try Self(rawValue: decoder.singleValueContainer().decode(RawValue.self)) ?? Self.allCases.last!
     }
 }

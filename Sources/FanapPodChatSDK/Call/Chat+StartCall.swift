@@ -9,22 +9,34 @@ import Foundation
 
 // Request
 extension Chat {
-    func requestStartCall(_ req: StartCallRequest, _ completion: @escaping CompletionType<CreateCall>, _ uniqueIdResult: UniqueIdResultType? = nil) {
+    /// Start request a call.
+    /// - Parameters:
+    ///   - request: The request to how to start the call as an example start call with a threadId.
+    ///   - completion: A response that tell you if the call is created and contains a callId and more.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func requestCall(_ request: StartCallRequest, _ completion: @escaping CompletionType<CreateCall>, uniqueIdResult: UniqueIdResultType? = nil) {
         callState = .requested
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
         startTimerTimeout()
     }
 
-    func requestStartGroupCall(_ req: StartCallRequest, _ completion: @escaping CompletionType<CreateCall>, _ uniqueIdResult: UniqueIdResultType? = nil) {
+    /// Start a group call with list of people or a threadId.
+    /// - Parameters:
+    ///   - request: A request that contains a list of people or a threadId.
+    ///   - completion: A response that tell you if the call is created and contains a callId and more.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func requestGroupCall(_ request: StartCallRequest, _ completion: @escaping CompletionType<CreateCall>, uniqueIdResult: UniqueIdResultType? = nil) {
         callState = .requested
-        req.chatMessageType = .groupCallRequest
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+        request.chatMessageType = .groupCallRequest
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
         startTimerTimeout()
     }
 
-    func requestReceivedCall(_ req: GeneralSubjectIdRequest) {
-        req.chatMessageType = .deliveredCallRequest
-        prepareToSendAsync(req: req)
+    /// An internal method when a call has arrived.
+    /// - Parameter request: A calId.
+    internal func callReceived(_ request: GeneralSubjectIdRequest) {
+        request.chatMessageType = .deliveredCallRequest
+        prepareToSendAsync(req: request)
     }
 
     /// if newtork is unstable and async server cant respond with type CALL_SESSION_CREATED then we must end call  for starter to close UI
@@ -46,30 +58,24 @@ extension Chat {
 extension Chat {
     /// Only call on receivers side. The starter of call never get this event.
     func onStartCall(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let createCall = try? JSONDecoder().decode(CreateCall.self, from: data) else { return }
-        delegate?.chatEvent(event: .call(.callReceived(createCall)))
+        let response: ChatResponse<CreateCall> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .call(.callReceived(response)))
         callState = .requested
-        startTimerTimeout(callId: createCall.callId)
+        startTimerTimeout(callId: response.result?.callId ?? 0)
         // SEND type 73 . This mean client receive call and showing ringing mode on call creator.
-        callReceived(.init(subjectId: createCall.callId))
-        guard let callback: CompletionType<CreateCall> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(.init(uniqueId: chatMessage.uniqueId, result: createCall))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .startCallRequest)
+        callReceived(.init(subjectId: response.result?.callId ?? 0))
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 
     func onCallStarted(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard var callStarted = try? JSONDecoder().decode(StartCall.self, from: data) else { return }
-        callStarted.callId = chatMessage.subjectId
+        var response: ChatResponse<StartCall> = asyncMessage.toChatResponse()
+        response.result?.callId = response.subjectId
         callState = .started
-        initWebRTC(callStarted)
-        delegate?.chatEvent(event: .call(.callStarted(callStarted)))
-        guard let callback: CompletionType<StartCall> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(.init(uniqueId: chatMessage.uniqueId, result: callStarted))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .startCallRequest)
+        if let callStarted = response.result {
+            initWebRTC(callStarted)
+        }
+        delegate?.chatEvent(event: .call(.callStarted(response)))
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 
     // Only public for swiftui Preview
@@ -89,13 +95,9 @@ extension Chat {
     }
 
     func onDeliverCall(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let call = try? JSONDecoder().decode(Call.self, from: data) else { return }
-        delegate?.chatEvent(event: .call(.callDelivered(call)))
-        guard let callback: CompletionType<Call> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(.init(uniqueId: chatMessage.uniqueId, result: call))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .deliveredCallRequest)
+        let response: ChatResponse<Call> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .call(.callDelivered(response)))
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 
     /// maybe starter of call after start call request disconnected we need to close ui on the receiver side
@@ -106,7 +108,7 @@ extension Chat {
                 if self?.config.isDebuggingLogEnabled == true {
                     self?.logger?.log(title: "cancel call after \(self?.config.callTimeout ?? 0) second")
                 }
-                self?.delegate?.chatEvent(event: .call(.callEnded(callId)))
+                self?.delegate?.chatEvent(event: .call(.callEnded(.init(result: callId))))
                 self?.callState = .ended
             }
             timer.invalidate()
@@ -114,15 +116,13 @@ extension Chat {
     }
 
     func onCallSessionCreated(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let createCall = try? JSONDecoder().decode(CreateCall.self, from: data) else { return }
-        delegate?.chatEvent(event: .call(.callCreate(createCall)))
-        guard let callback: CompletionType<CreateCall> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(.init(uniqueId: chatMessage.uniqueId, result: createCall))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .callSessionCreated)
+        let response: ChatResponse<CreateCall> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .call(.callCreate(response)))
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
         callState = .created
-        startTimerTimeout(createCall)
+        if let createCall = response.result {
+            startTimerTimeout(createCall)
+        }
     }
 
     /// end call if no one doesn't accept or available to answer call
@@ -145,21 +145,14 @@ extension Chat {
     }
 
     func onCallParticipantLeft(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let callParticipants = try? JSONDecoder().decode([CallParticipant].self, from: data) else { return }
-        delegate?.chatEvent(event: .call(.callParticipantLeft(callParticipants)))
-        guard let callback: CompletionType<[CallParticipant]> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(.init(uniqueId: chatMessage.uniqueId, result: callParticipants))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .leaveCall)
+        let response: ChatResponse<[CallParticipant]> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .call(.callParticipantLeft(response)))
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 
     func onRejectCall(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let createCall = try? JSONDecoder().decode(CreateCall.self, from: data) else { return }
-        delegate?.chatEvent(event: .call(.callRejected(createCall)))
-        guard let callback: CompletionType<CreateCall> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(.init(uniqueId: chatMessage.uniqueId, result: createCall))
+        let response: ChatResponse<CreateCall> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .call(.callRejected(response)))
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

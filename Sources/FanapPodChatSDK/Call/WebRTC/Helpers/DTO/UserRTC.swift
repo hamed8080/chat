@@ -214,10 +214,10 @@ public class AudioRTC: UserRTC, AudioRTCProtocol {
     public func onSpeakingLevelChange(_ stat: Dictionary<String, RTCStatistics>.Values.Element, _ callParticipant: CallParticipant) {
         if (stat.values["audioLevel"] as? Double ?? .zero) > 0.01 {
             participantStartSpeaking()
-            delegate?.chatEvent(event: .call(.callParticipantStartSpeaking(callParticipant)))
+            delegate?.chatEvent(event: .call(.callParticipantStartSpeaking(.init(result: callParticipant))))
         } else if let lastSpeakingTime = lastTimeSpeaking, lastSpeakingTime.timeIntervalSince1970 + 3 < Date().timeIntervalSince1970 {
             participantStopSpeaking()
-            delegate?.chatEvent(event: .call(.callParticipantStopSpeaking(callParticipant)))
+            delegate?.chatEvent(event: .call(.callParticipantStopSpeaking(.init(result: callParticipant))))
         }
     }
 

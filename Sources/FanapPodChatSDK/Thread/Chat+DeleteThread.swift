@@ -2,34 +2,32 @@
 // Chat+DeleteThread.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import FanapPodAsyncSDK
 import Foundation
 
 // Request
-extension Chat {
-    func requestDeleteThread(_ req: GeneralSubjectIdRequest, _ completion: @escaping CompletionType<Int>, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        req.chatMessageType = .deleteThread
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+public extension Chat {
+    /// Delete a thread if you are admin in this thread.
+    /// - Parameters:
+    ///   - request: The request that contains thread id.
+    ///   - completion: Result of request.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func deleteThread(_ request: GeneralSubjectIdRequest, completion: @escaping CompletionType<Int>, _ uniqueIdResult: UniqueIdResultType? = nil) {
+        request.chatMessageType = .deleteThread
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 
 // Response
 extension Chat {
     func onDeleteThread(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let threadId = chatMessage.subjectId else { return }
-        var participant: Participant?
-        if let data = chatMessage.content?.data(using: .utf8) {
-            participant = try? JSONDecoder().decode(Participant.self, from: data)
-            delegate?.chatEvent(event: .thread(.threadDeleted(threadId: threadId, participant: participant)))
-            delegate?.chatEvent(event: .thread(.threadLastActivityTime(time: chatMessage.time, threadId: chatMessage.subjectId)))
-        }
-        cache.write(cacheType: .deleteThreads([threadId]))
+        let response: ChatResponse<Participant> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .thread(.threadDeleted(response)))
+        delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
+        cache.write(cacheType: .deleteThreads([response.subjectId ?? 0]))
         cache.save()
-        guard let callback: CompletionType<Int> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(ChatResponse(uniqueId: chatMessage.uniqueId, result: threadId))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .deleteThread)
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

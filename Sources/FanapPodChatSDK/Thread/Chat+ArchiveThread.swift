@@ -2,34 +2,40 @@
 // Chat+ArchiveThread.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import FanapPodAsyncSDK
 import Foundation
 
 // Request
-extension Chat {
-    func requestArchiveThread(_ req: GeneralSubjectIdRequest, _ completion: @escaping CompletionType<Int>, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        req.chatMessageType = .archiveThread
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+public extension Chat {
+    /// Archive a thread.
+    /// - Parameters:
+    ///   - request: A request that contains the threadId.
+    ///   - completion: A response which contain the threadId of archived thread.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func archiveThread(_ request: GeneralSubjectIdRequest, _ completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
+        request.chatMessageType = .archiveThread
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 
-    func requestUnArchiveThread(_ req: GeneralSubjectIdRequest, _ completion: @escaping CompletionType<Int>, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        req.chatMessageType = .unarchiveThread
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+    /// Unarchive a thread.
+    /// - Parameters:
+    ///   - request: A request that contains the threadId.
+    ///   - completion: A response which contain the threadId of unarchived thread.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func unarchiveThread(_ request: GeneralSubjectIdRequest, _ completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
+        request.chatMessageType = .unarchiveThread
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 
 // Response
 extension Chat {
     func onArchiveUnArchiveThread(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let threadId = chatMessage.subjectId else { return }
-        cache.write(cacheType: .archiveUnarchiveAhread(chatMessage.type == .archiveThread, threadId))
+        let response: ChatResponse<[TagParticipant]> = asyncMessage.toChatResponse()
+        cache.write(cacheType: .archiveUnarchiveAhread(asyncMessage.chatMessage?.type == .archiveThread, response.subjectId ?? 0))
         cache.save()
-        guard let callback: CompletionType<Int> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(ChatResponse(uniqueId: chatMessage.uniqueId, result: threadId))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .archiveThread)
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .unarchiveThread)
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

@@ -2,40 +2,45 @@
 // Chat+PinThread.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import FanapPodAsyncSDK
 import Foundation
 
 // Request
-extension Chat {
-    func requestPinThread(_ req: GeneralSubjectIdRequest, _ completion: @escaping CompletionType<Int>, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        req.chatMessageType = .pinThread
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+public extension Chat {
+    /// Pin a thread.
+    /// - Parameters:
+    ///   - request: The request with a thread id.
+    ///   - completion: Response of pin thread.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func pinThread(_ request: GeneralSubjectIdRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
+        request.chatMessageType = .pinThread
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 
-    func requestUnPinThread(_ req: GeneralSubjectIdRequest, _ completion: @escaping CompletionType<Int>, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        req.chatMessageType = .unpinThread
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+    /// UNPin a thread.
+    /// - Parameters:
+    ///   - request: The request with a thread id.
+    ///   - completion: Response of unpin thread.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func unpinThread(_ request: GeneralSubjectIdRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
+        request.chatMessageType = .unpinThread
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 
 // Response
 extension Chat {
     func onPinUnPinThread(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let threadId = try? JSONDecoder().decode(Int.self, from: data) else { return }
-        if chatMessage.type == .pinThread {
-            delegate?.chatEvent(event: .thread(.threadPin(threadId: threadId)))
-        } else if chatMessage.type == .unpinThread {
-            delegate?.chatEvent(event: .thread(.threadUnpin(threadId: threadId)))
+        let response: ChatResponse<Int> = asyncMessage.toChatResponse()
+        if asyncMessage.chatMessage?.type == .pinThread {
+            delegate?.chatEvent(event: .thread(.threadPin(response)))
+        } else if asyncMessage.chatMessage?.type == .unpinThread {
+            delegate?.chatEvent(event: .thread(.threadUnpin(response)))
         }
-        let resposne = PinThreadResponse(threadId: threadId)
-        cache.write(cacheType: .pinUnpinThread(threadId))
+        cache.write(cacheType: .pinUnpinThread(response.subjectId ?? 0))
         cache.save()
-        guard let callback: CompletionType<PinThreadResponse> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(ChatResponse(uniqueId: chatMessage.uniqueId, result: resposne))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .pinThread)
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

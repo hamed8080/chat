@@ -1,14 +1,16 @@
 //
-// SendStartTypingRequestHandler.swift
+// Chat+SendStartTyping.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import FanapPodAsyncSDK
 import Foundation
 
 extension Chat {
-    func requestStartTyping(_ threadId: Int, onEndStartTyping _: (() -> Void)? = nil) {
+    /// Send a event to the participants of a thread that you are typing something.
+    /// - Parameter threadId: The id of the thread.
+    public func snedStartTyping(threadId: Int) {
         if isSendingIsTypingStarted() {
             stopTimerWhenUserIsNotTyping()
             return
@@ -21,7 +23,7 @@ extension Chat {
                     self?.sendSignalMessage(req: .init(signalType: .isTyping, threadId: threadId))
                 }
             } else {
-                self?.stopTyping()
+                self?.sendStopTyping()
             }
         }
         stopTimerWhenUserIsNotTyping()
@@ -34,11 +36,12 @@ extension Chat {
     func stopTimerWhenUserIsNotTyping() {
         timerCheckUserStoppedTyping?.invalidate()
         timerCheckUserStoppedTyping = Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { [weak self] _ in
-            self?.stopTyping()
+            self?.sendStopTyping()
         }
     }
 
-    func stopTyping() {
+    /// Send user stop typing.
+    public func sendStopTyping() {
         timerTyping?.invalidate()
         timerTyping = nil
         isTypingCount = 0

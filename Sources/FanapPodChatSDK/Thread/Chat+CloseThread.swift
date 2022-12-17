@@ -2,29 +2,33 @@
 // Chat+CloseThread.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import FanapPodAsyncSDK
 import Foundation
 
 // Request
-extension Chat {
-    func requestCloseThread(_ req: GeneralSubjectIdRequest, _ completion: @escaping CompletionType<Int>, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        req.chatMessageType = .closeThread
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+public extension Chat {
+    /// Close a thread.
+    ///
+    /// With the closing, a thread participants of it can't send a message to it.
+    /// - Parameters:
+    ///   - request: Thread Id of the thread you want to be closed.
+    ///   - completion: The id of the thread which closed.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func closeThread(_ request: GeneralSubjectIdRequest, completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
+        request.chatMessageType = .closeThread
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 
 // Response
 extension Chat {
     func onCloseThread(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let threadId = chatMessage.subjectId else { return }
-        delegate?.chatEvent(event: .thread(.threadClosed(threadId: threadId)))
-        cache.write(cacheType: .threads([.init(id: threadId)]))
+        let response: ChatResponse<Int> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .thread(.threadClosed(response)))
+        cache.write(cacheType: .threads([.init(id: response.subjectId ?? 0)]))
         cache.save()
-        guard let callback: CompletionType<Int> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(ChatResponse(uniqueId: chatMessage.uniqueId, result: threadId))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .closeThread)
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

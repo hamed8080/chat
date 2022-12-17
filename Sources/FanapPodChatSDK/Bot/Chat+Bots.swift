@@ -2,32 +2,33 @@
 // Chat+Bots.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import FanapPodAsyncSDK
 import Foundation
 
 // Request
-extension Chat {
-    func requestBots(_ req: GetUserBotsRequest, _ completion: @escaping CompletionType<[BotInfo]>, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+public extension Chat {
+    /// Get all user bots.
+    /// - Parameters:
+    ///   - request: Request if want to have different uniqueId.
+    ///   - completion: List of user bots.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func getUserBots(_ request: GetUserBotsRequest, completion: @escaping CompletionType<[BotInfo]>, uniqueIdResult: UniqueIdResultType? = nil) {
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 
 // Response
 extension Chat {
     func onBots(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let callback: CompletionType<[BotInfo]> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let userBots = try? JSONDecoder().decode([BotInfo].self, from: data) else { return }
-        callback(ChatResponse(uniqueId: chatMessage.uniqueId, result: userBots))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .getUserBots)
+        let response: ChatResponse<[BotInfo]> = asyncMessage.toChatResponse()
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 
     func onBotMessage(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        delegate?.chatEvent(event: .bot(.botMessage(chatMessage.content)))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .botMessage)
+        let response: ChatResponse<String?> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .bot(.botMessage(response)))
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

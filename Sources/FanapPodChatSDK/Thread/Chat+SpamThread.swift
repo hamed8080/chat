@@ -2,27 +2,30 @@
 // Chat+SpamThread.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import FanapPodAsyncSDK
 import Foundation
 
 // Request
-extension Chat {
-    func requestSpamThread(_ req: GeneralSubjectIdRequest, _ completion: @escaping CompletionType<BlockedContact>, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        req.chatMessageType = .spamPvThread
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+public extension Chat {
+    /// Mark a thread as an spam
+    ///
+    /// A spammed thread can't send a message anymore.
+    /// - Parameters:
+    ///   - request: Request to spam a thread.
+    ///   - completion: Response of request.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func spamPvThread(_ request: GeneralSubjectIdRequest, completion: @escaping CompletionType<BlockedContact>, uniqueIdResult: UniqueIdResultType? = nil) {
+        request.chatMessageType = .spamPvThread
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 
 // Response
 extension Chat {
     func onSpamThread(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let callback: CompletionType<BlockedContact> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let blockedUser = try? JSONDecoder().decode(BlockedContact.self, from: data) else { return }
-        callback(ChatResponse(uniqueId: chatMessage.uniqueId, result: blockedUser))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .spamPvThread)
+        let response: ChatResponse<BlockedContact> = asyncMessage.toChatResponse()
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }
