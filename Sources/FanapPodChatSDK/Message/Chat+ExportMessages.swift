@@ -2,16 +2,23 @@
 // Chat+ExportMessages.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import AVFoundation
 import FanapPodAsyncSDK
 import Foundation
 
 // Request
-extension Chat {
-    func requestExportMessages(_ req: GetHistoryRequest, _ completion: @escaping CompletionTypeNoneDecodeable<URL>, _: UniqueIdResultType? = nil) {
-        let vm = ExportMessages(chat: self, request: req, completion: completion)
+public extension Chat {
+    /// Every time you call this function old export file for the thread will be deleted and replaced with a new one. To manages your storage be cautious about removing the file whenever you don't need this file.
+    /// This function can only export 10000 messages.
+    /// - Parameters:
+    ///   - request: A request that contains threadId and other filters to export.
+    ///   - localIdentifire: The locals to output.
+    ///   - completion: A file url of a csv file.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func exportChat(_ request: GetHistoryRequest, _ completion: @escaping CompletionTypeNoneDecodeable<URL>, uniqueIdResult _: UniqueIdResultType? = nil) {
+        let vm = ExportMessages(chat: self, request: request, completion: completion)
         vm.start()
         exportMessageViewModels.append(vm)
     }
@@ -152,10 +159,7 @@ class ExportMessages: ExportMessagesProtocol {
 // Response
 extension Chat {
     func onExportMessages(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let callback: CompletionType<[Message]> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let history = try? JSONDecoder().decode([Message].self, from: data) else { return }
-        callback(ChatResponse(uniqueId: chatMessage.uniqueId, result: history, contentCount: chatMessage.contentCount ?? 0))
+        let response: ChatResponse<[Message]> = asyncMessage.toChatResponse()
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

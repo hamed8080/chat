@@ -2,7 +2,7 @@
 // Chat+SyncContacts.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import Contacts
 import FanapPodAsyncSDK
@@ -10,7 +10,13 @@ import Foundation
 
 // Response
 extension Chat {
-    func requestSyncContacts(_ completion: @escaping CompletionType<[Contact]>, _ uniqueIdsResult: UniqueIdsResultType? = nil) {
+    /// Sync contacts with server.
+    ///
+    /// If a new contact is added to your device it'll sync the unsynced contacts.
+    /// - Parameters:
+    ///   - completion: The answer of synced contacts.
+    ///   - uniqueIdsResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func syncContacts(completion: @escaping CompletionType<[Contact]>, uniqueIdsResult: UniqueIdsResultType? = nil) {
         var contactsToSync: [AddContactRequest] = []
         authorizeContactAccess(grant: { [weak self] store in
             let phoneContacts = self?.getContactsFromAuthorizedStore(store)
@@ -30,7 +36,7 @@ extension Chat {
             }
             if contactsToSync.count <= 0 { return }
 
-            self?.requestAddContacts(contactsToSync) { [weak self] (response: ChatResponse<[Contact]>) in
+            self?.addContacts(contactsToSync) { [weak self] (response: ChatResponse<[Contact]>) in
                 completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error))
                 PhoneContact.updateOrInsertPhoneBooks(contacts: contactsToSync)
                 self?.cache.save()

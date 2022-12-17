@@ -2,19 +2,24 @@
 // Chat+DownloadMapStaticImage.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import Foundation
 
-extension Chat {
-    func requestDownloadMapStatic(_ req: MapStaticImageRequest, _ downloadProgress: DownloadProgressType? = nil, _ uniqueIdResult: UniqueIdResultType? = nil, _ completion: @escaping CompletionType<Data?>) {
-        uniqueIdResult?(req.uniqueId)
-        req.key = config.mapApiKey
+public extension Chat {
+    /// Convert a location to an image.
+    /// - Parameters:
+    ///   - request: The request size and location.
+    ///   - completion: Data of image.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func mapStaticImage(_ request: MapStaticImageRequest, _ downloadProgress: DownloadProgressType? = nil, completion: @escaping CompletionType<Data?>, uniqueIdResult: UniqueIdResultType? = nil) {
+        uniqueIdResult?(request.uniqueId)
+        request.key = config.mapApiKey
         let url = "\(config.mapServer)\(Routes.mapStaticImage.rawValue)"
-        DownloadManager(callbackManager: callbacksManager).download(url: url, uniqueId: req.uniqueId, headers: nil, parameters: try? req.asDictionary(), downloadProgress: downloadProgress) { data, response, error in
+        DownloadManager(callbackManager: callbacksManager).download(url: url, uniqueId: request.uniqueId, headers: nil, parameters: try? request.asDictionary(), downloadProgress: downloadProgress) { data, response, error in
             let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
             let error: ChatError? = error != nil ? ChatError(message: "\(ChatErrorCodes.networkError.rawValue) \(error?.localizedDescription ?? "")", errorCode: statusCode, hasError: error != nil) : nil
-            completion(ChatResponse(uniqueId: req.uniqueId, result: data, error: error))
+            completion(ChatResponse(uniqueId: request.uniqueId, result: data, error: error))
         }
     }
 }

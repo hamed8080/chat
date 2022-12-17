@@ -2,7 +2,7 @@
 // ChatDelegate.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/16/22
 
 import FanapPodAsyncSDK
 import Foundation

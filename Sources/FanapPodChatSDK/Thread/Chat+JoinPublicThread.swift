@@ -2,26 +2,27 @@
 // Chat+JoinPublicThread.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import FanapPodAsyncSDK
 import Foundation
 
 // Request
-extension Chat {
-    func requestJoinThread(_ req: JoinPublicThreadRequest, _ completion: @escaping CompletionType<Conversation>, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+public extension Chat {
+    /// Join to a public thread.
+    /// - Parameters:
+    ///   - request: Thread name of public thread.
+    ///   - completion: Detail of public thread as a ``Conversation`` object.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func joinThread(_ request: JoinPublicThreadRequest, completion: @escaping CompletionType<Conversation>, uniqueIdResult: UniqueIdResultType? = nil) {
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 
 // Response
 extension Chat {
     func onJoinThread(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let callback: CompletionType<Conversation> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let conversation = try? JSONDecoder().decode(Conversation.self, from: data) else { return }
-        callback(ChatResponse<Conversation>(uniqueId: chatMessage.uniqueId, result: conversation))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .joinThread)
+        let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

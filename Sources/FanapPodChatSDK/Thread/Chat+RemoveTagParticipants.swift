@@ -2,29 +2,30 @@
 // Chat+RemoveTagParticipants.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import FanapPodAsyncSDK
 import Foundation
 
 // Request
-extension Chat {
-    func requestRemoveTagParticipants(_ req: RemoveTagParticipantsRequest, _ completion: @escaping CompletionType<[TagParticipant]>, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+public extension Chat {
+    /// Remove tag participants from a tag.
+    /// - Parameters:
+    ///   - request: The tag id and the list of tag participants id.
+    ///   - completion: List of removed tag participants.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func removeTagParticipants(_ request: RemoveTagParticipantsRequest, completion: @escaping CompletionType<[TagParticipant]>, uniqueIdResult: UniqueIdResultType? = nil) {
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 
 // Response
 extension Chat {
     func onRemoveTagParticipants(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let tagParticipants = try? JSONDecoder().decode([TagParticipant].self, from: data) else { return }
-        delegate?.chatEvent(event: .tag(.removeTagParticipant(tagParticipants)))
-        cache.write(cacheType: .deleteTagParticipants(tagParticipants))
+        let response: ChatResponse<[TagParticipant]> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .tag(.removeTagParticipant(response)))
+        cache.write(cacheType: .deleteTagParticipants(response.result ?? []))
         cache.save()
-        guard let callback: CompletionType<[TagParticipant]> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(.init(uniqueId: chatMessage.uniqueId, result: tagParticipants))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .removeTagParticipants)
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

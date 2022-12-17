@@ -2,7 +2,7 @@
 // ChatResponse.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import Foundation
 
@@ -16,13 +16,17 @@ public struct ChatResponse<T> {
     public var error: ChatError?
     public var contentCount: Int?
     public var pagination: Pagination?
+    public var subjectId: Int?
+    public var time: Int?
 
-    public init(uniqueId: String? = nil, result: T? = nil, error: ChatError? = nil, contentCount: Int? = nil, pagination: Pagination? = nil) {
+    public init(uniqueId: String? = nil, result: T? = nil, error: ChatError? = nil, contentCount: Int? = nil, pagination: Pagination? = nil, subjectId: Int? = nil, time: Int? = nil) {
         self.uniqueId = uniqueId
         self.result = result
         self.error = error
         self.contentCount = contentCount
         self.pagination = pagination
+        self.subjectId = subjectId
+        self.time = time
     }
 }
 

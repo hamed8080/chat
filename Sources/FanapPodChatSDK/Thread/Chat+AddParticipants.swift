@@ -2,30 +2,31 @@
 // Chat+AddParticipants.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import FanapPodAsyncSDK
 import Foundation
 
 // Request
-extension Chat {
-    func requestAddParticipant(_ req: AddParticipantRequest, _ completion: @escaping CompletionType<Conversation>, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+public extension Chat {
+    /// Add participant to a thread.
+    /// - Parameters:
+    ///   - request: Fill in the appropriate initializer.
+    ///   - completion: Reponse of request.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func addParticipant(_ request: AddParticipantRequest, completion: @escaping CompletionType<Conversation>, uniqueIdResult: UniqueIdResultType? = nil) {
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 
 // Response
 extension Chat {
     func onAddParticipant(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let conversation = try? JSONDecoder().decode(Conversation.self, from: data) else { return }
-        cache.write(cacheType: .participants(conversation.participants, conversation.id))
+        let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
+        cache.write(cacheType: .participants(response.result?.participants ?? [], response.result?.id))
         cache.save()
-        delegate?.chatEvent(event: .thread(.threadLastActivityTime(time: chatMessage.time, threadId: chatMessage.subjectId)))
-        delegate?.chatEvent(event: .thread(.threadAddParticipants(thread: conversation, conversation.participants)))
-        guard let callback: CompletionType<Conversation> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(ChatResponse(uniqueId: chatMessage.uniqueId, result: conversation))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .addParticipant)
+        delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
+        delegate?.chatEvent(event: .thread(.threadAddParticipants(.init(uniqueId: response.uniqueId, result: response.result?.participants, time: response.time))))
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

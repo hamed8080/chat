@@ -2,29 +2,30 @@
 // Chat+RegisterAssistant.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import FanapPodAsyncSDK
 import Foundation
 
 // Request
-extension Chat {
-    func requestRegisterAssistant(_ req: RegisterAssistantRequest, _ completion: @escaping CompletionType<[Assistant]>, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+public extension Chat {
+    /// Register a participant as an assistant.
+    /// - Parameters:
+    ///   - request: The request that contains list of assistants.
+    ///   - completion: A list of assistant that added for the user.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func registerAssistat(_ request: RegisterAssistantRequest, completion: @escaping CompletionType<[Assistant]>, uniqueIdResult: UniqueIdResultType? = nil) {
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 
 // Response
 extension Chat {
     func onRegisterAssistants(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let assistants = try? JSONDecoder().decode([Assistant].self, from: data) else { return }
-        delegate?.chatEvent(event: .assistant(.registerAssistant(assistants)))
-        cache.write(cacheType: .insertOrUpdateAssistants(assistants))
+        let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .assistant(.registerAssistant(response)))
+        cache.write(cacheType: .insertOrUpdateAssistants(response.result ?? []))
         cache.save()
-        guard let callback: CompletionType<[Assistant]> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(ChatResponse(uniqueId: chatMessage.uniqueId, result: assistants))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .registerAssistant)
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

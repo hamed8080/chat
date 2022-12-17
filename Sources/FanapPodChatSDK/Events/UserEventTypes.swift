@@ -2,10 +2,10 @@
 // UserEventTypes.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 11/2/22
 
 import Foundation
 
 public enum UserEventTypes {
-    case roles([Roles], id: Int?)
+    case roles(ChatResponse<[Roles]>)
 }

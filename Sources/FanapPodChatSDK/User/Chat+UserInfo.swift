@@ -2,28 +2,30 @@
 // Chat+UserInfo.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import FanapPodAsyncSDK
 import Foundation
 
 // Request
 extension Chat {
-    func requestUserInfo(_ req: UserInfoRequest,
-                         _ completion: @escaping CompletionType<User>,
-                         _ cacheResponse: CacheResponseType<User>? = nil,
-                         _ uniqueIdResult: UniqueIdResultType? = nil)
-    {
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+    /// Getting current user details.
+    /// - Parameters:
+    ///   - request: The request:
+    ///   - completion: Response of the request.
+    ///   - cacheResponse: cache response for the current user.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func getUserInfo(_ request: UserInfoRequest, completion: @escaping CompletionType<User>, cacheResponse: CacheResponseType<User>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
         cache.get(useCache: cacheResponse != nil, cacheType: .userInfo, completion: cacheResponse)
     }
 
     func getUserForChatReady() {
         if userInfo == nil {
             _ = requestUserTimer.scheduledTimer(withTimeInterval: 2, repeats: true) { [weak self] timer in
-                self?.requestUserInfo(.init()) { (response: ChatResponse<User>) in
+                self?.getUserInfo(.init()) { (response: ChatResponse<User>) in
                     if let user = response.result {
-                        self?.setUser(user: user)
+                        self?.userInfo = user
                         self?.delegate?.chatState(state: .chatReady, currentUser: user, error: nil)
                         self?.asyncManager.sendQueuesOnReconnect()
                         timer.invalidate()
@@ -48,14 +50,12 @@ extension Chat {
 // Response
 extension Chat {
     func onUserInfo(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        delegate?.chatEvent(event: .system(.serverTime(chatMessage.time)))
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let user = try? JSONDecoder().decode(User.self, from: data) else { return }
-        cache.write(cacheType: .userInfo(user))
-        cache.save()
-        guard let callback: CompletionType<User> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(ChatResponse(uniqueId: chatMessage.uniqueId, result: user))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .userInfo)
+        let response: ChatResponse<User> = asyncMessage.toChatResponse()
+        if let user = response.result {
+            cache.write(cacheType: .userInfo(user))
+            cache.save()
+        }
+        delegate?.chatEvent(event: .system(.serverTime(.init(uniqueId: response.uniqueId, result: response.time, time: response.time))))
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

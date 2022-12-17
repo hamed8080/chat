@@ -2,7 +2,7 @@
 // Chat+Message.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import FanapPodAsyncSDK
 import Foundation
@@ -11,28 +11,41 @@ import Foundation
 #endif
 
 // Request
-extension Chat {
-    func requestSendMessage(_ req: SendTextMessageRequest,
-                            _ onSent: OnSentType?,
-                            _ onSeen: OnSeenType?,
-                            _ onDeliver: OnDeliveryType?,
-                            _ uniqueIdResult: UniqueIdResultType? = nil)
-    {
-        prepareToSendAsync(req: req,
+public extension Chat {
+    /// Send a plain text message to a thread.
+    /// - Parameters:
+    ///   - request: The request that contains text message and id of the thread.
+    ///   - uniqueIdresult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    ///   - onSent: Is called when a message sent successfully.
+    ///   - onSeen: Is called when a message, have seen by a participant successfully.
+    ///   - onDeliver: Is called when a message, have delivered to a participant successfully.
+    func sendTextMessage(_ request: SendTextMessageRequest, uniqueIdResult: UniqueIdResultType? = nil, onSent: OnSentType? = nil, onSeen: OnSeenType? = nil, onDeliver: OnDeliveryType? = nil) {
+        prepareToSendAsync(req: request,
                            uniqueIdResult: uniqueIdResult,
                            completion: nil as CompletionType<Voidcodable>?, //
                            onSent: onSent,
                            onDelivered: onDeliver,
                            onSeen: onSeen)
-        cache.write(cacheType: .sendTxetMessageQueue(req))
+        cache.write(cacheType: .sendTxetMessageQueue(request))
         cache.save()
     }
 
-    func requestForwardMessage(_ req: ForwardMessageRequest,
-                               _ onSent: OnSentType? = nil,
-                               _ onSeen: OnSeenType? = nil,
-                               _ onDeliver: OnDeliveryType? = nil,
-                               _ uniqueIdsResult: UniqueIdsResultType? = nil)
+    /// Reply to a message.
+    /// - Parameters:
+    ///   - request: The request contains the id of the message you want to reply to, and id of the thread, and a text message.
+    ///   - uniqueIdresult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    ///   - onSent: Is called when a message sent successfully.
+    ///   - onSeen: Is called when a message, have seen by a participant successfully.
+    ///   - onDeliver: Is called when a message, have delivered to a participant successfully.
+    func replyMessage(_ request: ReplyMessageRequest, uniqueIdresult: UniqueIdResultType? = nil, onSent: OnSentType? = nil, onSeen: OnSeenType? = nil, onDeliver: OnDeliveryType? = nil) {
+        sendTextMessage(request, uniqueIdResult: uniqueIdresult, onSent: onSent, onSeen: onSeen, onDeliver: onDeliver)
+    }
+
+    internal func requestForwardMessage(_ req: ForwardMessageRequest,
+                                        _ onSent: OnSentType? = nil,
+                                        _ onSeen: OnSeenType? = nil,
+                                        _ onDeliver: OnDeliveryType? = nil,
+                                        _ uniqueIdsResult: UniqueIdsResultType? = nil)
     {
         uniqueIdsResult?(req.uniqueIds) // do not remove this line it use batch uniqueIds
         prepareToSendAsync(req: req,
@@ -48,14 +61,24 @@ extension Chat {
         cache.save()
     }
 
-    func requestSendLocationMessage(_ request: LocationMessageRequest,
-                                    _ downloadProgress: DownloadProgressType? = nil,
-                                    _ uploadProgress: UploadFileProgressType? = nil,
-                                    _ onSent: OnSentType? = nil,
-                                    _ onSeen: OnSeenType? = nil,
-                                    _ onDeliver: OnDeliveryType? = nil,
-                                    _ uploadUniqueIdResult: UniqueIdResultType? = nil,
-                                    _ messageUniqueIdResult: UniqueIdResultType? = nil)
+    /// Send a location.
+    /// - Parameters:
+    ///   - request: The request that gets a threadId and a location and a ``Conversation/userGroupHash``.
+    ///   - uploadProgress: Progress of uploading an image of the location to the thread.
+    ///   - downloadProgress: Download progess of image.
+    ///   - onSent: Is called when a message sent successfully.
+    ///   - onSeen: Is called when a message, have seen by a participant successfully.
+    ///   - onDeliver: Is called when a message, have delivered to a participant successfully.
+    ///   - uploadUniqueIdResult: Unique id of upload file you could cancel an upload if you need it.
+    ///   - messageUniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func sendLocationMessage(_ request: LocationMessageRequest,
+                             uploadProgress: UploadFileProgressType? = nil,
+                             downloadProgress: DownloadProgressType? = nil,
+                             onSent: OnSentType? = nil,
+                             onSeen: OnSeenType? = nil,
+                             onDeliver: OnDeliveryType? = nil,
+                             uploadUniqueIdResult: UniqueIdResultType? = nil,
+                             messageUniqueIdResult: UniqueIdResultType? = nil)
     {
         let mapStaticReq = MapStaticImageRequest(center: request.mapCenter,
                                                  key: nil,
@@ -64,7 +87,7 @@ extension Chat {
                                                  zoom: request.mapZoom,
                                                  type: request.mapType)
 
-        requestDownloadMapStatic(mapStaticReq, downloadProgress) { [weak self] (response: ChatResponse<Data?>) in
+        mapStaticImage(mapStaticReq, downloadProgress) { [weak self] (response: ChatResponse<Data?>) in
 
             guard let data = response.result as? Data else { return }
             var hC = 0
@@ -102,30 +125,42 @@ extension Chat {
         }
     }
 
-    func requestMentions(_ req: MentionRequest,
-                         _ completion: @escaping CompletionType<[Message]>,
-                         _ cacheResponse: CacheResponseType<[Message]>? = nil,
-                         _ uniqueIdResult: UniqueIdResultType? = nil)
-    {
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { (response: ChatResponse<[Message]>) in
-            let pagination = PaginationWithContentCount(count: req.count, offset: req.offset, totalCount: response.contentCount)
+    /// Get messages that you have mentioned in a thread.
+    /// - Parameters:
+    ///   - request: The request that contains a threadId.
+    ///   - completion: The response contains a list of messages that you have mentioned.
+    ///   - cacheResponse: The cache response of mentioned messages inside a thread.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func getMentions(_ request: MentionRequest, completion: @escaping CompletionType<[Message]>, cacheResponse: CacheResponseType<[Message]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult) { (response: ChatResponse<[Message]>) in
+            let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: response.contentCount)
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
 
         cache.get(useCache: cacheResponse != nil, cacheType: .mentions) { (response: ChatResponse<[Message]>) in
-            let predicate = NSPredicate(format: "threadId == %i", req.threadId)
-            let pagination = PaginationWithContentCount(count: req.count, offset: req.offset, totalCount: CMMessage.crud.getTotalCount(predicate: predicate))
+            let predicate = NSPredicate(format: "threadId == %i", request.threadId)
+            let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: CMMessage.crud.getTotalCount(predicate: predicate))
             cacheResponse?(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
     }
 
-    func requestSendDeliverMessage(_ req: MessageDeliverRequest, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult)
+    /// Tell the sender of a message that the message is delivered successfully.
+    /// - Parameters:
+    ///   - request: The request that contains a messageId.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    internal func deliver(_ request: MessageDeliverRequest, uniqueIdResult: UniqueIdResultType? = nil) {
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult)
     }
 
-    func requestSendSeenMessage(_ req: MessageSeenRequest, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult)
-        cache.write(cacheType: .lastThreadMessageSeen(req.threadId, req.messageId))
+    /// Send seen to participants of a thread that informs you have seen the message already.
+    ///
+    /// When you send seen the last seen messageId and unreadCount will be updated in cache behind the scene.
+    /// - Parameters:
+    ///   - request: The id of the message.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func seen(_ request: MessageSeenRequest, uniqueIdResult: UniqueIdResultType? = nil) {
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult)
+        cache.write(cacheType: .lastThreadMessageSeen(request.threadId, request.messageId))
         cache.save()
     }
 }
@@ -133,14 +168,14 @@ extension Chat {
 // Response
 extension Chat {
     func onNewMessage(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8), let message = try? JSONDecoder().decode(Message.self, from: data) else { return }
-        delegate?.chatEvent(event: .message(.messageNew(message)))
-        delegate?.chatEvent(event: .thread(.threadLastActivityTime(time: chatMessage.time, threadId: chatMessage.subjectId)))
-        let unreadCount = message.conversation?.unreadCount ?? 0
-        delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(threadId: chatMessage.subjectId ?? 0, count: unreadCount)))
+        let response: ChatResponse<Message> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .message(.messageNew(response)))
+        delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
+        guard let message = response.result else { return }
+        let unreadCount = UnreadCount(unreadCount: message.conversation?.unreadCount ?? 0, threadId: response.subjectId)
+        delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: unreadCount))))
         if message.threadId == nil {
-            message.threadId = chatMessage.subjectId ?? message.conversation?.id
+            message.threadId = response.subjectId ?? message.conversation?.id
         }
         cache.write(cacheType: .message(message))
 
@@ -155,62 +190,53 @@ extension Chat {
     }
 
     func onSentMessage(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        if let stringMessageId = chatMessage.content, let messageId = Int(stringMessageId), let threadId = chatMessage.subjectId {
-            let sentResponse = MessageResponse(messageState: .sent, threadId: threadId, messageId: messageId, messageTime: UInt(chatMessage.time))
-            delegate?.chatEvent(event: .message(.messageSent(sentResponse)))
-            cache.write(cacheType: .messageSentToUser(sentResponse))
-            cache.write(cacheType: .deleteQueue(chatMessage.uniqueId))
+        let response: ChatResponse<MessageResponse> = asyncMessage.toChatResponse()
+        if let messageSent = response.result {
+            delegate?.chatEvent(event: .message(.messageSent(response)))
+            cache.write(cacheType: .messageSentToUser(messageSent))
+            cache.write(cacheType: .deleteQueue(response.uniqueId ?? ""))
             cache.save()
-            guard let callback = callbacksManager.getSentCallback(chatMessage.uniqueId) else { return }
-            callback(sentResponse, chatMessage.uniqueId, nil)
-            callbacksManager.removeSentCallback(uniqueId: chatMessage.uniqueId)
+            callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
         }
     }
 
     func onDeliverMessage(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        if let data = chatMessage.content?.data(using: .utf8), let deliverResponse = try? JSONDecoder().decode(MessageResponse.self, from: data) {
+        let response: ChatResponse<MessageResponse> = asyncMessage.toChatResponse()
+        if let deliverResponse = response.result {
             deliverResponse.messageState = .delivered
-            delegate?.chatEvent(event: .message(.messageDelivery(deliverResponse)))
+            delegate?.chatEvent(event: .message(.messageDelivery(response)))
             cache.write(cacheType: .messageDeliveredToUser(deliverResponse))
             cache.save()
-            guard let callback = callbacksManager.getDeliverCallback(chatMessage.uniqueId) else { return }
-            callback(deliverResponse, chatMessage.uniqueId, nil)
-            callbacksManager.removeDeliverCallback(uniqueId: chatMessage.uniqueId)
+            callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
         }
     }
 
     func onSeenMessage(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        if let data = chatMessage.content?.data(using: .utf8), let seenResponse = try? JSONDecoder().decode(MessageResponse.self, from: data) {
+        let response: ChatResponse<MessageResponse> = asyncMessage.toChatResponse()
+        if let seenResponse = response.result {
             seenResponse.messageState = .seen
-            delegate?.chatEvent(event: .message(.messageSeen(seenResponse)))
+            delegate?.chatEvent(event: .message(.messageSeen(response)))
             cache.write(cacheType: .messageSeenByUser(seenResponse))
             cache.save()
-            guard let callback = callbacksManager.getSeenCallback(chatMessage.uniqueId) else { return }
-            callback(seenResponse, chatMessage.uniqueId, nil)
-            callbacksManager.removeSeenCallback(uniqueId: chatMessage.uniqueId)
+            callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
         }
     }
 
     func onLastMessageEdited(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let thread = try? JSONDecoder().decode(Conversation.self, from: data) else { return }
-        delegate?.chatEvent(event: .thread(.lastMessageEdited(thread: thread)))
-        delegate?.chatEvent(event: .thread(.threadLastActivityTime(time: chatMessage.time, threadId: chatMessage.subjectId)))
-        cache.write(cacheType: .threads([thread]))
-        cache.save()
+        let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .thread(.lastMessageEdited(response)))
+        delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
+        if let thread = response.result {
+            cache.write(cacheType: .threads([thread]))
+            cache.save()
+        }
     }
 
     func onLastMessageDeleted(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let thread = try? JSONDecoder().decode(Conversation.self, from: data) else { return }
-        delegate?.chatEvent(event: .thread(.lastMessageDeleted(thread: thread)))
-        delegate?.chatEvent(event: .thread(.threadLastActivityTime(time: chatMessage.time, threadId: chatMessage.subjectId)))
-        if let threadId = thread.id, let lastMessage = thread.lastMessageVO {
+        let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .thread(.lastMessageDeleted(response)))
+        delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
+        if let threadId = response.result?.id, let lastMessage = response.result?.lastMessageVO {
             cache.write(cacheType: .lastThreadMessageUpdated(threadId, lastMessage))
             cache.save()
         }

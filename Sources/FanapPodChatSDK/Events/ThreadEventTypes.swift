@@ -2,31 +2,31 @@
 // ThreadEventTypes.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 11/16/22
 
 import Foundation
 
 public enum ThreadEventTypes {
-    case threadClosed(threadId: Int)
-    case threadUnreadCountUpdated(threadId: Int, count: Int)
-    case threadLastActivityTime(time: Int, threadId: Int?)
-    case threadPin(threadId: Int)
-    case threadUnpin(threadId: Int)
-    case threadInfoUpdated(Conversation)
-    case threadUserRole(threadId: Int, roles: [UserRole])
-    case threadAddParticipants(thread: Conversation, [Participant]?)
-    case threadLeaveSaftlyFailed(threadId: Int)
-    case threadLeaveParticipant(User)
-    case threadRemovedFrom(threadId: Int)
-    case threadMute(threadId: Int)
-    case threadUnmute(threadId: Int)
-    case threadsListChange([Conversation])
-    case threadParticipantsListChange(threadId: Int?, [Participant])
-    case threadNew(Conversation)
-    case threadRemoveParticipants([Participant])
-    case messagePin(threadId: Int?, PinUnpinMessage)
-    case messageUnpin(threadId: Int?, PinUnpinMessage)
-    case threadDeleted(threadId: Int, participant: Participant?)
-    case lastMessageDeleted(thread: Conversation)
-    case lastMessageEdited(thread: Conversation)
+    case threadClosed(ChatResponse<Int>)
+    case threadUnreadCountUpdated(ChatResponse<UnreadCount>)
+    case threadLastActivityTime(ChatResponse<ThreadLastActivity>)
+    case threadPin(ChatResponse<Int>)
+    case threadUnpin(ChatResponse<Int>)
+    case threadInfoUpdated(ChatResponse<Conversation>)
+    case threadUserRole(ChatResponse<[UserRole]>)
+    case threadAddParticipants(ChatResponse<[Participant]>)
+    case threadLeaveSaftlyFailed(ChatResponse<Int>)
+    case threadLeaveParticipant(ChatResponse<User>)
+    case threadRemovedFrom(ChatResponse<Int>)
+    case threadMute(ChatResponse<Int>)
+    case threadUnmute(ChatResponse<Int>)
+    case threadsListChange(ChatResponse<[Conversation]>)
+    case threadParticipantsListChange(ChatResponse<[Participant]>)
+    case threadNew(ChatResponse<Conversation>)
+    case threadRemoveParticipants(ChatResponse<[Participant]>)
+    case messagePin(ChatResponse<PinUnpinMessage>)
+    case messageUnpin(ChatResponse<PinUnpinMessage>)
+    case threadDeleted(ChatResponse<Participant>)
+    case lastMessageDeleted(ChatResponse<Conversation>)
+    case lastMessageEdited(ChatResponse<Conversation>)
 }

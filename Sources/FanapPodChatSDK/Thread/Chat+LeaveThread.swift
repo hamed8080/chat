@@ -2,31 +2,31 @@
 // Chat+LeaveThread.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import FanapPodAsyncSDK
 import Foundation
 
 // Request
-extension Chat {
-    func requestLeaveThread(_ req: LeaveThreadRequest, _ completion: @escaping CompletionType<User>, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+public extension Chat {
+    /// Leave a thread.
+    /// - Parameters:
+    ///   - request: The threadId if the thread with option to clear it's content.
+    ///   - completion: The response of the left thread..
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func leaveThread(_ request: LeaveThreadRequest, completion: @escaping CompletionType<User>, uniqueIdResult: UniqueIdResultType? = nil) {
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 
 // Response
 extension Chat {
     func onLeaveThread(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let user = try? JSONDecoder().decode(User.self, from: data) else { return }
-        delegate?.chatEvent(event: .thread(.threadLeaveParticipant(user)))
-        delegate?.chatEvent(event: .thread(.threadLastActivityTime(time: chatMessage.time, threadId: chatMessage.subjectId)))
-        guard let threadId = chatMessage.subjectId else { return }
-        cache.write(cacheType: .leaveThread(threadId))
+        let response: ChatResponse<User> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .thread(.threadLeaveParticipant(response)))
+        delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
+        cache.write(cacheType: .leaveThread(response.subjectId ?? 0))
         cache.save()
-        guard let callback: CompletionType<User> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(ChatResponse(uniqueId: chatMessage.uniqueId, result: user))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .leaveThread)
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

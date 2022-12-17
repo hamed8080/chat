@@ -2,25 +2,27 @@
 // Chat+Assistants.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import FanapPodAsyncSDK
 import Foundation
 
 // Request
-extension Chat {
-    func requestAssistants(_ req: AssistantsRequest,
-                           _ completion: @escaping CompletionType<[Assistant]>,
-                           _ cacheResponse: CompletionType<[Assistant]>? = nil,
-                           _ uniqueIdResult: UniqueIdResultType? = nil)
-    {
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult) { (response: ChatResponse<[Assistant]>) in
-            let pagination = PaginationWithContentCount(count: req.count, offset: req.offset, totalCount: response.contentCount)
+public extension Chat {
+    /// Get list of assistants for user.
+    /// - Parameters:
+    ///   - request: A request with a contact type and offset, count.
+    ///   - completion: The list of assistants.
+    ///   - cacheResponse: The cache response of list of assistants.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func getAssistats(_ request: AssistantsRequest, completion: @escaping CompletionType<[Assistant]>, cacheResponse: CompletionType<[Assistant]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult) { (response: ChatResponse<[Assistant]>) in
+            let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: response.contentCount)
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
 
-        cache.get(useCache: cacheResponse != nil, cacheType: .getAssistants(req.count, req.offset)) { (response: ChatResponse<[Assistant]>) in
-            let pagination = PaginationWithContentCount(count: req.count, offset: req.offset, totalCount: CMAssistant.crud.getTotalCount())
+        cache.get(useCache: cacheResponse != nil, cacheType: .getAssistants(request.count, request.offset)) { (response: ChatResponse<[Assistant]>) in
+            let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: CMAssistant.crud.getTotalCount())
             cacheResponse?(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
     }
@@ -29,14 +31,10 @@ extension Chat {
 // Response
 extension Chat {
     func onAssistants(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let assistants = try? JSONDecoder().decode([Assistant].self, from: data) else { return }
-        delegate?.chatEvent(event: .assistant(.assistants(assistants)))
-        cache.write(cacheType: .insertOrUpdateAssistants(assistants))
+        let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .assistant(.assistants(response)))
+        cache.write(cacheType: .insertOrUpdateAssistants(response.result ?? []))
         cache.save()
-        guard let callback: CompletionType<[Assistant]> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(ChatResponse(uniqueId: chatMessage.uniqueId, result: assistants))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .getAssistants)
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

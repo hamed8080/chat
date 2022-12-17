@@ -1,18 +1,23 @@
 //
-// EditMessageRequestHandler.swift
+// Chat+EditMessage.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import FanapPodAsyncSDK
 import Foundation
 
 // Request
-extension Chat {
-    func requestEditMessage(_ req: EditMessageRequest, _ completion: CompletionType<Message>? = nil, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        req.typeCode = config.typeCode
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
-        cache.write(cacheType: .editMessageQueue(req))
+public extension Chat {
+    /// Edit a message.
+    /// - Parameters:
+    ///   - request: The request that contains threadId and messageId and new text for the message you want to edit.
+    ///   - completion: The result of edited message.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func editMessage(_ request: EditMessageRequest, completion: CompletionType<Message>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
+        request.typeCode = config.typeCode
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
+        cache.write(cacheType: .editMessageQueue(request))
         cache.save()
     }
 }
@@ -20,15 +25,14 @@ extension Chat {
 // Response
 extension Chat {
     func onEditMessage(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        let message = Message(chatMessage: chatMessage)
-        delegate?.chatEvent(event: .message(.messageEdit(message)))
-        delegate?.chatEvent(event: .thread(.threadLastActivityTime(time: chatMessage.time, threadId: chatMessage.subjectId)))
-        cache.write(cacheType: .deleteEditMessageQueue(message))
-        cache.write(cacheType: .message(message))
-        cache.save()
-        guard let callback: CompletionType<Message> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(ChatResponse(uniqueId: chatMessage.uniqueId, result: message))
-        callbacksManager.removeSentCallback(uniqueId: chatMessage.uniqueId)
+        let response: ChatResponse<Message> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .message(.messageEdit(response)))
+        delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
+        if let message = response.result {
+            cache.write(cacheType: .deleteEditMessageQueue(message))
+            cache.write(cacheType: .message(message))
+            cache.save()
+        }
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

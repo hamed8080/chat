@@ -2,27 +2,28 @@
 // Chat+RemoveBotCommand.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import FanapPodAsyncSDK
 import Foundation
 
 // Request
-extension Chat {
-    func requestRemoveBotCommand(_ req: RemoveBotCommandRequest, _ completion: @escaping CompletionType<BotInfo>, _ uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+public extension Chat {
+    /// Remove commands from a bot.
+    /// - Parameters:
+    ///   - request: The request that contains the name bot and list of commands.
+    ///   - completion: The responser of the request.
+    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    func removeBotCommand(_ request: RemoveBotCommandRequest, completion: @escaping CompletionType<BotInfo>, uniqueIdResult: UniqueIdResultType? = nil) {
+        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 
 // Response
 extension Chat {
     func onRemoveBotCommand(_ asyncMessage: AsyncMessage) {
-        guard let chatMessage = asyncMessage.chatMessage else { return }
-        guard let data = chatMessage.content?.data(using: .utf8) else { return }
-        guard let botInfo = try? JSONDecoder().decode(BotInfo.self, from: data) else { return }
-        delegate?.chatEvent(event: .bot(.removeBotCommand(botInfo)))
-        guard let callback: CompletionType<BotInfo> = callbacksManager.getCallBack(chatMessage.uniqueId) else { return }
-        callback(ChatResponse(uniqueId: chatMessage.uniqueId, result: botInfo))
-        callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .removeBotCommands)
+        let response: ChatResponse<BotInfo> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .bot(.removeBotCommand(response)))
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

@@ -2,18 +2,25 @@
 // Chat+UpdateContact.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
-// Created by Hamed Hosseini on 9/27/22.
+// Created by Hamed Hosseini on 12/14/22
 
 import Contacts
 import Foundation
 
 // Request
 extension Chat {
-    func requestUpdateContact(_ req: UpdateContactRequest, _ completion: @escaping CompletionType<[Contact]>, _: UniqueIdResultType? = nil) {
+    /// Update a particular contact.
+    ///
+    /// Update name or other details of a contact.
+    /// - Parameters:
+    ///   - req: The request of what you need to be updated.
+    ///   - completion: The list of updated contacts.
+    ///   - uniqueIdsResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
+    public func updateContact(_ request: UpdateContactRequest, completion: @escaping CompletionType<[Contact]>, uniqueIdsResult _: UniqueIdResultType? = nil) {
         let url = "\(config.platformHost)\(Routes.updateContacts.rawValue)"
-        var headers: [String: String] = ["_token_": config.token, "_token_issuer_": "1"]
-        req.typeCode = config.typeCode
-        let bodyData = req.getParameterData()
+        let headers: [String: String] = ["_token_": config.token, "_token_issuer_": "1"]
+        request.typeCode = config.typeCode
+        let bodyData = request.getParameterData()
         var urlReq = URLRequest(url: URL(string: url)!)
         urlReq.allHTTPHeaderFields = headers
         urlReq.httpBody = bodyData
@@ -22,12 +29,14 @@ extension Chat {
         session.dataTask(with: urlReq) { [weak self] data, response, error in
             let result: ChatResponse<ContactResponse>? = self?.session.decode(data, response, error)
             self?.responseQueue.async {
-                completion(ChatResponse(uniqueId: req.uniqueId, result: result?.result?.contacts, error: result?.error))
+                completion(ChatResponse(uniqueId: request.uniqueId, result: result?.result?.contacts, error: result?.error))
                 self?.insertOrUpdateCache(contactsResponse: result?.result)
             }
         }
         .resume()
     }
+
+    func requestUpdateContact(_: UpdateContactRequest, _: @escaping CompletionType<[Contact]>, _: UniqueIdResultType? = nil) {}
 
     func insertOrUpdateCache(contactsResponse: ContactResponse?) {
         if let contacts = contactsResponse?.contacts {
