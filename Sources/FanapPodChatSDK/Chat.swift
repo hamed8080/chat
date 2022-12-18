@@ -8,8 +8,9 @@ import FanapPodAsyncSDK
 import Foundation
 import Sentry
 
-protocol ChatProtocol {
+protocol ChatProtocol: AnyObject {
     var id: UUID { get set }
+    var delegate: ChatDelegate? { get set }
     var callbacksManager: CallbacksManager { get }
     var config: ChatConfig { get set }
     var isTypingCount: Int { get set }
