@@ -38,6 +38,8 @@ protocol ChatProtocol {
     func dispose()
     func connect()
     func startCrashAnalytics()
+    func invokeCallback(asyncMessage: AsyncMessage)
+    func getUserForChatReady()
 }
 
 public class Chat: ChatProtocol, Identifiable {
