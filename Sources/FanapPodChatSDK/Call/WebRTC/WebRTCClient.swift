@@ -156,7 +156,7 @@ public protocol WebRTCClientDelegate: AnyObject {
 // MARK: - Pay attention, this class use many extensions inside a files not be here.
 
 public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDelegate {
-    private weak var chat: Chat?
+    private weak var chat: ChatProtocol?
     private var answerReceived: [String: RTCPeerConnection] = [:]
     private var config: WebRTCConfig
     private var delegate: WebRTCClientDelegate?
