@@ -12,7 +12,7 @@ internal class AsyncManager: AsyncDelegate {
     private var config: ChatConfig?
     private weak var delegate: ChatDelegate?
     private var logger: Logger?
-    var chat: Chat!
+    var chat: ChatProtocol!
     /// Async client.
     private(set) var asyncClient: Async?
 
@@ -141,6 +141,6 @@ internal class AsyncManager: AsyncDelegate {
     private func sendChatServerPing() {
         let req = BareChatSendableRequest()
         req.chatMessageType = .ping
-        chat.prepareToSendAsync(req: req)
+        sendData(sendable: req)
     }
 }

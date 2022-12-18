@@ -41,6 +41,8 @@ protocol ChatProtocol {
     func dispose()
     func connect()
     func startCrashAnalytics()
+    func invokeCallback(asyncMessage: AsyncMessage)
+    func getUserForChatReady()
 }
 
 public class Chat: ChatProtocol, Identifiable {
@@ -91,7 +93,7 @@ public class Chat: ChatProtocol, Identifiable {
         self.session = session
         self.callDelegate = callDelegate
         cache = CacheFactory(config: config)
-        asyncManager = AsyncManager(pingTimer: pingTimer, queueTimer: queueTimer, config: config, delegate: delegate, logger: logger)
+        asyncManager = AsyncManager(pingTimer: pingTimer, queueTimer: queueTimer, config: config, delegate: delegate, logger: self.logger)
         asyncManager.chat = self
     }
 
