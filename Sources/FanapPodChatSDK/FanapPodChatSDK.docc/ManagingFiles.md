@@ -4,7 +4,7 @@ You could manage download and upload and so more in terms of working with files.
 
 ### Get A File
 
-To get a file from the cache or download it directly from the server. If you want to get a file from the cache just set ``FileRequest/forceToDownloadFromServer`` to false to search through a cache and if it has contained it, it will immediately back the file else it will download the file from the server. Call method ``Chat/getFile(req:downloadProgress:completion:cacheResponse:uniqueIdResult:)`` like this:
+To get a file from the cache or download it directly from the server. If you want to get a file from the cache just set ``FileRequest/forceToDownloadFromServer`` to false to search through a cache and if it has contained it, it will immediately back the file else it will download the file from the server. Call method ``Chat/getFile(_:downloadProgress:completion:cacheResponse:uniqueIdResult:)`` like this:
 ```swift
 let req = FileRequest(hashCode: "XYZ...", checkUserGroupAccess: false, forceToDownloadFromServer: true)
 Chat.sharedInstance.getFile(req: req) { downloadProgress in
@@ -21,7 +21,7 @@ Chat.sharedInstance.getFile(req: req) { downloadProgress in
 
 ### Get An Image
 
-To get an image from the cache or download it directly from the server. If you want to get an image from the cache just set ``FileRequest/forceToDownloadFromServer`` to false to search through a cache and if it has contained it, it will immediately back the image else it will download the image from the server. Call method ``Chat/getImage(req:downloadProgress:completion:cacheResponse:uniqueIdResult:)`` like this:
+To get an image from the cache or download it directly from the server. If you want to get an image from the cache just set ``FileRequest/forceToDownloadFromServer`` to false to search through a cache and if it has contained it, it will immediately back the image else it will download the image from the server. Call method ``Chat/getImage(_:downloadProgress:completion:cacheResponse:uniqueIdResult:)`` like this:
 
 >Tip: You could set the ideal size of an image you wish to receive inside the initializer of ``ImageRequest``.
 
@@ -41,7 +41,7 @@ Chat.sharedInstance.getImage(req: req) { downloadProgress in
 
 ### Upload a file
 
-To upload a file to server use ``UploadFileRequest/userGroupHash`` if you want to send it inside a thread. Please visit all properties that you could manage for uploading a file in class ``UploadFileRequest``. Call method ``Chat/uploadFile(req:uploadUniqueIdResult:uploadProgress:uploadCompletion:)`` like this:
+To upload a file to server use ``UploadFileRequest/userGroupHash`` if you want to send it inside a thread. Please visit all properties that you could manage for uploading a file in class ``UploadFileRequest``. Call method ``Chat/uploadFile(_:uploadUniqueIdResult:uploadProgress:uploadCompletion:)`` like this:
 
 ```swift
 let req = UploadFileRequest(data: fileData, fileExtension: ".txt", fileName: "Test", mimeType: "text/plain" , userGroupHash: "XYZ....")
@@ -54,7 +54,7 @@ Chat.sharedInstance.uploadFile(req: req) { uploadProgress, error in
 
 ### Upload an image
 
-To upload an image to server use ``UploadFileRequest/userGroupHash`` if you want to send it inside a thread. Please visit all properties that you could manage for uploading an image in class ``UploadFileRequest``. Call method ``Chat/uploadImage(req:uploadUniqueIdResult:uploadProgress:uploadCompletion:)`` like this:
+To upload an image to server use ``UploadFileRequest/userGroupHash`` if you want to send it inside a thread. Please visit all properties that you could manage for uploading an image in class ``UploadFileRequest``. Call method ``Chat/uploadImage(_:uploadUniqueIdResult:uploadProgress:uploadCompletion:)`` like this:
 
 ```swift
 let req = UploadFileRequest(data: imageData, fileName: "test.png", mimeType: "image/png" , userGroupHash: "XYZ....")
@@ -101,7 +101,7 @@ Chat.sharedInstance.sendFileMessage(textMessage: message, uploadFile: imageReque
 ```
 
 ### Managing a upload
-To ``DownloaUploadAction/suspend``, ``DownloaUploadAction/resume`` and comletely ``DownloaUploadAction/cancel`` a file which is uploading right now use the method ``Chat/manageUpload(uniqueId:action:isImage:completion:)`` like this:
+To ``DownloaUploadAction/suspend``, ``DownloaUploadAction/resume`` and comletely ``DownloaUploadAction/cancel`` a file which is uploading right now use the method ``Chat/manageUpload(uniqueId:action:completion:)`` like this:
 >Tip: To distinguish between a file or image set `isImage` on this funcion
 ```swift
 Chat.sharedInstance.manageUpload(uniqueId: "XYZ...": action: .resume, isImage: false){ stringResult, completed in
@@ -110,7 +110,7 @@ Chat.sharedInstance.manageUpload(uniqueId: "XYZ...": action: .resume, isImage: f
 ```
 
 ### Managing a download
-To ``DownloaUploadAction/suspend``, ``DownloaUploadAction/resume`` and comletely ``DownloaUploadAction/cancel`` a file which is downloading right now use the method ``Chat/manageDownload(uniqueId:action:isImage:completion:)`` like this:
+To ``DownloaUploadAction/suspend``, ``DownloaUploadAction/resume`` and comletely ``DownloaUploadAction/cancel`` a file which is downloading right now use the method ``Chat/manageDownload(uniqueId:action:completion:)`` like this:
 >Tip: To distinguish between a file or image set `isImage` on this funcion
 ```swift
 Chat.sharedInstance.manageDownload(uniqueId: "XYZ...": action: .resume, isImage: false){ stringResult, completed in

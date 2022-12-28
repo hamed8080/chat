@@ -42,7 +42,7 @@ Chat.sharedInstance.mapRouting(.init(alternative: true, origin: origin, destinat
 
 ### Convert an cordinate to an image
 
-Convert an location to an image use the method ``Chat/mapStaticImage(_:completion:uniqueIdResult:)`` like this:
+Convert an location to an image use the method ``Chat/mapStaticImage(_:_:completion:uniqueIdResult:)`` like this:
 ```swift
 let center = Cordinate(lat: 37.33900249783756, lng: -122.00944807880965)
 let req = MapStaticImageRequest(center: center)

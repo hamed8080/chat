@@ -54,7 +54,7 @@ extension Chat {
                 return
             }
             if let data = data, let podspaceError = try? JSONDecoder().decode(PodspaceFileUploadResponse.self, from: data) {
-                let error = ChatError(message: podspaceError.message, errorCode: podspaceError.errorType?.rawValue, hasError: true)
+                let error = ChatError(message: podspaceError.message, code: podspaceError.errorType?.rawValue, hasError: true)
                 completion?(nil, nil, error)
                 let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId, error: error)
                 delegate?.chatEvent(event: .file(.downloadError(response)))
@@ -80,7 +80,7 @@ extension Chat {
             let headers = (response as? HTTPURLResponse)?.allHeaderFields as? [String: Any]
             let message = (headers?["errorMessage"] as? String) ?? ""
             let code = (headers?["errorCode"] as? Int) ?? 999
-            let error = ChatError(message: message, errorCode: code, hasError: true, content: nil)
+            let error = ChatError(message: message, code: code, hasError: true, content: nil)
             completion?(nil, nil, error)
             let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId, error: error)
             delegate?.chatEvent(event: .file(.downloadError(response)))

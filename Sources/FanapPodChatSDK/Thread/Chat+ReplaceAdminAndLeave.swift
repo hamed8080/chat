@@ -28,7 +28,7 @@ public extension Chat {
                     }
                 }
             } else {
-                let chatError = ChatError(message: "Current User have no Permission to Change the ThreadAdmin", errorCode: 6666, hasError: true)
+                let chatError = ChatError(message: "Current User have no Permission to Change the ThreadAdmin", code: 6666, hasError: true)
                 let response: ChatResponse<Int> = .init(uniqueId: request.uniqueId, result: request.threadId, error: chatError)
                 self?.delegate?.chatEvent(event: .thread(.threadLeaveSaftlyFailed(response)))
                 completion(ChatResponse(uniqueId: request.uniqueId, error: chatError))

@@ -39,7 +39,9 @@ public extension Chat {
         var urlReq = URLRequest(url: URL(string: urlString)!)
         urlReq.allHTTPHeaderFields = headers
         urlReq.httpMethod = HTTPMethod.post.rawValue
+        logger?.log(urlReq, String(describing: type(of: [Contact].self)))
         session.dataTask(with: urlReq) { [weak self] data, response, error in
+            self?.logger?.log(data, response, error)
             let result: ChatResponse<ContactResponse>? = self?.session.decode(data, response, error)
             self?.responseQueue.async {
                 completion(ChatResponse(uniqueId: request.first?.uniqueId, result: result?.result?.contacts, error: result?.error))

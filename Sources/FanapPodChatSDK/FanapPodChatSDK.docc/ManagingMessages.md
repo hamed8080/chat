@@ -18,7 +18,7 @@ Each message has 5 phases to send to the opposite person or in a group thread.
 
 ### Send Text Message
 
-To send a simple text message insisde a thread call the method ``Chat/sendTextMessage(_:uniqueIdresult:onSent:onSeen:onDeliver:)`` like this:
+To send a simple text message insisde a thread call the method ``Chat/sendTextMessage(_:uniqueIdResult:onSent:onSeen:onDeliver:)`` like this:
 
 ```swift
 Chat.sharedInstance.sendTextMessage(.init(threadId: 123456, textMessage: "Hello", messageType: .TEXT)) { uniqueId in
@@ -205,7 +205,7 @@ Chat.sharedInstance.getMentions(.init(threadId: 123456, onlyUnreadMention: false
 
 ### List of participants who delivered the message to them.
 
-For retrieving the list of participants who the message delivered to them, use the method ``Chat/messageDeliveryParticipants(_:completion:uniqueIdResult:)`` like this:
+For retrieving the list of participants who the message delivered to them, use the method ``Chat/messageDeliveredToParticipants(_:completion:uniqueIdResult:)`` like this:
 
 ```swift
 Chat.sharedInstance.messageDeliveryParticipants(.init(messageId: 123456)) { participants, uniqueId, pagination, error in

@@ -20,10 +20,10 @@ extension URLSessionProtocol {
         } else if statusCode >= 200, statusCode <= 300, let data = data, let codable = try? JSONDecoder().decode(T.self, from: data) {
             return ChatResponse(result: codable)
         } else if let error = error {
-            let error = ChatError(message: "\(ChatErrorCodes.networkError.rawValue) \(error)", errorCode: statusCode, hasError: true)
+            let error = ChatError(message: "\(ChatErrorType.networkError.rawValue) \(error)", code: statusCode, hasError: true)
             return ChatResponse(error: error)
         } else {
-            let error = ChatError(message: "\(ChatErrorCodes.networkError.rawValue)", errorCode: statusCode, hasError: true)
+            let error = ChatError(message: "\(ChatErrorType.networkError.rawValue)", code: statusCode, hasError: true)
             return ChatResponse(error: error)
         }
     }

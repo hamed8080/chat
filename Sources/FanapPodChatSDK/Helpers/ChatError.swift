@@ -7,7 +7,7 @@
 import FanapPodAsyncSDK
 import Foundation
 
-public enum ChatErrorCodes: String {
+public enum ChatErrorType: String {
     case asyncError
     case outOfStorage
     case errorRaedyChat
@@ -18,12 +18,12 @@ public enum ChatErrorCodes: String {
 
 public struct ChatError: Decodable {
     public var message: String?
-    public var errorCode: Int?
+    public var code: Int?
     public var hasError: Bool?
     public var content: String?
     public var userInfo: [String: Any]?
     public var rawError: Error?
-    public var code: ChatErrorCodes = .undefined
+    public var type: ChatErrorType = .undefined
     public var banError: BanError?
 
     internal enum CodingKeys: String, CodingKey {
@@ -35,18 +35,18 @@ public struct ChatError: Decodable {
         case message
     }
 
-    public init(code: ChatErrorCodes = .undefined, errorCode: Int? = nil, message: String? = nil, userInfo: [String: Any]? = nil, rawError: Error? = nil, content: String? = nil) {
-        self.code = code
+    public init(type: ChatErrorType = .undefined, code: Int? = nil, message: String? = nil, userInfo: [String: Any]? = nil, rawError: Error? = nil, content: String? = nil) {
+        self.type = type
         self.message = message
         self.userInfo = userInfo
         self.rawError = rawError
-        self.errorCode = errorCode
+        self.code = code
         self.content = content
     }
 
-    init(message: String? = nil, errorCode: Int? = nil, hasError: Bool? = nil, content: String? = nil) {
+    init(message: String? = nil, code: Int? = nil, hasError: Bool? = nil, content: String? = nil) {
         self.message = message
-        self.errorCode = errorCode
+        self.code = code
         self.hasError = hasError
         self.content = content
     }
@@ -55,16 +55,12 @@ public struct ChatError: Decodable {
         let containser = try? decoder.container(keyedBy: CodingKeys.self)
         hasError = try containser?.decodeIfPresent(Bool.self, forKey: .hasError)
         message = try containser?.decodeIfPresent(String.self, forKey: .errorMessage)
-        errorCode = try containser?.decodeIfPresent(Int.self, forKey: .errorCode)
         content = try containser?.decodeIfPresent(String.self, forKey: .content)
         if let msg = try containser?.decodeIfPresent(String.self, forKey: .message) {
             message = msg
         }
-        if let errorCode = try containser?.decodeIfPresent(Int.self, forKey: .code),
-           errorCode == 208,
-           let data = message?.data(using: .utf8),
-           let banError = try? JSONDecoder().decode(BanError.self, from: data)
-        {
+        code = (try? containser?.decodeIfPresent(Int.self, forKey: .code)) ?? (try? containser?.decodeIfPresent(Int.self, forKey: .errorCode))
+        if code == 208, let data = message?.data(using: .utf8), let banError = try? JSONDecoder().decode(BanError.self, from: data) {
             self.banError = banError
         }
     }
@@ -78,6 +74,6 @@ public class BanError: Decodable {
 
 extension AsyncError {
     var chatError: ChatError {
-        ChatError(code: .asyncError, message: message, userInfo: userInfo, rawError: rawError)
+        ChatError(type: .asyncError, message: message, userInfo: userInfo, rawError: rawError)
     }
 }

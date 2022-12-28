@@ -42,7 +42,7 @@ extension Chat {
             uploadCompletion?(nil, nil, chatError)
         } else if let data = data, let uploadResponse = try? JSONDecoder().decode(PodspaceFileUploadResponse.self, from: data) {
             if uploadResponse.error != nil {
-                let error = ChatError(message: "\(uploadResponse.error ?? "") - \(uploadResponse.message ?? "")", errorCode: uploadResponse.errorType?.rawValue, hasError: true)
+                let error = ChatError(message: "\(uploadResponse.error ?? "") - \(uploadResponse.message ?? "")", code: uploadResponse.errorType?.rawValue, hasError: true)
                 uploadCompletion?(nil, nil, error)
                 let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, error: error)
                 delegate?.chatEvent(event: .file(.uploadError(response)))
@@ -70,7 +70,7 @@ extension Chat {
             let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId)
             delegate?.chatEvent(event: .file(.uploaded(response)))
         } else if let error = error {
-            let error = ChatError(message: "\(ChatErrorCodes.networkError.rawValue) \(error)", errorCode: 6200, hasError: true)
+            let error = ChatError(message: "\(ChatErrorType.networkError.rawValue) \(error)", code: 6200, hasError: true)
             uploadCompletion?(nil, nil, error)
             let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, error: error)
             delegate?.chatEvent(event: .file(.uploadError(response)))
