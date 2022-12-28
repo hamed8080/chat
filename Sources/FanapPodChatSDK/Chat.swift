@@ -8,55 +8,18 @@ import FanapPodAsyncSDK
 import Foundation
 import Sentry
 
-protocol ChatProtocol: AnyObject {
-    var id: UUID { get set }
-    var delegate: ChatDelegate? { get set }
-    var callbacksManager: CallbacksManager { get }
-    var config: ChatConfig { get set }
-    var isTypingCount: Int { get set }
-    var timerTyping: TimerProtocol? { get set }
-    var requestUserTimer: TimerProtocol { get set }
-    var asyncManager: AsyncManager { get set }
-    var logger: Logger? { get set }
-    var timerCheckUserStoppedTyping: TimerProtocol? { get set }
-    var exportMessageViewModels: [any ExportMessagesProtocol] { get set }
-    var session: URLSessionProtocol { get set }
-    var responseQueue: DispatchQueueProtocol { get set }
-    var cache: CacheFactory { get set }
-    var userRetrycount: Int { get set }
-    var maxUserRetryCount: Int { get }
-    var userInfo: User? { get set }
-    func setToken(newToken: String, reCreateObject: Bool)
-    func prepareToSendAsync<T: Decodable>(
-        req: ChatSendable,
-        uniqueIdResult: UniqueIdResultType?,
-        completion: CompletionType<T>?,
-        onSent: OnSentType?,
-        onDelivered: OnDeliveryType?,
-        onSeen: OnSeenType?
-    )
-    func prepareToSendAsync(req: ChatSendable, uniqueIdResult: UniqueIdResultType?)
-    func dispose()
-    func connect()
-    func startCrashAnalytics()
-    func invokeCallback(asyncMessage: AsyncMessage)
-    func getUserForChatReady()
-}
-
 public class Chat: ChatProtocol, Identifiable {
     public var id: UUID = .init()
     public var config: ChatConfig
-    /// Delegate to send events.
     public weak var delegate: ChatDelegate?
-    /// Current user info of the application it'll be filled after chat is in the ``ChatState/chatReady``  state.
     public var userInfo: User?
     internal var asyncManager: AsyncManager
     internal var logger: Logger?
     internal var userRetrycount = 0
     internal let maxUserRetryCount = 5
+    var requestUserTimer: TimerProtocol
     var isTypingCount = 0
     var timerTyping: TimerProtocol?
-    var requestUserTimer: TimerProtocol
     var timerCheckUserStoppedTyping: TimerProtocol?
     var exportMessageViewModels: [any ExportMessagesProtocol] = []
     var session: URLSessionProtocol
@@ -87,7 +50,6 @@ public class Chat: ChatProtocol, Identifiable {
         asyncManager.chat = self
     }
 
-    /// Create logger and then connect to async server.
     public func connect() {
         if config.captureLogsOnSentry == true {
             startCrashAnalytics()
@@ -101,8 +63,6 @@ public class Chat: ChatProtocol, Identifiable {
         DiskStatus.checkIfDeviceHasFreeSpace(needSpaceInMB: config.deviecLimitationSpaceMB, turnOffTheCache: true, errorDelegate: delegate)
     }
 
-    /// Closing the async socket if it is open and setting the chat shared instance to nil.
-    /// You should take into consideration that if you need to work with this instance you should call the ``createChatObject(config:)`` method again.
     public func dispose() {
         asyncManager.disposeObject()
         print("Disposed Singleton instance")

@@ -20,7 +20,7 @@ Chat.sharedInstance.getThreads(init(offset: 50)) { threads, uniqueId, pagination
 }
 ```
 
-For retriving data witouth calling network you could use ``cache/get(useCache:cacheType:completion:)``
+For retriving data witouth calling network you could use ``CacheFactory/get(useCache:cacheType:completion:)``
 It won't work unless you set `enableCache` to true in configuration.
 ```swift
 let req = ThreadsRequest(count:50, offset: 0)
@@ -195,7 +195,7 @@ Chat.sharedInstance.leaveThreadSaftly(req) { user, uniqueId, error in
 ```
 
 ### Delete a thread
-If you have a ``Roles/ownership`` access for this thread you could completely delete the thread. ``Chat/deleteThread(_:completion:uniqueIdResult:)``.
+If you have a ``Roles/ownership`` access for this thread you could completely delete the thread. ``Chat/deleteThread(_:completion:_:)``.
 
 >Important: Following things will happen if you delete a thread:
 - All members are deleted from the channel or group and will receive a message about it.
