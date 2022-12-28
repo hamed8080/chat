@@ -58,7 +58,7 @@ public class Logger {
         }
     }
 
-    func restRequest(_ request: URLRequest, _ decodeType: String) {
+    func log(_ request: URLRequest, _ decodeType: String) {
         if isDebuggingLogEnabled == true {
             var output = "\n"
             output += "Start Of Request============================================================================================\n"
@@ -72,7 +72,7 @@ public class Logger {
         }
     }
 
-    func restResponse(_ data: Data?, _ response: URLResponse?, _: Error?) {
+    func log(_ data: Data?, _ response: URLResponse?, _: Error?) {
         if isDebuggingLogEnabled == true {
             var output = "\n"
             output += "Start Of Response============================================================================================\n"

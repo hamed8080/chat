@@ -18,7 +18,7 @@ public extension Chat {
         let url = "\(config.mapServer)\(Routes.mapStaticImage.rawValue)"
         DownloadManager(callbackManager: callbacksManager).download(url: url, uniqueId: request.uniqueId, headers: nil, parameters: try? request.asDictionary(), downloadProgress: downloadProgress) { data, response, error in
             let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
-            let error: ChatError? = error != nil ? ChatError(message: "\(ChatErrorCodes.networkError.rawValue) \(error?.localizedDescription ?? "")", errorCode: statusCode, hasError: error != nil) : nil
+            let error: ChatError? = error != nil ? ChatError(message: "\(ChatErrorType.networkError.rawValue) \(error?.localizedDescription ?? "")", code: statusCode, hasError: error != nil) : nil
             completion(ChatResponse(uniqueId: request.uniqueId, result: data, error: error))
         }
     }

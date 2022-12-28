@@ -22,7 +22,7 @@ extension Chat {
 
     func getUserForChatReady() {
         if userInfo == nil {
-            _ = requestUserTimer.scheduledTimer(withTimeInterval: 2, repeats: true) { [weak self] timer in
+            requestUserTimer.scheduledTimer(withTimeInterval: 2, repeats: true) { [weak self] timer in
                 self?.getUserInfo(.init()) { (response: ChatResponse<User>) in
                     if let user = response.result {
                         self?.userInfo = user
@@ -34,7 +34,7 @@ extension Chat {
                     } else {
                         // reach to max retry
                         timer.invalidate()
-                        self?.delegate?.chatError(error: .init(code: .errorRaedyChat, message: response.error?.message))
+                        self?.delegate?.chatError(error: .init(type: .errorRaedyChat, message: response.error?.message))
                     }
                 }
             }

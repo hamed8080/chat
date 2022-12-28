@@ -98,7 +98,7 @@ public class Chat: ChatProtocol, Identifiable {
         } else {
             requestDeviceId()
         }
-        _ = DiskStatus.checkIfDeviceHasFreeSpace(needSpaceInMB: config.deviecLimitationSpaceMB, turnOffTheCache: true, errorDelegate: delegate)
+        DiskStatus.checkIfDeviceHasFreeSpace(needSpaceInMB: config.deviecLimitationSpaceMB, turnOffTheCache: true, errorDelegate: delegate)
     }
 
     /// Closing the async socket if it is open and setting the chat shared instance to nil.

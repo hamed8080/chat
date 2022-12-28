@@ -63,7 +63,7 @@ internal class AsyncManager: AsyncDelegate {
 
     /// A delegate to raise an error.
     public func asyncError(error: AsyncError) {
-        delegate?.chatError(error: .init(code: .asyncError, message: error.message, userInfo: error.userInfo, rawError: error.rawError))
+        delegate?.chatError(error: .init(type: .asyncError, message: error.message, userInfo: error.userInfo, rawError: error.rawError))
     }
 
     /// A public method to completely destroy the async object.
@@ -99,7 +99,7 @@ internal class AsyncManager: AsyncDelegate {
         var interval: TimeInterval = 0
         queue.sorted { $0.value.queueTime < $1.value.queueTime }.forEach { _, item in
             if let sendable = item as? ChatSendable {
-                _ = queueTimer.scheduledTimer(withTimeInterval: interval + 2, repeats: false) { [weak self] _ in
+                queueTimer.scheduledTimer(withTimeInterval: interval + 2, repeats: false) { [weak self] _ in
                     self?.sendData(sendable: sendable)
                 }
             }

@@ -66,6 +66,7 @@ open class DiskStatus {
         return formatter.string(fromByteCount: bytes) as String
     }
 
+    @discardableResult
     class func checkIfDeviceHasFreeSpace(needSpaceInMB: Int64, turnOffTheCache: Bool, errorDelegate: ChatDelegate?) -> Bool {
         let availableSpace = DiskStatus.freeDiskSpaceInBytes
         if availableSpace < (needSpaceInMB * 1024 * 1024) {
@@ -73,7 +74,7 @@ open class DiskStatus {
             if turnOffTheCache {
                 message += " " + "so, the cache will be switch OFF!"
             }
-            errorDelegate?.chatError(error: .init(code: .outOfStorage, message: message))
+            errorDelegate?.chatError(error: .init(type: .outOfStorage, message: message))
             return false
         } else {
             return true

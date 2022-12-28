@@ -92,7 +92,7 @@ class ExportMessages: ExportMessagesProtocol {
                 finished(success: true, uniqueId: response.uniqueId, error: response.error)
             }
         } else {
-            finished(uniqueId: response.uniqueId, error: response.error ?? ChatError(code: .exportError, errorCode: 0, message: nil, rawError: response.error?.rawError))
+            finished(uniqueId: response.uniqueId, error: response.error ?? ChatError(type: .exportError, code: 0, message: nil, rawError: response.error?.rawError))
         }
     }
 

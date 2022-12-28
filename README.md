@@ -61,3 +61,10 @@ For more information about how to use Chat SDK visit [Documentation](https://ham
 
 ## Developer Application 
 For more example and usage you can use [developer implementation app](https://pubgi.fanapsoft.ir/chat/ios/chatapplication)
+
+
+## Contributing to FanapPodChatSDK
+
+Please see the [contributing guide](/CONTRIBUTING.md) for more information.
+
+<!-- Copyright (c) 2021-2022 Apple Inc and the Swift Project authors. All Rights Reserved. -->

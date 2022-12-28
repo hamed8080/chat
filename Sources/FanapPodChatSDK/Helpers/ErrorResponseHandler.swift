@@ -18,24 +18,11 @@ extension Chat {
             event.message = "Message of type 'ERROR' recieved: \n \(asyncMessage.convertCodableToString() ?? "")"
             Client.shared?.send(event: event, completion: { _ in })
         }
-
+        let data = asyncMessage.chatMessage?.content?.data(using: .utf8) ?? Data()
+        let chatError = try? JSONDecoder().decode(ChatError.self, from: data)
+        delegate?.chatError(error: chatError ?? .init())
         if let chatMessage = asyncMessage.chatMessage, let callback: CompletionType<Voidcodable> = callbacksManager.getCallBack(chatMessage.uniqueId) {
-            let code: Int
-            let message: String
-            let content: String
-
-            if let data = chatMessage.content?.data(using: .utf8), let chatError = try? JSONDecoder().decode(ChatError.self, from: data) {
-                code = chatError.errorCode ?? 0
-                message = chatError.message ?? ""
-                content = chatError.content ?? ""
-            } else {
-                code = chatMessage.code ?? 0
-                content = asyncMessage.convertCodableToString() ?? ""
-                message = chatMessage.message ?? ""
-            }
-
-            callback(.init(uniqueId: chatMessage.uniqueId, error: .init(message: message, errorCode: code, hasError: true, content: content)))
-            delegate?.chatError(error: .init(errorCode: code, message: message, content: content))
+            callback(.init(uniqueId: chatMessage.uniqueId, error: chatError))
             callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .error)
         }
     }
