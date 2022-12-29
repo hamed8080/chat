@@ -12,7 +12,6 @@ public extension CMTag {
     func getCodable() -> Tag? {
         Tag(id: id as? Int ?? 0,
             name: name,
-            owner: owner.getCodable(),
             active: Bool(exactly: active) ?? false,
             tagParticipants: tagParticipants?.compactMap { $0.getCodable() } ?? [])
     }
@@ -31,11 +30,6 @@ public extension CMTag {
                 }
             }
         }
-
-        CMParticipant.insertOrUpdate(participant: tag.owner) { resultEntity in
-            model.owner = resultEntity
-        }
-
         return model
     }
 

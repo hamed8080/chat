@@ -14,6 +14,9 @@ protocol ChatProtocol: AnyObject {
     /// A delegation property to emit events and errors and connection status of the object.
     var delegate: ChatDelegate? { get set }
 
+    /// Last state of the chat object.
+    var state: ChatState { get set }
+
     /// A manager for the chat object that will manage and holds the strong reference of a callback to invoke and then remove after the invocation.
     var callbacksManager: CallbacksManager { get }
 

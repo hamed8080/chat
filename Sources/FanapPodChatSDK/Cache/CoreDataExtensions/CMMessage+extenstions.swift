@@ -58,7 +58,7 @@ public extension CMMessage {
             model.conversation = conversation // prevent write nil when pinMessage or other method need to update or insert beacause it nil
         }
 
-        if let participant = message.participant, let threadId = conversation?.id as? Int {
+        if let participant = message.participant, let threadId = conversation?.id as? Int, participant.id != nil {
             CMParticipant.insertOrUpdate(participant: participant, threadId: threadId) { resultEntity in
                 model.participant = resultEntity
             }

@@ -12,10 +12,11 @@ public enum ChatState: String {
     case closed
     case asyncReady
     case chatReady
+    case uninitialized
 }
 
 extension AsyncSocketState {
     var chatState: ChatState {
-        ChatState(rawValue: rawValue) ?? ChatState.closed
+        ChatState(rawValue: rawValue) ?? .uninitialized
     }
 }

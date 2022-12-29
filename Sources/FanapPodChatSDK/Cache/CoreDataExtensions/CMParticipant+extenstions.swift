@@ -86,18 +86,6 @@ public extension CMParticipant {
         }
     }
 
-    class func insertOrUpdate(participant: Participant, resultEntity: ((CMParticipant) -> Void)? = nil) {
-        if let id = participant.id, let findedEntity = CMParticipant.crud.fetchWith(NSPredicate(format: "id == %i", id))?.first {
-            let cmParticipant = convertParticipantToCM(participant: participant, fromMainMethod: false, threadId: nil, entity: findedEntity)
-            resultEntity?(cmParticipant)
-        } else {
-            CMParticipant.crud.insert { cmLinkedUserEntity in
-                let cmParticipant = convertParticipantToCM(participant: participant, fromMainMethod: false, threadId: nil, entity: cmLinkedUserEntity)
-                resultEntity?(cmParticipant)
-            }
-        }
-    }
-
     class func insertOrUpdateParicipants(participants: [Participant]?, fromMainMethod: Bool = false, threadId: Int?, resultEntity: ((CMParticipant) -> Void)? = nil) {
         participants?.forEach { participant in
             insertOrUpdate(participant: participant, fromMainMethod: fromMainMethod, threadId: threadId, resultEntity: resultEntity)

@@ -26,6 +26,7 @@ public class Chat: ChatProtocol, Identifiable {
     var responseQueue: DispatchQueueProtocol
     var cache: CacheFactory
     let callbacksManager = CallbacksManager()
+    public internal(set) var state: ChatState = .uninitialized
 
     init(
         config: ChatConfig,
@@ -46,7 +47,7 @@ public class Chat: ChatProtocol, Identifiable {
         self.timerCheckUserStoppedTyping = timerCheckUserStoppedTyping
         self.session = session
         cache = CacheFactory(config: config)
-        asyncManager = AsyncManager(pingTimer: pingTimer, queueTimer: queueTimer, config: config, delegate: delegate, logger: self.logger)
+        asyncManager = AsyncManager(pingTimer: pingTimer, queueTimer: queueTimer)
         asyncManager.chat = self
     }
 

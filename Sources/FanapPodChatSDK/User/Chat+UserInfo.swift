@@ -26,6 +26,7 @@ extension Chat {
                 self?.getUserInfo(.init()) { (response: ChatResponse<User>) in
                     if let user = response.result {
                         self?.userInfo = user
+                        self?.state = .chatReady
                         self?.delegate?.chatState(state: .chatReady, currentUser: user, error: nil)
                         self?.asyncManager.sendQueuesOnReconnect()
                         timer.invalidate()

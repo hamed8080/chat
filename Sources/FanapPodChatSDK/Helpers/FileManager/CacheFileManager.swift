@@ -17,7 +17,7 @@ enum FileManagerPaths: String {
 
 public class CacheFileManager {
     private let rootPath: String
-    var cache: CacheFactory!
+    weak var cache: CacheFactory?
     private let logger: Logger?
     private let enableCache: Bool
 
@@ -87,7 +87,7 @@ public class CacheFileManager {
             }
             CMFile.crud.delete(entity: file)
         }
-        cache.save()
+        cache?.save()
     }
 
     public func deleteAllImages() {
@@ -102,7 +102,7 @@ public class CacheFileManager {
             }
             CMImage.crud.delete(entity: image)
         }
-        cache.save()
+        cache?.save()
     }
 
     func deleteAllFilesWithCache() {
@@ -128,7 +128,7 @@ public class CacheFileManager {
         CMFile.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", fileModel.hashCode), logger)
         CMFile.insert(request: fileModel)
         createDirectoryIfNotExist(paths: .files)
-        cache.save()
+        cache?.save()
         let url = URL(fileURLWithPath: rootPath + "/\(FileManagerPaths.files.rawValue)").appendingPathComponent("\(fileModel.hashCode)")
         writeDataAt(url: url, data: data)
     }
@@ -138,7 +138,7 @@ public class CacheFileManager {
         CMImage.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", imageModel.hashCode), logger)
         CMImage.insert(request: imageModel, isThumbnail: isThumbnail)
         createDirectoryIfNotExist(paths: .images)
-        cache.save()
+        cache?.save()
         let url = URL(fileURLWithPath: rootPath + "/\(FileManagerPaths.images.rawValue)").appendingPathComponent("\(imageModel.hashCode)")
         writeDataAt(url: url, data: data)
     }
@@ -149,7 +149,7 @@ public class CacheFileManager {
             try? FileManager.default.removeItem(at: url)
         }
         CMImage.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", fileHashCode), logger)
-        cache.save()
+        cache?.save()
     }
 
     public func deleteFileFromCache(fileHashCode: String) {
@@ -158,7 +158,7 @@ public class CacheFileManager {
             try? FileManager.default.removeItem(at: url)
         }
         CMFile.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", fileHashCode), logger)
-        cache.save()
+        cache?.save()
     }
 
     public func delete(fileHashCode: String) {

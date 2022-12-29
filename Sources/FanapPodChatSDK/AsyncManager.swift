@@ -9,10 +9,9 @@ import Foundation
 
 /// AsyncManager intermediate between chat and async socket server.
 internal class AsyncManager: AsyncDelegate {
-    private var config: ChatConfig?
-    private weak var delegate: ChatDelegate?
-    private var logger: Logger?
-    var chat: ChatProtocol!
+    private var config: ChatConfig? { chat?.config }
+    private var logger: Logger? { chat?.logger }
+    weak var chat: ChatProtocol?
     /// Async client.
     private(set) var asyncClient: Async?
 
@@ -26,10 +25,7 @@ internal class AsyncManager: AsyncDelegate {
     /// This queue will live till application is running and this class is in memory, be careful it's not persistent on storage.
     private var queue: [String: Queueable] = [:]
 
-    public init(pingTimer: TimerProtocol, queueTimer: TimerProtocol, config: ChatConfig?, delegate: ChatDelegate?, logger: Logger?) {
-        self.config = config
-        self.delegate = delegate
-        self.logger = logger
+    public init(pingTimer: TimerProtocol, queueTimer: TimerProtocol) {
         self.pingTimer = pingTimer
         self.queueTimer = queueTimer
     }
@@ -44,15 +40,16 @@ internal class AsyncManager: AsyncDelegate {
 
     /// A delegate method that receives a message.
     public func asyncMessage(asyncMessage: AsyncMessage) {
-        chat.invokeCallback(asyncMessage: asyncMessage)
+        chat?.invokeCallback(asyncMessage: asyncMessage)
         removeFromQueue(asyncMessage: asyncMessage)
     }
 
     /// A delegate that tells the status of the async connection.
     public func asyncStateChanged(asyncState: AsyncSocketState, error: AsyncError?) {
-        delegate?.chatState(state: asyncState.chatState, currentUser: nil, error: error?.chatError)
+        chat?.state = asyncState.chatState
+        chat?.delegate?.chatState(state: asyncState.chatState, currentUser: nil, error: error?.chatError)
         if asyncState == .asyncReady {
-            chat.getUserForChatReady()
+            chat?.getUserForChatReady()
         } else if asyncState == .closed {
             pingTimer.invalidate()
         }
@@ -63,7 +60,7 @@ internal class AsyncManager: AsyncDelegate {
 
     /// A delegate to raise an error.
     public func asyncError(error: AsyncError) {
-        delegate?.chatError(error: .init(type: .asyncError, message: error.message, userInfo: error.userInfo, rawError: error.rawError))
+        chat?.delegate?.chatError(error: .init(type: .asyncError, message: error.message, userInfo: error.userInfo, rawError: error.rawError))
     }
 
     /// A public method to completely destroy the async object.
@@ -114,7 +111,7 @@ internal class AsyncManager: AsyncDelegate {
                                               peerName: asyncMessage.peerName ?? config.asyncConfig.serverName,
                                               priority: config.msgPriority,
                                               pushMsgType: asyncMessage.asyncMessageType)
-        guard let data = try? JSONEncoder().encode(asyncMessage) else { return }
+        guard let data = try? JSONEncoder().encode(asyncMessage), chat?.state == .chatReady || chat?.state == .asyncReady else { return }
         logger?.log(title: "send Message", jsonString: asyncMessage.string ?? "", receive: false)
         asyncClient?.sendData(type: .message, data: data)
     }
