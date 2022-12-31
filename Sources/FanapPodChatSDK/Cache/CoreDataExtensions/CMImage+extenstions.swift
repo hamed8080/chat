@@ -20,13 +20,12 @@ public extension CMImage {
                           width: width as? Int)
     }
 
-    class func convertToCM(request: ImageModel, isThumbnail: Bool, entity: CMImage? = nil) -> CMImage {
+    class func convertToCM(request: ImageModel, entity: CMImage? = nil) -> CMImage {
         let model = entity ?? CMImage()
         model.actualHeight = request.actualHeight as NSNumber?
         model.actualWidth = request.actualWidth as NSNumber?
         model.hashCode = request.hashCode
         model.height = request.height as NSNumber?
-        model.isThumbnail = NSNumber(value: isThumbnail)
         model.name = request.name
         model.size = request.size as NSNumber?
         model.width = request.width as NSNumber?
@@ -34,10 +33,15 @@ public extension CMImage {
         return model
     }
 
-    class func insert(request: ImageModel, isThumbnail: Bool, resultEntity: ((CMImage) -> Void)? = nil) {
+    class func insert(request: ImageModel, resultEntity: ((CMImage) -> Void)? = nil) {
         CMImage.crud.insert { cmEntity in
-            let cmEntity = convertToCM(request: request, isThumbnail: isThumbnail, entity: cmEntity)
+            let cmEntity = convertToCM(request: request, entity: cmEntity)
             resultEntity?(cmEntity)
         }
+    }
+
+    class func deleteAndInsert(imageModel: ImageModel, logger: Logger?) {
+        CMImage.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", imageModel.hashCode), logger)
+        CMImage.insert(request: imageModel)
     }
 }

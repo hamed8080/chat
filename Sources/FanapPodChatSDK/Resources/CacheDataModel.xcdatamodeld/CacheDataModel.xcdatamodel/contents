@@ -94,7 +94,6 @@
         <attribute name="actualWidth" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="hashCode" optional="YES" attributeType="String"/>
         <attribute name="height" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="isThumbnail" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="size" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="width" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>

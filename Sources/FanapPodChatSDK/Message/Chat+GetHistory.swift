@@ -37,21 +37,21 @@ public extension Chat {
             }
         }
 
-        cache.get(useCache: cacheResponse != nil, cacheType: .getHistory(request), completion: cacheResponse)
+        cache?.get(cacheType: .getHistory(request), completion: cacheResponse)
 
-        cache.get(useCache: textMessageNotSentRequests != nil, cacheType: .getTextNotSentRequests(request.threadId)) { (response: ChatResponse<[SendTextMessageRequest]>) in
+        cache?.get(cacheType: .getTextNotSentRequests(request.threadId)) { (response: ChatResponse<[SendTextMessageRequest]>) in
             textMessageNotSentRequests?(ChatResponse(uniqueId: request.uniqueId, result: response.result, error: response.error))
         }
 
-        cache.get(useCache: editMessageNotSentRequests != nil, cacheType: .editMessageRequests(request.threadId)) { response in
+        cache?.get(cacheType: .editMessageRequests(request.threadId)) { response in
             editMessageNotSentRequests?(ChatResponse(uniqueId: request.uniqueId, result: response.result, error: response.error))
         }
 
-        cache.get(useCache: forwardMessageNotSentRequests != nil, cacheType: .forwardMessageRequests(request.threadId)) { (response: ChatResponse<[ForwardMessageRequest]>) in
+        cache?.get(cacheType: .forwardMessageRequests(request.threadId)) { (response: ChatResponse<[ForwardMessageRequest]>) in
             forwardMessageNotSentRequests?(ChatResponse(uniqueId: request.uniqueId, result: response.result, error: response.error))
         }
 
-        cache.get(useCache: fileMessageNotSentRequests != nil, cacheType: .fileMessageRequests(request.threadId)) { (response: ChatResponse<[(UploadFileRequest, SendTextMessageRequest)]>) in
+        cache?.get(cacheType: .fileMessageRequests(request.threadId)) { (response: ChatResponse<[(UploadFileRequest, SendTextMessageRequest)]>) in
             fileMessageNotSentRequests?(ChatResponse(uniqueId: request.uniqueId, result: response.result, error: response.error))
         }
     }
@@ -72,10 +72,10 @@ public extension Chat {
 
     internal func saveMessagesToCache(_ messages: [Message]?, _: CompletionType<[Message]>?) {
         messages?.forEach { message in
-            cache.write(cacheType: .message(message))
-            cache.write(cacheType: .deleteQueue(message.uniqueId ?? ""))
+            cache?.write(cacheType: .message(message))
+            cache?.write(cacheType: .deleteQueue(message.uniqueId ?? ""))
         }
-        cache.save()
+        cache?.save()
     }
 }
 

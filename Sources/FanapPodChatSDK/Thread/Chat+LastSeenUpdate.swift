@@ -15,7 +15,7 @@ extension Chat {
         if let unreadCount = response.result?.unreadCount, let threadId = response.result?.id {
             let unreadCountInstance = UnreadCount(unreadCount: unreadCount, threadId: threadId)
             delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: unreadCountInstance))))
-            cache.write(cacheType: .setThreadUnreadCount(threadId, unreadCount))
+            cache?.write(cacheType: .setThreadUnreadCount(threadId, unreadCount))
         }
     }
 }

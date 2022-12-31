@@ -35,12 +35,12 @@ extension Chat {
         let response: ChatResponse<PinUnpinMessage> = asyncMessage.toChatResponse()
         if asyncMessage.chatMessage?.type == .pinMessage, let message = response.result {
             delegate?.chatEvent(event: .thread(.messagePin(response)))
-            cache.write(cacheType: .pinMessage(message, response.subjectId))
+            cache?.write(cacheType: .pinMessage(message, response.subjectId))
         } else if let message = response.result {
             delegate?.chatEvent(event: .thread(.messageUnpin(response)))
-            cache.write(cacheType: .unpinMessage(message, response.subjectId))
+            cache?.write(cacheType: .unpinMessage(message, response.subjectId))
         }
-        cache.save()
+        cache?.save()
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

@@ -6,229 +6,194 @@
 
 import Foundation
 
-enum FileManagerPaths: String {
-    case files = "/Chat/Files/"
-    case images = "/Chat/Images/"
-
-    var imagesForGroup: String {
-        "\(FileManagerPaths.images.rawValue.dropFirst())"
-    }
+public protocol FileManagerProtocol {
+    func url(for directory: FileManager.SearchPathDirectory, in domain: FileManager.SearchPathDomainMask, appropriateFor url: URL?, create shouldCreate: Bool) throws -> URL
+    func urls(for directory: FileManager.SearchPathDirectory, in domainMask: FileManager.SearchPathDomainMask) -> [URL]
+    func fileExists(atPath path: String) -> Bool
+    func containerURL(forSecurityApplicationGroupIdentifier groupIdentifier: String) -> URL?
+    func createDirectory(at url: URL, withIntermediateDirectories createIntermediates: Bool, attributes: [FileAttributeKey: Any]?) throws
+    func removeItem(at URL: URL) throws
 }
 
-public class CacheFileManager {
-    private let rootPath: String
-    weak var cache: CacheFactory?
-    private let logger: Logger?
-    private let enableCache: Bool
+extension FileManager: FileManagerProtocol {}
 
-    public init(logger: Logger? = nil, enableCache: Bool) {
-        self.logger = logger
-        self.enableCache = enableCache
-        if let rootPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first {
-            self.rootPath = rootPath
-        } else {
-            rootPath = ""
-        }
-    }
+public protocol CacheFileManagerProtocol {
+    var fm: FileManagerProtocol { get }
+    var logger: Logger? { get }
+    var queue: DispatchQueueProtocol { get }
+    var documentPath: URL? { get }
+    var group: String? { get }
+    var groupFolder: URL? { get }
+    init(fileManager: FileManagerProtocol, group: String?, queue: DispatchQueueProtocol, logger: Logger?)
 
-    public func getFileUrl(_ hashCode: String?) -> URL? {
-        let filePath = rootPath + "/\(FileManagerPaths.files.rawValue)/" + "\(hashCode ?? "default")"
-        return URL(fileURLWithPath: filePath)
-    }
+    @discardableResult
+    /// Save the file asynchronously into the disk.
+    /// - Parameters:
+    ///   - url: The real HttpURL of the file.
+    ///   - data: The data of the file to be saved.
+    /// - Returns: Throw an exception if something went wrong and saving has failed.
+    func saveFile(url: URL, data: Data) -> URL?
 
-    public func getFile(hashCode: String) -> (file: FileModel, path: String)? {
-        let predicate = NSPredicate(format: "hashCode == %@", hashCode, NSNumber(value: false))
-        if let findedFile = CMFile.crud.fetchWith(predicate)?.first, let fileModel = findedFile.getCodable() {
-            let filePath = rootPath + "/\(FileManagerPaths.files.rawValue)/" + "\(findedFile.hashCode ?? "default")"
-            return (fileModel, filePath)
-        }
-        return nil
-    }
+    @discardableResult
+    /// Save the file asynchronously into the disk by making an md5 hash name for the uniqueness of the path.
+    /// - Parameters:
+    ///   - url: The string real HttpURL string.
+    ///   - data: The data of the file to be saved.
+    /// - Returns: Throw an exception if something went wrong and saving has failed.
+    func saveFileInGroup(url: URL, data: Data) -> URL?
 
-    public func getImage(hashCode: String) -> (image: ImageModel, path: String)? {
-        let predicate = NSPredicate(format: "hashCode == %@ AND isThumbnail == %@", hashCode, NSNumber(value: false))
-        if let findedImage = CMImage.crud.fetchWith(predicate)?.first, let imageModel = findedImage.getCodable() {
-            let imagePath = rootPath + "/\(FileManagerPaths.images.rawValue)/" + "\(findedImage.hashCode ?? "default")"
-            return (imageModel, imagePath)
-        }
-        return nil
-    }
+    /// Return the data of the file if it exists. Get data of the file asynchronously on the background thread.
+    /// - Returns: Data of the file.
+    /// - Parameter url: The HttpURL of the file.
+    func getData(url: URL) -> Data?
 
-    public func getThumbnail(hashCode: String) -> (image: ImageModel, path: String)? {
-        let predicate = NSPredicate(format: "hashCode == %@ AND isThumbnail == %@", hashCode + "-Thumbnail", NSNumber(value: true))
-        if let findedImage = CMImage.crud.fetchWith(predicate)?.first, let imageModel = findedImage.getCodable() {
-            let imagePath = rootPath + "/\(FileManagerPaths.images.rawValue)/" + "\(hashCode + "-Thumbnail")"
-            return (imageModel, imagePath)
-        }
-        return nil
-    }
+    /// Return the data of the file a file in group if it exists. Get data of the a file in a group asynchronously on the background thread.
+    /// - Returns: Data of the file.
+    /// - Parameter url: The HttpURL of the file.
+    func getDataInGroup(url: URL) -> Data?
 
-    public func retrieveAllImagesSize() -> UInt64 {
-        let path = rootPath + "/\(FileManagerPaths.images.rawValue)"
-        let documentsDirectoryURL = URL(fileURLWithPath: path)
-        return (try? FileManager.default.allocatedSizeOfDirectory(at: documentsDirectoryURL)) ?? 0
-    }
+    /// Return crosspondent file url for a HttpURL.
+    /// - Parameter url: The HttpURL of the file.
+    /// - Returns: Return the filePath on the disk.
+    func filePath(url: URL) -> URL?
 
-    public func retrieveAllFilesSize() -> UInt64 {
-        let path = rootPath + "/\(FileManagerPaths.files.rawValue)"
-        let documentsDirectoryURL = URL(fileURLWithPath: path)
-        return (try? FileManager.default.allocatedSizeOfDirectory(at: documentsDirectoryURL)) ?? 0
-    }
+    /// Return crosspondent file url for a HttpURL.
+    /// - Parameter url: The HttpURL of the file in a group containter.
+    /// - Returns: Return the filePath on the disk container.
+    func filePathInGroup(url: URL) -> URL?
 
-    public func deleteAllFiles() {
-        CMFile.crud.getAll().forEach { file in
-            let filePath = rootPath + "/\(FileManagerPaths.files.rawValue)/" + "\(file.hashCode ?? "default")"
-            if FileManager.default.fileExists(atPath: filePath) {
-                do {
-                    try FileManager.default.removeItem(atPath: filePath)
-                } catch {
-                    fatalError("can not delete the file from app bundle!")
-                }
-            }
-            CMFile.crud.delete(entity: file)
-        }
-        cache?.save()
-    }
+    /// Delete a file at path.
+    /// - Parameter at: Path of the file or directory to delete.
+    func deleteFile(at url: URL)
 
-    public func deleteAllImages() {
-        CMImage.crud.getAll().forEach { image in
-            let imagePath = rootPath + "/\(FileManagerPaths.images.rawValue)/" + "\(image.hashCode ?? "default")"
-            if FileManager.default.fileExists(atPath: imagePath) {
-                do {
-                    try FileManager.default.removeItem(atPath: imagePath)
-                } catch {
-                    fatalError("can not delete the file from app bundle!")
-                }
-            }
-            CMImage.crud.delete(entity: image)
-        }
-        cache?.save()
-    }
+    /// Delete a folder at a path.
+    /// - Parameter url: Path to delete.
+    func deleteFolder(url: URL)
 
-    func deleteAllFilesWithCache() {
-        deleteAllFiles()
-        deleteAllImages()
-    }
+    /// Check if the file exist in the path.
+    /// - Parameter url: The HttpUrl of the file.
+    /// - Parameter isDirectory: If you are checking to see if it is a directory pass this true.
+    /// - Returns: True if the file exist on the disk.
+    func isFileExist(url: URL) -> Bool
 
-    func totoalUsedSpace() -> UInt64 {
-        retrieveAllFilesSize() + retrieveAllImagesSize()
-    }
+    /// Check if the file exist in the container path.
+    /// - Parameter url: The HttpUrl of the file.
+    /// - Parameter isDirectory: If you are checking to see if it is a directory pass this true.
+    /// - Returns: True if the file exist on the disk.
+    func isFileExistInGroup(url: URL) -> Bool
 
-    public func getDataOfFileWith(filePath: String) -> Data? {
-        let fileURL = URL(fileURLWithPath: filePath)
-        if FileManager.default.fileExists(atPath: filePath), let data = try? Data(contentsOf: fileURL) {
-            return data
+    /// Create group folder for sharing with other extensions.
+    /// The group property should be fiiled if you are looking to work with this.
+    func createGroupDirectory()
+}
+
+public class CacheFileManager: CacheFileManagerProtocol {
+    public let fm: FileManagerProtocol
+    public let logger: Logger?
+    public let queue: DispatchQueueProtocol
+    public let group: String?
+    public var groupFolder: URL? {
+        if let group = group {
+            return fm.containerURL(forSecurityApplicationGroupIdentifier: group)?
+                .appendingPathComponent("Files", isDirectory: true)
         } else {
             return nil
         }
     }
 
-    func saveFile(_ fileModel: FileModel, _ data: Data?) {
-        guard let data = data else { return }
-        CMFile.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", fileModel.hashCode), logger)
-        CMFile.insert(request: fileModel)
-        createDirectoryIfNotExist(paths: .files)
-        cache?.save()
-        let url = URL(fileURLWithPath: rootPath + "/\(FileManagerPaths.files.rawValue)").appendingPathComponent("\(fileModel.hashCode)")
-        writeDataAt(url: url, data: data)
+    public var documentPath: URL? {
+        fm.urls(for: .documentDirectory, in: .userDomainMask).first?
+            .appendingPathComponent("Files", isDirectory: true)
     }
 
-    func saveImage(_ imageModel: ImageModel, _ isThumbnail: Bool, _ data: Data?) {
-        guard let data = data else { return }
-        CMImage.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", imageModel.hashCode), logger)
-        CMImage.insert(request: imageModel, isThumbnail: isThumbnail)
-        createDirectoryIfNotExist(paths: .images)
-        cache?.save()
-        let url = URL(fileURLWithPath: rootPath + "/\(FileManagerPaths.images.rawValue)").appendingPathComponent("\(imageModel.hashCode)")
-        writeDataAt(url: url, data: data)
+    public required init(fileManager: FileManagerProtocol = FileManager.default,
+                         group: String? = nil,
+                         queue: DispatchQueueProtocol = DispatchQueue.global(qos: .background),
+                         logger: Logger? = nil)
+    {
+        fm = fileManager
+        self.group = group
+        self.queue = queue
+        self.logger = logger
     }
 
-    public func deleteImageFromCache(fileHashCode: String) {
-        let url = URL(fileURLWithPath: rootPath + "/\(FileManagerPaths.images.rawValue)").appendingPathComponent("\(fileHashCode)")
-        if FileManager.default.fileExists(atPath: url.absoluteString) {
-            try? FileManager.default.removeItem(at: url)
+    public func saveFile(url: URL, data: Data) -> URL? {
+        guard let filePath = filePath(url: url) else { return nil }
+        createDirectory()
+        queue.async {
+            try? data.write(to: filePath)
         }
-        CMImage.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", fileHashCode), logger)
-        cache?.save()
+        return filePath
     }
 
-    public func deleteFileFromCache(fileHashCode: String) {
-        let url = URL(fileURLWithPath: rootPath + "/\(FileManagerPaths.images.rawValue)").appendingPathComponent("\(fileHashCode)")
-        if FileManager.default.fileExists(atPath: url.absoluteString) {
-            try? FileManager.default.removeItem(at: url)
+    public func saveFileInGroup(url: URL, data: Data) -> URL? {
+        guard let groupFilePath = filePathInGroup(url: url) else { return nil }
+        createGroupDirectory()
+        queue.async {
+            try? data.write(to: url)
         }
-        CMFile.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", fileHashCode), logger)
-        cache?.save()
+        return groupFilePath
     }
 
-    public func delete(fileHashCode: String) {
-        deleteFileFromCache(fileHashCode: fileHashCode)
-        deleteImageFromCache(fileHashCode: fileHashCode)
+    public func getData(url: URL) -> Data? {
+        guard !isFileExist(url: url), let filePath = filePath(url: url) else { return nil }
+        return try? Data(contentsOf: filePath)
     }
 
-    public func saveImageProfile(url: String, data: Data, group: String) {
-        let urlHash = url.md5 ?? ""
-        if enableCache == true {
-            createDirectoryForGroupIfNotExist(paths: .images, group: group)
-            if let filePath = appGroupContainerUrl(group: group)?
-                .appendingPathComponent(FileManagerPaths.images.imagesForGroup, isDirectory: true)
-                .appendingPathComponent(urlHash, isDirectory: false)
-            {
-                logger?.log(title: "create file at", message: filePath.path)
-                writeDataAt(url: filePath, data: data)
-            }
+    public func getDataInGroup(url: URL) -> Data? {
+        guard !isFileExistInGroup(url: url), let groupFilePath = filePathInGroup(url: url) else { return nil }
+        return getData(url: groupFilePath)
+    }
+
+    @discardableResult
+    public func filePath(url: URL) -> URL? {
+        guard let hash = md5(url: url), let documentPath = documentPath?.appendingPathComponent(hash, isDirectory: false) else { return nil }
+        return documentPath
+    }
+
+    @discardableResult
+    public func filePathInGroup(url: URL) -> URL? {
+        guard let hash = md5(url: url), let groupFilePath = groupFolder?.appendingPathComponent(hash, isDirectory: false) else { return nil }
+        return groupFilePath
+    }
+
+    private func md5(url: URL) -> String? {
+        url.absoluteString.md5
+    }
+
+    public func deleteFile(at url: URL) {
+        if let documentPath = filePath(url: url) {
+            try? fm.removeItem(at: documentPath)
         }
-    }
 
-    public func getImageProfileCache(url: String, group: String) -> Data? {
-        let urlHash = url.md5 ?? ""
-        if let container = appGroupContainerUrl(group: group) {
-            let imagePath = container
-                .appendingPathComponent(FileManagerPaths.images.imagesForGroup, isDirectory: true)
-                .appendingPathComponent(urlHash, isDirectory: false)
-            return getDataOfFileWith(filePath: imagePath.path)
-        }
-        return nil
-    }
-
-    func appGroupContainerUrl(group: String) -> URL? {
-        FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: group)
-    }
-
-    func createDirectoryForGroupIfNotExist(paths: FileManagerPaths, group: String) {
-        let fileManager = FileManager.default
-        if let container = appGroupContainerUrl(group: group) {
-            var isDir: ObjCBool = true
-            let imageDirectoryPath = container.appendingPathComponent(paths.imagesForGroup, isDirectory: true)
-            if !(fileManager.fileExists(atPath: imageDirectoryPath.path, isDirectory: &isDir)) {
-                do {
-                    try fileManager.createDirectory(at: imageDirectoryPath, withIntermediateDirectories: true, attributes: nil)
-                    logger?.log(title: "directory created at:\n \(imageDirectoryPath.path)")
-                } catch {
-                    logger?.log(title: "error on creating Directory \n\(error.localizedDescription)")
-                }
-            }
+        if let groupPath = filePathInGroup(url: url) {
+            try? fm.removeItem(at: groupPath)
         }
     }
 
-    func createDirectoryIfNotExist(paths: FileManagerPaths) {
-        let directory = rootPath + paths.rawValue
-        let url = URL(fileURLWithPath: directory)
-        if !(FileManager.default.fileExists(atPath: directory, isDirectory: nil)) {
-            do {
-                try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
-                logger?.log(title: "directory created at:\n \(url)")
-            } catch {
-                logger?.log(title: "error on creating Directory \n\(error.localizedDescription)")
-            }
+    public func deleteFolder(url: URL) {
+        try? fm.removeItem(at: url)
+    }
+
+    public func isFileExist(url: URL) -> Bool {
+        if let filePathURL = filePath(url: url) { return fm.fileExists(atPath: filePathURL.absoluteString) }
+        return false
+    }
+
+    public func isFileExistInGroup(url: URL) -> Bool {
+        if let groupPath = filePathInGroup(url: url) { return fm.fileExists(atPath: groupPath.absoluteString) }
+        return false
+    }
+
+    public func createDirectory() {
+        if let documentPath = documentPath {
+            try? fm.createDirectory(at: documentPath, withIntermediateDirectories: true, attributes: nil)
         }
     }
 
-    func writeDataAt(url: URL, data: Data) {
-        do {
-            try data.write(to: url)
-        } catch {
-            logger?.log(title: "error when try to write data on url:\(url.path) \n\(error.localizedDescription)")
+    public func createGroupDirectory() {
+        if let groupFolder = groupFolder {
+            try? fm.createDirectory(at: groupFolder, withIntermediateDirectories: true, attributes: nil)
         }
     }
 }

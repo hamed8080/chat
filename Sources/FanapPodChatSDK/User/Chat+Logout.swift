@@ -13,8 +13,15 @@ public extension Chat {
         let req = BareChatSendableRequest(uniqueId: UUID().uuidString)
         req.chatMessageType = .logout
         prepareToSendAsync(req: req)
-        cache.write(cacheType: .deleteAllCacheData)
-        cache.save()
+        cache?.write(cacheType: .deleteAllCacheData)
+        cache?.save()
+        if let docFoler = cacheFileManager?.documentPath {
+            cacheFileManager?.deleteFolder(url: docFoler)
+        }
+
+        if let groupFoler = cacheFileManager?.groupFolder {
+            cacheFileManager?.deleteFolder(url: groupFoler)
+        }
         dispose()
     }
 }

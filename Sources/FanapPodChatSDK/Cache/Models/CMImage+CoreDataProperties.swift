@@ -12,7 +12,6 @@ public extension CMImage {
     @NSManaged var actualWidth: NSNumber?
     @NSManaged var hashCode: String?
     @NSManaged var height: NSNumber?
-    @NSManaged var isThumbnail: NSNumber?
     @NSManaged var name: String?
     @NSManaged var size: NSNumber?
     @NSManaged var width: NSNumber?

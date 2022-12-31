@@ -8,29 +8,30 @@ import FanapPodAsyncSDK
 import Foundation
 
 public struct ChatConfig {
-    var asyncConfig: AsyncConfig
-    var ssoHost: String
-    var platformHost: String
-    var fileServer: String
-    var podSpaceFileServerAddress: String = "https://podspace.pod.ir"
-    var token: String
-    var mapApiKey: String?
-    var mapServer: String = "https://api.neshan.org/v1"
-    var typeCode: String = "default"
-    var enableCache: Bool = false
-    var cacheTimeStampInSec: Int = (2 * 24) * (60 * 60)
-    var msgPriority: Int = 1
-    var msgTTL: Int = 10
-    var httpRequestTimeout: Int = 20
-    var wsConnectionWaitTime: Double = 0.0
-    var captureLogsOnSentry: Bool = false
-    var maxReconnectTimeInterval: Int = 60
-    var localImageCustomPath: URL?
-    var localFileCustomPath: URL?
-    var deviecLimitationSpaceMB: Int64 = 100
-    var getDeviceIdFromToken: Bool = false
-    var isDebuggingLogEnabled: Bool = false
-    var enableNotificationLogObserver: Bool = false
+    public var asyncConfig: AsyncConfig
+    public private(set) var ssoHost: String
+    public private(set) var platformHost: String
+    public private(set) var fileServer: String
+    public private(set) var podSpaceFileServerAddress: String = "https://podspace.pod.ir"
+    public private(set) var token: String
+    public private(set) var mapApiKey: String?
+    public private(set) var mapServer: String = "https://api.neshan.org/v1"
+    public private(set) var typeCode: String = "default"
+    public private(set) var enableCache: Bool = false
+    public private(set) var cacheTimeStampInSec: Int = (2 * 24) * (60 * 60)
+    public private(set) var msgPriority: Int = 1
+    public private(set) var msgTTL: Int = 10
+    public private(set) var httpRequestTimeout: Int = 20
+    public private(set) var wsConnectionWaitTime: Double = 0.0
+    public private(set) var captureLogsOnSentry: Bool = false
+    public private(set) var maxReconnectTimeInterval: Int = 60
+    public private(set) var localImageCustomPath: URL?
+    public private(set) var localFileCustomPath: URL?
+    public private(set) var deviecLimitationSpaceMB: Int64 = 100
+    public private(set) var getDeviceIdFromToken: Bool = false
+    public private(set) var isDebuggingLogEnabled: Bool = false
+    public private(set) var enableNotificationLogObserver: Bool = false
+    public private(set) var appGroup: String?
 
     // Memberwise Initializer
     public init(
@@ -56,7 +57,8 @@ public struct ChatConfig {
         deviecLimitationSpaceMB: Int64 = 100,
         getDeviceIdFromToken: Bool = false,
         isDebuggingLogEnabled: Bool = false,
-        enableNotificationLogObserver: Bool = false
+        enableNotificationLogObserver: Bool = false,
+        appGroup: String? = nil
     ) {
         self.asyncConfig = asyncConfig
         self.ssoHost = ssoHost
@@ -80,6 +82,11 @@ public struct ChatConfig {
         self.getDeviceIdFromToken = getDeviceIdFromToken
         self.isDebuggingLogEnabled = isDebuggingLogEnabled
         self.enableNotificationLogObserver = enableNotificationLogObserver
+        self.appGroup = appGroup
+    }
+
+    public mutating func updateToken(_ token: String) {
+        self.token = token
     }
 }
 
@@ -107,6 +114,7 @@ public class ChatConfigBuilder {
     private(set) var getDeviceIdFromToken: Bool = false
     private(set) var isDebuggingLogEnabled: Bool = false
     private(set) var enableNotificationLogObserver: Bool = false
+    private(set) var appGroup: String?
 
     public init(_ asyncConfig: AsyncConfig) {
         self.asyncConfig = asyncConfig
@@ -222,6 +230,11 @@ public class ChatConfigBuilder {
         return self
     }
 
+    @discardableResult public func appGroup(_ appGroup: String) -> ChatConfigBuilder {
+        self.appGroup = appGroup
+        return self
+    }
+
     public func build() -> ChatConfig {
         ChatConfig(
             asyncConfig: asyncConfig,
@@ -246,7 +259,8 @@ public class ChatConfigBuilder {
             deviecLimitationSpaceMB: deviecLimitationSpaceMB,
             getDeviceIdFromToken: getDeviceIdFromToken,
             isDebuggingLogEnabled: isDebuggingLogEnabled,
-            enableNotificationLogObserver: enableNotificationLogObserver
+            enableNotificationLogObserver: enableNotificationLogObserver,
+            appGroup: appGroup
         )
     }
 }

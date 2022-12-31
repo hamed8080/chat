@@ -39,7 +39,7 @@ extension Chat {
             self?.addContacts(contactsToSync) { [weak self] (response: ChatResponse<[Contact]>) in
                 completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error))
                 PhoneContact.updateOrInsertPhoneBooks(contacts: contactsToSync)
-                self?.cache.save()
+                self?.cache?.save()
             }
             uniqueIdsResult?(uniqueIds)
 
@@ -85,8 +85,8 @@ extension Chat {
 extension Chat {
     func onSyncContacts(_ asyncMessage: AsyncMessage) {
         guard let chatMessage = asyncMessage.chatMessage else { return }
-        cache.write(cacheType: .syncedContacts)
-        cache.save()
+        cache?.write(cacheType: .syncedContacts)
+        cache?.save()
         callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .contactSynced)
     }
 }

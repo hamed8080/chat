@@ -64,7 +64,10 @@ protocol ChatProtocol: AnyObject {
     var responseQueue: DispatchQueueProtocol { get set }
 
     /// A cache object to store and give you the opportunity to retrieve data from it.
-    var cache: CacheFactory { get set }
+    var cache: CacheFactory? { get set }
+
+    /// A file manager for caching files on the storage.
+    var cacheFileManager: CacheFileManagerProtocol? { get set }
 
     /// A token setter to update token.
     /// - Parameters:

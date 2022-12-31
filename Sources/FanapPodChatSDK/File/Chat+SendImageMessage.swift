@@ -17,8 +17,8 @@ extension Chat {
                                      _ messageUniqueIdResult: UniqueIdResultType? = nil)
     {
         textMessage.typeCode = config.typeCode
-        cache.write(cacheType: .sendFileMessageQueue(req, textMessage))
-        cache.save()
+        cache?.write(cacheType: .sendFileMessageQueue(req, textMessage))
+        cache?.save()
         messageUniqueIdResult?(textMessage.uniqueId)
         uploadImage(req, uploadUniqueIdResult: uploadUniqueIdResult, uploadProgress: uploadProgress) { [weak self] _, fileMetaData, error in
             // completed upload file

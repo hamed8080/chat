@@ -26,8 +26,8 @@ public extension Chat {
                            onSent: onSent,
                            onDelivered: onDeliver,
                            onSeen: onSeen)
-        cache.write(cacheType: .sendTxetMessageQueue(request))
-        cache.save()
+        cache?.write(cacheType: .sendTxetMessageQueue(request))
+        cache?.save()
     }
 
     /// Reply to a message.
@@ -57,8 +57,8 @@ public extension Chat {
         req.uniqueIds.forEach { uniqueId in
             callbacksManager.addCallback(uniqueId: uniqueId, requesType: .forwardMessage, callback: nil as CompletionType<Voidcodable>?, onSent: onSent, onDelivered: onDeliver, onSeen: onSeen)
         }
-        cache.write(cacheType: .forwardMessageQueue(req))
-        cache.save()
+        cache?.write(cacheType: .forwardMessageQueue(req))
+        cache?.save()
     }
 
     /// Send a location.
@@ -137,7 +137,7 @@ public extension Chat {
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
 
-        cache.get(useCache: cacheResponse != nil, cacheType: .mentions) { (response: ChatResponse<[Message]>) in
+        cache?.get(cacheType: .mentions) { (response: ChatResponse<[Message]>) in
             let predicate = NSPredicate(format: "threadId == %i", request.threadId)
             let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: CMMessage.crud.getTotalCount(predicate: predicate))
             cacheResponse?(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
@@ -160,8 +160,8 @@ public extension Chat {
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func seen(_ request: MessageSeenRequest, uniqueIdResult: UniqueIdResultType? = nil) {
         prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult)
-        cache.write(cacheType: .lastThreadMessageSeen(request.threadId, request.messageId))
-        cache.save()
+        cache?.write(cacheType: .lastThreadMessageSeen(request.threadId, request.messageId))
+        cache?.save()
     }
 }
 
@@ -177,25 +177,25 @@ extension Chat {
         if message.threadId == nil {
             message.threadId = response.subjectId ?? message.conversation?.id
         }
-        cache.write(cacheType: .message(message))
+        cache?.write(cacheType: .message(message))
 
         // Check that we are not the sender of the message and message come from another person.
         if let messageId = message.id, message.participant?.id != userInfo?.id {
             deliver(.init(messageId: messageId))
         }
         if let threadId = message.threadId {
-            cache.write(cacheType: .setThreadUnreadCount(threadId, message.conversation?.unreadCount ?? 0))
+            cache?.write(cacheType: .setThreadUnreadCount(threadId, message.conversation?.unreadCount ?? 0))
         }
-        cache.save()
+        cache?.save()
     }
 
     func onSentMessage(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<MessageResponse> = asyncMessage.toChatResponse()
         if let messageSent = response.result {
             delegate?.chatEvent(event: .message(.messageSent(response)))
-            cache.write(cacheType: .messageSentToUser(messageSent))
-            cache.write(cacheType: .deleteQueue(response.uniqueId ?? ""))
-            cache.save()
+            cache?.write(cacheType: .messageSentToUser(messageSent))
+            cache?.write(cacheType: .deleteQueue(response.uniqueId ?? ""))
+            cache?.save()
             callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
         }
     }
@@ -205,8 +205,8 @@ extension Chat {
         if let deliverResponse = response.result {
             deliverResponse.messageState = .delivered
             delegate?.chatEvent(event: .message(.messageDelivery(response)))
-            cache.write(cacheType: .messageDeliveredToUser(deliverResponse))
-            cache.save()
+            cache?.write(cacheType: .messageDeliveredToUser(deliverResponse))
+            cache?.save()
             callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
         }
     }
@@ -216,8 +216,8 @@ extension Chat {
         if let seenResponse = response.result {
             seenResponse.messageState = .seen
             delegate?.chatEvent(event: .message(.messageSeen(response)))
-            cache.write(cacheType: .messageSeenByUser(seenResponse))
-            cache.save()
+            cache?.write(cacheType: .messageSeenByUser(seenResponse))
+            cache?.save()
             callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
         }
     }
@@ -227,8 +227,8 @@ extension Chat {
         delegate?.chatEvent(event: .thread(.lastMessageEdited(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         if let thread = response.result {
-            cache.write(cacheType: .threads([thread]))
-            cache.save()
+            cache?.write(cacheType: .threads([thread]))
+            cache?.save()
         }
     }
 
@@ -237,8 +237,8 @@ extension Chat {
         delegate?.chatEvent(event: .thread(.lastMessageDeleted(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         if let threadId = response.result?.id, let lastMessage = response.result?.lastMessageVO {
-            cache.write(cacheType: .lastThreadMessageUpdated(threadId, lastMessage))
-            cache.save()
+            cache?.write(cacheType: .lastThreadMessageUpdated(threadId, lastMessage))
+            cache?.save()
         }
     }
 }

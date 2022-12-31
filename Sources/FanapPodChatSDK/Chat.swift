@@ -24,8 +24,9 @@ public class Chat: ChatProtocol, Identifiable {
     var exportMessageViewModels: [any ExportMessagesProtocol] = []
     var session: URLSessionProtocol
     var responseQueue: DispatchQueueProtocol
-    var cache: CacheFactory
+    public var cache: CacheFactory?
     let callbacksManager = CallbacksManager()
+    public var cacheFileManager: CacheFileManagerProtocol?
     public internal(set) var state: ChatState = .uninitialized
 
     init(
@@ -46,7 +47,10 @@ public class Chat: ChatProtocol, Identifiable {
         self.requestUserTimer = requestUserTimer
         self.timerCheckUserStoppedTyping = timerCheckUserStoppedTyping
         self.session = session
-        cache = CacheFactory(config: config)
+        if config.enableCache {
+            cache = CacheFactory()
+            cacheFileManager = CacheFileManager()
+        }
         asyncManager = AsyncManager(pingTimer: pingTimer, queueTimer: queueTimer)
         asyncManager.chat = self
     }
@@ -88,7 +92,7 @@ public class Chat: ChatProtocol, Identifiable {
     }
 
     public func setToken(newToken: String, reCreateObject: Bool = false) {
-        config.token = newToken
+        config.updateToken(newToken)
         if reCreateObject {
             asyncManager.createAsync()
         }

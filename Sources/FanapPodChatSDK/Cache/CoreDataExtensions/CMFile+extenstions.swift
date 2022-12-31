@@ -30,4 +30,9 @@ public extension CMFile {
             resultEntity?(cmEntity)
         }
     }
+
+    class func deleteAndInsert(fileModel: FileModel, logger: Logger?) {
+        CMFile.crud.deleteWith(predicate: NSPredicate(format: "hashCode == %@", fileModel.hashCode), logger)
+        CMFile.insert(request: fileModel)
+    }
 }

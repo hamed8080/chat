@@ -41,7 +41,7 @@ extension Chat {
 
     func saveThreadImageToCashe(req: UpdateThreadInfoRequest) {
         if let imageRequest = req.threadImage, config.enableCache == true {
-            cache.write(cacheType: .sendFileMessageQueue(imageRequest, nil))
+            cache?.write(cacheType: .sendFileMessageQueue(imageRequest, nil))
         }
     }
 }
@@ -52,8 +52,8 @@ extension Chat {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.threadInfoUpdated(response)))
         if let thread = response.result {
-            cache.write(cacheType: .threads([thread]))
-            cache.save()
+            cache?.write(cacheType: .threads([thread]))
+            cache?.save()
         }
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }

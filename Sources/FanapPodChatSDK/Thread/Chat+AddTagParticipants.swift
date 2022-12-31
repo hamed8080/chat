@@ -25,9 +25,9 @@ extension Chat {
         let response: ChatResponse<[TagParticipant]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .tag(.addTagParticipant(response)))
         if let tagId = response.subjectId {
-            cache.write(cacheType: .tagParticipants(response.result ?? [], tagId))
+            cache?.write(cacheType: .tagParticipants(response.result ?? [], tagId))
         }
-        cache.save()
+        cache?.save()
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

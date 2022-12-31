@@ -15,16 +15,16 @@ public extension Chat {
     func cancelMessage(_ request: CancelMessageRequest, completion: @escaping CompletionTypeNoneDecodeable<Bool>) {
         if config.enableCache == true {
             if let uniqueId = request.textMessageUniqueId {
-                cache.write(cacheType: .deleteWaitTextMessage(uniqueId))
+                cache?.write(cacheType: .deleteWaitTextMessage(uniqueId))
                 completion(ChatResponse(uniqueId: uniqueId, result: true))
             } else if let uniqueId = request.editMessageUniqueId {
-                cache.write(cacheType: .deleteEditTextMessage(uniqueId))
+                cache?.write(cacheType: .deleteEditTextMessage(uniqueId))
                 completion(ChatResponse(uniqueId: uniqueId, result: true))
             } else if let uniqueId = request.forwardMessageUniqueId {
-                cache.write(cacheType: .deleteForwardMessage(uniqueId))
+                cache?.write(cacheType: .deleteForwardMessage(uniqueId))
                 completion(ChatResponse(uniqueId: uniqueId, result: true))
             } else if let uniqueId = request.fileMessageUniqueId {
-                cache.write(cacheType: .deleteWaitFileMessage(uniqueId))
+                cache?.write(cacheType: .deleteWaitFileMessage(uniqueId))
                 completion(ChatResponse(uniqueId: uniqueId, result: true))
             } else if let uniqueId = request.uploadFileUniqueId {
                 manageUpload(uniqueId: uniqueId, action: .cancel) { _, state in

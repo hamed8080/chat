@@ -83,8 +83,8 @@ extension Chat {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.threadNew(response)))
         if let newThread = response.result {
-            cache.write(cacheType: .threads([newThread]))
-            cache.save()
+            cache?.write(cacheType: .threads([newThread]))
+            cache?.save()
         }
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }

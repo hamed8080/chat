@@ -37,8 +37,8 @@ extension Chat {
         let response: ChatResponse<Message> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .message(.messageDelete(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
-        cache.write(cacheType: .deleteMessage(response.subjectId ?? 0, messageId: response.result?.id ?? 0))
-        cache.save()
+        cache?.write(cacheType: .deleteMessage(response.subjectId ?? 0, messageId: response.result?.id ?? 0))
+        cache?.save()
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

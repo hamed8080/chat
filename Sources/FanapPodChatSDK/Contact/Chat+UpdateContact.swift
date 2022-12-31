@@ -43,6 +43,6 @@ extension Chat {
         if let contacts = contactsResponse?.contacts {
             CMContact.insertOrUpdate(contacts: contacts)
         }
-        cache.save()
+        cache?.save()
     }
 }

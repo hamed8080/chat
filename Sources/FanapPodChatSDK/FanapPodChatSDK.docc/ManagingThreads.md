@@ -24,7 +24,7 @@ For retriving data witouth calling network you could use ``CacheFactory/get(useC
 It won't work unless you set `enableCache` to true in configuration.
 ```swift
 let req = ThreadsRequest(count:50, offset: 0)
-cache.get(useCache: true, cacheType: .GET_THREADS(req)) { response in
+cache?.get(useCache: true, cacheType: .GET_THREADS(req)) { response in
     if let threads = response.cacheResponse as? [Conversation]{
         // Write your code
     }

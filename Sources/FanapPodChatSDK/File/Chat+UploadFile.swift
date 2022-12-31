@@ -24,8 +24,8 @@ extension Chat {
         guard let parameters = try? request.asDictionary() else { return }
         let headers = ["Authorization": "Bearer \(config.token)", "Content-type": "multipart/form-data"]
 
-        cache.write(cacheType: .deleteQueue(request.uniqueId))
-        cache.save()
+        cache?.write(cacheType: .deleteQueue(request.uniqueId))
+        cache?.save()
 
         UploadManager(callbackManager: callbacksManager)
             .upload(url: url,
@@ -72,8 +72,8 @@ extension Chat {
             uploadCompletion?(uploadResponse.result, fileMetaData, nil)
             let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId)
             delegate?.chatEvent(event: .file(.uploaded(response)))
-            cache.write(cacheType: .deleteQueue(req.uniqueId))
-            cache.save()
+            cache?.write(cacheType: .deleteQueue(req.uniqueId))
+            cache?.save()
         } else if let error = error {
             let error = ChatError(message: "\(ChatErrorType.networkError.rawValue) \(error)", code: 6200, hasError: true)
             uploadCompletion?(nil, nil, error)

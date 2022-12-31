@@ -17,7 +17,7 @@ extension Chat {
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     public func getUserInfo(_ request: UserInfoRequest, completion: @escaping CompletionType<User>, cacheResponse: CacheResponseType<User>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
-        cache.get(useCache: cacheResponse != nil, cacheType: .userInfo, completion: cacheResponse)
+        cache?.get(cacheType: .userInfo, completion: cacheResponse)
     }
 
     func getUserForChatReady() {
@@ -53,8 +53,8 @@ extension Chat {
     func onUserInfo(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<User> = asyncMessage.toChatResponse()
         if let user = response.result {
-            cache.write(cacheType: .userInfo(user))
-            cache.save()
+            cache?.write(cacheType: .userInfo(user))
+            cache?.save()
         }
         delegate?.chatEvent(event: .system(.serverTime(.init(uniqueId: response.uniqueId, result: response.time, time: response.time))))
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)

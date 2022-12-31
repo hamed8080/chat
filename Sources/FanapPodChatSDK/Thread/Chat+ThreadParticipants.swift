@@ -21,7 +21,7 @@ public extension Chat {
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
 
-        cache.get(useCache: cacheResponse != nil, cacheType: .getThreadParticipants(request)) { (response: ChatResponse<[Participant]>) in
+        cache?.get(cacheType: .getThreadParticipants(request)) { (response: ChatResponse<[Participant]>) in
             let predicate = NSPredicate(format: "threadId == %i", request.threadId)
             let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: CMParticipant.crud.getTotalCount(predicate: predicate))
             cacheResponse?(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
@@ -47,8 +47,8 @@ extension Chat {
     func onThreadParticipants(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Participant]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.threadParticipantsListChange(response)))
-        cache.write(cacheType: .participants(response.result ?? [], response.subjectId ?? 0))
-        cache.save()
+        cache?.write(cacheType: .participants(response.result ?? [], response.subjectId ?? 0))
+        cache?.save()
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

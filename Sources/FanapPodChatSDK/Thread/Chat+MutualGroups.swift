@@ -22,12 +22,12 @@ public extension Chat {
 
             // insert to mutual cache only for this method beacuse we need request and id and idType to be cache
             if let conversations = response.result {
-                self?.cache.write(cacheType: .mutualGroups(conversations, request))
-                self?.cache.save()
+                self?.cache?.write(cacheType: .mutualGroups(conversations, request))
+                self?.cache?.save()
             }
         }
 
-        cache.get(useCache: cacheResponse != nil, cacheType: .getMutualGroups(request)) { (response: ChatResponse<[Conversation]>) in
+        cache?.get(cacheType: .getMutualGroups(request)) { (response: ChatResponse<[Conversation]>) in
             let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: CMMutualGroup.crud.getTotalCount())
             cacheResponse?(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }

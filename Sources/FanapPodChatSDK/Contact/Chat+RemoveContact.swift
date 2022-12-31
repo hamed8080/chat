@@ -36,8 +36,8 @@ extension Chat {
 
     func removeFromCacheIfExist(removeContactResponse: RemoveContactResponse?, contactId: Int) {
         if removeContactResponse?.deteled == true {
-            cache.write(cacheType: .deleteContacts([contactId]))
-            cache.save()
+            cache?.write(cacheType: .deleteContacts([contactId]))
+            cache?.save()
         }
     }
 }

@@ -7,11 +7,11 @@
 import Foundation
 
 extension DispatchQueue: DispatchQueueProtocol {
-    func async(execute work: @escaping @convention(block) () -> Void) {
+    public func async(execute work: @escaping @convention(block) () -> Void) {
         async(group: nil, qos: .unspecified, flags: [], execute: work)
     }
 }
 
-protocol DispatchQueueProtocol {
+public protocol DispatchQueueProtocol {
     func async(execute work: @escaping @convention(block) () -> Void)
 }

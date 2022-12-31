@@ -19,21 +19,15 @@ public class ImageRequest: UniqueIdManagerRequest, Encodable {
     public let quality: Float?
     public let size: ImageSize?
     public let crop: Bool?
-    public let isThumbnail: Bool
     public let checkUserGroupAccess: Bool
 
-    public init(hashCode: String, checkUserGroupAccess: Bool = true, forceToDownloadFromServer: Bool = false, isThumbnail: Bool = false, quality: Float? = nil, size: ImageSize? = nil, crop: Bool? = nil) {
+    public init(hashCode: String, checkUserGroupAccess: Bool = true, forceToDownloadFromServer: Bool = false, quality: Float? = nil, size: ImageSize? = nil, crop: Bool? = nil) {
         self.hashCode = hashCode
         self.forceToDownloadFromServer = forceToDownloadFromServer
         self.size = size
         self.crop = crop
-        self.isThumbnail = isThumbnail
+        self.quality = quality ?? 1
         self.checkUserGroupAccess = checkUserGroupAccess
-        if isThumbnail {
-            self.quality = 0.123
-        } else {
-            self.quality = quality
-        }
     }
 
     private enum CodingKeys: String, CodingKey {
