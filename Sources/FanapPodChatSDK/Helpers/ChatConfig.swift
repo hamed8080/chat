@@ -7,7 +7,7 @@
 import FanapPodAsyncSDK
 import Foundation
 
-public struct ChatConfig {
+public struct ChatConfig: Codable {
     var asyncConfig: AsyncConfig
     var ssoHost: String
     var platformHost: String

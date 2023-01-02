@@ -53,7 +53,7 @@ public class Chat {
 
     /// Create logger and then connect to async server.
     private func initialize() {
-        logger = Logger(isDebuggingLogEnabled: config?.isDebuggingLogEnabled ?? false)
+        logger = Logger(config: config!)
         if config?.captureLogsOnSentry == true {
             startCrashAnalytics()
         }
