@@ -10,20 +10,31 @@ public class ThreadParticipantsRequest: UniqueIdManagerRequest, ChatSendable, Su
     public let offset: Int
     public let threadId: Int
     public let name: String?
+    public let username: String?
+    public let cellphoneNumber: String?
+    /// If it set to true the request only contains the list of admins of a thread.
+    public var admin: Bool = false
 
     var content: String? { convertCodableToString() }
     var subjectId: Int { threadId }
     var chatMessageType: ChatMessageVOTypes = .threadParticipants
 
-    /// If it set to true the request only contains the list of admins of a thread.
-    public var admin: Bool = false
-
-    public init(threadId: Int, name: String? = nil, offset: Int = 0, count: Int = 50, admin: Bool = false, uniqueId: String? = nil) {
-        self.name = name
+    public init(threadId: Int,
+                offset: Int = 0,
+                count: Int = 50,
+                name: String? = nil,
+                admin: Bool = false,
+                cellphoneNumber: String? = nil,
+                username: String? = nil,
+                uniqueId: String? = nil)
+    {
         self.count = count
         self.offset = offset
         self.threadId = threadId
         self.admin = admin
+        self.username = username
+        self.cellphoneNumber = cellphoneNumber
+        self.name = name
         super.init(uniqueId: uniqueId)
     }
 
@@ -32,6 +43,8 @@ public class ThreadParticipantsRequest: UniqueIdManagerRequest, ChatSendable, Su
         case offset
         case admin
         case name
+        case cellphoneNumber
+        case username
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -40,5 +53,7 @@ public class ThreadParticipantsRequest: UniqueIdManagerRequest, ChatSendable, Su
         try? container.encodeIfPresent(offset, forKey: .offset)
         try? container.encodeIfPresent(admin, forKey: .admin)
         try? container.encodeIfPresent(name, forKey: .name)
+        try? container.encodeIfPresent(cellphoneNumber, forKey: .cellphoneNumber)
+        try? container.encodeIfPresent(username, forKey: .username)
     }
 }

@@ -39,7 +39,7 @@ public class CacheFactory {
         case getBlockedUsers
         case participants(_ participants: [Participant]?, _ threadId: Int?)
         case removeParticipants(participants: [Participant]?, threadId: Int?)
-        case leaveThread(_ threadId: Int)
+        case leaveThread(_ participantId: Int)
         case currentUserRoles(_ roles: [Roles], _ threadId: Int?)
         case userInfo(_ user: User)
         case pinMessage(_ pinMessage: PinUnpinMessage, _ threadId: Int?)
@@ -185,9 +185,8 @@ public class CacheFactory {
             CMParticipant.insertOrUpdateParicipants(participants: participants, fromMainMethod: true, threadId: threadId)
         case let .removeParticipants(_: participants, _: threadId):
             CMParticipant.deleteParticipants(participants: participants, threadId: threadId)
-        case let .leaveThread(_: threadId):
-            CMParticipant.crud.deleteWith(predicate: NSPredicate(format: "threadId == %i", threadId), logger)
-            CMConversation.crud.deleteWith(predicate: NSPredicate(format: "id == %i", threadId), logger)
+        case let .leaveThread(_: participantId):
+            CMParticipant.crud.deleteWith(predicate: NSPredicate(format: "id == %i", participantId), logger)
         case let .currentUserRoles(_: roles, _: threadId):
             if let threadId = threadId {
                 CMCurrentUserRoles.insertOrUpdate(roles: roles, threadId: threadId)

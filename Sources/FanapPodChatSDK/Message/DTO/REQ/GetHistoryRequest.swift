@@ -31,6 +31,7 @@ public class GetHistoryRequest: UniqueIdManagerRequest, ChatSendable, SubjectPro
     public var lastMessageTime: UInt?
     public var historyEndTime: UInt?
     public var readOnly: Bool = false
+    public var newMessages: Bool?
 
     var chatMessageType: ChatMessageVOTypes = .getHistory
     var subjectId: Int { threadId }
@@ -63,6 +64,7 @@ public class GetHistoryRequest: UniqueIdManagerRequest, ChatSendable, SubjectPro
                 lastMessageTime: UInt? = nil,
                 historyEndTime: UInt? = nil,
                 readOnly: Bool = false,
+                newMessages: Bool? = nil,
                 uniqueId: String? = nil)
     {
         self.threadId = threadId
@@ -90,6 +92,7 @@ public class GetHistoryRequest: UniqueIdManagerRequest, ChatSendable, SubjectPro
         self.lastMessageTime = lastMessageTime
         self.historyEndTime = historyEndTime
         self.readOnly = readOnly
+        self.newMessages = newMessages
         super.init(uniqueId: uniqueId)
     }
 
@@ -117,6 +120,7 @@ public class GetHistoryRequest: UniqueIdManagerRequest, ChatSendable, SubjectPro
         case unreadMentioned
         case lastMessageTime
         case historyEndTime
+        case newMessages
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -144,5 +148,6 @@ public class GetHistoryRequest: UniqueIdManagerRequest, ChatSendable, SubjectPro
         try container.encodeIfPresent(unreadMentioned, forKey: .unreadMentioned)
         try container.encodeIfPresent(lastMessageTime, forKey: .lastMessageTime)
         try container.encodeIfPresent(historyEndTime, forKey: .historyEndTime)
+        try container.encodeIfPresent(newMessages, forKey: .newMessages)
     }
 }

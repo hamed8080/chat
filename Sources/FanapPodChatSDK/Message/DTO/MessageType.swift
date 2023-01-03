@@ -29,6 +29,8 @@ public enum MessageType: Int, Codable, SafeDecodable {
     case startCall = 14
     case sticker = 15
     case location = 16
+    case participantJoin = 18
+    case participantLeft = 19
 
     /// Only when can't decode a type.
     ///
