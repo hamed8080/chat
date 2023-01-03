@@ -9,6 +9,7 @@ public class ThreadParticipantsRequest: UniqueIdManagerRequest, ChatSendable, Su
     public let count: Int
     public let offset: Int
     public let threadId: Int
+    public let name: String?
 
     var content: String? { convertCodableToString() }
     var subjectId: Int { threadId }
@@ -17,7 +18,8 @@ public class ThreadParticipantsRequest: UniqueIdManagerRequest, ChatSendable, Su
     /// If it set to true the request only contains the list of admins of a thread.
     public var admin: Bool = false
 
-    public init(threadId: Int, offset: Int = 0, count: Int = 50, admin: Bool = false, uniqueId: String? = nil) {
+    public init(threadId: Int, name: String? = nil, offset: Int = 0, count: Int = 50, admin: Bool = false, uniqueId: String? = nil) {
+        self.name = name
         self.count = count
         self.offset = offset
         self.threadId = threadId
@@ -29,6 +31,7 @@ public class ThreadParticipantsRequest: UniqueIdManagerRequest, ChatSendable, Su
         case count
         case offset
         case admin
+        case name
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -36,5 +39,6 @@ public class ThreadParticipantsRequest: UniqueIdManagerRequest, ChatSendable, Su
         try? container.encodeIfPresent(count, forKey: .count)
         try? container.encodeIfPresent(offset, forKey: .offset)
         try? container.encodeIfPresent(admin, forKey: .admin)
+        try? container.encodeIfPresent(name, forKey: .name)
     }
 }

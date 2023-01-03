@@ -12,7 +12,7 @@
 //
 import Foundation
 
-open class Participant: Codable, Hashable {
+open class Participant: Codable, Hashable, Identifiable {
     public static func == (lhs: Participant, rhs: Participant) -> Bool {
         lhs.id == rhs.id
     }
