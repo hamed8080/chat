@@ -31,6 +31,7 @@ struct DeviceInfo: Codable {
 }
 
 struct Log: Codable {
+    var id = UUID().string
     var deviceInfo: DeviceInfo
     let config: ChatConfig
     let message: String
@@ -48,10 +49,15 @@ class Logger {
     private let sdkName = "CHAT_SDK: "
     private var urlSession: URLSession
     private let config: ChatConfig
+    private let cache: CacheFactory?
+    private let timer: Timer
 
-    init(config: ChatConfig, urlSession: URLSession = .shared) {
+    init(config: ChatConfig, timer: Timer = Timer(), cache: CacheFactory?, urlSession: URLSession = .shared) {
+        self.timer = timer
+        self.cache = cache
         self.config = config
         self.urlSession = urlSession
+        startSending()
     }
 
     func log(title: String? = nil, jsonString: String? = nil, receive: Bool = true) {
@@ -100,15 +106,40 @@ class Logger {
 
     func log(message: String, _ level: LogLevel = .verbose) {
         let log = Log(deviceInfo: DeviceInfo.getDeviceInfo(), config: config, message: message, time: UInt(Date().timeIntervalSince1970), level: level)
-        let data = try? JSONEncoder().encode(log)
-        sendLog(log: data)
+        addLogTocache(log: log)
     }
 
-    func sendLog(log: Data?) {
+    func startSending() {
+        Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
+            let sortByTime = NSSortDescriptor(key: "time", ascending: true)
+            let req = CMLog.crud.fetchRequest()
+            req.sortDescriptors = [sortByTime]
+            if let log = CMLog.crud.fetchWith(req)?.first?.getCodable() {
+                self?.sendLog(log: log)
+            }
+        }
+    }
+
+    func sendLog(log: Log) {
         var req = URLRequest(url: URL(string: "http://10.56.34.61:8080/1m-http-server-test-chat")!)
         req.httpMethod = HTTPMethod.put.rawValue
-        req.httpBody = log
+        req.httpBody = try? JSONEncoder().encode(log)
         req.allHTTPHeaderFields = ["Authorization": "Basic Y2hhdDpjaGF0MTIz", "Content-Type": "application/json"]
-        urlSession.dataTask(with: req).resume()
+        let task = urlSession.dataTask(with: req) { [weak self] _, response, _ in
+            if (response as? HTTPURLResponse)?.statusCode == 200 {
+                self?.deleteLogFromCache(log: log)
+            }
+        }
+        task.resume()
+    }
+
+    func deleteLogFromCache(log: Log) {
+        CMLog.crud.deleteWith(predicate: NSPredicate(format: "id == %@", log.id ?? ""))
+        CacheFactory.save()
+    }
+
+    func addLogTocache(log: Log) {
+        CMLog.insertOrUpdate(log: log)
+        CacheFactory.save()
     }
 }
