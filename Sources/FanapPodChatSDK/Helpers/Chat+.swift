@@ -104,9 +104,6 @@ protocol ChatProtocol: AnyObject {
     /// A method that should be called by clients whenever they fill it is the right time to connect to the server.
     func connect()
 
-    /// Crach manager.
-    func startCrashAnalytics()
-
     /// A private method that will be called by the SDK to pass data that received from onMessage.
     func invokeCallback(asyncMessage: AsyncMessage)
 }

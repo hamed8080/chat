@@ -14,7 +14,6 @@ let package = Package(
         .library(name: "FanapPodChatSDK", targets: ["FanapPodChatSDK"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/getsentry/sentry-cocoa.git", .upToNextMinor(from: "4.5.0")),
         .package(url: "https://pubgi.fanapsoft.ir/chat/ios/fanappodasyncsdk.git", .upToNextMinor(from: "1.1.0")),
         .package(url: "https://github.com/apple/swift-docc-plugin", branch: "main"),
     ],
@@ -24,8 +23,6 @@ let package = Package(
             dependencies: [
                 .product(name: "FanapPodAsyncSDK",
                          package: "fanappodasyncsdk"),
-                .product(name: "Sentry",
-                         package: "sentry-cocoa"),
             ],
             resources: [.process("Resources")]
         ),

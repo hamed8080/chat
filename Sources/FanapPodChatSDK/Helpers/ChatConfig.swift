@@ -7,7 +7,7 @@
 import FanapPodAsyncSDK
 import Foundation
 
-public struct ChatConfig {
+public struct ChatConfig: Codable {
     public var asyncConfig: AsyncConfig
     public private(set) var ssoHost: String
     public private(set) var platformHost: String
@@ -23,7 +23,9 @@ public struct ChatConfig {
     public private(set) var msgTTL: Int = 10
     public private(set) var httpRequestTimeout: Int = 20
     public private(set) var wsConnectionWaitTime: Double = 0.0
-    public private(set) var captureLogsOnSentry: Bool = false
+    /// Caution: If you enable this most errors and important logs of the SDK will store in Core Data
+    /// and then they will send to the server by a queue.
+    public private(set) var persistLogsOnServer: Bool = false
     public private(set) var maxReconnectTimeInterval: Int = 60
     public private(set) var localImageCustomPath: URL?
     public private(set) var localFileCustomPath: URL?
@@ -50,7 +52,7 @@ public struct ChatConfig {
         msgTTL: Int = 10,
         httpRequestTimeout: Int = 20,
         wsConnectionWaitTime: Double = 0.0,
-        captureLogsOnSentry: Bool = false,
+        persistLogsOnServer: Bool = false,
         maxReconnectTimeInterval: Int = 60,
         localImageCustomPath: URL? = nil,
         localFileCustomPath: URL? = nil,
@@ -74,7 +76,7 @@ public struct ChatConfig {
         self.msgTTL = msgTTL
         self.httpRequestTimeout = httpRequestTimeout
         self.wsConnectionWaitTime = wsConnectionWaitTime
-        self.captureLogsOnSentry = captureLogsOnSentry
+        self.persistLogsOnServer = persistLogsOnServer
         self.maxReconnectTimeInterval = maxReconnectTimeInterval
         self.localImageCustomPath = localImageCustomPath
         self.localFileCustomPath = localFileCustomPath
@@ -106,7 +108,7 @@ public class ChatConfigBuilder {
     private(set) var msgTTL: Int = 10
     private(set) var httpRequestTimeout: Int = 20
     private(set) var wsConnectionWaitTime: Double = 0.0
-    private(set) var captureLogsOnSentry: Bool = false
+    private(set) var persistLogsOnServer: Bool = false
     private(set) var maxReconnectTimeInterval: Int = 60
     private(set) var localImageCustomPath: URL?
     private(set) var localFileCustomPath: URL?
@@ -190,8 +192,8 @@ public class ChatConfigBuilder {
         return self
     }
 
-    @discardableResult public func captureLogsOnSentry(_ captureLogsOnSentry: Bool) -> ChatConfigBuilder {
-        self.captureLogsOnSentry = captureLogsOnSentry
+    @discardableResult public func persistLogsOnServer(_ persistLogsOnServer: Bool) -> ChatConfigBuilder {
+        self.persistLogsOnServer = persistLogsOnServer
         return self
     }
 
@@ -252,7 +254,7 @@ public class ChatConfigBuilder {
             msgTTL: msgTTL,
             httpRequestTimeout: httpRequestTimeout,
             wsConnectionWaitTime: wsConnectionWaitTime,
-            captureLogsOnSentry: captureLogsOnSentry,
+            persistLogsOnServer: persistLogsOnServer,
             maxReconnectTimeInterval: maxReconnectTimeInterval,
             localImageCustomPath: localImageCustomPath,
             localFileCustomPath: localFileCustomPath,

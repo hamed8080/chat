@@ -6,18 +6,11 @@
 
 import FanapPodAsyncSDK
 import Foundation
-import Sentry
 
 // Event
 extension Chat {
     func onError(_ asyncMessage: AsyncMessage) {
-        logger?.log(title: "Message of type 'ERROR' recieved", jsonString: asyncMessage.string)
-        // send log to Sentry 4.3.1
-        if config.captureLogsOnSentry {
-            let event = Event(level: SentrySeverity.error)
-            event.message = "Message of type 'ERROR' recieved: \n \(asyncMessage.convertCodableToString() ?? "")"
-            Client.shared?.send(event: event, completion: { _ in })
-        }
+        logger?.log(message: asyncMessage.string ?? "", level: LogLevel.error)
         let data = asyncMessage.chatMessage?.content?.data(using: .utf8) ?? Data()
         let chatError = try? JSONDecoder().decode(ChatError.self, from: data)
         delegate?.chatError(error: chatError ?? .init())

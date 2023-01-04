@@ -15,6 +15,5 @@ Pod::Spec.new do |s|
   s.resources = "Sources/FanapPodChatSDK/Resources/*.xcdatamodeld"
   s.frameworks  = "Foundation" , "CoreData" , "Contacts", "CoreServices"
   s.dependency "FanapPodAsyncSDK" , '~> 1.1.0'
-  s.dependency "Sentry" , '~> 4.3.1'
 
 end

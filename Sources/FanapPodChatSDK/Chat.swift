@@ -6,7 +6,6 @@
 
 import FanapPodAsyncSDK
 import Foundation
-import Sentry
 
 public class Chat: ChatProtocol, Identifiable {
     public var id: UUID = .init()
@@ -53,13 +52,10 @@ public class Chat: ChatProtocol, Identifiable {
         }
         asyncManager = AsyncManager(pingTimer: pingTimer, queueTimer: queueTimer)
         asyncManager.chat = self
+        self.logger?.cache = cache
     }
 
     public func connect() {
-        if config.captureLogsOnSentry == true {
-            startCrashAnalytics()
-        }
-
         if config.getDeviceIdFromToken == false {
             asyncManager.createAsync()
         } else {
@@ -95,16 +91,6 @@ public class Chat: ChatProtocol, Identifiable {
         config.updateToken(newToken)
         if reCreateObject {
             asyncManager.createAsync()
-        }
-    }
-
-    func startCrashAnalytics() {
-        // Config for Sentry 4.3.1
-        do {
-            Client.shared = try Client(dsn: "https://5e236d8a40be4fe99c4e8e9497682333:5a6c7f732d5746e8b28625fcbfcbe58d@chatsentryweb.sakku.cloud/4")
-            try Client.shared?.startCrashHandler()
-        } catch {
-            print("\(error)")
         }
     }
 }
