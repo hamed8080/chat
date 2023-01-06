@@ -25,7 +25,7 @@ public extension Chat {
 // Response
 extension Chat {
     func onEditMessage(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<Message> = asyncMessage.toChatResponse()
+        let response: ChatResponse<Message> = asyncMessage.toChatResponse(context: persistentManager.context)
         delegate?.chatEvent(event: .message(.messageEdit(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         if let message = response.result {

@@ -52,6 +52,7 @@ internal class AsyncManager: AsyncDelegate {
             chat?.getUserForChatReady()
         } else if asyncState == .closed {
             pingTimer.invalidate()
+            logger?.log(message: "Socket Disconnected", level: LogLevel.error)
         }
     }
 

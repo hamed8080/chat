@@ -10,7 +10,7 @@ import Foundation
 // Event
 extension Chat {
     func onLastSeenUpdate(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<LastSeenMessageResponse> = asyncMessage.toChatResponse()
+        let response: ChatResponse<LastSeenMessageResponse> = asyncMessage.toChatResponse(context: persistentManager.context)
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         if let unreadCount = response.result?.unreadCount, let threadId = response.result?.id {
             let unreadCountInstance = UnreadCount(unreadCount: unreadCount, threadId: threadId)

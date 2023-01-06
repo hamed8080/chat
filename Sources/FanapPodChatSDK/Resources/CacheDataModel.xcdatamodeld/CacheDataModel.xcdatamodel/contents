@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="22C65" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="CMAssistant" representedClassName="FanapPodChatSDK.CMAssistant" syncable="YES">
-        <attribute name="assistant" optional="YES" attributeType="Binary"/>
+    <entity name="Assistant" representedClassName="FanapPodChatSDK.Assistant" syncable="YES" codeGenerationType="category">
+        <attribute name="assistant" optional="YES" attributeType="Transformable" valueTransformerName="AssistantValueTransformer" customClassName="Invitee"/>
         <attribute name="block" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="contactType" optional="YES" attributeType="String"/>
         <attribute name="inviteeId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="roles" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer"/>
-        <relationship name="participant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMParticipant" inverseName="assistant" inverseEntity="CMParticipant"/>
+        <attribute name="roles" optional="YES" attributeType="Transformable" valueTransformerName="RolesValueTransformer" customClassName="[Roles]"/>
+        <relationship name="participant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Participant" inverseName="assistant" inverseEntity="Participant"/>
     </entity>
-    <entity name="CMBlockedContact" representedClassName="FanapPodChatSDK.CMBlockedContact" syncable="YES">
-        <attribute name="firstName" optional="YES" attributeType="String"/>
-        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="lastName" optional="YES" attributeType="String"/>
-        <attribute name="nickName" optional="YES" attributeType="String"/>
-    </entity>
-    <entity name="CMContact" representedClassName="FanapPodChatSDK.CMContact" syncable="YES">
+    <entity name="Contact" representedClassName="FanapPodChatSDK.Contact" syncable="YES" codeGenerationType="category">
         <attribute name="blocked" optional="YES" attributeType="Boolean" defaultValueString="0.0" usesScalarValueType="NO"/>
         <attribute name="cellphoneNumber" optional="YES" attributeType="String"/>
         <attribute name="email" optional="YES" attributeType="String"/>
@@ -24,12 +18,19 @@
         <attribute name="image" optional="YES" attributeType="String"/>
         <attribute name="lastName" optional="YES" attributeType="String"/>
         <attribute name="notSeenDuration" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="time" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="time" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
         <attribute name="uniqueId" optional="YES" attributeType="String"/>
         <attribute name="userId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <relationship name="linkedUser" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CMLinkedUser" inverseName="dummyContact" inverseEntity="CMLinkedUser"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+            <uniquenessConstraint>
+                <constraint value="userId"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
-    <entity name="CMConversation" representedClassName="FanapPodChatSDK.CMConversation" syncable="YES">
+    <entity name="Conversation" representedClassName="FanapPodChatSDK.Conversation" syncable="YES" codeGenerationType="category">
         <attribute name="admin" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="canEditInfo" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="canSpam" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
@@ -38,7 +39,7 @@
         <attribute name="group" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="image" optional="YES" attributeType="String"/>
-        <attribute name="isArchive" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isArchive" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="joinDate" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="lastMessage" optional="YES" attributeType="String"/>
         <attribute name="lastParticipantImage" optional="YES" attributeType="String"/>
@@ -61,35 +62,33 @@
         <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="type" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="uniqueName" optional="YES" attributeType="String"/>
         <attribute name="unreadCount" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="userGroupHash" optional="YES" attributeType="String"/>
-        <relationship name="dummyForwardInfo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMForwardInfo" inverseName="conversation" inverseEntity="CMForwardInfo"/>
-        <relationship name="dummyMessage" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="conversation" inverseEntity="CMMessage"/>
-        <relationship name="dummyUserRoles" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMUserRole" inverseName="conversation" inverseEntity="CMUserRole"/>
-        <relationship name="inviter" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CMParticipant" inverseName="dummyConversationInviter" inverseEntity="CMParticipant"/>
-        <relationship name="lastMessageVO" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="dummyConversationLastMessageVO" inverseEntity="CMMessage"/>
-        <relationship name="mutualGroups" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMMutualGroup" inverseName="conversation" inverseEntity="CMMutualGroup"/>
-        <relationship name="participants" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="CMParticipant" inverseName="dummyConversationParticipants" inverseEntity="CMParticipant"/>
-        <relationship name="pinMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMPinMessage" inverseName="message" inverseEntity="CMPinMessage"/>
-        <relationship name="tagParticipants" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CMTagParticipant" inverseName="conversation" inverseEntity="CMTagParticipant"/>
+        <relationship name="inviter" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Participant"/>
+        <relationship name="lastMessageVO" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Message"/>
+        <relationship name="mutualGroups" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MutualGroup" inverseName="conversation" inverseEntity="MutualGroup"/>
+        <relationship name="participants" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Participant"/>
+        <relationship name="pinMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PinMessage" inverseName="message" inverseEntity="PinMessage"/>
+        <relationship name="tagParticipants" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TagParticipant" inverseName="conversation" inverseEntity="TagParticipant"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
-    <entity name="CMCurrentUserRoles" representedClassName="FanapPodChatSDK.CMCurrentUserRoles" syncable="YES">
-        <attribute name="roles" optional="YES" attributeType="Transformable" valueTransformerName="" customClassName="[String]"/>
-        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-    </entity>
-    <entity name="CMFile" representedClassName="FanapPodChatSDK.CMFile" syncable="YES">
+    <entity name="File" representedClassName="FanapPodChatSDK.File" syncable="YES" codeGenerationType="category">
         <attribute name="hashCode" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="size" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="type" optional="YES" attributeType="String"/>
     </entity>
-    <entity name="CMForwardInfo" representedClassName="FanapPodChatSDK.CMForwardInfo" syncable="YES">
-        <attribute name="messageId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="conversation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="dummyForwardInfo" inverseEntity="CMConversation"/>
-        <relationship name="dummyMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="forwardInfo" inverseEntity="CMMessage"/>
-        <relationship name="participant" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CMParticipant" inverseName="dummyForwardInfo" inverseEntity="CMParticipant"/>
+    <entity name="ForwardInfo" representedClassName="FanapPodChatSDK.ForwardInfo" syncable="YES" codeGenerationType="category">
+        <attribute name="messageId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <relationship name="conversation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Conversation"/>
+        <relationship name="participant" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Participant"/>
     </entity>
-    <entity name="CMImage" representedClassName="FanapPodChatSDK.CMImage" syncable="YES">
+    <entity name="Image" representedClassName="FanapPodChatSDK.Image" syncable="YES" codeGenerationType="category">
         <attribute name="actualHeight" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="actualWidth" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="hashCode" optional="YES" attributeType="String"/>
@@ -98,20 +97,15 @@
         <attribute name="size" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="width" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
     </entity>
-    <entity name="CMLinkedUser" representedClassName="FanapPodChatSDK.CMLinkedUser" syncable="YES">
-        <attribute name="coreUserId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="image" optional="YES" attributeType="String"/>
-        <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="nickname" optional="YES" attributeType="String"/>
-        <attribute name="username" optional="YES" attributeType="String"/>
-        <relationship name="dummyContact" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMContact" inverseName="linkedUser" inverseEntity="CMContact"/>
-    </entity>
-    <entity name="CMLog" representedClassName="FanapPodChatSDK.CMLog" syncable="YES">
+    <entity name="Log" representedClassName="FanapPodChatSDK.Log" syncable="YES" codeGenerationType="category">
+        <attribute name="config" optional="YES" attributeType="Binary"/>
+        <attribute name="deviceInfo" optional="YES" attributeType="Binary"/>
         <attribute name="id" optional="YES" attributeType="String"/>
-        <attribute name="json" optional="YES" attributeType="String"/>
-        <attribute name="time" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="level" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="message" optional="YES" attributeType="String"/>
+        <attribute name="time" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
     </entity>
-    <entity name="CMMessage" representedClassName="FanapPodChatSDK.CMMessage" syncable="YES">
+    <entity name="Message" representedClassName="FanapPodChatSDK.Message" syncable="YES" codeGenerationType="category">
         <attribute name="deletable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="delivered" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="editable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
@@ -122,25 +116,29 @@
         <attribute name="messageType" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="ownerId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="pinned" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="pinned" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="previousId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="seen" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="systemMetadata" optional="YES" attributeType="String"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="uniqueId" optional="YES" attributeType="String"/>
-        <relationship name="conversation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="dummyMessage" inverseEntity="CMConversation"/>
-        <relationship name="dummyConversationLastMessageVO" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="lastMessageVO" inverseEntity="CMConversation"/>
-        <relationship name="forwardInfo" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CMForwardInfo" inverseName="dummyMessage" inverseEntity="CMForwardInfo"/>
-        <relationship name="participant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMParticipant" inverseName="dummyMessage" inverseEntity="CMParticipant"/>
-        <relationship name="replyInfo" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CMReplyInfo" inverseName="dummyMessage" inverseEntity="CMReplyInfo"/>
+        <relationship name="conversation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Conversation"/>
+        <relationship name="forwardInfo" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ForwardInfo"/>
+        <relationship name="participant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Participant"/>
+        <relationship name="replyInfo" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ReplyInfo"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
-    <entity name="CMMutualGroup" representedClassName="FanapPodChatSDK.CMMutualGroup" syncable="YES">
-        <attribute name="idType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+    <entity name="MutualGroup" representedClassName="FanapPodChatSDK.MutualGroup" syncable="YES" codeGenerationType="category">
+        <attribute name="idType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
         <attribute name="mutualId" optional="YES" attributeType="String"/>
-        <relationship name="conversation" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="mutualGroups" inverseEntity="CMConversation"/>
+        <relationship name="conversation" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Conversation" inverseName="mutualGroups" inverseEntity="Conversation"/>
     </entity>
-    <entity name="CMParticipant" representedClassName="FanapPodChatSDK.CMParticipant" syncable="YES">
+    <entity name="Participant" representedClassName="FanapPodChatSDK.Participant" syncable="YES" codeGenerationType="category">
         <attribute name="admin" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="auditor" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="bio" optional="YES" attributeType="String"/>
@@ -163,99 +161,44 @@
         <attribute name="notSeenDuration" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="online" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="receiveEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
-        <attribute name="roles" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer"/>
+        <attribute name="roles" optional="YES" attributeType="Transformable" valueTransformerName="RolesValueTransformer" customClassName="[Roles]"/>
         <attribute name="sendEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="username" optional="YES" attributeType="String"/>
-        <relationship name="assistant" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMAssistant" inverseName="participant" inverseEntity="CMAssistant"/>
-        <relationship name="dummyConversationInviter" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="inviter" inverseEntity="CMConversation"/>
-        <relationship name="dummyConversationParticipants" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="participants" inverseEntity="CMConversation"/>
-        <relationship name="dummyForwardInfo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMForwardInfo" inverseName="participant" inverseEntity="CMForwardInfo"/>
-        <relationship name="dummyMessage" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="participant" inverseEntity="CMMessage"/>
-        <relationship name="dummyReplyInfo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMReplyInfo" inverseName="participant" inverseEntity="CMReplyInfo"/>
+        <relationship name="assistant" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Assistant" inverseName="participant" inverseEntity="Assistant"/>
     </entity>
-    <entity name="CMPinMessage" representedClassName="FanapPodChatSDK.CMPinMessage" syncable="YES">
+    <entity name="PhoneContact" representedClassName="FanapPodChatSDK.PhoneContact" syncable="YES" codeGenerationType="category">
+        <attribute name="cellphoneNumber" optional="YES" attributeType="String"/>
+        <attribute name="email" optional="YES" attributeType="String"/>
+        <attribute name="firstName" optional="YES" attributeType="String"/>
+        <attribute name="lastName" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="PinMessage" representedClassName="FanapPodChatSDK.PinMessage" syncable="YES" codeGenerationType="category">
         <attribute name="messageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="notifyAll" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="text" optional="YES" attributeType="String"/>
-        <relationship name="message" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="pinMessage" inverseEntity="CMConversation"/>
+        <attribute name="time" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <relationship name="message" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Conversation" inverseName="pinMessage" inverseEntity="Conversation"/>
     </entity>
-    <entity name="CMReplyInfo" representedClassName="FanapPodChatSDK.CMReplyInfo" syncable="YES">
-        <attribute name="deletedd" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
-        <attribute name="message" optional="YES" attributeType="String"/>
-        <attribute name="messageId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="messageType" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="metadata" optional="YES" attributeType="String"/>
-        <attribute name="repliedToMessageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="systemMetadata" optional="YES" attributeType="String"/>
-        <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <relationship name="dummyMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMMessage" inverseName="replyInfo" inverseEntity="CMMessage"/>
-        <relationship name="participant" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CMParticipant" inverseName="dummyReplyInfo" inverseEntity="CMParticipant"/>
-    </entity>
-    <entity name="CMTag" representedClassName="FanapPodChatSDK.CMTag" syncable="YES">
-        <attribute name="active" optional="YES" attributeType="Boolean" valueTransformerName="NSSecureUnarchiveFromDataTransformer" usesScalarValueType="YES"/>
-        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="name" optional="YES" attributeType="String"/>
-        <relationship name="tagParticipants" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CMTagParticipant" inverseName="tag" inverseEntity="CMTagParticipant"/>
-    </entity>
-    <entity name="CMTagParticipant" representedClassName="FanapPodChatSDK.CMTagParticipant" syncable="YES">
-        <attribute name="active" optional="YES" attributeType="Boolean" valueTransformerName="NSSecureUnarchiveFromDataTransformer" usesScalarValueType="YES"/>
-        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="tagId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="threadId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="conversation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="tagParticipants" inverseEntity="CMConversation"/>
-        <relationship name="tag" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CMTag" inverseName="tagParticipants" inverseEntity="CMTag"/>
-    </entity>
-    <entity name="CMUser" representedClassName="FanapPodChatSDK.CMUser" syncable="YES">
-        <attribute name="bio" optional="YES" attributeType="String"/>
-        <attribute name="cellphoneNumber" optional="YES" attributeType="String"/>
-        <attribute name="contactSynced" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="coreUserId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="email" optional="YES" attributeType="String"/>
-        <attribute name="firstName" optional="YES" attributeType="String"/>
-        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="image" optional="YES" attributeType="String"/>
-        <attribute name="lastName" optional="YES" attributeType="String"/>
-        <attribute name="lastSeen" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="metadata" optional="YES" attributeType="String"/>
-        <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="receiveEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
-        <attribute name="sendEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
-        <attribute name="ssoId" optional="YES" attributeType="String"/>
-        <attribute name="username" optional="YES" attributeType="String"/>
-    </entity>
-    <entity name="CMUserRole" representedClassName="FanapPodChatSDK.CMUserRole" syncable="YES">
-        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="roles" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer"/>
-        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <relationship name="conversation" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CMConversation" inverseName="dummyUserRoles" inverseEntity="CMConversation"/>
-    </entity>
-    <entity name="PhoneContact" representedClassName="FanapPodChatSDK.PhoneContact" syncable="YES">
-        <attribute name="cellphoneNumber" optional="YES" attributeType="String"/>
-        <attribute name="email" optional="YES" attributeType="String"/>
-        <attribute name="firstName" optional="YES" attributeType="String"/>
-        <attribute name="lastName" optional="YES" attributeType="String"/>
-    </entity>
-    <entity name="QueueOfEditMessages" representedClassName="FanapPodChatSDK.QueueOfEditMessages" syncable="YES">
+    <entity name="QueueOfEditMessages" representedClassName="FanapPodChatSDK.QueueOfEditMessages" syncable="YES" codeGenerationType="category">
         <attribute name="messageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="messageType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="messageType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
         <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="textMessage" optional="YES" attributeType="String"/>
-        <attribute name="threadId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="threadId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
         <attribute name="typeCode" optional="YES" attributeType="String"/>
         <attribute name="uniqueId" optional="YES" attributeType="String"/>
     </entity>
-    <entity name="QueueOfFileMessages" representedClassName="FanapPodChatSDK.QueueOfFileMessages" syncable="YES">
+    <entity name="QueueOfFileMessages" representedClassName="FanapPodChatSDK.QueueOfFileMessages" syncable="YES" codeGenerationType="category">
         <attribute name="fileExtension" optional="YES" attributeType="String"/>
         <attribute name="fileName" optional="YES" attributeType="String"/>
         <attribute name="fileToSend" optional="YES" attributeType="Binary"/>
-        <attribute name="hC" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="hC" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
         <attribute name="imageToSend" optional="YES" attributeType="Binary"/>
         <attribute name="isPublic" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
-        <attribute name="messageType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="messageType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
         <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="mimeType" optional="YES" attributeType="String"/>
         <attribute name="originalName" optional="YES" attributeType="String"/>
@@ -265,11 +208,11 @@
         <attribute name="typeCode" optional="YES" attributeType="String"/>
         <attribute name="uniqueId" optional="YES" attributeType="String"/>
         <attribute name="userGroupHash" optional="YES" attributeType="String"/>
-        <attribute name="wC" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="xC" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="yC" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="wC" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="xC" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="yC" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
     </entity>
-    <entity name="QueueOfForwardMessages" representedClassName="FanapPodChatSDK.QueueOfForwardMessages" syncable="YES">
+    <entity name="QueueOfForwardMessages" representedClassName="FanapPodChatSDK.QueueOfForwardMessages" syncable="YES" codeGenerationType="category">
         <attribute name="fromThreadId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
         <attribute name="messageIds" optional="YES" attributeType="String"/>
         <attribute name="metadata" optional="YES" attributeType="String"/>
@@ -278,8 +221,8 @@
         <attribute name="typeCode" optional="YES" attributeType="String"/>
         <attribute name="uniqueIds" optional="YES" attributeType="String"/>
     </entity>
-    <entity name="QueueOfTextMessages" representedClassName="FanapPodChatSDK.QueueOfTextMessages" syncable="YES">
-        <attribute name="messageType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+    <entity name="QueueOfTextMessages" representedClassName="FanapPodChatSDK.QueueOfTextMessages" syncable="YES" codeGenerationType="category">
+        <attribute name="messageType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
         <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="systemMetadata" optional="YES" attributeType="String"/>
@@ -287,5 +230,75 @@
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="typeCode" optional="YES" attributeType="String"/>
         <attribute name="uniqueId" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="ReplyInfo" representedClassName="FanapPodChatSDK.ReplyInfo" syncable="YES" codeGenerationType="category">
+        <attribute name="deleted" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="message" optional="YES" attributeType="String"/>
+        <attribute name="messageId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="messageType" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="metadata" optional="YES" attributeType="String"/>
+        <attribute name="repliedToMessageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="systemMetadata" optional="YES" attributeType="String"/>
+        <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <relationship name="participant" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Participant"/>
+    </entity>
+    <entity name="Tag" representedClassName="FanapPodChatSDK.Tag" syncable="YES" codeGenerationType="category">
+        <attribute name="active" optional="YES" attributeType="Boolean" valueTransformerName="NSSecureUnarchiveFromDataTransformer" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="tagParticipants" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TagParticipant" inverseName="tag" inverseEntity="TagParticipant"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="TagParticipant" representedClassName="FanapPodChatSDK.TagParticipant" syncable="YES" codeGenerationType="category">
+        <attribute name="active" optional="YES" attributeType="Boolean" valueTransformerName="NSSecureUnarchiveFromDataTransformer" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="tagId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="threadId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <relationship name="conversation" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Conversation" inverseName="tagParticipants" inverseEntity="Conversation"/>
+        <relationship name="tag" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Tag" inverseName="tagParticipants" inverseEntity="Tag"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="User" representedClassName="FanapPodChatSDK.User" syncable="YES" codeGenerationType="category">
+        <attribute name="bio" optional="YES" attributeType="String"/>
+        <attribute name="cellphoneNumber" optional="YES" attributeType="String"/>
+        <attribute name="contactSynced" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="coreUserId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="email" optional="YES" attributeType="String"/>
+        <attribute name="firstName" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="image" optional="YES" attributeType="String"/>
+        <attribute name="lastName" optional="YES" attributeType="String"/>
+        <attribute name="lastSeen" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="metadata" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="nickname" optional="YES" attributeType="String"/>
+        <attribute name="receiveEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="sendEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="ssoId" optional="YES" attributeType="String"/>
+        <attribute name="username" optional="YES" attributeType="String"/>
+        <relationship name="roles" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="UserRole" inverseName="user" inverseEntity="UserRole"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+            <uniquenessConstraint>
+                <constraint value="username"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="UserRole" representedClassName="FanapPodChatSDK.UserRole" syncable="YES" codeGenerationType="category">
+        <attribute name="image" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="roles" optional="YES" attributeType="Transformable" valueTransformerName="RolesValueTransformer" customClassName="[Roles]"/>
+        <attribute name="userId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="roles" inverseEntity="User"/>
     </entity>
 </model>

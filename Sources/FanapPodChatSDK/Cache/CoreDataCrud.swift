@@ -8,8 +8,10 @@ import CoreData
 
 open class CoreDataCrud<T: NSFetchRequestResult> {
     var entityName: String
+    var context: NSManagedObjectContext
 
-    public init(entityName: String) {
+    public init(context: NSManagedObjectContext, entityName: String) {
+        self.context = context
         self.entityName = entityName
     }
 
@@ -18,7 +20,7 @@ open class CoreDataCrud<T: NSFetchRequestResult> {
     }
 
     public func getInsertEntity() -> T? {
-        NSEntityDescription.insertNewObject(forEntityName: entityName, into: PSM.shared.context) as? T
+        NSEntityDescription.insertNewObject(forEntityName: entityName, into: context) as? T
     }
 
     public func getFetchRequest() -> NSFetchRequest<T> {
@@ -26,23 +28,23 @@ open class CoreDataCrud<T: NSFetchRequestResult> {
     }
 
     public func getAll() -> [T] {
-        (try? PSM.shared.context.fetch(getFetchRequest())) ?? []
+        (try? context.fetch(getFetchRequest())) ?? []
     }
 
     public func getTotalCount(predicate: NSPredicate? = nil) -> Int {
         let req = fetchRequest()
         req.predicate = predicate
-        return (try? PSM.shared.context.count(for: req)) ?? 0
+        return (try? context.count(for: req)) ?? 0
     }
 
     public func fetchWith(_ fetchRequest: NSFetchRequest<NSFetchRequestResult>) -> [T]? {
-        (try? PSM.shared.context.fetch(fetchRequest)) as? [T]
+        (try? context.fetch(fetchRequest)) as? [T]
     }
 
     public func fetchWith(_ predicate: NSPredicate) -> [T]? {
         let req = fetchRequest()
         req.predicate = predicate
-        return (try? PSM.shared.context.fetch(req)) as? [T]
+        return (try? context.fetch(req)) as? [T]
     }
 
     /// - todo: check key equality work with @ for string or int %i float %f and ...
@@ -50,14 +52,14 @@ open class CoreDataCrud<T: NSFetchRequestResult> {
         let req = getFetchRequest()
         req.predicate = NSPredicate(format: "\(keyWithFromat)", value)
         do {
-            return try PSM.shared.context.fetch(req).first
+            return try context.fetch(req).first
         } catch {
             return nil
         }
     }
 
     public func delete(entity: NSManagedObject) {
-        PSM.shared.context.delete(entity)
+        context.delete(entity)
     }
 
     public func deleteEntityWithPredicate(predicate: NSPredicate) {
@@ -71,7 +73,7 @@ open class CoreDataCrud<T: NSFetchRequestResult> {
             let req = fetchRequest()
             req.predicate = predicate
             let deleteReq = NSBatchDeleteRequest(fetchRequest: req)
-            try PSM.shared.context.execute(deleteReq)
+            try context.execute(deleteReq)
             logger?.log(title: "CHAT_SDK:", message: "saved successfully from deleteWith execute")
         } catch {
             logger?.log(title: "error in deleteWith happened", message: "\(error)")
@@ -82,24 +84,24 @@ open class CoreDataCrud<T: NSFetchRequestResult> {
         do {
             let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest())
             deleteRequest.resultType = .resultTypeObjectIDs
-            let batchDelete = try PSM.shared.context.execute(deleteRequest) as? NSBatchDeleteResult
+            let batchDelete = try context.execute(deleteRequest) as? NSBatchDeleteResult
             guard let deletedResult = batchDelete?.result as? [NSManagedObjectID] else { return }
             let deletedObjects: [AnyHashable: Any] = [NSDeletedObjectsKey: deletedResult]
-            NSManagedObjectContext.mergeChanges(fromRemoteContextSave: deletedObjects, into: [PSM.shared.context])
+            NSManagedObjectContext.mergeChanges(fromRemoteContextSave: deletedObjects, into: [context])
             logger?.log(title: "saved successfully from deleteAll execute for table \(entityName)")
         } catch {
             logger?.log(title: "error in deleteAll happened", message: "\(error)")
         }
     }
 
-    public func insert(setEntityVariables: (T) -> Void) {
+    public func insert(setEntityVariables: @escaping (T) -> Void) {
         insertAll(setEntityVariables: setEntityVariables)
     }
 
     /// - warning: Please be sure using entity fetched from insertEntity method otherwise cant save
-    public func insertAll(setEntityVariables: (T) -> Void) {
-        PSM.shared.context.performAndWait {
-            if let entity = getInsertEntity() {
+    public func insertAll(setEntityVariables: @escaping (T) -> Void) {
+        context.perform { [weak self] in
+            if let entity = self?.getInsertEntity() {
                 setEntityVariables(entity)
             }
         }

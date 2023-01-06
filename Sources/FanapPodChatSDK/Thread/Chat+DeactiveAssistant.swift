@@ -22,7 +22,7 @@ public extension Chat {
 // Response
 extension Chat {
     func onDeactiveAssistants(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse()
+        let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse(context: persistentManager.context)
         delegate?.chatEvent(event: .assistant(.deactiveAssistants(response)))
         cache?.write(cacheType: .deleteAssistants(response.result ?? []))
         cache?.save()

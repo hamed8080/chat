@@ -10,7 +10,7 @@ import Foundation
 // Event
 extension Chat {
     func onUsersLastSeen(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[UserLastSeenDuration]> = asyncMessage.toChatResponse()
+        let response: ChatResponse<[UserLastSeenDuration]> = asyncMessage.toChatResponse(context: persistentManager.context)
         delegate?.chatEvent(event: .contact(.contactsLastSeen(response)))
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }

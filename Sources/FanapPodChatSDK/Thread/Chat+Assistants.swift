@@ -21,8 +21,9 @@ public extension Chat {
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
 
-        cache?.get(cacheType: .getAssistants(request.count, request.offset)) { (response: ChatResponse<[Assistant]>) in
-            let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: CMAssistant.crud.getTotalCount())
+        cache?.get(cacheType: .getAssistants(request.count, request.offset)) { [weak self] (response: ChatResponse<[Assistant]>) in
+            let totalCount = try? self?.persistentManager.context.count(for: Assistant.fetchRequest()) ?? 0
+            let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: totalCount)
             cacheResponse?(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
     }
@@ -31,7 +32,7 @@ public extension Chat {
 // Response
 extension Chat {
     func onAssistants(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse()
+        let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse(context: persistentManager.context)
         delegate?.chatEvent(event: .assistant(.assistants(response)))
         cache?.write(cacheType: .insertOrUpdateAssistants(response.result ?? []))
         cache?.save()

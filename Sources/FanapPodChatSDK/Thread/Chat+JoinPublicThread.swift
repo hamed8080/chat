@@ -22,7 +22,7 @@ public extension Chat {
 // Response
 extension Chat {
     func onJoinThread(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
+        let response: ChatResponse<Conversation> = asyncMessage.toChatResponse(context: persistentManager.context)
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

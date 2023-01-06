@@ -33,7 +33,7 @@ public extension Chat {
 // Response
 extension Chat {
     func onMuteUnMuteThread(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<Int> = asyncMessage.toChatResponse()
+        let response: ChatResponse<Int> = asyncMessage.toChatResponse(context: persistentManager.context)
         if asyncMessage.chatMessage?.type == .muteThread {
             delegate?.chatEvent(event: .thread(.threadMute(response)))
         } else if asyncMessage.chatMessage?.type == .unmuteThread {

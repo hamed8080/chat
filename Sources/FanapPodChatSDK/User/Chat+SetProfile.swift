@@ -22,7 +22,7 @@ public extension Chat {
 // Response
 extension Chat {
     func onSetProfile(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<Profile> = asyncMessage.toChatResponse()
+        let response: ChatResponse<Profile> = asyncMessage.toChatResponse(context: persistentManager.context)
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

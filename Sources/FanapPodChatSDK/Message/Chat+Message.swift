@@ -190,7 +190,7 @@ extension Chat {
     }
 
     func onSentMessage(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<MessageResponse> = asyncMessage.toChatResponse()
+        let response: ChatResponse<MessageResponse> = asyncMessage.toChatResponse(context: persistentManager.context)
         if let messageSent = response.result {
             delegate?.chatEvent(event: .message(.messageSent(response)))
             cache?.write(cacheType: .messageSentToUser(messageSent))
@@ -201,7 +201,7 @@ extension Chat {
     }
 
     func onDeliverMessage(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<MessageResponse> = asyncMessage.toChatResponse()
+        let response: ChatResponse<MessageResponse> = asyncMessage.toChatResponse(context: persistentManager.context)
         if let deliverResponse = response.result {
             deliverResponse.messageState = .delivered
             delegate?.chatEvent(event: .message(.messageDelivery(response)))
@@ -212,7 +212,7 @@ extension Chat {
     }
 
     func onSeenMessage(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<MessageResponse> = asyncMessage.toChatResponse()
+        let response: ChatResponse<MessageResponse> = asyncMessage.toChatResponse(context: persistentManager.context)
         if let seenResponse = response.result {
             seenResponse.messageState = .seen
             delegate?.chatEvent(event: .message(.messageSeen(response)))
@@ -223,7 +223,7 @@ extension Chat {
     }
 
     func onLastMessageEdited(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
+        let response: ChatResponse<Conversation> = asyncMessage.toChatResponse(context: persistentManager.context)
         delegate?.chatEvent(event: .thread(.lastMessageEdited(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         if let thread = response.result {
@@ -233,7 +233,7 @@ extension Chat {
     }
 
     func onLastMessageDeleted(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
+        let response: ChatResponse<Conversation> = asyncMessage.toChatResponse(context: persistentManager.context)
         delegate?.chatEvent(event: .thread(.lastMessageDeleted(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         if let threadId = response.result?.id, let lastMessage = response.result?.lastMessageVO {

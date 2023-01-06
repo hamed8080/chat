@@ -22,7 +22,7 @@ extension Chat {
 // Response
 extension Chat {
     func onTagParticipants(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[TagParticipant]> = asyncMessage.toChatResponse()
+        let response: ChatResponse<[TagParticipant]> = asyncMessage.toChatResponse(context: persistentManager.context)
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

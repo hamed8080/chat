@@ -22,7 +22,7 @@ public extension Chat {
 // Response
 extension Chat {
     func onCreateTag(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<Tag> = asyncMessage.toChatResponse()
+        let response: ChatResponse<Tag> = asyncMessage.toChatResponse(context: persistentManager.context)
         delegate?.chatEvent(event: .tag(.createTag(response)))
         if let tag = response.result {
             cache?.write(cacheType: .tags([tag]))

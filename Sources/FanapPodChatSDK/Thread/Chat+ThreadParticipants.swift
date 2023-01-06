@@ -45,7 +45,7 @@ public extension Chat {
 // Response
 extension Chat {
     func onThreadParticipants(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[Participant]> = asyncMessage.toChatResponse()
+        let response: ChatResponse<[Participant]> = asyncMessage.toChatResponse(context: persistentManager.context)
         delegate?.chatEvent(event: .thread(.threadParticipantsListChange(response)))
         cache?.write(cacheType: .participants(response.result ?? [], response.subjectId ?? 0))
         cache?.save()

@@ -22,7 +22,7 @@ public extension Chat {
 // Response
 extension Chat {
     func onLeaveThread(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<User> = asyncMessage.toChatResponse()
+        let response: ChatResponse<User> = asyncMessage.toChatResponse(context: persistentManager.context)
         delegate?.chatEvent(event: .thread(.threadLeaveParticipant(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         cache?.write(cacheType: .leaveThread(response.result?.id ?? 0))

@@ -42,9 +42,8 @@ extension Chat {
                 self?.cache?.save()
             }
             uniqueIdsResult?(uniqueIds)
-
         }, errorResult: { [weak self] error in
-            self?.logger?.log(title: "authorize error", message: "\(error)")
+            self?.logger?.log(message: "UNAuthorized Access to Contact API with error: \(error.localizedDescription)", level: .error)
         })
     }
 

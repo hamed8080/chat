@@ -31,7 +31,7 @@ public extension Chat { /// Start a bot.
 // Response
 extension Chat {
     func onStartStopBot(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<String> = asyncMessage.toChatResponse()
+        let response: ChatResponse<String> = asyncMessage.toChatResponse(context: persistentManager.context)
         if asyncMessage.chatMessage?.type == .startBot {
             delegate?.chatEvent(event: .bot(.startBot(response)))
         } else {

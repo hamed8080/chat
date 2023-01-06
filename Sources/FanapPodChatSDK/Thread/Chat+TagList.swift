@@ -24,7 +24,7 @@ public extension Chat {
 // Response
 extension Chat {
     func onTags(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[Tag]> = asyncMessage.toChatResponse()
+        let response: ChatResponse<[Tag]> = asyncMessage.toChatResponse(context: persistentManager.context)
         cache?.write(cacheType: .tags(response.result ?? []))
         cache?.save()
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)

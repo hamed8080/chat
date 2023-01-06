@@ -23,7 +23,7 @@ public extension Chat {
 // Response
 extension Chat {
     func onBlockContact(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<BlockedContact> = asyncMessage.toChatResponse()
+        let response: ChatResponse<BlockedContact> = asyncMessage.toChatResponse(context: persistentManager.context)
         delegate?.chatEvent(event: .contact(.blocked(response)))
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }

@@ -22,7 +22,7 @@ public extension Chat {
 // Response
 extension Chat {
     func onRemoveParticipants(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[Participant]> = asyncMessage.toChatResponse()
+        let response: ChatResponse<[Participant]> = asyncMessage.toChatResponse(context: persistentManager.context)
         cache?.write(cacheType: .removeParticipants(participants: response.result ?? [], threadId: response.subjectId))
         cache?.save()
         delegate?.chatEvent(event: .thread(.threadRemoveParticipants(response)))

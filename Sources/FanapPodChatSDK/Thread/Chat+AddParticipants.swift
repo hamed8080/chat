@@ -22,7 +22,7 @@ public extension Chat {
 // Response
 extension Chat {
     func onAddParticipant(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
+        let response: ChatResponse<Conversation> = asyncMessage.toChatResponse(context: persistentManager.context)
         cache?.write(cacheType: .participants(response.result?.participants ?? [], response.result?.id))
         cache?.save()
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))

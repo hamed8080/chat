@@ -80,7 +80,7 @@ public extension Chat {
 // Response
 extension Chat {
     func onCreateThread(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
+        let response: ChatResponse<Conversation> = asyncMessage.toChatResponse(context: persistentManager.context)
         delegate?.chatEvent(event: .thread(.threadNew(response)))
         if let newThread = response.result {
             cache?.write(cacheType: .threads([newThread]))

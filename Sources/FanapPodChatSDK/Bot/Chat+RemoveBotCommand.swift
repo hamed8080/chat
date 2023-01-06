@@ -22,7 +22,7 @@ public extension Chat {
 // Response
 extension Chat {
     func onRemoveBotCommand(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<BotInfo> = asyncMessage.toChatResponse()
+        let response: ChatResponse<BotInfo> = asyncMessage.toChatResponse(context: persistentManager.context)
         delegate?.chatEvent(event: .bot(.removeBotCommand(response)))
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }

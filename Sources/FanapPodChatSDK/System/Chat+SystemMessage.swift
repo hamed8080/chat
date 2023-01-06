@@ -10,7 +10,7 @@ import Foundation
 // Event
 extension Chat {
     func onSystemMessageEvent(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<SystemEventMessageModel> = asyncMessage.toChatResponse()
+        let response: ChatResponse<SystemEventMessageModel> = asyncMessage.toChatResponse(context: persistentManager.context)
         delegate?.chatEvent(event: .system(.systemMessage(response)))
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }

@@ -51,7 +51,7 @@ extension Chat {
 // Response
 extension Chat {
     func onUserInfo(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<User> = asyncMessage.toChatResponse()
+        let response: ChatResponse<User> = asyncMessage.toChatResponse(context: persistentManager.context)
         if let user = response.result {
             cache?.write(cacheType: .userInfo(user))
             cache?.save()

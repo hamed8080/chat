@@ -31,7 +31,7 @@ public extension Chat {
 // Response
 extension Chat {
     func onGetBlockedAssistants(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse()
+        let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse(context: persistentManager.context)
         cache?.write(cacheType: .insertOrUpdateAssistants(response.result ?? []))
         cache?.save()
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)

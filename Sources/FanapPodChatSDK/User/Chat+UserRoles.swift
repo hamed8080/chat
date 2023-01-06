@@ -44,7 +44,7 @@ public extension Chat {
 // Response
 extension Chat {
     func onUserRoles(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[Roles]> = asyncMessage.toChatResponse()
+        let response: ChatResponse<[Roles]> = asyncMessage.toChatResponse(context: persistentManager.context)
         delegate?.chatEvent(event: .user(.roles(response)))
         cache?.write(cacheType: .currentUserRoles(response.result ?? [], response.subjectId))
         cache?.save()

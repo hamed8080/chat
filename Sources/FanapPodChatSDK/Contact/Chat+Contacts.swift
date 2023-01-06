@@ -44,7 +44,7 @@ public extension Chat {
 // Response
 extension Chat {
     func onContacts(_ asyncMessage: AsyncMessage) {
-        var response: ChatResponse<[Contact]> = asyncMessage.toChatResponse()
+        var response: ChatResponse<[Contact]> = asyncMessage.toChatResponse(context: persistentManager.context)
         response.contentCount = asyncMessage.chatMessage?.contentCount
         cache?.write(cacheType: .casheContacts(response.result ?? []))
         cache?.save()

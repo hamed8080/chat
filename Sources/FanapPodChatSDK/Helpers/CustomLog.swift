@@ -4,12 +4,13 @@
 //
 // Created by Hamed Hosseini on 12/14/22
 
+import CoreData
 import Foundation
 #if canImport(UIKit)
     import UIKit
 #endif
 
-struct DeviceInfo: Codable {
+public struct DeviceInfo: Codable {
     let deviceModel: String
     let os: String
     let osVersion: String
@@ -28,16 +29,7 @@ struct DeviceInfo: Codable {
     }
 }
 
-struct Log: Codable {
-    var id = UUID().string
-    var deviceInfo: DeviceInfo
-    let config: ChatConfig
-    let message: String
-    let time: UInt
-    let level: LogLevel
-}
-
-enum LogLevel: Int, Codable {
+public enum LogLevel: Int, Codable {
     case verbose = 0
     case warning = 1
     case error = 2
@@ -47,7 +39,7 @@ public class Logger {
     private let sdkName = "CHAT_SDK: "
     private var urlSession: URLSession
     private let config: ChatConfig
-    var cache: CacheFactory?
+    var persistentManager: PersistentManager?
     private let timer: Timer
 
     init(config: ChatConfig, timer: Timer = Timer(), urlSession: URLSession = .shared) {
@@ -114,7 +106,7 @@ public class Logger {
         }
     }
 
-    func log(_ data: Data?, _ response: URLResponse?, _: Error?) {
+    func log(_ data: Data?, _ response: URLResponse?, _ error: Error?) {
         if config.isDebuggingLogEnabled == true {
             var output = "\n"
             output += "Start Of Response============================================================================================\n"
@@ -123,28 +115,38 @@ public class Logger {
             output += "End  Of  Response============================================================================================\n"
             output += "\n"
             log(title: "CHAT_SDK:", message: output)
+            if let error = error {
+                log(message: "\(error.localizedDescription) \n\(output)", level: .error)
+            }
         }
     }
 
     func log(message: String, level: LogLevel = .verbose) {
-        if config.persistLogsOnServer {
-            let log = Log(deviceInfo: DeviceInfo.getDeviceInfo(), config: config, message: message, time: UInt(Date().timeIntervalSince1970), level: level)
+        if config.persistLogsOnServer, let context = persistentManager?.context {
+            let log = Log(
+                context: context,
+                message: message,
+                config: config,
+                deviceInfo: DeviceInfo.getDeviceInfo(),
+                level: level
+            )
             addLogTocache(log: log)
         }
     }
 
-    func startSending() {
+    private func startSending() {
         Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
             let sortByTime = NSSortDescriptor(key: "time", ascending: true)
-            let req = CMLog.crud.fetchRequest()
+            let req = Log.fetchRequest()
+            req.fetchLimit = 1
             req.sortDescriptors = [sortByTime]
-            if let log = CMLog.crud.fetchWith(req)?.first?.getCodable() {
+            if let log = try? self?.persistentManager?.context.fetch(req).first {
                 self?.sendLog(log: log)
             }
         }
     }
 
-    func sendLog(log: Log) {
+    private func sendLog(log: Log) {
         var req = URLRequest(url: URL(string: "http://10.56.34.61:8080/1m-http-server-test-chat")!)
         req.httpMethod = HTTPMethod.put.rawValue
         req.httpBody = try? JSONEncoder().encode(log)
@@ -161,13 +163,12 @@ public class Logger {
         task.resume()
     }
 
-    func deleteLogFromCache(log: Log) {
-        CMLog.crud.deleteWith(predicate: NSPredicate(format: "id == %@", log.id ?? ""), self)
-        cache?.save()
+    private func deleteLogFromCache(log: Log) {
+        persistentManager?.context.delete(log)
+        persistentManager?.save()
     }
 
-    func addLogTocache(log: Log) {
-        CMLog.insertOrUpdate(log: log)
-        cache?.save()
+    private func addLogTocache(log _: Log) {
+        persistentManager?.save()
     }
 }

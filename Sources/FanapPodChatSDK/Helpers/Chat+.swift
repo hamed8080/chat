@@ -63,8 +63,8 @@ protocol ChatProtocol: AnyObject {
     /// A queue in which the response will call which is by default is ``DispatchQueue.main``.
     var responseQueue: DispatchQueueProtocol { get set }
 
-    /// A cache object to store and give you the opportunity to retrieve data from it.
-    var cache: CacheFactory? { get set }
+    /// Persistent Manager for managing the object context.
+    var persistentManager: PersistentManager { get set }
 
     /// A file manager for caching files on the storage.
     var cacheFileManager: CacheFileManagerProtocol? { get set }

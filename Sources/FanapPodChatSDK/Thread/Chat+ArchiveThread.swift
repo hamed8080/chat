@@ -33,7 +33,7 @@ public extension Chat {
 // Response
 extension Chat {
     func onArchiveUnArchiveThread(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[TagParticipant]> = asyncMessage.toChatResponse()
+        let response: ChatResponse<[TagParticipant]> = asyncMessage.toChatResponse(context: persistentManager.context)
         cache?.write(cacheType: .archiveUnarchiveAhread(asyncMessage.chatMessage?.type == .archiveThread, response.subjectId ?? 0))
         cache?.save()
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)

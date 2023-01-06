@@ -43,7 +43,7 @@ public extension Chat {
 // Response
 extension Chat {
     func onThreads(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[Conversation]> = asyncMessage.toChatResponse()
+        let response: ChatResponse<[Conversation]> = asyncMessage.toChatResponse(context: persistentManager.context)
         delegate?.chatEvent(event: .thread(.threadsListChange(response)))
         cache?.write(cacheType: .threads(response.result ?? []))
         cache?.save()

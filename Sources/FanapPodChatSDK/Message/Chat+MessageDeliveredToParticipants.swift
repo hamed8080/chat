@@ -25,7 +25,7 @@ public extension Chat {
 // Response
 extension Chat {
     func onMessageDeliveredToParticipants(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[Participant]> = asyncMessage.toChatResponse()
+        let response: ChatResponse<[Participant]> = asyncMessage.toChatResponse(context: persistentManager.context)
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

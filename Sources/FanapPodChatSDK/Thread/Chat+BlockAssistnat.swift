@@ -32,7 +32,7 @@ public extension Chat {
 // Response
 extension Chat {
     func onBlockUnBlockAssistant(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse()
+        let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse(context: persistentManager.context)
         if asyncMessage.chatMessage?.type == .blockAssistant {
             delegate?.chatEvent(event: .assistant(.blockAssistant(response)))
         } else if asyncMessage.chatMessage?.type == .unblockAssistant {
