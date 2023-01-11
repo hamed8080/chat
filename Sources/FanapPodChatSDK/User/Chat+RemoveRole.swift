@@ -32,7 +32,7 @@ public extension Chat {
 // Response
 extension Chat {
     func onRemveUserRoles(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[UserRole]> = asyncMessage.toChatResponse(context: persistentManager.context)
+        let response: ChatResponse<[UserRole]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         delegate?.chatEvent(event: .thread(.threadUserRole(response)))
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)

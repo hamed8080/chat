@@ -40,9 +40,9 @@ public extension Chat {
 // Response
 extension Chat {
     func onUserRemovedFromThread(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<Int> = asyncMessage.toChatResponse(context: persistentManager.context)
+        let response: ChatResponse<Int> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.threadRemovedFrom(response)))
-        cache?.write(cacheType: .deleteThreads([response.subjectId ?? 0]))
+        CacheConversationManager(pm: persistentManager, logger: logger).delete(response.result ?? -1)
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

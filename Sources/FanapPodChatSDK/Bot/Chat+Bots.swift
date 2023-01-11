@@ -22,12 +22,12 @@ public extension Chat {
 // Response
 extension Chat {
     func onBots(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[BotInfo]> = asyncMessage.toChatResponse(context: persistentManager.context)
+        let response: ChatResponse<[BotInfo]> = asyncMessage.toChatResponse()
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 
     func onBotMessage(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<String?> = asyncMessage.toChatResponse(context: persistentManager.context)
+        let response: ChatResponse<String?> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .bot(.botMessage(response)))
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }

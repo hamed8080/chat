@@ -22,12 +22,9 @@ public extension Chat {
 // Response
 extension Chat {
     func onAddTagParticipant(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[TagParticipant]> = asyncMessage.toChatResponse(context: persistentManager.context)
+        let response: ChatResponse<[TagParticipant]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .tag(.addTagParticipant(response)))
-        if let tagId = response.subjectId {
-            cache?.write(cacheType: .tagParticipants(response.result ?? [], tagId))
-        }
-        cache?.save()
+        CacheTagParticipantManager(pm: persistentManager, logger: logger).insert(models: response.result?.compactMap { $0 } ?? [])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

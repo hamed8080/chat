@@ -19,8 +19,7 @@ public extension Chat {
                 task.cancel()
                 completion?("upload task with uniqueId \(uniqueId) canceled.", true)
                 callbacksManager.removeUploadTask(uniqueId: uniqueId)
-                cache?.write(cacheType: .deleteQueue(uniqueId))
-                cache?.save()
+                deleteQueues(uniqueIds: [uniqueId])
             case .suspend:
                 task.suspend()
                 completion?("upload task with uniqueId \(uniqueId) suspend.", true)

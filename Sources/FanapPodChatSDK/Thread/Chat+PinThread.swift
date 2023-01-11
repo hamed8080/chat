@@ -33,14 +33,13 @@ public extension Chat {
 // Response
 extension Chat {
     func onPinUnPinThread(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<Int> = asyncMessage.toChatResponse(context: persistentManager.context)
+        let response: ChatResponse<Int> = asyncMessage.toChatResponse()
         if asyncMessage.chatMessage?.type == .pinThread {
             delegate?.chatEvent(event: .thread(.threadPin(response)))
         } else if asyncMessage.chatMessage?.type == .unpinThread {
             delegate?.chatEvent(event: .thread(.threadUnpin(response)))
         }
-        cache?.write(cacheType: .pinUnpinThread(response.subjectId ?? 0))
-        cache?.save()
+        CacheConversationManager(pm: persistentManager, logger: logger).pin(asyncMessage.chatMessage?.type == .pinThread, response.subjectId)
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

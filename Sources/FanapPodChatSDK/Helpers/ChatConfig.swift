@@ -34,6 +34,7 @@ public struct ChatConfig: Codable {
     public private(set) var isDebuggingLogEnabled: Bool = false
     public private(set) var enableNotificationLogObserver: Bool = false
     public private(set) var appGroup: String?
+    public private(set) var sendLogInterval: TimeInterval = 60
 
     // Memberwise Initializer
     public init(
@@ -60,7 +61,8 @@ public struct ChatConfig: Codable {
         getDeviceIdFromToken: Bool = false,
         isDebuggingLogEnabled: Bool = false,
         enableNotificationLogObserver: Bool = false,
-        appGroup: String? = nil
+        appGroup: String? = nil,
+        sendLogInterval: TimeInterval = 60
     ) {
         self.asyncConfig = asyncConfig
         self.ssoHost = ssoHost
@@ -85,6 +87,7 @@ public struct ChatConfig: Codable {
         self.isDebuggingLogEnabled = isDebuggingLogEnabled
         self.enableNotificationLogObserver = enableNotificationLogObserver
         self.appGroup = appGroup
+        self.sendLogInterval = sendLogInterval
     }
 
     public mutating func updateToken(_ token: String) {
@@ -117,6 +120,7 @@ public class ChatConfigBuilder {
     private(set) var isDebuggingLogEnabled: Bool = false
     private(set) var enableNotificationLogObserver: Bool = false
     private(set) var appGroup: String?
+    private(set) var sendLogInterval: TimeInterval = 60
 
     public init(_ asyncConfig: AsyncConfig) {
         self.asyncConfig = asyncConfig
@@ -237,6 +241,11 @@ public class ChatConfigBuilder {
         return self
     }
 
+    @discardableResult public func sendLogInterval(_ sendLogInterval: TimeInterval) -> ChatConfigBuilder {
+        self.sendLogInterval = sendLogInterval
+        return self
+    }
+
     public func build() -> ChatConfig {
         ChatConfig(
             asyncConfig: asyncConfig,
@@ -262,7 +271,8 @@ public class ChatConfigBuilder {
             getDeviceIdFromToken: getDeviceIdFromToken,
             isDebuggingLogEnabled: isDebuggingLogEnabled,
             enableNotificationLogObserver: enableNotificationLogObserver,
-            appGroup: appGroup
+            appGroup: appGroup,
+            sendLogInterval: sendLogInterval
         )
     }
 }

@@ -22,8 +22,6 @@ extension Chat {
             onAddParticipant(asyncMessage)
         case .allUnreadMessageCount:
             onUnreadMessageCount(asyncMessage)
-        case .block:
-            onBlockContact(asyncMessage)
         case .botMessage:
             onBotMessage(asyncMessage)
         case .changeType: // TODO: not implemented yet!
@@ -124,8 +122,8 @@ extension Chat {
             onUpdateThreadInfo(asyncMessage)
         case .threadParticipants:
             onThreadParticipants(asyncMessage)
-        case .unblock:
-            onUnBlockContact(asyncMessage)
+        case .unblock, .block:
+            onBlockUnBlockContact(asyncMessage)
         case .muteThread, .unmuteThread:
             onMuteUnMuteThread(asyncMessage)
         case .pinMessage, .unpinMessage:

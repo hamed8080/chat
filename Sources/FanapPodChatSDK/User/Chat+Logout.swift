@@ -8,13 +8,12 @@ import Foundation
 
 // Request
 public extension Chat {
-    /// Tell the server user has logged out.
+    /// Tell the server user has logged out. This method wil **truncate and delete** all data inside the cache.
     func logOut() {
         let req = BareChatSendableRequest(uniqueId: UUID().uuidString)
         req.chatMessageType = .logout
         prepareToSendAsync(req: req)
-        cache?.write(cacheType: .deleteAllCacheData)
-        cache?.save()
+        truncate()
         if let docFoler = cacheFileManager?.documentPath {
             cacheFileManager?.deleteFolder(url: docFoler)
         }

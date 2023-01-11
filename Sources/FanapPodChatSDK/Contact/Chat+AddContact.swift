@@ -7,13 +7,13 @@
 import Foundation
 
 // Request
-extension Chat {
+public extension Chat {
     /// Add a new contact.
     /// - Parameters:
     ///   - request: The request.
     ///   - completion: The answer of the request if the contact is added successfully.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    public func addContact(_ request: AddContactRequest, completion: @escaping CompletionType<[Contact]>, uniqueIdResult _: UniqueIdResultType? = nil) {
+    func addContact(_ request: AddContactRequest, completion: @escaping CompletionType<[Contact]>, uniqueIdResult _: UniqueIdResultType? = nil) {
         let url = "\(config.platformHost)\(Routes.addContacts.rawValue)"
         let headers: [String: String] = ["_token_": config.token, "_token_issuer_": "1"]
         request.typeCode = config.typeCode
@@ -28,15 +28,11 @@ extension Chat {
             let result: ChatResponse<ContactResponse>? = self?.session.decode(data, response, error)
             self?.responseQueue.async {
                 completion(ChatResponse(uniqueId: request.uniqueId, result: result?.result?.contacts, error: result?.error))
-                self?.insertContactsToCache(contacts: result?.result?.contacts)
+            }
+            if let self = self {
+                CacheContactManager(pm: self.persistentManager, logger: self.logger).insert(models: result?.result?.contacts ?? [])
             }
         }
         .resume()
-    }
-
-    func insertContactsToCache(contacts: [Contact]?) {
-        if config.enableCache == true, let contacts = contacts {
-            CMContact.insertOrUpdate(contacts: contacts)
-        }
     }
 }

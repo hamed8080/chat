@@ -22,9 +22,8 @@ public extension Chat {
 // Response
 extension Chat {
     func onAddParticipant(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<Conversation> = asyncMessage.toChatResponse(context: persistentManager.context)
-        cache?.write(cacheType: .participants(response.result?.participants ?? [], response.result?.id))
-        cache?.save()
+        let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
+        CacheParticipantManager(pm: persistentManager, logger: logger).insert(models: response.result?.participants ?? [])
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         delegate?.chatEvent(event: .thread(.threadAddParticipants(.init(uniqueId: response.uniqueId, result: response.result?.participants, time: response.time))))
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)

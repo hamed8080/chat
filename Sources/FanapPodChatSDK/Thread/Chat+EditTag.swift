@@ -22,12 +22,9 @@ public extension Chat {
 // Response
 extension Chat {
     func onEditTag(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<Tag> = asyncMessage.toChatResponse(context: persistentManager.context)
+        let response: ChatResponse<Tag> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .tag(.editTag(response)))
-        if let tag = response.result {
-            cache?.write(cacheType: .tags([tag]))
-            cache?.save()
-        }
+        CacheTagManager(pm: persistentManager, logger: logger).insert(models: [response.result].compactMap { $0 })
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

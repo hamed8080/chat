@@ -37,17 +37,18 @@ public extension Chat {
     func getCurrentUserRoles(_ request: GeneralSubjectIdRequest, completion: @escaping CompletionType<[Roles]>, cacheResponse: CacheResponseType<[Roles]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         request.chatMessageType = .getCurrentUserRoles
         prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
-        cache?.get(cacheType: .cureentUserRoles(request.subjectId), completion: cacheResponse)
+        let roles = CacheUserRoleManager(pm: persistentManager, logger: logger).roles(request.subjectId)
+        cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: roles, error: nil))
     }
 }
 
 // Response
 extension Chat {
     func onUserRoles(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[Roles]> = asyncMessage.toChatResponse(context: persistentManager.context)
+        let response: ChatResponse<[Roles]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .user(.roles(response)))
-        cache?.write(cacheType: .currentUserRoles(response.result ?? [], response.subjectId))
-        cache?.save()
+        let userRole = UserRole(userId: response.subjectId, name: nil, roles: response.result, image: nil)
+        CacheUserRoleManager(pm: persistentManager, logger: logger).insert(models: [userRole])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

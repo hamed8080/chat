@@ -22,10 +22,9 @@ public extension Chat {
 // Response
 extension Chat {
     func onRegisterAssistants(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse(context: persistentManager.context)
+        let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .assistant(.registerAssistant(response)))
-        cache?.write(cacheType: .insertOrUpdateAssistants(response.result ?? []))
-        cache?.save()
+        CacheAssistantManager(pm: persistentManager, logger: logger).insert(models: response.result ?? [])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

@@ -21,15 +21,16 @@ public extension Chat {
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
 
             // insert to mutual cache only for this method beacuse we need request and id and idType to be cache
-            if let conversations = response.result {
-                self?.cache?.write(cacheType: .mutualGroups(conversations, request))
-                self?.cache?.save()
+            if let self = self {
+                CacheMutualGroupManager(pm: self.persistentManager, logger: self.logger).insert(response.result ?? [], request)
             }
         }
 
-        cache?.get(cacheType: .getMutualGroups(request)) { (response: ChatResponse<[Conversation]>) in
-            let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: CMMutualGroup.crud.getTotalCount())
-            cacheResponse?(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
+        if config.enableCache {
+            let mutuals = CacheMutualGroupManager(pm: persistentManager, logger: logger).mutualGroups(request.toBeUserVO.id)
+            let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: mutuals.count)
+            let threads = mutuals.first?.conversations?.allObjects.compactMap { $0 as? CDConversation } ?? []
+            cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: threads.map(\.codable), error: nil, pagination: pagination))
         }
     }
 }
@@ -37,7 +38,7 @@ public extension Chat {
 // Response
 extension Chat {
     func onMutalGroups(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[Conversation]> = asyncMessage.toChatResponse(context: persistentManager.context)
+        let response: ChatResponse<[Conversation]> = asyncMessage.toChatResponse()
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

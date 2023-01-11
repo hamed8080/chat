@@ -23,7 +23,7 @@ public extension Chat {
 // Response
 extension Chat {
     func onAssistantHistory(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[AssistantAction]> = asyncMessage.toChatResponse(context: persistentManager.context)
+        let response: ChatResponse<[AssistantAction]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .assistant(.assistantActions(response)))
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }

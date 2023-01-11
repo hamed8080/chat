@@ -32,14 +32,14 @@ public extension Chat {
 // Response
 extension Chat {
     func onBlockUnBlockAssistant(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse(context: persistentManager.context)
+        let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse()
         if asyncMessage.chatMessage?.type == .blockAssistant {
             delegate?.chatEvent(event: .assistant(.blockAssistant(response)))
         } else if asyncMessage.chatMessage?.type == .unblockAssistant {
             delegate?.chatEvent(event: .assistant(.unblockAssistant(response)))
         }
-        cache?.write(cacheType: .insertOrUpdateAssistants(response.result ?? []))
-        cache?.save()
+        let manager = CacheAssistantManager(pm: persistentManager, logger: logger)
+        manager.block(block: asyncMessage.chatMessage?.type == .blockAssistant, assistants: response.result ?? [])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

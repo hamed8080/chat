@@ -21,10 +21,10 @@ public extension Chat {
             let pagination = PaginationWithContentCount(count: request.size, offset: request.offset, totalCount: response.contentCount)
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
-
-        cache?.get(cacheType: .getCashedContacts(request)) { (response: ChatResponse<[Contact]>) in
-            let pagination = PaginationWithContentCount(count: request.size, offset: request.offset, totalCount: CMContact.crud.getTotalCount())
-            cacheResponse?(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
+        if config.enableCache {
+            let res = CacheContactManager(pm: persistentManager, logger: logger).getContacts(request)
+            let pagination = PaginationWithContentCount(count: request.size, offset: request.offset, totalCount: res.totalCount)
+            cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: res.objects.map(\.codable), pagination: pagination))
         }
     }
 
@@ -44,10 +44,9 @@ public extension Chat {
 // Response
 extension Chat {
     func onContacts(_ asyncMessage: AsyncMessage) {
-        var response: ChatResponse<[Contact]> = asyncMessage.toChatResponse(context: persistentManager.context)
+        var response: ChatResponse<[Contact]> = asyncMessage.toChatResponse()
         response.contentCount = asyncMessage.chatMessage?.contentCount
-        cache?.write(cacheType: .casheContacts(response.result ?? []))
-        cache?.save()
+        CacheContactManager(pm: persistentManager, logger: logger).insert(models: response.result ?? [])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

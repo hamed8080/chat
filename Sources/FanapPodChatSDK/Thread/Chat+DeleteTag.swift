@@ -22,12 +22,9 @@ public extension Chat {
 // Response
 extension Chat {
     func onDeleteTag(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<Tag> = asyncMessage.toChatResponse(context: persistentManager.context)
+        let response: ChatResponse<Tag> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .tag(.deleteTag(response)))
-        if let tag = response.result {
-            cache?.write(cacheType: .deleteTag(tag))
-            cache?.save()
-        }
+        CacheTagManager(pm: persistentManager, logger: logger).delete(response.result?.id)
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

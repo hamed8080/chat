@@ -17,21 +17,19 @@ public extension Chat {
     func editMessage(_ request: EditMessageRequest, completion: CompletionType<Message>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         request.typeCode = config.typeCode
         prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
-        cache?.write(cacheType: .editMessageQueue(request))
-        cache?.save()
+        CacheQueueOfEditMessagesManager(pm: persistentManager, logger: logger).insert(request)
     }
 }
 
 // Response
 extension Chat {
     func onEditMessage(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<Message> = asyncMessage.toChatResponse(context: persistentManager.context)
+        let response: ChatResponse<Message> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .message(.messageEdit(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         if let message = response.result {
-            cache?.write(cacheType: .deleteEditMessageQueue(message))
-            cache?.write(cacheType: .message(message))
-            cache?.save()
+            deleteQueues(uniqueIds: [response.uniqueId ?? ""])
+            CacheMessageManager(pm: persistentManager, logger: logger).insert(models: [message])
         }
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }

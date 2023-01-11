@@ -40,9 +40,9 @@ extension Chat {
                 }
         }
 
-        if let filePath = cacheFileManager?.filePath(url: URL(string: url)!), cacheResponse != nil {
-            let fileModel = CMImage.crud.find(keyWithFromat: "hashCode == %@", value: request.hashCode)?.getCodable()
-            cacheResponse?(nil, filePath, fileModel, nil)
+        if config.enableCache, let filePath = cacheFileManager?.filePath(url: URL(string: url)!), cacheResponse != nil {
+            let image = CacheImageManager(pm: persistentManager, logger: logger).first(with: request.hashCode)
+            cacheResponse?(nil, filePath, image?.codable, nil)
         }
     }
 
@@ -69,11 +69,10 @@ extension Chat {
 
             let size = Int((headers["Content-Length"] as? String) ?? "0")
             let fileNameWithExtension = "\(name ?? "default")"
-            let imageModel = ImageModel(hashCode: req.hashCode, name: fileNameWithExtension, size: size)
-            CMImage.deleteAndInsert(imageModel: imageModel, logger: logger)
-            cache?.save()
+            let image = Image(size: size, name: fileNameWithExtension, hashCode: req.hashCode)
+            CacheImageManager(pm: persistentManager, logger: logger).insert(models: [image])
             let filePath = cacheFileManager?.saveFile(url: URL(string: url)!, data: data ?? Data())
-            completion?(data, filePath, imageModel, nil)
+            completion?(data, filePath, image, nil)
             let response: ChatResponse<Data?> = .init(uniqueId: req.uniqueId, result: data)
             delegate?.chatEvent(event: .file(.imageDownloaded(response)))
         } else {

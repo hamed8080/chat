@@ -6,16 +6,15 @@
 
 import Foundation
 public class AllThreads: UniqueIdManagerRequest, ChatSendable {
-    private let summary: Bool
+    /// - summary: If it set to true the result only contains the ids of threads not other properties.
+    private let summary: Bool = true
     var chatMessageType: ChatMessageVOTypes = .getThreads
     var content: String? { convertCodableToString() }
 
     /// Init the request.
     /// - Parameters:
-    ///   - summary: If it set to true the result only contains the ids of threads not other properties.
     ///   - uniqueId: The optional uniqueId.
-    public init(summary: Bool = false, uniqueId: String? = nil) {
-        self.summary = summary
+    override public init(uniqueId: String? = nil) {
         super.init(uniqueId: uniqueId)
     }
 

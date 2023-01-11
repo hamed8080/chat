@@ -49,7 +49,7 @@ public class Chat: ChatProtocol, Identifiable {
         if config.enableCache {
             cacheFileManager = CacheFileManager()
         }
-        persistentManager = PersistentManager(logger: self.logger)
+        persistentManager = PersistentManager(logger: self.logger, cacheEnabled: config.enableCache)
         asyncManager = AsyncManager(pingTimer: pingTimer, queueTimer: queueTimer)
         asyncManager.chat = self
         self.logger?.persistentManager = persistentManager

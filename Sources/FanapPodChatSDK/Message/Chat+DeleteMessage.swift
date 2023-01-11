@@ -34,11 +34,10 @@ public extension Chat {
 // Response
 extension Chat {
     func onDeleteMessage(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<Message> = asyncMessage.toChatResponse(context: persistentManager.context)
+        let response: ChatResponse<Message> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .message(.messageDelete(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
-        cache?.write(cacheType: .deleteMessage(response.subjectId ?? 0, messageId: response.result?.id ?? 0))
-        cache?.save()
+        CacheMessageManager(pm: persistentManager, logger: logger).delete(response.subjectId ?? -1, response.result?.id)
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

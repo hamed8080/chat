@@ -159,7 +159,7 @@ class ExportMessages: ExportMessagesProtocol {
 // Response
 extension Chat {
     func onExportMessages(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[Message]> = asyncMessage.toChatResponse(context: persistentManager.context)
+        let response: ChatResponse<[Message]> = asyncMessage.toChatResponse()
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

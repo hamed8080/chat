@@ -30,8 +30,9 @@ public extension Chat {
             requestSendImageTextMessage(textMessage, uploadRequest, onSent, onSeen, onDeliver, uploadProgress, uploadUniqueIdResult, messageUniqueIdResult)
             return
         }
-        cache?.write(cacheType: .sendFileMessageQueue(uploadFile, textMessage))
-        cache?.save()
+        if config.enableCache {
+            CacheQueueOfFileMessagesManager(pm: persistentManager, logger: logger).insert(req: textMessage, uploadFile: uploadFile)
+        }
         messageUniqueIdResult?(textMessage.uniqueId)
         self.uploadFile(uploadFile, uploadUniqueIdResult: uploadUniqueIdResult, uploadProgress: uploadProgress) { [weak self] _, fileMetaData, error in
             // completed upload file

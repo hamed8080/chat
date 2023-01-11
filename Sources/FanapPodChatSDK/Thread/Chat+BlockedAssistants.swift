@@ -21,9 +21,11 @@ public extension Chat {
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
 
-        cache?.get(cacheType: .getBlockedAssistants(request.count, request.offset)) { (response: ChatResponse<[Assistant]>) in
-            let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: CMAssistant.crud.getTotalCount())
-            cacheResponse?(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
+        if config.enableCache {
+            let cm = CacheAssistantManager(pm: persistentManager, logger: logger)
+            let response = cm.getBlocked(request.count, request.offset)
+            let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: response.totalCount)
+            cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: response.objects.map(\.codable), error: nil, pagination: pagination))
         }
     }
 }
@@ -31,9 +33,8 @@ public extension Chat {
 // Response
 extension Chat {
     func onGetBlockedAssistants(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse(context: persistentManager.context)
-        cache?.write(cacheType: .insertOrUpdateAssistants(response.result ?? []))
-        cache?.save()
+        let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse()
+        CacheAssistantManager(pm: persistentManager, logger: logger).insert(models: response.result ?? [])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

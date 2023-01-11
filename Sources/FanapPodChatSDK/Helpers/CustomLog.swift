@@ -122,34 +122,29 @@ public class Logger {
     }
 
     func log(message: String, level: LogLevel = .verbose) {
-        if config.persistLogsOnServer, let context = persistentManager?.context {
+        if config.persistLogsOnServer {
             let log = Log(
-                context: context,
                 message: message,
                 config: config,
                 deviceInfo: DeviceInfo.getDeviceInfo(),
                 level: level
             )
-            addLogTocache(log: log)
+            addLogTocache(log)
         }
     }
 
     private func startSending() {
         Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
-            let sortByTime = NSSortDescriptor(key: "time", ascending: true)
-            let req = Log.fetchRequest()
-            req.fetchLimit = 1
-            req.sortDescriptors = [sortByTime]
-            if let log = try? self?.persistentManager?.context.fetch(req).first {
+            if let pm = self?.persistentManager, let log = CacheLogManager(pm: pm, logger: self).firstLog() {
                 self?.sendLog(log: log)
             }
         }
     }
 
-    private func sendLog(log: Log) {
+    private func sendLog(log: CDLog) {
         var req = URLRequest(url: URL(string: "http://10.56.34.61:8080/1m-http-server-test-chat")!)
         req.httpMethod = HTTPMethod.put.rawValue
-        req.httpBody = try? JSONEncoder().encode(log)
+        req.httpBody = try? JSONEncoder().encode(log.codable)
         req.allHTTPHeaderFields = ["Authorization": "Basic Y2hhdDpjaGF0MTIz", "Content-Type": "application/json"]
         let task = urlSession.dataTask(with: req) { [weak self] _, response, error in
             if (response as? HTTPURLResponse)?.statusCode == 200 {
@@ -163,12 +158,15 @@ public class Logger {
         task.resume()
     }
 
-    private func deleteLogFromCache(log: Log) {
-        persistentManager?.context.delete(log)
-        persistentManager?.save()
+    private func deleteLogFromCache(log: CDLog) {
+        if let pm = persistentManager {
+            CacheLogManager(pm: pm, logger: self).delete([log.codable])
+        }
     }
 
-    private func addLogTocache(log _: Log) {
-        persistentManager?.save()
+    private func addLogTocache(_ log: Log) {
+        if let pm = persistentManager {
+            CacheLogManager(pm: pm, logger: self).insert(models: [log])
+        }
     }
 }

@@ -7,6 +7,6 @@
 import Foundation
 
 public enum ContactEventTypes {
-    case blocked(ChatResponse<BlockedContact>)
+    case blocked(ChatResponse<Contact>)
     case contactsLastSeen(ChatResponse<[UserLastSeenDuration]>)
 }

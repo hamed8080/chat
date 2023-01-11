@@ -23,7 +23,7 @@ public extension Chat {
 
 extension Chat {
     func onContactNotSeen(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[ContactNotSeenDurationRespoonse]> = asyncMessage.toChatResponse(context: persistentManager.context)
+        let response: ChatResponse<[ContactNotSeenDurationRespoonse]> = asyncMessage.toChatResponse()
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

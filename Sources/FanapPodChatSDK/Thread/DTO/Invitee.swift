@@ -12,7 +12,8 @@
 //
 import Foundation
 
-open class Invitee: Codable {
+@objc(Invitee)
+open class Invitee: NSObject, Codable {
     public var id: String?
     public var idType: Int?
 

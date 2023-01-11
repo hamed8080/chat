@@ -20,14 +20,15 @@ extension Chat {
         var contactsToSync: [AddContactRequest] = []
         authorizeContactAccess(grant: { [weak self] store in
             let phoneContacts = self?.getContactsFromAuthorizedStore(store)
-            let cachePhoneContacts = PhoneContact.crud.getAll().map { $0.convertToContact() }
+            guard let self = self else { return }
+            let cachedContacts = CacheContactManager(pm: self.persistentManager, logger: self.logger).allContacts()
             phoneContacts?.forEach { phoneContact in
-                if let findedContactCache = cachePhoneContacts.first(where: { $0.cellphoneNumber == phoneContact.cellphoneNumber }) {
-                    if PhoneContact.isContactChanged(findedContactCache, phoneContactModel: phoneContact) {
-                        contactsToSync.append(phoneContact.convertToAddRequest())
+                if let findedContactCache = cachedContacts.first(where: { $0.cellphoneNumber == phoneContact.cellphoneNumber }) {
+                    if findedContactCache.isContactChanged(contact: phoneContact) {
+                        contactsToSync.append(phoneContact.request)
                     }
                 } else {
-                    contactsToSync.append(phoneContact.convertToAddRequest())
+                    contactsToSync.append(phoneContact.request)
                 }
             }
             var uniqueIds: [String] = []
@@ -36,10 +37,11 @@ extension Chat {
             }
             if contactsToSync.count <= 0 { return }
 
-            self?.addContacts(contactsToSync) { [weak self] (response: ChatResponse<[Contact]>) in
+            self.addContacts(contactsToSync) { [weak self] (response: ChatResponse<[Contact]>) in
                 completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error))
-                PhoneContact.updateOrInsertPhoneBooks(contacts: contactsToSync)
-                self?.cache?.save()
+                if let self = self {
+                    CacheContactManager(pm: self.persistentManager, logger: self.logger).insert(models: response.result ?? [])
+                }
             }
             uniqueIdsResult?(uniqueIds)
         }, errorResult: { [weak self] error in
@@ -47,8 +49,8 @@ extension Chat {
         })
     }
 
-    func getContactsFromAuthorizedStore(_ store: CNContactStore) -> [PhoneContactModel] {
-        var phoneContacts: [PhoneContactModel] = []
+    func getContactsFromAuthorizedStore(_ store: CNContactStore) -> [Contact] {
+        var phoneContacts: [Contact] = []
         let keys = [CNContactGivenNameKey,
                     CNContactFamilyNameKey,
                     CNContactPhoneNumbersKey,
@@ -56,12 +58,12 @@ extension Chat {
         let request = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
 
         try? store.enumerateContacts(with: request, usingBlock: { contact, _ in
-            var phoneContactModel = PhoneContactModel()
-            phoneContactModel.cellphoneNumber = contact.phoneNumbers.first?.value.stringValue ?? ""
-            phoneContactModel.firstName = contact.givenName
-            phoneContactModel.lastName = contact.familyName
-            phoneContactModel.email = contact.emailAddresses.first?.value as String?
-            phoneContacts.append(phoneContactModel)
+            let contactModel = Contact()
+            contactModel.cellphoneNumber = contact.phoneNumbers.first?.value.stringValue ?? ""
+            contactModel.firstName = contact.givenName
+            contactModel.lastName = contact.familyName
+            contactModel.email = contact.emailAddresses.first?.value as String?
+            phoneContacts.append(contactModel)
         })
         return phoneContacts
     }
@@ -84,8 +86,6 @@ extension Chat {
 extension Chat {
     func onSyncContacts(_ asyncMessage: AsyncMessage) {
         guard let chatMessage = asyncMessage.chatMessage else { return }
-        cache?.write(cacheType: .syncedContacts)
-        cache?.save()
         callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .contactSynced)
     }
 }

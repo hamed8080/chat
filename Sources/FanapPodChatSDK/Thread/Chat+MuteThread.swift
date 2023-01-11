@@ -33,14 +33,13 @@ public extension Chat {
 // Response
 extension Chat {
     func onMuteUnMuteThread(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<Int> = asyncMessage.toChatResponse(context: persistentManager.context)
+        let response: ChatResponse<Int> = asyncMessage.toChatResponse()
         if asyncMessage.chatMessage?.type == .muteThread {
             delegate?.chatEvent(event: .thread(.threadMute(response)))
         } else if asyncMessage.chatMessage?.type == .unmuteThread {
             delegate?.chatEvent(event: .thread(.threadUnmute(response)))
         }
-        cache?.write(cacheType: .muteUnmuteThread(response.subjectId ?? 0))
-        cache?.save()
+        CacheConversationManager(pm: persistentManager, logger: logger).mute(asyncMessage.chatMessage?.type == .muteThread, response.subjectId)
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }
