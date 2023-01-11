@@ -1,5 +1,5 @@
 //
-// ErrorResponseHandler.swift
+// Chat+Error.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
 // Created by Hamed Hosseini on 12/14/22

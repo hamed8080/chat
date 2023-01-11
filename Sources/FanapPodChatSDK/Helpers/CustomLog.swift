@@ -51,7 +51,7 @@ public class Logger {
         }
     }
 
-    func log(title: String? = nil, jsonString: String? = nil, receive: Bool = true, persistOnServer: Bool = false) {
+    func log(title: String? = nil, jsonString: String? = nil, receive _: Bool = true, persistOnServer: Bool = false) {
         if config.isDebuggingLogEnabled {
             if let title = title {
                 print(sdkName + title)
@@ -65,7 +65,6 @@ public class Logger {
             }
             print("\n")
         }
-        sendNotificationLogIfEnabled(title: title, jsonString: jsonString?.preetyJsonString(), receive: receive)
     }
 
     func log(title: String? = nil, message: String? = nil, persistOnServer: Bool = false) {
@@ -81,14 +80,6 @@ public class Logger {
                 log(message: message)
             }
             print("\n")
-        }
-    }
-
-    func sendNotificationLogIfEnabled(title: String?, jsonString: String?, receive: Bool) {
-        if config.enableNotificationLogObserver, let jsonString = jsonString {
-            let title = "\(sdkName)\(title ?? "")\n"
-            let jsonWithTitle = title + jsonString
-            NotificationCenter.default.post(name: Notification.Name("log"), object: LogResult(json: jsonWithTitle, receive: receive))
         }
     }
 

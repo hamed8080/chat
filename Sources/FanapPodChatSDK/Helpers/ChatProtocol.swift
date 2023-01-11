@@ -1,5 +1,5 @@
 //
-// Chat+.swift
+// ChatProtocol.swift
 // Copyright (c) 2022 FanapPodChatSDK
 //
 // Created by Hamed Hosseini on 12/14/22

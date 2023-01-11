@@ -32,7 +32,6 @@ public struct ChatConfig: Codable {
     public private(set) var deviecLimitationSpaceMB: Int64 = 100
     public private(set) var getDeviceIdFromToken: Bool = false
     public private(set) var isDebuggingLogEnabled: Bool = false
-    public private(set) var enableNotificationLogObserver: Bool = false
     public private(set) var appGroup: String?
     public private(set) var sendLogInterval: TimeInterval = 60
 
@@ -60,7 +59,6 @@ public struct ChatConfig: Codable {
         deviecLimitationSpaceMB: Int64 = 100,
         getDeviceIdFromToken: Bool = false,
         isDebuggingLogEnabled: Bool = false,
-        enableNotificationLogObserver: Bool = false,
         appGroup: String? = nil,
         sendLogInterval: TimeInterval = 60
     ) {
@@ -85,7 +83,6 @@ public struct ChatConfig: Codable {
         self.deviecLimitationSpaceMB = deviecLimitationSpaceMB
         self.getDeviceIdFromToken = getDeviceIdFromToken
         self.isDebuggingLogEnabled = isDebuggingLogEnabled
-        self.enableNotificationLogObserver = enableNotificationLogObserver
         self.appGroup = appGroup
         self.sendLogInterval = sendLogInterval
     }
@@ -118,7 +115,6 @@ public class ChatConfigBuilder {
     private(set) var deviecLimitationSpaceMB: Int64 = 100
     private(set) var getDeviceIdFromToken: Bool = false
     private(set) var isDebuggingLogEnabled: Bool = false
-    private(set) var enableNotificationLogObserver: Bool = false
     private(set) var appGroup: String?
     private(set) var sendLogInterval: TimeInterval = 60
 
@@ -231,11 +227,6 @@ public class ChatConfigBuilder {
         return self
     }
 
-    @discardableResult public func enableNotificationLogObserver(_ enableNotificationLogObserver: Bool) -> ChatConfigBuilder {
-        self.enableNotificationLogObserver = enableNotificationLogObserver
-        return self
-    }
-
     @discardableResult public func appGroup(_ appGroup: String) -> ChatConfigBuilder {
         self.appGroup = appGroup
         return self
@@ -270,7 +261,6 @@ public class ChatConfigBuilder {
             deviecLimitationSpaceMB: deviecLimitationSpaceMB,
             getDeviceIdFromToken: getDeviceIdFromToken,
             isDebuggingLogEnabled: isDebuggingLogEnabled,
-            enableNotificationLogObserver: enableNotificationLogObserver,
             appGroup: appGroup,
             sendLogInterval: sendLogInterval
         )
