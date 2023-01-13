@@ -13,7 +13,7 @@ class CacheQueueOfForwardMessagesManager: CoreDataProtocol {
     let pm: PersistentManager
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDLog.entity().name ?? ""
+    let entityName = CDQueueOfForwardMessages.entity().name ?? ""
 
     required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
         self.context = context ?? pm.context

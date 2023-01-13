@@ -40,7 +40,7 @@ public extension Chat {
         if config.enableCache {
             let response = CacheMessageManager(pm: persistentManager, logger: logger).fetch(request)
             let pagination = Pagination(hasNext: response.totalCount >= request.count, count: request.count, offset: request.offset)
-            cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: response.messages.map { $0.codable(fillSelfRelation: false) }, error: nil, contentCount: response.totalCount, pagination: pagination))
+            cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: response.messages.map { $0.codable() }, error: nil, contentCount: response.totalCount, pagination: pagination))
 
             let cmText = CacheQueueOfTextMessagesManager(pm: persistentManager, logger: logger)
             let resText = cmText.unsedForThread(request.threadId, request.count, request.offset)

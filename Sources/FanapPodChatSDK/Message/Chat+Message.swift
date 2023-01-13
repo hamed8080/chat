@@ -120,7 +120,7 @@ public extension Chat {
         if config.enableCache {
             let res = CacheMessageManager(pm: persistentManager, logger: logger).getMentions(request)
             let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: res.totalCount)
-            cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: res.objects.map { $0.codable(fillSelfRelation: false) }, error: nil, pagination: pagination))
+            cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: res.objects.map { $0.codable() }, error: nil, pagination: pagination))
         }
     }
 

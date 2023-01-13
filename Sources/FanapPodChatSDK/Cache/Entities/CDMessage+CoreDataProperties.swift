@@ -42,7 +42,7 @@ public extension CDMessage {
 }
 
 public extension CDMessage {
-    func update(_ message: Message, conversation: CDConversation? = nil) {
+    func update(_ message: Message) {
         deletable = message.deletable as? NSNumber
         delivered = message.delivered as? NSNumber
         editable = message.editable as? NSNumber
@@ -62,30 +62,6 @@ public extension CDMessage {
         uniqueId = message.uniqueId
         pinTime = message.pinTime as? NSNumber
         notifyAll = message.pinNotifyAll as? NSNumber
-
-        guard let context = managedObjectContext else { print("context is nil"); return }
-        if let conversation = conversation {
-            self.conversation = conversation
-        }
-//        if let conversation = message.conversation {
-//            let entity = CDConversation(context: context)
-//            entity.update(conversation)
-//        }
-
-        if let forwardInfo = message.forwardInfo {
-            let entity = CDForwardInfo(context: context)
-            entity.update(forwardInfo)
-        }
-
-        if let participant = message.participant {
-            let entity = CDParticipant(context: context)
-            entity.update(participant)
-        }
-
-        if let replyInfo = message.replyInfo {
-            let entity = CDReplyInfo(context: context)
-            entity.update(replyInfo)
-        }
     }
 
     func codable(fillSelfRelation: Bool = true) -> Message {
@@ -108,9 +84,9 @@ public extension CDMessage {
                 timeNanos: time?.uintValue,
                 uniqueId: uniqueId,
                 conversation: fillSelfRelation ? conversation?.codable : nil,
-                forwardInfo: fillSelfRelation ? forwardInfo?.codable : nil,
-                participant: fillSelfRelation ? participant?.codable : nil,
-                replyInfo: fillSelfRelation ? replyInfo?.codable : nil,
+                forwardInfo: forwardInfo?.codable,
+                participant: participant?.codable,
+                replyInfo: replyInfo?.codable,
                 pinTime: pinTime?.uintValue,
                 notifyAll: notifyAll?.boolValue)
     }

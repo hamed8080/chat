@@ -66,4 +66,36 @@ class CacheForwardInfoManager: CoreDataProtocol {
     }
 
     func delete(entity _: CDForwardInfo) {}
+
+    func first(_ messageId: Int?, _ threadId: Int?, _: Int?) -> CDForwardInfo? {
+        let predicate = NSPredicate(format: "message.id == %i AND conversation.id == %i AND participant.id", messageId ?? -1, threadId ?? -1, threadId ?? -1)
+        let req = CDForwardInfo.fetchRequest()
+        req.predicate = predicate
+        req.fetchLimit = 1
+        return try? context.fetch(req).first
+    }
+
+    func insert(_ forwardInfo: ForwardInfo, _ message: CDMessage) {
+        let entity = CDForwardInfo(context: context)
+        entity.message = message
+        if let conversation = forwardInfo.conversation {
+            let cmThread = CacheConversationManager(context: context, pm: pm, logger: logger)
+            if let threadEntity = cmThread.first(with: conversation.id ?? -1) {
+                entity.conversation = threadEntity
+            } else {
+                entity.conversation = CDConversation(context: context)
+                entity.conversation?.update(conversation)
+            }
+        }
+
+        if let participant = forwardInfo.participant {
+            let cmThread = CacheParticipantManager(context: context, pm: pm, logger: logger)
+            if let participantEntity = cmThread.first(with: participant.id ?? -1) {
+                entity.participant = participantEntity
+            } else {
+                entity.participant = CDParticipant(context: context)
+                entity.participant?.update(participant)
+            }
+        }
+    }
 }

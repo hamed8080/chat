@@ -13,7 +13,7 @@ class CacheReplyInfoManager: CoreDataProtocol {
     let pm: PersistentManager
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDLog.entity().name ?? ""
+    let entityName = CDReplyInfo.entity().name ?? ""
 
     required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
         self.context = context ?? pm.context
@@ -66,4 +66,12 @@ class CacheReplyInfoManager: CoreDataProtocol {
     }
 
     func delete(entity _: CDReplyInfo) {}
+
+    func first(_ participantId: Int?, _ repliedToMessageId: Int?) -> CDReplyInfo? {
+        let predicate = NSPredicate(format: "participant.id == %i AND repliedToMessageId == %i", participantId ?? -1, repliedToMessageId ?? -1)
+        let req = CDReplyInfo.fetchRequest()
+        req.predicate = predicate
+        req.fetchLimit = 1
+        return try? context.fetch(req).first
+    }
 }

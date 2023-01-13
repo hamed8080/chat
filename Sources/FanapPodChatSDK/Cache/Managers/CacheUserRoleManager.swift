@@ -13,7 +13,7 @@ class CacheUserRoleManager: CoreDataProtocol {
     let pm: PersistentManager
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDUser.entity().name ?? ""
+    let entityName = CDUserRole.entity().name ?? ""
 
     required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
         self.context = context ?? pm.context
