@@ -37,27 +37,21 @@ public extension Chat {
             }
         }
 
-        if config.enableCache {
-            let response = CacheMessageManager(pm: persistentManager, logger: logger).fetch(request)
-            let pagination = Pagination(hasNext: response.totalCount >= request.count, count: request.count, offset: request.offset)
-            cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: response.messages.map { $0.codable() }, error: nil, contentCount: response.totalCount, pagination: pagination))
+        let response = cache?.message?.fetch(request)
+        let pagination = Pagination(hasNext: response?.totalCount ?? 0 >= request.count, count: request.count, offset: request.offset)
+        cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: response?.messages.map { $0.codable() }, error: nil, contentCount: response?.totalCount, pagination: pagination))
 
-            let cmText = CacheQueueOfTextMessagesManager(pm: persistentManager, logger: logger)
-            let resText = cmText.unsedForThread(request.threadId, request.count, request.offset)
-            textMessageNotSentRequests?(ChatResponse(uniqueId: request.uniqueId, result: resText.objects.map(\.codable.request), error: nil))
+        let resText = cache?.textQueue?.unsedForThread(request.threadId, request.count, request.offset)
+        textMessageNotSentRequests?(ChatResponse(uniqueId: request.uniqueId, result: resText?.objects.map(\.codable.request), error: nil))
 
-            let cmEdit = CacheQueueOfEditMessagesManager(pm: persistentManager, logger: logger)
-            let resEdit = cmEdit.unsedForThread(request.threadId, request.count, request.offset)
-            editMessageNotSentRequests?(ChatResponse(uniqueId: request.uniqueId, result: resEdit.objects.map(\.codable.request), error: nil))
+        let resEdit = cache?.editQueue?.unsedForThread(request.threadId, request.count, request.offset)
+        editMessageNotSentRequests?(ChatResponse(uniqueId: request.uniqueId, result: resEdit?.objects.map(\.codable.request), error: nil))
 
-            let cmForward = CacheQueueOfForwardMessagesManager(pm: persistentManager, logger: logger)
-            let resForward = cmForward.unsedForThread(request.threadId, request.count, request.offset)
-            forwardMessageNotSentRequests?(ChatResponse(uniqueId: request.uniqueId, result: resForward.objects.map(\.codable.request), error: nil))
+        let resForward = cache?.forwardQueue?.unsedForThread(request.threadId, request.count, request.offset)
+        forwardMessageNotSentRequests?(ChatResponse(uniqueId: request.uniqueId, result: resForward?.objects.map(\.codable.request), error: nil))
 
-            let cmFile = CacheQueueOfFileMessagesManager(pm: persistentManager, logger: logger)
-            let resFile = cmFile.unsedForThread(request.threadId, request.count, request.offset)
-            fileMessageNotSentRequests?(ChatResponse(uniqueId: request.uniqueId, result: resFile.objects.map(\.codable.request), error: nil))
-        }
+        let resFile = cache?.fileQueue?.unsedForThread(request.threadId, request.count, request.offset)
+        fileMessageNotSentRequests?(ChatResponse(uniqueId: request.uniqueId, result: resFile?.objects.map(\.codable.request), error: nil))
     }
 
     /// Get list of messages with hashtags.
@@ -75,7 +69,7 @@ public extension Chat {
     }
 
     internal func saveMessagesToCache(_ messages: [Message]?, _: CompletionType<[Message]>?) {
-        CacheMessageManager(pm: persistentManager, logger: logger).insert(models: messages ?? [])
+        cache?.message?.insert(models: messages ?? [])
         let uniqueIds = messages?.compactMap(\.uniqueId) ?? []
         deleteQueues(uniqueIds: uniqueIds)
     }

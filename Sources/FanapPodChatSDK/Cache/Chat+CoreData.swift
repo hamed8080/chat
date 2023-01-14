@@ -39,13 +39,14 @@ public extension Chat {
             var objectIds: [NSManagedObjectID] = []
             self?.entities.forEach { entity in
                 let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: entity.name ?? "")
-                fetchRequest.resultType = .managedObjectIDResultType
-                if let result = try? bgTask.execute(fetchRequest) as? NSBatchDeleteResult, let ids = result.result as? [NSManagedObjectID] {
+                let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+                deleteRequest.resultType = .resultTypeObjectIDs
+                if let result = try? bgTask.execute(deleteRequest) as? NSBatchDeleteResult, let ids = result.result as? [NSManagedObjectID] {
                     objectIds.append(contentsOf: ids)
                 }
+                try? bgTask.save()
+                self?.mergeChanges(key: NSDeletedObjectsKey, objectIds)
             }
-            try? bgTask.save()
-            self?.mergeChanges(key: NSDeletedObjectsKey, objectIds)
         }
     }
 
@@ -57,9 +58,9 @@ public extension Chat {
     }
 
     func deleteQueues(uniqueIds: [String]) {
-        CacheQueueOfEditMessagesManager(pm: persistentManager, logger: logger).delete(uniqueIds)
-        CacheQueueOfFileMessagesManager(pm: persistentManager, logger: logger).delete(uniqueIds)
-        CacheQueueOfTextMessagesManager(pm: persistentManager, logger: logger).delete(uniqueIds)
-        CacheQueueOfForwardMessagesManager(pm: persistentManager, logger: logger).delete(uniqueIds)
+        cache?.editQueue?.delete(uniqueIds)
+        cache?.fileQueue?.delete(uniqueIds)
+        cache?.textQueue?.delete(uniqueIds)
+        cache?.forwardQueue?.delete(uniqueIds)
     }
 }

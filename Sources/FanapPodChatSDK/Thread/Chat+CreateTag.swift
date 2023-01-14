@@ -24,7 +24,7 @@ extension Chat {
     func onCreateTag(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Tag> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .tag(.createTag(response)))
-        CacheTagManager(pm: persistentManager, logger: logger).insert(models: [response.result].compactMap { $0 })
+        cache?.tag?.insert(models: [response.result].compactMap { $0 })
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

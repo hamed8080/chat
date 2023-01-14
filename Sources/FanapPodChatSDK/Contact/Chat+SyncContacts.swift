@@ -21,9 +21,9 @@ extension Chat {
         authorizeContactAccess(grant: { [weak self] store in
             let phoneContacts = self?.getContactsFromAuthorizedStore(store)
             guard let self = self else { return }
-            let cachedContacts = CacheContactManager(pm: self.persistentManager, logger: self.logger).allContacts()
+            let cachedContacts = self.cache?.contact?.allContacts()
             phoneContacts?.forEach { phoneContact in
-                if let findedContactCache = cachedContacts.first(where: { $0.cellphoneNumber == phoneContact.cellphoneNumber }) {
+                if let findedContactCache = cachedContacts?.first(where: { $0.cellphoneNumber == phoneContact.cellphoneNumber }) {
                     if findedContactCache.isContactChanged(contact: phoneContact) {
                         contactsToSync.append(phoneContact.request)
                     }
@@ -39,9 +39,7 @@ extension Chat {
 
             self.addContacts(contactsToSync) { [weak self] (response: ChatResponse<[Contact]>) in
                 completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error))
-                if let self = self {
-                    CacheContactManager(pm: self.persistentManager, logger: self.logger).insert(models: response.result ?? [])
-                }
+                self?.cache?.contact?.insert(models: response.result ?? [])
             }
             uniqueIdsResult?(uniqueIds)
         }, errorResult: { [weak self] error in

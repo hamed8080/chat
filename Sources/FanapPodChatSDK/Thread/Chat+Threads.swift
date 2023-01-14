@@ -22,12 +22,10 @@ public extension Chat {
             completion(ChatResponse(uniqueId: response.uniqueId, result: threads, error: response.error, pagination: pagination))
         }
 
-        if config.enableCache {
-            let response = CacheConversationManager(pm: persistentManager, logger: logger).fetch(request)
-            let threads = response.threads.map(\.codable)
-            let pagination = Pagination(hasNext: response.count >= request.count, count: request.count, offset: request.offset)
-            cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: threads, error: nil, pagination: pagination))
-        }
+        let response = cache?.conversation?.fetch(request)
+        let threads = response?.threads.map(\.codable)
+        let pagination = Pagination(hasNext: response?.count ?? 0 >= request.count, count: request.count, offset: request.offset)
+        cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: threads, error: nil, pagination: pagination))
     }
 
     /// Getting the all threads.
@@ -38,10 +36,8 @@ public extension Chat {
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func getAllThreads(request: AllThreads, completion: @escaping CompletionType<[Int]>, cacheResponse: CacheResponseType<[Int]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
-        if config.enableCache {
-            let ids = CacheConversationManager(pm: persistentManager, logger: logger).fetchIds()
-            cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: ids, error: nil))
-        }
+        let ids = cache?.conversation?.fetchIds()
+        cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: ids, error: nil))
     }
 }
 
@@ -50,7 +46,7 @@ extension Chat {
     func onThreads(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Conversation]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.threadsListChange(response)))
-        CacheConversationManager(pm: persistentManager, logger: logger).insert(models: response.result ?? [])
+        cache?.conversation?.insert(models: response.result ?? [])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

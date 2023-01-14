@@ -27,7 +27,7 @@ extension Chat {
     func onCloseThread(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Int> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.threadClosed(response)))
-        CacheConversationManager(pm: persistentManager, logger: logger).close(true, response.result ?? -1)
+        cache?.conversation?.close(true, response.result ?? -1)
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

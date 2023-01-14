@@ -26,8 +26,8 @@ public extension Chat {
                            onSent: onSent,
                            onDelivered: onDeliver,
                            onSeen: onSeen)
-        CacheConversationManager(pm: persistentManager, logger: logger).updateLastMessage(request.threadId, request.textMessage)
-        CacheQueueOfTextMessagesManager(pm: persistentManager, logger: logger).insert(request)
+        cache?.conversation?.updateLastMessage(request.threadId, request.textMessage)
+        cache?.textQueue?.insert(request)
     }
 
     /// Reply to a message.
@@ -117,11 +117,9 @@ public extension Chat {
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
 
-        if config.enableCache {
-            let res = CacheMessageManager(pm: persistentManager, logger: logger).getMentions(request)
-            let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: res.totalCount)
-            cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: res.objects.map { $0.codable() }, error: nil, pagination: pagination))
-        }
+        let res = cache?.message?.getMentions(request)
+        let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: res?.totalCount)
+        cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: res?.objects.map { $0.codable() }, error: nil, pagination: pagination))
     }
 
     /// Tell the sender of a message that the message is delivered successfully.
@@ -140,7 +138,9 @@ public extension Chat {
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func seen(_ request: MessageSeenRequest, uniqueIdResult: UniqueIdResultType? = nil) {
         prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult)
-        CacheMessageManager(pm: persistentManager, logger: logger).seen(request)
+        cache?.message?.seen(request)
+        let unreadCount = cache?.conversation?.decreamentUnreadCount(request.threadId)
+        delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: .init(unreadCount: unreadCount, threadId: request.threadId)))))
     }
 }
 
@@ -151,17 +151,15 @@ extension Chat {
         delegate?.chatEvent(event: .message(.messageNew(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         guard let message = response.result else { return }
-        let unreadCount = UnreadCount(unreadCount: message.conversation?.unreadCount ?? 0, threadId: response.subjectId)
-        delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: unreadCount))))
         if message.threadId == nil {
             message.threadId = response.subjectId ?? message.conversation?.id
         }
-        let manager = CacheMessageManager(pm: persistentManager, logger: logger)
-        manager.insert(models: [message])
-        let conversationManager = CacheConversationManager(pm: persistentManager, logger: logger)
-        conversationManager.increamentUnreadCount(response.subjectId ?? -1)
+        cache?.message?.insert(models: [message])
         // Check that we are not the sender of the message and message come from another person.
         if let messageId = message.id, message.participant?.id != userInfo?.id {
+            let currentUnreadCount = cache?.conversation?.increamentUnreadCount(response.subjectId ?? -1)
+            let unreadCount = UnreadCount(unreadCount: currentUnreadCount, threadId: response.subjectId)
+            delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: unreadCount))))
             deliver(.init(messageId: messageId))
         }
     }
@@ -177,7 +175,7 @@ extension Chat {
         let response = asyncMessage.messageResponse(state: .delivered)
         delegate?.chatEvent(event: .message(.messageDelivery(response)))
         if let delivered = response.result {
-            CacheMessageManager(pm: persistentManager, logger: logger).partnerDeliver(delivered)
+            cache?.message?.partnerDeliver(delivered)
         }
         deleteQueues(uniqueIds: [response.uniqueId ?? ""])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
@@ -187,7 +185,7 @@ extension Chat {
         let response = asyncMessage.messageResponse(state: .seen)
         if let seenResponse = response.result {
             delegate?.chatEvent(event: .message(.messageSeen(response)))
-            CacheMessageManager(pm: persistentManager, logger: logger).partnerSeen(seenResponse)
+            cache?.message?.partnerSeen(seenResponse)
             callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
         }
     }
@@ -197,7 +195,7 @@ extension Chat {
         delegate?.chatEvent(event: .thread(.lastMessageEdited(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         if let thread = response.result {
-            CacheConversationManager(pm: persistentManager, logger: logger).updateLastMessage(thread)
+            cache?.conversation?.updateLastMessage(thread)
         }
     }
 
@@ -205,8 +203,8 @@ extension Chat {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.lastMessageDeleted(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
-        if let threadId = response.result?.id, let lastMessage = response.result?.lastMessageVO {
-            CacheMessageManager(pm: persistentManager, logger: logger).delete(threadId, lastMessage.id ?? -1)
+        if let thread = response.result {
+            cache?.conversation?.updateLastMessage(thread)
         }
     }
 }

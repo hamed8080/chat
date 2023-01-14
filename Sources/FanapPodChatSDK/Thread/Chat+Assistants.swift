@@ -21,12 +21,9 @@ public extension Chat {
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
 
-        if config.enableCache {
-            let mg = CacheAssistantManager(pm: persistentManager, logger: logger)
-            let response: (objects: [CDAssistant], totalCount: Int) = mg.fetchWithOffset(count: request.count, offset: request.offset)
-            let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: response.totalCount)
-            cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: response.objects.map(\.codable), error: nil, pagination: pagination))
-        }
+        let response: (objects: [CDAssistant], totalCount: Int) = cache?.assistant?.fetchWithOffset(count: request.count, offset: request.offset) ?? ([], 0)
+        let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: response.totalCount)
+        cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: response.objects.map(\.codable), error: nil, pagination: pagination))
     }
 }
 
@@ -35,7 +32,7 @@ extension Chat {
     func onAssistants(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .assistant(.assistants(response)))
-        CacheAssistantManager(pm: persistentManager, logger: logger).insert(models: response.result ?? [])
+        cache?.assistant?.insert(models: response.result ?? [])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

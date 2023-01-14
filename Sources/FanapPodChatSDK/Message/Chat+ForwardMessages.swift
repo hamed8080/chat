@@ -20,6 +20,6 @@ public extension Chat {
         request.uniqueIds.forEach { uniqueId in
             callbacksManager.addCallback(uniqueId: uniqueId, requesType: .forwardMessage, callback: nil as CompletionType<Voidcodable>?, onSent: onSent, onDelivered: onDeliver, onSeen: onSeen)
         }
-        CacheQueueOfForwardMessagesManager(pm: persistentManager, logger: logger).insert(request)
+        cache?.forwardQueue?.insert(request)
     }
 }

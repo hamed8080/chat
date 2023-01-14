@@ -108,11 +108,20 @@ class CacheConversationManager: CoreDataProtocol {
         update(propertiesToUpdate, predicate)
     }
 
-    func increamentUnreadCount(_ threadId: Int) {
-        if let entity = first(with: threadId) {
-            entity.unreadCount = NSNumber(integerLiteral: (entity.unreadCount?.intValue ?? 0) + 1)
-        }
+    @discardableResult
+    func increamentUnreadCount(_ threadId: Int) -> Int? {
+        guard let entity = first(with: threadId) else { return nil }
+        entity.unreadCount = NSNumber(integerLiteral: (entity.unreadCount?.intValue ?? 0) + 1)
         save()
+        return entity.unreadCount?.intValue ?? 0
+    }
+
+    @discardableResult
+    func decreamentUnreadCount(_ threadId: Int) -> Int? {
+        guard let entity = first(with: threadId) else { return nil }
+        entity.unreadCount = entity.unreadCount?.intValue ?? 0 > 0 ? NSNumber(integerLiteral: (entity.unreadCount?.intValue ?? 0) - 1) : 0
+        save()
+        return entity.unreadCount?.intValue ?? 0
     }
 
     func fetch(_ req: ThreadsRequest) -> (threads: [CDConversation], count: Int) {

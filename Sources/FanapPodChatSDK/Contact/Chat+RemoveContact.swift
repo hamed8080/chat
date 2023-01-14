@@ -36,7 +36,7 @@ extension Chat {
 
     func removeFromCacheIfExist(removeContactResponse: RemoveContactResponse?, contactId: Int) {
         if removeContactResponse?.deteled == true {
-            CacheContactManager(pm: persistentManager, logger: logger).delete(contactId)
+            cache?.contact?.delete(contactId)
         }
     }
 }

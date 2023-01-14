@@ -21,12 +21,9 @@ public extension Chat {
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
 
-        if config.enableCache {
-            let cm = CacheParticipantManager(pm: persistentManager, logger: logger)
-            let response = cm.getParticipantsForThread(request.threadId, request.count, request.offset)
-            let pagination = Pagination(hasNext: response.totalCount >= request.count, count: request.count, offset: request.offset)
-            cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: response.objects.map(\.codable), error: nil, pagination: pagination))
-        }
+        let response = cache?.participant?.getParticipantsForThread(request.threadId, request.count, request.offset)
+        let pagination = Pagination(hasNext: response?.totalCount ?? 0 >= request.count, count: request.count, offset: request.offset)
+        cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: response?.objects.map(\.codable), error: nil, pagination: pagination))
     }
 
     /// Get thread participants.
@@ -48,7 +45,7 @@ extension Chat {
     func onThreadParticipants(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Participant]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.threadParticipantsListChange(response)))
-        CacheParticipantManager(pm: persistentManager, logger: logger).insert(models: response.result ?? [])
+        cache?.participant?.insert(models: response.result ?? [])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

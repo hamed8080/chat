@@ -40,8 +40,8 @@ extension Chat {
     }
 
     func saveThreadImageToCashe(req: UpdateThreadInfoRequest) {
-        if let imageRequest = req.threadImage, config.enableCache == true {
-            CacheQueueOfFileMessagesManager(pm: persistentManager, logger: logger).insert(imageRequest: imageRequest)
+        if let imageRequest = req.threadImage {
+            cache?.fileQueue?.insert(imageRequest: imageRequest)
         }
     }
 }
@@ -51,7 +51,7 @@ extension Chat {
     func onUpdateThreadInfo(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.threadInfoUpdated(response)))
-        CacheConversationManager(pm: persistentManager, logger: logger).insert(models: [response.result].compactMap { $0 })
+        cache?.conversation?.insert(models: [response.result].compactMap { $0 })
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

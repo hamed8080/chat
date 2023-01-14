@@ -127,7 +127,7 @@ class CacheMessageManager: CoreDataProtocol {
     func predicate(_ threadId: Int?, _ messageId: Int?) -> NSPredicate {
         let threadId = threadId ?? -1
         let messageId = messageId ?? -1
-        return NSPredicate(format: "threadId == %i AND id == %i", threadId, threadId, messageId)
+        return NSPredicate(format: "threadId == %i AND id == %i", threadId, messageId)
     }
 
     func partnerDeliver(_ response: MessageResponse) {

@@ -21,12 +21,9 @@ public extension Chat {
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
 
-        if config.enableCache {
-            let cm = CacheAssistantManager(pm: persistentManager, logger: logger)
-            let response = cm.getBlocked(request.count, request.offset)
-            let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: response.totalCount)
-            cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: response.objects.map(\.codable), error: nil, pagination: pagination))
-        }
+        let response = cache?.assistant?.getBlocked(request.count, request.offset)
+        let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: response?.totalCount)
+        cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: response?.objects.map(\.codable), error: nil, pagination: pagination))
     }
 }
 
@@ -34,7 +31,7 @@ public extension Chat {
 extension Chat {
     func onGetBlockedAssistants(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse()
-        CacheAssistantManager(pm: persistentManager, logger: logger).insert(models: response.result ?? [])
+        cache?.assistant?.insert(models: response.result ?? [])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

@@ -24,7 +24,7 @@ extension Chat {
     func onRegisterAssistants(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .assistant(.registerAssistant(response)))
-        CacheAssistantManager(pm: persistentManager, logger: logger).insert(models: response.result ?? [])
+        cache?.assistant?.insert(models: response.result ?? [])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

@@ -40,9 +40,8 @@ extension Chat {
                 }
         }
 
-        if config.enableCache, let filePath = cacheFileManager?.filePath(url: URL(string: url)!), cacheResponse != nil {
-            let cm = CacheCoreDataFileManager(pm: persistentManager, logger: logger)
-            let file = cm.first(with: request.hashCode)
+        if let filePath = cacheFileManager?.filePath(url: URL(string: url)!), cacheResponse != nil {
+            let file = cache?.file?.first(with: request.hashCode)
             cacheResponse?(nil, filePath, file?.codable, nil)
         }
     }
@@ -74,7 +73,7 @@ extension Chat {
             let size = Int((headers["Content-Length"] as? String) ?? "0")
             let fileNameWithExtension = "\(name ?? "default").\(type ?? "none")"
             let file = File(hashCode: req.hashCode, name: fileNameWithExtension, size: size, type: type)
-            CacheCoreDataFileManager(pm: persistentManager, logger: logger).insert(models: [file])
+            cache?.file?.insert(models: [file])
             let filePath = cacheFileManager?.saveFile(url: URL(string: url)!, data: data ?? Data())
             completion?(data, filePath, file, nil)
             let response: ChatResponse<Data?> = .init(uniqueId: req.uniqueId, result: data)
