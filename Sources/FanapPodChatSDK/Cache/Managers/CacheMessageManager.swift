@@ -202,4 +202,9 @@ class CacheMessageManager: CoreDataProtocol {
         let res: (objects: [CDMessage], totalCount: Int) = fetchWithOffset(count: req.count, offset: req.offset, predicate: predicate)
         return res
     }
+
+    func clearHistory(threadId: Int?) {
+        let predicate = NSPredicate(format: "threadId == %i", threadId ?? -1)
+        batchDelete(entityName: entityName, predicate: predicate)
+    }
 }
