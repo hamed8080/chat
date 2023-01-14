@@ -24,10 +24,7 @@ extension Chat {
     func onEditTag(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Tag> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .tag(.editTag(response)))
-        if let tag = response.result {
-            cache.write(cacheType: .tags([tag]))
-            cache.save()
-        }
+        cache?.tag?.insert(models: [response.result].compactMap { $0 })
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

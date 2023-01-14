@@ -22,9 +22,7 @@ extension Chat {
         let url = config.fileServer + imagePath.rawValue.replacingOccurrences(of: "{userGroupHash}", with: request.userGroupHash ?? "")
         guard let parameters = try? request.asDictionary() else { return }
         let headers = ["Authorization": "Bearer \(config.token)", "Content-type": "multipart/form-data"]
-        cache.write(cacheType: .deleteQueue(request.uniqueId))
-        cache.save()
-
+        deleteQueues(uniqueIds: [request.uniqueId])
         UploadManager(callbackManager: callbacksManager).upload(url: url,
                                                                 headers: headers,
                                                                 parameters: parameters,
@@ -65,8 +63,7 @@ extension Chat {
                                         actualWidth: req.wC)
             let fileMetaData = FileMetaData(file: fileDetail, fileHash: uploadResponse.result?.hash, hashCode: uploadResponse.result?.hash, name: uploadResponse.result?.name)
             uploadCompletion?(uploadResponse.result, fileMetaData, nil)
-            cache.write(cacheType: .deleteQueue(req.uniqueId))
-            cache.save()
+            deleteQueues(uniqueIds: [req.uniqueId])
             let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId)
             delegate?.chatEvent(event: .file(.uploaded(response)))
         } else if let error = error {

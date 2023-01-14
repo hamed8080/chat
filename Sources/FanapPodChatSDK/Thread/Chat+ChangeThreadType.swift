@@ -24,7 +24,7 @@ extension Chat {
     func onChangeThreadType(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.threadRemovedFrom(.init(uniqueId: response.uniqueId, result: response.result?.id))))
-        cache.write(cacheType: .deleteThreads([response.subjectId ?? 0]))
+        cache?.conversation?.changeThreadType(response.result)
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

@@ -22,10 +22,9 @@ public extension Chat {
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
 
-        cache.get(useCache: cacheResponse != nil, cacheType: .getCashedContacts(request)) { (response: ChatResponse<[Contact]>) in
-            let pagination = PaginationWithContentCount(count: request.size, offset: request.offset, totalCount: CMContact.crud.getTotalCount())
-            cacheResponse?(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
-        }
+        let res = cache?.contact?.getContacts(request)
+        let pagination = PaginationWithContentCount(count: request.size, offset: request.offset, totalCount: res?.totalCount)
+        cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: res?.objects.map(\.codable), pagination: pagination))
     }
 
     /// Search inside contacts.
@@ -46,8 +45,7 @@ extension Chat {
     func onContacts(_ asyncMessage: AsyncMessage) {
         var response: ChatResponse<[Contact]> = asyncMessage.toChatResponse()
         response.contentCount = asyncMessage.chatMessage?.contentCount
-        cache.write(cacheType: .casheContacts(response.result ?? []))
-        cache.save()
+        cache?.contact?.insert(models: response.result ?? [])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

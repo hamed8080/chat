@@ -39,8 +39,7 @@ extension Chat {
         } else if asyncMessage.chatMessage?.type == .unmuteThread {
             delegate?.chatEvent(event: .thread(.threadUnmute(response)))
         }
-        cache.write(cacheType: .muteUnmuteThread(response.subjectId ?? 0))
-        cache.save()
+        cache?.conversation?.mute(asyncMessage.chatMessage?.type == .muteThread, response.subjectId)
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

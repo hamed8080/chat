@@ -21,16 +21,13 @@ public extension Chat {
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
 
             // insert to mutual cache only for this method beacuse we need request and id and idType to be cache
-            if let conversations = response.result {
-                self?.cache.write(cacheType: .mutualGroups(conversations, request))
-                self?.cache.save()
-            }
+            self?.cache?.mutualGroup?.insert(response.result ?? [], request)
         }
 
-        cache.get(useCache: cacheResponse != nil, cacheType: .getMutualGroups(request)) { (response: ChatResponse<[Conversation]>) in
-            let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: CMMutualGroup.crud.getTotalCount())
-            cacheResponse?(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
-        }
+        let mutuals = cache?.mutualGroup?.mutualGroups(request.toBeUserVO.id)
+        let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: mutuals?.count)
+        let threads = mutuals?.first?.conversations?.allObjects.compactMap { $0 as? CDConversation } ?? []
+        cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: threads.map(\.codable), error: nil, pagination: pagination))
     }
 }
 

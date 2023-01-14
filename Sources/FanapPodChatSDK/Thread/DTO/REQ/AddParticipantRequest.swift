@@ -40,13 +40,13 @@ public class AddParticipantRequest: UniqueIdManagerRequest, ChatSendable, Subjec
     }
 
     public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
         if contactIds == nil {
+            var container = encoder.container(keyedBy: CodingKeys.self)
             try? container.encode(id, forKey: .id)
             try? container.encode(idType, forKey: .idType)
         } else if let contactIds = contactIds {
             var container = encoder.unkeyedContainer()
-            try? container.encode(contactIds)
+            try? container.encode(contentsOf: contactIds)
         }
     }
 }

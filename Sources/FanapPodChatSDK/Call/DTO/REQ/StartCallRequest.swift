@@ -26,7 +26,7 @@ public class StartCallRequest: UniqueIdManagerRequest, ChatSendable {
         if isThreadCall {
             return thread?.title ?? groupName
         } else if isContactCall {
-            return contacts?.first?.linkedUser?.username ?? "\(contacts?.first?.firstName ?? "") \(contacts?.first?.lastName ?? "")"
+            return contacts?.first?.user?.username ?? "\(contacts?.first?.firstName ?? "") \(contacts?.first?.lastName ?? "")"
         } else if isGroupCall {
             return groupName
         } else {

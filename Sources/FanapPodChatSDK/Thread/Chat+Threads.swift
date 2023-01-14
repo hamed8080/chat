@@ -13,7 +13,7 @@ public extension Chat {
     /// - Parameters:
     ///   - request: The request of list of threads.
     ///   - completion: Response of list of threads that came with pagination.
-    ///   - cacheResponse: Threads list that came from the cache.
+    ///   - cacheResponse: Threads list that came from the cache?.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func getThreads(_ request: ThreadsRequest, completion: @escaping CompletionType<[Conversation]>, cacheResponse: CacheResponseType<[Conversation]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult) { (response: ChatResponse<[Conversation]>) in
@@ -22,10 +22,10 @@ public extension Chat {
             completion(ChatResponse(uniqueId: response.uniqueId, result: threads, error: response.error, pagination: pagination))
         }
 
-        cache.get(useCache: cacheResponse != nil, cacheType: .getThreads(request)) { (response: ChatResponse<[Conversation]>) in
-            let pagination = Pagination(hasNext: response.result?.count ?? 0 >= request.count, count: request.count, offset: request.offset)
-            cacheResponse?(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
-        }
+        let response = cache?.conversation?.fetch(request)
+        let threads = response?.threads.map(\.codable)
+        let pagination = Pagination(hasNext: response?.count ?? 0 >= request.count, count: request.count, offset: request.offset)
+        cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: threads, error: nil, pagination: pagination))
     }
 
     /// Getting the all threads.
@@ -34,9 +34,10 @@ public extension Chat {
     ///   - completion: Response of list of threads that came with pagination.
     ///   - cacheResponse: Thread cache return data from disk so it contains all data in each model.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    func getAllThreads(request: AllThreads, completion: @escaping CompletionType<[Conversation]>, cacheResponse: CacheResponseType<[Conversation]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
+    func getAllThreads(request: AllThreads, completion: @escaping CompletionType<[Int]>, cacheResponse: CacheResponseType<[Int]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
-        cache.get(useCache: cacheResponse != nil, cacheType: .allThreads, completion: cacheResponse)
+        let ids = cache?.conversation?.fetchIds()
+        cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: ids, error: nil))
     }
 }
 
@@ -45,8 +46,7 @@ extension Chat {
     func onThreads(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Conversation]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.threadsListChange(response)))
-        cache.write(cacheType: .threads(response.result ?? []))
-        cache.save()
+        cache?.conversation?.insert(models: response.result ?? [])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

@@ -26,8 +26,8 @@ public extension Chat {
                            onSent: onSent,
                            onDelivered: onDeliver,
                            onSeen: onSeen)
-        cache.write(cacheType: .sendTxetMessageQueue(request))
-        cache.save()
+        cache?.conversation?.updateLastMessage(request.threadId, request.textMessage)
+        cache?.textQueue?.insert(request)
     }
 
     /// Reply to a message.
@@ -39,26 +39,6 @@ public extension Chat {
     ///   - onDeliver: Is called when a message, have delivered to a participant successfully.
     func replyMessage(_ request: ReplyMessageRequest, uniqueIdresult: UniqueIdResultType? = nil, onSent: OnSentType? = nil, onSeen: OnSeenType? = nil, onDeliver: OnDeliveryType? = nil) {
         sendTextMessage(request, uniqueIdResult: uniqueIdresult, onSent: onSent, onSeen: onSeen, onDeliver: onDeliver)
-    }
-
-    internal func requestForwardMessage(_ req: ForwardMessageRequest,
-                                        _ onSent: OnSentType? = nil,
-                                        _ onSeen: OnSeenType? = nil,
-                                        _ onDeliver: OnDeliveryType? = nil,
-                                        _ uniqueIdsResult: UniqueIdsResultType? = nil)
-    {
-        uniqueIdsResult?(req.uniqueIds) // do not remove this line it use batch uniqueIds
-        prepareToSendAsync(req: req,
-                           completion: nil as CompletionType<Voidcodable>?,
-                           onSent: onSent,
-                           onDelivered: onDeliver,
-                           onSeen: onSeen)
-
-        req.uniqueIds.forEach { uniqueId in
-            callbacksManager.addCallback(uniqueId: uniqueId, requesType: .forwardMessage, callback: nil as CompletionType<Voidcodable>?, onSent: onSent, onDelivered: onDeliver, onSeen: onSeen)
-        }
-        cache.write(cacheType: .forwardMessageQueue(req))
-        cache.save()
     }
 
     /// Send a location.
@@ -137,11 +117,9 @@ public extension Chat {
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
 
-        cache.get(useCache: cacheResponse != nil, cacheType: .mentions) { (response: ChatResponse<[Message]>) in
-            let predicate = NSPredicate(format: "threadId == %i", request.threadId)
-            let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: CMMessage.crud.getTotalCount(predicate: predicate))
-            cacheResponse?(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
-        }
+        let res = cache?.message?.getMentions(request)
+        let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: res?.totalCount)
+        cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: res?.objects.map { $0.codable() }, error: nil, pagination: pagination))
     }
 
     /// Tell the sender of a message that the message is delivered successfully.
@@ -160,8 +138,9 @@ public extension Chat {
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func seen(_ request: MessageSeenRequest, uniqueIdResult: UniqueIdResultType? = nil) {
         prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult)
-        cache.write(cacheType: .lastThreadMessageSeen(request.threadId, request.messageId))
-        cache.save()
+        cache?.message?.seen(request)
+        let unreadCount = cache?.conversation?.decreamentUnreadCount(request.threadId)
+        delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: .init(unreadCount: unreadCount, threadId: request.threadId)))))
     }
 }
 
@@ -172,52 +151,41 @@ extension Chat {
         delegate?.chatEvent(event: .message(.messageNew(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         guard let message = response.result else { return }
-        let unreadCount = UnreadCount(unreadCount: message.conversation?.unreadCount ?? 0, threadId: response.subjectId)
-        delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: unreadCount))))
         if message.threadId == nil {
             message.threadId = response.subjectId ?? message.conversation?.id
         }
-        cache.write(cacheType: .message(message))
-
+        cache?.message?.insert(models: [message])
         // Check that we are not the sender of the message and message come from another person.
         if let messageId = message.id, message.participant?.id != userInfo?.id {
+            let currentUnreadCount = cache?.conversation?.increamentUnreadCount(response.subjectId ?? -1)
+            let unreadCount = UnreadCount(unreadCount: currentUnreadCount, threadId: response.subjectId)
+            delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: unreadCount))))
             deliver(.init(messageId: messageId))
         }
-        if let threadId = message.threadId {
-            cache.write(cacheType: .setThreadUnreadCount(threadId, message.conversation?.unreadCount ?? 0))
-        }
-        cache.save()
     }
 
     func onSentMessage(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<MessageResponse> = asyncMessage.toChatResponse()
-        if let messageSent = response.result {
-            delegate?.chatEvent(event: .message(.messageSent(response)))
-            cache.write(cacheType: .messageSentToUser(messageSent))
-            cache.write(cacheType: .deleteQueue(response.uniqueId ?? ""))
-            cache.save()
-            callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
-        }
+        let response = asyncMessage.messageResponse(state: .sent)
+        delegate?.chatEvent(event: .message(.messageSent(response)))
+        deleteQueues(uniqueIds: [response.uniqueId ?? ""])
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 
     func onDeliverMessage(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<MessageResponse> = asyncMessage.toChatResponse()
-        if let deliverResponse = response.result {
-            deliverResponse.messageState = .delivered
-            delegate?.chatEvent(event: .message(.messageDelivery(response)))
-            cache.write(cacheType: .messageDeliveredToUser(deliverResponse))
-            cache.save()
-            callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
+        let response = asyncMessage.messageResponse(state: .delivered)
+        delegate?.chatEvent(event: .message(.messageDelivery(response)))
+        if let delivered = response.result {
+            cache?.message?.partnerDeliver(delivered)
         }
+        deleteQueues(uniqueIds: [response.uniqueId ?? ""])
+        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 
     func onSeenMessage(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<MessageResponse> = asyncMessage.toChatResponse()
+        let response = asyncMessage.messageResponse(state: .seen)
         if let seenResponse = response.result {
-            seenResponse.messageState = .seen
             delegate?.chatEvent(event: .message(.messageSeen(response)))
-            cache.write(cacheType: .messageSeenByUser(seenResponse))
-            cache.save()
+            cache?.message?.partnerSeen(seenResponse)
             callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
         }
     }
@@ -227,8 +195,7 @@ extension Chat {
         delegate?.chatEvent(event: .thread(.lastMessageEdited(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         if let thread = response.result {
-            cache.write(cacheType: .threads([thread]))
-            cache.save()
+            cache?.conversation?.updateLastMessage(thread)
         }
     }
 
@@ -236,9 +203,8 @@ extension Chat {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.lastMessageDeleted(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
-        if let threadId = response.result?.id, let lastMessage = response.result?.lastMessageVO {
-            cache.write(cacheType: .lastThreadMessageUpdated(threadId, lastMessage))
-            cache.save()
+        if let thread = response.result {
+            cache?.conversation?.updateLastMessage(thread)
         }
     }
 }

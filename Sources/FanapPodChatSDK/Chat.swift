@@ -6,7 +6,6 @@
 
 import FanapPodAsyncSDK
 import Foundation
-import Sentry
 
 public class Chat: ChatProtocol, Identifiable {
     public var id: UUID = .init()
@@ -25,11 +24,14 @@ public class Chat: ChatProtocol, Identifiable {
     var exportMessageViewModels: [any ExportMessagesProtocol] = []
     var session: URLSessionProtocol
     var responseQueue: DispatchQueueProtocol
-    var cache: CacheFactory
     var callState: CallState?
     public var webrtc: WebRTCClient?
     public weak var callDelegate: WebRTCClientDelegate?
+    var cache: CacheManager?
+    var persistentManager: PersistentManager
     let callbacksManager = CallbacksManager()
+    public var cacheFileManager: CacheFileManagerProtocol?
+    public internal(set) var state: ChatState = .uninitialized
 
     init(
         config: ChatConfig,
@@ -53,16 +55,17 @@ public class Chat: ChatProtocol, Identifiable {
         self.timerCheckUserStoppedTyping = timerCheckUserStoppedTyping
         self.session = session
         self.callDelegate = callDelegate
-        cache = CacheFactory(config: config)
-        asyncManager = AsyncManager(pingTimer: pingTimer, queueTimer: queueTimer, config: config, delegate: delegate, logger: self.logger)
+        persistentManager = PersistentManager(logger: self.logger, cacheEnabled: config.enableCache)
+        if config.enableCache {
+            cacheFileManager = CacheFileManager()
+            cache = CacheManager(pm: persistentManager, logger: logger)
+        }
+        asyncManager = AsyncManager(pingTimer: pingTimer, queueTimer: queueTimer)
         asyncManager.chat = self
+        self.logger?.persistentManager = persistentManager
     }
 
     public func connect() {
-        if config.captureLogsOnSentry == true {
-            startCrashAnalytics()
-        }
-
         if config.getDeviceIdFromToken == false {
             asyncManager.createAsync()
         } else {
@@ -95,19 +98,9 @@ public class Chat: ChatProtocol, Identifiable {
     }
 
     public func setToken(newToken: String, reCreateObject: Bool = false) {
-        config.token = newToken
+        config.updateToken(newToken)
         if reCreateObject {
             asyncManager.createAsync()
-        }
-    }
-
-    func startCrashAnalytics() {
-        // Config for Sentry 4.3.1
-        do {
-            Client.shared = try Client(dsn: "https://5e236d8a40be4fe99c4e8e9497682333:5a6c7f732d5746e8b28625fcbfcbe58d@chatsentryweb.sakku.cloud/4")
-            try Client.shared?.startCrashHandler()
-        } catch {
-            print("\(error)")
         }
     }
 }

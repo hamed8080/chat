@@ -45,8 +45,8 @@ public extension Chat {
             let result: ChatResponse<ContactResponse>? = self?.session.decode(data, response, error)
             self?.responseQueue.async {
                 completion(ChatResponse(uniqueId: request.first?.uniqueId, result: result?.result?.contacts, error: result?.error))
-                self?.insertContactsToCache(contacts: result?.result?.contacts)
             }
+            self?.cache?.contact?.insert(models: result?.result?.contacts ?? [])
         }
         .resume()
     }

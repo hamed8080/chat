@@ -7,31 +7,34 @@
 import FanapPodAsyncSDK
 import Foundation
 
-public struct ChatConfig {
-    var asyncConfig: AsyncConfig
-    var ssoHost: String
-    var platformHost: String
-    var fileServer: String
-    var podSpaceFileServerAddress: String = "https://podspace.pod.ir"
-    var token: String
-    var mapApiKey: String?
-    var mapServer: String = "https://api.neshan.org/v1"
-    var typeCode: String = "default"
-    var enableCache: Bool = false
-    var cacheTimeStampInSec: Int = (2 * 24) * (60 * 60)
-    var msgPriority: Int = 1
-    var msgTTL: Int = 10
-    var httpRequestTimeout: Int = 20
-    var wsConnectionWaitTime: Double = 0.0
-    var captureLogsOnSentry: Bool = false
-    var maxReconnectTimeInterval: Int = 60
-    var localImageCustomPath: URL?
-    var localFileCustomPath: URL?
-    var deviecLimitationSpaceMB: Int64 = 100
-    var getDeviceIdFromToken: Bool = false
-    var isDebuggingLogEnabled: Bool = false
-    var enableNotificationLogObserver: Bool = false
-    var callTimeout: TimeInterval = 45
+public struct ChatConfig: Codable {
+    public var asyncConfig: AsyncConfig
+    public private(set) var ssoHost: String
+    public private(set) var platformHost: String
+    public private(set) var fileServer: String
+    public private(set) var podSpaceFileServerAddress: String = "https://podspace.pod.ir"
+    public private(set) var token: String
+    public private(set) var mapApiKey: String?
+    public private(set) var mapServer: String = "https://api.neshan.org/v1"
+    public private(set) var typeCode: String = "default"
+    public private(set) var enableCache: Bool = false
+    public private(set) var cacheTimeStampInSec: Int = (2 * 24) * (60 * 60)
+    public private(set) var msgPriority: Int = 1
+    public private(set) var msgTTL: Int = 10
+    public private(set) var httpRequestTimeout: Int = 20
+    public private(set) var wsConnectionWaitTime: Double = 0.0
+    /// Caution: If you enable this most errors and important logs of the SDK will store in Core Data
+    /// and then they will send to the server by a queue.
+    public private(set) var persistLogsOnServer: Bool = false
+    public private(set) var maxReconnectTimeInterval: Int = 60
+    public private(set) var localImageCustomPath: URL?
+    public private(set) var localFileCustomPath: URL?
+    public private(set) var deviecLimitationSpaceMB: Int64 = 100
+    public private(set) var getDeviceIdFromToken: Bool = false
+    public private(set) var isDebuggingLogEnabled: Bool = false
+    public private(set) var appGroup: String?
+    public private(set) var sendLogInterval: TimeInterval = 60
+    public private(set) var callTimeout: TimeInterval = 45
 
     // Memberwise Initializer
     public init(
@@ -50,15 +53,16 @@ public struct ChatConfig {
         msgTTL: Int = 10,
         httpRequestTimeout: Int = 20,
         wsConnectionWaitTime: Double = 0.0,
-        captureLogsOnSentry: Bool = false,
+        persistLogsOnServer: Bool = false,
         maxReconnectTimeInterval: Int = 60,
         localImageCustomPath: URL? = nil,
         localFileCustomPath: URL? = nil,
         deviecLimitationSpaceMB: Int64 = 100,
         getDeviceIdFromToken: Bool = false,
         isDebuggingLogEnabled: Bool = false,
-        enableNotificationLogObserver: Bool = false,
-        callTimeout: TimeInterval = 45
+        callTimeout: TimeInterval = 45,
+        appGroup: String? = nil,
+        sendLogInterval: TimeInterval = 60
     ) {
         self.asyncConfig = asyncConfig
         self.ssoHost = ssoHost
@@ -74,15 +78,20 @@ public struct ChatConfig {
         self.msgTTL = msgTTL
         self.httpRequestTimeout = httpRequestTimeout
         self.wsConnectionWaitTime = wsConnectionWaitTime
-        self.captureLogsOnSentry = captureLogsOnSentry
+        self.persistLogsOnServer = persistLogsOnServer
         self.maxReconnectTimeInterval = maxReconnectTimeInterval
         self.localImageCustomPath = localImageCustomPath
         self.localFileCustomPath = localFileCustomPath
         self.deviecLimitationSpaceMB = deviecLimitationSpaceMB
         self.getDeviceIdFromToken = getDeviceIdFromToken
         self.isDebuggingLogEnabled = isDebuggingLogEnabled
-        self.enableNotificationLogObserver = enableNotificationLogObserver
         self.callTimeout = callTimeout
+        self.appGroup = appGroup
+        self.sendLogInterval = sendLogInterval
+    }
+
+    public mutating func updateToken(_ token: String) {
+        self.token = token
     }
 }
 
@@ -102,15 +111,16 @@ public class ChatConfigBuilder {
     private(set) var msgTTL: Int = 10
     private(set) var httpRequestTimeout: Int = 20
     private(set) var wsConnectionWaitTime: Double = 0.0
-    private(set) var captureLogsOnSentry: Bool = false
+    private(set) var persistLogsOnServer: Bool = false
     private(set) var maxReconnectTimeInterval: Int = 60
     private(set) var localImageCustomPath: URL?
     private(set) var localFileCustomPath: URL?
     private(set) var deviecLimitationSpaceMB: Int64 = 100
     private(set) var getDeviceIdFromToken: Bool = false
     private(set) var isDebuggingLogEnabled: Bool = false
-    private(set) var enableNotificationLogObserver: Bool = false
     private(set) var callTimeout: TimeInterval = 45
+    private(set) var appGroup: String?
+    private(set) var sendLogInterval: TimeInterval = 60
 
     public init(_ asyncConfig: AsyncConfig) {
         self.asyncConfig = asyncConfig
@@ -186,8 +196,8 @@ public class ChatConfigBuilder {
         return self
     }
 
-    @discardableResult public func captureLogsOnSentry(_ captureLogsOnSentry: Bool) -> ChatConfigBuilder {
-        self.captureLogsOnSentry = captureLogsOnSentry
+    @discardableResult public func persistLogsOnServer(_ persistLogsOnServer: Bool) -> ChatConfigBuilder {
+        self.persistLogsOnServer = persistLogsOnServer
         return self
     }
 
@@ -221,8 +231,13 @@ public class ChatConfigBuilder {
         return self
     }
 
-    @discardableResult public func enableNotificationLogObserver(_ enableNotificationLogObserver: Bool) -> ChatConfigBuilder {
-        self.enableNotificationLogObserver = enableNotificationLogObserver
+    @discardableResult public func appGroup(_ appGroup: String) -> ChatConfigBuilder {
+        self.appGroup = appGroup
+        return self
+    }
+
+    @discardableResult public func sendLogInterval(_ sendLogInterval: TimeInterval) -> ChatConfigBuilder {
+        self.sendLogInterval = sendLogInterval
         return self
     }
 
@@ -248,15 +263,16 @@ public class ChatConfigBuilder {
             msgTTL: msgTTL,
             httpRequestTimeout: httpRequestTimeout,
             wsConnectionWaitTime: wsConnectionWaitTime,
-            captureLogsOnSentry: captureLogsOnSentry,
+            persistLogsOnServer: persistLogsOnServer,
             maxReconnectTimeInterval: maxReconnectTimeInterval,
             localImageCustomPath: localImageCustomPath,
             localFileCustomPath: localFileCustomPath,
             deviecLimitationSpaceMB: deviecLimitationSpaceMB,
             getDeviceIdFromToken: getDeviceIdFromToken,
             isDebuggingLogEnabled: isDebuggingLogEnabled,
-            enableNotificationLogObserver: enableNotificationLogObserver,
-            callTimeout: callTimeout
+            callTimeout: callTimeout,
+            appGroup: appGroup,
+            sendLogInterval: sendLogInterval
         )
     }
 }

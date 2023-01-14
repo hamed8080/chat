@@ -46,10 +46,15 @@ public class PaginationWithContentCount: Pagination {
     public var totalCount: Int
     public var nextOffset: Int?
 
-    public init(count: Int = 50, offset: Int = 0, totalCount: Int? = 0) {
-        let hasNext = (totalCount ?? 0) > (count + offset)
+    public init(hasNext: Bool = false, count: Int = 50, offset: Int = 0, totalCount: Int? = 0) {
+        var calculatedHasNext = false
+        if let totalCount = totalCount {
+            calculatedHasNext = totalCount > (count + offset)
+        } else {
+            calculatedHasNext = hasNext
+        }
         self.totalCount = totalCount ?? 0
         nextOffset = offset + count > self.totalCount ? nil : offset + count
-        super.init(hasNext: hasNext, count: count, offset: offset)
+        super.init(hasNext: calculatedHasNext, count: count, offset: offset)
     }
 }

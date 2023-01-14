@@ -17,7 +17,7 @@ extension Chat {
             let result: ChatResponse<DevicesResposne>? = self?.session.decode(data, response, error)
             self?.responseQueue.async {
                 if let device = result?.result?.devices?.first(where: { $0.current == true }) {
-                    self?.config.asyncConfig.deviceId = device.uid ?? UUID().uuidString
+                    self?.config.asyncConfig.updateDeviceId(device.uid ?? UUID().uuidString)
                     self?.asyncManager.createAsync()
                 }
             }

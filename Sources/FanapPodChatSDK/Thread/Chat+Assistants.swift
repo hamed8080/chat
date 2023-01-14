@@ -21,10 +21,9 @@ public extension Chat {
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
 
-        cache.get(useCache: cacheResponse != nil, cacheType: .getAssistants(request.count, request.offset)) { (response: ChatResponse<[Assistant]>) in
-            let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: CMAssistant.crud.getTotalCount())
-            cacheResponse?(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
-        }
+        let response: (objects: [CDAssistant], totalCount: Int) = cache?.assistant?.fetchWithOffset(count: request.count, offset: request.offset) ?? ([], 0)
+        let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: response.totalCount)
+        cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: response.objects.map(\.codable), error: nil, pagination: pagination))
     }
 }
 
@@ -33,8 +32,7 @@ extension Chat {
     func onAssistants(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .assistant(.assistants(response)))
-        cache.write(cacheType: .insertOrUpdateAssistants(response.result ?? []))
-        cache.save()
+        cache?.assistant?.insert(models: response.result ?? [])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

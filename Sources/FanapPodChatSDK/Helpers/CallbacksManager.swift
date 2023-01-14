@@ -108,7 +108,7 @@ class CallbacksManager {
         guard let uniqueId = response.uniqueId,
               let type = type,
               let callback: CompletionType<T> = getCallBack(uniqueId) else { return }
-        callback(ChatResponse(uniqueId: response.uniqueId, result: response.result))
+        callback(response)
         removeCallback(uniqueId: uniqueId, requestType: type)
     }
 }

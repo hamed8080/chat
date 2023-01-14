@@ -38,8 +38,7 @@ extension Chat {
         } else if asyncMessage.chatMessage?.type == .unblockAssistant {
             delegate?.chatEvent(event: .assistant(.unblockAssistant(response)))
         }
-        cache.write(cacheType: .insertOrUpdateAssistants(response.result ?? []))
-        cache.save()
+        cache?.assistant?.block(block: asyncMessage.chatMessage?.type == .blockAssistant, assistants: response.result ?? [])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }
