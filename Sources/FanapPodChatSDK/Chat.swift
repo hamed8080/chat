@@ -28,6 +28,7 @@ public class Chat: ChatProtocol, Identifiable {
     let callbacksManager = CallbacksManager()
     public var cacheFileManager: CacheFileManagerProtocol?
     public internal(set) var state: ChatState = .uninitialized
+    public weak var logDelegate: LoggerDelegate?
 
     init(
         config: ChatConfig,
@@ -42,7 +43,7 @@ public class Chat: ChatProtocol, Identifiable {
     ) {
         self.responseQueue = responseQueue
         self.config = config
-        self.logger = logger ?? Logger(config: config)
+        self.logger = logger ?? Logger()
         self.timerTyping = timerTyping
         self.requestUserTimer = requestUserTimer
         self.timerCheckUserStoppedTyping = timerCheckUserStoppedTyping
@@ -55,6 +56,7 @@ public class Chat: ChatProtocol, Identifiable {
         asyncManager = AsyncManager(pingTimer: pingTimer, queueTimer: queueTimer)
         asyncManager.chat = self
         self.logger?.persistentManager = persistentManager
+        self.logger?.chat = self
     }
 
     public func connect() {

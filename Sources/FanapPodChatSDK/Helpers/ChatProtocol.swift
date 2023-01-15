@@ -109,4 +109,7 @@ protocol ChatProtocol: AnyObject {
 
     /// A private method that will be called by the SDK to pass data that received from onMessage.
     func invokeCallback(asyncMessage: AsyncMessage)
+
+    /// A delegation property to emits all logs that happen in the SDK so it must be filled on initialization if you need to save logs on your own app or custom server.
+    var logDelegate: LoggerDelegate? { get set }
 }
