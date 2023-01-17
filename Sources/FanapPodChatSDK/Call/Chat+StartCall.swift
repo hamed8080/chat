@@ -41,10 +41,10 @@ extension Chat {
 
     /// if newtork is unstable and async server cant respond with type CALL_SESSION_CREATED then we must end call  for starter to close UI
     func startTimerTimeout() {
-        _ = callStartTimer?.scheduledTimer(withTimeInterval: config.callTimeout, repeats: false) { [weak self] timer in
+        _ = callStartTimer?.scheduledTimer(withTimeInterval: config.callConfig.callTimeout, repeats: false) { [weak self] timer in
             if self?.callState == .requested {
                 if self?.config.isDebuggingLogEnabled == true {
-                    self?.logger?.log(title: "cancel call after \(self?.config.callTimeout ?? 0) second no response back from server with type CALL_SESSION_CREATED")
+                    self?.logger?.log(title: "cancel call after \(self?.config.callConfig.callTimeout ?? 0) second no response back from server with type CALL_SESSION_CREATED")
                 }
                 self?.delegate?.chatEvent(event: .call(.callEnded(nil)))
                 self?.callState = .ended
@@ -82,7 +82,7 @@ extension Chat {
     public func initWebRTC(_ startCall: StartCall) {
         /// simulator File name
         let smFileName = TARGET_OS_SIMULATOR != 0 ? "webrtc_user_a.mp4" : nil
-        let config = WebRTCConfig(startCall: startCall, isSendVideoEnabled: startCall.clientDTO.video, fileName: smFileName)
+        let config = WebRTCConfig(callConfig: config.callConfig, startCall: startCall, isSendVideoEnabled: startCall.clientDTO.video, fileName: smFileName)
         webrtc = WebRTCClient(chat: self, config: config, delegate: callDelegate)
         let me = CallParticipant(sendTopic: config.topicSend ?? "", userId: userInfo?.id, mute: startCall.clientDTO.mute, video: startCall.clientDTO.video, participant: .init(name: "ME"))
         var users = [me]
@@ -102,11 +102,11 @@ extension Chat {
 
     /// maybe starter of call after start call request disconnected we need to close ui on the receiver side
     func startTimerTimeout(callId: Int) {
-        _ = callStartTimer?.scheduledTimer(withTimeInterval: config.callTimeout, repeats: false) { [weak self] timer in
+        _ = callStartTimer?.scheduledTimer(withTimeInterval: config.callConfig.callTimeout, repeats: false) { [weak self] timer in
             // If the user clicks on reject button the chat.callStatus = .cacnceled and bottom code will not be executed.
             if self?.callState == .requested {
                 if self?.config.isDebuggingLogEnabled == true {
-                    self?.logger?.log(title: "cancel call after \(self?.config.callTimeout ?? 0) second")
+                    self?.logger?.log(title: "cancel call after \(self?.config.callConfig.callTimeout ?? 0) second")
                 }
                 self?.delegate?.chatEvent(event: .call(.callEnded(.init(result: callId))))
                 self?.callState = .ended
@@ -127,10 +127,10 @@ extension Chat {
 
     /// end call if no one doesn't accept or available to answer call
     func startTimerTimeout(_ createCall: CreateCall) {
-        _ = callStartTimer?.scheduledTimer(withTimeInterval: config.callTimeout, repeats: false) { [weak self] timer in
+        _ = callStartTimer?.scheduledTimer(withTimeInterval: config.callConfig.callTimeout, repeats: false) { [weak self] timer in
             if self?.callState == .created {
                 if self?.config.isDebuggingLogEnabled == true {
-                    self?.logger?.log(title: "cancel call after \(self?.config.callTimeout ?? 0) second waiting to accept by user")
+                    self?.logger?.log(title: "cancel call after \(self?.config.callConfig.callTimeout ?? 0) second waiting to accept by user")
                 }
                 let call = Call(id: createCall.callId,
                                 creatorId: 0,
@@ -148,6 +148,12 @@ extension Chat {
         let response: ChatResponse<[CallParticipant]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .call(.callParticipantLeft(response)))
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
+        response.result?.forEach { callParticipant in
+            webrtc?.removeCallParticipant(callParticipant)
+            if callParticipant.userId == userInfo?.id {
+                webrtc?.clearResourceAndCloseConnection()
+            }
+        }
     }
 
     func onRejectCall(_ asyncMessage: AsyncMessage) {

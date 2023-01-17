@@ -10,6 +10,10 @@ import Foundation
     import UIKit
 #endif
 
+public protocol LoggerDelegate: AnyObject {
+    func onLog(log: Log)
+}
+
 public struct DeviceInfo: Codable {
     let deviceModel: String
     let os: String
@@ -37,22 +41,22 @@ public enum LogLevel: Int, Codable {
 
 public class Logger {
     private let sdkName = "CHAT_SDK: "
-    private var urlSession: URLSession
-    private let config: ChatConfig
+    weak var chat: ChatProtocol?
+    private var urlSession: URLSessionProtocol
+    private var config: ChatConfig? { chat?.config }
     var persistentManager: PersistentManager?
-    private let timer: Timer
+    private let timer: TimerProtocol?
 
-    init(config: ChatConfig, timer: Timer = Timer(), urlSession: URLSession = .shared) {
-        self.timer = timer
-        self.config = config
+    init(timer: TimerProtocol? = Timer(), urlSession: URLSessionProtocol = URLSession.shared) {
         self.urlSession = urlSession
-        if config.persistLogsOnServer {
+        self.timer = timer
+        if config?.persistLogsOnServer == true {
             startSending()
         }
     }
 
     func log(title: String? = nil, jsonString: String? = nil, receive _: Bool = true, persistOnServer: Bool = false) {
-        if config.isDebuggingLogEnabled {
+        if config?.isDebuggingLogEnabled == true {
             if let title = title {
                 print(sdkName + title)
             }
@@ -68,7 +72,7 @@ public class Logger {
     }
 
     func log(title: String? = nil, message: String? = nil, persistOnServer: Bool = false) {
-        if config.isDebuggingLogEnabled {
+        if config?.isDebuggingLogEnabled == true {
             if let title = title {
                 print(sdkName + title)
             }
@@ -84,7 +88,7 @@ public class Logger {
     }
 
     func log(_ request: URLRequest, _ decodeType: String) {
-        if config.isDebuggingLogEnabled == true {
+        if config?.isDebuggingLogEnabled == true {
             var output = "\n"
             output += "Start Of Request============================================================================================\n"
             output += " REST Request With Method:\(request.httpMethod ?? "") - url:\(request.url?.absoluteString ?? "")\n"
@@ -98,7 +102,7 @@ public class Logger {
     }
 
     func log(_ data: Data?, _ response: URLResponse?, _ error: Error?) {
-        if config.isDebuggingLogEnabled == true {
+        if config?.isDebuggingLogEnabled == true {
             var output = "\n"
             output += "Start Of Response============================================================================================\n"
             output += " REST Response For url:\(response?.url?.absoluteString ?? "")\n"
@@ -113,13 +117,14 @@ public class Logger {
     }
 
     func log(message: String, level: LogLevel = .verbose) {
-        if config.persistLogsOnServer {
-            let log = Log(
-                message: message,
-                config: config,
-                deviceInfo: DeviceInfo.getDeviceInfo(),
-                level: level
-            )
+        let log = Log(
+            message: message,
+            config: config,
+            deviceInfo: DeviceInfo.getDeviceInfo(),
+            level: level
+        )
+        chat?.logDelegate?.onLog(log: log)
+        if config?.persistLogsOnServer == true {
             addLogTocache(log)
         }
     }
@@ -150,14 +155,10 @@ public class Logger {
     }
 
     private func deleteLogFromCache(log: CDLog) {
-        if let pm = persistentManager {
-            CacheLogManager(pm: pm, logger: self).delete([log.codable])
-        }
+        chat?.cache?.log?.delete([log.codable])
     }
 
     private func addLogTocache(_ log: Log) {
-        if let pm = persistentManager {
-            CacheLogManager(pm: pm, logger: self).insert(models: [log])
-        }
+        chat?.cache?.log?.insert(models: [log])
     }
 }

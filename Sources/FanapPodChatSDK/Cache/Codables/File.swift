@@ -9,7 +9,15 @@
 import CoreData
 import Foundation
 
-open class File: Codable {
+open class File: Codable, Identifiable, Hashable {
+    public static func == (lhs: File, rhs: File) -> Bool {
+        lhs.hashCode == rhs.hashCode
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(hashCode)
+    }
+
     var hashCode: String?
     var name: String?
     var size: Int?

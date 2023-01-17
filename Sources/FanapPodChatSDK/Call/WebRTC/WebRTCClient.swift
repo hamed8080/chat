@@ -159,7 +159,7 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
     private weak var chat: ChatProtocol?
     private var answerReceived: [String: RTCPeerConnection] = [:]
     private var config: WebRTCConfig
-    private var delegate: WebRTCClientDelegate?
+    private weak var delegate: WebRTCClientDelegate?
     public private(set) var callParticipantsUserRTC: [CallParticipantUserRTC] = []
     var logFile: RTCFileLogger?
     private let rtcAudioSession = RTCAudioSession.sharedInstance()
@@ -206,7 +206,10 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
     }
 
     public func removeCallParticipant(_ callParticipant: CallParticipant) {
-        callParticipantsUserRTC.removeAll(where: { $0.callParticipant.userId == callParticipant.userId })
+        if let index = callParticipantsUserRTC.firstIndex(where: { $0.callParticipant.userId == callParticipant.userId }) {
+            callParticipantsUserRTC[index].close()
+            callParticipantsUserRTC.remove(at: index)
+        }
     }
 
     private func setConnectedState(peerConnection: RTCPeerConnection) {
@@ -227,6 +230,7 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
                 callParticipantsUserRTC[index].close()
             }
         }
+        destroyAudioSession()
         let close = CloseSessionReq(peerName: config.peerName, token: chat?.config.token ?? "")
         send(close)
         logFile?.stop()
@@ -482,7 +486,7 @@ extension WebRTCClient {
 }
 
 // configure audio session
-extension WebRTCClient {
+public extension WebRTCClient {
     private func configureAudioSession() {
         customPrint("configure audio session")
         rtcAudioSession.lockForConfiguration()
@@ -495,7 +499,7 @@ extension WebRTCClient {
         rtcAudioSession.unlockForConfiguration()
     }
 
-    public func toggleSpeaker() {
+    func toggleSpeaker() {
         audioQueue.async { [weak self] in
             let on = !(self?.rtcAudioSession.isActive ?? false)
             self?.customPrint("request to setSpeaker:\(on)")
@@ -509,6 +513,22 @@ extension WebRTCClient {
                 try self.rtcAudioSession.setCategory(AVAudioSession.Category.playAndRecord.rawValue)
                 try self.rtcAudioSession.overrideOutputAudioPort(on ? .speaker : .none)
                 if on { try self.rtcAudioSession.setActive(true) }
+            } catch {
+                self.customPrint("can't change audio speaker", error, isGuardNil: true)
+            }
+            self.rtcAudioSession.unlockForConfiguration()
+        }
+    }
+
+    func destroyAudioSession() {
+        audioQueue.async { [weak self] in
+            guard let self = self else {
+                self?.customPrint("self was nil set speaker mode!", isGuardNil: true)
+                return
+            }
+            self.rtcAudioSession.lockForConfiguration()
+            do {
+                try self.rtcAudioSession.setActive(false)
             } catch {
                 self.customPrint("can't change audio speaker", error, isGuardNil: true)
             }

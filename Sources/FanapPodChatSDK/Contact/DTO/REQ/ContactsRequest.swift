@@ -18,6 +18,7 @@ public class ContactsRequest: UniqueIdManagerRequest, ChatSendable {
     public let id: Int? // contact id to client app can query and find a contact in cache core data with id
     public let cellphoneNumber: String?
     public let email: String?
+    public let coreUserId: Int?
     public let order: String?
     public let query: String?
     public var summery: Bool?
@@ -26,6 +27,7 @@ public class ContactsRequest: UniqueIdManagerRequest, ChatSendable {
                 count: Int = 50,
                 cellphoneNumber: String? = nil,
                 email: String? = nil,
+                coreUserId: Int? = nil,
                 offset: Int = 0,
                 order: Ordering? = nil,
                 query: String? = nil,
@@ -40,6 +42,7 @@ public class ContactsRequest: UniqueIdManagerRequest, ChatSendable {
         self.order = order?.rawValue ?? nil
         self.query = query
         self.summery = summery
+        self.coreUserId = coreUserId
         super.init(uniqueId: uniqueId)
     }
 
@@ -52,6 +55,7 @@ public class ContactsRequest: UniqueIdManagerRequest, ChatSendable {
         case order
         case query
         case summery
+        case coreUserId
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -61,6 +65,7 @@ public class ContactsRequest: UniqueIdManagerRequest, ChatSendable {
         try? container.encodeIfPresent(id, forKey: .id)
         try? container.encodeIfPresent(cellphoneNumber, forKey: .cellphoneNumber)
         try? container.encodeIfPresent(email, forKey: .email)
+        try? container.encodeIfPresent(coreUserId, forKey: .coreUserId)
         try? container.encodeIfPresent(order, forKey: .order)
         try? container.encodeIfPresent(summery, forKey: .summery)
         try? container.encodeIfPresent(query, forKey: .query)

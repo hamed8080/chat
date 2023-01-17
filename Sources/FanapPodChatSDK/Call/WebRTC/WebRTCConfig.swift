@@ -7,6 +7,7 @@
 import Foundation
 
 public struct WebRTCConfig {
+    public let callConfig: CallConfig
     public let peerName: String
     public let iceServers: [String]
     public let turnAddress: String
@@ -30,7 +31,8 @@ public struct WebRTCConfig {
         }
     }
 
-    public init(startCall: StartCall, isSendVideoEnabled _: Bool, fileName: String? = nil) {
+    public init(callConfig: CallConfig, startCall: StartCall, isSendVideoEnabled _: Bool, fileName: String? = nil) {
+        self.callConfig = callConfig
         callId = startCall.callId
         peerName = startCall.chatDataDto.kurentoAddress
         iceServers = ["turn:\(startCall.chatDataDto.turnAddress)?transport=udp", "turn:\(startCall.chatDataDto.turnAddress)?transport=tcp"] // "stun:46.32.6.188:3478"

@@ -25,12 +25,20 @@ extension Encodable {
         return dictionary
     }
 
+    func asDictionaryNuallable() throws -> [String: Any?] {
+        let data = try JSONEncoder().encode(self)
+        guard let dictionary = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any?] else {
+            throw NSError()
+        }
+        return dictionary
+    }
+
     func getParameterData() -> Data? {
         var parameterString = ""
-        if let parameters = try? asDictionary(), parameters.count > 0 {
+        if let parameters = try? asDictionaryNuallable(), parameters.count > 0 {
             parameters.forEach { key, value in
                 let isFirst = parameters.first?.key == key
-                parameterString.append("\(isFirst ? "" : "&")\(key)=\(value)".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? "")
+                parameterString.append("\(isFirst ? "" : "&")\(key)=\(value ?? "")".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? "")
             }
             return parameterString.data(using: .utf8)
         }

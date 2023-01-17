@@ -51,9 +51,6 @@ public protocol VideoRTCProtocol: UserRTCProtocol {
     var renderer: RTCVideoRenderer? { get set }
     var videoCapturer: RTCVideoCapturer? { get }
     var isFrontCamera: Bool { get }
-    var targetLocalVideoWidth: Int { get set }
-    var targetLocalVideoHight: Int { get set }
-    var targetFPS: Int { get set }
     func addVideoRenderer(_ renderer: RTCVideoRenderer)
     func removeVideoRenderer(_ renderer: RTCVideoRenderer)
     func getCameraFormat() -> AVCaptureDevice.Format?
@@ -243,11 +240,10 @@ public class VideoRTC: UserRTC, VideoRTCProtocol {
     public var videoCapturer: RTCVideoCapturer?
     public var isFrontCamera: Bool = true
     public var isVideoTrackEnable: Bool { track?.isEnabled ?? false }
-    public var targetLocalVideoWidth: Int = 640
-    public var targetLocalVideoHight: Int = 480
-    public var targetFPS: Int = 15
+    public let config: WebRTCConfig
 
     init(direction: RTCDirection, topic: String, config: WebRTCConfig, delegate: RTCPeerConnectionDelegate) {
+        self.config = config
         renderer = TARGET_OS_SIMULATOR != 0 ? RTCEAGLVideoView(frame: .zero) : RTCMTLVideoView(frame: .zero)
         let custom: [String: String] = direction == .receive ? [kRTCMediaConstraintsOfferToReceiveVideo: kRTCMediaConstraintsValueTrue] : [:]
         super.init(direction: direction, topic: topic, config: config, delegate: delegate, customConstraint: custom, videoDecoder: RTCDefaultVideoDecoderFactory.default, videoEncoder: RTCDefaultVideoEncoderFactory.default)
@@ -283,7 +279,7 @@ public class VideoRTC: UserRTC, VideoRTCProtocol {
            let format = getCameraFormat()
         {
             DispatchQueue.global(qos: .background).async {
-                videoCapturer.startCapture(with: selectedCamera, format: format, fps: self.targetFPS)
+                videoCapturer.startCapture(with: selectedCamera, format: format, fps: self.config.callConfig.targetFPS)
             }
         } else if let videoCapturer = videoCapturer as? RTCFileVideoCapturer {
             videoCapturer.startCapturing(fromFileNamed: fileName ?? "") { _ in }
@@ -296,9 +292,10 @@ public class VideoRTC: UserRTC, VideoRTCProtocol {
     public func getCameraFormat() -> AVCaptureDevice.Format? {
         guard let frontCamera = RTCCameraVideoCapturer.captureDevices().first(where: { $0.position == (isFrontCamera ? .front : .back) }) else { return nil }
         let format = RTCCameraVideoCapturer.supportedFormats(for: frontCamera).last { format in
-            let maxFrameRate = format.videoSupportedFrameRateRanges.first(where: { $0.maxFrameRate <= Float64(targetFPS) })?.maxFrameRate ?? Float64(targetFPS)
-            targetFPS = Int(maxFrameRate)
-            return CMVideoFormatDescriptionGetDimensions(format.formatDescription).width == targetLocalVideoWidth && CMVideoFormatDescriptionGetDimensions(format.formatDescription).height == targetLocalVideoHight && Int(maxFrameRate) <= targetFPS
+            let maxFrameRate = format.videoSupportedFrameRateRanges.first(where: { $0.maxFrameRate <= Float64(config.callConfig.targetFPS) })?.maxFrameRate ?? Float64(config.callConfig.targetFPS)
+            let targetFPS = Int(maxFrameRate)
+            let dimensions = CMVideoFormatDescriptionGetDimensions(format.formatDescription)
+            return dimensions.width == config.callConfig.targetVideoWidth && dimensions.height == config.callConfig.targetVideoHeight && Int(maxFrameRate) <= targetFPS
         }
         return format
     }

@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 9/27/22.
 
 import Foundation
-public struct Call: Codable, Equatable {
+public struct Call: Codable, Equatable, Identifiable, Hashable {
     public static func == (lhs: Call, rhs: Call) -> Bool {
         lhs.id == rhs.id
     }

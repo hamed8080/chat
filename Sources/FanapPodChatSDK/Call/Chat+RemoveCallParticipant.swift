@@ -26,6 +26,9 @@ extension Chat {
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
         response.result?.forEach { callParticipant in
             webrtc?.removeCallParticipant(callParticipant)
+            if callParticipant.userId == userInfo?.id {
+                webrtc?.clearResourceAndCloseConnection()
+            }
         }
     }
 }

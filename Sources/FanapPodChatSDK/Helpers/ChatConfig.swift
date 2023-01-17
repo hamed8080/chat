@@ -9,6 +9,7 @@ import Foundation
 
 public struct ChatConfig: Codable {
     public var asyncConfig: AsyncConfig
+    public private(set) var callConfig: CallConfig
     public private(set) var ssoHost: String
     public private(set) var platformHost: String
     public private(set) var fileServer: String
@@ -34,11 +35,11 @@ public struct ChatConfig: Codable {
     public private(set) var isDebuggingLogEnabled: Bool = false
     public private(set) var appGroup: String?
     public private(set) var sendLogInterval: TimeInterval = 60
-    public private(set) var callTimeout: TimeInterval = 45
 
     // Memberwise Initializer
     public init(
         asyncConfig: AsyncConfig,
+        callConfig: CallConfig,
         token: String,
         ssoHost: String,
         platformHost: String,
@@ -60,11 +61,11 @@ public struct ChatConfig: Codable {
         deviecLimitationSpaceMB: Int64 = 100,
         getDeviceIdFromToken: Bool = false,
         isDebuggingLogEnabled: Bool = false,
-        callTimeout: TimeInterval = 45,
         appGroup: String? = nil,
         sendLogInterval: TimeInterval = 60
     ) {
         self.asyncConfig = asyncConfig
+        self.callConfig = callConfig
         self.ssoHost = ssoHost
         self.platformHost = platformHost
         self.fileServer = fileServer
@@ -85,7 +86,6 @@ public struct ChatConfig: Codable {
         self.deviecLimitationSpaceMB = deviecLimitationSpaceMB
         self.getDeviceIdFromToken = getDeviceIdFromToken
         self.isDebuggingLogEnabled = isDebuggingLogEnabled
-        self.callTimeout = callTimeout
         self.appGroup = appGroup
         self.sendLogInterval = sendLogInterval
     }
@@ -97,6 +97,7 @@ public struct ChatConfig: Codable {
 
 public class ChatConfigBuilder {
     private(set) var asyncConfig: AsyncConfig
+    private(set) var callConfig: CallConfig = CallConfigBuilder().build()
     private(set) var ssoHost: String = ""
     private(set) var platformHost: String = ""
     private(set) var fileServer: String = ""
@@ -118,12 +119,16 @@ public class ChatConfigBuilder {
     private(set) var deviecLimitationSpaceMB: Int64 = 100
     private(set) var getDeviceIdFromToken: Bool = false
     private(set) var isDebuggingLogEnabled: Bool = false
-    private(set) var callTimeout: TimeInterval = 45
     private(set) var appGroup: String?
     private(set) var sendLogInterval: TimeInterval = 60
 
     public init(_ asyncConfig: AsyncConfig) {
         self.asyncConfig = asyncConfig
+    }
+
+    @discardableResult public func callConfig(_ callConfig: CallConfig) -> ChatConfigBuilder {
+        self.callConfig = callConfig
+        return self
     }
 
     @discardableResult public func ssoHost(_ ssoHost: String) -> ChatConfigBuilder {
@@ -241,14 +246,10 @@ public class ChatConfigBuilder {
         return self
     }
 
-    @discardableResult public func callTimeout(_ callTimeout: TimeInterval) -> ChatConfigBuilder {
-        self.callTimeout = callTimeout
-        return self
-    }
-
     public func build() -> ChatConfig {
         ChatConfig(
             asyncConfig: asyncConfig,
+            callConfig: callConfig,
             token: token,
             ssoHost: ssoHost,
             platformHost: platformHost,
@@ -270,7 +271,6 @@ public class ChatConfigBuilder {
             deviecLimitationSpaceMB: deviecLimitationSpaceMB,
             getDeviceIdFromToken: getDeviceIdFromToken,
             isDebuggingLogEnabled: isDebuggingLogEnabled,
-            callTimeout: callTimeout,
             appGroup: appGroup,
             sendLogInterval: sendLogInterval
         )

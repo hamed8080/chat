@@ -11,11 +11,12 @@ import Foundation
 
 open class Message: Codable, Identifiable, Hashable {
     public static func == (lhs: Message, rhs: Message) -> Bool {
-        lhs.id == rhs.id
+        lhs.id == rhs.id && lhs.uniqueId == rhs.uniqueId
     }
 
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
+        hasher.combine(uniqueId)
     }
 
     public var deletable: Bool?

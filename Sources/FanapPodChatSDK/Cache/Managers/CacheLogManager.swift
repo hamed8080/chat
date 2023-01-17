@@ -69,7 +69,7 @@ class CacheLogManager: CoreDataProtocol {
 
     func delete(_ models: [Log]) {
         let ids = models.compactMap(\.id.string)
-        let predicate = NSPredicate(format: "id IN %i", ids)
+        let predicate = NSPredicate(format: "id IN %@", ids)
         batchDelete(entityName: entityName, predicate: predicate)
     }
 

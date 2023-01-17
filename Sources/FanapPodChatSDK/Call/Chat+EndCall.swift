@@ -23,8 +23,9 @@ public extension Chat {
 // Response
 extension Chat {
     func onCallEnded(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<Int> = asyncMessage.toChatResponse()
+        var response: ChatResponse<Int> = asyncMessage.toChatResponse()
         callState = .ended
+        response.result = response.subjectId
         delegate?.chatEvent(event: .call(.callEnded(response)))
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
         webrtc?.clearResourceAndCloseConnection()

@@ -118,4 +118,7 @@ protocol ChatProtocol: AnyObject {
 
     /// A delegataion to pass the call events to the clinet if they needed.
     var callDelegate: WebRTCClientDelegate? { get set }
+
+    /// A delegation property to emits all logs that happen in the SDK so it must be filled on initialization if you need to save logs on your own app or custom server.
+    var logDelegate: LoggerDelegate? { get set }
 }
