@@ -136,13 +136,13 @@ class CacheConversationManager: CoreDataProtocol {
             orFetchPredicatArray.append(searchDescriptions)
         }
 
-        req.threadIds?.forEach { threadId in
-            orFetchPredicatArray.append(NSPredicate(format: "id == %i", threadId))
+        if let threadIds = req.threadIds, threadIds.count > 0 {
+            orFetchPredicatArray.append(NSPredicate(format: "id IN %@", threadIds))
         }
 
         let archivePredicate = NSPredicate(format: "isArchive == %@", NSNumber(value: req.archived ?? false))
         orFetchPredicatArray.append(archivePredicate)
-        let orCompound = NSCompoundPredicate(type: .or, subpredicates: orFetchPredicatArray)
+        let orCompound = NSCompoundPredicate(type: .and, subpredicates: orFetchPredicatArray)
         fetchRequest.predicate = orCompound
 
         let sortByTime = NSSortDescriptor(key: "time", ascending: false)
