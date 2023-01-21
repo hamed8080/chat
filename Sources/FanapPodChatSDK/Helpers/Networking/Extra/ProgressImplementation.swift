@@ -30,9 +30,12 @@ class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSessionTaskDe
     func urlSession(_: URLSession, task _: URLSessionTask, didSendBodyData _: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
         let percent = (Float(totalBytesSent) / Float(totalBytesExpectedToSend)) * 100
         logger?.log(title: "Upload progress:\(percent)")
-        uploadProgress?(UploadFileProgress(percent: Int64(percent), totalSize: totalBytesExpectedToSend, bytesSend: totalBytesSent), nil)
-        let response: ChatResponse<String> = .init(uniqueId: uniqueId, result: uniqueId)
-        delegate?.chatEvent(event: .file(.uploading(response)))
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.uploadProgress?(UploadFileProgress(percent: Int64(percent), totalSize: totalBytesExpectedToSend, bytesSend: totalBytesSent), nil)
+            let response: ChatResponse<String> = .init(uniqueId: self.uniqueId, result: self.uniqueId)
+            self.delegate?.chatEvent(event: .file(.uploading(response)))
+        }
     }
 
     // MARK: - END Upload progress Delegates

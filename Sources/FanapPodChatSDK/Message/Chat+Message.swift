@@ -168,7 +168,7 @@ extension Chat {
         let response = asyncMessage.messageResponse(state: .sent)
         delegate?.chatEvent(event: .message(.messageSent(response)))
         deleteQueues(uniqueIds: [response.uniqueId ?? ""])
-        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
+        callbacksManager.invokeSentCallbackAndRemove(response)
     }
 
     func onDeliverMessage(_ asyncMessage: AsyncMessage) {
@@ -178,7 +178,7 @@ extension Chat {
             cache?.message?.partnerDeliver(delivered)
         }
         deleteQueues(uniqueIds: [response.uniqueId ?? ""])
-        callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
+        callbacksManager.invokeDeliverCallbackAndRemove(response)
     }
 
     func onSeenMessage(_ asyncMessage: AsyncMessage) {
@@ -186,7 +186,7 @@ extension Chat {
         if let seenResponse = response.result {
             delegate?.chatEvent(event: .message(.messageSeen(response)))
             cache?.message?.partnerSeen(seenResponse)
-            callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
+            callbacksManager.invokeSeenCallbackAndRemove(response)
         }
     }
 

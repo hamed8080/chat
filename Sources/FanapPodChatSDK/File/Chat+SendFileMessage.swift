@@ -26,6 +26,7 @@ public extension Chat {
                          uploadUniqueIdResult: UniqueIdResultType? = nil,
                          messageUniqueIdResult: UniqueIdResultType? = nil)
     {
+        textMessage.uniqueId = uploadFile.uniqueId
         if let uploadRequest = uploadFile as? UploadImageRequest {
             requestSendImageTextMessage(textMessage, uploadRequest, onSent, onSeen, onDeliver, uploadProgress, uploadUniqueIdResult, messageUniqueIdResult)
             return
