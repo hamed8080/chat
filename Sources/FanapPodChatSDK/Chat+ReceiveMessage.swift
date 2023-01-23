@@ -176,6 +176,8 @@ extension Chat {
             onDeleteThread(asyncMessage)
         case .archiveThread, .unarchiveThread:
             onArchiveUnArchiveThread(asyncMessage)
+        case .threadsUnreadCount:
+            onThreadsUnreadCount(asyncMessage)
         case .error:
             onError(asyncMessage)
         case .unknown:

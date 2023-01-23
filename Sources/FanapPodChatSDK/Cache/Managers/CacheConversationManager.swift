@@ -227,4 +227,33 @@ class CacheConversationManager: CoreDataProtocol {
         let predicate = idPredicate(id: threadId)
         batchDelete(entityName: entityName, predicate: predicate)
     }
+
+    func updateThreadsUnreadCount(_ resp: [String: Int]) {
+        resp.forEach { key, value in
+            let predicate = idPredicate(id: Int(key) ?? -1)
+            update(["unreadCount": value], predicate)
+        }
+    }
+
+    func threadsUnreadcount(_ threadIds: [Int]) -> [String: Int] {
+        let req = NSFetchRequest<NSDictionary>(entityName: entityName)
+        req.resultType = .dictionaryResultType
+        req.propertiesToFetch = ["id", "unreadCount"]
+        req.predicate = NSPredicate(format: "id IN %@", threadIds)
+        let rows = try? context.fetch(req)
+        var result: [String: Int] = [:]
+        rows?.forEach { dic in
+            var threadId = 0
+            var unreadCount = 0
+            dic.forEach { key, value in
+                if key as? String == "id" {
+                    threadId = value as? Int ?? 0
+                } else if key as? String == "unreadCount" {
+                    unreadCount = value as? Int ?? 0
+                }
+            }
+            result[String(threadId)] = unreadCount
+        }
+        return result
+    }
 }

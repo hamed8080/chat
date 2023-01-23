@@ -29,4 +29,5 @@ public enum ThreadEventTypes {
     case threadDeleted(ChatResponse<Participant>)
     case lastMessageDeleted(ChatResponse<Conversation>)
     case lastMessageEdited(ChatResponse<Conversation>)
+    case threadsUnreadCount(ChatResponse<[String: Int]>)
 }
