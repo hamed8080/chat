@@ -23,7 +23,6 @@ extension Chat {
         let url = config.fileServer + filePath.rawValue.replacingOccurrences(of: "{userGroupHash}", with: request.userGroupHash ?? "")
         guard let parameters = try? request.asDictionary() else { return }
         let headers = ["Authorization": "Bearer \(config.token)", "Content-type": "multipart/form-data"]
-        deleteQueues(uniqueIds: [request.uniqueId])
         UploadManager(callbackManager: callbacksManager)
             .upload(url: url,
                     headers: headers,

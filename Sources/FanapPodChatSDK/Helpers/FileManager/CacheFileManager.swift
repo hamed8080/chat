@@ -26,21 +26,19 @@ public protocol CacheFileManagerProtocol {
     var groupFolder: URL? { get }
     init(fileManager: FileManagerProtocol, group: String?, queue: DispatchQueueProtocol, logger: Logger?)
 
-    @discardableResult
     /// Save the file asynchronously into the disk.
     /// - Parameters:
     ///   - url: The real HttpURL of the file.
     ///   - data: The data of the file to be saved.
     /// - Returns: Throw an exception if something went wrong and saving has failed.
-    func saveFile(url: URL, data: Data) -> URL?
+    func saveFile(url: URL, data: Data, saveCompeletion: @escaping (URL?) -> Void)
 
-    @discardableResult
     /// Save the file asynchronously into the disk by making an md5 hash name for the uniqueness of the path.
     /// - Parameters:
     ///   - url: The string real HttpURL string.
     ///   - data: The data of the file to be saved.
     /// - Returns: Throw an exception if something went wrong and saving has failed.
-    func saveFileInGroup(url: URL, data: Data) -> URL?
+    func saveFileInGroup(url: URL, data: Data, saveCompeletion: @escaping (URL?) -> Void)
 
     /// Return the data of the file if it exists. Get data of the file asynchronously on the background thread.
     /// - Returns: Data of the file.
@@ -117,31 +115,41 @@ public class CacheFileManager: CacheFileManagerProtocol {
         self.logger = logger
     }
 
-    public func saveFile(url: URL, data: Data) -> URL? {
-        guard let filePath = filePath(url: url) else { return nil }
+    public func saveFile(url: URL, data: Data, saveCompeletion: @escaping (URL?) -> Void) {
+        guard let filePath = filePath(url: url) else {
+            saveCompeletion(nil)
+            return
+        }
         createDirectory()
         queue.async {
             try? data.write(to: filePath)
+            DispatchQueue.main.async {
+                saveCompeletion(filePath)
+            }
         }
-        return filePath
     }
 
-    public func saveFileInGroup(url: URL, data: Data) -> URL? {
-        guard let groupFilePath = filePathInGroup(url: url) else { return nil }
+    public func saveFileInGroup(url: URL, data: Data, saveCompeletion: @escaping (URL?) -> Void) {
+        guard let groupFilePath = filePathInGroup(url: url) else {
+            saveCompeletion(nil)
+            return
+        }
         createGroupDirectory()
         queue.async {
             try? data.write(to: url)
+            DispatchQueue.main.async {
+                saveCompeletion(groupFilePath)
+            }
         }
-        return groupFilePath
     }
 
     public func getData(url: URL) -> Data? {
-        guard !isFileExist(url: url), let filePath = filePath(url: url) else { return nil }
+        guard isFileExist(url: url), let filePath = filePath(url: url) else { return nil }
         return try? Data(contentsOf: filePath)
     }
 
     public func getDataInGroup(url: URL) -> Data? {
-        guard !isFileExistInGroup(url: url), let groupFilePath = filePathInGroup(url: url) else { return nil }
+        guard isFileExistInGroup(url: url), let groupFilePath = filePathInGroup(url: url) else { return nil }
         return getData(url: groupFilePath)
     }
 
@@ -176,12 +184,12 @@ public class CacheFileManager: CacheFileManagerProtocol {
     }
 
     public func isFileExist(url: URL) -> Bool {
-        if let filePathURL = filePath(url: url) { return fm.fileExists(atPath: filePathURL.absoluteString) }
+        if let filePathURL = filePath(url: url) { return fm.fileExists(atPath: filePathURL.path) }
         return false
     }
 
     public func isFileExistInGroup(url: URL) -> Bool {
-        if let groupPath = filePathInGroup(url: url) { return fm.fileExists(atPath: groupPath.absoluteString) }
+        if let groupPath = filePathInGroup(url: url) { return fm.fileExists(atPath: groupPath.path) }
         return false
     }
 

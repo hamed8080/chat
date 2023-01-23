@@ -111,4 +111,25 @@ class CallbacksManager {
         callback(response)
         removeCallback(uniqueId: uniqueId, requestType: type)
     }
+
+    func invokeSentCallbackAndRemove(_ response: ChatResponse<MessageResponse>) {
+        guard let uniqueId = response.uniqueId,
+              let callback = getSentCallback(uniqueId) else { return }
+        callback(response)
+        removeSentCallback(uniqueId: uniqueId)
+    }
+
+    func invokeDeliverCallbackAndRemove(_ response: ChatResponse<MessageResponse>) {
+        guard let uniqueId = response.uniqueId,
+              let callback = getDeliverCallback(uniqueId) else { return }
+        callback(response)
+        removeDeliverCallback(uniqueId: uniqueId)
+    }
+
+    func invokeSeenCallbackAndRemove(_ response: ChatResponse<MessageResponse>) {
+        guard let uniqueId = response.uniqueId,
+              let callback = getSeenCallback(uniqueId) else { return }
+        callback(response)
+        removeSeenCallback(uniqueId: uniqueId)
+    }
 }

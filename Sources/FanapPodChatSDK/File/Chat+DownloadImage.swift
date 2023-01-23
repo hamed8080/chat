@@ -71,10 +71,11 @@ extension Chat {
             let fileNameWithExtension = "\(name ?? "default")"
             let image = Image(size: size, name: fileNameWithExtension, hashCode: req.hashCode)
             cache?.image?.insert(models: [image])
-            let filePath = cacheFileManager?.saveFile(url: URL(string: url)!, data: data ?? Data())
-            completion?(data, filePath, image, nil)
-            let response: ChatResponse<Data?> = .init(uniqueId: req.uniqueId, result: data)
-            delegate?.chatEvent(event: .file(.imageDownloaded(response)))
+            cacheFileManager?.saveFile(url: URL(string: url)!, data: data ?? Data()) { [weak self] filePath in
+                completion?(data, filePath, image, nil)
+                let response: ChatResponse<Data?> = .init(uniqueId: req.uniqueId, result: data)
+                self?.delegate?.chatEvent(event: .file(.imageDownloaded(response)))
+            }
         } else {
             let headers = (response as? HTTPURLResponse)?.allHeaderFields as? [String: Any]
             let message = (headers?["errorMessage"] as? String) ?? ""

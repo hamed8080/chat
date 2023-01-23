@@ -54,7 +54,7 @@ public class AddCallParticipantsRequest: UniqueIdManagerRequest, ChatSendable, S
             try? container.encode(contactids)
         }
 
-        if let coreUserIds = contactIds {
+        if let coreUserIds = coreuserIds {
             try? container.encode(coreUserIds)
         }
 

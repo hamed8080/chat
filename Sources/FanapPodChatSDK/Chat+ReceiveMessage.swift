@@ -219,6 +219,8 @@ extension Chat {
             onGroupCallCanceled(asyncMessage)
         case .callStickerSystemMessage:
             onCallSticker(asyncMessage)
+        case .threadsUnreadCount:
+            onThreadsUnreadCount(asyncMessage)
         case .error:
             onError(asyncMessage)
         case .unknown:

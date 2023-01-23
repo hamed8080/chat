@@ -16,6 +16,7 @@ extension Chat {
                                      _ uploadUniqueIdResult: UniqueIdResultType? = nil,
                                      _ messageUniqueIdResult: UniqueIdResultType? = nil)
     {
+        textMessage.uniqueId = req.uniqueId
         textMessage.typeCode = config.typeCode
         cache?.fileQueue?.insert(req: textMessage, imageRequest: req)
         messageUniqueIdResult?(textMessage.uniqueId)

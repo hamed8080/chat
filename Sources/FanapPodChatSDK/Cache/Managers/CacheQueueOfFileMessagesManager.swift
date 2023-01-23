@@ -68,15 +68,19 @@ class CacheQueueOfFileMessagesManager: CoreDataProtocol {
     func delete(entity _: CDQueueOfFileMessages) {}
 
     func insert(req: SendTextMessageRequest? = nil, uploadFile: UploadFileRequest) {
-        let req = QueueOfFileMessages(req: req, uploadFile: uploadFile)
-        let entity = CDQueueOfFileMessages(context: context)
-        entity.update(req)
+        insertObjects { context in
+            let req = QueueOfFileMessages(req: req, uploadFile: uploadFile)
+            let entity = CDQueueOfFileMessages(context: context)
+            entity.update(req)
+        }
     }
 
     func insert(req: SendTextMessageRequest? = nil, imageRequest: UploadImageRequest) {
-        let req = QueueOfFileMessages(req: req, imageRequest: imageRequest)
-        let entity = CDQueueOfFileMessages(context: context)
-        entity.update(req)
+        insertObjects { context in
+            let req = QueueOfFileMessages(req: req, imageRequest: imageRequest)
+            let entity = CDQueueOfFileMessages(context: context)
+            entity.update(req)
+        }
     }
 
     func delete(_ uniqueIds: [String]) {
