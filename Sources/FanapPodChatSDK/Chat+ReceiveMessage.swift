@@ -118,8 +118,6 @@ extension Chat {
             onStatusPing(asyncMessage)
         case .systemMessage:
             onSystemMessageEvent(asyncMessage)
-        case .threadInfoUpdated:
-            onUpdateThreadInfo(asyncMessage)
         case .threadParticipants:
             onThreadParticipants(asyncMessage)
         case .unblock, .block:
@@ -178,6 +176,8 @@ extension Chat {
             onArchiveUnArchiveThread(asyncMessage)
         case .threadsUnreadCount:
             onThreadsUnreadCount(asyncMessage)
+        case .threadContactNameUpdated:
+            onThreadNameContactUpdated(asyncMessage)
         case .error:
             onError(asyncMessage)
         case .unknown:

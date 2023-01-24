@@ -35,7 +35,6 @@ public enum ChatMessageVOTypes: Int, Codable, SafeDecodable {
     case threadParticipants = 27
     case editMessage = 28
     case deleteMessage = 29
-    case threadInfoUpdated = 30
     case lastMssageSeenUpdated = 31
     case messageDeliveredToParticipants = 32
     case getMessageSeenParticipants = 33
@@ -92,6 +91,7 @@ public enum ChatMessageVOTypes: Int, Codable, SafeDecodable {
     case getTagParticipants = -4
 
     case exportChats = 152
+    case threadContactNameUpdated = 220
     case archiveThread = 223
     case unarchiveThread = 224
     case threadsUnreadCount = 233
