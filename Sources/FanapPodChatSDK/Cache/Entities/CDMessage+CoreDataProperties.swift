@@ -85,7 +85,7 @@ public extension CDMessage {
                 uniqueId: uniqueId,
                 conversation: fillSelfRelation ? conversation?.codable() : nil,
                 forwardInfo: forwardInfo?.codable,
-                participant: participant?.codable,
+                participant: fillSelfRelation ? participant?.codable : nil,
                 replyInfo: replyInfo?.codable,
                 pinTime: pinTime?.uintValue,
                 notifyAll: notifyAll?.boolValue)
