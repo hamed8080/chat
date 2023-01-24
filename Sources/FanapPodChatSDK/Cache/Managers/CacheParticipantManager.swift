@@ -24,12 +24,29 @@ class CacheParticipantManager: CoreDataProtocol {
     func insert(context: NSManagedObjectContext, model: Participant) {
         let entity = CDParticipant(context: context)
         entity.update(model)
+
+        if let conversation = model.conversation, let threadEntity = CacheConversationManager(context: context, pm: pm, logger: logger).first(with: conversation.id ?? -1) {
+            entity.conversation = threadEntity
+        } else if let conversation = model.conversation {
+            let newThraed = CDConversation(context: context)
+            newThraed.id = conversation.id as? NSNumber
+            entity.conversation = newThraed
+        }
     }
 
     func insert(models: [Participant]) {
         insertObjects { [weak self] bgTask in
             models.forEach { model in
                 self?.insert(context: bgTask, model: model)
+            }
+        }
+    }
+
+    func insert(model: Conversation?) {
+        insertObjects { [weak self] bgTask in
+            model?.participants?.forEach { participant in
+                participant.conversation = model
+                self?.insert(context: bgTask, model: participant)
             }
         }
     }
@@ -68,7 +85,7 @@ class CacheParticipantManager: CoreDataProtocol {
     func delete(entity _: CDParticipant) {}
 
     func getParticipantsForThread(_ threadId: Int?, _ count: Int?, _ offset: Int?) -> (objects: [CDParticipant], totalCount: Int) {
-        let predicate = NSPredicate(format: "threadId == %i", threadId ?? -1)
+        let predicate = NSPredicate(format: "conversation.id == %i", threadId ?? -1)
         return fetchWithOffset(count: count, offset: offset, predicate: predicate)
     }
 

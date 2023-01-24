@@ -42,6 +42,7 @@ open class Participant: Codable, Hashable, Identifiable {
     public var sendEnable: Bool?
     public var username: String?
     public var chatProfileVO: Profile?
+    public var conversation: Conversation?
     public init(
         admin: Bool? = nil,
         auditor: Bool? = nil,
@@ -66,7 +67,8 @@ open class Participant: Codable, Hashable, Identifiable {
         roles: [Roles]? = nil,
         sendEnable: Bool? = nil,
         username: String? = nil,
-        chatProfileVO: Profile? = nil
+        chatProfileVO: Profile? = nil,
+        conversation: Conversation? = nil
     ) {
         self.admin = admin
         self.auditor = auditor
@@ -92,6 +94,7 @@ open class Participant: Codable, Hashable, Identifiable {
         self.sendEnable = sendEnable
         self.username = username
         self.chatProfileVO = chatProfileVO
+        self.conversation = conversation
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -119,6 +122,7 @@ open class Participant: Codable, Hashable, Identifiable {
         case username
         case chatProfileVO
         case roles
+        case conversation
     }
 
     public required init(from decoder: Decoder) throws {
@@ -147,5 +151,6 @@ open class Participant: Codable, Hashable, Identifiable {
         username = try container.decodeIfPresent(String.self, forKey: .username)
         chatProfileVO = try container.decodeIfPresent(Profile.self, forKey: .chatProfileVO)
         roles = try container.decodeIfPresent([Roles].self, forKey: .roles)
+        conversation = try container.decodeIfPresent(Conversation.self, forKey: .conversation)
     }
 }

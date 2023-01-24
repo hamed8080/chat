@@ -35,6 +35,6 @@ public extension CDTagParticipant {
                        active: active?.boolValue,
                        tagId: tagId?.intValue,
                        threadId: threadId?.intValue,
-                       conversation: conversation?.codable)
+                       conversation: conversation?.codable())
     }
 }

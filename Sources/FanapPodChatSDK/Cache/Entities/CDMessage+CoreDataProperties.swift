@@ -83,7 +83,7 @@ public extension CDMessage {
                 time: time?.uintValue,
                 timeNanos: time?.uintValue,
                 uniqueId: uniqueId,
-                conversation: fillSelfRelation ? conversation?.codable : nil,
+                conversation: fillSelfRelation ? conversation?.codable() : nil,
                 forwardInfo: forwardInfo?.codable,
                 participant: participant?.codable,
                 replyInfo: replyInfo?.codable,

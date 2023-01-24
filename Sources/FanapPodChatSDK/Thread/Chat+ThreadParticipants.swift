@@ -44,8 +44,10 @@ public extension Chat {
 extension Chat {
     func onThreadParticipants(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Participant]> = asyncMessage.toChatResponse()
+        let conversation = Conversation(id: response.subjectId)
+        conversation.participants = response.result
         delegate?.chatEvent(event: .thread(.threadParticipantsListChange(response)))
-        cache?.participant?.insert(models: response.result ?? [])
+        cache?.participant?.insert(model: conversation)
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

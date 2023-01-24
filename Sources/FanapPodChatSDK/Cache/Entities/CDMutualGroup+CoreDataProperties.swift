@@ -44,6 +44,6 @@ public extension CDMutualGroup {
     var codable: MutualGroup {
         MutualGroup(idType: InviteeTypes(rawValue: Int(truncating: idType ?? -1)) ?? .unknown,
                     mutualId: mutualId,
-                    conversations: conversations?.allObjects.compactMap { $0 as? CDConversation }.map(\.codable))
+                    conversations: conversations?.allObjects.compactMap { $0 as? CDConversation }.map { $0.codable() })
     }
 }

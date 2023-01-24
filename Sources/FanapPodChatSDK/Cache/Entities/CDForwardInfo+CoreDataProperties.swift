@@ -35,6 +35,6 @@ public extension CDForwardInfo {
     }
 
     var codable: ForwardInfo {
-        ForwardInfo(conversation: conversation?.codable, participant: participant?.codable)
+        ForwardInfo(conversation: conversation?.codable(), participant: participant?.codable)
     }
 }

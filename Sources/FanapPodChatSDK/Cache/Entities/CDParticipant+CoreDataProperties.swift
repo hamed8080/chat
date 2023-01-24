@@ -38,7 +38,6 @@ public extension CDParticipant {
     @NSManaged var receiveEnable: NSNumber?
     @NSManaged var roles: Data?
     @NSManaged var sendEnable: NSNumber?
-    @NSManaged var threadId: NSNumber?
     @NSManaged var time: NSNumber?
     @NSManaged var username: String?
     @NSManaged var assistant: NSSet?
@@ -163,6 +162,7 @@ public extension CDParticipant {
                     receiveEnable: receiveEnable?.boolValue,
                     roles: try? JSONDecoder().decode([Roles].self, from: roles ?? Data()),
                     sendEnable: sendEnable?.boolValue,
-                    username: username)
+                    username: username,
+                    conversation: conversation?.codable(fillSelfRefrence: false))
     }
 }

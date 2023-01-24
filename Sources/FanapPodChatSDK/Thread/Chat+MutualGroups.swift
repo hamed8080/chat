@@ -27,7 +27,7 @@ public extension Chat {
         let mutuals = cache?.mutualGroup?.mutualGroups(request.toBeUserVO.id)
         let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: mutuals?.count)
         let threads = mutuals?.first?.conversations?.allObjects.compactMap { $0 as? CDConversation } ?? []
-        cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: threads.map(\.codable), error: nil, pagination: pagination))
+        cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: threads.map { $0.codable() }, error: nil, pagination: pagination))
     }
 }
 

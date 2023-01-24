@@ -23,7 +23,7 @@ public extension Chat {
         }
 
         let response = cache?.conversation?.fetch(request)
-        let threads = response?.threads.map(\.codable)
+        let threads = response?.threads.map { $0.codable() }
         let pagination = Pagination(hasNext: response?.count ?? 0 >= request.count, count: request.count, offset: request.offset)
         cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: threads, error: nil, pagination: pagination))
     }
