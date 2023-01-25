@@ -49,7 +49,7 @@ extension Chat {
         case .editMessage:
             onEditMessage(asyncMessage)
         case .forwardMessage:
-            break
+            onNewMessage(asyncMessage)
         case .getBlocked:
             onBlockedContacts(asyncMessage)
         case .getContacts:

@@ -156,12 +156,17 @@ extension Chat {
         }
         cache?.message?.insert(models: [message])
         // Check that we are not the sender of the message and message come from another person.
-        if let messageId = message.id, message.participant?.id != userInfo?.id {
-            let currentUnreadCount = cache?.conversation?.increamentUnreadCount(response.subjectId ?? -1)
-            let unreadCount = UnreadCount(unreadCount: currentUnreadCount, threadId: response.subjectId)
-            delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: unreadCount))))
-            deliver(.init(messageId: messageId))
+        // This means that the user himself was the sender of the message, therefore he saw messages inside the thread.
+        let isMe = message.participant?.id == userInfo?.id
+        let currentDBUnreadCount: Int?
+        if isMe {
+            currentDBUnreadCount = cache?.conversation?.setUnreadCountToZero(response.subjectId ?? -1)
+        } else {
+            currentDBUnreadCount = cache?.conversation?.increamentUnreadCount(response.subjectId ?? -1)
         }
+        let unreadCount = UnreadCount(unreadCount: currentDBUnreadCount ?? 0, threadId: response.subjectId)
+        delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: unreadCount))))
+        deliver(.init(messageId: message.id ?? 0))
     }
 
     func onSentMessage(_ asyncMessage: AsyncMessage) {

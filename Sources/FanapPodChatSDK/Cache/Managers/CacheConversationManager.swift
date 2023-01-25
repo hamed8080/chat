@@ -119,7 +119,16 @@ class CacheConversationManager: CoreDataProtocol {
     @discardableResult
     func decreamentUnreadCount(_ threadId: Int) -> Int? {
         guard let entity = first(with: threadId) else { return nil }
-        entity.unreadCount = entity.unreadCount?.intValue ?? 0 > 0 ? NSNumber(integerLiteral: (entity.unreadCount?.intValue ?? 0) - 1) : 0
+        let dbCount = entity.unreadCount?.intValue ?? 0
+        entity.unreadCount = dbCount > 0 ? NSNumber(integerLiteral: dbCount - 1) : 0
+        save()
+        return entity.unreadCount?.intValue ?? 0
+    }
+
+    @discardableResult
+    func setUnreadCountToZero(_ threadId: Int) -> Int? {
+        guard let entity = first(with: threadId) else { return nil }
+        entity.unreadCount = 0
         save()
         return entity.unreadCount?.intValue ?? 0
     }
