@@ -12,19 +12,10 @@ extension Chat {
     func onLastSeenUpdate(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<LastSeenMessageResponse> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
-    }
-}
-
-struct LastSeenMessageResponse: Decodable {
-    let id: Int?
-    var uniqueId: String?
-
-    enum CodingKeys: CodingKey {
-        case id
-    }
-
-    init(from decoder: Decoder) throws {
-        let container = try? decoder.container(keyedBy: CodingKeys.self)
-        id = try container?.decodeIfPresent(Int.self, forKey: .id)
+        if let threadId = response.result?.id, let unreadCount = response.result?.unreadCount {
+            cache?.conversation?.updateThreadsUnreadCount(["\(threadId)": unreadCount])
+            let unreadCountModel = UnreadCount(unreadCount: unreadCount, threadId: threadId)
+            delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(uniqueId: response.uniqueId, result: unreadCountModel, time: response.time))))
+        }
     }
 }
