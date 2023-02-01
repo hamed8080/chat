@@ -32,7 +32,7 @@ class CacheMessageManager: CoreDataProtocol {
             newThraed.id = conversation.id as? NSNumber
             entity.conversation = newThraed
         }
-        entity.threadId = entity.conversation?.id
+        entity.threadId = entity.conversation?.id ?? (model.conversation?.id as? NSNumber)
 
         if let forwardInfo = model.forwardInfo {
             let cmForward = CacheForwardInfoManager(context: context, pm: pm, logger: logger)
@@ -130,6 +130,12 @@ class CacheMessageManager: CoreDataProtocol {
         return NSPredicate(format: "threadId == %i AND id == %i", threadId, messageId)
     }
 
+    func joinPredicate(_ threadId: Int?, _ messageId: Int?) -> NSPredicate {
+        let threadId = threadId ?? -1
+        let messageId = messageId ?? -1
+        return NSPredicate(format: "(conversation.id == %i OR threadId == %i) AND id == %i", threadId, threadId, messageId)
+    }
+
     func partnerDeliver(_ response: MessageResponse) {
         let predicate = predicate(response.threadId, response.messageId)
         let propertiesToUpdate = ["delivered": NSNumber(booleanLiteral: true)]
@@ -175,7 +181,7 @@ class CacheMessageManager: CoreDataProtocol {
     @discardableResult
     func find(_ threadId: Int?, _ messageId: Int?) -> CDMessage? {
         let req = CDMessage.fetchRequest()
-        req.predicate = predicate(threadId, messageId)
+        req.predicate = joinPredicate(threadId, messageId)
         return try? context?.fetch(req).first
     }
 

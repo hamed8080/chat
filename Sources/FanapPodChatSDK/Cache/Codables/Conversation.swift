@@ -169,7 +169,7 @@ open class Conversation: Codable, Hashable, Identifiable {
         mute = try container.decodeIfPresent(Bool.self, forKey: .mute)
         participantCount = try container.decodeIfPresent(Int.self, forKey: .participantCount)
         partner = try container.decodeIfPresent(Int.self, forKey: .partner)
-        partnerLastDeliveredMessageId = try container.decodeIfPresent(Int.self, forKey: .partnerLastSeenMessageId)
+        partnerLastDeliveredMessageId = try container.decodeIfPresent(Int.self, forKey: .partnerLastDeliveredMessageId)
         partnerLastDeliveredMessageNanos = try container.decodeIfPresent(UInt.self, forKey: .partnerLastDeliveredMessageNanos)
         partnerLastDeliveredMessageTime = try container.decodeIfPresent(UInt.self, forKey: .partnerLastDeliveredMessageTime)
         partnerLastSeenMessageId = try container.decodeIfPresent(Int.self, forKey: .partnerLastSeenMessageId)

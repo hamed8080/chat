@@ -26,9 +26,11 @@ class CacheConversationManager: CoreDataProtocol {
         entity.update(model)
         if let lastMessageVO = model.lastMessageVO {
             if let messageEntity = CacheMessageManager(context: context, pm: pm, logger: logger).find(model.id, model.lastMessageVO?.id) {
+                messageEntity.threadId = entity.id
                 entity.lastMessageVO = messageEntity
             } else {
                 let newMessageEntity = CDMessage(context: context)
+                newMessageEntity.threadId = entity.id
                 newMessageEntity.update(lastMessageVO)
                 newMessageEntity.conversation = entity
                 entity.lastMessageVO = newMessageEntity
