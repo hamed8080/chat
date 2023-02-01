@@ -11,9 +11,9 @@ import Foundation
 class CacheQueueOfTextMessagesManager: CoreDataProtocol {
     let idName = "id"
     let pm: PersistentManager
-    var context: NSManagedObjectContext
+    var context: NSManagedObjectContext?
     let logger: Logger?
-    let entityName = CDQueueOfTextMessages.entity().name ?? ""
+    let entityName = CDQueueOfTextMessages.entity().name ?? "CDQueueOfTextMessages"
 
     required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
         self.context = context ?? pm.context
@@ -41,13 +41,13 @@ class CacheQueueOfTextMessagesManager: CoreDataProtocol {
     func first(with id: Int) -> CDQueueOfTextMessages? {
         let req = CDQueueOfTextMessages.fetchRequest()
         req.predicate = idPredicate(id: id)
-        return try? context.fetch(req).first
+        return try? context?.fetch(req).first
     }
 
     func find(predicate: NSPredicate) -> [CDQueueOfTextMessages] {
         let req = CDQueueOfTextMessages.fetchRequest()
         req.predicate = predicate
-        return (try? context.fetch(req)) ?? []
+        return (try? context?.fetch(req)) ?? []
     }
 
     func update(model _: QueueOfTextMessages, entity _: CDQueueOfTextMessages) {}
@@ -77,7 +77,7 @@ class CacheQueueOfTextMessagesManager: CoreDataProtocol {
         batchDelete(entityName: entityName, predicate: predicate)
     }
 
-    func unsedForThread(_ threadId: Int?, _ count: Int?, _ offset: Int?) -> (objects: [CDQueueOfTextMessages], totalCount: Int) {
+    func unsendForThread(_ threadId: Int?, _ count: Int?, _ offset: Int?) -> (objects: [CDQueueOfTextMessages], totalCount: Int) {
         let threadIdPredicate = NSPredicate(format: "threadId == %i", threadId ?? -1)
         let textResponse: (objects: [CDQueueOfTextMessages], totalCount: Int) = fetchWithOffset(
             count: count,

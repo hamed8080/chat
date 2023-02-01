@@ -8,4 +8,5 @@ import Foundation
 
 public enum UserEventTypes {
     case roles(ChatResponse<[Roles]>)
+    case onUser(ChatResponse<User>)
 }

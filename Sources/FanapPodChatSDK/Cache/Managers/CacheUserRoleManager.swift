@@ -11,9 +11,9 @@ import Foundation
 class CacheUserRoleManager: CoreDataProtocol {
     let idName = "id"
     let pm: PersistentManager
-    var context: NSManagedObjectContext
+    var context: NSManagedObjectContext?
     let logger: Logger?
-    let entityName = CDUserRole.entity().name ?? ""
+    let entityName = CDUserRole.entity().name ?? "CDUserRole"
 
     required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
         self.context = context ?? pm.context
@@ -41,13 +41,13 @@ class CacheUserRoleManager: CoreDataProtocol {
     func first(with id: Int) -> CDUserRole? {
         let req = CDUserRole.fetchRequest()
         req.predicate = idPredicate(id: id)
-        return try? context.fetch(req).first
+        return try? context?.fetch(req).first
     }
 
     func find(predicate: NSPredicate) -> [CDUserRole] {
         let req = CDUserRole.fetchRequest()
         req.predicate = predicate
-        return (try? context.fetch(req)) ?? []
+        return (try? context?.fetch(req)) ?? []
     }
 
     func update(model _: UserRole, entity _: CDUserRole) {}
@@ -70,7 +70,7 @@ class CacheUserRoleManager: CoreDataProtocol {
     func roles(_ threadId: Int) -> [Roles] {
         let req = CDUserRole.fetchRequest()
         req.predicate = NSPredicate(format: "threadId == %i", threadId)
-        let roles = (try? context.fetch(req))?.first?.codable.roles
+        let roles = (try? context?.fetch(req))?.first?.codable.roles
         return roles ?? []
     }
 }

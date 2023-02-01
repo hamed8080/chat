@@ -11,9 +11,9 @@ import Foundation
 class CacheContactManager: CoreDataProtocol {
     let idName = "id"
     let pm: PersistentManager
-    var context: NSManagedObjectContext
+    var context: NSManagedObjectContext?
     let logger: Logger?
-    let entityName = CDContact.entity().name ?? ""
+    let entityName = CDContact.entity().name ?? "CDContact"
 
     required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
         self.context = context ?? pm.context
@@ -41,13 +41,13 @@ class CacheContactManager: CoreDataProtocol {
     func first(with id: Int) -> CDContact? {
         let req = CDContact.fetchRequest()
         req.predicate = idPredicate(id: id)
-        return try? context.fetch(req).first
+        return try? context?.fetch(req).first
     }
 
     func find(predicate: NSPredicate) -> [CDContact] {
         let req = CDContact.fetchRequest()
         req.predicate = predicate
-        return (try? context.fetch(req)) ?? []
+        return (try? context?.fetch(req)) ?? []
     }
 
     func update(model _: Contact, entity _: CDContact) {}
@@ -116,13 +116,13 @@ class CacheContactManager: CoreDataProtocol {
         fetchRequest.sortDescriptors = [lastNameSort, firstNameSort]
         fetchRequest.fetchLimit = req.size
         fetchRequest.fetchOffset = req.offset
-        let contacts = (try? context.fetch(fetchRequest)) ?? []
-        let count = try? context.count(for: fetchRequest)
+        let contacts = (try? context?.fetch(fetchRequest)) ?? []
+        let count = try? context?.count(for: fetchRequest)
         return (contacts, count ?? 0)
     }
 
     func allContacts() -> [CDContact] {
         let req = CDContact.fetchRequest()
-        return (try? context.fetch(req)) ?? []
+        return (try? context?.fetch(req)) ?? []
     }
 }

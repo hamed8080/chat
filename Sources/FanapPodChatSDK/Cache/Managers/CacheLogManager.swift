@@ -11,9 +11,9 @@ import Foundation
 class CacheLogManager: CoreDataProtocol {
     let idName = "id"
     let pm: PersistentManager
-    var context: NSManagedObjectContext
+    var context: NSManagedObjectContext?
     let logger: Logger?
-    let entityName = CDLog.entity().name ?? ""
+    let entityName = CDLog.entity().name ?? "CDLog"
 
     required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
         self.context = context ?? pm.context
@@ -41,13 +41,13 @@ class CacheLogManager: CoreDataProtocol {
     func first(with id: Int) -> CDLog? {
         let req = CDLog.fetchRequest()
         req.predicate = idPredicate(id: id)
-        return try? context.fetch(req).first
+        return try? context?.fetch(req).first
     }
 
     func find(predicate: NSPredicate) -> [CDLog] {
         let req = CDLog.fetchRequest()
         req.predicate = predicate
-        return (try? context.fetch(req)) ?? []
+        return (try? context?.fetch(req)) ?? []
     }
 
     func update(model _: Log, entity _: CDLog) {}
@@ -78,6 +78,6 @@ class CacheLogManager: CoreDataProtocol {
         let req = CDLog.fetchRequest()
         req.fetchLimit = 1
         req.sortDescriptors = [sortByTime]
-        return try? context.fetch(req).first
+        return try? context?.fetch(req).first
     }
 }

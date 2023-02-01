@@ -18,7 +18,7 @@ protocol CoreDataProtocol {
     associatedtype Id: IdProtocol
     init(context: NSManagedObjectContext?, pm: PersistentManager, logger: Logger?)
     var pm: PersistentManager { get }
-    var context: NSManagedObjectContext { get set }
+    var context: NSManagedObjectContext? { get set }
     var logger: Logger? { get }
     var idName: String { get }
     var entityName: String { get }
@@ -40,9 +40,9 @@ protocol CoreDataProtocol {
 
 extension CoreDataProtocol {
     func save() {
-        if context.hasChanges == true {
+        if context?.hasChanges == true {
             do {
-                try context.save()
+                try context?.save()
                 logger?.log(title: "saved successfully", jsonString: nil)
             } catch {
                 let nserror = error as NSError
@@ -54,6 +54,7 @@ extension CoreDataProtocol {
     }
 
     func mergeChanges(key: String, _ objectIDs: [NSManagedObjectID]) {
+        guard let context = context else { return }
         NSManagedObjectContext.mergeChanges(
             fromRemoteContextSave: [key: objectIDs],
             into: [context]
@@ -61,7 +62,7 @@ extension CoreDataProtocol {
     }
 
     func insertObjects(_ makeEntities: @escaping ((NSManagedObjectContext) -> Void)) {
-        let bgTask = pm.newBgTask()
+        guard let bgTask = pm.newBgTask() else { return }
         bgTask.perform {
             makeEntities(bgTask)
             try? bgTask.save()
@@ -74,7 +75,7 @@ extension CoreDataProtocol {
     }
 
     func batchUpdate(_ updateObjects: @escaping (NSManagedObjectContext) -> Void) {
-        let bgTask = pm.newBgTask()
+        guard let bgTask = pm.newBgTask() else { return }
         bgTask.perform {
             updateObjects(bgTask)
             try? bgTask.save()
@@ -84,7 +85,7 @@ extension CoreDataProtocol {
     }
 
     func batchDelete(entityName: String, idName: String = "id", _ ids: [Int]) {
-        let bgTask = pm.newBgTask()
+        guard let bgTask = pm.newBgTask() else { return }
         let req = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
         req.predicate = NSPredicate(format: "\(idName) IN %@", ids.map { $0 as NSNumber })
         let request = NSBatchDeleteRequest(fetchRequest: req)
@@ -97,7 +98,7 @@ extension CoreDataProtocol {
     }
 
     func batchDelete(entityName: String, predicate: NSPredicate) {
-        let bgTask = pm.newBgTask()
+        guard let bgTask = pm.newBgTask() else { return }
         let req = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
         req.predicate = predicate
         let request = NSBatchDeleteRequest(fetchRequest: req)
@@ -121,8 +122,8 @@ extension CoreDataProtocol {
         req.predicate = predicate
         req.fetchLimit = count ?? 50
         req.fetchOffset = offset ?? 0
-        let totalCount = (try? context.count(for: req)) ?? 0
-        let objects = (try? context.fetch(req)) ?? []
+        let totalCount = (try? context?.count(for: req)) ?? 0
+        let objects = (try? context?.fetch(req)) ?? []
         return (objects, totalCount)
     }
 }

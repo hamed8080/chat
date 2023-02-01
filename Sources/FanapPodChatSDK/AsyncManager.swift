@@ -69,6 +69,7 @@ internal class AsyncManager: AsyncDelegate {
         asyncClient?.disposeObject()
         asyncClient = nil
         pingTimer.invalidate()
+        queueTimer.invalidate()
     }
 
     /// The sendData delegate will inform if a send event occurred by the async socket.

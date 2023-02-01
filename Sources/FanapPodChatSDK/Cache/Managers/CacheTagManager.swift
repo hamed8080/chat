@@ -11,9 +11,9 @@ import Foundation
 class CacheTagManager: CoreDataProtocol {
     let idName = "id"
     let pm: PersistentManager
-    var context: NSManagedObjectContext
+    var context: NSManagedObjectContext?
     let logger: Logger?
-    let entityName = CDTag.entity().name ?? ""
+    let entityName = CDTag.entity().name ?? "CDTag"
 
     required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
         self.context = context ?? pm.context
@@ -41,13 +41,13 @@ class CacheTagManager: CoreDataProtocol {
     func first(with id: Int) -> CDTag? {
         let req = CDTag.fetchRequest()
         req.predicate = idPredicate(id: id)
-        return try? context.fetch(req).first
+        return try? context?.fetch(req).first
     }
 
     func find(predicate: NSPredicate) -> [CDTag] {
         let req = CDTag.fetchRequest()
         req.predicate = predicate
-        return (try? context.fetch(req)) ?? []
+        return (try? context?.fetch(req)) ?? []
     }
 
     func update(model _: Tag, entity _: CDTag) {}
@@ -69,7 +69,7 @@ class CacheTagManager: CoreDataProtocol {
 
     func getTags() -> [CDTag] {
         let req = CDTag.fetchRequest()
-        return (try? context.fetch(req)) ?? []
+        return (try? context?.fetch(req)) ?? []
     }
 
     func delete(_ id: Int?) {

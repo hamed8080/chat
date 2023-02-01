@@ -11,9 +11,9 @@ import Foundation
 class CacheAssistantManager: CoreDataProtocol {
     let idName = "id"
     let pm: PersistentManager
-    var context: NSManagedObjectContext
+    var context: NSManagedObjectContext?
     let logger: Logger?
-    let entityName = CDAssistant.entity().name ?? ""
+    let entityName = CDAssistant.entity().name ?? "CDAssistant"
 
     required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
         self.context = context ?? pm.context
@@ -41,13 +41,13 @@ class CacheAssistantManager: CoreDataProtocol {
     func first(with id: Int) -> CDAssistant? {
         let req = CDAssistant.fetchRequest()
         req.predicate = idPredicate(id: id)
-        return try? context.fetch(req).first
+        return try? context?.fetch(req).first
     }
 
     func find(predicate: NSPredicate) -> [CDAssistant] {
         let req = CDAssistant.fetchRequest()
         req.predicate = predicate
-        return (try? context.fetch(req)) ?? []
+        return (try? context?.fetch(req)) ?? []
     }
 
     func update(model _: Assistant, entity _: CDAssistant) {}

@@ -11,9 +11,9 @@ import Foundation
 class CacheMessageManager: CoreDataProtocol {
     let idName = "id"
     let pm: PersistentManager
-    var context: NSManagedObjectContext
+    var context: NSManagedObjectContext?
     let logger: Logger?
-    let entityName = CDMessage.entity().name ?? ""
+    let entityName = CDMessage.entity().name ?? "CDMessage"
 
     required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
         self.context = context ?? pm.context
@@ -75,13 +75,13 @@ class CacheMessageManager: CoreDataProtocol {
     func first(with id: Int) -> CDMessage? {
         let req = CDMessage.fetchRequest()
         req.predicate = idPredicate(id: id)
-        return try? context.fetch(req).first
+        return try? context?.fetch(req).first
     }
 
     func find(predicate: NSPredicate) -> [CDMessage] {
         let req = CDMessage.fetchRequest()
         req.predicate = predicate
-        return (try? context.fetch(req)) ?? []
+        return (try? context?.fetch(req)) ?? []
     }
 
     func update(model _: Message, entity _: CDMessage) {}
@@ -176,13 +176,13 @@ class CacheMessageManager: CoreDataProtocol {
     func find(_ threadId: Int?, _ messageId: Int?) -> CDMessage? {
         let req = CDMessage.fetchRequest()
         req.predicate = predicate(threadId, messageId)
-        return try? context.fetch(req).first
+        return try? context?.fetch(req).first
     }
 
     func fecthMessage(threadId: Int?, messageId: Int?) -> CDMessage? {
         let req = CDMessage.fetchRequest()
         req.predicate = predicate(threadId, messageId)
-        return try? context.fetch(req).first
+        return try? context?.fetch(req).first
     }
 
     func fetch(_ req: GetHistoryRequest) -> (messages: [CDMessage], totalCount: Int) {
@@ -192,8 +192,8 @@ class CacheMessageManager: CoreDataProtocol {
         let sortByTime = NSSortDescriptor(key: "time", ascending: (req.order == Ordering.asc.rawValue) ? true : false)
         fetchRequest.sortDescriptors = [sortByTime]
         fetchRequest.predicate = predicateArray(req)
-        let totalCount = (try? context.count(for: fetchRequest)) ?? 0
-        let messages = (try? context.fetch(fetchRequest)) ?? []
+        let totalCount = (try? context?.count(for: fetchRequest)) ?? 0
+        let messages = (try? context?.fetch(fetchRequest)) ?? []
         return (messages, totalCount)
     }
 

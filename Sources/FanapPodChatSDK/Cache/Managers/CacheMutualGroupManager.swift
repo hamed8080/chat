@@ -11,9 +11,9 @@ import Foundation
 class CacheMutualGroupManager: CoreDataProtocol {
     let idName = "id"
     let pm: PersistentManager
-    var context: NSManagedObjectContext
+    var context: NSManagedObjectContext?
     let logger: Logger?
-    let entityName = CDMutualGroup.entity().name ?? ""
+    let entityName = CDMutualGroup.entity().name ?? "CDMutualGroup"
 
     required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
         self.context = context ?? pm.context
@@ -47,13 +47,13 @@ class CacheMutualGroupManager: CoreDataProtocol {
     func first(with id: Int) -> CDMutualGroup? {
         let req = CDMutualGroup.fetchRequest()
         req.predicate = idPredicate(id: id)
-        return try? context.fetch(req).first
+        return try? context?.fetch(req).first
     }
 
     func find(predicate: NSPredicate) -> [CDMutualGroup] {
         let req = CDMutualGroup.fetchRequest()
         req.predicate = predicate
-        return (try? context.fetch(req)) ?? []
+        return (try? context?.fetch(req)) ?? []
     }
 
     func update(model _: MutualGroup, entity _: CDMutualGroup) {}
@@ -81,6 +81,6 @@ class CacheMutualGroupManager: CoreDataProtocol {
     func mutualGroups(_ id: String?) -> [CDMutualGroup] {
         let req = CDMutualGroup.fetchRequest()
         req.predicate = NSPredicate(format: "mutualId == %@", id ?? "")
-        return (try? context.fetch(req)) ?? []
+        return (try? context?.fetch(req)) ?? []
     }
 }

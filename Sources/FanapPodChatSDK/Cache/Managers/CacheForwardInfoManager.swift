@@ -11,9 +11,9 @@ import Foundation
 class CacheForwardInfoManager: CoreDataProtocol {
     let idName = "id"
     let pm: PersistentManager
-    var context: NSManagedObjectContext
+    var context: NSManagedObjectContext?
     let logger: Logger?
-    let entityName = CDForwardInfo.entity().name ?? ""
+    let entityName = CDForwardInfo.entity().name ?? "CDForwardInfo"
 
     required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
         self.context = context ?? pm.context
@@ -41,13 +41,13 @@ class CacheForwardInfoManager: CoreDataProtocol {
     func first(with id: Int) -> CDForwardInfo? {
         let req = CDForwardInfo.fetchRequest()
         req.predicate = idPredicate(id: id)
-        return try? context.fetch(req).first
+        return try? context?.fetch(req).first
     }
 
     func find(predicate: NSPredicate) -> [CDForwardInfo] {
         let req = CDForwardInfo.fetchRequest()
         req.predicate = predicate
-        return (try? context.fetch(req)) ?? []
+        return (try? context?.fetch(req)) ?? []
     }
 
     func update(model _: ForwardInfo, entity _: CDForwardInfo) {}
@@ -72,10 +72,11 @@ class CacheForwardInfoManager: CoreDataProtocol {
         let req = CDForwardInfo.fetchRequest()
         req.predicate = predicate
         req.fetchLimit = 1
-        return try? context.fetch(req).first
+        return try? context?.fetch(req).first
     }
 
     func insert(_ forwardInfo: ForwardInfo, _ message: CDMessage) {
+        guard let context = context else { return }
         let entity = CDForwardInfo(context: context)
         entity.message = message
         if let conversation = forwardInfo.conversation {

@@ -11,9 +11,9 @@ import Foundation
 class CacheQueueOfFileMessagesManager: CoreDataProtocol {
     let idName = "id"
     let pm: PersistentManager
-    var context: NSManagedObjectContext
+    var context: NSManagedObjectContext?
     let logger: Logger?
-    let entityName = CDQueueOfFileMessages.entity().name ?? ""
+    let entityName = CDQueueOfFileMessages.entity().name ?? "CDQueueOfFileMessages"
 
     required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
         self.context = context ?? pm.context
@@ -41,13 +41,13 @@ class CacheQueueOfFileMessagesManager: CoreDataProtocol {
     func first(with id: Int) -> CDQueueOfFileMessages? {
         let req = CDQueueOfFileMessages.fetchRequest()
         req.predicate = idPredicate(id: id)
-        return try? context.fetch(req).first
+        return try? context?.fetch(req).first
     }
 
     func find(predicate: NSPredicate) -> [CDQueueOfFileMessages] {
         let req = CDQueueOfFileMessages.fetchRequest()
         req.predicate = predicate
-        return (try? context.fetch(req)) ?? []
+        return (try? context?.fetch(req)) ?? []
     }
 
     func update(model _: QueueOfFileMessages, entity _: CDQueueOfFileMessages) {}

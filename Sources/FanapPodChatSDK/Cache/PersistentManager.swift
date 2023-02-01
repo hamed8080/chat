@@ -17,36 +17,48 @@ class PMPersistentContainer: NSPersistentContainer {
 public class PersistentManager {
     var logger: Logger?
     var cacheEnabled: Bool
+    let baseModelFileName = "ChatSDKModel"
 
     init(logger: Logger? = nil, cacheEnabled: Bool = false) {
         self.logger = logger
         self.cacheEnabled = cacheEnabled
     }
 
-    lazy var context: NSManagedObjectContext = container.viewContext
+    var context: NSManagedObjectContext? {
+        guard let context = currentUserContainer?.viewContext else { return nil }
+        return context
+    }
 
-    func newBgTask() -> NSManagedObjectContext {
-        let bgTask = container.newBackgroundContext()
+    func newBgTask() -> NSManagedObjectContext? {
+        guard let bgTask = currentUserContainer?.newBackgroundContext() else { return nil }
         bgTask.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         bgTask.name = "BGTASK"
         return bgTask
     }
 
-    lazy var container: NSPersistentContainer = {
+    /// The structure and model of SQLite database which is a file we created at Resources/ChaSDKModel.xcdataModeld.
+    var modelFile: NSManagedObjectModel {
+        guard let modelURL = Bundle.moduleBundle.url(forResource: baseModelFileName, withExtension: "momd") else { fatalError("Couldn't find the mond file!") }
+        guard let mom = NSManagedObjectModel(contentsOf: modelURL) else { fatalError("Error initializing mom from: \(modelURL)") }
+        return mom
+    }
+
+    var containers: [NSPersistentContainer] = []
+    var currentUserContainer: NSPersistentContainer?
+
+    func switchToContainer(userId: Int) {
         RolesValueTransformer.register()
         AssistantValueTransformer.register()
-        let modelName = "ChatSDKModel"
-        guard let modelURL = Bundle.moduleBundle.url(forResource: modelName, withExtension: "momd") else { fatalError("Couldn't find the mond file!") }
-        guard let mom = NSManagedObjectModel(contentsOf: modelURL) else { fatalError("Error initializing mom from: \(modelURL)") }
-        let container = PMPersistentContainer(name: modelName, managedObjectModel: mom)
-        container.loadPersistentStores { desc, error in
+        let container = PMPersistentContainer(name: "\(baseModelFileName)-\(userId)", managedObjectModel: modelFile)
+        container.loadPersistentStores { [weak self] desc, error in
             if let error = error {
-                self.logger?.log(message: "error load CoreData persistentstore des:\(desc) error: \(error)", level: .error)
+                self?.logger?.log(message: "error load CoreData persistentstore des:\(desc) error: \(error)", level: .error)
+            } else {
+                container.viewContext.automaticallyMergesChangesFromParent = true
+                self?.currentUserContainer = container
             }
         }
-        container.viewContext.automaticallyMergesChangesFromParent = true
-        return container
-    }()
+    }
 
     func save(context: NSManagedObjectContext, _ logger: Logger? = nil) {
         if context.hasChanges == true, cacheEnabled == true {

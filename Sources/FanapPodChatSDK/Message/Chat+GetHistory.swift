@@ -41,7 +41,7 @@ public extension Chat {
         let pagination = Pagination(hasNext: response?.totalCount ?? 0 >= request.count, count: request.count, offset: request.offset)
         cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: response?.messages.map { $0.codable() }, error: nil, contentCount: response?.totalCount, pagination: pagination))
 
-        let resText = cache?.textQueue?.unsedForThread(request.threadId, request.count, request.offset)
+        let resText = cache?.textQueue?.unsendForThread(request.threadId, request.count, request.offset)
         textMessageNotSentRequests?(ChatResponse(uniqueId: request.uniqueId, result: resText?.objects.map(\.codable.request), error: nil))
 
         let resEdit = cache?.editQueue?.unsedForThread(request.threadId, request.count, request.offset)

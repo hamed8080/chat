@@ -11,9 +11,9 @@ import Foundation
 class CacheTagParticipantManager: CoreDataProtocol {
     let idName = "id"
     let pm: PersistentManager
-    var context: NSManagedObjectContext
+    var context: NSManagedObjectContext?
     let logger: Logger?
-    let entityName = CDTagParticipant.entity().name ?? ""
+    let entityName = CDTagParticipant.entity().name ?? "CDTagParticipant"
 
     required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
         self.context = context ?? pm.context
@@ -41,13 +41,13 @@ class CacheTagParticipantManager: CoreDataProtocol {
     func first(with id: Int) -> CDTagParticipant? {
         let req = CDTagParticipant.fetchRequest()
         req.predicate = idPredicate(id: id)
-        return try? context.fetch(req).first
+        return try? context?.fetch(req).first
     }
 
     func find(predicate: NSPredicate) -> [CDTagParticipant] {
         let req = CDTagParticipant.fetchRequest()
         req.predicate = predicate
-        return (try? context.fetch(req)) ?? []
+        return (try? context?.fetch(req)) ?? []
     }
 
     func update(model _: TagParticipant, entity _: CDTagParticipant) {}

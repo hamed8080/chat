@@ -11,9 +11,9 @@ import Foundation
 class CacheQueueOfForwardMessagesManager: CoreDataProtocol {
     let idName = "id"
     let pm: PersistentManager
-    var context: NSManagedObjectContext
+    var context: NSManagedObjectContext?
     let logger: Logger?
-    let entityName = CDQueueOfForwardMessages.entity().name ?? ""
+    let entityName = CDQueueOfForwardMessages.entity().name ?? "CDQueueOfForwardMessages"
 
     required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
         self.context = context ?? pm.context
@@ -41,13 +41,13 @@ class CacheQueueOfForwardMessagesManager: CoreDataProtocol {
     func first(with id: Int) -> CDQueueOfForwardMessages? {
         let req = CDQueueOfForwardMessages.fetchRequest()
         req.predicate = idPredicate(id: id)
-        return try? context.fetch(req).first
+        return try? context?.fetch(req).first
     }
 
     func find(predicate: NSPredicate) -> [CDQueueOfForwardMessages] {
         let req = CDQueueOfForwardMessages.fetchRequest()
         req.predicate = predicate
-        return (try? context.fetch(req)) ?? []
+        return (try? context?.fetch(req)) ?? []
     }
 
     func update(model _: QueueOfForwardMessages, entity _: CDQueueOfForwardMessages) {}

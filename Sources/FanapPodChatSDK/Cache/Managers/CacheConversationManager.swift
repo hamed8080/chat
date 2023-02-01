@@ -11,9 +11,9 @@ import Foundation
 class CacheConversationManager: CoreDataProtocol {
     let idName = "id"
     let pm: PersistentManager
-    var context: NSManagedObjectContext
+    var context: NSManagedObjectContext?
     let logger: Logger?
-    let entityName = CDConversation.entity().name ?? ""
+    let entityName = CDConversation.entity().name ?? "CDConversation"
 
     required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
         self.context = context ?? pm.context
@@ -52,13 +52,13 @@ class CacheConversationManager: CoreDataProtocol {
         let req = CDConversation.fetchRequest()
         req.predicate = idPredicate(id: id)
         req.fetchLimit = 1
-        return try? context.fetch(req).first
+        return try? context?.fetch(req).first
     }
 
     func find(predicate: NSPredicate) -> [CDConversation] {
         let req = CDConversation.fetchRequest()
         req.predicate = predicate
-        return (try? context.fetch(req)) ?? []
+        return (try? context?.fetch(req)) ?? []
     }
 
     func update(model _: Conversation, entity _: CDConversation) {}
@@ -157,10 +157,10 @@ class CacheConversationManager: CoreDataProtocol {
         let sortByTime = NSSortDescriptor(key: "time", ascending: false)
         let sortByPin = NSSortDescriptor(key: "pin", ascending: false)
         fetchRequest.sortDescriptors = [sortByPin, sortByTime]
-        let threads = (try? context.fetch(fetchRequest)) ?? []
+        let threads = (try? context?.fetch(fetchRequest)) ?? []
         fetchRequest.fetchLimit = 0
         fetchRequest.fetchOffset = 0
-        let count = (try? context.count(for: fetchRequest)) ?? 0
+        let count = (try? context?.count(for: fetchRequest)) ?? 0
         return (threads, count)
     }
 
@@ -168,7 +168,7 @@ class CacheConversationManager: CoreDataProtocol {
         let req = NSFetchRequest<NSDictionary>(entityName: entityName)
         req.resultType = .dictionaryResultType
         req.propertiesToFetch = ["id"]
-        let dic = try? context.fetch(req)
+        let dic = try? context?.fetch(req)
         let threadIds = dic?.flatMap(\.allValues).compactMap { $0 as? Int }
         return threadIds ?? []
     }
@@ -228,7 +228,7 @@ class CacheConversationManager: CoreDataProtocol {
         req.propertiesToFetch = [sumDesc]
         req.returnsObjectsAsFaults = false
         req.resultType = .dictionaryResultType
-        let dic = try? context.fetch(req).first as? [String: Int]
+        let dic = try? context?.fetch(req).first as? [String: Int]
         return dic?["sum"] ?? 0
     }
 
@@ -249,7 +249,7 @@ class CacheConversationManager: CoreDataProtocol {
         req.resultType = .dictionaryResultType
         req.propertiesToFetch = ["id", "unreadCount"]
         req.predicate = NSPredicate(format: "id IN %@", threadIds)
-        let rows = try? context.fetch(req)
+        let rows = try? context?.fetch(req)
         var result: [String: Int] = [:]
         rows?.forEach { dic in
             var threadId = 0

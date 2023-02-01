@@ -8,30 +8,32 @@
 import Foundation
 
 class CacheManager {
-    let logger: Logger?
-    let assistant: CacheAssistantManager?
-    let contact: CacheContactManager?
-    let conversation: CacheConversationManager?
-    let file: CacheCoreDataFileManager?
-    let forwardInfo: CacheForwardInfoManager?
-    let image: CacheImageManager?
-    let log: CacheLogManager?
-    let message: CacheMessageManager?
-    let mutualGroup: CacheMutualGroupManager?
-    let participant: CacheParticipantManager?
-    let editQueue: CacheQueueOfEditMessagesManager?
-    let textQueue: CacheQueueOfTextMessagesManager?
-    let forwardQueue: CacheQueueOfForwardMessagesManager?
-    let fileQueue: CacheQueueOfFileMessagesManager?
-    let replyInfo: CacheReplyInfoManager?
-    let tag: CacheTagManager?
-    let tagParticipant: CacheTagParticipantManager?
-    let user: CacheUserManager?
-    let userRole: CacheUserRoleManager?
+    var logger: Logger?
+    var assistant: CacheAssistantManager?
+    var contact: CacheContactManager?
+    var conversation: CacheConversationManager?
+    var file: CacheCoreDataFileManager?
+    var forwardInfo: CacheForwardInfoManager?
+    var image: CacheImageManager?
+    var log: CacheLogManager?
+    var message: CacheMessageManager?
+    var mutualGroup: CacheMutualGroupManager?
+    var participant: CacheParticipantManager?
+    var editQueue: CacheQueueOfEditMessagesManager?
+    var textQueue: CacheQueueOfTextMessagesManager?
+    var forwardQueue: CacheQueueOfForwardMessagesManager?
+    var fileQueue: CacheQueueOfFileMessagesManager?
+    var replyInfo: CacheReplyInfoManager?
+    var tag: CacheTagManager?
+    var tagParticipant: CacheTagParticipantManager?
+    var user: CacheUserManager?
+    var userRole: CacheUserRoleManager?
 
-    init(pm: PersistentManager, logger: Logger? = nil) {
+    init() {}
+
+    func update(pm: PersistentManager, logger: Logger? = nil) {
         self.logger = logger
-        let context = pm.context
+        guard let context = pm.context else { return }
         assistant = CacheAssistantManager(context: context, pm: pm, logger: logger)
         contact = CacheContactManager(context: context, pm: pm, logger: logger)
         conversation = CacheConversationManager(context: context, pm: pm, logger: logger)

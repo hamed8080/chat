@@ -19,7 +19,7 @@ extension Chat {
         prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
         let req = CDUser.fetchRequest()
         req.predicate = NSPredicate(format: "isMe == %@", NSNumber(booleanLiteral: true))
-        let cachedUseInfo = (try? persistentManager.context.fetch(req))?.first
+        let cachedUseInfo = (try? persistentManager.context?.fetch(req))?.first
         cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: cachedUseInfo?.codable))
     }
 
@@ -47,6 +47,7 @@ extension Chat {
             cache?.user?.insert([user], isMe: true)
             userInfo = user
             state = .chatReady
+            delegate?.chatEvent(event: .user(.onUser(.init(result: user))))
             delegate?.chatState(state: .chatReady, currentUser: user, error: nil)
             asyncManager.sendQueuesOnReconnect()
             requestUserTimer.invalidate()

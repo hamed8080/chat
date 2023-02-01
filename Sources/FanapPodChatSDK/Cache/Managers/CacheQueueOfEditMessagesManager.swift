@@ -11,9 +11,9 @@ import Foundation
 class CacheQueueOfEditMessagesManager: CoreDataProtocol {
     let idName = "id"
     let pm: PersistentManager
-    var context: NSManagedObjectContext
+    var context: NSManagedObjectContext?
     let logger: Logger?
-    let entityName = CDQueueOfEditMessages.entity().name ?? ""
+    let entityName = CDQueueOfEditMessages.entity().name ?? "CDQueueOfEditMessages"
 
     required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
         self.context = context ?? pm.context
@@ -41,13 +41,13 @@ class CacheQueueOfEditMessagesManager: CoreDataProtocol {
     func first(with id: Int) -> CDQueueOfEditMessages? {
         let req = CDQueueOfEditMessages.fetchRequest()
         req.predicate = idPredicate(id: id)
-        return try? context.fetch(req).first
+        return try? context?.fetch(req).first
     }
 
     func find(predicate: NSPredicate) -> [CDQueueOfEditMessages] {
         let req = CDQueueOfEditMessages.fetchRequest()
         req.predicate = predicate
-        return (try? context.fetch(req)) ?? []
+        return (try? context?.fetch(req)) ?? []
     }
 
     func update(model _: QueueOfEditMessages, entity _: CDQueueOfEditMessages) {}
