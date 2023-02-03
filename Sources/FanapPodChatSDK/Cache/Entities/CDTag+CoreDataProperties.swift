@@ -41,13 +41,6 @@ public extension CDTag {
         id = tag.id as NSNumber
         name = tag.name
         active = tag.active as NSNumber
-        guard let context = managedObjectContext else { print("context is nil"); return }
-        if let tagParticipants = tag.tagParticipants {
-            tagParticipants.forEach { tagParticipant in
-                let entity = CDTagParticipant(context: context)
-                entity.update(tagParticipant)
-            }
-        }
     }
 
     var codable: Tag {

@@ -42,7 +42,7 @@ extension Chat {
     func onUserRemovedFromThread(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Int> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.threadRemovedFrom(response)))
-        cache?.conversation?.delete(response.result ?? -1)
+        cache?.conversation.delete(response.result ?? -1)
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

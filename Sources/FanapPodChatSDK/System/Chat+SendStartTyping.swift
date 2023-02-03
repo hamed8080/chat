@@ -19,7 +19,7 @@ extension Chat {
         timerTyping = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             if self?.isTypingCount ?? 0 < 30 {
                 self?.isTypingCount += 1
-                DispatchQueue.main.async {
+                self?.responseQueue.async {
                     self?.sendSignalMessage(req: .init(signalType: .isTyping, threadId: threadId))
                 }
             } else {

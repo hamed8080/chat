@@ -10,26 +10,24 @@ import Foundation
 
 class CacheUserRoleManager: CoreDataProtocol {
     let idName = "id"
-    let pm: PersistentManager
-    var context: NSManagedObjectContext?
+    var context: NSManagedObjectContext
     let logger: Logger?
     let entityName = CDUserRole.entity().name ?? "CDUserRole"
 
-    required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
-        self.context = context ?? pm.context
-        self.pm = pm
+    required init(context: NSManagedObjectContext, logger: Logger? = nil) {
+        self.context = context
         self.logger = logger
     }
 
-    func insert(context: NSManagedObjectContext, model: UserRole) {
+    func insert(model: UserRole) {
         let entity = CDUserRole(context: context)
         entity.update(model)
     }
 
     func insert(models: [UserRole]) {
-        insertObjects { [weak self] bgTask in
+        insertObjects(context) { [weak self] _ in
             models.forEach { model in
-                self?.insert(context: bgTask, model: model)
+                self?.insert(model: model)
             }
         }
     }
@@ -38,16 +36,22 @@ class CacheUserRoleManager: CoreDataProtocol {
         NSPredicate(format: "\(idName) == %i", id)
     }
 
-    func first(with id: Int) -> CDUserRole? {
-        let req = CDUserRole.fetchRequest()
-        req.predicate = idPredicate(id: id)
-        return try? context?.fetch(req).first
+    func first(with id: Int, _ completion: @escaping (CDUserRole?) -> Void) {
+        context.perform {
+            let req = CDUserRole.fetchRequest()
+            req.predicate = self.idPredicate(id: id)
+            let userRole = try? self.context.fetch(req).first
+            completion(userRole)
+        }
     }
 
-    func find(predicate: NSPredicate) -> [CDUserRole] {
-        let req = CDUserRole.fetchRequest()
-        req.predicate = predicate
-        return (try? context?.fetch(req)) ?? []
+    func find(predicate: NSPredicate, _ completion: @escaping ([CDUserRole]) -> Void) {
+        context.perform {
+            let req = CDUserRole.fetchRequest()
+            req.predicate = predicate
+            let userRoles = (try? self.context.fetch(req)) ?? []
+            completion(userRoles)
+        }
     }
 
     func update(model _: UserRole, entity _: CDUserRole) {}
@@ -56,7 +60,7 @@ class CacheUserRoleManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate { [weak self] bgTask in
+        batchUpdate(context) { [weak self] bgTask in
             let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
@@ -70,7 +74,7 @@ class CacheUserRoleManager: CoreDataProtocol {
     func roles(_ threadId: Int) -> [Roles] {
         let req = CDUserRole.fetchRequest()
         req.predicate = NSPredicate(format: "threadId == %i", threadId)
-        let roles = (try? context?.fetch(req))?.first?.codable.roles
+        let roles = (try? context.fetch(req))?.first?.codable.roles
         return roles ?? []
     }
 }

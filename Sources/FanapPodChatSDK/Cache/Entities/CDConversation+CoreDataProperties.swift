@@ -156,29 +156,6 @@ public extension CDConversation {
 
 public extension CDConversation {
     func update(_ conversation: Conversation) {
-        if let context = managedObjectContext {
-            if let inviter = conversation.inviter {
-                let entity = CDParticipant(context: context)
-                entity.update(inviter)
-            }
-
-            if let participants = conversation.participants {
-                participants.forEach { participant in
-                    let entity = CDParticipant(context: context)
-                    entity.update(participant)
-                }
-            }
-
-            if let pinMessages = conversation.pinMessages {
-                pinMessages.forEach { pinMessage in
-                    let entity = CDMessage(context: context)
-                    entity.update(pinMessage)
-                }
-            }
-        } else {
-            print("context is nil")
-        }
-
         admin = conversation.admin as? NSNumber
         canEditInfo = conversation.canEditInfo as? NSNumber
         canSpam = conversation.canSpam as NSNumber?
@@ -250,9 +227,9 @@ public extension CDConversation {
                      uniqueName: uniqueName,
                      userGroupHash: userGroupHash,
                      inviter: inviter?.codable,
-                     lastMessageVO: lastMessageVO?.codable(fillSelfRelation: false),
+                     lastMessageVO: fillSelfRefrence ? lastMessageVO?.codable(fillConversation: false) : nil,
                      participants: fillSelfRefrence ? participants?.allObjects.map { $0 as? CDParticipant }.compactMap { $0?.codable } : nil,
-                     pinMessages: pinMessages?.allObjects.compactMap { $0 as? CDMessage }.map { $0.codable() },
+                     pinMessages: fillSelfRefrence ? pinMessages?.allObjects.compactMap { $0 as? CDMessage }.map { $0.codable(fillConversation: false) } : nil,
                      isArchive: isArchive?.boolValue)
     }
 }

@@ -26,13 +26,15 @@ public class PersistentManager {
 
     var context: NSManagedObjectContext? {
         guard let context = currentUserContainer?.viewContext else { return nil }
+        context.name = "Main"
+        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         return context
     }
 
     func newBgTask() -> NSManagedObjectContext? {
         guard let bgTask = currentUserContainer?.newBackgroundContext() else { return nil }
-        bgTask.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         bgTask.name = "BGTASK"
+        bgTask.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         return bgTask
     }
 
@@ -53,11 +55,10 @@ public class PersistentManager {
         container.loadPersistentStores { [weak self] desc, error in
             if let error = error {
                 self?.logger?.log(message: "error load CoreData persistentstore des:\(desc) error: \(error)", level: .error)
-            } else {
-                container.viewContext.automaticallyMergesChangesFromParent = true
-                self?.currentUserContainer = container
             }
         }
+        container.viewContext.automaticallyMergesChangesFromParent = true
+        currentUserContainer = container
     }
 
     func save(context: NSManagedObjectContext, _ logger: Logger? = nil) {

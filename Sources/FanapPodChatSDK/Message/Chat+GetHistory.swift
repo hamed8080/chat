@@ -37,21 +37,41 @@ public extension Chat {
             }
         }
 
-        let response = cache?.message?.fetch(request)
-        let pagination = Pagination(hasNext: response?.totalCount ?? 0 >= request.count, count: request.count, offset: request.offset)
-        cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: response?.messages.map { $0.codable() }, error: nil, contentCount: response?.totalCount, pagination: pagination))
+        cache?.message.fetch(request) { [weak self] messages, totalCount in
+            let messages = messages.map { $0.codable() }
+            self?.responseQueue.async {
+                let pagination = Pagination(hasNext: totalCount >= request.count, count: request.count, offset: request.offset)
+                cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: messages, error: nil, contentCount: totalCount, pagination: pagination))
+            }
+        }
 
-        let resText = cache?.textQueue?.unsendForThread(request.threadId, request.count, request.offset)
-        textMessageNotSentRequests?(ChatResponse(uniqueId: request.uniqueId, result: resText?.objects.map(\.codable.request), error: nil))
+        cache?.textQueue.unsendForThread(request.threadId, request.count, request.offset) { [weak self] unsedTexts, _ in
+            let requests = unsedTexts.map(\.codable.request)
+            self?.responseQueue.async {
+                textMessageNotSentRequests?(ChatResponse(uniqueId: request.uniqueId, result: requests))
+            }
+        }
 
-        let resEdit = cache?.editQueue?.unsedForThread(request.threadId, request.count, request.offset)
-        editMessageNotSentRequests?(ChatResponse(uniqueId: request.uniqueId, result: resEdit?.objects.map(\.codable.request), error: nil))
+        cache?.editQueue.unsedForThread(request.threadId, request.count, request.offset) { [weak self] unsendEdits, _ in
+            let requests = unsendEdits.map(\.codable.request)
+            self?.responseQueue.async {
+                editMessageNotSentRequests?(ChatResponse(uniqueId: request.uniqueId, result: requests))
+            }
+        }
 
-        let resForward = cache?.forwardQueue?.unsedForThread(request.threadId, request.count, request.offset)
-        forwardMessageNotSentRequests?(ChatResponse(uniqueId: request.uniqueId, result: resForward?.objects.map(\.codable.request), error: nil))
+        cache?.forwardQueue.unsedForThread(request.threadId, request.count, request.offset) { [weak self] unsendForwards, _ in
+            let requests = unsendForwards.map(\.codable.request)
+            self?.responseQueue.async {
+                forwardMessageNotSentRequests?(ChatResponse(uniqueId: request.uniqueId, result: requests))
+            }
+        }
 
-        let resFile = cache?.fileQueue?.unsedForThread(request.threadId, request.count, request.offset)
-        fileMessageNotSentRequests?(ChatResponse(uniqueId: request.uniqueId, result: resFile?.objects.map(\.codable.request), error: nil))
+        cache?.fileQueue.unsedForThread(request.threadId, request.count, request.offset) { [weak self] unsendFiles, _ in
+            let requests = unsendFiles.map(\.codable.request)
+            self?.responseQueue.async {
+                fileMessageNotSentRequests?(ChatResponse(uniqueId: request.uniqueId, result: requests))
+            }
+        }
     }
 
     /// Get list of messages with hashtags.
@@ -69,7 +89,7 @@ public extension Chat {
     }
 
     internal func saveMessagesToCache(_ messages: [Message]?, _: CompletionType<[Message]>?) {
-        cache?.message?.insert(models: messages ?? [])
+        cache?.message.insert(models: messages ?? [])
         let uniqueIds = messages?.compactMap(\.uniqueId) ?? []
         deleteQueues(uniqueIds: uniqueIds)
     }

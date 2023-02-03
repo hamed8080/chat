@@ -10,26 +10,33 @@ import Foundation
 
 class CacheForwardInfoManager: CoreDataProtocol {
     let idName = "id"
-    let pm: PersistentManager
-    var context: NSManagedObjectContext?
+    var context: NSManagedObjectContext
     let logger: Logger?
     let entityName = CDForwardInfo.entity().name ?? "CDForwardInfo"
 
-    required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
-        self.context = context ?? pm.context
-        self.pm = pm
+    required init(context: NSManagedObjectContext, logger: Logger? = nil) {
+        self.context = context
         self.logger = logger
     }
 
-    func insert(context: NSManagedObjectContext, model: ForwardInfo) {
+    func insert(model: ForwardInfo) {
         let entity = CDForwardInfo(context: context)
-        entity.update(model)
+        if let participant = model.participant, let thread = model.conversation {
+            CacheConversationManager(context: context, logger: logger).findOrCreateEntity(model.conversation?.id) { threadEntity in
+                threadEntity?.update(thread)
+                CacheParticipantManager(context: self.context, logger: self.logger).findOrCreateEntity(model.conversation?.id, participant.id) { participantEntity in
+                    participantEntity?.update(participant)
+                    participantEntity?.conversation = threadEntity
+                    entity.participant = participantEntity
+                }
+            }
+        }
     }
 
     func insert(models: [ForwardInfo]) {
-        insertObjects { [weak self] bgTask in
+        insertObjects(context) { [weak self] _ in
             models.forEach { model in
-                self?.insert(context: bgTask, model: model)
+                self?.insert(model: model)
             }
         }
     }
@@ -38,16 +45,22 @@ class CacheForwardInfoManager: CoreDataProtocol {
         NSPredicate(format: "\(idName) == %i", id)
     }
 
-    func first(with id: Int) -> CDForwardInfo? {
-        let req = CDForwardInfo.fetchRequest()
-        req.predicate = idPredicate(id: id)
-        return try? context?.fetch(req).first
+    func first(with id: Int, _ completion: @escaping (CDForwardInfo?) -> Void) {
+        context.perform {
+            let req = CDForwardInfo.fetchRequest()
+            req.predicate = self.idPredicate(id: id)
+            let forward = try? self.context.fetch(req).first
+            completion(forward)
+        }
     }
 
-    func find(predicate: NSPredicate) -> [CDForwardInfo] {
-        let req = CDForwardInfo.fetchRequest()
-        req.predicate = predicate
-        return (try? context?.fetch(req)) ?? []
+    func find(predicate: NSPredicate, _ completion: @escaping ([CDForwardInfo]) -> Void) {
+        context.perform {
+            let req = CDForwardInfo.fetchRequest()
+            req.predicate = predicate
+            let forwards = (try? self.context.fetch(req)) ?? []
+            completion(forwards)
+        }
     }
 
     func update(model _: ForwardInfo, entity _: CDForwardInfo) {}
@@ -56,7 +69,7 @@ class CacheForwardInfoManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate { [weak self] bgTask in
+        batchUpdate(context) { [weak self] bgTask in
             let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
@@ -72,30 +85,24 @@ class CacheForwardInfoManager: CoreDataProtocol {
         let req = CDForwardInfo.fetchRequest()
         req.predicate = predicate
         req.fetchLimit = 1
-        return try? context?.fetch(req).first
+        return try? context.fetch(req).first
     }
 
-    func insert(_ forwardInfo: ForwardInfo, _ message: CDMessage) {
-        guard let context = context else { return }
+    func insert(_ forwardInfo: ForwardInfo, _ messageEntity: CDMessage) {
         let entity = CDForwardInfo(context: context)
-        entity.message = message
-        if let conversation = forwardInfo.conversation {
-            let cmThread = CacheConversationManager(context: context, pm: pm, logger: logger)
-            if let threadEntity = cmThread.first(with: conversation.id ?? -1) {
+        entity.message = messageEntity
+        if let threadModel = forwardInfo.conversation {
+            CacheConversationManager(context: context, logger: logger).findOrCreateEntity(threadModel.id) { threadEntity in
+                threadEntity?.update(threadModel)
                 entity.conversation = threadEntity
-            } else {
-                entity.conversation = CDConversation(context: context)
-                entity.conversation?.update(conversation)
-            }
-        }
-
-        if let participant = forwardInfo.participant {
-            let cmThread = CacheParticipantManager(context: context, pm: pm, logger: logger)
-            if let participantEntity = cmThread.first(with: participant.id ?? -1) {
-                entity.participant = participantEntity
-            } else {
-                entity.participant = CDParticipant(context: context)
-                entity.participant?.update(participant)
+                messageEntity.conversation = threadEntity
+                if let participant = forwardInfo.participant {
+                    CacheParticipantManager(context: self.context, logger: self.logger).findOrCreateEntity(threadEntity?.id?.intValue, participant.id) { participantEntity in
+                        participantEntity?.update(participant)
+                        participantEntity?.conversation = threadEntity
+                        entity.participant = participantEntity
+                    }
+                }
             }
         }
     }

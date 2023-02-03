@@ -44,7 +44,7 @@ extension Chat {
 
     internal func onUser(response: ChatResponse<User>) {
         if let user = response.result {
-            cache?.user?.insert([user], isMe: true)
+            cache?.user.insert([user], isMe: true)
             userInfo = user
             state = .chatReady
             delegate?.chatEvent(event: .user(.onUser(.init(result: user))))
@@ -66,7 +66,7 @@ extension Chat {
     func onUserInfo(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<User> = asyncMessage.toChatResponse()
         if let user = response.result {
-            cache?.user?.insert([user])
+            cache?.user.insert([user])
         }
         delegate?.chatEvent(event: .system(.serverTime(.init(uniqueId: response.uniqueId, result: response.time, time: response.time))))
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)

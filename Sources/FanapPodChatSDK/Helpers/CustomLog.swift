@@ -131,7 +131,8 @@ public class Logger {
 
     private func startSending() {
         Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
-            if let pm = self?.persistentManager, let log = CacheLogManager(pm: pm, logger: self).firstLog() {
+            let bgTask = self?.persistentManager?.newBgTask()
+            if let bgTask = bgTask, let log = CacheLogManager(context: bgTask, logger: self).firstLog() {
                 self?.sendLog(log: log)
             }
         }
@@ -155,10 +156,10 @@ public class Logger {
     }
 
     private func deleteLogFromCache(log: CDLog) {
-        chat?.cache?.log?.delete([log.codable])
+        chat?.cache?.log.delete([log.codable])
     }
 
     private func addLogTocache(_ log: Log) {
-        chat?.cache?.log?.insert(models: [log])
+        chat?.cache?.log.insert(models: [log])
     }
 }

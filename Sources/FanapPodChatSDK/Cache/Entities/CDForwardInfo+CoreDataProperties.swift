@@ -21,19 +21,6 @@ public extension CDForwardInfo {
 }
 
 public extension CDForwardInfo {
-    func update(_ forwardInfo: ForwardInfo) {
-        guard let context = managedObjectContext else { print("Conetxt is nil"); return }
-        if let participant = forwardInfo.participant {
-            let entity = CDParticipant(context: context)
-            entity.update(participant)
-        }
-
-        if let conversation = forwardInfo.conversation {
-            let entity = CDConversation(context: context)
-            entity.update(conversation)
-        }
-    }
-
     var codable: ForwardInfo {
         ForwardInfo(conversation: conversation?.codable(), participant: participant?.codable)
     }

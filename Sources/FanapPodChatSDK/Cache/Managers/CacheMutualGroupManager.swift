@@ -10,32 +10,32 @@ import Foundation
 
 class CacheMutualGroupManager: CoreDataProtocol {
     let idName = "id"
-    let pm: PersistentManager
-    var context: NSManagedObjectContext?
+    var context: NSManagedObjectContext
     let logger: Logger?
     let entityName = CDMutualGroup.entity().name ?? "CDMutualGroup"
 
-    required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
-        self.context = context ?? pm.context
-        self.pm = pm
+    required init(context: NSManagedObjectContext, logger: Logger? = nil) {
+        self.context = context
         self.logger = logger
     }
 
-    func insert(context: NSManagedObjectContext, model: MutualGroup) {
+    func insert(model: MutualGroup) {
         let entity = CDMutualGroup(context: context)
         entity.update(model)
         model.conversations?.forEach { thread in
-            let cm = CacheConversationManager(pm: pm, logger: logger)
-            if let threadEntity = cm.first(with: thread.id ?? -1) {
-                entity.addToConversations(threadEntity)
+            CacheConversationManager(context: context, logger: logger).findOrCreateEntity(thread.id ?? -1) { threadEntity in
+                if let threadEntity = threadEntity {
+                    threadEntity.update(thread)
+                    entity.addToConversations(threadEntity)
+                }
             }
         }
     }
 
     func insert(models: [MutualGroup]) {
-        insertObjects { [weak self] bgTask in
+        insertObjects(context) { [weak self] _ in
             models.forEach { model in
-                self?.insert(context: bgTask, model: model)
+                self?.insert(model: model)
             }
         }
     }
@@ -44,16 +44,22 @@ class CacheMutualGroupManager: CoreDataProtocol {
         NSPredicate(format: "\(idName) == %i", id)
     }
 
-    func first(with id: Int) -> CDMutualGroup? {
-        let req = CDMutualGroup.fetchRequest()
-        req.predicate = idPredicate(id: id)
-        return try? context?.fetch(req).first
+    func first(with id: Int, _ completion: @escaping (CDMutualGroup?) -> Void) {
+        context.perform {
+            let req = CDMutualGroup.fetchRequest()
+            req.predicate = self.idPredicate(id: id)
+            let mutual = try? self.context.fetch(req).first
+            completion(mutual)
+        }
     }
 
-    func find(predicate: NSPredicate) -> [CDMutualGroup] {
-        let req = CDMutualGroup.fetchRequest()
-        req.predicate = predicate
-        return (try? context?.fetch(req)) ?? []
+    func find(predicate: NSPredicate, _ completion: @escaping ([CDMutualGroup]) -> Void) {
+        context.perform {
+            let req = CDMutualGroup.fetchRequest()
+            req.predicate = predicate
+            let mutuals = (try? self.context.fetch(req)) ?? []
+            completion(mutuals)
+        }
     }
 
     func update(model _: MutualGroup, entity _: CDMutualGroup) {}
@@ -62,7 +68,7 @@ class CacheMutualGroupManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate { [weak self] bgTask in
+        batchUpdate(context) { [weak self] bgTask in
             let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
@@ -78,9 +84,12 @@ class CacheMutualGroupManager: CoreDataProtocol {
         insert(models: [model])
     }
 
-    func mutualGroups(_ id: String?) -> [CDMutualGroup] {
-        let req = CDMutualGroup.fetchRequest()
-        req.predicate = NSPredicate(format: "mutualId == %@", id ?? "")
-        return (try? context?.fetch(req)) ?? []
+    func mutualGroups(_ id: String?, _ completion: @escaping ([CDMutualGroup]) -> Void) {
+        context.perform {
+            let req = CDMutualGroup.fetchRequest()
+            req.predicate = NSPredicate(format: "mutualId == %@", id ?? "")
+            let mutuals = (try? self.context.fetch(req)) ?? []
+            completion(mutuals)
+        }
     }
 }

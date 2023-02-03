@@ -59,9 +59,9 @@ public extension Chat {
     }
 
     func deleteQueues(uniqueIds: [String]) {
-        cache?.editQueue?.delete(uniqueIds)
-        cache?.fileQueue?.delete(uniqueIds)
-        cache?.textQueue?.delete(uniqueIds)
-        cache?.forwardQueue?.delete(uniqueIds)
+        cache?.editQueue.delete(uniqueIds)
+        cache?.fileQueue.delete(uniqueIds)
+        cache?.textQueue.delete(uniqueIds)
+        cache?.forwardQueue.delete(uniqueIds)
     }
 }

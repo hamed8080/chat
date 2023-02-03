@@ -24,7 +24,7 @@ extension Chat {
     func onDeactiveAssistants(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .assistant(.deactiveAssistants(response)))
-        cache?.assistant?.delete(response.result ?? [])
+        cache?.assistant.delete(response.result ?? [])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

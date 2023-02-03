@@ -185,8 +185,9 @@ open class Conversation: Codable, Hashable, Identifiable {
         inviter = try container.decodeIfPresent(Participant.self, forKey: .inviter)
         participants = try container.decodeIfPresent([Participant].self, forKey: .participants)
         lastMessageVO = try container.decodeIfPresent(Message.self, forKey: .lastMessageVO)
-        if let pinMessage = try container.decodeIfPresent(Message.self, forKey: .pinMessageVO) {
-            pinMessages = [pinMessage]
+        if let pinMessage = try container.decodeIfPresent(PinMessageVO.self, forKey: .pinMessageVO) {
+            pinMessage.threadId = id
+            pinMessages = [pinMessage.message]
         }
         isArchive = try container.decodeIfPresent(Bool.self, forKey: .archiveThread)
     }

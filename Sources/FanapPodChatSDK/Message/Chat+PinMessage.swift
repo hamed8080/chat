@@ -38,7 +38,7 @@ extension Chat {
         } else {
             delegate?.chatEvent(event: .thread(.messageUnpin(response)))
         }
-        cache?.message?.pin(asyncMessage.chatMessage?.type == .pinMessage, response.subjectId, response.result?.id)
+        cache?.message.pin(asyncMessage.chatMessage?.type == .pinMessage, response.subjectId, response.result?.id)
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

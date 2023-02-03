@@ -20,28 +20,31 @@ extension Chat {
         var contactsToSync: [AddContactRequest] = []
         authorizeContactAccess(grant: { [weak self] store in
             let phoneContacts = self?.getContactsFromAuthorizedStore(store)
-            guard let self = self else { return }
-            let cachedContacts = self.cache?.contact?.allContacts()
-            phoneContacts?.forEach { phoneContact in
-                if let findedContactCache = cachedContacts?.first(where: { $0.cellphoneNumber == phoneContact.cellphoneNumber }) {
-                    if findedContactCache.isContactChanged(contact: phoneContact) {
-                        contactsToSync.append(phoneContact.request)
+            self?.cache?.contact.allContacts { [weak self] cachedContacts in
+                guard let self = self else { return }
+                self.responseQueue.async {
+                    phoneContacts?.forEach { phoneContact in
+                        if let findedContactCache = cachedContacts.first(where: { $0.cellphoneNumber == phoneContact.cellphoneNumber }) {
+                            if findedContactCache.isContactChanged(contact: phoneContact) {
+                                contactsToSync.append(phoneContact.request)
+                            }
+                        } else {
+                            contactsToSync.append(phoneContact.request)
+                        }
                     }
-                } else {
-                    contactsToSync.append(phoneContact.request)
+                    var uniqueIds: [String] = []
+                    contactsToSync.forEach { contact in
+                        uniqueIds.append(contact.uniqueId)
+                    }
+                    if contactsToSync.count <= 0 { return }
+
+                    self.addContacts(contactsToSync) { [weak self] (response: ChatResponse<[Contact]>) in
+                        completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error))
+                        self?.cache?.contact.insert(models: response.result ?? [])
+                    }
+                    uniqueIdsResult?(uniqueIds)
                 }
             }
-            var uniqueIds: [String] = []
-            contactsToSync.forEach { contact in
-                uniqueIds.append(contact.uniqueId)
-            }
-            if contactsToSync.count <= 0 { return }
-
-            self.addContacts(contactsToSync) { [weak self] (response: ChatResponse<[Contact]>) in
-                completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error))
-                self?.cache?.contact?.insert(models: response.result ?? [])
-            }
-            uniqueIdsResult?(uniqueIds)
         }, errorResult: { [weak self] error in
             self?.logger?.log(message: "UNAuthorized Access to Contact API with error: \(error.localizedDescription)", level: .error)
         })

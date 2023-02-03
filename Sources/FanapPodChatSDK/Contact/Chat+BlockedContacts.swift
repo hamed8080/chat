@@ -27,7 +27,7 @@ public extension Chat {
 extension Chat {
     func onBlockedContacts(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Contact]> = asyncMessage.toChatResponse()
-        cache?.contact?.insert(models: response.result ?? [])
+        cache?.contact.insert(models: response.result ?? [])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

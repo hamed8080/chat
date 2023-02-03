@@ -10,38 +10,47 @@ import Foundation
 
 class CacheConversationManager: CoreDataProtocol {
     let idName = "id"
-    let pm: PersistentManager
-    var context: NSManagedObjectContext?
+    var context: NSManagedObjectContext
     let logger: Logger?
     let entityName = CDConversation.entity().name ?? "CDConversation"
 
-    required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
-        self.context = context ?? pm.context
-        self.pm = pm
+    required init(context: NSManagedObjectContext, logger: Logger? = nil) {
+        self.context = context
         self.logger = logger
     }
 
-    func insert(context: NSManagedObjectContext, model: Conversation) {
+    func insert(model: Conversation) {
         let entity = CDConversation(context: context)
         entity.update(model)
+
         if let lastMessageVO = model.lastMessageVO {
-            if let messageEntity = CacheMessageManager(context: context, pm: pm, logger: logger).find(model.id, model.lastMessageVO?.id) {
-                messageEntity.threadId = entity.id
-                entity.lastMessageVO = messageEntity
-            } else {
-                let newMessageEntity = CDMessage(context: context)
-                newMessageEntity.threadId = entity.id
-                newMessageEntity.update(lastMessageVO)
-                newMessageEntity.conversation = entity
-                entity.lastMessageVO = newMessageEntity
+            let messageEntity = CDMessage(context: context)
+            messageEntity.update(lastMessageVO)
+            messageEntity.threadId = entity.id
+            messageEntity.conversation = entity
+            entity.lastMessageVO = messageEntity
+            if let participant = model.lastMessageVO?.participant {
+                let participantEntity = CDParticipant(context: context)
+                participantEntity.update(participant)
+                participantEntity.conversation = entity
+                messageEntity.participant = participantEntity
             }
+        }
+
+        model.pinMessages?.forEach { pinMessage in
+            let pinMessageEntity = CDMessage(context: context)
+            pinMessageEntity.update(pinMessage)
+            pinMessageEntity.pinned = true
+            pinMessageEntity.threadId = entity.id
+            pinMessageEntity.conversation = entity
+            entity.addToPinMessages(pinMessageEntity)
         }
     }
 
     func insert(models: [Conversation]) {
-        insertObjects { [weak self] bgTask in
+        insertObjects(context) { [weak self] _ in
             models.forEach { model in
-                self?.insert(context: bgTask, model: model)
+                self?.insert(model: model)
             }
         }
     }
@@ -50,17 +59,23 @@ class CacheConversationManager: CoreDataProtocol {
         NSPredicate(format: "\(idName) == %i", id)
     }
 
-    func first(with id: Int) -> CDConversation? {
-        let req = CDConversation.fetchRequest()
-        req.predicate = idPredicate(id: id)
-        req.fetchLimit = 1
-        return try? context?.fetch(req).first
+    func first(with id: Int, _ completion: @escaping (CDConversation?) -> Void) {
+        context.perform {
+            let req = CDConversation.fetchRequest()
+            req.predicate = self.idPredicate(id: id)
+            req.fetchLimit = 1
+            let thread = try? self.context.fetch(req).first
+            completion(thread)
+        }
     }
 
-    func find(predicate: NSPredicate) -> [CDConversation] {
-        let req = CDConversation.fetchRequest()
-        req.predicate = predicate
-        return (try? context?.fetch(req)) ?? []
+    func find(predicate: NSPredicate, _ completion: @escaping ([CDConversation]) -> Void) {
+        context.perform {
+            let req = CDConversation.fetchRequest()
+            req.predicate = predicate
+            let threads = (try? self.context.fetch(req)) ?? []
+            completion(threads)
+        }
     }
 
     func update(model _: Conversation, entity _: CDConversation) {}
@@ -69,7 +84,7 @@ class CacheConversationManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate { [weak self] bgTask in
+        batchUpdate(context) { [weak self] bgTask in
             let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
@@ -110,32 +125,32 @@ class CacheConversationManager: CoreDataProtocol {
         update(propertiesToUpdate, predicate)
     }
 
-    @discardableResult
-    func increamentUnreadCount(_ threadId: Int) -> Int? {
-        guard let entity = first(with: threadId) else { return nil }
-        entity.unreadCount = NSNumber(integerLiteral: (entity.unreadCount?.intValue ?? 0) + 1)
-        save()
-        return entity.unreadCount?.intValue ?? 0
+    func increamentUnreadCount(_ threadId: Int, _ completion: ((Int) -> Void)? = nil) {
+        first(with: threadId) { entity in
+            entity?.unreadCount = NSNumber(integerLiteral: (entity?.unreadCount?.intValue ?? 0) + 1)
+            self.save()
+            completion?(entity?.unreadCount?.intValue ?? 0)
+        }
     }
 
-    @discardableResult
-    func decreamentUnreadCount(_ threadId: Int) -> Int? {
-        guard let entity = first(with: threadId) else { return nil }
-        let dbCount = entity.unreadCount?.intValue ?? 0
-        entity.unreadCount = dbCount > 0 ? NSNumber(integerLiteral: dbCount - 1) : 0
-        save()
-        return entity.unreadCount?.intValue ?? 0
+    func decreamentUnreadCount(_ threadId: Int, _ completion: ((Int) -> Void)? = nil) {
+        first(with: threadId) { entity in
+            let dbCount = entity?.unreadCount?.intValue ?? 0
+            entity?.unreadCount = dbCount > 0 ? NSNumber(integerLiteral: dbCount - 1) : 0
+            self.save()
+            completion?(entity?.unreadCount?.intValue ?? 0)
+        }
     }
 
-    @discardableResult
-    func setUnreadCountToZero(_ threadId: Int) -> Int? {
-        guard let entity = first(with: threadId) else { return nil }
-        entity.unreadCount = 0
-        save()
-        return entity.unreadCount?.intValue ?? 0
+    func setUnreadCountToZero(_ threadId: Int, _ completion: ((Int) -> Void)? = nil) {
+        first(with: threadId) { entity in
+            entity?.unreadCount = 0
+            self.save()
+            completion?(entity?.unreadCount?.intValue ?? 0)
+        }
     }
 
-    func fetch(_ req: ThreadsRequest) -> (threads: [CDConversation], count: Int) {
+    func fetch(_ req: ThreadsRequest, _ completion: @escaping ([CDConversation], Int) -> Void) {
         let fetchRequest = CDConversation.fetchRequest()
         fetchRequest.fetchLimit = req.count
         fetchRequest.fetchOffset = req.offset
@@ -159,20 +174,24 @@ class CacheConversationManager: CoreDataProtocol {
         let sortByTime = NSSortDescriptor(key: "time", ascending: false)
         let sortByPin = NSSortDescriptor(key: "pin", ascending: false)
         fetchRequest.sortDescriptors = [sortByPin, sortByTime]
-        let threads = (try? context?.fetch(fetchRequest)) ?? []
-        fetchRequest.fetchLimit = 0
-        fetchRequest.fetchOffset = 0
-        let count = (try? context?.count(for: fetchRequest)) ?? 0
-        return (threads, count)
+        context.perform {
+            let threads = (try? self.context.fetch(fetchRequest)) ?? []
+            fetchRequest.fetchLimit = 0
+            fetchRequest.fetchOffset = 0
+            let count = (try? self.context.count(for: fetchRequest)) ?? 0
+            completion(threads, count)
+        }
     }
 
-    func fetchIds() -> [Int] {
+    func fetchIds(_ completion: @escaping ([Int]) -> Void) {
         let req = NSFetchRequest<NSDictionary>(entityName: entityName)
         req.resultType = .dictionaryResultType
         req.propertiesToFetch = ["id"]
-        let dic = try? context?.fetch(req)
-        let threadIds = dic?.flatMap(\.allValues).compactMap { $0 as? Int }
-        return threadIds ?? []
+        context.perform {
+            let dic = try? self.context.fetch(req)
+            let threadIds = dic?.flatMap(\.allValues).compactMap { $0 as? Int }
+            completion(threadIds ?? [])
+        }
     }
 
     func archive(_ archive: Bool, _ threadId: Int?) {
@@ -200,10 +219,11 @@ class CacheConversationManager: CoreDataProtocol {
     }
 
     func updateLastMessage(_ thread: Conversation) {
-        let entity = first(with: thread.id ?? -1)
-        entity?.lastMessage = thread.lastMessage
-        if let lastMessageVO = thread.lastMessageVO {
-            entity?.lastMessageVO?.update(lastMessageVO)
+        first(with: thread.id ?? -1) { entity in
+            entity?.lastMessage = thread.lastMessage
+            if let lastMessageVO = thread.lastMessageVO {
+                entity?.lastMessageVO?.update(lastMessageVO)
+            }
         }
     }
 
@@ -230,13 +250,13 @@ class CacheConversationManager: CoreDataProtocol {
         req.propertiesToFetch = [sumDesc]
         req.returnsObjectsAsFaults = false
         req.resultType = .dictionaryResultType
-        let dic = try? context?.fetch(req).first as? [String: Int]
+        let dic = try? context.fetch(req).first as? [String: Int]
         return dic?["sum"] ?? 0
     }
 
     func delete(_ threadId: Int) {
         let predicate = idPredicate(id: threadId)
-        batchDelete(entityName: entityName, predicate: predicate)
+        batchDelete(context, entityName: entityName, predicate: predicate)
     }
 
     func updateThreadsUnreadCount(_ resp: [String: Int]) {
@@ -246,25 +266,33 @@ class CacheConversationManager: CoreDataProtocol {
         }
     }
 
-    func threadsUnreadcount(_ threadIds: [Int]) -> [String: Int] {
+    func threadsUnreadcount(_ threadIds: [Int], _ completion: @escaping ([String: Int]) -> Void) {
         let req = NSFetchRequest<NSDictionary>(entityName: entityName)
         req.resultType = .dictionaryResultType
         req.propertiesToFetch = ["id", "unreadCount"]
         req.predicate = NSPredicate(format: "id IN %@", threadIds)
-        let rows = try? context?.fetch(req)
-        var result: [String: Int] = [:]
-        rows?.forEach { dic in
-            var threadId = 0
-            var unreadCount = 0
-            dic.forEach { key, value in
-                if key as? String == "id" {
-                    threadId = value as? Int ?? 0
-                } else if key as? String == "unreadCount" {
-                    unreadCount = value as? Int ?? 0
+        context.perform {
+            let rows = try? self.context.fetch(req)
+            var result: [String: Int] = [:]
+            rows?.forEach { dic in
+                var threadId = 0
+                var unreadCount = 0
+                dic.forEach { key, value in
+                    if key as? String == "id" {
+                        threadId = value as? Int ?? 0
+                    } else if key as? String == "unreadCount" {
+                        unreadCount = value as? Int ?? 0
+                    }
                 }
+                result[String(threadId)] = unreadCount
             }
-            result[String(threadId)] = unreadCount
+            completion(result)
         }
-        return result
+    }
+
+    func findOrCreateEntity(_ threadId: Int?, _ completion: @escaping (CDConversation?) -> Void) {
+        first(with: threadId ?? -1) { thread in
+            completion(thread ?? CDConversation(context: self.context))
+        }
     }
 }

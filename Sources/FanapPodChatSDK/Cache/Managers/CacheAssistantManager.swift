@@ -10,26 +10,24 @@ import Foundation
 
 class CacheAssistantManager: CoreDataProtocol {
     let idName = "id"
-    let pm: PersistentManager
-    var context: NSManagedObjectContext?
+    var context: NSManagedObjectContext
     let logger: Logger?
     let entityName = CDAssistant.entity().name ?? "CDAssistant"
 
-    required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
-        self.context = context ?? pm.context
-        self.pm = pm
+    required init(context: NSManagedObjectContext, logger: Logger? = nil) {
+        self.context = context
         self.logger = logger
     }
 
-    func insert(context: NSManagedObjectContext, model: Assistant) {
+    func insert(model: Assistant) {
         let entity = CDAssistant(context: context)
         entity.update(model)
     }
 
     func insert(models: [Assistant]) {
-        insertObjects { [weak self] bgTask in
+        insertObjects(context) { [weak self] _ in
             models.forEach { model in
-                self?.insert(context: bgTask, model: model)
+                self?.insert(model: model)
             }
         }
     }
@@ -38,16 +36,22 @@ class CacheAssistantManager: CoreDataProtocol {
         NSPredicate(format: "\(idName) == %i", id)
     }
 
-    func first(with id: Int) -> CDAssistant? {
-        let req = CDAssistant.fetchRequest()
-        req.predicate = idPredicate(id: id)
-        return try? context?.fetch(req).first
+    func first(with id: Int, _ completion: @escaping (CDAssistant?) -> Void) {
+        context.perform {
+            let req = CDAssistant.fetchRequest()
+            req.predicate = self.idPredicate(id: id)
+            let assistant = try? self.context.fetch(req).first
+            completion(assistant)
+        }
     }
 
-    func find(predicate: NSPredicate) -> [CDAssistant] {
-        let req = CDAssistant.fetchRequest()
-        req.predicate = predicate
-        return (try? context?.fetch(req)) ?? []
+    func find(predicate: NSPredicate, _ completion: @escaping ([CDAssistant]) -> Void) {
+        context.perform {
+            let req = CDAssistant.fetchRequest()
+            req.predicate = predicate
+            let contacts = (try? self.context.fetch(req)) ?? []
+            completion(contacts)
+        }
     }
 
     func update(model _: Assistant, entity _: CDAssistant) {}
@@ -58,7 +62,7 @@ class CacheAssistantManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate { [weak self] bgTask in
+        batchUpdate(context) { [weak self] bgTask in
             let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
@@ -75,13 +79,13 @@ class CacheAssistantManager: CoreDataProtocol {
         update(propertiesToUpdate, predicate)
     }
 
-    func getBlocked(_ count: Int?, _ offset: Int?) -> (objects: [CDAssistant], totalCount: Int) {
+    func getBlocked(_ count: Int?, _ offset: Int?, _ completion: @escaping ([CDAssistant], Int) -> Void) {
         let predicate = NSPredicate(format: "block == %@", NSNumber(booleanLiteral: true))
-        return fetchWithOffset(count: count, offset: offset, predicate: predicate)
+        fetchWithOffset(count: count, offset: offset, predicate: predicate, completion)
     }
 
     func delete(_ models: [Assistant]) {
         let predicate = NSPredicate(format: "id IN == @i", models.compactMap { $0.id as? NSNumber })
-        batchDelete(entityName: entityName, predicate: predicate)
+        batchDelete(context, entityName: entityName, predicate: predicate)
     }
 }

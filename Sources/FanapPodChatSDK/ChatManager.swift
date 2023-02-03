@@ -41,6 +41,8 @@ public class ChatManager {
     public class func switchToUser(userId: Int) {
         guard let activeInstance = activeInstance else { return }
         activeInstance.persistentManager.switchToContainer(userId: userId)
-        activeInstance.cache?.update(pm: activeInstance.persistentManager, logger: activeInstance.logger)
+        if let context = activeInstance.persistentManager.newBgTask() {
+            activeInstance.cache = CacheManager(context: context, logger: activeInstance.logger)
+        }
     }
 }
