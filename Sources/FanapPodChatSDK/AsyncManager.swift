@@ -77,7 +77,7 @@ internal class AsyncManager: AsyncDelegate {
         guard let config = config else { return }
         let chatMessage = SendChatMessageVO(req: sendable, token: config.token, typeCode: config.typeCode)
         addToQueue(sendable: sendable)
-        sendToAsync(asyncMessage: AsyncChatServerMessage(chatMessage: chatMessage))
+        sendToAsync(asyncMessage: AsyncChatServerMessage(chatMessage: chatMessage), type: sendable.chatMessageType)
         sendPingTimer()
     }
 
@@ -106,7 +106,7 @@ internal class AsyncManager: AsyncDelegate {
         }
     }
 
-    func sendToAsync(asyncMessage: AsyncSnedable) {
+    func sendToAsync(asyncMessage: AsyncSnedable, type: ChatMessageVOTypes) {
         guard let config = config, let content = asyncMessage.content else { return }
         let asyncMessage = SendAsyncMessageVO(content: content,
                                               ttl: config.msgTTL,
@@ -114,7 +114,7 @@ internal class AsyncManager: AsyncDelegate {
                                               priority: config.msgPriority,
                                               pushMsgType: asyncMessage.asyncMessageType)
         guard let data = try? JSONEncoder().encode(asyncMessage), chat?.state == .chatReady || chat?.state == .asyncReady else { return }
-        logger?.log(title: "send Message", jsonString: asyncMessage.string ?? "", receive: false)
+        logger?.log(title: "send Message with type: \(type)", jsonString: asyncMessage.string ?? "", receive: false)
         asyncClient?.sendData(type: .message, data: data)
     }
 

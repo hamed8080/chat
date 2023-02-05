@@ -12,7 +12,8 @@
 //
 import Foundation
 
-public enum SignalMessageType: Int, Encodable, SafeDecodable {
+public enum SignalMessageType: Int, Encodable, SafeDecodable, Identifiable, CaseIterable {
+    public var id: Self { self }
     case isTyping = 1
     case recordVoice = 2
     case uploadPicture = 3

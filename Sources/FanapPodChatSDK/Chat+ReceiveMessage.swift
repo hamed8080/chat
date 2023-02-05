@@ -15,7 +15,7 @@ extension Chat {
             logger?.log(title: "mismatch typeCode", message: "expected typeCode is:\(config.typeCode) but receive: \(chatMessage.typeCode ?? "")")
             return
         }
-        logger?.log(title: "on Receive Message", jsonString: asyncMessage.string)
+        logger?.log(title: "on Receive Message with type: \(chatMessage.type)", jsonString: asyncMessage.string)
 
         switch chatMessage.type {
         case .addParticipant:

@@ -7,11 +7,13 @@
 import Foundation
 public class MessageDeliverRequest: UniqueIdManagerRequest, PlainTextSendable {
     let messageId: String
+    let threadId: Int?
     var content: String? { messageId }
     var chatMessageType: ChatMessageVOTypes = .delivery
 
-    public init(messageId: Int, uniqueId: String? = nil) {
+    public init(messageId: Int, threadId: Int?, uniqueId: String? = nil) {
         self.messageId = "\(messageId)"
+        self.threadId = threadId
         super.init(uniqueId: uniqueId)
     }
 }

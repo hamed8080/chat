@@ -38,7 +38,7 @@ public extension Chat {
         }
 
         cache?.message.fetch(request) { [weak self] messages, totalCount in
-            let messages = messages.map { $0.codable() }
+            let messages = messages.map { $0.codable(fillConversation: false) }
             self?.responseQueue.async {
                 let pagination = Pagination(hasNext: totalCount >= request.count, count: request.count, offset: request.offset)
                 cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: messages, error: nil, contentCount: totalCount, pagination: pagination))

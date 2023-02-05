@@ -6,7 +6,8 @@
 
 import Foundation
 
-public enum SMT: Int, Codable, SafeDecodable {
+public enum SMT: Int, Codable, CaseIterable, Identifiable, SafeDecodable {
+    public var id: Self { self }
     case isTyping = 1
     case recordVoice = 2
     case uploadPicture = 3

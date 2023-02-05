@@ -142,7 +142,7 @@ public extension Chat {
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func seen(_ request: MessageSeenRequest, uniqueIdResult: UniqueIdResultType? = nil) {
         prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult)
-        cache?.message.seen(request)
+        cache?.message.seen(request, userId: userInfo?.id ?? -1)
         cache?.conversation.decreamentUnreadCount(request.threadId) { [weak self] unreadCount in
             self?.responseQueue.async {
                 self?.delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: .init(unreadCount: unreadCount, threadId: request.threadId)))))
@@ -180,18 +180,21 @@ extension Chat {
                 }
             }
         }
-        deliver(.init(messageId: message.id ?? 0))
+        cache?.conversation.setLastMessageVO(message)
+        if !isMe {
+            deliver(.init(messageId: message.id ?? 0, threadId: message.threadId))
+        }
     }
 
     func onSentMessage(_ asyncMessage: AsyncMessage) {
-        let response = asyncMessage.messageResponse(state: .sent)
+        guard let response = asyncMessage.messageResponse(state: .sent) else { return }
         delegate?.chatEvent(event: .message(.messageSent(response)))
         deleteQueues(uniqueIds: [response.uniqueId ?? ""])
         callbacksManager.invokeSentCallbackAndRemove(response)
     }
 
     func onDeliverMessage(_ asyncMessage: AsyncMessage) {
-        let response = asyncMessage.messageResponse(state: .delivered)
+        guard let response = asyncMessage.messageResponse(state: .delivered) else { return }
         delegate?.chatEvent(event: .message(.messageDelivery(response)))
         if let delivered = response.result {
             cache?.message.partnerDeliver(delivered)
@@ -201,7 +204,7 @@ extension Chat {
     }
 
     func onSeenMessage(_ asyncMessage: AsyncMessage) {
-        let response = asyncMessage.messageResponse(state: .seen)
+        guard let response = asyncMessage.messageResponse(state: .seen) else { return }
         if let seenResponse = response.result {
             delegate?.chatEvent(event: .message(.messageSeen(response)))
             cache?.message.partnerSeen(seenResponse)

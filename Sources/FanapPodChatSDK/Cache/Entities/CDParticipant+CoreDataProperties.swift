@@ -27,6 +27,7 @@ public extension CDParticipant {
     @NSManaged var email: String?
     @NSManaged var firstName: String?
     @NSManaged var id: NSNumber?
+    @NSManaged var ssoId: String?
     @NSManaged var image: String?
     @NSManaged var keyId: String?
     @NSManaged var lastName: String?
@@ -137,6 +138,9 @@ public extension CDParticipant {
         sendEnable = participant.sendEnable as? NSNumber
         username = participant.username
         roles = participant.roles?.toData()
+        bio = participant.chatProfileVO?.bio
+        ssoId = participant.ssoId
+        metadata = participant.chatProfileVO?.metadata
     }
 
     var codable: Participant {
@@ -152,6 +156,7 @@ public extension CDParticipant {
                     email: email,
                     firstName: firstName,
                     id: id?.intValue,
+                    ssoId: ssoId,
                     image: image,
                     keyId: keyId,
                     lastName: lastName,
@@ -163,6 +168,7 @@ public extension CDParticipant {
                     roles: try? JSONDecoder().decode([Roles].self, from: roles ?? Data()),
                     sendEnable: sendEnable?.boolValue,
                     username: username,
+                    chatProfileVO: .init(bio: bio, metadata: metadata),
                     conversation: conversation?.codable(fillSelfRefrence: false))
     }
 }

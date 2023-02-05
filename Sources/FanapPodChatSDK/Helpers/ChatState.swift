@@ -6,7 +6,8 @@
 
 import FanapPodAsyncSDK
 import Foundation
-public enum ChatState: String {
+public enum ChatState: String, Identifiable, CaseIterable {
+    public var id: Self { self }
     case connecting
     case connected
     case closed

@@ -6,7 +6,8 @@
 
 import Foundation
 
-public enum Roles: String, Codable, SafeDecodable {
+public enum Roles: String, Codable, SafeDecodable, Identifiable, CaseIterable {
+    public var id: Self { self }
     case changeThreadInfo = "CHANGE_THREAD_INFO"
     case postChannelMessage = "POST_CHANNEL_MESSAGE"
     case editMessageOfOthers = "EDIT_MESSAGE_OF_OTHERS"

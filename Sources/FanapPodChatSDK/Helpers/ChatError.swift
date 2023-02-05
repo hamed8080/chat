@@ -7,7 +7,8 @@
 import FanapPodAsyncSDK
 import Foundation
 
-public enum ChatErrorType: String {
+public enum ChatErrorType: String, Identifiable, CaseIterable {
+    public var id: Self { self }
     case asyncError
     case outOfStorage
     case errorRaedyChat

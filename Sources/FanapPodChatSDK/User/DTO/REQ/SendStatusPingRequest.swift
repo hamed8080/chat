@@ -6,7 +6,8 @@
 
 import Foundation
 
-public enum StatusPingType: Int, Encodable {
+public enum StatusPingType: Int, Encodable, Identifiable, CaseIterable {
+    public var id: Self { self }
     case chat
     case thread
     case contacts

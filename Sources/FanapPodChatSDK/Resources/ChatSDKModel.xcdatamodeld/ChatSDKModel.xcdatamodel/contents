@@ -170,6 +170,7 @@
         <attribute name="receiveEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="roles" optional="YES" attributeType="Binary" valueTransformerName="RolesValueTransformer" customClassName="[Roles]"/>
         <attribute name="sendEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="ssoId" optional="YES" attributeType="String"/>
         <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="username" optional="YES" attributeType="String"/>
         <relationship name="assistant" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDAssistant" inverseName="participant" inverseEntity="CDAssistant"/>

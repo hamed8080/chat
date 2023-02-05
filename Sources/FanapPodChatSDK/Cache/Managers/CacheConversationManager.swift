@@ -20,20 +20,36 @@ class CacheConversationManager: CoreDataProtocol {
     }
 
     func insert(model: Conversation) {
-        let entity = CDConversation(context: context)
-        entity.update(model)
+        let req = CDConversation.fetchRequest()
+        req.predicate = NSPredicate(format: "id == %i", model.id ?? -1)
+        var entity = try? context.fetch(req).first
+        if entity == nil {
+            entity = CDConversation(context: context)
+        }
+        entity?.update(model)
 
         if let lastMessageVO = model.lastMessageVO {
-            let messageEntity = CDMessage(context: context)
-            messageEntity.update(lastMessageVO)
-            messageEntity.threadId = entity.id
-            messageEntity.conversation = entity
-            entity.lastMessageVO = messageEntity
+            let req = CDMessage.fetchRequest()
+            req.predicate = NSPredicate(format: "conversation.id == %i AND id == %i", model.id ?? -1, lastMessageVO.id ?? -1)
+            var messageEntity = try? context.fetch(req).first
+            if messageEntity == nil {
+                messageEntity = CDMessage(context: context)
+                messageEntity?.update(lastMessageVO)
+            }
+            messageEntity?.conversation = entity
+            messageEntity?.threadId = model.id as? NSNumber
+            entity?.lastMessageVO = messageEntity
+
             if let participant = model.lastMessageVO?.participant {
-                let participantEntity = CDParticipant(context: context)
-                participantEntity.update(participant)
-                participantEntity.conversation = entity
-                messageEntity.participant = participantEntity
+                let participantReq = CDParticipant.fetchRequest()
+                participantReq.predicate = NSPredicate(format: "conversation.id == %i AND id == %i", model.id ?? -1, participant.id ?? -1)
+                var participantEntity = try? context.fetch(participantReq).first
+                if participantEntity == nil {
+                    participantEntity = CDParticipant(context: context)
+                    participantEntity?.update(participant)
+                }
+                participantEntity?.conversation = entity
+                messageEntity?.participant = participantEntity
             }
         }
 
@@ -41,9 +57,9 @@ class CacheConversationManager: CoreDataProtocol {
             let pinMessageEntity = CDMessage(context: context)
             pinMessageEntity.update(pinMessage)
             pinMessageEntity.pinned = true
-            pinMessageEntity.threadId = entity.id
+            pinMessageEntity.threadId = entity?.id
             pinMessageEntity.conversation = entity
-            entity.addToPinMessages(pinMessageEntity)
+            entity?.addToPinMessages(pinMessageEntity)
         }
     }
 
@@ -121,6 +137,9 @@ class CacheConversationManager: CoreDataProtocol {
             "partnerLastSeenMessageTime": response.messageTime ?? 0,
             "partnerLastSeenMessageNanos": response.messageTime ?? 0,
             "partnerLastSeenMessageId": response.messageId ?? -1,
+            "partnerLastDeliveredMessageTime": response.messageTime ?? 0,
+            "partnerLastDeliveredMessageNanos": response.messageTime ?? 0,
+            "partnerLastDeliveredMessageId": response.messageId ?? -1,
         ]
         update(propertiesToUpdate, predicate)
     }
@@ -164,6 +183,16 @@ class CacheConversationManager: CoreDataProtocol {
 
         if let threadIds = req.threadIds, threadIds.count > 0 {
             orFetchPredicatArray.append(NSPredicate(format: "id IN %@", threadIds))
+        }
+
+        if let isGroup = req.isGroup {
+            let groupPredicate = NSPredicate(format: "group == %@", NSNumber(value: isGroup))
+            orFetchPredicatArray.append(groupPredicate)
+        }
+
+        if let type = req.type?.rawValue {
+            let thtreadTypePredicate = NSPredicate(format: "type == %i", type)
+            orFetchPredicatArray.append(thtreadTypePredicate)
         }
 
         let archivePredicate = NSPredicate(format: "isArchive == %@", NSNumber(value: req.archived ?? false))
@@ -231,6 +260,23 @@ class CacheConversationManager: CoreDataProtocol {
         let predicate = idPredicate(id: threadId ?? -1)
         let propertiesToUpdate: [String: Any] = ["lastMessage": text]
         update(propertiesToUpdate, predicate)
+    }
+
+    func setLastMessageVO(_ message: Message) {
+        let threadId = message.threadId ?? -1
+        let messageId = message.id ?? -1
+        let req = CDConversation.fetchRequest()
+        req.predicate = idPredicate(id: threadId)
+        let messageReq = CDMessage.fetchRequest()
+        messageReq.predicate = NSPredicate(format: "conversation.id == %i AND id == %i", threadId, messageId)
+        context.perform {
+            if let threadEntity = try? self.context.fetch(req).first, let messageEntity = try? self.context.fetch(messageReq).first {
+                threadEntity.lastMessageVO = messageEntity
+                threadEntity.lastMessage = messageEntity.message
+                messageEntity.message = message.message
+                self.save()
+            }
+        }
     }
 
     func changeThreadType(_ thread: Conversation?) {

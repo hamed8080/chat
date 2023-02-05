@@ -30,6 +30,7 @@ open class Participant: Codable, Hashable, Identifiable {
     public var email: String?
     public var firstName: String?
     public var id: Int?
+    public var ssoId: String?
     public var image: String?
     public var keyId: String?
     public var lastName: String?
@@ -56,6 +57,7 @@ open class Participant: Codable, Hashable, Identifiable {
         email: String? = nil,
         firstName: String? = nil,
         id: Int? = nil,
+        ssoId: String? = nil,
         image: String? = nil,
         keyId: String? = nil,
         lastName: String? = nil,
@@ -82,6 +84,7 @@ open class Participant: Codable, Hashable, Identifiable {
         self.email = email
         self.firstName = firstName
         self.id = id
+        self.ssoId = ssoId
         self.image = image
         self.keyId = keyId
         self.lastName = lastName
@@ -110,6 +113,7 @@ open class Participant: Codable, Hashable, Identifiable {
         case email
         case firstName
         case id
+        case ssoId
         case image
         case keyId
         case lastName
@@ -139,6 +143,7 @@ open class Participant: Codable, Hashable, Identifiable {
         email = try container.decodeIfPresent(String.self, forKey: .email)
         firstName = try container.decodeIfPresent(String.self, forKey: .firstName)
         id = try container.decodeIfPresent(Int.self, forKey: .id)
+        ssoId = try container.decodeIfPresent(String.self, forKey: .ssoId)
         image = try container.decodeIfPresent(String.self, forKey: .image)
         keyId = try container.decodeIfPresent(String.self, forKey: .keyId)
         lastName = try container.decodeIfPresent(String.self, forKey: .lastName)
