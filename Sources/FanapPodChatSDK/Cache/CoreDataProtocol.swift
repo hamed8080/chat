@@ -43,6 +43,7 @@ extension CoreDataProtocol {
         if context.hasChanges == true {
             do {
                 try context.save()
+                context.reset()
                 logger?.log(title: "saved successfully", jsonString: nil)
             } catch {
                 let nserror = error as NSError

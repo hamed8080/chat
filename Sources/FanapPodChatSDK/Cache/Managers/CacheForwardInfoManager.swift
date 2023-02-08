@@ -87,23 +87,4 @@ class CacheForwardInfoManager: CoreDataProtocol {
         req.fetchLimit = 1
         return try? context.fetch(req).first
     }
-
-    func insert(_ forwardInfo: ForwardInfo, _ messageEntity: CDMessage) {
-        let entity = CDForwardInfo(context: context)
-        entity.message = messageEntity
-        if let threadModel = forwardInfo.conversation {
-            CacheConversationManager(context: context, logger: logger).findOrCreateEntity(threadModel.id) { threadEntity in
-                threadEntity?.update(threadModel)
-                entity.conversation = threadEntity
-                messageEntity.conversation = threadEntity
-                if let participant = forwardInfo.participant {
-                    CacheParticipantManager(context: self.context, logger: self.logger).findOrCreateEntity(threadEntity?.id?.intValue, participant.id) { participantEntity in
-                        participantEntity?.update(participant)
-                        participantEntity?.conversation = threadEntity
-                        entity.participant = participantEntity
-                    }
-                }
-            }
-        }
-    }
 }

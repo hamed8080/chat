@@ -42,8 +42,9 @@ extension Chat {
 
         if let filePath = cacheFileManager?.filePath(url: URL(string: url)!), cacheResponse != nil {
             cache?.file.first(with: request.hashCode) { [weak self] file in
+                let file = file?.codable
                 self?.responseQueue.async {
-                    cacheResponse?(nil, filePath, file?.codable, nil)
+                    cacheResponse?(nil, filePath, file, nil)
                 }
             }
         }

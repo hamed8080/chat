@@ -49,9 +49,11 @@ public class Chat: ChatProtocol, Identifiable {
         self.timerCheckUserStoppedTyping = timerCheckUserStoppedTyping
         self.session = session
         persistentManager = PersistentManager(logger: self.logger, cacheEnabled: config.enableCache)
-        if config.enableCache, let context = persistentManager.newBgTask() {
+        if config.enableCache {
             cacheFileManager = CacheFileManager()
-            cache = CacheManager(context: context, logger: logger)
+            if let context = persistentManager.newBgTask() {
+                cache = CacheManager(context: context, logger: logger)
+            }
         }
         asyncManager = AsyncManager(pingTimer: pingTimer, queueTimer: queueTimer)
         asyncManager.chat = self

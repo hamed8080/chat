@@ -42,8 +42,9 @@ extension Chat {
 
         if let filePath = cacheFileManager?.filePath(url: URL(string: url)!), cacheResponse != nil {
             cache?.image.first(with: request.hashCode) { [weak self] image in
+                let image = image?.codable
                 self?.responseQueue.async {
-                    cacheResponse?(nil, filePath, image?.codable, nil)
+                    cacheResponse?(nil, filePath, image, nil)
                 }
             }
         }

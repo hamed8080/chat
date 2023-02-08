@@ -25,14 +25,14 @@ public class PersistentManager {
     }
 
     var context: NSManagedObjectContext? {
-        guard let context = currentUserContainer?.viewContext else { return nil }
+        guard let context = container?.viewContext else { return nil }
         context.name = "Main"
         context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         return context
     }
 
     func newBgTask() -> NSManagedObjectContext? {
-        guard let bgTask = currentUserContainer?.newBackgroundContext() else { return nil }
+        guard let bgTask = container?.newBackgroundContext() else { return nil }
         bgTask.name = "BGTASK"
         bgTask.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         return bgTask
@@ -45,8 +45,7 @@ public class PersistentManager {
         return mom
     }
 
-    var containers: [NSPersistentContainer] = []
-    var currentUserContainer: NSPersistentContainer?
+    var container: NSPersistentContainer?
 
     func switchToContainer(userId: Int) {
         RolesValueTransformer.register()
@@ -58,20 +57,20 @@ public class PersistentManager {
             }
         }
         container.viewContext.automaticallyMergesChangesFromParent = true
-        currentUserContainer = container
+        self.container = container
     }
 
-    func save(context: NSManagedObjectContext, _ logger: Logger? = nil) {
-        if context.hasChanges == true, cacheEnabled == true {
-            do {
-                try context.save()
-                logger?.log(title: "saved successfully", jsonString: nil)
-            } catch {
-                let nserror = error as NSError
-                logger?.log(message: "error occured in save CoreData: \(nserror), \(nserror.userInfo)", level: .error)
+    func delete() {
+        let storeCordinator = container?.persistentStoreCoordinator
+        guard let store = storeCordinator?.persistentStores.first, let url = store.url else { return }
+        do {
+            if #available(iOS 15.0, *) {
+                try storeCordinator?.destroyPersistentStore(at: url, type: .sqlite)
+            } else {
+                try storeCordinator?.destroyPersistentStore(at: url, ofType: NSSQLiteStoreType)
             }
-        } else {
-            logger?.log(title: "CHAT_SDK:", message: "no changes find on context so nothing to save!")
+        } catch {
+            print("Error to delete the database file: \(error.localizedDescription)")
         }
     }
 }

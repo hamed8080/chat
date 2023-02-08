@@ -28,8 +28,8 @@ class CacheMessageManager: CoreDataProtocol {
     func updateRelations(_ entity: CDMessage, _ model: Message) {
         updateConversation(entity, model)
         entity.threadId = entity.conversation?.id ?? (model.conversation?.id as? NSNumber)
-        updateForwardInfo(entity, model)
         updateParticipant(entity, model)
+        updateForwardInfo(entity, model)
         updateReplyInfo(entity, model)
     }
 
@@ -58,9 +58,22 @@ class CacheMessageManager: CoreDataProtocol {
     }
 
     func updateForwardInfo(_ entity: CDMessage, _ model: Message) {
-        if let forwardInfo = model.forwardInfo {
-            let cmForward = CacheForwardInfoManager(context: context, logger: logger)
-            cmForward.insert(forwardInfo, entity)
+        if let forwardInfoModel = model.forwardInfo {
+            let forwardInfoEntity = CDForwardInfo(context: context)
+            forwardInfoEntity.messageId = model.id as? NSNumber
+            forwardInfoEntity.participant = entity.participant
+
+            if let conversation = forwardInfoModel.conversation {
+                let req = CDConversation.fetchRequest()
+                req.predicate = NSPredicate(format: "id == %i", conversation.id ?? -1)
+                var threadEntity = try? context.fetch(req).first
+                if threadEntity == nil {
+                    threadEntity = CDConversation(context: context)
+                    threadEntity?.update(conversation)
+                }
+                forwardInfoEntity.conversation = threadEntity
+            }
+            entity.forwardInfo = forwardInfoEntity
         }
     }
 
