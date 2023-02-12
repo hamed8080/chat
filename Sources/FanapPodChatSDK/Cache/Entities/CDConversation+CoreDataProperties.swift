@@ -192,7 +192,7 @@ public extension CDConversation {
         isArchive = conversation.isArchive as NSNumber?
     }
 
-    func codable(fillSelfRefrence: Bool = true) -> Conversation {
+    func codable(fillLastMessageVO: Bool = true, fillParticipants: Bool = false, fillPinMessages: Bool = true) -> Conversation {
         Conversation(admin: admin?.boolValue,
                      canEditInfo: canEditInfo?.boolValue,
                      canSpam: canSpam?.boolValue,
@@ -227,9 +227,9 @@ public extension CDConversation {
                      uniqueName: uniqueName,
                      userGroupHash: userGroupHash,
                      inviter: inviter?.codable,
-                     lastMessageVO: fillSelfRefrence ? lastMessageVO?.codable(fillConversation: false) : nil,
-                     participants: fillSelfRefrence ? participants?.allObjects.map { $0 as? CDParticipant }.compactMap { $0?.codable } : nil,
-                     pinMessages: fillSelfRefrence ? pinMessages?.allObjects.compactMap { $0 as? CDMessage }.map { $0.codable(fillConversation: false) } : nil,
+                     lastMessageVO: fillLastMessageVO ? lastMessageVO?.codable(fillConversation: false) : nil,
+                     participants: fillParticipants ? participants?.allObjects.map { $0 as? CDParticipant }.compactMap { $0?.codable } : nil,
+                     pinMessages: fillPinMessages ? pinMessages?.allObjects.compactMap { $0 as? CDMessage }.map { $0.codable(fillConversation: false) } : nil,
                      isArchive: isArchive?.boolValue)
     }
 }

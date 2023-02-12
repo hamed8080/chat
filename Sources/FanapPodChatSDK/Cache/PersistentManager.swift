@@ -39,11 +39,13 @@ public class PersistentManager {
     }
 
     /// The structure and model of SQLite database which is a file we created at Resources/ChaSDKModel.xcdataModeld.
-    var modelFile: NSManagedObjectModel {
+    /// Notice: In runtime we should not call this mutliple time and this is the reason why we made this property lazy variable, because we wanted to init this property only once.
+    /// If you call this multiple time such as inside a concreate object you will get console warning realted to `mutiple Climas entity`.
+    lazy var modelFile: NSManagedObjectModel = {
         guard let modelURL = Bundle.moduleBundle.url(forResource: baseModelFileName, withExtension: "momd") else { fatalError("Couldn't find the mond file!") }
         guard let mom = NSManagedObjectModel(contentsOf: modelURL) else { fatalError("Error initializing mom from: \(modelURL)") }
         return mom
-    }
+    }()
 
     var container: NSPersistentContainer?
 

@@ -203,6 +203,7 @@ class CacheConversationManager: CoreDataProtocol {
         let sortByTime = NSSortDescriptor(key: "time", ascending: false)
         let sortByPin = NSSortDescriptor(key: "pin", ascending: false)
         fetchRequest.sortDescriptors = [sortByPin, sortByTime]
+        fetchRequest.relationshipKeyPathsForPrefetching = ["lastMessageVO"]
         context.perform {
             let threads = (try? self.context.fetch(fetchRequest)) ?? []
             fetchRequest.fetchLimit = 0
