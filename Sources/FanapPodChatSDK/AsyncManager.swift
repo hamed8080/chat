@@ -112,10 +112,11 @@ internal class AsyncManager: AsyncDelegate {
                                               ttl: config.msgTTL,
                                               peerName: asyncMessage.peerName ?? config.asyncConfig.serverName,
                                               priority: config.msgPriority,
-                                              pushMsgType: asyncMessage.asyncMessageType)
-        guard let data = try? JSONEncoder().encode(asyncMessage), chat?.state == .chatReady || chat?.state == .asyncReady else { return }
+                                              pushMsgType: asyncMessage.asyncMessageType,
+                                              uniqueId: (asyncMessage as? AsyncChatServerMessage)?.chatMessage.uniqueId)
+        guard chat?.state == .chatReady || chat?.state == .asyncReady else { return }
         logger?.log(title: "send Message with type: \(type)", jsonString: asyncMessage.string ?? "", receive: false)
-        asyncClient?.sendData(type: .message, data: data)
+        asyncClient?.sendData(type: .message, message: asyncMessage)
     }
 
     /// A timer that repeats ping the `Chat server` every 20 seconds.
