@@ -9,10 +9,10 @@ import Foundation
 public class ChatManager {
     private init() {}
     public static var instance: ChatManager = .init()
-    public static var activeInstance: Chat!
+    public static var activeInstance: Chat?
     private var instances: [UUID: Chat] = [:]
 
-    public func createInstance(config: ChatConfig) {
+    private func createInstance(config: ChatConfig) {
         let chat = Chat(config: config)
         instances[chat.id] = chat
         ChatManager.activeInstance = chat
@@ -24,5 +24,25 @@ public class ChatManager {
 
     public func removeInstance(chatId: UUID) {
         instances.removeValue(forKey: chatId)
+    }
+
+    public func createOrReplaceUserInstance(userId: Int? = nil, config: ChatConfig) {
+        if let userId = userId, let key = instances.first(where: { $0.value.userInfo?.id == userId })?.key {
+            ChatManager.activeInstance = instances[key]
+        } else {
+            createInstance(config: config)
+        }
+
+        if let userId = userId {
+            ChatManager.switchToUser(userId: userId)
+        }
+    }
+
+    public class func switchToUser(userId: Int) {
+        guard let activeInstance = activeInstance else { return }
+        activeInstance.persistentManager.switchToContainer(userId: userId)
+        if let context = activeInstance.persistentManager.newBgTask() {
+            activeInstance.cache = CacheManager(context: context, logger: activeInstance.logger)
+        }
     }
 }

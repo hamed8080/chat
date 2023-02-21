@@ -17,7 +17,7 @@ public extension Chat {
     func editMessage(_ request: EditMessageRequest, completion: CompletionType<Message>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         request.typeCode = config.typeCode
         prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
-        cache?.editQueue?.insert(request)
+        cache?.editQueue.insert(request)
     }
 }
 
@@ -29,7 +29,7 @@ extension Chat {
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         if let message = response.result {
             deleteQueues(uniqueIds: [response.uniqueId ?? ""])
-            cache?.message?.insert(models: [message])
+            cache?.message.insert(models: [message])
         }
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }

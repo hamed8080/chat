@@ -30,6 +30,7 @@ open class Participant: Codable, Hashable, Identifiable {
     public var email: String?
     public var firstName: String?
     public var id: Int?
+    public var ssoId: String?
     public var image: String?
     public var keyId: String?
     public var lastName: String?
@@ -42,6 +43,7 @@ open class Participant: Codable, Hashable, Identifiable {
     public var sendEnable: Bool?
     public var username: String?
     public var chatProfileVO: Profile?
+    public var conversation: Conversation?
     public init(
         admin: Bool? = nil,
         auditor: Bool? = nil,
@@ -55,6 +57,7 @@ open class Participant: Codable, Hashable, Identifiable {
         email: String? = nil,
         firstName: String? = nil,
         id: Int? = nil,
+        ssoId: String? = nil,
         image: String? = nil,
         keyId: String? = nil,
         lastName: String? = nil,
@@ -66,7 +69,8 @@ open class Participant: Codable, Hashable, Identifiable {
         roles: [Roles]? = nil,
         sendEnable: Bool? = nil,
         username: String? = nil,
-        chatProfileVO: Profile? = nil
+        chatProfileVO: Profile? = nil,
+        conversation: Conversation? = nil
     ) {
         self.admin = admin
         self.auditor = auditor
@@ -80,6 +84,7 @@ open class Participant: Codable, Hashable, Identifiable {
         self.email = email
         self.firstName = firstName
         self.id = id
+        self.ssoId = ssoId
         self.image = image
         self.keyId = keyId
         self.lastName = lastName
@@ -92,6 +97,7 @@ open class Participant: Codable, Hashable, Identifiable {
         self.sendEnable = sendEnable
         self.username = username
         self.chatProfileVO = chatProfileVO
+        self.conversation = conversation
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -107,6 +113,7 @@ open class Participant: Codable, Hashable, Identifiable {
         case email
         case firstName
         case id
+        case ssoId
         case image
         case keyId
         case lastName
@@ -119,6 +126,7 @@ open class Participant: Codable, Hashable, Identifiable {
         case username
         case chatProfileVO
         case roles
+        case conversation
     }
 
     public required init(from decoder: Decoder) throws {
@@ -135,6 +143,7 @@ open class Participant: Codable, Hashable, Identifiable {
         email = try container.decodeIfPresent(String.self, forKey: .email)
         firstName = try container.decodeIfPresent(String.self, forKey: .firstName)
         id = try container.decodeIfPresent(Int.self, forKey: .id)
+        ssoId = try container.decodeIfPresent(String.self, forKey: .ssoId)
         image = try container.decodeIfPresent(String.self, forKey: .image)
         keyId = try container.decodeIfPresent(String.self, forKey: .keyId)
         lastName = try container.decodeIfPresent(String.self, forKey: .lastName)
@@ -147,5 +156,6 @@ open class Participant: Codable, Hashable, Identifiable {
         username = try container.decodeIfPresent(String.self, forKey: .username)
         chatProfileVO = try container.decodeIfPresent(Profile.self, forKey: .chatProfileVO)
         roles = try container.decodeIfPresent([Roles].self, forKey: .roles)
+        conversation = try container.decodeIfPresent(Conversation.self, forKey: .conversation)
     }
 }

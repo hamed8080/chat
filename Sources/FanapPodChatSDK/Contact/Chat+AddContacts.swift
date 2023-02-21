@@ -46,7 +46,7 @@ public extension Chat {
             self?.responseQueue.async {
                 completion(ChatResponse(uniqueId: request.first?.uniqueId, result: result?.result?.contacts, error: result?.error))
             }
-            self?.cache?.contact?.insert(models: result?.result?.contacts ?? [])
+            self?.cache?.contact.insert(models: result?.result?.contacts ?? [])
         }
         .resume()
     }

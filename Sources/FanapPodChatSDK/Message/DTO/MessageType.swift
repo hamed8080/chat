@@ -12,7 +12,8 @@
 //
 import Foundation
 
-public enum MessageType: Int, Codable, SafeDecodable {
+public enum MessageType: Int, Codable, SafeDecodable, Identifiable, CaseIterable {
+    public var id: Self { self }
     case text = 1
     case voice = 2
     case picture = 3

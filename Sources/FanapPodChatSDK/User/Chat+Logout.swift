@@ -13,7 +13,7 @@ public extension Chat {
         let req = BareChatSendableRequest(uniqueId: UUID().uuidString)
         req.chatMessageType = .logout
         prepareToSendAsync(req: req)
-        truncate()
+        persistentManager.delete()
         if let docFoler = cacheFileManager?.documentPath {
             cacheFileManager?.deleteFolder(url: docFoler)
         }

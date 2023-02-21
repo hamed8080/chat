@@ -6,12 +6,12 @@
 
 import Foundation
 public class ThreadParticipantsRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
-    public let count: Int
-    public let offset: Int
-    public let threadId: Int
-    public let name: String?
-    public let username: String?
-    public let cellphoneNumber: String?
+    public var count: Int
+    public var offset: Int
+    public var threadId: Int
+    public var name: String?
+    public var username: String?
+    public var cellphoneNumber: String?
     /// If it set to true the request only contains the list of admins of a thread.
     public var admin: Bool = false
 

@@ -31,18 +31,33 @@ public extension AsyncMessage {
         ChatResponse(uniqueId: chatMessage?.uniqueId, result: decodeContent(), subjectId: chatMessage?.subjectId, time: chatMessage?.time)
     }
 
-    func messageResponse(state _: MessageResposneState) -> ChatResponse<MessageResponse> {
-        let response: ChatResponse<Int> = toChatResponse()
-        let messageSent = MessageResponse(messageState: .sent,
-                                          threadId: response.subjectId,
-                                          participantId: nil,
-                                          messageId: response.result,
-                                          messageTime: UInt(response.time ?? 0))
-        let chatRes: ChatResponse<MessageResponse> = ChatResponse(uniqueId: response.uniqueId,
-                                                                  result: messageSent,
-                                                                  error: response.error,
-                                                                  subjectId: response.subjectId,
-                                                                  time: response.time)
-        return chatRes
+    /// There is two type  of decoding one with `Int` and another one with `MessageResponse.
+    /// Caution: When receiving a new message and sending a new message `OnDeliver`, `OnSeen`, and `OnSent` have different behavior.
+    func messageResponse(state: MessageResposneState) -> ChatResponse<MessageResponse>? {
+        let idResponse: ChatResponse<Int> = toChatResponse()
+        let messageResponse: ChatResponse<MessageResponse> = toChatResponse()
+        if idResponse.result != nil {
+            let messageSent = MessageResponse(messageState: state,
+                                              threadId: idResponse.subjectId,
+                                              participantId: nil,
+                                              messageId: idResponse.result,
+                                              messageTime: UInt(idResponse.time ?? 0))
+            let chatRes: ChatResponse<MessageResponse> = ChatResponse(uniqueId: idResponse.uniqueId,
+                                                                      result: messageSent,
+                                                                      error: idResponse.error,
+                                                                      subjectId: idResponse.subjectId,
+                                                                      time: idResponse.time)
+            return chatRes
+        } else if messageResponse.result != nil {
+            messageResponse.result?.messageState = state
+            let chatRes: ChatResponse<MessageResponse> = ChatResponse(uniqueId: messageResponse.uniqueId,
+                                                                      result: messageResponse.result,
+                                                                      error: messageResponse.error,
+                                                                      subjectId: messageResponse.subjectId,
+                                                                      time: messageResponse.time)
+            return chatRes
+        } else {
+            return nil
+        }
     }
 }

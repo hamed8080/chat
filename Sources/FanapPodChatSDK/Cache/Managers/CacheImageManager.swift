@@ -10,26 +10,24 @@ import Foundation
 
 class CacheImageManager: CoreDataProtocol {
     let idName = "hashCode"
-    let pm: PersistentManager
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDImage.entity().name ?? ""
+    let entityName = CDImage.entity().name ?? "CDImage"
 
-    required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
-        self.context = context ?? pm.context
-        self.pm = pm
+    required init(context: NSManagedObjectContext, logger: Logger? = nil) {
+        self.context = context
         self.logger = logger
     }
 
-    func insert(context: NSManagedObjectContext, model: Image) {
+    func insert(model: Image) {
         let entity = CDImage(context: context)
         entity.update(model)
     }
 
     func insert(models: [Image]) {
-        insertObjects { [weak self] bgTask in
+        insertObjects(context) { [weak self] _ in
             models.forEach { model in
-                self?.insert(context: bgTask, model: model)
+                self?.insert(model: model)
             }
         }
     }
@@ -38,16 +36,22 @@ class CacheImageManager: CoreDataProtocol {
         NSPredicate(format: "\(idName) == %@", id)
     }
 
-    func first(with id: String) -> CDImage? {
-        let req = CDImage.fetchRequest()
-        req.predicate = idPredicate(id: id)
-        return try? context.fetch(req).first
+    func first(with id: String, _ completion: @escaping (CDImage?) -> Void) {
+        context.perform {
+            let req = CDImage.fetchRequest()
+            req.predicate = self.idPredicate(id: id)
+            let image = try? self.context.fetch(req).first
+            completion(image)
+        }
     }
 
-    func find(predicate: NSPredicate) -> [CDImage] {
-        let req = CDImage.fetchRequest()
-        req.predicate = predicate
-        return (try? context.fetch(req)) ?? []
+    func find(predicate: NSPredicate, _ completion: @escaping ([CDImage]) -> Void) {
+        context.perform {
+            let req = CDImage.fetchRequest()
+            req.predicate = predicate
+            let images = (try? self.context.fetch(req)) ?? []
+            completion(images)
+        }
     }
 
     func update(model _: Image, entity _: CDImage) {}
@@ -56,7 +60,7 @@ class CacheImageManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate { [weak self] bgTask in
+        batchUpdate(context) { [weak self] bgTask in
             let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate

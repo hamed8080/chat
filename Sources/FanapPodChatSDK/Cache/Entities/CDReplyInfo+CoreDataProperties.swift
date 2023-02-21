@@ -34,10 +34,6 @@ public extension CDReplyInfo {
         metadata = replyInfo.metadata
         repliedToMessageId = replyInfo.repliedToMessageId as? NSNumber
         systemMetadata = replyInfo.systemMetadata
-        if let participant = replyInfo.participant, let context = managedObjectContext {
-            let entity = CDParticipant(context: context)
-            entity.update(participant)
-        }
         time = replyInfo.time as? NSNumber
     }
 

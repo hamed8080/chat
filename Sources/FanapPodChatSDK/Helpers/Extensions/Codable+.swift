@@ -8,8 +8,8 @@ import Foundation
 
 struct Voidcodable: Codable {}
 
-extension Encodable {
-    public func convertCodableToString() -> String? {
+public extension Encodable {
+    func convertCodableToString() -> String? {
         if let data = try? JSONEncoder().encode(self) {
             return String(data: data, encoding: .utf8)
         } else {
@@ -17,7 +17,7 @@ extension Encodable {
         }
     }
 
-    func asDictionary() throws -> [String: Any] {
+    internal func asDictionary() throws -> [String: Any] {
         let data = try JSONEncoder().encode(self)
         guard let dictionary = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] else {
             throw NSError()
@@ -25,7 +25,7 @@ extension Encodable {
         return dictionary
     }
 
-    func asDictionaryNuallable() throws -> [String: Any?] {
+    internal func asDictionaryNuallable() throws -> [String: Any?] {
         let data = try JSONEncoder().encode(self)
         guard let dictionary = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any?] else {
             throw NSError()

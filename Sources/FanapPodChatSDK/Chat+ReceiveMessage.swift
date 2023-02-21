@@ -15,7 +15,7 @@ extension Chat {
             logger?.log(title: "mismatch typeCode", message: "expected typeCode is:\(config.typeCode) but receive: \(chatMessage.typeCode ?? "")")
             return
         }
-        logger?.log(title: "on Receive Message", jsonString: asyncMessage.string)
+        logger?.log(title: "on Receive Message with type: \(chatMessage.type)", jsonString: asyncMessage.string)
 
         switch chatMessage.type {
         case .addParticipant:
@@ -49,7 +49,7 @@ extension Chat {
         case .editMessage:
             onEditMessage(asyncMessage)
         case .forwardMessage:
-            break
+            onNewMessage(asyncMessage)
         case .getBlocked:
             onBlockedContacts(asyncMessage)
         case .getContacts:
@@ -118,8 +118,6 @@ extension Chat {
             onStatusPing(asyncMessage)
         case .systemMessage:
             onSystemMessageEvent(asyncMessage)
-        case .threadInfoUpdated:
-            onUpdateThreadInfo(asyncMessage)
         case .threadParticipants:
             onThreadParticipants(asyncMessage)
         case .unblock, .block:
@@ -221,6 +219,8 @@ extension Chat {
             onCallSticker(asyncMessage)
         case .threadsUnreadCount:
             onThreadsUnreadCount(asyncMessage)
+        case .threadContactNameUpdated:
+            onThreadNameContactUpdated(asyncMessage)
         case .error:
             onError(asyncMessage)
         case .unknown:

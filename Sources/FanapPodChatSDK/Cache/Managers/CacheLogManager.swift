@@ -10,26 +10,24 @@ import Foundation
 
 class CacheLogManager: CoreDataProtocol {
     let idName = "id"
-    let pm: PersistentManager
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDLog.entity().name ?? ""
+    let entityName = CDLog.entity().name ?? "CDLog"
 
-    required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
-        self.context = context ?? pm.context
-        self.pm = pm
+    required init(context: NSManagedObjectContext, logger: Logger? = nil) {
+        self.context = context
         self.logger = logger
     }
 
-    func insert(context: NSManagedObjectContext, model: Log) {
+    func insert(model: Log) {
         let entity = CDLog(context: context)
         entity.update(model)
     }
 
     func insert(models: [Log]) {
-        insertObjects { [weak self] bgTask in
+        insertObjects(context) { [weak self] _ in
             models.forEach { model in
-                self?.insert(context: bgTask, model: model)
+                self?.insert(model: model)
             }
         }
     }
@@ -38,16 +36,22 @@ class CacheLogManager: CoreDataProtocol {
         NSPredicate(format: "\(idName) == %i", id)
     }
 
-    func first(with id: Int) -> CDLog? {
-        let req = CDLog.fetchRequest()
-        req.predicate = idPredicate(id: id)
-        return try? context.fetch(req).first
+    func first(with id: Int, _ completion: @escaping (CDLog?) -> Void) {
+        context.perform {
+            let req = CDLog.fetchRequest()
+            req.predicate = self.idPredicate(id: id)
+            let log = try? self.context.fetch(req).first
+            completion(log)
+        }
     }
 
-    func find(predicate: NSPredicate) -> [CDLog] {
-        let req = CDLog.fetchRequest()
-        req.predicate = predicate
-        return (try? context.fetch(req)) ?? []
+    func find(predicate: NSPredicate, _ completion: @escaping ([CDLog]) -> Void) {
+        context.perform {
+            let req = CDLog.fetchRequest()
+            req.predicate = predicate
+            let logs = (try? self.context.fetch(req)) ?? []
+            completion(logs)
+        }
     }
 
     func update(model _: Log, entity _: CDLog) {}
@@ -56,7 +60,7 @@ class CacheLogManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate { [weak self] bgTask in
+        batchUpdate(context) { [weak self] bgTask in
             let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
@@ -70,7 +74,7 @@ class CacheLogManager: CoreDataProtocol {
     func delete(_ models: [Log]) {
         let ids = models.compactMap(\.id.string)
         let predicate = NSPredicate(format: "id IN %@", ids)
-        batchDelete(entityName: entityName, predicate: predicate)
+        batchDelete(context, entityName: entityName, predicate: predicate)
     }
 
     func firstLog() -> CDLog? {

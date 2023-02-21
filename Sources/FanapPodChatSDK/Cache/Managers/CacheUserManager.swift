@@ -10,26 +10,24 @@ import Foundation
 
 class CacheUserManager: CoreDataProtocol {
     let idName = "id"
-    let pm: PersistentManager
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDUser.entity().name ?? ""
+    let entityName = CDUser.entity().name ?? "CDUser"
 
-    required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
-        self.context = context ?? pm.context
-        self.pm = pm
+    required init(context: NSManagedObjectContext, logger: Logger? = nil) {
+        self.context = context
         self.logger = logger
     }
 
-    func insert(context: NSManagedObjectContext, model: User) {
+    func insert(model: User) {
         let entity = CDUser(context: context)
         entity.update(model)
     }
 
     func insert(models: [User]) {
-        insertObjects { [weak self] bgTask in
+        insertObjects(context) { [weak self] _ in
             models.forEach { model in
-                self?.insert(context: bgTask, model: model)
+                self?.insert(model: model)
             }
         }
     }
@@ -38,16 +36,22 @@ class CacheUserManager: CoreDataProtocol {
         NSPredicate(format: "\(idName) == %i", id)
     }
 
-    func first(with id: Int) -> CDUser? {
-        let req = CDUser.fetchRequest()
-        req.predicate = idPredicate(id: id)
-        return try? context.fetch(req).first
+    func first(with id: Int, _ completion: @escaping (CDUser?) -> Void) {
+        context.perform {
+            let req = CDUser.fetchRequest()
+            req.predicate = self.idPredicate(id: id)
+            let user = try? self.context.fetch(req).first
+            completion(user)
+        }
     }
 
-    func find(predicate: NSPredicate) -> [CDUser] {
-        let req = CDUser.fetchRequest()
-        req.predicate = predicate
-        return (try? context.fetch(req)) ?? []
+    func find(predicate: NSPredicate, _ completion: @escaping ([CDUser]) -> Void) {
+        context.perform {
+            let req = CDUser.fetchRequest()
+            req.predicate = predicate
+            let users = (try? self.context.fetch(req)) ?? []
+            completion(users)
+        }
     }
 
     func update(model _: User, entity _: CDUser) {}
@@ -56,7 +60,7 @@ class CacheUserManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate { [weak self] bgTask in
+        batchUpdate(context) { [weak self] bgTask in
             let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
@@ -68,7 +72,7 @@ class CacheUserManager: CoreDataProtocol {
     func delete(entity _: CDUser) {}
 
     func insert(_ models: [User], isMe: Bool = false) {
-        insertObjects { bgTask in
+        insertObjects(context) { bgTask in
             models.forEach { model in
                 let entity = CDUser(context: bgTask)
                 entity.update(model)

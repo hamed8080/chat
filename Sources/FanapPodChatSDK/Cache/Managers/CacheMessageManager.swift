@@ -10,60 +10,90 @@ import Foundation
 
 class CacheMessageManager: CoreDataProtocol {
     let idName = "id"
-    let pm: PersistentManager
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDMessage.entity().name ?? ""
+    let entityName = CDMessage.entity().name ?? "CDMessage"
 
-    required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
-        self.context = context ?? pm.context
-        self.pm = pm
+    required init(context: NSManagedObjectContext, logger: Logger? = nil) {
+        self.context = context
         self.logger = logger
     }
 
-    func insert(context: NSManagedObjectContext, model: Message) {
+    func insert(model: Message) {
         let entity = CDMessage(context: context)
         entity.update(model)
+        updateRelations(entity, model)
+    }
 
-        if let conversation = model.conversation, let threadEntity = CacheConversationManager(context: context, pm: pm, logger: logger).first(with: conversation.id ?? -1) {
-            entity.conversation = threadEntity
-        } else if let conversation = model.conversation {
-            let newThraed = CDConversation(context: context)
-            newThraed.id = conversation.id as? NSNumber
-            entity.conversation = newThraed
-        }
-        entity.threadId = entity.conversation?.id
+    func updateRelations(_ entity: CDMessage, _ model: Message) {
+        updateConversation(entity, model)
+        entity.threadId = entity.conversation?.id ?? (model.conversation?.id as? NSNumber)
+        updateParticipant(entity, model)
+        updateForwardInfo(entity, model)
+        updateReplyInfo(entity, model)
+    }
 
-        if let forwardInfo = model.forwardInfo {
-            let cmForward = CacheForwardInfoManager(context: context, pm: pm, logger: logger)
-            cmForward.insert(forwardInfo, entity)
-        }
-
+    func updateParticipant(_ entity: CDMessage, _ model: Message) {
         if let participant = model.participant {
-            let cmParticipant = CacheParticipantManager(context: context, pm: pm, logger: logger)
-            if let participantEntity = cmParticipant.first(with: participant.id ?? -1) {
-                entity.participant = participantEntity
-            } else {
-                entity.participant = CDParticipant(context: context)
-                entity.participant?.update(participant)
+            let req = CDParticipant.fetchRequest()
+            req.predicate = NSPredicate(format: "conversation.id == %i AND id == %i", entity.conversation?.id?.intValue ?? -1, participant.id ?? -1)
+            var participnatEntity = try? context.fetch(req).first
+            if participnatEntity == nil {
+                participnatEntity = CDParticipant(context: context)
+                participnatEntity?.update(participant)
             }
+            entity.participant = participnatEntity
+            participnatEntity?.conversation = entity.conversation
         }
+    }
 
-        if let replyInfo = model.replyInfo {
-            let cmReplyInfo = CacheReplyInfoManager(context: context, pm: pm, logger: logger)
-            if let replyInfoEntity = cmReplyInfo.first(replyInfo.participant?.id, replyInfo.repliedToMessageId) {
-                entity.replyInfo = replyInfoEntity
-            } else {
-                entity.replyInfo = CDReplyInfo(context: context)
-                entity.replyInfo?.update(replyInfo)
+    func updateReplyInfo(_ entity: CDMessage, _ model: Message) {
+        if let replyInfoModel = model.replyInfo {
+            let replyInfoEntity = CDReplyInfo(context: context)
+            replyInfoEntity.repliedToMessageId = replyInfoModel.repliedToMessageId as? NSNumber
+            replyInfoEntity.participant?.id = model.replyInfo?.participant?.id as? NSNumber
+            replyInfoEntity.update(replyInfoModel)
+            entity.replyInfo = replyInfoEntity
+        }
+    }
+
+    func updateForwardInfo(_ entity: CDMessage, _ model: Message) {
+        if let forwardInfoModel = model.forwardInfo {
+            let forwardInfoEntity = CDForwardInfo(context: context)
+            forwardInfoEntity.messageId = model.id as? NSNumber
+            forwardInfoEntity.participant = entity.participant
+
+            if let conversation = forwardInfoModel.conversation {
+                let req = CDConversation.fetchRequest()
+                req.predicate = NSPredicate(format: "id == %i", conversation.id ?? -1)
+                var threadEntity = try? context.fetch(req).first
+                if threadEntity == nil {
+                    threadEntity = CDConversation(context: context)
+                    threadEntity?.update(conversation)
+                }
+                forwardInfoEntity.conversation = threadEntity
             }
+            entity.forwardInfo = forwardInfoEntity
+        }
+    }
+
+    func updateConversation(_ entity: CDMessage, _ model: Message) {
+        if let conversation = model.conversation {
+            let req = CDConversation.fetchRequest()
+            req.predicate = NSPredicate(format: "id == %i", conversation.id ?? -1)
+            var threadEntity = try? context.fetch(req).first
+            if threadEntity == nil {
+                threadEntity = CDConversation(context: context)
+                threadEntity?.update(conversation)
+            }
+            entity.conversation = threadEntity
         }
     }
 
     func insert(models: [Message]) {
-        insertObjects { [weak self] bgTask in
+        insertObjects(context) { [weak self] _ in
             models.forEach { model in
-                self?.insert(context: bgTask, model: model)
+                self?.insert(model: model)
             }
         }
     }
@@ -72,16 +102,22 @@ class CacheMessageManager: CoreDataProtocol {
         NSPredicate(format: "\(idName) == %i", id)
     }
 
-    func first(with id: Int) -> CDMessage? {
-        let req = CDMessage.fetchRequest()
-        req.predicate = idPredicate(id: id)
-        return try? context.fetch(req).first
+    func first(with id: Int, _ completion: @escaping (CDMessage?) -> Void) {
+        context.perform {
+            let req = CDMessage.fetchRequest()
+            req.predicate = self.idPredicate(id: id)
+            let message = try? self.context.fetch(req).first
+            completion(message)
+        }
     }
 
-    func find(predicate: NSPredicate) -> [CDMessage] {
-        let req = CDMessage.fetchRequest()
-        req.predicate = predicate
-        return (try? context.fetch(req)) ?? []
+    func find(predicate: NSPredicate, _ completion: @escaping ([CDMessage]) -> Void) {
+        context.perform {
+            let req = CDMessage.fetchRequest()
+            req.predicate = predicate
+            let messages = (try? self.context.fetch(req)) ?? []
+            completion(messages)
+        }
     }
 
     func update(model _: Message, entity _: CDMessage) {}
@@ -90,7 +126,7 @@ class CacheMessageManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate { [weak self] bgTask in
+        batchUpdate(context) { [weak self] bgTask in
             let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
@@ -103,12 +139,12 @@ class CacheMessageManager: CoreDataProtocol {
 
     func delete(_ threadId: Int?, _ messageId: Int?) {
         let predicate = predicate(threadId, messageId)
-        batchDelete(entityName: entityName, predicate: predicate)
+        batchDelete(context, entityName: entityName, predicate: predicate)
     }
 
     func delete(_ messageId: Int?) {
         let predicate = idPredicate(id: messageId ?? -1)
-        batchDelete(entityName: entityName, predicate: predicate)
+        batchDelete(context, entityName: entityName, predicate: predicate)
     }
 
     func pin(_ pin: Bool, _ threadId: Int?, _ messageId: Int?) {
@@ -117,10 +153,16 @@ class CacheMessageManager: CoreDataProtocol {
         update(propertiesToUpdate, predicate)
     }
 
-    func seen(_ request: MessageSeenRequest) {
-        let predicate = predicate(request.threadId, request.messageId)
-        let propertiesToUpdate = ["seen": NSNumber(booleanLiteral: true)]
+    /// Set seen only for prior messages where the owner of the message is not me.
+    /// We should do that because we need to distinguish between messages that came from the partner or messages sent by myself.
+    /// Also we should set delivered to true because when we have seen a message for 100% we have received the message as well.
+    /// Also we need to set lastSeenMessageId and time and nano time in the conversation entity to keep it synced.
+    func seen(_ request: MessageSeenRequest, userId: Int) {
+        let predicate = NSPredicate(format: "threadId == %i AND id <= %i AND (seen = nil OR seen == NO) AND ownerId != %i", request.threadId, request.messageId, userId)
+        let propertiesToUpdate = ["seen": NSNumber(booleanLiteral: true), "delivered": NSNumber(booleanLiteral: true)]
         update(propertiesToUpdate, predicate)
+        let cmConversation = CacheConversationManager(context: context, logger: logger)
+        cmConversation.seen(request)
     }
 
     // We don't join with the conversation.id because it leads to a crash when batch updating due to lack of relation update query support in a predicate in batch mode.
@@ -130,22 +172,30 @@ class CacheMessageManager: CoreDataProtocol {
         return NSPredicate(format: "threadId == %i AND id == %i", threadId, messageId)
     }
 
+    func joinPredicate(_ threadId: Int?, _ messageId: Int?) -> NSPredicate {
+        let threadId = threadId ?? -1
+        let messageId = messageId ?? -1
+        return NSPredicate(format: "(conversation.id == %i OR threadId == %i) AND id == %i", threadId, threadId, messageId)
+    }
+
     func partnerDeliver(_ response: MessageResponse) {
-        let predicate = predicate(response.threadId, response.messageId)
+        let threadId = response.threadId ?? -1
+        let messageId = response.messageId ?? -1
+        let predicate = NSPredicate(format: "threadId == %i AND id <= %i AND (delivered = nil OR delivered == NO)", threadId, messageId)
         let propertiesToUpdate = ["delivered": NSNumber(booleanLiteral: true)]
         update(propertiesToUpdate, predicate)
-        let cm = CacheConversationManager(pm: pm, logger: logger)
+        let cm = CacheConversationManager(context: context, logger: logger)
         cm.partnerDeliver(response)
-        save()
     }
 
     func partnerSeen(_ response: MessageResponse) {
-        let predicate = predicate(response.threadId, response.messageId)
-        let propertiesToUpdate = ["seen": NSNumber(booleanLiteral: true)]
+        let threadId = response.threadId ?? -1
+        let messageId = response.messageId ?? -1
+        let predicate = NSPredicate(format: "threadId == %i AND id <= %i AND (seen = nil OR seen == NO)", threadId, messageId)
+        let propertiesToUpdate = ["seen": NSNumber(booleanLiteral: true), "delivered": NSNumber(booleanLiteral: true)]
         update(propertiesToUpdate, predicate)
-        let cm = CacheConversationManager(pm: pm, logger: logger)
-        cm.partnerDeliver(response)
-        save()
+        let cm = CacheConversationManager(context: context, logger: logger)
+        cm.partnerSeen(response)
     }
 
     func predicateArray(_ req: GetHistoryRequest) -> NSCompoundPredicate {
@@ -172,11 +222,13 @@ class CacheMessageManager: CoreDataProtocol {
         return NSCompoundPredicate(type: .and, subpredicates: predicateArray)
     }
 
-    @discardableResult
-    func find(_ threadId: Int?, _ messageId: Int?) -> CDMessage? {
-        let req = CDMessage.fetchRequest()
-        req.predicate = predicate(threadId, messageId)
-        return try? context.fetch(req).first
+    func find(_ threadId: Int?, _ messageId: Int?, _ completion: @escaping (CDMessage?) -> Void) {
+        context.perform {
+            let req = CDMessage.fetchRequest()
+            req.predicate = self.joinPredicate(threadId, messageId)
+            let message = try? self.context.fetch(req).first
+            completion(message)
+        }
     }
 
     func fecthMessage(threadId: Int?, messageId: Int?) -> CDMessage? {
@@ -185,26 +237,33 @@ class CacheMessageManager: CoreDataProtocol {
         return try? context.fetch(req).first
     }
 
-    func fetch(_ req: GetHistoryRequest) -> (messages: [CDMessage], totalCount: Int) {
-        let fetchRequest = CDMessage.fetchRequest()
-        fetchRequest.fetchOffset = req.offset
-        fetchRequest.fetchLimit = req.count
-        let sortByTime = NSSortDescriptor(key: "time", ascending: (req.order == Ordering.asc.rawValue) ? true : false)
-        fetchRequest.sortDescriptors = [sortByTime]
-        fetchRequest.predicate = predicateArray(req)
-        let totalCount = (try? context.count(for: fetchRequest)) ?? 0
-        let messages = (try? context.fetch(fetchRequest)) ?? []
-        return (messages, totalCount)
+    func fetch(_ req: GetHistoryRequest, _ completion: @escaping ([CDMessage], Int) -> Void) {
+        context.perform {
+            let fetchRequest = CDMessage.fetchRequest()
+            let sortByTime = NSSortDescriptor(key: "time", ascending: (req.order == Ordering.asc.rawValue) ? true : false)
+            fetchRequest.sortDescriptors = [sortByTime]
+            fetchRequest.predicate = self.predicateArray(req)
+            let totalCount = (try? self.context.count(for: fetchRequest)) ?? 0
+            fetchRequest.fetchOffset = req.offset
+            fetchRequest.fetchLimit = req.count
+            let messages = (try? self.context.fetch(fetchRequest)) ?? []
+            completion(messages, totalCount)
+        }
     }
 
-    func getMentions(_ req: MentionRequest) -> (objects: [CDMessage], totalCount: Int) {
+    func getMentions(_ req: MentionRequest, _ completion: @escaping ([CDMessage], Int) -> Void) {
         let predicate = NSPredicate(format: "threadId == %i", req.threadId, req.threadId)
-        let res: (objects: [CDMessage], totalCount: Int) = fetchWithOffset(count: req.count, offset: req.offset, predicate: predicate)
-        return res
+        fetchWithOffset(count: req.count, offset: req.offset, predicate: predicate, completion)
     }
 
     func clearHistory(threadId: Int?) {
         let predicate = NSPredicate(format: "threadId == %i", threadId ?? -1)
-        batchDelete(entityName: entityName, predicate: predicate)
+        batchDelete(context, entityName: entityName, predicate: predicate)
+    }
+
+    func findOrCreate(_ threadId: Int?, _ messageId: Int?, _ completion: @escaping (CDMessage?) -> Void) {
+        find(threadId, messageId) { message in
+            completion(message ?? CDMessage(context: self.context))
+        }
     }
 }

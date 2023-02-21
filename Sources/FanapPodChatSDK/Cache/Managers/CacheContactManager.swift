@@ -10,26 +10,24 @@ import Foundation
 
 class CacheContactManager: CoreDataProtocol {
     let idName = "id"
-    let pm: PersistentManager
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDContact.entity().name ?? ""
+    let entityName = CDContact.entity().name ?? "CDContact"
 
-    required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
-        self.context = context ?? pm.context
-        self.pm = pm
+    required init(context: NSManagedObjectContext, logger: Logger? = nil) {
+        self.context = context
         self.logger = logger
     }
 
-    func insert(context: NSManagedObjectContext, model: Contact) {
+    func insert(model: Contact) {
         let entity = CDContact(context: context)
         entity.update(model)
     }
 
     func insert(models: [Contact]) {
-        insertObjects { [weak self] bgTask in
+        insertObjects(context) { [weak self] _ in
             models.forEach { model in
-                self?.insert(context: bgTask, model: model)
+                self?.insert(model: model)
             }
         }
     }
@@ -38,16 +36,22 @@ class CacheContactManager: CoreDataProtocol {
         NSPredicate(format: "\(idName) == %i", id)
     }
 
-    func first(with id: Int) -> CDContact? {
-        let req = CDContact.fetchRequest()
-        req.predicate = idPredicate(id: id)
-        return try? context.fetch(req).first
+    func first(with id: Int, _ completion: @escaping (CDContact?) -> Void) {
+        context.perform {
+            let req = CDContact.fetchRequest()
+            req.predicate = self.idPredicate(id: id)
+            let contact = try? self.context.fetch(req).first
+            completion(contact)
+        }
     }
 
-    func find(predicate: NSPredicate) -> [CDContact] {
-        let req = CDContact.fetchRequest()
-        req.predicate = predicate
-        return (try? context.fetch(req)) ?? []
+    func find(predicate: NSPredicate, _ completion: @escaping ([CDContact]) -> Void) {
+        context.perform {
+            let req = CDContact.fetchRequest()
+            req.predicate = predicate
+            let contacts = (try? self.context.fetch(req)) ?? []
+            completion(contacts)
+        }
     }
 
     func update(model _: Contact, entity _: CDContact) {}
@@ -56,7 +60,7 @@ class CacheContactManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate { [weak self] bgTask in
+        batchUpdate(context) { [weak self] bgTask in
             let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
@@ -68,7 +72,7 @@ class CacheContactManager: CoreDataProtocol {
     func delete(entity _: CDContact) {}
 
     func delete(_ id: Int) {
-        batchDelete(entityName: entityName, predicate: idPredicate(id: id))
+        batchDelete(context, entityName: entityName, predicate: idPredicate(id: id))
     }
 
     func block(_ block: Bool, _ threadId: Int?) {
@@ -77,8 +81,8 @@ class CacheContactManager: CoreDataProtocol {
         update(propertiesToUpdate, predicate)
     }
 
-    func getContacts(_ req: ContactsRequest?) -> (objects: [CDContact], totalCount: Int) {
-        guard let req = req else { return ([], 0) }
+    func getContacts(_ req: ContactsRequest?, _ completion: @escaping ([CDContact], Int) -> Void) {
+        guard let req = req else { completion([], 0); return }
         let fetchRequest = CDContact.fetchRequest()
         let ascending = req.order != Ordering.desc.rawValue
         if let id = req.id {
@@ -114,15 +118,20 @@ class CacheContactManager: CoreDataProtocol {
         let firstNameSort = NSSortDescriptor(key: "firstName", ascending: ascending)
         let lastNameSort = NSSortDescriptor(key: "lastName", ascending: ascending)
         fetchRequest.sortDescriptors = [lastNameSort, firstNameSort]
-        fetchRequest.fetchLimit = req.size
-        fetchRequest.fetchOffset = req.offset
-        let contacts = (try? context.fetch(fetchRequest)) ?? []
-        let count = try? context.count(for: fetchRequest)
-        return (contacts, count ?? 0)
+        context.perform {
+            let count = try? self.context.count(for: CDContact.fetchRequest())
+            fetchRequest.fetchLimit = req.size
+            fetchRequest.fetchOffset = req.offset
+            let contacts = (try? self.context.fetch(fetchRequest)) ?? []
+            completion(contacts, count ?? 0)
+        }
     }
 
-    func allContacts() -> [CDContact] {
-        let req = CDContact.fetchRequest()
-        return (try? context.fetch(req)) ?? []
+    func allContacts(_ completion: @escaping ([CDContact]) -> Void) {
+        context.perform {
+            let req = CDContact.fetchRequest()
+            let contacts = (try? self.context.fetch(req)) ?? []
+            completion(contacts)
+        }
     }
 }

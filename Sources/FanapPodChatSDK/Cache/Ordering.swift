@@ -6,7 +6,8 @@
 
 import Foundation
 
-public enum Ordering: String {
+public enum Ordering: String, Identifiable, CaseIterable {
+    public var id: Self { self }
     case asc
     case desc
 }

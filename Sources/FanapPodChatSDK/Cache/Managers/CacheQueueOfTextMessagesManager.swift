@@ -10,26 +10,24 @@ import Foundation
 
 class CacheQueueOfTextMessagesManager: CoreDataProtocol {
     let idName = "id"
-    let pm: PersistentManager
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDQueueOfTextMessages.entity().name ?? ""
+    let entityName = CDQueueOfTextMessages.entity().name ?? "CDQueueOfTextMessages"
 
-    required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
-        self.context = context ?? pm.context
-        self.pm = pm
+    required init(context: NSManagedObjectContext, logger: Logger? = nil) {
+        self.context = context
         self.logger = logger
     }
 
-    func insert(context: NSManagedObjectContext, model: QueueOfTextMessages) {
+    func insert(model: QueueOfTextMessages) {
         let entity = CDQueueOfTextMessages(context: context)
         entity.update(model)
     }
 
     func insert(models: [QueueOfTextMessages]) {
-        insertObjects { [weak self] bgTask in
+        insertObjects(context) { [weak self] _ in
             models.forEach { model in
-                self?.insert(context: bgTask, model: model)
+                self?.insert(model: model)
             }
         }
     }
@@ -38,16 +36,22 @@ class CacheQueueOfTextMessagesManager: CoreDataProtocol {
         NSPredicate(format: "\(idName) == %i", id)
     }
 
-    func first(with id: Int) -> CDQueueOfTextMessages? {
-        let req = CDQueueOfTextMessages.fetchRequest()
-        req.predicate = idPredicate(id: id)
-        return try? context.fetch(req).first
+    func first(with id: Int, _ completion: @escaping (CDQueueOfTextMessages?) -> Void) {
+        context.perform {
+            let req = CDQueueOfTextMessages.fetchRequest()
+            req.predicate = self.idPredicate(id: id)
+            let queue = try? self.context.fetch(req).first
+            completion(queue)
+        }
     }
 
-    func find(predicate: NSPredicate) -> [CDQueueOfTextMessages] {
-        let req = CDQueueOfTextMessages.fetchRequest()
-        req.predicate = predicate
-        return (try? context.fetch(req)) ?? []
+    func find(predicate: NSPredicate, _ completion: @escaping ([CDQueueOfTextMessages]) -> Void) {
+        context.perform {
+            let req = CDQueueOfTextMessages.fetchRequest()
+            req.predicate = predicate
+            let queues = (try? self.context.fetch(req)) ?? []
+            completion(queues)
+        }
     }
 
     func update(model _: QueueOfTextMessages, entity _: CDQueueOfTextMessages) {}
@@ -56,7 +60,7 @@ class CacheQueueOfTextMessagesManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate { [weak self] bgTask in
+        batchUpdate(context) { [weak self] bgTask in
             let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
@@ -74,16 +78,11 @@ class CacheQueueOfTextMessagesManager: CoreDataProtocol {
 
     func delete(_ uniqueIds: [String]) {
         let predicate = NSPredicate(format: "uniqueId IN %@", uniqueIds)
-        batchDelete(entityName: entityName, predicate: predicate)
+        batchDelete(context, entityName: entityName, predicate: predicate)
     }
 
-    func unsedForThread(_ threadId: Int?, _ count: Int?, _ offset: Int?) -> (objects: [CDQueueOfTextMessages], totalCount: Int) {
+    func unsendForThread(_ threadId: Int?, _ count: Int?, _ offset: Int?, _ completion: @escaping ([CDQueueOfTextMessages], Int) -> Void) {
         let threadIdPredicate = NSPredicate(format: "threadId == %i", threadId ?? -1)
-        let textResponse: (objects: [CDQueueOfTextMessages], totalCount: Int) = fetchWithOffset(
-            count: count,
-            offset: offset,
-            predicate: threadIdPredicate
-        )
-        return textResponse
+        fetchWithOffset(count: count, offset: offset, predicate: threadIdPredicate, completion)
     }
 }

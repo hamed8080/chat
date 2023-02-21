@@ -250,7 +250,16 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
     }
 
     func send(_ asyncMessage: AsyncSnedable) {
-        chat?.asyncManager.sendToAsync(asyncMessage: asyncMessage)
+        guard let config = chat?.config, let content = asyncMessage.content else { return }
+        let asyncMessage = SendAsyncMessageVO(content: content,
+                                              ttl: config.msgTTL,
+                                              peerName: asyncMessage.peerName ?? config.asyncConfig.serverName,
+                                              priority: config.msgPriority,
+                                              pushMsgType: asyncMessage.asyncMessageType,
+                                              uniqueId: (asyncMessage as? AsyncChatServerMessage)?.chatMessage.uniqueId)
+        guard chat?.state == .chatReady || chat?.state == .asyncReady else { return }
+        chat?.logger?.log(title: "send Message with type CallType", jsonString: asyncMessage.string ?? "", receive: false)
+        chat?.asyncManager.asyncClient?.sendData(type: .message, message: asyncMessage)
     }
 
     deinit {

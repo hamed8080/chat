@@ -26,10 +26,6 @@ public extension CDAssistant {
     func update(_ assistant: Assistant) {
         contactType = assistant.contactType
         self.assistant = assistant.assistant
-        if let participant = assistant.participant, let context = managedObjectContext {
-            let entity = CDParticipant(context: context)
-            entity.update(participant)
-        }
         roles = assistant.roles?.toData()
         block = assistant.block as? NSNumber
     }

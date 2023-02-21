@@ -26,8 +26,8 @@ public extension Chat {
                            onSent: onSent,
                            onDelivered: onDeliver,
                            onSeen: onSeen)
-        cache?.conversation?.updateLastMessage(request.threadId, request.textMessage)
-        cache?.textQueue?.insert(request)
+        cache?.conversation.updateLastMessage(request.threadId, request.textMessage)
+        cache?.textQueue.insert(request)
     }
 
     /// Reply to a message.
@@ -117,9 +117,13 @@ public extension Chat {
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
 
-        let res = cache?.message?.getMentions(request)
-        let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: res?.totalCount)
-        cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: res?.objects.map { $0.codable() }, error: nil, pagination: pagination))
+        cache?.message.getMentions(request) { [weak self] messages, totalCount in
+            let messages = messages.map { $0.codable() }
+            self?.responseQueue.async {
+                let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: totalCount)
+                cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: messages, pagination: pagination))
+            }
+        }
     }
 
     /// Tell the sender of a message that the message is delivered successfully.
@@ -138,9 +142,12 @@ public extension Chat {
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func seen(_ request: MessageSeenRequest, uniqueIdResult: UniqueIdResultType? = nil) {
         prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult)
-        cache?.message?.seen(request)
-        let unreadCount = cache?.conversation?.decreamentUnreadCount(request.threadId)
-        delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: .init(unreadCount: unreadCount, threadId: request.threadId)))))
+        cache?.message.seen(request, userId: userInfo?.id ?? -1)
+        cache?.conversation.decreamentUnreadCount(request.threadId) { [weak self] unreadCount in
+            self?.responseQueue.async {
+                self?.delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: .init(unreadCount: unreadCount, threadId: request.threadId)))))
+            }
+        }
     }
 }
 
@@ -154,38 +161,53 @@ extension Chat {
         if message.threadId == nil {
             message.threadId = response.subjectId ?? message.conversation?.id
         }
-        cache?.message?.insert(models: [message])
+        cache?.message.insert(models: [message])
         // Check that we are not the sender of the message and message come from another person.
-        if let messageId = message.id, message.participant?.id != userInfo?.id {
-            let currentUnreadCount = cache?.conversation?.increamentUnreadCount(response.subjectId ?? -1)
-            let unreadCount = UnreadCount(unreadCount: currentUnreadCount, threadId: response.subjectId)
-            delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: unreadCount))))
-            deliver(.init(messageId: messageId))
+        // This means that the user himself was the sender of the message, therefore he saw messages inside the thread.
+        let isMe = message.participant?.id == userInfo?.id
+        if isMe {
+            cache?.conversation.setUnreadCountToZero(response.subjectId ?? -1) { [weak self] unreadCount in
+                self?.responseQueue.async {
+                    let unreadCount = UnreadCount(unreadCount: unreadCount, threadId: response.subjectId)
+                    self?.delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: unreadCount))))
+                }
+            }
+        } else {
+            cache?.conversation.increamentUnreadCount(response.subjectId ?? -1) { [weak self] unreadCount in
+                self?.responseQueue.async {
+                    let unreadCount = UnreadCount(unreadCount: unreadCount, threadId: response.subjectId)
+                    self?.delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: unreadCount))))
+                }
+            }
+        }
+        cache?.conversation.setLastMessageVO(message)
+        if !isMe {
+            deliver(.init(messageId: message.id ?? 0, threadId: message.threadId))
         }
     }
 
     func onSentMessage(_ asyncMessage: AsyncMessage) {
-        let response = asyncMessage.messageResponse(state: .sent)
+        guard let response = asyncMessage.messageResponse(state: .sent) else { return }
         delegate?.chatEvent(event: .message(.messageSent(response)))
         deleteQueues(uniqueIds: [response.uniqueId ?? ""])
         callbacksManager.invokeSentCallbackAndRemove(response)
     }
 
     func onDeliverMessage(_ asyncMessage: AsyncMessage) {
-        let response = asyncMessage.messageResponse(state: .delivered)
+        guard let response = asyncMessage.messageResponse(state: .delivered) else { return }
         delegate?.chatEvent(event: .message(.messageDelivery(response)))
         if let delivered = response.result {
-            cache?.message?.partnerDeliver(delivered)
+            cache?.message.partnerDeliver(delivered)
         }
         deleteQueues(uniqueIds: [response.uniqueId ?? ""])
         callbacksManager.invokeDeliverCallbackAndRemove(response)
     }
 
     func onSeenMessage(_ asyncMessage: AsyncMessage) {
-        let response = asyncMessage.messageResponse(state: .seen)
+        guard let response = asyncMessage.messageResponse(state: .seen) else { return }
         if let seenResponse = response.result {
             delegate?.chatEvent(event: .message(.messageSeen(response)))
-            cache?.message?.partnerSeen(seenResponse)
+            cache?.message.partnerSeen(seenResponse)
             callbacksManager.invokeSeenCallbackAndRemove(response)
         }
     }
@@ -195,7 +217,7 @@ extension Chat {
         delegate?.chatEvent(event: .thread(.lastMessageEdited(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         if let thread = response.result {
-            cache?.conversation?.updateLastMessage(thread)
+            cache?.conversation.updateLastMessage(thread)
         }
     }
 
@@ -204,7 +226,7 @@ extension Chat {
         delegate?.chatEvent(event: .thread(.lastMessageDeleted(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         if let thread = response.result {
-            cache?.conversation?.updateLastMessage(thread)
+            cache?.conversation.updateLastMessage(thread)
         }
     }
 }

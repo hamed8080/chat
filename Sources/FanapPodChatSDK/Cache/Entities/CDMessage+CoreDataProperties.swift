@@ -64,7 +64,7 @@ public extension CDMessage {
         notifyAll = message.pinNotifyAll as? NSNumber
     }
 
-    func codable(fillSelfRelation: Bool = true) -> Message {
+    func codable(fillConversation: Bool = true, fillParticipant: Bool = true, fillForwardInfo: Bool = false, fillReplyInfo: Bool = false) -> Message {
         Message(threadId: threadId?.intValue,
                 deletable: deletable?.boolValue,
                 delivered: deletable?.boolValue,
@@ -83,10 +83,10 @@ public extension CDMessage {
                 time: time?.uintValue,
                 timeNanos: time?.uintValue,
                 uniqueId: uniqueId,
-                conversation: fillSelfRelation ? conversation?.codable : nil,
-                forwardInfo: forwardInfo?.codable,
-                participant: participant?.codable,
-                replyInfo: replyInfo?.codable,
+                conversation: fillConversation ? conversation?.codable() : nil,
+                forwardInfo: fillForwardInfo ? forwardInfo?.codable : nil,
+                participant: fillParticipant ? participant?.codable : nil,
+                replyInfo: fillReplyInfo ? replyInfo?.codable : nil,
                 pinTime: pinTime?.uintValue,
                 notifyAll: notifyAll?.boolValue)
     }

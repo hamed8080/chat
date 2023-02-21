@@ -34,7 +34,7 @@ public extension Chat {
     }
 
     func truncate() {
-        let bgTask = persistentManager.newBgTask()
+        guard let bgTask = persistentManager.newBgTask() else { return }
         bgTask.perform { [weak self] in
             var objectIds: [NSManagedObjectID] = []
             self?.entities.forEach { entity in
@@ -51,16 +51,17 @@ public extension Chat {
     }
 
     func mergeChanges(key: String, _ objectIDs: [NSManagedObjectID]) {
+        guard let context = persistentManager.context else { return }
         NSManagedObjectContext.mergeChanges(
             fromRemoteContextSave: [key: objectIDs],
-            into: [persistentManager.context]
+            into: [context]
         )
     }
 
     func deleteQueues(uniqueIds: [String]) {
-        cache?.editQueue?.delete(uniqueIds)
-        cache?.fileQueue?.delete(uniqueIds)
-        cache?.textQueue?.delete(uniqueIds)
-        cache?.forwardQueue?.delete(uniqueIds)
+        cache?.editQueue.delete(uniqueIds)
+        cache?.fileQueue.delete(uniqueIds)
+        cache?.textQueue.delete(uniqueIds)
+        cache?.forwardQueue.delete(uniqueIds)
     }
 }

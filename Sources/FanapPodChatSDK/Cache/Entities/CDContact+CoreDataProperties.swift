@@ -42,10 +42,6 @@ public extension CDContact {
         notSeenDuration = contact.notSeenDuration as? NSNumber
         time = contact.time as? NSNumber
         userId = contact.userId as? NSNumber
-        if let user = contact.user, let context = managedObjectContext {
-            let entity = CDUser(context: context)
-            entity.update(user)
-        }
     }
 
     var codable: Contact {

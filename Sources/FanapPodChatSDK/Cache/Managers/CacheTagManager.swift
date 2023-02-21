@@ -10,26 +10,24 @@ import Foundation
 
 class CacheTagManager: CoreDataProtocol {
     let idName = "id"
-    let pm: PersistentManager
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDTag.entity().name ?? ""
+    let entityName = CDTag.entity().name ?? "CDTag"
 
-    required init(context: NSManagedObjectContext? = nil, pm: PersistentManager, logger: Logger? = nil) {
-        self.context = context ?? pm.context
-        self.pm = pm
+    required init(context: NSManagedObjectContext, logger: Logger? = nil) {
+        self.context = context
         self.logger = logger
     }
 
-    func insert(context: NSManagedObjectContext, model: Tag) {
+    func insert(model: Tag) {
         let entity = CDTag(context: context)
         entity.update(model)
     }
 
     func insert(models: [Tag]) {
-        insertObjects { [weak self] bgTask in
+        insertObjects(context) { [weak self] _ in
             models.forEach { model in
-                self?.insert(context: bgTask, model: model)
+                self?.insert(model: model)
             }
         }
     }
@@ -38,16 +36,22 @@ class CacheTagManager: CoreDataProtocol {
         NSPredicate(format: "\(idName) == %i", id)
     }
 
-    func first(with id: Int) -> CDTag? {
-        let req = CDTag.fetchRequest()
-        req.predicate = idPredicate(id: id)
-        return try? context.fetch(req).first
+    func first(with id: Int, _ completion: @escaping (CDTag?) -> Void) {
+        context.perform {
+            let req = CDTag.fetchRequest()
+            req.predicate = self.idPredicate(id: id)
+            let tag = try? self.context.fetch(req).first
+            completion(tag)
+        }
     }
 
-    func find(predicate: NSPredicate) -> [CDTag] {
-        let req = CDTag.fetchRequest()
-        req.predicate = predicate
-        return (try? context.fetch(req)) ?? []
+    func find(predicate: NSPredicate, _ completion: @escaping ([CDTag]) -> Void) {
+        context.perform {
+            let req = CDTag.fetchRequest()
+            req.predicate = predicate
+            let tags = (try? self.context.fetch(req)) ?? []
+            completion(tags)
+        }
     }
 
     func update(model _: Tag, entity _: CDTag) {}
@@ -56,7 +60,7 @@ class CacheTagManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate { [weak self] bgTask in
+        batchUpdate(context) { [weak self] bgTask in
             let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
@@ -67,13 +71,16 @@ class CacheTagManager: CoreDataProtocol {
 
     func delete(entity _: CDTag) {}
 
-    func getTags() -> [CDTag] {
-        let req = CDTag.fetchRequest()
-        return (try? context.fetch(req)) ?? []
+    func getTags(_ completion: @escaping ([CDTag]) -> Void) {
+        context.perform {
+            let req = CDTag.fetchRequest()
+            let tags = (try? self.context.fetch(req)) ?? []
+            completion(tags)
+        }
     }
 
     func delete(_ id: Int?) {
         let predicate = idPredicate(id: id ?? -1)
-        batchDelete(entityName: entityName, predicate: predicate)
+        batchDelete(context, entityName: entityName, predicate: predicate)
     }
 }

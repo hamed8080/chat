@@ -75,6 +75,7 @@ internal class AsyncManager: AsyncDelegate {
         asyncClient?.disposeObject()
         asyncClient = nil
         pingTimer.invalidate()
+        queueTimer.invalidate()
     }
 
     /// The sendData delegate will inform if a send event occurred by the async socket.
@@ -82,7 +83,7 @@ internal class AsyncManager: AsyncDelegate {
         guard let config = config else { return }
         let chatMessage = SendChatMessageVO(req: sendable, token: config.token, typeCode: config.typeCode)
         addToQueue(sendable: sendable)
-        sendToAsync(asyncMessage: AsyncChatServerMessage(chatMessage: chatMessage))
+        sendToAsync(asyncMessage: AsyncChatServerMessage(chatMessage: chatMessage), type: sendable.chatMessageType)
         sendPingTimer()
     }
 
@@ -111,16 +112,17 @@ internal class AsyncManager: AsyncDelegate {
         }
     }
 
-    func sendToAsync(asyncMessage: AsyncSnedable) {
+    func sendToAsync(asyncMessage: AsyncSnedable, type: ChatMessageVOTypes) {
         guard let config = config, let content = asyncMessage.content else { return }
         let asyncMessage = SendAsyncMessageVO(content: content,
                                               ttl: config.msgTTL,
                                               peerName: asyncMessage.peerName ?? config.asyncConfig.serverName,
                                               priority: config.msgPriority,
-                                              pushMsgType: asyncMessage.asyncMessageType)
-        guard let data = try? JSONEncoder().encode(asyncMessage), chat?.state == .chatReady || chat?.state == .asyncReady else { return }
-        logger?.log(title: "send Message", jsonString: asyncMessage.string ?? "", receive: false)
-        asyncClient?.sendData(type: .message, data: data)
+                                              pushMsgType: asyncMessage.asyncMessageType,
+                                              uniqueId: (asyncMessage as? AsyncChatServerMessage)?.chatMessage.uniqueId)
+        guard chat?.state == .chatReady || chat?.state == .asyncReady else { return }
+        logger?.log(title: "send Message with type: \(type)", jsonString: asyncMessage.string ?? "", receive: false)
+        asyncClient?.sendData(type: .message, message: asyncMessage)
     }
 
     /// A timer that repeats ping the `Chat server` every 20 seconds.

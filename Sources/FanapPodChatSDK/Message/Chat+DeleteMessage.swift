@@ -37,12 +37,16 @@ extension Chat {
         let response: ChatResponse<Message> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .message(.messageDelete(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
-        let entity = cache?.message?.find(response.subjectId, response.result?.id)
-        if entity?.seen == nil, entity?.ownerId?.intValue != userInfo?.id {
-            let unreadCount = cache?.conversation?.decreamentUnreadCount(response.subjectId ?? -1)
-            delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: .init(unreadCount: unreadCount, threadId: response.subjectId)))))
+        cache?.message.find(response.subjectId, response.result?.id) { [weak self] entity in
+            if entity?.seen == nil, entity?.ownerId?.intValue != self?.userInfo?.id {
+                self?.cache?.conversation.decreamentUnreadCount(response.subjectId ?? -1) { [weak self] unreadCount in
+                    self?.responseQueue.async {
+                        self?.delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: .init(unreadCount: unreadCount, threadId: response.subjectId)))))
+                    }
+                }
+            }
         }
-        cache?.message?.delete(response.subjectId ?? -1, response.result?.id)
+        cache?.message.delete(response.subjectId ?? -1, response.result?.id)
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

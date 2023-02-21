@@ -18,6 +18,8 @@ public class ThreadsRequest: UniqueIdManagerRequest, ChatSendable {
     public let partnerCoreUserId: Int?
     public let partnerCoreContactId: Int?
     public var metadataCriteria: String?
+    public var isGroup: Bool?
+    public var type: ThreadTypes?
     var chatMessageType: ChatMessageVOTypes = .getThreads
     var content: String? { convertCodableToString() }
 
@@ -25,6 +27,8 @@ public class ThreadsRequest: UniqueIdManagerRequest, ChatSendable {
                 offset: Int = 0,
                 name: String? = nil,
                 new: Bool? = nil,
+                isGroup: Bool? = nil,
+                type: ThreadTypes? = nil,
                 archived: Bool? = nil,
                 threadIds: [Int]? = nil,
                 creatorCoreUserId: Int? = nil,
@@ -38,6 +42,8 @@ public class ThreadsRequest: UniqueIdManagerRequest, ChatSendable {
         self.name = name
         self.metadataCriteria = metadataCriteria
         self.new = new
+        self.isGroup = isGroup
+        self.type = type
         self.archived = archived
         self.threadIds = threadIds
         self.creatorCoreUserId = creatorCoreUserId
@@ -57,6 +63,8 @@ public class ThreadsRequest: UniqueIdManagerRequest, ChatSendable {
         case partnerCoreUserId
         case partnerCoreContactId
         case metadataCriteria
+        case isGroup
+        case type
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -71,5 +79,7 @@ public class ThreadsRequest: UniqueIdManagerRequest, ChatSendable {
         try? container.encodeIfPresent(partnerCoreContactId, forKey: .partnerCoreContactId)
         try? container.encodeIfPresent(metadataCriteria, forKey: .metadataCriteria)
         try? container.encodeIfPresent(archived, forKey: .archived)
+        try? container.encodeIfPresent(isGroup, forKey: .isGroup)
+        try? container.encodeIfPresent(type, forKey: .type)
     }
 }

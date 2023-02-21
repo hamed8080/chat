@@ -7,7 +7,9 @@
 import Foundation
 
 /// Type of thread.
-public enum ThreadTypes: Int, Codable, SafeDecodable {
+public enum ThreadTypes: Int, Codable, SafeDecodable, Identifiable {
+    public var id: Self { self }
+
     /// This type can be P2P only 2 user or can be a Private group.
     /// - If it's a Private Group only the admin can add participants to it.
     /// - Everyone can send messages to this type of thread.
