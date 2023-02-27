@@ -50,9 +50,6 @@ public class Logger {
     init(timer: TimerProtocol? = Timer(), urlSession: URLSessionProtocol = URLSession.shared) {
         self.urlSession = urlSession
         self.timer = timer
-        if config?.persistLogsOnServer == true {
-            startSending()
-        }
     }
 
     func log(title: String? = nil, jsonString: String? = nil, receive _: Bool = true, persistOnServer: Bool = false) {
@@ -129,7 +126,8 @@ public class Logger {
         }
     }
 
-    private func startSending() {
+    func startSending() {
+        if config?.persistLogsOnServer ?? false == false { return }
         Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
             let bgTask = self?.persistentManager?.newBgTask()
             if let bgTask = bgTask, let log = CacheLogManager(context: bgTask, logger: self).firstLog() {
