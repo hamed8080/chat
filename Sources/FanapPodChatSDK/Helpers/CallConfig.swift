@@ -8,17 +8,17 @@ import FanapPodAsyncSDK
 import Foundation
 
 public struct CallConfig: Codable {
-    public private(set) var targetVideoWidth: Int = 1920
-    public private(set) var targetVideoHeight: Int = 1080
-    public private(set) var targetFPS: Int = 60
-    public private(set) var callTimeout: TimeInterval = 45
+    public private(set) var targetVideoWidth: Int
+    public private(set) var targetVideoHeight: Int
+    public private(set) var targetFPS: Int
+    public private(set) var callTimeout: TimeInterval
 
     // Memberwise Initializer
     public init(
-        targetVideoWidth: Int,
-        targetVideoHeight: Int,
-        targetFPS: Int,
-        callTimeout: TimeInterval
+        targetVideoWidth: Int = 1920,
+        targetVideoHeight: Int = 1080,
+        targetFPS: Int = 60,
+        callTimeout: TimeInterval = 45
     ) {
         self.targetVideoWidth = targetVideoWidth
         self.targetVideoHeight = targetVideoHeight

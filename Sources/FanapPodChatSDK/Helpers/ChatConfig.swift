@@ -93,6 +93,35 @@ public struct ChatConfig: Codable {
     public mutating func updateToken(_ token: String) {
         self.token = token
     }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        asyncConfig = try container.decode(AsyncConfig.self, forKey: .asyncConfig)
+        callConfig = (try? container.decodeIfPresent(CallConfig.self, forKey: .callConfig)) ?? CallConfig()
+        ssoHost = try container.decode(String.self, forKey: .ssoHost)
+        platformHost = try container.decode(String.self, forKey: .platformHost)
+        fileServer = try container.decode(String.self, forKey: .fileServer)
+        podSpaceFileServerAddress = try container.decode(String.self, forKey: .podSpaceFileServerAddress)
+        token = try container.decode(String.self, forKey: .token)
+        mapApiKey = try container.decodeIfPresent(String.self, forKey: .mapApiKey)
+        mapServer = try container.decode(String.self, forKey: .mapServer)
+        typeCode = try container.decode(String.self, forKey: .typeCode)
+        enableCache = try container.decode(Bool.self, forKey: .enableCache)
+        cacheTimeStampInSec = try container.decode(Int.self, forKey: .cacheTimeStampInSec)
+        msgPriority = try container.decode(Int.self, forKey: .msgPriority)
+        msgTTL = try container.decode(Int.self, forKey: .msgTTL)
+        httpRequestTimeout = try container.decode(Int.self, forKey: .httpRequestTimeout)
+        wsConnectionWaitTime = try container.decode(Double.self, forKey: .wsConnectionWaitTime)
+        persistLogsOnServer = try container.decode(Bool.self, forKey: .persistLogsOnServer)
+        maxReconnectTimeInterval = try container.decode(Int.self, forKey: .maxReconnectTimeInterval)
+        localImageCustomPath = try container.decodeIfPresent(URL.self, forKey: .localImageCustomPath)
+        localFileCustomPath = try container.decodeIfPresent(URL.self, forKey: .localFileCustomPath)
+        deviecLimitationSpaceMB = try container.decode(Int64.self, forKey: .deviecLimitationSpaceMB)
+        getDeviceIdFromToken = try container.decode(Bool.self, forKey: .getDeviceIdFromToken)
+        isDebuggingLogEnabled = try container.decode(Bool.self, forKey: .isDebuggingLogEnabled)
+        appGroup = try container.decodeIfPresent(String.self, forKey: .appGroup)
+        sendLogInterval = try container.decode(TimeInterval.self, forKey: .sendLogInterval)
+    }
 }
 
 public class ChatConfigBuilder {
