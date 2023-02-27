@@ -244,7 +244,7 @@ Chat.sharedInstance.seen(.init(messageId: 123456))
 
 ### Cancel a message.
 
-Cancel a message happens when a message is not sent by the SDK and canceling it will delete it from a cache of SDK respectively. For this call the method ``Chat/cancelMessage(_:completion:)`` like this:
+Cancel a message happens when a message is not sent by the SDK and canceling it will delete it from a cache of SDK respectively. For this call the method ``Chat/cancelMessage(uniqueId:completion:)`` like this:
 
 ```swift
 Chat.sharedInstance.cancelMessage(.init(uniqueId: "XYZ...")){ isCanceled, uniqueId, error in

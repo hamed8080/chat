@@ -20,17 +20,6 @@ Chat.sharedInstance.getThreads(init(offset: 50)) { threads, uniqueId, pagination
 }
 ```
 
-For retriving data witouth calling network you could use ``CacheFactory/get(useCache:cacheType:completion:)``
-It won't work unless you set `enableCache` to true in configuration.
-```swift
-let req = ThreadsRequest(count:50, offset: 0)
-cache?.get(useCache: true, cacheType: .GET_THREADS(req)) { response in
-    if let threads = response.cacheResponse as? [Conversation]{
-        // Write your code
-    }
-}
-```
-
 ### Create a thread
 For creating a thread use method with a ``CreateThreadRequest`` ``Chat/createThread(_:completion:uniqueIdResult:)``.
 Each thread contains a ``Conversation/type`` which determine if the thread is P2P, Group, Channel or e.g.

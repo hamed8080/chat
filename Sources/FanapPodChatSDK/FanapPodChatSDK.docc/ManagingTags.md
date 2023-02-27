@@ -3,7 +3,7 @@
 Tags are like folder for managing threads. You could Add, delete, edit and add/remove tag participans.
 
 ### Tag List
-For retrieving the list of tags use method ``Chat/tagList(_:completion:uniqueIdResult:)`` like this:
+For retrieving the list of tags use method ``Chat/tagList(_:completion:cacheResponse:uniqueIdResult:)`` like this:
 ```swift
 Chat.sharedInstance.tagList() { tags, uniqueId, error in
     if let tags = tags{
