@@ -59,6 +59,7 @@ public class Chat: ChatProtocol, Identifiable {
         asyncManager.chat = self
         self.logger?.persistentManager = persistentManager
         self.logger?.chat = self
+        self.logger?.startSending()
     }
 
     public func connect() {
