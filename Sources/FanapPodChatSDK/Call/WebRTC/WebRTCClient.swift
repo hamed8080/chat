@@ -164,6 +164,7 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
     var logFile: RTCFileLogger?
     private let rtcAudioSession = RTCAudioSession.sharedInstance()
     private let audioQueue = DispatchQueue(label: "audio")
+    private var isPassedMaxVideoLimit: Bool { callParticipantsUserRTC.filter { $0.callParticipant.video == true }.count > config.callConfig.maxActiveVideoSessions ?? 4 }
 
     public init(chat: Chat, config: WebRTCConfig, delegate _: WebRTCClientDelegate? = nil) {
         self.chat = chat
