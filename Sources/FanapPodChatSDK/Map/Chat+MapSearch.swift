@@ -21,7 +21,7 @@ public extension Chat {
         var urlReq = URLRequest(url: URL(string: urlString)!)
         urlReq.allHTTPHeaderFields = headers
         urlReq.httpBody = bodyData
-        session.dataTask(with: urlReq) { [weak self] data, response, error in
+        session.dataTask(urlReq) { [weak self] data, response, error in
             let result: ChatResponse<MapSearchResponse>? = self?.session.decode(data, response, error)
             self?.responseQueue.async {
                 completion(ChatResponse(uniqueId: request.uniqueId, result: result?.result?.items, error: result?.error))

@@ -34,7 +34,7 @@ extension Chat {
     }
 
     func stopTimerWhenUserIsNotTyping() {
-        timerCheckUserStoppedTyping?.invalidate()
+        timerCheckUserStoppedTyping?.invalidateTimer()
         timerCheckUserStoppedTyping = Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { [weak self] _ in
             self?.sendStopTyping()
         }
@@ -42,7 +42,7 @@ extension Chat {
 
     /// Send user stop typing.
     public func sendStopTyping() {
-        timerTyping?.invalidate()
+        timerTyping?.invalidateTimer()
         timerTyping = nil
         isTypingCount = 0
     }

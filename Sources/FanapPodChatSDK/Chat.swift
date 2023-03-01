@@ -20,7 +20,7 @@ public class Chat: ChatProtocol, Identifiable {
     var isTypingCount = 0
     var timerTyping: TimerProtocol?
     var timerCheckUserStoppedTyping: TimerProtocol?
-    var exportMessageViewModels: [any ExportMessagesProtocol] = []
+    var exportMessageViewModels: [ExportMessagesProtocol] = []
     var session: URLSessionProtocol
     var responseQueue: DispatchQueueProtocol
     var cache: CacheManager?

@@ -24,7 +24,7 @@ extension Chat {
 
     func getUserForChatReady() {
         if userInfo == nil {
-            requestUserTimer = requestUserTimer.scheduledTimer(withTimeInterval: 2, repeats: true) { [weak self] _ in
+            requestUserTimer = requestUserTimer.scheduledTimer(interval: 2, repeats: true) { [weak self] _ in
                 self?.onUserTimer()
             }
         } else {
@@ -49,12 +49,12 @@ extension Chat {
             delegate?.chatEvent(event: .user(.onUser(.init(result: user))))
             delegate?.chatState(state: .chatReady, currentUser: user, error: nil)
             asyncManager.sendQueuesOnReconnect()
-            requestUserTimer.invalidate()
+            requestUserTimer.invalidateTimer()
         } else if userRetrycount < maxUserRetryCount {
             userRetrycount += 1
         } else {
             // reach to max retry
-            requestUserTimer.invalidate()
+            requestUserTimer.invalidateTimer()
             delegate?.chatError(error: .init(type: .errorRaedyChat, message: response.error?.message))
         }
     }

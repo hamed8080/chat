@@ -132,7 +132,7 @@ public class Logger {
             let bgTask = self?.persistentManager?.newBgTask()
             if let bgTask = bgTask {
                 CacheLogManager(context: bgTask, logger: self).firstLog { log in
-                    if let log {
+                    if let log = log {
                         self?.sendLog(log: log)
                     }
                 }
@@ -145,7 +145,7 @@ public class Logger {
         req.httpMethod = HTTPMethod.put.rawValue
         req.httpBody = try? JSONEncoder().encode(log.codable)
         req.allHTTPHeaderFields = ["Authorization": "Basic Y2hhdDpjaGF0MTIz", "Content-Type": "application/json"]
-        let task = urlSession.dataTask(with: req) { [weak self] _, response, error in
+        let task = urlSession.dataTask(req) { [weak self] _, response, error in
             if (response as? HTTPURLResponse)?.statusCode == 200 {
                 self?.deleteLogFromCache(log: log)
             }

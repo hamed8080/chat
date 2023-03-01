@@ -51,7 +51,7 @@ internal class AsyncManager: AsyncDelegate {
         if asyncState == .asyncReady {
             chat?.getUserForChatReady()
         } else if asyncState == .closed {
-            pingTimer.invalidate()
+            pingTimer.invalidateTimer()
             logger?.log(message: "Socket Disconnected", level: LogLevel.error)
         }
     }
@@ -68,8 +68,8 @@ internal class AsyncManager: AsyncDelegate {
     public func disposeObject() {
         asyncClient?.disposeObject()
         asyncClient = nil
-        pingTimer.invalidate()
-        queueTimer.invalidate()
+        pingTimer.invalidateTimer()
+        queueTimer.invalidateTimer()
     }
 
     /// The sendData delegate will inform if a send event occurred by the async socket.
@@ -98,7 +98,7 @@ internal class AsyncManager: AsyncDelegate {
         var interval: TimeInterval = 0
         queue.sorted { $0.value.queueTime < $1.value.queueTime }.forEach { _, item in
             if let sendable = item as? ChatSendable {
-                queueTimer.scheduledTimer(withTimeInterval: interval + 2, repeats: false) { [weak self] _ in
+                queueTimer.scheduledTimer(interval: interval + 2, repeats: false) { [weak self] _ in
                     self?.sendData(sendable: sendable)
                 }
             }
@@ -121,8 +121,8 @@ internal class AsyncManager: AsyncDelegate {
 
     /// A timer that repeats ping the `Chat server` every 20 seconds.
     internal func sendPingTimer() {
-        pingTimer.invalidate()
-        pingTimer = pingTimer.scheduledTimer(withTimeInterval: 20, repeats: true) { [weak self] _ in
+        pingTimer.invalidateTimer()
+        pingTimer = pingTimer.scheduledTimer(interval: 20, repeats: true) { [weak self] _ in
             guard let self = self else { return }
             if let lastSentMessageDate = self.lastSentMessageDate, Date().timeIntervalSince1970 - (lastSentMessageDate.timeIntervalSince1970 + 20) > 20 {
                 self.sendChatServerPing()
