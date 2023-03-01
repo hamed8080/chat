@@ -2,7 +2,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "FanapPodChatSDK"
-  s.version      = "1.1.0"
+  s.version      = "1.2.0"
   s.summary      = "Fanap's POD Chat SDK"
   s.description  = "This Package is used for creating chat apps for companies whoes want to use Fanap Chat Services; This Package will use Fanap-Pod-Async-SDK"
   s.homepage     = "https://pubgi.fanapsoft.ir/chat/ios/fanappodchatsdk"
@@ -15,6 +15,6 @@ Pod::Spec.new do |s|
   #s.vendored_frameworks = "Frameworks/WebRTC.xcframework"#inside root folder of podhcat sdk
   s.resources = "Sources/FanapPodChatSDK/Resources/*.xcdatamodeld"
   s.frameworks  = "Foundation" , "CoreData" , "Contacts", "CoreServices"
-  s.dependency "FanapPodAsyncSDK" , '~> 1.1.0'
+  s.dependency "FanapPodAsyncSDK" , '~> 1.2.0'
   s.dependency "WebRTC-lib" , '107.0.0'
 end

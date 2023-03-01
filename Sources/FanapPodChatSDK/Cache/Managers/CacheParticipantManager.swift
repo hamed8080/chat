@@ -57,7 +57,7 @@ class CacheParticipantManager: CoreDataProtocol {
         context.perform {
             let req = CDParticipant.fetchRequest()
             req.predicate = self.idPredicate(id: id)
-            let participant = try? self.context.fetch(req).first
+            let participant = try self.context.fetch(req).first
             completion(participant)
         }
     }
@@ -66,7 +66,7 @@ class CacheParticipantManager: CoreDataProtocol {
         context.perform {
             let req = CDParticipant.fetchRequest()
             req.predicate = self.predicate(threadId, participantId)
-            let participant = try? self.context.fetch(req).first
+            let participant = try self.context.fetch(req).first
             completion(participant)
         }
     }
@@ -79,7 +79,7 @@ class CacheParticipantManager: CoreDataProtocol {
         context.perform {
             let req = CDParticipant.fetchRequest()
             req.predicate = predicate
-            let participants = (try? self.context.fetch(req)) ?? []
+            let participants = try self.context.fetch(req)
             completion(participants)
         }
     }

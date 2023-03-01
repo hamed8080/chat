@@ -17,15 +17,14 @@ extension Chat {
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     public func getUserInfo(_ request: UserInfoRequest, completion: @escaping CompletionType<User>, cacheResponse: CacheResponseType<User>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
-        let req = CDUser.fetchRequest()
-        req.predicate = NSPredicate(format: "isMe == %@", NSNumber(booleanLiteral: true))
-        let cachedUseInfo = (try? persistentManager.context?.fetch(req))?.first
-        cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: cachedUseInfo?.codable))
+        cache?.user.fetchCurrentUser { userEntity in
+            cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: userEntity?.codable))
+        }
     }
 
     func getUserForChatReady() {
         if userInfo == nil {
-            requestUserTimer = requestUserTimer.scheduledTimer(withTimeInterval: 2, repeats: true) { [weak self] _ in
+            requestUserTimer = requestUserTimer.scheduledTimer(interval: 2, repeats: true) { [weak self] _ in
                 self?.onUserTimer()
             }
         } else {
@@ -50,12 +49,12 @@ extension Chat {
             delegate?.chatEvent(event: .user(.onUser(.init(result: user))))
             delegate?.chatState(state: .chatReady, currentUser: user, error: nil)
             asyncManager.sendQueuesOnReconnect()
-            requestUserTimer.invalidate()
+            requestUserTimer.invalidateTimer()
         } else if userRetrycount < maxUserRetryCount {
             userRetrycount += 1
         } else {
             // reach to max retry
-            requestUserTimer.invalidate()
+            requestUserTimer.invalidateTimer()
             delegate?.chatError(error: .init(type: .errorRaedyChat, message: response.error?.message))
         }
     }

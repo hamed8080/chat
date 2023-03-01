@@ -41,7 +41,7 @@ extension Chat {
 
     /// if newtork is unstable and async server cant respond with type CALL_SESSION_CREATED then we must end call  for starter to close UI
     func startTimerTimeout() {
-        _ = callStartTimer?.scheduledTimer(withTimeInterval: config.callConfig.callTimeout, repeats: false) { [weak self] timer in
+        _ = callStartTimer?.scheduledTimer(interval: config.callConfig.callTimeout, repeats: false) { [weak self] timer in
             if self?.callState == .requested {
                 if self?.config.isDebuggingLogEnabled == true {
                     self?.logger?.log(title: "cancel call after \(self?.config.callConfig.callTimeout ?? 0) second no response back from server with type CALL_SESSION_CREATED")
@@ -102,7 +102,7 @@ extension Chat {
 
     /// maybe starter of call after start call request disconnected we need to close ui on the receiver side
     func startTimerTimeout(callId: Int) {
-        _ = callStartTimer?.scheduledTimer(withTimeInterval: config.callConfig.callTimeout, repeats: false) { [weak self] timer in
+        _ = callStartTimer?.scheduledTimer(interval: config.callConfig.callTimeout, repeats: false) { [weak self] timer in
             // If the user clicks on reject button the chat.callStatus = .cacnceled and bottom code will not be executed.
             if self?.callState == .requested {
                 if self?.config.isDebuggingLogEnabled == true {
@@ -127,7 +127,7 @@ extension Chat {
 
     /// end call if no one doesn't accept or available to answer call
     func startTimerTimeout(_ createCall: CreateCall) {
-        _ = callStartTimer?.scheduledTimer(withTimeInterval: config.callConfig.callTimeout, repeats: false) { [weak self] timer in
+        _ = callStartTimer?.scheduledTimer(interval: config.callConfig.callTimeout, repeats: false) { [weak self] timer in
             if self?.callState == .created {
                 if self?.config.isDebuggingLogEnabled == true {
                     self?.logger?.log(title: "cancel call after \(self?.config.callConfig.callTimeout ?? 0) second waiting to accept by user")

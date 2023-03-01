@@ -40,7 +40,7 @@ class CacheTagParticipantManager: CoreDataProtocol {
         context.perform {
             let req = CDTagParticipant.fetchRequest()
             req.predicate = self.idPredicate(id: id)
-            let tagParticipant = try? self.context.fetch(req).first
+            let tagParticipant = try self.context.fetch(req).first
             completion(tagParticipant)
         }
     }
@@ -49,7 +49,7 @@ class CacheTagParticipantManager: CoreDataProtocol {
         context.perform {
             let req = CDTagParticipant.fetchRequest()
             req.predicate = predicate
-            let tagParticipants = (try? self.context.fetch(req)) ?? []
+            let tagParticipants = try self.context.fetch(req)
             completion(tagParticipants)
         }
     }

@@ -40,7 +40,7 @@ class CacheUserRoleManager: CoreDataProtocol {
         context.perform {
             let req = CDUserRole.fetchRequest()
             req.predicate = self.idPredicate(id: id)
-            let userRole = try? self.context.fetch(req).first
+            let userRole = try self.context.fetch(req).first
             completion(userRole)
         }
     }
@@ -49,7 +49,7 @@ class CacheUserRoleManager: CoreDataProtocol {
         context.perform {
             let req = CDUserRole.fetchRequest()
             req.predicate = predicate
-            let userRoles = (try? self.context.fetch(req)) ?? []
+            let userRoles = try self.context.fetch(req)
             completion(userRoles)
         }
     }

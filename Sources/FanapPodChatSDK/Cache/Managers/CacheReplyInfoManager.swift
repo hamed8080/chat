@@ -51,7 +51,7 @@ class CacheReplyInfoManager: CoreDataProtocol {
         context.perform {
             let req = CDReplyInfo.fetchRequest()
             req.predicate = self.idPredicate(id: id)
-            let reply = try? self.context.fetch(req).first
+            let reply = try self.context.fetch(req).first
             completion(reply)
         }
     }
@@ -60,7 +60,7 @@ class CacheReplyInfoManager: CoreDataProtocol {
         context.perform {
             let req = CDReplyInfo.fetchRequest()
             req.predicate = predicate
-            let replyes = (try? self.context.fetch(req)) ?? []
+            let replyes = try self.context.fetch(req)
             completion(replyes)
         }
     }
@@ -88,7 +88,7 @@ class CacheReplyInfoManager: CoreDataProtocol {
             let req = CDReplyInfo.fetchRequest()
             req.predicate = predicate
             req.fetchLimit = 1
-            let reply = try? self.context.fetch(req).first
+            let reply = try self.context.fetch(req).first
             completion(reply)
         }
     }

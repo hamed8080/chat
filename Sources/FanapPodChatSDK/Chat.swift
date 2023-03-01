@@ -21,7 +21,7 @@ public class Chat: ChatProtocol, Identifiable {
     var timerTyping: TimerProtocol?
     var timerCheckUserStoppedTyping: TimerProtocol?
     var callStartTimer: TimerProtocol?
-    var exportMessageViewModels: [any ExportMessagesProtocol] = []
+    var exportMessageViewModels: [ExportMessagesProtocol] = []
     var session: URLSessionProtocol
     var responseQueue: DispatchQueueProtocol
     var callState: CallState?

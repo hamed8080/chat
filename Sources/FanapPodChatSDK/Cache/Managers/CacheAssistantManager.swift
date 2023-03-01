@@ -40,7 +40,7 @@ class CacheAssistantManager: CoreDataProtocol {
         context.perform {
             let req = CDAssistant.fetchRequest()
             req.predicate = self.idPredicate(id: id)
-            let assistant = try? self.context.fetch(req).first
+            let assistant = try self.context.fetch(req).first
             completion(assistant)
         }
     }
@@ -49,7 +49,7 @@ class CacheAssistantManager: CoreDataProtocol {
         context.perform {
             let req = CDAssistant.fetchRequest()
             req.predicate = predicate
-            let contacts = (try? self.context.fetch(req)) ?? []
+            let contacts = try self.context.fetch(req)
             completion(contacts)
         }
     }

@@ -55,7 +55,7 @@ protocol ChatProtocol: AnyObject {
     var logger: Logger? { get set }
 
     /// An array to manage a list of threads in the queue of exporting messages of a thread.
-    var exportMessageViewModels: [any ExportMessagesProtocol] { get set }
+    var exportMessageViewModels: [ExportMessagesProtocol] { get set }
 
     /// A url session to initiate a network call.
     var session: URLSessionProtocol { get set }

@@ -13,7 +13,7 @@ extension Chat {
         let headers = ["Authorization": "Bearer \(config.token)"]
         var urlReq = URLRequest(url: URL(string: url)!)
         urlReq.allHTTPHeaderFields = headers
-        session.dataTask(with: urlReq) { [weak self] data, response, error in
+        session.dataTask(urlReq) { [weak self] data, response, error in
             let result: ChatResponse<DevicesResposne>? = self?.session.decode(data, response, error)
             self?.responseQueue.async {
                 if let device = result?.result?.devices?.first(where: { $0.current == true }) {

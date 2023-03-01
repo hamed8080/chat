@@ -40,7 +40,7 @@ class CacheImageManager: CoreDataProtocol {
         context.perform {
             let req = CDImage.fetchRequest()
             req.predicate = self.idPredicate(id: id)
-            let image = try? self.context.fetch(req).first
+            let image = try self.context.fetch(req).first
             completion(image)
         }
     }
@@ -49,7 +49,7 @@ class CacheImageManager: CoreDataProtocol {
         context.perform {
             let req = CDImage.fetchRequest()
             req.predicate = predicate
-            let images = (try? self.context.fetch(req)) ?? []
+            let images = try self.context.fetch(req)
             completion(images)
         }
     }

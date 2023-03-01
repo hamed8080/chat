@@ -60,8 +60,11 @@ public struct ChatError: Decodable {
         if let msg = try containser?.decodeIfPresent(String.self, forKey: .message) {
             message = msg
         }
-        code = (try? containser?.decodeIfPresent(Int.self, forKey: .code)) ?? (try? containser?.decodeIfPresent(Int.self, forKey: .errorCode))
-        if code == 208, let data = message?.data(using: .utf8), let banError = try? JSONDecoder().decode(BanError.self, from: data) {
+        let code = try? containser?.decodeIfPresent(Int.self, forKey: .code)
+        let errorCode = try? containser?.decodeIfPresent(Int.self, forKey: .errorCode)
+        let codeRes = code ?? errorCode
+        self.code = codeRes ?? nil
+        if self.code == 208, let data = message?.data(using: .utf8), let banError = try? JSONDecoder().decode(BanError.self, from: data) {
             self.banError = banError
         }
     }

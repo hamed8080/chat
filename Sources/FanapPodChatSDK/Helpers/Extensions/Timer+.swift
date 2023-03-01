@@ -6,15 +6,18 @@
 
 import Foundation
 protocol TimerProtocol {
-    init(timeInterval interval: TimeInterval, repeats: Bool, block: @escaping @Sendable (Timer) -> Void)
     @discardableResult
-    func scheduledTimer(withTimeInterval interval: TimeInterval, repeats: Bool, block: @escaping @Sendable (Timer) -> Void) -> Timer
-    func invalidate()
+    func scheduledTimer(interval: TimeInterval, repeats: Bool, block: @escaping @Sendable (Timer) -> Void) -> Timer
+    func invalidateTimer()
 }
 
 extension Timer: TimerProtocol {
     @discardableResult
-    func scheduledTimer(withTimeInterval interval: TimeInterval, repeats: Bool, block: @escaping @Sendable (Timer) -> Void) -> Timer {
+    func scheduledTimer(interval: TimeInterval, repeats: Bool, block: @escaping @Sendable (Timer) -> Void) -> Timer {
         Timer.scheduledTimer(withTimeInterval: interval, repeats: repeats, block: block)
+    }
+
+    func invalidateTimer() {
+        invalidate()
     }
 }

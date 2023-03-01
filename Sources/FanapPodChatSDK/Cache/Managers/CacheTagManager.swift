@@ -40,7 +40,7 @@ class CacheTagManager: CoreDataProtocol {
         context.perform {
             let req = CDTag.fetchRequest()
             req.predicate = self.idPredicate(id: id)
-            let tag = try? self.context.fetch(req).first
+            let tag = try self.context.fetch(req).first
             completion(tag)
         }
     }
@@ -49,7 +49,7 @@ class CacheTagManager: CoreDataProtocol {
         context.perform {
             let req = CDTag.fetchRequest()
             req.predicate = predicate
-            let tags = (try? self.context.fetch(req)) ?? []
+            let tags = try self.context.fetch(req)
             completion(tags)
         }
     }
@@ -74,7 +74,7 @@ class CacheTagManager: CoreDataProtocol {
     func getTags(_ completion: @escaping ([CDTag]) -> Void) {
         context.perform {
             let req = CDTag.fetchRequest()
-            let tags = (try? self.context.fetch(req)) ?? []
+            let tags = try self.context.fetch(req)
             completion(tags)
         }
     }

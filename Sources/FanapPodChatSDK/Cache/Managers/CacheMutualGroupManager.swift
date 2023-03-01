@@ -48,7 +48,7 @@ class CacheMutualGroupManager: CoreDataProtocol {
         context.perform {
             let req = CDMutualGroup.fetchRequest()
             req.predicate = self.idPredicate(id: id)
-            let mutual = try? self.context.fetch(req).first
+            let mutual = try self.context.fetch(req).first
             completion(mutual)
         }
     }
@@ -57,7 +57,7 @@ class CacheMutualGroupManager: CoreDataProtocol {
         context.perform {
             let req = CDMutualGroup.fetchRequest()
             req.predicate = predicate
-            let mutuals = (try? self.context.fetch(req)) ?? []
+            let mutuals = try self.context.fetch(req)
             completion(mutuals)
         }
     }
@@ -88,7 +88,7 @@ class CacheMutualGroupManager: CoreDataProtocol {
         context.perform {
             let req = CDMutualGroup.fetchRequest()
             req.predicate = NSPredicate(format: "mutualId == %@", id ?? "")
-            let mutuals = (try? self.context.fetch(req)) ?? []
+            let mutuals = try self.context.fetch(req)
             completion(mutuals)
         }
     }

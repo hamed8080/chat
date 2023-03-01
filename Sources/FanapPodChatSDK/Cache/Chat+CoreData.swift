@@ -37,11 +37,11 @@ public extension Chat {
         guard let bgTask = persistentManager.newBgTask() else { return }
         bgTask.perform { [weak self] in
             var objectIds: [NSManagedObjectID] = []
-            self?.entities.forEach { entity in
+            try self?.entities.forEach { entity in
                 let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: entity.name ?? "")
                 let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
                 deleteRequest.resultType = .resultTypeObjectIDs
-                if let result = try? bgTask.execute(deleteRequest) as? NSBatchDeleteResult, let ids = result.result as? [NSManagedObjectID] {
+                if let result = try bgTask.execute(deleteRequest) as? NSBatchDeleteResult, let ids = result.result as? [NSManagedObjectID] {
                     objectIds.append(contentsOf: ids)
                 }
                 try? bgTask.save()
