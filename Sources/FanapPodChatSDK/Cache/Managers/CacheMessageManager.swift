@@ -19,14 +19,9 @@ class CacheMessageManager: CoreDataProtocol {
         self.logger = logger
     }
 
-    func insert(model: Message) {
-        let entity = CDMessage(context: context)
-        entity.update(model)
-        updateRelations(entity, model)
-    }
+    func insert(model _: Message) {}
 
     func updateRelations(_ entity: CDMessage, _ model: Message) {
-        updateConversation(entity, model)
         entity.threadId = entity.conversation?.id ?? (model.conversation?.id as? NSNumber)
         updateParticipant(entity, model)
         updateForwardInfo(entity, model)
@@ -77,23 +72,31 @@ class CacheMessageManager: CoreDataProtocol {
         }
     }
 
-    func updateConversation(_ entity: CDMessage, _ model: Message) {
-        if let conversation = model.conversation {
-            let req = CDConversation.fetchRequest()
-            req.predicate = NSPredicate(format: "id == %i", conversation.id ?? -1)
-            var threadEntity = try? context.fetch(req).first
-            if threadEntity == nil {
-                threadEntity = CDConversation(context: context)
-                threadEntity?.update(conversation)
-            }
-            entity.conversation = threadEntity
+    func insertOrUpdateConversation(_ threadModel: Conversation) -> CDConversation? {
+        let req = CDConversation.fetchRequest()
+        req.predicate = NSPredicate(format: "id == %i", threadModel.id ?? -1)
+        var threadEntity = try? context.fetch(req).first
+        if threadEntity == nil {
+            threadEntity = CDConversation(context: context)
+            threadEntity?.update(threadModel)
         }
+        return threadEntity
     }
 
     func insert(models: [Message]) {
         insertObjects(context) { [weak self] _ in
-            models.forEach { model in
-                self?.insert(model: model)
+            if let threadModel = models.first?.conversation, let context = self?.context {
+                let threadEntity = self?.insertOrUpdateConversation(threadModel)
+                models.forEach { model in
+                    if model.id == threadEntity?.lastMessageVO?.id?.intValue {
+                        threadEntity?.lastMessageVO?.update(model)
+                    } else {
+                        let entity = CDMessage(context: context)
+                        entity.update(model)
+                        entity.conversation = threadEntity
+                        self?.updateRelations(entity, model)
+                    }
+                }
             }
         }
     }

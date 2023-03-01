@@ -130,8 +130,12 @@ public class Logger {
         if config?.persistLogsOnServer ?? false == false { return }
         Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
             let bgTask = self?.persistentManager?.newBgTask()
-            if let bgTask = bgTask, let log = CacheLogManager(context: bgTask, logger: self).firstLog() {
-                self?.sendLog(log: log)
+            if let bgTask = bgTask {
+                CacheLogManager(context: bgTask, logger: self).firstLog { log in
+                    if let log {
+                        self?.sendLog(log: log)
+                    }
+                }
             }
         }
     }

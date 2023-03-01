@@ -146,26 +146,25 @@ class CacheConversationManager: CoreDataProtocol {
 
     func increamentUnreadCount(_ threadId: Int, _ completion: ((Int) -> Void)? = nil) {
         first(with: threadId) { entity in
-            entity?.unreadCount = NSNumber(integerLiteral: (entity?.unreadCount?.intValue ?? 0) + 1)
-            self.save()
-            completion?(entity?.unreadCount?.intValue ?? 0)
+            let unreadCount = (entity?.unreadCount?.intValue ?? 0) + 1
+            self.update(["unreadCount": unreadCount], self.idPredicate(id: threadId))
+            completion?(unreadCount)
         }
     }
 
     func decreamentUnreadCount(_ threadId: Int, _ completion: ((Int) -> Void)? = nil) {
         first(with: threadId) { entity in
             let dbCount = entity?.unreadCount?.intValue ?? 0
-            entity?.unreadCount = dbCount > 0 ? NSNumber(integerLiteral: dbCount - 1) : 0
-            self.save()
-            completion?(entity?.unreadCount?.intValue ?? 0)
+            let decreamentCount = max(0, dbCount - 1)
+            self.update(["unreadCount": decreamentCount], self.idPredicate(id: threadId))
+            completion?(decreamentCount)
         }
     }
 
     func setUnreadCountToZero(_ threadId: Int, _ completion: ((Int) -> Void)? = nil) {
-        first(with: threadId) { entity in
-            entity?.unreadCount = 0
-            self.save()
-            completion?(entity?.unreadCount?.intValue ?? 0)
+        context.perform {
+            self.update(["unreadCount": 0], self.idPredicate(id: threadId))
+            completion?(0)
         }
     }
 

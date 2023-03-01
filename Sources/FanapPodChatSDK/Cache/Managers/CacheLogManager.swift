@@ -77,11 +77,13 @@ class CacheLogManager: CoreDataProtocol {
         batchDelete(context, entityName: entityName, predicate: predicate)
     }
 
-    func firstLog() -> CDLog? {
-        let sortByTime = NSSortDescriptor(key: "time", ascending: true)
-        let req = CDLog.fetchRequest()
-        req.fetchLimit = 1
-        req.sortDescriptors = [sortByTime]
-        return try? context.fetch(req).first
+    func firstLog(_ completion: @escaping (CDLog?) -> Void) {
+        context.perform {
+            let sortByTime = NSSortDescriptor(key: "time", ascending: true)
+            let req = CDLog.fetchRequest()
+            req.fetchLimit = 1
+            req.sortDescriptors = [sortByTime]
+            completion(try? self.context.fetch(req).first)
+        }
     }
 }
