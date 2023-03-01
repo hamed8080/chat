@@ -11,10 +11,8 @@ protocol URLSessionProtocol {
 }
 
 extension URLSession: URLSessionProtocol {
-    
-    
     func dataTask(_ request: URLRequest, completionHandler: @escaping @Sendable (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
-        return self.dataTask(with: request, completionHandler: completionHandler)
+        dataTask(with: request, completionHandler: completionHandler)
     }
 }
 
