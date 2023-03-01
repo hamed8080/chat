@@ -40,7 +40,7 @@ class CacheUserManager: CoreDataProtocol {
         context.perform {
             let req = CDUser.fetchRequest()
             req.predicate = self.idPredicate(id: id)
-            let user = try? self.context.fetch(req).first
+            let user = try self.context.fetch(req).first
             completion(user)
         }
     }
@@ -49,7 +49,7 @@ class CacheUserManager: CoreDataProtocol {
         context.perform {
             let req = CDUser.fetchRequest()
             req.predicate = predicate
-            let users = (try? self.context.fetch(req)) ?? []
+            let users = try self.context.fetch(req)
             completion(users)
         }
     }
@@ -78,6 +78,15 @@ class CacheUserManager: CoreDataProtocol {
                 entity.update(model)
                 entity.isMe = isMe as NSNumber
             }
+        }
+    }
+
+    func fetchCurrentUser(_ compeletion: @escaping (CDUser?) -> Void) {
+        context.perform {
+            let req = CDUser.fetchRequest()
+            req.predicate = NSPredicate(format: "isMe == %@", NSNumber(booleanLiteral: true))
+            let cachedUseInfo = try self.context.fetch(req).first
+            compeletion(cachedUseInfo)
         }
     }
 }

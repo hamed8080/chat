@@ -40,7 +40,7 @@ class CacheContactManager: CoreDataProtocol {
         context.perform {
             let req = CDContact.fetchRequest()
             req.predicate = self.idPredicate(id: id)
-            let contact = try? self.context.fetch(req).first
+            let contact = try self.context.fetch(req).first
             completion(contact)
         }
     }
@@ -49,7 +49,7 @@ class CacheContactManager: CoreDataProtocol {
         context.perform {
             let req = CDContact.fetchRequest()
             req.predicate = predicate
-            let contacts = (try? self.context.fetch(req)) ?? []
+            let contacts = try self.context.fetch(req)
             completion(contacts)
         }
     }
@@ -122,7 +122,7 @@ class CacheContactManager: CoreDataProtocol {
             let count = try? self.context.count(for: CDContact.fetchRequest())
             fetchRequest.fetchLimit = req.size
             fetchRequest.fetchOffset = req.offset
-            let contacts = (try? self.context.fetch(fetchRequest)) ?? []
+            let contacts = try self.context.fetch(fetchRequest)
             completion(contacts, count ?? 0)
         }
     }
@@ -130,7 +130,7 @@ class CacheContactManager: CoreDataProtocol {
     func allContacts(_ completion: @escaping ([CDContact]) -> Void) {
         context.perform {
             let req = CDContact.fetchRequest()
-            let contacts = (try? self.context.fetch(req)) ?? []
+            let contacts = try self.context.fetch(req)
             completion(contacts)
         }
     }

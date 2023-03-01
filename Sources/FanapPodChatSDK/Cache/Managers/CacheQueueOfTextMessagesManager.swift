@@ -40,7 +40,7 @@ class CacheQueueOfTextMessagesManager: CoreDataProtocol {
         context.perform {
             let req = CDQueueOfTextMessages.fetchRequest()
             req.predicate = self.idPredicate(id: id)
-            let queue = try? self.context.fetch(req).first
+            let queue = try self.context.fetch(req).first
             completion(queue)
         }
     }
@@ -49,7 +49,7 @@ class CacheQueueOfTextMessagesManager: CoreDataProtocol {
         context.perform {
             let req = CDQueueOfTextMessages.fetchRequest()
             req.predicate = predicate
-            let queues = (try? self.context.fetch(req)) ?? []
+            let queues = try self.context.fetch(req)
             completion(queues)
         }
     }

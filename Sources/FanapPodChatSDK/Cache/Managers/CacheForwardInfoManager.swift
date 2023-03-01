@@ -49,7 +49,7 @@ class CacheForwardInfoManager: CoreDataProtocol {
         context.perform {
             let req = CDForwardInfo.fetchRequest()
             req.predicate = self.idPredicate(id: id)
-            let forward = try? self.context.fetch(req).first
+            let forward = try self.context.fetch(req).first
             completion(forward)
         }
     }
@@ -58,7 +58,7 @@ class CacheForwardInfoManager: CoreDataProtocol {
         context.perform {
             let req = CDForwardInfo.fetchRequest()
             req.predicate = predicate
-            let forwards = (try? self.context.fetch(req)) ?? []
+            let forwards = try self.context.fetch(req)
             completion(forwards)
         }
     }
@@ -80,11 +80,11 @@ class CacheForwardInfoManager: CoreDataProtocol {
 
     func delete(entity _: CDForwardInfo) {}
 
-    func first(_ messageId: Int?, _ threadId: Int?, _: Int?) -> CDForwardInfo? {
+    func first(_ messageId: Int?, _ threadId: Int?, _: Int?) throws -> CDForwardInfo? {
         let predicate = NSPredicate(format: "message.id == %i AND conversation.id == %i AND participant.id", messageId ?? -1, threadId ?? -1, threadId ?? -1)
         let req = CDForwardInfo.fetchRequest()
         req.predicate = predicate
         req.fetchLimit = 1
-        return try? context.fetch(req).first
+        return try context.fetch(req).first
     }
 }

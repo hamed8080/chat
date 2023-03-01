@@ -38,8 +38,8 @@ open class Log: Codable, Identifiable, Hashable {
         let container = try? decoder.container(keyedBy: CodingKeys.self)
         id = UUID(uuidString: try container?.decodeIfPresent(String.self, forKey: .id) ?? "") ?? UUID()
         message = try container?.decodeIfPresent(String.self, forKey: .message)
-        config = try? container?.decodeIfPresent(ChatConfig.self, forKey: .config)
-        deviceInfo = try? container?.decodeIfPresent(DeviceInfo.self, forKey: .deviceInfo)
+        config = try container?.decodeIfPresent(ChatConfig.self, forKey: .config)
+        deviceInfo = try container?.decodeIfPresent(DeviceInfo.self, forKey: .deviceInfo)
         time = try container?.decodeIfPresent(Date.self, forKey: .time)
         level = try container?.decodeIfPresent(LogLevel.self, forKey: .level)
     }

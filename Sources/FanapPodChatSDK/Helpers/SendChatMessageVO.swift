@@ -59,11 +59,15 @@ public struct SendChatMessageVO: Codable {
     }
 
     init?(with asyncData: Data?) {
-        guard let data = asyncData,
-              let asyncMessageData = try? JSONDecoder().decode(AsyncMessage.self, from: data).content?.data(using: .utf8),
-              let asyncMessageVOData = try? JSONDecoder().decode(SendAsyncMessageVO.self, from: asyncMessageData).content.data(using: .utf8),
-              let chatMessage = try? JSONDecoder().decode(SendChatMessageVO.self, from: asyncMessageVOData) else { return nil }
-        self = chatMessage
+        do {
+            guard let data = asyncData,
+                  let asyncMessageData = try JSONDecoder().decode(AsyncMessage.self, from: data).content?.data(using: .utf8),
+                  let asyncMessageVOData = try JSONDecoder().decode(SendAsyncMessageVO.self, from: asyncMessageData).content.data(using: .utf8) else { return nil }
+            let chatMessage = try JSONDecoder().decode(SendChatMessageVO.self, from: asyncMessageVOData)
+            self = chatMessage
+        } catch {
+            return nil
+        }
     }
 
     init?(with asyncMessage: AsyncMessage?) {

@@ -40,7 +40,7 @@ class CacheCoreDataFileManager: CoreDataProtocol {
         context.perform {
             let req = CDFile.fetchRequest()
             req.predicate = self.idPredicate(id: id)
-            let file = try? self.context.fetch(req).first
+            let file = try self.context.fetch(req).first
             completion(file)
         }
     }
@@ -49,7 +49,7 @@ class CacheCoreDataFileManager: CoreDataProtocol {
         context.perform {
             let req = CDFile.fetchRequest()
             req.predicate = predicate
-            let files = (try? self.context.fetch(req)) ?? []
+            let files = try self.context.fetch(req)
             completion(files)
         }
     }

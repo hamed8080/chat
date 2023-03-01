@@ -40,7 +40,7 @@ class CacheLogManager: CoreDataProtocol {
         context.perform {
             let req = CDLog.fetchRequest()
             req.predicate = self.idPredicate(id: id)
-            let log = try? self.context.fetch(req).first
+            let log = try self.context.fetch(req).first
             completion(log)
         }
     }
@@ -49,7 +49,7 @@ class CacheLogManager: CoreDataProtocol {
         context.perform {
             let req = CDLog.fetchRequest()
             req.predicate = predicate
-            let logs = (try? self.context.fetch(req)) ?? []
+            let logs = try self.context.fetch(req)
             completion(logs)
         }
     }
@@ -83,7 +83,7 @@ class CacheLogManager: CoreDataProtocol {
             let req = CDLog.fetchRequest()
             req.fetchLimit = 1
             req.sortDescriptors = [sortByTime]
-            completion(try? self.context.fetch(req).first)
+            completion(try self.context.fetch(req).first)
         }
     }
 }

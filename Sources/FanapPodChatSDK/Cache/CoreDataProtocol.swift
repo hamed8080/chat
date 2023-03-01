@@ -31,7 +31,7 @@ protocol CoreDataProtocol {
     func update(model: Model, entity: Entity)
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate)
     func mergeChanges(key: String, _ objectIDs: [NSManagedObjectID])
-    func insertObjects(_ bgTask: NSManagedObjectContext, _ makeEntities: @escaping ((NSManagedObjectContext) -> Void))
+    func insertObjects(_ bgTask: NSManagedObjectContext, _ makeEntities: @escaping ((NSManagedObjectContext) throws -> Void))
     func batchUpdate(_ bgTask: NSManagedObjectContext, _ updateObjects: @escaping (NSManagedObjectContext) -> Void)
     func batchDelete(_ bgTask: NSManagedObjectContext, entityName: String, idName: String, _ ids: [Int])
     func batchDelete(_ bgTask: NSManagedObjectContext, entityName: String, predicate: NSPredicate)
@@ -61,9 +61,9 @@ extension CoreDataProtocol {
         )
     }
 
-    func insertObjects(_ bgTask: NSManagedObjectContext, _ makeEntities: @escaping ((NSManagedObjectContext) -> Void)) {
+    func insertObjects(_ bgTask: NSManagedObjectContext, _ makeEntities: @escaping ((NSManagedObjectContext) throws -> Void)) {
         bgTask.perform {
-            makeEntities(bgTask)
+            try makeEntities(bgTask)
             save()
             let insertedObjectIds = bgTask.insertedObjects.map(\.objectID)
             let updatedObjectIds = bgTask.updatedObjects.map(\.objectID)
@@ -88,7 +88,7 @@ extension CoreDataProtocol {
         let request = NSBatchDeleteRequest(fetchRequest: req)
         request.resultType = .resultTypeObjectIDs
         bgTask.perform {
-            let deleteResult = try? bgTask.execute(request) as? NSBatchDeleteResult
+            let deleteResult = try bgTask.execute(request) as? NSBatchDeleteResult
             save()
             mergeChanges(key: NSDeletedObjectsKey, deleteResult?.result as? [NSManagedObjectID] ?? [])
         }
@@ -100,7 +100,7 @@ extension CoreDataProtocol {
         let request = NSBatchDeleteRequest(fetchRequest: req)
         request.resultType = .resultTypeObjectIDs
         bgTask.perform {
-            let deleteResult = try? bgTask.execute(request) as? NSBatchDeleteResult
+            let deleteResult = try bgTask.execute(request) as? NSBatchDeleteResult
             save()
             mergeChanges(key: NSDeletedObjectsKey, deleteResult?.result as? [NSManagedObjectID] ?? [])
         }
@@ -116,7 +116,7 @@ extension CoreDataProtocol {
             let totalCount = (try? self.context.count(for: req)) ?? 0
             req.fetchLimit = count ?? 50
             req.fetchOffset = offset ?? 0
-            let objects = (try? self.context.fetch(req)) ?? []
+            let objects = try self.context.fetch(req)
             completion(objects, totalCount)
         }
     }
