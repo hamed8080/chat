@@ -9,4 +9,5 @@
 import CoreData
 import Foundation
 
+@objc(CDAssistant)
 public class CDAssistant: NSManagedObject {}

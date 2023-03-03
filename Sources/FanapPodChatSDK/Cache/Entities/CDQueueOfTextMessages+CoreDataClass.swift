@@ -9,4 +9,5 @@
 import CoreData
 import Foundation
 
+@objc(CDQueueOfTextMessages)
 public class CDQueueOfTextMessages: NSManagedObject {}

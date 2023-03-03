@@ -9,4 +9,5 @@
 import CoreData
 import Foundation
 
+@objc(CDConversation)
 public class CDConversation: NSManagedObject {}

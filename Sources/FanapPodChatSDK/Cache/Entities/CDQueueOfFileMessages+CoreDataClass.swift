@@ -9,4 +9,5 @@
 import CoreData
 import Foundation
 
+@objc(CDQueueOfFileMessages)
 public class CDQueueOfFileMessages: NSManagedObject {}

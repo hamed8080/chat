@@ -9,4 +9,5 @@
 import CoreData
 import Foundation
 
+@objc(CDLog)
 public class CDLog: NSManagedObject {}

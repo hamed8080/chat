@@ -9,4 +9,5 @@
 import CoreData
 import Foundation
 
+@objc(CDReplyInfo)
 public class CDReplyInfo: NSManagedObject {}
