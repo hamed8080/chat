@@ -9,4 +9,5 @@
 import CoreData
 import Foundation
 
+@objc(CDParticipant)
 public class CDParticipant: NSManagedObject {}

@@ -9,4 +9,5 @@
 import CoreData
 import Foundation
 
+@objc(CDImage)
 public class CDImage: NSManagedObject {}

@@ -9,4 +9,5 @@
 import CoreData
 import Foundation
 
+@objc(CDFile)
 public class CDFile: NSManagedObject {}
