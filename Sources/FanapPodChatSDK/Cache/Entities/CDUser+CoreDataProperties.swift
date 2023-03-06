@@ -14,6 +14,15 @@ public extension CDUser {
         NSFetchRequest<CDUser>(entityName: "CDUser")
     }
 
+    static let entityName = "CDUser"
+    static func entityDescription(_ context: NSManagedObjectContext) -> NSEntityDescription {
+        NSEntityDescription.entity(forEntityName: entityName, in: context)!
+    }
+
+    static func insertEntity(_ context: NSManagedObjectContext) -> CDUser {
+        CDUser(entity: entityDescription(context), insertInto: context)
+    }
+
     @NSManaged var bio: String?
     @NSManaged var cellphoneNumber: String?
     @NSManaged var coreUserId: NSNumber?

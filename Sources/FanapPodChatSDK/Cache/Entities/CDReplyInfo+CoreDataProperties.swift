@@ -14,6 +14,15 @@ public extension CDReplyInfo {
         NSFetchRequest<CDReplyInfo>(entityName: "CDReplyInfo")
     }
 
+    static let entityName = "CDReplyInfo"
+    static func entityDescription(_ context: NSManagedObjectContext) -> NSEntityDescription {
+        NSEntityDescription.entity(forEntityName: entityName, in: context)!
+    }
+
+    static func insertEntity(_ context: NSManagedObjectContext) -> CDReplyInfo {
+        CDReplyInfo(entity: entityDescription(context), insertInto: context)
+    }
+
     @NSManaged var markDeleted: NSNumber?
     @NSManaged var messageId: NSNumber?
     @NSManaged var messageText: String?

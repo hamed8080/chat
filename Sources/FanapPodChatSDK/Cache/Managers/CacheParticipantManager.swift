@@ -12,7 +12,6 @@ class CacheParticipantManager: CoreDataProtocol {
     let idName = "id"
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDParticipant.entity().name ?? "CDParticipant"
 
     required init(context: NSManagedObjectContext, logger: Logger? = nil) {
         self.context = context
@@ -20,7 +19,7 @@ class CacheParticipantManager: CoreDataProtocol {
     }
 
     func insert(model: Participant) {
-        let entity = CDParticipant(context: context)
+        let entity = CDParticipant.insertEntity(context)
         entity.update(model)
         CacheConversationManager(context: context, logger: logger).findOrCreateEntity(model.conversation?.id ?? -1) { threadEntity in
             threadEntity?.addToParticipants(entity)
@@ -40,7 +39,7 @@ class CacheParticipantManager: CoreDataProtocol {
             self.insertObjects(self.context) { _ in
                 if let threadEntity = threadEntity {
                     model?.participants?.forEach { participant in
-                        let participantEntity = CDParticipant(context: self.context)
+                        let participantEntity = CDParticipant.insertEntity(self.context)
                         participantEntity.update(participant)
                         threadEntity.addToParticipants(participantEntity)
                     }
@@ -90,8 +89,8 @@ class CacheParticipantManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate(context) { [weak self] bgTask in
-            let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
+        batchUpdate(context) { bgTask in
+            let batchRequest = NSBatchUpdateRequest(entityName: CDParticipant.entityName)
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
             batchRequest.resultType = .updatedObjectIDsResultType
@@ -103,18 +102,18 @@ class CacheParticipantManager: CoreDataProtocol {
 
     func getParticipantsForThread(_ threadId: Int?, _ count: Int?, _ offset: Int?, _ completion: @escaping ([CDParticipant], Int) -> Void) {
         let predicate = NSPredicate(format: "conversation.id == %i", threadId ?? -1)
-        fetchWithOffset(count: count, offset: offset, predicate: predicate, completion)
+        fetchWithOffset(entityName: CDParticipant.entityName, count: count, offset: offset, predicate: predicate, completion)
     }
 
     func delete(_ models: [Participant]) {
         let ids = models.compactMap(\.id)
         let predicate = NSPredicate(format: "id IN %@", ids)
-        batchDelete(context, entityName: entityName, predicate: predicate)
+        batchDelete(context, entityName: CDParticipant.entityName, predicate: predicate)
     }
 
     func findOrCreateEntity(_ threadId: Int?, _ participantId: Int?, _ completion: @escaping (CDParticipant?) -> Void) {
         first(threadId ?? -1, participantId ?? -1) { participant in
-            completion(participant ?? CDParticipant(context: self.context))
+            completion(participant ?? CDParticipant.insertEntity(self.context))
         }
     }
 }

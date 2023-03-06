@@ -14,6 +14,15 @@ public extension CDQueueOfEditMessages {
         NSFetchRequest<CDQueueOfEditMessages>(entityName: "CDQueueOfEditMessages")
     }
 
+    static let entityName = "CDQueueOfEditMessages"
+    static func entityDescription(_ context: NSManagedObjectContext) -> NSEntityDescription {
+        NSEntityDescription.entity(forEntityName: entityName, in: context)!
+    }
+
+    static func insertEntity(_ context: NSManagedObjectContext) -> CDQueueOfEditMessages {
+        CDQueueOfEditMessages(entity: entityDescription(context), insertInto: context)
+    }
+
     @NSManaged var messageId: NSNumber?
     @NSManaged var messageType: NSNumber?
     @NSManaged var metadata: String?

@@ -12,7 +12,6 @@ class CacheReplyInfoManager: CoreDataProtocol {
     let idName = "id"
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDReplyInfo.entity().name ?? "CDReplyInfo"
 
     required init(context: NSManagedObjectContext, logger: Logger? = nil) {
         self.context = context
@@ -20,7 +19,7 @@ class CacheReplyInfoManager: CoreDataProtocol {
     }
 
     func insert(model: ReplyInfo) {
-        let entity = CDReplyInfo(context: context)
+        let entity = CDReplyInfo.insertEntity(context)
         entity.update(model)
 
         if let participant = model.participant, let thread = model.participant?.conversation {
@@ -71,8 +70,8 @@ class CacheReplyInfoManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate(context) { [weak self] bgTask in
-            let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
+        batchUpdate(context) { bgTask in
+            let batchRequest = NSBatchUpdateRequest(entityName: CDReplyInfo.entityName)
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
             batchRequest.resultType = .updatedObjectIDsResultType
@@ -95,7 +94,7 @@ class CacheReplyInfoManager: CoreDataProtocol {
 
     func findOrCreate(_ participantId: Int?, _ replyToMessageId: Int?, _ completion: @escaping (CDReplyInfo?) -> Void) {
         first(participantId, replyToMessageId) { message in
-            completion(message ?? CDReplyInfo(context: self.context))
+            completion(message ?? CDReplyInfo.insertEntity(self.context))
         }
     }
 }

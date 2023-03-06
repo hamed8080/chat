@@ -12,7 +12,6 @@ class CacheContactManager: CoreDataProtocol {
     let idName = "id"
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDContact.entity().name ?? "CDContact"
 
     required init(context: NSManagedObjectContext, logger: Logger? = nil) {
         self.context = context
@@ -20,7 +19,7 @@ class CacheContactManager: CoreDataProtocol {
     }
 
     func insert(model: Contact) {
-        let entity = CDContact(context: context)
+        let entity = CDContact.insertEntity(context)
         entity.update(model)
     }
 
@@ -60,8 +59,8 @@ class CacheContactManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate(context) { [weak self] bgTask in
-            let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
+        batchUpdate(context) { bgTask in
+            let batchRequest = NSBatchUpdateRequest(entityName: CDContact.entityName)
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
             batchRequest.resultType = .updatedObjectIDsResultType
@@ -72,7 +71,7 @@ class CacheContactManager: CoreDataProtocol {
     func delete(entity _: CDContact) {}
 
     func delete(_ id: Int) {
-        batchDelete(context, entityName: entityName, predicate: idPredicate(id: id))
+        batchDelete(context, entityName: CDContact.entityName, predicate: idPredicate(id: id))
     }
 
     func block(_ block: Bool, _ threadId: Int?) {

@@ -14,6 +14,15 @@ public extension CDMutualGroup {
         NSFetchRequest<CDMutualGroup>(entityName: "CDMutualGroup")
     }
 
+    static let entityName = "CDMutualGroup"
+    static func entityDescription(_ context: NSManagedObjectContext) -> NSEntityDescription {
+        NSEntityDescription.entity(forEntityName: entityName, in: context)!
+    }
+
+    static func insertEntity(_ context: NSManagedObjectContext) -> CDMutualGroup {
+        CDMutualGroup(entity: entityDescription(context), insertInto: context)
+    }
+
     @NSManaged var idType: NSNumber?
     @NSManaged var mutualId: String?
     @NSManaged var conversations: NSSet?

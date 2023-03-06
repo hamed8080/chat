@@ -14,6 +14,15 @@ public extension CDQueueOfFileMessages {
         NSFetchRequest<CDQueueOfFileMessages>(entityName: "CDQueueOfFileMessages")
     }
 
+    static let entityName = "CDQueueOfFileMessages"
+    static func entityDescription(_ context: NSManagedObjectContext) -> NSEntityDescription {
+        NSEntityDescription.entity(forEntityName: entityName, in: context)!
+    }
+
+    static func insertEntity(_ context: NSManagedObjectContext) -> CDQueueOfFileMessages {
+        CDQueueOfFileMessages(entity: entityDescription(context), insertInto: context)
+    }
+
     @NSManaged var fileExtension: String?
     @NSManaged var fileName: String?
     @NSManaged var fileToSend: Data?

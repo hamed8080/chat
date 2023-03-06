@@ -12,7 +12,6 @@ class CacheAssistantManager: CoreDataProtocol {
     let idName = "id"
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDAssistant.entity().name ?? "CDAssistant"
 
     required init(context: NSManagedObjectContext, logger: Logger? = nil) {
         self.context = context
@@ -20,7 +19,7 @@ class CacheAssistantManager: CoreDataProtocol {
     }
 
     func insert(model: Assistant) {
-        let entity = CDAssistant(context: context)
+        let entity = CDAssistant.insertEntity(context)
         entity.update(model)
     }
 
@@ -62,8 +61,8 @@ class CacheAssistantManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate(context) { [weak self] bgTask in
-            let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
+        batchUpdate(context) { bgTask in
+            let batchRequest = NSBatchUpdateRequest(entityName: CDAssistant.entityName)
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
             batchRequest.resultType = .updatedObjectIDsResultType
@@ -81,11 +80,11 @@ class CacheAssistantManager: CoreDataProtocol {
 
     func getBlocked(_ count: Int?, _ offset: Int?, _ completion: @escaping ([CDAssistant], Int) -> Void) {
         let predicate = NSPredicate(format: "block == %@", NSNumber(booleanLiteral: true))
-        fetchWithOffset(count: count, offset: offset, predicate: predicate, completion)
+        fetchWithOffset(entityName: CDAssistant.entityName, count: count, offset: offset, predicate: predicate, completion)
     }
 
     func delete(_ models: [Assistant]) {
         let predicate = NSPredicate(format: "id IN == @i", models.compactMap { $0.id as? NSNumber })
-        batchDelete(context, entityName: entityName, predicate: predicate)
+        batchDelete(context, entityName: CDAssistant.entityName, predicate: predicate)
     }
 }

@@ -20,7 +20,6 @@ protocol CoreDataProtocol {
     var context: NSManagedObjectContext { get set }
     var logger: Logger? { get }
     var idName: String { get }
-    var entityName: String { get }
     func idPredicate(id: Id) -> NSPredicate
     func save()
     func first(with id: Id, _ completion: @escaping (Entity?) -> Void)
@@ -35,7 +34,7 @@ protocol CoreDataProtocol {
     func batchUpdate(_ bgTask: NSManagedObjectContext, _ updateObjects: @escaping (NSManagedObjectContext) -> Void)
     func batchDelete(_ bgTask: NSManagedObjectContext, entityName: String, idName: String, _ ids: [Int])
     func batchDelete(_ bgTask: NSManagedObjectContext, entityName: String, predicate: NSPredicate)
-    func fetchWithOffset(count: Int?, offset: Int?, predicate: NSPredicate?, sortDescriptor: [NSSortDescriptor]?, _ completion: @escaping ([Entity], Int) -> Void)
+    func fetchWithOffset(entityName: String, count: Int?, offset: Int?, predicate: NSPredicate?, sortDescriptor: [NSSortDescriptor]?, _ completion: @escaping ([Entity], Int) -> Void)
 }
 
 extension CoreDataProtocol {
@@ -106,7 +105,7 @@ extension CoreDataProtocol {
         }
     }
 
-    public func fetchWithOffset(count: Int?, offset: Int?, predicate: NSPredicate? = nil, sortDescriptor: [NSSortDescriptor]? = nil, _ completion: @escaping ([Entity], Int) -> Void) {
+    public func fetchWithOffset(entityName: String, count: Int?, offset: Int?, predicate: NSPredicate? = nil, sortDescriptor: [NSSortDescriptor]? = nil, _ completion: @escaping ([Entity], Int) -> Void) {
         context.perform {
             let req = NSFetchRequest<Entity>(entityName: entityName)
             if let sortDescriptors = sortDescriptor {

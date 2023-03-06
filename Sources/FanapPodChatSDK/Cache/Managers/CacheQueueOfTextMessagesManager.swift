@@ -12,7 +12,6 @@ class CacheQueueOfTextMessagesManager: CoreDataProtocol {
     let idName = "id"
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDQueueOfTextMessages.entity().name ?? "CDQueueOfTextMessages"
 
     required init(context: NSManagedObjectContext, logger: Logger? = nil) {
         self.context = context
@@ -20,7 +19,7 @@ class CacheQueueOfTextMessagesManager: CoreDataProtocol {
     }
 
     func insert(model: QueueOfTextMessages) {
-        let entity = CDQueueOfTextMessages(context: context)
+        let entity = CDQueueOfTextMessages.insertEntity(context)
         entity.update(model)
     }
 
@@ -60,8 +59,8 @@ class CacheQueueOfTextMessagesManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate(context) { [weak self] bgTask in
-            let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
+        batchUpdate(context) { bgTask in
+            let batchRequest = NSBatchUpdateRequest(entityName: CDQueueOfTextMessages.entityName)
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
             batchRequest.resultType = .updatedObjectIDsResultType
@@ -78,11 +77,11 @@ class CacheQueueOfTextMessagesManager: CoreDataProtocol {
 
     func delete(_ uniqueIds: [String]) {
         let predicate = NSPredicate(format: "uniqueId IN %@", uniqueIds)
-        batchDelete(context, entityName: entityName, predicate: predicate)
+        batchDelete(context, entityName: CDQueueOfTextMessages.entityName, predicate: predicate)
     }
 
     func unsendForThread(_ threadId: Int?, _ count: Int?, _ offset: Int?, _ completion: @escaping ([CDQueueOfTextMessages], Int) -> Void) {
         let threadIdPredicate = NSPredicate(format: "threadId == %i", threadId ?? -1)
-        fetchWithOffset(count: count, offset: offset, predicate: threadIdPredicate, completion)
+        fetchWithOffset(entityName: CDQueueOfTextMessages.entityName, count: count, offset: offset, predicate: threadIdPredicate, completion)
     }
 }

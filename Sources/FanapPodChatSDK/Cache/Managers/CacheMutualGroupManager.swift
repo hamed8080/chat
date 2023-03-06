@@ -12,7 +12,6 @@ class CacheMutualGroupManager: CoreDataProtocol {
     let idName = "id"
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDMutualGroup.entity().name ?? "CDMutualGroup"
 
     required init(context: NSManagedObjectContext, logger: Logger? = nil) {
         self.context = context
@@ -20,7 +19,7 @@ class CacheMutualGroupManager: CoreDataProtocol {
     }
 
     func insert(model: MutualGroup) {
-        let entity = CDMutualGroup(context: context)
+        let entity = CDMutualGroup.insertEntity(context)
         entity.update(model)
         model.conversations?.forEach { thread in
             CacheConversationManager(context: context, logger: logger).findOrCreateEntity(thread.id ?? -1) { threadEntity in
@@ -68,8 +67,8 @@ class CacheMutualGroupManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate(context) { [weak self] bgTask in
-            let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
+        batchUpdate(context) { bgTask in
+            let batchRequest = NSBatchUpdateRequest(entityName: CDMutualGroup.entityName)
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
             batchRequest.resultType = .updatedObjectIDsResultType

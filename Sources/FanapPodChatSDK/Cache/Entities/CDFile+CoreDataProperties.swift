@@ -14,6 +14,15 @@ public extension CDFile {
         NSFetchRequest<CDFile>(entityName: "CDFile")
     }
 
+    static let entityName = "CDFile"
+    static func entityDescription(_ context: NSManagedObjectContext) -> NSEntityDescription {
+        NSEntityDescription.entity(forEntityName: entityName, in: context)!
+    }
+
+    static func insertEntity(_ context: NSManagedObjectContext) -> CDFile {
+        CDFile(entity: entityDescription(context), insertInto: context)
+    }
+
     @NSManaged var hashCode: String?
     @NSManaged var name: String?
     @NSManaged var size: NSNumber?

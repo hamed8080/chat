@@ -12,7 +12,6 @@ class CacheUserRoleManager: CoreDataProtocol {
     let idName = "id"
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDUserRole.entity().name ?? "CDUserRole"
 
     required init(context: NSManagedObjectContext, logger: Logger? = nil) {
         self.context = context
@@ -20,7 +19,7 @@ class CacheUserRoleManager: CoreDataProtocol {
     }
 
     func insert(model: UserRole) {
-        let entity = CDUserRole(context: context)
+        let entity = CDUserRole.insertEntity(context)
         entity.update(model)
     }
 
@@ -60,8 +59,8 @@ class CacheUserRoleManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate(context) { [weak self] bgTask in
-            let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
+        batchUpdate(context) { bgTask in
+            let batchRequest = NSBatchUpdateRequest(entityName: CDUserRole.entityName)
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
             batchRequest.resultType = .updatedObjectIDsResultType

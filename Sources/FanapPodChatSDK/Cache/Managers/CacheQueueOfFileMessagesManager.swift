@@ -12,7 +12,6 @@ class CacheQueueOfFileMessagesManager: CoreDataProtocol {
     let idName = "id"
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDQueueOfFileMessages.entity().name ?? "CDQueueOfFileMessages"
 
     required init(context: NSManagedObjectContext, logger: Logger? = nil) {
         self.context = context
@@ -20,7 +19,7 @@ class CacheQueueOfFileMessagesManager: CoreDataProtocol {
     }
 
     func insert(model: QueueOfFileMessages) {
-        let entity = CDQueueOfFileMessages(context: context)
+        let entity = CDQueueOfFileMessages.insertEntity(context)
         entity.update(model)
     }
 
@@ -60,8 +59,8 @@ class CacheQueueOfFileMessagesManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate(context) { [weak self] bgTask in
-            let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
+        batchUpdate(context) { bgTask in
+            let batchRequest = NSBatchUpdateRequest(entityName: CDQueueOfFileMessages.entityName)
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
             batchRequest.resultType = .updatedObjectIDsResultType
@@ -74,7 +73,7 @@ class CacheQueueOfFileMessagesManager: CoreDataProtocol {
     func insert(req: SendTextMessageRequest? = nil, uploadFile: UploadFileRequest) {
         insertObjects(context) { context in
             let req = QueueOfFileMessages(req: req, uploadFile: uploadFile)
-            let entity = CDQueueOfFileMessages(context: context)
+            let entity = CDQueueOfFileMessages.insertEntity(context)
             entity.update(req)
         }
     }
@@ -82,18 +81,18 @@ class CacheQueueOfFileMessagesManager: CoreDataProtocol {
     func insert(req: SendTextMessageRequest? = nil, imageRequest: UploadImageRequest) {
         insertObjects(context) { context in
             let req = QueueOfFileMessages(req: req, imageRequest: imageRequest)
-            let entity = CDQueueOfFileMessages(context: context)
+            let entity = CDQueueOfFileMessages.insertEntity(context)
             entity.update(req)
         }
     }
 
     func delete(_ uniqueIds: [String]) {
         let predicate = NSPredicate(format: "uniqueId IN %@", uniqueIds)
-        batchDelete(context, entityName: entityName, predicate: predicate)
+        batchDelete(context, entityName: CDQueueOfFileMessages.entityName, predicate: predicate)
     }
 
     func unsedForThread(_ threadId: Int?, _ count: Int?, _ offset: Int?, _ completion: @escaping ([CDQueueOfFileMessages], Int) -> Void) {
         let threadIdPredicate = NSPredicate(format: "threadId == %i", threadId ?? -1)
-        fetchWithOffset(count: count, offset: offset, predicate: threadIdPredicate, completion)
+        fetchWithOffset(entityName: CDQueueOfFileMessages.entityName, count: count, offset: offset, predicate: threadIdPredicate, completion)
     }
 }

@@ -12,7 +12,6 @@ class CacheCoreDataFileManager: CoreDataProtocol {
     let idName = "hashCode"
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDFile.entity().name ?? "CDFile"
 
     required init(context: NSManagedObjectContext, logger: Logger? = nil) {
         self.context = context
@@ -20,7 +19,7 @@ class CacheCoreDataFileManager: CoreDataProtocol {
     }
 
     func insert(model: File) {
-        let entity = CDFile(context: context)
+        let entity = CDFile.insertEntity(context)
         entity.update(model)
     }
 
@@ -60,8 +59,8 @@ class CacheCoreDataFileManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate(context) { [weak self] bgTask in
-            let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
+        batchUpdate(context) { bgTask in
+            let batchRequest = NSBatchUpdateRequest(entityName: CDFile.entityName)
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
             batchRequest.resultType = .updatedObjectIDsResultType

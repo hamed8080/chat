@@ -14,6 +14,15 @@ public extension CDQueueOfForwardMessages {
         NSFetchRequest<CDQueueOfForwardMessages>(entityName: "CDQueueOfForwardMessages")
     }
 
+    static let entityName = "CDQueueOfForwardMessages"
+    static func entityDescription(_ context: NSManagedObjectContext) -> NSEntityDescription {
+        NSEntityDescription.entity(forEntityName: entityName, in: context)!
+    }
+
+    static func insertEntity(_ context: NSManagedObjectContext) -> CDQueueOfForwardMessages {
+        CDQueueOfForwardMessages(entity: entityDescription(context), insertInto: context)
+    }
+
     @NSManaged var fromThreadId: NSNumber?
     @NSManaged var messageIds: String?
     @NSManaged var threadId: NSNumber?

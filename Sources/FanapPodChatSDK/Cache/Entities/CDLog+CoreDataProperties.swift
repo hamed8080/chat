@@ -14,6 +14,15 @@ public extension CDLog {
         NSFetchRequest<CDLog>(entityName: "CDLog")
     }
 
+    static let entityName = "CDLog"
+    static func entityDescription(_ context: NSManagedObjectContext) -> NSEntityDescription {
+        NSEntityDescription.entity(forEntityName: entityName, in: context)!
+    }
+
+    static func insertEntity(_ context: NSManagedObjectContext) -> CDLog {
+        CDLog(entity: entityDescription(context), insertInto: context)
+    }
+
     @NSManaged var config: Data?
     @NSManaged var deviceInfo: Data?
     @NSManaged var id: String?

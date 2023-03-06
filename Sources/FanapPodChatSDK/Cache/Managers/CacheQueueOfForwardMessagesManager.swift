@@ -12,7 +12,6 @@ class CacheQueueOfForwardMessagesManager: CoreDataProtocol {
     let idName = "id"
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDQueueOfForwardMessages.entity().name ?? "CDQueueOfForwardMessages"
 
     required init(context: NSManagedObjectContext, logger: Logger? = nil) {
         self.context = context
@@ -20,7 +19,7 @@ class CacheQueueOfForwardMessagesManager: CoreDataProtocol {
     }
 
     func insert(model: QueueOfForwardMessages) {
-        let entity = CDQueueOfForwardMessages(context: context)
+        let entity = CDQueueOfForwardMessages.insertEntity(context)
         entity.update(model)
     }
 
@@ -60,8 +59,8 @@ class CacheQueueOfForwardMessagesManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate(context) { [weak self] bgTask in
-            let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
+        batchUpdate(context) { bgTask in
+            let batchRequest = NSBatchUpdateRequest(entityName: CDQueueOfForwardMessages.entityName)
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
             batchRequest.resultType = .updatedObjectIDsResultType
@@ -78,11 +77,11 @@ class CacheQueueOfForwardMessagesManager: CoreDataProtocol {
 
     func delete(_ uniqueIds: [String]) {
         let predicate = NSPredicate(format: "uniqueIds CONTAINS %@", uniqueIds)
-        batchDelete(context, entityName: entityName, predicate: predicate)
+        batchDelete(context, entityName: CDQueueOfForwardMessages.entityName, predicate: predicate)
     }
 
     func unsedForThread(_ threadId: Int?, _ count: Int?, _ offset: Int?, _ completion: @escaping ([CDQueueOfForwardMessages], Int) -> Void) {
         let threadIdPredicate = NSPredicate(format: "threadId == %i", threadId ?? -1)
-        fetchWithOffset(count: count, offset: offset, predicate: threadIdPredicate, completion)
+        fetchWithOffset(entityName: CDQueueOfForwardMessages.entityName, count: count, offset: offset, predicate: threadIdPredicate, completion)
     }
 }

@@ -12,7 +12,6 @@ class CacheTagManager: CoreDataProtocol {
     let idName = "id"
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDTag.entity().name ?? "CDTag"
 
     required init(context: NSManagedObjectContext, logger: Logger? = nil) {
         self.context = context
@@ -20,7 +19,7 @@ class CacheTagManager: CoreDataProtocol {
     }
 
     func insert(model: Tag) {
-        let entity = CDTag(context: context)
+        let entity = CDTag.insertEntity(context)
         entity.update(model)
     }
 
@@ -60,8 +59,8 @@ class CacheTagManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate(context) { [weak self] bgTask in
-            let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
+        batchUpdate(context) { bgTask in
+            let batchRequest = NSBatchUpdateRequest(entityName: CDTag.entityName)
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
             batchRequest.resultType = .updatedObjectIDsResultType
@@ -81,6 +80,6 @@ class CacheTagManager: CoreDataProtocol {
 
     func delete(_ id: Int?) {
         let predicate = idPredicate(id: id ?? -1)
-        batchDelete(context, entityName: entityName, predicate: predicate)
+        batchDelete(context, entityName: CDTag.entityName, predicate: predicate)
     }
 }

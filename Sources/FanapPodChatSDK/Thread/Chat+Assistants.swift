@@ -21,7 +21,7 @@ public extension Chat {
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
 
-        cache?.assistant.fetchWithOffset(count: request.count, offset: request.offset) { [weak self] assistants, totalCount in
+        cache?.assistant.fetchWithOffset(entityName: CDAssistant.entityName, count: request.count, offset: request.offset) { [weak self] assistants, totalCount in
             let assistants = assistants.map(\.codable)
             self?.responseQueue.async {
                 let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: totalCount)
