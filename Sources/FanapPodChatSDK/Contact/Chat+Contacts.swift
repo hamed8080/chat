@@ -18,14 +18,14 @@ public extension Chat {
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func getContacts(_ request: ContactsRequest, completion: @escaping CompletionType<[Contact]>, cacheResponse: CacheResponseType<[Contact]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult) { (response: ChatResponse<[Contact]>) in
-            let pagination = PaginationWithContentCount(count: request.size, offset: request.offset, totalCount: response.contentCount)
+            let pagination = PaginationWithContentCount(hasNext: response.result?.count ?? 0 >= request.size, count: request.size, offset: request.offset, totalCount: response.contentCount)
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
 
         cache?.contact.getContacts(request) { [weak self] contacts, totalCount in
             let contacts = contacts.map(\.codable)
             self?.responseQueue.async {
-                let pagination = PaginationWithContentCount(count: request.size, offset: request.offset, totalCount: totalCount)
+                let pagination = PaginationWithContentCount(hasNext: contacts.count >= request.size, count: request.size, offset: request.offset, totalCount: totalCount)
                 cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: contacts, pagination: pagination))
             }
         }
