@@ -12,7 +12,6 @@ class CacheUserManager: CoreDataProtocol {
     let idName = "id"
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDUser.entity().name ?? "CDUser"
 
     required init(context: NSManagedObjectContext, logger: Logger? = nil) {
         self.context = context
@@ -20,7 +19,7 @@ class CacheUserManager: CoreDataProtocol {
     }
 
     func insert(model: User) {
-        let entity = CDUser(context: context)
+        let entity = CDUser.insertEntity(context)
         entity.update(model)
     }
 
@@ -60,8 +59,8 @@ class CacheUserManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate(context) { [weak self] bgTask in
-            let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
+        batchUpdate(context) { bgTask in
+            let batchRequest = NSBatchUpdateRequest(entityName: CDUser.entityName)
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
             batchRequest.resultType = .updatedObjectIDsResultType
@@ -74,9 +73,9 @@ class CacheUserManager: CoreDataProtocol {
     func insert(_ models: [User], isMe: Bool = false) {
         insertObjects(context) { bgTask in
             models.forEach { model in
-                let entity = CDUser(context: bgTask)
-                entity.update(model)
-                entity.isMe = isMe as NSNumber
+                let userEntity = CDUser.insertEntity(bgTask)
+                userEntity.update(model)
+                userEntity.isMe = isMe as NSNumber
             }
         }
     }

@@ -14,6 +14,15 @@ public extension CDConversation {
         NSFetchRequest<CDConversation>(entityName: "CDConversation")
     }
 
+    static let entityName = "CDConversation"
+    static func entityDescription(_ context: NSManagedObjectContext) -> NSEntityDescription {
+        NSEntityDescription.entity(forEntityName: entityName, in: context)!
+    }
+
+    static func insertEntity(_ context: NSManagedObjectContext) -> CDConversation {
+        CDConversation(entity: entityDescription(context), insertInto: context)
+    }
+
     @NSManaged var admin: NSNumber?
     @NSManaged var canEditInfo: NSNumber?
     @NSManaged var canSpam: NSNumber?

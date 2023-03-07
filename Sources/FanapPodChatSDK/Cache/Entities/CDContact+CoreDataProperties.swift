@@ -14,6 +14,15 @@ public extension CDContact {
         NSFetchRequest<CDContact>(entityName: "CDContact")
     }
 
+    static let entityName = "CDContact"
+    static func entityDescription(_ context: NSManagedObjectContext) -> NSEntityDescription {
+        NSEntityDescription.entity(forEntityName: entityName, in: context)!
+    }
+
+    static func insertEntity(_ context: NSManagedObjectContext) -> CDContact {
+        CDContact(entity: entityDescription(context), insertInto: context)
+    }
+
     @NSManaged var blocked: NSNumber?
     @NSManaged var cellphoneNumber: String?
     @NSManaged var email: String?

@@ -12,7 +12,6 @@ class CacheTagParticipantManager: CoreDataProtocol {
     let idName = "id"
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDTagParticipant.entity().name ?? "CDTagParticipant"
 
     required init(context: NSManagedObjectContext, logger: Logger? = nil) {
         self.context = context
@@ -20,7 +19,7 @@ class CacheTagParticipantManager: CoreDataProtocol {
     }
 
     func insert(model: TagParticipant) {
-        let entity = CDTagParticipant(context: context)
+        let entity = CDTagParticipant.insertEntity(context)
         entity.update(model)
     }
 
@@ -60,8 +59,8 @@ class CacheTagParticipantManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate(context) { [weak self] bgTask in
-            let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
+        batchUpdate(context) { bgTask in
+            let batchRequest = NSBatchUpdateRequest(entityName: CDTagParticipant.entityName)
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
             batchRequest.resultType = .updatedObjectIDsResultType
@@ -74,6 +73,6 @@ class CacheTagParticipantManager: CoreDataProtocol {
     func delete(_ models: [TagParticipant]) {
         let ids = models.compactMap(\.id)
         let predicate = NSPredicate(format: "id IN %@", ids)
-        batchDelete(context, entityName: entityName, predicate: predicate)
+        batchDelete(context, entityName: CDTagParticipant.entityName, predicate: predicate)
     }
 }

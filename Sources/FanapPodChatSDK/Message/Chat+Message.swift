@@ -113,14 +113,14 @@ public extension Chat {
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func getMentions(_ request: MentionRequest, completion: @escaping CompletionType<[Message]>, cacheResponse: CacheResponseType<[Message]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult) { (response: ChatResponse<[Message]>) in
-            let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: response.contentCount)
+            let pagination = PaginationWithContentCount(hasNext: response.result?.count ?? 0 >= request.count, count: request.count, offset: request.offset, totalCount: response.contentCount)
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
 
         cache?.message.getMentions(request) { [weak self] messages, totalCount in
             let messages = messages.map { $0.codable() }
             self?.responseQueue.async {
-                let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: totalCount)
+                let pagination = PaginationWithContentCount(hasNext: messages.count >= request.count, count: request.count, offset: request.offset, totalCount: totalCount)
                 cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: messages, pagination: pagination))
             }
         }

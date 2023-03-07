@@ -12,7 +12,6 @@ class CacheLogManager: CoreDataProtocol {
     let idName = "id"
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDLog.entity().name ?? "CDLog"
 
     required init(context: NSManagedObjectContext, logger: Logger? = nil) {
         self.context = context
@@ -20,7 +19,7 @@ class CacheLogManager: CoreDataProtocol {
     }
 
     func insert(model: Log) {
-        let entity = CDLog(context: context)
+        let entity = CDLog.insertEntity(context)
         entity.update(model)
     }
 
@@ -60,8 +59,8 @@ class CacheLogManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate(context) { [weak self] bgTask in
-            let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
+        batchUpdate(context) { bgTask in
+            let batchRequest = NSBatchUpdateRequest(entityName: CDLog.entityName)
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
             batchRequest.resultType = .updatedObjectIDsResultType
@@ -74,7 +73,7 @@ class CacheLogManager: CoreDataProtocol {
     func delete(_ models: [Log]) {
         let ids = models.compactMap(\.id.string)
         let predicate = NSPredicate(format: "id IN %@", ids)
-        batchDelete(context, entityName: entityName, predicate: predicate)
+        batchDelete(context, entityName: CDLog.entityName, predicate: predicate)
     }
 
     func firstLog(_ completion: @escaping (CDLog?) -> Void) {

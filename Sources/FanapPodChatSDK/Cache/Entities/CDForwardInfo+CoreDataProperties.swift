@@ -14,6 +14,15 @@ public extension CDForwardInfo {
         NSFetchRequest<CDForwardInfo>(entityName: "CDForwardInfo")
     }
 
+    static let entityName = "CDForwardInfo"
+    static func entityDescription(_ context: NSManagedObjectContext) -> NSEntityDescription {
+        NSEntityDescription.entity(forEntityName: entityName, in: context)!
+    }
+
+    static func insertEntity(_ context: NSManagedObjectContext) -> CDForwardInfo {
+        CDForwardInfo(entity: entityDescription(context), insertInto: context)
+    }
+
     @NSManaged var messageId: NSNumber?
     @NSManaged var conversation: CDConversation?
     @NSManaged var message: CDMessage?

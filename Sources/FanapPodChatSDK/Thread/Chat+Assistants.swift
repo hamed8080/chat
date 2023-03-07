@@ -17,14 +17,14 @@ public extension Chat {
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func getAssistats(_ request: AssistantsRequest, completion: @escaping CompletionType<[Assistant]>, cacheResponse: CompletionType<[Assistant]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult) { (response: ChatResponse<[Assistant]>) in
-            let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: response.contentCount)
+            let pagination = PaginationWithContentCount(hasNext: response.result?.count ?? 0 >= request.count, count: request.count, offset: request.offset, totalCount: response.contentCount)
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
 
-        cache?.assistant.fetchWithOffset(count: request.count, offset: request.offset) { [weak self] assistants, totalCount in
+        cache?.assistant.fetchWithOffset(entityName: CDAssistant.entityName, count: request.count, offset: request.offset) { [weak self] assistants, totalCount in
             let assistants = assistants.map(\.codable)
             self?.responseQueue.async {
-                let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: totalCount)
+                let pagination = PaginationWithContentCount(hasNext: assistants.count >= request.count, count: request.count, offset: request.offset, totalCount: totalCount)
                 cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: assistants, error: nil, pagination: pagination))
             }
         }

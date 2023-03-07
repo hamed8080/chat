@@ -14,6 +14,15 @@ public extension CDQueueOfTextMessages {
         NSFetchRequest<CDQueueOfTextMessages>(entityName: "CDQueueOfTextMessages")
     }
 
+    static let entityName = "CDQueueOfTextMessages"
+    static func entityDescription(_ context: NSManagedObjectContext) -> NSEntityDescription {
+        NSEntityDescription.entity(forEntityName: entityName, in: context)!
+    }
+
+    static func insertEntity(_ context: NSManagedObjectContext) -> CDQueueOfTextMessages {
+        CDQueueOfTextMessages(entity: entityDescription(context), insertInto: context)
+    }
+
     @NSManaged var messageType: NSNumber?
     @NSManaged var metadata: String?
     @NSManaged var repliedTo: NSNumber?

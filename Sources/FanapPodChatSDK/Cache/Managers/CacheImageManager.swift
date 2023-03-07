@@ -12,7 +12,6 @@ class CacheImageManager: CoreDataProtocol {
     let idName = "hashCode"
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDImage.entity().name ?? "CDImage"
 
     required init(context: NSManagedObjectContext, logger: Logger? = nil) {
         self.context = context
@@ -20,7 +19,7 @@ class CacheImageManager: CoreDataProtocol {
     }
 
     func insert(model: Image) {
-        let entity = CDImage(context: context)
+        let entity = CDImage.insertEntity(context)
         entity.update(model)
     }
 
@@ -60,8 +59,8 @@ class CacheImageManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate(context) { [weak self] bgTask in
-            let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
+        batchUpdate(context) { bgTask in
+            let batchRequest = NSBatchUpdateRequest(entityName: CDImage.entityName)
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
             batchRequest.resultType = .updatedObjectIDsResultType

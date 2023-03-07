@@ -14,6 +14,15 @@ public extension CDTagParticipant {
         NSFetchRequest<CDTagParticipant>(entityName: "CDTagParticipant")
     }
 
+    static let entityName = "CDTagParticipant"
+    static func entityDescription(_ context: NSManagedObjectContext) -> NSEntityDescription {
+        NSEntityDescription.entity(forEntityName: entityName, in: context)!
+    }
+
+    static func insertEntity(_ context: NSManagedObjectContext) -> CDTagParticipant {
+        CDTagParticipant(entity: entityDescription(context), insertInto: context)
+    }
+
     @NSManaged var active: NSNumber?
     @NSManaged var id: NSNumber?
     @NSManaged var tagId: NSNumber?

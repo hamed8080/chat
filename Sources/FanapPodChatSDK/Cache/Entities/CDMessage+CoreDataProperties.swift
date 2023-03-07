@@ -14,6 +14,15 @@ public extension CDMessage {
         NSFetchRequest<CDMessage>(entityName: "CDMessage")
     }
 
+    static let entityName = "CDMessage"
+    static func entityDescription(_ context: NSManagedObjectContext) -> NSEntityDescription {
+        NSEntityDescription.entity(forEntityName: entityName, in: context)!
+    }
+
+    static func insertEntity(_ context: NSManagedObjectContext) -> CDMessage {
+        CDMessage(entity: entityDescription(context), insertInto: context)
+    }
+
     @NSManaged var deletable: NSNumber?
     @NSManaged var delivered: NSNumber?
     @NSManaged var editable: NSNumber?

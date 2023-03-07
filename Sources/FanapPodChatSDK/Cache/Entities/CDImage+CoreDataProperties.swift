@@ -14,6 +14,15 @@ public extension CDImage {
         NSFetchRequest<CDImage>(entityName: "CDImage")
     }
 
+    static let entityName = "CDImage"
+    static func entityDescription(_ context: NSManagedObjectContext) -> NSEntityDescription {
+        NSEntityDescription.entity(forEntityName: entityName, in: context)!
+    }
+
+    static func insertEntity(_ context: NSManagedObjectContext) -> CDImage {
+        CDImage(entity: entityDescription(context), insertInto: context)
+    }
+
     @NSManaged var actualHeight: NSNumber?
     @NSManaged var actualWidth: NSNumber?
     @NSManaged var hashCode: String?

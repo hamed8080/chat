@@ -14,6 +14,15 @@ public extension CDAssistant {
         NSFetchRequest<CDAssistant>(entityName: "CDAssistant")
     }
 
+    static let entityName = "CDAssistant"
+    static func entityDescription(_ context: NSManagedObjectContext) -> NSEntityDescription {
+        NSEntityDescription.entity(forEntityName: entityName, in: context)!
+    }
+
+    static func insertEntity(_ context: NSManagedObjectContext) -> CDAssistant {
+        CDAssistant(entity: entityDescription(context), insertInto: context)
+    }
+
     @NSManaged var assistant: Invitee?
     @NSManaged var block: NSNumber?
     @NSManaged var contactType: String?

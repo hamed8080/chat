@@ -12,7 +12,6 @@ class CacheForwardInfoManager: CoreDataProtocol {
     let idName = "id"
     var context: NSManagedObjectContext
     let logger: Logger?
-    let entityName = CDForwardInfo.entity().name ?? "CDForwardInfo"
 
     required init(context: NSManagedObjectContext, logger: Logger? = nil) {
         self.context = context
@@ -20,7 +19,7 @@ class CacheForwardInfoManager: CoreDataProtocol {
     }
 
     func insert(model: ForwardInfo) {
-        let entity = CDForwardInfo(context: context)
+        let entity = CDForwardInfo.insertEntity(context)
         if let participant = model.participant, let thread = model.conversation {
             CacheConversationManager(context: context, logger: logger).findOrCreateEntity(model.conversation?.id) { threadEntity in
                 threadEntity?.update(thread)
@@ -69,8 +68,8 @@ class CacheForwardInfoManager: CoreDataProtocol {
 
     func update(_ propertiesToUpdate: [String: Any], _ predicate: NSPredicate) {
         // batch update request
-        batchUpdate(context) { [weak self] bgTask in
-            let batchRequest = NSBatchUpdateRequest(entityName: self?.entityName ?? "")
+        batchUpdate(context) { bgTask in
+            let batchRequest = NSBatchUpdateRequest(entityName: CDForwardInfo.entityName)
             batchRequest.predicate = predicate
             batchRequest.propertiesToUpdate = propertiesToUpdate
             batchRequest.resultType = .updatedObjectIDsResultType

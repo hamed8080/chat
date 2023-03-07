@@ -14,6 +14,15 @@ public extension CDUserRole {
         NSFetchRequest<CDUserRole>(entityName: "CDUserRole")
     }
 
+    static let entityName = "CDUserRole"
+    static func entityDescription(_ context: NSManagedObjectContext) -> NSEntityDescription {
+        NSEntityDescription.entity(forEntityName: entityName, in: context)!
+    }
+
+    static func insertEntity(_ context: NSManagedObjectContext) -> CDUserRole {
+        CDUserRole(entity: entityDescription(context), insertInto: context)
+    }
+
     @NSManaged var image: String?
     @NSManaged var name: String?
     @NSManaged var roles: Data?
