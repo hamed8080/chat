@@ -31,7 +31,7 @@ Add in `Podfile`:
 pod 'FanapPodChatSDK'
 ```
 
-## Intit 
+## How to use? 
 
 ```swift
 let asyncConfig = AsyncConfigBuilder()
@@ -75,7 +75,7 @@ For more information about how to use Chat SDK visit [Documentation](https://ham
 <br/>
 <br/>
 
-## [Developer Application](https://pubgi.fanapsoft.ir/chat/ios/chatapplication) 
+## [Developer Application](https://github.com/hamed8080/ChatApplication) 
 For more example and usage you can use [developer implementation app](https://pubgi.fanapsoft.ir/chat/ios/chatapplication)
 <br/>
 <br/>
