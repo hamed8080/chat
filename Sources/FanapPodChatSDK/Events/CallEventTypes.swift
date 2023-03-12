@@ -29,4 +29,5 @@ public enum CallEventTypes {
     case callParticipantStopSpeaking(ChatResponse<CallParticipant>)
     case callsToJoin(ChatResponse<[Call]>)
     case sticker(ChatResponse<StickerResponse>)
+    case maxVideoSessionLimit(ChatResponse<CallParticipant>)
 }

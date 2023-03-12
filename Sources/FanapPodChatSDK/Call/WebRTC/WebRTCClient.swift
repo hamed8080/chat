@@ -164,7 +164,7 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
     var logFile: RTCFileLogger?
     private let rtcAudioSession = RTCAudioSession.sharedInstance()
     private let audioQueue = DispatchQueue(label: "audio")
-    private var isPassedMaxVideoLimit: Bool { callParticipantsUserRTC.filter { $0.callParticipant.video == true }.count > config.callConfig.maxActiveVideoSessions ?? 4 }
+    private var isPassedMaxVideoLimit: Bool { callParticipantsUserRTC.filter { $0.callParticipant.video == true }.count > config.callConfig.maxActiveVideoSessions }
 
     public init(chat: Chat, config: WebRTCConfig, delegate _: WebRTCClientDelegate? = nil) {
         self.chat = chat
@@ -203,6 +203,29 @@ public class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
     public func addCallParticipants(_ callParticipants: [CallParticipant]) {
         callParticipants.forEach { callParticipant in
             addCallParticipant(callParticipant)
+        }
+        reCalculateActiveVideoSessionLimit()
+    }
+
+    /// If it has passed ``CallConfig/maxActiveVideoSessions``, then find the first active video and disable it, and send an event to client for updating the view.
+    /// If it sees that the limitation is not passed, it will return to active all inactive video sessions.
+    public func reCalculateActiveVideoSessionLimit() {
+        if isPassedMaxVideoLimit, let topActive = callParticipantsUserRTC.first(where: { $0.callParticipant.video == true }) {
+            deActiveFirstVideoSession(topActive)
+        } else {
+            reActiveVideoSession()
+        }
+    }
+
+    private func deActiveFirstVideoSession(_ callParticipant: CallParticipantUserRTC) {
+        callParticipant.videoRTC.setTrackEnable(false)
+        chat?.delegate?.chatEvent(event: .call(.maxVideoSessionLimit(.init(uniqueId: nil, result: callParticipant.callParticipant, time: Int(Date().timeIntervalSince1970)))))
+    }
+
+    private func reActiveVideoSession() {
+        callParticipantsUserRTC.filter { $0.callParticipant.video == true && $0.videoRTC.isVideoTrackEnable == false }.forEach { callParticipant in
+            callParticipant.videoRTC.setTrackEnable(true)
+            chat?.delegate?.chatEvent(event: .call(.maxVideoSessionLimit(.init(uniqueId: nil, result: callParticipant.callParticipant, time: Int(Date().timeIntervalSince1970)))))
         }
     }
 
