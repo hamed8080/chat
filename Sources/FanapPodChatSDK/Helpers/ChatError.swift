@@ -71,9 +71,9 @@ public struct ChatError: Decodable {
 }
 
 public class BanError: Decodable {
-    private let errorMessage: String?
-    private let duration: Int?
-    private let uniqueId: String?
+    public let errorMessage: String?
+    public let duration: Int?
+    public let uniqueId: String?
 }
 
 extension AsyncError {

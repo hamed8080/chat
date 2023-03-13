@@ -20,6 +20,7 @@ public class Chat: ChatProtocol, Identifiable {
     var isTypingCount = 0
     var timerTyping: TimerProtocol?
     var timerCheckUserStoppedTyping: TimerProtocol?
+    var banTimer: TimerProtocol
     var exportMessageViewModels: [ExportMessagesProtocol] = []
     var session: URLSessionProtocol
     var responseQueue: DispatchQueueProtocol
@@ -38,6 +39,7 @@ public class Chat: ChatProtocol, Identifiable {
         timerCheckUserStoppedTyping: TimerProtocol? = Timer(),
         pingTimer: TimerProtocol = Timer(),
         queueTimer: TimerProtocol = Timer(),
+        banTimer: TimerProtocol = Timer(),
         session: URLSessionProtocol = URLSession.shared,
         responseQueue: DispatchQueueProtocol = DispatchQueue.main
     ) {
@@ -45,6 +47,7 @@ public class Chat: ChatProtocol, Identifiable {
         self.config = config
         self.logger = logger ?? Logger()
         self.timerTyping = timerTyping
+        self.banTimer = banTimer
         self.requestUserTimer = requestUserTimer
         self.timerCheckUserStoppedTyping = timerCheckUserStoppedTyping
         self.session = session

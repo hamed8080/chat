@@ -60,4 +60,12 @@ public extension AsyncMessage {
             return nil
         }
     }
+
+    var banError: BanError? {
+        if chatMessage?.type == .error, let error: ChatError = toChatResponse().result, let ban = error.banError {
+            return ban
+        } else {
+            return nil
+        }
+    }
 }

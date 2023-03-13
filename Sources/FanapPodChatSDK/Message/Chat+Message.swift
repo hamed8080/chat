@@ -22,7 +22,7 @@ public extension Chat {
     func sendTextMessage(_ request: SendTextMessageRequest, uniqueIdResult: UniqueIdResultType? = nil, onSent: OnSentType? = nil, onSeen: OnSeenType? = nil, onDeliver: OnDeliveryType? = nil) {
         prepareToSendAsync(req: request,
                            uniqueIdResult: uniqueIdResult,
-                           completion: nil as CompletionType<Voidcodable>?, //
+                           completion: nil as CompletionType<Voidcodable>?,
                            onSent: onSent,
                            onDelivered: onDeliver,
                            onSeen: onSeen)

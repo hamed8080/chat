@@ -41,7 +41,11 @@ internal class AsyncManager: AsyncDelegate {
     /// A delegate method that receives a message.
     public func asyncMessage(asyncMessage: AsyncMessage) {
         chat?.invokeCallback(asyncMessage: asyncMessage)
-        removeFromQueue(asyncMessage: asyncMessage)
+        if let ban = asyncMessage.banError {
+            scheduleForResendQueues(ban)
+        } else {
+            removeFromQueue(asyncMessage: asyncMessage)
+        }
     }
 
     /// A delegate that tells the status of the async connection.
@@ -136,5 +140,13 @@ internal class AsyncManager: AsyncDelegate {
         let req = BareChatSendableRequest()
         req.chatMessageType = .ping
         sendData(sendable: req)
+    }
+
+    /// When a user rapidly sends an action to the Async server, they'll be banned by Async Server.
+    /// Due to this matter, we should reschedule a timer to start sending all messages inside the queue.
+    private func scheduleForResendQueues(_ ban: BanError) {
+        chat?.banTimer.scheduledTimer(interval: TimeInterval((ban.duration ?? 5000) / 1000) + 1, repeats: false) { [weak self] _ in
+            self?.sendQueuesOnReconnect()
+        }
     }
 }

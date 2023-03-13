@@ -32,6 +32,10 @@ protocol ChatProtocol: AnyObject {
     /// A timer to stop user is typing event.
     var timerCheckUserStoppedTyping: TimerProtocol? { get set }
 
+    /// A timer that will retry if the user rapidly tries to send action to the chat server.
+    /// Chat server usually bans the user if it sends more than 3 requests in less than a second.
+    var banTimer: TimerProtocol { get set }
+
     /// A timer for retrieving the ``User`` object to make the ``ChatState/chatReady``.
     var requestUserTimer: TimerProtocol { get set }
 
