@@ -14,7 +14,7 @@ public class MapStaticImageRequest: UniqueIdManagerRequest, Encodable {
     public var width: Int = 800
     public var zoom: Int = 15
 
-    public init(center: Cordinate,
+    public init(center: Coordinate,
                 key: String? = nil,
                 height: Int = 500,
                 width: Int = 800,

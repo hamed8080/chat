@@ -6,7 +6,7 @@
 
 import Foundation
 public class LocationMessageRequest: UniqueIdManagerRequest {
-    public let mapCenter: Cordinate
+    public let mapCenter: Coordinate
     public let mapHeight: Int
     public let mapType: String
     public let mapWidth: Int
@@ -21,7 +21,7 @@ public class LocationMessageRequest: UniqueIdManagerRequest {
 
     public let messageType: MessageType
 
-    public init(mapCenter: Cordinate,
+    public init(mapCenter: Coordinate,
                 threadId: Int,
                 userGroupHash: String,
                 mapHeight: Int = 500,

@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct Cordinate {
+public struct Coordinate: Codable {
     public let lat: Double
     public let lng: Double
 
@@ -18,10 +18,10 @@ public struct Cordinate {
 
 public class MapRoutingRequest: UniqueIdManagerRequest, Encodable {
     public var alternative: Bool = true
-    private let destination: Cordinate
-    private let origin: Cordinate
+    private let destination: Coordinate
+    private let origin: Coordinate
 
-    public init(alternative: Bool?, origin: Cordinate, destination: Cordinate, uniqueId: String? = nil) {
+    public init(alternative: Bool?, origin: Coordinate, destination: Coordinate, uniqueId: String? = nil) {
         self.alternative = alternative ?? true
         self.destination = origin
         self.origin = destination
