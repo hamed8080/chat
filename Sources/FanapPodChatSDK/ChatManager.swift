@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class ChatManager {
+public final class ChatManager {
     private init() {}
     public static var instance: ChatManager = .init()
     public static var activeInstance: Chat?
@@ -38,7 +38,7 @@ public class ChatManager {
         }
     }
 
-    public class func switchToUser(userId: Int) {
+    public final class func switchToUser(userId: Int) {
         guard let activeInstance = activeInstance else { return }
         activeInstance.persistentManager.switchToContainer(userId: userId)
         if let context = activeInstance.persistentManager.newBgTask() {

@@ -16,7 +16,7 @@ public struct Coordinate: Codable {
     }
 }
 
-public class MapRoutingRequest: UniqueIdManagerRequest, Encodable {
+public final class MapRoutingRequest: UniqueIdManagerRequest, Encodable {
     public var alternative: Bool = true
     private let destination: Coordinate
     private let origin: Coordinate

@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class UpdateContactRequest: UniqueIdManagerRequest, Encodable, BodyRequestProtocol {
+public final class UpdateContactRequest: UniqueIdManagerRequest, Encodable, BodyRequestProtocol {
     public let cellphoneNumber: String
     public let email: String
     public let firstName: String

@@ -69,7 +69,7 @@ public extension Chat {
 
         mapStaticImage(mapStaticReq, downloadProgress) { [weak self] (response: ChatResponse<Data?>) in
 
-            guard let data = response.result as? Data else { return }
+            guard let self = self, let data = response.result as? Data else { return }
             var hC = 0
             var wC = 0
             #if canImport(UIKit)
@@ -85,23 +85,34 @@ public extension Chat {
                                                   mimeType: "image/png",
                                                   userGroupHash: request.userGroupHash,
                                                   uniqueId: request.uniqueId)
-            imageRequest.typeCode = self?.config.typeCode
-
+            imageRequest.typeCode = self.config.typeCode
             let textMessage = SendTextMessageRequest(threadId: request.threadId,
                                                      textMessage: request.textMessage ?? "",
-                                                     messageType: .podSpacePicture,
+                                                     messageType: .location,
                                                      repliedTo: request.repliedTo,
                                                      systemMetadata: request.systemMetadata,
                                                      uniqueId: request.uniqueId)
 
-            self?.sendFileMessage(textMessage: textMessage,
-                                  uploadFile: imageRequest,
-                                  uploadProgress: uploadProgress,
-                                  onSent: onSent,
-                                  onSeen: onSeen,
-                                  onDeliver: onDeliver,
-                                  uploadUniqueIdResult: uploadUniqueIdResult,
-                                  messageUniqueIdResult: messageUniqueIdResult)
+            textMessage.uniqueId = request.uniqueId
+            textMessage.typeCode = self.config.typeCode
+            self.cache?.fileQueue.insert(req: textMessage, imageRequest: imageRequest)
+            messageUniqueIdResult?(textMessage.uniqueId)
+            self.uploadImage(imageRequest, uploadUniqueIdResult: uploadUniqueIdResult, uploadProgress: uploadProgress) { [weak self] _, fileMetaData, error in
+                // completed upload file
+                if let error = error {
+                    self?.delegate?.chatError(error: error)
+                } else {
+                    fileMetaData?.latitude = request.mapCenter.lat
+                    fileMetaData?.longitude = request.mapCenter.lng
+                    guard let stringMetaData = fileMetaData.convertCodableToString() else { return }
+                    textMessage.metadata = stringMetaData
+                    self?.sendTextMessage(textMessage,
+                                          uniqueIdResult: messageUniqueIdResult,
+                                          onSent: onSent,
+                                          onSeen: onSeen,
+                                          onDeliver: onDeliver)
+                }
+            }
         }
     }
 

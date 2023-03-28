@@ -42,7 +42,7 @@ public class Pagination {
     }
 }
 
-public class PaginationWithContentCount: Pagination {
+public final class PaginationWithContentCount: Pagination {
     public var totalCount: Int
     public var nextOffset: Int?
 

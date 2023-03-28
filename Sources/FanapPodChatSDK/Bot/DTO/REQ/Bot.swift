@@ -7,7 +7,7 @@
 import Foundation
 
 /// A bot object.
-public class Bot: Codable {
+public final class Bot: Codable {
     ///
     public var apiToken: String?
 
@@ -26,7 +26,7 @@ public class Bot: Codable {
     }
 }
 
-public class Thing: Codable {
+public final class Thing: Codable {
     public var id: Int? // its thing id of relevant thing of this bot in SSO
     public var name: String? // bot name
     public var title: String? // bot name

@@ -52,7 +52,7 @@ extension Chat {
                 return
             }
             if config.isDebuggingLogEnabled == true {
-                logger?.log(title: "file uploaded successfully", message: "\(String(data: data, encoding: .utf8) ?? "")")
+                logger?.log(title: "File uploaded successfully", jsonString: String(data: data, encoding: .utf8), receive: true)
             }
             let link = "\(config.fileServer)\(Routes.files.rawValue)/\(uploadResponse.result?.hash ?? "")"
             let fileDetail = FileDetail(fileExtension: req.fileExtension,

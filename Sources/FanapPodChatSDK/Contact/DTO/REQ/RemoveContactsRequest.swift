@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 12/14/22
 
 import Foundation
-public class RemoveContactsRequest: UniqueIdManagerRequest, Encodable, BodyRequestProtocol {
+public final class RemoveContactsRequest: UniqueIdManagerRequest, Encodable, BodyRequestProtocol {
     public let contactId: Int
     internal var typeCode: String?
 

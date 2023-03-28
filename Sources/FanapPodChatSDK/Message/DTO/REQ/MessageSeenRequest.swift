@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 11/28/22
 
 import Foundation
-public class MessageSeenRequest: UniqueIdManagerRequest, PlainTextSendable {
+public final class MessageSeenRequest: UniqueIdManagerRequest, PlainTextSendable {
     let messageId: Int
     let threadId: Int
     var content: String? { "\(messageId)" }

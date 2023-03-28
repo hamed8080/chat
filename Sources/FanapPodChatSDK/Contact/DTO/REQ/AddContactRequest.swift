@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class AddContactRequest: UniqueIdManagerRequest, Encodable {
+public final class AddContactRequest: UniqueIdManagerRequest, Encodable {
     public var cellphoneNumber: String?
     public var email: String?
     public var firstName: String?

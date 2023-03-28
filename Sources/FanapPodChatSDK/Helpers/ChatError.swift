@@ -70,7 +70,7 @@ public struct ChatError: Decodable {
     }
 }
 
-public class BanError: Decodable {
+public final class BanError: Decodable {
     public let errorMessage: String?
     public let duration: Int?
     public let uniqueId: String?

@@ -7,7 +7,7 @@
 import Foundation
 
 /// Create bot request.
-public class CreateBotRequest: UniqueIdManagerRequest, PlainTextSendable {
+public final class CreateBotRequest: UniqueIdManagerRequest, PlainTextSendable {
     /// The name of the bot you want to create.
     public var botName: String
     var content: String? { botName }

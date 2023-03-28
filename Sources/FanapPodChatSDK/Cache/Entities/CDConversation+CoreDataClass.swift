@@ -10,4 +10,4 @@ import CoreData
 import Foundation
 
 @objc(CDConversation)
-public class CDConversation: NSManagedObject {}
+public final class CDConversation: NSManagedObject {}

@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 11/2/22
 
 import Foundation
-public class UploadImageRequest: UploadFileRequest {
+public final class UploadImageRequest: UploadFileRequest {
     public var xC: Int = 0
     public var yC: Int = 0
     public var hC: Int = 0

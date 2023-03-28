@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 11/19/22
 
 import Foundation
-public class DeleteMessageRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
+public final class DeleteMessageRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
     public let deleteForAll: Bool
     public let messageId: Int
     var subjectId: Int { messageId }

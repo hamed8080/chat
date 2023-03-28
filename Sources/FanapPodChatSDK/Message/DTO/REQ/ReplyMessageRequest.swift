@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 11/2/22
 
 import Foundation
-public class ReplyMessageRequest: SendTextMessageRequest {
+public final class ReplyMessageRequest: SendTextMessageRequest {
     public init(threadId: Int,
                 repliedTo: Int,
                 textMessage: String,

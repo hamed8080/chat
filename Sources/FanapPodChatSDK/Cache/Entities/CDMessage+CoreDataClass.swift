@@ -10,4 +10,4 @@ import CoreData
 import Foundation
 
 @objc(CDMessage)
-public class CDMessage: NSManagedObject {}
+public final class CDMessage: NSManagedObject {}

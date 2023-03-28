@@ -7,7 +7,7 @@
 import FanapPodAsyncSDK
 import Foundation
 
-public class Chat: ChatProtocol, Identifiable {
+public final class Chat: ChatProtocol, Identifiable {
     public var id: UUID = .init()
     public var config: ChatConfig
     public weak var delegate: ChatDelegate?

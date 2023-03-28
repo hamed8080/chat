@@ -10,4 +10,4 @@ import CoreData
 import Foundation
 
 @objc(CDTagParticipant)
-public class CDTagParticipant: NSManagedObject {}
+public final class CDTagParticipant: NSManagedObject {}

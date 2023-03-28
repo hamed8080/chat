@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class AssistantsRequest: UniqueIdManagerRequest, ChatSendable {
+public final class AssistantsRequest: UniqueIdManagerRequest, ChatSendable {
     public let contactType: String
     public let count: Int
     public let offset: Int

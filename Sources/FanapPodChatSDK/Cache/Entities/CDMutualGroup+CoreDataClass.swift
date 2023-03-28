@@ -10,4 +10,4 @@ import CoreData
 import Foundation
 
 @objc(CDMutualGroup)
-public class CDMutualGroup: NSManagedObject {}
+public final class CDMutualGroup: NSManagedObject {}

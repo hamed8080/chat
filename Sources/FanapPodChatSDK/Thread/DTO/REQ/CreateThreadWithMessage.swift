@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 11/2/22
 
 import Foundation
-public class CreateThreadWithMessage: CreateThreadRequest {
+public final class CreateThreadWithMessage: CreateThreadRequest {
     public var message: CreateThreadMessage
 
     public init(description: String?,
@@ -39,7 +39,7 @@ public class CreateThreadWithMessage: CreateThreadRequest {
     }
 }
 
-public class CreateThreadMessage: Encodable {
+public final class CreateThreadMessage: Encodable {
     public let forwardedMessageIds: [String]?
     public var forwardedUniqueIds: [String]?
     public let repliedTo: Int?

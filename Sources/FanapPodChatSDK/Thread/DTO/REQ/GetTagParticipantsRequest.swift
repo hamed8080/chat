@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 11/19/22
 
 import Foundation
-public class GetTagParticipantsRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
+public final class GetTagParticipantsRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
     public var id: Int
     var subjectId: Int { id }
     var chatMessageType: ChatMessageVOTypes = .getTagParticipants

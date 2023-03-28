@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 12/14/22
 
 import Foundation
-class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSessionTaskDelegate {
+final class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSessionTaskDelegate {
     private let uploadProgress: UploadFileProgressType?
     private let downloadProgress: DownloadProgressType?
     private var buffer: NSMutableData = .init()

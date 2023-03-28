@@ -92,7 +92,7 @@ public struct ChatConfig: Codable {
     }
 }
 
-public class ChatConfigBuilder {
+public final class ChatConfigBuilder {
     private(set) var asyncConfig: AsyncConfig
     private(set) var ssoHost: String = ""
     private(set) var platformHost: String = ""

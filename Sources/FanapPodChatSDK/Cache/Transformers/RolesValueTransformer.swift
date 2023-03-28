@@ -8,7 +8,7 @@
 import Foundation
 
 @objc(RolesValueTransformer)
-class RolesValueTransformer: ValueTransformer {
+final class RolesValueTransformer: ValueTransformer {
     override class func transformedValueClass() -> AnyClass {
         NSArray.self
     }

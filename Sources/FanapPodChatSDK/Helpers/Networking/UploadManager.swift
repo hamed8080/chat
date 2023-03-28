@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 12/14/22
 
 import Foundation
-class UploadManager {
+final class UploadManager {
     private var callbackManager: CallbacksManager
     init(callbackManager: CallbacksManager) {
         self.callbackManager = callbackManager

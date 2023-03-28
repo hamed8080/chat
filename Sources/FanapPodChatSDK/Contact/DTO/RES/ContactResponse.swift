@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 11/2/22
 
 import Foundation
-public class ContactResponse: Decodable {
+public final class ContactResponse: Decodable {
     public var contentCount: Int = 0
     public var contacts: [Contact] = []
 

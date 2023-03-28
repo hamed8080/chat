@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 12/14/22
 
 import Foundation
-class DownloadManager {
+final class DownloadManager {
     private let callbackManager: CallbacksManager
     init(callbackManager: CallbacksManager) {
         self.callbackManager = callbackManager

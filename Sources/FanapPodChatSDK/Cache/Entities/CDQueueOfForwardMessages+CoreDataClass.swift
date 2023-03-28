@@ -10,4 +10,4 @@ import CoreData
 import Foundation
 
 @objc(CDQueueOfForwardMessages)
-public class CDQueueOfForwardMessages: NSManagedObject {}
+public final class CDQueueOfForwardMessages: NSManagedObject {}

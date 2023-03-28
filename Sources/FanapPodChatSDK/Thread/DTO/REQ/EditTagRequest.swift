@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 11/19/22
 
 import Foundation
-public class EditTagRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
+public final class EditTagRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
     public var name: String
     public var id: Int
     var subjectId: Int { id }

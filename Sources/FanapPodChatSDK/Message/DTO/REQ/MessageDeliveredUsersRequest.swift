@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 12/14/22
 
 import Foundation
-public class MessageDeliveredUsersRequest: UniqueIdManagerRequest, ChatSendable {
+public final class MessageDeliveredUsersRequest: UniqueIdManagerRequest, ChatSendable {
     let messageId: Int
     let offset: Int
     let count: Int

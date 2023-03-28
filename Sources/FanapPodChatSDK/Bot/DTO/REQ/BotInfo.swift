@@ -7,7 +7,7 @@
 import Foundation
 
 /// Bot more information.
-public class BotInfo: Decodable {
+public final class BotInfo: Decodable {
     /// The name of the bot.
     public var name: String?
 

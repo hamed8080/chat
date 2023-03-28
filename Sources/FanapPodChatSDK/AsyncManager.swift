@@ -116,7 +116,6 @@ internal class AsyncManager: AsyncDelegate {
                                               ttl: config.msgTTL,
                                               peerName: asyncMessage.peerName ?? config.asyncConfig.serverName,
                                               priority: config.msgPriority,
-                                              pushMsgType: asyncMessage.asyncMessageType,
                                               uniqueId: (asyncMessage as? AsyncChatServerMessage)?.chatMessage.uniqueId)
         guard chat?.state == .chatReady || chat?.state == .asyncReady else { return }
         logger?.log(title: "send Message with type: \(type)", jsonString: asyncMessage.string ?? "", receive: false)

@@ -10,4 +10,4 @@ import CoreData
 import Foundation
 
 @objc(CDContact)
-public class CDContact: NSManagedObject {}
+public final class CDContact: NSManagedObject {}

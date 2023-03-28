@@ -39,7 +39,7 @@ public enum LogLevel: Int, Codable {
     case error = 2
 }
 
-public class Logger {
+public final class Logger {
     private var sdkName: String { "CHAT_SDK-\(chat?.userInfo?.id ?? 0): " }
     weak var chat: ChatProtocol?
     private var urlSession: URLSessionProtocol

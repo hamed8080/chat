@@ -7,7 +7,7 @@
 import Foundation
 
 /// Start or stop a bot request.
-public class StartStopBotRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
+public final class StartStopBotRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
     var chatMessageType: ChatMessageVOTypes = .stopBot
     var subjectId: Int { threadId }
     var content: String? { convertCodableToString() }

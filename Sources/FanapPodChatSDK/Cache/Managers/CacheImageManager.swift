@@ -8,7 +8,7 @@
 import CoreData
 import Foundation
 
-class CacheImageManager: CoreDataProtocol {
+final class CacheImageManager: CoreDataProtocol {
     let idName = "hashCode"
     var context: NSManagedObjectContext
     let logger: Logger?

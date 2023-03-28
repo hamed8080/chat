@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 11/19/22
 
 import Foundation
-public class RemoveParticipantsRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
+public final class RemoveParticipantsRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
     public let participantIds: [Int]
     public let threadId: Int
     var content: String? { participantIds.convertCodableToString() }

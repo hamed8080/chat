@@ -7,7 +7,7 @@
 import FanapPodAsyncSDK
 import Foundation
 
-public class ThreadsUnreadCountRequest: UniqueIdManagerRequest, ChatSendable {
+public final class ThreadsUnreadCountRequest: UniqueIdManagerRequest, ChatSendable {
     public let threadIds: [Int]
     var chatMessageType: ChatMessageVOTypes = .threadsUnreadCount
     var content: String? { threadIds.convertCodableToString() }

@@ -10,4 +10,4 @@ import CoreData
 import Foundation
 
 @objc(CDUser)
-public class CDUser: NSManagedObject {}
+public final class CDUser: NSManagedObject {}

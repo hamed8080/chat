@@ -85,7 +85,7 @@ public protocol CacheFileManagerProtocol {
     func createGroupDirectory()
 }
 
-public class CacheFileManager: CacheFileManagerProtocol {
+public final class CacheFileManager: CacheFileManagerProtocol {
     public let fm: FileManagerProtocol
     public let logger: Logger?
     public let queue: DispatchQueueProtocol

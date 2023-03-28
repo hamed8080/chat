@@ -8,7 +8,7 @@
 import CoreData
 import Foundation
 
-class CacheMutualGroupManager: CoreDataProtocol {
+final class CacheMutualGroupManager: CoreDataProtocol {
     let idName = "id"
     var context: NSManagedObjectContext
     let logger: Logger?

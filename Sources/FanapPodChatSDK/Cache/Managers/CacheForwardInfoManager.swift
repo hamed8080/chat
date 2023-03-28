@@ -8,7 +8,7 @@
 import CoreData
 import Foundation
 
-class CacheForwardInfoManager: CoreDataProtocol {
+final class CacheForwardInfoManager: CoreDataProtocol {
     let idName = "id"
     var context: NSManagedObjectContext
     let logger: Logger?

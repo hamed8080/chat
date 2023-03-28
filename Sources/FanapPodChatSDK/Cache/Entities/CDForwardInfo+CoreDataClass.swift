@@ -10,4 +10,4 @@ import CoreData
 import Foundation
 
 @objc(CDForwardInfo)
-public class CDForwardInfo: NSManagedObject {}
+public final class CDForwardInfo: NSManagedObject {}

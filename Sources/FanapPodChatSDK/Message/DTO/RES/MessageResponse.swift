@@ -12,7 +12,7 @@ public enum MessageResposneState {
     case seen
 }
 
-public class MessageResponse: Decodable {
+public final class MessageResponse: Decodable {
     public var threadId: Int?
     public var participantId: Int?
     public var messageId: Int?

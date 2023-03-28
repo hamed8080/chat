@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 11/19/22
 
 import Foundation
-public class RemoveTagParticipantsRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
+public final class RemoveTagParticipantsRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
     public var tagId: Int
     public var tagParticipants: [TagParticipant]
     var subjectId: Int { tagId }

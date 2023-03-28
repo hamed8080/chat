@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class MapReverseRequest: UniqueIdManagerRequest, Encodable {
+public final class MapReverseRequest: UniqueIdManagerRequest, Encodable {
     public let lat: Double
     public let lng: Double
 

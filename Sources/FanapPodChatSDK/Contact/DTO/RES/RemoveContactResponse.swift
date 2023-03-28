@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 11/2/22
 
 import Foundation
-public class RemoveContactResponse: Decodable {
+public final class RemoveContactResponse: Decodable {
     public var deteled: Bool
 
     private enum CodingKeys: String, CodingKey {

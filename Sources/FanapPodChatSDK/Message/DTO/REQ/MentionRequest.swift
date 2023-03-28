@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class MentionRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
+public final class MentionRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
     public var count: Int = 50
     public var offset: Int = 0
     public let threadId: Int

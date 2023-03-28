@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class AssistantAction: Decodable {
+public final class AssistantAction: Decodable {
     public var actionName: String?
     public var actionTime: UInt?
     public var actionType: Int?

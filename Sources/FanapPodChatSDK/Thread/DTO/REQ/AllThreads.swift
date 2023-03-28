@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 11/19/22
 
 import Foundation
-public class AllThreads: UniqueIdManagerRequest, ChatSendable {
+public final class AllThreads: UniqueIdManagerRequest, ChatSendable {
     /// - summary: If it set to true the result only contains the ids of threads not other properties.
     private let summary: Bool = true
     var chatMessageType: ChatMessageVOTypes = .getThreads

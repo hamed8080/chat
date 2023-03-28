@@ -14,7 +14,7 @@ public enum ImageSize: String, Encodable, Identifiable, CaseIterable {
     case ACTUAL
 }
 
-public class ImageRequest: UniqueIdManagerRequest, Encodable {
+public final class ImageRequest: UniqueIdManagerRequest, Encodable {
     public let hashCode: String
     public var forceToDownloadFromServer: Bool
     public let quality: Float?

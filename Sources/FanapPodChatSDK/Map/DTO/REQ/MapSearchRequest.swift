@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class MapSearchRequest: UniqueIdManagerRequest, Encodable {
+public final class MapSearchRequest: UniqueIdManagerRequest, Encodable {
     public let lat: Double
     public let lng: Double
     public let term: String

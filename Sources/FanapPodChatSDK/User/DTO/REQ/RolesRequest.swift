@@ -19,13 +19,13 @@ public class RolesRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol
     }
 }
 
-public class AuditorRequest: RolesRequest {
+public final class AuditorRequest: RolesRequest {
     public init(userRoleRequest: UserRoleRequest, threadId: Int, uniqueId: String? = nil) {
         super.init(userRoles: [userRoleRequest], threadId: threadId, uniqueId: uniqueId)
     }
 }
 
-public class UserRoleRequest: Encodable {
+public final class UserRoleRequest: Encodable {
     private let userId: Int
     private var roles: [Roles] = []
 

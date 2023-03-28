@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 11/19/22
 
 import Foundation
-public class GetHistoryRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
+public final class GetHistoryRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
     public let threadId: Int
     public var offset: Int
     public var count: Int

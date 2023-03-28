@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 11/19/22
 
 import Foundation
-public class ThreadParticipantsRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
+public final class ThreadParticipantsRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
     public var count: Int
     public var offset: Int
     public var threadId: Int

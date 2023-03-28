@@ -25,7 +25,7 @@ protocol AsyncSnedable: Encodable, PeerNameProtocol {
     var content: String? { get }
 }
 
-class AsyncChatServerMessage: AsyncSnedable {
+final class AsyncChatServerMessage: AsyncSnedable {
     var chatMessage: SendChatMessageVO
     var peerName: String?
     var asyncMessageType: AsyncMessageTypes? = .message

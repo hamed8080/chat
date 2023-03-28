@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 11/19/22
 
 import Foundation
-public class BlockedAssistantsRequest: UniqueIdManagerRequest, ChatSendable {
+public final class BlockedAssistantsRequest: UniqueIdManagerRequest, ChatSendable {
     internal let count: Int
     internal let offset: Int
     var chatMessageType: ChatMessageVOTypes = .blockedAssistnts

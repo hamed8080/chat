@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class UploadFileResponse: Decodable {
+public final class UploadFileResponse: Decodable {
     let name: String?
     let hash: String?
     let parentHash: String?

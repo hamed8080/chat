@@ -10,4 +10,4 @@ import CoreData
 import Foundation
 
 @objc(CDFile)
-public class CDFile: NSManagedObject {}
+public final class CDFile: NSManagedObject {}

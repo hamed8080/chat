@@ -5,21 +5,31 @@
 // Created by Hamed Hosseini on 11/2/22
 
 import Foundation
-public class FileMetaData: Codable {
+public final class FileMetaData: Codable {
     public let file: FileDetail?
     public let fileHash: String?
     public let hashCode: String?
     public let name: String?
+    public var latitude: Double?
+    public var longitude: Double?
 
-    public init(file: FileDetail, fileHash: String? = nil, hashCode: String? = nil, name: String? = nil) {
+    public init(file: FileDetail,
+                fileHash: String? = nil,
+                hashCode: String? = nil,
+                name: String? = nil,
+                latitude: Double? = nil,
+                longitude: Double? = nil)
+    {
         self.file = file
         self.fileHash = fileHash
         self.name = name
         self.hashCode = hashCode
+        self.longitude = longitude
+        self.latitude = latitude
     }
 }
 
-public class FileDetail: Codable {
+public final class FileDetail: Codable {
     public let actualHeight: Int?
     public let actualWidth: Int?
     public let `extension`: String?

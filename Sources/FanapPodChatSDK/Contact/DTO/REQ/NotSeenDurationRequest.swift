@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 11/19/22
 
 import Foundation
-public class NotSeenDurationRequest: UniqueIdManagerRequest, ChatSendable {
+public final class NotSeenDurationRequest: UniqueIdManagerRequest, ChatSendable {
     public let userIds: [Int]
     var chatMessageType: ChatMessageVOTypes = .getNotSeenDuration
     var content: String? { convertCodableToString() }

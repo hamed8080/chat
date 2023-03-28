@@ -175,7 +175,7 @@ open class Message: Codable, Identifiable, Hashable {
     }
 
     // FIXME: need fix with object decoding in this calss with FileMetaData for proerty metadata
-    public var metaData: FileMetaData? {
+    public var fileMetaData: FileMetaData? {
         guard let metadata = metadata?.data(using: .utf8),
               let metaData = try? JSONDecoder().decode(FileMetaData.self, from: metadata) else { return nil }
         return metaData

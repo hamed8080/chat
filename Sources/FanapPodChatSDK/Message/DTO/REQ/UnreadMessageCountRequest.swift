@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 11/19/22
 
 import Foundation
-public class UnreadMessageCountRequest: UniqueIdManagerRequest, ChatSendable {
+public final class UnreadMessageCountRequest: UniqueIdManagerRequest, ChatSendable {
     let countMutedThreads: Bool
     var chatMessageType: ChatMessageVOTypes = .allUnreadMessageCount
     var content: String? { convertCodableToString() }

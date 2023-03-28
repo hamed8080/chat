@@ -8,7 +8,7 @@
 import CoreData
 import Foundation
 
-class CacheManager {
+final class CacheManager {
     let assistant: CacheAssistantManager
     let contact: CacheContactManager
     let conversation: CacheConversationManager

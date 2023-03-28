@@ -7,14 +7,14 @@
 import CoreData
 
 /// It leads to loading the MOMD file from the current module, not by default the main module.
-class PMPersistentContainer: NSPersistentContainer {
+final class PMPersistentContainer: NSPersistentContainer {
     override class func defaultDirectoryURL() -> URL {
         super.defaultDirectoryURL().appendingPathComponent("ChatSDKModel")
     }
 }
 
 /// TLDR 'Persistance Service Manager'
-public class PersistentManager {
+public final class PersistentManager {
     var logger: Logger?
     var cacheEnabled: Bool
     let baseModelFileName = "ChatSDKModel"

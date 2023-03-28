@@ -10,4 +10,4 @@ import CoreData
 import Foundation
 
 @objc(CDReplyInfo)
-public class CDReplyInfo: NSManagedObject {}
+public final class CDReplyInfo: NSManagedObject {}

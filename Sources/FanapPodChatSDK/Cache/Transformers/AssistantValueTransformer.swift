@@ -8,7 +8,7 @@
 import Foundation
 
 @objc(AssistantValueTransformer)
-class AssistantValueTransformer: ValueTransformer {
+final class AssistantValueTransformer: ValueTransformer {
     override class func transformedValueClass() -> AnyClass {
         Invitee.self
     }

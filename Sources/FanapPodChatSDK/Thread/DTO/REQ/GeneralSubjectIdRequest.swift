@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 11/19/22
 
 import Foundation
-public class GeneralSubjectIdRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
+public final class GeneralSubjectIdRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtocol {
     var chatMessageType: ChatMessageVOTypes = .unknown
     var subjectId: Int
     var content: String?

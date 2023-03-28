@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 12/14/22
 
 import Foundation
-public class EditMessageRequest: UniqueIdManagerRequest, Queueable, PlainTextSendable, ReplyProtocol, MetadataProtocol, SubjectProtocol, MessageTypeProtocol {
+public final class EditMessageRequest: UniqueIdManagerRequest, Queueable, PlainTextSendable, ReplyProtocol, MetadataProtocol, SubjectProtocol, MessageTypeProtocol {
     public var queueTime: Date = .init()
     public var messageType: MessageType
     public let repliedTo: Int?
