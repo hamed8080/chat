@@ -13,7 +13,7 @@ public final class Chat: ChatProtocol, Identifiable {
     public weak var delegate: ChatDelegate?
     public var userInfo: User?
     internal var asyncManager: AsyncManager
-    internal var logger: Logger?
+    internal var logger: Logger
     internal var userRetrycount = 0
     internal let maxUserRetryCount = 5
     var requestUserTimer: TimerProtocol
@@ -33,7 +33,7 @@ public final class Chat: ChatProtocol, Identifiable {
 
     init(
         config: ChatConfig,
-        logger: Logger? = nil,
+        logger: Logger = Logger(),
         timerTyping: TimerProtocol? = Timer(),
         requestUserTimer: TimerProtocol = Timer(),
         timerCheckUserStoppedTyping: TimerProtocol? = Timer(),
@@ -45,7 +45,7 @@ public final class Chat: ChatProtocol, Identifiable {
     ) {
         self.responseQueue = responseQueue
         self.config = config
-        self.logger = logger ?? Logger()
+        self.logger = logger
         self.timerTyping = timerTyping
         self.banTimer = banTimer
         self.requestUserTimer = requestUserTimer
@@ -60,9 +60,8 @@ public final class Chat: ChatProtocol, Identifiable {
         }
         asyncManager = AsyncManager(pingTimer: pingTimer, queueTimer: queueTimer)
         asyncManager.chat = self
-        self.logger?.persistentManager = persistentManager
-        self.logger?.chat = self
-        self.logger?.startSending()
+        self.logger.persistentManager = persistentManager
+        self.logger.chat = self
     }
 
     public func connect() {

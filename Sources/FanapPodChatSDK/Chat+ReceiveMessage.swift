@@ -12,10 +12,10 @@ extension Chat {
     func invokeCallback(asyncMessage: AsyncMessage) {
         guard let chatMessage = asyncMessage.chatMessage else { return }
         if let typeCode = chatMessage.typeCode, typeCode != config.typeCode {
-            logger?.log(title: "mismatch typeCode", message: "expected typeCode is:\(config.typeCode) but receive: \(chatMessage.typeCode ?? "")")
+            logger.log(title: "mismatch typeCode", message: "expected typeCode is:\(config.typeCode) but receive: \(chatMessage.typeCode ?? "")", persist: true, type: .internalLog)
             return
         }
-        logger?.log(title: "on Receive Message with type: \(chatMessage.type)", jsonString: asyncMessage.string)
+        logger.logJSON(title: "on Receive Message with type: \(chatMessage.type)", jsonString: asyncMessage.string, persist: false, type: .received)
 
         switch chatMessage.type {
         case .addParticipant:
@@ -181,7 +181,7 @@ extension Chat {
         case .error:
             onError(asyncMessage)
         case .unknown:
-            logger?.log(title: "CHAT_SDK:", message: "an unknown message type received from the server not implemented in SDK!")
+            logger.log(title: "CHAT_SDK:", message: "an unknown message type received from the server not implemented in SDK!", persist: true, type: .internalLog)
         }
     }
 }

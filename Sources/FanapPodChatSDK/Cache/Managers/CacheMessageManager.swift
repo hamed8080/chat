@@ -11,9 +11,9 @@ import Foundation
 final class CacheMessageManager: CoreDataProtocol {
     let idName = "id"
     var context: NSManagedObjectContext
-    let logger: Logger?
+    let logger: Logger
 
-    required init(context: NSManagedObjectContext, logger: Logger? = nil) {
+    required init(context: NSManagedObjectContext, logger: Logger) {
         self.context = context
         self.logger = logger
     }

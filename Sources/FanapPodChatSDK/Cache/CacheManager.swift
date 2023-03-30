@@ -29,7 +29,7 @@ final class CacheManager {
     let user: CacheUserManager
     let userRole: CacheUserRoleManager
 
-    init(context: NSManagedObjectContext, logger: Logger? = nil) {
+    init(context: NSManagedObjectContext, logger: Logger) {
         assistant = CacheAssistantManager(context: context, logger: logger)
         contact = CacheContactManager(context: context, logger: logger)
         conversation = CacheConversationManager(context: context, logger: logger)

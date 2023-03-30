@@ -56,7 +56,7 @@ internal class AsyncManager: AsyncDelegate {
             chat?.getUserForChatReady()
         } else if asyncState == .closed {
             pingTimer.invalidateTimer()
-            logger?.log(message: "Socket Disconnected", level: LogLevel.error)
+            logger?.log(message: "Socket Disconnected", persist: false, level: LogLevel.error, type: .received)
         }
     }
 
@@ -118,7 +118,7 @@ internal class AsyncManager: AsyncDelegate {
                                               priority: config.msgPriority,
                                               uniqueId: (asyncMessage as? AsyncChatServerMessage)?.chatMessage.uniqueId)
         guard chat?.state == .chatReady || chat?.state == .asyncReady else { return }
-        logger?.log(title: "send Message with type: \(type)", jsonString: asyncMessage.string ?? "", receive: false)
+        logger?.logJSON(title: "send Message with type: \(type)", jsonString: asyncMessage.string ?? "", persist: false, type: .sent)
         asyncClient?.sendData(type: .message, message: asyncMessage)
     }
 

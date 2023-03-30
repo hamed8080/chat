@@ -10,7 +10,7 @@ import Foundation
 // Event
 extension Chat {
     func onError(_ asyncMessage: AsyncMessage) {
-        logger?.log(message: asyncMessage.string ?? "", level: LogLevel.error)
+        logger.logJSON(title: "onError:", jsonString: asyncMessage.string, persist: true, type: .received)
         let data = asyncMessage.chatMessage?.content?.data(using: .utf8) ?? Data()
         let chatError = try? JSONDecoder().decode(ChatError.self, from: data)
         delegate?.chatError(error: chatError ?? .init())

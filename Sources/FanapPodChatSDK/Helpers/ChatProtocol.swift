@@ -56,7 +56,7 @@ protocol ChatProtocol: AnyObject {
     var asyncManager: AsyncManager { get set }
 
     /// A logger to logs events if it is enabled in configuration ``ChatConfig/isDebuggingLogEnabled``.
-    var logger: Logger? { get set }
+    var logger: Logger { get set }
 
     /// An array to manage a list of threads in the queue of exporting messages of a thread.
     var exportMessageViewModels: [ExportMessagesProtocol] { get set }

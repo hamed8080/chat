@@ -29,7 +29,7 @@ final class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSession
 
     func urlSession(_: URLSession, task _: URLSessionTask, didSendBodyData _: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
         let percent = (Float(totalBytesSent) / Float(totalBytesExpectedToSend)) * 100
-        logger?.log(title: "Upload progress:\(percent)")
+        logger?.log(title: "Upload progress:\(percent)", persist: false, type: .internalLog)
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.uploadProgress?(UploadFileProgress(percent: Int64(percent), totalSize: totalBytesExpectedToSend, bytesSend: totalBytesSent), nil)
@@ -46,7 +46,7 @@ final class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSession
         self.response = response as? HTTPURLResponse
         downloadFileProgress.totalSize = response.expectedContentLength
         downloadProgress?(downloadFileProgress)
-        logger?.log(title: "Download progress:\(downloadFileProgress.percent)")
+        logger?.log(title: "Download progress:\(downloadFileProgress.percent)", persist: false, type: .internalLog)
         completionHandler(.allow)
         let response: ChatResponse<String> = .init(uniqueId: uniqueId, result: uniqueId)
         delegate?.chatEvent(event: .file(.downloading(response)))

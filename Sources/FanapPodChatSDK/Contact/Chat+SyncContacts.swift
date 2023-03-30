@@ -46,7 +46,7 @@ extension Chat {
                 }
             }
         }, errorResult: { [weak self] error in
-            self?.logger?.log(message: "UNAuthorized Access to Contact API with error: \(error.localizedDescription)", level: .error)
+            self?.logger.log(message: "UNAuthorized Access to Contact API with error: \(error.localizedDescription)", persist: true, level: .error, type: .received)
         })
     }
 

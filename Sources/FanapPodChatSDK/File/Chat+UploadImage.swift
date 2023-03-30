@@ -45,9 +45,7 @@ extension Chat {
                 delegate?.chatEvent(event: .file(.uploadError(response)))
                 return
             }
-            if config.isDebuggingLogEnabled == true {
-                logger?.log(title: "Image uploaded successfully", jsonString: String(data: data, encoding: .utf8), receive: true)
-            }
+            logger.logJSON(title: "Image uploaded successfully", jsonString: String(data: data, encoding: .utf8), persist: false, type: .internalLog)
             let link = "\(config.fileServer)\(Routes.images.rawValue)/\(uploadResponse.result?.hash ?? "")"
             let fileDetail = FileDetail(fileExtension: req.fileExtension,
                                         link: link,

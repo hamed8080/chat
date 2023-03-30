@@ -55,7 +55,7 @@ public final class PersistentManager {
         let container = PMPersistentContainer(name: "\(baseModelFileName)-\(userId)", managedObjectModel: modelFile)
         container.loadPersistentStores { [weak self] desc, error in
             if let error = error {
-                self?.logger?.log(message: "error load CoreData persistentstore des:\(desc) error: \(error)", level: .error)
+                self?.logger?.log(message: "error load CoreData persistentstore des:\(desc) error: \(error)", persist: true, level: .error, type: .internalLog)
             }
         }
         container.viewContext.automaticallyMergesChangesFromParent = true

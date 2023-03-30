@@ -12,7 +12,7 @@ extension NSManagedObjectContext {
             do {
                 try block()
             } catch {
-                ChatManager.activeInstance?.logger?.log(message: error.localizedDescription)
+                ChatManager.activeInstance?.logger.log(message: error.localizedDescription, persist: true, type: .internalLog)
             }
         }
     }

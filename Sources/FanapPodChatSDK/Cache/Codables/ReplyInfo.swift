@@ -1,6 +1,6 @@
 //
 //  ReplyInfo.swift
-//  ChatApplication
+//  FanapPodChatSDK
 //
 //  Created by hamed on 1/5/23.
 //

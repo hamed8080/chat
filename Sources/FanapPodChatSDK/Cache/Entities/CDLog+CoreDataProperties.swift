@@ -1,6 +1,6 @@
 //
 //  CDLog+CoreDataProperties.swift
-//  ChatApplication
+//  FanapPodChatSDK
 //
 //  Created by hamed on 1/8/23.
 //
@@ -29,6 +29,7 @@ public extension CDLog {
     @NSManaged var level: NSNumber?
     @NSManaged var message: String?
     @NSManaged var time: NSNumber?
+    @NSManaged var type: NSNumber?
 }
 
 public extension CDLog {
@@ -39,6 +40,7 @@ public extension CDLog {
         level = log.level?.rawValue as? NSNumber
         message = log.message
         time = log.time?.timeIntervalSince1970 as? NSNumber
+        type = log.type?.rawValue as? NSNumber
     }
 
     var codable: Log {
@@ -47,6 +49,7 @@ public extension CDLog {
             config: try? JSONDecoder().decode(ChatConfig.self, from: config ?? Data()),
             deviceInfo: try? JSONDecoder().decode(DeviceInfo.self, from: deviceInfo ?? Data()),
             level: LogLevel(rawValue: level?.intValue ?? 0),
-            id: UUID(uuidString: id ?? "") ?? UUID())
+            id: UUID(uuidString: id ?? "") ?? UUID(),
+            type: type == nil ? nil : LogEmitter(rawValue: type!.intValue))
     }
 }

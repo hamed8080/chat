@@ -22,9 +22,9 @@ extension Chat {
         urlReq.allHTTPHeaderFields = headers
         urlReq.httpBody = bodyData
         urlReq.httpMethod = HTTPMethod.post.rawValue
-        logger?.log(urlReq, String(describing: type(of: Bool.self)))
+        logger.log(urlReq, String(describing: type(of: Bool.self)), persist: true, type: .sent)
         session.dataTask(urlReq) { [weak self] data, response, error in
-            self?.logger?.log(data, response, error)
+            self?.logger.log(data, response, error, persist: true, type: .received)
             let result: ChatResponse<RemoveContactResponse>? = self?.session.decode(data, response, error)
             self?.responseQueue.async {
                 completion(ChatResponse(uniqueId: request.uniqueId, result: result?.result?.deteled ?? false, error: result?.error))

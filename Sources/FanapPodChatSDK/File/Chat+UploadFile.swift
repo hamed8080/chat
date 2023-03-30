@@ -43,7 +43,7 @@ extension Chat {
             let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId, error: chatError)
             delegate?.chatEvent(event: .file(.uploadError(response)))
         } else if let data = data, let uploadResponse = try? JSONDecoder().decode(PodspaceFileUploadResponse.self, from: data) {
-            logger?.log(title: "response is:\(String(data: data, encoding: .utf8) ?? "") ")
+            logger.log(title: "response is:\(String(data: data, encoding: .utf8) ?? "") ", persist: false, type: .internalLog)
             if uploadResponse.error != nil {
                 let error = ChatError(message: "\(uploadResponse.error ?? "") - \(uploadResponse.message ?? "")", code: uploadResponse.errorType?.rawValue, hasError: true)
                 uploadCompletion?(nil, nil, error)
@@ -52,7 +52,7 @@ extension Chat {
                 return
             }
             if config.isDebuggingLogEnabled == true {
-                logger?.log(title: "File uploaded successfully", jsonString: String(data: data, encoding: .utf8), receive: true)
+                logger.logJSON(title: "File uploaded successfully", jsonString: String(data: data, encoding: .utf8), persist: false, type: .internalLog)
             }
             let link = "\(config.fileServer)\(Routes.files.rawValue)/\(uploadResponse.result?.hash ?? "")"
             let fileDetail = FileDetail(fileExtension: req.fileExtension,

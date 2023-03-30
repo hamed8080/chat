@@ -1,6 +1,6 @@
 //
 //  Log.swift
-//  ChatApplication
+//  FanapPodChatSDK
 //
 //  Created by hamed on 1/5/23.
 //
@@ -8,6 +8,13 @@
 
 import CoreData
 import Foundation
+
+public enum LogEmitter: Int, CaseIterable, Codable, Identifiable {
+    public var id: Self { self }
+    case internalLog = 0
+    case sent = 1
+    case received = 2
+}
 
 open class Log: Codable, Identifiable, Hashable {
     public static func == (lhs: Log, rhs: Log) -> Bool {
@@ -24,6 +31,7 @@ open class Log: Codable, Identifiable, Hashable {
     public var deviceInfo: DeviceInfo?
     public var level: LogLevel?
     public var id: UUID
+    public var type: LogEmitter?
 
     private enum CodingKeys: String, CodingKey {
         case time
@@ -32,6 +40,7 @@ open class Log: Codable, Identifiable, Hashable {
         case id
         case config
         case deviceInfo
+        case type
     }
 
     public required init(from decoder: Decoder) throws {
@@ -42,6 +51,7 @@ open class Log: Codable, Identifiable, Hashable {
         deviceInfo = try container?.decodeIfPresent(DeviceInfo.self, forKey: .deviceInfo)
         time = try container?.decodeIfPresent(Date.self, forKey: .time)
         level = try container?.decodeIfPresent(LogLevel.self, forKey: .level)
+        type = try container?.decodeIfPresent(LogEmitter.self, forKey: .type)
     }
 
     public init(
@@ -50,7 +60,8 @@ open class Log: Codable, Identifiable, Hashable {
         config: ChatConfig? = nil,
         deviceInfo: DeviceInfo? = nil,
         level: LogLevel? = nil,
-        id: UUID = UUID()
+        id: UUID = UUID(),
+        type: LogEmitter?
     ) {
         self.time = time
         self.message = message
@@ -58,6 +69,7 @@ open class Log: Codable, Identifiable, Hashable {
         self.config = config
         self.deviceInfo = deviceInfo
         self.level = level
+        self.type = type
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -68,5 +80,6 @@ open class Log: Codable, Identifiable, Hashable {
         try container.encodeIfPresent(deviceInfo, forKey: .deviceInfo)
         try container.encodeIfPresent(config, forKey: .config)
         try container.encodeIfPresent(level, forKey: .level)
+        try container.encodeIfPresent(type, forKey: .type)
     }
 }

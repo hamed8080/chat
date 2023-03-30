@@ -11,9 +11,9 @@ import Foundation
 final class CacheConversationManager: CoreDataProtocol {
     let idName = "id"
     var context: NSManagedObjectContext
-    let logger: Logger?
+    let logger: Logger
 
-    required init(context: NSManagedObjectContext, logger: Logger? = nil) {
+    required init(context: NSManagedObjectContext, logger: Logger) {
         self.context = context
         self.logger = logger
     }
@@ -62,7 +62,7 @@ final class CacheConversationManager: CoreDataProtocol {
                 entity?.addToPinMessages(pinMessageEntity)
             }
         } catch {
-            logger?.log(message: error.localizedDescription)
+            logger.log(message: error.localizedDescription, persist: true, type: .internalLog)
         }
     }
 

@@ -16,9 +16,9 @@ protocol CoreDataProtocol {
     associatedtype Entity: NSManagedObject
     associatedtype Model: Codable
     associatedtype Id: IdProtocol
-    init(context: NSManagedObjectContext, logger: Logger?)
+    init(context: NSManagedObjectContext, logger: Logger)
     var context: NSManagedObjectContext { get set }
-    var logger: Logger? { get }
+    var logger: Logger { get }
     var idName: String { get }
     func idPredicate(id: Id) -> NSPredicate
     func save()
@@ -43,13 +43,13 @@ extension CoreDataProtocol {
             do {
                 try context.save()
                 context.reset()
-                logger?.log(title: "saved successfully", jsonString: nil)
+                logger.log(title: "saved successfully", persist: false, type: .internalLog)
             } catch {
                 let nserror = error as NSError
-                logger?.log(message: "error occured in save CoreData: \(nserror), \(nserror.userInfo)", level: .error)
+                logger.log(message: "error occured in save CoreData: \(nserror), \(nserror.userInfo)", persist: true, level: .error, type: .internalLog)
             }
         } else {
-            logger?.log(title: "CHAT_SDK:", message: "no changes find on context so nothing to save!")
+            logger.log(title: "CHAT_SDK:", message: "no changes find on context so nothing to save!", persist: false, type: .internalLog)
         }
     }
 
