@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "FanapPodChatSDK",
+    name: "Chat",
     defaultLocalization: "en",
     platforms: [
         .iOS(.v10),
@@ -11,22 +11,20 @@ let package = Package(
         .macCatalyst(.v13),
     ],
     products: [
-        .library(name: "FanapPodChatSDK", targets: ["FanapPodChatSDK"]),
+        .library(name: "Chat", targets: ["Chat"]),
     ],
     dependencies: [
-        .package(url: "https://pubgi.fanapsoft.ir/chat/ios/fanappodasyncsdk.git", .upToNextMinor(from: "1.1.0")),
+        .package(url: "https://pubgi.fanapsoft.ir/chat/ios/async.git", branch: "main"),
         .package(url: "https://github.com/apple/swift-docc-plugin", branch: "main"),
     ],
     targets: [
         .target(
-            name: "FanapPodChatSDK",
+            name: "Chat",
             dependencies: [
-                .product(name: "FanapPodAsyncSDK",
-                         package: "fanappodasyncsdk"),
+                .product(name: "Async", package: "async"),
             ],
             resources: [.process("Resources")]
         ),
-        .testTarget(name: "FanapPodChatSDKTests",
-                    dependencies: ["FanapPodChatSDK"], path: "Tests"),
+        .testTarget(name: "ChatTests", dependencies: ["Chat"], path: "Tests"),
     ]
 )

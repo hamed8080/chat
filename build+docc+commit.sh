@@ -1,10 +1,10 @@
 #!/bin/bash
 
-TARGET_NAME="FanapPodChatSDK"
+TARGET_NAME="Chat"
 BUNDLE_ID="ir.fanap.${TARGET_NAME}"
 BUNDLE_VERSION="1.0.0"
-DOCC_FILE_PATH="${pwd}/Sources/FanapPodChatSDK/FanapPodChatSDK.docc"
-DOCC_HOST_BASE_PATH="fanappodchatsdk"
+DOCC_FILE_PATH="${pwd}/Sources/Chat/Chat.docc"
+DOCC_HOST_BASE_PATH="chat"
 DOCC_OUTPUT_FOLDER="./.docs"
 DOCC_SYMBOL_GRAPHS=".build/symbol-graphs/"
 DOCC_SYMBOL_GRAPHS_OUTPUT=".build/swift-docc-symbol-graphs"

@@ -1,9 +1,9 @@
-# FanapPodChatSDK
-<img src="https://gitlab.com/hamed8080/fanappodchatsdk/-/raw/gl-pages/.docs/favicon.svg"  width="64" height="64">
+# Chat
+### A Swift Chat SDK which handle all backend communication with Async SDK and Chat Server. 
+<img src="https://github.com/hamed8080/chat/raw/main/images/icon.png"  width="64" height="64">
 <br />
 <br />
 
-Fanap's POD Chat Service - iOS SDK
 ## Features
 
 - [x] Simplify Socket connection to Async server
@@ -20,7 +20,7 @@ Fanap's POD Chat Service - iOS SDK
 Add in `Package.swift` or directly in `Xcode Project dependencies` section:
 
 ```swift
-.package(url: "https://pubgi.fanapsoft.ir/chat/ios/fanappodchatsdk.git", .upToNextMinor(from: "1.2.0")),
+.package(url: "https://pubgi.fanapsoft.ir/chat/ios/chat.git", .upToNextMinor(from: "1.2.0")),
 ```
 
 #### [CocoaPods](https://cocoapods.org) 
@@ -28,7 +28,7 @@ Add in `Package.swift` or directly in `Xcode Project dependencies` section:
 Add in `Podfile`:
 
 ```ruby
-pod 'FanapPodChatSDK'
+pod 'Chat'
 ```
 
 ## How to use? 
@@ -70,8 +70,8 @@ ChatManager.activeInstance?.getThreads(.init(), completion: { response in
 <br/>
 <br/>
 
-## [Documentation](https://hamed8080.gitlab.io/fanappodchatsdk/documentation/fanappodchatsdk/)
-For more information about how to use Chat SDK visit [Documentation](https://hamed8080.gitlab.io/fanappodchatsdk/documentation/fanappodchatsdk/) 
+## [Documentation](https://hamed8080.gitlab.io/chat/documentation/Chat/)
+For more information about how to use Chat SDK visit [Documentation](https://hamed8080.gitlab.io/Chat/documentation/chat/) 
 <br/>
 <br/>
 
@@ -80,7 +80,7 @@ For more example and usage you can use [developer implementation app](https://pu
 <br/>
 <br/>
 
-## Contributing to FanapPodChatSDK
+## Contributing to Chat
 Please see the [contributing guide](/CONTRIBUTING.md) for more information.
 
 <!-- Copyright (c) 2021-2022 Apple Inc and the Swift Project authors. All Rights Reserved. -->
