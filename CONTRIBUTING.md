@@ -64,15 +64,15 @@ installed.
     cd Chat
     ```
 
-3. Create a new branch off of `master` for your change using:
+3. Create a new branch off of `main` for your change using:
 
     ```bash
     git checkout -b branch-name-here
     ```
 
-    Note that `master` (the repository's default branch) will always hold the most
-    recent approved changes. In most cases, you should branch off of `master` when
-    starting your work and open a PR against `master` when you're ready to merge
+    Note that `main` (the repository's default branch) will always hold the most
+    recent approved changes. In most cases, you should branch off of `main` when
+    starting your work and open a PR against `main` when you're ready to merge
     that work.
 
 4. Build Chat from the command line by running:
@@ -113,7 +113,7 @@ and complete all tasks mentioned there.
 
 Your PR should mention the number of the GitHub issue your work is addressing.
   
-Most PRs should be against the `master` branch. If your change is intended 
+Most PRs should be against the `main` branch. If your change is intended 
 for a specific release, you should also create a separate branch 
 that cherry-picks your commit onto the associated release branch.
 

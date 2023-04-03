@@ -21,7 +21,7 @@ body:
   attributes:
     label: Checklist
     options:
-    - label: If possible, I've reproduced the issue using the `master` branch of this package.
+    - label: If possible, I've reproduced the issue using the `main` branch of this package.
       required: false
 - type: textarea
   attributes:
