@@ -20,15 +20,19 @@
 Add in `Package.swift` or directly in `Xcode Project dependencies` section:
 
 ```swift
-.package(url: "https://pubgi.fanapsoft.ir/chat/ios/chat.git", .upToNextMinor(from: "1.2.0")),
+.package(url: "https://pubgi.fanapsoft.ir/chat/ios/chat.git", .upToNextMinor(from: "1.3.0")),
 ```
 
 #### [CocoaPods](https://cocoapods.org) 
-
+Because it has conflict with other Pods' names in cocoapods you have to use direct git repo.
 Add in `Podfile`:
 
 ```ruby
-pod 'Chat'
+    pod 'Additive', '1.0.0'
+    pod 'Starscream', :git => 'https://github.com/daltoniam/Starscream.git', :tag => '3.0.5'
+    pod 'Logger', :git => 'http://pubgi.fanapsoft.ir/chat/ios/logger.git', :tag => '1.0.1'
+    pod "Async", :git => 'http://pubgi.fanapsoft.ir/chat/ios/async.git', :tag => '1.3.0'
+    pod "Chat", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat.git', :tag => '1.3.0'
 ```
 
 ## How to use? 

@@ -16,7 +16,7 @@ public final class ContactResponse: Decodable {
 
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        if let contacts = try? container.decodeIfPresent([Contact].self, forKey: .contacts) {
+        if let contacts = try? container.decodeIfPresent([Contact].self, forKey: .contacts) ?? [] {
             self.contacts = contacts
         }
         contentCount = try container.decodeIfPresent(Int.self, forKey: .contentCount) ?? 0

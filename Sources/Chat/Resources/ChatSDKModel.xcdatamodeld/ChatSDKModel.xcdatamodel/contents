@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22D49" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="CDAssistant" representedClassName="FanapPodChatSDK.CDAssistant" syncable="YES">
+    <entity name="CDAssistant" representedClassName="Chat.CDAssistant" syncable="YES">
         <attribute name="assistant" optional="YES" attributeType="Transformable" valueTransformerName="AssistantValueTransformer" customClassName="Invitee"/>
         <attribute name="block" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="contactType" optional="YES" attributeType="String"/>
@@ -8,7 +8,7 @@
         <attribute name="roles" optional="YES" attributeType="Binary" valueTransformerName="RolesValueTransformer" customClassName="[Roles]"/>
         <relationship name="participant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDParticipant" inverseName="assistant" inverseEntity="CDParticipant"/>
     </entity>
-    <entity name="CDContact" representedClassName="FanapPodChatSDK.CDContact" syncable="YES">
+    <entity name="CDContact" representedClassName="Chat.CDContact" syncable="YES">
         <attribute name="blocked" optional="YES" attributeType="Boolean" defaultValueString="0.0" usesScalarValueType="NO"/>
         <attribute name="cellphoneNumber" optional="YES" attributeType="String"/>
         <attribute name="email" optional="YES" attributeType="String"/>
@@ -29,7 +29,7 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <entity name="CDConversation" representedClassName="FanapPodChatSDK.CDConversation" syncable="YES">
+    <entity name="CDConversation" representedClassName="Chat.CDConversation" syncable="YES">
         <attribute name="admin" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="canEditInfo" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="canSpam" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
@@ -78,19 +78,19 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <entity name="CDFile" representedClassName="FanapPodChatSDK.CDFile" syncable="YES">
+    <entity name="CDFile" representedClassName="Chat.CDFile" syncable="YES">
         <attribute name="hashCode" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="size" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="type" optional="YES" attributeType="String"/>
     </entity>
-    <entity name="CDForwardInfo" representedClassName="FanapPodChatSDK.CDForwardInfo" syncable="YES">
+    <entity name="CDForwardInfo" representedClassName="Chat.CDForwardInfo" syncable="YES">
         <attribute name="messageId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
         <relationship name="conversation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDConversation" inverseName="forwardInfos" inverseEntity="CDConversation"/>
         <relationship name="message" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDMessage" inverseName="forwardInfo" inverseEntity="CDMessage"/>
         <relationship name="participant" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CDParticipant" inverseName="forwardInfos" inverseEntity="CDParticipant"/>
     </entity>
-    <entity name="CDImage" representedClassName="FanapPodChatSDK.CDImage" syncable="YES">
+    <entity name="CDImage" representedClassName="Chat.CDImage" syncable="YES">
         <attribute name="actualHeight" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="actualWidth" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="hashCode" optional="YES" attributeType="String"/>
@@ -99,7 +99,7 @@
         <attribute name="size" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="width" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
     </entity>
-    <entity name="CDMessage" representedClassName="FanapPodChatSDK.CDMessage" syncable="YES">
+    <entity name="CDMessage" representedClassName="Chat.CDMessage" syncable="YES">
         <attribute name="deletable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="delivered" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="editable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
@@ -132,12 +132,12 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <entity name="CDMutualGroup" representedClassName="FanapPodChatSDK.CDMutualGroup" syncable="YES">
+    <entity name="CDMutualGroup" representedClassName="Chat.CDMutualGroup" syncable="YES">
         <attribute name="idType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
         <attribute name="mutualId" optional="YES" attributeType="String"/>
         <relationship name="conversations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDConversation" inverseName="mutualGroups" inverseEntity="CDConversation"/>
     </entity>
-    <entity name="CDParticipant" representedClassName="FanapPodChatSDK.CDParticipant" syncable="YES">
+    <entity name="CDParticipant" representedClassName="Chat.CDParticipant" syncable="YES">
         <attribute name="admin" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="auditor" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="bio" optional="YES" attributeType="String"/>
@@ -178,7 +178,7 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <entity name="CDQueueOfEditMessages" representedClassName="FanapPodChatSDK.CDQueueOfEditMessages" syncable="YES">
+    <entity name="CDQueueOfEditMessages" representedClassName="Chat.CDQueueOfEditMessages" syncable="YES">
         <attribute name="messageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="messageType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
         <attribute name="metadata" optional="YES" attributeType="String"/>
@@ -188,7 +188,7 @@
         <attribute name="typeCode" optional="YES" attributeType="String"/>
         <attribute name="uniqueId" optional="YES" attributeType="String"/>
     </entity>
-    <entity name="CDQueueOfFileMessages" representedClassName="FanapPodChatSDK.CDQueueOfFileMessages" syncable="YES">
+    <entity name="CDQueueOfFileMessages" representedClassName="Chat.CDQueueOfFileMessages" syncable="YES">
         <attribute name="fileExtension" optional="YES" attributeType="String"/>
         <attribute name="fileName" optional="YES" attributeType="String"/>
         <attribute name="fileToSend" optional="YES" attributeType="Binary"/>
@@ -209,14 +209,14 @@
         <attribute name="xC" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
         <attribute name="yC" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
     </entity>
-    <entity name="CDQueueOfForwardMessages" representedClassName="FanapPodChatSDK.CDQueueOfForwardMessages" syncable="YES">
+    <entity name="CDQueueOfForwardMessages" representedClassName="Chat.CDQueueOfForwardMessages" syncable="YES">
         <attribute name="fromThreadId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
         <attribute name="messageIds" optional="YES" attributeType="String"/>
         <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="typeCode" optional="YES" attributeType="String"/>
         <attribute name="uniqueIds" optional="YES" attributeType="String"/>
     </entity>
-    <entity name="CDQueueOfTextMessages" representedClassName="FanapPodChatSDK.CDQueueOfTextMessages" syncable="YES">
+    <entity name="CDQueueOfTextMessages" representedClassName="Chat.CDQueueOfTextMessages" syncable="YES">
         <attribute name="messageType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
         <attribute name="metadata" optional="YES" attributeType="String"/>
         <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
@@ -226,7 +226,7 @@
         <attribute name="typeCode" optional="YES" attributeType="String"/>
         <attribute name="uniqueId" optional="YES" attributeType="String"/>
     </entity>
-    <entity name="CDReplyInfo" representedClassName="FanapPodChatSDK.CDReplyInfo" syncable="YES">
+    <entity name="CDReplyInfo" representedClassName="Chat.CDReplyInfo" syncable="YES">
         <attribute name="markDeleted" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
         <attribute name="messageId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
         <attribute name="messageText" optional="YES" attributeType="String"/>
@@ -238,7 +238,7 @@
         <relationship name="parentMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDMessage" inverseName="replyInfo" inverseEntity="CDMessage"/>
         <relationship name="participant" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CDParticipant" inverseName="replyInfo" inverseEntity="CDParticipant"/>
     </entity>
-    <entity name="CDTag" representedClassName="FanapPodChatSDK.CDTag" syncable="YES">
+    <entity name="CDTag" representedClassName="Chat.CDTag" syncable="YES">
         <attribute name="active" optional="YES" attributeType="Boolean" valueTransformerName="NSSecureUnarchiveFromDataTransformer" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
@@ -249,7 +249,7 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <entity name="CDTagParticipant" representedClassName="FanapPodChatSDK.CDTagParticipant" syncable="YES">
+    <entity name="CDTagParticipant" representedClassName="Chat.CDTagParticipant" syncable="YES">
         <attribute name="active" optional="YES" attributeType="Boolean" valueTransformerName="NSSecureUnarchiveFromDataTransformer" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
         <attribute name="tagId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
@@ -263,7 +263,7 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <entity name="CDUser" representedClassName="FanapPodChatSDK.CDUser" syncable="YES">
+    <entity name="CDUser" representedClassName="Chat.CDUser" syncable="YES">
         <attribute name="bio" optional="YES" attributeType="String"/>
         <attribute name="cellphoneNumber" optional="YES" attributeType="String"/>
         <attribute name="coreUserId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
@@ -290,7 +290,7 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <entity name="CDUserRole" representedClassName="FanapPodChatSDK.CDUserRole" syncable="YES">
+    <entity name="CDUserRole" representedClassName="Chat.CDUserRole" syncable="YES">
         <attribute name="image" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="roles" optional="YES" attributeType="Binary" valueTransformerName="RolesValueTransformer" customClassName="[Roles]"/>

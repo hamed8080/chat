@@ -14,7 +14,7 @@ let package = Package(
         .library(name: "Chat", targets: ["Chat"]),
     ],
     dependencies: [
-        .package(url: "https://pubgi.fanapsoft.ir/chat/ios/async.git", branch: "main"),
+        .package(url: "https://pubgi.fanapsoft.ir/chat/ios/async.git", exact: "1.3.0"),
         .package(url: "https://github.com/apple/swift-docc-plugin", branch: "main"),
     ],
     targets: [
