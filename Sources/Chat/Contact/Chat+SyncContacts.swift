@@ -5,6 +5,9 @@
 // Created by Hamed Hosseini on 12/14/22
 
 import Async
+import ChatCore
+import ChatDTO
+import ChatModels
 import Contacts
 import Foundation
 
@@ -46,7 +49,7 @@ extension Chat {
                 }
             }
         }, errorResult: { [weak self] error in
-            self?.logger.log(message: "UNAuthorized Access to Contact API with error: \(error.localizedDescription)", persist: true, level: .error, type: .received, userInfo: self?.loggerUserInfo)
+            self?.logger.createLog(message: "UNAuthorized Access to Contact API with error: \(error.localizedDescription)", persist: true, level: .error, type: .received, userInfo: self?.loggerUserInfo)
         })
     }
 

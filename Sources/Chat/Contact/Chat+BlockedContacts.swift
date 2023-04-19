@@ -5,6 +5,9 @@
 // Created by Hamed Hosseini on 12/14/22
 
 import Async
+import ChatCore
+import ChatDTO
+import ChatModels
 import Contacts
 import Foundation
 

@@ -4,6 +4,7 @@
 //
 // Created by Hamed Hosseini on 11/2/22
 
+import ChatCore
 import Foundation
 
 public enum FileEventType {

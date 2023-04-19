@@ -5,6 +5,9 @@
 // Created by Hamed Hosseini on 12/14/22
 
 import Additive
+import ChatCore
+import ChatDTO
+import ChatModels
 import Foundation
 
 // Request - Response
@@ -15,11 +18,12 @@ public extension Chat {
     ///   - completion: Reponse of founded items.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func mapSearch(_ request: MapSearchRequest, completion: @escaping CompletionType<[MapItem]>, uniqueIdResult _: UniqueIdResultType? = nil) {
-        let url = "\(config.mapServer)\(Routes.mapSearch.rawValue)"
-        let urlString = url.toURLCompoenentString(encodable: request) ?? url
+        let urlString = "\(config.mapServer)\(Routes.mapSearch.rawValue)"
+        var url = URL(string: urlString)!
+        url.appendQueryItems(with: request)
         let headers = ["Api-Key": config.mapApiKey!]
         let bodyData = request.data
-        var urlReq = URLRequest(url: URL(string: urlString)!)
+        var urlReq = URLRequest(url: url)
         urlReq.allHTTPHeaderFields = headers
         urlReq.httpBody = bodyData
         session.dataTask(urlReq) { [weak self] data, response, error in

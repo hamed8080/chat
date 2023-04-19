@@ -5,6 +5,10 @@
 // Created by Hamed Hosseini on 12/14/22
 
 import Async
+import ChatCache
+import ChatCore
+import ChatDTO
+import ChatModels
 import Foundation
 
 // Request
@@ -21,7 +25,7 @@ public extension Chat {
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
 
-        cache?.assistant.fetchWithOffset(entityName: CDAssistant.entityName, count: request.count, offset: request.offset) { [weak self] assistants, totalCount in
+        cache?.assistant.fetch(request) { [weak self] assistants, totalCount in
             let assistants = assistants.map(\.codable)
             self?.responseQueue.async {
                 let pagination = PaginationWithContentCount(hasNext: assistants.count >= request.count, count: request.count, offset: request.offset, totalCount: totalCount)

@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22E261" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CDAssistant" representedClassName="ChatCache.CDAssistant" syncable="YES">
+        <attribute name="assistant" optional="YES" attributeType="Transformable" valueTransformerName="AssistantValueTransformer" customClassName="Invitee"/>
+        <attribute name="block" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="contactType" optional="YES" attributeType="String"/>
+        <attribute name="inviteeId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="roles" optional="YES" attributeType="Binary" valueTransformerName="RolesValueTransformer" customClassName="[Roles]"/>
+        <relationship name="participant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDParticipant" inverseName="assistant" inverseEntity="CDParticipant"/>
+    </entity>
+    <entity name="CDContact" representedClassName="ChatCache.CDContact" syncable="YES">
+        <attribute name="blocked" optional="YES" attributeType="Boolean" defaultValueString="0.0" usesScalarValueType="NO"/>
+        <attribute name="cellphoneNumber" optional="YES" attributeType="String"/>
+        <attribute name="email" optional="YES" attributeType="String"/>
+        <attribute name="firstName" optional="YES" attributeType="String"/>
+        <attribute name="hasUser" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="image" optional="YES" attributeType="String"/>
+        <attribute name="lastName" optional="YES" attributeType="String"/>
+        <attribute name="notSeenDuration" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="time" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="uniqueId" optional="YES" attributeType="String"/>
+        <attribute name="userId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDUser" inverseName="contacts" inverseEntity="CDUser"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+                <constraint value="userId"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="CDConversation" representedClassName="ChatCache.CDConversation" syncable="YES">
+        <attribute name="admin" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="canEditInfo" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="canSpam" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="closedThread" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="descriptions" optional="YES" attributeType="String"/>
+        <attribute name="group" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="image" optional="YES" attributeType="String"/>
+        <attribute name="isArchive" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="joinDate" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="lastMessage" optional="YES" attributeType="String"/>
+        <attribute name="lastParticipantImage" optional="YES" attributeType="String"/>
+        <attribute name="lastParticipantName" optional="YES" attributeType="String"/>
+        <attribute name="lastSeenMessageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="lastSeenMessageNanos" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="lastSeenMessageTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="mentioned" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="metadata" optional="YES" attributeType="String"/>
+        <attribute name="mute" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="participantCount" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="partner" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="partnerLastDeliveredMessageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="partnerLastDeliveredMessageNanos" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="partnerLastDeliveredMessageTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="partnerLastSeenMessageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="partnerLastSeenMessageNanos" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="partnerLastSeenMessageTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="pin" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="uniqueName" optional="YES" attributeType="String"/>
+        <attribute name="unreadCount" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="userGroupHash" optional="YES" attributeType="String"/>
+        <relationship name="forwardInfos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDForwardInfo" inverseName="conversation" inverseEntity="CDForwardInfo"/>
+        <relationship name="inviter" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDParticipant" inverseName="inviter" inverseEntity="CDParticipant"/>
+        <relationship name="lastMessageVO" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDMessage" inverseName="lastMessageVO" inverseEntity="CDMessage"/>
+        <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDMessage" inverseName="conversation" inverseEntity="CDMessage"/>
+        <relationship name="mutualGroups" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDMutualGroup" inverseName="conversations" inverseEntity="CDMutualGroup"/>
+        <relationship name="participants" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDParticipant" inverseName="conversation" inverseEntity="CDParticipant"/>
+        <relationship name="pinMessages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDMessage" inverseName="pinMessages" inverseEntity="CDMessage"/>
+        <relationship name="tagParticipants" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDTagParticipant" inverseName="conversation" inverseEntity="CDTagParticipant"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="CDFile" representedClassName="ChatCache.CDFile" syncable="YES">
+        <attribute name="hashCode" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="size" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="CDForwardInfo" representedClassName="ChatCache.CDForwardInfo" syncable="YES">
+        <attribute name="messageId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <relationship name="conversation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDConversation" inverseName="forwardInfos" inverseEntity="CDConversation"/>
+        <relationship name="message" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDMessage" inverseName="forwardInfo" inverseEntity="CDMessage"/>
+        <relationship name="participant" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CDParticipant" inverseName="forwardInfos" inverseEntity="CDParticipant"/>
+    </entity>
+    <entity name="CDImage" representedClassName="ChatCache.CDImage" syncable="YES">
+        <attribute name="actualHeight" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="actualWidth" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="hashCode" optional="YES" attributeType="String"/>
+        <attribute name="height" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="size" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="width" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+    </entity>
+    <entity name="CDMessage" representedClassName="ChatCache.CDMessage" syncable="YES">
+        <attribute name="deletable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="delivered" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="editable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="edited" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="mentioned" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="message" optional="YES" attributeType="String"/>
+        <attribute name="messageType" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="metadata" optional="YES" attributeType="String"/>
+        <attribute name="notifyAll" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="ownerId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="pinned" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="pinTime" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="previousId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="seen" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="systemMetadata" optional="YES" attributeType="String"/>
+        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="uniqueId" optional="YES" attributeType="String"/>
+        <relationship name="conversation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDConversation" inverseName="messages" inverseEntity="CDConversation"/>
+        <relationship name="forwardInfo" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CDForwardInfo" inverseName="message" inverseEntity="CDForwardInfo"/>
+        <relationship name="lastMessageVO" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDConversation" inverseName="lastMessageVO" inverseEntity="CDConversation"/>
+        <relationship name="participant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDParticipant" inverseName="messages" inverseEntity="CDParticipant"/>
+        <relationship name="pinMessages" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDConversation" inverseName="pinMessages" inverseEntity="CDConversation"/>
+        <relationship name="replyInfo" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CDReplyInfo" inverseName="parentMessage" inverseEntity="CDReplyInfo"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+                <constraint value="conversation"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="CDMutualGroup" representedClassName="ChatCache.CDMutualGroup" syncable="YES">
+        <attribute name="idType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="mutualId" optional="YES" attributeType="String"/>
+        <relationship name="conversations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDConversation" inverseName="mutualGroups" inverseEntity="CDConversation"/>
+    </entity>
+    <entity name="CDParticipant" representedClassName="ChatCache.CDParticipant" syncable="YES">
+        <attribute name="admin" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="auditor" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="bio" optional="YES" attributeType="String"/>
+        <attribute name="blocked" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="cellphoneNumber" optional="YES" attributeType="String"/>
+        <attribute name="contactFirstName" optional="YES" attributeType="String"/>
+        <attribute name="contactId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="contactLastName" optional="YES" attributeType="String"/>
+        <attribute name="contactName" optional="YES" attributeType="String"/>
+        <attribute name="coreUserId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="email" optional="YES" attributeType="String"/>
+        <attribute name="firstName" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="image" optional="YES" attributeType="String"/>
+        <attribute name="keyId" optional="YES" attributeType="String"/>
+        <attribute name="lastName" optional="YES" attributeType="String"/>
+        <attribute name="metadata" optional="YES" attributeType="String"/>
+        <attribute name="myFriend" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="notSeenDuration" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="online" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="receiveEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="roles" optional="YES" attributeType="Binary" valueTransformerName="RolesValueTransformer" customClassName="[Roles]"/>
+        <attribute name="sendEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="ssoId" optional="YES" attributeType="String"/>
+        <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="username" optional="YES" attributeType="String"/>
+        <relationship name="assistant" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDAssistant" inverseName="participant" inverseEntity="CDAssistant"/>
+        <relationship name="conversation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDConversation" inverseName="participants" inverseEntity="CDConversation"/>
+        <relationship name="forwardInfos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDForwardInfo" inverseName="participant" inverseEntity="CDForwardInfo"/>
+        <relationship name="inviter" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDConversation" inverseName="inviter" inverseEntity="CDConversation"/>
+        <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDMessage" inverseName="participant" inverseEntity="CDMessage"/>
+        <relationship name="replyInfo" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDReplyInfo" inverseName="participant" inverseEntity="CDReplyInfo"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+                <constraint value="conversation"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="CDQueueOfEditMessages" representedClassName="ChatCache.CDQueueOfEditMessages" syncable="YES">
+        <attribute name="messageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="messageType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="metadata" optional="YES" attributeType="String"/>
+        <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="textMessage" optional="YES" attributeType="String"/>
+        <attribute name="threadId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="typeCode" optional="YES" attributeType="String"/>
+        <attribute name="uniqueId" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="CDQueueOfFileMessages" representedClassName="ChatCache.CDQueueOfFileMessages" syncable="YES">
+        <attribute name="fileExtension" optional="YES" attributeType="String"/>
+        <attribute name="fileName" optional="YES" attributeType="String"/>
+        <attribute name="fileToSend" optional="YES" attributeType="Binary"/>
+        <attribute name="hC" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="imageToSend" optional="YES" attributeType="Binary"/>
+        <attribute name="isPublic" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="messageType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="metadata" optional="YES" attributeType="String"/>
+        <attribute name="mimeType" optional="YES" attributeType="String"/>
+        <attribute name="originalName" optional="YES" attributeType="String"/>
+        <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="textMessage" optional="YES" attributeType="String"/>
+        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="typeCode" optional="YES" attributeType="String"/>
+        <attribute name="uniqueId" optional="YES" attributeType="String"/>
+        <attribute name="userGroupHash" optional="YES" attributeType="String"/>
+        <attribute name="wC" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="xC" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="yC" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+    </entity>
+    <entity name="CDQueueOfForwardMessages" representedClassName="ChatCache.CDQueueOfForwardMessages" syncable="YES">
+        <attribute name="fromThreadId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="messageIds" optional="YES" attributeType="String"/>
+        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="typeCode" optional="YES" attributeType="String"/>
+        <attribute name="uniqueIds" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="CDQueueOfTextMessages" representedClassName="ChatCache.CDQueueOfTextMessages" syncable="YES">
+        <attribute name="messageType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="metadata" optional="YES" attributeType="String"/>
+        <attribute name="repliedTo" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="systemMetadata" optional="YES" attributeType="String"/>
+        <attribute name="textMessage" optional="YES" attributeType="String"/>
+        <attribute name="threadId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="typeCode" optional="YES" attributeType="String"/>
+        <attribute name="uniqueId" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="CDReplyInfo" representedClassName="ChatCache.CDReplyInfo" syncable="YES">
+        <attribute name="markDeleted" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="messageId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="messageText" optional="YES" attributeType="String"/>
+        <attribute name="messageType" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="metadata" optional="YES" attributeType="String"/>
+        <attribute name="repliedToMessageId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="systemMetadata" optional="YES" attributeType="String"/>
+        <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <relationship name="parentMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDMessage" inverseName="replyInfo" inverseEntity="CDMessage"/>
+        <relationship name="participant" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CDParticipant" inverseName="replyInfo" inverseEntity="CDParticipant"/>
+    </entity>
+    <entity name="CDTag" representedClassName="ChatCache.CDTag" syncable="YES">
+        <attribute name="active" optional="YES" attributeType="Boolean" valueTransformerName="NSSecureUnarchiveFromDataTransformer" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="tagParticipants" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDTagParticipant" inverseName="tag" inverseEntity="CDTagParticipant"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="CDTagParticipant" representedClassName="ChatCache.CDTagParticipant" syncable="YES">
+        <attribute name="active" optional="YES" attributeType="Boolean" valueTransformerName="NSSecureUnarchiveFromDataTransformer" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="tagId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="threadId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <relationship name="conversation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDConversation" inverseName="tagParticipants" inverseEntity="CDConversation"/>
+        <relationship name="tag" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDTag" inverseName="tagParticipants" inverseEntity="CDTag"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+                <constraint value="conversation"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="CDUser" representedClassName="ChatCache.CDUser" syncable="YES">
+        <attribute name="bio" optional="YES" attributeType="String"/>
+        <attribute name="cellphoneNumber" optional="YES" attributeType="String"/>
+        <attribute name="coreUserId" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="email" optional="YES" attributeType="String"/>
+        <attribute name="firstName" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="image" optional="YES" attributeType="String"/>
+        <attribute name="isMe" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="lastName" optional="YES" attributeType="String"/>
+        <attribute name="lastSeen" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="metadata" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="nickname" optional="YES" attributeType="String"/>
+        <attribute name="receiveEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="sendEnable" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="ssoId" optional="YES" attributeType="String"/>
+        <attribute name="username" optional="YES" attributeType="String"/>
+        <relationship name="contacts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDContact" inverseName="user" inverseEntity="CDContact"/>
+        <relationship name="roles" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDUserRole" inverseName="user" inverseEntity="CDUserRole"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+                <constraint value="username"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="CDUserRole" representedClassName="ChatCache.CDUserRole" syncable="YES">
+        <attribute name="image" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="roles" optional="YES" attributeType="Binary" valueTransformerName="RolesValueTransformer" customClassName="[Roles]"/>
+        <attribute name="userId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDUser" inverseName="roles" inverseEntity="CDUser"/>
+    </entity>
+</model>

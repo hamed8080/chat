@@ -6,6 +6,10 @@
 
 import Additive
 import Async
+import ChatCache
+import ChatCore
+import ChatDTO
+import ChatModels
 import Foundation
 import Logger
 
@@ -32,7 +36,7 @@ public final class Chat: ChatProtocol, Identifiable {
     var session: URLSessionProtocol
     var responseQueue: DispatchQueueProtocol
     var cache: CacheManager?
-    var persistentManager: PersistentManager
+    var persistentManager: ChatCache.PersistentManager
     let callbacksManager = CallbacksManager()
     public var cacheFileManager: CacheFileManagerProtocol?
     public internal(set) var state: ChatState = .uninitialized

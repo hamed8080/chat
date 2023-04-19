@@ -6,12 +6,15 @@
 
 import Additive
 import Async
+import ChatCore
+import ChatDTO
+import ChatModels
 import Foundation
 
 // Event
 extension Chat {
     func onError(_ asyncMessage: AsyncMessage) {
-        logger.logJSON(title: "onError:", jsonString: asyncMessage.string, persist: true, type: .received, userInfo: loggerUserInfo)
+        logger.logJSON(title: "onError:", jsonString: asyncMessage.string ?? "", persist: true, type: .received, userInfo: loggerUserInfo)
         let data = asyncMessage.chatMessage?.content?.data(using: .utf8) ?? Data()
         let chatError = try? JSONDecoder.instance.decode(ChatError.self, from: data)
         delegate?.chatError(error: chatError ?? .init())

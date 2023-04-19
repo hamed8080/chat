@@ -4,6 +4,9 @@
 //
 // Created by Hamed Hosseini on 11/2/22
 
+import ChatCore
+import ChatDTO
+import ChatModels
 import Foundation
 
 public enum ContactEventTypes {

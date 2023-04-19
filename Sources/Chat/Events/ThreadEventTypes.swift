@@ -4,6 +4,9 @@
 //
 // Created by Hamed Hosseini on 11/16/22
 
+import ChatCore
+import ChatDTO
+import ChatModels
 import Foundation
 
 public enum ThreadEventTypes {

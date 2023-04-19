@@ -4,6 +4,9 @@
 //
 // Created by Hamed Hosseini on 12/14/22
 
+import ChatCore
+import ChatDTO
+import ChatModels
 import Foundation
 
 extension Chat {
@@ -43,7 +46,7 @@ extension Chat {
             let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId, error: chatError)
             delegate?.chatEvent(event: .file(.uploadError(response)))
         } else if let data = data, let uploadResponse = try? JSONDecoder.instance.decode(PodspaceFileUploadResponse.self, from: data) {
-            logger.log(title: "response is:\(String(data: data, encoding: .utf8) ?? "") ", persist: false, type: .internalLog)
+            logger.log(title: "Response is:\(data.utf8StringOrEmpty)", persist: false, type: .internalLog)
             if uploadResponse.error != nil {
                 let error = ChatError(message: "\(uploadResponse.error ?? "") - \(uploadResponse.message ?? "")", code: uploadResponse.errorType?.rawValue, hasError: true)
                 uploadCompletion?(nil, nil, error)
@@ -51,7 +54,7 @@ extension Chat {
                 delegate?.chatEvent(event: .file(.uploadError(response)))
                 return
             }
-            logger.logJSON(title: "File uploaded successfully", jsonString: String(data: data, encoding: .utf8), persist: false, type: .internalLog)
+            logger.logJSON(title: "File uploaded successfully", jsonString: data.utf8StringOrEmpty, persist: false, type: .internalLog)
             let link = "\(config.fileServer)\(Routes.files.rawValue)/\(uploadResponse.result?.hash ?? "")"
             let fileDetail = FileDetail(fileExtension: req.fileExtension,
                                         link: link,
@@ -66,7 +69,7 @@ extension Chat {
             uploadCompletion?(uploadResponse.result, fileMetaData, nil)
             let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId)
             delegate?.chatEvent(event: .file(.uploaded(response)))
-            deleteQueues(uniqueIds: [req.uniqueId])
+            cache?.deleteQueues(uniqueIds: [req.uniqueId])
         } else if let error = error {
             let error = ChatError(message: "\(ChatErrorType.networkError.rawValue) \(error)", code: 6200, hasError: true)
             uploadCompletion?(nil, nil, error)

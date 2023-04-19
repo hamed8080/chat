@@ -4,6 +4,7 @@
 //
 // Created by Hamed Hosseini on 12/16/22
 
+import ChatDTO
 import Foundation
 
 public extension Chat {

@@ -5,6 +5,9 @@
 // Created by Hamed Hosseini on 12/14/22
 
 import Async
+import ChatCore
+import ChatDTO
+import ChatModels
 import Foundation
 
 // Request
@@ -91,7 +94,7 @@ public extension Chat {
     internal func saveMessagesToCache(_ messages: [Message]?, _: CompletionType<[Message]>?) {
         cache?.message.insert(models: messages ?? [])
         let uniqueIds = messages?.compactMap(\.uniqueId) ?? []
-        deleteQueues(uniqueIds: uniqueIds)
+        cache?.deleteQueues(uniqueIds: uniqueIds)
     }
 }
 

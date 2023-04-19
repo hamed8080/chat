@@ -5,6 +5,7 @@
 // Created by Hamed Hosseini on 12/14/22
 
 import Async
+import ChatDTO
 import Foundation
 
 // Request

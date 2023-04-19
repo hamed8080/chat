@@ -6,6 +6,9 @@
 
 import Additive
 import Async
+import ChatCache
+import ChatCore
+import ChatModels
 import Foundation
 import Logger
 
@@ -73,7 +76,7 @@ protocol ChatProtocol: AnyObject {
     var cache: CacheManager? { get set }
 
     /// Persistent Manager for managing the object context.
-    var persistentManager: PersistentManager { get set }
+    var persistentManager: ChatCache.PersistentManager { get set }
 
     /// A file manager for caching files on the storage.
     var cacheFileManager: CacheFileManagerProtocol? { get set }

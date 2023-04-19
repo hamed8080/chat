@@ -6,6 +6,9 @@
 
 import Additive
 import Async
+import ChatCore
+import ChatDTO
+import ChatModels
 import Foundation
 import Logger
 
@@ -58,7 +61,7 @@ internal class AsyncManager: AsyncDelegate {
             chat?.getUserForChatReady()
         } else if asyncState == .closed {
             pingTimer.invalidateTimer()
-            logger?.log(message: "Socket Disconnected", persist: false, level: LogLevel.error, type: .received)
+            logger?.createLog(message: "Socket Disconnected", persist: false, level: LogLevel.error, type: .received)
         }
     }
 

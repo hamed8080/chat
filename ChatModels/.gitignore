@@ -1,0 +1,14 @@
+.DS_Store
+**/.DS_Store
+
+### SwiftPM ###
+.build/
+.swiftpm/
+Packages
+xcuserdata
+*.xcodeproj
+swift-format.xcodeproj/
+Package.resolved
+
+### DOCC
+.docs/

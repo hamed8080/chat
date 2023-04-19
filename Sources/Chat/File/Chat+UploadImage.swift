@@ -4,7 +4,11 @@
 //
 // Created by Hamed Hosseini on 12/14/22
 
+import ChatCore
+import ChatDTO
+import ChatModels
 import Foundation
+
 extension Chat {
     /// Upload an image.
     /// - Parameters:
@@ -45,7 +49,7 @@ extension Chat {
                 delegate?.chatEvent(event: .file(.uploadError(response)))
                 return
             }
-            logger.logJSON(title: "Image uploaded successfully", jsonString: String(data: data, encoding: .utf8), persist: false, type: .internalLog)
+            logger.logJSON(title: "Image uploaded successfully", jsonString: data.utf8StringOrEmpty, persist: false, type: .internalLog)
             let link = "\(config.fileServer)\(Routes.images.rawValue)/\(uploadResponse.result?.hash ?? "")"
             let fileDetail = FileDetail(fileExtension: req.fileExtension,
                                         link: link,
@@ -60,7 +64,7 @@ extension Chat {
                                         actualWidth: req.wC)
             let fileMetaData = FileMetaData(file: fileDetail, fileHash: uploadResponse.result?.hash, hashCode: uploadResponse.result?.hash, name: uploadResponse.result?.name)
             uploadCompletion?(uploadResponse.result, fileMetaData, nil)
-            deleteQueues(uniqueIds: [req.uniqueId])
+            cache?.deleteQueues(uniqueIds: [req.uniqueId])
             let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId)
             delegate?.chatEvent(event: .file(.uploaded(response)))
         } else if let error = error {

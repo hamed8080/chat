@@ -5,6 +5,9 @@
 // Created by Hamed Hosseini on 12/14/22
 
 import Additive
+import ChatCore
+import ChatDTO
+import ChatModels
 import Foundation
 
 public extension Chat {

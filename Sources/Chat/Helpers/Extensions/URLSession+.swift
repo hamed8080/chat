@@ -5,6 +5,7 @@
 // Created by Hamed Hosseini on 12/16/22
 
 import Additive
+import ChatCore
 import Foundation
 
 extension URLSessionProtocol {

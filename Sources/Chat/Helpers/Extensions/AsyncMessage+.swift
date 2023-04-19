@@ -5,7 +5,9 @@
 // Created by Hamed Hosseini on 11/2/22
 
 import Async
-import CoreData
+import ChatCore
+import ChatDTO
+import ChatModels
 import Foundation
 
 extension CodingUserInfoKey {

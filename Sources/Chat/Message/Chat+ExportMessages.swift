@@ -7,6 +7,9 @@
 import Additive
 import Async
 import AVFoundation
+import ChatCore
+import ChatDTO
+import ChatModels
 import Foundation
 
 // Request

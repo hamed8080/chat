@@ -5,6 +5,9 @@
 // Created by Hamed Hosseini on 12/14/22
 
 import Async
+import ChatCore
+import ChatDTO
+import ChatModels
 import Foundation
 
 // Request
@@ -28,7 +31,7 @@ extension Chat {
         delegate?.chatEvent(event: .message(.messageEdit(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         if let message = response.result {
-            deleteQueues(uniqueIds: [response.uniqueId ?? ""])
+            cache?.deleteQueues(uniqueIds: [response.uniqueId ?? ""])
             cache?.message.insert(models: [message])
         }
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)

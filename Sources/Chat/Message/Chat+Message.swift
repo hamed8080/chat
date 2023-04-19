@@ -6,6 +6,9 @@
 
 import Additive
 import Async
+import ChatCore
+import ChatDTO
+import ChatModels
 import Foundation
 #if canImport(UIKit)
     import UIKit
@@ -201,7 +204,7 @@ extension Chat {
     func onSentMessage(_ asyncMessage: AsyncMessage) {
         guard let response = asyncMessage.messageResponse(state: .sent) else { return }
         delegate?.chatEvent(event: .message(.messageSent(response)))
-        deleteQueues(uniqueIds: [response.uniqueId ?? ""])
+        cache?.deleteQueues(uniqueIds: [response.uniqueId ?? ""])
         callbacksManager.invokeSentCallbackAndRemove(response)
     }
 
@@ -211,7 +214,7 @@ extension Chat {
         if let delivered = response.result {
             cache?.message.partnerDeliver(delivered)
         }
-        deleteQueues(uniqueIds: [response.uniqueId ?? ""])
+        cache?.deleteQueues(uniqueIds: [response.uniqueId ?? ""])
         callbacksManager.invokeDeliverCallbackAndRemove(response)
     }
 

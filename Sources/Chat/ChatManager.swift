@@ -4,6 +4,10 @@
 //
 // Created by Hamed Hosseini on 12/16/22
 
+import ChatCache
+import ChatCore
+import ChatDTO
+import ChatModels
 import Foundation
 
 public final class ChatManager {
