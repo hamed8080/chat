@@ -72,8 +72,8 @@ ChatManager.activeInstance?.getThreads(.init(), completion: { response in
 ```
 <br/>
 
-## [Documentation](https://hamed8080.gitlab.io/chat/documentation/Chat/)
-For more information about how to use Chat SDK visit [Documentation](https://hamed8080.gitlab.io/Chat/documentation/chat/) 
+## [Documentation](https://hamed8080.github.io/chat/documentation/chat/chat)
+For more information about how to use Chat SDK visit [Documentation](https://hamed8080.github.io/chat/chat/documentation/chat/) 
 <br/>
 
 ## [Developer Application](https://github.com/hamed8080/ChatApplication) 

@@ -57,7 +57,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:../Chat.xctestplan"
+            reference = "container:Chat.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>

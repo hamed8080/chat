@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "DB3A7361-6E8D-4DBF-BAAF-27F86F071878",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ChatTests",
+        "name" : "ChatTests"
+      }
+    }
+  ],
+  "version" : 1
+}
