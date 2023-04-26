@@ -22,7 +22,7 @@ Chat.sharedInstance.getThreads(init(offset: 50)) { threads, uniqueId, pagination
 
 ### Create a thread
 For creating a thread use method with a ``CreateThreadRequest`` ``Chat/createThread(_:completion:uniqueIdResult:)``.
-Each thread contains a ``Conversation/type`` which determine if the thread is P2P, Group, Channel or e.g.
+Each thread contains a **Conversation.type** which determine if the thread is P2P, Group, Channel or e.g.
 
 ```swift
 let invitee = Invitee(id: "\(123456)", idType: .CONTACT_ID)

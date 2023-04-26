@@ -1,12 +1,8 @@
-Pod-Chat-iOS-SDK/Frameworks
-Pod-Chat-iOS-SDK/Frameworks/**
-
 .DS_Store
 **/.DS_Store
 
 ### SwiftPM ###
 .build/
-.swiftpm/
 Packages
 xcuserdata
 *.xcodeproj

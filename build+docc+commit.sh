@@ -1,67 +1,65 @@
 #!/bin/bash
 
-TARGET_NAME="Chat"
-BUNDLE_ID="ir.fanap.${TARGET_NAME}"
-BUNDLE_VERSION="1.0.0"
-DOCC_FILE_PATH="${pwd}/Sources/Chat/Chat.docc"
-DOCC_HOST_BASE_PATH="chat"
-DOCC_OUTPUT_FOLDER="./.docs"
-DOCC_SYMBOL_GRAPHS=".build/symbol-graphs/"
-DOCC_SYMBOL_GRAPHS_OUTPUT=".build/swift-docc-symbol-graphs"
-BRANCH_NAME="gl-pages"
+source $(dirname $0)/environment+variables.sh
 
-function isSymbolGraphDirectoryExist() {
-    [ -d $DOCC_SYMBOL_GRAPHS ]
-}
+#Use git worktree to checkout the $DOCC_BRANCH_NAME branch of this repository in a $DOCC_BRANCH_NAME sub-directory
+git worktree add --checkout $DOCC_BRANCH_NAME
 
-function makeSymbolGraphs() {
-    mkdir -p $DOCC_SYMBOL_GRAPHS &&
-        swift build --target $TARGET_NAME \
-            -Xswiftc -emit-symbol-graph \
-            -Xswiftc -emit-symbol-graph-dir -Xswiftc $DOCC_SYMBOL_GRAPHS
-
-    mkdir $DOCC_SYMBOL_GRAPHS_OUTPUT &&
-        mv "${DOCC_SYMBOL_GRAPHS}${TARGET_NAME}"* $DOCC_SYMBOL_GRAPHS_OUTPUT
-}
-
-#Use git worktree to checkout the $BRANCH_NAME branch of this repository in a $BRANCH_NAME sub-directory
-git worktree add --checkout $BRANCH_NAME
+cd $DOCC_BRANCH_NAME #move to worktree directory to create all files there
 
 # # Pretty print DocC JSON output so that it can be consistently diffed between commits
 export DOCC_JSON_PRETTYPRINT="YES"
 
-if isSymbolGraphDirectoryExist; then
-    echo "Symbol directory graph is exist"
-else
-    makeSymbolGraphs
-fi
+rm -rf $DOCC_DATA
 
-## Create docc files and folders
-swift package --allow-writing-to-directory $DOCC_OUTPUT_FOLDER \
-    generate-documentation \
-    --target $TARGET_NAME \
-    --output-path $DOCC_OUTPUT_FOLDER \
-    --transform-for-static-hosting \
-    --hosting-base-path $DOCC_HOST_BASE_PATH \
-    --additional-symbol-graph-dir $DOCC_SYMBOL_GRAPHS_OUTPUT \
-    --disable-indexing
+xcodebuild \
+-derivedDataPath $DOCC_DATA \
+-scheme $TARGET_NAME \
+-destination 'platform=iOS Simulator,name=iPhone 14' \
+-parallelizeTargets \
+docbuild
+
+mkdir $DOCC_ARCHIVE
+
+cp -R `find ${DOCC_DATA} -type d -name '*.doccarchive'` $DOCC_ARCHIVE
+
+mkdir $DOCC_OUTPUT_FOLDER
+
+for ARCHIVE in $DOCC_ARCHIVE/*.doccarchive; do
+    cmd() {
+        echo "$ARCHIVE" | awk -F'.' '{print $1}' | awk -F'/' '{print tolower($2)}'
+    }
+    ARCHIVE_NAME="$(cmd)"
+    echo "Processing Archive: $ARCHIVE"
+    $(xcrun --find docc) process-archive \
+    transform-for-static-hosting "$ARCHIVE" \
+    --hosting-base-path $LOWERCASE_TARGET_NAME/$ARCHIVE_NAME \
+    --output-path $DOCC_OUTPUT_FOLDER/$ARCHIVE_NAME
+done
+
+cp images/icon.png $DOCC_OUTPUT_FOLDER/$TARGET_NAME/favicon.ico
+cp images/icon.svg $DOCC_OUTPUT_FOLDER/$TARGET_NAME/favicon.svg
 
 ### Save the current commit we've just built documentation from in a variable
 CURRENT_COMMIT_HASH=$(git rev-parse --short HEAD)
 
-## Commit our changes to the $BRANCH_NAME branch
-mv $DOCC_OUTPUT_FOLDER "$BRANCH_NAME/"
-cd $BRANCH_NAME #move to worktree directory
+## Commit our changes to the $DOCC_BRANCH_NAME branch
 echo "worktree documentation path: ${PWD}/$DOCC_OUTPUT_FOLDER"
 git add $DOCC_OUTPUT_FOLDER
 
 if [ -n "$(git status --porcelain)" ]; then
-    echo "Documentation changes found. Committing the changes to the '$BRANCH_NAME' branch."
+    echo "Documentation changes found. Committing the changes to the '$DOCC_BRANCH_NAME' branch."
     echo "Please call push manually"
-    git commit -m "Update Gitlab Pages documentation site to $CURRENT_COMMIT_HASH"
+    git commit -m "Update Github Pages documentation site to $CURRENT_COMMIT_HASH"
+    open -n https://$GITHUB_USER_NAME.github.io/${LOWERCASE_TARGET_NAME}/${DOCC_HOST_BASE_PATH}/documentation/${LOWERCASE_TARGET_NAME}/
 else
     # No changes found, nothing to commit.
     echo "No documentation changes found."
 fi
 
-git worktree remove -f $BRANCH_NAME
+git worktree remove -f $DOCC_BRANCH_NAME
+
+# After deleting the worktree we should back to the root directory for pushing new files.
+cd $ROOT_DIR
+git push origin $DOCC_BRANCH_NAME
+
