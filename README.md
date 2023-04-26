@@ -27,11 +27,17 @@ Because it has conflict with other Pods' names in cocoapods you have to use dire
 Add in `Podfile`:
 
 ```ruby
-pod 'Starscream', :git => 'https://github.com/daltoniam/Starscream.git', :tag => '3.0.5'
+pod 'Starscream', :git => 'https://github.com/daltoniam/Starscream.git', :tag => '3.1.1'
 pod 'Additive', :git => 'http://pubgi.fanapsoft.ir/chat/ios/additive.git', :tag => '1.0.1'
+pod 'Mocks', :git => 'http://pubgi.fanapsoft.ir/chat/ios/mocks.git', :tag => '1.0.1'
 pod 'Logger', :git => 'http://pubgi.fanapsoft.ir/chat/ios/logger.git', :tag => '1.0.2'
 pod "Async", :git => 'http://pubgi.fanapsoft.ir/chat/ios/async.git', :tag => '1.3.1'
-pod "Chat", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat.git', :tag => '1.3.1'
+pod "ChatCore", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat-core.git', :tag => '1.0.0'
+pod "ChatModels", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat-models.git', :tag => '1.0.0'
+pod "ChatDTO", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat-dto.git', :tag => '1.0.0'
+pod "ChatExtensions", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat-extensions.git', :tag => '1.0.0'
+pod "ChatCache", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat-cache.git', :tag => '1.0.0'
+pod "Chat", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat.git', :branch => 'main'
 ```
 
 ## How to use? 
