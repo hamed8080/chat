@@ -1,4 +1,11 @@
 # ``Chat``
+
+@Metadata {
+   @PageImage(purpose: icon, source: "icon.png", alt: "App icon.")
+   @Available(iOS, introduced: "10.0")
+   @Available(macOS, introduced: "12")    
+}
+
 With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.
 
 ## Overview

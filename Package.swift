@@ -21,7 +21,7 @@ let package = Package(
 //        .package(path: "ChatDTO"),
 //        .package(path: "ChatCore"),
         .package(url: "https://pubgi.fanapsoft.ir/chat/ios/chat-cache.git", exact: "1.0.0"),
-        .package(url: "https://github.com/apple/swift-docc-plugin", branch: "main"),
+        .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
     ],
     targets: [
         .target(

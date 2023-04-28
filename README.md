@@ -1,5 +1,6 @@
 # Chat
-A Swift Chat SDK which handle all backend communication with Async SDK and Chat Server. 
+
+<h5>A Swift Chat SDK which handle all backend communication with Async SDK and Chat Server.</h5>
 
 <img src="https://github.com/hamed8080/chat/raw/main/images/icon.png"  width="164" height="164">
 
@@ -37,7 +38,7 @@ pod "ChatModels", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat-models.git', 
 pod "ChatDTO", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat-dto.git', :tag => '1.0.0'
 pod "ChatExtensions", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat-extensions.git', :tag => '1.0.0'
 pod "ChatCache", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat-cache.git', :tag => '1.0.0'
-pod "Chat", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat.git', :branch => 'main'
+pod "Chat", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat.git', :tag => '1.3.1'
 ```
 
 ## How to use? 
@@ -78,8 +79,8 @@ ChatManager.activeInstance?.getThreads(.init(), completion: { response in
 ```
 <br/>
 
-## [Documentation](https://hamed8080.github.io/chat/documentation/chat/chat)
-For more information about how to use Chat SDK visit [Documentation](https://hamed8080.github.io/chat/chat/documentation/chat/) 
+## [Documentation](https://hamed8080.github.io/chat/documentation/chat)
+For more information about how to use Chat SDK visit [Documentation](https://hamed8080.github.io/chat/documentation/chat/) 
 <br/>
 
 ## [Developer Application](https://github.com/hamed8080/ChatApplication) 

@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
   s.name         = "Chat"
   s.version      = "1.3.1"
   s.summary      = "Swift Chat SDK"
-  s.description  = "This Package is used for creating chat apps for companies whoes want to use Chat Services; This Package will use Async SDK."
+  s.description  = "A Swift Chat SDK which handle all backend communication with Async SDK and Chat Server."
   s.homepage     = "https://pubgi.fanapsoft.ir/chat/ios/chat"
   s.license      = "MIT"
   s.author       = { "Hamed Hosseini" => "hamed8080@gmail.com" }
