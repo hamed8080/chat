@@ -1,0 +1,1207 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "s:4Chat16CacheFileManagerC",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "class"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "text" : "CacheFileManager"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "navigatorTitle" : [
+      {
+        "kind" : "identifier",
+        "text" : "CacheFileManager"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Class",
+    "symbolKind" : "class",
+    "title" : "CacheFileManager"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "final"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "keyword",
+              "text" : "class"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "identifier",
+              "text" : "CacheFileManager"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    }
+  ],
+  "relationshipsSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManagerProtocol"
+      ],
+      "kind" : "relationships",
+      "title" : "Conforms To",
+      "type" : "conformsTo"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/init(fileManager:group:queue:logger:)"
+      ],
+      "title" : "Initializers"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/documentPath",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/fm",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/group",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/groupFolder",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/logger",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/queue"
+      ],
+      "title" : "Instance Properties"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/createDirectory()",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/createGroupDirectory()",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/deleteFile(at:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/deleteFolder(url:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/filePath(url:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/filePathInGroup(url:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/getData(url:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/getDataInGroup(url:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/isFileExist(url:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/isFileExistInGroup(url:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/saveFile(url:data:saveCompeletion:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/saveFileInGroup(url:data:saveCompeletion:)"
+      ],
+      "title" : "Instance Methods"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/cachefilemanager"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/CacheFileManager": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "CacheFileManager"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "CacheFileManager"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "CacheFileManager",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager"
+},
+"doc://Chat/documentation/Chat/CacheFileManager/createDirectory()": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "createDirectory"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/createDirectory()",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "createDirectory()",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/createdirectory()"
+},
+"doc://Chat/documentation/Chat/CacheFileManager/createGroupDirectory()": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "createGroupDirectory"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/createGroupDirectory()",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "createGroupDirectory()",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/creategroupdirectory()"
+},
+"doc://Chat/documentation/Chat/CacheFileManager/deleteFile(at:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "deleteFile"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "at"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/deleteFile(at:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "deleteFile(at:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/deletefile(at:)"
+},
+"doc://Chat/documentation/Chat/CacheFileManager/deleteFolder(url:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "deleteFolder"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "url"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/deleteFolder(url:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "deleteFolder(url:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/deletefolder(url:)"
+},
+"doc://Chat/documentation/Chat/CacheFileManager/documentPath": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "documentPath"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/documentPath",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "documentPath",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/documentpath"
+},
+"doc://Chat/documentation/Chat/CacheFileManager/filePath(url:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "filePath"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "url"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ") -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/filePath(url:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "filePath(url:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/filepath(url:)"
+},
+"doc://Chat/documentation/Chat/CacheFileManager/filePathInGroup(url:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "filePathInGroup"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "url"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ") -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/filePathInGroup(url:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "filePathInGroup(url:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/filepathingroup(url:)"
+},
+"doc://Chat/documentation/Chat/CacheFileManager/fm": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "let"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "fm"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat19FileManagerProtocolP",
+      "text" : "FileManagerProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/fm",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "fm",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/fm"
+},
+"doc://Chat/documentation/Chat/CacheFileManager/getData(url:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "getData"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "url"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ") -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation4DataV",
+      "text" : "Data"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/getData(url:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "getData(url:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/getdata(url:)"
+},
+"doc://Chat/documentation/Chat/CacheFileManager/getDataInGroup(url:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "getDataInGroup"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "url"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ") -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation4DataV",
+      "text" : "Data"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/getDataInGroup(url:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "getDataInGroup(url:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/getdataingroup(url:)"
+},
+"doc://Chat/documentation/Chat/CacheFileManager/group": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "let"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "group"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/group",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "group",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/group"
+},
+"doc://Chat/documentation/Chat/CacheFileManager/groupFolder": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "groupFolder"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/groupFolder",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "groupFolder",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/groupfolder"
+},
+"doc://Chat/documentation/Chat/CacheFileManager/init(fileManager:group:queue:logger:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "identifier",
+      "text" : "init"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "fileManager"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat19FileManagerProtocolP",
+      "text" : "FileManagerProtocol"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "group"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : "?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "queue"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8Additive21DispatchQueueProtocolP",
+      "text" : "DispatchQueueProtocol"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "logger"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:6LoggerAAC",
+      "text" : "Logger"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/init(fileManager:group:queue:logger:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "init(fileManager:group:queue:logger:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/init(filemanager:group:queue:logger:)"
+},
+"doc://Chat/documentation/Chat/CacheFileManager/isFileExist(url:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "isFileExist"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "url"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ") -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Sb",
+      "text" : "Bool"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/isFileExist(url:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "isFileExist(url:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/isfileexist(url:)"
+},
+"doc://Chat/documentation/Chat/CacheFileManager/isFileExistInGroup(url:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "isFileExistInGroup"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "url"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ") -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Sb",
+      "text" : "Bool"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/isFileExistInGroup(url:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "isFileExistInGroup(url:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/isfileexistingroup(url:)"
+},
+"doc://Chat/documentation/Chat/CacheFileManager/logger": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "let"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "logger"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:6LoggerAAC",
+      "text" : "Logger"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/logger",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "logger",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/logger"
+},
+"doc://Chat/documentation/Chat/CacheFileManager/queue": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "let"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "queue"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8Additive21DispatchQueueProtocolP",
+      "text" : "DispatchQueueProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/queue",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "queue",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/queue"
+},
+"doc://Chat/documentation/Chat/CacheFileManager/saveFile(url:data:saveCompeletion:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "saveFile"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "url"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "data"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation4DataV",
+      "text" : "Data"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "saveCompeletion"
+    },
+    {
+      "kind" : "text",
+      "text" : ": ("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : "?) -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:s4Voida",
+      "text" : "Void"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/saveFile(url:data:saveCompeletion:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "saveFile(url:data:saveCompeletion:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/savefile(url:data:savecompeletion:)"
+},
+"doc://Chat/documentation/Chat/CacheFileManager/saveFileInGroup(url:data:saveCompeletion:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "saveFileInGroup"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "url"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "data"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation4DataV",
+      "text" : "Data"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "saveCompeletion"
+    },
+    {
+      "kind" : "text",
+      "text" : ": ("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : "?) -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:s4Voida",
+      "text" : "Void"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/saveFileInGroup(url:data:saveCompeletion:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "saveFileInGroup(url:data:saveCompeletion:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager\/savefileingroup(url:data:savecompeletion:)"
+},
+"doc://Chat/documentation/Chat/CacheFileManagerProtocol": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "CacheFileManagerProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManagerProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "CacheFileManagerProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "CacheFileManagerProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanagerprotocol"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

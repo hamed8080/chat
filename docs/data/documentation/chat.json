@@ -1,0 +1,1527 @@
+{
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "hierarchy" : {
+    "paths" : [
+      [
+
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "Chat",
+    "images" : [
+      {
+        "identifier" : "icon.png",
+        "type" : "icon"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "platforms" : [
+      {
+        "introducedAt" : "10.0",
+        "name" : "iOS"
+      },
+      {
+        "introducedAt" : "12",
+        "name" : "macOS"
+      }
+    ],
+    "role" : "collection",
+    "roleHeading" : "Framework",
+    "symbolKind" : "module",
+    "title" : "Chat"
+  },
+  "primaryContentSections" : [
+    {
+      "content" : [
+        {
+          "anchor" : "Overview",
+          "level" : 2,
+          "text" : "Overview",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "Chat SDK provides the ability to connect easily to the chat server and manage the connection and reconnect whenever reconnecting is needed.",
+              "type" : "text"
+            },
+            {
+              "text" : " ",
+              "type" : "text"
+            },
+            {
+              "text" : "Behind the scene it uses Async SDK to connect to async socket and after socket get’s ",
+              "type" : "text"
+            },
+            {
+              "code" : "ChatState.asyncReady",
+              "type" : "codeVoice"
+            },
+            {
+              "text" : " the chat SDK start to get user information of the current have set token, after it received the user it tell you that chat sdk is ",
+              "type" : "text"
+            },
+            {
+              "code" : "ChatState.chatReady",
+              "type" : "codeVoice"
+            },
+            {
+              "text" : " unless is stay in one of ",
+              "type" : "text"
+            },
+            {
+              "inlineContent" : [
+                {
+                  "text" : "ChatState.connecting",
+                  "type" : "text"
+                }
+              ],
+              "type" : "strong"
+            },
+            {
+              "text" : " or ",
+              "type" : "text"
+            },
+            {
+              "inlineContent" : [
+                {
+                  "text" : "ChatState.closed",
+                  "type" : "text"
+                }
+              ],
+              "type" : "strong"
+            },
+            {
+              "text" : ".",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "Please check out the figure below to find out how the Chat SDK works behind the scene.",
+              "type" : "text"
+            },
+            {
+              "text" : " ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "chat-flow.png",
+              "type" : "image"
+            }
+          ],
+          "type" : "paragraph"
+        }
+      ],
+      "kind" : "content"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/GettingStarted",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingThreads",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingMessages",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingContacts",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingFiles",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingUsers",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingProfile",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingTags",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingBots",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingAssistants",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps"
+      ],
+      "title" : "Essentials"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/Chat",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatDelegate"
+      ],
+      "title" : "Important classes"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatManager",
+        "doc:\/\/Chat\/documentation\/Chat\/DiskStatus"
+      ],
+      "title" : "Classes"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManagerProtocol",
+        "doc:\/\/Chat\/documentation\/Chat\/FileManagerProtocol"
+      ],
+      "title" : "Protocols"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/DeviceInfo",
+        "doc:\/\/Chat\/documentation\/Chat\/DownloadFileProgress",
+        "doc:\/\/Chat\/documentation\/Chat\/UploadFileProgress"
+      ],
+      "title" : "Structures"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/CacheResponseType",
+        "doc:\/\/Chat\/documentation\/Chat\/CompletionType",
+        "doc:\/\/Chat\/documentation\/Chat\/CompletionTypeNoneDecodeable",
+        "doc:\/\/Chat\/documentation\/Chat\/CompletionTypeWithoutUniqueId",
+        "doc:\/\/Chat\/documentation\/Chat\/DownloadFileCompletionType",
+        "doc:\/\/Chat\/documentation\/Chat\/DownloadImageCompletionType",
+        "doc:\/\/Chat\/documentation\/Chat\/DownloadProgressType",
+        "doc:\/\/Chat\/documentation\/Chat\/OnDeliveryType",
+        "doc:\/\/Chat\/documentation\/Chat\/OnSeenType",
+        "doc:\/\/Chat\/documentation\/Chat\/OnSentType",
+        "doc:\/\/Chat\/documentation\/Chat\/UniqueIdResultType",
+        "doc:\/\/Chat\/documentation\/Chat\/UniqueIdsResultType",
+        "doc:\/\/Chat\/documentation\/Chat\/UploadCompletionType",
+        "doc:\/\/Chat\/documentation\/Chat\/UploadFileProgressType"
+      ],
+      "title" : "Type Aliases"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/AssistantEventTypes",
+        "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatEventType",
+        "doc:\/\/Chat\/documentation\/Chat\/ContactEventTypes",
+        "doc:\/\/Chat\/documentation\/Chat\/DownloaUploadAction",
+        "doc:\/\/Chat\/documentation\/Chat\/FileEventType",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes",
+        "doc:\/\/Chat\/documentation\/Chat\/SystemEventTypes",
+        "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes",
+        "doc:\/\/Chat\/documentation\/Chat\/UserEventTypes"
+      ],
+      "title" : "Enumerations"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"chat-flow.png": {
+  "alt" : "How chat sdk works behind the scene.",
+  "identifier" : "chat-flow.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/chat-flow.png"
+    }
+  ]
+},
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/AssistantEventTypes": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "AssistantEventTypes"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AssistantEventTypes",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "AssistantEventTypes"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "AssistantEventTypes",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/assistanteventtypes"
+},
+"doc://Chat/documentation/Chat/BotEventTypes": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "BotEventTypes"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "BotEventTypes"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "BotEventTypes",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/boteventtypes"
+},
+"doc://Chat/documentation/Chat/CacheFileManager": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "CacheFileManager"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "CacheFileManager"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "CacheFileManager",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanager"
+},
+"doc://Chat/documentation/Chat/CacheFileManagerProtocol": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "CacheFileManagerProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManagerProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "CacheFileManagerProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "CacheFileManagerProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cachefilemanagerprotocol"
+},
+"doc://Chat/documentation/Chat/CacheResponseType": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "typealias"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "CacheResponseType"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheResponseType",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "CacheResponseType"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "CacheResponseType",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/cacheresponsetype"
+},
+"doc://Chat/documentation/Chat/Chat": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "Chat"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "Chat"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat"
+},
+"doc://Chat/documentation/Chat/ChatDelegate": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ChatDelegate"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatDelegate",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ChatDelegate"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ChatDelegate",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatdelegate"
+},
+"doc://Chat/documentation/Chat/ChatEventType": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ChatEventType"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatEventType",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ChatEventType"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ChatEventType",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chateventtype"
+},
+"doc://Chat/documentation/Chat/ChatManager": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ChatManager"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatManager",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ChatManager"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ChatManager",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatmanager"
+},
+"doc://Chat/documentation/Chat/CompletionType": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "typealias"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "CompletionType"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CompletionType",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "CompletionType"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "CompletionType",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/completiontype"
+},
+"doc://Chat/documentation/Chat/CompletionTypeNoneDecodeable": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "typealias"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "CompletionTypeNoneDecodeable"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CompletionTypeNoneDecodeable",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "CompletionTypeNoneDecodeable"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "CompletionTypeNoneDecodeable",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/completiontypenonedecodeable"
+},
+"doc://Chat/documentation/Chat/CompletionTypeWithoutUniqueId": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "typealias"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "CompletionTypeWithoutUniqueId"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CompletionTypeWithoutUniqueId",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "CompletionTypeWithoutUniqueId"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "CompletionTypeWithoutUniqueId",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/completiontypewithoutuniqueid"
+},
+"doc://Chat/documentation/Chat/ContactEventTypes": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ContactEventTypes"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactEventTypes",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ContactEventTypes"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ContactEventTypes",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/contacteventtypes"
+},
+"doc://Chat/documentation/Chat/DeviceInfo": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "struct"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "DeviceInfo"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DeviceInfo",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "DeviceInfo"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "DeviceInfo",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/deviceinfo"
+},
+"doc://Chat/documentation/Chat/DiskStatus": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "DiskStatus"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DiskStatus",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "DiskStatus"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "DiskStatus",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/diskstatus"
+},
+"doc://Chat/documentation/Chat/DownloaUploadAction": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "DownloaUploadAction"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DownloaUploadAction",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "DownloaUploadAction"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "DownloaUploadAction",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/downloauploadaction"
+},
+"doc://Chat/documentation/Chat/DownloadFileCompletionType": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "typealias"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "DownloadFileCompletionType"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DownloadFileCompletionType",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "DownloadFileCompletionType"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "DownloadFileCompletionType",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/downloadfilecompletiontype"
+},
+"doc://Chat/documentation/Chat/DownloadFileProgress": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "struct"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "DownloadFileProgress"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DownloadFileProgress",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "DownloadFileProgress"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "DownloadFileProgress",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/downloadfileprogress"
+},
+"doc://Chat/documentation/Chat/DownloadImageCompletionType": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "typealias"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "DownloadImageCompletionType"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DownloadImageCompletionType",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "DownloadImageCompletionType"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "DownloadImageCompletionType",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/downloadimagecompletiontype"
+},
+"doc://Chat/documentation/Chat/DownloadProgressType": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "typealias"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "DownloadProgressType"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DownloadProgressType",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "DownloadProgressType"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "DownloadProgressType",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/downloadprogresstype"
+},
+"doc://Chat/documentation/Chat/FileEventType": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "FileEventType"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileEventType",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "FileEventType"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "FileEventType",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileeventtype"
+},
+"doc://Chat/documentation/Chat/FileManagerProtocol": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "FileManagerProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileManagerProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "FileManagerProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "FileManagerProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/filemanagerprotocol"
+},
+"doc://Chat/documentation/Chat/GettingStarted": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/GettingStarted",
+  "kind" : "article",
+  "role" : "collectionGroup",
+  "title" : "Getting Started",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/gettingstarted"
+},
+"doc://Chat/documentation/Chat/ManagingAssistants": {
+  "abstract" : [
+    {
+      "text" : "Adding a participant as an assistant.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingAssistants",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Assistants",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingassistants"
+},
+"doc://Chat/documentation/Chat/ManagingBots": {
+  "abstract" : [
+    {
+      "text" : "For creating, add\/remove command, user bots, start\/stop.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingBots",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Bots",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingbots"
+},
+"doc://Chat/documentation/Chat/ManagingContacts": {
+  "abstract" : [
+    {
+      "text" : "Managing contacts add, edit, delete, search, and more.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingContacts",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Contacts",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingcontacts"
+},
+"doc://Chat/documentation/Chat/ManagingFiles": {
+  "abstract" : [
+    {
+      "text" : "You could manage download and upload and so more in terms of working with files.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingFiles",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Files",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingfiles"
+},
+"doc://Chat/documentation/Chat/ManagingMaps": {
+  "abstract" : [
+    {
+      "text" : "Converting lat, long to an address or searching through a map, or finding a route getting an image of lat, long.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Maps",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingmaps"
+},
+"doc://Chat/documentation/Chat/ManagingMessages": {
+  "abstract" : [
+    {
+      "text" : "You could Add, delete, edit, reply, forward and so many more.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingMessages",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Messages",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingmessages"
+},
+"doc://Chat/documentation/Chat/ManagingProfile": {
+  "abstract" : [
+    {
+      "text" : "Get current user details, update, set profile.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingProfile",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Profile",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingprofile"
+},
+"doc://Chat/documentation/Chat/ManagingTags": {
+  "abstract" : [
+    {
+      "text" : "Tags are like folder for managing threads. You could Add, delete, edit and add\/remove tag participans.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingTags",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Tags",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingtags"
+},
+"doc://Chat/documentation/Chat/ManagingThreads": {
+  "abstract" : [
+    {
+      "text" : "Managing threads create P2P, Group, Channel or delete edit and so many more.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingThreads",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Threads",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingthreads"
+},
+"doc://Chat/documentation/Chat/ManagingUsers": {
+  "abstract" : [
+    {
+      "text" : "Manage users such as get a list of roles and so more.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingUsers",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Users",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingusers"
+},
+"doc://Chat/documentation/Chat/MessageEventTypes": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "MessageEventTypes"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "MessageEventTypes"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "MessageEventTypes",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageeventtypes"
+},
+"doc://Chat/documentation/Chat/OnDeliveryType": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "typealias"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "OnDeliveryType"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/OnDeliveryType",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "OnDeliveryType"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "OnDeliveryType",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/ondeliverytype"
+},
+"doc://Chat/documentation/Chat/OnSeenType": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "typealias"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "OnSeenType"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/OnSeenType",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "OnSeenType"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "OnSeenType",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/onseentype"
+},
+"doc://Chat/documentation/Chat/OnSentType": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "typealias"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "OnSentType"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/OnSentType",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "OnSentType"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "OnSentType",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/onsenttype"
+},
+"doc://Chat/documentation/Chat/SystemEventTypes": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "SystemEventTypes"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SystemEventTypes",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "SystemEventTypes"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "SystemEventTypes",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/systemeventtypes"
+},
+"doc://Chat/documentation/Chat/TagEventTypes": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "TagEventTypes"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "TagEventTypes"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "TagEventTypes",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/tageventtypes"
+},
+"doc://Chat/documentation/Chat/ThreadEventTypes": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ThreadEventTypes"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ThreadEventTypes"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ThreadEventTypes",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadeventtypes"
+},
+"doc://Chat/documentation/Chat/UniqueIdResultType": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "typealias"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "UniqueIdResultType"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UniqueIdResultType",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "UniqueIdResultType"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "UniqueIdResultType",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/uniqueidresulttype"
+},
+"doc://Chat/documentation/Chat/UniqueIdsResultType": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "typealias"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "UniqueIdsResultType"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UniqueIdsResultType",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "UniqueIdsResultType"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "UniqueIdsResultType",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/uniqueidsresulttype"
+},
+"doc://Chat/documentation/Chat/UploadCompletionType": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "typealias"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "UploadCompletionType"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UploadCompletionType",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "UploadCompletionType"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "UploadCompletionType",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/uploadcompletiontype"
+},
+"doc://Chat/documentation/Chat/UploadFileProgress": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "struct"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "UploadFileProgress"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UploadFileProgress",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "UploadFileProgress"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "UploadFileProgress",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/uploadfileprogress"
+},
+"doc://Chat/documentation/Chat/UploadFileProgressType": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "typealias"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "UploadFileProgressType"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UploadFileProgressType",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "UploadFileProgressType"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "UploadFileProgressType",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/uploadfileprogresstype"
+},
+"doc://Chat/documentation/Chat/UserEventTypes": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "UserEventTypes"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UserEventTypes",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "UserEventTypes"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "UserEventTypes",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/usereventtypes"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

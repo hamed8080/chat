@@ -1,0 +1,1283 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "s:4Chat16ThreadEventTypesO",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "enum"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "text" : "ThreadEventTypes"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "navigatorTitle" : [
+      {
+        "kind" : "identifier",
+        "text" : "ThreadEventTypes"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Enumeration",
+    "symbolKind" : "enum",
+    "title" : "ThreadEventTypes"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "enum"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "identifier",
+              "text" : "ThreadEventTypes"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/lastMessageDeleted(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/lastMessageEdited(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/messagePin(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/messageUnpin(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadAddParticipants(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadClosed(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadDeleted(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadInfoUpdated(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadLastActivityTime(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadLeaveParticipant(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadLeaveSaftlyFailed(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadMute(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadNew(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadParticipantsListChange(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadPin(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadRemoveParticipants(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadRemovedFrom(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadUnmute(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadUnpin(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadUnreadCountUpdated(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadUserRole(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadsListChange(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadsUnreadCount(_:)"
+      ],
+      "title" : "Enumeration Cases"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/threadeventtypes"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/ThreadEventTypes": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ThreadEventTypes"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ThreadEventTypes"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ThreadEventTypes",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadeventtypes"
+},
+"doc://Chat/documentation/Chat/ThreadEventTypes/lastMessageDeleted(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "lastMessageDeleted"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels12ConversationC",
+      "text" : "Conversation"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/lastMessageDeleted(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ThreadEventTypes.lastMessageDeleted(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadeventtypes\/lastmessagedeleted(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadEventTypes/lastMessageEdited(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "lastMessageEdited"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels12ConversationC",
+      "text" : "Conversation"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/lastMessageEdited(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ThreadEventTypes.lastMessageEdited(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadeventtypes\/lastmessageedited(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadEventTypes/messagePin(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "messagePin"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7MessageC",
+      "text" : "Message"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/messagePin(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ThreadEventTypes.messagePin(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadeventtypes\/messagepin(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadEventTypes/messageUnpin(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "messageUnpin"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7MessageC",
+      "text" : "Message"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/messageUnpin(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ThreadEventTypes.messageUnpin(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadeventtypes\/messageunpin(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadEventTypes/threadAddParticipants(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "threadAddParticipants"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels11ParticipantC",
+      "text" : "Participant"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadAddParticipants(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ThreadEventTypes.threadAddParticipants(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadeventtypes\/threadaddparticipants(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadEventTypes/threadClosed(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "threadClosed"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Si",
+      "text" : "Int"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadClosed(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ThreadEventTypes.threadClosed(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadeventtypes\/threadclosed(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadEventTypes/threadDeleted(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "threadDeleted"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels11ParticipantC",
+      "text" : "Participant"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadDeleted(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ThreadEventTypes.threadDeleted(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadeventtypes\/threaddeleted(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadEventTypes/threadInfoUpdated(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "threadInfoUpdated"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels12ConversationC",
+      "text" : "Conversation"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadInfoUpdated(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ThreadEventTypes.threadInfoUpdated(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadeventtypes\/threadinfoupdated(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadEventTypes/threadLastActivityTime(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "threadLastActivityTime"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO18ThreadLastActivityV",
+      "text" : "ThreadLastActivity"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadLastActivityTime(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ThreadEventTypes.threadLastActivityTime(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadeventtypes\/threadlastactivitytime(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadEventTypes/threadLeaveParticipant(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "threadLeaveParticipant"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels4UserC",
+      "text" : "User"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadLeaveParticipant(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ThreadEventTypes.threadLeaveParticipant(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadeventtypes\/threadleaveparticipant(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadEventTypes/threadLeaveSaftlyFailed(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "threadLeaveSaftlyFailed"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Si",
+      "text" : "Int"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadLeaveSaftlyFailed(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ThreadEventTypes.threadLeaveSaftlyFailed(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadeventtypes\/threadleavesaftlyfailed(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadEventTypes/threadMute(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "threadMute"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Si",
+      "text" : "Int"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadMute(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ThreadEventTypes.threadMute(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadeventtypes\/threadmute(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadEventTypes/threadNew(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "threadNew"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels12ConversationC",
+      "text" : "Conversation"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadNew(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ThreadEventTypes.threadNew(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadeventtypes\/threadnew(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadEventTypes/threadParticipantsListChange(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "threadParticipantsListChange"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels11ParticipantC",
+      "text" : "Participant"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadParticipantsListChange(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ThreadEventTypes.threadParticipantsListChange(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadeventtypes\/threadparticipantslistchange(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadEventTypes/threadPin(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "threadPin"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Si",
+      "text" : "Int"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadPin(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ThreadEventTypes.threadPin(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadeventtypes\/threadpin(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadEventTypes/threadRemoveParticipants(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "threadRemoveParticipants"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels11ParticipantC",
+      "text" : "Participant"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadRemoveParticipants(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ThreadEventTypes.threadRemoveParticipants(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadeventtypes\/threadremoveparticipants(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadEventTypes/threadRemovedFrom(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "threadRemovedFrom"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Si",
+      "text" : "Int"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadRemovedFrom(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ThreadEventTypes.threadRemovedFrom(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadeventtypes\/threadremovedfrom(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadEventTypes/threadUnmute(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "threadUnmute"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Si",
+      "text" : "Int"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadUnmute(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ThreadEventTypes.threadUnmute(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadeventtypes\/threadunmute(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadEventTypes/threadUnpin(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "threadUnpin"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Si",
+      "text" : "Int"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadUnpin(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ThreadEventTypes.threadUnpin(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadeventtypes\/threadunpin(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadEventTypes/threadUnreadCountUpdated(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "threadUnreadCountUpdated"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO11UnreadCountV",
+      "text" : "UnreadCount"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadUnreadCountUpdated(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ThreadEventTypes.threadUnreadCountUpdated(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadeventtypes\/threadunreadcountupdated(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadEventTypes/threadUserRole(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "threadUserRole"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels8UserRoleC",
+      "text" : "UserRole"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadUserRole(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ThreadEventTypes.threadUserRole(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadeventtypes\/threaduserrole(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadEventTypes/threadsListChange(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "threadsListChange"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels12ConversationC",
+      "text" : "Conversation"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadsListChange(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ThreadEventTypes.threadsListChange(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadeventtypes\/threadslistchange(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadEventTypes/threadsUnreadCount(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "threadsUnreadCount"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : " : "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Si",
+      "text" : "Int"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes\/threadsUnreadCount(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ThreadEventTypes.threadsUnreadCount(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadeventtypes\/threadsunreadcount(_:)"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

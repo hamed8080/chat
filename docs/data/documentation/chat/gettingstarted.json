@@ -1,0 +1,252 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/GettingStarted"
+  },
+  "kind" : "article",
+  "metadata" : {
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "role" : "collectionGroup",
+    "roleHeading" : "Article",
+    "title" : "Getting Started"
+  },
+  "primaryContentSections" : [
+    {
+      "content" : [
+        {
+          "anchor" : "Overview",
+          "level" : 2,
+          "text" : "Overview",
+          "type" : "heading"
+        }
+      ],
+      "kind" : "content"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "seeAlsoSections" : [
+    {
+      "generated" : true,
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingThreads",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingMessages",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingContacts",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingFiles",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingUsers",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingProfile",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingTags",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingBots",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingAssistants",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps"
+      ],
+      "title" : "Essentials"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/gettingstarted"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/ManagingAssistants": {
+  "abstract" : [
+    {
+      "text" : "Adding a participant as an assistant.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingAssistants",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Assistants",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingassistants"
+},
+"doc://Chat/documentation/Chat/ManagingBots": {
+  "abstract" : [
+    {
+      "text" : "For creating, add\/remove command, user bots, start\/stop.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingBots",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Bots",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingbots"
+},
+"doc://Chat/documentation/Chat/ManagingContacts": {
+  "abstract" : [
+    {
+      "text" : "Managing contacts add, edit, delete, search, and more.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingContacts",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Contacts",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingcontacts"
+},
+"doc://Chat/documentation/Chat/ManagingFiles": {
+  "abstract" : [
+    {
+      "text" : "You could manage download and upload and so more in terms of working with files.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingFiles",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Files",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingfiles"
+},
+"doc://Chat/documentation/Chat/ManagingMaps": {
+  "abstract" : [
+    {
+      "text" : "Converting lat, long to an address or searching through a map, or finding a route getting an image of lat, long.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Maps",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingmaps"
+},
+"doc://Chat/documentation/Chat/ManagingMessages": {
+  "abstract" : [
+    {
+      "text" : "You could Add, delete, edit, reply, forward and so many more.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingMessages",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Messages",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingmessages"
+},
+"doc://Chat/documentation/Chat/ManagingProfile": {
+  "abstract" : [
+    {
+      "text" : "Get current user details, update, set profile.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingProfile",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Profile",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingprofile"
+},
+"doc://Chat/documentation/Chat/ManagingTags": {
+  "abstract" : [
+    {
+      "text" : "Tags are like folder for managing threads. You could Add, delete, edit and add\/remove tag participans.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingTags",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Tags",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingtags"
+},
+"doc://Chat/documentation/Chat/ManagingThreads": {
+  "abstract" : [
+    {
+      "text" : "Managing threads create P2P, Group, Channel or delete edit and so many more.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingThreads",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Threads",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingthreads"
+},
+"doc://Chat/documentation/Chat/ManagingUsers": {
+  "abstract" : [
+    {
+      "text" : "Manage users such as get a list of roles and so more.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingUsers",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Users",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingusers"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

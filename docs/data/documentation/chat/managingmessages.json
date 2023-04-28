@@ -1,0 +1,3377 @@
+{
+  "abstract" : [
+    {
+      "text" : "You could Add, delete, edit, reply, forward and so many more.",
+      "type" : "text"
+    }
+  ],
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/ManagingMessages"
+  },
+  "kind" : "article",
+  "metadata" : {
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "role" : "article",
+    "roleHeading" : "Article",
+    "title" : "Managing Messages"
+  },
+  "primaryContentSections" : [
+    {
+      "content" : [
+        {
+          "anchor" : "Message-States",
+          "level" : 3,
+          "text" : "Message States",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "identifier" : "message-flow.png",
+              "type" : "image"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "Each message has 5 phases to send to the opposite person or in a group thread.",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "items" : [
+            {
+              "content" : [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "Stage waiting to send it to the chat server but there isn’t any response yet, so the message just has a uniqueId, not an ",
+                      "type" : "text"
+                    },
+                    {
+                      "code" : "Message\/id",
+                      "type" : "codeVoice"
+                    },
+                    {
+                      "text" : ".",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            },
+            {
+              "content" : [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "In this stage, the message is added to a queue in the cache with the power of ",
+                      "type" : "text"
+                    },
+                    {
+                      "inlineContent" : [
+                        {
+                          "text" : "CoreData",
+                          "type" : "text"
+                        }
+                      ],
+                      "type" : "strong"
+                    },
+                    {
+                      "text" : ", to live there for resending, if the message wasn’t sent to the server.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            },
+            {
+              "content" : [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "In stage 3, the server receives the message and will respond with types ",
+                      "type" : "text"
+                    },
+                    {
+                      "code" : "ChatMessageVOTypes\/sent",
+                      "type" : "codeVoice"
+                    },
+                    {
+                      "text" : " and ",
+                      "type" : "text"
+                    },
+                    {
+                      "code" : "ChatMessageVOTypes\/message",
+                      "type" : "codeVoice"
+                    },
+                    {
+                      "text" : " at the same time.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            },
+            {
+              "content" : [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "When another person receives the message, it should send the ",
+                      "type" : "text"
+                    },
+                    {
+                      "inlineContent" : [
+                        {
+                          "text" : "deliver",
+                          "type" : "text"
+                        }
+                      ],
+                      "type" : "strong"
+                    },
+                    {
+                      "text" : " event to the sender, which is done behind the scene by the chat SDK.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            },
+            {
+              "content" : [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "When another person opens the thread and sees the message, it should send a seen with type ",
+                      "type" : "text"
+                    },
+                    {
+                      "code" : "ChatMessageVOTypes\/seen",
+                      "type" : "codeVoice"
+                    },
+                    {
+                      "text" : " response to the sender.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            }
+          ],
+          "type" : "orderedList"
+        },
+        {
+          "content" : [
+            {
+              "inlineContent" : [
+                {
+                  "text" : "After a message has been sent to the server, it will be deleted automatically from the cache.",
+                  "type" : "text"
+                }
+              ],
+              "type" : "paragraph"
+            }
+          ],
+          "name" : "Important",
+          "style" : "important",
+          "type" : "aside"
+        },
+        {
+          "content" : [
+            {
+              "inlineContent" : [
+                {
+                  "text" : "If the device is in runtime mode and the app wasn’t terminated by the user or OS a queue exists to resend messages automatically when chat SDK is in ",
+                  "type" : "text"
+                },
+                {
+                  "code" : "ChatState\/chatReady",
+                  "type" : "codeVoice"
+                },
+                {
+                  "text" : " state again, by two second time interval one by one.",
+                  "type" : "text"
+                }
+              ],
+              "type" : "paragraph"
+            }
+          ],
+          "name" : "Important",
+          "style" : "important",
+          "type" : "aside"
+        },
+        {
+          "anchor" : "Send-Text-Message",
+          "level" : 3,
+          "text" : "Send Text Message",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "To send a simple text message insisde a thread call the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/sendTextMessage(_:uniqueIdResult:onSent:onSeen:onDeliver:)",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "Chat.sharedInstance.sendTextMessage(.init(threadId: 123456, textMessage: \"Hello\", messageType: .TEXT)) { uniqueId in",
+            "    \/\/ Write your code",
+            "} onSent: { sentResponse, uniqueId, error in",
+            "    \/\/ Write your code",
+            "} onSeen: { seenResponse, uniqueId, error in",
+            "    \/\/ Write your code",
+            "} onDeliver: { deliverresponse, uniqueId, error in",
+            "    \/\/ Write your code",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Edit-Text-Message",
+          "level" : 3,
+          "text" : "Edit Text Message",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "To edit a message call the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/editMessage(_:completion:uniqueIdResult:)",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "content" : [
+            {
+              "inlineContent" : [
+                {
+                  "text" : "Editing a message requires that the message must be editable. You could check it through ",
+                  "type" : "text"
+                },
+                {
+                  "code" : "Message\/editable",
+                  "type" : "codeVoice"
+                },
+                {
+                  "text" : ".",
+                  "type" : "text"
+                }
+              ],
+              "type" : "paragraph"
+            }
+          ],
+          "name" : "Important",
+          "style" : "important",
+          "type" : "aside"
+        },
+        {
+          "code" : [
+            "let req = EditMessageRequest(threadId: 123456, messageType: .TEXT, messageId: 4567890, textMessage: \"Edited Text Message\")",
+            "Chat.sharedInstance.editMessage(req) { message, uniqueId, error in",
+            "    if error == nil {",
+            "        \/\/ Write your code",
+            "    }",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Send-Reply-Message",
+          "level" : 3,
+          "text" : "Send Reply Message",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "To send a reply text message insisde a thread call the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/replyMessage(_:uniqueIdresult:onSent:onSeen:onDeliver:)",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "Chat.sharedInstance.replyMessage(.init(threadId: 123456, repliedTo: 4567890, textMessage: \"Hello\", messageType: .TEXT)) { uniqueId in",
+            "    \/\/ Write your code",
+            "} onSent: { sentResponse, uniqueId, error in",
+            "    \/\/ Write your code",
+            "} onSeen: { seenResponse, uniqueId, error in",
+            "    \/\/ Write your code",
+            "} onDeliver: { deliverresponse, uniqueId, error in",
+            "    \/\/ Write your code",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Send-Location-Message",
+          "level" : 3,
+          "text" : "Send Location Message",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "To send a message with location cordinate you should send call the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/sendLocationMessage(_:uploadProgress:downloadProgress:onSent:onSeen:onDeliver:uploadUniqueIdResult:messageUniqueIdResult:)",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "let req = LocationMessageRequest(mapCenter: .init(lat: 37.33900249783756, lng: -122.00944807880965), threadId: 123456, userGroupHash: \"XYZ....\")",
+            "Chat.sharedInstance.sendLocationMessage(req) { uniqueId in",
+            "    \/\/ Write your code",
+            "} onSent: { sentResponse, uniqueId, error in",
+            "    \/\/ Write your code",
+            "} onSeen: { seenResponse, uniqueId, error in",
+            "    \/\/ Write your code",
+            "} onDeliver: { deliverresponse, uniqueId, error in",
+            "    \/\/ Write your code",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Forward-Messages",
+          "level" : 3,
+          "text" : "Forward Messages",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "To forward messages to a thread you must prepare a list of messageIds and a threadId call the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/forwardMessages(_:onSent:onSeen:onDeliver:uniqueIdsResult:)",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "let msgIds = [123456, 78901,...]",
+            "let req = ForwardMessageRequest(threadId: 123456, messageIds: msgIds)",
+            "Chat.sharedInstance.forwardMessages(req) { uniqueId in",
+            "    \/\/ Write your code",
+            "} onSent: { sentResponse, uniqueId, error in",
+            "    \/\/ Write your code",
+            "} onSeen: { seenResponse, uniqueId, error in",
+            "    \/\/ Write your code",
+            "} onDeliver: { deliverresponse, uniqueId, error in",
+            "    \/\/ Write your code",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Get-History",
+          "level" : 3,
+          "text" : "Get History",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "A list of messages of a thread for this reason call method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/getHistory(_:completion:cacheResponse:textMessageNotSentRequests:editMessageNotSentRequests:forwardMessageNotSentRequests:fileMessageNotSentRequests:uniqueIdResult:)",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "content" : [
+            {
+              "inlineContent" : [
+                {
+                  "text" : "Messages those didn’t send properly will inform you of the appropriate closures.",
+                  "type" : "text"
+                }
+              ],
+              "type" : "paragraph"
+            }
+          ],
+          "name" : "Important",
+          "style" : "important",
+          "type" : "aside"
+        },
+        {
+          "code" : [
+            "let req = GetHistoryRequest(threadId: 123456, count: 100, offset: 0)",
+            "Chat.sharedInstance.getHistory(req) { messages, uniqueId, pagination, error in",
+            "    \/\/ Write your code",
+            "} cacheResponse: { messages, uniqueId, pagination, error in",
+            "    \/\/ Write your code",
+            "} "
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Get-Hashtags",
+          "level" : 3,
+          "text" : "Get Hashtags",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "A list of messages which contains hashtags. Call method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/getHashtagList(_:completion:cacheResponse:uniqueIdResult:)",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "let req = GetHistoryRequest(threadId: 123456 , hashtag: \"ios\")",
+            "Chat.sharedInstance.getHashtagList(req) { messages, uniqueId, pagination, error in",
+            "    \/\/ Write your code",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Pin-A-Message",
+          "level" : 3,
+          "text" : "Pin A Message",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "For pin a message inside a thread. For checking the result use the property ",
+              "type" : "text"
+            },
+            {
+              "code" : "Message\/pinned",
+              "type" : "codeVoice"
+            },
+            {
+              "text" : ". Call method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/pinMessage(_:completion:uniqueIdResult:)",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "let req = PinUnpinMessageRequest(messageId: 123456)",
+            "Chat.sharedInstance.pinMessage(req) { pinMessage, uniqueId, error in",
+            "    \/\/ Write your code",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "UNPin-A-Message",
+          "level" : 3,
+          "text" : "UNPin A Message",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "For unpin a message inside a thread. For checking the result use the property ",
+              "type" : "text"
+            },
+            {
+              "code" : "Message\/pinned",
+              "type" : "codeVoice"
+            },
+            {
+              "text" : ". Call method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/pinMessage(_:completion:uniqueIdResult:)",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "let req = PinUnpinMessageRequest(messageId: 123456)",
+            "Chat.sharedInstance.unpinMessage(req) { pinMessage, uniqueId, error in",
+            "    \/\/ Write your code",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Clear-Thread-Messages-History",
+          "level" : 3,
+          "text" : "Clear Thread Messages History",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "If you need to clear messages history of a thread just call ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/clearHistory(_:completion:uniqueIdResult:)",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "Chat.sharedInstance.clearHistory(.init(threadId: 123456)) { threadId, uniqueId, error in",
+            "    \/\/ Write your code",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Delete-A-Message",
+          "level" : 3,
+          "text" : "Delete A Message",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "For deleting a message call method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/deleteMessage(_:completion:uniqueIdResult:)",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "content" : [
+            {
+              "inlineContent" : [
+                {
+                  "text" : "For deleting a message for all other users set ",
+                  "type" : "text"
+                },
+                {
+                  "code" : "DeleteMessageRequest\/deleteForAll",
+                  "type" : "codeVoice"
+                },
+                {
+                  "text" : " to ",
+                  "type" : "text"
+                },
+                {
+                  "code" : "true",
+                  "type" : "codeVoice"
+                },
+                {
+                  "text" : " in initializer.",
+                  "type" : "text"
+                }
+              ],
+              "type" : "paragraph"
+            }
+          ],
+          "name" : "Tip",
+          "style" : "tip",
+          "type" : "aside"
+        },
+        {
+          "content" : [
+            {
+              "inlineContent" : [
+                {
+                  "text" : "A message only can be deleted when it’s ",
+                  "type" : "text"
+                },
+                {
+                  "code" : "Message\/deletable",
+                  "type" : "codeVoice"
+                },
+                {
+                  "text" : ".",
+                  "type" : "text"
+                }
+              ],
+              "type" : "paragraph"
+            }
+          ],
+          "name" : "Important",
+          "style" : "important",
+          "type" : "aside"
+        },
+        {
+          "code" : [
+            "Chat.sharedInstance.deleteMessage(.init(messageId: 123456)) { message, uniqueId, error in",
+            "    \/\/ Write your code",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Delete-Multiple-Messages",
+          "level" : 3,
+          "text" : "Delete Multiple Messages",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "For deleting multiple messages call method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/deleteMultipleMessages(_:completion:uniqueIdResult:)",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "let msgIds = [894560, 4567892, ...]",
+            "Chat.sharedInstance.deleteMultipleMessages(.init(threadId: 123456, messageIds: msgIds)) { messages, uniqueId, error in",
+            "    \/\/ Write your code",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Number-of-unread-messages",
+          "level" : 3,
+          "text" : "Number of unread messages",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "For retrieving the number of unread messages count use the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/deleteMultipleMessages(_:completion:uniqueIdResult:)",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "Chat.sharedInstance.deleteMultipleMessages(.init(countMutedThreads: true)) { unreadCount, uniqueId, error in",
+            "    \/\/ Write your code",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Get-the-list-of-messages-that-you-are-mentioned",
+          "level" : 3,
+          "text" : "Get the list of messages that you are mentioned",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "For retrieving the list of messages that you have mentioned in a thread use the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/getMentions(_:completion:cacheResponse:uniqueIdResult:)",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "Chat.sharedInstance.getMentions(.init(threadId: 123456, onlyUnreadMention: false)) { messages, uniqueId, pagination, error in",
+            "    \/\/ Write your code",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "List-of-participants-who-delivered-the-message-to-them",
+          "level" : 3,
+          "text" : "List of participants who delivered the message to them.",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "For retrieving the list of participants who the message delivered to them, use the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/messageDeliveredToParticipants(_:completion:uniqueIdResult:)",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "Chat.sharedInstance.messageDeliveryParticipants(.init(messageId: 123456)) { participants, uniqueId, pagination, error in",
+            "    \/\/ Write your code",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "List-of-participants-who-have-seen-the-message",
+          "level" : 3,
+          "text" : "List of participants who have seen the message.",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "For retrieving the list of participants who the message delivered to them, use the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/messageSeenByUsers(_:completion:uniqueIdResult:)",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "Chat.sharedInstance.messageSeenByUsers(.init(messageId: 123456)) { participants, uniqueId, pagination, error in",
+            "    \/\/ Write your code",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "List-of-participants-who-have-seen-the-message",
+          "level" : 3,
+          "text" : "List of participants who have seen the message.",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "For retrieving the list of participants who the message delivered to them, use the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/messageSeenByUsers(_:completion:uniqueIdResult:)",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "Chat.sharedInstance.messageSeenByUsers(.init(messageId: 123456)) { participants, uniqueId, pagination, error in",
+            "    \/\/ Write your code",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Send-seen-of-a-message",
+          "level" : 3,
+          "text" : "Send seen of a message.",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "For the time that your user opens a thread in your application, that is your responsibility to inform the other participants to tell them you have seen the message. For this matter, use the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/seen(_:uniqueIdResult:)",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "content" : [
+            {
+              "inlineContent" : [
+                {
+                  "text" : "Sending a delivery of a message is Chat-SDK responsibility and it will happen automatically.",
+                  "type" : "text"
+                }
+              ],
+              "type" : "paragraph"
+            }
+          ],
+          "name" : "Important",
+          "style" : "important",
+          "type" : "aside"
+        },
+        {
+          "code" : [
+            "Chat.sharedInstance.seen(.init(messageId: 123456))"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Cancel-a-message",
+          "level" : 3,
+          "text" : "Cancel a message.",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "Cancel a message happens when a message is not sent by the SDK and canceling it will delete it from a cache of SDK respectively. For this call the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/cancelMessage(uniqueId:completion:)",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "Chat.sharedInstance.cancelMessage(.init(uniqueId: \"XYZ...\")){ isCanceled, uniqueId, error in",
+            "    \/\/ Write your code",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Send-user-is-typing",
+          "level" : 3,
+          "text" : "Send user is typing.",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "For sending an event to participants of a thread that you are typing in a thread call the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/snedStartTyping(threadId:)",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "Chat.sharedInstance.snedStartTyping(threadId: 123456)"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Send-user-stop-typing",
+          "level" : 3,
+          "text" : "Send user stop typing.",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "For sending an event to participants of a thread that you have stopped typing in a thread call the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/sendStopTyping()",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "Chat.sharedInstance.sendStopTyping()"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Tell-the-server-user-has-logged-out",
+          "level" : 3,
+          "text" : "Tell the server user has logged out.",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "For sending an event to the server that the user with the device has logged out call the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/logOut()",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "Chat.sharedInstance.logOut()"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Send-a-signal-event",
+          "level" : 3,
+          "text" : "Send a signal event",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "For sending an event to the server that the user is doing some acitons call the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/sendSignalMessage(req:)",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "Chat.sharedInstance.sendSignalMessage(.init(signalType: .RECORD_VOICE, threadId: 123456))"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Export-Messages-in-CSV",
+          "level" : 3,
+          "text" : "Export Messages in CSV",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "To export a messages of a thread inside a ",
+              "type" : "text"
+            },
+            {
+              "code" : "CSV",
+              "type" : "codeVoice"
+            },
+            {
+              "text" : " file, call the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/exportChat(_:_:uniqueIdResult:)",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "content" : [
+            {
+              "inlineContent" : [
+                {
+                  "text" : "Please remove the created file after you have finished the use of this file.",
+                  "type" : "text"
+                }
+              ],
+              "type" : "paragraph"
+            }
+          ],
+          "name" : "Important",
+          "style" : "important",
+          "type" : "aside"
+        },
+        {
+          "content" : [
+            {
+              "inlineContent" : [
+                {
+                  "text" : "Every time you call this function it will remove the older file.",
+                  "type" : "text"
+                }
+              ],
+              "type" : "paragraph"
+            }
+          ],
+          "name" : "Note",
+          "style" : "note",
+          "type" : "aside"
+        },
+        {
+          "content" : [
+            {
+              "inlineContent" : [
+                {
+                  "text" : "This function only can export up to 10000 message at each call.",
+                  "type" : "text"
+                }
+              ],
+              "type" : "paragraph"
+            }
+          ],
+          "name" : "Note",
+          "style" : "note",
+          "type" : "aside"
+        },
+        {
+          "code" : [
+            "let req = GetHistoryRequest(threadId: 123456, fromTime: UInt(startDate.millisecondsSince1970), toTime: UInt(endDate.millisecondsSince1970))",
+            "Chat.sharedInstance.exportChat(req){ url, uniqueId, error in",
+            "    \/\/ Write your code",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        }
+      ],
+      "kind" : "content"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "seeAlsoSections" : [
+    {
+      "generated" : true,
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/GettingStarted",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingThreads",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingContacts",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingFiles",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingUsers",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingProfile",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingTags",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingBots",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingAssistants",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps"
+      ],
+      "title" : "Essentials"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/managingmessages"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/Chat/cancelMessage(uniqueId:completion:)": {
+  "abstract" : [
+    {
+      "text" : "Cancel a message send.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "cancelMessage"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueId"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "completion"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat28CompletionTypeNoneDecodeablea",
+      "text" : "CompletionTypeNoneDecodeable"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Sb",
+      "text" : "Bool"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/cancelMessage(uniqueId:completion:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "cancelMessage(uniqueId:completion:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/cancelmessage(uniqueid:completion:)"
+},
+"doc://Chat/documentation/Chat/Chat/clearHistory(_:completion:uniqueIdResult:)": {
+  "abstract" : [
+    {
+      "text" : "Clear all messages inside a thread for user.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "clearHistory"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO23GeneralSubjectIdRequestC",
+      "text" : "GeneralSubjectIdRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "completion"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat14CompletionTypea",
+      "text" : "CompletionType"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Si",
+      "text" : "Int"
+    },
+    {
+      "kind" : "text",
+      "text" : ">, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueIdResult"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
+      "text" : "UniqueIdResultType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/clearHistory(_:completion:uniqueIdResult:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "clearHistory(_:completion:uniqueIdResult:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/clearhistory(_:completion:uniqueidresult:)"
+},
+"doc://Chat/documentation/Chat/Chat/deleteMessage(_:completion:uniqueIdResult:)": {
+  "abstract" : [
+    {
+      "text" : "Delete a message if it’s ",
+      "type" : "text"
+    },
+    {
+      "code" : "Message\/deletable",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : ".",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "deleteMessage"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO20DeleteMessageRequestC",
+      "text" : "DeleteMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "completion"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat14CompletionTypea",
+      "text" : "CompletionType"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7MessageC",
+      "text" : "Message"
+    },
+    {
+      "kind" : "text",
+      "text" : ">, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueIdResult"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
+      "text" : "UniqueIdResultType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/deleteMessage(_:completion:uniqueIdResult:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "deleteMessage(_:completion:uniqueIdResult:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/deletemessage(_:completion:uniqueidresult:)"
+},
+"doc://Chat/documentation/Chat/Chat/deleteMultipleMessages(_:completion:uniqueIdResult:)": {
+  "abstract" : [
+    {
+      "text" : "Delete multiple messages at once.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "deleteMultipleMessages"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO25BatchDeleteMessageRequestC",
+      "text" : "BatchDeleteMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "completion"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat14CompletionTypea",
+      "text" : "CompletionType"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7MessageC",
+      "text" : "Message"
+    },
+    {
+      "kind" : "text",
+      "text" : ">, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueIdResult"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
+      "text" : "UniqueIdResultType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/deleteMultipleMessages(_:completion:uniqueIdResult:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "deleteMultipleMessages(_:completion:uniqueIdResult:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/deletemultiplemessages(_:completion:uniqueidresult:)"
+},
+"doc://Chat/documentation/Chat/Chat/editMessage(_:completion:uniqueIdResult:)": {
+  "abstract" : [
+    {
+      "text" : "Edit a message.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "editMessage"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO18EditMessageRequestC",
+      "text" : "EditMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "completion"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat14CompletionTypea",
+      "text" : "CompletionType"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7MessageC",
+      "text" : "Message"
+    },
+    {
+      "kind" : "text",
+      "text" : ">?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueIdResult"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
+      "text" : "UniqueIdResultType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/editMessage(_:completion:uniqueIdResult:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "editMessage(_:completion:uniqueIdResult:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/editmessage(_:completion:uniqueidresult:)"
+},
+"doc://Chat/documentation/Chat/Chat/exportChat(_:_:uniqueIdResult:)": {
+  "abstract" : [
+    {
+      "text" : "Every time you call this function old export file for the thread will be deleted and replaced with a new one. To manages your storage be cautious about removing the file whenever you don’t need this file.",
+      "type" : "text"
+    },
+    {
+      "text" : " ",
+      "type" : "text"
+    },
+    {
+      "text" : "This function can only export 10000 messages.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "exportChat"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO17GetHistoryRequestC",
+      "text" : "GetHistoryRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat28CompletionTypeNoneDecodeablea",
+      "text" : "CompletionTypeNoneDecodeable"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ">, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueIdResult"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
+      "text" : "UniqueIdResultType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/exportChat(_:_:uniqueIdResult:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "exportChat(_:_:uniqueIdResult:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/exportchat(_:_:uniqueidresult:)"
+},
+"doc://Chat/documentation/Chat/Chat/forwardMessages(_:onSent:onSeen:onDeliver:uniqueIdsResult:)": {
+  "abstract" : [
+    {
+      "text" : "Forwrad messages to a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "forwardMessages"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO21ForwardMessageRequestC",
+      "text" : "ForwardMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "onSent"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat10OnSentTypea",
+      "text" : "OnSentType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "onSeen"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat10OnSeenTypea",
+      "text" : "OnSeenType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "onDeliver"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat14OnDeliveryTypea",
+      "text" : "OnDeliveryType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueIdsResult"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat19UniqueIdsResultTypea",
+      "text" : "UniqueIdsResultType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/forwardMessages(_:onSent:onSeen:onDeliver:uniqueIdsResult:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "forwardMessages(_:onSent:onSeen:onDeliver:uniqueIdsResult:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/forwardmessages(_:onsent:onseen:ondeliver:uniqueidsresult:)"
+},
+"doc://Chat/documentation/Chat/Chat/getHashtagList(_:completion:cacheResponse:uniqueIdResult:)": {
+  "abstract" : [
+    {
+      "text" : "Get list of messages with hashtags.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "getHashtagList"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO17GetHistoryRequestC",
+      "text" : "GetHistoryRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "completion"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat14CompletionTypea",
+      "text" : "CompletionType"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7MessageC",
+      "text" : "Message"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "cacheResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat17CacheResponseTypea",
+      "text" : "CacheResponseType"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7MessageC",
+      "text" : "Message"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueIdResult"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
+      "text" : "UniqueIdResultType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/getHashtagList(_:completion:cacheResponse:uniqueIdResult:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "getHashtagList(_:completion:cacheResponse:uniqueIdResult:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/gethashtaglist(_:completion:cacheresponse:uniqueidresult:)"
+},
+"doc://Chat/documentation/Chat/Chat/getHistory(_:completion:cacheResponse:textMessageNotSentRequests:editMessageNotSentRequests:forwardMessageNotSentRequests:fileMessageNotSentRequests:uniqueIdResult:)": {
+  "abstract" : [
+    {
+      "text" : "Get list of messages inside a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "getHistory"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO17GetHistoryRequestC",
+      "text" : "GetHistoryRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "completion"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat14CompletionTypea",
+      "text" : "CompletionType"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7MessageC",
+      "text" : "Message"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "cacheResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat17CacheResponseTypea",
+      "text" : "CacheResponseType"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7MessageC",
+      "text" : "Message"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "textMessageNotSentRequests"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat28CompletionTypeNoneDecodeablea",
+      "text" : "CompletionTypeNoneDecodeable"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO22SendTextMessageRequestC",
+      "text" : "SendTextMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "editMessageNotSentRequests"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat28CompletionTypeNoneDecodeablea",
+      "text" : "CompletionTypeNoneDecodeable"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO18EditMessageRequestC",
+      "text" : "EditMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "forwardMessageNotSentRequests"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat28CompletionTypeNoneDecodeablea",
+      "text" : "CompletionTypeNoneDecodeable"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO21ForwardMessageRequestC",
+      "text" : "ForwardMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "fileMessageNotSentRequests"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat28CompletionTypeNoneDecodeablea",
+      "text" : "CompletionTypeNoneDecodeable"
+    },
+    {
+      "kind" : "text",
+      "text" : "<[("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO17UploadFileRequestC",
+      "text" : "UploadFileRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO22SendTextMessageRequestC",
+      "text" : "SendTextMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")]>?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueIdResult"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
+      "text" : "UniqueIdResultType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/getHistory(_:completion:cacheResponse:textMessageNotSentRequests:editMessageNotSentRequests:forwardMessageNotSentRequests:fileMessageNotSentRequests:uniqueIdResult:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "getHistory(_:completion:cacheResponse:textMessageNotSentRequests:editMessageNotSentRequests:forwardMessageNotSentRequests:fileMessageNotSentRequests:uniqueIdResult:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/gethistory(_:completion:cacheresponse:textmessagenotsentrequests:editmessagenotsentrequests:forwardmessagenotsentrequests:filemessagenotsentrequests:uniqueidresult:)"
+},
+"doc://Chat/documentation/Chat/Chat/getMentions(_:completion:cacheResponse:uniqueIdResult:)": {
+  "abstract" : [
+    {
+      "text" : "Get messages that you have mentioned in a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "getMentions"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO14MentionRequestC",
+      "text" : "MentionRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "completion"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat14CompletionTypea",
+      "text" : "CompletionType"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7MessageC",
+      "text" : "Message"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "cacheResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat17CacheResponseTypea",
+      "text" : "CacheResponseType"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7MessageC",
+      "text" : "Message"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueIdResult"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
+      "text" : "UniqueIdResultType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/getMentions(_:completion:cacheResponse:uniqueIdResult:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "getMentions(_:completion:cacheResponse:uniqueIdResult:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/getmentions(_:completion:cacheresponse:uniqueidresult:)"
+},
+"doc://Chat/documentation/Chat/Chat/logOut()": {
+  "abstract" : [
+    {
+      "text" : "Tell the server user has logged out. This method wil ",
+      "type" : "text"
+    },
+    {
+      "inlineContent" : [
+        {
+          "text" : "truncate and delete",
+          "type" : "text"
+        }
+      ],
+      "type" : "strong"
+    },
+    {
+      "text" : " all data inside the cache.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "logOut"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/logOut()",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "logOut()",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/logout()"
+},
+"doc://Chat/documentation/Chat/Chat/messageDeliveredToParticipants(_:completion:uniqueIdResult:)": {
+  "abstract" : [
+    {
+      "text" : "Retrieve the list of participants to who the message was delivered to them.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "messageDeliveredToParticipants"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO28MessageDeliveredUsersRequestC",
+      "text" : "MessageDeliveredUsersRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "completion"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat17CacheResponseTypea",
+      "text" : "CacheResponseType"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels11ParticipantC",
+      "text" : "Participant"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueIdResult"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
+      "text" : "UniqueIdResultType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/messageDeliveredToParticipants(_:completion:uniqueIdResult:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "messageDeliveredToParticipants(_:completion:uniqueIdResult:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/messagedeliveredtoparticipants(_:completion:uniqueidresult:)"
+},
+"doc://Chat/documentation/Chat/Chat/messageSeenByUsers(_:completion:uniqueIdResult:)": {
+  "abstract" : [
+    {
+      "text" : "Retrieve the list of participants to who have seen the message.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "messageSeenByUsers"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO25MessageSeenByUsersRequestC",
+      "text" : "MessageSeenByUsersRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "completion"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat17CacheResponseTypea",
+      "text" : "CacheResponseType"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels11ParticipantC",
+      "text" : "Participant"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueIdResult"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
+      "text" : "UniqueIdResultType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/messageSeenByUsers(_:completion:uniqueIdResult:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "messageSeenByUsers(_:completion:uniqueIdResult:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/messageseenbyusers(_:completion:uniqueidresult:)"
+},
+"doc://Chat/documentation/Chat/Chat/pinMessage(_:completion:uniqueIdResult:)": {
+  "abstract" : [
+    {
+      "text" : "Pin a message inside a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "pinMessage"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO22PinUnpinMessageRequestC",
+      "text" : "PinUnpinMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "completion"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat14CompletionTypea",
+      "text" : "CompletionType"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7MessageC",
+      "text" : "Message"
+    },
+    {
+      "kind" : "text",
+      "text" : ">, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueIdResult"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
+      "text" : "UniqueIdResultType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/pinMessage(_:completion:uniqueIdResult:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "pinMessage(_:completion:uniqueIdResult:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/pinmessage(_:completion:uniqueidresult:)"
+},
+"doc://Chat/documentation/Chat/Chat/replyMessage(_:uniqueIdresult:onSent:onSeen:onDeliver:)": {
+  "abstract" : [
+    {
+      "text" : "Reply to a message.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "replyMessage"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO19ReplyMessageRequestC",
+      "text" : "ReplyMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueIdresult"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
+      "text" : "UniqueIdResultType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "onSent"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat10OnSentTypea",
+      "text" : "OnSentType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "onSeen"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat10OnSeenTypea",
+      "text" : "OnSeenType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "onDeliver"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat14OnDeliveryTypea",
+      "text" : "OnDeliveryType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/replyMessage(_:uniqueIdresult:onSent:onSeen:onDeliver:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "replyMessage(_:uniqueIdresult:onSent:onSeen:onDeliver:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/replymessage(_:uniqueidresult:onsent:onseen:ondeliver:)"
+},
+"doc://Chat/documentation/Chat/Chat/seen(_:uniqueIdResult:)": {
+  "abstract" : [
+    {
+      "text" : "Send seen to participants of a thread that informs you have seen the message already.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "seen"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO18MessageSeenRequestC",
+      "text" : "MessageSeenRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueIdResult"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
+      "text" : "UniqueIdResultType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/seen(_:uniqueIdResult:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "seen(_:uniqueIdResult:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/seen(_:uniqueidresult:)"
+},
+"doc://Chat/documentation/Chat/Chat/sendLocationMessage(_:uploadProgress:downloadProgress:onSent:onSeen:onDeliver:uploadUniqueIdResult:messageUniqueIdResult:)": {
+  "abstract" : [
+    {
+      "text" : "Send a location.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "sendLocationMessage"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO22LocationMessageRequestC",
+      "text" : "LocationMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uploadProgress"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat22UploadFileProgressTypea",
+      "text" : "UploadFileProgressType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "downloadProgress"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat20DownloadProgressTypea",
+      "text" : "DownloadProgressType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "onSent"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat10OnSentTypea",
+      "text" : "OnSentType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "onSeen"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat10OnSeenTypea",
+      "text" : "OnSeenType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "onDeliver"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat14OnDeliveryTypea",
+      "text" : "OnDeliveryType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uploadUniqueIdResult"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
+      "text" : "UniqueIdResultType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "messageUniqueIdResult"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
+      "text" : "UniqueIdResultType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/sendLocationMessage(_:uploadProgress:downloadProgress:onSent:onSeen:onDeliver:uploadUniqueIdResult:messageUniqueIdResult:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "sendLocationMessage(_:uploadProgress:downloadProgress:onSent:onSeen:onDeliver:uploadUniqueIdResult:messageUniqueIdResult:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/sendlocationmessage(_:uploadprogress:downloadprogress:onsent:onseen:ondeliver:uploaduniqueidresult:messageuniqueidresult:)"
+},
+"doc://Chat/documentation/Chat/Chat/sendSignalMessage(req:)": {
+  "abstract" : [
+    {
+      "text" : "Notify some system actions such as upload a file, record a voice and e.g.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "sendSignalMessage"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "req"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO24SendSignalMessageRequestC",
+      "text" : "SendSignalMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/sendSignalMessage(req:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "sendSignalMessage(req:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/sendsignalmessage(req:)"
+},
+"doc://Chat/documentation/Chat/Chat/sendStopTyping()": {
+  "abstract" : [
+    {
+      "text" : "Send user stop typing.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "sendStopTyping"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/sendStopTyping()",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "sendStopTyping()",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/sendstoptyping()"
+},
+"doc://Chat/documentation/Chat/Chat/sendTextMessage(_:uniqueIdResult:onSent:onSeen:onDeliver:)": {
+  "abstract" : [
+    {
+      "text" : "Send a plain text message to a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "sendTextMessage"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO22SendTextMessageRequestC",
+      "text" : "SendTextMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueIdResult"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
+      "text" : "UniqueIdResultType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "onSent"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat10OnSentTypea",
+      "text" : "OnSentType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "onSeen"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat10OnSeenTypea",
+      "text" : "OnSeenType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "onDeliver"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat14OnDeliveryTypea",
+      "text" : "OnDeliveryType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/sendTextMessage(_:uniqueIdResult:onSent:onSeen:onDeliver:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "sendTextMessage(_:uniqueIdResult:onSent:onSeen:onDeliver:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/sendtextmessage(_:uniqueidresult:onsent:onseen:ondeliver:)"
+},
+"doc://Chat/documentation/Chat/Chat/snedStartTyping(threadId:)": {
+  "abstract" : [
+    {
+      "text" : "Send a event to the participants of a thread that you are typing something.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "snedStartTyping"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "threadId"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Si",
+      "text" : "Int"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/snedStartTyping(threadId:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "snedStartTyping(threadId:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/snedstarttyping(threadid:)"
+},
+"doc://Chat/documentation/Chat/GettingStarted": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/GettingStarted",
+  "kind" : "article",
+  "role" : "collectionGroup",
+  "title" : "Getting Started",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/gettingstarted"
+},
+"doc://Chat/documentation/Chat/ManagingAssistants": {
+  "abstract" : [
+    {
+      "text" : "Adding a participant as an assistant.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingAssistants",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Assistants",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingassistants"
+},
+"doc://Chat/documentation/Chat/ManagingBots": {
+  "abstract" : [
+    {
+      "text" : "For creating, add\/remove command, user bots, start\/stop.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingBots",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Bots",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingbots"
+},
+"doc://Chat/documentation/Chat/ManagingContacts": {
+  "abstract" : [
+    {
+      "text" : "Managing contacts add, edit, delete, search, and more.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingContacts",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Contacts",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingcontacts"
+},
+"doc://Chat/documentation/Chat/ManagingFiles": {
+  "abstract" : [
+    {
+      "text" : "You could manage download and upload and so more in terms of working with files.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingFiles",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Files",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingfiles"
+},
+"doc://Chat/documentation/Chat/ManagingMaps": {
+  "abstract" : [
+    {
+      "text" : "Converting lat, long to an address or searching through a map, or finding a route getting an image of lat, long.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Maps",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingmaps"
+},
+"doc://Chat/documentation/Chat/ManagingProfile": {
+  "abstract" : [
+    {
+      "text" : "Get current user details, update, set profile.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingProfile",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Profile",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingprofile"
+},
+"doc://Chat/documentation/Chat/ManagingTags": {
+  "abstract" : [
+    {
+      "text" : "Tags are like folder for managing threads. You could Add, delete, edit and add\/remove tag participans.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingTags",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Tags",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingtags"
+},
+"doc://Chat/documentation/Chat/ManagingThreads": {
+  "abstract" : [
+    {
+      "text" : "Managing threads create P2P, Group, Channel or delete edit and so many more.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingThreads",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Threads",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingthreads"
+},
+"doc://Chat/documentation/Chat/ManagingUsers": {
+  "abstract" : [
+    {
+      "text" : "Manage users such as get a list of roles and so more.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingUsers",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Users",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingusers"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+},
+"message-flow.png": {
+  "alt" : "How chat sdk works behind the scene.",
+  "identifier" : "message-flow.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/message-flow.png"
+    }
+  ]
+}
+}
+}

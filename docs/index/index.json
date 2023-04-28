@@ -1,0 +1,1800 @@
+{
+  "interfaceLanguages" : {
+    "swift" : [
+      {
+        "children" : [
+          {
+            "title" : "Essentials",
+            "type" : "groupMarker"
+          },
+          {
+            "path" : "\/documentation\/chat\/gettingstarted",
+            "title" : "Getting Started",
+            "type" : "symbol"
+          },
+          {
+            "path" : "\/documentation\/chat\/managingthreads",
+            "title" : "Managing Threads",
+            "type" : "article"
+          },
+          {
+            "path" : "\/documentation\/chat\/managingmessages",
+            "title" : "Managing Messages",
+            "type" : "article"
+          },
+          {
+            "path" : "\/documentation\/chat\/managingcontacts",
+            "title" : "Managing Contacts",
+            "type" : "article"
+          },
+          {
+            "path" : "\/documentation\/chat\/managingfiles",
+            "title" : "Managing Files",
+            "type" : "article"
+          },
+          {
+            "path" : "\/documentation\/chat\/managingusers",
+            "title" : "Managing Users",
+            "type" : "article"
+          },
+          {
+            "path" : "\/documentation\/chat\/managingprofile",
+            "title" : "Managing Profile",
+            "type" : "article"
+          },
+          {
+            "path" : "\/documentation\/chat\/managingtags",
+            "title" : "Managing Tags",
+            "type" : "article"
+          },
+          {
+            "path" : "\/documentation\/chat\/managingbots",
+            "title" : "Managing Bots",
+            "type" : "article"
+          },
+          {
+            "path" : "\/documentation\/chat\/managingassistants",
+            "title" : "Managing Assistants",
+            "type" : "article"
+          },
+          {
+            "path" : "\/documentation\/chat\/managingmaps",
+            "title" : "Managing Maps",
+            "type" : "article"
+          },
+          {
+            "title" : "Important classes",
+            "type" : "groupMarker"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Instance Properties",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/cachefilemanager",
+                "title" : "var cacheFileManager: CacheFileManagerProtocol?",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/config",
+                "title" : "var config: ChatConfig",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/delegate",
+                "title" : "var delegate: ChatDelegate?",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/id-8qlfa",
+                "title" : "var id: UUID",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/state",
+                "title" : "var state: ChatState",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/userinfo",
+                "title" : "var userInfo: User?",
+                "type" : "property"
+              },
+              {
+                "title" : "Instance Methods",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/addbotcommand(_:completion:uniqueidresult:)",
+                "title" : "func addBotCommand(AddBotCommandRequest, completion: CompletionType<BotInfo>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/addcontact(_:completion:uniqueidresult:)",
+                "title" : "func addContact(AddContactRequest, completion: CompletionType<[Contact]>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/addcontacts(_:completion:uniqueidsresult:)",
+                "title" : "func addContacts([AddContactRequest], completion: CompletionType<[Contact]>, uniqueIdsResult: UniqueIdsResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/addparticipant(_:completion:uniqueidresult:)",
+                "title" : "func addParticipant(AddParticipantRequest, completion: CompletionType<Conversation>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/addtagparticipants(_:completion:uniqueidresult:)",
+                "title" : "func addTagParticipants(AddTagParticipantsRequest, completion: CompletionType<[TagParticipant]>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/allunreadmessagecount(_:completion:cacheresponse:uniqueidresult:)",
+                "title" : "func allUnreadMessageCount(UnreadMessageCountRequest, completion: CompletionType<Int>, cacheResponse: CacheResponseType<Int>?, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/archivethread(_:_:uniqueidresult:)",
+                "title" : "func archiveThread(GeneralSubjectIdRequest, CompletionType<Int>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/blockassistants(_:_:uniqueidresult:)",
+                "title" : "func blockAssistants(BlockUnblockAssistantRequest, CompletionType<[Assistant]>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/blockcontact(_:completion:uniqueidresult:)",
+                "title" : "func blockContact(BlockRequest, completion: CompletionType<Contact>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/cancelmessage(uniqueid:completion:)",
+                "title" : "func cancelMessage(uniqueId: String, completion: CompletionTypeNoneDecodeable<Bool>)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/changethreadtype(_:completion:uniqueidresult:)",
+                "title" : "func changeThreadType(ChangeThreadTypeRequest, completion: CompletionType<Conversation>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/clearhistory(_:completion:uniqueidresult:)",
+                "title" : "func clearHistory(GeneralSubjectIdRequest, completion: CompletionType<Int>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/closethread(_:completion:uniqueidresult:)",
+                "title" : "func closeThread(GeneralSubjectIdRequest, completion: CompletionType<Int>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/connect()",
+                "title" : "func connect()",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/contactnotseen(_:completion:uniqueidresult:)",
+                "title" : "func contactNotSeen(NotSeenDurationRequest, completion: CompletionType<[UserLastSeenDuration]>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/createbot(_:completion:uniqueidresult:)",
+                "title" : "func createBot(CreateBotRequest, completion: CompletionType<Bot>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/createtag(_:completion:uniqueidresult:)",
+                "title" : "func createTag(CreateTagRequest, completion: CompletionType<Tag>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/createthread(_:completion:uniqueidresult:)",
+                "title" : "func createThread(CreateThreadRequest, completion: CompletionType<Conversation>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/createthreadwithfilemessage(_:textmessage:uploadfile:uploadprogress:onsent:onseen:ondeliver:createthreadcompletion:uploaduniqueidresult:messageuniqueidresult:)",
+                "title" : "func createThreadWithFileMessage(CreateThreadRequest, textMessage: SendTextMessageRequest, uploadFile: UploadFileRequest, uploadProgress: UploadFileProgressType?, onSent: OnSentType?, onSeen: OnSeenType?, onDeliver: OnDeliveryType?, createThreadCompletion: CompletionType<Conversation>?, uploadUniqueIdResult: UniqueIdResultType?, messageUniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/createthreadwithmessage(_:uniqueidresult:onsent:ondelivery:onseen:completion:)",
+                "title" : "func createThreadWithMessage(CreateThreadWithMessage, uniqueIdResult: UniqueIdResultType?, onSent: OnSentType?, onDelivery: OnDeliveryType?, onSeen: OnSentType?, completion: CompletionType<Conversation>)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/deactiveassistant(_:completion:uniqueidresult:)",
+                "title" : "func deactiveAssistant(DeactiveAssistantRequest, completion: CompletionType<[Assistant]>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/deletemessage(_:completion:uniqueidresult:)",
+                "title" : "func deleteMessage(DeleteMessageRequest, completion: CompletionType<Message>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/deletemultiplemessages(_:completion:uniqueidresult:)",
+                "title" : "func deleteMultipleMessages(BatchDeleteMessageRequest, completion: CompletionType<Message>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/deletetag(_:completion:uniqueidresult:)",
+                "title" : "func deleteTag(DeleteTagRequest, completion: CompletionType<Tag>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/deletethread(_:completion:_:)",
+                "title" : "func deleteThread(GeneralSubjectIdRequest, completion: CompletionType<Int>, UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/dispose()",
+                "title" : "func dispose()",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/editmessage(_:completion:uniqueidresult:)",
+                "title" : "func editMessage(EditMessageRequest, completion: CompletionType<Message>?, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/edittag(_:completion:uniqueidresult:)",
+                "title" : "func editTag(EditTagRequest, completion: CompletionType<Tag>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/exportchat(_:_:uniqueidresult:)",
+                "title" : "func exportChat(GetHistoryRequest, CompletionTypeNoneDecodeable<URL>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/forwardmessages(_:onsent:onseen:ondeliver:uniqueidsresult:)",
+                "title" : "func forwardMessages(ForwardMessageRequest, onSent: OnSentType?, onSeen: OnSeenType?, onDeliver: OnDeliveryType?, uniqueIdsResult: UniqueIdsResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/getallthreads(request:completion:cacheresponse:uniqueidresult:)",
+                "title" : "func getAllThreads(request: AllThreads, completion: CompletionType<[Int]>, cacheResponse: CacheResponseType<[Int]>?, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/getassistats(_:completion:cacheresponse:uniqueidresult:)",
+                "title" : "func getAssistats(AssistantsRequest, completion: CompletionType<[Assistant]>, cacheResponse: CompletionType<[Assistant]>?, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/getassistatshistory(_:uniqueidresult:)",
+                "title" : "func getAssistatsHistory(CompletionType<[AssistantAction]>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/getblockedassistants(_:_:cacheresponse:uniqueidresult:)",
+                "title" : "func getBlockedAssistants(BlockedAssistantsRequest, CompletionType<[Assistant]>, cacheResponse: CacheResponseType<[Assistant]>?, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/getblockedcontacts(_:completion:uniqueidresult:)",
+                "title" : "func getBlockedContacts(BlockedListRequest, completion: CompletionType<[Contact]>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/getcontacts(_:completion:cacheresponse:uniqueidresult:)",
+                "title" : "func getContacts(ContactsRequest, completion: CompletionType<[Contact]>, cacheResponse: CacheResponseType<[Contact]>?, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/getcurrentuserroles(_:completion:cacheresponse:uniqueidresult:)",
+                "title" : "func getCurrentUserRoles(GeneralSubjectIdRequest, completion: CompletionType<[Roles]>, cacheResponse: CacheResponseType<[Roles]>?, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/getfile(_:downloadprogress:completion:cacheresponse:uniqueidresult:)",
+                "title" : "func getFile(FileRequest, downloadProgress: DownloadProgressType, completion: DownloadFileCompletionType, cacheResponse: DownloadFileCompletionType?, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/gethashtaglist(_:completion:cacheresponse:uniqueidresult:)",
+                "title" : "func getHashtagList(GetHistoryRequest, completion: CompletionType<[Message]>, cacheResponse: CacheResponseType<[Message]>?, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/gethistory(_:completion:cacheresponse:textmessagenotsentrequests:editmessagenotsentrequests:forwardmessagenotsentrequests:filemessagenotsentrequests:uniqueidresult:)",
+                "title" : "func getHistory(GetHistoryRequest, completion: CompletionType<[Message]>, cacheResponse: CacheResponseType<[Message]>?, textMessageNotSentRequests: CompletionTypeNoneDecodeable<[SendTextMessageRequest]>?, editMessageNotSentRequests: CompletionTypeNoneDecodeable<[EditMessageRequest]>?, forwardMessageNotSentRequests: CompletionTypeNoneDecodeable<[ForwardMessageRequest]>?, fileMessageNotSentRequests: CompletionTypeNoneDecodeable<[(UploadFileRequest, SendTextMessageRequest)]>?, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/getimage(_:downloadprogress:completion:cacheresponse:uniqueidresult:)",
+                "title" : "func getImage(ImageRequest, downloadProgress: DownloadProgressType, completion: DownloadImageCompletionType, cacheResponse: DownloadImageCompletionType?, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/getmentions(_:completion:cacheresponse:uniqueidresult:)",
+                "title" : "func getMentions(MentionRequest, completion: CompletionType<[Message]>, cacheResponse: CacheResponseType<[Message]>?, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/getthreadadmins(_:completion:cacheresponse:uniqueidresult:)",
+                "title" : "func getThreadAdmins(ThreadParticipantsRequest, completion: CompletionType<[Participant]>, cacheResponse: CacheResponseType<[Participant]>?, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/getthreadparticipants(_:completion:cacheresponse:uniqueidresult:)",
+                "title" : "func getThreadParticipants(ThreadParticipantsRequest, completion: CompletionType<[Participant]>, cacheResponse: CacheResponseType<[Participant]>?, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/getthreads(_:completion:cacheresponse:uniqueidresult:)",
+                "title" : "func getThreads(ThreadsRequest, completion: CompletionType<[Conversation]>, cacheResponse: CacheResponseType<[Conversation]>?, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/getthreadsunreadcount(_:completion:cacheresponse:uniqueidresult:)",
+                "title" : "func getThreadsUnreadCount(ThreadsUnreadCountRequest, completion: CompletionType<[String : Int]>, cacheResponse: CacheResponseType<[String : Int]>?, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/getuserbots(_:completion:uniqueidresult:)",
+                "title" : "func getUserBots(GetUserBotsRequest, completion: CompletionType<[BotInfo]>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/getuserinfo(_:completion:cacheresponse:uniqueidresult:)",
+                "title" : "func getUserInfo(UserInfoRequest, completion: CompletionType<User>, cacheResponse: CacheResponseType<User>?, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/isthreadnamepublic(_:completion:uniqueidresult:)",
+                "title" : "func isThreadNamePublic(IsThreadNamePublicRequest, completion: CompletionType<PublicThreadNameAvailableResponse>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/jointhread(_:completion:uniqueidresult:)",
+                "title" : "func joinThread(JoinPublicThreadRequest, completion: CompletionType<Conversation>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/leavethread(_:completion:uniqueidresult:)",
+                "title" : "func leaveThread(LeaveThreadRequest, completion: CompletionType<User>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/leavethreadsaftly(_:completion:newadmincompletion:uniqueidresult:)",
+                "title" : "func leaveThreadSaftly(SafeLeaveThreadRequest, completion: CompletionType<User>, newAdminCompletion: CompletionType<[UserRole]>?, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/logout()",
+                "title" : "func logOut()",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/managedownload(uniqueid:action:completion:)",
+                "title" : "func manageDownload(uniqueId: String, action: DownloaUploadAction, completion: ((String, Bool) -> Void)?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/manageupload(uniqueid:action:completion:)",
+                "title" : "func manageUpload(uniqueId: String, action: DownloaUploadAction, completion: ((String, Bool) -> Void)?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/mapreverse(_:completion:uniqueidresult:)",
+                "title" : "func mapReverse(MapReverseRequest, completion: CompletionType<MapReverse>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/maprouting(_:completion:uniqueidresult:)",
+                "title" : "func mapRouting(MapRoutingRequest, completion: CompletionType<[Route]>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/mapsearch(_:completion:uniqueidresult:)",
+                "title" : "func mapSearch(MapSearchRequest, completion: CompletionType<[MapItem]>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/mapstaticimage(_:_:completion:uniqueidresult:)",
+                "title" : "func mapStaticImage(MapStaticImageRequest, DownloadProgressType?, completion: CompletionType<Data?>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/messagedeliveredtoparticipants(_:completion:uniqueidresult:)",
+                "title" : "func messageDeliveredToParticipants(MessageDeliveredUsersRequest, completion: CacheResponseType<[Participant]>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/messageseenbyusers(_:completion:uniqueidresult:)",
+                "title" : "func messageSeenByUsers(MessageSeenByUsersRequest, completion: CacheResponseType<[Participant]>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/mutethread(_:completion:uniqueidresult:)",
+                "title" : "func muteThread(GeneralSubjectIdRequest, completion: CompletionType<Int>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/mutualgroups(_:_:cacheresponse:uniqueidresult:)",
+                "title" : "func mutualGroups(MutualGroupsRequest, CompletionType<[Conversation]>, cacheResponse: CacheResponseType<[Conversation]>?, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/pinmessage(_:completion:uniqueidresult:)",
+                "title" : "func pinMessage(PinUnpinMessageRequest, completion: CompletionType<Message>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/pinthread(_:completion:uniqueidresult:)",
+                "title" : "func pinThread(GeneralSubjectIdRequest, completion: CompletionType<Int>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/registerassistat(_:completion:uniqueidresult:)",
+                "title" : "func registerAssistat(RegisterAssistantRequest, completion: CompletionType<[Assistant]>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/removeauditor(_:_:uniqueidresult:)",
+                "title" : "func removeAuditor(AuditorRequest, CompletionType<[UserRole]>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/removebotcommand(_:completion:uniqueidresult:)",
+                "title" : "func removeBotCommand(RemoveBotCommandRequest, completion: CompletionType<BotInfo>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/removecontact(_:completion:uniqueidresult:)",
+                "title" : "func removeContact(RemoveContactsRequest, completion: CompletionType<Bool>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/removeparticipants(_:completion:uniqueidresult:)",
+                "title" : "func removeParticipants(RemoveParticipantsRequest, completion: CompletionType<[Participant]>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/removeroles(_:_:uniqueidresult:)",
+                "title" : "func removeRoles(RolesRequest, CompletionType<[UserRole]>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/removetagparticipants(_:completion:uniqueidresult:)",
+                "title" : "func removeTagParticipants(RemoveTagParticipantsRequest, completion: CompletionType<[TagParticipant]>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/replyfilemessage(replymessage:uploadfile:uploadprogress:onsent:onseen:ondeliver:uploaduniqueidresult:messageuniqueidresult:)",
+                "title" : "func replyFileMessage(replyMessage: ReplyMessageRequest, uploadFile: UploadFileRequest, uploadProgress: UploadFileProgressType?, onSent: OnSentType?, onSeen: OnSeenType?, onDeliver: OnDeliveryType?, uploadUniqueIdResult: UniqueIdResultType?, messageUniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/replymessage(_:uniqueidresult:onsent:onseen:ondeliver:)",
+                "title" : "func replyMessage(ReplyMessageRequest, uniqueIdresult: UniqueIdResultType?, onSent: OnSentType?, onSeen: OnSeenType?, onDeliver: OnDeliveryType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/searchcontacts(_:completion:cacheresponse:uniqueidresult:)",
+                "title" : "func searchContacts(ContactsRequest, completion: CompletionType<[Contact]>, cacheResponse: CacheResponseType<[Contact]>?, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/seen(_:uniqueidresult:)",
+                "title" : "func seen(MessageSeenRequest, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/sendfilemessage(textmessage:uploadfile:uploadprogress:onsent:onseen:ondeliver:uploaduniqueidresult:messageuniqueidresult:)",
+                "title" : "func sendFileMessage(textMessage: SendTextMessageRequest, uploadFile: UploadFileRequest, uploadProgress: UploadFileProgressType?, onSent: OnSentType?, onSeen: OnSeenType?, onDeliver: OnDeliveryType?, uploadUniqueIdResult: UniqueIdResultType?, messageUniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/sendlocationmessage(_:uploadprogress:downloadprogress:onsent:onseen:ondeliver:uploaduniqueidresult:messageuniqueidresult:)",
+                "title" : "func sendLocationMessage(LocationMessageRequest, uploadProgress: UploadFileProgressType?, downloadProgress: DownloadProgressType?, onSent: OnSentType?, onSeen: OnSeenType?, onDeliver: OnDeliveryType?, uploadUniqueIdResult: UniqueIdResultType?, messageUniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/sendsignalmessage(req:)",
+                "title" : "func sendSignalMessage(req: SendSignalMessageRequest)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/sendstatusping(_:)",
+                "title" : "func sendStatusPing(SendStatusPingRequest)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/sendstoptyping()",
+                "title" : "func sendStopTyping()",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/sendtextmessage(_:uniqueidresult:onsent:onseen:ondeliver:)",
+                "title" : "func sendTextMessage(SendTextMessageRequest, uniqueIdResult: UniqueIdResultType?, onSent: OnSentType?, onSeen: OnSeenType?, onDeliver: OnDeliveryType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/setauditor(_:_:uniqueidresult:)",
+                "title" : "func setAuditor(AuditorRequest, CompletionType<[UserRole]>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/setprofile(_:completion:uniqueidresult:)",
+                "title" : "func setProfile(UpdateChatProfile, completion: CompletionType<Profile>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/setroles(_:_:uniqueidresult:)",
+                "title" : "func setRoles(RolesRequest, CompletionType<[UserRole]>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/settoken(newtoken:recreateobject:)",
+                "title" : "func setToken(newToken: String, reCreateObject: Bool)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/snedstarttyping(threadid:)",
+                "title" : "func snedStartTyping(threadId: Int)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/spampvthread(_:completion:uniqueidresult:)",
+                "title" : "func spamPvThread(GeneralSubjectIdRequest, completion: CompletionType<Contact>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/startbot(_:completion:uniqueidresult:)",
+                "title" : "func startBot(StartStopBotRequest, completion: CompletionType<String>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/stopbot(_:completion:uniqueidresult:)",
+                "title" : "func stopBot(StartStopBotRequest, completion: CompletionType<String>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/synccontacts(completion:uniqueidsresult:)",
+                "title" : "func syncContacts(completion: CompletionType<[Contact]>, uniqueIdsResult: UniqueIdsResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/taglist(_:completion:cacheresponse:uniqueidresult:)",
+                "title" : "func tagList(String?, completion: CompletionType<[Tag]>, cacheResponse: CacheResponseType<[Tag]>?, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/unblockcontact(_:completion:uniqueidresult:)",
+                "title" : "func unBlockContact(UnBlockRequest, completion: CompletionType<Contact>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/unarchivethread(_:_:uniqueidresult:)",
+                "title" : "func unarchiveThread(GeneralSubjectIdRequest, CompletionType<Int>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/unblockassistants(_:_:uniqueidresult:)",
+                "title" : "func unblockAssistants(BlockUnblockAssistantRequest, CompletionType<[Assistant]>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/unmutethread(_:completion:uniqueidresult:)",
+                "title" : "func unmuteThread(GeneralSubjectIdRequest, completion: CompletionType<Int>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/unpinmessage(_:completion:uniqueidresult:)",
+                "title" : "func unpinMessage(PinUnpinMessageRequest, completion: CompletionType<Message>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/unpinthread(_:completion:uniqueidresult:)",
+                "title" : "func unpinThread(GeneralSubjectIdRequest, completion: CompletionType<Int>, uniqueIdResult: UniqueIdResultType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/updatethreadinfo(_:uniqueidresult:uploadprogress:completion:)",
+                "title" : "func updateThreadInfo(UpdateThreadInfoRequest, uniqueIdResult: UniqueIdResultType?, uploadProgress: UploadFileProgressType, completion: CompletionType<Conversation>)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/uploadfile(_:uploaduniqueidresult:uploadprogress:uploadcompletion:)",
+                "title" : "func uploadFile(UploadFileRequest, uploadUniqueIdResult: UniqueIdResultType?, uploadProgress: UploadFileProgressType?, uploadCompletion: UploadCompletionType?)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chat\/uploadimage(_:uploaduniqueidresult:uploadprogress:uploadcompletion:)",
+                "title" : "func uploadImage(UploadImageRequest, uploadUniqueIdResult: UniqueIdResultType?, uploadProgress: UploadFileProgressType?, uploadCompletion: UploadCompletionType?)",
+                "type" : "method"
+              },
+              {
+                "title" : "Default Implementations",
+                "type" : "groupMarker"
+              },
+              {
+                "children" : [
+                  {
+                    "title" : "Instance Properties",
+                    "type" : "groupMarker"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/chat\/id-8smih",
+                    "title" : "var id: ObjectIdentifier",
+                    "type" : "property"
+                  }
+                ],
+                "path" : "\/documentation\/chat\/chat\/identifiable-implementations",
+                "title" : "Identifiable Implementations",
+                "type" : "symbol"
+              }
+            ],
+            "path" : "\/documentation\/chat\/chat",
+            "title" : "Chat",
+            "type" : "class"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Instance Methods",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/chatdelegate\/chaterror(error:)",
+                "title" : "func chatError(error: ChatError)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chatdelegate\/chatevent(event:)",
+                "title" : "func chatEvent(event: ChatEventType)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chatdelegate\/chatstate(state:currentuser:error:)",
+                "title" : "func chatState(state: ChatState, currentUser: User?, error: ChatError?)",
+                "type" : "method"
+              }
+            ],
+            "path" : "\/documentation\/chat\/chatdelegate",
+            "title" : "ChatDelegate",
+            "type" : "protocol"
+          },
+          {
+            "title" : "Classes",
+            "type" : "groupMarker"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Initializers",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanager\/init(filemanager:group:queue:logger:)",
+                "title" : "init(fileManager: FileManagerProtocol, group: String?, queue: DispatchQueueProtocol, logger: Logger?)",
+                "type" : "init"
+              },
+              {
+                "title" : "Instance Properties",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanager\/documentpath",
+                "title" : "var documentPath: URL?",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanager\/fm",
+                "title" : "let fm: FileManagerProtocol",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanager\/group",
+                "title" : "let group: String?",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanager\/groupfolder",
+                "title" : "var groupFolder: URL?",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanager\/logger",
+                "title" : "let logger: Logger?",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanager\/queue",
+                "title" : "let queue: DispatchQueueProtocol",
+                "type" : "property"
+              },
+              {
+                "title" : "Instance Methods",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanager\/createdirectory()",
+                "title" : "func createDirectory()",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanager\/creategroupdirectory()",
+                "title" : "func createGroupDirectory()",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanager\/deletefile(at:)",
+                "title" : "func deleteFile(at: URL)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanager\/deletefolder(url:)",
+                "title" : "func deleteFolder(url: URL)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanager\/filepath(url:)",
+                "title" : "func filePath(url: URL) -> URL?",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanager\/filepathingroup(url:)",
+                "title" : "func filePathInGroup(url: URL) -> URL?",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanager\/getdata(url:)",
+                "title" : "func getData(url: URL) -> Data?",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanager\/getdataingroup(url:)",
+                "title" : "func getDataInGroup(url: URL) -> Data?",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanager\/isfileexist(url:)",
+                "title" : "func isFileExist(url: URL) -> Bool",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanager\/isfileexistingroup(url:)",
+                "title" : "func isFileExistInGroup(url: URL) -> Bool",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanager\/savefile(url:data:savecompeletion:)",
+                "title" : "func saveFile(url: URL, data: Data, saveCompeletion: (URL?) -> Void)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanager\/savefileingroup(url:data:savecompeletion:)",
+                "title" : "func saveFileInGroup(url: URL, data: Data, saveCompeletion: (URL?) -> Void)",
+                "type" : "method"
+              }
+            ],
+            "path" : "\/documentation\/chat\/cachefilemanager",
+            "title" : "CacheFileManager",
+            "type" : "class"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Instance Methods",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/chatmanager\/createorreplaceuserinstance(userid:config:)",
+                "title" : "func createOrReplaceUserInstance(userId: Int?, config: ChatConfig)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chatmanager\/removeinstance(chatid:)",
+                "title" : "func removeInstance(chatId: UUID)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/chatmanager\/switchinstance(chatid:)",
+                "title" : "func switchInstance(chatId: UUID)",
+                "type" : "method"
+              },
+              {
+                "title" : "Type Properties",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/chatmanager\/activeinstance",
+                "title" : "static var activeInstance: Chat?",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/chat\/chatmanager\/instance",
+                "title" : "static var instance: ChatManager",
+                "type" : "property"
+              },
+              {
+                "title" : "Type Methods",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/chatmanager\/switchtouser(userid:)",
+                "title" : "class func switchToUser(userId: Int)",
+                "type" : "method"
+              }
+            ],
+            "path" : "\/documentation\/chat\/chatmanager",
+            "title" : "ChatManager",
+            "type" : "class"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Type Properties",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/diskstatus\/freediskspace",
+                "title" : "class var freeDiskSpace: String",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/chat\/diskstatus\/freediskspaceinbytes",
+                "title" : "class var freeDiskSpaceInBytes: Int64",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/chat\/diskstatus\/totaldiskspace",
+                "title" : "class var totalDiskSpace: String",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/chat\/diskstatus\/totaldiskspaceinbytes",
+                "title" : "class var totalDiskSpaceInBytes: Int64",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/chat\/diskstatus\/useddiskspace",
+                "title" : "class var usedDiskSpace: String",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/chat\/diskstatus\/useddiskspaceinbytes",
+                "title" : "class var usedDiskSpaceInBytes: Int64",
+                "type" : "property"
+              },
+              {
+                "title" : "Type Methods",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/diskstatus\/gbformatter(_:)",
+                "title" : "class func GBFormatter(Int64) -> String",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/diskstatus\/mbformatter(_:)",
+                "title" : "class func MBFormatter(Int64) -> String",
+                "type" : "method"
+              }
+            ],
+            "path" : "\/documentation\/chat\/diskstatus",
+            "title" : "DiskStatus",
+            "type" : "class"
+          },
+          {
+            "title" : "Protocols",
+            "type" : "groupMarker"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Initializers",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanagerprotocol\/init(filemanager:group:queue:logger:)",
+                "title" : "init(fileManager: FileManagerProtocol, group: String?, queue: DispatchQueueProtocol, logger: Logger?)",
+                "type" : "init"
+              },
+              {
+                "title" : "Instance Properties",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanagerprotocol\/documentpath",
+                "title" : "var documentPath: URL?",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanagerprotocol\/fm",
+                "title" : "var fm: FileManagerProtocol",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanagerprotocol\/group",
+                "title" : "var group: String?",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanagerprotocol\/groupfolder",
+                "title" : "var groupFolder: URL?",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanagerprotocol\/logger",
+                "title" : "var logger: Logger?",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanagerprotocol\/queue",
+                "title" : "var queue: DispatchQueueProtocol",
+                "type" : "property"
+              },
+              {
+                "title" : "Instance Methods",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanagerprotocol\/creategroupdirectory()",
+                "title" : "func createGroupDirectory()",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanagerprotocol\/deletefile(at:)",
+                "title" : "func deleteFile(at: URL)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanagerprotocol\/deletefolder(url:)",
+                "title" : "func deleteFolder(url: URL)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanagerprotocol\/filepath(url:)",
+                "title" : "func filePath(url: URL) -> URL?",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanagerprotocol\/filepathingroup(url:)",
+                "title" : "func filePathInGroup(url: URL) -> URL?",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanagerprotocol\/getdata(url:)",
+                "title" : "func getData(url: URL) -> Data?",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanagerprotocol\/getdataingroup(url:)",
+                "title" : "func getDataInGroup(url: URL) -> Data?",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanagerprotocol\/isfileexist(url:)",
+                "title" : "func isFileExist(url: URL) -> Bool",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanagerprotocol\/isfileexistingroup(url:)",
+                "title" : "func isFileExistInGroup(url: URL) -> Bool",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanagerprotocol\/savefile(url:data:savecompeletion:)",
+                "title" : "func saveFile(url: URL, data: Data, saveCompeletion: (URL?) -> Void)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/cachefilemanagerprotocol\/savefileingroup(url:data:savecompeletion:)",
+                "title" : "func saveFileInGroup(url: URL, data: Data, saveCompeletion: (URL?) -> Void)",
+                "type" : "method"
+              }
+            ],
+            "path" : "\/documentation\/chat\/cachefilemanagerprotocol",
+            "title" : "CacheFileManagerProtocol",
+            "type" : "protocol"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Instance Methods",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/filemanagerprotocol\/containerurl(forsecurityapplicationgroupidentifier:)",
+                "title" : "func containerURL(forSecurityApplicationGroupIdentifier: String) -> URL?",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/filemanagerprotocol\/createdirectory(at:withintermediatedirectories:attributes:)",
+                "title" : "func createDirectory(at: URL, withIntermediateDirectories: Bool, attributes: [FileAttributeKey : Any]?) throws",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/filemanagerprotocol\/fileexists(atpath:)",
+                "title" : "func fileExists(atPath: String) -> Bool",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/filemanagerprotocol\/removeitem(at:)",
+                "title" : "func removeItem(at: URL) throws",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/filemanagerprotocol\/url(for:in:appropriatefor:create:)",
+                "title" : "func url(for: FileManager.SearchPathDirectory, in: FileManager.SearchPathDomainMask, appropriateFor: URL?, create: Bool) throws -> URL",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/chat\/filemanagerprotocol\/urls(for:in:)",
+                "title" : "func urls(for: FileManager.SearchPathDirectory, in: FileManager.SearchPathDomainMask) -> [URL]",
+                "type" : "method"
+              }
+            ],
+            "path" : "\/documentation\/chat\/filemanagerprotocol",
+            "title" : "FileManagerProtocol",
+            "type" : "protocol"
+          },
+          {
+            "title" : "Structures",
+            "type" : "groupMarker"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Initializers",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/deviceinfo\/init(from:)",
+                "title" : "init(from: Decoder) throws",
+                "type" : "init"
+              },
+              {
+                "title" : "Default Implementations",
+                "type" : "groupMarker"
+              },
+              {
+                "children" : [
+                  {
+                    "title" : "Instance Properties",
+                    "type" : "groupMarker"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/deviceinfo\/data",
+                    "title" : "var data: Data?",
+                    "type" : "property"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/deviceinfo\/dataprettyprint",
+                    "title" : "var dataPrettyPrint: Data?",
+                    "type" : "property"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/deviceinfo\/jsonstring",
+                    "title" : "var jsonString: String?",
+                    "type" : "property"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/deviceinfo\/parameterdata",
+                    "title" : "var parameterData: Data?",
+                    "type" : "property"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/deviceinfo\/string",
+                    "title" : "var string: String?",
+                    "type" : "property"
+                  },
+                  {
+                    "title" : "Instance Methods",
+                    "type" : "groupMarker"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/deviceinfo\/asdictionary()",
+                    "title" : "func asDictionary() throws -> [String : Any]",
+                    "type" : "method"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/deviceinfo\/asdictionarynuallable()",
+                    "title" : "func asDictionaryNuallable() throws -> [String : Any?]",
+                    "type" : "method"
+                  }
+                ],
+                "path" : "\/documentation\/chat\/deviceinfo\/encodable-implementations",
+                "title" : "Encodable Implementations",
+                "type" : "symbol"
+              }
+            ],
+            "path" : "\/documentation\/chat\/deviceinfo",
+            "title" : "DeviceInfo",
+            "type" : "struct"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Instance Properties",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/downloadfileprogress\/bytesrecivied",
+                "title" : "var bytesRecivied: Int64",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/chat\/downloadfileprogress\/percent",
+                "title" : "var percent: Int64",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/chat\/downloadfileprogress\/totalsize",
+                "title" : "var totalSize: Int64",
+                "type" : "property"
+              }
+            ],
+            "path" : "\/documentation\/chat\/downloadfileprogress",
+            "title" : "DownloadFileProgress",
+            "type" : "struct"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Instance Properties",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/uploadfileprogress\/bytessend",
+                "title" : "let bytesSend: Int64",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/chat\/uploadfileprogress\/percent",
+                "title" : "let percent: Int64",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/chat\/uploadfileprogress\/totalsize",
+                "title" : "let totalSize: Int64",
+                "type" : "property"
+              }
+            ],
+            "path" : "\/documentation\/chat\/uploadfileprogress",
+            "title" : "UploadFileProgress",
+            "type" : "struct"
+          },
+          {
+            "title" : "Type Aliases",
+            "type" : "groupMarker"
+          },
+          {
+            "path" : "\/documentation\/chat\/cacheresponsetype",
+            "title" : "CacheResponseType",
+            "type" : "typealias"
+          },
+          {
+            "path" : "\/documentation\/chat\/completiontype",
+            "title" : "CompletionType",
+            "type" : "typealias"
+          },
+          {
+            "path" : "\/documentation\/chat\/completiontypenonedecodeable",
+            "title" : "CompletionTypeNoneDecodeable",
+            "type" : "typealias"
+          },
+          {
+            "path" : "\/documentation\/chat\/completiontypewithoutuniqueid",
+            "title" : "CompletionTypeWithoutUniqueId",
+            "type" : "typealias"
+          },
+          {
+            "path" : "\/documentation\/chat\/downloadfilecompletiontype",
+            "title" : "DownloadFileCompletionType",
+            "type" : "typealias"
+          },
+          {
+            "path" : "\/documentation\/chat\/downloadimagecompletiontype",
+            "title" : "DownloadImageCompletionType",
+            "type" : "typealias"
+          },
+          {
+            "path" : "\/documentation\/chat\/downloadprogresstype",
+            "title" : "DownloadProgressType",
+            "type" : "typealias"
+          },
+          {
+            "path" : "\/documentation\/chat\/ondeliverytype",
+            "title" : "OnDeliveryType",
+            "type" : "typealias"
+          },
+          {
+            "path" : "\/documentation\/chat\/onseentype",
+            "title" : "OnSeenType",
+            "type" : "typealias"
+          },
+          {
+            "path" : "\/documentation\/chat\/onsenttype",
+            "title" : "OnSentType",
+            "type" : "typealias"
+          },
+          {
+            "path" : "\/documentation\/chat\/uniqueidresulttype",
+            "title" : "UniqueIdResultType",
+            "type" : "typealias"
+          },
+          {
+            "path" : "\/documentation\/chat\/uniqueidsresulttype",
+            "title" : "UniqueIdsResultType",
+            "type" : "typealias"
+          },
+          {
+            "path" : "\/documentation\/chat\/uploadcompletiontype",
+            "title" : "UploadCompletionType",
+            "type" : "typealias"
+          },
+          {
+            "path" : "\/documentation\/chat\/uploadfileprogresstype",
+            "title" : "UploadFileProgressType",
+            "type" : "typealias"
+          },
+          {
+            "title" : "Enumerations",
+            "type" : "groupMarker"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Enumeration Cases",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/assistanteventtypes\/assistantactions(_:)",
+                "title" : "case assistantActions(ChatResponse<[AssistantAction]>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/assistanteventtypes\/assistants(_:)",
+                "title" : "case assistants(ChatResponse<[Assistant]>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/assistanteventtypes\/blockassistant(_:)",
+                "title" : "case blockAssistant(ChatResponse<[Assistant]>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/assistanteventtypes\/deactiveassistants(_:)",
+                "title" : "case deactiveAssistants(ChatResponse<[Assistant]>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/assistanteventtypes\/registerassistant(_:)",
+                "title" : "case registerAssistant(ChatResponse<[Assistant]>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/assistanteventtypes\/unblockassistant(_:)",
+                "title" : "case unblockAssistant(ChatResponse<[Assistant]>)",
+                "type" : "case"
+              }
+            ],
+            "path" : "\/documentation\/chat\/assistanteventtypes",
+            "title" : "AssistantEventTypes",
+            "type" : "enum"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Enumeration Cases",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/boteventtypes\/botmessage(_:)",
+                "title" : "case botMessage(ChatResponse<String?>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/boteventtypes\/createbot(_:)",
+                "title" : "case createBot(ChatResponse<BotInfo>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/boteventtypes\/createbotcommand(_:)",
+                "title" : "case createBotCommand(ChatResponse<BotInfo>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/boteventtypes\/removebotcommand(_:)",
+                "title" : "case removeBotCommand(ChatResponse<BotInfo>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/boteventtypes\/startbot(_:)",
+                "title" : "case startBot(ChatResponse<String>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/boteventtypes\/stopbot(_:)",
+                "title" : "case stopBot(ChatResponse<String>)",
+                "type" : "case"
+              }
+            ],
+            "path" : "\/documentation\/chat\/boteventtypes",
+            "title" : "BotEventTypes",
+            "type" : "enum"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Enumeration Cases",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/chateventtype\/assistant(_:)",
+                "title" : "case assistant(AssistantEventTypes)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/chateventtype\/bot(_:)",
+                "title" : "case bot(BotEventTypes)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/chateventtype\/contact(_:)",
+                "title" : "case contact(ContactEventTypes)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/chateventtype\/file(_:)",
+                "title" : "case file(FileEventType)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/chateventtype\/message(_:)",
+                "title" : "case message(MessageEventTypes)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/chateventtype\/system(_:)",
+                "title" : "case system(SystemEventTypes)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/chateventtype\/tag(_:)",
+                "title" : "case tag(TagEventTypes)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/chateventtype\/thread(_:)",
+                "title" : "case thread(ThreadEventTypes)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/chateventtype\/user(_:)",
+                "title" : "case user(UserEventTypes)",
+                "type" : "case"
+              }
+            ],
+            "path" : "\/documentation\/chat\/chateventtype",
+            "title" : "ChatEventType",
+            "type" : "enum"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Enumeration Cases",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/contacteventtypes\/blocked(_:)",
+                "title" : "case blocked(ChatResponse<Contact>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/contacteventtypes\/contactslastseen(_:)",
+                "title" : "case contactsLastSeen(ChatResponse<[UserLastSeenDuration]>)",
+                "type" : "case"
+              }
+            ],
+            "path" : "\/documentation\/chat\/contacteventtypes",
+            "title" : "ContactEventTypes",
+            "type" : "enum"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Enumeration Cases",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/downloauploadaction\/cancel",
+                "title" : "case cancel",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/downloauploadaction\/resume",
+                "title" : "case resume",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/downloauploadaction\/suspend",
+                "title" : "case suspend",
+                "type" : "case"
+              },
+              {
+                "title" : "Instance Properties",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/downloauploadaction\/id-i476",
+                "title" : "var id: DownloaUploadAction",
+                "type" : "property"
+              },
+              {
+                "title" : "Default Implementations",
+                "type" : "groupMarker"
+              },
+              {
+                "children" : [
+                  {
+                    "title" : "Operators",
+                    "type" : "groupMarker"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/downloauploadaction\/!=(_:_:)",
+                    "title" : "static func != (Self, Self) -> Bool",
+                    "type" : "op"
+                  }
+                ],
+                "path" : "\/documentation\/chat\/downloauploadaction\/equatable-implementations",
+                "title" : "Equatable Implementations",
+                "type" : "symbol"
+              },
+              {
+                "children" : [
+                  {
+                    "title" : "Instance Properties",
+                    "type" : "groupMarker"
+                  },
+                  {
+                    "path" : "\/documentation\/chat\/downloauploadaction\/id-4r2it",
+                    "title" : "var id: ObjectIdentifier",
+                    "type" : "property"
+                  }
+                ],
+                "path" : "\/documentation\/chat\/downloauploadaction\/identifiable-implementations",
+                "title" : "Identifiable Implementations",
+                "type" : "symbol"
+              }
+            ],
+            "path" : "\/documentation\/chat\/downloauploadaction",
+            "title" : "DownloaUploadAction",
+            "type" : "enum"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Enumeration Cases",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/fileeventtype\/downloaderror(_:)",
+                "title" : "case downloadError(ChatResponse<String>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/fileeventtype\/downloaded(_:)",
+                "title" : "case downloaded(ChatResponse<Data?>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/fileeventtype\/downloading(_:)",
+                "title" : "case downloading(ChatResponse<String>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/fileeventtype\/imagedownloaded(_:)",
+                "title" : "case imageDownloaded(ChatResponse<Data?>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/fileeventtype\/notstarted",
+                "title" : "case notStarted",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/fileeventtype\/uploaderror(_:)",
+                "title" : "case uploadError(ChatResponse<String>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/fileeventtype\/uploaded(_:)",
+                "title" : "case uploaded(ChatResponse<String>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/fileeventtype\/uploading(_:)",
+                "title" : "case uploading(ChatResponse<String>)",
+                "type" : "case"
+              }
+            ],
+            "path" : "\/documentation\/chat\/fileeventtype",
+            "title" : "FileEventType",
+            "type" : "enum"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Enumeration Cases",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/messageeventtypes\/messagedelete(_:)",
+                "title" : "case messageDelete(ChatResponse<Message>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/messageeventtypes\/messagedelivery(_:)",
+                "title" : "case messageDelivery(ChatResponse<MessageResponse>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/messageeventtypes\/messageedit(_:)",
+                "title" : "case messageEdit(ChatResponse<Message>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/messageeventtypes\/messagenew(_:)",
+                "title" : "case messageNew(ChatResponse<Message>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/messageeventtypes\/messageseen(_:)",
+                "title" : "case messageSeen(ChatResponse<MessageResponse>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/messageeventtypes\/messagesent(_:)",
+                "title" : "case messageSent(ChatResponse<MessageResponse>)",
+                "type" : "case"
+              }
+            ],
+            "path" : "\/documentation\/chat\/messageeventtypes",
+            "title" : "MessageEventTypes",
+            "type" : "enum"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Enumeration Cases",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/systemeventtypes\/servertime(_:)",
+                "title" : "case serverTime(ChatResponse<Int?>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/systemeventtypes\/systemmessage(_:)",
+                "title" : "case systemMessage(ChatResponse<SystemEventMessageModel>)",
+                "type" : "case"
+              }
+            ],
+            "path" : "\/documentation\/chat\/systemeventtypes",
+            "title" : "SystemEventTypes",
+            "type" : "enum"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Enumeration Cases",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/tageventtypes\/addtagparticipant(_:)",
+                "title" : "case addTagParticipant(ChatResponse<[TagParticipant]>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/tageventtypes\/createtag(_:)",
+                "title" : "case createTag(ChatResponse<Tag>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/tageventtypes\/deletetag(_:)",
+                "title" : "case deleteTag(ChatResponse<Tag>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/tageventtypes\/edittag(_:)",
+                "title" : "case editTag(ChatResponse<Tag>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/tageventtypes\/removetagparticipant(_:)",
+                "title" : "case removeTagParticipant(ChatResponse<[TagParticipant]>)",
+                "type" : "case"
+              }
+            ],
+            "path" : "\/documentation\/chat\/tageventtypes",
+            "title" : "TagEventTypes",
+            "type" : "enum"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Enumeration Cases",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/threadeventtypes\/lastmessagedeleted(_:)",
+                "title" : "case lastMessageDeleted(ChatResponse<Conversation>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/threadeventtypes\/lastmessageedited(_:)",
+                "title" : "case lastMessageEdited(ChatResponse<Conversation>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/threadeventtypes\/messagepin(_:)",
+                "title" : "case messagePin(ChatResponse<Message>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/threadeventtypes\/messageunpin(_:)",
+                "title" : "case messageUnpin(ChatResponse<Message>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/threadeventtypes\/threadaddparticipants(_:)",
+                "title" : "case threadAddParticipants(ChatResponse<[Participant]>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/threadeventtypes\/threadclosed(_:)",
+                "title" : "case threadClosed(ChatResponse<Int>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/threadeventtypes\/threaddeleted(_:)",
+                "title" : "case threadDeleted(ChatResponse<Participant>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/threadeventtypes\/threadinfoupdated(_:)",
+                "title" : "case threadInfoUpdated(ChatResponse<Conversation>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/threadeventtypes\/threadlastactivitytime(_:)",
+                "title" : "case threadLastActivityTime(ChatResponse<ThreadLastActivity>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/threadeventtypes\/threadleaveparticipant(_:)",
+                "title" : "case threadLeaveParticipant(ChatResponse<User>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/threadeventtypes\/threadleavesaftlyfailed(_:)",
+                "title" : "case threadLeaveSaftlyFailed(ChatResponse<Int>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/threadeventtypes\/threadmute(_:)",
+                "title" : "case threadMute(ChatResponse<Int>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/threadeventtypes\/threadnew(_:)",
+                "title" : "case threadNew(ChatResponse<Conversation>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/threadeventtypes\/threadparticipantslistchange(_:)",
+                "title" : "case threadParticipantsListChange(ChatResponse<[Participant]>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/threadeventtypes\/threadpin(_:)",
+                "title" : "case threadPin(ChatResponse<Int>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/threadeventtypes\/threadremoveparticipants(_:)",
+                "title" : "case threadRemoveParticipants(ChatResponse<[Participant]>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/threadeventtypes\/threadremovedfrom(_:)",
+                "title" : "case threadRemovedFrom(ChatResponse<Int>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/threadeventtypes\/threadunmute(_:)",
+                "title" : "case threadUnmute(ChatResponse<Int>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/threadeventtypes\/threadunpin(_:)",
+                "title" : "case threadUnpin(ChatResponse<Int>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/threadeventtypes\/threadunreadcountupdated(_:)",
+                "title" : "case threadUnreadCountUpdated(ChatResponse<UnreadCount>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/threadeventtypes\/threaduserrole(_:)",
+                "title" : "case threadUserRole(ChatResponse<[UserRole]>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/threadeventtypes\/threadslistchange(_:)",
+                "title" : "case threadsListChange(ChatResponse<[Conversation]>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/threadeventtypes\/threadsunreadcount(_:)",
+                "title" : "case threadsUnreadCount(ChatResponse<[String : Int]>)",
+                "type" : "case"
+              }
+            ],
+            "path" : "\/documentation\/chat\/threadeventtypes",
+            "title" : "ThreadEventTypes",
+            "type" : "enum"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Enumeration Cases",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/chat\/usereventtypes\/onuser(_:)",
+                "title" : "case onUser(ChatResponse<User>)",
+                "type" : "case"
+              },
+              {
+                "path" : "\/documentation\/chat\/usereventtypes\/roles(_:)",
+                "title" : "case roles(ChatResponse<[Roles]>)",
+                "type" : "case"
+              }
+            ],
+            "path" : "\/documentation\/chat\/usereventtypes",
+            "title" : "UserEventTypes",
+            "type" : "enum"
+          }
+        ],
+        "icon" : "icon.png",
+        "path" : "\/documentation\/chat",
+        "title" : "Chat",
+        "type" : "module"
+      }
+    ]
+  },
+  "references" : {
+    "icon.png" : {
+      "alt" : "App icon.",
+      "identifier" : "icon.png",
+      "type" : "image",
+      "variants" : [
+        {
+          "traits" : [
+            "1x",
+            "light"
+          ],
+          "url" : "\/images\/icon.png"
+        }
+      ]
+    }
+  },
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 1,
+    "patch" : 1
+  }
+}

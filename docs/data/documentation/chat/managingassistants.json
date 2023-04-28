@@ -1,0 +1,1093 @@
+{
+  "abstract" : [
+    {
+      "text" : "Adding a participant as an assistant.",
+      "type" : "text"
+    }
+  ],
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/ManagingAssistants"
+  },
+  "kind" : "article",
+  "metadata" : {
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "role" : "article",
+    "roleHeading" : "Article",
+    "title" : "Managing Assistants"
+  },
+  "primaryContentSections" : [
+    {
+      "content" : [
+        {
+          "anchor" : "overview",
+          "level" : 2,
+          "text" : "Overview",
+          "type" : "heading"
+        },
+        {
+          "content" : [
+            {
+              "inlineContent" : [
+                {
+                  "text" : "A assitant is only work in P2P thread with two participant. You can not have an assistatnt in group or channel.",
+                  "type" : "text"
+                }
+              ],
+              "type" : "paragraph"
+            }
+          ],
+          "name" : "Important",
+          "style" : "important",
+          "type" : "aside"
+        },
+        {
+          "content" : [
+            {
+              "inlineContent" : [
+                {
+                  "text" : "The server guarantee that it will add assistants to a P2P-thread automatically.",
+                  "type" : "text"
+                }
+              ],
+              "type" : "paragraph"
+            }
+          ],
+          "name" : "Note",
+          "style" : "note",
+          "type" : "aside"
+        },
+        {
+          "anchor" : "Register-participants-as-assistants",
+          "level" : 3,
+          "text" : "Register participants as assistants",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "To register participants as assistants use the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/registerAssistat(_:completion:uniqueIdResult:)",
+              "isActive" : true,
+              "type" : "reference"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "let invitee = Invitee(id: 123456, idType: .TO_BE_USER_ID)",
+            "let roles:[Roles] = [.READ_THREAD, .EDIT_THREAD, .ADD_RULE_TO_USER]",
+            "let assistant = Assistant(assistant: invitee, contactType: \"default\", roleTypes: roles)",
+            "Chat.sharedInstance.registerAssistat(.init(assistants: [assistant])) { assistants, uniqueId, error in",
+            "    \/\/ Write your code",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Deactivate-assistants",
+          "level" : 3,
+          "text" : "Deactivate assistants",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "To deactivate assistants use the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/deactiveAssistant(_:completion:uniqueIdResult:)",
+              "isActive" : true,
+              "type" : "reference"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "Chat.sharedInstance.deactiveAssistant(.init(assistants: [assistant])) { assistants, uniqueId, error in",
+            "    \/\/ Write your code",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Get-list-of-assistants",
+          "level" : 3,
+          "text" : "Get list of assistants",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "To get a list of assistants for the current user, use the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/getAssistats(_:completion:cacheResponse:uniqueIdResult:)",
+              "isActive" : true,
+              "type" : "reference"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "let req = AssistantsRequest(contactType: \"default\")",
+            "Chat.sharedInstance.getAssistats(req) {  assistants, uniqueId,pagination, error in",
+            "    \/\/ Write your code",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Get-list-of-assistants-actions",
+          "level" : 3,
+          "text" : "Get list of assistants actions",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "To get a list of actions that a assistant performed, use the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/getAssistatsHistory(_:uniqueIdResult:)",
+              "isActive" : true,
+              "type" : "reference"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "Chat.sharedInstance.getAssistatsHistory() { assistantActions, uniqueId, error in",
+            "    \/\/ Write your code",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Get-list-of-blocked-assistants",
+          "level" : 3,
+          "text" : "Get list of blocked assistants",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "To get a list of blocked assistants, use the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/getBlockedAssistants(_:_:cacheResponse:uniqueIdResult:)",
+              "isActive" : true,
+              "type" : "reference"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "Chat.sharedInstance.getBlockedAssistants(.init(count: 50, offset: 0)) { blockedAssistants, uniqueId, pagination, error in",
+            "    \/\/ Write your code",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Block-assistants",
+          "level" : 3,
+          "text" : "Block assistants",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "To block assistants, use the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/blockAssistants(_:_:uniqueIdResult:)",
+              "isActive" : true,
+              "type" : "reference"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "Chat.sharedInstance.blockAssistants(.init(assistants:assistants)) { blockedAssistants, uniqueId, pagination, error in",
+            "    \/\/ Write your code",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "UNBlock-assistants",
+          "level" : 3,
+          "text" : "UNBlock assistants",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "To unblock assistants, use the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/unblockAssistants(_:_:uniqueIdResult:)",
+              "isActive" : true,
+              "type" : "reference"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "Chat.sharedInstance.unblockAssistants(.init(assistants:assistants)) { unblockedAssistants, uniqueId, pagination, error in",
+            "    \/\/ Write your code",
+            "}"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        }
+      ],
+      "kind" : "content"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "seeAlsoSections" : [
+    {
+      "generated" : true,
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/GettingStarted",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingThreads",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingMessages",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingContacts",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingFiles",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingUsers",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingProfile",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingTags",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingBots",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps"
+      ],
+      "title" : "Essentials"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/managingassistants"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/Chat/blockAssistants(_:_:uniqueIdResult:)": {
+  "abstract" : [
+    {
+      "text" : "Block assistants.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "blockAssistants"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO28BlockUnblockAssistantRequestC",
+      "text" : "BlockUnblockAssistantRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat14CompletionTypea",
+      "text" : "CompletionType"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels9AssistantC",
+      "text" : "Assistant"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueIdResult"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
+      "text" : "UniqueIdResultType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/blockAssistants(_:_:uniqueIdResult:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "blockAssistants(_:_:uniqueIdResult:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/blockassistants(_:_:uniqueidresult:)"
+},
+"doc://Chat/documentation/Chat/Chat/deactiveAssistant(_:completion:uniqueIdResult:)": {
+  "abstract" : [
+    {
+      "text" : "Deactivate assistants.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "deactiveAssistant"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO24DeactiveAssistantRequestC",
+      "text" : "DeactiveAssistantRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "completion"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat14CompletionTypea",
+      "text" : "CompletionType"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels9AssistantC",
+      "text" : "Assistant"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueIdResult"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
+      "text" : "UniqueIdResultType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/deactiveAssistant(_:completion:uniqueIdResult:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "deactiveAssistant(_:completion:uniqueIdResult:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/deactiveassistant(_:completion:uniqueidresult:)"
+},
+"doc://Chat/documentation/Chat/Chat/getAssistats(_:completion:cacheResponse:uniqueIdResult:)": {
+  "abstract" : [
+    {
+      "text" : "Get list of assistants for user.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "getAssistats"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO17AssistantsRequestC",
+      "text" : "AssistantsRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "completion"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat14CompletionTypea",
+      "text" : "CompletionType"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels9AssistantC",
+      "text" : "Assistant"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "cacheResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat14CompletionTypea",
+      "text" : "CompletionType"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels9AssistantC",
+      "text" : "Assistant"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueIdResult"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
+      "text" : "UniqueIdResultType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/getAssistats(_:completion:cacheResponse:uniqueIdResult:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "getAssistats(_:completion:cacheResponse:uniqueIdResult:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/getassistats(_:completion:cacheresponse:uniqueidresult:)"
+},
+"doc://Chat/documentation/Chat/Chat/getAssistatsHistory(_:uniqueIdResult:)": {
+  "abstract" : [
+    {
+      "text" : "Get a history of assitant actions.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "getAssistatsHistory"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat14CompletionTypea",
+      "text" : "CompletionType"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO15AssistantActionC",
+      "text" : "AssistantAction"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueIdResult"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
+      "text" : "UniqueIdResultType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/getAssistatsHistory(_:uniqueIdResult:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "getAssistatsHistory(_:uniqueIdResult:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/getassistatshistory(_:uniqueidresult:)"
+},
+"doc://Chat/documentation/Chat/Chat/getBlockedAssistants(_:_:cacheResponse:uniqueIdResult:)": {
+  "abstract" : [
+    {
+      "text" : "Get list of blocked assistants.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "getBlockedAssistants"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO24BlockedAssistantsRequestC",
+      "text" : "BlockedAssistantsRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat14CompletionTypea",
+      "text" : "CompletionType"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels9AssistantC",
+      "text" : "Assistant"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "cacheResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat17CacheResponseTypea",
+      "text" : "CacheResponseType"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels9AssistantC",
+      "text" : "Assistant"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueIdResult"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
+      "text" : "UniqueIdResultType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/getBlockedAssistants(_:_:cacheResponse:uniqueIdResult:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "getBlockedAssistants(_:_:cacheResponse:uniqueIdResult:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/getblockedassistants(_:_:cacheresponse:uniqueidresult:)"
+},
+"doc://Chat/documentation/Chat/Chat/registerAssistat(_:completion:uniqueIdResult:)": {
+  "abstract" : [
+    {
+      "text" : "Register a participant as an assistant.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "registerAssistat"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO24RegisterAssistantRequestC",
+      "text" : "RegisterAssistantRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "completion"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat14CompletionTypea",
+      "text" : "CompletionType"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels9AssistantC",
+      "text" : "Assistant"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueIdResult"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
+      "text" : "UniqueIdResultType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/registerAssistat(_:completion:uniqueIdResult:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "registerAssistat(_:completion:uniqueIdResult:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/registerassistat(_:completion:uniqueidresult:)"
+},
+"doc://Chat/documentation/Chat/Chat/unblockAssistants(_:_:uniqueIdResult:)": {
+  "abstract" : [
+    {
+      "text" : "UNBlock assistants.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "unblockAssistants"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO28BlockUnblockAssistantRequestC",
+      "text" : "BlockUnblockAssistantRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat14CompletionTypea",
+      "text" : "CompletionType"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels9AssistantC",
+      "text" : "Assistant"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueIdResult"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
+      "text" : "UniqueIdResultType"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/unblockAssistants(_:_:uniqueIdResult:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "unblockAssistants(_:_:uniqueIdResult:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat\/unblockassistants(_:_:uniqueidresult:)"
+},
+"doc://Chat/documentation/Chat/GettingStarted": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/GettingStarted",
+  "kind" : "article",
+  "role" : "collectionGroup",
+  "title" : "Getting Started",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/gettingstarted"
+},
+"doc://Chat/documentation/Chat/ManagingBots": {
+  "abstract" : [
+    {
+      "text" : "For creating, add\/remove command, user bots, start\/stop.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingBots",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Bots",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingbots"
+},
+"doc://Chat/documentation/Chat/ManagingContacts": {
+  "abstract" : [
+    {
+      "text" : "Managing contacts add, edit, delete, search, and more.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingContacts",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Contacts",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingcontacts"
+},
+"doc://Chat/documentation/Chat/ManagingFiles": {
+  "abstract" : [
+    {
+      "text" : "You could manage download and upload and so more in terms of working with files.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingFiles",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Files",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingfiles"
+},
+"doc://Chat/documentation/Chat/ManagingMaps": {
+  "abstract" : [
+    {
+      "text" : "Converting lat, long to an address or searching through a map, or finding a route getting an image of lat, long.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Maps",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingmaps"
+},
+"doc://Chat/documentation/Chat/ManagingMessages": {
+  "abstract" : [
+    {
+      "text" : "You could Add, delete, edit, reply, forward and so many more.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingMessages",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Messages",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingmessages"
+},
+"doc://Chat/documentation/Chat/ManagingProfile": {
+  "abstract" : [
+    {
+      "text" : "Get current user details, update, set profile.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingProfile",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Profile",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingprofile"
+},
+"doc://Chat/documentation/Chat/ManagingTags": {
+  "abstract" : [
+    {
+      "text" : "Tags are like folder for managing threads. You could Add, delete, edit and add\/remove tag participans.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingTags",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Tags",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingtags"
+},
+"doc://Chat/documentation/Chat/ManagingThreads": {
+  "abstract" : [
+    {
+      "text" : "Managing threads create P2P, Group, Channel or delete edit and so many more.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingThreads",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Threads",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingthreads"
+},
+"doc://Chat/documentation/Chat/ManagingUsers": {
+  "abstract" : [
+    {
+      "text" : "Manage users such as get a list of roles and so more.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingUsers",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Users",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingusers"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

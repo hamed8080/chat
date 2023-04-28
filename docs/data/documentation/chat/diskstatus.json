@@ -1,0 +1,545 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/DiskStatus"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "s:4Chat10DiskStatusC",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "class"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "text" : "DiskStatus"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "navigatorTitle" : [
+      {
+        "kind" : "identifier",
+        "text" : "DiskStatus"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Class",
+    "symbolKind" : "class",
+    "title" : "DiskStatus"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "final"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "keyword",
+              "text" : "class"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "identifier",
+              "text" : "DiskStatus"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/DiskStatus\/freeDiskSpace",
+        "doc:\/\/Chat\/documentation\/Chat\/DiskStatus\/freeDiskSpaceInBytes",
+        "doc:\/\/Chat\/documentation\/Chat\/DiskStatus\/totalDiskSpace",
+        "doc:\/\/Chat\/documentation\/Chat\/DiskStatus\/totalDiskSpaceInBytes",
+        "doc:\/\/Chat\/documentation\/Chat\/DiskStatus\/usedDiskSpace",
+        "doc:\/\/Chat\/documentation\/Chat\/DiskStatus\/usedDiskSpaceInBytes"
+      ],
+      "title" : "Type Properties"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/DiskStatus\/GBFormatter(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/DiskStatus\/MBFormatter(_:)"
+      ],
+      "title" : "Type Methods"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/diskstatus"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/DiskStatus": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "DiskStatus"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DiskStatus",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "DiskStatus"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "DiskStatus",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/diskstatus"
+},
+"doc://Chat/documentation/Chat/DiskStatus/GBFormatter(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "GBFormatter"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:s5Int64V",
+      "text" : "Int64"
+    },
+    {
+      "kind" : "text",
+      "text" : ") -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DiskStatus\/GBFormatter(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "GBFormatter(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/diskstatus\/gbformatter(_:)"
+},
+"doc://Chat/documentation/Chat/DiskStatus/MBFormatter(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "MBFormatter"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:s5Int64V",
+      "text" : "Int64"
+    },
+    {
+      "kind" : "text",
+      "text" : ") -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DiskStatus\/MBFormatter(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "MBFormatter(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/diskstatus\/mbformatter(_:)"
+},
+"doc://Chat/documentation/Chat/DiskStatus/freeDiskSpace": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "freeDiskSpace"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DiskStatus\/freeDiskSpace",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "freeDiskSpace",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/diskstatus\/freediskspace"
+},
+"doc://Chat/documentation/Chat/DiskStatus/freeDiskSpaceInBytes": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "freeDiskSpaceInBytes"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:s5Int64V",
+      "text" : "Int64"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DiskStatus\/freeDiskSpaceInBytes",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "freeDiskSpaceInBytes",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/diskstatus\/freediskspaceinbytes"
+},
+"doc://Chat/documentation/Chat/DiskStatus/totalDiskSpace": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "totalDiskSpace"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DiskStatus\/totalDiskSpace",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "totalDiskSpace",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/diskstatus\/totaldiskspace"
+},
+"doc://Chat/documentation/Chat/DiskStatus/totalDiskSpaceInBytes": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "totalDiskSpaceInBytes"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:s5Int64V",
+      "text" : "Int64"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DiskStatus\/totalDiskSpaceInBytes",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "totalDiskSpaceInBytes",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/diskstatus\/totaldiskspaceinbytes"
+},
+"doc://Chat/documentation/Chat/DiskStatus/usedDiskSpace": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "usedDiskSpace"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DiskStatus\/usedDiskSpace",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "usedDiskSpace",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/diskstatus\/useddiskspace"
+},
+"doc://Chat/documentation/Chat/DiskStatus/usedDiskSpaceInBytes": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "usedDiskSpaceInBytes"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:s5Int64V",
+      "text" : "Int64"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DiskStatus\/usedDiskSpaceInBytes",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "usedDiskSpaceInBytes",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/diskstatus\/useddiskspaceinbytes"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}
