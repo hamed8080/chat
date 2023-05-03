@@ -22,7 +22,6 @@ public extension Chat {
     func addContact(_ request: AddContactRequest, completion: @escaping CompletionType<[Contact]>, uniqueIdResult _: UniqueIdResultType? = nil) {
         let url = "\(config.platformHost)\(Routes.addContacts.rawValue)"
         let headers: [String: String] = ["_token_": config.token, "_token_issuer_": "1"]
-        request.typeCode = config.typeCode
         let bodyData = request.parameterData
         var urlReq = URLRequest(url: URL(string: url)!)
         urlReq.allHTTPHeaderFields = headers

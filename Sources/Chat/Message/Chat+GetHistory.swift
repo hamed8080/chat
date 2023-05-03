@@ -31,7 +31,7 @@ public extension Chat {
                     fileMessageNotSentRequests: CompletionTypeNoneDecodeable<[(UploadFileRequest, SendTextMessageRequest)]>? = nil,
                     uniqueIdResult: UniqueIdResultType? = nil)
     {
-        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult) { [weak self] (response: ChatResponse<[Message]>) in
+        prepareToSendAsync(req: request, type: .getHistory, uniqueIdResult: uniqueIdResult) { [weak self] (response: ChatResponse<[Message]>) in
             let messages = response.result
             let pagination = Pagination(hasNext: messages?.count ?? 0 >= request.count, count: request.count, offset: request.offset)
             completion(ChatResponse(uniqueId: response.uniqueId, result: messages, error: response.error, pagination: pagination))
@@ -40,7 +40,7 @@ public extension Chat {
             }
         }
 
-        cache?.message.fetch(request) { [weak self] messages, totalCount in
+        cache?.message.fetch(request.fetchRequest) { [weak self] messages, totalCount in
             let messages = messages.map { $0.codable(fillConversation: false) }
             self?.responseQueue.async {
                 let pagination = Pagination(hasNext: totalCount >= request.count, count: request.count, offset: request.offset)

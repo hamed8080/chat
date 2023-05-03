@@ -15,5 +15,5 @@ Pod::Spec.new do |s|
   s.dependency "Async" , '~> 1.3.1'
   s.dependency "Additive" , '~> 1.0.1'
   s.dependency "Logger" , '~> 1.0.2'
-  s.dependency "ChatCache", '~> 1.0.0'
+  s.dependency "ChatExtensions", '~> 1.0.1'
 end

@@ -20,7 +20,6 @@ public extension Chat {
 //    func updateContact(_ request: UpdateContactRequest, completion: @escaping CompletionType<[Contact]>, uniqueIdsResult _: UniqueIdResultType? = nil) {
 //        let url = "\(config.platformHost)\(Routes.updateContacts.rawValue)"
 //        let headers: [String: String] = ["_token_": config.token, "_token_issuer_": "1"]
-//        request.typeCode = config.typeCode
 //        let bodyData = request.getParameterData()
 //        var urlReq = URLRequest(url: URL(string: url)!)
 //        urlReq.allHTTPHeaderFields = headers

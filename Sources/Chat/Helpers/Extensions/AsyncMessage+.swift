@@ -51,12 +51,13 @@ public extension AsyncMessage {
                                                                       time: idResponse.time)
             return chatRes
         } else if messageResponse.result != nil {
-            messageResponse.result?.messageState = state
-            let chatRes: ChatResponse<MessageResponse> = ChatResponse(uniqueId: messageResponse.uniqueId,
-                                                                      result: messageResponse.result,
-                                                                      error: messageResponse.error,
-                                                                      subjectId: messageResponse.subjectId,
-                                                                      time: messageResponse.time)
+            var response = messageResponse
+            response.result?.messageState = state
+            let chatRes: ChatResponse<MessageResponse> = ChatResponse(uniqueId: response.uniqueId,
+                                                                      result: response.result,
+                                                                      error: response.error,
+                                                                      subjectId: response.subjectId,
+                                                                      time: response.time)
             return chatRes
         } else {
             return nil

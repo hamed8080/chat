@@ -14,20 +14,14 @@ let package = Package(
         .library(name: "Chat", targets: ["Chat"]),
     ],
     dependencies: [
-//        .package(path: "../Async"),
-//        .package(path: "ChatModels"),
-//        .package(path: "ChatCache"),
-//        .package(path: "ChatExtensions"),
-//        .package(path: "ChatDTO"),
-//        .package(path: "ChatCore"),
-        .package(url: "https://pubgi.fanapsoft.ir/chat/ios/chat-cache.git", exact: "1.0.0"),
+        .package(url: "https://pubgi.fanapsoft.ir/chat/ios/chat-extensions.git", exact: "1.0.1"),
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
     ],
     targets: [
         .target(
             name: "Chat",
             dependencies: [
-                .product(name: "ChatCache", package: "chat-cache"),
+                .product(name: "ChatExtensions", package: "chat-extensions"),
             ],
             resources: []
         ),

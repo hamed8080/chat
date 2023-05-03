@@ -17,7 +17,7 @@ public extension Chat { /// Start a bot.
     ///   - completion: Name of a bot if it starts successfully.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func startBot(_ request: StartStopBotRequest, completion: @escaping CompletionType<String>, uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
+        prepareToSendAsync(req: request, type: .startBot, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 
     /// Stop a bot.
@@ -26,8 +26,7 @@ public extension Chat { /// Start a bot.
     ///   - completion: Name of a bot if it stopped successfully.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func stopBot(_ request: StartStopBotRequest, completion: @escaping CompletionType<String>, uniqueIdResult: UniqueIdResultType? = nil) {
-        request.chatMessageType = .stopBot
-        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
+        prepareToSendAsync(req: request, type: .stopBot, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 

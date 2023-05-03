@@ -12,6 +12,11 @@ import ChatModels
 import Foundation
 import Logger
 
+private struct QueueableWithType {
+    let queueable: Queueable
+    let type: ChatMessageVOTypes
+}
+
 /// AsyncManager intermediate between chat and async socket server.
 internal class AsyncManager: AsyncDelegate {
     private var config: ChatConfig? { chat?.config }
@@ -28,7 +33,7 @@ internal class AsyncManager: AsyncDelegate {
     private(set) var queueTimer: TimerProtocol
 
     /// This queue will live till application is running and this class is in memory, be careful it's not persistent on storage.
-    private var queue: [String: Queueable] = [:]
+    private var queue: [String: QueueableWithType] = [:]
 
     public init(pingTimer: TimerProtocol, queueTimer: TimerProtocol) {
         self.pingTimer = pingTimer
@@ -82,17 +87,17 @@ internal class AsyncManager: AsyncDelegate {
     }
 
     /// The sendData delegate will inform if a send event occurred by the async socket.
-    public func sendData(sendable: ChatSendable) {
+    public func sendData(sendable: ChatSendable, type: ChatMessageVOTypes) {
         guard let config = config else { return }
-        let chatMessage = SendChatMessageVO(req: sendable, token: config.token, typeCode: config.typeCode)
-        addToQueue(sendable: sendable)
-        sendToAsync(asyncMessage: AsyncChatServerMessage(chatMessage: chatMessage), type: sendable.chatMessageType)
+        let chatMessage = SendChatMessageVO(req: sendable, type: type.rawValue, token: config.token, typeCode: config.typeCode)
+        addToQueue(sendable: sendable, type: type)
+        sendToAsync(asyncMessage: AsyncChatServerMessage(chatMessage: chatMessage), type: type)
         sendPingTimer()
     }
 
-    private func addToQueue(sendable: ChatSendable) {
+    private func addToQueue(sendable: ChatSendable, type: ChatMessageVOTypes) {
         if let queueable = sendable as? Queueable {
-            queue[sendable.uniqueId] = queueable
+            queue[sendable.chatUniqueId] = .init(queueable: queueable, type: type)
         }
     }
 
@@ -105,10 +110,10 @@ internal class AsyncManager: AsyncDelegate {
     /// Send queueable each one by one after ``ChatState.chatReady`` with 2 seconds interval between each message to prevent server rejection.
     func sendQueuesOnReconnect() {
         var interval: TimeInterval = 0
-        queue.sorted { $0.value.queueTime < $1.value.queueTime }.forEach { _, item in
+        queue.sorted { $0.value.queueable.queueTime < $1.value.queueable.queueTime }.forEach { _, item in
             if let sendable = item as? ChatSendable {
                 queueTimer.scheduledTimer(interval: interval + 2, repeats: false) { [weak self] _ in
-                    self?.sendData(sendable: sendable)
+                    self?.sendData(sendable: sendable, type: item.type)
                 }
             }
             interval += 2
@@ -142,8 +147,7 @@ internal class AsyncManager: AsyncDelegate {
     /// If you don't send a ping to the chat server it clears peerId within the 30s to 1 minute and the chat server cannot send messages to the client like new chat inside the thread
     private func sendChatServerPing() {
         let req = BareChatSendableRequest()
-        req.chatMessageType = .ping
-        sendData(sendable: req)
+        sendData(sendable: req, type: .ping)
     }
 
     /// When a user rapidly sends an action to the Async server, they'll be banned by Async Server.

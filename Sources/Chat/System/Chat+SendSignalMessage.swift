@@ -11,6 +11,6 @@ public extension Chat {
     /// Notify some system actions such as upload a file, record a voice and e.g.
     /// - Parameter req: A request that contains the type of request and a threadId.
     func sendSignalMessage(req: SendSignalMessageRequest) {
-        prepareToSendAsync(req: req)
+        prepareToSendAsync(req: req, type: .systemMessage)
     }
 }

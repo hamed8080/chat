@@ -13,7 +13,7 @@ public extension Chat {
     /// Send Status ping.
     /// - Parameter request: Send type of ping.
     func sendStatusPing(_ request: SendStatusPingRequest) {
-        prepareToSendAsync(req: request)
+        prepareToSendAsync(req: request, type: .statusPing)
     }
 }
 

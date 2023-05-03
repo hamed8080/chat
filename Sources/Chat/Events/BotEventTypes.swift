@@ -6,6 +6,7 @@
 
 import ChatCore
 import ChatDTO
+import ChatModels
 import Foundation
 
 public enum BotEventTypes {

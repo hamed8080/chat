@@ -97,6 +97,7 @@ protocol ChatProtocol: AnyObject {
     ///   - onSeen: A completion handler for onSeen message.
     func prepareToSendAsync<T: Decodable>(
         req: ChatSendable,
+        type: ChatMessageVOTypes,
         uniqueIdResult: UniqueIdResultType?,
         completion: CompletionType<T>?,
         onSent: OnSentType?,
@@ -108,7 +109,7 @@ protocol ChatProtocol: AnyObject {
     /// - Parameters:
     ///   - req: A object that conform to the ``ChatSendable``.
     ///   - uniqueIdResult: A unique ID should be filled by the client or the SDK.
-    func prepareToSendAsync(req: ChatSendable, uniqueIdResult: UniqueIdResultType?)
+    func prepareToSendAsync(req: ChatSendable, type: ChatMessageVOTypes, uniqueIdResult: UniqueIdResultType?)
 
     /// A method to destroy a chat object and release all strong reference objects.
     func dispose()

@@ -18,7 +18,7 @@ extension Chat {
     ///   - completion: List of tag participants.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func getTagParticipants(_ request: GetTagParticipantsRequest, completion: @escaping CompletionType<[TagParticipant]>, uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
+        prepareToSendAsync(req: request, type: .getTagParticipants, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 

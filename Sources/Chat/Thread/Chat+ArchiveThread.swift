@@ -19,8 +19,7 @@ public extension Chat {
     ///   - completion: A response which contain the threadId of archived thread.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func archiveThread(_ request: GeneralSubjectIdRequest, _ completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
-        request.chatMessageType = .archiveThread
-        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
+        prepareToSendAsync(req: request, type: .archiveThread, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 
     /// Unarchive a thread.
@@ -29,8 +28,7 @@ public extension Chat {
     ///   - completion: A response which contain the threadId of unarchived thread.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func unarchiveThread(_ request: GeneralSubjectIdRequest, _ completion: @escaping CompletionType<Int>, uniqueIdResult: UniqueIdResultType? = nil) {
-        request.chatMessageType = .unarchiveThread
-        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
+        prepareToSendAsync(req: request, type: .unarchiveThread, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 

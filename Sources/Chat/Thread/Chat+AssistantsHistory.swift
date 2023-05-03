@@ -18,8 +18,7 @@ public extension Chat {
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func getAssistatsHistory(_ completion: @escaping CompletionType<[AssistantAction]>, uniqueIdResult: UniqueIdResultType? = nil) {
         let req = BareChatSendableRequest()
-        req.chatMessageType = .getAssistantHistory
-        prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
+        prepareToSendAsync(req: req, type: .getAssistantHistory, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 

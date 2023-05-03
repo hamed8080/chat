@@ -21,7 +21,7 @@ extension Chat {
                             uploadProgress: UploadFileProgressType? = nil,
                             uploadCompletion: UploadCompletionType? = nil)
     {
-        uploadUniqueIdResult?(request.uniqueId)
+        uploadUniqueIdResult?(request.chatUniqueId)
         let imagePath: Routes = request.userGroupHash != nil ? .uploadImageWithUserGroup : .images
         let url = config.fileServer + imagePath.rawValue.replacingOccurrences(of: "{userGroupHash}", with: request.userGroupHash ?? "")
         guard let parameters = try? request.asDictionary() else { return }
@@ -32,7 +32,7 @@ extension Chat {
                                                                 fileData: request.data,
                                                                 fileName: request.fileName,
                                                                 mimetype: request.mimeType,
-                                                                uniqueId: request.uniqueId,
+                                                                uniqueId: request.chatUniqueId,
                                                                 uploadProgress: uploadProgress) { [weak self] data, _, error in
             self?.onResponseUploadImage(req: request, data: data, error: error, uploadCompletion: uploadCompletion)
         }
@@ -64,7 +64,7 @@ extension Chat {
                                         actualWidth: req.wC)
             let fileMetaData = FileMetaData(file: fileDetail, fileHash: uploadResponse.result?.hash, hashCode: uploadResponse.result?.hash, name: uploadResponse.result?.name)
             uploadCompletion?(uploadResponse.result, fileMetaData, nil)
-            cache?.deleteQueues(uniqueIds: [req.uniqueId])
+            cache?.deleteQueues(uniqueIds: [req.chatUniqueId])
             let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId)
             delegate?.chatEvent(event: .file(.uploaded(response)))
         } else if let error = error {

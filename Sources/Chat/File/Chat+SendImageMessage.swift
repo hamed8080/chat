@@ -18,10 +18,10 @@ extension Chat {
                                      _ uploadUniqueIdResult: UniqueIdResultType? = nil,
                                      _ messageUniqueIdResult: UniqueIdResultType? = nil)
     {
-        textMessage.uniqueId = req.uniqueId
-        textMessage.typeCode = config.typeCode
-        cache?.fileQueue.insert(req: textMessage, imageRequest: req)
-        messageUniqueIdResult?(textMessage.uniqueId)
+        var textMessage = textMessage
+        textMessage.uniqueId = req.chatUniqueId
+        cache?.fileQueue.insertImage(req: textMessage.queueOfFileMessages(req))
+        messageUniqueIdResult?(textMessage.chatUniqueId)
         uploadImage(req, uploadUniqueIdResult: uploadUniqueIdResult, uploadProgress: uploadProgress) { [weak self] _, fileMetaData, error in
             // completed upload file
             if let error = error {

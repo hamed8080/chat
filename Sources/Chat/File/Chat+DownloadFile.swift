@@ -25,18 +25,19 @@ extension Chat {
                         cacheResponse: DownloadFileCompletionType? = nil,
                         uniqueIdResult: UniqueIdResultType? = nil)
     {
-        uniqueIdResult?(request.uniqueId)
+        uniqueIdResult?(request.chatUniqueId)
         let url = "\(config.fileServer)\(Routes.files.rawValue)/\(request.hashCode)"
         // Check if file exist on cache or not if it doesn't exist force to download it become true.
+        var forceToDownloadFromServer = false
         if cacheFileManager?.isFileExist(url: URL(string: url)!) == nil {
-            request.forceToDownloadFromServer = true
+            forceToDownloadFromServer = true
         }
-
+        let request = FileRequest(request: request, forceToDownloadFromServer: forceToDownloadFromServer)
         if request.forceToDownloadFromServer == true {
             let headers = ["Authorization": "Bearer \(config.token)"]
             DownloadManager(callbackManager: callbacksManager)
                 .download(url: url,
-                          uniqueId: request.uniqueId,
+                          uniqueId: request.chatUniqueId,
                           headers: headers,
                           parameters: try? request.asDictionary(),
                           downloadProgress: downloadProgress) { [weak self] data, response, error in

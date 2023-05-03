@@ -19,7 +19,7 @@ public extension Chat {
     ///   - completion: The response of deleted message.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func deleteMessage(_ request: DeleteMessageRequest, completion: @escaping CompletionType<Message>, uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
+        prepareToSendAsync(req: request, type: .deleteMessage, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 
     /// Delete multiple messages at once.
@@ -31,7 +31,7 @@ public extension Chat {
         request.uniqueIds.forEach { uniqueId in
             callbacksManager.addCallback(uniqueId: uniqueId, requesType: .deleteMessage, callback: completion)
         }
-        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
+        prepareToSendAsync(req: request, type: .deleteMessage, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 

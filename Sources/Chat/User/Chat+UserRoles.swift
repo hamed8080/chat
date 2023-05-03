@@ -19,8 +19,7 @@ public extension Chat {
     ///   - completion: List of applied roles for a participant.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func setRoles(_ request: RolesRequest, _ completion: @escaping CompletionType<[UserRole]>, uniqueIdResult: UniqueIdResultType? = nil) {
-        request.chatMessageType = .setRuleToUser
-        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
+        prepareToSendAsync(req: request, type: .setRuleToUser, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 
     /// Set a participant auditor access roles.
@@ -29,7 +28,7 @@ public extension Chat {
     ///   - completion: List of roles that applied for the users.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func setAuditor(_ request: AuditorRequest, _ completion: @escaping CompletionType<[UserRole]>, uniqueIdResult: UniqueIdResultType? = nil) {
-        setRoles(request, completion, uniqueIdResult: uniqueIdResult)
+        prepareToSendAsync(req: request, type: .setRuleToUser, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 
     /// Get the roles of the current user in a thread.
@@ -39,8 +38,7 @@ public extension Chat {
     ///   - cacheResponse: The cache response of roles.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func getCurrentUserRoles(_ request: GeneralSubjectIdRequest, completion: @escaping CompletionType<[Roles]>, cacheResponse: CacheResponseType<[Roles]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
-        request.chatMessageType = .getCurrentUserRoles
-        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
+        prepareToSendAsync(req: request, type: .getCurrentUserRoles, uniqueIdResult: uniqueIdResult, completion: completion)
         let roles = cache?.userRole.roles(request.subjectId)
         cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: roles, error: nil))
     }

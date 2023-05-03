@@ -19,7 +19,7 @@ public extension Chat {
     ///   - completion: Reponse of blocked request.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func blockContact(_ request: BlockRequest, completion: @escaping CompletionType<Contact>, uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
+        prepareToSendAsync(req: request, type: .block, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 
     /// Unblock a blcked contact.
@@ -28,7 +28,7 @@ public extension Chat {
     ///   - completion: Reponse of before blocked request.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func unBlockContact(_ request: UnBlockRequest, completion: @escaping CompletionType<Contact>, uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
+        prepareToSendAsync(req: request, type: .unblock, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 }
 

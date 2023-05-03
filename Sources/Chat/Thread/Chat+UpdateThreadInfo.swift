@@ -37,15 +37,16 @@ extension Chat {
     }
 
     func updateThreadInfo(_ req: UpdateThreadInfoRequest, _ fileMetaData: FileMetaData? = nil, _ completion: @escaping CompletionType<Conversation>) {
+        var req = req
         if let fileMetaData = fileMetaData {
             req.metadata = fileMetaData.jsonString
         }
-        prepareToSendAsync(req: req, completion: completion)
+        prepareToSendAsync(req: req, type: .updateThreadInfo, completion: completion)
     }
 
     func saveThreadImageToCashe(req: UpdateThreadInfoRequest) {
         if let imageRequest = req.threadImage {
-            cache?.fileQueue.insert(imageRequest: imageRequest)
+            cache?.fileQueue.insertImage(req: imageRequest.queueOfFileMessages)
         }
     }
 }

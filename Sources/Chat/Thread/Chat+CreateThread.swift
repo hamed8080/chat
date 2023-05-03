@@ -18,7 +18,7 @@ public extension Chat {
     ///   - completion: Response to create thread which contains a ``Conversation`` that includes threadId and other properties.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func createThread(_ request: CreateThreadRequest, completion: @escaping CompletionType<Conversation>, uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
+        prepareToSendAsync(req: request, type: .createThread, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 
     /// Create thread with a message.
@@ -36,7 +36,7 @@ public extension Chat {
                                  onSeen _: OnSentType? = nil,
                                  completion: @escaping CompletionType<Conversation>)
     {
-        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
+        prepareToSendAsync(req: request, type: .createThread, uniqueIdResult: uniqueIdResult, completion: completion)
     }
 
     /// Create thread and send a file message.
@@ -62,14 +62,11 @@ public extension Chat {
                                      uploadUniqueIdResult: UniqueIdResultType? = nil,
                                      messageUniqueIdResult: UniqueIdResultType? = nil)
     {
-        prepareToSendAsync(req: request, uniqueIdResult: nil) { [weak self] (response: ChatResponse<Conversation>) in
-
-            guard let thread = response.result, let id = thread.id else { return }
+        prepareToSendAsync(req: request, type: .createThread, uniqueIdResult: nil) { [weak self] (response: ChatResponse<Conversation>) in
+            guard let thread = response.result else { return }
             createThreadCompletion?(ChatResponse(result: thread))
-            textMessage.threadId = id
-            uploadFile.userGroupHash = thread.userGroupHash
             self?.sendFileMessage(textMessage: textMessage,
-                                  uploadFile: uploadFile,
+                                  uploadFile: .init(request: uploadFile, userGroupHash: thread.userGroupHash),
                                   uploadProgress: uploadProgress,
                                   onSent: onSent,
                                   onSeen: onSeen,

@@ -83,8 +83,7 @@ class ExportMessages: ExportMessagesProtocol {
     }
 
     func getHistory() {
-        request.chatMessageType = .exportChats
-        chat.prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: onReceive(_:))
+        chat.prepareToSendAsync(req: request, type: .exportChats, uniqueIdResult: uniqueIdResult, completion: onReceive(_:))
     }
 
     func onReceive(_ response: ChatResponse<[Message]>) {

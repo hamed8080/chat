@@ -6,6 +6,7 @@
 
 import ChatCore
 import ChatDTO
+import ChatExtensions
 import ChatModels
 import Foundation
 
@@ -21,7 +22,7 @@ extension Chat {
                            uploadProgress: UploadFileProgressType? = nil,
                            uploadCompletion: UploadCompletionType? = nil)
     {
-        uploadUniqueIdResult?(request.uniqueId)
+        uploadUniqueIdResult?(request.chatUniqueId)
         let filePath: Routes = request.userGroupHash != nil ? .uploadFileWithUserGroup : .files
         let url = config.fileServer + filePath.rawValue.replacingOccurrences(of: "{userGroupHash}", with: request.userGroupHash ?? "")
         guard let parameters = try? request.asDictionary() else { return }
@@ -33,7 +34,7 @@ extension Chat {
                     fileData: request.data,
                     fileName: request.fileName,
                     mimetype: request.mimeType,
-                    uniqueId: request.uniqueId,
+                    uniqueId: request.chatUniqueId,
                     uploadProgress: uploadProgress) { [weak self] data, _, error in
                 self?.onResponseUploadFile(req: request, data: data, error: error, uploadCompletion: uploadCompletion)
             }
@@ -69,7 +70,7 @@ extension Chat {
             uploadCompletion?(uploadResponse.result, fileMetaData, nil)
             let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId)
             delegate?.chatEvent(event: .file(.uploaded(response)))
-            cache?.deleteQueues(uniqueIds: [req.uniqueId])
+            cache?.deleteQueues(uniqueIds: [req.chatUniqueId])
         } else if let error = error {
             let error = ChatError(message: "\(ChatErrorType.networkError.rawValue) \(error)", code: 6200, hasError: true)
             uploadCompletion?(nil, nil, error)

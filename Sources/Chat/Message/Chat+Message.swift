@@ -25,13 +25,14 @@ public extension Chat {
     ///   - onDeliver: Is called when a message, have delivered to a participant successfully.
     func sendTextMessage(_ request: SendTextMessageRequest, uniqueIdResult: UniqueIdResultType? = nil, onSent: OnSentType? = nil, onSeen: OnSeenType? = nil, onDeliver: OnDeliveryType? = nil) {
         prepareToSendAsync(req: request,
+                           type: .message,
                            uniqueIdResult: uniqueIdResult,
                            completion: nil as CompletionType<Voidcodable>?,
                            onSent: onSent,
                            onDelivered: onDeliver,
                            onSeen: onSeen)
         cache?.conversation.updateLastMessage(request.threadId, request.textMessage)
-        cache?.textQueue.insert(request)
+        cache?.textQueue.insert(request.queueOfTextMessages)
     }
 
     /// Reply to a message.
@@ -42,7 +43,7 @@ public extension Chat {
     ///   - onSeen: Is called when a message, have seen by a participant successfully.
     ///   - onDeliver: Is called when a message, have delivered to a participant successfully.
     func replyMessage(_ request: ReplyMessageRequest, uniqueIdresult: UniqueIdResultType? = nil, onSent: OnSentType? = nil, onSeen: OnSeenType? = nil, onDeliver: OnDeliveryType? = nil) {
-        sendTextMessage(request, uniqueIdResult: uniqueIdresult, onSent: onSent, onSeen: onSeen, onDeliver: onDeliver)
+        sendTextMessage(request.sendTextMessageRequest, uniqueIdResult: uniqueIdresult, onSent: onSent, onSeen: onSeen, onDeliver: onDeliver)
     }
 
     /// Send a location.
@@ -82,25 +83,24 @@ public extension Chat {
                 wC = Int(image.size.width)
             #endif
             let imageRequest = UploadImageRequest(data: data,
-                                                  hC: hC,
-                                                  wC: wC,
                                                   fileExtension: ".png",
-                                                  fileName: request.mapImageName,
+                                                  fileName: request.mapImageName ?? "",
                                                   mimeType: "image/png",
                                                   userGroupHash: request.userGroupHash,
-                                                  uniqueId: request.uniqueId)
-            imageRequest.typeCode = self.config.typeCode
-            let textMessage = SendTextMessageRequest(threadId: request.threadId,
-                                                     textMessage: request.textMessage ?? "",
-                                                     messageType: .location,
-                                                     repliedTo: request.repliedTo,
-                                                     systemMetadata: request.systemMetadata,
-                                                     uniqueId: request.uniqueId)
+                                                  uniqueId: request.uniqueId,
+                                                  hC: hC,
+                                                  wC: wC)
+            let textMessageReq = SendTextMessageRequest(threadId: request.threadId,
+                                                        textMessage: request.textMessage ?? "",
+                                                        messageType: .location,
+                                                        repliedTo: request.repliedTo,
+                                                        systemMetadata: request.systemMetadata,
+                                                        uniqueId: request.uniqueId)
 
+            var textMessage = textMessageReq
             textMessage.uniqueId = request.uniqueId
-            textMessage.typeCode = self.config.typeCode
-            self.cache?.fileQueue.insert(req: textMessage, imageRequest: imageRequest)
-            messageUniqueIdResult?(textMessage.uniqueId)
+            self.cache?.fileQueue.insert(req: textMessage.queueOfFileMessages(imageRequest))
+            messageUniqueIdResult?(textMessage.chatUniqueId)
             self.uploadImage(imageRequest, uploadUniqueIdResult: uploadUniqueIdResult, uploadProgress: uploadProgress) { [weak self] _, fileMetaData, error in
                 // completed upload file
                 if let error = error {
@@ -127,12 +127,12 @@ public extension Chat {
     ///   - cacheResponse: The cache response of mentioned messages inside a thread.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func getMentions(_ request: MentionRequest, completion: @escaping CompletionType<[Message]>, cacheResponse: CacheResponseType<[Message]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult) { (response: ChatResponse<[Message]>) in
+        prepareToSendAsync(req: request, type: .getHistory, uniqueIdResult: uniqueIdResult) { (response: ChatResponse<[Message]>) in
             let pagination = PaginationWithContentCount(hasNext: response.result?.count ?? 0 >= request.count, count: request.count, offset: request.offset, totalCount: response.contentCount)
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
 
-        cache?.message.getMentions(request) { [weak self] messages, totalCount in
+        cache?.message.getMentions(threadId: request.threadId, offset: request.offset, count: request.count) { [weak self] messages, totalCount in
             let messages = messages.map { $0.codable() }
             self?.responseQueue.async {
                 let pagination = PaginationWithContentCount(hasNext: messages.count >= request.count, count: request.count, offset: request.offset, totalCount: totalCount)
@@ -146,7 +146,7 @@ public extension Chat {
     ///   - request: The request that contains a messageId.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     internal func deliver(_ request: MessageDeliverRequest, uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult)
+        prepareToSendAsync(req: request, type: .delivery, uniqueIdResult: uniqueIdResult)
     }
 
     /// Send seen to participants of a thread that informs you have seen the message already.
@@ -156,8 +156,8 @@ public extension Chat {
     ///   - request: The id of the message.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func seen(_ request: MessageSeenRequest, uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult)
-        cache?.message.seen(request, userId: userInfo?.id ?? -1)
+        prepareToSendAsync(req: request, type: .seen, uniqueIdResult: uniqueIdResult)
+        cache?.message.seen(threadId: request.threadId, messageId: request.messageId, userId: userInfo?.id ?? -1)
         cache?.conversation.decreamentUnreadCount(request.threadId) { [weak self] unreadCount in
             self?.responseQueue.async {
                 self?.delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: .init(unreadCount: unreadCount, threadId: request.threadId)))))
@@ -212,7 +212,7 @@ extension Chat {
         guard let response = asyncMessage.messageResponse(state: .delivered) else { return }
         delegate?.chatEvent(event: .message(.messageDelivery(response)))
         if let delivered = response.result {
-            cache?.message.partnerDeliver(delivered)
+            cache?.message.partnerDeliver(threadId: delivered.threadId ?? -1, messageId: delivered.messageId ?? -1, messageTime: delivered.messageTime ?? 0)
         }
         cache?.deleteQueues(uniqueIds: [response.uniqueId ?? ""])
         callbacksManager.invokeDeliverCallbackAndRemove(response)
@@ -222,7 +222,7 @@ extension Chat {
         guard let response = asyncMessage.messageResponse(state: .seen) else { return }
         if let seenResponse = response.result {
             delegate?.chatEvent(event: .message(.messageSeen(response)))
-            cache?.message.partnerSeen(seenResponse)
+            cache?.message.partnerSeen(threadId: seenResponse.threadId ?? -1, messageId: seenResponse.messageId ?? -1)
             callbacksManager.invokeSeenCallbackAndRemove(response)
         }
     }

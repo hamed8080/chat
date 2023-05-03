@@ -20,13 +20,12 @@ public extension Chat {
     ///   - cacheResponse: Threads list that came from the cache?.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func getThreads(_ request: ThreadsRequest, completion: @escaping CompletionType<[Conversation]>, cacheResponse: CacheResponseType<[Conversation]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult) { (response: ChatResponse<[Conversation]>) in
+        prepareToSendAsync(req: request, type: .getThreads, uniqueIdResult: uniqueIdResult) { (response: ChatResponse<[Conversation]>) in
             let threads = response.result
             let pagination = Pagination(hasNext: threads?.count ?? 0 >= request.count, count: request.count, offset: request.offset)
             completion(ChatResponse(uniqueId: response.uniqueId, result: threads, error: response.error, pagination: pagination))
         }
-
-        cache?.conversation.fetch(request) { [weak self] threads, totalCount in
+        cache?.conversation.fetch(request.fetchRequest) { [weak self] threads, totalCount in
             let threads = threads.map { $0.codable() }
             self?.responseQueue.async {
                 let pagination = Pagination(hasNext: totalCount >= request.count, count: request.count, offset: request.offset)
@@ -42,7 +41,7 @@ public extension Chat {
     ///   - cacheResponse: Thread cache return data from disk so it contains all data in each model.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func getAllThreads(request: AllThreads, completion: @escaping CompletionType<[Int]>, cacheResponse: CacheResponseType<[Int]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
-        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
+        prepareToSendAsync(req: request, type: .getThreads, uniqueIdResult: uniqueIdResult, completion: completion)
         cache?.conversation.fetchIds { [weak self] threadIds in
             self?.responseQueue.async {
                 cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: threadIds, error: nil))

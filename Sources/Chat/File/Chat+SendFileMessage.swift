@@ -29,13 +29,10 @@ public extension Chat {
                          uploadUniqueIdResult: UniqueIdResultType? = nil,
                          messageUniqueIdResult: UniqueIdResultType? = nil)
     {
-        textMessage.uniqueId = uploadFile.uniqueId
-        if let uploadRequest = uploadFile as? UploadImageRequest {
-            requestSendImageTextMessage(textMessage, uploadRequest, onSent, onSeen, onDeliver, uploadProgress, uploadUniqueIdResult, messageUniqueIdResult)
-            return
-        }
-        cache?.fileQueue.insert(req: textMessage, uploadFile: uploadFile)
-        messageUniqueIdResult?(textMessage.uniqueId)
+        var textMessage = textMessage
+        textMessage.uniqueId = uploadFile.chatUniqueId
+        cache?.fileQueue.insert(req: textMessage.queueOfFileMessages(uploadFile))
+        messageUniqueIdResult?(textMessage.chatUniqueId)
         self.uploadFile(uploadFile, uploadUniqueIdResult: uploadUniqueIdResult, uploadProgress: uploadProgress) { [weak self] _, fileMetaData, error in
             // completed upload file
             if let error = error {
@@ -67,7 +64,7 @@ public extension Chat {
                           uploadUniqueIdResult: UniqueIdResultType? = nil,
                           messageUniqueIdResult: UniqueIdResultType? = nil)
     {
-        sendFileMessage(textMessage: replyMessage,
+        sendFileMessage(textMessage: replyMessage.sendTextMessageRequest,
                         uploadFile: uploadFile,
                         uploadProgress: uploadProgress,
                         onSent: onSent,

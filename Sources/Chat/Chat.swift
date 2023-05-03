@@ -60,14 +60,15 @@ public final class Chat: ChatProtocol, Identifiable {
         self.requestUserTimer = requestUserTimer
         self.timerCheckUserStoppedTyping = timerCheckUserStoppedTyping
         self.session = session
-        persistentManager = PersistentManager(logger: logger, cacheEnabled: config.enableCache)
+        asyncManager = AsyncManager(pingTimer: pingTimer, queueTimer: queueTimer)
+        persistentManager = PersistentManager(cacheEnabled: config.enableCache)
         if config.enableCache {
+            persistentManager.logger = self
             cacheFileManager = CacheFileManager()
             if let context = persistentManager.newBgTask() {
-                cache = CacheManager(context: context, logger: logger)
+                cache = CacheManager(context: context, logger: self)
             }
         }
-        asyncManager = AsyncManager(pingTimer: pingTimer, queueTimer: queueTimer)
         asyncManager.chat = self
     }
 
@@ -87,20 +88,21 @@ public final class Chat: ChatProtocol, Identifiable {
 
     func prepareToSendAsync<T: Decodable>(
         req: ChatSendable,
+        type: ChatMessageVOTypes,
         uniqueIdResult: UniqueIdResultType? = nil,
         completion: CompletionType<T>? = nil,
         onSent: OnSentType? = nil,
         onDelivered: OnDeliveryType? = nil,
         onSeen: OnSeenType? = nil
     ) {
-        callbacksManager.addCallback(uniqueId: req.uniqueId, requesType: req.chatMessageType, callback: completion, onSent: onSent, onDelivered: onDelivered, onSeen: onSeen)
-        uniqueIdResult?(req.uniqueId)
-        asyncManager.sendData(sendable: req)
+        callbacksManager.addCallback(uniqueId: req.chatUniqueId, requesType: type, callback: completion, onSent: onSent, onDelivered: onDelivered, onSeen: onSeen)
+        uniqueIdResult?(req.chatUniqueId)
+        asyncManager.sendData(sendable: req, type: type)
     }
 
-    func prepareToSendAsync(req: ChatSendable, uniqueIdResult: UniqueIdResultType? = nil) {
-        uniqueIdResult?(req.uniqueId)
-        asyncManager.sendData(sendable: req)
+    func prepareToSendAsync(req: ChatSendable, type: ChatMessageVOTypes, uniqueIdResult: UniqueIdResultType? = nil) {
+        uniqueIdResult?(req.chatUniqueId)
+        asyncManager.sendData(sendable: req, type: type)
     }
 
     public func setToken(newToken: String, reCreateObject: Bool = false) {

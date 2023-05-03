@@ -20,7 +20,6 @@ extension Chat {
     public func removeContact(_ request: RemoveContactsRequest, completion: @escaping CompletionType<Bool>, uniqueIdResult _: UniqueIdResultType? = nil) {
         let url = "\(config.platformHost)\(Routes.removeContacts.rawValue)"
         let headers: [String: String] = ["_token_": config.token, "_token_issuer_": "1"]
-        request.typeCode = config.typeCode
         let bodyData = request.parameterData
         var urlReq = URLRequest(url: URL(string: url)!)
         urlReq.allHTTPHeaderFields = headers

@@ -18,9 +18,8 @@ public extension Chat {
     ///   - completion: The result of edited message.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func editMessage(_ request: EditMessageRequest, completion: CompletionType<Message>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
-        request.typeCode = config.typeCode
-        prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
-        cache?.editQueue.insert(request)
+        prepareToSendAsync(req: request, type: .editMessage, uniqueIdResult: uniqueIdResult, completion: completion)
+        cache?.editQueue.insert(request.queueOfTextMessages)
     }
 }
 

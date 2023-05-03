@@ -9,7 +9,7 @@ Get threads list. Call the method ``Chat/getThreads(_:completion:cacheResponse:u
 You can send request in pagination mode and set offset.
 
 ```swift
-Chat.sharedInstance.getThreads(init(offset: 50)) { threads, uniqueId, pagination, error in
+Chat.sharedInstance.getThreads(.init(offset: 50)) { threads, uniqueId, pagination, error in
     if error == nil{
         // Write your code
     }

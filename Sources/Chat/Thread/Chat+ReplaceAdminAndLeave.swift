@@ -27,7 +27,7 @@ public extension Chat {
                 self?.setRoles(roleRequest) { (response: ChatResponse<[UserRole]>) in
                     if let usersRoles = response.result {
                         newAdminCompletion?(ChatResponse(uniqueId: request.uniqueId, result: usersRoles, error: response.error))
-                        self?.leaveThread(request, completion: completion, uniqueIdResult: uniqueIdResult)
+                        self?.prepareToSendAsync(req: request, type: .leaveThread, uniqueIdResult: uniqueIdResult, completion: completion)
                     }
                 }
             } else {

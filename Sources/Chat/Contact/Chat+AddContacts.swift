@@ -28,7 +28,6 @@ public extension Chat {
             // the number of paramter is not equal in all contact and get invalid request like below:
             // [firstname,lastname,email,cellPhoneNumber],[firstname,lastname,cellPhoneNumber]
             // ****
-            contact.typeCode = config.typeCode
             urlComp.queryItems?.append(URLQueryItem(name: "firstName", value: contact.firstName))
             urlComp.queryItems?.append(URLQueryItem(name: "lastName", value: contact.lastName))
             urlComp.queryItems?.append(URLQueryItem(name: "email", value: contact.email))
