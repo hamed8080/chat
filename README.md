@@ -20,7 +20,7 @@
 Add in `Package.swift` or directly in `Xcode Project dependencies` section:
 
 ```swift
-.package(url: "https://pubgi.fanapsoft.ir/chat/ios/chat.git", .upToNextMinor(from: "1.3.1")),
+.package(url: "https://pubgi.fanapsoft.ir/chat/ios/chat.git", .upToNextMinor(from: "1.3.2")),
 ```
 
 #### [CocoaPods](https://cocoapods.org) 
@@ -33,12 +33,12 @@ pod 'Additive', :git => 'http://pubgi.fanapsoft.ir/chat/ios/additive.git', :tag 
 pod 'Mocks', :git => 'http://pubgi.fanapsoft.ir/chat/ios/mocks.git', :tag => '1.0.1'
 pod 'Logger', :git => 'http://pubgi.fanapsoft.ir/chat/ios/logger.git', :tag => '1.0.2'
 pod "Async", :git => 'http://pubgi.fanapsoft.ir/chat/ios/async.git', :tag => '1.3.1'
-pod "ChatCore", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat-core.git', :tag => '1.0.0'
-pod "ChatModels", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat-models.git', :tag => '1.0.0'
-pod "ChatDTO", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat-dto.git', :tag => '1.0.0'
-pod "ChatExtensions", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat-extensions.git', :tag => '1.0.0'
-pod "ChatCache", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat-cache.git', :tag => '1.0.0'
-pod "Chat", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat.git', :tag => '1.3.1'
+pod "ChatCore", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat-core.git', :tag => '1.0.1'
+pod "ChatModels", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat-models.git', :tag => '1.0.2'
+pod "ChatDTO", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat-dto.git', :tag => '1.0.2'
+pod "ChatExtensions", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat-extensions.git', :tag => '1.0.2'
+pod "ChatCache", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat-cache.git', :tag => '1.0.2'
+pod "Chat", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat.git', :tag => '1.3.2'
 ```
 
 ## How to use? 

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Chat"
-  s.version      = "1.3.1"
+  s.version      = "1.3.2"
   s.summary      = "Swift Chat SDK"
   s.description  = "A Swift Chat SDK which handle all backend communication with Async SDK and Chat Server."
   s.homepage     = "https://pubgi.fanapsoft.ir/chat/ios/chat"
@@ -15,5 +15,5 @@ Pod::Spec.new do |s|
   s.dependency "Async" , '~> 1.3.1'
   s.dependency "Additive" , '~> 1.0.1'
   s.dependency "Logger" , '~> 1.0.2'
-  s.dependency "ChatExtensions", '~> 1.0.1'
+  s.dependency "ChatExtensions", '~> 1.0.2'
 end
