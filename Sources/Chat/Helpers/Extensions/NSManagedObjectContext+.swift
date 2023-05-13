@@ -12,7 +12,8 @@ extension NSManagedObjectContext {
             do {
                 try block()
             } catch {
-                ChatManager.activeInstance?.logger.log(message: error.localizedDescription, persist: true, type: .internalLog)
+                let internalDelegate = ChatManager.activeInstance as? ChatImplementation
+                internalDelegate?.logger.log(message: error.localizedDescription, persist: true, type: .internalLog)
             }
         }
     }

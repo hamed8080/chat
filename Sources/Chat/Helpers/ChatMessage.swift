@@ -7,19 +7,19 @@
 import ChatCore
 import Foundation
 
-struct ChatMessage: Decodable {
-    var code: Int?
-    let content: String?
-    let contentCount: Int?
-    var message: String?
-    let messageType: Int
-    let subjectId: Int?
-    let time: Int
-    let type: ChatMessageVOTypes
-    let uniqueId: String
-    var messageId: Int?
-    var participantId: Int?
-    var typeCode: String?
+public struct ChatMessage: Decodable {
+    public var code: Int?
+    public let content: String?
+    public let contentCount: Int?
+    public var message: String?
+    public let messageType: Int
+    public let subjectId: Int?
+    public let time: Int
+    public let type: ChatMessageVOTypes
+    public let uniqueId: String
+    public var messageId: Int?
+    public var participantId: Int?
+    public var typeCode: String?
 
     private enum CodingKeys: String, CodingKey {
         case code
@@ -36,7 +36,7 @@ struct ChatMessage: Decodable {
         case typeCode
     }
 
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         code = try? container.decode(Int.self, forKey: .code)
         content = try? container.decode(String.self, forKey: .content)

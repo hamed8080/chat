@@ -9,7 +9,7 @@ import ChatDTO
 import ChatModels
 import Foundation
 
-final class CallbacksManager {
+public final class CallbacksManager {
     private var callbacks: [String: Any] = [:]
     private var callbacksRequestType: [String: ChatMessageVOTypes] = [:]
     private var sentCallbacks: [String: OnSentType?] = [:]
@@ -107,7 +107,7 @@ final class CallbacksManager {
         uploadTasks[uniqueId] = task
     }
 
-    func invokeAndRemove<T: Decodable>(_ response: ChatResponse<T>, _ type: ChatMessageVOTypes?) {
+    public func invokeAndRemove<T: Decodable>(_ response: ChatResponse<T>, _ type: ChatMessageVOTypes?) {
         guard let uniqueId = response.uniqueId,
               let type = type,
               let callback: CompletionType<T> = getCallBack(uniqueId) else { return }

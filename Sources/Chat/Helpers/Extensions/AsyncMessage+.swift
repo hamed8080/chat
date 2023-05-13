@@ -15,7 +15,7 @@ extension CodingUserInfoKey {
 }
 
 public extension AsyncMessage {
-    internal var chatMessage: ChatMessage? {
+    var chatMessage: ChatMessage? {
         guard
             let chatMessageData = content?.data(using: .utf8),
             let chatMessage = try? JSONDecoder.instance.decode(ChatMessage.self, from: chatMessageData) else { return nil }

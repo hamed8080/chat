@@ -14,14 +14,14 @@ let package = Package(
         .library(name: "Chat", targets: ["Chat"]),
     ],
     dependencies: [
-        .package(url: "https://pubgi.fanapsoft.ir/chat/ios/chat-extensions.git", .upToNextMinor(from: "1.0.2")),
+        .package(path: "../ChatExtensions"),
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
     ],
     targets: [
         .target(
             name: "Chat",
             dependencies: [
-                .product(name: "ChatExtensions", package: "chat-extensions"),
+                "ChatExtensions",
             ],
             resources: []
         ),

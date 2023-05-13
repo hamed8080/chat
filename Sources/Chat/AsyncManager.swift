@@ -18,12 +18,12 @@ private struct QueueableWithType {
 }
 
 /// AsyncManager intermediate between chat and async socket server.
-internal class AsyncManager: AsyncDelegate {
+public final class AsyncManager: AsyncDelegate {
     private var config: ChatConfig? { chat?.config }
     private var logger: Logger? { chat?.logger }
-    weak var chat: ChatProtocol?
+    var chat: ChatInternalProtocol?
     /// Async client.
-    private(set) var asyncClient: Async?
+    public var asyncClient: Async?
 
     /// Last message date that was received from the server to manage ping status.
     private var lastSentMessageDate: Date? = Date()
@@ -43,8 +43,8 @@ internal class AsyncManager: AsyncDelegate {
     /// Create an async connection.
     public func createAsync() {
         if let asyncConfig = config?.asyncConfig {
-            asyncClient = Async(config: asyncConfig, delegate: self)
-            asyncClient?.createSocket()
+            asyncClient = SocketFactory.create(config: asyncConfig, delegate: self)
+            asyncClient?.connect()
         }
     }
 
@@ -71,7 +71,7 @@ internal class AsyncManager: AsyncDelegate {
     }
 
     /// It will be only used whenever a client implements a custom async class by itself.
-    func asyncMessageSent(message _: Data?, error _: AsyncError?) {}
+    public func asyncMessageSent(message _: Data?, error _: AsyncError?) {}
 
     /// A delegate to raise an error.
     public func asyncError(error: AsyncError) {
@@ -129,7 +129,7 @@ internal class AsyncManager: AsyncDelegate {
                                               uniqueId: (asyncMessage as? AsyncChatServerMessage)?.chatMessage.uniqueId)
         guard chat?.state == .chatReady || chat?.state == .asyncReady else { return }
         logger?.logJSON(title: "send Message with type: \(type)", jsonString: asyncMessage.string ?? "", persist: false, type: .sent)
-        asyncClient?.sendData(type: .message, message: asyncMessage)
+        asyncClient?.send(message: asyncMessage)
     }
 
     /// A timer that repeats ping the `Chat server` every 20 seconds.
@@ -159,7 +159,7 @@ internal class AsyncManager: AsyncDelegate {
     }
 
     /// On Async SDK log. It is needed for times that client applications need to collect logs of the async SDK.
-    func onLog(log: Log) {
+    public func onLog(log: Log) {
         logger?.delegate?.onLog(log: log)
     }
 }
