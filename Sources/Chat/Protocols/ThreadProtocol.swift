@@ -434,7 +434,6 @@ public extension ThreadProtocol {
     /// - Parameters:
     ///   - request: The request of create a thread.
     ///   - completion: Response to create thread which contains a ``Conversation`` that includes threadId and other properties.
-    ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func createThread(_ request: CreateThreadRequest, completion: @escaping CompletionType<Conversation>) {
         createThread(request, completion: completion, uniqueIdResult: nil)
     }
@@ -442,29 +441,15 @@ public extension ThreadProtocol {
     /// Create thread with a message.
     /// - Parameters:
     ///   - request: The request with a message and threadId.
-    ///   - onSent: Call when message is snet.
-    ///   - onDelivery:  Call when message deliverd but not seen yet.
-    ///   - onSeen: Call when message is seen.
-    ///   - completion: Response of request and created thread.
-    func createThreadWithMessage(_: CreateThreadWithMessage,
-                                 uniqueIdResult _: UniqueIdResultType?,
-                                 onSent _: OnSentType?,
-                                 onDelivery _: OnDeliveryType?,
-                                 onSeen _: OnSentType?,
-                                 completion _: @escaping CompletionType<Conversation>) {}
+    func createThreadWithMessage(_ request: CreateThreadWithMessage, completion: @escaping CompletionType<Conversation>) {
+        createThreadWithMessage(request, uniqueIdResult: nil, onSent: nil, onDelivery: nil, onSeen: nil, completion: completion)
+    }
 
     /// Create thread and send a file message.
     /// - Parameters:
     ///   - request: Request of craete thread.
     ///   - textMessage: Text message.
     ///   - uploadFile: File request.
-    ///   - uploadProgress: Track the progress of uploading.
-    ///   - onSent: Call when message is snet.
-    ///   - onSeen: Call when message is seen.
-    ///   - onDeliver: Call when message deliverd but not seen yet.
-    ///   - createThreadCompletion: Call when the thread is created, and it's called before uploading gets completed
-    ///   - uploadUniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    ///   - messageUniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func createThreadWithFileMessage(_ request: CreateThreadRequest, textMessage: SendTextMessageRequest, uploadFile: UploadFileRequest) {
         createThreadWithFileMessage(request,
                                     textMessage: textMessage,

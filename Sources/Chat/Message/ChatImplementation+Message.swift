@@ -89,17 +89,15 @@ public extension ChatImplementation {
                                                   uniqueId: request.uniqueId,
                                                   hC: hC,
                                                   wC: wC)
-            let textMessageReq = SendTextMessageRequest(threadId: request.threadId,
+            var textMessageReq = SendTextMessageRequest(threadId: request.threadId,
                                                         textMessage: request.textMessage ?? "",
                                                         messageType: .location,
                                                         repliedTo: request.repliedTo,
                                                         systemMetadata: request.systemMetadata,
                                                         uniqueId: request.uniqueId)
 
-            var textMessage = textMessageReq
-            textMessage.uniqueId = request.uniqueId
-            self.cache?.fileQueue.insert(req: textMessage.queueOfFileMessages(imageRequest))
-            messageUniqueIdResult?(textMessage.chatUniqueId)
+            self.cache?.fileQueue.insert(req: textMessageReq.queueOfFileMessages(imageRequest))
+            messageUniqueIdResult?(textMessageReq.chatUniqueId)
             self.uploadImage(imageRequest, uploadUniqueIdResult: uploadUniqueIdResult, uploadProgress: uploadProgress) { [weak self] _, fileMetaData, error in
                 // completed upload file
                 if let error = error {
@@ -108,8 +106,8 @@ public extension ChatImplementation {
                     fileMetaData?.latitude = request.mapCenter.lat
                     fileMetaData?.longitude = request.mapCenter.lng
                     guard let stringMetaData = fileMetaData.jsonString else { return }
-                    textMessage.metadata = stringMetaData
-                    self?.sendTextMessage(textMessage,
+                    textMessageReq.metadata = stringMetaData
+                    self?.sendTextMessage(textMessageReq,
                                           uniqueIdResult: messageUniqueIdResult,
                                           onSent: onSent,
                                           onSeen: onSeen,
