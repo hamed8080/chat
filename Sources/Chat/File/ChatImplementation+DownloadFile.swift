@@ -29,7 +29,7 @@ extension ChatImplementation {
         let url = "\(config.fileServer)\(Routes.files.rawValue)/\(request.hashCode)"
         // Check if file exist on cache or not if it doesn't exist force to download it become true.
         var forceToDownloadFromServer = false
-        if cacheFileManager?.isFileExist(url: URL(string: url)!) == nil {
+        if cacheFileManager?.isFileExist(url: URL(string: url)!) == false {
             forceToDownloadFromServer = true
         }
         let request = FileRequest(request: request, forceToDownloadFromServer: forceToDownloadFromServer)
