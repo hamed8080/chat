@@ -96,7 +96,7 @@ public extension ChatImplementation {
                                                         systemMetadata: request.systemMetadata,
                                                         uniqueId: request.uniqueId)
 
-            self.cache?.fileQueue.insert(req: textMessageReq.queueOfFileMessages(imageRequest))
+            self.cache?.fileQueue.insert(model: textMessageReq.queueOfFileMessages(imageRequest))
             messageUniqueIdResult?(textMessageReq.chatUniqueId)
             self.uploadImage(imageRequest, uploadUniqueIdResult: uploadUniqueIdResult, uploadProgress: uploadProgress) { [weak self] _, fileMetaData, error in
                 // completed upload file

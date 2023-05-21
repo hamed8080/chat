@@ -19,7 +19,7 @@ public extension ChatImplementation {
                                      messageUniqueIdResult: UniqueIdResultType? = nil)
     {
         var textMessage = SendTextMessageRequest(request: textMessage, uniqueId: req.chatUniqueId)
-        cache?.fileQueue.insertImage(req: textMessage.queueOfFileMessages(req))
+        cache?.fileQueue.insert(model: textMessage.queueOfFileMessages(req))
         messageUniqueIdResult?(textMessage.chatUniqueId)
         uploadImage(req, uploadUniqueIdResult: uploadUniqueIdResult, uploadProgress: uploadProgress) { [weak self] _, fileMetaData, error in
             // completed upload file

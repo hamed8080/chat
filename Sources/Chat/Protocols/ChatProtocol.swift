@@ -28,7 +28,7 @@ public protocol Chat: BotProtocols, ContactProtocols, MapProtocol, MessageProtoc
     )
 
     /// The unique id of a chat instance to find and use it in ``ChatManager`` to fetch it.
-    var id: UUID { get set }
+    var id: UUID { get }
 
     /// The current userInfo is set by the SDK after the connection gets ready.
     var userInfo: User? { get }
@@ -37,7 +37,7 @@ public protocol Chat: BotProtocols, ContactProtocols, MapProtocol, MessageProtoc
     var delegate: ChatDelegate? { get set }
 
     /// Last state of the chat object.
-    var state: ChatState { get set }
+    var state: ChatState { get }
 
     /// A configuration of the chat. Please use the ``ChatConfigBuilder`` to build this object easier.
     var config: ChatConfig { get set }

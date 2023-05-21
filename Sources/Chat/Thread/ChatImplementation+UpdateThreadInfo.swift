@@ -46,7 +46,7 @@ extension ChatImplementation {
 
     func saveThreadImageToCashe(req: UpdateThreadInfoRequest) {
         if let imageRequest = req.threadImage {
-            cache?.fileQueue.insertImage(req: imageRequest.queueOfFileMessages)
+            cache?.fileQueue.insert(model: imageRequest.queueOfFileMessages)
         }
     }
 }

@@ -6,7 +6,7 @@
 
 import Foundation
 
-public protocol WebRTCClientDelegate {
+public protocol WebRTCClientDelegate: AnyObject {
     func didIceConnectionStateChanged(iceConnectionState: IceConnectionState)
     func didReceiveData(data: Data)
     func didReceiveMessage(message: String)

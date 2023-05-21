@@ -60,7 +60,7 @@ public final class AsyncManager: AsyncDelegate {
 
     /// A delegate that tells the status of the async connection.
     public func asyncStateChanged(asyncState: AsyncSocketState, error: AsyncError?) {
-        chat?.state = asyncState.chatState
+        (chat as? ChatImplementation)?.state = asyncState.chatState
         chat?.delegate?.chatState(state: asyncState.chatState, currentUser: nil, error: error?.chatError)
         if asyncState == .asyncReady {
             chat?.getUserForChatReady()

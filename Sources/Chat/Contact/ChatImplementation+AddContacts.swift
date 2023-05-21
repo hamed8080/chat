@@ -17,7 +17,7 @@ public extension ChatImplementation {
     ///   - completion: The answer of the request if the contacts are added successfully.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func addContacts(_ request: [AddContactRequest], completion: @escaping CompletionType<[Contact]>, uniqueIdsResult: UniqueIdsResultType? = nil) {
-        uniqueIdsResult?(request.map(\.uniqueId))
+        uniqueIdsResult?(request.map { $0.uniqueId ?? UUID().uuidString })
         let url = "\(config.platformHost)\(Routes.addContacts.rawValue)"
         var urlComp = URLComponents(string: url)!
         urlComp.queryItems = []

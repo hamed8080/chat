@@ -37,7 +37,7 @@ extension ChatImplementation {
                     }
                     var uniqueIds: [String] = []
                     contactsToSync.forEach { contact in
-                        uniqueIds.append(contact.uniqueId)
+                        uniqueIds.append(contact.uniqueId ?? UUID().uuidString)
                     }
                     if contactsToSync.count <= 0 { return }
 
