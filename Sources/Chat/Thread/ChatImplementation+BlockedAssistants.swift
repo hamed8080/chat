@@ -24,7 +24,7 @@ public extension ChatImplementation {
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
 
-        cache?.assistant.getBlocked(request.count, request.offset) { [weak self] assistants, totalCount in
+        cache?.assistant?.getBlocked(request.count, request.offset) { [weak self] assistants, totalCount in
             let assistants = assistants.map(\.codable)
             self?.responseQueue.async {
                 let pagination = PaginationWithContentCount(hasNext: assistants.count >= request.count, count: request.count, offset: request.offset, totalCount: totalCount)
@@ -38,7 +38,7 @@ public extension ChatImplementation {
 extension ChatImplementation {
     func onGetBlockedAssistants(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse()
-        cache?.assistant.insert(models: response.result ?? [])
+        cache?.assistant?.insert(models: response.result ?? [])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

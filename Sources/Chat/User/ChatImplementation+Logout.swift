@@ -15,7 +15,7 @@ public extension ChatImplementation {
     func logOut() {
         let req = BareChatSendableRequest(uniqueId: UUID().uuidString)
         prepareToSendAsync(req: req, type: .logout)
-        persistentManager.delete()
+        cache?.delete()
         if let docFoler = cacheFileManager?.documentPath {
             cacheFileManager?.deleteFolder(url: docFoler)
         }

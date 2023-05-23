@@ -106,9 +106,6 @@ public protocol ChatInternalProtocol: Chat {
     /// A manager that keeps all concrete object of cache managers.
     var cache: CacheManager? { get set }
 
-    /// Persistent Manager for managing the object context.
-    var persistentManager: ChatCache.PersistentManager { get set }
-
     /// A file manager for caching files on the storage.
     var cacheFileManager: CacheFileManagerProtocol? { get set }
 

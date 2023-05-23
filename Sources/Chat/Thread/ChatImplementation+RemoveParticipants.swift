@@ -26,7 +26,7 @@ public extension ChatImplementation {
 extension ChatImplementation {
     func onRemoveParticipants(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Participant]> = asyncMessage.toChatResponse()
-        cache?.participant.delete(response.result ?? [])
+        cache?.participant?.delete(response.result ?? [])
         delegate?.chatEvent(event: .thread(.threadRemoveParticipants(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)

@@ -36,7 +36,7 @@ public extension ChatImplementation {
 extension ChatImplementation {
     func onBlockUnBlockContact(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Contact> = asyncMessage.toChatResponse()
-        cache?.contact.block(asyncMessage.chatMessage?.type == .block, response.result?.id)
+        cache?.contact?.block(asyncMessage.chatMessage?.type == .block, response.result?.id)
         delegate?.chatEvent(event: .contact(.blocked(response)))
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }

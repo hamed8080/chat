@@ -36,7 +36,6 @@ public final class ChatImplementation: ChatInternalProtocol, Identifiable {
     public var session: URLSessionProtocol
     public var responseQueue: DispatchQueueProtocol
     public var cache: CacheManager?
-    public var persistentManager: ChatCache.PersistentManager
     public let callbacksManager = CallbacksManager()
     public var cacheFileManager: CacheFileManagerProtocol?
     public var state: ChatState = .uninitialized
@@ -64,13 +63,9 @@ public final class ChatImplementation: ChatInternalProtocol, Identifiable {
         self.session = session
         self.callDelegate = callDelegate
         asyncManager = AsyncManager(pingTimer: pingTimer, queueTimer: queueTimer)
-        persistentManager = PersistentManager(cacheEnabled: config.enableCache)
         if config.enableCache {
-            persistentManager.logger = self
             cacheFileManager = CacheFileManager()
-            if let context = persistentManager.newBgTask() {
-                cache = CacheManager(context: context, logger: self)
-            }
+            cache = CacheManager(logger: self)
         }
         asyncManager.chat = self
     }

@@ -24,6 +24,6 @@ public extension ChatImplementation {
         request.uniqueIds.forEach { uniqueId in
             callbacksManager.addCallback(uniqueId: uniqueId, requesType: .forwardMessage, callback: nil as CompletionType<Voidcodable>?, onSent: onSent, onDelivered: onDeliver, onSeen: onSeen)
         }
-        cache?.forwardQueue.insert(request.queueOfForwardMessages)
+        cache?.forwardQueue?.insert(request.queueOfForwardMessages)
     }
 }

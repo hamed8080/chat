@@ -25,7 +25,7 @@ public extension ChatImplementation {
             let pagination = PaginationWithContentCount(hasNext: response.result?.count ?? 0 >= request.size, count: request.size, offset: request.offset, totalCount: response.contentCount)
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
-        cache?.contact.getContacts(request.fetchRequest) { [weak self] contacts, totalCount in
+        cache?.contact?.getContacts(request.fetchRequest) { [weak self] contacts, totalCount in
             let contacts = contacts.map(\.codable)
             self?.responseQueue.async {
                 let pagination = PaginationWithContentCount(hasNext: contacts.count >= request.size, count: request.size, offset: request.offset, totalCount: totalCount)
@@ -52,7 +52,7 @@ extension ChatImplementation {
     func onContacts(_ asyncMessage: AsyncMessage) {
         var response: ChatResponse<[Contact]> = asyncMessage.toChatResponse()
         response.contentCount = asyncMessage.chatMessage?.contentCount
-        cache?.contact.insert(models: response.result ?? [])
+        cache?.contact?.insert(models: response.result ?? [])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

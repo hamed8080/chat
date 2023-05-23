@@ -39,7 +39,7 @@ public extension ChatImplementation {
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func getCurrentUserRoles(_ request: GeneralSubjectIdRequest, completion: @escaping CompletionType<[Roles]>, cacheResponse: CacheResponseType<[Roles]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         prepareToSendAsync(req: request, type: .getCurrentUserRoles, uniqueIdResult: uniqueIdResult, completion: completion)
-        let roles = cache?.userRole.roles(request.subjectId)
+        let roles = cache?.userRole?.roles(request.subjectId)
         cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: roles, error: nil))
     }
 }
@@ -50,7 +50,7 @@ extension ChatImplementation {
         let response: ChatResponse<[Roles]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .user(.roles(response)))
         let userRole = UserRole(userId: response.subjectId, name: nil, roles: response.result, image: nil)
-        cache?.userRole.insert(models: [userRole])
+        cache?.userRole?.insert(models: [userRole])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

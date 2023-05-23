@@ -40,7 +40,7 @@ extension ChatImplementation {
         } else if asyncMessage.chatMessage?.type == .unblockAssistant {
             delegate?.chatEvent(event: .assistant(.unblockAssistant(response)))
         }
-        cache?.assistant.block(block: asyncMessage.chatMessage?.type == .blockAssistant, assistants: response.result ?? [])
+        cache?.assistant?.block(block: asyncMessage.chatMessage?.type == .blockAssistant, assistants: response.result ?? [])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

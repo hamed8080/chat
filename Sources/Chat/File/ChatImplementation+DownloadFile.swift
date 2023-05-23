@@ -46,7 +46,7 @@ extension ChatImplementation {
         }
 
         if let filePath = cacheFileManager?.filePath(url: URL(string: url)!), cacheResponse != nil {
-            cache?.file.first(with: request.hashCode) { [weak self] file in
+            cache?.file?.first(with: request.hashCode) { [weak self] file in
                 let file = file?.codable
                 self?.responseQueue.async {
                     cacheResponse?(nil, filePath, file, nil)
@@ -82,7 +82,7 @@ extension ChatImplementation {
             let size = Int((headers["Content-Length"] as? String) ?? "0")
             let fileNameWithExtension = "\(name ?? "default").\(type ?? "none")"
             let file = File(hashCode: req.hashCode, name: fileNameWithExtension, size: size, type: type)
-            cache?.file.insert(models: [file])
+            cache?.file?.insert(models: [file])
             cacheFileManager?.saveFile(url: URL(string: url)!, data: data ?? Data()) { [weak self] filePath in
                 completion?(data, filePath, file, nil)
                 let response: ChatResponse<Data?> = .init(uniqueId: req.uniqueId, result: data)

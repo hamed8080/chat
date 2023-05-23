@@ -16,6 +16,6 @@ extension ChatImplementation {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
         response.result?.id = response.subjectId
         delegate?.chatEvent(event: .thread(.threadInfoUpdated(response)))
-        cache?.conversation.insert(models: [response.result].compactMap { $0 })
+        cache?.conversation?.insert(models: [response.result].compactMap { $0 })
     }
 }

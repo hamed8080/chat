@@ -40,7 +40,7 @@ extension ChatImplementation {
         } else if asyncMessage.chatMessage?.type == .unmuteThread {
             delegate?.chatEvent(event: .thread(.threadUnmute(response)))
         }
-        cache?.conversation.mute(asyncMessage.chatMessage?.type == .muteThread, response.subjectId)
+        cache?.conversation?.mute(asyncMessage.chatMessage?.type == .muteThread, response.subjectId)
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

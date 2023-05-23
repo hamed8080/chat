@@ -28,7 +28,7 @@ extension ChatImplementation {
         let response: ChatResponse<Participant> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.threadDeleted(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
-        cache?.conversation.delete(response.subjectId ?? -1)
+        cache?.conversation?.delete(response.subjectId ?? -1)
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

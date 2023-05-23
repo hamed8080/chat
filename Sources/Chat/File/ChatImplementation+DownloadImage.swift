@@ -46,7 +46,7 @@ extension ChatImplementation {
         }
 
         if let filePath = cacheFileManager?.filePath(url: URL(string: url)!), cacheResponse != nil {
-            cache?.image.first(with: request.hashCode) { [weak self] image in
+            cache?.image?.first(with: request.hashCode) { [weak self] image in
                 let image = image?.codable
                 self?.responseQueue.async {
                     cacheResponse?(nil, filePath, image, nil)
@@ -79,7 +79,7 @@ extension ChatImplementation {
             let size = Int((headers["Content-Length"] as? String) ?? "0")
             let fileNameWithExtension = "\(name ?? "default")"
             let image = Image(size: size, name: fileNameWithExtension, hashCode: req.hashCode)
-            cache?.image.insert(models: [image])
+            cache?.image?.insert(models: [image])
             cacheFileManager?.saveFile(url: URL(string: url)!, data: data ?? Data()) { [weak self] filePath in
                 completion?(data, filePath, image, nil)
                 let response: ChatResponse<Data?> = .init(uniqueId: req.uniqueId, result: data)

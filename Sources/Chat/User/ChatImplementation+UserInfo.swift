@@ -21,15 +21,16 @@ extension ChatImplementation {
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     public func getUserInfo(_ request: UserInfoRequest, completion: @escaping CompletionType<User>, cacheResponse: CacheResponseType<User>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         prepareToSendAsync(req: request, type: .userInfo, uniqueIdResult: uniqueIdResult, completion: completion)
-        cache?.user.fetchCurrentUser { userEntity in
+        cache?.user?.fetchCurrentUser { userEntity in
             cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: userEntity?.codable))
         }
     }
 
     public func getUserForChatReady() {
         if userInfo == nil {
-            requestUserTimer = requestUserTimer.scheduledTimer(interval: 2, repeats: true) { [weak self] _ in
-                self?.onUserTimer()
+            fetchUserInfo()
+            requestUserTimer = requestUserTimer.scheduledTimer(interval: 5, repeats: true) { [weak self] _ in
+                self?.fetchUserInfo()
             }
         } else {
             // it mean chat was connected before and reconnected again
@@ -39,15 +40,15 @@ extension ChatImplementation {
         }
     }
 
-    internal func onUserTimer() {
-        getUserInfo(.init()) { [weak self] (response: ChatResponse<User>) in
+    internal func fetchUserInfo() {
+        getUserInfo(.init()) { [weak self] response in
             self?.onUser(response: response)
         }
     }
 
     internal func onUser(response: ChatResponse<User>) {
         if let user = response.result {
-            cache?.user.insert([user], isMe: true)
+            cache?.user?.insert([user], isMe: true)
             userInfo = user
             state = .chatReady
             delegate?.chatEvent(event: .user(.onUser(.init(result: user))))
@@ -69,7 +70,7 @@ extension ChatImplementation {
     func onUserInfo(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<User> = asyncMessage.toChatResponse()
         if let user = response.result {
-            cache?.user.insert([user])
+            cache?.user?.insert([user])
         }
         delegate?.chatEvent(event: .system(.serverTime(.init(uniqueId: response.uniqueId, result: response.time, time: response.time))))
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)

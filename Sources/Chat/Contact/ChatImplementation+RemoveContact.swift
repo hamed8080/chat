@@ -39,7 +39,7 @@ public extension ChatImplementation {
 
     func removeFromCacheIfExist(removeContactResponse: RemoveContactResponse?, contactId: Int) {
         if removeContactResponse?.deteled == true {
-            cache?.contact.delete(contactId)
+            cache?.contact?.delete(contactId)
         }
     }
 }

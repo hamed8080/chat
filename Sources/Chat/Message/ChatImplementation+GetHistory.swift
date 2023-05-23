@@ -40,7 +40,7 @@ public extension ChatImplementation {
             }
         }
 
-        cache?.message.fetch(request.fetchRequest) { [weak self] messages, totalCount in
+        cache?.message?.fetch(request.fetchRequest) { [weak self] messages, totalCount in
             let messages = messages.map { $0.codable(fillConversation: false) }
             self?.responseQueue.async {
                 let pagination = Pagination(hasNext: totalCount >= request.count, count: request.count, offset: request.offset)
@@ -48,28 +48,28 @@ public extension ChatImplementation {
             }
         }
 
-        cache?.textQueue.unsendForThread(request.threadId, request.count, request.offset) { [weak self] unsedTexts, _ in
+        cache?.textQueue?.unsendForThread(request.threadId, request.count, request.offset) { [weak self] unsedTexts, _ in
             let requests = unsedTexts.map(\.codable.request)
             self?.responseQueue.async {
                 textMessageNotSentRequests?(ChatResponse(uniqueId: request.uniqueId, result: requests))
             }
         }
 
-        cache?.editQueue.unsedForThread(request.threadId, request.count, request.offset) { [weak self] unsendEdits, _ in
+        cache?.editQueue?.unsedForThread(request.threadId, request.count, request.offset) { [weak self] unsendEdits, _ in
             let requests = unsendEdits.map(\.codable.request)
             self?.responseQueue.async {
                 editMessageNotSentRequests?(ChatResponse(uniqueId: request.uniqueId, result: requests))
             }
         }
 
-        cache?.forwardQueue.unsedForThread(request.threadId, request.count, request.offset) { [weak self] unsendForwards, _ in
+        cache?.forwardQueue?.unsedForThread(request.threadId, request.count, request.offset) { [weak self] unsendForwards, _ in
             let requests = unsendForwards.map(\.codable.request)
             self?.responseQueue.async {
                 forwardMessageNotSentRequests?(ChatResponse(uniqueId: request.uniqueId, result: requests))
             }
         }
 
-        cache?.fileQueue.unsedForThread(request.threadId, request.count, request.offset) { [weak self] unsendFiles, _ in
+        cache?.fileQueue?.unsedForThread(request.threadId, request.count, request.offset) { [weak self] unsendFiles, _ in
             let requests = unsendFiles.map(\.codable.request)
             self?.responseQueue.async {
                 fileMessageNotSentRequests?(ChatResponse(uniqueId: request.uniqueId, result: requests))
@@ -92,7 +92,7 @@ public extension ChatImplementation {
     }
 
     internal func saveMessagesToCache(_ messages: [Message]?, _: CompletionType<[Message]>?) {
-        cache?.message.insert(models: messages ?? [])
+        cache?.message?.insert(models: messages ?? [])
         let uniqueIds = messages?.compactMap(\.uniqueId) ?? []
         cache?.deleteQueues(uniqueIds: uniqueIds)
     }

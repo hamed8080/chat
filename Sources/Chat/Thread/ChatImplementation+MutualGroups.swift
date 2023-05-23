@@ -25,10 +25,10 @@ public extension ChatImplementation {
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
 
             // insert to mutual cache only for this method beacuse we need request and id and idType to be cache
-            self?.cache?.mutualGroup.insert(response.result ?? [], idType: request.toBeUserVO.inviteeTypes, mutualId: request.toBeUserVO.id)
+            self?.cache?.mutualGroup?.insert(response.result ?? [], idType: request.toBeUserVO.inviteeTypes, mutualId: request.toBeUserVO.id)
         }
 
-        cache?.mutualGroup.mutualGroups(request.toBeUserVO.id) { [weak self] mutuals in
+        cache?.mutualGroup?.mutualGroups(request.toBeUserVO.id) { [weak self] mutuals in
             let threads = mutuals.first?.conversations?.allObjects.compactMap { $0 as? CDConversation }.map { $0.codable() }
             self?.responseQueue.async {
                 let pagination = PaginationWithContentCount(hasNext: threads?.count ?? 0 >= request.count, count: request.count, offset: request.offset, totalCount: mutuals.count)

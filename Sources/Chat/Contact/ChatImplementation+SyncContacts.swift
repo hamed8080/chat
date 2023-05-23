@@ -23,7 +23,7 @@ extension ChatImplementation {
         var contactsToSync: [AddContactRequest] = []
         authorizeContactAccess(grant: { [weak self] store in
             let phoneContacts = self?.getContactsFromAuthorizedStore(store)
-            self?.cache?.contact.allContacts { [weak self] cachedContacts in
+            self?.cache?.contact?.allContacts { [weak self] cachedContacts in
                 guard let self = self else { return }
                 self.responseQueue.async {
                     phoneContacts?.forEach { phoneContact in
@@ -43,7 +43,7 @@ extension ChatImplementation {
 
                     self.addContacts(contactsToSync) { [weak self] (response: ChatResponse<[Contact]>) in
                         completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error))
-                        self?.cache?.contact.insert(models: response.result ?? [])
+                        self?.cache?.contact?.insert(models: response.result ?? [])
                     }
                     uniqueIdsResult?(uniqueIds)
                 }

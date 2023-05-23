@@ -26,7 +26,7 @@ public extension ChatImplementation {
 extension ChatImplementation {
     func onTagParticipants(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[TagParticipant]> = asyncMessage.toChatResponse()
-        cache?.tagParticipant.insert(models: response.result?.compactMap { $0 } ?? [])
+        cache?.tagParticipant?.insert(models: response.result?.compactMap { $0 } ?? [])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

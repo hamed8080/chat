@@ -26,7 +26,7 @@ public extension ChatImplementation {
 extension ChatImplementation {
     func onClearHistory(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Int> = asyncMessage.toChatResponse()
-        cache?.message.clearHistory(threadId: response.result ?? -1)
+        cache?.message?.clearHistory(threadId: response.result ?? -1)
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

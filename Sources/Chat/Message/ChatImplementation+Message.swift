@@ -31,8 +31,8 @@ public extension ChatImplementation {
                            onSent: onSent,
                            onDelivered: onDeliver,
                            onSeen: onSeen)
-        cache?.conversation.updateLastMessage(request.threadId, request.textMessage)
-        cache?.textQueue.insert(request.queueOfTextMessages)
+        cache?.conversation?.updateLastMessage(request.threadId, request.textMessage)
+        cache?.textQueue?.insert(request.queueOfTextMessages)
     }
 
     /// Reply to a message.
@@ -96,7 +96,7 @@ public extension ChatImplementation {
                                                         systemMetadata: request.systemMetadata,
                                                         uniqueId: request.uniqueId)
 
-            self.cache?.fileQueue.insert(model: textMessageReq.queueOfFileMessages(imageRequest))
+            self.cache?.fileQueue?.insert(models: [textMessageReq.queueOfFileMessages(imageRequest)])
             messageUniqueIdResult?(textMessageReq.chatUniqueId)
             self.uploadImage(imageRequest, uploadUniqueIdResult: uploadUniqueIdResult, uploadProgress: uploadProgress) { [weak self] _, fileMetaData, error in
                 // completed upload file
@@ -129,7 +129,7 @@ public extension ChatImplementation {
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
 
-        cache?.message.getMentions(threadId: request.threadId, offset: request.offset, count: request.count) { [weak self] messages, totalCount in
+        cache?.message?.getMentions(threadId: request.threadId, offset: request.offset, count: request.count) { [weak self] messages, totalCount in
             let messages = messages.map { $0.codable() }
             self?.responseQueue.async {
                 let pagination = PaginationWithContentCount(hasNext: messages.count >= request.count, count: request.count, offset: request.offset, totalCount: totalCount)
@@ -154,8 +154,8 @@ public extension ChatImplementation {
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func seen(_ request: MessageSeenRequest, uniqueIdResult: UniqueIdResultType? = nil) {
         prepareToSendAsync(req: request, type: .seen, uniqueIdResult: uniqueIdResult)
-        cache?.message.seen(threadId: request.threadId, messageId: request.messageId, userId: userInfo?.id ?? -1)
-        cache?.conversation.decreamentUnreadCount(request.threadId) { [weak self] unreadCount in
+        cache?.message?.seen(threadId: request.threadId, messageId: request.messageId, userId: userInfo?.id ?? -1)
+        cache?.conversation?.decreamentUnreadCount(request.threadId) { [weak self] unreadCount in
             self?.responseQueue.async {
                 self?.delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: .init(unreadCount: unreadCount, threadId: request.threadId)))))
             }
@@ -173,26 +173,26 @@ extension ChatImplementation {
         if message.threadId == nil {
             message.threadId = response.subjectId ?? message.conversation?.id
         }
-        cache?.message.insert(models: [message])
+        cache?.message?.insert(models: [message])
         // Check that we are not the sender of the message and message come from another person.
         // This means that the user himself was the sender of the message, therefore he saw messages inside the thread.
         let isMe = message.participant?.id == userInfo?.id
         if isMe {
-            cache?.conversation.setUnreadCountToZero(response.subjectId ?? -1) { [weak self] unreadCount in
+            cache?.conversation?.setUnreadCountToZero(response.subjectId ?? -1) { [weak self] unreadCount in
                 self?.responseQueue.async {
                     let unreadCount = UnreadCount(unreadCount: unreadCount, threadId: response.subjectId)
                     self?.delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: unreadCount))))
                 }
             }
         } else {
-            cache?.conversation.increamentUnreadCount(response.subjectId ?? -1) { [weak self] unreadCount in
+            cache?.conversation?.increamentUnreadCount(response.subjectId ?? -1) { [weak self] unreadCount in
                 self?.responseQueue.async {
                     let unreadCount = UnreadCount(unreadCount: unreadCount, threadId: response.subjectId)
                     self?.delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: unreadCount))))
                 }
             }
         }
-        cache?.conversation.setLastMessageVO(message)
+        cache?.conversation?.setLastMessageVO(message)
         if !isMe {
             deliver(.init(messageId: message.id ?? 0, threadId: message.threadId))
         }
@@ -209,7 +209,7 @@ extension ChatImplementation {
         guard let response = asyncMessage.messageResponse(state: .delivered) else { return }
         delegate?.chatEvent(event: .message(.messageDelivery(response)))
         if let delivered = response.result {
-            cache?.message.partnerDeliver(threadId: delivered.threadId ?? -1, messageId: delivered.messageId ?? -1, messageTime: delivered.messageTime ?? 0)
+            cache?.message?.partnerDeliver(threadId: delivered.threadId ?? -1, messageId: delivered.messageId ?? -1, messageTime: delivered.messageTime ?? 0)
         }
         cache?.deleteQueues(uniqueIds: [response.uniqueId ?? ""])
         callbacksManager.invokeDeliverCallbackAndRemove(response)
@@ -219,7 +219,7 @@ extension ChatImplementation {
         guard let response = asyncMessage.messageResponse(state: .seen) else { return }
         if let seenResponse = response.result {
             delegate?.chatEvent(event: .message(.messageSeen(response)))
-            cache?.message.partnerSeen(threadId: seenResponse.threadId ?? -1, messageId: seenResponse.messageId ?? -1)
+            cache?.message?.partnerSeen(threadId: seenResponse.threadId ?? -1, messageId: seenResponse.messageId ?? -1)
             callbacksManager.invokeSeenCallbackAndRemove(response)
         }
     }
@@ -229,7 +229,7 @@ extension ChatImplementation {
         delegate?.chatEvent(event: .thread(.lastMessageEdited(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         if let thread = response.result {
-            cache?.conversation.updateLastMessage(thread)
+            cache?.conversation?.updateLastMessage(thread)
         }
     }
 
@@ -238,7 +238,7 @@ extension ChatImplementation {
         delegate?.chatEvent(event: .thread(.lastMessageDeleted(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         if let thread = response.result {
-            cache?.conversation.updateLastMessage(thread)
+            cache?.conversation?.updateLastMessage(thread)
         }
     }
 }

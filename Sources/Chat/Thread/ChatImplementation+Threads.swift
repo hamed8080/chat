@@ -25,7 +25,7 @@ public extension ChatImplementation {
             let pagination = Pagination(hasNext: threads?.count ?? 0 >= request.count, count: request.count, offset: request.offset)
             completion(ChatResponse(uniqueId: response.uniqueId, result: threads, error: response.error, pagination: pagination))
         }
-        cache?.conversation.fetch(request.fetchRequest) { [weak self] threads, totalCount in
+        cache?.conversation?.fetch(request.fetchRequest) { [weak self] threads, totalCount in
             let threads = threads.map { $0.codable() }
             self?.responseQueue.async {
                 let pagination = Pagination(hasNext: totalCount >= request.count, count: request.count, offset: request.offset)
@@ -42,7 +42,7 @@ public extension ChatImplementation {
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func getAllThreads(request: AllThreads, completion: @escaping CompletionType<[Int]>, cacheResponse: CacheResponseType<[Int]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         prepareToSendAsync(req: request, type: .getThreads, uniqueIdResult: uniqueIdResult, completion: completion)
-        cache?.conversation.fetchIds { [weak self] threadIds in
+        cache?.conversation?.fetchIds { [weak self] threadIds in
             self?.responseQueue.async {
                 cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: threadIds, error: nil))
             }
@@ -55,7 +55,7 @@ extension ChatImplementation {
     func onThreads(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Conversation]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.threadsListChange(response)))
-        cache?.conversation.insert(models: response.result ?? [])
+        cache?.conversation?.insert(models: response.result ?? [])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }
