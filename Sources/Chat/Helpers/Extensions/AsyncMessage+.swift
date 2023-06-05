@@ -35,7 +35,7 @@ public extension AsyncMessage {
 
     /// There is two type  of decoding one with `Int` and another one with `MessageResponse.
     /// Caution: When receiving a new message and sending a new message `OnDeliver`, `OnSeen`, and `OnSent` have different behavior.
-    func messageResponse(state: MessageResposneState) -> ChatResponse<MessageResponse>? {
+    func messageResponse(state: MessageResponseState) -> ChatResponse<MessageResponse>? {
         let idResponse: ChatResponse<Int> = toChatResponse()
         let messageResponse: ChatResponse<MessageResponse> = toChatResponse()
         if idResponse.result != nil {

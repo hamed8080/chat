@@ -31,7 +31,7 @@ extension ChatImplementation {
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         if let message = response.result {
             cache?.deleteQueues(uniqueIds: [response.uniqueId ?? ""])
-            cache?.message?.insert(models: [message])
+            try? cache?.conversation?.replaceLastMessage(.init(id: response.subjectId, lastMessage: message.message, lastMessageVO: message))
         }
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }

@@ -44,9 +44,9 @@ public extension ChatImplementation {
         urlReq.method = .post
         logger.logHTTPRequest(urlReq, String(describing: type(of: [Contact].self)), persist: true, type: .sent)
         session.dataTask(urlReq) { [weak self] data, response, error in
-            self?.logger.logHTTPResponse(data, response, error, persist: true, type: .received, userInfo: self?.loggerUserInfo)
             let result: ChatResponse<ContactResponse>? = self?.session.decode(data, response, error)
             self?.responseQueue.async {
+                self?.logger.logHTTPResponse(data, response, error, persist: true, type: .received, userInfo: self?.loggerUserInfo)
                 completion(ChatResponse(uniqueId: request.first?.uniqueId, result: result?.result?.contacts, error: result?.error))
             }
             self?.cache?.contact?.insert(models: result?.result?.contacts ?? [])

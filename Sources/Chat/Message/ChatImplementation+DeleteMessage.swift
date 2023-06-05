@@ -43,7 +43,7 @@ extension ChatImplementation {
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         cache?.message?.find(response.subjectId, response.result?.id) { [weak self] entity in
             if entity?.seen == nil, entity?.ownerId?.intValue != self?.userInfo?.id {
-                self?.cache?.conversation?.decreamentUnreadCount(response.subjectId ?? -1) { [weak self] unreadCount in
+                self?.cache?.conversation?.setUnreadCount(action: .decrease, threadId: response.subjectId ?? -1) { [weak self] unreadCount in
                     self?.responseQueue.async {
                         self?.delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: .init(unreadCount: unreadCount, threadId: response.subjectId)))))
                     }

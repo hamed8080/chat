@@ -23,11 +23,11 @@ extension ChatImplementation {
         var contactsToSync: [AddContactRequest] = []
         authorizeContactAccess(grant: { [weak self] store in
             let phoneContacts = self?.getContactsFromAuthorizedStore(store)
-            self?.cache?.contact?.allContacts { [weak self] cachedContacts in
+            self?.cache?.contact?.all { [weak self] contactEntities in
                 guard let self = self else { return }
                 self.responseQueue.async {
                     phoneContacts?.forEach { phoneContact in
-                        if let findedContactCache = cachedContacts.first(where: { $0.cellphoneNumber == phoneContact.cellphoneNumber }) {
+                        if let findedContactCache = contactEntities.first(where: { $0.cellphoneNumber == phoneContact.cellphoneNumber }) {
                             if findedContactCache.isContactChanged(contact: phoneContact) {
                                 contactsToSync.append(phoneContact.request)
                             }

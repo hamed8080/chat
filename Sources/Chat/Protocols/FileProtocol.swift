@@ -236,10 +236,12 @@ public extension FileProtocol {
 
     func requestSendImageTextMessage(textMessage: SendTextMessageRequest,
                                      req: UploadImageRequest,
-                                     onSent: OnSentType?,
-                                     onSeen: OnSeenType?,
-                                     onDeliver: OnDeliveryType?,
-                                     uploadProgress: UploadFileProgressType?)
+                                     onSent: OnSentType? = nil,
+                                     onSeen: OnSeenType? = nil,
+                                     onDeliver: OnDeliveryType? = nil,
+                                     uploadProgress: UploadFileProgressType? = nil,
+                                     uploadUniqueIdResult: UniqueIdResultType? = nil,
+                                     messageUniqueIdResult: UniqueIdResultType? = nil)
     {
         requestSendImageTextMessage(textMessage: textMessage,
                                     req: req,
@@ -247,8 +249,8 @@ public extension FileProtocol {
                                     onSeen: onSeen,
                                     onDeliver: onDeliver,
                                     uploadProgress: uploadProgress,
-                                    uploadUniqueIdResult: nil,
-                                    messageUniqueIdResult: nil)
+                                    uploadUniqueIdResult: uploadUniqueIdResult,
+                                    messageUniqueIdResult: messageUniqueIdResult)
     }
 
     /// Upload a file.

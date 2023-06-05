@@ -15,6 +15,9 @@ Chat.sharedInstance.registerAssistat(.init(assistants: [assistant])) { assistant
     // Write your code
 }
 ```
+
+>Important: To detect an assistant you should use **Assistant.participant.id** field.
+
 ### Deactivate assistants
 To deactivate assistants use the method ``Chat/deactiveAssistant(_:completion:uniqueIdResult:)``
 ```swift

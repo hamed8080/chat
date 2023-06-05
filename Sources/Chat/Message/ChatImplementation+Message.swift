@@ -6,6 +6,7 @@
 
 import Additive
 import Async
+import ChatCache
 import ChatCore
 import ChatDTO
 import ChatModels
@@ -31,8 +32,9 @@ public extension ChatImplementation {
                            onSent: onSent,
                            onDelivered: onDeliver,
                            onSeen: onSeen)
-        cache?.conversation?.updateLastMessage(request.threadId, request.textMessage)
-        cache?.textQueue?.insert(request.queueOfTextMessages)
+        let lastMessageVO = Message(threadId: request.threadId, message: request.textMessage, uniqueId: request.uniqueId)
+        try? cache?.conversation?.replaceLastMessage(.init(id: request.threadId, lastMessage: lastMessageVO.message, lastMessageVO: lastMessageVO))
+        cache?.textQueue?.insert(models: [request.queueOfTextMessages])
     }
 
     /// Reply to a message.
@@ -155,7 +157,7 @@ public extension ChatImplementation {
     func seen(_ request: MessageSeenRequest, uniqueIdResult: UniqueIdResultType? = nil) {
         prepareToSendAsync(req: request, type: .seen, uniqueIdResult: uniqueIdResult)
         cache?.message?.seen(threadId: request.threadId, messageId: request.messageId, userId: userInfo?.id ?? -1)
-        cache?.conversation?.decreamentUnreadCount(request.threadId) { [weak self] unreadCount in
+        cache?.conversation?.setUnreadCount(action: .decrease, threadId: request.threadId) { [weak self] unreadCount in
             self?.responseQueue.async {
                 self?.delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: .init(unreadCount: unreadCount, threadId: request.threadId)))))
             }
@@ -173,26 +175,18 @@ extension ChatImplementation {
         if message.threadId == nil {
             message.threadId = response.subjectId ?? message.conversation?.id
         }
-        cache?.message?.insert(models: [message])
-        // Check that we are not the sender of the message and message come from another person.
-        // This means that the user himself was the sender of the message, therefore he saw messages inside the thread.
+        /// If we were sender of the message therfore we have seen all the messages inside the thread.
         let isMe = message.participant?.id == userInfo?.id
-        if isMe {
-            cache?.conversation?.setUnreadCountToZero(response.subjectId ?? -1) { [weak self] unreadCount in
-                self?.responseQueue.async {
-                    let unreadCount = UnreadCount(unreadCount: unreadCount, threadId: response.subjectId)
-                    self?.delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: unreadCount))))
-                }
-            }
-        } else {
-            cache?.conversation?.increamentUnreadCount(response.subjectId ?? -1) { [weak self] unreadCount in
-                self?.responseQueue.async {
-                    let unreadCount = UnreadCount(unreadCount: unreadCount, threadId: response.subjectId)
-                    self?.delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: unreadCount))))
-                }
+        let unreadCountAction: CacheUnreadCountAction = isMe ? .set(0) : .increase
+        cache?.conversation?.setUnreadCount(action: unreadCountAction, threadId: response.subjectId ?? -1) { [weak self] unreadCount in
+            self?.responseQueue.async {
+                let unreadCount = UnreadCount(unreadCount: unreadCount, threadId: response.subjectId)
+                self?.delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: unreadCount))))
             }
         }
-        cache?.conversation?.setLastMessageVO(message)
+        /// It will insert a new message into the Message table if the sender is not me
+        /// and it will update a current message with a uniqueId of a message when we were the sender of a message, and consequently, it will set lastMessageVO for the thread.
+        try? cache?.conversation?.replaceLastMessage(.init(id: message.threadId, lastMessage: message.message, lastMessageVO: message))
         if !isMe {
             deliver(.init(messageId: message.id ?? 0, threadId: message.threadId))
         }
@@ -229,7 +223,7 @@ extension ChatImplementation {
         delegate?.chatEvent(event: .thread(.lastMessageEdited(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         if let thread = response.result {
-            cache?.conversation?.updateLastMessage(thread)
+            try? cache?.conversation?.replaceLastMessage(thread)
         }
     }
 
@@ -238,7 +232,8 @@ extension ChatImplementation {
         delegate?.chatEvent(event: .thread(.lastMessageDeleted(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         if let thread = response.result {
-            cache?.conversation?.updateLastMessage(thread)
+            let lastMessageVO = Message(threadId: thread.id, message: thread.lastMessage)
+            try? cache?.conversation?.replaceLastMessage(.init(id: lastMessageVO.threadId, lastMessage: lastMessageVO.message, lastMessageVO: lastMessageVO))
         }
     }
 }

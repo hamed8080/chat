@@ -27,9 +27,9 @@ public extension ChatImplementation {
         urlReq.method = .post
         logger.logHTTPRequest(urlReq, String(describing: type(of: Bool.self)), persist: true, type: .sent)
         session.dataTask(urlReq) { [weak self] data, response, error in
-            self?.logger.logHTTPResponse(data, response, error, persist: true, type: .received, userInfo: self?.loggerUserInfo)
             let result: ChatResponse<RemoveContactResponse>? = self?.session.decode(data, response, error)
             self?.responseQueue.async {
+                self?.logger.logHTTPResponse(data, response, error, persist: true, type: .received, userInfo: self?.loggerUserInfo)
                 completion(ChatResponse(uniqueId: request.uniqueId, result: result?.result?.deteled ?? false, error: result?.error))
                 self?.removeFromCacheIfExist(removeContactResponse: result?.result, contactId: request.contactId)
             }
@@ -39,7 +39,7 @@ public extension ChatImplementation {
 
     func removeFromCacheIfExist(removeContactResponse: RemoveContactResponse?, contactId: Int) {
         if removeContactResponse?.deteled == true {
-            cache?.contact?.delete(contactId)
+            cache?.contact?.batchDelete([contactId])
         }
     }
 }
