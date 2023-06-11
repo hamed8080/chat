@@ -36,12 +36,12 @@ public extension ChatImplementation {
             let pagination = Pagination(hasNext: messages?.count ?? 0 >= request.count, count: request.count, offset: request.offset)
             completion(ChatResponse(uniqueId: response.uniqueId, result: messages, error: response.error, pagination: pagination))
             if request.readOnly == false {
-                self?.saveMessagesToCache(messages, cacheResponse)
+                self?.saveMessagesToCache(messages, response.subjectId ?? -1)
             }
         }
 
         cache?.message?.fetch(request.fetchRequest) { [weak self] messages, totalCount in
-            let messages = messages.map { $0.codable(fillConversation: false) }
+            let messages = messages.map { $0.codable(fillConversation: false, fillForwardInfo: true, fillReplyInfo: true) }
             self?.responseQueue.async {
                 let pagination = Pagination(hasNext: totalCount >= request.count, count: request.count, offset: request.offset)
                 cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: messages, error: nil, contentCount: totalCount, pagination: pagination))
@@ -91,8 +91,8 @@ public extension ChatImplementation {
         getHistory(request, completion: completion, cacheResponse: cacheResponse, textMessageNotSentRequests: nil, editMessageNotSentRequests: nil, forwardMessageNotSentRequests: nil, fileMessageNotSentRequests: nil, uniqueIdResult: uniqueIdResult)
     }
 
-    internal func saveMessagesToCache(_ messages: [Message]?, _: CompletionType<[Message]>?) {
-        cache?.message?.insert(models: messages ?? [])
+    internal func saveMessagesToCache(_ messages: [Message]?, _ threadId: Int) {
+        cache?.message?.insert(models: messages ?? [], threadId: threadId)
         let uniqueIds = messages?.compactMap(\.uniqueId) ?? []
         cache?.deleteQueues(uniqueIds: uniqueIds)
     }

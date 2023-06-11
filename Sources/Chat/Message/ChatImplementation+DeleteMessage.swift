@@ -41,7 +41,7 @@ extension ChatImplementation {
         let response: ChatResponse<Message> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .message(.messageDelete(response)))
         delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
-        cache?.message?.find(response.subjectId, response.result?.id) { [weak self] entity in
+        cache?.message?.find(response.subjectId ?? -1, response.result?.id ?? -1) { [weak self] entity in
             if entity?.seen == nil, entity?.ownerId?.intValue != self?.userInfo?.id {
                 self?.cache?.conversation?.setUnreadCount(action: .decrease, threadId: response.subjectId ?? -1) { [weak self] unreadCount in
                     self?.responseQueue.async {
@@ -50,7 +50,7 @@ extension ChatImplementation {
                 }
             }
         }
-        cache?.message?.delete(response.subjectId ?? -1, response.result?.id)
+        cache?.message?.delete(response.subjectId ?? -1, response.result?.id ?? -1)
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

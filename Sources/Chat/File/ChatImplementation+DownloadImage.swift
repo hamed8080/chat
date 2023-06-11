@@ -27,9 +27,12 @@ extension ChatImplementation {
     {
         uniqueIdResult?(request.chatUniqueId)
         let url = "\(config.fileServer)\(Routes.images.rawValue)/\(request.hashCode)"
-        // Check if file exist on cache or not if it doesn't exist force to download it become true.
+        /// Check if either the image exists in the cache or not, if it doesn't exist force to download property has become true.
         var forceToDownloadFromServer = false
         if cacheFileManager?.isFileExist(url: URL(string: url)!) == false {
+            forceToDownloadFromServer = true
+        }
+        if request.forceToDownloadFromServer == true {
             forceToDownloadFromServer = true
         }
         let request = ImageRequest(request: request, forceToDownloadFromServer: forceToDownloadFromServer)

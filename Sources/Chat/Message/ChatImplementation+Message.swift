@@ -156,7 +156,7 @@ public extension ChatImplementation {
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func seen(_ request: MessageSeenRequest, uniqueIdResult: UniqueIdResultType? = nil) {
         prepareToSendAsync(req: request, type: .seen, uniqueIdResult: uniqueIdResult)
-        cache?.message?.seen(threadId: request.threadId, messageId: request.messageId, userId: userInfo?.id ?? -1)
+        cache?.message?.seen(threadId: request.threadId, messageId: request.messageId, mineUserId: userInfo?.id ?? -1)
         cache?.conversation?.setUnreadCount(action: .decrease, threadId: request.threadId) { [weak self] unreadCount in
             self?.responseQueue.async {
                 self?.delegate?.chatEvent(event: .thread(.threadUnreadCountUpdated(.init(result: .init(unreadCount: unreadCount, threadId: request.threadId)))))
@@ -213,7 +213,7 @@ extension ChatImplementation {
         guard let response = asyncMessage.messageResponse(state: .seen) else { return }
         if let seenResponse = response.result {
             delegate?.chatEvent(event: .message(.messageSeen(response)))
-            cache?.message?.partnerSeen(threadId: seenResponse.threadId ?? -1, messageId: seenResponse.messageId ?? -1)
+            cache?.message?.partnerSeen(threadId: seenResponse.threadId ?? -1, messageId: seenResponse.messageId ?? -1, mineUserId: userInfo?.id ?? -1)
             callbacksManager.invokeSeenCallbackAndRemove(response)
         }
     }

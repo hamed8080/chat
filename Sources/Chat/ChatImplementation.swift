@@ -65,7 +65,7 @@ public final class ChatImplementation: ChatInternalProtocol, Identifiable {
         asyncManager = AsyncManager(pingTimer: pingTimer, queueTimer: queueTimer)
         if config.enableCache {
             cacheFileManager = CacheFileManager()
-            cache = CacheManager(logger: self)
+            cache = CacheManager(persistentManager: PersistentManager(logger: self))
         }
         asyncManager.chat = self
     }
