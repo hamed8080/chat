@@ -35,7 +35,7 @@ extension ChatImplementation {
         case deviceInfo
     }
 
-    var loggerUserInfo: [String: String] {
+    public var loggerUserInfo: [String: String] {
         var dic = [String: String]()
         dic[LoggerUserInfosKeys.config.rawValue] = config.string?.prettyJsonString()
         dic[LoggerUserInfosKeys.deviceInfo.rawValue] = DeviceInfo.getDeviceInfo().string?.prettyJsonString()

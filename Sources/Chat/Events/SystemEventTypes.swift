@@ -11,4 +11,5 @@ import Foundation
 public enum SystemEventTypes {
     case systemMessage(ChatResponse<SystemEventMessageModel>)
     case serverTime(ChatResponse<Int?>)
+    case error(ChatResponse<Any>)
 }

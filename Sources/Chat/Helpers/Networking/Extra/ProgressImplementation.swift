@@ -21,7 +21,12 @@ final class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSession
     private weak var delegate: ChatDelegate?
     private var logger: Logger?
 
-    init(delegate: ChatDelegate? = nil, logger: Logger? = nil, uniqueId: String, uploadProgress: UploadFileProgressType? = nil, downloadProgress: DownloadProgressType? = nil, downloadCompletion: ((Data?, HTTPURLResponse?, Error?) -> Void)? = nil) {
+    init(delegate: ChatDelegate? = nil,
+         logger: Logger? = nil,
+         uniqueId: String,
+         uploadProgress: UploadFileProgressType? = nil,
+         downloadProgress: DownloadProgressType? = nil,
+         downloadCompletion: ((Data?, HTTPURLResponse?, Error?) -> Void)? = nil) {
         self.uniqueId = uniqueId
         self.delegate = delegate
         self.logger = logger

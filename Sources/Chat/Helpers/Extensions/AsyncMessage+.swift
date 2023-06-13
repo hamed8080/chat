@@ -33,6 +33,21 @@ public extension AsyncMessage {
         ChatResponse(uniqueId: chatMessage?.uniqueId, result: decodeContent(), subjectId: chatMessage?.subjectId, time: chatMessage?.time)
     }
 
+    func toChatResponse<T: Decodable>(asyncManager: AsyncManager) -> ChatResponse<T> {
+        let chatMessage = chatMessage
+        let pagination: (count: Int, offset: Int)? = asyncManager.pop(chatMessage?.uniqueId)
+        let result: T? = decodeContent()
+        let contentCount = chatMessage?.contentCount
+        let receivedCount = (result as? any Collection)?.count ?? 0
+        let hasNext = receivedCount >= pagination?.count ?? 0
+        return ChatResponse(uniqueId: chatMessage?.uniqueId,
+                            result: result,
+                            contentCount: contentCount,
+                            hasNext: hasNext,
+                            subjectId: chatMessage?.subjectId,
+                            time: chatMessage?.time)
+    }
+
     /// There is two type  of decoding one with `Int` and another one with `MessageResponse.
     /// Caution: When receiving a new message and sending a new message `OnDeliver`, `OnSeen`, and `OnSent` have different behavior.
     func messageResponse(state: MessageResponseState) -> ChatResponse<MessageResponse>? {

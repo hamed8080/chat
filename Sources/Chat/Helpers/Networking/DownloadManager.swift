@@ -8,17 +8,17 @@ import Additive
 import Foundation
 
 final class DownloadManager {
-    private let callbackManager: CallbacksManager
-    init(callbackManager: CallbacksManager) {
-        self.callbackManager = callbackManager
+    private let chat: ChatInternalProtocol
+    init(chat: ChatInternalProtocol) {
+        self.chat = chat
     }
 
     func download(url: String,
                   method: HTTPMethod = .get,
                   uniqueId: String,
-                  headers: [String: String]?,
-                  parameters: [String: Any]?,
-                  downloadProgress: DownloadProgressType?,
+                  headers: [String: String]? = nil,
+                  parameters: [String: Any]? = nil,
+                  downloadProgress: DownloadProgressType? = nil,
                   completion: @escaping (Data?, URLResponse?, Error?) -> Void)
     {
         guard var urlObj = URL(string: url) else { return }
@@ -40,12 +40,12 @@ final class DownloadManager {
         let delegate = ProgressImplementation(uniqueId: uniqueId, downloadProgress: downloadProgress) { [weak self] data, response, error in
             DispatchQueue.main.async {
                 completion(data, response, error)
-                self?.callbackManager.removeDownloadTask(uniqueId: uniqueId)
+                self?.chat.callbacksManager.removeDownloadTask(uniqueId: uniqueId)
             }
         }
         let session = URLSession(configuration: .default, delegate: delegate, delegateQueue: .main)
         let downloadTask = session.dataTask(with: request)
         downloadTask.resume()
-        callbackManager.addDownloadTask(task: downloadTask, uniqueId: uniqueId)
+        chat.callbacksManager.addDownloadTask(task: downloadTask, uniqueId: uniqueId)
     }
 }

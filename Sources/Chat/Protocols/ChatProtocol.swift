@@ -13,12 +13,9 @@ import ChatModels
 import Foundation
 import Logger
 
-public protocol Chat: BotProtocols, ContactProtocols, MapProtocol, MessageProtocol, ThreadProtocol, SystemProtocol, FileProtocol, CacheLogDelegate, UserProtocol {
+public protocol Chat {
     init(
         config: ChatConfig,
-        timerTyping: TimerProtocol,
-        requestUserTimer: TimerProtocol,
-        timerCheckUserStoppedTyping: TimerProtocol?,
         pingTimer: TimerProtocol,
         queueTimer: TimerProtocol,
         banTimer: TimerProtocol,
@@ -29,6 +26,18 @@ public protocol Chat: BotProtocols, ContactProtocols, MapProtocol, MessageProtoc
 
     /// The unique id of a chat instance to find and use it in ``ChatManager`` to fetch it.
     var id: UUID { get }
+
+    var contact: ContactProtocol { get set }
+    var conversation: ThreadProtocol { get set }
+    var bot: BotProtocol { get set }
+    var map: MapProtocol { get set }
+    var file: FileProtocol { get set }
+    var message: MessageProtocol { get set }
+    var tag: TagProtocol { get set }
+    var user: UserProtocol { get set }
+    var participant: ParticipantProtocol { get set }
+    var assistant: AssistantProtocol { get set }
+    var system: SystemProtocol { get set }
 
     /// The current userInfo is set by the SDK after the connection gets ready.
     var userInfo: User? { get }
@@ -59,30 +68,9 @@ public protocol ChatInternalProtocol: Chat {
     /// A manager for the chat object that will manage and holds the strong reference of a callback to invoke and then remove after the invocation.
     var callbacksManager: CallbacksManager { get }
 
-    /// A variable that determines how many times the user is typing is sent to the other participants.
-    var isTypingCount: Int { get set }
-
-    /// The timer for sending user is typing.
-    var timerTyping: TimerProtocol? { get set }
-
-    /// A timer to stop user is typing event.
-    var timerCheckUserStoppedTyping: TimerProtocol? { get set }
-
     /// A timer that will retry if the user rapidly tries to send action to the chat server.
     /// Chat server usually bans the user if it sends more than 3 requests in less than a second.
     var banTimer: TimerProtocol { get set }
-
-    /// A timer for retrieving the ``User`` object to make the ``ChatState/chatReady``.
-    var requestUserTimer: TimerProtocol { get set }
-
-    /// Number of retry count to retrieve the user.
-    var userRetrycount: Int { get set }
-
-    /// Max number of retry to fetch user object.
-    var maxUserRetryCount: Int { get }
-
-    /// A private method for fetching the user for first time.
-    func getUserForChatReady()
 
     /// The object of the current user will automatically be filled by the SDK after ``ChatState/asyncReady``,
     /// and if it is fetched properly, it will change the state of the chat to ``ChatState/chatReady``.
@@ -117,6 +105,7 @@ public protocol ChatInternalProtocol: Chat {
     ///   - req: A object that conform to the ``ChatSendable``.
     ///   - uniqueIdResult: A unique ID should be filled by the client or the SDK.
     func prepareToSendAsync(req: ChatSendable, type: ChatMessageVOTypes, uniqueIdResult: UniqueIdResultType?)
+    func prepareToSendAsync(req: ChatSendable, type: ChatMessageVOTypes)
 
     /// It is a private method and only should used by the SDK to send data to ``AsyncManager`` and send to ``Async``.
     /// - Parameters:
@@ -138,4 +127,9 @@ public protocol ChatInternalProtocol: Chat {
 
     /// A private method that will be called by the SDK to pass data that received from onMessage.
     func invokeCallback(asyncMessage: AsyncMessage)
+
+    /// Dispose and close object.
+    func dispose()
+
+    var loggerUserInfo: [String: String] { get }
 }

@@ -35,6 +35,10 @@ public final class AsyncManager: AsyncDelegate {
     /// This queue will live till application is running and this class is in memory, be careful it's not persistent on storage.
     private var queue: [String: QueueableWithType] = [:]
 
+    /// This saves all requests that need to use pagination and later calculates whether it has the next item or not. The key is uniqueId and the value is count.
+    /// Because if we have count we can estimate that  a response is at the end or not.
+    private var paginateables: [String: (count: Int, offset: Int)] = [:]
+
     public init(pingTimer: TimerProtocol, queueTimer: TimerProtocol) {
         self.pingTimer = pingTimer
         self.queueTimer = queueTimer
@@ -63,7 +67,7 @@ public final class AsyncManager: AsyncDelegate {
         (chat as? ChatImplementation)?.state = asyncState.chatState
         chat?.delegate?.chatState(state: asyncState.chatState, currentUser: nil, error: error?.chatError)
         if asyncState == .asyncReady {
-            chat?.getUserForChatReady()
+            (chat?.user as? UserManager)?.getUserForChatReady()
         } else if asyncState == .closed {
             pingTimer.invalidateTimer()
             logger?.createLog(message: "Socket Disconnected", persist: false, level: LogLevel.error, type: .received)
@@ -75,7 +79,9 @@ public final class AsyncManager: AsyncDelegate {
 
     /// A delegate to raise an error.
     public func asyncError(error: AsyncError) {
-        chat?.delegate?.chatError(error: .init(type: .asyncError, message: error.message, userInfo: error.userInfo, rawError: error.rawError))
+        let chatError = ChatError(type: .asyncError, message: error.message, userInfo: error.userInfo, rawError: error.rawError)
+        let errorResponse = ChatResponse(result: Optional<Any>.none, error: chatError)
+        chat?.delegate?.chatEvent(event: .system(.error(errorResponse)))
     }
 
     /// A public method to completely destroy the async object.
@@ -91,6 +97,7 @@ public final class AsyncManager: AsyncDelegate {
         guard let config = config else { return }
         let chatMessage = SendChatMessageVO(req: sendable, type: type.rawValue, token: config.token, typeCode: config.typeCode)
         addToQueue(sendable: sendable, type: type)
+        addToPaginateable(sendable: sendable)
         sendToAsync(asyncMessage: AsyncChatServerMessage(chatMessage: chatMessage), type: type)
         sendPingTimer()
     }
@@ -104,6 +111,25 @@ public final class AsyncManager: AsyncDelegate {
     private func removeFromQueue(asyncMessage: AsyncMessage) {
         if let uniqueId = SendChatMessageVO(with: asyncMessage)?.uniqueId, queue[uniqueId] != nil {
             queue.removeValue(forKey: uniqueId)
+        }
+    }
+
+    public func pop(_ uniqueId: String?) -> (count: Int, offset: Int)? {
+        guard let uniqueId = uniqueId else { return nil }
+        let value = paginateables[uniqueId]
+        paginateables.removeValue(forKey: uniqueId)
+        return value
+    }
+
+    private func addToPaginateable(sendable: ChatSendable) {
+        if let paginateable = sendable as? Paginateable {
+            paginateables[paginateable.uniqueId] = (count: paginateable.count, offset: paginateable.offset)
+        }
+    }
+
+    private func removeFromPaginateable(paginateable: Paginateable) {
+        if paginateables[paginateable.uniqueId] != nil {
+            paginateables.removeValue(forKey: paginateable.uniqueId)
         }
     }
 

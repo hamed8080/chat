@@ -10,5 +10,7 @@ import Foundation
 
 public enum UserEventTypes {
     case roles(ChatResponse<[Roles]>)
-    case onUser(ChatResponse<User>)
+    case user(ChatResponse<User>)
+    case setProfile(ChatResponse<Profile>)
+    case remove(ChatResponse<[UserRole]>)
 }

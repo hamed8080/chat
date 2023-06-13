@@ -8,9 +8,9 @@ import Foundation
 import Logger
 
 final class UploadManager {
-    private var callbackManager: CallbacksManager
-    init(callbackManager: CallbacksManager) {
-        self.callbackManager = callbackManager
+    private var chat: ChatInternalProtocol
+    init(chat: ChatInternalProtocol) {
+        self.chat = chat
     }
 
     func upload(url: String,
@@ -37,11 +37,11 @@ final class UploadManager {
         let uploadTask = session.uploadTask(with: request, from: body as Data) { [weak self] data, response, error in
             DispatchQueue.main.async {
                 completion(data, response, error)
-                self?.callbackManager.removeUploadTask(uniqueId: uniqueId)
+                self?.chat.callbacksManager.removeUploadTask(uniqueId: uniqueId)
             }
         }
         uploadTask.resume()
-        callbackManager.addUploadTask(task: uploadTask, uniqueId: uniqueId)
+        chat.callbacksManager.addUploadTask(task: uploadTask, uniqueId: uniqueId)
     }
 
     func multipartFormDatas(parameters: [String: Any]?, fileName: String, mimeType: String?, fileData: Data?, boundary: String) -> NSMutableData {

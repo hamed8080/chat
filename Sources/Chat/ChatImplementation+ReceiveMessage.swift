@@ -19,81 +19,83 @@ public extension ChatImplementation {
 
         switch chatMessage.type {
         case .addParticipant:
-            onAddParticipant(asyncMessage)
+            (participant as? ParticipantManager)?.onAddParticipant(asyncMessage)
         case .allUnreadMessageCount:
-            onUnreadMessageCount(asyncMessage)
+            (conversation as? ThreadManager)?.onUnreadMessageCount(asyncMessage)
         case .botMessage:
-            onBotMessage(asyncMessage)
+            (bot as? BotManager)?.onBotMessage(asyncMessage)
         case .changeType: // TODO: not implemented yet!
             break
         case .clearHistory:
-            onClearHistory(asyncMessage)
+            (message as? MessageManager)?.onClearHistory(asyncMessage)
         case .closeThread:
-            onCloseThread(asyncMessage)
+            (conversation as? ThreadManager)?.onCloseThread(asyncMessage)
         case .contactsLastSeen:
-            onUsersLastSeen(asyncMessage)
+            (contact as? ContactManager)?.onUsersLastSeen(asyncMessage)
         case .createBot:
-            onCreateBot(asyncMessage)
+            (bot as? BotManager)?.onCreateBot(asyncMessage)
         case .createThread:
-            onCreateThread(asyncMessage)
+            (conversation as? ThreadManager)?.onCreateThread(asyncMessage)
         case .defineBotCommand:
-            onAddBotCommand(asyncMessage)
+            (bot as? BotManager)?.onAddBotCommand(asyncMessage)
         case .deleteMessage:
-            onDeleteMessage(asyncMessage)
+            (message as? MessageManager)?.onDeleteMessage(asyncMessage)
         case .delivery:
-            onDeliverMessage(asyncMessage)
+            (message as? MessageManager)?.onDeliverMessage(asyncMessage)
         case .seen:
-            onSeenMessage(asyncMessage)
+            (message as? MessageManager)?.onSeenMessage(asyncMessage)
         case .sent:
-            onSentMessage(asyncMessage)
+            (message as? MessageManager)?.onSentMessage(asyncMessage)
         case .editMessage:
-            onEditMessage(asyncMessage)
+            (message as? MessageManager)?.onEditMessage(asyncMessage)
         case .forwardMessage:
-            onNewMessage(asyncMessage)
+            (message as? MessageManager)?.onNewMessage(asyncMessage)
         case .getBlocked:
-            onBlockedContacts(asyncMessage)
+            (contact as? ContactManager)?.onBlockedContacts(asyncMessage)
         case .getContacts:
-            onContacts(asyncMessage)
+            (contact as? ContactManager)?.onContacts(asyncMessage)
         case .getCurrentUserRoles:
-            onUserRoles(asyncMessage)
+            (user as? UserManager)?.onUserRoles(asyncMessage)
+            (conversation as? ThreadManager)?.onUserRoles(asyncMessage)
         case .getHistory:
-            onGetHistroy(asyncMessage)
+            (message as? MessageManager)?.onGetHistroy(asyncMessage)
         case .messageDeliveredToParticipants:
-            onMessageDeliveredToParticipants(asyncMessage)
+            (message as? MessageManager)?.onMessageDeliveredToParticipants(asyncMessage)
         case .getMessageSeenParticipants:
-            onMessageSeenByParticipants(asyncMessage)
+            (message as? MessageManager)?.onMessageSeenByParticipants(asyncMessage)
         case .getNotSeenDuration:
-            onContactNotSeen(asyncMessage)
+            (contact as? ContactManager)?.onContactNotSeen(asyncMessage)
         case .getReportReasons: // TODO: not implemented yet!
             break
         case .getStatus: // TODO: not implemented yet!
             break
         case .getThreads:
-            onThreads(asyncMessage)
+            (conversation as? ThreadManager)?.onThreads(asyncMessage)
         case .isNameAvailable:
-            onIsThreadNamePublic(asyncMessage)
+            (conversation as? ThreadManager)?.onIsThreadNamePublic(asyncMessage)
         case .joinThread:
-            onJoinThread(asyncMessage)
+            (conversation as? ThreadManager)?.onJoinThread(asyncMessage)
         case .lastMssageSeenUpdated:
-            onLastSeenUpdate(asyncMessage)
+            (conversation as? ThreadManager)?.onLastSeenUpdate(asyncMessage)
         case .leaveThread:
-            onLeaveThread(asyncMessage)
+            (conversation as? ThreadManager)?.onLeaveThread(asyncMessage)
         case .logout:
             break
         case .message:
-            onNewMessage(asyncMessage)
+            (message as? MessageManager)?.onNewMessage(asyncMessage)
+            (conversation as? ThreadManager)?.onNewMessage(asyncMessage)
         case .ping:
             break
         case .pinThread, .unpinThread:
-            onPinUnPinThread(asyncMessage)
+            (conversation as? ThreadManager)?.onPinUnPinThread(asyncMessage)
         case .relationInfo: // TODO: not implemented yet!
             break
         case .removedFromThread:
-            onUserRemovedFromThread(asyncMessage)
+            (conversation as? ThreadManager)?.onUserRemovedFromThread(asyncMessage)
         case .removeParticipant:
-            onRemoveParticipants(asyncMessage)
+            (participant as? ParticipantManager)?.onRemoveParticipants(asyncMessage)
         case .removeRoleFromUser:
-            onRemveUserRoles(asyncMessage)
+            (user as? UserManager)?.onRemveUserRoles(asyncMessage)
         case .rename: // TODO: not implemented yet!
             break
         case .reportMessage:
@@ -103,81 +105,82 @@ public extension ChatImplementation {
         case .reportUser:
             break
         case .setProfile:
-            onSetProfile(asyncMessage)
+            (user as? UserManager)?.onSetProfile(asyncMessage)
         case .setRuleToUser:
-            onUserRoles(asyncMessage)
+            (user as? UserManager)?.onUserRoles(asyncMessage)
+            (conversation as? ThreadManager)?.onUserRoles(asyncMessage)
         case .spamPvThread:
-            onSpamThread(asyncMessage)
+            (conversation as? ThreadManager)?.onSpamThread(asyncMessage)
         case .startBot, .stopBot:
-            onStartStopBot(asyncMessage)
+            (bot as? BotManager)?.onStartStopBot(asyncMessage)
         case .lastMessageDeleted:
-            onLastMessageDeleted(asyncMessage)
+            (message as? MessageManager)?.onLastMessageDeleted(asyncMessage)
         case .lastMessageEdited:
-            onLastMessageEdited(asyncMessage)
+            (message as? MessageManager)?.onLastMessageEdited(asyncMessage)
         case .statusPing:
-            onStatusPing(asyncMessage)
+            (user as? UserManager)?.onStatusPing(asyncMessage)
         case .systemMessage:
-            onSystemMessageEvent(asyncMessage)
+            (system as? SystemManager)?.onSystemMessageEvent(asyncMessage)
         case .threadParticipants:
-            onThreadParticipants(asyncMessage)
+            (participant as? ParticipantManager)?.onThreadParticipants(asyncMessage)
         case .unblock, .block:
-            onBlockUnBlockContact(asyncMessage)
+            (contact as? ContactManager)?.onBlockUnBlockContact(asyncMessage)
         case .muteThread, .unmuteThread:
-            onMuteUnMuteThread(asyncMessage)
+            (conversation as? ThreadManager)?.onMuteUnMuteThread(asyncMessage)
         case .pinMessage, .unpinMessage:
-            onPinUnPinMessage(asyncMessage)
+            (message as? MessageManager)?.onPinUnPinMessage(asyncMessage)
         case .contactSynced:
-            onSyncContacts(asyncMessage)
+            (contact as? ContactManager)?.onSyncContacts(asyncMessage)
         case .updateThreadInfo:
-            onUpdateThreadInfo(asyncMessage)
+            (conversation as? ThreadManager)?.onUpdateThreadInfo(asyncMessage)
         case .userInfo:
-            onUserInfo(asyncMessage)
+            (user as? UserManager)?.onUserInfo(asyncMessage)
         case .registerAssistant:
-            onRegisterAssistants(asyncMessage)
+            (assistant as? AssistantManager)?.onRegisterAssistants(asyncMessage)
         case .deacticveAssistant:
-            onDeactiveAssistants(asyncMessage)
+            (assistant as? AssistantManager)?.onDeactiveAssistants(asyncMessage)
         case .getAssistants:
-            onAssistants(asyncMessage)
+            (assistant as? AssistantManager)?.onAssistants(asyncMessage)
         case .getAssistantHistory:
-            onAssistantHistory(asyncMessage)
+            (assistant as? AssistantManager)?.onAssistantHistory(asyncMessage)
         case .blockedAssistnts:
-            onGetBlockedAssistants(asyncMessage)
+            (assistant as? AssistantManager)?.onGetBlockedAssistants(asyncMessage)
         case .blockAssistant, .unblockAssistant:
-            onBlockUnBlockAssistant(asyncMessage)
+            (assistant as? AssistantManager)?.onBlockUnBlockAssistant(asyncMessage)
         case .mutualGroups:
-            onMutalGroups(asyncMessage)
+            (conversation as? ThreadManager)?.onMutalGroups(asyncMessage)
         case .userStatus: // TODO: not implemented yet!
             break
         case .removeBotCommands:
-            onRemoveBotCommand(asyncMessage)
+            (bot as? BotManager)?.onRemoveBotCommand(asyncMessage)
         case .getUserBots:
-            onBots(asyncMessage)
+            (bot as? BotManager)?.onBots(asyncMessage)
         case .changeThreadType:
-            onChangeThreadType(asyncMessage)
+            (conversation as? ThreadManager)?.onChangeThreadType(asyncMessage)
         case .tagList:
-            onTags(asyncMessage)
+            (tag as? TagManager)?.onTags(asyncMessage)
         case .createTag:
-            onCreateTag(asyncMessage)
+            (tag as? TagManager)?.onCreateTag(asyncMessage)
         case .editTag:
-            onEditTag(asyncMessage)
+            (tag as? TagManager)?.onEditTag(asyncMessage)
         case .deleteTag:
-            onDeleteTag(asyncMessage)
+            (tag as? TagManager)?.onDeleteTag(asyncMessage)
         case .addTagParticipants:
-            onAddTagParticipant(asyncMessage)
+            (tag as? TagManager)?.onAddTagParticipant(asyncMessage)
         case .removeTagParticipants:
-            onRemoveTagParticipants(asyncMessage)
+            (tag as? TagManager)?.onRemoveTagParticipants(asyncMessage)
         case .getTagParticipants:
-            onTagParticipants(asyncMessage)
+            (tag as? TagManager)?.onTagParticipants(asyncMessage)
         case .exportChats:
-            onExportMessages(asyncMessage)
+            (message as? MessageManager)?.onExportMessages(asyncMessage)
         case .deleteThread:
-            onDeleteThread(asyncMessage)
+            (conversation as? ThreadManager)?.onDeleteThread(asyncMessage)
         case .archiveThread, .unarchiveThread:
-            onArchiveUnArchiveThread(asyncMessage)
+            (conversation as? ThreadManager)?.onArchiveUnArchiveThread(asyncMessage)
         case .threadsUnreadCount:
-            onThreadsUnreadCount(asyncMessage)
+            (conversation as? ThreadManager)?.onThreadsUnreadCount(asyncMessage)
         case .threadContactNameUpdated:
-            onThreadNameContactUpdated(asyncMessage)
+            (conversation as? ThreadManager)?.onThreadNameContactUpdated(asyncMessage)
         case .startCallRequest,
              .acceptCall,
              .cancelCall,
@@ -208,7 +211,7 @@ public extension ChatImplementation {
              .callInquiry:
             callMessageDeleaget?.onCallMessageDelegate(asyncMessage: asyncMessage, chat: self)
         case .error:
-            onError(asyncMessage)
+            (system as? SystemManager)?.onError(asyncMessage)
         case .unknown:
             logger.log(title: "CHAT_SDK:", message: "an unknown message type received from the server not implemented in SDK!", persist: true, type: .internalLog)
         }

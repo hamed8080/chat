@@ -11,9 +11,10 @@ import Foundation
 
 public enum AssistantEventTypes {
     case assistants(ChatResponse<[Assistant]>)
-    case registerAssistant(ChatResponse<[Assistant]>)
-    case blockAssistant(ChatResponse<[Assistant]>)
-    case unblockAssistant(ChatResponse<[Assistant]>)
-    case deactiveAssistants(ChatResponse<[Assistant]>)
-    case assistantActions(ChatResponse<[AssistantAction]>)
+    case blockedList(ChatResponse<[Assistant]>)
+    case register(ChatResponse<[Assistant]>)
+    case block(ChatResponse<[Assistant]>)
+    case unblock(ChatResponse<[Assistant]>)
+    case deactive(ChatResponse<[Assistant]>)
+    case actions(ChatResponse<[AssistantAction]>)
 }
