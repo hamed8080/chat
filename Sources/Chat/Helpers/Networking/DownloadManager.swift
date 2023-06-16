@@ -19,9 +19,9 @@ final class DownloadManager {
                   headers: [String: String]? = nil,
                   parameters: [String: Any]? = nil,
                   downloadProgress: DownloadProgressType? = nil,
-                  completion: @escaping (Data?, URLResponse?, Error?) -> Void)
+                  completion: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionTask?
     {
-        guard var urlObj = URL(string: url) else { return }
+        guard var urlObj = URL(string: url) else { return nil }
         var request = URLRequest(url: urlObj)
         headers?.forEach { key, value in
             request.addValue(value, forHTTPHeaderField: key)
@@ -37,15 +37,14 @@ final class DownloadManager {
         }
         request.url = urlObj
         request.method = method
-        let delegate = ProgressImplementation(uniqueId: uniqueId, downloadProgress: downloadProgress) { [weak self] data, response, error in
+        let delegate = ProgressImplementation(uniqueId: uniqueId, downloadProgress: downloadProgress) { data, response, error in
             DispatchQueue.main.async {
                 completion(data, response, error)
-                self?.chat.callbacksManager.removeDownloadTask(uniqueId: uniqueId)
             }
         }
         let session = URLSession(configuration: .default, delegate: delegate, delegateQueue: .main)
         let downloadTask = session.dataTask(with: request)
         downloadTask.resume()
-        chat.callbacksManager.addDownloadTask(task: downloadTask, uniqueId: uniqueId)
+        return downloadTask
     }
 }

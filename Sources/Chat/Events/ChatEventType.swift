@@ -8,7 +8,8 @@ import Foundation
 public enum ChatEventType {
     case bot(BotEventTypes)
     case contact(ContactEventTypes)
-    case file(FileEventType)
+    case download(DownloadEventTypes)
+    case upload(UploadEventTypes)
     case system(SystemEventTypes)
     case message(MessageEventTypes)
     case thread(ThreadEventTypes)

@@ -80,7 +80,7 @@ public final class AsyncManager: AsyncDelegate {
     /// A delegate to raise an error.
     public func asyncError(error: AsyncError) {
         let chatError = ChatError(type: .asyncError, message: error.message, userInfo: error.userInfo, rawError: error.rawError)
-        let errorResponse = ChatResponse(result: Optional<Any>.none, error: chatError)
+        let errorResponse = ChatResponse(result: Any?.none, error: chatError)
         chat?.delegate?.chatEvent(event: .system(.error(errorResponse)))
     }
 

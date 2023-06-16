@@ -3,10 +3,10 @@
 // Copyright (c) 2022 Chat
 //
 // Created by Hamed Hosseini on 12/14/22
-import Foundation
-import ChatModels
 import ChatCore
 import ChatDTO
+import ChatModels
+import Foundation
 
 public protocol ExportMessagesProtocol {
     var chat: ChatImplementation { get set }

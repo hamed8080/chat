@@ -26,7 +26,8 @@ final class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSession
          uniqueId: String,
          uploadProgress: UploadFileProgressType? = nil,
          downloadProgress: DownloadProgressType? = nil,
-         downloadCompletion: ((Data?, HTTPURLResponse?, Error?) -> Void)? = nil) {
+         downloadCompletion: ((Data?, HTTPURLResponse?, Error?) -> Void)? = nil)
+    {
         self.uniqueId = uniqueId
         self.delegate = delegate
         self.logger = logger
@@ -42,9 +43,9 @@ final class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSession
         logger?.log(title: "Upload progress:\(percent)", persist: false, type: .internalLog)
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            self.uploadProgress?(UploadFileProgress(percent: Int64(percent), totalSize: totalBytesExpectedToSend, bytesSend: totalBytesSent), nil)
-            let response: ChatResponse<String> = .init(uniqueId: self.uniqueId, result: self.uniqueId)
-            self.delegate?.chatEvent(event: .file(.uploading(response)))
+            let uploadProgress = UploadFileProgress(percent: Int64(percent), totalSize: totalBytesExpectedToSend, bytesSend: totalBytesSent)
+            self.uploadProgress?(uploadProgress, nil)
+            self.delegate?.chatEvent(event: .upload(.progress(uniqueId, uploadProgress, nil)))
         }
     }
 
@@ -54,12 +55,13 @@ final class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSession
 
     func urlSession(_: URLSession, dataTask _: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
         self.response = response as? HTTPURLResponse
-        downloadFileProgress.totalSize = response.expectedContentLength
+        let totalSize = response.expectedContentLength
+        downloadFileProgress.totalSize = totalSize
         downloadProgress?(downloadFileProgress)
         logger?.log(title: "Download progress:\(downloadFileProgress.percent)", persist: false, type: .internalLog)
         completionHandler(.allow)
-        let response: ChatResponse<String> = .init(uniqueId: uniqueId, result: uniqueId)
-        delegate?.chatEvent(event: .file(.downloading(response)))
+        let progress = DownloadFileProgress(percent: 0, totalSize: totalSize, bytesRecivied: 0)
+        delegate?.chatEvent(event: .download(.progress(uniqueId: uniqueId, progress: progress)))
     }
 
     func urlSession(_: URLSession, dataTask _: URLSessionDataTask, didReceive data: Data) {

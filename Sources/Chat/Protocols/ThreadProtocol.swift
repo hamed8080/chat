@@ -4,10 +4,10 @@
 //
 // Created by Hamed Hosseini on 12/14/22
 
+import Async
 import ChatDTO
 import ChatModels
 import Foundation
-import Async
 
 public protocol ThreadProtocol {
     /// Archive a thread.

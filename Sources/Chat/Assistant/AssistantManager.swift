@@ -19,7 +19,7 @@ final class AssistantManager: AssistantProtocol {
 
     func get(_ request: AssistantsRequest) {
         chat.prepareToSendAsync(req: request, type: .getAssistants)
-        chat.cache?.assistant?.fetch(request.count, request.offset) { [weak self] assistants, totalCount in
+        chat.cache?.assistant?.fetch(request.count, request.offset) { [weak self] assistants, _ in
             let assistants = assistants.map(\.codable)
             self?.chat.responseQueue.async {
                 let hasNext = assistants.count >= request.count
@@ -62,7 +62,7 @@ final class AssistantManager: AssistantProtocol {
 
     func blockedList(_ request: BlockedAssistantsRequest) {
         chat.prepareToSendAsync(req: request, type: .blockedAssistnts)
-        chat.cache?.assistant?.getBlocked(request.count, request.offset) { [weak self] assistants, totalCount in
+        chat.cache?.assistant?.getBlocked(request.count, request.offset) { [weak self] assistants, _ in
             let assistants = assistants.map(\.codable)
             self?.chat.responseQueue.async {
                 let hasNext = assistants.count >= request.count

@@ -7,10 +7,10 @@
 import Async
 import ChatCore
 import ChatDTO
-import ChatModels
-import Foundation
-import Contacts
 import ChatExtensions
+import ChatModels
+import Contacts
+import Foundation
 
 final class ContactManager: ContactProtocol {
     let chat: ChatInternalProtocol
@@ -258,5 +258,4 @@ final class ContactManager: ContactProtocol {
         }
         chat.cache?.contact?.insert(models: result?.result?.contacts ?? [])
     }
-
 }

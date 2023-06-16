@@ -5,13 +5,13 @@
 // Created by Hamed Hosseini on 12/14/22
 
 import Async
+import ChatCache
 import ChatCore
 import ChatDTO
 import ChatModels
 import Foundation
-import ChatCache
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 #endif
 
 final class MessageManager: MessageProtocol {
@@ -79,18 +79,14 @@ final class MessageManager: MessageProtocol {
     }
 
     func export(_ request: GetHistoryRequest) {
-        exportVM = ExportMessages(chat: chat as! ChatImplementation, request: request)
+        guard let chat = chat as? ChatImplementation else { return }
+        exportVM = ExportMessages(chat: chat, request: request)
         exportVM?.start()
     }
 
     func onExportMessages(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Message]> = asyncMessage.toChatResponse()
         exportVM?.onReceive(response)
-    }
-
-    func forward(_ request: ForwardMessageRequest) {
-        chat.prepareToSendAsync(req: request, type: .forwardMessage)
-        cache?.forwardQueue?.insert(request.queueOfForwardMessages)
     }
 
     func history(_ request: GetHistoryRequest) {
@@ -100,14 +96,14 @@ final class MessageManager: MessageProtocol {
             self?.chat.responseQueue.async {
                 let hasNext = totalCount >= request.count
                 let response = ChatResponse(uniqueId: request.uniqueId, result: messages, contentCount: totalCount, hasNext: hasNext, cache: true)
-                self?.chat.delegate?.chatEvent(event: .message(.messages(response)))
+                self?.chat.delegate?.chatEvent(event: .message(.history(response)))
             }
         }
 
         cache?.textQueue?.unsendForThread(request.threadId, request.count, request.offset) { [weak self] unsedTexts, _ in
             let requests = unsedTexts.map(\.codable.request)
             self?.chat.responseQueue.async {
-                let response = ChatResponse(uniqueId: request.uniqueId, result: requests)
+                let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true)
                 self?.chat.delegate?.chatEvent(event: .message(.queueTextMessages(response)))
             }
         }
@@ -115,7 +111,7 @@ final class MessageManager: MessageProtocol {
         cache?.editQueue?.unsedForThread(request.threadId, request.count, request.offset) { [weak self] unsendEdits, _ in
             let requests = unsendEdits.map(\.codable.request)
             self?.chat.responseQueue.async {
-                let response = ChatResponse(uniqueId: request.uniqueId, result: requests)
+                let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true)
                 self?.chat.delegate?.chatEvent(event: .message(.queueEditMessages(response)))
             }
         }
@@ -123,7 +119,7 @@ final class MessageManager: MessageProtocol {
         cache?.forwardQueue?.unsedForThread(request.threadId, request.count, request.offset) { [weak self] unsendForwards, _ in
             let requests = unsendForwards.map(\.codable.request)
             self?.chat.responseQueue.async {
-                let response = ChatResponse(uniqueId: request.uniqueId, result: requests)
+                let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true)
                 self?.chat.delegate?.chatEvent(event: .message(.queueForwardMessages(response)))
             }
         }
@@ -131,7 +127,7 @@ final class MessageManager: MessageProtocol {
         cache?.fileQueue?.unsedForThread(request.threadId, request.count, request.offset) { [weak self] unsendFiles, _ in
             let requests = unsendFiles.map(\.codable.request)
             self?.chat.responseQueue.async {
-                let response = ChatResponse(uniqueId: request.uniqueId, result: requests)
+                let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true)
                 self?.chat.delegate?.chatEvent(event: .message(.queueFileMessages(response)))
             }
         }
@@ -148,8 +144,13 @@ final class MessageManager: MessageProtocol {
     }
 
     func onGetHistroy(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[Message]> = asyncMessage.toChatResponse()
+        let response: ChatResponse<[Message]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)
         delegate?.chatEvent(event: .message(.history(response)))
+    }
+
+    func send(_ request: ForwardMessageRequest) {
+        chat.prepareToSendAsync(req: request, type: .forwardMessage)
+        cache?.forwardQueue?.insert(request.queueOfForwardMessages)
     }
 
     func send(_ request: SendTextMessageRequest) {
@@ -157,10 +158,6 @@ final class MessageManager: MessageProtocol {
         let lastMessageVO = Message(threadId: request.threadId, message: request.textMessage, uniqueId: request.uniqueId)
         try? cache?.conversation?.replaceLastMessage(.init(id: request.threadId, lastMessage: lastMessageVO.message, lastMessageVO: lastMessageVO))
         cache?.textQueue?.insert(models: [request.queueOfTextMessages])
-    }
-
-    func reply(_ request: ReplyMessageRequest) {
-        send(request.sendTextMessageRequest)
     }
 
     func send(_ request: LocationMessageRequest) {
@@ -175,11 +172,11 @@ final class MessageManager: MessageProtocol {
             guard let self = self, let data = response.result else { return }
             var hC = 0
             var wC = 0
-#if canImport(UIKit)
-            let image = UIImage(data: data) ?? UIImage()
-            hC = Int(image.size.height)
-            wC = Int(image.size.width)
-#endif
+            #if canImport(UIKit)
+                let image = UIImage(data: data) ?? UIImage()
+                hC = Int(image.size.height)
+                wC = Int(image.size.width)
+            #endif
             let imageRequest = UploadImageRequest(data: data,
                                                   fileExtension: ".png",
                                                   fileName: request.mapImageName ?? "",
@@ -196,24 +193,55 @@ final class MessageManager: MessageProtocol {
                                                         uniqueId: request.uniqueId)
 
             self.cache?.fileQueue?.insert(models: [textMessageReq.queueOfFileMessages(imageRequest)])
-            (self.chat.file as? InternalFileProtocol)?.upload(imageRequest, nil) { [weak self] _, fileMetaData, error in
-                if let error = error {
-                    let response = ChatResponse(uniqueId: request.uniqueId, result: Optional<Any>.none, error: error)
-                    self?.delegate?.chatEvent(event: .system(.error(response)))
-                } else {
-                    fileMetaData?.latitude = request.mapCenter.lat
-                    fileMetaData?.longitude = request.mapCenter.lng
-                    guard let stringMetaData = fileMetaData.jsonString else { return }
-                    textMessageReq.metadata = stringMetaData
-                    self?.send(textMessageReq)
-                }
+            (chat.file as? ChatFileManager)?.upload(imageRequest, nil) { [weak self] imageResponse, fileMetaData, error in
+                self?.sendTextMessageOnUploadCompletion(textMessageReq, imageRequest.uniqueId, imageResponse, fileMetaData, error)
             }
+        }
+    }
+
+    func reply(_ request: ReplyMessageRequest) {
+        send(request.sendTextMessageRequest)
+    }
+
+    func send(_ textMessage: SendTextMessageRequest, _ imageRequest: UploadImageRequest) {
+        var textMessage = SendTextMessageRequest(request: textMessage, uniqueId: imageRequest.chatUniqueId)
+        cache?.fileQueue?.insert(models: [textMessage.queueOfFileMessages(imageRequest)])
+        (chat.file as? ChatFileManager)?.upload(imageRequest, nil) { [weak self] imageResponse, fileMetaData, error in
+            self?.sendTextMessageOnUploadCompletion(textMessage, imageRequest.uniqueId, imageResponse, fileMetaData, error)
+        }
+    }
+
+    func send(_ textMessage: SendTextMessageRequest, _ fileRequest: UploadFileRequest) {
+        var textMessage = SendTextMessageRequest(request: textMessage, uniqueId: fileRequest.chatUniqueId)
+        cache?.fileQueue?.insert(models: [textMessage.queueOfFileMessages(fileRequest)])
+        (chat.file as? ChatFileManager)?.upload(fileRequest, nil) { [weak self] fileResponse, fileMetaData, error in
+            self?.sendTextMessageOnUploadCompletion(textMessage, fileRequest.uniqueId, fileResponse, fileMetaData, error)
+        }
+    }
+
+    func reply(_ replyMessage: ReplyMessageRequest, _ fileRequest: UploadFileRequest) {
+        send(replyMessage.sendTextMessageRequest, fileRequest)
+    }
+
+    func reply(_ replyMessage: ReplyMessageRequest, _ imageRequest: UploadImageRequest) {
+        send(replyMessage.sendTextMessageRequest, imageRequest)
+    }
+
+    private func sendTextMessageOnUploadCompletion(_ textMessage: SendTextMessageRequest, _ uniqueId: String, _: UploadFileResponse?, _ metadata: FileMetaData?, _ error: ChatError?) {
+        if let error = error {
+            let response = ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error)
+            chat.delegate?.chatEvent(event: .system(.error(response)))
+        } else {
+            guard let stringMetaData = metadata.jsonString else { return }
+            var textMessage = textMessage
+            textMessage.metadata = stringMetaData
+            send(textMessage)
         }
     }
 
     func mentions(_ request: MentionRequest) {
         chat.prepareToSendAsync(req: request, type: .getHistory)
-        cache?.message?.getMentions(threadId: request.threadId, offset: request.offset, count: request.count) { [weak self] messages, totalCount in
+        cache?.message?.getMentions(threadId: request.threadId, offset: request.offset, count: request.count) { [weak self] messages, _ in
             let messages = messages.map { $0.codable() }
             self?.chat.responseQueue.async {
                 let hasNext = messages.count >= request.count
@@ -336,5 +364,4 @@ final class MessageManager: MessageProtocol {
         delegate?.chatEvent(event: .message(pin ? .pin(response) : .unpin(response)))
         cache?.message?.pin(asyncMessage.chatMessage?.type == .pinMessage, response.subjectId ?? -1, response.result?.id ?? -1)
     }
-
 }

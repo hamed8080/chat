@@ -30,20 +30,6 @@ public protocol FileProtocol {
     ///   - action: Action to pause, resume or cancel.
     func manageUpload(uniqueId: String, action: DownloaUploadAction)
 
-    /// Send a file message.
-    /// - Parameters:
-    ///   - textMessage: A text message with a threadId.
-    ///   - uploadFile: The progress of uploading file.
-    func send(_ textMessage: SendTextMessageRequest, _ uploadRequest: UploadFileRequest)
-
-    /// Reply to a mesaage inside a thread with a file.
-    /// - Parameters:
-    ///   - replyMessage: The request that contains the threadId and a text message an id of an message you want to reply.
-    ///   - uploadFile: The request that contains the data of file and other file properties
-    func reply(_ replyMessage: ReplyMessageRequest, _ uploadFile: UploadFileRequest)
-
-    func send(_ textMessage: SendTextMessageRequest, _ imageRequest: UploadImageRequest)
-
     /// Upload a file.
     /// - Parameters:
     ///   - req: The request that contains the data of file and other file properties.
@@ -80,12 +66,4 @@ public protocol FileProtocol {
 
     /// Save a file inside a shared group.
     func saveFileInGroup(url: URL, data: Data, completion: @escaping (URL?) -> Void)
-}
-
-
-protocol InternalFileProtocol: FileProtocol {
-    func upload(_ request: UploadImageRequest, _ progressCompletion: UploadFileProgressType?, _ uploadCompletion: UploadCompletionType?)
-    func onResponseUploadImage(_ request: UploadImageRequest, _ data: Data?, _ error: Error?, _ uploadCompletion: UploadCompletionType?)
-    func upload(_ request: UploadFileRequest, _ progressCompletion: UploadFileProgressType?, _ uploadCompletion: UploadCompletionType?)
-    func onResponseUploadFile(_ request: UploadFileRequest, _ data: Data?, _ error: Error?, _ uploadCompletion: UploadCompletionType?)
 }

@@ -4,8 +4,8 @@
 //
 // Created by Hamed Hosseini on 11/2/22
 
-import Foundation
 import ChatCore
+import Foundation
 
 public final class DiskStatus {
     // MARK: Get raw value
@@ -76,7 +76,7 @@ public final class DiskStatus {
                 message += " " + "so, the cache will be switch OFF!"
             }
             let error = ChatError(type: .outOfStorage, message: message)
-            let errorResponse = ChatResponse(result: Optional<Any>.none, error: error)
+            let errorResponse = ChatResponse(result: Any?.none, error: error)
             delegate?.chatEvent(event: .system(.error(errorResponse)))
             return false
         } else {

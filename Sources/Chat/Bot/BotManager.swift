@@ -69,6 +69,6 @@ final class BotManager: BotProtocol {
     func onStartStopBot(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<String> = asyncMessage.toChatResponse()
         let start = asyncMessage.chatMessage?.type == .startBot
-        chat.delegate?.chatEvent(event: .bot( start ? .start(response) : .stop(response)))
+        chat.delegate?.chatEvent(event: .bot(start ? .start(response) : .stop(response)))
     }
 }

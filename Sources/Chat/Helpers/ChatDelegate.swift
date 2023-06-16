@@ -14,4 +14,3 @@ public protocol ChatDelegate: AnyObject, LogDelegate {
     func chatState(state: ChatState, currentUser: User?, error: ChatError?)
     func chatEvent(event: ChatEventType)
 }
-

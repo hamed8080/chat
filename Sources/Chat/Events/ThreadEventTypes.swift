@@ -20,7 +20,7 @@ public enum ThreadEventTypes {
     case left(ChatResponse<User>)
     case removedFrom(ChatResponse<Int>)
     case mute(ChatResponse<Int>)
-    case unmute(ChatResponse<Int>)    
+    case unmute(ChatResponse<Int>)
     case created(ChatResponse<Conversation>)
     case pin(ChatResponse<Conversation>)
     case unpin(ChatResponse<Conversation>)

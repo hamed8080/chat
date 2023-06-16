@@ -4,13 +4,12 @@
 //
 // Created by Hamed Hosseini on 12/14/22
 
+import Additive
 import ChatDTO
 import ChatModels
 import Foundation
-import Additive
 
 public protocol UserProtocol {
-
     /// Tell the server user has logged out. This method wil **truncate and delete** all data inside the cache.
     func logOut()
 

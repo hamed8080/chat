@@ -14,17 +14,17 @@ import Foundation
 import Logger
 
 public final class ChatImplementation: ChatInternalProtocol, Identifiable {
-    public lazy var contact: ContactProtocol = { ContactManager(chat: self) }()
-    public lazy var conversation: ThreadProtocol = { ThreadManager(chat: self) }()
-    public lazy var bot: BotProtocol = { BotManager(chat: self) }()
-    public lazy var map: MapProtocol = { MapManager(chat: self) }()
-    public lazy var file: FileProtocol = { ChatFileManager(chat: self) }()
-    public lazy var message: MessageProtocol = { MessageManager(chat: self) }()
-    public lazy var tag: TagProtocol = { TagManager(chat: self) }()
-    public lazy var user: UserProtocol = { UserManager(chat: self) }()
-    public lazy var participant: ParticipantProtocol = { ParticipantManager(chat: self) }()
-    public lazy var assistant: AssistantProtocol  = { AssistantManager(chat: self) }()
-    public lazy var system: SystemProtocol = { SystemManager(chat: self) }()
+    public lazy var contact: ContactProtocol = ContactManager(chat: self)
+    public lazy var conversation: ThreadProtocol = ThreadManager(chat: self)
+    public lazy var bot: BotProtocol = BotManager(chat: self)
+    public lazy var map: MapProtocol = MapManager(chat: self)
+    public lazy var file: FileProtocol = ChatFileManager(chat: self)
+    public lazy var message: MessageProtocol = MessageManager(chat: self)
+    public lazy var tag: TagProtocol = TagManager(chat: self)
+    public lazy var user: UserProtocol = UserManager(chat: self)
+    public lazy var participant: ParticipantProtocol = ParticipantManager(chat: self)
+    public lazy var assistant: AssistantProtocol = AssistantManager(chat: self)
+    public lazy var system: SystemProtocol = SystemManager(chat: self)
 
     public var id: UUID = .init()
     public var config: ChatConfig
@@ -42,7 +42,6 @@ public final class ChatImplementation: ChatInternalProtocol, Identifiable {
     public var session: URLSessionProtocol
     public var responseQueue: DispatchQueueProtocol
     public var cache: CacheManager?
-    public let callbacksManager = CallbacksManager()
     public var cacheFileManager: CacheFileManagerProtocol?
     public var state: ChatState = .uninitialized
     public var callMessageDeleaget: CallMessageProtocol?
@@ -81,25 +80,6 @@ public final class ChatImplementation: ChatInternalProtocol, Identifiable {
 
     public func dispose() {
         asyncManager.disposeObject()
-    }
-
-    public func prepareToSendAsync<T: Decodable>(
-        req: ChatSendable,
-        type: ChatMessageVOTypes,
-        uniqueIdResult: UniqueIdResultType? = nil,
-        completion: CompletionType<T>? = nil,
-        onSent: OnSentType? = nil,
-        onDelivered: OnDeliveryType? = nil,
-        onSeen: OnSeenType? = nil
-    ) {
-        callbacksManager.addCallback(uniqueId: req.chatUniqueId, requesType: type, callback: completion, onSent: onSent, onDelivered: onDelivered, onSeen: onSeen)
-        uniqueIdResult?(req.chatUniqueId)
-        asyncManager.sendData(sendable: req, type: type)
-    }
-
-    public func prepareToSendAsync(req: ChatSendable, type: ChatMessageVOTypes, uniqueIdResult: UniqueIdResultType? = nil) {
-        uniqueIdResult?(req.chatUniqueId)
-        asyncManager.sendData(sendable: req, type: type)
     }
 
     public func prepareToSendAsync(req: ChatCore.ChatSendable, type: ChatCore.ChatMessageVOTypes) {

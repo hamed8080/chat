@@ -4,8 +4,8 @@
 //
 // Created by Hamed Hosseini on 12/14/22
 
-import ChatDTO
 import ChatCore
+import ChatDTO
 import Foundation
 
 public protocol MapProtocol {

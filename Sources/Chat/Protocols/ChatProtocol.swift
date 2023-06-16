@@ -65,9 +65,6 @@ public protocol Chat {
 }
 
 public protocol ChatInternalProtocol: Chat {
-    /// A manager for the chat object that will manage and holds the strong reference of a callback to invoke and then remove after the invocation.
-    var callbacksManager: CallbacksManager { get }
-
     /// A timer that will retry if the user rapidly tries to send action to the chat server.
     /// Chat server usually bans the user if it sends more than 3 requests in less than a second.
     var banTimer: TimerProtocol { get set }
@@ -103,27 +100,7 @@ public protocol ChatInternalProtocol: Chat {
     /// It is a private method and only should used by the SDK to send data to ``AsyncManager`` and send to ``Async``.
     /// - Parameters:
     ///   - req: A object that conform to the ``ChatSendable``.
-    ///   - uniqueIdResult: A unique ID should be filled by the client or the SDK.
-    func prepareToSendAsync(req: ChatSendable, type: ChatMessageVOTypes, uniqueIdResult: UniqueIdResultType?)
     func prepareToSendAsync(req: ChatSendable, type: ChatMessageVOTypes)
-
-    /// It is a private method and only should used by the SDK to send data to ``AsyncManager`` and send to ``Async``.
-    /// - Parameters:
-    ///   - req: A object that conform to the ``ChatSendable``.
-    ///   - uniqueIdResult: A unique ID should be filled by the client or the SDK.
-    ///   - completion: A completion handler to send data result back.
-    ///   - onSent: A completion handler for onSent message.
-    ///   - onDelivered: A completion handler for onDelivered message.
-    ///   - onSeen: A completion handler for onSeen message.
-    func prepareToSendAsync<T: Decodable>(
-        req: ChatSendable,
-        type: ChatMessageVOTypes,
-        uniqueIdResult: UniqueIdResultType?,
-        completion: CompletionType<T>?,
-        onSent: OnSentType?,
-        onDelivered: OnDeliveryType?,
-        onSeen: OnSeenType?
-    )
 
     /// A private method that will be called by the SDK to pass data that received from onMessage.
     func invokeCallback(asyncMessage: AsyncMessage)

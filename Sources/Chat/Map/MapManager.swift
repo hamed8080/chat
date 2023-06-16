@@ -24,15 +24,15 @@ final class MapManager: InternalMapProtocol {
     func image(_ request: MapStaticImageRequest, _ completion: ((ChatResponse<Data>) -> Void)? = nil) {
         let request = MapStaticImageRequest(request: request, key: chat.config.mapApiKey)
         let url = "\(chat.config.mapServer)\(Routes.mapStaticImage.rawValue)"
-        DownloadManager(chat: chat)
+        _ = DownloadManager(chat: chat)
             .download(url: url, uniqueId: request.chatUniqueId, parameters: try? request.asDictionary())
-        { [weak self] data, response, error in
-            let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
-            let error = error != nil ? ChatError(message: "\(ChatErrorType.networkError.rawValue) \(error?.localizedDescription ?? "")", code: statusCode, hasError: error != nil) : nil
-            let response = ChatResponse(uniqueId: request.uniqueId, result: data, error: error)
-            self?.chat.delegate?.chatEvent(event: .map(.image(response)))
-            completion?(response)
-        }
+            { [weak self] data, response, error in
+                let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
+                let error = error != nil ? ChatError(message: "\(ChatErrorType.networkError.rawValue) \(error?.localizedDescription ?? "")", code: statusCode, hasError: error != nil) : nil
+                let response = ChatResponse(uniqueId: request.uniqueId, result: data, error: error)
+                self?.chat.delegate?.chatEvent(event: .map(.image(response)))
+                completion?(response)
+            }
     }
 
     func reverse(_ request: MapReverseRequest) {
@@ -91,5 +91,4 @@ final class MapManager: InternalMapProtocol {
         }
         .resume()
     }
-
 }

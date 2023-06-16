@@ -4,9 +4,9 @@
 //
 // Created by Hamed Hosseini on 12/14/22
 
+import Additive
 import ChatDTO
 import Foundation
-import Additive
 
 public protocol SystemProtocol {
     /// Send a event to the participants of a thread that you are typing something.

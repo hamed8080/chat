@@ -4,13 +4,13 @@
 //
 // Created by Hamed Hosseini on 12/14/22
 
+import Additive
 import Async
 import ChatCore
 import ChatDTO
+import ChatExtensions
 import ChatModels
 import Foundation
-import Additive
-import ChatExtensions
 
 final class SystemManager: SystemProtocol, InternalSystemProtocol {
     let chat: ChatInternalProtocol
@@ -72,7 +72,7 @@ final class SystemManager: SystemProtocol, InternalSystemProtocol {
         let chatMessage = asyncMessage.chatMessage
         let data = chatMessage?.content?.data(using: .utf8) ?? Data()
         let chatError = try? JSONDecoder.instance.decode(ChatError.self, from: data)
-        let response = ChatResponse(uniqueId: chatMessage?.uniqueId, result: Optional<Any>.none, error: chatError)
+        let response = ChatResponse(uniqueId: chatMessage?.uniqueId, result: Any?.none, error: chatError)
         error(response: response)
     }
 

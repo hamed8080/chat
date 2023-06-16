@@ -5,11 +5,11 @@
 // Created by Hamed Hosseini on 12/14/22
 
 import Async
+import ChatCache
 import ChatCore
 import ChatDTO
 import ChatModels
 import Foundation
-import ChatCache
 
 final class ThreadManager: ThreadProtocol {
     let chat: ChatInternalProtocol
@@ -27,7 +27,7 @@ final class ThreadManager: ThreadProtocol {
             (chat.file as? ChatFileManager)?.upload(image, nil) { [weak self] _, fileMetaData, error in
                 // send update thread Info with new file
                 if let error = error {
-                    let response = ChatResponse(uniqueId: request.uniqueId, result: Optional<Any>.none, error: error)
+                    let response = ChatResponse(uniqueId: request.uniqueId, result: Any?.none, error: error)
                     self?.delegate?.chatEvent(event: .system(.error(response)))
 
                 } else {
@@ -147,7 +147,7 @@ final class ThreadManager: ThreadProtocol {
             chat.user.set(roleRequest)
         } else {
             let chatError = ChatError(message: "Current User have no Permission to Change the ThreadAdmin", code: 6666, hasError: true)
-            let response = ChatResponse(uniqueId: request.uniqueId, result: Optional<Any>.none, error: chatError)
+            let response = ChatResponse(uniqueId: request.uniqueId, result: Any?.none, error: chatError)
             delegate?.chatEvent(event: .system(.error(response)))
         }
     }
@@ -182,7 +182,7 @@ final class ThreadManager: ThreadProtocol {
     }
 
     func mutual(_ request: MutualGroupsRequest) {
-        self.requests[request.uniqueId] = request
+        requests[request.uniqueId] = request
         chat.prepareToSendAsync(req: request, type: .mutualGroups)
         cache?.mutualGroup?.mutualGroups(request.toBeUserVO.id) { [weak self] mutuals in
             let threads = mutuals.first?.conversations?.allObjects.compactMap { $0 as? CDConversation }.map { $0.codable() }

@@ -4,19 +4,20 @@
 //
 // Created by Hamed Hosseini on 12/14/22
 
+import Additive
 import Async
 import ChatCore
 import ChatDTO
+import ChatExtensions
 import ChatModels
 import Foundation
-import ChatExtensions
-import Additive
 
 final class UserManager: UserProtocol, InternalUserProtocol {
     public var userRetrycount = 0
     public let maxUserRetryCount = 5
-    public var requestUserTimer: TimerProtocol = Timer.init()
+    public var requestUserTimer: TimerProtocol = Timer()
     var chat: ChatInternalProtocol
+    private var requests: [String: Any] = [:]
 
     init(chat: ChatInternalProtocol) {
         self.chat = chat
@@ -67,10 +68,14 @@ final class UserManager: UserProtocol, InternalUserProtocol {
     }
 
     internal func fetchUserInfo() {
-        userInfo(.init())
+        let req = UserInfoRequest()
+        requests[req.uniqueId] = req
+        userInfo(req)
     }
 
-    internal func onUser(response: ChatResponse<User>) {
+    private func onInternalUser(response: ChatResponse<User>) {
+        guard let uniqueId = response.uniqueId, requests[uniqueId] != nil else { return }
+        requests.removeValue(forKey: uniqueId)
         if let user = response.result {
             chat.cache?.user?.insert([user], isMe: true)
             chat.userInfo = user
@@ -85,7 +90,7 @@ final class UserManager: UserProtocol, InternalUserProtocol {
             // reach to max retry
             requestUserTimer.invalidateTimer()
             let error = ChatError(type: .errorRaedyChat, message: "Reached max retry count!")
-            let errorResponse = ChatResponse(result: Optional<Any>.none, error: error)
+            let errorResponse = ChatResponse(result: Any?.none, error: error)
             chat.delegate?.chatEvent(event: .system(.error(errorResponse)))
         }
     }
@@ -95,6 +100,7 @@ final class UserManager: UserProtocol, InternalUserProtocol {
         if let user = response.result {
             chat.cache?.user?.insert([user])
         }
+        onInternalUser(response: response)
         chat.delegate?.chatEvent(event: .system(.serverTime(.init(uniqueId: response.uniqueId, result: response.time, time: response.time))))
         chat.delegate?.chatEvent(event: .user(.user(response)))
     }
@@ -133,14 +139,12 @@ final class UserManager: UserProtocol, InternalUserProtocol {
         if let groupFoler = chat.cacheFileManager?.groupFolder {
             chat.cacheFileManager?.deleteFolder(url: groupFoler)
         }
-        self.chat.dispose()
+        chat.dispose()
     }
 
     func send(_ request: SendStatusPingRequest) {
         chat.prepareToSendAsync(req: request, type: .statusPing)
     }
 
-    func onStatusPing(_ asyncMessage: AsyncMessage) {
-
-    }
+    func onStatusPing(_: AsyncMessage) {}
 }

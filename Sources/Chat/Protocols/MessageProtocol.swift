@@ -17,7 +17,7 @@ public protocol MessageProtocol {
     /// Forwrad messages to a thread.
     /// - Parameters:
     ///   - request: The request that contains messageId list and a destination threadId.
-    func forward(_ request: ForwardMessageRequest)
+    func send(_ request: ForwardMessageRequest)
 
     /// Clear all messages inside a thread for user.
     /// - Parameters:
@@ -55,15 +55,39 @@ public protocol MessageProtocol {
     ///   - request: The request that contains text message and id of the thread.
     func send(_ request: SendTextMessageRequest)
 
+    /// Send a location.
+    /// - Parameters:
+    ///   - request: The request that gets a threadId and a location and a ``Conversation/userGroupHash``.
+    func send(_ request: LocationMessageRequest)
+
+    /// Send a file message.
+    /// - Parameters:
+    ///   - textMessage: A text message with a threadId.
+    ///   - fileRequest: The request that contains the data of a file and other file properties.
+    func send(_ textMessage: SendTextMessageRequest, _ fileRequest: UploadFileRequest)
+
+    /// Send a file message.
+    /// - Parameters:
+    ///   - textMessage: A text message with a threadId.
+    ///   - imageRequest: The request that contains the data of an image and other image properties.
+    func send(_ textMessage: SendTextMessageRequest, _ imageRequest: UploadImageRequest)
+
     /// Reply to a message.
     /// - Parameters:
     ///   - request: The request contains the id of the message you want to reply to, and id of the thread, and a text message.
     func reply(_ request: ReplyMessageRequest)
 
-    /// Send a location.
+    /// Reply to a mesaage inside a thread with a file.
     /// - Parameters:
-    ///   - request: The request that gets a threadId and a location and a ``Conversation/userGroupHash``.
-    func send(_ request: LocationMessageRequest)
+    ///   - replyMessage: The request that contains the threadId and a text message an id of an message you want to reply.
+    ///   - fileRequest: The request that contains the data of a file and other file properties.
+    func reply(_ replyMessage: ReplyMessageRequest, _ fileRequest: UploadFileRequest)
+
+    /// Reply to a mesaage inside a thread with a file.
+    /// - Parameters:
+    ///   - replyMessage: The request that contains the threadId and a text message an id of an message you want to reply.
+    ///   - imageRequest: The request that contains the data of an image and other image properties.
+    func reply(_ replyMessage: ReplyMessageRequest, _ imageRequest: UploadImageRequest)
 
     /// Get messages that you have mentioned in a thread.
     /// - Parameters:
