@@ -76,117 +76,65 @@ final class ChatFileManager: FileProtocol {
     }
 
     func manageUpload(uniqueId: String, action: DownloaUploadAction) {
-        if let task = tasks[uniqueId] {
-            switch action {
-            case .cancel:
-                task.cancel()
-                removeTask(uniqueId)
-                delegate?.chatEvent(event: .upload(.canceled(uniqueId: uniqueId)))
-                cache?.deleteQueues(uniqueIds: [uniqueId])
-            case .suspend:
-                task.suspend()
-                delegate?.chatEvent(event: .upload(.suspended(uniqueId: uniqueId)))
-            case .resume:
-                task.resume()
-                delegate?.chatEvent(event: .upload(.resumed(uniqueId: uniqueId)))
-            }
-        } else {
-            delegate?.chatEvent(event: .upload(.failed(uniqueId: uniqueId, error: nil)))
-        }
+        manageTask(upload: true, uniqueId: uniqueId, action: action)
     }
 
     func manageDownload(uniqueId: String, action: DownloaUploadAction) {
+        manageTask(upload: false, uniqueId: uniqueId, action: action)
+    }
+
+    private func manageTask(upload: Bool, uniqueId: String, action: DownloaUploadAction) {
         if let task = tasks[uniqueId] {
             switch action {
             case .cancel:
                 task.cancel()
-                delegate?.chatEvent(event: .download(.canceled(uniqueId: uniqueId)))
+                delegate?.chatEvent(event: upload ? .upload(.canceled(uniqueId: uniqueId)) : .download(.canceled(uniqueId: uniqueId)))
                 removeTask(uniqueId)
+                cache?.deleteQueues(uniqueIds: [uniqueId])
             case .suspend:
                 task.suspend()
-                delegate?.chatEvent(event: .download(.suspended(uniqueId: uniqueId)))
+                delegate?.chatEvent(event: upload ? .upload(.suspended(uniqueId: uniqueId)) : .download(.suspended(uniqueId: uniqueId)))
             case .resume:
                 task.resume()
-                delegate?.chatEvent(event: .download(.resumed(uniqueId: uniqueId)))
+                delegate?.chatEvent(event: upload ? .upload(.resumed(uniqueId: uniqueId)) : .download(.resumed(uniqueId: uniqueId)))
             }
         } else {
-            delegate?.chatEvent(event: .download(.failed(uniqueId: uniqueId, error: nil)))
+            delegate?.chatEvent(event: upload ? .upload(.failed(uniqueId: uniqueId, error: nil)) : .download(.failed(uniqueId: uniqueId, error: nil)))
         }
     }
 
     public func get(_ request: ImageRequest) {
-        let url = "\(chat.config.fileServer)\(Routes.images.rawValue)/\(request.hashCode)"
-        /// Check if either the image exists in the cache. or not, if it doesn't exist force to download property has become true.
-        var forceToDownloadFromServer = false
-        if chat.cacheFileManager?.isFileExist(url: URL(string: url)!) == false {
-            forceToDownloadFromServer = true
-        }
-        if request.forceToDownloadFromServer == true {
-            forceToDownloadFromServer = true
-        }
-        let request = ImageRequest(request: request, forceToDownloadFromServer: forceToDownloadFromServer)
-        if request.forceToDownloadFromServer == true {
-            let headers = ["Authorization": "Bearer \(chat.config.token)"]
-            let task = DownloadManager(chat: chat)
-                .download(url: url,
-                          uniqueId: request.chatUniqueId,
-                          headers: headers,
-                          parameters: try? request.asDictionary()) { [weak self] progress in
-                    self?.delegate?.chatEvent(event: .download(.progress(uniqueId: request.uniqueId, progress: progress)))
-                } completion: { [weak self] data, response, error in
-                    self?.onDownload(hashCode: request.hashCode, uniqueId: request.uniqueId, url: url, data: data, response: response, error: error, isImage: true)
-                }
-            tasks[request.uniqueId] = task
-        }
-
-        if let filePath = chat.cacheFileManager?.filePath(url: URL(string: url)!) {
-            cache?.image?.first(hashCode: request.hashCode) { [weak self] _ in
-                self?.chat.responseQueue.async {
-                    let data = self?.chat.cacheFileManager?.getData(url: filePath) ?? self?.chat.cacheFileManager?.getDataInGroup(url: filePath)
-                    let response = ChatResponse(uniqueId: request.uniqueId, result: data)
-                    self?.delegate?.chatEvent(event: .download(.image(response, filePath)))
-                }
-            }
-        }
+        let params = DownloadManagerParameters(request, chat.config, chat.cacheFileManager)
+        download(params)
     }
 
     public func get(_ request: FileRequest) {
-        let url = "\(chat.config.fileServer)\(Routes.files.rawValue)/\(request.hashCode)"
-        /// Check if either the file exists in the cache. or not, if it doesn't exist force to download property has become true.
-        var forceToDownloadFromServer = false
-        if chat.cacheFileManager?.isFileExist(url: URL(string: url)!) == false {
-            forceToDownloadFromServer = true
-        }
-        if request.forceToDownloadFromServer == true {
-            forceToDownloadFromServer = true
-        }
-        let request = FileRequest(request: request, forceToDownloadFromServer: forceToDownloadFromServer)
-        if request.forceToDownloadFromServer == true {
-            let headers = ["Authorization": "Bearer \(chat.config.token)"]
-            let task = DownloadManager(chat: chat)
-                .download(url: url,
-                          uniqueId: request.chatUniqueId,
-                          headers: headers,
-                          parameters: try? request.asDictionary()) { [weak self] progress in
-                    self?.delegate?.chatEvent(event: .download(.progress(uniqueId: request.uniqueId, progress: progress)))
-                } completion: { [weak self] data, response, error in
-                    self?.onDownload(hashCode: request.hashCode, uniqueId: request.uniqueId, url: url, data: data, response: response, error: error)
-                }
-            tasks[request.uniqueId] = task
+        let params = DownloadManagerParameters(request, chat.config, chat.cacheFileManager)
+        download(params)
+    }
+
+    private func download(_ params: DownloadManagerParameters) {
+        if params.forceToDownload, let hashCode = params.hashCode {
+            let task = DownloadManager(chat: chat).download(params) { [weak self] progress in
+                self?.delegate?.chatEvent(event: .download(.progress(uniqueId: params.uniqueId, progress: progress)))
+            } completion: { [weak self] data, response, error in
+                self?.onDownload(hashCode: hashCode, uniqueId: params.uniqueId, url: params.url, data: data, response: response, error: error)
+            }
+            tasks[params.uniqueId] = task
         }
 
-        if let filePath = chat.cacheFileManager?.filePath(url: URL(string: url)!) {
-            cache?.file?.first(hashCode: request.hashCode) { [weak self] _ in
+        if let filePath = chat.cacheFileManager?.filePath(url: params.url), let hashCode = params.hashCode {
+            cache?.file?.first(hashCode: hashCode) { [weak self] _ in
                 self?.chat.responseQueue.async {
-                    let data = self?.chat.cacheFileManager?.getData(url: filePath) ?? self?.chat.cacheFileManager?.getDataInGroup(url: filePath)
-                    let response = ChatResponse(uniqueId: request.uniqueId, result: data)
-                    self?.delegate?.chatEvent(event: .download(.file(response, filePath)))
+                    let data = self?.chat.cacheFileManager?.getData(url: params.url) ?? self?.chat.cacheFileManager?.getDataInGroup(url: params.url)
+                    let response = ChatResponse(uniqueId: params.uniqueId, result: data, cache: true)
+                    self?.delegate?.chatEvent(event: .download(params.isImage ? .image(response, filePath) : .file(response, filePath)))
                 }
             }
         }
     }
 
-    func onDownload(hashCode: String, uniqueId: String, url: String, data: Data?, response: URLResponse?, error _: Error?, isImage: Bool = false) {
+    func onDownload(hashCode: String, uniqueId: String, url: URL, data: Data?, response: URLResponse?, error _: Error?, isImage: Bool = false) {
         guard let response = response as? HTTPURLResponse,
               let headers = response.allHeaderFields as? [String: Any]
         else { return }
@@ -194,19 +142,9 @@ final class ChatFileManager: FileProtocol {
         if let errorResponse = error(statusCode: statusCode, data: data, uniqueId: uniqueId, headers: headers) {
             delegate?.chatEvent(event: .system(.error(errorResponse)))
         } else {
-            var name: String?
-            if let fileName = (headers["Content-Disposition"] as? String)?.replacingOccurrences(of: "\"", with: "").split(separator: "=").last {
-                name = String(fileName)
-            }
-            var type: String?
-            if let mimetype = (headers["Content-Type"] as? String)?.split(separator: "/").last {
-                type = String(mimetype)
-            }
-            let size = Int((headers["Content-Length"] as? String) ?? "0")
-            let fileNameWithExtension = "\(name ?? "default").\(type ?? "none")"
-            let file = File(hashCode: hashCode, name: fileNameWithExtension, size: size, type: type)
+            let file = File(hashCode: hashCode, headers: headers)
             cache?.file?.insert(models: [file])
-            chat.cacheFileManager?.saveFile(url: URL(string: url)!, data: data ?? Data()) { [weak self] filePath in
+            chat.cacheFileManager?.saveFile(url: url, data: data ?? Data()) { [weak self] filePath in
                 let response = ChatResponse(uniqueId: uniqueId, result: data)
                 self?.delegate?.chatEvent(event: .download(isImage ? .image(response, filePath) : .file(response, filePath)))
             }
@@ -216,21 +154,18 @@ final class ChatFileManager: FileProtocol {
     private func error(statusCode: Int, data: Data?, uniqueId: String, headers: [String: Any]) -> ChatResponse<Any>? {
         if statusCode >= 200, statusCode <= 300 {
             if let data = data, let error = try? JSONDecoder.instance.decode(ChatError.self, from: data), error.hasError == true {
-                let response = ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error)
-                return response
+                return ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error)
             }
             if let data = data, let podspaceError = try? JSONDecoder.instance.decode(PodspaceFileUploadResponse.self, from: data) {
                 let error = ChatError(message: podspaceError.message, code: podspaceError.errorType?.rawValue, hasError: true)
-                let response = ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error)
-                return response
+                return ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error)
             }
             return nil /// Means the result was success.
         } else {
             let message = (headers["errorMessage"] as? String) ?? ""
             let code = (headers["errorCode"] as? Int) ?? 999
             let error = ChatError(message: message, code: code, hasError: true, content: nil)
-            let response = ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error)
-            return response
+            return ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error)
         }
     }
 

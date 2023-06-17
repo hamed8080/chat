@@ -64,7 +64,7 @@ final class ThreadManager: ThreadProtocol {
         chat.prepareToSendAsync(req: request, type: .threadsUnreadCount)
         cache?.conversation?.threadsUnreadcount(request.threadIds) { [weak self] unreadCount in
             self?.chat.responseQueue.async {
-                let response = ChatResponse(uniqueId: request.uniqueId, result: unreadCount)
+                let response = ChatResponse(uniqueId: request.uniqueId, result: unreadCount, cache: true)
                 self?.delegate?.chatEvent(event: .thread(.unreadCount(response)))
             }
         }
@@ -82,7 +82,7 @@ final class ThreadManager: ThreadProtocol {
             let threads = threads.map { $0.codable() }
             self?.chat.responseQueue.async {
                 let hasNext = totalCount >= request.count
-                let response = ChatResponse(uniqueId: request.uniqueId, result: threads, hasNext: hasNext)
+                let response = ChatResponse(uniqueId: request.uniqueId, result: threads, hasNext: hasNext, cache: true)
                 self?.delegate?.chatEvent(event: .thread(.threads(response)))
             }
         }
@@ -92,7 +92,7 @@ final class ThreadManager: ThreadProtocol {
         chat.prepareToSendAsync(req: request, type: .getThreads)
         cache?.conversation?.fetchIds { [weak self] threadIds in
             self?.chat.responseQueue.async {
-                let response = ChatResponse(uniqueId: request.uniqueId, result: threadIds.map { Conversation(id: $0) })
+                let response = ChatResponse(uniqueId: request.uniqueId, result: threadIds.map { Conversation(id: $0) }, cache: true)
                 self?.delegate?.chatEvent(event: .thread(.threads(response)))
             }
         }

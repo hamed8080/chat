@@ -9,7 +9,7 @@ import ChatDTO
 import Foundation
 import Logger
 
-class UploadManagerParameters {
+struct UploadManagerParameters {
     let imageRequest: UploadImageRequest?
     let fileRequest: UploadFileRequest?
     let fileServer: String

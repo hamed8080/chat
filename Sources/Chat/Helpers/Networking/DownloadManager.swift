@@ -13,31 +13,21 @@ final class DownloadManager {
         self.chat = chat
     }
 
-    func download(url: String,
-                  method: HTTPMethod = .get,
-                  uniqueId: String,
-                  headers: [String: String]? = nil,
-                  parameters: [String: Any]? = nil,
-                  downloadProgress: DownloadProgressType? = nil,
-                  completion: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionTask?
-    {
-        guard var urlObj = URL(string: url) else { return nil }
-        var request = URLRequest(url: urlObj)
-        headers?.forEach { key, value in
+    func download(_ params: DownloadManagerParameters, progress: DownloadProgressType? = nil, completion: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionTask? {
+        var request = URLRequest(url: params.url)
+        params.headers?.forEach { key, value in
             request.addValue(value, forHTTPHeaderField: key)
         }
-
-        if let parameters = parameters, parameters.count > 0, method == .get {
-            var urlComp = URLComponents(string: url)!
+        if let parameters = params.params, parameters.count > 0, params.method == .get {
+            var urlComp = URLComponents(string: params.url.absoluteString)!
             urlComp.queryItems = []
             parameters.forEach { key, value in
                 urlComp.queryItems?.append(URLQueryItem(name: key, value: "\(value)"))
             }
-            urlObj = urlComp.url ?? urlObj
+            request.url = urlComp.url
         }
-        request.url = urlObj
-        request.method = method
-        let delegate = ProgressImplementation(uniqueId: uniqueId, downloadProgress: downloadProgress) { data, response, error in
+        request.method = params.method
+        let delegate = ProgressImplementation(uniqueId: params.uniqueId, downloadProgress: progress) { data, response, error in
             DispatchQueue.main.async {
                 completion(data, response, error)
             }
