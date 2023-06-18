@@ -40,8 +40,11 @@ final class ChatFileManager: FileProtocol {
         upload(params, request.data, progress, completion)
     }
 
-    private func upload(_ req: UploadManagerParameters, _ fileData: Data, _ progress: UploadFileProgressType? = nil, _ completion: UploadCompletionType? = nil) {
-        let task = UploadManager(chat: chat).upload(req, fileData, progress: progress) { data, _, error in
+    private func upload(_ req: UploadManagerParameters, _ fileData: Data, _ progressCompletion: UploadFileProgressType? = nil, _ completion: UploadCompletionType? = nil) {
+        let task = UploadManager(chat: chat).upload(req, fileData) { [weak self] progress, error in
+            self?.delegate?.chatEvent(event: .upload(.progress(req.uniqueId, progress, error)))
+            progressCompletion?(progress, error)
+        } completion: { data, _, error in
             self.onUploadCompleted(req, data, error, completion)
         }
         tasks[req.uniqueId] = task
@@ -118,7 +121,7 @@ final class ChatFileManager: FileProtocol {
             let task = DownloadManager(chat: chat).download(params) { [weak self] progress in
                 self?.delegate?.chatEvent(event: .download(.progress(uniqueId: params.uniqueId, progress: progress)))
             } completion: { [weak self] data, response, error in
-                self?.onDownload(hashCode: hashCode, uniqueId: params.uniqueId, url: params.url, data: data, response: response, error: error)
+                self?.onDownload(hashCode: hashCode, uniqueId: params.uniqueId, url: params.url, data: data, response: response, error: error, isImage: params.isImage)
             }
             tasks[params.uniqueId] = task
         }
