@@ -132,7 +132,7 @@ final class ThreadManager: ThreadProtocol {
 
     /// Step 1: to leave safely
     func leaveSafely(_ request: SafeLeaveThreadRequest) {
-        let currentUserRolseReq = GeneralSubjectIdRequest(subjectId: request.threadId, uniqueId: request.uniqueId)
+        let currentUserRolseReq = request.generalRequest
         requests[request.uniqueId] = request
         chat.user.currentUserRoles(currentUserRolseReq)
     }
@@ -143,7 +143,7 @@ final class ThreadManager: ThreadProtocol {
         guard let uniqueId = response.uniqueId, let request = requests[uniqueId] as? SafeLeaveThreadRequest else { return }
         let isAdmin = response.result?.contains(.threadAdmin) ?? false || response.result?.contains(.addRuleToUser) ?? false
         if isAdmin, let roles = response.result {
-            let roleRequest = RolesRequest(userRoles: [.init(userId: request.participantId, roles: roles)], threadId: request.subjectId, uniqueId: request.uniqueId)
+            let roleRequest = request.roleRequest(roles: roles)
             chat.user.set(roleRequest)
         } else {
             let chatError = ChatError(message: "Current User have no Permission to Change the ThreadAdmin", code: 6666, hasError: true)

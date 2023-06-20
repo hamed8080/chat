@@ -148,11 +148,11 @@ final class ContactManager: ContactProtocol {
 
     func get(_ request: ContactsRequest) {
         chat.prepareToSendAsync(req: request, type: .getContacts)
-        chat.cache?.contact?.getContacts(request.fetchRequest) { [weak self] contacts, totalCount in
+        chat.cache?.contact?.getContacts(request.fetchRequest) { [weak self] contacts, _ in
             let contacts = contacts.map(\.codable)
             self?.chat.responseQueue.async {
-                let pagination = PaginationWithContentCount(hasNext: contacts.count >= request.size, count: request.size, offset: request.offset, totalCount: totalCount)
-                let reponse = ChatResponse(uniqueId: request.uniqueId, result: contacts, cache: true, pagination: pagination)
+                let hasNext = contacts.count >= request.size
+                let reponse = ChatResponse(uniqueId: request.uniqueId, result: contacts, hasNext: hasNext, cache: true)
                 self?.chat.delegate?.chatEvent(event: .contact(.contacts(reponse)))
             }
         }
