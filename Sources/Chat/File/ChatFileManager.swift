@@ -117,11 +117,11 @@ final class ChatFileManager: FileProtocol {
     }
 
     private func download(_ params: DownloadManagerParameters) {
-        if params.forceToDownload, let hashCode = params.hashCode {
+        if params.forceToDownload {
             let task = DownloadManager(chat: chat).download(params) { [weak self] progress in
                 self?.delegate?.chatEvent(event: .download(.progress(uniqueId: params.uniqueId, progress: progress)))
             } completion: { [weak self] data, response, error in
-                self?.onDownload(hashCode: hashCode, uniqueId: params.uniqueId, url: params.url, data: data, response: response, error: error, isImage: params.isImage)
+                self?.onDownload(params: params, data: data, response: response, error: error)
             }
             tasks[params.uniqueId] = task
         }
@@ -137,19 +137,24 @@ final class ChatFileManager: FileProtocol {
         }
     }
 
-    func onDownload(hashCode: String, uniqueId: String, url: URL, data: Data?, response: URLResponse?, error _: Error?, isImage: Bool = false) {
+    func onDownload(params: DownloadManagerParameters, data: Data?, response: URLResponse?, error _: Error?) {
         guard let response = response as? HTTPURLResponse,
               let headers = response.allHeaderFields as? [String: Any]
         else { return }
         let statusCode = response.statusCode
-        if let errorResponse = error(statusCode: statusCode, data: data, uniqueId: uniqueId, headers: headers) {
+        if let errorResponse = error(statusCode: statusCode, data: data, uniqueId: params.uniqueId, headers: headers) {
             delegate?.chatEvent(event: .system(.error(errorResponse)))
-        } else {
-            let file = File(hashCode: hashCode, headers: headers)
-            cache?.file?.insert(models: [file])
-            chat.cacheFileManager?.saveFile(url: url, data: data ?? Data()) { [weak self] filePath in
-                let response = ChatResponse(uniqueId: uniqueId, result: data)
-                self?.delegate?.chatEvent(event: .download(isImage ? .image(response, filePath) : .file(response, filePath)))
+        } else if let data = data {
+            let response = ChatResponse(uniqueId: params.uniqueId, result: data)
+            if !params.thumbnail {
+                let file = File(hashCode: params.hashCode ?? "", headers: headers)
+                cache?.file?.insert(models: [file])
+                chat.cacheFileManager?.saveFile(url: params.url, data: data) { [weak self] filePath in
+                    self?.delegate?.chatEvent(event: .download(params.isImage ? .image(response, filePath) : .file(response, filePath)))
+                }
+            } else {
+                /// Is thumbnail and it does not need to save on the disk.
+                delegate?.chatEvent(event: .download(params.isImage ? .image(response, nil) : .file(response, nil)))
             }
         }
     }

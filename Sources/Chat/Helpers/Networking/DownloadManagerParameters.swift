@@ -17,11 +17,12 @@ struct DownloadManagerParameters {
     var headers: [String: String]? { ["Authorization": "Bearer \(token)"] }
     var params: [String: Any]?
     let isImage: Bool
+    let thumbnail: Bool
     var hashCode: String?
     var method: HTTPMethod = .get
     var uniqueId: String
 
-    init(forceToDownload: Bool = false, url: URL, token: String, params: [String: Any]? = nil, isImage: Bool = false, method: HTTPMethod = .get, uniqueId: String) {
+    init(forceToDownload: Bool = false, url: URL, token: String, params: [String: Any]? = nil, thumbnail: Bool = false, isImage: Bool = false, method: HTTPMethod = .get, uniqueId: String) {
         self.forceToDownload = forceToDownload
         self.url = url
         self.token = token
@@ -30,11 +31,13 @@ struct DownloadManagerParameters {
         hashCode = nil
         self.method = method
         self.uniqueId = uniqueId
+        self.thumbnail = thumbnail
     }
 
     init(_ request: ImageRequest, _ config: ChatConfig, _ cache: CacheFileManagerProtocol?) {
         isImage = true
         hashCode = request.hashCode
+        thumbnail = request.thumbnail
         url = URL(string: "\(config.fileServer)\(Routes.images.rawValue)/\(request.hashCode)")!
         params = try? request.asDictionary()
         token = config.token
@@ -45,6 +48,7 @@ struct DownloadManagerParameters {
     init(_ request: FileRequest, _ config: ChatConfig, _ cache: CacheFileManagerProtocol?) {
         isImage = false
         hashCode = request.hashCode
+        thumbnail = false
         url = URL(string: "\(config.fileServer)\(Routes.files.rawValue)/\(request.hashCode)")!
         params = try? request.asDictionary()
         token = config.token

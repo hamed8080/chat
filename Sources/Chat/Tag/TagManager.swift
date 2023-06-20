@@ -33,7 +33,7 @@ final class TagManager: TagProtocol {
         chat.cache?.tag?.getTags { [weak self] tags in
             let tagModels = tags.map(\.codable)
             self?.chat.responseQueue.async {
-                let response = ChatResponse(uniqueId: req.uniqueId, result: tagModels)
+                let response = ChatResponse(uniqueId: req.uniqueId, result: tagModels, cache: true)
                 self?.chat.delegate?.chatEvent(event: .tag(.tags(response)))
             }
         }
