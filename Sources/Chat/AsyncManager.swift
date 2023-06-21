@@ -150,7 +150,7 @@ public final class AsyncManager: AsyncDelegate {
         guard let config = config, let content = asyncMessage.content else { return }
         let asyncMessage = SendAsyncMessageVO(content: content,
                                               ttl: config.msgTTL,
-                                              peerName: asyncMessage.peerName ?? config.asyncConfig.serverName,
+                                              peerName: asyncMessage.peerName ?? config.asyncConfig.peerName,
                                               priority: config.msgPriority,
                                               uniqueId: (asyncMessage as? AsyncChatServerMessage)?.chatMessage.uniqueId)
         guard chat?.state == .chatReady || chat?.state == .asyncReady else { return }
