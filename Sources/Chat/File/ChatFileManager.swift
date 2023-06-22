@@ -10,9 +10,10 @@ import ChatCore
 import ChatDTO
 import ChatExtensions
 import ChatModels
+import ChatTransceiver
 import Foundation
 
-final class ChatFileManager: FileProtocol {
+final class ChatFileManager: FileProtocol, TransceiverDelegate {
     let chat: ChatInternalProtocol
     var delegate: ChatDelegate? { chat.delegate }
     var cache: CacheManager? { chat.cache }
@@ -31,17 +32,17 @@ final class ChatFileManager: FileProtocol {
     }
 
     internal func upload(_ request: UploadImageRequest, _ progress: UploadFileProgressType? = nil, _ completion: UploadCompletionType? = nil) {
-        let params = UploadManagerParameters(request, chat.config)
+        let params = UploadManagerParameters(request, token: chat.config.token, fileServer: chat.config.fileServer)
         upload(params, request.data, progress, completion)
     }
 
     internal func upload(_ request: UploadFileRequest, _ progress: UploadFileProgressType? = nil, _ completion: UploadCompletionType? = nil) {
-        let params = UploadManagerParameters(request, chat.config)
+        let params = UploadManagerParameters(request, token: chat.config.token, fileServer: chat.config.fileServer)
         upload(params, request.data, progress, completion)
     }
 
     private func upload(_ req: UploadManagerParameters, _ fileData: Data, _ progressCompletion: UploadFileProgressType? = nil, _ completion: UploadCompletionType? = nil) {
-        let task = UploadManager(chat: chat).upload(req, fileData) { [weak self] progress, error in
+        let task = UploadManager(delegate: self).upload(req, fileData) { [weak self] progress, error in
             self?.delegate?.chatEvent(event: .upload(.progress(req.uniqueId, progress, error)))
             progressCompletion?(progress, error)
         } completion: { data, _, error in
@@ -118,7 +119,7 @@ final class ChatFileManager: FileProtocol {
 
     private func download(_ params: DownloadManagerParameters) {
         if params.forceToDownload {
-            let task = DownloadManager(chat: chat).download(params) { [weak self] progress in
+            let task = DownloadManager(delegate: self).download(params) { [weak self] progress in
                 self?.delegate?.chatEvent(event: .download(.progress(uniqueId: params.uniqueId, progress: progress)))
             } completion: { [weak self] data, response, error in
                 self?.onDownload(params: params, data: data, response: response, error: error)
@@ -227,5 +228,13 @@ final class ChatFileManager: FileProtocol {
             task.cancel()
             tasks.removeValue(forKey: uniqueId)
         }
+    }
+
+    func onDownload(event: ChatTransceiver.DownloadEventTypes) {
+        delegate?.chatEvent(event: .download(event))
+    }
+
+    func onUpload(event: ChatTransceiver.UploadEventTypes) {
+        delegate?.chatEvent(event: .upload(event))
     }
 }

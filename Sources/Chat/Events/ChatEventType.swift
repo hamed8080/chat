@@ -3,6 +3,7 @@
 // Copyright (c) 2022 Chat
 //
 // Created by Hamed Hosseini on 12/16/22
+import ChatTransceiver
 import Foundation
 
 public enum ChatEventType {
