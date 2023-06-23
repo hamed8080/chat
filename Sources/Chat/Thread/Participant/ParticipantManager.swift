@@ -58,8 +58,9 @@ final class ParticipantManager: ParticipantProtocol {
 
     func onAddParticipant(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
-        chat.cache?.participant?.insert(model: response.result)
-        chat.delegate?.chatEvent(event: .thread(.activity(.init(result: .init(time: response.time, threadId: response.subjectId)))))
+        guard let thread = response.result else { return }
+        chat.cache?.participant?.insert(model: thread)
+        chat.delegate?.chatEvent(event: .thread(.threads(.init(result: [thread]))))
         chat.delegate?.chatEvent(event: .participant(.add(response)))
     }
 }

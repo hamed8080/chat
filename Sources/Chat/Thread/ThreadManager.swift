@@ -160,7 +160,9 @@ final class ThreadManager: ThreadProtocol {
     }
 
     func onUserRemovedFromThread(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<Int> = asyncMessage.toChatResponse()
+        var response: ChatResponse<Int> = asyncMessage.toChatResponse()
+        /// Do not remove this line. In the server response, there is no Int value when the user is removed by the admin of a thread.
+        response.result = response.subjectId
         delegate?.chatEvent(event: .thread(.userRemoveFormThread(response)))
         cache?.conversation?.delete(response.result ?? -1)
     }
