@@ -92,7 +92,7 @@ final class MessageManager: MessageProtocol {
     func history(_ request: GetHistoryRequest) {
         chat.prepareToSendAsync(req: request, type: .getHistory)
         cache?.message?.fetch(request.fetchRequest) { [weak self] messages, totalCount in
-            let messages = messages.map { $0.codable(fillConversation: false, fillForwardInfo: true, fillReplyInfo: true) }
+            let messages = messages.map { $0.codable(fillConversation: false) }
             self?.chat.responseQueue.async {
                 let hasNext = totalCount >= request.count
                 let response = ChatResponse(uniqueId: request.uniqueId, result: messages, contentCount: totalCount, hasNext: hasNext, cache: true)
