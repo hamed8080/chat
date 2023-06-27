@@ -108,7 +108,7 @@ final class MessageManager: MessageProtocol {
             }
         }
 
-        cache?.editQueue?.unsedForThread(request.threadId, request.count, request.offset) { [weak self] unsendEdits, _ in
+        cache?.editQueue?.unsendForThread(request.threadId, request.count, request.offset) { [weak self] unsendEdits, _ in
             let requests = unsendEdits.map(\.codable.request)
             self?.chat.responseQueue.async {
                 let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true)
@@ -116,7 +116,7 @@ final class MessageManager: MessageProtocol {
             }
         }
 
-        cache?.forwardQueue?.unsedForThread(request.threadId, request.count, request.offset) { [weak self] unsendForwards, _ in
+        cache?.forwardQueue?.unsendForThread(request.threadId, request.count, request.offset) { [weak self] unsendForwards, _ in
             let requests = unsendForwards.map(\.codable.request)
             self?.chat.responseQueue.async {
                 let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true)
@@ -124,7 +124,7 @@ final class MessageManager: MessageProtocol {
             }
         }
 
-        cache?.fileQueue?.unsedForThread(request.threadId, request.count, request.offset) { [weak self] unsendFiles, _ in
+        cache?.fileQueue?.unsendForThread(request.threadId, request.count, request.offset) { [weak self] unsendFiles, _ in
             let requests = unsendFiles.map(\.codable.request)
             self?.chat.responseQueue.async {
                 let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true)
@@ -150,7 +150,7 @@ final class MessageManager: MessageProtocol {
 
     func send(_ request: ForwardMessageRequest) {
         chat.prepareToSendAsync(req: request, type: .forwardMessage)
-        cache?.forwardQueue?.insert(request.queueOfForwardMessages)
+        cache?.forwardQueue?.insert(models: [request.queueOfForwardMessages])
     }
 
     func send(_ request: SendTextMessageRequest) {

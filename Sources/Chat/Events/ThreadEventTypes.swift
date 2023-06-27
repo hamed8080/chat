@@ -16,7 +16,7 @@ public enum ThreadEventTypes {
     case updatedUnreadCount(ChatResponse<UnreadCount>)
     case activity(ChatResponse<ThreadLastActivity>)
     case updatedInfo(ChatResponse<Conversation>)
-    case userRoles(ChatResponse<[UserRole]>)
+    case userRoles(ChatResponse<[CurrentUserRole]>)
     case left(ChatResponse<User>)
     case removedFrom(ChatResponse<Int>)
     case mute(ChatResponse<Int>)

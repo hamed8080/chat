@@ -52,7 +52,7 @@ final class TagManager: TagProtocol {
     func onRemoveTagParticipants(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[TagParticipant]> = asyncMessage.toChatResponse()
         chat.delegate?.chatEvent(event: .tag(.removed(response)))
-        chat.cache?.tagParticipant?.delete(response.result ?? [])
+        chat.cache?.tagParticipant?.delete(response.result ?? [], tagId: response.subjectId ?? -1)
     }
 
     func edit(_ request: EditTagRequest) {
@@ -72,7 +72,7 @@ final class TagManager: TagProtocol {
     func onDeleteTag(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Tag> = asyncMessage.toChatResponse()
         chat.delegate?.chatEvent(event: .tag(.deleted(response)))
-        chat.cache?.tag?.delete(response.result?.id)
+        chat.cache?.tag?.delete(response.result?.id ?? -1)
     }
 
     func create(_ request: CreateTagRequest) {

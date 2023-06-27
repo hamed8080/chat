@@ -154,7 +154,7 @@ final class ThreadManager: ThreadProtocol {
 
     /// Step 3: to leave safely
     func onRoles(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<UserRole> = asyncMessage.toChatResponse()
+        let response: ChatResponse<CurrentUserRole> = asyncMessage.toChatResponse()
         guard let uniqueId = response.uniqueId, let request = requests[uniqueId] as? SafeLeaveThreadRequest else { return }
         chat.prepareToSendAsync(req: request, type: .leaveThread)
     }
@@ -186,7 +186,7 @@ final class ThreadManager: ThreadProtocol {
     func mutual(_ request: MutualGroupsRequest) {
         requests[request.uniqueId] = request
         chat.prepareToSendAsync(req: request, type: .mutualGroups)
-        cache?.mutualGroup?.mutualGroups(request.toBeUserVO.id) { [weak self] mutuals in
+        cache?.mutualGroup?.mutualGroups(request.toBeUserVO.id ?? "") { [weak self] mutuals in
             let threads = mutuals.first?.conversations?.allObjects.compactMap { $0 as? CDConversation }.map { $0.codable() }
             self?.chat.responseQueue.async {
                 let response = ChatResponse(uniqueId: request.uniqueId, result: threads, hasNext: threads?.count ?? 0 >= request.count, cache: true)
@@ -225,7 +225,7 @@ final class ThreadManager: ThreadProtocol {
         let response: ChatResponse<User> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.left(response)))
         delegate?.chatEvent(event: .thread(.activity(.init(result: .init(time: response.time, threadId: response.subjectId)))))
-        cache?.participant?.delete([Participant(id: response.result?.id)])
+        cache?.participant?.delete([Participant(id: response.result?.id)], response.subjectId ?? -1)
         if response.result?.id == chat.userInfo?.id, let threadId = response.subjectId {
             cache?.conversation?.delete(threadId)
         }

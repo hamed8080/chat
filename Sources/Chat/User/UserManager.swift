@@ -40,7 +40,7 @@ final class UserManager: UserProtocol, InternalUserProtocol {
     func onUserRoles(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Roles]> = asyncMessage.toChatResponse()
         chat.delegate?.chatEvent(event: .user(.roles(response)))
-        let userRole = UserRole(userId: response.subjectId, name: nil, roles: response.result, image: nil)
+        let userRole = CurrentUserRole(threadId: response.subjectId, roles: response.result)
         chat.cache?.userRole?.insert(models: [userRole])
         chat.delegate?.chatEvent(event: .user(.roles(response)))
     }
@@ -77,7 +77,7 @@ final class UserManager: UserProtocol, InternalUserProtocol {
         guard let uniqueId = response.uniqueId, requests[uniqueId] != nil else { return }
         requests.removeValue(forKey: uniqueId)
         if let user = response.result {
-            chat.cache?.user?.insert([user], isMe: true)
+            chat.cache?.user?.insert(user, isMe: true)
             chat.userInfo = user
             (chat as? ChatImplementation)?.state = .chatReady
             chat.delegate?.chatEvent(event: .user(.user(.init(result: user))))
@@ -98,7 +98,7 @@ final class UserManager: UserProtocol, InternalUserProtocol {
     func onUserInfo(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<User> = asyncMessage.toChatResponse()
         if let user = response.result {
-            chat.cache?.user?.insert([user])
+            chat.cache?.user?.insert(user)
         }
         onInternalUser(response: response)
         chat.delegate?.chatEvent(event: .system(.serverTime(.init(uniqueId: response.uniqueId, result: response.time, time: response.time))))
@@ -123,7 +123,7 @@ final class UserManager: UserProtocol, InternalUserProtocol {
     }
 
     func onRemveUserRoles(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[UserRole]> = asyncMessage.toChatResponse()
+        let response: ChatResponse<[CurrentUserRole]> = asyncMessage.toChatResponse()
         chat.delegate?.chatEvent(event: .thread(.activity(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         chat.delegate?.chatEvent(event: .user(.remove(response)))
     }

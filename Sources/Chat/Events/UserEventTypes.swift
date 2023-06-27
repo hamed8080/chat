@@ -12,5 +12,5 @@ public enum UserEventTypes {
     case roles(ChatResponse<[Roles]>)
     case user(ChatResponse<User>)
     case setProfile(ChatResponse<Profile>)
-    case remove(ChatResponse<[UserRole]>)
+    case remove(ChatResponse<[CurrentUserRole]>)
 }

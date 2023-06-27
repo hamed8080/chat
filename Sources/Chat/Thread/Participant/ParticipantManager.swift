@@ -20,7 +20,7 @@ final class ParticipantManager: ParticipantProtocol {
 
     func get(_ request: ThreadParticipantsRequest) {
         chat.prepareToSendAsync(req: request, type: .threadParticipants)
-        chat.cache?.participant?.getParticipantsForThread(request.threadId, request.count, request.offset) { [weak self] participants, totalCount in
+        chat.cache?.participant?.getThreadParticipants(request.threadId, request.count, request.offset) { [weak self] participants, totalCount in
             let participants = participants.map(\.codable)
             self?.chat.responseQueue.async {
                 let response = ChatResponse(uniqueId: request.uniqueId, result: participants, hasNext: totalCount >= request.count, cache: true)
@@ -47,7 +47,7 @@ final class ParticipantManager: ParticipantProtocol {
 
     func onRemoveParticipants(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Participant]> = asyncMessage.toChatResponse()
-        chat.cache?.participant?.delete(response.result ?? [])
+        chat.cache?.participant?.delete(response.result ?? [], response.subjectId ?? -1)
         chat.delegate?.chatEvent(event: .participant(.deleted(response)))
         chat.delegate?.chatEvent(event: .thread(.activity(.init(result: .init(time: response.time, threadId: response.subjectId)))))
     }
