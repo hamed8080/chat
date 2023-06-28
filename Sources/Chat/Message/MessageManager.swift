@@ -146,6 +146,7 @@ final class MessageManager: MessageProtocol {
     func onGetHistroy(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Message]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)
         delegate?.chatEvent(event: .message(.history(response)))
+        cache?.message?.insert(models: response.result ?? [], threadId: response.subjectId ?? -1)
     }
 
     func send(_ request: ForwardMessageRequest) {
