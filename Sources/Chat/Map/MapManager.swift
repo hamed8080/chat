@@ -11,7 +11,7 @@ import ChatModels
 import ChatTransceiver
 import Foundation
 
-final class MapManager: InternalMapProtocol, TransceiverDelegate {
+final class MapManager: InternalMapProtocol {
     let chat: ChatInternalProtocol
 
     init(chat: ChatInternalProtocol) {
@@ -26,7 +26,7 @@ final class MapManager: InternalMapProtocol, TransceiverDelegate {
         let request = MapStaticImageRequest(request: request, key: chat.config.mapApiKey)
         let url = "\(chat.config.mapServer)\(Routes.mapStaticImage.rawValue)"
         let params = DownloadManagerParameters(url: URL(string: url)!, token: chat.config.token, params: try? request.asDictionary(), uniqueId: request.uniqueId)
-        _ = DownloadManager(delegate: self).download(params) { [weak self] data, response, error in
+        _ = DownloadManager().download(params) { [weak self] data, response, error in
             let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
             let error = error != nil ? ChatError(message: "\(ChatErrorType.networkError.rawValue) \(error?.localizedDescription ?? "")", code: statusCode, hasError: error != nil) : nil
             let response = ChatResponse(uniqueId: request.uniqueId, result: data, error: error)

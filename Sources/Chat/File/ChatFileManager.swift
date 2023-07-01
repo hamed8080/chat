@@ -13,7 +13,7 @@ import ChatModels
 import ChatTransceiver
 import Foundation
 
-final class ChatFileManager: FileProtocol, TransceiverDelegate {
+final class ChatFileManager: FileProtocol {
     let chat: ChatInternalProtocol
     var delegate: ChatDelegate? { chat.delegate }
     var cache: CacheManager? { chat.cache }
@@ -42,7 +42,7 @@ final class ChatFileManager: FileProtocol, TransceiverDelegate {
     }
 
     private func upload(_ req: UploadManagerParameters, _ fileData: Data, _ progressCompletion: UploadFileProgressType? = nil, _ completion: UploadCompletionType? = nil) {
-        let task = UploadManager(delegate: self).upload(req, fileData) { [weak self] progress, error in
+        let task = UploadManager().upload(req, fileData) { [weak self] progress, error in
             self?.delegate?.chatEvent(event: .upload(.progress(req.uniqueId, progress, error)))
             progressCompletion?(progress, error)
         } completion: { data, _, error in
@@ -119,12 +119,12 @@ final class ChatFileManager: FileProtocol, TransceiverDelegate {
 
     private func download(_ params: DownloadManagerParameters) {
         if params.forceToDownload {
-            let task = DownloadManager(delegate: self).download(params) { [weak self] progress in
+            let task = DownloadManager().download(params) { [weak self] progress in
                 self?.delegate?.chatEvent(event: .download(.progress(uniqueId: params.uniqueId, progress: progress)))
             } completion: { [weak self] data, response, error in
                 self?.onDownload(params: params, data: data, response: response, error: error)
             }
-            tasks[params.uniqueId] = task
+            tasks[params.uniqueId] = task as? URLSessionTask
         }
 
         if let filePath = chat.cacheFileManager?.filePath(url: params.url), let hashCode = params.hashCode {
@@ -228,13 +228,5 @@ final class ChatFileManager: FileProtocol, TransceiverDelegate {
             task.cancel()
             tasks.removeValue(forKey: uniqueId)
         }
-    }
-
-    func onDownload(event: ChatTransceiver.DownloadEventTypes) {
-        delegate?.chatEvent(event: .download(event))
-    }
-
-    func onUpload(event: ChatTransceiver.UploadEventTypes) {
-        delegate?.chatEvent(event: .upload(event))
     }
 }
