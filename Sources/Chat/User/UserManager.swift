@@ -34,15 +34,23 @@ final class UserManager: UserProtocol, InternalUserProtocol {
     func currentUserRoles(_ request: GeneralSubjectIdRequest) {
         chat.prepareToSendAsync(req: request, type: .getCurrentUserRoles)
         let roles = chat.cache?.userRole?.roles(request.subjectId)
-        chat.delegate?.chatEvent(event: .user(.roles(ChatResponse(uniqueId: request.uniqueId, result: roles, cache: true))))
+        chat.delegate?.chatEvent(event: .user(.currentUserRoles(ChatResponse(uniqueId: request.uniqueId, result: roles, cache: true))))
     }
 
-    func onUserRoles(_ asyncMessage: AsyncMessage) {
+    func onCurrentUserRoles(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Roles]> = asyncMessage.toChatResponse()
-        chat.delegate?.chatEvent(event: .user(.roles(response)))
-        let userRole = CurrentUserRole(threadId: response.subjectId, roles: response.result)
+        let userRole = UserRole(threadId: response.subjectId, roles: response.result)
+        chat.delegate?.chatEvent(event: .user(.currentUserRoles(response)))
         chat.cache?.userRole?.insert(models: [userRole])
-        chat.delegate?.chatEvent(event: .user(.roles(response)))
+    }
+
+    func onSetRolesToUser(_ asyncMessage: AsyncMessage) {
+        let response: ChatResponse<[UserRole]> = asyncMessage.toChatResponse()
+        chat.delegate?.chatEvent(event: .user(.setRolesToUser(response)))
+        chat.cache?.userRole?.insert(models: response.result?.compactMap {
+            $0.threadId = response.subjectId
+            return $0
+        } ?? [])
     }
 
     public func userInfo(_ request: UserInfoRequest) {
@@ -123,7 +131,7 @@ final class UserManager: UserProtocol, InternalUserProtocol {
     }
 
     func onRemveUserRoles(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[CurrentUserRole]> = asyncMessage.toChatResponse()
+        let response: ChatResponse<[UserRole]> = asyncMessage.toChatResponse()
         chat.delegate?.chatEvent(event: .thread(.activity(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         chat.delegate?.chatEvent(event: .user(.remove(response)))
     }

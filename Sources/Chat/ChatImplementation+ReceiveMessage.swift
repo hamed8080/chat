@@ -55,8 +55,8 @@ public extension ChatImplementation {
         case .getContacts:
             (contact as? ContactManager)?.onContacts(asyncMessage)
         case .getCurrentUserRoles:
-            (user as? UserManager)?.onUserRoles(asyncMessage)
-            (conversation as? ThreadManager)?.onUserRoles(asyncMessage)
+            (user as? UserManager)?.onCurrentUserRoles(asyncMessage)
+            (conversation as? ThreadManager)?.onCurrentUserRoles(asyncMessage)
         case .getHistory:
             (message as? MessageManager)?.onGetHistroy(asyncMessage)
         case .messageDeliveredToParticipants:
@@ -107,8 +107,7 @@ public extension ChatImplementation {
         case .setProfile:
             (user as? UserManager)?.onSetProfile(asyncMessage)
         case .setRuleToUser:
-            (user as? UserManager)?.onUserRoles(asyncMessage)
-            (conversation as? ThreadManager)?.onUserRoles(asyncMessage)
+            (user as? UserManager)?.onSetRolesToUser(asyncMessage)
         case .spamPvThread:
             (conversation as? ThreadManager)?.onSpamThread(asyncMessage)
         case .startBot, .stopBot:

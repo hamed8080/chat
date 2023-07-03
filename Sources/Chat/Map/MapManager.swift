@@ -91,12 +91,4 @@ final class MapManager: InternalMapProtocol {
         }
         .resume()
     }
-
-    func onDownload(event: ChatTransceiver.DownloadEventTypes) {
-        chat.delegate?.chatEvent(event: .download(event))
-    }
-
-    func onUpload(event: ChatTransceiver.UploadEventTypes) {
-        chat.delegate?.chatEvent(event: .upload(event))
-    }
 }

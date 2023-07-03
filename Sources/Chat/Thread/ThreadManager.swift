@@ -138,7 +138,7 @@ final class ThreadManager: ThreadProtocol {
     }
 
     /// Step 2: to leave safely
-    func onUserRoles(_ asyncMessage: AsyncMessage) {
+    func onCurrentUserRoles(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Roles]> = asyncMessage.toChatResponse()
         guard let uniqueId = response.uniqueId, let request = requests[uniqueId] as? SafeLeaveThreadRequest else { return }
         let isAdmin = response.result?.contains(.threadAdmin) ?? false || response.result?.contains(.addRuleToUser) ?? false
@@ -154,7 +154,7 @@ final class ThreadManager: ThreadProtocol {
 
     /// Step 3: to leave safely
     func onRoles(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<CurrentUserRole> = asyncMessage.toChatResponse()
+        let response: ChatResponse<UserRole> = asyncMessage.toChatResponse()
         guard let uniqueId = response.uniqueId, let request = requests[uniqueId] as? SafeLeaveThreadRequest else { return }
         chat.prepareToSendAsync(req: request, type: .leaveThread)
     }

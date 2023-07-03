@@ -4,6 +4,7 @@
 //
 // Created by Hamed Hosseini on 12/14/22
 
+import Additive
 import Async
 import ChatCache
 import ChatCore
@@ -17,7 +18,7 @@ final class ChatFileManager: FileProtocol {
     let chat: ChatInternalProtocol
     var delegate: ChatDelegate? { chat.delegate }
     var cache: CacheManager? { chat.cache }
-    private var tasks: [String: URLSessionTask] = [:]
+    private var tasks: [String: URLSessionDataTaskProtocol] = [:]
 
     init(chat: ChatInternalProtocol) {
         self.chat = chat
@@ -31,20 +32,20 @@ final class ChatFileManager: FileProtocol {
         upload(request, nil, nil)
     }
 
-    internal func upload(_ request: UploadImageRequest, _ progress: UploadFileProgressType? = nil, _ completion: UploadCompletionType? = nil) {
+    internal func upload(_ request: UploadImageRequest, _ progress: UploadProgressType? = nil, _ completion: UploadCompletionType? = nil) {
         let params = UploadManagerParameters(request, token: chat.config.token, fileServer: chat.config.fileServer)
         upload(params, request.data, progress, completion)
     }
 
-    internal func upload(_ request: UploadFileRequest, _ progress: UploadFileProgressType? = nil, _ completion: UploadCompletionType? = nil) {
+    internal func upload(_ request: UploadFileRequest, _ progress: UploadProgressType? = nil, _ completion: UploadCompletionType? = nil) {
         let params = UploadManagerParameters(request, token: chat.config.token, fileServer: chat.config.fileServer)
         upload(params, request.data, progress, completion)
     }
 
-    private func upload(_ req: UploadManagerParameters, _ fileData: Data, _ progressCompletion: UploadFileProgressType? = nil, _ completion: UploadCompletionType? = nil) {
-        let task = UploadManager().upload(req, fileData) { [weak self] progress, error in
-            self?.delegate?.chatEvent(event: .upload(.progress(req.uniqueId, progress, error)))
-            progressCompletion?(progress, error)
+    private func upload(_ req: UploadManagerParameters, _ data: Data, _ progressCompletion: UploadProgressType? = nil, _ completion: UploadCompletionType? = nil) {
+        let task = UploadManager().upload(req, data) { [weak self] progress in
+            self?.delegate?.chatEvent(event: .upload(.progress(req.uniqueId, progress)))
+            progressCompletion?(progress)
         } completion: { data, _, error in
             self.onUploadCompleted(req, data, error, completion)
         }
@@ -124,7 +125,7 @@ final class ChatFileManager: FileProtocol {
             } completion: { [weak self] data, response, error in
                 self?.onDownload(params: params, data: data, response: response, error: error)
             }
-            tasks[params.uniqueId] = task as? URLSessionTask
+            tasks[params.uniqueId] = task
         }
 
         if let filePath = chat.cacheFileManager?.filePath(url: params.url), let hashCode = params.hashCode {
