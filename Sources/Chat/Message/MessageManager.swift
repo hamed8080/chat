@@ -352,5 +352,6 @@ final class MessageManager: MessageProtocol {
         let pin = asyncMessage.chatMessage?.type == .pinMessage
         delegate?.chatEvent(event: .message(pin ? .pin(response) : .unpin(response)))
         cache?.message?.pin(asyncMessage.chatMessage?.type == .pinMessage, response.subjectId ?? -1, response.result?.id ?? -1)
+        cache?.message?.addOrRemoveThreadPinMessages(asyncMessage.chatMessage?.type == .pinMessage, response.subjectId ?? -1, response.result?.id ?? -1)
     }
 }
