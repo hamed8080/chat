@@ -39,7 +39,10 @@ public extension AsyncMessage {
         let result: T? = decodeContent()
         let contentCount = chatMessage?.contentCount
         let receivedCount = (result as? any Collection)?.count ?? 0
-        let hasNext = receivedCount >= pagination?.count ?? 0
+        /// If we get 15 items from server and we requested 15 so there are more items on the server, and if we get 0 item from the server it means that there are not other items there
+        /// If pagination is nil and server revieve items so default value is set 0 and and the same time if there is no result on the server side and recievedcount is zero 0 >= 0 is true
+        /// And that leads to problem if we remove receivedCount > 0
+        let hasNext = (receivedCount >= pagination?.count ?? 0) && receivedCount > 0
         return ChatResponse(uniqueId: chatMessage?.uniqueId,
                             result: result,
                             contentCount: contentCount,
