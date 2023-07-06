@@ -348,7 +348,7 @@ final class MessageManager: MessageProtocol {
     }
 
     func onPinUnPinMessage(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<Message> = asyncMessage.toChatResponse()
+        let response: ChatResponse<PinMessage> = asyncMessage.toChatResponse()
         let pin = asyncMessage.chatMessage?.type == .pinMessage
         delegate?.chatEvent(event: .message(pin ? .pin(response) : .unpin(response)))
         cache?.message?.pin(asyncMessage.chatMessage?.type == .pinMessage, response.subjectId ?? -1, response.result?.id ?? -1)
