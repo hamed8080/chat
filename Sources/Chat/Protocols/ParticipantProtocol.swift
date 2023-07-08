@@ -17,17 +17,10 @@ public protocol ParticipantProtocol {
     /// Remove participants from a thread.
     /// - Parameters:
     ///   - request: List of participants id and threadId.
-    func remove(_ request: RemoveParticipantsRequest)
+    func remove(_ request: RemoveParticipantRequest)
 
     /// Get thread participants.
     /// - Parameters:
     ///   - request: The request that contain threadId and count and offset.
-    func get(_ request: ThreadParticipantsRequest)
-
-    // Get thread participants.
-    ///
-    /// It's the same ``Chat/get(_:)`` only return admins.
-    /// - Parameters:
-    ///   - request: The request that contain threadId and count and offset.
-    func admins(_ request: ThreadParticipantsRequest)
+    func get(_ request: ThreadParticipantRequest)
 }

@@ -35,7 +35,6 @@ public protocol Chat {
     var message: MessageProtocol { get set }
     var tag: TagProtocol { get set }
     var user: UserProtocol { get set }
-    var participant: ParticipantProtocol { get set }
     var assistant: AssistantProtocol { get set }
     var system: SystemProtocol { get set }
 

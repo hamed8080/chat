@@ -22,7 +22,6 @@ public final class ChatImplementation: ChatInternalProtocol, Identifiable {
     public lazy var message: MessageProtocol = MessageManager(chat: self)
     public lazy var tag: TagProtocol = TagManager(chat: self)
     public lazy var user: UserProtocol = UserManager(chat: self)
-    public lazy var participant: ParticipantProtocol = ParticipantManager(chat: self)
     public lazy var assistant: AssistantProtocol = AssistantManager(chat: self)
     public lazy var system: SystemProtocol = SystemManager(chat: self)
 

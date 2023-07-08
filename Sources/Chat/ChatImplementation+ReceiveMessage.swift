@@ -19,7 +19,7 @@ public extension ChatImplementation {
 
         switch chatMessage.type {
         case .addParticipant:
-            (participant as? ParticipantManager)?.onAddParticipant(asyncMessage)
+            (conversation.participant as? ParticipantManager)?.onAddParticipant(asyncMessage)
         case .allUnreadMessageCount:
             (conversation as? ThreadManager)?.onUnreadMessageCount(asyncMessage)
         case .botMessage:
@@ -93,7 +93,7 @@ public extension ChatImplementation {
         case .removedFromThread:
             (conversation as? ThreadManager)?.onUserRemovedFromThread(asyncMessage)
         case .removeParticipant:
-            (participant as? ParticipantManager)?.onRemoveParticipants(asyncMessage)
+            (conversation.participant as? ParticipantManager)?.onRemoveParticipants(asyncMessage)
         case .removeRoleFromUser:
             (user as? UserManager)?.onRemveUserRoles(asyncMessage)
         case .rename: // TODO: not implemented yet!
@@ -121,7 +121,7 @@ public extension ChatImplementation {
         case .systemMessage:
             (system as? SystemManager)?.onSystemMessageEvent(asyncMessage)
         case .threadParticipants:
-            (participant as? ParticipantManager)?.onThreadParticipants(asyncMessage)
+            (conversation.participant as? ParticipantManager)?.onThreadParticipants(asyncMessage)
         case .unblock, .block:
             (contact as? ContactManager)?.onBlockUnBlockContact(asyncMessage)
         case .muteThread, .unmuteThread:

@@ -10,6 +10,9 @@ import ChatModels
 import Foundation
 
 public protocol ThreadProtocol {
+    /// Accessing to participants of a thread.
+    var participant: ParticipantProtocol { get }
+
     /// Archive a thread.
     /// - Parameters:
     ///   - request: A request that contains the threadId.

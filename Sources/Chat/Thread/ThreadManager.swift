@@ -16,9 +16,11 @@ final class ThreadManager: ThreadProtocol {
     var cache: CacheManager? { chat.cache }
     var delegate: ChatDelegate? { chat.delegate }
     private var requests: [String: Any] = [:]
+    let participant: ParticipantProtocol
 
     init(chat: ChatInternalProtocol) {
         self.chat = chat
+        participant = ParticipantManager(chat: chat)
     }
 
     public func updateInfo(_ request: UpdateThreadInfoRequest) {

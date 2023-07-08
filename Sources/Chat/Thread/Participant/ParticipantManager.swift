@@ -18,7 +18,7 @@ final class ParticipantManager: ParticipantProtocol {
         self.chat = chat
     }
 
-    func get(_ request: ThreadParticipantsRequest) {
+    func get(_ request: ThreadParticipantRequest) {
         chat.prepareToSendAsync(req: request, type: .threadParticipants)
         chat.cache?.participant?.getThreadParticipants(request.threadId, request.count, request.offset) { [weak self] participants, totalCount in
             let participants = participants.map(\.codable)
@@ -29,10 +29,6 @@ final class ParticipantManager: ParticipantProtocol {
         }
     }
 
-    func admins(_ request: ThreadParticipantsRequest) {
-        get(.init(request: request, admin: true))
-    }
-
     func onThreadParticipants(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Participant]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)
         let conversation = Conversation(id: response.subjectId)
@@ -41,7 +37,7 @@ final class ParticipantManager: ParticipantProtocol {
         chat.cache?.participant?.insert(model: conversation)
     }
 
-    func remove(_ request: RemoveParticipantsRequest) {
+    func remove(_ request: RemoveParticipantRequest) {
         chat.prepareToSendAsync(req: request, type: .removeParticipant)
     }
 
