@@ -233,8 +233,13 @@ final class ThreadManager: ThreadProtocol {
 
     func onLastSeenUpdate(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<LastSeenMessageResponse> = asyncMessage.toChatResponse()
+        delegate?.chatEvent(event: .thread(.lastSeenMessageUpdated(response)))
         delegate?.chatEvent(event: .thread(.activity(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         if let threadId = response.result?.id, let unreadCount = response.result?.unreadCount {
+            cache?.conversation?.seen(threadId: threadId,
+                                      lastSeenMessageId: response.result?.lastSeenMessageId ?? -1,
+                                      lastSeenMessageTime: response.result?.lastSeenMessageTime,
+                                      lastSeenMessageNanos: response.result?.lastSeenMessageNanos)
             cache?.conversation?.updateThreadsUnreadCount(["\(threadId)": unreadCount])
             let unreadCountModel = UnreadCount(unreadCount: unreadCount, threadId: threadId)
             delegate?.chatEvent(event: .thread(.updatedUnreadCount(.init(uniqueId: response.uniqueId, result: unreadCountModel, time: response.time))))

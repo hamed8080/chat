@@ -36,4 +36,5 @@ public enum ThreadEventTypes {
     case allUnreadCount(ChatResponse<Int>)
     case deleted(ChatResponse<Participant>)
     case userRemoveFormThread(ChatResponse<Int>)
+    case lastSeenMessageUpdated(ChatResponse<LastSeenMessageResponse>)
 }
