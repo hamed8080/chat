@@ -36,18 +36,22 @@ final class MapManager: InternalMapProtocol {
     }
 
     func reverse(_ request: MapReverseRequest) {
+        reverse(request, nil)
+    }
+
+    func reverse(_ request: MapReverseRequest, _ completion: ((ChatResponse<MapReverse>) -> Void)? = nil) {
         let urlString = "\(chat.config.mapServer)\(Routes.mapReverse.rawValue)"
         var url = URL(string: urlString)!
         url.appendQueryItems(with: request)
         let headers = ["Api-Key": chat.config.mapApiKey!]
-        let bodyData = request.data
         var urlReq = URLRequest(url: url)
         urlReq.allHTTPHeaderFields = headers
-        urlReq.httpBody = bodyData
+        urlReq.method = .get
         chat.session.dataTask(urlReq) { [weak self] data, response, error in
             if let result: ChatResponse<MapReverse> = self?.chat.session.decode(data, response, error) {
                 self?.chat.responseQueue.async {
                     self?.chat.delegate?.chatEvent(event: .map(.reverse(result)))
+                    completion?(result)
                 }
             }
         }
@@ -59,10 +63,9 @@ final class MapManager: InternalMapProtocol {
         var url = URL(string: urlString)!
         url.appendQueryItems(with: request)
         let headers = ["Api-Key": chat.config.mapApiKey!]
-        let bodyData = request.data
         var urlReq = URLRequest(url: url)
         urlReq.allHTTPHeaderFields = headers
-        urlReq.httpBody = bodyData
+        urlReq.method = .get
         chat.session.dataTask(urlReq) { [weak self] data, response, error in
             let result: ChatResponse<MapRoutingResponse>? = self?.chat.session.decode(data, response, error)
             self?.chat.responseQueue.async {
@@ -78,10 +81,9 @@ final class MapManager: InternalMapProtocol {
         var url = URL(string: urlString)!
         url.appendQueryItems(with: request)
         let headers = ["Api-Key": chat.config.mapApiKey!]
-        let bodyData = request.data
         var urlReq = URLRequest(url: url)
         urlReq.allHTTPHeaderFields = headers
-        urlReq.httpBody = bodyData
+        urlReq.method = .get
         chat.session.dataTask(urlReq) { [weak self] data, response, error in
             let result: ChatResponse<MapSearchResponse>? = self?.chat.session.decode(data, response, error)
             self?.chat.responseQueue.async {

@@ -32,4 +32,5 @@ public protocol MapProtocol {
 
 protocol InternalMapProtocol: MapProtocol {
     func image(_ request: MapStaticImageRequest, _ completion: ((ChatResponse<Data>) -> Void)?)
+    func reverse(_ request: MapReverseRequest, _ completion: ((ChatResponse<MapReverse>) -> Void)?)
 }

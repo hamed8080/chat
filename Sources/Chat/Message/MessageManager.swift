@@ -181,10 +181,23 @@ final class MessageManager: MessageProtocol {
             /// Convert and set uniqueId request
             let imageRequest = request.imageRequest(data: data, wC: wC, hC: hC)
             var textMessageReq = request.textMessageRequest
-            self.cache?.fileQueue?.insert(models: [textMessageReq.queueOfFileMessages(imageRequest)])
-            (chat.file as? ChatFileManager)?.upload(imageRequest, nil) { [weak self] imageResponse, fileMetaData, error in
-                self?.sendTextMessageOnUploadCompletion(textMessageReq, imageRequest.uniqueId, imageResponse, fileMetaData, error)
+
+            (chat.map as? InternalMapProtocol)?.reverse(.init(lat: request.mapCenter.lat, lng: request.mapCenter.lng)) { [weak self] response in
+                if let reverse = response.result {
+                    self?.sendTextLoactionMessage(request.mapCenter, textMessageReq, imageRequest, reverse)
+                }
             }
+        }
+    }
+
+    private func sendTextLoactionMessage(_ coordinate: Coordinate, _ textMessageReq: SendTextMessageRequest, _ imageRequest: UploadImageRequest, _ reverse: MapReverse) {
+        cache?.fileQueue?.insert(models: [textMessageReq.queueOfFileMessages(imageRequest)])
+        (chat.file as? ChatFileManager)?.upload(imageRequest, nil) { [weak self] imageResponse, fileMetaData, error in
+            var metaData = fileMetaData
+            metaData?.latitude = coordinate.lat
+            metaData?.longitude = coordinate.lng
+            metaData?.reverse = reverse.string
+            self?.sendTextMessageOnUploadCompletion(textMessageReq, imageRequest.uniqueId, imageResponse, metaData, error)
         }
     }
 
