@@ -49,15 +49,8 @@ public class Chat: ChatProtocol, Identifiable {
         self.timerCheckUserStoppedTyping = timerCheckUserStoppedTyping
         self.session = session
         persistentManager = PersistentManager(logger: self.logger, cacheEnabled: config.enableCache)
-        if config.enableCache {
-            cacheFileManager = CacheFileManager()
-            if let context = persistentManager.newBgTask() {
-                cache = CacheManager(context: context, logger: logger)
-            }
-        }
         asyncManager = AsyncManager(pingTimer: pingTimer, queueTimer: queueTimer)
         asyncManager.chat = self
-        self.logger?.persistentManager = persistentManager
         self.logger?.chat = self
         self.logger?.startSending()
     }
@@ -73,6 +66,7 @@ public class Chat: ChatProtocol, Identifiable {
 
     public func dispose() {
         asyncManager.disposeObject()
+        logger?.dispose()
         print("Disposed Singleton instance")
     }
 
@@ -95,9 +89,13 @@ public class Chat: ChatProtocol, Identifiable {
     }
 
     public func setToken(newToken: String, reCreateObject: Bool = false) {
+        asyncManager.invalildate()
         config.updateToken(newToken)
         if reCreateObject {
             asyncManager.createAsync()
+        } else {
+            // After calling  asyncManager.invalildate() the Chat server ping timer will stop so we should make it up and ready again.
+            asyncManager.sendPingTimer()
         }
     }
 }

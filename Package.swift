@@ -14,7 +14,8 @@ let package = Package(
         .library(name: "FanapPodChatSDK", targets: ["FanapPodChatSDK"]),
     ],
     dependencies: [
-        .package(url: "https://pubgi.fanapsoft.ir/chat/ios/fanappodasyncsdk.git", .upToNextMinor(from: "1.1.0")),
+//        .package(path: "../async"),
+        .package(url: "https://pubgi.fanapsoft.ir/chat/ios/fanappodasyncsdk.git", .upToNextMinor(from: "1.2.0")),
         .package(url: "https://github.com/apple/swift-docc-plugin", branch: "main"),
     ],
     targets: [
@@ -23,6 +24,9 @@ let package = Package(
             dependencies: [
                 .product(name: "FanapPodAsyncSDK",
                          package: "fanappodasyncsdk"),
+
+//                    .product(name: "FanapPodAsyncSDK",
+//                             package: "async"),
             ],
             resources: [.process("Resources")]
         ),

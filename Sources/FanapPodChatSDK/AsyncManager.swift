@@ -137,4 +137,10 @@ internal class AsyncManager: AsyncDelegate {
         req.chatMessageType = .ping
         sendData(sendable: req)
     }
+
+    /// It will be called upon token changed to prevent send expired token requests.
+    public func invalildate() {
+        pingTimer.invalidateTimer()
+        queueTimer.invalidateTimer()
+    }
 }

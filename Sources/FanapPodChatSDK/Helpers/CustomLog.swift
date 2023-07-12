@@ -45,7 +45,7 @@ public class Logger {
     private var urlSession: URLSessionProtocol
     private var config: ChatConfig? { chat?.config }
     var persistentManager: PersistentManager?
-    private let timer: TimerProtocol?
+    private var timer: TimerProtocol?
 
     init(timer: TimerProtocol? = Timer(), urlSession: URLSessionProtocol = URLSession.shared) {
         self.urlSession = urlSession
@@ -128,7 +128,7 @@ public class Logger {
 
     func startSending() {
         if config?.persistLogsOnServer ?? false == false { return }
-        Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
+        timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
             let bgTask = self?.persistentManager?.newBgTask()
             if let bgTask = bgTask {
                 CacheLogManager(context: bgTask, logger: self).firstLog { log in
@@ -163,5 +163,10 @@ public class Logger {
 
     private func addLogTocache(_ log: Log) {
         chat?.cache?.log.insert(models: [log])
+    }
+
+    public func dispose() {
+        timer?.invalidateTimer()
+        timer = nil
     }
 }
