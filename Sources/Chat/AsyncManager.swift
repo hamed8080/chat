@@ -137,7 +137,7 @@ public final class AsyncManager: AsyncDelegate {
     func sendQueuesOnReconnect() {
         var interval: TimeInterval = 0
         queue.sorted { $0.value.queueable.queueTime < $1.value.queueable.queueTime }.forEach { _, item in
-            if let sendable = item as? ChatSendable {
+            if let sendable = item.queueable as? ChatSendable {
                 queueTimer.scheduledTimer(interval: interval + 2, repeats: false) { [weak self] _ in
                     self?.sendData(sendable: sendable, type: item.type)
                 }

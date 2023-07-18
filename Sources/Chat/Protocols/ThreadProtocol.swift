@@ -113,11 +113,6 @@ public protocol ThreadProtocol {
     ///   - request: The request of list of threads.
     func get(_ request: ThreadsRequest)
 
-    /// Getting the all threads.
-    /// - Parameters:
-    ///   - request: If you send the summary true in request the result only contains list of all thread ids which is much faster way to fetch thread list.
-    func all(_ request: AllThreads)
-
     /// Get list of threads.
     /// - Parameters:
     ///   - request: The request of list of threads.
@@ -128,7 +123,7 @@ public protocol ThreadProtocol {
     ///   - request: The request might contain an image, title, description, and a threadId.
     func updateInfo(_ request: UpdateThreadInfoRequest)
 
-    /// Get the number of unread message count.
+    /// Get sum of the all unread counts in all threads.
     /// - Parameters:
     ///   - request: The request can contain property to aggregate mute threads unread count.
     func allUnreadCount(_ request: AllThreadsUnreadCountRequest)

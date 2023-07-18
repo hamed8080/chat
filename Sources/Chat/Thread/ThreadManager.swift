@@ -90,16 +90,6 @@ final class ThreadManager: ThreadProtocol {
         }
     }
 
-    func all(_ request: AllThreads) {
-        chat.prepareToSendAsync(req: request, type: .getThreads)
-        cache?.conversation?.fetchIds { [weak self] threadIds in
-            self?.chat.responseQueue.async {
-                let response = ChatResponse(uniqueId: request.uniqueId, result: threadIds.map { Conversation(id: $0) }, cache: true)
-                self?.delegate?.chatEvent(event: .thread(.threads(response)))
-            }
-        }
-    }
-
     func onThreads(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Conversation]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)
         delegate?.chatEvent(event: .thread(.threads(response)))
