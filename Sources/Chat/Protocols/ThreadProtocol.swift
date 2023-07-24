@@ -113,6 +113,11 @@ public protocol ThreadProtocol {
     ///   - request: The request of list of threads.
     func get(_ request: ThreadsRequest)
 
+    /// Get a lighter version of threads. In this version there is no [pinMessage, participantCount, inviter], so keep in mind that these fields will be nil in the `Conversation` model.
+    /// - Parameters:
+    ///   - request: The request of list of threads.
+    func getLight(_ request: ThreadsRequest)
+
     /// Get list of threads.
     /// - Parameters:
     ///   - request: The request of list of threads.

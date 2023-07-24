@@ -209,6 +209,8 @@ public extension ChatImplementation {
              .renewCallRequest,
              .callInquiry:
             callMessageDeleaget?.onCallMessageDelegate(asyncMessage: asyncMessage, chat: self)
+        case .getThreadsLight:
+            (conversation as? ThreadManager)?.onGetThreadsLight(asyncMessage)
         case .error:
             (system as? SystemManager)?.onError(asyncMessage)
         case .unknown:

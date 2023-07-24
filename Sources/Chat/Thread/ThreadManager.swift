@@ -346,4 +346,12 @@ final class ThreadManager: ThreadProtocol {
         let response: ChatResponse<Int> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.allUnreadCount(response)))
     }
+
+    func getLight(_ request: ThreadsRequest) {
+        chat.prepareToSendAsync(req: request, type: .getThreadsLight)
+    }
+
+    func onGetThreadsLight(_ asyncMessage: AsyncMessage) {
+        onThreads(asyncMessage)
+    }
 }
