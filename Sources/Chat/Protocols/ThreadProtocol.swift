@@ -127,6 +127,11 @@ public protocol ThreadProtocol {
     /// - Parameters:
     ///   - request: The request can contain property to aggregate mute threads unread count.
     func allUnreadCount(_ request: AllThreadsUnreadCountRequest)
+
+    /// Get threads pin message by sending the list of conversationIds.
+    /// - Parameters:
+    ///   - request: The request can contain list of conversatoin ids.
+    func getPins(_ request: ConversationsPinRequest)
 }
 
 protocol InternalThreadProtocol: ThreadProtocol {

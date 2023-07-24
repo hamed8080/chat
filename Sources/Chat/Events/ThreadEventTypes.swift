@@ -37,4 +37,5 @@ public enum ThreadEventTypes {
     case deleted(ChatResponse<Participant>)
     case userRemoveFormThread(ChatResponse<Int>)
     case lastSeenMessageUpdated(ChatResponse<LastSeenMessageResponse>)
+    case conversationsPin(ChatResponse<[Int: PinMessage]>)
 }

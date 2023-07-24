@@ -8,6 +8,7 @@ import Async
 import ChatCache
 import ChatCore
 import ChatDTO
+import ChatExtensions
 import ChatModels
 import Foundation
 
@@ -345,5 +346,18 @@ final class ThreadManager: ThreadProtocol {
     func onUnreadMessageCount(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Int> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.allUnreadCount(response)))
+    }
+
+    func getPins(_ request: ConversationsPinRequest) {
+        chat.prepareToSendAsync(req: request, type: .conversationsPin)
+    }
+
+    func onGetPins(_ asyncMessage: AsyncMessage) {
+        let response: ChatResponse<[String: PinMessage]> = asyncMessage.toChatResponse()
+        var convertedDict: [Int: PinMessage] = [:]
+        response.result?.forEach { key, value in convertedDict[Int(key)!] = value }
+        let convertedResponse = ChatResponse(response: response, result: convertedDict)
+        delegate?.chatEvent(event: .thread(.conversationsPin(convertedResponse)))
+        cache?.conversation?.conversationsPin(convertedResponse.result ?? [:])
     }
 }
