@@ -7,19 +7,19 @@
 import Foundation
 
 public class UploadFileResponse: Decodable {
-    let name: String?
-    let hash: String?
-    let parentHash: String?
-    let created: Int64?
-    let updated: Int64?
-    let `extension`: String?
-    let size: Int64?
-    let type: String?
-    let actualHeight: Int64?
-    let actualWidth: Int64?
+    public let name: String?
+    public let hash: String?
+    public let parentHash: String?
+    public let created: Int64?
+    public let updated: Int64?
+    public let `extension`: String?
+    public let size: Int64?
+    public let type: String?
+    public let actualHeight: Int64?
+    public let actualWidth: Int64?
 
-    let owner: FileOwner?
-    let uploader: FileOwner?
+    public let owner: FileOwner?
+    public let uploader: FileOwner?
 }
 
 public struct FileOwner: Decodable {
