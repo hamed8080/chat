@@ -91,11 +91,12 @@ public class Chat: ChatProtocol, Identifiable {
     public func setToken(newToken: String, reCreateObject: Bool = false) {
         asyncManager.invalildate()
         config.updateToken(newToken)
-        if reCreateObject {
+        if reCreateObject || asyncManager.asyncClient == nil {
             asyncManager.createAsync()
         } else {
-            // After calling  asyncManager.invalildate() the Chat server ping timer will stop so we should make it up and ready again.
+            // After calling asyncManager.invalildate() the Chat server ping timer will stop so we should make it up and ready again.
             asyncManager.sendPingTimer()
+            asyncManager.chat?.getUserForChatReady()
         }
     }
 }

@@ -142,5 +142,6 @@ internal class AsyncManager: AsyncDelegate {
     public func invalildate() {
         pingTimer.invalidateTimer()
         queueTimer.invalidateTimer()
+        chat?.requestUserTimer.invalidateTimer()
     }
 }
