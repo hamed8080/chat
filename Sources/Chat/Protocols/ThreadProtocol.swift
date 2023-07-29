@@ -127,6 +127,11 @@ public protocol ThreadProtocol {
     /// - Parameters:
     ///   - request: The request can contain property to aggregate mute threads unread count.
     func allUnreadCount(_ request: AllThreadsUnreadCountRequest)
+
+    /// Get the last message info array by sending an array of conversation ids.
+    /// - Parameters:
+    ///   - request: The request that contains list of ids.
+    func lastMessageInfos(_ request: LastMessageInfosRequest)
 }
 
 protocol InternalThreadProtocol: ThreadProtocol {
