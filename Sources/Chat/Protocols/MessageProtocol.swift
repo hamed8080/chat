@@ -77,6 +77,11 @@ public protocol MessageProtocol {
     ///   - request: The request contains the id of the message you want to reply to, and id of the thread, and a text message.
     func reply(_ request: ReplyMessageRequest)
 
+    /// Privately reply to a participant who is the same thread is you with a message.
+    /// - Parameters:
+    ///   - request: The request contains the id of the message you want to reply to, and id of the thread, and a text message.
+    func replyPrivately(_ request: ReplyPrivatelyRequest)
+
     /// Reply to a mesaage inside a thread with a file.
     /// - Parameters:
     ///   - replyMessage: The request that contains the threadId and a text message an id of an message you want to reply.

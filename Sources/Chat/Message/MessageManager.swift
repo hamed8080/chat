@@ -367,4 +367,8 @@ final class MessageManager: MessageProtocol {
         cache?.message?.pin(asyncMessage.chatMessage?.type == .pinMessage, response.subjectId ?? -1, response.result?.id ?? -1)
         cache?.message?.addOrRemoveThreadPinMessages(asyncMessage.chatMessage?.type == .pinMessage, response.subjectId ?? -1, response.result?.id ?? -1)
     }
+
+    func replyPrivately(_ request: ReplyPrivatelyRequest) {
+        chat.prepareToSendAsync(req: request, type: .replyPrivately)
+    }
 }

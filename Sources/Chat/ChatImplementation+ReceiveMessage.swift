@@ -209,6 +209,9 @@ public extension ChatImplementation {
              .renewCallRequest,
              .callInquiry:
             callMessageDeleaget?.onCallMessageDelegate(asyncMessage: asyncMessage, chat: self)
+        case .replyPrivately:
+            /// This action will not trigger by the server it just a send request.
+            break
         case .error:
             (system as? SystemManager)?.onError(asyncMessage)
         case .unknown:
