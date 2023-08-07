@@ -12,10 +12,12 @@ public protocol AssistantProtocol {
     /// Get list of assistants for user.
     /// - Parameters:
     ///   - request: A request with a contact type and offset, count.
+    ///
+    /// It will only fetch activated assistants, not deactivated ones.
     func get(_ request: AssistantsRequest)
 
     /// Get a history of assitant actions.
-    func history()
+    func history(_ request: AssistantsHistoryRequest)
 
     /// Block assistants.
     /// - Parameters:
@@ -35,6 +37,8 @@ public protocol AssistantProtocol {
     /// Deactivate assistants.
     /// - Parameters:
     ///   - request: A request that contains a list of activated assistants.
+    ///
+    /// By deactivating an assistant, you will not receive it in the get method. However, it remains untouched in conversations that have already been added to; it simply will not be added in future conversations.
     func deactive(_ request: DeactiveAssistantRequest)
 
     /// Register a participant as an assistant.

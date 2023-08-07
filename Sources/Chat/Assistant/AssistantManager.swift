@@ -35,9 +35,8 @@ final class AssistantManager: AssistantProtocol {
         chat.cache?.assistant?.insert(models: response.result ?? [])
     }
 
-    func history() {
-        let req = BareChatSendableRequest()
-        chat.prepareToSendAsync(req: req, type: .getAssistantHistory)
+    func history(_ request: AssistantsHistoryRequest) {
+        chat.prepareToSendAsync(req: request, type: .getAssistantHistory)
     }
 
     func onAssistantHistory(_ asyncMessage: AsyncMessage) {
