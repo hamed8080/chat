@@ -20,4 +20,5 @@ public enum ChatEventType {
     case call(CallEventTypes)
     case participant(ParticipantEventTypes)
     case map(MapEventTypes)
+    case reaction(ReactionEventTypes)
 }
