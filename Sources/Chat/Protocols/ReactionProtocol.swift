@@ -8,9 +8,9 @@ import ChatDTO
 import Foundation
 
 public protocol ReactionProtocol {
-    /// Get list of reactions count for a list of messages.
+    /// Get list of reactions for a messsage with messageId.
     /// - Parameters:
-    ///   - uniqueId: The request that contains messageId list.
+    ///   - uniqueId: The request that contains a messageId and offset and count.
     func get(_ request: RactionListRequest)
 
     /// Add a reaction to a message.
