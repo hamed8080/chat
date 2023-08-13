@@ -33,7 +33,7 @@ final class ReactionManager: ReactionProtocol {
     }
 
     func onReactionList(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[ReactionList]> = asyncMessage.toChatResponse()
+        let response: ChatResponse<ReactionList> = asyncMessage.toChatResponse()
         chat.delegate?.chatEvent(event: .reaction(.list(response)))
     }
 

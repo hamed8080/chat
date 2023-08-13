@@ -10,7 +10,7 @@ import ChatModels
 import Foundation
 
 public enum ReactionEventTypes {
-    case list(ChatResponse<[ReactionList]>)
+    case list(ChatResponse<ReactionList>)
     case add(ChatResponse<ReactionMessageResponse>)
     case reaplce(ChatResponse<ReactionMessageResponse>)
 }
