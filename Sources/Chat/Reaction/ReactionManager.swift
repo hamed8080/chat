@@ -20,6 +20,10 @@ final class ReactionManager: ReactionProtocol {
         self.chat = chat
     }
 
+    func count(_ request: RactionCountRequest) {
+        chat.prepareToSendAsync(req: request, type: .reactionCount)
+    }
+
     func get(_ request: RactionListRequest) {
         chat.prepareToSendAsync(req: request, type: .reactionList)
     }
@@ -34,6 +38,11 @@ final class ReactionManager: ReactionProtocol {
 
     func delete(_ request: DeleteReactionRequest) {
         chat.prepareToSendAsync(req: request, type: .removeReaction)
+    }
+
+    func onReactionCount(_ asyncMessage: AsyncMessage) {
+        let response: ChatResponse<[ReactionCountList]> = asyncMessage.toChatResponse()
+        chat.delegate?.chatEvent(event: .reaction(.count(response)))
     }
 
     func onReactionList(_ asyncMessage: AsyncMessage) {
