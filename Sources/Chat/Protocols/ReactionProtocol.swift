@@ -22,4 +22,9 @@ public protocol ReactionProtocol {
     /// - Parameters:
     ///   - request: The request that  contains id of message and reaction string for a message.
     func replace(_ request: ReplaceReactionRequest)
+
+    /// Delete a reaction over a message.
+    /// - Parameters:
+    ///   - request: The request that  contains id of the reactoin.
+    func delete(_ request: DeleteReactionRequest)
 }

@@ -32,6 +32,10 @@ final class ReactionManager: ReactionProtocol {
         chat.prepareToSendAsync(req: request, type: .replaceReaction)
     }
 
+    func delete(_ request: DeleteReactionRequest) {
+        chat.prepareToSendAsync(req: request, type: .removeReaction)
+    }
+
     func onReactionList(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<ReactionList> = asyncMessage.toChatResponse()
         chat.delegate?.chatEvent(event: .reaction(.list(response)))
@@ -45,5 +49,10 @@ final class ReactionManager: ReactionProtocol {
     func onReplaceReaction(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<ReactionMessageResponse> = asyncMessage.toChatResponse()
         chat.delegate?.chatEvent(event: .reaction(.reaplce(response)))
+    }
+
+    func onDeleteReaction(_ asyncMessage: AsyncMessage) {
+        let response: ChatResponse<ReactionMessageResponse> = asyncMessage.toChatResponse()
+        chat.delegate?.chatEvent(event: .reaction(.delete(response)))
     }
 }

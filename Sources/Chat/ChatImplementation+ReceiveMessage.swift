@@ -215,6 +215,8 @@ public extension ChatImplementation {
             (reaction as? ReactionManager)?.onAddReaction(asyncMessage)
         case .replaceReaction:
             (reaction as? ReactionManager)?.onReplaceReaction(asyncMessage)
+        case .removeReaction:
+            (reaction as? ReactionManager)?.onDeleteReaction(asyncMessage)
         case .error:
             (system as? SystemManager)?.onError(asyncMessage)
         case .unknown:
