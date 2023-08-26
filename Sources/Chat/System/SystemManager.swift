@@ -8,7 +8,6 @@ import Additive
 import Async
 import ChatCore
 import ChatDTO
-import ChatExtensions
 import ChatModels
 import Foundation
 
