@@ -17,7 +17,6 @@ extension Chat {
     ///   - completion: Response of update.
     public func updateThreadInfo(_ request: UpdateThreadInfoRequest, uniqueIdResult _: UniqueIdResultType? = nil, uploadProgress: @escaping UploadFileProgressType, completion: @escaping CompletionType<Conversation>) {
         if let image = request.threadImage {
-            saveThreadImageToCashe(req: request)
             uploadImage(image, uploadProgress: uploadProgress) { [weak self] _, fileMetaData, error in
                 // send update thread Info with new file
                 if let error = error {
@@ -38,12 +37,6 @@ extension Chat {
         }
         prepareToSendAsync(req: req, completion: completion)
     }
-
-    func saveThreadImageToCashe(req: UpdateThreadInfoRequest) {
-        if let imageRequest = req.threadImage {
-            cache?.fileQueue.insert(imageRequest: imageRequest)
-        }
-    }
 }
 
 // Response
@@ -51,7 +44,6 @@ extension Chat {
     func onUpdateThreadInfo(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.threadInfoUpdated(response)))
-        cache?.conversation.insert(models: [response.result].compactMap { $0 })
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

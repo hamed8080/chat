@@ -24,7 +24,6 @@ extension Chat {
     func onRemoveTagParticipants(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[TagParticipant]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .tag(.removeTagParticipant(response)))
-        cache?.tagParticipant.delete(response.result ?? [])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

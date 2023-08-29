@@ -62,7 +62,6 @@ extension Chat {
                                         actualWidth: req.wC)
             let fileMetaData = FileMetaData(file: fileDetail, fileHash: uploadResponse.result?.hash, hashCode: uploadResponse.result?.hash, name: uploadResponse.result?.name)
             uploadCompletion?(uploadResponse.result, fileMetaData, nil)
-            deleteQueues(uniqueIds: [req.uniqueId])
             let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId)
             delegate?.chatEvent(event: .file(.uploaded(response)))
         } else if let error = error {

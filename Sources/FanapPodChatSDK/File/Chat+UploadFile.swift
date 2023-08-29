@@ -68,7 +68,6 @@ extension Chat {
             uploadCompletion?(uploadResponse.result, fileMetaData, nil)
             let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId)
             delegate?.chatEvent(event: .file(.uploaded(response)))
-            deleteQueues(uniqueIds: [req.uniqueId])
         } else if let error = error {
             let error = ChatError(message: "\(ChatErrorType.networkError.rawValue) \(error)", code: 6200, hasError: true)
             uploadCompletion?(nil, nil, error)

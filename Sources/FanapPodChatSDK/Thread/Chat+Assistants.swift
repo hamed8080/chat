@@ -20,14 +20,6 @@ public extension Chat {
             let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: response.contentCount)
             completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
         }
-
-        cache?.assistant.fetchWithOffset(count: request.count, offset: request.offset) { [weak self] assistants, totalCount in
-            let assistants = assistants.map(\.codable)
-            self?.responseQueue.async {
-                let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: totalCount)
-                cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: assistants, error: nil, pagination: pagination))
-            }
-        }
     }
 }
 
@@ -36,7 +28,6 @@ extension Chat {
     func onAssistants(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .assistant(.assistants(response)))
-        cache?.assistant.insert(models: response.result ?? [])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

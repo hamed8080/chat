@@ -44,7 +44,6 @@ public class Logger {
     weak var chat: ChatProtocol?
     private var urlSession: URLSessionProtocol
     private var config: ChatConfig? { chat?.config }
-    var persistentManager: PersistentManager?
     private var timer: TimerProtocol?
 
     init(timer: TimerProtocol? = Timer(), urlSession: URLSessionProtocol = URLSession.shared) {
@@ -121,48 +120,9 @@ public class Logger {
             level: level
         )
         chat?.logDelegate?.onLog(log: log)
-        if config?.persistLogsOnServer == true {
-            addLogTocache(log)
-        }
     }
 
     func startSending() {
-        if config?.persistLogsOnServer ?? false == false { return }
-        timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
-            let bgTask = self?.persistentManager?.newBgTask()
-            if let bgTask = bgTask {
-                CacheLogManager(context: bgTask, logger: self).firstLog { log in
-                    if let log = log {
-                        self?.sendLog(log: log)
-                    }
-                }
-            }
-        }
-    }
-
-    private func sendLog(log: CDLog) {
-        var req = URLRequest(url: URL(string: "http://10.56.34.61:8080/1m-http-server-test-chat")!)
-        req.httpMethod = HTTPMethod.put.rawValue
-        req.httpBody = try? JSONEncoder().encode(log.codable)
-        req.allHTTPHeaderFields = ["Authorization": "Basic Y2hhdDpjaGF0MTIz", "Content-Type": "application/json"]
-        let task = urlSession.dataTask(req) { [weak self] _, response, error in
-            if (response as? HTTPURLResponse)?.statusCode == 200 {
-                self?.deleteLogFromCache(log: log)
-            }
-
-            if let error = error {
-                print("error to send log \(error)")
-            }
-        }
-        task.resume()
-    }
-
-    private func deleteLogFromCache(log: CDLog) {
-        chat?.cache?.log.delete([log.codable])
-    }
-
-    private func addLogTocache(_ log: Log) {
-        chat?.cache?.log.insert(models: [log])
     }
 
     public func dispose() {

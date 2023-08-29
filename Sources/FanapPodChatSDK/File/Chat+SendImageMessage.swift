@@ -18,7 +18,6 @@ extension Chat {
     {
         textMessage.uniqueId = req.uniqueId
         textMessage.typeCode = config.typeCode
-        cache?.fileQueue.insert(req: textMessage, imageRequest: req)
         messageUniqueIdResult?(textMessage.uniqueId)
         uploadImage(req, uploadUniqueIdResult: uploadUniqueIdResult, uploadProgress: uploadProgress) { [weak self] _, fileMetaData, error in
             // completed upload file

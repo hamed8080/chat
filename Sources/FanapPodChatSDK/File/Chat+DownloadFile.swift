@@ -23,11 +23,7 @@ extension Chat {
     {
         uniqueIdResult?(request.uniqueId)
         let url = "\(config.fileServer)\(Routes.files.rawValue)/\(request.hashCode)"
-        // Check if file exist on cache or not if it doesn't exist force to download it become true.
-        if cacheFileManager?.isFileExist(url: URL(string: url)!) == nil {
-            request.forceToDownloadFromServer = true
-        }
-
+        request.forceToDownloadFromServer = true
         if request.forceToDownloadFromServer == true {
             let headers = ["Authorization": "Bearer \(config.token)"]
             DownloadManager(callbackManager: callbacksManager)
@@ -38,15 +34,6 @@ extension Chat {
                           downloadProgress: downloadProgress) { [weak self] data, response, error in
                     self?.onResponse(req: request, url: url, data: data, response: response, error: error, completion: completion)
                 }
-        }
-
-        if let filePath = cacheFileManager?.filePath(url: URL(string: url)!), cacheResponse != nil {
-            cache?.file.first(with: request.hashCode) { [weak self] file in
-                let file = file?.codable
-                self?.responseQueue.async {
-                    cacheResponse?(nil, filePath, file, nil)
-                }
-            }
         }
     }
 
@@ -77,12 +64,9 @@ extension Chat {
             let size = Int((headers["Content-Length"] as? String) ?? "0")
             let fileNameWithExtension = "\(name ?? "default").\(type ?? "none")"
             let file = File(hashCode: req.hashCode, name: fileNameWithExtension, size: size, type: type)
-            cache?.file.insert(models: [file])
-            cacheFileManager?.saveFile(url: URL(string: url)!, data: data ?? Data()) { [weak self] filePath in
-                completion?(data, filePath, file, nil)
-                let response: ChatResponse<Data?> = .init(uniqueId: req.uniqueId, result: data)
-                self?.delegate?.chatEvent(event: .file(.downloaded(response)))
-            }
+            completion?(data, nil, file, nil)
+            let response: ChatResponse<Data?> = .init(uniqueId: req.uniqueId, result: data)
+            delegate?.chatEvent(event: .file(.downloaded(response)))
         } else {
             let headers = (response as? HTTPURLResponse)?.allHeaderFields as? [String: Any]
             let message = (headers?["errorMessage"] as? String) ?? ""

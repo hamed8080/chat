@@ -32,14 +32,5 @@ public class ChatManager {
         } else {
             createInstance(config: config)
         }
-
-        if let userId = userId {
-            ChatManager.switchToUser(userId: userId)
-        }
-    }
-
-    public class func switchToUser(userId: Int) {
-        guard let activeInstance = activeInstance else { return }
-        activeInstance.persistentManager.switchToContainer(userId: userId)
     }
 }

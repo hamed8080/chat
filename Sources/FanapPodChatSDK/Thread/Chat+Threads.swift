@@ -21,14 +21,6 @@ public extension Chat {
             let pagination = Pagination(hasNext: threads?.count ?? 0 >= request.count, count: request.count, offset: request.offset)
             completion(ChatResponse(uniqueId: response.uniqueId, result: threads, error: response.error, pagination: pagination))
         }
-
-        cache?.conversation.fetch(request) { [weak self] threads, totalCount in
-            let threads = threads.map { $0.codable() }
-            self?.responseQueue.async {
-                let pagination = Pagination(hasNext: totalCount >= request.count, count: request.count, offset: request.offset)
-                cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: threads, pagination: pagination))
-            }
-        }
     }
 
     /// Getting the all threads.
@@ -39,11 +31,6 @@ public extension Chat {
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func getAllThreads(request: AllThreads, completion: @escaping CompletionType<[Int]>, cacheResponse: CacheResponseType<[Int]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult, completion: completion)
-        cache?.conversation.fetchIds { [weak self] threadIds in
-            self?.responseQueue.async {
-                cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: threadIds, error: nil))
-            }
-        }
     }
 }
 
@@ -52,7 +39,6 @@ extension Chat {
     func onThreads(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Conversation]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.threadsListChange(response)))
-        cache?.conversation.insert(models: response.result ?? [])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

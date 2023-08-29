@@ -34,7 +34,6 @@ public extension Chat {
 extension Chat {
     func onArchiveUnArchiveThread(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Int> = asyncMessage.toChatResponse()
-        cache?.conversation.archive(asyncMessage.chatMessage?.type == .archiveThread, response.subjectId)
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

@@ -28,15 +28,8 @@ extension Chat {
             let result: ChatResponse<RemoveContactResponse>? = self?.session.decode(data, response, error)
             self?.responseQueue.async {
                 completion(ChatResponse(uniqueId: request.uniqueId, result: result?.result?.deteled ?? false, error: result?.error))
-                self?.removeFromCacheIfExist(removeContactResponse: result?.result, contactId: request.contactId)
             }
         }
         .resume()
-    }
-
-    func removeFromCacheIfExist(removeContactResponse: RemoveContactResponse?, contactId: Int) {
-        if removeContactResponse?.deteled == true {
-            cache?.contact.delete(contactId)
-        }
     }
 }

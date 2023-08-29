@@ -19,12 +19,6 @@ public extension Chat {
         let req = BareChatSendableRequest(uniqueId: uniqueId)
         req.chatMessageType = .tagList
         prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
-        cache?.tag.getTags { [weak self] tags in
-            let tags = tags.map(\.codable)
-            self?.responseQueue.async {
-                cacheResponse?(ChatResponse(uniqueId: req.uniqueId, result: tags))
-            }
-        }
     }
 }
 
@@ -32,7 +26,6 @@ public extension Chat {
 extension Chat {
     func onTags(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Tag]> = asyncMessage.toChatResponse()
-        cache?.tag.insert(models: response.result ?? [])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

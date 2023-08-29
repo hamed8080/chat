@@ -23,10 +23,7 @@ public class Chat: ChatProtocol, Identifiable {
     var exportMessageViewModels: [ExportMessagesProtocol] = []
     var session: URLSessionProtocol
     var responseQueue: DispatchQueueProtocol
-    var cache: CacheManager?
-    var persistentManager: PersistentManager
     let callbacksManager = CallbacksManager()
-    public var cacheFileManager: CacheFileManagerProtocol?
     public internal(set) var state: ChatState = .uninitialized
     public weak var logDelegate: LoggerDelegate?
 
@@ -48,7 +45,6 @@ public class Chat: ChatProtocol, Identifiable {
         self.requestUserTimer = requestUserTimer
         self.timerCheckUserStoppedTyping = timerCheckUserStoppedTyping
         self.session = session
-        persistentManager = PersistentManager(logger: self.logger, cacheEnabled: config.enableCache)
         asyncManager = AsyncManager(pingTimer: pingTimer, queueTimer: queueTimer)
         asyncManager.chat = self
         self.logger?.chat = self

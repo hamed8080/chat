@@ -20,12 +20,6 @@ public extension Chat {
             let threads = response.result
             completion(ChatResponse(uniqueId: response.uniqueId, result: threads, error: response.error))
         }
-
-        cache?.conversation.threadsUnreadcount(request.threadIds) { [weak self] threadsUnreadCount in
-            self?.responseQueue.async {
-                cacheResponse?(ChatResponse(uniqueId: request.uniqueId, result: threadsUnreadCount, error: nil))
-            }
-        }
     }
 }
 
@@ -34,7 +28,6 @@ extension Chat {
     func onThreadsUnreadCount(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[String: Int]> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.threadsUnreadCount(response)))
-        cache?.conversation.updateThreadsUnreadCount(response.result ?? [:])
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }
