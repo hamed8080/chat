@@ -117,6 +117,8 @@ public protocol MessageProtocol {
     func seenByParticipants(_ request: MessageSeenByUsersRequest)
 
     /// Pin a message inside a thread.
+    /// If you are a member in a channel you can not pin a message unless you are admin in the channel.
+    /// Only admins can pin a message in group or they should have access to pin a message.
     /// - Parameters:
     ///   - request: The request that contains messageId.
     func pin(_ request: PinUnpinMessageRequest)
