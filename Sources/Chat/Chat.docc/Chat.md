@@ -31,6 +31,7 @@ Please check out the figure below to find out how the Chat SDK works behind the 
 - <doc:ManagingBots>
 - <doc:ManagingAssistants>
 - <doc:ManagingMaps>
+- <doc:ErrorCodes>
 
 ### Important classes
 - ``Chat/Chat``
