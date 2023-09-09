@@ -209,6 +209,8 @@ public extension ChatImplementation {
              .renewCallRequest,
              .callInquiry:
             callMessageDeleaget?.onCallMessageDelegate(asyncMessage: asyncMessage, chat: self)
+        case .getReaction:
+            (reaction as? ReactionManager)?.onUserReaction(asyncMessage)
         case .reactionList:
             (reaction as? ReactionManager)?.onReactionList(asyncMessage)
         case .addReaction:

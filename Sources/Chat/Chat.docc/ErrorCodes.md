@@ -48,4 +48,5 @@ The list of error codes with a description of why this error is raised.
 | `222` | Too many tag to create. You have passed the maximum number of tags. |
 | `223` | Too many tag participnt to add. You have passed the maximum number of tag participant in a tag. |
 | `313` | The conversation has already archived. |
+| `400` | The time for adding a reaction is over. |
 

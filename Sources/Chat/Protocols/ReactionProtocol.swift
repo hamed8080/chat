@@ -8,9 +8,14 @@ import ChatDTO
 import Foundation
 
 public protocol ReactionProtocol {
+    /// Get the user current reaction on a message.
+    /// - Parameters:
+    ///   - request: The request that contains a messageId and conversationId.
+    func reaction(_ request: UserReactionRequest)
+
     /// Get the count of each reaction by messageIds.
     /// - Parameters:
-    ///   - uniqueId: The request that contains a messageId and offset and count.
+    ///   - request: The request that contains a messageIds and conversationId.
     func count(_ request: RactionCountRequest)
 
     /// Get list of reactions for a messsage with messageId.
