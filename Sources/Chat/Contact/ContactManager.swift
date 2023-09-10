@@ -48,51 +48,57 @@ final class ContactManager: ContactProtocol {
     //    }
 
     public func sync() {
-        var contactsToSync: [AddContactRequest] = []
         authorizeContactAccess(grant: { [weak self] store in
-            let phoneContacts = self?.getContactsFromAuthorizedStore(store)
-            self?.chat.cache?.contact?.all { [weak self] contactEntities in
-                guard let self = self else { return }
-                self.chat.responseQueue.async {
-                    phoneContacts?.forEach { phoneContact in
-                        if let findedContactchat = contactEntities.first(where: { $0.cellphoneNumber == phoneContact.cellphoneNumber }) {
-                            if findedContactchat.isContactChanged(contact: phoneContact) {
-                                contactsToSync.append(phoneContact.request)
-                            }
-                        } else {
-                            contactsToSync.append(phoneContact.request)
-                        }
-                    }
-                    var uniqueIds: [String] = []
-                    contactsToSync.forEach { contact in
-                        uniqueIds.append(contact.uniqueId)
-                    }
-                    if contactsToSync.count <= 0 { return }
-                    self.addAll(contactsToSync)
-                }
+            self?.getContactsFromAuthorizedStore(store) { [weak self] phoneContacts in
+                self?.syncWithCache(phoneContacts)
             }
         }, errorResult: { [weak self] error in
             self?.chat.logger.createLog(message: "UNAuthorized Access to Contact API with error: \(error.localizedDescription)", persist: true, level: .error, type: .received, userInfo: self?.chat.loggerUserInfo)
         })
     }
 
-    func getContactsFromAuthorizedStore(_ store: CNContactStore) -> [Contact] {
+    private func syncWithCache(_ phoneContacts: [Contact]) {
+        var contactsToSync: [AddContactRequest] = []
+        chat.cache?.contact?.all { [weak self] contactEntities in
+            guard let self = self else { return }
+            self.chat.responseQueue.async {
+                phoneContacts.forEach { phoneContact in
+                    if let findedContactchat = contactEntities.first(where: { $0.cellphoneNumber == phoneContact.cellphoneNumber }) {
+                        if findedContactchat.isContactChanged(contact: phoneContact) {
+                            contactsToSync.append(phoneContact.request)
+                        }
+                    } else {
+                        contactsToSync.append(phoneContact.request)
+                    }
+                }
+                var uniqueIds: [String] = []
+                contactsToSync.forEach { contact in
+                    uniqueIds.append(contact.uniqueId)
+                }
+                if contactsToSync.count <= 0 { return }
+                self.addAll(contactsToSync)
+            }
+        }
+    }
+
+    func getContactsFromAuthorizedStore(_ store: CNContactStore, completion: @escaping (([Contact]) -> Void)) {
         var phoneContacts: [Contact] = []
         let keys = [CNContactGivenNameKey,
                     CNContactFamilyNameKey,
                     CNContactPhoneNumbersKey,
                     CNContactEmailAddressesKey]
         let request = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
-
-        try? store.enumerateContacts(with: request, usingBlock: { contact, _ in
-            let contactModel = Contact()
-            contactModel.cellphoneNumber = contact.phoneNumbers.first?.value.stringValue ?? ""
-            contactModel.firstName = contact.givenName
-            contactModel.lastName = contact.familyName
-            contactModel.email = contact.emailAddresses.first?.value as String?
-            phoneContacts.append(contactModel)
-        })
-        return phoneContacts
+        DispatchQueue.global(qos: .background).async {
+            try? store.enumerateContacts(with: request, usingBlock: { contact, _ in
+                let contactModel = Contact()
+                contactModel.cellphoneNumber = contact.phoneNumbers.first?.value.stringValue ?? ""
+                contactModel.firstName = contact.givenName
+                contactModel.lastName = contact.familyName
+                contactModel.email = contact.emailAddresses.first?.value as String?
+                phoneContacts.append(contactModel)
+            })
+            completion(phoneContacts)
+        }
     }
 
     func authorizeContactAccess(grant: @escaping (CNContactStore) -> Void, errorResult: ((Error) -> Void)? = nil) {
