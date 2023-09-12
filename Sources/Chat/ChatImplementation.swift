@@ -108,4 +108,8 @@ public final class ChatImplementation: ChatInternalProtocol, Identifiable {
         }
         .resume()
     }
+
+    public func bind(call: CallMessageProtocol) {
+        callMessageDeleaget = call
+    }
 }
