@@ -26,6 +26,13 @@ final class ReactionManager: ReactionProtocol {
 
     func count(_ request: RactionCountRequest) {
         chat.prepareToSendAsync(req: request, type: .reactionCount)
+        cache?.reactionCount?.fetch(request.messageIds) { [weak self] reactionCountList in
+            let reactionCountListModels = reactionCountList.map { $0.codable }
+            self?.chat.responseQueue.async {
+                let response = ChatResponse(uniqueId: request.uniqueId, result: reactionCountListModels, hasNext: false, cache: true)
+                self?.chat.delegate?.chatEvent(event: .reaction(.count(response)))
+            }
+        }
     }
 
     func get(_ request: RactionListRequest) {
@@ -38,6 +45,7 @@ final class ReactionManager: ReactionProtocol {
 
     func replace(_ request: ReplaceReactionRequest) {
         chat.prepareToSendAsync(req: request, type: .replaceReaction)
+        cache?.reactionCount?.setReactionCount(messageId: request.messageId, reaction: request.reaction, action: .decrease)
     }
 
     func delete(_ request: DeleteReactionRequest) {
@@ -46,6 +54,7 @@ final class ReactionManager: ReactionProtocol {
 
     func onReactionCount(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[ReactionCountList]> = asyncMessage.toChatResponse()
+        cache?.reactionCount?.insert(models: response.result ?? [])
         chat.delegate?.chatEvent(event: .reaction(.count(response)))
     }
 
@@ -61,16 +70,19 @@ final class ReactionManager: ReactionProtocol {
 
     func onAddReaction(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<ReactionMessageResponse> = asyncMessage.toChatResponse()
+        cache?.reactionCount?.setReactionCount(messageId: response.result?.messageId, reaction: response.result?.reaction?.reaction, action: .increase)
         chat.delegate?.chatEvent(event: .reaction(.add(response)))
     }
 
     func onReplaceReaction(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<ReactionMessageResponse> = asyncMessage.toChatResponse()
-        chat.delegate?.chatEvent(event: .reaction(.reaplce(response)))
+        chat.delegate?.chatEvent(event: .reaction(.replace(response)))
+        cache?.reactionCount?.setReactionCount(messageId: response.result?.messageId, reaction: response.result?.reaction?.reaction, action: .increase)
     }
 
     func onDeleteReaction(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<ReactionMessageResponse> = asyncMessage.toChatResponse()
+        cache?.reactionCount?.setReactionCount(messageId: response.result?.messageId, reaction: response.result?.reaction?.reaction, action: .decrease)
         chat.delegate?.chatEvent(event: .reaction(.delete(response)))
     }
 }
