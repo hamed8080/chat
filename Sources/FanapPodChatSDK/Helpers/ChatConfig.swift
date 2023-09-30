@@ -33,6 +33,7 @@ public struct ChatConfig: Codable {
     public private(set) var getDeviceIdFromToken: Bool = false
     public private(set) var isDebuggingLogEnabled: Bool = false
     public private(set) var appGroup: String?
+    public private(set) var enableQueue: Bool = false
     public private(set) var sendLogInterval: TimeInterval = 60
 
     // Memberwise Initializer
@@ -60,6 +61,7 @@ public struct ChatConfig: Codable {
         getDeviceIdFromToken: Bool = false,
         isDebuggingLogEnabled: Bool = false,
         appGroup: String? = nil,
+        enableQueue: Bool = false,
         sendLogInterval: TimeInterval = 60
     ) {
         self.asyncConfig = asyncConfig
@@ -84,6 +86,7 @@ public struct ChatConfig: Codable {
         self.getDeviceIdFromToken = getDeviceIdFromToken
         self.isDebuggingLogEnabled = isDebuggingLogEnabled
         self.appGroup = appGroup
+        self.enableQueue = enableQueue
         self.sendLogInterval = sendLogInterval
     }
 
@@ -116,6 +119,7 @@ public class ChatConfigBuilder {
     private(set) var getDeviceIdFromToken: Bool = false
     private(set) var isDebuggingLogEnabled: Bool = false
     private(set) var appGroup: String?
+    private(set) var enableQueue: Bool = false
     private(set) var sendLogInterval: TimeInterval = 60
 
     public init(_ asyncConfig: AsyncConfig) {
@@ -232,6 +236,11 @@ public class ChatConfigBuilder {
         return self
     }
 
+    @discardableResult public func enableQueue(_ enableQueue: Bool) -> ChatConfigBuilder {
+        self.enableQueue = enableQueue
+        return self
+    }
+
     @discardableResult public func sendLogInterval(_ sendLogInterval: TimeInterval) -> ChatConfigBuilder {
         self.sendLogInterval = sendLogInterval
         return self
@@ -262,6 +271,7 @@ public class ChatConfigBuilder {
             getDeviceIdFromToken: getDeviceIdFromToken,
             isDebuggingLogEnabled: isDebuggingLogEnabled,
             appGroup: appGroup,
+            enableQueue: enableQueue,
             sendLogInterval: sendLogInterval
         )
     }
