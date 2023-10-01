@@ -103,7 +103,7 @@ public final class AsyncManager: AsyncDelegate {
     }
 
     private func addToQueue(sendable: ChatSendable, type: ChatMessageVOTypes) {
-        if let queueable = sendable as? Queueable {
+        if config?.enableQueue == true, let queueable = sendable as? Queueable {
             queue[sendable.chatUniqueId] = .init(queueable: queueable, type: type)
         }
     }
@@ -111,6 +111,16 @@ public final class AsyncManager: AsyncDelegate {
     private func removeFromQueue(asyncMessage: AsyncMessage) {
         if let uniqueId = SendChatMessageVO(with: asyncMessage)?.uniqueId, queue[uniqueId] != nil {
             queue.removeValue(forKey: uniqueId)
+        }
+        removeForwardMessagesQueue(asyncMessage)
+    }
+
+    /// For forward messages, we have to check an array of uniqueIds instead of a single uniqueId.
+    func removeForwardMessagesQueue(_ asyncMessage: AsyncMessage) {
+        if let chatMessage = SendChatMessageVO(with: asyncMessage),
+           chatMessage.type == ChatMessageVOTypes.sent.rawValue,
+           let forwardUniqueIds = queue.first(where: {$0.key.contains(chatMessage.uniqueId ?? "")})?.key {
+            queue.removeValue(forKey: forwardUniqueIds)
         }
     }
 
