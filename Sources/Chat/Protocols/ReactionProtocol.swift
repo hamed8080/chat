@@ -8,6 +8,7 @@ import ChatDTO
 import Foundation
 
 public protocol ReactionProtocol {
+    var inMemoryReaction: InMemoryReactionProtocol { get }
     /// Get the user current reaction on a message.
     /// - Parameters:
     ///   - request: The request that contains a messageId and conversationId.

@@ -15,28 +15,42 @@ final class ReactionManager: ReactionProtocol {
     let chat: ChatInternalProtocol
     var delegate: ChatDelegate? { chat.delegate }
     var cache: CacheManager? { chat.cache }
+    let inMemoryReaction: InMemoryReactionProtocol
+    var _internalInMemoryReaction: InMemoryReaction? { inMemoryReaction as? InMemoryReaction }
 
     init(chat: ChatInternalProtocol) {
         self.chat = chat
+        inMemoryReaction = InMemoryReaction(chat: chat)
     }
 
     func reaction(_ request: UserReactionRequest) {
-        chat.prepareToSendAsync(req: request, type: .getReaction)
-    }
-
-    func count(_ request: RactionCountRequest) {
-        chat.prepareToSendAsync(req: request, type: .reactionCount)
-        cache?.reactionCount?.fetch(request.messageIds) { [weak self] reactionCountList in
-            let reactionCountListModels = reactionCountList.map { $0.codable }
-            self?.chat.responseQueue.async {
-                let response = ChatResponse(uniqueId: request.uniqueId, result: reactionCountListModels, hasNext: false, cache: true)
-                self?.chat.delegate?.chatEvent(event: .reaction(.count(response)))
-            }
+        if _internalInMemoryReaction?.reaction(request) == false {
+            /// Featch current user Message reaction from the server
+            chat.prepareToSendAsync(req: request, type: .getReaction)
         }
     }
 
+    func count(_ request: RactionCountRequest) {
+        guard let tuple = _internalInMemoryReaction?.tupleOfMessageIds(request.messageIds) else { return }
+        var newRquest = request
+        newRquest.messageIds = tuple.notInMemory
+        _internalInMemoryReaction?.countEvent(inMemoryMessageIds: tuple.inMemory, uniqueId: request.uniqueId, conversationId: request.conversationId)
+        _internalInMemoryReaction?.storeNewCountRequestMessageIds(newRquest.messageIds)
+        if newRquest.messageIds.isEmpty { return }
+        chat.prepareToSendAsync(req: newRquest, type: .reactionCount)
+//        cache?.reactionCount?.fetch(newRquest.messageIds) { [weak self] reactionCountList in
+//            let reactionCountListModels = reactionCountList.map { $0.codable }
+//            self?.chat.responseQueue.async {
+//                let response = ChatResponse(uniqueId: request.uniqueId, result: reactionCountListModels, hasNext: false, cache: true)
+//                self?.chat.delegate?.chatEvent(event: .reaction(.count(response)))
+//            }
+//        }
+    }
+
     func get(_ request: RactionListRequest) {
-        chat.prepareToSendAsync(req: request, type: .reactionList)
+        if _internalInMemoryReaction?.get(request) == false {
+            chat.prepareToSendAsync(req: request, type: .reactionList)
+        }
     }
 
     func add(_ request: AddReactionRequest) {
@@ -56,33 +70,39 @@ final class ReactionManager: ReactionProtocol {
         let response: ChatResponse<[ReactionCountList]> = asyncMessage.toChatResponse()
         cache?.reactionCount?.insert(models: response.result ?? [])
         chat.delegate?.chatEvent(event: .reaction(.count(response)))
+        _internalInMemoryReaction?.onSummaryCount(response)
     }
 
     func onUserReaction(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<CurrentUserReaction> = asyncMessage.toChatResponse()
         chat.delegate?.chatEvent(event: .reaction(.reaction(response)))
+        _internalInMemoryReaction?.onUserReaction(response)
     }
 
     func onReactionList(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<ReactionList> = asyncMessage.toChatResponse()
         chat.delegate?.chatEvent(event: .reaction(.list(response)))
+        _internalInMemoryReaction?.onReactionList(response)
     }
 
     func onAddReaction(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<ReactionMessageResponse> = asyncMessage.toChatResponse()
         cache?.reactionCount?.setReactionCount(messageId: response.result?.messageId, reaction: response.result?.reaction?.reaction, action: .increase)
         chat.delegate?.chatEvent(event: .reaction(.add(response)))
+        _internalInMemoryReaction?.onAdd(response)
     }
 
     func onReplaceReaction(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<ReactionMessageResponse> = asyncMessage.toChatResponse()
         chat.delegate?.chatEvent(event: .reaction(.replace(response)))
         cache?.reactionCount?.setReactionCount(messageId: response.result?.messageId, reaction: response.result?.reaction?.reaction, action: .increase)
+        _internalInMemoryReaction?.onReplace(response)
     }
 
     func onDeleteReaction(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<ReactionMessageResponse> = asyncMessage.toChatResponse()
         cache?.reactionCount?.setReactionCount(messageId: response.result?.messageId, reaction: response.result?.reaction?.reaction, action: .decrease)
         chat.delegate?.chatEvent(event: .reaction(.delete(response)))
+        _internalInMemoryReaction?.onDelete(response)
     }
 }
