@@ -11,23 +11,19 @@ public class MessageInMemoryReaction {
     let messageId: Int
     var currentUserReaction: Reaction?
     var summary: [ReactionCount] = []
-    /// Participants reactions detail on a message by a sticker.
-    /// Max 20.
-    var details: [Sticker: [Reaction]] = [:]
+    /// All participants reaction to a message.
+    var details: [Reaction] = []
 
     public init(messageId: Int) {
         self.messageId = messageId
     }
 
-    public func appendOrReplaceDetail(sticker: Sticker, _ reactions: [Reaction]) {
+    public func appendOrReplaceDetail(reactions: [Reaction]) {
         reactions.forEach { reaction in
-            if !details.keys.contains(sticker) {
-                details[sticker] = []
-            }
-            if let stickerDetail = details[sticker], let index = stickerDetail.firstIndex(where: {$0.id == reaction.id}) {
-                details[sticker]?[index] = reaction
+            if let index = self.details.firstIndex(where: {$0.id == reaction.id}) {
+                details[index] = reaction
             } else {
-                details[sticker]?.append(reaction)
+                details.append(reaction)
             }
         }
     }

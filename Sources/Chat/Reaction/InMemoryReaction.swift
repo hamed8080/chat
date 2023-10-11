@@ -13,7 +13,6 @@ import ChatCore
 public final class InMemoryReaction: InMemoryReactionProtocol {
     private let chat: ChatInternalProtocol
     var reactions: [MessageInMemoryReaction] = []
-    private var requests: [String: Any] = [:]
 
     init(chat: ChatInternalProtocol) {
         self.chat = chat
@@ -85,23 +84,23 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
         return (inMemory: inMemoryMessageIds, notInMemory: notInMemoryMessageIds)
     }
 
-    func get(_ request: RactionListRequest) -> Bool {
-        requests[request.uniqueId] = request
-        let details = reactions
-            .first(where: { $0.messageId == request.messageId })?
-            .details
-            .first(where: { $0.key == request.sticker })
-        if let details = details {
-            let response = ChatResponse<ReactionList>(uniqueId: request.uniqueId,
-                                                      result: .init(messageId: request.messageId, reactions: details.value),
-                                                      cache: true,
-                                                      subjectId: request.conversationId)
-            chat.delegate?.chatEvent(event: .reaction(.list(response)))
-            chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messageId: request.messageId)))
-            return true
-        } else {
-            return false
-        }
+    func getOffset(_ request: RactionListRequest) -> Int {
+        guard let index = indexOfMessageId(request.messageId) else { return 0 }
+        let reacrionInMemory = reactions[index]
+        let allStoredReactions = reacrionInMemory.details
+        let byStickerFilter = allStoredReactions.filter({$0.reaction == request.sticker})
+
+        let currentStoredInMemory = request.sticker == nil ? allStoredReactions : byStickerFilter
+        let count = currentStoredInMemory.count
+
+        let response = ChatResponse<ReactionList>(uniqueId: request.uniqueId,
+                                                  result: .init(messageId: request.messageId, reactions: currentStoredInMemory),
+                                                  cache: true,
+                                                  subjectId: request.conversationId)
+        chat.delegate?.chatEvent(event: .reaction(.list(response)))
+        chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messageId: request.messageId)))
+
+        return count
     }
 
     func onSummaryCount(_ response: ChatResponse<[ReactionCountList]>) {
@@ -135,11 +134,8 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
     func onReactionList(_ response: ChatResponse<ReactionList>) {
         if let messageId = response.result?.messageId,
            let index = indexOfMessageId(messageId),
-           let uniqueId = response.uniqueId,
-           let result = response.result,
-           let request = requests[uniqueId] as? RactionListRequest {
-            reactions[index].appendOrReplaceDetail(sticker: request.sticker ?? .unknown, result.reactions ?? [])
-            requests.removeValue(forKey: uniqueId)
+           let reactions = response.result?.reactions {
+            self.reactions[index].appendOrReplaceDetail(reactions: reactions)
             chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messageId: messageId)))
         }
     }
@@ -207,14 +203,8 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
         return reactions[index].summary
     }
 
-    public func participants(messageId: Int, sticker: Sticker) -> [ChatModels.Reaction] {
-        guard let index = indexOfMessageId(messageId) else { return [] }
-        return reactions[index].details[sticker] ?? []
-    }
-
     /// Clear in memory cache upon disconnect.
     public func invalidate() {
         reactions.removeAll()
-        requests.removeAll()
     }
 }

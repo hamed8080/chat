@@ -48,8 +48,11 @@ final class ReactionManager: ReactionProtocol {
     }
 
     func get(_ request: RactionListRequest) {
-        if _internalInMemoryReaction?.get(request) == false {
-            chat.prepareToSendAsync(req: request, type: .reactionList)
+        let allowedRequestOffset = _internalInMemoryReaction?.getOffset(request) ?? 0
+        if  allowedRequestOffset <= request.offset {
+            var newReq = request
+            newReq.offset = allowedRequestOffset
+            chat.prepareToSendAsync(req: newReq, type: .reactionList)
         }
     }
 

@@ -12,7 +12,4 @@ public protocol InMemoryReactionProtocol {
 
     /// Return list of stickers and count per messageId.
     func summary(for messageId: Int) -> [ReactionCount]
-
-    /// Return list of participants reaction for each message.
-    func participants(messageId: Int, sticker: Sticker) -> [Reaction]
 }
