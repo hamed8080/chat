@@ -211,4 +211,10 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
         guard let index = indexOfMessageId(messageId) else { return [] }
         return reactions[index].details[sticker] ?? []
     }
+
+    /// Clear in memory cache upon disconnect.
+    public func invalidate() {
+        reactions.removeAll()
+        requests.removeAll()
+    }
 }
