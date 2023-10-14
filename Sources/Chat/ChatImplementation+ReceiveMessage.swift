@@ -221,6 +221,10 @@ public extension ChatImplementation {
             (reaction as? ReactionManager)?.onDeleteReaction(asyncMessage)
         case .reactionCount:
             (reaction as? ReactionManager)?.onReactionCount(asyncMessage)
+        case .setAdminRoleToUser:
+            ((conversation as? ThreadManager)?.participant as? ParticipantManager)?.onSetAdminRoleToUser(asyncMessage)
+        case .removeAdminRoleFromUser:
+            ((conversation as? ThreadManager)?.participant as? ParticipantManager)?.onRemoveAdminRoleFromUser(asyncMessage)
         case .error:
             (system as? SystemManager)?.onError(asyncMessage)
         case .unknown:
