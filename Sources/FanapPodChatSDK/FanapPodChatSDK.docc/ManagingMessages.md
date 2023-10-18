@@ -5,7 +5,7 @@ You could Add, delete, edit, reply, forward and so many more.
 ![How chat sdk works behind the scene.](message-flow.png)
 
 Each message has 5 phases to send to the opposite person or in a group thread.
-1. Stage waiting to send it to the chat server but there isn't any response yet, so the message just has a uniqueId, not an ``Message/id``.
+1. Stage waiting to send it to the chat server but there isn't any response yet, so the message just has a uniqueId, not an **Message.id**.
 2. In this stage, the message is added to a queue in the cache with the power of **CoreData**, to live there for resending, if the message wasn't sent to the server.
 3. In stage 3, the server receives the message and will respond with types ``ChatMessageVOTypes/sent`` and ``ChatMessageVOTypes/message`` at the same time.
 4. When another person receives the message, it should send the **deliver** event to the sender, which is done behind the scene by the chat SDK.

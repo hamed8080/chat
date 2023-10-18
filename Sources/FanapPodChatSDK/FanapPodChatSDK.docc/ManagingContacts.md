@@ -112,14 +112,14 @@ Chat.sharedInstance.syncContacts { contacts, uniqueId, error in
 ```
 
 ### Update contacts
-
-To get to know when was the last time a user was online you should use ``Chat/updateContact(_:completion:uniqueIdsResult:)`` like this:
-```swift
-Chat.sharedInstance.updateContact { contacts, uniqueId, error in
-    if error == nil{
-        // Write your code
-    }
-}
+There is a bug right now to directly call update contact method, the workaround for this is using add contant.
+<!--To get to know when was the last time a user was online you should use ``Chat/updateContact(_:completion:uniqueIdsResult:)`` like this:-->
+<!--```swift-->
+<!--Chat.sharedInstance.updateContact { contacts, uniqueId, error in-->
+<!--    if error == nil{-->
+<!--        // Write your code-->
+<!--    }-->
+<!--}-->
 ```
 
 ### Block a contact

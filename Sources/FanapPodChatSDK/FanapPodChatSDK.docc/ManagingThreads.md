@@ -199,7 +199,7 @@ Chat.sharedInstance.deleteThread(.init(threadId: 123456)) { threadId, unqiueId, 
 ```
 
 ### All threads(Ids)
-Getting the list of all threads by itself is not useful, if you set the summary of this request to true you will receive only the list of thread ids  `[Int]`  so the only filed that will set is ``Conversation/id``. 
+Getting the list of all threads by itself is not useful, if you set the summary of this request to true you will receive only the list of thread ids  `[Int]`  so the only filed that will set is **Conversation.id**. 
 
 ```swift
 Chat.sharedInstance.getAllThreads(.init(summary: true)) { threadIds, unqiueId, error in
