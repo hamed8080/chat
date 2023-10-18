@@ -26,6 +26,8 @@ public class Chat: ChatProtocol, Identifiable {
     let callbacksManager = CallbacksManager()
     public internal(set) var state: ChatState = .uninitialized
     public weak var logDelegate: LoggerDelegate?
+    internal let inMemoryReaction: InMemoryReactionProtocol
+    internal var _internalInMemoryReaction: InMemoryReaction? { inMemoryReaction as? InMemoryReaction }
 
     init(
         config: ChatConfig,
@@ -46,9 +48,11 @@ public class Chat: ChatProtocol, Identifiable {
         self.timerCheckUserStoppedTyping = timerCheckUserStoppedTyping
         self.session = session
         asyncManager = AsyncManager(pingTimer: pingTimer, queueTimer: queueTimer)
+        inMemoryReaction = InMemoryReaction()
         asyncManager.chat = self
         self.logger?.chat = self
         self.logger?.startSending()
+        (inMemoryReaction as? InMemoryReaction)?.chat = self
     }
 
     public func connect() {

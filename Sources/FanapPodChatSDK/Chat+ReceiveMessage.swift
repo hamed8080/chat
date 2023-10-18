@@ -178,6 +178,18 @@ extension Chat {
             onThreadsUnreadCount(asyncMessage)
         case .threadContactNameUpdated:
             onThreadNameContactUpdated(asyncMessage)
+        case .getReaction:
+            onUserReaction(asyncMessage)
+        case .reactionList:
+            onReactionList(asyncMessage)
+        case .addReaction:
+            onAddReaction(asyncMessage)
+        case .replaceReaction:
+            onReplaceReaction(asyncMessage)
+        case .removeReaction:
+            onDeleteReaction(asyncMessage)
+        case .reactionCount:
+            onReactionCount(asyncMessage)
         case .error:
             onError(asyncMessage)
         case .unknown:

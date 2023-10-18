@@ -95,6 +95,12 @@ public enum ChatMessageVOTypes: Int, Codable, SafeDecodable {
     case archiveThread = 223
     case unarchiveThread = 224
     case threadsUnreadCount = 233
+    case addReaction = 239
+    case replaceReaction = 240
+    case removeReaction = 241
+    case reactionList = 242
+    case getReaction = 243
+    case reactionCount = 244
 
     case error = 999
 
