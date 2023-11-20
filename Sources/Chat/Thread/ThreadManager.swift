@@ -65,10 +65,8 @@ final class ThreadManager: ThreadProtocol {
     func unreadCount(_ request: ThreadsUnreadCountRequest) {
         chat.prepareToSendAsync(req: request, type: .threadsUnreadCount)
         cache?.conversation?.threadsUnreadcount(request.threadIds) { [weak self] unreadCount in
-            self?.chat.responseQueue.async {
-                let response = ChatResponse(uniqueId: request.uniqueId, result: unreadCount, cache: true)
-                self?.delegate?.chatEvent(event: .thread(.unreadCount(response)))
-            }
+            let response = ChatResponse(uniqueId: request.uniqueId, result: unreadCount, cache: true)
+            self?.delegate?.chatEvent(event: .thread(.unreadCount(response)))
         }
     }
 
@@ -82,11 +80,9 @@ final class ThreadManager: ThreadProtocol {
         chat.prepareToSendAsync(req: request, type: .getThreads)
         cache?.conversation?.fetch(request.fetchRequest) { [weak self] threads, totalCount in
             let threads = threads.map { $0.codable() }
-            self?.chat.responseQueue.async {
-                let hasNext = totalCount >= request.count
-                let response = ChatResponse(uniqueId: request.uniqueId, result: threads, hasNext: hasNext, cache: true)
-                self?.delegate?.chatEvent(event: .thread(.threads(response)))
-            }
+            let hasNext = totalCount >= request.count
+            let response = ChatResponse(uniqueId: request.uniqueId, result: threads, hasNext: hasNext, cache: true)
+            self?.delegate?.chatEvent(event: .thread(.threads(response)))
         }
     }
 
@@ -180,10 +176,8 @@ final class ThreadManager: ThreadProtocol {
         chat.prepareToSendAsync(req: request, type: .mutualGroups)
         cache?.mutualGroup?.mutualGroups(request.toBeUserVO.id ?? "") { [weak self] mutuals in
             let threads = mutuals.first?.conversations?.allObjects.compactMap { $0 as? CDConversation }.map { $0.codable() }
-            self?.chat.responseQueue.async {
-                let response = ChatResponse(uniqueId: request.uniqueId, result: threads, hasNext: threads?.count ?? 0 >= request.count, cache: true)
-                self?.delegate?.chatEvent(event: .thread(.mutual(response)))
-            }
+            let response = ChatResponse(uniqueId: request.uniqueId, result: threads, hasNext: threads?.count ?? 0 >= request.count, cache: true)
+            self?.delegate?.chatEvent(event: .thread(.mutual(response)))
         }
     }
 

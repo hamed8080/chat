@@ -54,9 +54,7 @@ final class MessageManager: MessageProtocol {
         cache?.message?.find(response.subjectId ?? -1, response.result?.id ?? -1) { [weak self] entity in
             if entity?.seen == nil, entity?.ownerId?.intValue != self?.chat.userInfo?.id {
                 self?.cache?.conversation?.setUnreadCount(action: .decrease, threadId: response.subjectId ?? -1) { [weak self] unreadCount in
-                    self?.chat.responseQueue.async {
-                        self?.delegate?.chatEvent(event: .thread(.updatedUnreadCount(.init(result: .init(unreadCount: unreadCount, threadId: response.subjectId)))))
-                    }
+                    self?.delegate?.chatEvent(event: .thread(.updatedUnreadCount(.init(result: .init(unreadCount: unreadCount, threadId: response.subjectId)))))
                 }
             }
         }
@@ -93,43 +91,33 @@ final class MessageManager: MessageProtocol {
         chat.prepareToSendAsync(req: request, type: .getHistory)
         cache?.message?.fetch(request.fetchRequest) { [weak self] messages, totalCount in
             let messages = messages.map { $0.codable(fillConversation: false) }
-            self?.chat.responseQueue.async {
-                let hasNext = totalCount >= request.count
-                let response = ChatResponse(uniqueId: request.uniqueId, result: messages, contentCount: totalCount, hasNext: hasNext, cache: true)
-                self?.chat.delegate?.chatEvent(event: .message(.history(response)))
-            }
+            let hasNext = totalCount >= request.count
+            let response = ChatResponse(uniqueId: request.uniqueId, result: messages, contentCount: totalCount, hasNext: hasNext, cache: true)
+            self?.chat.delegate?.chatEvent(event: .message(.history(response)))
         }
 
         cache?.textQueue?.unsendForThread(request.threadId, request.count, request.offset) { [weak self] unsedTexts, _ in
             let requests = unsedTexts.map(\.codable.request)
-            self?.chat.responseQueue.async {
-                let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true)
-                self?.chat.delegate?.chatEvent(event: .message(.queueTextMessages(response)))
-            }
+            let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true)
+            self?.chat.delegate?.chatEvent(event: .message(.queueTextMessages(response)))
         }
 
         cache?.editQueue?.unsendForThread(request.threadId, request.count, request.offset) { [weak self] unsendEdits, _ in
             let requests = unsendEdits.map(\.codable.request)
-            self?.chat.responseQueue.async {
-                let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true)
-                self?.chat.delegate?.chatEvent(event: .message(.queueEditMessages(response)))
-            }
+            let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true)
+            self?.chat.delegate?.chatEvent(event: .message(.queueEditMessages(response)))
         }
 
         cache?.forwardQueue?.unsendForThread(request.threadId, request.count, request.offset) { [weak self] unsendForwards, _ in
             let requests = unsendForwards.map(\.codable.request)
-            self?.chat.responseQueue.async {
-                let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true)
-                self?.chat.delegate?.chatEvent(event: .message(.queueForwardMessages(response)))
-            }
+            let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true)
+            self?.chat.delegate?.chatEvent(event: .message(.queueForwardMessages(response)))
         }
 
         cache?.fileQueue?.unsendForThread(request.threadId, request.count, request.offset) { [weak self] unsendFiles, _ in
             let requests = unsendFiles.map(\.codable.request)
-            self?.chat.responseQueue.async {
-                let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true)
-                self?.chat.delegate?.chatEvent(event: .message(.queueFileMessages(response)))
-            }
+            let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true)
+            self?.chat.delegate?.chatEvent(event: .message(.queueFileMessages(response)))
         }
     }
 
@@ -245,11 +233,9 @@ final class MessageManager: MessageProtocol {
         chat.prepareToSendAsync(req: request, type: .getHistory)
         cache?.message?.getMentions(threadId: request.threadId, offset: request.offset, count: request.count) { [weak self] messages, _ in
             let messages = messages.map { $0.codable() }
-            self?.chat.responseQueue.async {
-                let hasNext = messages.count >= request.count
-                let response = ChatResponse(uniqueId: request.uniqueId, result: messages, hasNext: hasNext)
-                self?.delegate?.chatEvent(event: .message(.messages(response)))
-            }
+            let hasNext = messages.count >= request.count
+            let response = ChatResponse(uniqueId: request.uniqueId, result: messages, hasNext: hasNext)
+            self?.delegate?.chatEvent(event: .message(.messages(response)))
         }
     }
 
@@ -261,9 +247,7 @@ final class MessageManager: MessageProtocol {
         chat.prepareToSendAsync(req: request, type: .seen)
         cache?.message?.seen(threadId: request.threadId, messageId: request.messageId, mineUserId: chat.userInfo?.id ?? -1)
         cache?.conversation?.setUnreadCount(action: .decrease, threadId: request.threadId) { [weak self] unreadCount in
-            self?.chat.responseQueue.async {
-                self?.delegate?.chatEvent(event: .thread(.updatedUnreadCount(.init(result: .init(unreadCount: unreadCount, threadId: request.threadId)))))
-            }
+            self?.delegate?.chatEvent(event: .thread(.updatedUnreadCount(.init(result: .init(unreadCount: unreadCount, threadId: request.threadId)))))
         }
     }
 
@@ -279,10 +263,8 @@ final class MessageManager: MessageProtocol {
         let isMe = message.participant?.id == chat.userInfo?.id
         let unreadCountAction: CacheUnreadCountAction = isMe ? .set(0) : .increase
         cache?.conversation?.setUnreadCount(action: unreadCountAction, threadId: response.subjectId ?? -1) { [weak self] unreadCount in
-            self?.chat.responseQueue.async {
-                let unreadCount = UnreadCount(unreadCount: unreadCount, threadId: response.subjectId)
-                self?.delegate?.chatEvent(event: .thread(.updatedUnreadCount(.init(result: unreadCount))))
-            }
+            let unreadCount = UnreadCount(unreadCount: unreadCount, threadId: response.subjectId)
+            self?.delegate?.chatEvent(event: .thread(.updatedUnreadCount(.init(result: unreadCount))))
         }
         /// It will insert a new message into the Message table if the sender is not me
         /// and it will update a current message with a uniqueId of a message when we were the sender of a message, and consequently, it will set lastMessageVO for the thread.

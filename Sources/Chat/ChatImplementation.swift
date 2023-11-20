@@ -40,7 +40,6 @@ public final class ChatImplementation: ChatInternalProtocol, Identifiable {
     public var banTimer: TimerProtocol
     public var exportMessageViewModels: [ExportMessagesProtocol] = []
     public var session: URLSessionProtocol
-    public var responseQueue: DispatchQueueProtocol
     public var cache: CacheManager?
     public var cacheFileManager: CacheFileManagerProtocol?
     public var state: ChatState = .uninitialized
@@ -52,10 +51,9 @@ public final class ChatImplementation: ChatInternalProtocol, Identifiable {
                 queueTimer: TimerProtocol = Timer(),
                 banTimer: TimerProtocol = Timer(),
                 session: URLSessionProtocol = URLSession.shared,
-                callDelegate: WebRTCClientDelegate? = nil,
-                responseQueue: DispatchQueueProtocol = DispatchQueue.main)
+                callDelegate: WebRTCClientDelegate? = nil
+                )
     {
-        self.responseQueue = responseQueue
         self.config = config
         logger = Logger(config: config.loggerConfig)
         self.banTimer = banTimer
@@ -88,6 +86,9 @@ public final class ChatImplementation: ChatInternalProtocol, Identifiable {
 
     public func setToken(newToken: String, reCreateObject: Bool = false) {
         config.updateToken(newToken)
+        if state != .chatReady {
+            (user as? UserManager)?.getUserForChatReady()
+        }
         if reCreateObject {
             asyncManager.createAsync()
         }
@@ -100,11 +101,9 @@ public final class ChatImplementation: ChatInternalProtocol, Identifiable {
         urlReq.allHTTPHeaderFields = headers
         session.dataTask(urlReq) { [weak self] data, response, error in
             let result: ChatResponse<DevicesResposne>? = self?.session.decode(data, response, error)
-            self?.responseQueue.async {
-                if let device = result?.result?.devices?.first(where: { $0.current == true }) {
-                    self?.config.asyncConfig.updateDeviceId(device.uid ?? UUID().uuidString)
-                    self?.asyncManager.createAsync()
-                }
+            if let device = result?.result?.devices?.first(where: { $0.current == true }) {
+                self?.config.asyncConfig.updateDeviceId(device.uid ?? UUID().uuidString)
+                self?.asyncManager.createAsync()
             }
         }
         .resume()

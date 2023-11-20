@@ -49,10 +49,8 @@ final class MapManager: InternalMapProtocol {
         urlReq.method = .get
         chat.session.dataTask(urlReq) { [weak self] data, response, error in
             if let result: ChatResponse<MapReverse> = self?.chat.session.decode(data, response, error) {
-                self?.chat.responseQueue.async {
-                    self?.chat.delegate?.chatEvent(event: .map(.reverse(result)))
-                    completion?(result)
-                }
+                self?.chat.delegate?.chatEvent(event: .map(.reverse(result)))
+                completion?(result)
             }
         }
         .resume()
@@ -68,10 +66,8 @@ final class MapManager: InternalMapProtocol {
         urlReq.method = .get
         chat.session.dataTask(urlReq) { [weak self] data, response, error in
             let result: ChatResponse<MapRoutingResponse>? = self?.chat.session.decode(data, response, error)
-            self?.chat.responseQueue.async {
-                let response = ChatResponse(uniqueId: request.uniqueId, result: result?.result?.routes, error: result?.error)
-                self?.chat.delegate?.chatEvent(event: .map(.routes(response)))
-            }
+            let response = ChatResponse(uniqueId: request.uniqueId, result: result?.result?.routes, error: result?.error)
+            self?.chat.delegate?.chatEvent(event: .map(.routes(response)))
         }
         .resume()
     }
@@ -86,10 +82,8 @@ final class MapManager: InternalMapProtocol {
         urlReq.method = .get
         chat.session.dataTask(urlReq) { [weak self] data, response, error in
             let result: ChatResponse<MapSearchResponse>? = self?.chat.session.decode(data, response, error)
-            self?.chat.responseQueue.async {
-                let response = ChatResponse(uniqueId: request.uniqueId, result: result?.result?.items, error: result?.error)
-                self?.chat.delegate?.chatEvent(event: .map(.search(response)))
-            }
+            let response = ChatResponse(uniqueId: request.uniqueId, result: result?.result?.items, error: result?.error)
+            self?.chat.delegate?.chatEvent(event: .map(.search(response)))
         }
         .resume()
     }

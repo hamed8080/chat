@@ -45,9 +45,9 @@ public final class CacheFileManager: CacheFileManagerProtocol {
             return
         }
         createDirectory()
-        queue.async {
+        queue.asyncWork {
             try? data.write(to: filePath)
-            DispatchQueue.main.async {
+            DispatchQueue.global(qos: .background).async {
                 saveCompeletion(filePath)
             }
         }
@@ -59,9 +59,9 @@ public final class CacheFileManager: CacheFileManagerProtocol {
             return
         }
         createGroupDirectory()
-        queue.async {
+        queue.asyncWork {
             try? data.write(to: url)
-            DispatchQueue.main.async {
+            DispatchQueue.global(qos: .background).async {
                 saveCompeletion(groupFilePath)
             }
         }

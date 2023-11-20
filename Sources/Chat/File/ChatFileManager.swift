@@ -130,11 +130,9 @@ final class ChatFileManager: FileProtocol {
 
         if let filePath = chat.cacheFileManager?.filePath(url: params.url), let hashCode = params.hashCode {
             cache?.file?.first(hashCode: hashCode) { [weak self] _ in
-                self?.chat.responseQueue.async {
-                    let data = self?.chat.cacheFileManager?.getData(url: params.url) ?? self?.chat.cacheFileManager?.getDataInGroup(url: params.url)
-                    let response = ChatResponse(uniqueId: params.uniqueId, result: data, cache: true)
-                    self?.delegate?.chatEvent(event: .download(params.isImage ? .image(response, filePath) : .file(response, filePath)))
-                }
+                let data = self?.chat.cacheFileManager?.getData(url: params.url) ?? self?.chat.cacheFileManager?.getDataInGroup(url: params.url)
+                let response = ChatResponse(uniqueId: params.uniqueId, result: data, cache: true)
+                self?.delegate?.chatEvent(event: .download(params.isImage ? .image(response, filePath) : .file(response, filePath)))
             }
         }
     }

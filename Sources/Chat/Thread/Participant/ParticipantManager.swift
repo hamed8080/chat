@@ -22,10 +22,8 @@ final class ParticipantManager: ParticipantProtocol {
         chat.prepareToSendAsync(req: request, type: .threadParticipants)
         chat.cache?.participant?.getThreadParticipants(request.threadId, request.count, request.offset) { [weak self] participants, totalCount in
             let participants = participants.map(\.codable)
-            self?.chat.responseQueue.async {
-                let response = ChatResponse(uniqueId: request.uniqueId, result: participants, hasNext: totalCount >= request.count, cache: true)
-                self?.chat.delegate?.chatEvent(event: .participant(.participants(response)))
-            }
+            let response = ChatResponse(uniqueId: request.uniqueId, result: participants, hasNext: totalCount >= request.count, cache: true)
+            self?.chat.delegate?.chatEvent(event: .participant(.participants(response)))
         }
     }
 

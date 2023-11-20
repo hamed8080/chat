@@ -20,8 +20,7 @@ public protocol Chat {
         queueTimer: TimerProtocol,
         banTimer: TimerProtocol,
         session: URLSessionProtocol,
-        callDelegate: WebRTCClientDelegate?,
-        responseQueue: DispatchQueueProtocol
+        callDelegate: WebRTCClientDelegate?
     )
 
     /// The unique id of a chat instance to find and use it in ``ChatManager`` to fetch it.
@@ -84,9 +83,6 @@ public protocol ChatInternalProtocol: Chat {
 
     /// A url session to initiate a network call.
     var session: URLSessionProtocol { get set }
-
-    /// A queue in which the response will call which is by default is ``DispatchQueue.main``.
-    var responseQueue: DispatchQueueProtocol { get set }
 
     /// A manager that keeps all concrete object of cache managers.
     var cache: CacheManager? { get set }

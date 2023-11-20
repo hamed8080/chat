@@ -32,10 +32,8 @@ final class TagManager: TagProtocol {
         chat.prepareToSendAsync(req: req, type: .tagList)
         chat.cache?.tag?.getTags { [weak self] tags in
             let tagModels = tags.map(\.codable)
-            self?.chat.responseQueue.async {
-                let response = ChatResponse(uniqueId: req.uniqueId, result: tagModels, cache: true)
-                self?.chat.delegate?.chatEvent(event: .tag(.tags(response)))
-            }
+            let response = ChatResponse(uniqueId: req.uniqueId, result: tagModels, cache: true)
+            self?.chat.delegate?.chatEvent(event: .tag(.tags(response)))
         }
     }
 

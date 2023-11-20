@@ -61,23 +61,21 @@ final class ContactManager: ContactProtocol {
         var contactsToSync: [AddContactRequest] = []
         chat.cache?.contact?.all { [weak self] contactEntities in
             guard let self = self else { return }
-            self.chat.responseQueue.async {
-                phoneContacts.forEach { phoneContact in
-                    if let findedContactchat = contactEntities.first(where: { $0.cellphoneNumber == phoneContact.cellphoneNumber }) {
-                        if findedContactchat.isContactChanged(contact: phoneContact) {
-                            contactsToSync.append(phoneContact.request)
-                        }
-                    } else {
+            phoneContacts.forEach { phoneContact in
+                if let findedContactchat = contactEntities.first(where: { $0.cellphoneNumber == phoneContact.cellphoneNumber }) {
+                    if findedContactchat.isContactChanged(contact: phoneContact) {
                         contactsToSync.append(phoneContact.request)
                     }
+                } else {
+                    contactsToSync.append(phoneContact.request)
                 }
-                var uniqueIds: [String] = []
-                contactsToSync.forEach { contact in
-                    uniqueIds.append(contact.uniqueId)
-                }
-                if contactsToSync.count <= 0 { return }
-                self.addAll(contactsToSync)
             }
+            var uniqueIds: [String] = []
+            contactsToSync.forEach { contact in
+                uniqueIds.append(contact.uniqueId)
+            }
+            if contactsToSync.count <= 0 { return }
+            self.addAll(contactsToSync)
         }
     }
 
@@ -130,13 +128,11 @@ final class ContactManager: ContactProtocol {
         chat.logger.logHTTPRequest(urlReq, String(describing: type(of: Bool.self)), persist: true, type: .sent)
         chat.session.dataTask(urlReq) { [weak self] data, urlResponse, error in
             let response: ChatResponse<RemoveContactResponse>? = self?.chat.session.decode(data, urlResponse, error)
-            self?.chat.responseQueue.async {
-                self?.chat.logger.logHTTPResponse(data, urlResponse, error, persist: true, type: .received, userInfo: self?.chat.loggerUserInfo)
-                let deletedContacts = [Contact(id: request.contactId)]
-                let chatResponse = ChatResponse(uniqueId: request.uniqueId, result: deletedContacts, error: response?.error)
-                self?.chat.delegate?.chatEvent(event: .contact(.delete(chatResponse, deleted: response?.result?.deteled ?? false)))
-                self?.removeFromCacheIfExist(removeContactResponse: response?.result, contactId: request.contactId)
-            }
+            self?.chat.logger.logHTTPResponse(data, urlResponse, error, persist: true, type: .received, userInfo: self?.chat.loggerUserInfo)
+            let deletedContacts = [Contact(id: request.contactId)]
+            let chatResponse = ChatResponse(uniqueId: request.uniqueId, result: deletedContacts, error: response?.error)
+            self?.chat.delegate?.chatEvent(event: .contact(.delete(chatResponse, deleted: response?.result?.deteled ?? false)))
+            self?.removeFromCacheIfExist(removeContactResponse: response?.result, contactId: request.contactId)
         }
         .resume()
     }
@@ -156,11 +152,9 @@ final class ContactManager: ContactProtocol {
         chat.prepareToSendAsync(req: request, type: .getContacts)
         chat.cache?.contact?.getContacts(request.fetchRequest) { [weak self] contacts, _ in
             let contacts = contacts.map(\.codable)
-            self?.chat.responseQueue.async {
-                let hasNext = contacts.count >= request.size
-                let reponse = ChatResponse(uniqueId: request.uniqueId, result: contacts, hasNext: hasNext, cache: true)
-                self?.chat.delegate?.chatEvent(event: .contact(.contacts(reponse)))
-            }
+            let hasNext = contacts.count >= request.size
+            let reponse = ChatResponse(uniqueId: request.uniqueId, result: contacts, hasNext: hasNext, cache: true)
+            self?.chat.delegate?.chatEvent(event: .contact(.contacts(reponse)))
         }
     }
 
@@ -257,11 +251,9 @@ final class ContactManager: ContactProtocol {
 
     private func onAddContacts(uniqueId: String?, data: Data?, response: URLResponse?, error: Error?) {
         let result: ChatResponse<ContactResponse>? = chat.session.decode(data, response, error)
-        chat.responseQueue.async { [weak self] in
-            self?.chat.logger.logHTTPResponse(data, response, error, persist: true, type: .received, userInfo: self?.chat.loggerUserInfo)
-            let response = ChatResponse(uniqueId: uniqueId, result: result?.result?.contacts, error: result?.error)
-            self?.chat.delegate?.chatEvent(event: .contact(.add(response)))
-        }
+        chat.logger.logHTTPResponse(data, response, error, persist: true, type: .received, userInfo: chat.loggerUserInfo)
+        let response = ChatResponse(uniqueId: uniqueId, result: result?.result?.contacts, error: result?.error)
+        chat.delegate?.chatEvent(event: .contact(.add(response)))
         chat.cache?.contact?.insert(models: result?.result?.contacts ?? [])
     }
 }
