@@ -75,9 +75,13 @@ final class UserManager: UserProtocol, InternalUserProtocol {
     }
 
     internal func fetchUserInfo() {
-        let req = UserInfoRequest()
-        requests[req.uniqueId] = req
-        userInfo(req)
+        if chat.state != .chatReady {
+            let req = UserInfoRequest()
+            requests[req.uniqueId] = req
+            userInfo(req)
+        } else {
+            requestUserTimer.invalidateTimer()
+        }
     }
 
     private func onInternalUser(response: ChatResponse<User>) {
