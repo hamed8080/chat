@@ -50,6 +50,26 @@ public protocol MessageProtocol {
     ///   - request: The threadId and other filter properties.
     func history(_ request: GetHistoryRequest)
 
+    /// Get the list of unsent text messages inside a thread.
+    /// - Parameters:
+    ///   - request: The threadId and other filter properties.
+    func unsentTextMessages(_ request: GetHistoryRequest)
+
+    /// Get the list of unsent edit messages inside a thread.
+    /// - Parameters:
+    ///   - request: The threadId and other filter properties.
+    func unsentEditMessages(_ request: GetHistoryRequest)
+
+    /// Get the list of unsent forward messages inside a thread.
+    /// - Parameters:
+    ///   - request: The threadId and other filter properties.
+    func unsentForwardMessages(_ request: GetHistoryRequest)
+
+    /// Get the list of unsent file messages inside a thread.
+    /// - Parameters:
+    ///   - request: The threadId and other filter properties.
+    func unsentFileMessages(_ request: GetHistoryRequest)
+
     /// Send a plain text message to a thread.
     /// - Parameters:
     ///   - request: The request that contains text message and id of the thread.

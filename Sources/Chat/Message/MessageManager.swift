@@ -95,25 +95,33 @@ final class MessageManager: MessageProtocol {
             let response = ChatResponse(uniqueId: request.uniqueId, result: messages, contentCount: totalCount, hasNext: hasNext, cache: true)
             self?.chat.delegate?.chatEvent(event: .message(.history(response)))
         }
+    }
 
+    func unsentTextMessages(_ request: GetHistoryRequest) {
         cache?.textQueue?.unsendForThread(request.threadId, request.count, request.offset) { [weak self] unsedTexts, _ in
             let requests = unsedTexts.map(\.codable.request)
             let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true)
             self?.chat.delegate?.chatEvent(event: .message(.queueTextMessages(response)))
         }
+    }
 
+    func unsentEditMessages(_ request: GetHistoryRequest) {
         cache?.editQueue?.unsendForThread(request.threadId, request.count, request.offset) { [weak self] unsendEdits, _ in
             let requests = unsendEdits.map(\.codable.request)
             let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true)
             self?.chat.delegate?.chatEvent(event: .message(.queueEditMessages(response)))
         }
+    }
 
-        cache?.forwardQueue?.unsendForThread(request.threadId, request.count, request.offset) { [weak self] unsendForwards, _ in
+    func unsentForwardMessages(_ request: GetHistoryRequest) {
+        cache?.forwardQueue?.unsendForThread(request.threadId, request.count, 100) { [weak self] unsendForwards, _ in
             let requests = unsendForwards.map(\.codable.request)
             let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true)
             self?.chat.delegate?.chatEvent(event: .message(.queueForwardMessages(response)))
         }
+    }
 
+    func unsentFileMessages(_ request: GetHistoryRequest) {
         cache?.fileQueue?.unsendForThread(request.threadId, request.count, request.offset) { [weak self] unsendFiles, _ in
             let requests = unsendFiles.map(\.codable.request)
             let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true)
