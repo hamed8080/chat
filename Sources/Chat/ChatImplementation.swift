@@ -78,6 +78,7 @@ public final class ChatImplementation: ChatInternalProtocol, Identifiable {
 
     public func dispose() {
         asyncManager.disposeObject()
+        logger.dispose()
     }
 
     public func prepareToSendAsync(req: ChatCore.ChatSendable, type: ChatCore.ChatMessageVOTypes) {
