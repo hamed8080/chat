@@ -97,6 +97,11 @@ public protocol MessageProtocol {
     ///   - request: The request contains the id of the message you want to reply to, and id of the thread, and a text message.
     func reply(_ request: ReplyMessageRequest)
 
+    /// Privately reply to a participant who is the same thread is you with a message.
+    /// - Parameters:
+    ///   - request: The request contains the id of the message you want to reply to, and id of the thread, and a text message.
+    func replyPrivately(_ request: ReplyPrivatelyRequest)
+
     /// Reply to a mesaage inside a thread with a file.
     /// - Parameters:
     ///   - replyMessage: The request that contains the threadId and a text message an id of an message you want to reply.
@@ -108,6 +113,18 @@ public protocol MessageProtocol {
     ///   - replyMessage: The request that contains the threadId and a text message an id of an message you want to reply.
     ///   - imageRequest: The request that contains the data of an image and other image properties.
     func reply(_ replyMessage: ReplyMessageRequest, _ imageRequest: UploadImageRequest)
+
+    /// Privately reply to a participant who is the same thread is you with a message and a file.
+    /// - Parameters:
+    ///   - request: The request contains the id of the message you want to reply to, and id of the thread, and a text message.
+    ///   - fileRequest: The request that contains the data of a file and other file properties.
+    func replyPrivately(_ replyMessage: ReplyPrivatelyRequest, _ fileRequest: UploadFileRequest)
+
+    /// Privately reply to a participant who is the same thread is you with a message and an image.
+    /// - Parameters:
+    ///   - request: The request contains the id of the message you want to reply to, and id of the thread, and a text message.
+    ///   - imageRequest: The request that contains the data of an image and other image properties.
+    func replyPrivately(_ replyMessage: ReplyPrivatelyRequest, _ imageRequest: UploadImageRequest)
 
     /// Get messages that you have mentioned in a thread.
     /// - Parameters:

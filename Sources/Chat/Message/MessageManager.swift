@@ -357,4 +357,32 @@ final class MessageManager: MessageProtocol {
         cache?.message?.pin(asyncMessage.chatMessage?.type == .pinMessage, response.subjectId ?? -1, response.result?.id ?? -1)
         cache?.message?.addOrRemoveThreadPinMessages(asyncMessage.chatMessage?.type == .pinMessage, response.subjectId ?? -1, response.result?.id ?? -1)
     }
+
+    func replyPrivately(_ request: ReplyPrivatelyRequest) {
+        chat.prepareToSendAsync(req: request, type: .replyPrivately)
+    }
+
+    func replyPrivately(_ replyMessage: ReplyPrivatelyRequest, _ fileRequest: UploadFileRequest) {
+        (chat.file as? ChatFileManager)?.upload(fileRequest, nil) { [weak self] fileResponse, fileMetaData, error in
+            self?.sendReplyPrivatelyMessageOnUploadCompletion(replyMessage, fileRequest.uniqueId, fileResponse, fileMetaData, error)
+        }
+    }
+
+    func replyPrivately(_ replyMessage: ReplyPrivatelyRequest, _ imageRequest: UploadImageRequest) {
+        (chat.file as? ChatFileManager)?.upload(imageRequest, nil) { [weak self] imageResponse, fileMetaData, error in
+            self?.sendReplyPrivatelyMessageOnUploadCompletion(replyMessage, imageRequest.uniqueId, imageResponse, fileMetaData, error)
+        }
+    }
+
+    private func sendReplyPrivatelyMessageOnUploadCompletion(_ replyMessage: ReplyPrivatelyRequest, _ uniqueId: String, _: UploadFileResponse?, _ metadata: FileMetaData?, _ error: ChatError?) {
+        if let error = error {
+            let response = ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error)
+            chat.delegate?.chatEvent(event: .system(.error(response)))
+        } else {
+            guard let stringMetaData = metadata.jsonString else { return }
+            var textMessage = replyMessage
+            textMessage.metadata = stringMetaData
+            replyPrivately(textMessage)
+        }
+    }
 }

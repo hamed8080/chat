@@ -221,6 +221,9 @@ public extension ChatImplementation {
             (reaction as? ReactionManager)?.onDeleteReaction(asyncMessage)
         case .reactionCount:
             (reaction as? ReactionManager)?.onReactionCount(asyncMessage)
+        case .replyPrivately:
+            /// This action will not trigger by the server it just a send request.
+            break
         case .error:
             (system as? SystemManager)?.onError(asyncMessage)
         case .unknown:
