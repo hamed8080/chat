@@ -14,4 +14,6 @@ public enum ParticipantEventTypes {
     case add(ChatResponse<Conversation>)
     case added(ChatResponse<[Participant]>)
     case deleted(ChatResponse<[Participant]>)
+    case setAdminRoleToUser(ChatResponse<[AdminRoleResponse]>)
+    case removeAdminRoleFromUser(ChatResponse<[AdminRoleResponse]>)
 }

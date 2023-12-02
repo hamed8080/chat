@@ -57,4 +57,24 @@ final class ParticipantManager: ParticipantProtocol {
         chat.delegate?.chatEvent(event: .thread(.threads(.init(result: [thread]))))
         chat.delegate?.chatEvent(event: .participant(.add(response)))
     }
+
+    func addAdminRole(_ request: AdminRoleRequest) {
+        chat.prepareToSendAsync(req: request, type: .setAdminRoleToUser)
+    }
+
+    func onSetAdminRoleToUser(_ asyncMessage: AsyncMessage) {
+        let response: ChatResponse<[AdminRoleResponse]> = asyncMessage.toChatResponse()
+        chat.delegate?.chatEvent(event: .participant(.setAdminRoleToUser(response)))
+        chat.cache?.participant?.addAdminRole(participantIds: response.result?.compactMap({$0.participant?.id}) ?? [])
+    }
+
+    func removeAdminRole(_ request: AdminRoleRequest) {
+        chat.prepareToSendAsync(req: request, type: .removeAdminRoleFromUser)
+    }
+
+    func onRemoveAdminRoleFromUser(_ asyncMessage: AsyncMessage) {
+        let response: ChatResponse<[AdminRoleResponse]> = asyncMessage.toChatResponse()
+        chat.delegate?.chatEvent(event: .participant(.removeAdminRoleFromUser(response)))
+        chat.cache?.participant?.removeAdminRole(participantIds: response.result?.compactMap({$0.participant?.id}) ?? [])
+    }
 }

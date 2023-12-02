@@ -224,6 +224,10 @@ public extension ChatImplementation {
         case .replyPrivately:
             /// This action will not trigger by the server it just a send request.
             break
+        case .setAdminRoleToUser:
+            ((conversation as? ThreadManager)?.participant as? ParticipantManager)?.onSetAdminRoleToUser(asyncMessage)
+        case .removeAdminRoleFromUser:
+            ((conversation as? ThreadManager)?.participant as? ParticipantManager)?.onRemoveAdminRoleFromUser(asyncMessage)
         case .error:
             (system as? SystemManager)?.onError(asyncMessage)
         case .unknown:

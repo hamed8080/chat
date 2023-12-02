@@ -23,4 +23,14 @@ public protocol ParticipantProtocol {
     /// - Parameters:
     ///   - request: The request that contain threadId and count and offset.
     func get(_ request: ThreadParticipantRequest)
+
+    /// Add admin role to participants of a thread.
+    /// - Parameters:
+    ///   - request: List of users.
+    func addAdminRole(_ request: AdminRoleRequest)
+
+    /// Remove the admin role to participants of a thread.
+    /// - Parameters:
+    ///   - request: List of users.
+    func removeAdminRole(_ request: AdminRoleRequest)
 }
