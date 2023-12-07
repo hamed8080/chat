@@ -18,7 +18,6 @@ public enum ThreadEventTypes {
     case updatedInfo(ChatResponse<Conversation>)
     case userRoles(ChatResponse<[UserRole]>)
     case left(ChatResponse<User>)
-    case removedFrom(ChatResponse<Int>)
     case mute(ChatResponse<Int>)
     case unmute(ChatResponse<Int>)
     case created(ChatResponse<Conversation>)
@@ -35,6 +34,7 @@ public enum ThreadEventTypes {
     case isNameAvailable(ChatResponse<PublicThreadNameAvailableResponse>)
     case allUnreadCount(ChatResponse<Int>)
     case deleted(ChatResponse<Participant>)
+    /// The participant has been removed by the admin of the conversation.
     case userRemoveFormThread(ChatResponse<Int>)
     case lastSeenMessageUpdated(ChatResponse<LastSeenMessageResponse>)
 }
