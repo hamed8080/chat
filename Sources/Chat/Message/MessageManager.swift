@@ -176,7 +176,7 @@ final class MessageManager: MessageProtocol {
             #endif
             /// Convert and set uniqueId request
             let imageRequest = request.imageRequest(data: data, wC: wC, hC: hC)
-            var textMessageReq = request.textMessageRequest
+            let textMessageReq = request.textMessageRequest
 
             (chat.map as? InternalMapProtocol)?.reverse(.init(lat: request.mapCenter.lat, lng: request.mapCenter.lng)) { [weak self] response in
                 if let reverse = response.result {
@@ -189,10 +189,12 @@ final class MessageManager: MessageProtocol {
     private func sendTextLoactionMessage(_ coordinate: Coordinate, _ textMessageReq: SendTextMessageRequest, _ imageRequest: UploadImageRequest, _ reverse: MapReverse) {
         cache?.fileQueue?.insert(models: [textMessageReq.queueOfFileMessages(imageRequest)])
         (chat.file as? ChatFileManager)?.upload(imageRequest, nil) { [weak self] imageResponse, fileMetaData, error in
-            var metaData = fileMetaData
+            let metaData = fileMetaData
+            let mapLink = "\(Routes.baseMapLink.rawValue)\(coordinate.lat),\(coordinate.lng)"
             metaData?.latitude = coordinate.lat
             metaData?.longitude = coordinate.lng
             metaData?.reverse = reverse.string
+            metaData?.mapLink = mapLink
             self?.sendTextMessageOnUploadCompletion(textMessageReq, imageRequest.uniqueId, imageResponse, metaData, error)
         }
     }
@@ -202,7 +204,7 @@ final class MessageManager: MessageProtocol {
     }
 
     func send(_ textMessage: SendTextMessageRequest, _ imageRequest: UploadImageRequest) {
-        var textMessage = imageRequest.textMessageRequest(textMessage: textMessage)
+        let textMessage = imageRequest.textMessageRequest(textMessage: textMessage)
         cache?.fileQueue?.insert(models: [textMessage.queueOfFileMessages(imageRequest)])
         (chat.file as? ChatFileManager)?.upload(imageRequest, nil) { [weak self] imageResponse, fileMetaData, error in
             self?.sendTextMessageOnUploadCompletion(textMessage, imageRequest.uniqueId, imageResponse, fileMetaData, error)
@@ -210,7 +212,7 @@ final class MessageManager: MessageProtocol {
     }
 
     func send(_ textMessage: SendTextMessageRequest, _ fileRequest: UploadFileRequest) {
-        var textMessage = fileRequest.textMessageRequest(textMessage: textMessage)
+        let textMessage = fileRequest.textMessageRequest(textMessage: textMessage)
         cache?.fileQueue?.insert(models: [textMessage.queueOfFileMessages(fileRequest)])
         (chat.file as? ChatFileManager)?.upload(fileRequest, nil) { [weak self] fileResponse, fileMetaData, error in
             self?.sendTextMessageOnUploadCompletion(textMessage, fileRequest.uniqueId, fileResponse, fileMetaData, error)

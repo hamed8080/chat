@@ -12,7 +12,7 @@ import ChatCore
 /// In Memory reactions.
 public final class InMemoryReaction: InMemoryReactionProtocol {
     private let chat: ChatInternalProtocol
-    var reactions: [MessageInMemoryReaction] = []
+    var reactions: ContiguousArray<MessageInMemoryReaction> = []
 
     init(chat: ChatInternalProtocol) {
         self.chat = chat
