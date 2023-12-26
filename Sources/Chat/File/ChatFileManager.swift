@@ -19,6 +19,7 @@ final class ChatFileManager: FileProtocol {
     var delegate: ChatDelegate? { chat.delegate }
     var cache: CacheManager? { chat.cache }
     private var tasks: [String: URLSessionDataTaskProtocol] = [:]
+    private var queue = DispatchQueue(label: "DownloadQueue")
 
     init(chat: ChatInternalProtocol) {
         self.chat = chat
@@ -125,7 +126,9 @@ final class ChatFileManager: FileProtocol {
             } completion: { [weak self] data, response, error in
                 self?.onDownload(params: params, data: data, response: response, error: error)
             }
-            tasks[params.uniqueId] = task
+            queue.async { [weak self] in
+                self?.tasks[params.uniqueId] = task
+            }
         }
 
         if let filePath = chat.cacheFileManager?.filePath(url: params.url), let hashCode = params.hashCode {
