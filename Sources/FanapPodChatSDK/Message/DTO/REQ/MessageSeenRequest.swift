@@ -11,9 +11,9 @@ public class MessageSeenRequest: UniqueIdManagerRequest, PlainTextSendable {
     var content: String? { "\(messageId)" }
     var chatMessageType: ChatMessageVOTypes = .seen
 
-    public init(threadId: Int, messageId: Int, uniqueId: String? = nil) {
+    public init(threadId: Int, messageId: Int, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.messageId = messageId
         self.threadId = threadId
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 }

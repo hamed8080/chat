@@ -18,7 +18,7 @@ public extension Chat {
     func getThreadsUnreadCount(_ request: ThreadsUnreadCountRequest, completion: @escaping CompletionType<[String: Int]>, cacheResponse: CacheResponseType<[String: Int]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult) { (response: ChatResponse<[String: Int]>) in
             let threads = response.result
-            completion(ChatResponse(uniqueId: response.uniqueId, result: threads, error: response.error))
+            completion(ChatResponse(uniqueId: response.uniqueId, result: threads, error: response.error, typeCode: response.typeCode))
         }
     }
 }

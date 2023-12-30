@@ -20,14 +20,15 @@ public class UpdateThreadInfoRequest: UniqueIdManagerRequest, ChatSendable, Subj
                 threadId: Int,
                 threadImage: UploadImageRequest? = nil,
                 title: String,
-                uniqueId: String? = nil)
+                uniqueId: String? = nil,
+                typeCodeIndex: TypeCodeIndexProtocol.Index = 0)
     {
         self.description = description
         self.metadata = metadata
         self.threadId = threadId
         self.threadImage = threadImage
         self.title = title
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

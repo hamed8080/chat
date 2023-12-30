@@ -40,14 +40,16 @@ extension Chat {
         // completed upload file
         if let data = data, let chatError = try? JSONDecoder().decode(ChatError.self, from: data), chatError.hasError == true {
             uploadCompletion?(nil, nil, chatError)
-            let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId, error: chatError)
+            let typeCode = self.config.typeCodes[req.typeCodeIndex].typeCode
+            let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId, error: chatError, typeCode: typeCode)
             delegate?.chatEvent(event: .file(.uploadError(response)))
         } else if let data = data, let uploadResponse = try? JSONDecoder().decode(PodspaceFileUploadResponse.self, from: data) {
             logger?.log(title: "response is:\(String(data: data, encoding: .utf8) ?? "") ")
             if uploadResponse.error != nil {
                 let error = ChatError(message: "\(uploadResponse.error ?? "") - \(uploadResponse.message ?? "")", code: uploadResponse.errorType?.rawValue, hasError: true)
                 uploadCompletion?(nil, nil, error)
-                let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId, error: error)
+                let typeCode = self.config.typeCodes[req.typeCodeIndex].typeCode
+                let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId, error: error, typeCode: typeCode)
                 delegate?.chatEvent(event: .file(.uploadError(response)))
                 return
             }
@@ -66,12 +68,14 @@ extension Chat {
                                         parentHash: uploadResponse.result?.parentHash)
             let fileMetaData = FileMetaData(file: fileDetail, fileHash: uploadResponse.result?.hash, hashCode: uploadResponse.result?.hash, name: uploadResponse.result?.name)
             uploadCompletion?(uploadResponse.result, fileMetaData, nil)
-            let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId)
+            let typeCode = self.config.typeCodes[req.typeCodeIndex].typeCode
+            let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId, typeCode: typeCode)
             delegate?.chatEvent(event: .file(.uploaded(response)))
         } else if let error = error {
             let error = ChatError(message: "\(ChatErrorType.networkError.rawValue) \(error)", code: 6200, hasError: true)
+            let typeCode = self.config.typeCodes[req.typeCodeIndex].typeCode
             uploadCompletion?(nil, nil, error)
-            let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId, error: error)
+            let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId, error: error, typeCode: typeCode)
             delegate?.chatEvent(event: .file(.uploadError(response)))
         }
     }

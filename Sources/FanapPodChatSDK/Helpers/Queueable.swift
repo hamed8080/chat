@@ -16,6 +16,11 @@ protocol UniqueIdProtocol {
     var uniqueId: String { get }
 }
 
+public protocol TypeCodeIndexProtocol {
+    typealias Index = Int
+    var typeCodeIndex: Index { get }
+}
+
 protocol PeerNameProtocol {
     var peerName: String? { get }
 }
@@ -38,7 +43,7 @@ class AsyncChatServerMessage: AsyncSnedable {
 }
 
 /// If a message is marked as Chat Sendable, it will send the data to the async server and chat server afterward.
-protocol ChatSendable: Encodable, UniqueIdProtocol {
+protocol ChatSendable: Encodable, UniqueIdProtocol, TypeCodeIndexProtocol {
     var chatMessageType: ChatMessageVOTypes { get set }
     var content: String? { get }
 }
@@ -69,6 +74,12 @@ protocol SubjectProtocol {
 class BareChatSendableRequest: UniqueIdManagerRequest, ChatSendable {
     var content: String?
     var chatMessageType: ChatMessageVOTypes = .unknown
+
+    init(content: String? = nil, uniqueId: String? = nil, chatMessageType: ChatMessageVOTypes = .unknown, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
+        self.content = content
+        self.chatMessageType = chatMessageType
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
+    }
 }
 
 protocol BodyRequestProtocol {}

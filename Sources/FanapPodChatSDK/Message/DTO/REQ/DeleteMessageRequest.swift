@@ -14,11 +14,12 @@ public class DeleteMessageRequest: UniqueIdManagerRequest, ChatSendable, Subject
 
     public init(deleteForAll: Bool? = false,
                 messageId: Int,
-                uniqueId: String? = nil)
+                uniqueId: String? = nil,
+                typeCodeIndex: TypeCodeIndexProtocol.Index = 0)
     {
         self.deleteForAll = deleteForAll ?? false
         self.messageId = messageId
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

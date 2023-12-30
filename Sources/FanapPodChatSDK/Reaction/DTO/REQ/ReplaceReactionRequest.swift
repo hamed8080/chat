@@ -15,12 +15,12 @@ public class ReplaceReactionRequest: UniqueIdManagerRequest, Encodable, ChatSend
     var content: String? { convertCodableToString() }
     var subjectId: Int { conversationId }
 
-    public init(messageId: Int, conversationId: Int, reactionId: Int, reaction: Sticker, uniqueId: String? = nil) {
+    public init(messageId: Int, conversationId: Int, reactionId: Int, reaction: Sticker, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.messageId = messageId
         self.reactionId = reactionId
         self.reaction = reaction
         self.conversationId = conversationId
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

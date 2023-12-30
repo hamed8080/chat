@@ -21,11 +21,11 @@ public class MapRoutingRequest: UniqueIdManagerRequest, Encodable {
     private let destination: Cordinate
     private let origin: Cordinate
 
-    public init(alternative: Bool?, origin: Cordinate, destination: Cordinate, uniqueId: String? = nil) {
+    public init(alternative: Bool?, origin: Cordinate, destination: Cordinate, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.alternative = alternative ?? true
         self.destination = origin
         self.origin = destination
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

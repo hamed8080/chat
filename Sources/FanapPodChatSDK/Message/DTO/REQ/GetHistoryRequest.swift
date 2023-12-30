@@ -65,7 +65,8 @@ public class GetHistoryRequest: UniqueIdManagerRequest, ChatSendable, SubjectPro
                 historyEndTime: UInt? = nil,
                 readOnly: Bool = false,
                 newMessages: Bool? = nil,
-                uniqueId: String? = nil)
+                uniqueId: String? = nil,
+                typeCodeIndex: TypeCodeIndexProtocol.Index = 0)
     {
         self.threadId = threadId
         self.count = count ?? 50
@@ -93,7 +94,7 @@ public class GetHistoryRequest: UniqueIdManagerRequest, ChatSendable, SubjectPro
         self.historyEndTime = historyEndTime
         self.readOnly = readOnly
         self.newMessages = newMessages
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

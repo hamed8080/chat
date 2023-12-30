@@ -12,9 +12,9 @@ public class AddTagParticipantsRequest: UniqueIdManagerRequest, ChatSendable, Su
     var chatMessageType: ChatMessageVOTypes = .addTagParticipants
     var content: String? { threadIds.convertCodableToString() }
 
-    public init(tagId: Int, threadIds: [Int], uniqueId: String? = nil) {
+    public init(tagId: Int, threadIds: [Int], uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.threadIds = threadIds
         self.tagId = tagId
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 }

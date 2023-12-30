@@ -10,8 +10,8 @@ public class RegisterAssistantRequest: UniqueIdManagerRequest, ChatSendable {
     var content: String? { assistants.convertCodableToString() }
     var chatMessageType: ChatMessageVOTypes = .registerAssistant
 
-    public init(assistants: [Assistant], uniqueId: String? = nil) {
+    public init(assistants: [Assistant], uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.assistants = assistants
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 }

@@ -15,7 +15,7 @@ extension Chat {
         let chatError = try? JSONDecoder().decode(ChatError.self, from: data)
         delegate?.chatError(error: chatError ?? .init())
         if let chatMessage = asyncMessage.chatMessage, let callback: CompletionType<Voidcodable> = callbacksManager.getCallBack(chatMessage.uniqueId) {
-            callback(.init(uniqueId: chatMessage.uniqueId, error: chatError))
+            callback(.init(uniqueId: chatMessage.uniqueId, error: chatError, typeCode: chatMessage.typeCode))
             callbacksManager.removeCallback(uniqueId: chatMessage.uniqueId, requestType: .error)
         }
     }

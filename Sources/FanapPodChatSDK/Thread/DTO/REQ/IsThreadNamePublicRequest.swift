@@ -11,9 +11,9 @@ public class IsThreadNamePublicRequest: UniqueIdManagerRequest, ChatSendable {
     var chatMessageType: ChatMessageVOTypes = .isNameAvailable
     var content: String? { convertCodableToString() }
 
-    public init(name: String, uniqueId: String? = nil) {
+    public init(name: String, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.name = name
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

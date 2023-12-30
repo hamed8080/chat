@@ -12,10 +12,10 @@ public class LeaveThreadRequest: UniqueIdManagerRequest, ChatSendable, SubjectPr
     var content: String? { convertCodableToString() }
     var chatMessageType: ChatMessageVOTypes = .leaveThread
 
-    public init(threadId: Int, clearHistory: Bool? = false, uniqueId: String? = nil) {
+    public init(threadId: Int, clearHistory: Bool? = false, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.clearHistory = clearHistory
         self.threadId = threadId
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

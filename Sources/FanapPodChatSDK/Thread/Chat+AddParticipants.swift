@@ -23,8 +23,8 @@ public extension Chat {
 extension Chat {
     func onAddParticipant(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
-        delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
-        delegate?.chatEvent(event: .thread(.threadAddParticipants(.init(uniqueId: response.uniqueId, result: response.result?.participants, time: response.time))))
+        delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId), typeCode: response.typeCode))))
+        delegate?.chatEvent(event: .thread(.threadAddParticipants(.init(uniqueId: response.uniqueId, result: response.result?.participants, time: response.time, typeCode: response.typeCode))))
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

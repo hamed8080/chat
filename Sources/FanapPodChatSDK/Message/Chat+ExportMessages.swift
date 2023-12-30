@@ -37,7 +37,7 @@ protocol ExportMessagesProtocol {
     var maxSize: Int { get }
     var maxAvailableCount: Int { get }
     func start()
-    func finished(success: Bool, uniqueId: String?, error: ChatError?)
+    func finished(success: Bool, uniqueId: String?, error: ChatError?, typeCode: String?)
     func removeCallbacks(_ uniqueId: String?)
     func hasNext(response: ChatResponse<[Message]>) -> Bool
     func setNextOffest()
@@ -89,10 +89,10 @@ class ExportMessages: ExportMessagesProtocol {
             if hasNext(response: response) {
                 getHistory()
             } else {
-                finished(success: true, uniqueId: response.uniqueId, error: response.error)
+                finished(success: true, uniqueId: response.uniqueId, error: response.error, typeCode: response.typeCode)
             }
         } else {
-            finished(uniqueId: response.uniqueId, error: response.error ?? ChatError(type: .exportError, code: 0, message: nil, rawError: response.error?.rawError))
+            finished(uniqueId: response.uniqueId, error: response.error ?? ChatError(type: .exportError, code: 0, message: nil, rawError: response.error?.rawError), typeCode: response.typeCode)
         }
     }
 
@@ -102,8 +102,8 @@ class ExportMessages: ExportMessagesProtocol {
         chat.callbacksManager.removeCallback(uniqueId: uniqueId, requestType: .exportChats)
     }
 
-    func finished(success: Bool = false, uniqueId: String?, error: ChatError?) {
-        completion(ChatResponse(uniqueId: uniqueId, result: success ? filePath : nil, error: error))
+    func finished(success: Bool = false, uniqueId: String?, error: ChatError?, typeCode: String?) {
+        completion(ChatResponse(uniqueId: uniqueId, result: success ? filePath : nil, error: error, typeCode: typeCode))
         removeCallbacks(uniqueId)
     }
 

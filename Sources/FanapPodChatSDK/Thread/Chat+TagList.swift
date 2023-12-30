@@ -15,8 +15,8 @@ public extension Chat {
     ///   - completion: List of tags.
     ///   - cacheResponse: List of cached tags.
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
-    func tagList(_ uniqueId: String? = nil, completion: @escaping CompletionType<[Tag]>, cacheResponse: CacheResponseType<[Tag]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
-        let req = BareChatSendableRequest(uniqueId: uniqueId)
+    func tagList(_ uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0, completion: @escaping CompletionType<[Tag]>, cacheResponse: CacheResponseType<[Tag]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
+        let req = BareChatSendableRequest(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
         req.chatMessageType = .tagList
         prepareToSendAsync(req: req, uniqueIdResult: uniqueIdResult, completion: completion)
     }

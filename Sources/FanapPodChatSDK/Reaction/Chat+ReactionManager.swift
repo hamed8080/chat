@@ -19,7 +19,11 @@ public extension Chat {
         guard let tuple = _internalInMemoryReaction?.tupleOfMessageIds(request.messageIds) else { return }
         let newRquest = request
         newRquest.messageIds = tuple.notInMemory
-        _internalInMemoryReaction?.countEvent(inMemoryMessageIds: tuple.inMemory, uniqueId: request.uniqueId, conversationId: request.conversationId)
+        _internalInMemoryReaction?.countEvent(inMemoryMessageIds: tuple.inMemory,
+                                              uniqueId: request.uniqueId,
+                                              conversationId: request.conversationId,
+                                              typeCodeIndex: request.typeCodeIndex
+        )
         _internalInMemoryReaction?.storeNewCountRequestMessageIds(newRquest.messageIds)
         if newRquest.messageIds.isEmpty { return }
         prepareToSendAsync(req: newRquest)

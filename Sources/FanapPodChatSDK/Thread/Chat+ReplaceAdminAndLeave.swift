@@ -23,15 +23,15 @@ public extension Chat {
                 let roleRequest = RolesRequest(userRoles: [.init(userId: request.participantId, roles: roles)], threadId: request.threadId)
                 self?.setRoles(roleRequest) { (response: ChatResponse<[UserRole]>) in
                     if let usersRoles = response.result {
-                        newAdminCompletion?(ChatResponse(uniqueId: request.uniqueId, result: usersRoles, error: response.error))
+                        newAdminCompletion?(ChatResponse(uniqueId: request.uniqueId, result: usersRoles, error: response.error, typeCode: response.typeCode))
                         self?.leaveThread(request, completion: completion, uniqueIdResult: uniqueIdResult)
                     }
                 }
             } else {
                 let chatError = ChatError(message: "Current User have no Permission to Change the ThreadAdmin", code: 6666, hasError: true)
-                let response: ChatResponse<Int> = .init(uniqueId: request.uniqueId, result: request.threadId, error: chatError)
+                let response: ChatResponse<Int> = .init(uniqueId: request.uniqueId, result: request.threadId, error: chatError, typeCode: response.typeCode)
                 self?.delegate?.chatEvent(event: .thread(.threadLeaveSaftlyFailed(response)))
-                completion(ChatResponse(uniqueId: request.uniqueId, error: chatError))
+                completion(ChatResponse(uniqueId: request.uniqueId, error: chatError, typeCode: response.typeCode))
             }
         }
     }

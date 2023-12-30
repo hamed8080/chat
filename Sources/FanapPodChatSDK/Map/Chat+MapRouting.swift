@@ -24,7 +24,7 @@ public extension Chat {
         session.dataTask(urlReq) { [weak self] data, response, error in
             let result: ChatResponse<MapRoutingResponse>? = self?.session.decode(data, response, error)
             self?.responseQueue.async {
-                completion(ChatResponse(uniqueId: request.uniqueId, result: result?.result?.routes, error: result?.error))
+                completion(ChatResponse(uniqueId: request.uniqueId, result: result?.result?.routes, error: result?.error, typeCode: result?.typeCode))
             }
         }
         .resume()

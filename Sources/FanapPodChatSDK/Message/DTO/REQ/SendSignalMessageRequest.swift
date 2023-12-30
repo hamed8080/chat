@@ -12,10 +12,10 @@ public class SendSignalMessageRequest: UniqueIdManagerRequest, ChatSendable, Sub
     var chatMessageType: ChatMessageVOTypes = .systemMessage
     var content: String? { convertCodableToString() }
 
-    public init(signalType: SignalMessageType, threadId: Int, uniqueId: String? = nil) {
+    public init(signalType: SignalMessageType, threadId: Int, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.signalType = signalType
         self.threadId = threadId
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

@@ -26,7 +26,8 @@ public class ThreadParticipantsRequest: UniqueIdManagerRequest, ChatSendable, Su
                 admin: Bool = false,
                 cellphoneNumber: String? = nil,
                 username: String? = nil,
-                uniqueId: String? = nil)
+                uniqueId: String? = nil,
+                typeCodeIndex: TypeCodeIndexProtocol.Index = 0)
     {
         self.count = count
         self.offset = offset
@@ -35,7 +36,7 @@ public class ThreadParticipantsRequest: UniqueIdManagerRequest, ChatSendable, Su
         self.username = username
         self.cellphoneNumber = cellphoneNumber
         self.name = name
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

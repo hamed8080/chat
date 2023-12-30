@@ -19,7 +19,8 @@ public class ForwardMessageRequest: UniqueIdManagerRequest, Queueable, PlainText
     public init(fromThreadId: Int,
                 threadId: Int,
                 messageIds: [Int],
-                uniqueIds: [String] = [])
+                uniqueIds: [String] = [],
+                typeCodeIndex: TypeCodeIndexProtocol.Index = 0)
     {
         self.fromThreadId = fromThreadId
         self.threadId = threadId
@@ -32,6 +33,6 @@ public class ForwardMessageRequest: UniqueIdManagerRequest, Queueable, PlainText
             }
             self.uniqueIds = uniqueIds
         }
-        super.init(uniqueId: "\(self.uniqueIds)")
+        super.init(uniqueId: "\(self.uniqueIds)", typeCodeIndex: typeCodeIndex)
     }
 }

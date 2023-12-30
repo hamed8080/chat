@@ -16,7 +16,6 @@ public extension Chat {
     func forwardMessages(_ request: ForwardMessageRequest, onSent: OnSentType? = nil, onSeen: OnSeenType? = nil, onDeliver: OnDeliveryType? = nil, uniqueIdsResult: UniqueIdsResultType? = nil) {
         uniqueIdsResult?(request.uniqueIds) // do not remove this line it use batch uniqueIds
         prepareToSendAsync(req: request, completion: nil as CompletionType<Voidcodable>?, onSent: onSent, onDelivered: onDeliver, onSeen: onSeen)
-        request.typeCode = config.typeCode
         request.uniqueIds.forEach { uniqueId in
             callbacksManager.addCallback(uniqueId: uniqueId, requesType: .forwardMessage, callback: nil as CompletionType<Voidcodable>?, onSent: onSent, onDelivered: onDeliver, onSeen: onSeen)
         }

@@ -11,8 +11,8 @@ public class DeleteTagRequest: UniqueIdManagerRequest, ChatSendable, SubjectProt
     var chatMessageType: ChatMessageVOTypes = .deleteTag
     var content: String?
 
-    public init(id: Int, uniqueId: String? = nil) {
+    public init(id: Int, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.id = id
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 }

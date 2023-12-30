@@ -13,10 +13,10 @@ public class DeleteReactionRequest: UniqueIdManagerRequest, Encodable, ChatSenda
     public let conversationId: Int
     var subjectId: Int { conversationId }
 
-    public init(reactionId: Int, conversationId: Int, uniqueId: String? = nil) {
+    public init(reactionId: Int, conversationId: Int, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.reactionId = reactionId
         self.conversationId = conversationId
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: CodingKey {

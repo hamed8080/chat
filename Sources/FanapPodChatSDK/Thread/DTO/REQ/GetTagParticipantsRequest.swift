@@ -11,8 +11,8 @@ public class GetTagParticipantsRequest: UniqueIdManagerRequest, ChatSendable, Su
     var chatMessageType: ChatMessageVOTypes = .getTagParticipants
     var content: String?
 
-    public init(id: Int, uniqueId: String? = nil) {
+    public init(id: Int, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.id = id
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 }

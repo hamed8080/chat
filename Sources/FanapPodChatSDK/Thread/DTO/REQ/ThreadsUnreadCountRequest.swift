@@ -12,9 +12,9 @@ public class ThreadsUnreadCountRequest: UniqueIdManagerRequest, ChatSendable {
     var chatMessageType: ChatMessageVOTypes = .threadsUnreadCount
     var content: String? { threadIds.convertCodableToString() }
 
-    public init(threadIds: [Int], uniqueId: String? = nil) {
+    public init(threadIds: [Int], uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.threadIds = threadIds
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     public func encode(to _: Encoder) throws {}

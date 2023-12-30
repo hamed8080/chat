@@ -31,7 +31,7 @@ public extension Chat {
         prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult) { (response: ChatResponse<[Message]>) in
             let messages = response.result
             let pagination = Pagination(hasNext: messages?.count ?? 0 >= request.count, count: request.count, offset: request.offset)
-            completion(ChatResponse(uniqueId: response.uniqueId, result: messages, error: response.error, pagination: pagination))
+            completion(ChatResponse(uniqueId: response.uniqueId, result: messages, error: response.error, pagination: pagination, typeCode: response.typeCode))
         }
     }
 

@@ -16,7 +16,7 @@ public struct ChatConfig: Codable {
     public private(set) var token: String
     public private(set) var mapApiKey: String?
     public private(set) var mapServer: String = "https://api.neshan.org/v1"
-    public private(set) var typeCode: String = "default"
+    public private(set) var typeCodes: [OwnerTypeCode] = []
     public private(set) var enableCache: Bool = false
     public private(set) var cacheTimeStampInSec: Int = (2 * 24) * (60 * 60)
     public private(set) var msgPriority: Int = 1
@@ -46,7 +46,7 @@ public struct ChatConfig: Codable {
         podSpaceFileServerAddress _: String = "https://podspace.pod.ir",
         mapApiKey: String? = nil,
         mapServer: String = "https://api.neshan.org/v1",
-        typeCode: String = "default",
+        typeCodes: [OwnerTypeCode] = [],
         enableCache: Bool = false,
         cacheTimeStampInSec: Int = (2 * 24) * (60 * 60),
         msgPriority: Int = 1,
@@ -71,7 +71,10 @@ public struct ChatConfig: Codable {
         self.token = token
         self.mapApiKey = mapApiKey
         self.mapServer = mapServer
-        self.typeCode = typeCode
+        self.typeCodes.append(contentsOf: typeCodes)
+        if self.typeCodes.count == 0 {
+            fatalError("You have to pass at least one type code!")
+        }
         self.enableCache = enableCache
         self.cacheTimeStampInSec = cacheTimeStampInSec
         self.msgPriority = msgPriority
@@ -104,7 +107,7 @@ public class ChatConfigBuilder {
     private(set) var token: String = ""
     private(set) var mapApiKey: String?
     private(set) var mapServer: String = "https://api.neshan.org/v1"
-    private(set) var typeCode: String = "default"
+    private(set) var typeCodes: [OwnerTypeCode] = []
     private(set) var enableCache: Bool = false
     private(set) var cacheTimeStampInSec: Int = (2 * 24) * (60 * 60)
     private(set) var msgPriority: Int = 1
@@ -161,8 +164,8 @@ public class ChatConfigBuilder {
         return self
     }
 
-    @discardableResult public func typeCode(_ typeCode: String) -> ChatConfigBuilder {
-        self.typeCode = typeCode
+    @discardableResult public func typeCodes(_ typeCodes: [OwnerTypeCode]) -> ChatConfigBuilder {
+        self.typeCodes = typeCodes
         return self
     }
 
@@ -256,7 +259,7 @@ public class ChatConfigBuilder {
             podSpaceFileServerAddress: podSpaceFileServerAddress,
             mapApiKey: mapApiKey,
             mapServer: mapServer,
-            typeCode: typeCode,
+            typeCodes: typeCodes,
             enableCache: enableCache,
             cacheTimeStampInSec: cacheTimeStampInSec,
             msgPriority: msgPriority,

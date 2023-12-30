@@ -12,11 +12,11 @@ public class MutualGroupsRequest: UniqueIdManagerRequest, ChatSendable {
     var content: String? { convertCodableToString() }
     var chatMessageType: ChatMessageVOTypes = .mutualGroups
 
-    public init(toBeUser: Invitee, count: Int = 50, offset: Int = 0, uniqueId: String? = nil) {
+    public init(toBeUser: Invitee, count: Int = 50, offset: Int = 0, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.count = count
         self.offset = offset
         toBeUserVO = toBeUser
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

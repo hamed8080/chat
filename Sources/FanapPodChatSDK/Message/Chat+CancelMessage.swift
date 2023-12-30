@@ -14,8 +14,8 @@ public extension Chat {
     ///   - completion: The result of cancelation.
     func cancelMessage(uniqueId: String, completion: @escaping CompletionTypeNoneDecodeable<Bool>) {
         manageUpload(uniqueId: uniqueId, action: .cancel) { _, state in
-            completion(ChatResponse(uniqueId: uniqueId, result: state))
+            completion(ChatResponse(uniqueId: uniqueId, result: state, typeCode: nil))
         }
-        completion(ChatResponse(uniqueId: uniqueId, result: true))
+        completion(ChatResponse(uniqueId: uniqueId, result: true, typeCode: nil))
     }
 }

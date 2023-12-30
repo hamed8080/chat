@@ -62,7 +62,7 @@ public extension Chat {
         prepareToSendAsync(req: request, uniqueIdResult: nil) { [weak self] (response: ChatResponse<Conversation>) in
 
             guard let thread = response.result, let id = thread.id else { return }
-            createThreadCompletion?(ChatResponse(result: thread))
+            createThreadCompletion?(ChatResponse(result: thread, typeCode: response.typeCode))
             textMessage.threadId = id
             uploadFile.userGroupHash = thread.userGroupHash
             self?.sendFileMessage(textMessage: textMessage,

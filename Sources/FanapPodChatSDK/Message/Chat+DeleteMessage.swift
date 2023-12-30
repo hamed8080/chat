@@ -36,7 +36,7 @@ extension Chat {
     func onDeleteMessage(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Message> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .message(.messageDelete(response)))
-        delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
+        delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId), typeCode: response.typeCode))))
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

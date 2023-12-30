@@ -15,7 +15,8 @@ public class CreateThreadWithMessage: CreateThreadRequest {
                 title: String,
                 type: ThreadTypes?,
                 uniqueName: String?,
-                message: CreateThreadMessage)
+                message: CreateThreadMessage,
+                typeCodeIndex: TypeCodeIndexProtocol.Index = 0)
     {
         self.message = message
         super.init(description: description,
@@ -25,7 +26,8 @@ public class CreateThreadWithMessage: CreateThreadRequest {
                    title: title,
                    type: type,
                    uniqueName: uniqueName,
-                   uniqueId: nil)
+                   uniqueId: nil,
+                   typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

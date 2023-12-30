@@ -25,9 +25,12 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
         /// If we have a cached version of messgeId in reactions list it means that the last time it was nil and did not have a user reaction.
         if let index = indexOfMessageId(request.messageId) {
             let cachedVersion = reactions[index].currentUserReaction
+            let typeCode = chat?.config.typeCodes[request.typeCodeIndex].typeCode
             let response = ChatResponse<CurrentUserReaction>(uniqueId: request.uniqueId,
                                                              result: .init(messageId: request.messageId, reaction: cachedVersion),
-                                                             subjectId: request.conversationId)
+                                                             subjectId: request.conversationId,
+                                                             typeCode: typeCode
+            )
             chat?.delegate?.chatEvent(event: .reaction(.reaction(response)))
             chat?.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messageId: request.messageId)))
             return true
@@ -41,12 +44,14 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
         }
     }
 
-    func countEvent(inMemoryMessageIds: [Int], uniqueId: String, conversationId: Int) {
+    func countEvent(inMemoryMessageIds: [Int], uniqueId: String, conversationId: Int, typeCodeIndex: TypeCodeIndexProtocol.Index) {
         let list = listOfReactionCount(inMemoryMessageIds)
         if list.count > 0 {
+            let typeCode = chat?.config.typeCodes[typeCodeIndex].typeCode
             let response = ChatResponse<[ReactionCountList]>(uniqueId: uniqueId,
                                                              result: list,
-                                                             subjectId: conversationId)
+                                                             subjectId: conversationId,
+                                                             typeCode: typeCode)
             chat?.delegate?.chatEvent(event: .reaction(.count(response)))
             list.forEach { item in
                 chat?.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messageId: item.messageId ?? 0)))
@@ -93,10 +98,11 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
 
         let currentStoredInMemory = request.sticker == nil ? allStoredReactions : byStickerFilter
         let count = currentStoredInMemory.count
-
+        let typeCode = chat?.config.typeCodes[request.typeCodeIndex].typeCode
         let response = ChatResponse<ReactionList>(uniqueId: request.uniqueId,
                                                   result: .init(messageId: request.messageId, reactions: currentStoredInMemory),
-                                                  subjectId: request.conversationId)
+                                                  subjectId: request.conversationId,
+                                                  typeCode: typeCode)
         chat?.delegate?.chatEvent(event: .reaction(.list(response)))
         chat?.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messageId: request.messageId)))
 

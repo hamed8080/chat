@@ -17,8 +17,8 @@ public class CreateBotRequest: UniqueIdManagerRequest, PlainTextSendable {
     /// - Parameters:
     ///   - botName: The bot name you want to create.
     ///   - uniqueId: The unique id of request. If you manage the unique id by yourself you should leave this blank, otherwise, you must use it if you need to know what response is for what request.
-    public init(botName: String, uniqueId: String? = nil) {
+    public init(botName: String, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.botName = botName
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 }

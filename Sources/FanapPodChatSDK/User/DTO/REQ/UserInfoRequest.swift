@@ -9,7 +9,7 @@ public class UserInfoRequest: UniqueIdManagerRequest, ChatSendable {
     var chatMessageType: ChatMessageVOTypes = .userInfo
     var content: String?
 
-    override init(uniqueId: String? = nil) {
-        super.init(uniqueId: uniqueId)
+    override init(uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 }

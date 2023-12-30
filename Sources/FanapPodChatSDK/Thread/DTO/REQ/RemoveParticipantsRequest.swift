@@ -12,10 +12,10 @@ public class RemoveParticipantsRequest: UniqueIdManagerRequest, ChatSendable, Su
     var chatMessageType: ChatMessageVOTypes = .removeParticipant
     var subjectId: Int { threadId }
 
-    public init(participantId: Int, threadId: Int, uniqueId: String? = nil) {
+    public init(participantId: Int, threadId: Int, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.threadId = threadId
         participantIds = [participantId]
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     public init(participantIds: [Int], threadId: Int, uniqueId: String? = nil) {

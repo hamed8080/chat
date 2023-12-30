@@ -13,9 +13,9 @@ public class RactionCountRequest: UniqueIdManagerRequest, Encodable, ChatSendabl
     var content: String? { "\(messageIds)" }
     var subjectId: Int { conversationId }
 
-    public init(messageIds: [Int], conversationId: Int, uniqueId: String? = nil) {
+    public init(messageIds: [Int], conversationId: Int, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.messageIds = messageIds
         self.conversationId = conversationId
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 }

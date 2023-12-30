@@ -33,7 +33,7 @@ class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSessionTaskDe
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.uploadProgress?(UploadFileProgress(percent: Int64(percent), totalSize: totalBytesExpectedToSend, bytesSend: totalBytesSent), nil)
-            let response: ChatResponse<String> = .init(uniqueId: self.uniqueId, result: self.uniqueId)
+            let response: ChatResponse<String> = .init(uniqueId: self.uniqueId, result: self.uniqueId, typeCode: nil)
             self.delegate?.chatEvent(event: .file(.uploading(response)))
         }
     }
@@ -48,7 +48,7 @@ class ProgressImplementation: NSObject, URLSessionDataDelegate, URLSessionTaskDe
         downloadProgress?(downloadFileProgress)
         logger?.log(title: "Download progress:\(downloadFileProgress.percent)")
         completionHandler(.allow)
-        let response: ChatResponse<String> = .init(uniqueId: uniqueId, result: uniqueId)
+        let response: ChatResponse<String> = .init(uniqueId: uniqueId, result: uniqueId, typeCode: nil)
         delegate?.chatEvent(event: .file(.downloading(response)))
     }
 

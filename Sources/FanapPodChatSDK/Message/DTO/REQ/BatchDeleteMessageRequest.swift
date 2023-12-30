@@ -13,7 +13,7 @@ public class BatchDeleteMessageRequest: UniqueIdManagerRequest, ChatSendable {
     var chatMessageType: ChatMessageVOTypes = .deleteMessage
     var content: String? { convertCodableToString() }
 
-    public init(threadId: Int, messageIds: [Int], deleteForAll: Bool = false, uniqueIds: [String]? = nil, uniqueId: String? = nil) {
+    public init(threadId: Int, messageIds: [Int], deleteForAll: Bool = false, uniqueIds: [String]? = nil, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.threadId = threadId
         self.deleteForAll = deleteForAll
         if let uniqueIds = uniqueIds {
@@ -26,7 +26,7 @@ public class BatchDeleteMessageRequest: UniqueIdManagerRequest, ChatSendable {
             self.uniqueIds = generatedUniqeIds
         }
         self.messageIds = messageIds
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

@@ -16,7 +16,7 @@ public extension Chat {
     func addContact(_ request: AddContactRequest, completion: @escaping CompletionType<[Contact]>, uniqueIdResult _: UniqueIdResultType? = nil) {
         let url = "\(config.platformHost)\(Routes.addContacts.rawValue)"
         let headers: [String: String] = ["_token_": config.token, "_token_issuer_": "1"]
-        request.typeCode = config.typeCode
+        request.typeCode = config.typeCodes[request.typeCodeIndex].typeCode
         let bodyData = request.getParameterData()
         var urlReq = URLRequest(url: URL(string: url)!)
         urlReq.allHTTPHeaderFields = headers
@@ -27,7 +27,7 @@ public extension Chat {
             self?.logger?.log(data, response, error)
             let result: ChatResponse<ContactResponse>? = self?.session.decode(data, response, error)
             self?.responseQueue.async {
-                completion(ChatResponse(uniqueId: request.uniqueId, result: result?.result?.contacts, error: result?.error))
+                completion(ChatResponse(uniqueId: request.uniqueId, result: result?.result?.contacts, error: result?.error, typeCode: request.typeCode))
             }
         }
         .resume()

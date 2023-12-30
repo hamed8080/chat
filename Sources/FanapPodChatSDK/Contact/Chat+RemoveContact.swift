@@ -16,7 +16,7 @@ extension Chat {
     public func removeContact(_ request: RemoveContactsRequest, completion: @escaping CompletionType<Bool>, uniqueIdResult _: UniqueIdResultType? = nil) {
         let url = "\(config.platformHost)\(Routes.removeContacts.rawValue)"
         let headers: [String: String] = ["_token_": config.token, "_token_issuer_": "1"]
-        request.typeCode = config.typeCode
+        request.typeCode = config.typeCodes[request.typeCodeIndex].typeCode
         let bodyData = request.getParameterData()
         var urlReq = URLRequest(url: URL(string: url)!)
         urlReq.allHTTPHeaderFields = headers
@@ -27,7 +27,7 @@ extension Chat {
             self?.logger?.log(data, response, error)
             let result: ChatResponse<RemoveContactResponse>? = self?.session.decode(data, response, error)
             self?.responseQueue.async {
-                completion(ChatResponse(uniqueId: request.uniqueId, result: result?.result?.deteled ?? false, error: result?.error))
+                completion(ChatResponse(uniqueId: request.uniqueId, result: result?.result?.deteled ?? false, error: result?.error, typeCode: request.typeCode))
             }
         }
         .resume()

@@ -13,11 +13,11 @@ public class ChangeThreadTypeRequest: UniqueIdManagerRequest, ChatSendable, Subj
     var chatMessageType: ChatMessageVOTypes = .changeThreadType
     var content: String? { convertCodableToString() }
 
-    public init(threadId: Int, type: ThreadTypes, uniqueName: String? = nil, uniqueId: String? = nil) {
+    public init(threadId: Int, type: ThreadTypes, uniqueName: String? = nil, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.type = type
         self.threadId = threadId
         self.uniqueName = uniqueName
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

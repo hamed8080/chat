@@ -10,12 +10,11 @@ public class AllThreads: UniqueIdManagerRequest, ChatSendable {
     private let summary: Bool = true
     var chatMessageType: ChatMessageVOTypes = .getThreads
     var content: String? { convertCodableToString() }
-
     /// Init the request.
     /// - Parameters:
     ///   - uniqueId: The optional uniqueId.
-    override public init(uniqueId: String? = nil) {
-        super.init(uniqueId: uniqueId)
+    override public init(uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

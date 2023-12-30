@@ -32,7 +32,7 @@ extension Chat {
                 if contactsToSync.count <= 0 { return }
 
                 self.addContacts(contactsToSync) { (response: ChatResponse<[Contact]>) in
-                    completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error))
+                    completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, typeCode: response.typeCode))
                 }
                 uniqueIdsResult?(uniqueIds)
             }

@@ -18,7 +18,7 @@ public extension Chat {
     func mutualGroups(_ request: MutualGroupsRequest, _ completion: @escaping CompletionType<[Conversation]>, cacheResponse: CacheResponseType<[Conversation]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult) { (response: ChatResponse<[Conversation]>) in
             let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: response.contentCount)
-            completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
+            completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination, typeCode: response.typeCode))
         }
     }
 }

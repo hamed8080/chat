@@ -14,12 +14,13 @@ public class MapSearchRequest: UniqueIdManagerRequest, Encodable {
     public init(lat: Double,
                 lng: Double,
                 term: String,
-                uniqueId: String? = nil)
+                uniqueId: String? = nil,
+                typeCodeIndex: TypeCodeIndexProtocol.Index = 0)
     {
         self.lat = lat
         self.lng = lng
         self.term = term
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

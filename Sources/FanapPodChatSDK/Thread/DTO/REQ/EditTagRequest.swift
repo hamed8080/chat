@@ -12,10 +12,10 @@ public class EditTagRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtoc
     var chatMessageType: ChatMessageVOTypes = .editTag
     var content: String? { convertCodableToString() }
 
-    public init(id: Int, tagName: String, uniqueId: String? = nil) {
+    public init(id: Int, tagName: String, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.id = id
         name = tagName
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

@@ -42,7 +42,7 @@ extension Chat {
         if let user = response.result {
             userInfo = user
             state = .chatReady
-            delegate?.chatEvent(event: .user(.onUser(.init(result: user))))
+            delegate?.chatEvent(event: .user(.onUser(.init(result: user, typeCode: response.typeCode))))
             delegate?.chatState(state: .chatReady, currentUser: user, error: nil)
             asyncManager.sendQueuesOnReconnect()
             requestUserTimer.invalidateTimer()
@@ -60,7 +60,7 @@ extension Chat {
 extension Chat {
     func onUserInfo(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<User> = asyncMessage.toChatResponse()
-        delegate?.chatEvent(event: .system(.serverTime(.init(uniqueId: response.uniqueId, result: response.time, time: response.time))))
+        delegate?.chatEvent(event: .system(.serverTime(.init(uniqueId: response.uniqueId, result: response.time, time: response.time, typeCode: response.typeCode))))
         callbacksManager.invokeAndRemove(response, asyncMessage.chatMessage?.type)
     }
 }

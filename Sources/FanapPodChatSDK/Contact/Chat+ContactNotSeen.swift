@@ -16,7 +16,7 @@ public extension Chat {
     ///   - uniqueIdResult: The unique id of request. If you manage the unique id by yourself you should leave this closure blank, otherwise, you must use it if you need to know what response is for what request.
     func contactNotSeen(_ request: NotSeenDurationRequest, completion: @escaping CompletionType<[UserLastSeenDuration]>, uniqueIdResult: UniqueIdResultType? = nil) {
         prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult) { (response: ChatResponse<ContactNotSeenDurationRespoonse>) in
-            completion(ChatResponse(uniqueId: request.uniqueId, result: response.result?.notSeenDuration, error: response.error))
+            completion(ChatResponse(uniqueId: request.uniqueId, result: response.result?.notSeenDuration, error: response.error, typeCode: response.typeCode))
         }
     }
 }

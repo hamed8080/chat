@@ -24,7 +24,7 @@ public extension Chat {
             // the number of paramter is not equal in all contact and get invalid request like below:
             // [firstname,lastname,email,cellPhoneNumber],[firstname,lastname,cellPhoneNumber]
             // ****
-            contact.typeCode = config.typeCode
+            contact.typeCode = config.typeCodes[contact.typeCodeIndex].typeCode
             urlComp.queryItems?.append(URLQueryItem(name: "firstName", value: contact.firstName))
             urlComp.queryItems?.append(URLQueryItem(name: "lastName", value: contact.lastName))
             urlComp.queryItems?.append(URLQueryItem(name: "email", value: contact.email))
@@ -44,7 +44,7 @@ public extension Chat {
             self?.logger?.log(data, response, error)
             let result: ChatResponse<ContactResponse>? = self?.session.decode(data, response, error)
             self?.responseQueue.async {
-                completion(ChatResponse(uniqueId: request.first?.uniqueId, result: result?.result?.contacts, error: result?.error))
+                completion(ChatResponse(uniqueId: request.first?.uniqueId, result: result?.result?.contacts, error: result?.error, typeCode: result?.typeCode))
             }
         }
         .resume()

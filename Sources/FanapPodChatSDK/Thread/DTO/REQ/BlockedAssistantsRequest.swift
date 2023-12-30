@@ -11,10 +11,10 @@ public class BlockedAssistantsRequest: UniqueIdManagerRequest, ChatSendable {
     var chatMessageType: ChatMessageVOTypes = .blockedAssistnts
     var content: String? { convertCodableToString() }
 
-    public init(count: Int = 50, offset: Int = 0, uniqueId: String? = nil) {
+    public init(count: Int = 50, offset: Int = 0, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.count = count
         self.offset = offset
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

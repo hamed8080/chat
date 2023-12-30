@@ -76,7 +76,10 @@ internal class AsyncManager: AsyncDelegate {
     /// The sendData delegate will inform if a send event occurred by the async socket.
     public func sendData(sendable: ChatSendable) {
         guard let config = config else { return }
-        let chatMessage = SendChatMessageVO(req: sendable, token: config.token, typeCode: config.typeCode)
+        let typeCodeIndex = sendable.typeCodeIndex
+        guard config.typeCodes.indices.contains(typeCodeIndex) else { fatalError("Type code index is not exist. Check if the index of the type is right.") }
+        let typeCode = config.typeCodes[typeCodeIndex].typeCode
+        let chatMessage = SendChatMessageVO(req: sendable, token: config.token, typeCode: typeCode)
         addToQueue(sendable: sendable)
         sendToAsync(asyncMessage: AsyncChatServerMessage(chatMessage: chatMessage), type: sendable.chatMessageType)
         sendPingTimer()

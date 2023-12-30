@@ -19,7 +19,7 @@ public class MapStaticImageRequest: UniqueIdManagerRequest, Encodable {
                 height: Int = 500,
                 width: Int = 800,
                 zoom: Int = 15,
-                type: String = "standard-night")
+                type: String = "standard-night", typeCodeIndex: TypeCodeIndexProtocol.Index = 0)
     {
         self.center = "\(center.lat),\(center.lng)"
         self.type = type
@@ -27,6 +27,7 @@ public class MapStaticImageRequest: UniqueIdManagerRequest, Encodable {
         self.width = width
         self.zoom = zoom
         self.key = key
+        super.init(typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

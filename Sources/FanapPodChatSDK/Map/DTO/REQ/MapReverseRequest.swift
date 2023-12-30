@@ -10,10 +10,10 @@ public class MapReverseRequest: UniqueIdManagerRequest, Encodable {
     public let lat: Double
     public let lng: Double
 
-    public init(lat: Double, lng: Double, uniqueId: String? = nil) {
+    public init(lat: Double, lng: Double, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.lat = lat
         self.lng = lng
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

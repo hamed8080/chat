@@ -24,7 +24,8 @@ public class SendTextMessageRequest: UniqueIdManagerRequest, Queueable, PlainTex
                 metadata: String? = nil,
                 repliedTo: Int? = nil,
                 systemMetadata: String? = nil,
-                uniqueId: String? = nil)
+                uniqueId: String? = nil,
+                typeCodeIndex: TypeCodeIndexProtocol.Index = 0)
     {
         self.messageType = messageType
         self.metadata = metadata
@@ -32,6 +33,6 @@ public class SendTextMessageRequest: UniqueIdManagerRequest, Queueable, PlainTex
         self.systemMetadata = systemMetadata
         self.textMessage = textMessage
         self.threadId = threadId
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 }

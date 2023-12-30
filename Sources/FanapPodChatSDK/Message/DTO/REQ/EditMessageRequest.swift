@@ -24,7 +24,8 @@ public class EditMessageRequest: UniqueIdManagerRequest, Queueable, PlainTextSen
                 textMessage: String,
                 repliedTo: Int? = nil,
                 metadata: String? = nil,
-                uniqueId: String? = nil)
+                uniqueId: String? = nil,
+                typeCodeIndex: TypeCodeIndexProtocol.Index = 0)
     {
         self.threadId = threadId
         self.messageType = messageType
@@ -32,6 +33,6 @@ public class EditMessageRequest: UniqueIdManagerRequest, Queueable, PlainTextSen
         self.messageId = messageId
         self.textMessage = textMessage
         self.metadata = metadata
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 }

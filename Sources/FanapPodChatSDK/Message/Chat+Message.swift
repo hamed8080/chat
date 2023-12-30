@@ -83,7 +83,7 @@ public extension Chat {
                                                   mimeType: "image/png",
                                                   userGroupHash: request.userGroupHash,
                                                   uniqueId: request.uniqueId)
-            imageRequest.typeCode = self?.config.typeCode
+            imageRequest.typeCode = self?.config.typeCodes[request.typeCodeIndex].typeCode
 
             let textMessage = SendTextMessageRequest(threadId: request.threadId,
                                                      textMessage: request.textMessage ?? "",
@@ -112,7 +112,7 @@ public extension Chat {
     func getMentions(_ request: MentionRequest, completion: @escaping CompletionType<[Message]>, cacheResponse: CacheResponseType<[Message]>? = nil, uniqueIdResult: UniqueIdResultType? = nil) {
         prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult) { (response: ChatResponse<[Message]>) in
             let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: response.contentCount)
-            completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
+            completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination, typeCode: response.typeCode))
         }
     }
 
@@ -140,7 +140,7 @@ extension Chat {
     func onNewMessage(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Message> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .message(.messageNew(response)))
-        delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
+        delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId), typeCode: response.typeCode))))
         guard let message = response.result else { return }
         if message.threadId == nil {
             message.threadId = response.subjectId ?? message.conversation?.id
@@ -176,12 +176,12 @@ extension Chat {
     func onLastMessageEdited(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.lastMessageEdited(response)))
-        delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
+        delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId), typeCode: response.typeCode))))
     }
 
     func onLastMessageDeleted(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.lastMessageDeleted(response)))
-        delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId)))))
+        delegate?.chatEvent(event: .thread(.threadLastActivityTime(.init(result: .init(time: response.time, threadId: response.subjectId), typeCode: response.typeCode))))
     }
 }

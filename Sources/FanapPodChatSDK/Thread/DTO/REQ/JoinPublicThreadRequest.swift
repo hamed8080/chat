@@ -10,8 +10,8 @@ public class JoinPublicThreadRequest: UniqueIdManagerRequest, PlainTextSendable 
     var chatMessageType: ChatMessageVOTypes = .joinThread
     var content: String? { threadName }
 
-    public init(threadName: String, uniqueId: String? = nil) {
+    public init(threadName: String, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.threadName = threadName
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 }

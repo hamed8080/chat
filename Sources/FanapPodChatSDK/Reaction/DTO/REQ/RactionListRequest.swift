@@ -17,13 +17,13 @@ public class RactionListRequest: UniqueIdManagerRequest, Encodable, ChatSendable
     var content: String? { convertCodableToString() }
     var subjectId: Int { conversationId }
 
-    public init(messageId: Int, offset: Int = 0, count: Int = 25, conversationId: Int, sticker: Sticker? = nil, uniqueId: String? = nil) {
+    public init(messageId: Int, offset: Int = 0, count: Int = 25, conversationId: Int, sticker: Sticker? = nil, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.messageId = messageId
         self.count = count
         self.offset = offset
         self.conversationId = conversationId
         self.sticker = sticker
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     enum CodingKeys: CodingKey {

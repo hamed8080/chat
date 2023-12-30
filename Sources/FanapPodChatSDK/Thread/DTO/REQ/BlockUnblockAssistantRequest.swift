@@ -10,8 +10,8 @@ public class BlockUnblockAssistantRequest: UniqueIdManagerRequest, ChatSendable 
     var chatMessageType: ChatMessageVOTypes = .blockAssistant
     var content: String? { assistants.convertCodableToString() }
 
-    public required init(assistants: [Assistant], uniqueId: String? = nil) {
+    public required init(assistants: [Assistant], uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.assistants = assistants
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 }

@@ -41,14 +41,14 @@ extension Chat {
         if let response = response as? HTTPURLResponse, (200 ... 300).contains(response.statusCode), let headers = response.allHeaderFields as? [String: Any] {
             if let data = data, let error = try? JSONDecoder().decode(ChatError.self, from: data), error.hasError == true {
                 completion?(nil, nil, nil, error)
-                let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId, error: error)
+                let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId, error: error, typeCode: nil)
                 delegate?.chatEvent(event: .file(.downloadError(response)))
                 return
             }
             if let data = data, let podspaceError = try? JSONDecoder().decode(PodspaceFileUploadResponse.self, from: data) {
                 let error = ChatError(message: podspaceError.message, code: podspaceError.errorType?.rawValue, hasError: true)
                 completion?(nil, nil, nil, error)
-                let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId, error: error)
+                let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId, error: error, typeCode: nil)
                 delegate?.chatEvent(event: .file(.downloadError(response)))
                 return
             }
@@ -65,7 +65,7 @@ extension Chat {
             let fileNameWithExtension = "\(name ?? "default").\(type ?? "none")"
             let file = File(hashCode: req.hashCode, name: fileNameWithExtension, size: size, type: type)
             completion?(data, nil, file, nil)
-            let response: ChatResponse<Data?> = .init(uniqueId: req.uniqueId, result: data)
+            let response: ChatResponse<Data?> = .init(uniqueId: req.uniqueId, result: data, typeCode: nil)
             delegate?.chatEvent(event: .file(.downloaded(response)))
         } else {
             let headers = (response as? HTTPURLResponse)?.allHeaderFields as? [String: Any]
@@ -73,7 +73,7 @@ extension Chat {
             let code = (headers?["errorCode"] as? Int) ?? 999
             let error = ChatError(message: message, code: code, hasError: true, content: nil)
             completion?(nil, nil, nil, error)
-            let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId, error: error)
+            let response: ChatResponse<String> = .init(uniqueId: req.uniqueId, result: req.uniqueId, error: error, typeCode: nil)
             delegate?.chatEvent(event: .file(.downloadError(response)))
         }
     }

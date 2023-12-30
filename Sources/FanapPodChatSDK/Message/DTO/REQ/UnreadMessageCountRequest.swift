@@ -10,9 +10,9 @@ public class UnreadMessageCountRequest: UniqueIdManagerRequest, ChatSendable {
     var chatMessageType: ChatMessageVOTypes = .allUnreadMessageCount
     var content: String? { convertCodableToString() }
 
-    public init(countMutedThreads: Bool = false, uniqueId: String? = nil) {
-        self.countMutedThreads = countMutedThreads
-        super.init(uniqueId: uniqueId)
+    public init(countMutedThreads: Bool = false, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
+        self.countMutedThreads = countMutedThreads        
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

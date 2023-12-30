@@ -12,11 +12,11 @@ public class MessageDeliveredUsersRequest: UniqueIdManagerRequest, ChatSendable 
     var content: String? { convertCodableToString() }
     var chatMessageType: ChatMessageVOTypes = .messageDeliveredToParticipants
 
-    public init(messageId: Int, count: Int = 50, offset: Int = 0, uniqueId: String? = nil) {
+    public init(messageId: Int, count: Int = 50, offset: Int = 0, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.messageId = messageId
         self.offset = offset
         self.count = count
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

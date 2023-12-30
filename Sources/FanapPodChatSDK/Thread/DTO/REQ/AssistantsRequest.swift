@@ -16,12 +16,13 @@ public class AssistantsRequest: UniqueIdManagerRequest, ChatSendable {
     public init(contactType: String,
                 count: Int = 50,
                 offset: Int = 0,
-                uniqueId: String? = nil)
+                uniqueId: String? = nil,
+                typeCodeIndex: TypeCodeIndexProtocol.Index = 0)
     {
         self.contactType = contactType
         self.count = count
         self.offset = offset
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

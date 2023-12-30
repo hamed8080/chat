@@ -23,7 +23,8 @@ public class CreateThreadRequest: UniqueIdManagerRequest, ChatSendable {
                 title: String,
                 type: ThreadTypes? = nil,
                 uniqueName: String? = nil,
-                uniqueId: String? = nil)
+                uniqueId: String? = nil,
+                typeCodeIndex: TypeCodeIndexProtocol.Index = 0)
     {
         self.description = description
         self.image = image
@@ -32,7 +33,7 @@ public class CreateThreadRequest: UniqueIdManagerRequest, ChatSendable {
         self.title = title
         self.type = type
         self.uniqueName = uniqueName
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

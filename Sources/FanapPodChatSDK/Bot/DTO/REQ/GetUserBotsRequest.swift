@@ -11,7 +11,7 @@ public class GetUserBotsRequest: UniqueIdManagerRequest, ChatSendable {
     var chatMessageType: ChatMessageVOTypes = .getUserBots
     var content: String?
 
-    override public init(uniqueId: String? = nil) {
-        super.init(uniqueId: uniqueId)
+    override public init(uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 }

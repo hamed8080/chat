@@ -17,7 +17,7 @@ public extension Chat {
     func messageDeliveredToParticipants(_ request: MessageDeliveredUsersRequest, completion: @escaping CacheResponseType<[Participant]>, uniqueIdResult: UniqueIdResultType? = nil) {
         prepareToSendAsync(req: request, uniqueIdResult: uniqueIdResult) { (response: ChatResponse<[Participant]>) in
             let pagination = PaginationWithContentCount(count: request.count, offset: request.offset, totalCount: response.contentCount)
-            completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination))
+            completion(ChatResponse(uniqueId: response.uniqueId, result: response.result, error: response.error, pagination: pagination, typeCode: response.typeCode))
         }
     }
 }

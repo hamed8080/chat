@@ -19,13 +19,14 @@ public class MentionRequest: UniqueIdManagerRequest, ChatSendable, SubjectProtoc
                 onlyUnreadMention: Bool,
                 count: Int = 50,
                 offset: Int = 0,
-                uniqueId: String? = nil)
+                uniqueId: String? = nil,
+                typeCodeIndex: TypeCodeIndexProtocol.Index = 0)
     {
         self.count = count
         self.offset = offset
         self.threadId = threadId
         self.onlyUnreadMention = onlyUnreadMention
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

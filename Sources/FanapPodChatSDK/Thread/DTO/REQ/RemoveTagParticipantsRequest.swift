@@ -12,9 +12,9 @@ public class RemoveTagParticipantsRequest: UniqueIdManagerRequest, ChatSendable,
     var content: String? { tagParticipants.convertCodableToString() }
     var chatMessageType: ChatMessageVOTypes = .removeTagParticipants
 
-    public init(tagId: Int, tagParticipants: [TagParticipant], uniqueId: String? = nil) {
+    public init(tagId: Int, tagParticipants: [TagParticipant], uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.tagId = tagId
         self.tagParticipants = tagParticipants
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 }

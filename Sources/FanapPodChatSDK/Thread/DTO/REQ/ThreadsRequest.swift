@@ -35,7 +35,8 @@ public class ThreadsRequest: UniqueIdManagerRequest, ChatSendable {
                 partnerCoreUserId: Int? = nil,
                 partnerCoreContactId: Int? = nil,
                 metadataCriteria: String? = nil,
-                uniqueId: String? = nil)
+                uniqueId: String? = nil,
+                typeCodeIndex: TypeCodeIndexProtocol.Index = 0)
     {
         self.count = count
         self.offset = offset
@@ -49,7 +50,7 @@ public class ThreadsRequest: UniqueIdManagerRequest, ChatSendable {
         self.creatorCoreUserId = creatorCoreUserId
         self.partnerCoreUserId = partnerCoreUserId
         self.partnerCoreContactId = partnerCoreContactId
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

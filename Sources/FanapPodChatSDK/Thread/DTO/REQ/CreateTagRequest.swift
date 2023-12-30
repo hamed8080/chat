@@ -10,9 +10,9 @@ public class CreateTagRequest: UniqueIdManagerRequest, ChatSendable {
     var content: String? { convertCodableToString() }
     var chatMessageType: ChatMessageVOTypes = .createTag
 
-    public init(tagName: String, uniqueId: String? = nil) {
+    public init(tagName: String, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         name = tagName
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

@@ -5,7 +5,7 @@
 // Created by Hamed Hosseini on 11/16/22
 
 import Foundation
-public class LocationMessageRequest: UniqueIdManagerRequest {
+public class LocationMessageRequest: UniqueIdManagerRequest, TypeCodeIndexProtocol {
     public let mapCenter: Cordinate
     public let mapHeight: Int
     public let mapType: String
@@ -32,7 +32,8 @@ public class LocationMessageRequest: UniqueIdManagerRequest {
                 repliedTo: Int? = nil,
                 systemMetadata: String? = nil,
                 textMessage: String? = nil,
-                uniqueId: String? = nil)
+                uniqueId: String? = nil,
+                typeCodeIndex: TypeCodeIndexProtocol.Index = 0)
     {
         self.mapCenter = mapCenter
         self.mapHeight = mapHeight
@@ -48,6 +49,6 @@ public class LocationMessageRequest: UniqueIdManagerRequest {
         self.userGroupHash = userGroupHash
 
         messageType = MessageType.picture
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 }

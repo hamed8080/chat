@@ -14,24 +14,24 @@ public class AddParticipantRequest: UniqueIdManagerRequest, ChatSendable, Subjec
     var chatMessageType: ChatMessageVOTypes = .addParticipant
     var content: String? { convertCodableToString() }
 
-    public init(userName: String, threadId: Int, uniqueId: String? = nil) {
+    public init(userName: String, threadId: Int, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         idType = .username
         id = userName
         self.threadId = threadId
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
-    public init(coreUserId: Int, threadId: Int, uniqueId: String? = nil) {
+    public init(coreUserId: Int, threadId: Int, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         idType = .coreUserId
         id = "\(coreUserId)"
         self.threadId = threadId
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
-    public init(contactIds: [Int], threadId: Int, uniqueId: String? = nil) {
+    public init(contactIds: [Int], threadId: Int, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.contactIds = contactIds
         self.threadId = threadId
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {

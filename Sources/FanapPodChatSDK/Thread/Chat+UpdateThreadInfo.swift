@@ -20,7 +20,8 @@ extension Chat {
             uploadImage(image, uploadProgress: uploadProgress) { [weak self] _, fileMetaData, error in
                 // send update thread Info with new file
                 if let error = error {
-                    completion(ChatResponse(uniqueId: request.uniqueId, result: nil, error: error))
+                    let typeCode = self?.config.typeCodes[image.typeCodeIndex].typeCode
+                    completion(ChatResponse(uniqueId: request.uniqueId, result: nil, error: error, typeCode: typeCode))
                 } else {
                     self?.updateThreadInfo(request, fileMetaData, completion)
                 }

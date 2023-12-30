@@ -28,7 +28,12 @@ public extension AsyncMessage {
     var subjectId: Int? { chatMessage?.subjectId }
 
     func toChatResponse<T: Decodable>() -> ChatResponse<T> {
-        ChatResponse(uniqueId: chatMessage?.uniqueId, result: decodeContent(), subjectId: chatMessage?.subjectId, time: chatMessage?.time)
+        ChatResponse(uniqueId: chatMessage?.uniqueId,
+                     result: decodeContent(),
+                     subjectId: chatMessage?.subjectId,
+                     time: chatMessage?.time,
+                     typeCode: chatMessage?.typeCode
+        )
     }
 
     /// There is two type  of decoding one with `Int` and another one with `MessageResponse.
@@ -46,7 +51,8 @@ public extension AsyncMessage {
                                                                       result: messageSent,
                                                                       error: idResponse.error,
                                                                       subjectId: idResponse.subjectId,
-                                                                      time: idResponse.time)
+                                                                      time: idResponse.time,
+                                                                      typeCode: idResponse.typeCode)
             return chatRes
         } else if messageResponse.result != nil {
             messageResponse.result?.messageState = state
@@ -54,7 +60,9 @@ public extension AsyncMessage {
                                                                       result: messageResponse.result,
                                                                       error: messageResponse.error,
                                                                       subjectId: messageResponse.subjectId,
-                                                                      time: messageResponse.time)
+                                                                      time: messageResponse.time,
+                                                                      typeCode: messageResponse.typeCode
+            )
             return chatRes
         } else {
             return nil

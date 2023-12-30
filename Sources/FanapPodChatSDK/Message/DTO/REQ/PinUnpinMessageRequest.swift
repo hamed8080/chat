@@ -13,10 +13,10 @@ public class PinUnpinMessageRequest: UniqueIdManagerRequest, ChatSendable, Subje
     var subjectId: Int { messageId }
     var content: String? { convertCodableToString() }
 
-    public init(messageId: Int, notifyAll: Bool = false, uniqueId: String? = nil) {
+    public init(messageId: Int, notifyAll: Bool = false, uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0) {
         self.messageId = messageId
         self.notifyAll = notifyAll
-        super.init(uniqueId: uniqueId)
+        super.init(uniqueId: uniqueId, typeCodeIndex: typeCodeIndex)
     }
 
     private enum CodingKeys: String, CodingKey {
