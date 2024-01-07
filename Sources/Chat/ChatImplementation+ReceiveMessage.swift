@@ -221,6 +221,8 @@ public extension ChatImplementation {
             (reaction as? ReactionManager)?.onDeleteReaction(asyncMessage)
         case .reactionCount:
             (reaction as? ReactionManager)?.onReactionCount(asyncMessage)
+        case .lastActionInThread:
+            (conversation as? ThreadManager)?.onLastActionInThread(asyncMessage)
         case .replyPrivately:
             /// This action will not trigger by the server it just a send request.
             break

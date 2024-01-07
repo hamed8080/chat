@@ -37,4 +37,5 @@ public enum ThreadEventTypes {
     /// The participant has been removed by the admin of the conversation.
     case userRemoveFormThread(ChatResponse<Int>)
     case lastSeenMessageUpdated(ChatResponse<LastSeenMessageResponse>)
+    case lastActions(ChatResponse<[LastActionInConversation]>)
 }

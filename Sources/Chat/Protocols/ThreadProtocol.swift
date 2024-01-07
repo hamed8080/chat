@@ -127,6 +127,11 @@ public protocol ThreadProtocol {
     /// - Parameters:
     ///   - request: The request can contain property to aggregate mute threads unread count.
     func allUnreadCount(_ request: AllThreadsUnreadCountRequest)
+
+    /// Get the last action inside the conversation whether it's reaction or a message.
+    /// - Parameters:
+    ///   - request: List of conversation IDs to fetch last actions.
+    func lastAction(_ request: LastActionInConversationRequest)
 }
 
 protocol InternalThreadProtocol: ThreadProtocol {
