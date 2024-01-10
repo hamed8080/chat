@@ -25,12 +25,12 @@ public final class AsyncManager: AsyncDelegate {
     /// Async client.
     public var asyncClient: Async?
 
-    /// Last message date that was received from the server to manage ping status.
-    private var lastSentMessageDate: Date? = Date()
-
     /// A timer to check the connection status every 20 seconds.
     private(set) var pingTimer: TimerProtocol
     private(set) var queueTimer: TimerProtocol
+    /// Private concurrent queue to call ping timer.
+    /// The timer will be cnceld on receive a new message.
+    private let concurrentQueue = DispatchQueue(label: "AsyncManagerQueue", attributes: .concurrent)
 
     /// This queue will live till application is running and this class is in memory, be careful it's not persistent on storage.
     private var queue: [String: QueueableWithType] = [:]
@@ -55,6 +55,7 @@ public final class AsyncManager: AsyncDelegate {
     /// A delegate method that receives a message.
     public func asyncMessage(asyncMessage: AsyncMessage) {
         chat?.invokeCallback(asyncMessage: asyncMessage)
+        schedulePingTimer()
         if let ban = asyncMessage.banError {
             scheduleForResendQueues(ban)
         } else {
@@ -69,7 +70,7 @@ public final class AsyncManager: AsyncDelegate {
         if asyncState == .asyncReady {
             (chat?.user as? UserManager)?.getUserForChatReady()
         } else if asyncState == .closed {
-            pingTimer.invalidateTimer()
+            cancelPingTimer()
             logger?.createLog(message: "Socket Disconnected", persist: false, level: LogLevel.error, type: .received)
             (chat?.reaction.inMemoryReaction as? InMemoryReaction)?.invalidate()
         }
@@ -89,7 +90,7 @@ public final class AsyncManager: AsyncDelegate {
     public func disposeObject() {
         asyncClient?.disposeObject()
         asyncClient = nil
-        pingTimer.invalidateTimer()
+        cancelPingTimer()
         queueTimer.invalidateTimer()
     }
 
@@ -100,7 +101,7 @@ public final class AsyncManager: AsyncDelegate {
         addToQueue(sendable: sendable, type: type)
         addToPaginateable(sendable: sendable)
         sendToAsync(asyncMessage: AsyncChatServerMessage(chatMessage: chatMessage), type: type)
-        sendPingTimer()
+        schedulePingTimer()
     }
 
     private func addToQueue(sendable: ChatSendable, type: ChatMessageVOTypes) {
@@ -170,13 +171,15 @@ public final class AsyncManager: AsyncDelegate {
     }
 
     /// A timer that repeats ping the `Chat server` every 20 seconds.
-    internal func sendPingTimer() {
-        pingTimer.invalidateTimer()
-        pingTimer = pingTimer.scheduledTimer(interval: 20, repeats: true) { [weak self] _ in
+    internal func schedulePingTimer() {
+        concurrentQueue.asyncWork { [weak self] in
             guard let self = self else { return }
-            if let lastSentMessageDate = self.lastSentMessageDate, Date().timeIntervalSince1970 - (lastSentMessageDate.timeIntervalSince1970 + 20) > 20 {
+            cancelPingTimer()
+            pingTimer = Timer.scheduledTimer(withTimeInterval: 20, repeats: false) { [weak self] _ in
+                guard let self = self else { return }
                 self.sendChatServerPing()
             }
+            RunLoop.current.run()
         }
     }
 
@@ -198,5 +201,9 @@ public final class AsyncManager: AsyncDelegate {
     /// On Async SDK log. It is needed for times that client applications need to collect logs of the async SDK.
     public func onLog(log: Log) {
         logger?.delegate?.onLog(log: log)
+    }
+
+    private func cancelPingTimer() {
+        pingTimer.invalidateTimer()
     }
 }

@@ -70,7 +70,7 @@ final class UserManager: UserProtocol, InternalUserProtocol {
             // it mean chat was connected before and reconnected again
             chat.delegate?.chatState(state: .chatReady, currentUser: chat.userInfo, error: nil)
             chat.asyncManager.sendQueuesOnReconnect()
-            chat.asyncManager.sendPingTimer()
+            chat.asyncManager.schedulePingTimer()
         }
     }
 
