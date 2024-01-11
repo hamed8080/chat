@@ -26,11 +26,8 @@ public final class AsyncManager: AsyncDelegate {
     public var asyncClient: Async?
 
     /// A timer to check the connection status every 20 seconds.
-    private(set) var pingTimer: TimerProtocol
-    private(set) var queueTimer: TimerProtocol
-    /// Private concurrent queue to call ping timer.
-    /// The timer will be cnceld on receive a new message.
-    private let concurrentQueue = DispatchQueue(label: "AsyncManagerQueue", attributes: .concurrent)
+    private(set) var pingTimer: SourceTimer
+    private(set) var queueTimer: SourceTimer
 
     /// This queue will live till application is running and this class is in memory, be careful it's not persistent on storage.
     private var queue: [String: QueueableWithType] = [:]
@@ -39,7 +36,7 @@ public final class AsyncManager: AsyncDelegate {
     /// Because if we have count we can estimate that  a response is at the end or not.
     private var paginateables: [String: (count: Int, offset: Int)] = [:]
 
-    public init(pingTimer: TimerProtocol, queueTimer: TimerProtocol) {
+    public init(pingTimer: SourceTimer, queueTimer: SourceTimer) {
         self.pingTimer = pingTimer
         self.queueTimer = queueTimer
     }
@@ -91,7 +88,7 @@ public final class AsyncManager: AsyncDelegate {
         asyncClient?.disposeObject()
         asyncClient = nil
         cancelPingTimer()
-        queueTimer.invalidateTimer()
+        queueTimer.cancel()
     }
 
     /// The sendData delegate will inform if a send event occurred by the async socket.
@@ -150,7 +147,8 @@ public final class AsyncManager: AsyncDelegate {
         var interval: TimeInterval = 0
         queue.sorted { $0.value.queueable.queueTime < $1.value.queueable.queueTime }.forEach { _, item in
             if let sendable = item.queueable as? ChatSendable {
-                queueTimer.scheduledTimer(interval: interval + 2, repeats: false) { [weak self] _ in
+                queueTimer = SourceTimer()
+                queueTimer.start(duration: interval + 2) { [weak self] in
                     self?.sendData(sendable: sendable, type: item.type)
                 }
             }
@@ -172,14 +170,11 @@ public final class AsyncManager: AsyncDelegate {
 
     /// A timer that repeats ping the `Chat server` every 20 seconds.
     internal func schedulePingTimer() {
-        concurrentQueue.asyncWork { [weak self] in
+        cancelPingTimer()
+        pingTimer = SourceTimer()
+        pingTimer.start(duration: 20){ [weak self] in
             guard let self = self else { return }
-            cancelPingTimer()
-            pingTimer = Timer.scheduledTimer(withTimeInterval: 20, repeats: false) { [weak self] _ in
-                guard let self = self else { return }
-                self.sendChatServerPing()
-            }
-            RunLoop.current.run()
+            sendChatServerPing()
         }
     }
 
@@ -204,6 +199,6 @@ public final class AsyncManager: AsyncDelegate {
     }
 
     private func cancelPingTimer() {
-        pingTimer.invalidateTimer()
+        pingTimer.cancel()
     }
 }

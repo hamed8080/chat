@@ -47,8 +47,8 @@ public final class ChatImplementation: ChatInternalProtocol, Identifiable {
     public var callDelegate: WebRTCClientDelegate?
 
     public init(config: ChatConfig,
-                pingTimer: TimerProtocol = Timer(),
-                queueTimer: TimerProtocol = Timer(),
+                pingTimer: SourceTimer = SourceTimer(),
+                queueTimer: SourceTimer = SourceTimer(),
                 banTimer: TimerProtocol = Timer(),
                 session: URLSessionProtocol = URLSession.shared,
                 callDelegate: WebRTCClientDelegate? = nil

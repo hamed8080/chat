@@ -16,8 +16,8 @@ import Logger
 public protocol Chat {
     init(
         config: ChatConfig,
-        pingTimer: TimerProtocol,
-        queueTimer: TimerProtocol,
+        pingTimer: SourceTimer,
+        queueTimer: SourceTimer,
         banTimer: TimerProtocol,
         session: URLSessionProtocol,
         callDelegate: WebRTCClientDelegate?
