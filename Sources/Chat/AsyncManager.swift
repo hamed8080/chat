@@ -25,6 +25,7 @@ public final class AsyncManager: AsyncDelegate {
     /// Async client.
     public var asyncClient: Async?
 
+    private var serialQueue = DispatchQueue(label: "CHAT_ASYNC_MANAGER_QUEUE", qos: .utility)
     /// A timer to check the connection status every 20 seconds.
     private(set) var pingTimer: SourceTimer
     private(set) var queueTimer: SourceTimer
@@ -51,12 +52,15 @@ public final class AsyncManager: AsyncDelegate {
 
     /// A delegate method that receives a message.
     public func asyncMessage(asyncMessage: AsyncMessage) {
-        chat?.invokeCallback(asyncMessage: asyncMessage)
-        schedulePingTimer()
-        if let ban = asyncMessage.banError {
-            scheduleForResendQueues(ban)
-        } else {
-            removeFromQueue(asyncMessage: asyncMessage)
+        serialQueue.asyncWork { [weak self] in
+            guard let self = self else { return }
+            chat?.invokeCallback(asyncMessage: asyncMessage)
+            schedulePingTimer()
+            if let ban = asyncMessage.banError {
+                scheduleForResendQueues(ban)
+            } else {
+                removeFromQueue(asyncMessage: asyncMessage)
+            }
         }
     }
 
@@ -98,7 +102,6 @@ public final class AsyncManager: AsyncDelegate {
         addToQueue(sendable: sendable, type: type)
         addToPaginateable(sendable: sendable)
         sendToAsync(asyncMessage: AsyncChatServerMessage(chatMessage: chatMessage), type: type)
-        schedulePingTimer()
     }
 
     private func addToQueue(sendable: ChatSendable, type: ChatMessageVOTypes) {
