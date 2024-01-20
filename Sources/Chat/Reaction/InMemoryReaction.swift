@@ -142,8 +142,10 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
 
     func onAdd(_ response: ChatResponse<ReactionMessageResponse>) {
         if let messageId = response.result?.messageId {
+            let reaction = response.result?.reaction
             let index = findOrCreateIndex(messageId)
-            reactions[index].addOrReplaceSummaryCount(sticker: response.result?.reaction?.reaction ?? Sticker.unknown)
+            reactions[index].addOrReplaceSummaryCount(sticker: reaction?.reaction ?? Sticker.unknown)
+            reactions[index].details.append(.init(id: reaction?.id, reaction: reaction?.reaction, participant: reaction?.participant, time: reaction?.time))
             setUserReaction(index: index, action: response.result)
             chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messageId: messageId)))
         }
@@ -164,6 +166,7 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
     func onDelete(_ response: ChatResponse<ReactionMessageResponse>) {
         guard let result = response.result, let index = indexOfMessageId(result.messageId) else { return }
         reactions[index].deleteSummaryCount(sticker: result.reaction?.reaction ?? Sticker.unknown)
+        reactions[index].details.removeAll(where: {$0.participant?.id == result.reaction?.participant?.id})
         removeCurrentUserReaction(index: index, action: result)
         chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messageId: result.messageId ?? 0)))
     }
