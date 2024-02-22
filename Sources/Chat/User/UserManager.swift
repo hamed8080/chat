@@ -88,7 +88,7 @@ final class UserManager: UserProtocol, InternalUserProtocol {
         guard let uniqueId = response.uniqueId, requests[uniqueId] != nil else { return }
         requests.removeValue(forKey: uniqueId)
         if let user = response.result {
-            chat.cache?.user?.insert(user, isMe: true)
+            chat.cache?.user?.insertOnMain(user, isMe: true)
             chat.userInfo = user
             (chat as? ChatImplementation)?.state = .chatReady
             chat.delegate?.chatEvent(event: .user(.user(.init(result: user))))
@@ -109,7 +109,7 @@ final class UserManager: UserProtocol, InternalUserProtocol {
     func onUserInfo(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<User> = asyncMessage.toChatResponse()
         if let user = response.result {
-            chat.cache?.user?.insert(user)
+            chat.cache?.user?.insertOnMain(user)
         }
         onInternalUser(response: response)
         chat.delegate?.chatEvent(event: .system(.serverTime(.init(uniqueId: response.uniqueId, result: response.time, time: response.time))))

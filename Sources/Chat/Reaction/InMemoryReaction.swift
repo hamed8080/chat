@@ -53,7 +53,7 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
         }
     }
 
-    func listOfReactionCount(_ messageIds: [Int]) -> [ReactionCountList] {
+    private func listOfReactionCount(_ messageIds: [Int]) -> [ReactionCountList] {
         messageIds
             .compactMap { messageId in
                 ReactionCountList(messageId: messageId, reactionCounts: summary(for: messageId))
@@ -61,7 +61,7 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
     }
 
     /// Generate list of messageIds where they are available in memory.
-    func inMemoryMessageIds(_ messageIds: [Int]) -> [Int] {
+    private func inMemoryMessageIds(_ messageIds: [Int]) -> [Int] {
         let cachedMessageIds = reactions.map{$0.messageId}
         return messageIds
             .filter { requestMessageId in
@@ -70,7 +70,7 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
     }
 
     /// Generate list of messageIds where they are not available in memory.
-    func notInMemoryMessageIds(_ messageIds: [Int]) -> [Int] {
+    private func notInMemoryMessageIds(_ messageIds: [Int]) -> [Int] {
         let cachedMessageIds = reactions.map{$0.messageId}
         return messageIds
             .filter { requestMessageId in
@@ -112,7 +112,7 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
         }
     }
 
-    func setUserReaction(_ list: ReactionCountList) {
+    private func setUserReaction(_ list: ReactionCountList) {
         if let userReaction = list.userReaction, let index = indexOfMessageId(list.messageId ?? 0) {
             reactions[index].currentUserReaction = userReaction
         }
@@ -171,19 +171,19 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
         chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messageId: result.messageId ?? 0)))
     }
 
-    func removeCurrentUserReaction(index: Int, action: ReactionMessageResponse) {
+    private func removeCurrentUserReaction(index: Int, action: ReactionMessageResponse) {
         if chat.userInfo?.id == action.reaction?.participant?.id {
             reactions[index].currentUserReaction = nil
         }
     }
 
-    func setUserReaction(index: Int, action: ReactionMessageResponse?) {
+    private func setUserReaction(index: Int, action: ReactionMessageResponse?) {
         if chat.userInfo?.id == action?.reaction?.participant?.id, let reaction = action?.reaction {
             reactions[index].currentUserReaction = reaction
         }
     }
 
-    func findOrCreateIndex(_ messageId: Int) -> Int {
+    private func findOrCreateIndex(_ messageId: Int) -> Int {
         if let index = indexOfMessageId(messageId) {
             return index
         } else {
@@ -192,7 +192,7 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
         }
     }
 
-    func indexOfMessageId(_ messageId: Int?) -> Int? {
+    private func indexOfMessageId(_ messageId: Int?) -> Int? {
         reactions.firstIndex(where: { $0.messageId == messageId })
     }
 
