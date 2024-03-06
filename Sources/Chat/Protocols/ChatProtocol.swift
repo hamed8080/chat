@@ -64,6 +64,7 @@ public protocol Chat {
 }
 
 public protocol ChatInternalProtocol: Chat {
+    var coordinator: ChatCoordinator { get set }
     /// A timer that will retry if the user rapidly tries to send action to the chat server.
     /// Chat server usually bans the user if it sends more than 3 requests in less than a second.
     var banTimer: TimerProtocol { get set }

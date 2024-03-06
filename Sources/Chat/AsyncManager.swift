@@ -73,7 +73,7 @@ public final class AsyncManager: AsyncDelegate {
         } else if asyncState == .closed {
             cancelPingTimer()
             logger?.createLog(message: "Socket Disconnected", persist: false, level: LogLevel.error, type: .received)
-            (chat?.reaction.inMemoryReaction as? InMemoryReaction)?.invalidate()
+            chat?.coordinator.invalidate()
         }
     }
 

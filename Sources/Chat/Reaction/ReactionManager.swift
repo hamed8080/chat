@@ -20,7 +20,7 @@ final class ReactionManager: ReactionProtocol {
 
     init(chat: ChatInternalProtocol) {
         self.chat = chat
-        inMemoryReaction = InMemoryReaction(chat: chat)
+        inMemoryReaction = chat.coordinator.reaction
     }
 
     func reaction(_ request: UserReactionRequest) {

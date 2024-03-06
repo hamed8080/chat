@@ -25,6 +25,7 @@ public final class ChatImplementation: ChatInternalProtocol, Identifiable {
     public lazy var assistant: AssistantProtocol = AssistantManager(chat: self)
     public lazy var system: SystemProtocol = SystemManager(chat: self)
     public lazy var reaction: ReactionProtocol = ReactionManager(chat: self)
+    public lazy var coordinator: ChatCoordinator = ChatCoordinator(chat: self)
 
     public var id: UUID = .init()
     public var config: ChatConfig

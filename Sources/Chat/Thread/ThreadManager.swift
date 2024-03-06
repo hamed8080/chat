@@ -10,6 +10,7 @@ import ChatCore
 import ChatDTO
 import ChatModels
 import Foundation
+import ChatExtensions
 
 final class ThreadManager: ThreadProtocol {
     let chat: ChatInternalProtocol
@@ -77,19 +78,13 @@ final class ThreadManager: ThreadProtocol {
     }
 
     func get(_ request: ThreadsRequest) {
-        chat.prepareToSendAsync(req: request, type: .getThreads)
-        cache?.conversation?.fetch(request.fetchRequest) { [weak self] threads, totalCount in
-            let threads = threads.map { $0.codable() }
-            let hasNext = totalCount >= request.count
-            let response = ChatResponse(uniqueId: request.uniqueId, result: threads, hasNext: hasNext, cache: true)
-            self?.delegate?.chatEvent(event: .thread(.threads(response)))
-        }
+        chat.coordinator.conversation.get(request)
     }
 
     func onThreads(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Conversation]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)
-        delegate?.chatEvent(event: .thread(.threads(response)))
-        cache?.conversation?.insert(models: response.result ?? [])
+        chat.delegate?.chatEvent(event: .thread(.threads(response)))
+        chat.coordinator.conversation.onFetchedThreads(response)
     }
 
     func isNameAvailable(_ request: IsThreadNamePublicRequest) {
@@ -165,10 +160,13 @@ final class ThreadManager: ThreadProtocol {
 
     func onPinUnPinThread(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Int> = asyncMessage.toChatResponse()
-        let threadResponse = ChatResponse(uniqueId: response.uniqueId, result: Conversation(id: response.result), subjectId: response.subjectId, time: response.time)
+        let conversationId = response.result ?? -1
+        let c = Conversation(id: conversationId).copy
+        let threadResponse = ChatResponse(uniqueId: response.uniqueId, result: Conversation(id: conversationId), subjectId: response.subjectId, time: response.time)
         let pinned = asyncMessage.chatMessage?.type == .pinThread
+        chat.coordinator.conversation.onPinUnPin(pin: pinned, conversationId)
         delegate?.chatEvent(event: .thread(pinned ? .pin(threadResponse) : .unpin(threadResponse)))
-        cache?.conversation?.pin(asyncMessage.chatMessage?.type == .pinThread, response.subjectId ?? -1)
+        cache?.conversation?.pin(asyncMessage.chatMessage?.type == .pinThread, conversationId)
     }
 
     func mutual(_ request: MutualGroupsRequest) {
