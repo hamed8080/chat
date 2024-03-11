@@ -83,7 +83,7 @@ final class ThreadManager: ThreadProtocol {
 
     func onThreads(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Conversation]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)
-        chat.delegate?.chatEvent(event: .thread(.threads(response)))
+
         chat.coordinator.conversation.onFetchedThreads(response)
     }
 
@@ -146,6 +146,7 @@ final class ThreadManager: ThreadProtocol {
         var response: ChatResponse<Int> = asyncMessage.toChatResponse()
         /// Do not remove this line. In the server response, there is no Int value when the user is removed by the admin of a thread.
         response.result = response.subjectId
+        chat.coordinator.conversation.onDeleteConversation(response.subjectId ?? response.result)
         delegate?.chatEvent(event: .thread(.userRemoveFormThread(response)))
         cache?.conversation?.delete(response.result ?? -1)
     }
@@ -161,7 +162,6 @@ final class ThreadManager: ThreadProtocol {
     func onPinUnPinThread(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Int> = asyncMessage.toChatResponse()
         let conversationId = response.result ?? -1
-        let c = Conversation(id: conversationId).copy
         let threadResponse = ChatResponse(uniqueId: response.uniqueId, result: Conversation(id: conversationId), subjectId: response.subjectId, time: response.time)
         let pinned = asyncMessage.chatMessage?.type == .pinThread
         chat.coordinator.conversation.onPinUnPin(pin: pinned, conversationId)
@@ -196,7 +196,9 @@ final class ThreadManager: ThreadProtocol {
 
     func onMuteUnMuteThread(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Int> = asyncMessage.toChatResponse()
+        let conversationId = response.result ?? -1
         let mute = asyncMessage.chatMessage?.type == .muteThread
+        chat.coordinator.conversation.onMuteOnMute(mute: mute, conversationId)
         delegate?.chatEvent(event: .thread(mute ? .mute(response) : .unmute(response)))
         cache?.conversation?.mute(asyncMessage.chatMessage?.type == .muteThread, response.subjectId ?? -1)
     }
@@ -211,6 +213,7 @@ final class ThreadManager: ThreadProtocol {
         delegate?.chatEvent(event: .thread(.activity(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         cache?.participant?.delete([Participant(id: response.result?.id)], response.subjectId ?? -1)
         if response.result?.id == chat.userInfo?.id, let threadId = response.subjectId {
+            chat.coordinator.conversation.onDeleteConversation(threadId)
             cache?.conversation?.delete(threadId)
         }
     }
@@ -236,6 +239,7 @@ final class ThreadManager: ThreadProtocol {
 
     func onJoinThread(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
+        chat.coordinator.conversation.onJoined(conversation: response.result)
         delegate?.chatEvent(event: .thread(.joined(response)))
     }
 
@@ -245,6 +249,7 @@ final class ThreadManager: ThreadProtocol {
 
     func onDeleteThread(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Participant> = asyncMessage.toChatResponse()
+        chat.coordinator.conversation.onDeleteConversation(response.subjectId)
         delegate?.chatEvent(event: .thread(.deleted(response)))
         delegate?.chatEvent(event: .thread(.activity(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         cache?.conversation?.delete(response.subjectId ?? -1)
@@ -271,6 +276,7 @@ final class ThreadManager: ThreadProtocol {
 
     func onCreateThread(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
+        chat.coordinator.conversation.onCreateConversation(response.result)
         delegate?.chatEvent(event: .thread(.created(response)))
         cache?.conversation?.insert(models: [response.result].compactMap { $0 })
         sendTextMessage(response)
@@ -286,6 +292,7 @@ final class ThreadManager: ThreadProtocol {
     /// Create thread and Send a text message and then upload a file.
     func onNewMessage(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Message> = asyncMessage.toChatResponse()
+        chat.coordinator.conversation.onNewMessage(response.result)
         if let uniqueId = response.uniqueId, let request = requests[uniqueId] as? UploadFileRequest {
             chat.file.upload(request)
         }
@@ -297,6 +304,7 @@ final class ThreadManager: ThreadProtocol {
 
     func onCloseThread(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Int> = asyncMessage.toChatResponse()
+        chat.coordinator.conversation.onClosed(response.result)
         delegate?.chatEvent(event: .thread(.closed(response)))
         cache?.conversation?.close(true, response.result ?? -1)
     }
@@ -308,6 +316,7 @@ final class ThreadManager: ThreadProtocol {
     func onChangeThreadType(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
         cache?.conversation?.changeThreadType(response.result?.id ?? -1, response.result?.type ?? .unknown)
+        chat.coordinator.conversation.onChangeConversationType(response.result)
         delegate?.chatEvent(event: .thread(.changedType(response)))
     }
 
@@ -323,6 +332,7 @@ final class ThreadManager: ThreadProtocol {
         let response: ChatResponse<Int> = asyncMessage.toChatResponse()
         let archived = asyncMessage.chatMessage?.type == .archiveThread
         cache?.conversation?.archive(archived, response.subjectId ?? -1)
+        chat.coordinator.conversation.onArchiveUnArchive(archive: archived, id: response.result)
         delegate?.chatEvent(event: .thread(archived ? .archive(response) : .unArchive(response)))
     }
 

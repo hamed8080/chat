@@ -42,6 +42,7 @@ final class ParticipantManager: ParticipantProtocol {
     func onRemoveParticipants(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Participant]> = asyncMessage.toChatResponse()
         chat.cache?.participant?.delete(response.result ?? [], response.subjectId ?? -1)
+        chat.coordinator.conversation.onRemovedParticipants(response.subjectId, count: response.result?.count ?? 0)
         chat.delegate?.chatEvent(event: .participant(.deleted(response)))
         chat.delegate?.chatEvent(event: .thread(.activity(.init(result: .init(time: response.time, threadId: response.subjectId)))))
     }
@@ -53,6 +54,7 @@ final class ParticipantManager: ParticipantProtocol {
     func onAddParticipant(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
         guard let thread = response.result else { return }
+        chat.coordinator.conversation.onAddParticipant(response.subjectId, count: response.result?.participantCount ?? 0)
         chat.cache?.participant?.insert(model: thread)
         chat.delegate?.chatEvent(event: .thread(.threads(.init(result: [thread]))))
         chat.delegate?.chatEvent(event: .participant(.add(response)))

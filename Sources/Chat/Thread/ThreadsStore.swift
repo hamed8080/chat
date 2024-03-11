@@ -9,96 +9,70 @@ import ChatDTO
 import Foundation
 import ChatCore
 import Additive
+import ChatExtensions
 
-
-protocol InMemoryConversationOperations {
-    associatedtype T: InMemoryConversation
-
-    // In Memory operations
-    func get(_ request: ThreadsRequest)
-    func hasRange(offset: Int, count: Int) -> Bool
-    func store(_ conversations: [Conversation], request: ThreadsRequest)
-    func append(_ conversation: T)
-    func remove(_ convesation: T)
-    func remove(_ convesationId: T.ID)
-    func update(_ conversation: T)
-    func indexOf(_ conversationId: T.ID) -> Array<T>.Index?
-    func contains(_ conversationId: T.ID) -> Bool
-    func emit(_ conversations: [T], _ uniqueId: String, _ hasNext: Bool)
-    func makeEmptySlots(_ request: ThreadsRequest)
-    func makeEmptySlot(for: Conversation.ID, at: Array<T>.Index)
-    func emptySlot(id: Conversation.ID)
-}
-
-protocol ServerConversationOperations {
-    // Server operations
-    func fetch(request: ThreadsRequest)
-    func onFetchedThreads(_ response: ChatResponse<[Conversation]>)
-    func request(for uniqueId: String) -> ChatDTO.UniqueIdProtocol?
-    func requestsContains(uniqueId: String) -> Bool
-    func storePinThreads(_ conversations: [Conversation])
-    func onPinUnPin(pin: Bool, _ conversationId: Conversation.ID)
-}
-
-protocol DBConversationOPerations {
-    // Core Data operations
-    func storeInDB(_ conversations: [Conversation])
-}
-
-protocol ThreadStoreProtocol: InMemoryConversationOperations, ServerConversationOperations, DBConversationOPerations {
-    var conversations: ContiguousArray<T> { get set }
-    var serverSortedPins: [Int] { get }
-    var offset: Int { get set }
-    var requests: [ChatDTO.UniqueIdProtocol] { get set }
-    var chat: ChatInternalProtocol { get }
-    init(chat: ChatInternalProtocol)
-    func invalidate()
-}
-
-class InMemoryConversation: Identifiable {
+internal final class InMemoryConversation: Identifiable {
     var id: Conversation.ID?
     var conversation: Conversation?
     var isEmptySlot: Bool { conversation == nil }
+}
+
+internal struct ThreadsRequestWrapper {
+    let key: String
+    let request: ThreadsRequest
+    let originalRequest: ThreadsRequest
 }
 
 internal final class ThreadsStore: ThreadStoreProtocol {
     var conversations = ContiguousArray<InMemoryConversation>()
     var serverSortedPins: [Int] = []
     var offset: Int = 0
-    var requests: [ChatDTO.UniqueIdProtocol] = []
+    var requests: [ThreadsRequestWrapper] = []
     var chat: ChatInternalProtocol
 
     init(chat: ChatInternalProtocol) {
         self.chat = chat
     }
 
-    // Input(offset: 0, count: 20) -> false
     func get(_ request: ThreadsRequest) {
-        if request.threadIds?.isEmpty == false {
+        if !request.isCacheRequest {
             fetch(request: request)
             return
         }
+
+        if request.cache == false {
+            invalidate()
+        }
+
         if hasRange(offset: request.offset, count: request.count) {
-            let nsrange = NSRange(location: request.offset, length: request.count)
-            let range = Range(nsrange)!
-            let conversations = conversations[range]
-            emit(Array(conversations), request.uniqueId, true)
+            respondByInMemory(request)
+        } else if hasSomeSlots(request) {
+            fetchUnavailableSlots(request: request)
         } else {
             makeEmptySlots(request)
-            fetch(request: request)
+            getCompleteOffset(request: request)
         }
     }
 
-    // Input(offset: 0, count: 20) -> false
-    // Input(offset: 20, count: 25) -> false
-    // Input(offset: 0, count: 10) -> true
-    // Input(offset: 0, count: 24) -> true
-    func hasRange(offset: Int, count: Int) -> Bool {
-        conversations.count > offset && conversations.count > offset + count
+    func respondByInMemory(_ request: ThreadsRequest) {
+        let nsrange = NSRange(location: request.offset, length: request.count)
+        let range = Range(nsrange)!
+        let conversations = conversations[range]
+        emit(Array(conversations), request.uniqueId, true)
     }
 
-    /// Make 0...24 slot = offset = 0 count = 25
-    /// Make 25...49 slot = offset = 25 count = 25
+    func hasRange(offset: Int, count: Int) -> Bool {
+        conversations.count >= offset && conversations.count >= offset + count
+    }
+
+    func hasSomeSlots(_ request: ThreadsRequest) -> Bool {
+        return conversations.count > request.offset
+    }
+
+    func numberOfUnavailableSlots(_ request: ThreadsRequest) -> Int? {
+        return request.count - conversations.count
+    }
+
     func makeEmptySlots(_ request: ThreadsRequest) {
         let lastIndex = max(0, conversations.count - 1)
         let range = lastIndex..<(lastIndex + request.count)
@@ -140,6 +114,16 @@ internal final class ThreadsStore: ThreadStoreProtocol {
         conversations.append(conversation)
     }
 
+    func appendAndSortIntoInMemory(conversations: [Conversation]) {
+        conversations.forEach { conversation in
+            let inMemory = InMemoryConversation()
+            inMemory.conversation = conversation.copy
+            inMemory.id = conversation.id
+            self.conversations.append(inMemory)
+        }
+        sort()
+    }
+
     func remove(_ convesation: InMemoryConversation) {
         conversations.removeAll(where: {$0.id == convesation.id})
     }
@@ -166,6 +150,45 @@ internal final class ThreadsStore: ThreadStoreProtocol {
         chat.cache?.conversation?.insert(models: conversations)
     }
 
+    func requestsContains(uniqueId: String) -> Bool {
+        requests.contains(where: {$0.request.uniqueId == uniqueId})
+    }
+
+    func request(for uniqueId: String, key: String) -> ThreadsRequestWrapper? {
+        requests.first(where: {$0.request.uniqueId == uniqueId && $0.key == key})
+    }
+
+    func onFetchedThreads(_ response: ChatResponse<[Conversation]>) {
+        guard let uniqueId = response.uniqueId else { return }
+        if let completeOffsetRequest = request(for: uniqueId, key: "GET-COMPLETE-OFFSET") {
+            onGetCompleteOffset(response, completeOffsetRequest)
+        } else if let unavilableRequest = request(for: uniqueId, key: "GET-UNAVAILABLE-OFFSETS") {
+            onGetUnavailableOffsets(response, unavilableRequest)
+        } else {
+            // Search in threads or requsts with threadIds
+            // It is need to update the conversation for example if a new message comes from the bottom parts
+            // We should wait for the client to request for that thread
+            // Once the result has arrived we can update our in memory and fill it.
+            response.result?.forEach{ conversation in
+                if let index = indexOf(conversation.id) {
+                    conversations[index].conversation = conversation.copy
+                }
+            }
+            chat.delegate?.chatEvent(event: .thread(.threads(response)))
+        }
+    }
+
+    func getCompleteOffset(request: ThreadsRequest) {
+        chat.cache?.conversation?.fetch(request.fetchRequest) { [weak self] threads, totalCount in
+            let threads = threads.map { $0.codable() }
+            let hasNext = totalCount >= request.count
+            let response = ChatResponse(uniqueId: request.uniqueId, result: threads, hasNext: hasNext, cache: true)
+            self?.chat.delegate?.chatEvent(event: .thread(.threads(response)))
+        }
+        requests.append(.init(key: "GET-COMPLETE-OFFSET", request: request, originalRequest: request))
+        chat.prepareToSendAsync(req: request, type: .getThreads)
+    }
+
     func fetch(request: ThreadsRequest) {
         chat.cache?.conversation?.fetch(request.fetchRequest) { [weak self] threads, totalCount in
             let threads = threads.map { $0.codable() }
@@ -173,39 +196,48 @@ internal final class ThreadsStore: ThreadStoreProtocol {
             let response = ChatResponse(uniqueId: request.uniqueId, result: threads, hasNext: hasNext, cache: true)
             self?.chat.delegate?.chatEvent(event: .thread(.threads(response)))
         }
-        requests.append(request)
         chat.prepareToSendAsync(req: request, type: .getThreads)
     }
 
-    func requestsContains(uniqueId: String) -> Bool {
-        requests.contains(where: {$0.uniqueId == uniqueId})
-    }
-
-    func request(for uniqueId: String) -> ChatDTO.UniqueIdProtocol? {
-        requests.first(where: {$0.uniqueId == uniqueId})
-    }
-
-    func onFetchedTop(_ response: ChatResponse<[Conversation]>) {
-        response.result?.forEach{ conversation in
-            if let index = indexOf(conversation.id) {
-                conversations[index].conversation = conversation
-            }
-        }
-    }
-
-    func onFetchedThreads(_ response: ChatResponse<[Conversation]>) {
+    private func onGetCompleteOffset(_ response: ChatResponse<[Conversation]>,_ request: ThreadsRequestWrapper) {
         guard let uniqueId = response.uniqueId else { return }
-        let request = request(for: uniqueId)
-        guard let request = request else {
-            onFetchedTop(response)
-            return
-        }
-        if let conversations = response.result, request != nil {
-            store(conversations, request: request as! ThreadsRequest)
+        if let conversations = response.result?.compactMap({$0.copy}) {
+            store(conversations, request: request.originalRequest)
             storePinThreads(conversations)
-            requests.removeAll(where: {$0.uniqueId == uniqueId})
+            requests.removeAll(where: {$0.request.uniqueId == uniqueId})
             storeInDB(conversations)
-        }        
+        }
+        chat.delegate?.chatEvent(event: .thread(.threads(response)))
+    }
+
+    func fetchUnavailableSlots(request: ThreadsRequest) {
+        guard let count = numberOfUnavailableSlots(request) else { return }
+        let newReq = request.copyWith(count: count, offset: conversations.count)
+        requests.append(.init(key: "GET-UNAVAILABLE-OFFSETS", request: newReq, originalRequest: request))
+        chat.prepareToSendAsync(req: newReq, type: .getThreads)
+    }
+
+    private func onGetUnavailableOffsets(_ response: ChatResponse<[Conversation]>, _ request: ThreadsRequestWrapper) {
+        guard let uniqueId = response.uniqueId else { return }
+        let conversations = response.result?.compactMap{$0.copy} ?? []
+        appendAndSortIntoInMemory(conversations: conversations)
+        requests.removeAll(where: {$0.request.uniqueId == uniqueId})
+        storeInDB(conversations)
+        let hasNext = request.request.count == conversations.count
+        let startIndex = request.originalRequest.offset
+        let length = request.originalRequest.count
+        let endIndex = startIndex + length
+        let nsRange = NSRange(location: startIndex, length: length)
+        if let range = Range(nsRange), startIndex < endIndex, self.conversations.count >= endIndex {
+            let mergedConversations = self.conversations[range]
+            emit(Array(mergedConversations), request.originalRequest.uniqueId, hasNext)
+        } else {
+            // There were no bottom part client requested we have to repond with available threads.
+            let startIndex = request.originalRequest.offset
+            let endIndex = self.conversations.count - 1
+            let conversations = self.conversations[startIndex...endIndex]
+            emit(Array(conversations), request.originalRequest.uniqueId, hasNext)
+        }
     }
 
     func storePinThreads(_ conversations: [Conversation]) {
@@ -223,9 +255,78 @@ internal final class ThreadsStore: ThreadStoreProtocol {
         if pin {
             serverSortedPins.insert(conversationId, at: 0)
             fetchPinnedIfIsNotInList(conversationId)
+            sort()
         } else {
             serverSortedPins.removeAll(where: {$0 == conversationId})
             moveToProperPositionAfterUnPin(conversationId)
+        }
+    }
+
+    func onMuteOnMute(mute: Bool, _ conversationId: Conversation.ID) {
+        guard let conversationId = conversationId else { return }
+        if let index = indexOf(conversationId) {
+            conversations[index].conversation?.mute = mute;
+        }
+    }
+
+    func onJoined(conversation: Conversation?) {
+        if let copy = conversation?.copy {
+            appendAndSortIntoInMemory(conversations: [copy])
+        }
+    }
+
+    func onDeleteConversation(_ id: Conversation.ID) {
+        remove(id)
+    }
+
+    func onCreateConversation(_ conversation: Conversation?) {
+        if let copy = conversation?.copy {
+            appendAndSortIntoInMemory(conversations: [copy])
+        }
+    }
+
+    func onNewMessage(_ message: Message?) {
+        if let message = message?.copy, let conversationId = message.conversation?.id {
+            if contains(conversationId), let index = indexOf(conversationId) {
+                conversations[index].conversation?.lastMessageVO = message
+                conversations[index].conversation?.lastMessage = message.message
+            } else {
+                // Insert empty slot at the top
+                appendAndSortIntoInMemory(conversations: [.init(id: conversationId)])
+            }
+        }
+    }
+
+    func onClosed(_ id: Conversation.ID) {
+        if let index = indexOf(id) {
+            conversations[index].conversation?.closedThread = true;
+        }
+    }
+
+    func onChangeConversationType(_ conversation: Conversation?) {
+        if let copy = conversation?.copy, let index = indexOf(copy.id) {
+            conversations[index].conversation?.type = copy.type
+        }
+    }
+
+    func onArchiveUnArchive(archive: Bool, id: Conversation.ID) {
+        guard let conversationId = id else { return }
+        if let index = indexOf(conversationId) {
+            conversations[index].conversation?.isArchive = archive;
+        }
+    }
+
+    func onAddParticipant(_ id: Conversation.ID, count: Int) {
+        guard let conversationId = id else { return }
+        if let index = indexOf(conversationId) {
+            conversations[index].conversation?.participantCount = count
+        }
+    }
+
+    func onRemovedParticipants(_ id: Conversation.ID, count: Int) {
+        if let index = indexOf(id) {
+            let currentCount = conversations[index].conversation?.participantCount ?? 0
+            conversations[index].conversation?.participantCount = max(0, currentCount - count)
         }
     }
 
@@ -271,8 +372,9 @@ internal final class ThreadsStore: ThreadStoreProtocol {
         conversations.removeAll()
     }
 
+    /// Emit a copy version of the conversaiton object
     func emit(_ conversations: [InMemoryConversation], _ uniqueId: String, _ hasNext: Bool) {
-        let map = conversations.compactMap{$0.conversation}
+        let map = conversations.compactMap{$0.conversation?.copy}
         let res = ChatResponse<[Conversation]>(uniqueId: uniqueId,
                                                result: map,
                                                hasNext: hasNext,
