@@ -21,6 +21,7 @@ public class ChatCoordinator: ChatStoreProtocol {
     let chat: ChatInternalProtocol
     let reaction: InMemoryReaction
     let conversation: ThreadsStore
+    private let queue = DispatchQueue(label: "ChatCoordinator")
 
     required init(chat: ChatInternalProtocol) {
         self.chat = chat
@@ -29,7 +30,10 @@ public class ChatCoordinator: ChatStoreProtocol {
     }
 
     func invalidate() {
-        reaction.invalidate()
-        conversation.invalidate()
+        queue.async { [weak self] in
+            guard let self = self else { return }
+            reaction.invalidate()
+            conversation.invalidate()
+        }
     }
 }
