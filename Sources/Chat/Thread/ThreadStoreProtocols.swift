@@ -59,7 +59,11 @@ protocol DBConversationOPerations {
     func storeInDB(_ conversations: [Conversation])
 }
 
-protocol ThreadStoreProtocol: InMemoryConversationOperations, ServerConversationOperations, DBConversationOPerations {
+protocol ServerPinMessageOperations {
+    func onPinUnPin(_ isPin: Bool, _ threadId: Int?, _ message: PinMessage?)
+}
+
+protocol ThreadStoreProtocol: InMemoryConversationOperations, ServerConversationOperations, DBConversationOPerations, ServerPinMessageOperations {
     var conversations: ContiguousArray<T> { get set }
     var serverSortedPins: [Int] { get }
     var offset: Int { get set }

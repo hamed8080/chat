@@ -372,6 +372,12 @@ internal final class ThreadsStore: ThreadStoreProtocol {
         conversations.removeAll()
     }
 
+    func onPinUnPin(_ isPin: Bool, _ threadId: Int?, _ message: PinMessage?) {
+        if let index = indexOf(threadId) {
+            conversations[index].conversation?.pinMessage = isPin ? message : nil
+        }
+    }
+
     /// Emit a copy version of the conversaiton object
     func emit(_ conversations: [InMemoryConversation], _ uniqueId: String, _ hasNext: Bool) {
         let map = conversations.compactMap{$0.conversation?.copy}

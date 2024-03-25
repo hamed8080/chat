@@ -355,9 +355,12 @@ final class MessageManager: MessageProtocol {
     func onPinUnPinMessage(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<PinMessage> = asyncMessage.toChatResponse()
         let pin = asyncMessage.chatMessage?.type == .pinMessage
+        let threadId = response.subjectId ?? -1
+        let messageId = response.result?.id ?? -1
+        chat.coordinator.conversation.onPinUnPin(pin, threadId, response.result)
         delegate?.chatEvent(event: .message(pin ? .pin(response) : .unpin(response)))
-        cache?.message?.pin(asyncMessage.chatMessage?.type == .pinMessage, response.subjectId ?? -1, response.result?.id ?? -1)
-        cache?.message?.addOrRemoveThreadPinMessages(asyncMessage.chatMessage?.type == .pinMessage, response.subjectId ?? -1, response.result?.id ?? -1)
+        cache?.message?.pin(pin, threadId, messageId)
+        cache?.message?.addOrRemoveThreadPinMessages(pin, threadId, messageId)
     }
 
     func replyPrivately(_ request: ReplyPrivatelyRequest) {
