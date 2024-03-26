@@ -83,7 +83,6 @@ final class ThreadManager: ThreadProtocol {
 
     func onThreads(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Conversation]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)
-
         chat.coordinator.conversation.onFetchedThreads(response)
     }
 

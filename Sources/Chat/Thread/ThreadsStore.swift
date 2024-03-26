@@ -35,7 +35,8 @@ internal final class ThreadsStore: ThreadStoreProtocol {
     }
 
     func get(_ request: ThreadsRequest) {
-        if !request.isCacheRequest {
+        // Direct request to the server and the SQLITE Store to fetch data.
+        if !request.isCacheableInMemoryRequest {
             fetch(request: request)
             return
         }
@@ -179,14 +180,8 @@ internal final class ThreadsStore: ThreadStoreProtocol {
     }
 
     func getCompleteOffset(request: ThreadsRequest) {
-        chat.cache?.conversation?.fetch(request.fetchRequest) { [weak self] threads, totalCount in
-            let threads = threads.map { $0.codable() }
-            let hasNext = totalCount >= request.count
-            let response = ChatResponse(uniqueId: request.uniqueId, result: threads, hasNext: hasNext, cache: true)
-            self?.chat.delegate?.chatEvent(event: .thread(.threads(response)))
-        }
         requests.append(.init(key: "GET-COMPLETE-OFFSET", request: request, originalRequest: request))
-        chat.prepareToSendAsync(req: request, type: .getThreads)
+        fetch(request: request)
     }
 
     func fetch(request: ThreadsRequest) {
@@ -212,9 +207,9 @@ internal final class ThreadsStore: ThreadStoreProtocol {
 
     func fetchUnavailableSlots(request: ThreadsRequest) {
         guard let count = numberOfUnavailableSlots(request) else { return }
-        let newReq = request.copyWith(count: count, offset: conversations.count)
+        let newReq = request.copyWith(count: abs(count), offset: conversations.count)
         requests.append(.init(key: "GET-UNAVAILABLE-OFFSETS", request: newReq, originalRequest: request))
-        chat.prepareToSendAsync(req: newReq, type: .getThreads)
+        fetch(request: newReq)
     }
 
     private func onGetUnavailableOffsets(_ response: ChatResponse<[Conversation]>, _ request: ThreadsRequestWrapper) {
