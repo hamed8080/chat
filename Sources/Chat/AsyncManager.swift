@@ -70,6 +70,8 @@ public final class AsyncManager: AsyncDelegate {
         chat?.delegate?.chatState(state: asyncState.chatState, currentUser: nil, error: error?.chatError)
         if asyncState == .asyncReady {
             (chat?.user as? UserManager)?.getUserForChatReady()
+            // In the first time it won't clear the cache due to the all managers are null.
+            chat?.cache?.truncate()
         } else if asyncState == .closed {
             cancelPingTimer()
             logger?.createLog(message: "Socket Disconnected", persist: false, level: LogLevel.error, type: .received)
