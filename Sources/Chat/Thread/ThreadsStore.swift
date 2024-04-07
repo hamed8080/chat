@@ -107,7 +107,9 @@ internal final class ThreadsStore: ThreadStoreProtocol {
             let conversation = conversations[indexInList]
             inMemory.conversation = conversation
             inMemory.id = conversation.id
-            self.conversations[index] = inMemory
+            if conversations.indices.contains(index) {
+                self.conversations[index] = inMemory
+            }
         }
     }
 

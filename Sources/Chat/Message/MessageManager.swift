@@ -279,9 +279,6 @@ final class MessageManager: MessageProtocol {
         /// It will insert a new message into the Message table if the sender is not me
         /// and it will update a current message with a uniqueId of a message when we were the sender of a message, and consequently, it will set lastMessageVO for the thread.
         try? cache?.conversation?.replaceLastMessage(.init(id: message.threadId, lastMessage: message.message, lastMessageVO: message))
-        if !isMe {
-            deliver(.init(messageId: message.id ?? 0, threadId: message.threadId))
-        }
     }
 
     func onSentMessage(_ asyncMessage: AsyncMessage) {
