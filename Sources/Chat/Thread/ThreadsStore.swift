@@ -58,7 +58,9 @@ internal final class ThreadsStore: ThreadStoreProtocol {
     func respondByInMemory(_ request: ThreadsRequest) {
         let nsrange = NSRange(location: request.offset, length: request.count)
         let range = Range(nsrange)!
-        let conversations = conversations[range]
+        if conversations.count > 0 {
+            let conversations = conversations[range]
+        }
         emit(Array(conversations), request.uniqueId, true)
     }
 
