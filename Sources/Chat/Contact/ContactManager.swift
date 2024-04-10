@@ -164,7 +164,8 @@ final class ContactManager: ContactProtocol {
 
     func onContacts(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Contact]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)
-        chat.cache?.contact?.insert(models: response.result ?? [])
+        let copies = response.result?.compactMap{$0.copy} ?? []
+        chat.cache?.contact?.insert(models: copies)
         chat.delegate?.chatEvent(event: .contact(.contacts(response)))
     }
 

@@ -8,6 +8,7 @@ import Foundation
 import ChatDTO
 import ChatModels
 import ChatCore
+import ChatExtensions
 
 /// In Memory reactions.
 public final class InMemoryReaction: InMemoryReactionProtocol {
@@ -56,7 +57,7 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
     private func listOfReactionCount(_ messageIds: [Int]) -> [ReactionCountList] {
         messageIds
             .compactMap { messageId in
-                ReactionCountList(messageId: messageId, reactionCounts: summary(for: messageId))
+                ReactionCountList(messageId: messageId, reactionCounts: summary(for: messageId), userReaction: nil)
             }
     }
 
@@ -104,7 +105,7 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
     }
 
     func onSummaryCount(_ response: ChatResponse<[ReactionCountList]>) {
-        response.result?.forEach { listCount in
+        response.result?.compactMap{$0.copy}.forEach { listCount in
             let index = findOrCreateIndex(listCount.messageId ?? 0)
             reactions[index].summary = listCount.reactionCounts ?? []
             setUserReaction(listCount)
@@ -132,9 +133,10 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
     }
 
     func onReactionList(_ response: ChatResponse<ReactionList>) {
-        if let messageId = response.result?.messageId,
+        let copied = response.result?.copy
+        if let messageId = copied?.messageId,
            let index = indexOfMessageId(messageId),
-           let reactions = response.result?.reactions {
+           let reactions = copied?.reactions {
             self.reactions[index].appendOrReplaceDetail(reactions: reactions)
             chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messageId: messageId)))
         }

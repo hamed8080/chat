@@ -165,6 +165,7 @@ internal final class ThreadsStore: ThreadStoreProtocol {
 
     func onFetchedThreads(_ response: ChatResponse<[Conversation]>) {
         guard let uniqueId = response.uniqueId else { return }
+        let copies = response.result?.map{$0.copy} ?? []
         if let completeOffsetRequest = request(for: uniqueId, key: "GET-COMPLETE-OFFSET") {
             onGetCompleteOffset(response, completeOffsetRequest)
         } else if let unavilableRequest = request(for: uniqueId, key: "GET-UNAVAILABLE-OFFSETS") {
@@ -174,9 +175,9 @@ internal final class ThreadsStore: ThreadStoreProtocol {
             // It is need to update the conversation for example if a new message comes from the bottom parts
             // We should wait for the client to request for that thread
             // Once the result has arrived we can update our in memory and fill it.
-            response.result?.forEach{ conversation in
+            copies.forEach{ conversation in
                 if let index = indexOf(conversation.id) {
-                    conversations[index].conversation = conversation.copy
+                    conversations[index].conversation = conversation
                 }
             }
             chat.delegate?.chatEvent(event: .thread(.threads(response)))

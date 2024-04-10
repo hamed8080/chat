@@ -59,8 +59,9 @@ final class ThreadManager: ThreadProtocol {
 
     func onUpdateThreadInfo(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
+        let copied = response.result?.copy
         delegate?.chatEvent(event: .thread(.updatedInfo(response)))
-        cache?.conversation?.insert(models: [response.result].compactMap { $0 })
+        cache?.conversation?.insert(models: [copied].compactMap { $0 })
     }
 
     func unreadCount(_ request: ThreadsUnreadCountRequest) {
@@ -98,9 +99,10 @@ final class ThreadManager: ThreadProtocol {
     /// Update when a contact user updates his name or the contacts updated and the name of the thread accordingly updated.
     func onThreadNameContactUpdated(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
+        let copied = response.result
         response.result?.id = response.subjectId
         delegate?.chatEvent(event: .thread(.updatedInfo(response)))
-        cache?.conversation?.insert(models: [response.result].compactMap { $0 })
+        cache?.conversation?.insert(models: [copied].compactMap { $0 })
     }
 
     func spam(_ request: GeneralSubjectIdRequest) {
@@ -181,7 +183,8 @@ final class ThreadManager: ThreadProtocol {
     func onMutalGroups(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Conversation]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)
         guard let uniqueId = response.uniqueId, let request = requests[uniqueId] as? MutualGroupsRequest else { return }
-        cache?.mutualGroup?.insert(response.result ?? [], idType: request.toBeUserVO.inviteeTypes, mutualId: request.toBeUserVO.id)
+        let copies = response.result?.compactMap({$0.copy}) ?? []
+        cache?.mutualGroup?.insert(copies, idType: request.toBeUserVO.inviteeTypes, mutualId: request.toBeUserVO.id)
         delegate?.chatEvent(event: .thread(.mutual(response)))
     }
 
@@ -238,7 +241,8 @@ final class ThreadManager: ThreadProtocol {
 
     func onJoinThread(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
-        chat.coordinator.conversation.onJoined(conversation: response.result)
+        let copied = response.result
+        chat.coordinator.conversation.onJoined(conversation: copied)
         delegate?.chatEvent(event: .thread(.joined(response)))
     }
 
@@ -275,9 +279,10 @@ final class ThreadManager: ThreadProtocol {
 
     func onCreateThread(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
-        chat.coordinator.conversation.onCreateConversation(response.result)
+        let copied = response.result
+        chat.coordinator.conversation.onCreateConversation(copied)
         delegate?.chatEvent(event: .thread(.created(response)))
-        cache?.conversation?.insert(models: [response.result].compactMap { $0 })
+        cache?.conversation?.insert(models: [copied].compactMap { $0 })
         sendTextMessage(response)
     }
 
@@ -291,7 +296,8 @@ final class ThreadManager: ThreadProtocol {
     /// Create thread and Send a text message and then upload a file.
     func onNewMessage(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Message> = asyncMessage.toChatResponse()
-        chat.coordinator.conversation.onNewMessage(response.result)
+        let copied = response.result
+        chat.coordinator.conversation.onNewMessage(copied)
         if let uniqueId = response.uniqueId, let request = requests[uniqueId] as? UploadFileRequest {
             chat.file.upload(request)
         }
@@ -314,8 +320,9 @@ final class ThreadManager: ThreadProtocol {
 
     func onChangeThreadType(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
-        cache?.conversation?.changeThreadType(response.result?.id ?? -1, response.result?.type ?? .unknown)
-        chat.coordinator.conversation.onChangeConversationType(response.result)
+        let copied = response.result?.copy
+        cache?.conversation?.changeThreadType(copied?.id ?? -1, copied?.type ?? .unknown)
+        chat.coordinator.conversation.onChangeConversationType(copied)
         delegate?.chatEvent(event: .thread(.changedType(response)))
     }
 

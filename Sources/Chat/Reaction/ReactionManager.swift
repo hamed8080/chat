@@ -10,6 +10,7 @@ import ChatCore
 import ChatDTO
 import ChatModels
 import Foundation
+import ChatExtensions
 
 final class ReactionManager: ReactionProtocol {
     let chat: ChatInternalProtocol
@@ -71,7 +72,8 @@ final class ReactionManager: ReactionProtocol {
 
     func onReactionCount(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[ReactionCountList]> = asyncMessage.toChatResponse()
-        cache?.reactionCount?.insert(models: response.result ?? [])
+        let copies = response.result?.compactMap{$0.copy} ?? []
+        cache?.reactionCount?.insert(models: copies)
         chat.delegate?.chatEvent(event: .reaction(.count(response)))
         _internalInMemoryReaction?.onSummaryCount(response)
     }
