@@ -29,6 +29,7 @@ internal final class ThreadsStore: ThreadStoreProtocol {
     var offset: Int = 0
     var requests: [ThreadsRequestWrapper] = []
     var chat: ChatInternalProtocol
+    private var debug = ProcessInfo().environment["talk.pod.ir.chat.threadStore.debug"] == "1"
 
     init(chat: ChatInternalProtocol) {
         self.chat = chat
@@ -36,22 +37,28 @@ internal final class ThreadsStore: ThreadStoreProtocol {
 
     func get(_ request: ThreadsRequest) {
         // Direct request to the server and the SQLITE Store to fetch data.
+        log("Start getting threads. The number of items in memory is:\(conversations.count) and current offset is: \(offset) and number of requests currently is:\(requests.count)")
         if !request.isCacheableInMemoryRequest {
             fetch(request: request)
+            log("Direct request to the server as a result of request type is not memory cacheable.")
             return
         }
 
         if request.cache == false {
             invalidate()
+            log("Invalidating the cache due to cache was false")
         }
 
         if hasRange(offset: request.offset, count: request.count) {
             respondByInMemory(request)
+            log("ThreadsStore has the range, offset: \(request.offset) count: \(request.count)")
         } else if hasSomeSlots(request) {
             fetchUnavailableSlots(request: request)
+            log("ThreadsStore has some parts, offset: \(request.offset) count: \(request.count)")
         } else {
             makeEmptySlots(request)
             getCompleteOffset(request: request)
+            log("ThreadsStore doesn't have any range, request to fetch from server offset: \(request.offset) count: \(request.count)")
         }
     }
 
@@ -366,6 +373,7 @@ internal final class ThreadsStore: ThreadStoreProtocol {
     }
 
     func invalidate() {
+        log("Invalidating the cache")
         offset = 0
         serverSortedPins.removeAll()
         requests.removeAll()
@@ -387,5 +395,13 @@ internal final class ThreadsStore: ThreadStoreProtocol {
                                                cache: false,
                                                time: Int(Date().millisecondsSince1970))
         chat.delegate?.chatEvent(event: .thread(.threads(res)))
+    }
+
+    private func log(_ message: String) {
+#if DEBUG
+        if debug {
+            chat.logger.log(title: "ThreadsStore", message: message, persist: false, type: .internalLog, userInfo: [:])
+        }
+#endif
     }
 }
