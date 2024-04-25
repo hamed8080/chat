@@ -135,7 +135,6 @@ final class UserManager: UserProtocol, InternalUserProtocol {
 
     func onRemveUserRoles(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[UserRole]> = asyncMessage.toChatResponse()
-        chat.delegate?.chatEvent(event: .thread(.activity(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         chat.delegate?.chatEvent(event: .user(.remove(response)))
     }
 

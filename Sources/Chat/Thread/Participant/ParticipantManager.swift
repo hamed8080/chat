@@ -44,7 +44,6 @@ final class ParticipantManager: ParticipantProtocol {
         chat.cache?.participant?.delete(response.result ?? [], response.subjectId ?? -1)
         chat.coordinator.conversation.onRemovedParticipants(response.subjectId, count: response.result?.count ?? 0)
         chat.delegate?.chatEvent(event: .participant(.deleted(response)))
-        chat.delegate?.chatEvent(event: .thread(.activity(.init(result: .init(time: response.time, threadId: response.subjectId)))))
     }
 
     func add(_ request: AddParticipantRequest) {

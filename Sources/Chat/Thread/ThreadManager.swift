@@ -212,7 +212,6 @@ final class ThreadManager: ThreadProtocol {
     func onLeaveThread(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<User> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.left(response)))
-        delegate?.chatEvent(event: .thread(.activity(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         cache?.participant?.delete([Participant(id: response.result?.id)], response.subjectId ?? -1)
         if response.result?.id == chat.userInfo?.id, let threadId = response.subjectId {
             chat.coordinator.conversation.onDeleteConversation(threadId)
@@ -223,15 +222,12 @@ final class ThreadManager: ThreadProtocol {
     func onLastSeenUpdate(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<LastSeenMessageResponse> = asyncMessage.toChatResponse()
         delegate?.chatEvent(event: .thread(.lastSeenMessageUpdated(response)))
-        delegate?.chatEvent(event: .thread(.activity(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         if let threadId = response.result?.id, let unreadCount = response.result?.unreadCount {
             cache?.conversation?.seen(threadId: threadId,
                                       lastSeenMessageId: response.result?.lastSeenMessageId ?? -1,
                                       lastSeenMessageTime: response.result?.lastSeenMessageTime,
                                       lastSeenMessageNanos: response.result?.lastSeenMessageNanos)
-            cache?.conversation?.updateThreadsUnreadCount(["\(threadId)": unreadCount])
-            let unreadCountModel = UnreadCount(unreadCount: unreadCount, threadId: threadId)
-            delegate?.chatEvent(event: .thread(.updatedUnreadCount(.init(uniqueId: response.uniqueId, result: unreadCountModel, time: response.time))))
+            cache?.conversation?.updateThreadsUnreadCount(["\(threadId)": unreadCount])           
         }
     }
 
@@ -254,7 +250,6 @@ final class ThreadManager: ThreadProtocol {
         let response: ChatResponse<Participant> = asyncMessage.toChatResponse()
         chat.coordinator.conversation.onDeleteConversation(response.subjectId)
         delegate?.chatEvent(event: .thread(.deleted(response)))
-        delegate?.chatEvent(event: .thread(.activity(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         cache?.conversation?.delete(response.subjectId ?? -1)
     }
 

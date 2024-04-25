@@ -52,12 +52,9 @@ final class MessageManager: MessageProtocol {
         let threadId = response.subjectId ?? -1
         let messageId = response.result?.id ?? -1
         delegate?.chatEvent(event: .message(.deleted(response)))
-        delegate?.chatEvent(event: .thread(.activity(.init(result: .init(time: response.time, threadId: threadId)))))
         cache?.message?.find(threadId, messageId) { [weak self] entity in
             if entity?.seen == nil, entity?.ownerId?.intValue != self?.chat.userInfo?.id {
-                self?.cache?.conversation?.setUnreadCount(action: .decrease, threadId: threadId) { [weak self] unreadCount in
-                    self?.delegate?.chatEvent(event: .thread(.updatedUnreadCount(.init(result: .init(unreadCount: unreadCount, threadId: threadId)))))
-                }
+                self?.cache?.conversation?.setUnreadCount(action: .decrease, threadId: threadId)
             }
         }
         cache?.message?.delete(threadId, messageId)
@@ -72,7 +69,6 @@ final class MessageManager: MessageProtocol {
         let response: ChatResponse<Message> = asyncMessage.toChatResponse()
         let copied = response.result
         delegate?.chatEvent(event: .message(.edited(response)))
-        delegate?.chatEvent(event: .thread(.activity(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         if let message = copied {
             cache?.deleteQueues(uniqueIds: [response.uniqueId ?? ""])
             try? cache?.conversation?.replaceLastMessage(.init(id: response.subjectId, lastMessage: message.message, lastMessageVO: message))
@@ -254,16 +250,13 @@ final class MessageManager: MessageProtocol {
     func seen(_ request: MessageSeenRequest) {
         chat.prepareToSendAsync(req: request, type: .seen)
         cache?.message?.seen(threadId: request.threadId, messageId: request.messageId, mineUserId: chat.userInfo?.id ?? -1)
-        cache?.conversation?.setUnreadCount(action: .decrease, threadId: request.threadId) { [weak self] unreadCount in
-            self?.delegate?.chatEvent(event: .thread(.updatedUnreadCount(.init(result: .init(unreadCount: unreadCount, threadId: request.threadId)))))
-        }
+        cache?.conversation?.setUnreadCount(action: .decrease, threadId: request.threadId)
     }
 
     func onNewMessage(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Message> = asyncMessage.toChatResponse()
         let copyiedMessage = response.result?.copy
         delegate?.chatEvent(event: .message(.new(response)))
-        delegate?.chatEvent(event: .thread(.activity(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         guard var copyiedMessage = copyiedMessage else { return }
         if copyiedMessage.threadId == nil {
             copyiedMessage.threadId = response.subjectId ?? copyiedMessage.conversation?.id
@@ -271,10 +264,7 @@ final class MessageManager: MessageProtocol {
         /// If we were sender of the message therfore we have seen all the messages inside the thread.
         let isMe = copyiedMessage.participant?.id == chat.userInfo?.id
         let unreadCountAction: CacheUnreadCountAction = isMe ? .set(0) : .increase
-        cache?.conversation?.setUnreadCount(action: unreadCountAction, threadId: response.subjectId ?? -1) { [weak self] unreadCount in
-            let unreadCount = UnreadCount(unreadCount: unreadCount, threadId: response.subjectId)
-            self?.delegate?.chatEvent(event: .thread(.updatedUnreadCount(.init(result: unreadCount))))
-        }
+        cache?.conversation?.setUnreadCount(action: unreadCountAction, threadId: response.subjectId ?? -1)
         /// It will insert a new message into the Message table if the sender is not me
         /// and it will update a current message with a uniqueId of a message when we were the sender of a message, and consequently, it will set lastMessageVO for the thread.
         try? cache?.conversation?.replaceLastMessage(.init(id: copyiedMessage.threadId, lastMessage: copyiedMessage.message, lastMessageVO: copyiedMessage))
@@ -307,7 +297,6 @@ final class MessageManager: MessageProtocol {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
         let copied = response.result?.copy
         delegate?.chatEvent(event: .thread(.lastMessageEdited(response)))
-        delegate?.chatEvent(event: .thread(.activity(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         if let thread = copied {
             try? cache?.conversation?.replaceLastMessage(thread)
         }
@@ -317,7 +306,6 @@ final class MessageManager: MessageProtocol {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
         let copied = response.result
         delegate?.chatEvent(event: .thread(.lastMessageDeleted(response)))
-        delegate?.chatEvent(event: .thread(.activity(.init(result: .init(time: response.time, threadId: response.subjectId)))))
         if let thread = copied {
             let lastMessageVO = Message(threadId: thread.id, message: thread.lastMessage)
             try? cache?.conversation?.replaceLastMessage(.init(id: lastMessageVO.threadId, lastMessage: lastMessageVO.message, lastMessageVO: lastMessageVO))
