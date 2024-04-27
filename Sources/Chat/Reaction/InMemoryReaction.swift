@@ -14,6 +14,7 @@ import ChatExtensions
 public final class InMemoryReaction: InMemoryReactionProtocol {
     private let chat: ChatInternalProtocol
     var reactions: ContiguousArray<MessageInMemoryReaction> = []
+    private var queue = DispatchQueue(label: "InMemoryReactionSerialQueue")
 
     init(chat: ChatInternalProtocol) {
         self.chat = chat
@@ -195,7 +196,9 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
     }
 
     private func indexOfMessageId(_ messageId: Int?) -> Int? {
-        reactions.firstIndex(where: { $0.messageId == messageId })
+        queue.sync {
+            reactions.firstIndex(where: { $0.messageId == messageId })
+        }
     }
 
     public func currentReaction(_ messageId: Int) -> Reaction? {
@@ -210,6 +213,8 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
 
     /// Clear in memory cache upon disconnect.
     public func invalidate() {
-        reactions.removeAll()
+        queue.sync {
+            reactions.removeAll()
+        }
     }
 }
