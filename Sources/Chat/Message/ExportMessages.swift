@@ -112,8 +112,8 @@ final class ExportMessages: ExportMessagesProtocol {
         string.append(contentsOf: "\(sanitize(message.message ?? "")),")
         string.append(contentsOf: "\(sanitize(message.participant?.username ?? "undefined".localized(bundle: Bundle.moduleBundle))),")
         string.append(contentsOf: "\(sanitize(sender)),")
-        string.append(contentsOf: "\(date.getTime(localIdentifire: Locale.current.identifier)),")
-        string.append(contentsOf: "\(date.getDate(localIdentifire: Locale.current.identifier))")
+        string.append(contentsOf: "\(date.getTime(localIdentifire: Locale.current.identifier, withAbbrevation: "GMT")),")
+        string.append(contentsOf: "\(date.getDate(localIdentifire: Locale.current.identifier, withAbbrevation: "GMT")))")
         string.append(contentsOf: "\r\n")
         return string
     }
