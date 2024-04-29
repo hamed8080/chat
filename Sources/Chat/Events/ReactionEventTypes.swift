@@ -10,7 +10,7 @@ import ChatModels
 import Foundation
 
 public enum ReactionEventTypes {
-    case inMemoryUpdate(messageId: Int)
+    case inMemoryUpdate(messages: [ReactionInMemoryCopy])
     case reaction(ChatResponse<CurrentUserReaction>)
     case count(ChatResponse<[ReactionCountList]>)
     case list(ChatResponse<ReactionList>)

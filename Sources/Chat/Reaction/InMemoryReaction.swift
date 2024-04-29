@@ -21,7 +21,7 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
     }
 
     func reaction(_ request: UserReactionRequest) -> Bool {
-        /// If we have a cached version of messgeId in reactions list it means that the last time it was nil and did not have a user reaction.
+        /// If we have a cached version of messageId in reactions list it means that the last time it was nil and did not have a user reaction.
         if let index = indexOfMessageId(request.messageId) {
             let cachedVersion = reactions[index].currentUserReaction
             let response = ChatResponse<CurrentUserReaction>(uniqueId: request.uniqueId,
@@ -29,7 +29,8 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
                                                              cache: true,
                                                              subjectId: request.conversationId)
             chat.delegate?.chatEvent(event: .reaction(.reaction(response)))
-            chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messageId: request.messageId)))
+            let copy = reactions[index].copy
+            chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messages: [copy])))
             return true
         }
         return false
@@ -45,6 +46,7 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
 
     func countEvent(inMemoryMessageIds: [Int], uniqueId: String, conversationId: Int) {
         let list = listOfReactionCount(inMemoryMessageIds)
+        var copies: [ReactionInMemoryCopy] = []
         if list.count > 0 {
             let response = ChatResponse<[ReactionCountList]>(uniqueId: uniqueId,
                                                              result: list,
@@ -52,9 +54,12 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
                                                              subjectId: conversationId)
             chat.delegate?.chatEvent(event: .reaction(.count(response)))
             list.forEach { item in
-                chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messageId: item.messageId ?? 0)))
+                if let messageId = item.messageId, let index = indexOfMessageId(messageId) {
+                    copies.append(reactions[index].copy)
+                }
             }
         }
+        chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messages: copies)))
     }
 
     private func listOfReactionCount(_ messageIds: [Int]) -> [ReactionCountList] {
@@ -102,18 +107,20 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
                                                   cache: true,
                                                   subjectId: request.conversationId)
         chat.delegate?.chatEvent(event: .reaction(.list(response)))
-        chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messageId: request.messageId)))
+        chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messages: [reacrionInMemory.copy])))
 
         return count
     }
 
     func onSummaryCount(_ response: ChatResponse<[ReactionCountList]>) {
+        var inMemoryReactions: [ReactionInMemoryCopy] = []
         response.result?.compactMap{$0.copy}.forEach { listCount in
             let index = findOrCreateIndex(listCount.messageId ?? 0)
             reactions[index].summary = listCount.reactionCounts ?? []
             setUserReaction(listCount)
-            chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messageId: listCount.messageId ?? 0)))
+            inMemoryReactions.append(reactions[index].copy)
         }
+        chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messages: inMemoryReactions)))
     }
 
     private func setUserReaction(_ list: ReactionCountList) {
@@ -124,14 +131,17 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
 
     func onUserReaction(_ response: ChatResponse<CurrentUserReaction>) {
         if let result = response.result, let messageId = result.messageId {
+            var copy: ReactionInMemoryCopy
             if let firstIndex = indexOfMessageId(messageId) {
                 reactions[firstIndex].currentUserReaction = result.reaction
+                copy = reactions[firstIndex].copy
             } else {
                 let inMemoryItem = MessageInMemoryReaction(messageId: messageId)
                 inMemoryItem.currentUserReaction = result.reaction
                 reactions.append(inMemoryItem)
+                copy = inMemoryItem.copy
             }
-            chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messageId: messageId)))
+            chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messages: [copy])))
         }
     }
 
@@ -141,7 +151,8 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
            let index = indexOfMessageId(messageId),
            let reactions = copied?.reactions {
             self.reactions[index].appendOrReplaceDetail(reactions: reactions)
-            chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messageId: messageId)))
+            let copy = self.reactions[index].copy
+            chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messages: [copy])))
         }
     }
 
@@ -152,7 +163,7 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
             reactions[index].addOrReplaceSummaryCount(sticker: reaction?.reaction ?? Sticker.unknown)
             reactions[index].details.append(.init(id: reaction?.id, reaction: reaction?.reaction, participant: reaction?.participant, time: reaction?.time))
             setUserReaction(index: index, action: response.result)
-            chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messageId: messageId)))
+            chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messages: [reactions[index].copy])))
         }
     }
 
@@ -165,7 +176,7 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
         removeCurrentUserReaction(index: index, action: result)
         reactions[index].addOrReplaceSummaryCount(sticker: response.result?.reaction?.reaction ?? Sticker.unknown)
         setUserReaction(index: index, action: result)
-        chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messageId: messageId)))
+        chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messages: [reactions[index].copy])))
     }
 
     func onDelete(_ response: ChatResponse<ReactionMessageResponse>) {
@@ -173,7 +184,7 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
         reactions[index].deleteSummaryCount(sticker: result.reaction?.reaction ?? Sticker.unknown)
         reactions[index].details.removeAll(where: {$0.participant?.id == result.reaction?.participant?.id})
         removeCurrentUserReaction(index: index, action: result)
-        chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messageId: result.messageId ?? 0)))
+        chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messages: [reactions[index].copy])))
     }
 
     private func removeCurrentUserReaction(index: Int, action: ReactionMessageResponse) {

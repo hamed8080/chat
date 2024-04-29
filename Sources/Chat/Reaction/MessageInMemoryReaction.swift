@@ -44,4 +44,21 @@ public class MessageInMemoryReaction {
             }
         }
     }
+
+    var copy: ReactionInMemoryCopy { .init(messageId: messageId, currentUserReaction: currentUserReaction, summary: summary, details: details) }
+}
+
+public struct ReactionInMemoryCopy {
+    public let messageId: Int
+    public var currentUserReaction: Reaction?
+    public var summary: [ReactionCount] = []
+    /// All participants reaction to a message.
+    public var details: [Reaction] = []
+
+    public init(messageId: Int, currentUserReaction: Reaction? = nil, summary: [ReactionCount] = [], details: [Reaction] = []) {
+        self.messageId = messageId
+        self.currentUserReaction = currentUserReaction
+        self.summary = summary
+        self.details = details
+    }
 }
