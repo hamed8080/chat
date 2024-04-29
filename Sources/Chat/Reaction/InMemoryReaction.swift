@@ -36,8 +36,10 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
     }
 
     func storeNewCountRequestMessageIds(_ messageIds: [Int]) {
-        messageIds.forEach { messageId in
-            reactions.append(.init(messageId: messageId))
+        queue.sync {
+            messageIds.forEach { messageId in
+                reactions.append(.init(messageId: messageId))
+            }
         }
     }
 
@@ -196,19 +198,21 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
     }
 
     private func indexOfMessageId(_ messageId: Int?) -> Int? {
-        queue.sync {
-            reactions.firstIndex(where: { $0.messageId == messageId })
-        }
+        reactions.firstIndex(where: { $0.messageId == messageId })
     }
 
     public func currentReaction(_ messageId: Int) -> Reaction? {
-        guard let index = indexOfMessageId(messageId) else { return nil }
-        return reactions[index].currentUserReaction
+        queue.sync {
+            guard let index = indexOfMessageId(messageId) else { return nil }
+            return reactions[index].currentUserReaction
+        }
     }
 
     public func summary(for messageId: Int) -> [ChatModels.ReactionCount] {
-        guard let index = indexOfMessageId(messageId) else { return [] }
-        return reactions[index].summary
+        queue.sync {
+            guard let index = indexOfMessageId(messageId) else { return [] }
+            return reactions[index].summary
+        }
     }
 
     /// Clear in memory cache upon disconnect.

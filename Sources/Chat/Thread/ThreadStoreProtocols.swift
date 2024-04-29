@@ -66,7 +66,6 @@ protocol ServerPinMessageOperations {
 protocol ThreadStoreProtocol: InMemoryConversationOperations, ServerConversationOperations, DBConversationOPerations, ServerPinMessageOperations {
     var conversations: ContiguousArray<T> { get set }
     var serverSortedPins: [Int] { get }
-    var offset: Int { get set }
     var requests: [ThreadsRequestWrapper] { get set }
     var chat: ChatInternalProtocol { get }
     init(chat: ChatInternalProtocol)

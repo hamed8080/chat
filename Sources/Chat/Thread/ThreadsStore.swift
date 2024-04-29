@@ -26,7 +26,6 @@ internal struct ThreadsRequestWrapper {
 internal final class ThreadsStore: ThreadStoreProtocol {
     var conversations = ContiguousArray<InMemoryConversation>()
     var serverSortedPins: [Int] = []
-    var offset: Int = 0
     var requests: [ThreadsRequestWrapper] = []
     var chat: ChatInternalProtocol
     private var debug = ProcessInfo().environment["talk.pod.ir.chat.threadStore.debug"] == "1"
@@ -37,7 +36,7 @@ internal final class ThreadsStore: ThreadStoreProtocol {
 
     func get(_ request: ThreadsRequest) {
         // Direct request to the server and the SQLITE Store to fetch data.
-        log("Start getting threads. The number of items in memory is:\(conversations.count) and current offset is: \(offset) and number of requests currently is:\(requests.count)")
+        log("Start getting threads. The number of items in memory is:\(conversations.count) and number of requests currently is:\(requests.count)")
         if !request.isCacheableInMemoryRequest {
             fetch(request: request)
             log("Direct request to the server as a result of request type is not memory cacheable.")
@@ -67,8 +66,8 @@ internal final class ThreadsStore: ThreadStoreProtocol {
         let range = Range(nsrange)!
         if conversations.count > 0 {
             let conversations = conversations[range]
+            emit(Array(conversations), request.uniqueId, true)
         }
-        emit(Array(conversations), request.uniqueId, true)
     }
 
     func hasRange(offset: Int, count: Int) -> Bool {
@@ -116,7 +115,7 @@ internal final class ThreadsStore: ThreadStoreProtocol {
             let conversation = conversations[indexInList]
             inMemory.conversation = conversation
             inMemory.id = conversation.id
-            if conversations.indices.contains(index) {
+            if self.conversations.indices.contains(index) {
                 self.conversations[index] = inMemory
             }
         }
@@ -374,7 +373,6 @@ internal final class ThreadsStore: ThreadStoreProtocol {
 
     func invalidate() {
         log("Invalidating the cache")
-        offset = 0
         serverSortedPins.removeAll()
         requests.removeAll()
         conversations.removeAll()
