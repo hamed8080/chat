@@ -39,20 +39,13 @@ final class ReactionManager: ReactionProtocol {
         _internalInMemoryReaction?.storeNewCountRequestMessageIds(newRquest.messageIds)
         if newRquest.messageIds.isEmpty { return }
         chat.prepareToSendAsync(req: newRquest, type: .reactionCount)
-//        cache?.reactionCount?.fetch(newRquest.messageIds) { [weak self] reactionCountList in
-//            let reactionCountListModels = reactionCountList.map { $0.codable }
-//            self?.chat.responseQueue.async {
-//                let response = ChatResponse(uniqueId: request.uniqueId, result: reactionCountListModels, hasNext: false, cache: true)
-//                self?.chat.delegate?.chatEvent(event: .reaction(.count(response)))
-//            }
-//        }
     }
 
     func get(_ request: RactionListRequest) {
         let allowedRequestOffset = _internalInMemoryReaction?.getOffset(request) ?? 0
-        if  allowedRequestOffset <= request.offset {
+        if  allowedRequestOffset <= request.offset || request.sticker == nil {
             var newReq = request
-            newReq.offset = allowedRequestOffset
+            newReq.offset = request.sticker == nil ? request.offset : allowedRequestOffset
             chat.prepareToSendAsync(req: newReq, type: .reactionList)
         }
     }
