@@ -93,8 +93,8 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
         return (inMemory: inMemoryMessageIds, notInMemory: notInMemoryMessageIds)
     }
 
-    func getOffset(_ request: RactionListRequest) -> Int {
-        guard let index = indexOfMessageId(request.messageId) else { return 0 }
+    func getOffset(_ request: RactionListRequest) -> Int? {
+        guard let index = indexOfMessageId(request.messageId) else { return nil }
         let reacrionInMemory = reactions[index]
         let allStoredReactions = reacrionInMemory.details
         let byStickerFilter = allStoredReactions.filter({$0.reaction == request.sticker})
@@ -224,6 +224,10 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
             guard let index = indexOfMessageId(messageId) else { return [] }
             return reactions[index].summary
         }
+    }
+
+    internal func createEmptySlot(messageId: Int) {
+        reactions.append(.init(messageId: messageId))
     }
 
     /// Clear in memory cache upon disconnect.

@@ -42,7 +42,14 @@ final class ReactionManager: ReactionProtocol {
     }
 
     func get(_ request: RactionListRequest) {
-        let allowedRequestOffset = _internalInMemoryReaction?.getOffset(request) ?? 0
+        //Creating and inserting an empty slot to the reactions array is essential if there is a connection disruption.
+
+        var allowedRequestOffset = 0
+        if let lastStoredOffset = _internalInMemoryReaction?.getOffset(request) {
+            allowedRequestOffset = lastStoredOffset
+        } else {
+            _internalInMemoryReaction?.createEmptySlot(messageId: request.messageId)
+        }
         if  allowedRequestOffset <= request.offset || request.sticker == nil {
             var newReq = request
             newReq.offset = request.sticker == nil ? request.offset : allowedRequestOffset
