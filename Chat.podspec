@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Chat"
-  s.version      = "1.3.2"
+  s.version      = "2.0.0"
   s.summary      = "Swift Chat SDK"
   s.description  = "A Swift Chat SDK which handle all backend communication with Async SDK and Chat Server."
   s.homepage     = "https://pubgi.fanapsoft.ir/chat/ios/chat"
@@ -12,8 +12,8 @@ Pod::Spec.new do |s|
   s.source_files = "Sources/Chat/**/*.{h,swift,xcdatamodeld,m,momd}"
   s.resources = "Sources/Chat/Resources/*.xcdatamodeld"
   s.frameworks  = "Foundation" , "CoreData" , "Contacts", "CoreServices"
-  s.dependency "Async" , '~> 1.3.1'
-  s.dependency "Additive" , '~> 1.0.1'
-  s.dependency "Logger" , '~> 1.0.2'
-  s.dependency "ChatExtensions", '~> 1.0.2'
+  s.dependency "Async" , '~> 2.0.0'
+  s.dependency "Additive" , '~> 1.2.0'
+  s.dependency "Logger" , '~> 1.2.0'
+  s.dependency "ChatExtensions", '~> 2.0.0'
 end
