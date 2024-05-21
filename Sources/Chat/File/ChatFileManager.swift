@@ -47,8 +47,8 @@ final class ChatFileManager: FileProtocol {
         let task = UploadManager().upload(req, data) { [weak self] progress in
             self?.delegate?.chatEvent(event: .upload(.progress(req.uniqueId, progress)))
             progressCompletion?(progress)
-        } completion: { data, _, error in
-            self.onUploadCompleted(req, data, error, completion)
+        } completion: { respData, _, error in
+            self.onUploadCompleted(req, respData, error, data, completion)
         }
         tasks[req.uniqueId] = task
     }
@@ -68,17 +68,34 @@ final class ChatFileManager: FileProtocol {
         }
     }
 
-    private func onUploadCompleted(_ req: UploadManagerParameters, _ data: Data?, _ error: Error?, _ uploadCompletion: UploadCompletionType?) {
+    private func onUploadCompleted(_ req: UploadManagerParameters, _ responseData: Data?, _ error: Error?, _ fileData: Data, _ uploadCompletion: UploadCompletionType?) {
         // completed upload file
-        if let error = uploadHasError(data, error) {
+        if let error = uploadHasError(responseData, error) {
             delegate?.chatEvent(event: .upload(.failed(uniqueId: req.uniqueId, error: error)))
-        } else if let data = data, let uploadResponse = try? JSONDecoder.instance.decode(PodspaceFileUploadResponse.self, from: data) {
+        } else if let data = responseData, let uploadResponse = try? JSONDecoder.instance.decode(PodspaceFileUploadResponse.self, from: data) {
             chat.logger.logJSON(title: "File uploaded successfully", jsonString: data.utf8StringOrEmpty, persist: false, type: .internalLog)
             let fileMetaData = uploadResponse.toMetaData(chat.config, width: req.imageRequest?.wC, height: req.imageRequest?.hC)
             uploadCompletion?(uploadResponse.result, fileMetaData, nil)
             delegate?.chatEvent(event: .upload(.completed(uniqueId: req.uniqueId, fileMetaData: fileMetaData, data: data, error: nil)))
             cache?.deleteQueues(uniqueIds: [req.uniqueId])
+            if chat.config.saveOnUpload == true {
+                saveUploadedFile(req ,uploadResponse, fileData)
+            }
         }
+    }
+
+    private func saveUploadedFile(_ params: UploadManagerParameters, _ response: PodspaceFileUploadResponse, _ fileData: Data) {
+        let config = chat.config
+        let isImage = params.imageRequest != nil
+        guard let hashCode = response.result?.hash else { return }
+        var url: URL?
+        if isImage {
+            url = URL(string: "\(config.fileServer)\(Routes.images.rawValue)/\(hashCode)")!
+        } else {
+            url = URL(string: "\(config.fileServer)\(Routes.files.rawValue)/\(hashCode)")!
+        }
+        guard let url = url else { return }
+        chat.cacheFileManager?.saveFile(url: url, data: fileData) {_ in}
     }
 
     func manageUpload(uniqueId: String, action: DownloaUploadAction) {
