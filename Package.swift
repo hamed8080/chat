@@ -14,20 +14,20 @@ let package = Package(
         .library(name: "Chat", targets: ["Chat"]),
     ],
     dependencies: [
-        .package(url: "https://pubgi.sandpod.ir/chat/ios/chat-extensions", from: "2.0.1"),
+        .package(path: "../ChatExtensions"),
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
     ],
     targets: [
         .target(
             name: "Chat",
             dependencies: [
-                .product(name: "ChatExtensions", package: "chat-extensions"),
+                .product(name: "ChatExtensions", package: "ChatExtensions"),
             ],
             resources: []
         ),
         .testTarget(name: "ChatTests", dependencies: [
             "Chat",
-            .product(name: "ChatExtensions", package: "chat-extensions"),
+            .product(name: "ChatExtensions", package: "ChatExtensions"),
         ], path: "Tests"),
     ]
 )
