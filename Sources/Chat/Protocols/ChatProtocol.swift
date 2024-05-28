@@ -4,12 +4,14 @@
 //
 // Created by Hamed Hosseini on 12/14/22
 
-import Additive
-import Async
-import ChatCache
-import ChatCore
-import ChatDTO
-import ChatModels
+@_exported import Additive
+@_exported import Async
+@_exported import ChatCache
+@_exported import ChatCore
+@_exported import ChatDTO
+@_exported import ChatModels
+@_exported import ChatTransceiver
+@_exported import ChatExtensions
 import Foundation
 import Logger
 

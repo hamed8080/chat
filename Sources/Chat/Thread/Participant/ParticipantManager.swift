@@ -29,7 +29,7 @@ final class ParticipantManager: ParticipantProtocol {
 
     func onThreadParticipants(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Participant]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)
-        let conversation = Conversation(id: response.subjectId)
+        var conversation = Conversation(id: response.subjectId)
         conversation.participants = response.result
         chat.delegate?.chatEvent(event: .participant(.participants(response)))
         chat.cache?.participant?.insert(model: conversation)

@@ -29,7 +29,7 @@ final class AssistantManager: AssistantProtocol {
 
     func onAssistants(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)
-        let copies = response.result?.compactMap{ $0.copy } ?? []
+        let copies = response.result?.compactMap{ $0 } ?? []
         chat.delegate?.chatEvent(event: .assistant(.assistants(response)))
         chat.cache?.assistant?.insert(models: copies)
     }
@@ -53,7 +53,7 @@ final class AssistantManager: AssistantProtocol {
 
     func onBlockUnBlockAssistant(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse()
-        let copies = response.result?.compactMap{$0.copy} ?? []
+        let copies = response.result?.compactMap{$0} ?? []
         let block = asyncMessage.chatMessage?.type == .blockAssistant
         chat.delegate?.chatEvent(event: .assistant(block ? .block(response) : .unblock(response)))
         chat.cache?.assistant?.block(block: asyncMessage.chatMessage?.type == .blockAssistant, assistants: copies)
@@ -71,7 +71,7 @@ final class AssistantManager: AssistantProtocol {
 
     func onGetBlockedAssistants(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)
-        let copies = response.result?.compactMap{$0.copy} ?? []
+        let copies = response.result?.compactMap{$0} ?? []
         chat.cache?.assistant?.insert(models: copies)
         chat.delegate?.chatEvent(event: .assistant(.blockedList(response)))
     }
@@ -82,7 +82,7 @@ final class AssistantManager: AssistantProtocol {
 
     func onDeactiveAssistants(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse()
-        let copies = response.result?.compactMap{$0.copy} ?? []
+        let copies = response.result?.compactMap{$0} ?? []
         chat.delegate?.chatEvent(event: .assistant(.deactive(response)))
         chat.cache?.assistant?.delete(copies)
     }
@@ -93,7 +93,7 @@ final class AssistantManager: AssistantProtocol {
 
     func onRegisterAssistants(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Assistant]> = asyncMessage.toChatResponse()
-        let copies = response.result?.compactMap{$0.copy} ?? []
+        let copies = response.result?.compactMap{$0} ?? []
         chat.delegate?.chatEvent(event: .assistant(.register(response)))
         chat.cache?.assistant?.insert(models: copies)
     }

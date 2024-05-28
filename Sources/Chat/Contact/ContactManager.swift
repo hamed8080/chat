@@ -88,7 +88,7 @@ final class ContactManager: ContactProtocol {
         let request = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
         DispatchQueue.global(qos: .background).async {
             try? store.enumerateContacts(with: request, usingBlock: { contact, _ in
-                let contactModel = Contact()
+                var contactModel = Contact()
                 contactModel.cellphoneNumber = contact.phoneNumbers.first?.value.stringValue ?? ""
                 contactModel.firstName = contact.givenName
                 contactModel.lastName = contact.familyName
@@ -164,7 +164,7 @@ final class ContactManager: ContactProtocol {
 
     func onContacts(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Contact]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)
-        let copies = response.result?.compactMap{$0.copy} ?? []
+        let copies = response.result?.compactMap{$0} ?? []
         chat.cache?.contact?.insert(models: copies)
         chat.delegate?.chatEvent(event: .contact(.contacts(response)))
     }

@@ -114,7 +114,7 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
 
     func onSummaryCount(_ response: ChatResponse<[ReactionCountList]>) {
         var inMemoryReactions: [ReactionInMemoryCopy] = []
-        response.result?.compactMap{$0.copy}.forEach { listCount in
+        response.result?.compactMap{$0}.forEach { listCount in
             let index = findOrCreateIndex(listCount.messageId ?? 0)
             reactions[index].summary = listCount.reactionCounts ?? []
             setUserReaction(listCount)
@@ -146,7 +146,7 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
     }
 
     func onReactionList(_ response: ChatResponse<ReactionList>) {
-        let copied = response.result?.copy
+        let copied = response.result
         if let messageId = copied?.messageId,
            let index = indexOfMessageId(messageId),
            let reactions = copied?.reactions {

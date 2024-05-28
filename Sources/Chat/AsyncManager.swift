@@ -99,11 +99,14 @@ public final class AsyncManager: AsyncDelegate {
 
     /// The sendData delegate will inform if a send event occurred by the async socket.
     public func sendData(sendable: ChatSendable, type: ChatMessageVOTypes) {
-        guard let config = config else { return }
-        let chatMessage = SendChatMessageVO(req: sendable, type: type.rawValue, token: config.token, typeCode: config.typeCode)
-        addToQueue(sendable: sendable, type: type)
-        addToPaginateable(sendable: sendable)
-        sendToAsync(asyncMessage: AsyncChatServerMessage(chatMessage: chatMessage), type: type)
+        serialQueue.asyncWork { [weak self] in
+            guard let self = self else { return }
+            guard let config = config else { return }
+            let chatMessage = SendChatMessageVO(req: sendable, type: type.rawValue, token: config.token, typeCode: config.typeCode)
+            addToQueue(sendable: sendable, type: type)
+            addToPaginateable(sendable: sendable)
+            sendToAsync(asyncMessage: AsyncChatServerMessage(chatMessage: chatMessage), type: type)
+        }
     }
 
     private func addToQueue(sendable: ChatSendable, type: ChatMessageVOTypes) {

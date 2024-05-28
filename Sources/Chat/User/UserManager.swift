@@ -46,10 +46,11 @@ final class UserManager: UserProtocol, InternalUserProtocol {
     func onSetRolesToUser(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[UserRole]> = asyncMessage.toChatResponse()
         chat.delegate?.chatEvent(event: .user(.setRolesToUser(response)))
-        chat.cache?.userRole?.insert(models: response.result?.compactMap {
-            $0.threadId = response.subjectId
-            return $0
-        } ?? [])
+        var userRoles = response.result ?? []
+        for (i, _) in userRoles.enumerated() {
+            userRoles[i].threadId = response.subjectId
+        }
+        chat.cache?.userRole?.insert(models: userRoles)
     }
 
     public func userInfo(_ request: UserInfoRequest) {

@@ -128,7 +128,7 @@ internal final class ThreadsStore: ThreadStoreProtocol {
     func appendAndSortIntoInMemory(conversations: [Conversation]) {
         conversations.forEach { conversation in
             let inMemory = InMemoryConversation()
-            inMemory.conversation = conversation.copy
+            inMemory.conversation = conversation
             inMemory.id = conversation.id
             self.conversations.append(inMemory)
         }
@@ -171,7 +171,7 @@ internal final class ThreadsStore: ThreadStoreProtocol {
 
     func onFetchedThreads(_ response: ChatResponse<[Conversation]>) {
         guard let uniqueId = response.uniqueId else { return }
-        let copies = response.result?.map{$0.copy} ?? []
+        let copies = response.result?.map{$0} ?? []
         if let completeOffsetRequest = request(for: uniqueId, key: "GET-COMPLETE-OFFSET") {
             onGetCompleteOffset(response, completeOffsetRequest)
         } else if let unavilableRequest = request(for: uniqueId, key: "GET-UNAVAILABLE-OFFSETS") {
@@ -207,7 +207,7 @@ internal final class ThreadsStore: ThreadStoreProtocol {
 
     private func onGetCompleteOffset(_ response: ChatResponse<[Conversation]>,_ request: ThreadsRequestWrapper) {
         guard let uniqueId = response.uniqueId else { return }
-        if let conversations = response.result?.compactMap({$0.copy}) {
+        if let conversations = response.result?.compactMap({$0}) {
             store(conversations, request: request.originalRequest)
             storePinThreads(conversations)
             requests.removeAll(where: {$0.request.uniqueId == uniqueId})
@@ -218,14 +218,16 @@ internal final class ThreadsStore: ThreadStoreProtocol {
 
     func fetchUnavailableSlots(request: ThreadsRequest) {
         guard let count = numberOfUnavailableSlots(request) else { return }
-        let newReq = request.copyWith(count: abs(count), offset: conversations.count)
+        var newReq = request
+        newReq.count = abs(count)
+        newReq.offset = conversations.count
         requests.append(.init(key: "GET-UNAVAILABLE-OFFSETS", request: newReq, originalRequest: request))
         fetch(request: newReq)
     }
 
     private func onGetUnavailableOffsets(_ response: ChatResponse<[Conversation]>, _ request: ThreadsRequestWrapper) {
         guard let uniqueId = response.uniqueId else { return }
-        let conversations = response.result?.compactMap{$0.copy} ?? []
+        let conversations = response.result?.compactMap{$0} ?? []
         appendAndSortIntoInMemory(conversations: conversations)
         requests.removeAll(where: {$0.request.uniqueId == uniqueId})
         storeInDB(conversations)
@@ -276,7 +278,7 @@ internal final class ThreadsStore: ThreadStoreProtocol {
     }
 
     func onJoined(conversation: Conversation?) {
-        if let copy = conversation?.copy {
+        if let copy = conversation {
             appendAndSortIntoInMemory(conversations: [copy])
         }
     }
@@ -286,15 +288,15 @@ internal final class ThreadsStore: ThreadStoreProtocol {
     }
 
     func onCreateConversation(_ conversation: Conversation?) {
-        if let copy = conversation?.copy {
+        if let copy = conversation {
             appendAndSortIntoInMemory(conversations: [copy])
         }
     }
 
     func onNewMessage(_ message: Message?) {
-        if let message = message?.copy, let conversationId = message.conversation?.id {
+        if let message = message, let conversationId = message.conversation?.id {
             if contains(conversationId), let index = indexOf(conversationId) {
-                conversations[index].conversation?.lastMessageVO = message
+                conversations[index].conversation?.lastMessageVO = message.toLastMessageVO
                 conversations[index].conversation?.lastMessage = message.message
             } else {
                 // Insert empty slot at the top
@@ -310,7 +312,7 @@ internal final class ThreadsStore: ThreadStoreProtocol {
     }
 
     func onChangeConversationType(_ conversation: Conversation?) {
-        if let copy = conversation?.copy, let index = indexOf(copy.id) {
+        if let copy = conversation, let index = indexOf(copy.id) {
             conversations[index].conversation?.type = copy.type
         }
     }
@@ -386,7 +388,7 @@ internal final class ThreadsStore: ThreadStoreProtocol {
 
     /// Emit a copy version of the conversaiton object
     func emit(_ conversations: [InMemoryConversation], _ uniqueId: String, _ hasNext: Bool) {
-        let map = conversations.compactMap{$0.conversation?.copy}
+        let map = conversations.compactMap{$0.conversation}
         let res = ChatResponse<[Conversation]>(uniqueId: uniqueId,
                                                result: map,
                                                hasNext: hasNext,

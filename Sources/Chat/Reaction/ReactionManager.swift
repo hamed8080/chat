@@ -72,7 +72,7 @@ final class ReactionManager: ReactionProtocol {
 
     func onReactionCount(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[ReactionCountList]> = asyncMessage.toChatResponse()
-        let copies = response.result?.compactMap{$0.copy} ?? []
+        let copies = response.result?.compactMap{$0} ?? []
         cache?.reactionCount?.insert(models: copies)
         chat.delegate?.chatEvent(event: .reaction(.count(response)))
         _internalInMemoryReaction?.onSummaryCount(response)

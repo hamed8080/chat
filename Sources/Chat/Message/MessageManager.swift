@@ -69,10 +69,7 @@ final class MessageManager: MessageProtocol {
         let response: ChatResponse<Message> = asyncMessage.toChatResponse()
         let copied = response.result
         delegate?.chatEvent(event: .message(.edited(response)))
-        if let message = copied {
-            cache?.deleteQueues(uniqueIds: [response.uniqueId ?? ""])
-            try? cache?.conversation?.replaceLastMessage(.init(id: response.subjectId, lastMessage: message.message, lastMessageVO: message))
-        }
+        cache?.deleteQueues(uniqueIds: [response.uniqueId ?? ""])
     }
 
     func export(_ request: GetHistoryRequest) {
@@ -134,7 +131,7 @@ final class MessageManager: MessageProtocol {
 
     func onGetHistroy(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Message]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)
-        let copies = response.result?.compactMap{$0.copy} ?? []
+        let copies = response.result?.compactMap{$0} ?? []
         delegate?.chatEvent(event: .message(.history(response)))
         cache?.message?.insert(models: copies, threadId: response.subjectId ?? -1)
     }
@@ -147,7 +144,7 @@ final class MessageManager: MessageProtocol {
     func send(_ request: SendTextMessageRequest) {
         chat.prepareToSendAsync(req: request, type: .message)
         let lastMessageVO = Message(threadId: request.threadId, message: request.textMessage, uniqueId: request.uniqueId)
-        try? cache?.conversation?.replaceLastMessage(.init(id: request.threadId, lastMessage: lastMessageVO.message, lastMessageVO: lastMessageVO))
+        try? cache?.conversation?.replaceLastMessage(.init(id: request.threadId, lastMessage: lastMessageVO.message, lastMessageVO: lastMessageVO.toLastMessageVO))
         cache?.textQueue?.insert(models: [request.queueOfTextMessages])
     }
 
@@ -183,7 +180,7 @@ final class MessageManager: MessageProtocol {
     private func sendTextLoactionMessage(_ coordinate: Coordinate, _ textMessageReq: SendTextMessageRequest, _ imageRequest: UploadImageRequest, _ reverse: MapReverse) {
         cache?.fileQueue?.insert(models: [textMessageReq.queueOfFileMessages(imageRequest)])
         (chat.file as? ChatFileManager)?.upload(imageRequest, nil) { [weak self] imageResponse, fileMetaData, error in
-            let metaData = fileMetaData
+            var metaData = fileMetaData
             let mapLink = "\(Routes.baseMapLink.rawValue)\(coordinate.lat),\(coordinate.lng)"
             metaData?.latitude = coordinate.lat
             metaData?.longitude = coordinate.lng
@@ -255,19 +252,19 @@ final class MessageManager: MessageProtocol {
 
     func onNewMessage(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Message> = asyncMessage.toChatResponse()
-        let copyiedMessage = response.result?.copy
+        let copiedMessage = response.result
         delegate?.chatEvent(event: .message(.new(response)))
-        guard var copyiedMessage = copyiedMessage else { return }
-        if copyiedMessage.threadId == nil {
-            copyiedMessage.threadId = response.subjectId ?? copyiedMessage.conversation?.id
+        guard var copiedMessage = copiedMessage else { return }
+        if copiedMessage.threadId == nil {
+            copiedMessage.threadId = response.subjectId ?? copiedMessage.conversation?.id
         }
         /// If we were sender of the message therfore we have seen all the messages inside the thread.
-        let isMe = copyiedMessage.participant?.id == chat.userInfo?.id
+        let isMe = copiedMessage.participant?.id == chat.userInfo?.id
         let unreadCountAction: CacheUnreadCountAction = isMe ? .set(0) : .increase
         cache?.conversation?.setUnreadCount(action: unreadCountAction, threadId: response.subjectId ?? -1)
         /// It will insert a new message into the Message table if the sender is not me
         /// and it will update a current message with a uniqueId of a message when we were the sender of a message, and consequently, it will set lastMessageVO for the thread.
-        try? cache?.conversation?.replaceLastMessage(.init(id: copyiedMessage.threadId, lastMessage: copyiedMessage.message, lastMessageVO: copyiedMessage))
+        try? cache?.conversation?.replaceLastMessage(.init(id: copiedMessage.threadId, lastMessage: copiedMessage.message, lastMessageVO: copiedMessage.toLastMessageVO))
     }
 
     func onSentMessage(_ asyncMessage: AsyncMessage) {
@@ -295,7 +292,7 @@ final class MessageManager: MessageProtocol {
 
     func onLastMessageEdited(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
-        let copied = response.result?.copy
+        let copied = response.result
         delegate?.chatEvent(event: .thread(.lastMessageEdited(response)))
         if let thread = copied {
             try? cache?.conversation?.replaceLastMessage(thread)
@@ -308,7 +305,7 @@ final class MessageManager: MessageProtocol {
         delegate?.chatEvent(event: .thread(.lastMessageDeleted(response)))
         if let thread = copied {
             let lastMessageVO = Message(threadId: thread.id, message: thread.lastMessage)
-            try? cache?.conversation?.replaceLastMessage(.init(id: lastMessageVO.threadId, lastMessage: lastMessageVO.message, lastMessageVO: lastMessageVO))
+            try? cache?.conversation?.replaceLastMessage(.init(id: lastMessageVO.threadId, lastMessage: lastMessageVO.message, lastMessageVO: lastMessageVO.toLastMessageVO))
         }
     }
 

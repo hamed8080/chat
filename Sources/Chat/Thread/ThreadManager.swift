@@ -59,7 +59,7 @@ final class ThreadManager: ThreadProtocol {
 
     func onUpdateThreadInfo(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
-        let copied = response.result?.copy
+        let copied = response.result
         delegate?.chatEvent(event: .thread(.updatedInfo(response)))
         cache?.conversation?.insert(models: [copied].compactMap { $0 })
     }
@@ -98,7 +98,7 @@ final class ThreadManager: ThreadProtocol {
 
     /// Update when a contact user updates his name or the contacts updated and the name of the thread accordingly updated.
     func onThreadNameContactUpdated(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
+        var response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
         let copied = response.result
         response.result?.id = response.subjectId
         delegate?.chatEvent(event: .thread(.updatedInfo(response)))
@@ -183,7 +183,7 @@ final class ThreadManager: ThreadProtocol {
     func onMutalGroups(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Conversation]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)
         guard let uniqueId = response.uniqueId, let request = requests[uniqueId] as? MutualGroupsRequest else { return }
-        let copies = response.result?.compactMap({$0.copy}) ?? []
+        let copies = response.result?.compactMap({$0}) ?? []
         cache?.mutualGroup?.insert(copies, idType: request.toBeUserVO.inviteeTypes, mutualId: request.toBeUserVO.id)
         delegate?.chatEvent(event: .thread(.mutual(response)))
     }
@@ -315,7 +315,7 @@ final class ThreadManager: ThreadProtocol {
 
     func onChangeThreadType(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
-        let copied = response.result?.copy
+        let copied = response.result
         cache?.conversation?.changeThreadType(copied?.id ?? -1, copied?.type ?? .unknown)
         chat.coordinator.conversation.onChangeConversationType(copied)
         delegate?.chatEvent(event: .thread(.changedType(response)))
