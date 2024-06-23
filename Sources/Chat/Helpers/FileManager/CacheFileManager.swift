@@ -40,12 +40,13 @@ public final class CacheFileManager: CacheFileManagerProtocol {
     }
 
     public func saveFile(url: URL, data: Data, saveCompeletion: @escaping (URL?) -> Void) {
-        guard let filePath = filePath(url: url) else {
-            saveCompeletion(nil)
-            return
-        }
-        createDirectory()
-        queue.asyncWork {
+        queue.asyncWork { [weak self] in
+            guard let self = self else { return }
+            guard let filePath = filePath(url: url) else {
+                saveCompeletion(nil)
+                return
+            }
+            createDirectory()
             try? data.write(to: filePath)
             DispatchQueue.global(qos: .background).async {
                 saveCompeletion(filePath)
@@ -54,27 +55,38 @@ public final class CacheFileManager: CacheFileManagerProtocol {
     }
 
     public func saveFileInGroup(url: URL, data: Data, saveCompeletion: @escaping (URL?) -> Void) {
-        guard let groupFilePath = filePathInGroup(url: url) else {
-            saveCompeletion(nil)
+        queue.asyncWork { [weak self] in
+            guard let self = self else { return }
+            guard let groupFilePath = filePathInGroup(url: url) else {
+                saveCompeletion(nil)
+                return
+            }
+            createGroupDirectory()
+            try? data.write(to: url)
+            saveCompeletion(groupFilePath)
+        }
+    }
+
+    public func getData(url: URL, completion: @escaping (Data?) -> Void) {
+        queue.asyncWork { [weak self] in
+            guard let self = self else { return }
+            guard isFileExist(url: url), let filePath = filePath(url: url) else {
+                completion(nil)
+                return
+            }
+            let data = try? Data(contentsOf: filePath)
+            completion(data)
+        }
+    }
+
+    public func getDataInGroup(url: URL, completion: @escaping (Data?) -> Void) {
+        guard isFileExistInGroup(url: url), let groupFilePath = filePathInGroup(url: url) else {
+            completion(nil)
             return
         }
-        createGroupDirectory()
-        queue.asyncWork {
-            try? data.write(to: url)
-            DispatchQueue.global(qos: .background).async {
-                saveCompeletion(groupFilePath)
-            }
+        getData(url: groupFilePath) { data in
+            completion(data)
         }
-    }
-
-    public func getData(url: URL) -> Data? {
-        guard isFileExist(url: url), let filePath = filePath(url: url) else { return nil }
-        return try? Data(contentsOf: filePath)
-    }
-
-    public func getDataInGroup(url: URL) -> Data? {
-        guard isFileExistInGroup(url: url), let groupFilePath = filePathInGroup(url: url) else { return nil }
-        return getData(url: groupFilePath)
     }
 
     @discardableResult

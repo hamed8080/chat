@@ -150,9 +150,16 @@ final class ChatFileManager: FileProtocol {
 
         if let filePath = chat.cacheFileManager?.filePath(url: params.url), let hashCode = params.hashCode {
             cache?.file?.first(hashCode: hashCode) { [weak self] _ in
-                let data = self?.chat.cacheFileManager?.getData(url: params.url) ?? self?.chat.cacheFileManager?.getDataInGroup(url: params.url)
-                let response = ChatResponse(uniqueId: params.uniqueId, result: data, cache: true)
-                self?.delegate?.chatEvent(event: .download(params.isImage ? .image(response, filePath) : .file(response, filePath)))
+
+                self?.chat.cacheFileManager?.getData(url: params.url) { [weak self] data in
+                    let response = ChatResponse(uniqueId: params.uniqueId, result: data, cache: true)
+                    self?.delegate?.chatEvent(event: .download(params.isImage ? .image(response, filePath) : .file(response, filePath)))
+                }
+
+                self?.chat.cacheFileManager?.getDataInGroup(url: params.url) { [weak self] data in
+                    let response = ChatResponse(uniqueId: params.uniqueId, result: data, cache: true)
+                    self?.delegate?.chatEvent(event: .download(params.isImage ? .image(response, filePath) : .file(response, filePath)))
+                }
             }
         }
     }
@@ -223,13 +230,17 @@ final class ChatFileManager: FileProtocol {
     }
 
     /// Get data of a cache. file in the correspondent URL.
-    func getData(_ url: URL) -> Data? {
-        chat.cacheFileManager?.getData(url: url)
+    func getData(_ url: URL, completion: @escaping (Data?) -> Void) {
+        chat.cacheFileManager?.getData(url: url) { data in
+            completion(data)
+        }
     }
 
     /// Get data of a cache. file in the correspondent URL inside a shared group.
-    func getDataInGroup(_ url: URL) -> Data? {
-        chat.cacheFileManager?.getDataInGroup(url: url)
+    func getDataInGroup(_ url: URL, completion: @escaping (Data?) -> Void) {
+        chat.cacheFileManager?.getDataInGroup(url: url) { data in
+            completion(data)
+        }
     }
 
     /// Save a file inside the sandbox of the Chat SDK.

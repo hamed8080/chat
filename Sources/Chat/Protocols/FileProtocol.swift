@@ -56,10 +56,10 @@ public protocol FileProtocol {
     func filePathInGroup(_ url: URL) -> URL?
 
     /// Get data of a cache file in the correspondent URL.
-    func getData(_ url: URL) -> Data?
+    func getData(_ url: URL, completion: @escaping (Data?) -> Void)
 
     /// Get data of a cache file in the correspondent URL inside a shared group.
-    func getDataInGroup(_ url: URL) -> Data?
+    func getDataInGroup(_ url: URL, completion: @escaping (Data?) -> Void)
 
     /// Save a file inside the sandbox of the Chat SDK.
     func saveFile(url: URL, data: Data, completion: @escaping (URL?) -> Void)
