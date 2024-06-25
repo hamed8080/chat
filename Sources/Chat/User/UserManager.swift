@@ -33,7 +33,8 @@ final class UserManager: UserProtocol, InternalUserProtocol {
     func currentUserRoles(_ request: GeneralSubjectIdRequest) {
         chat.prepareToSendAsync(req: request, type: .getCurrentUserRoles)
         let roles = chat.cache?.userRole?.roles(request.subjectId)
-        chat.delegate?.chatEvent(event: .user(.currentUserRoles(ChatResponse(uniqueId: request.uniqueId, result: roles, cache: true))))
+        let typeCode = request.toTypeCode(chat)
+        chat.delegate?.chatEvent(event: .user(.currentUserRoles(ChatResponse(uniqueId: request.uniqueId, result: roles, cache: true, typeCode: typeCode))))
     }
 
     func onCurrentUserRoles(_ asyncMessage: AsyncMessage) {
@@ -55,8 +56,9 @@ final class UserManager: UserProtocol, InternalUserProtocol {
 
     public func userInfo(_ request: UserInfoRequest) {
         chat.prepareToSendAsync(req: request, type: .userInfo)
+        let typeCode = request.toTypeCode(chat)
         chat.cache?.user?.fetchCurrentUser { [weak self] userEntity in
-            let response = ChatResponse(uniqueId: request.uniqueId, result: userEntity?.codable, cache: true)
+            let response = ChatResponse(uniqueId: request.uniqueId, result: userEntity?.codable, cache: true, typeCode: typeCode)
             self?.chat.delegate?.chatEvent(event: .user(.user(response)))
         }
     }
@@ -92,7 +94,7 @@ final class UserManager: UserProtocol, InternalUserProtocol {
             chat.cache?.user?.insertOnMain(user, isMe: true)
             chat.userInfo = user
             (chat as? ChatImplementation)?.state = .chatReady
-            chat.delegate?.chatEvent(event: .user(.user(.init(result: user))))
+            chat.delegate?.chatEvent(event: .user(.user(.init(result: user, typeCode: response.typeCode))))
             chat.delegate?.chatState(state: .chatReady, currentUser: user, error: nil)
             chat.asyncManager.sendQueuesOnReconnect()
             requestUserTimer.invalidateTimer()
@@ -102,7 +104,7 @@ final class UserManager: UserProtocol, InternalUserProtocol {
             // reach to max retry
             requestUserTimer.invalidateTimer()
             let error = ChatError(type: .errorRaedyChat, message: "Reached max retry count!")
-            let errorResponse = ChatResponse(result: Any?.none, error: error)
+            let errorResponse = ChatResponse(result: Any?.none, error: error, typeCode: response.typeCode)
             chat.delegate?.chatEvent(event: .system(.error(errorResponse)))
         }
     }
@@ -113,7 +115,7 @@ final class UserManager: UserProtocol, InternalUserProtocol {
             chat.cache?.user?.insertOnMain(user)
         }
         onInternalUser(response: response)
-        chat.delegate?.chatEvent(event: .system(.serverTime(.init(uniqueId: response.uniqueId, result: response.time, time: response.time))))
+        chat.delegate?.chatEvent(event: .system(.serverTime(.init(uniqueId: response.uniqueId, result: response.time, time: response.time, typeCode: response.typeCode))))
         chat.delegate?.chatEvent(event: .user(.user(response)))
     }
 

@@ -76,7 +76,7 @@ public final class DiskStatus {
                 message += " " + "so, the cache will be switch OFF!"
             }
             let error = ChatError(type: .outOfStorage, message: message)
-            let errorResponse = ChatResponse(result: Any?.none, error: error)
+            let errorResponse = ChatResponse(result: Any?.none, error: error, typeCode: nil)
             delegate?.chatEvent(event: .system(.error(errorResponse)))
             return false
         } else {

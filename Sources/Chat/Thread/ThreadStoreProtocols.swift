@@ -24,7 +24,7 @@ protocol InMemoryConversationOperations {
     func update(_ conversation: T)
     func indexOf(_ conversationId: T.ID) -> Array<T>.Index?
     func contains(_ conversationId: T.ID) -> Bool
-    func emit(_ conversations: [T], _ uniqueId: String, _ hasNext: Bool)
+    func emit(_ conversations: [T], _ uniqueId: String,_ typeCode: String?, _ hasNext: Bool)
     func makeEmptySlots(_ request: ThreadsRequest)
     func makeEmptySlot(for: Conversation.ID, at: Array<T>.Index)
     func emptySlot(id: Conversation.ID)

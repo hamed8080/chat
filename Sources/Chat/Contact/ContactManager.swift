@@ -114,12 +114,18 @@ final class ContactManager: ContactProtocol {
 
     func onSyncContacts(_ asyncMessage: AsyncMessage) {
         guard let response = asyncMessage.chatMessage else { return }
-        chat.delegate?.chatEvent(event: .contact(.synced(.init(result: response))))
+        chat.delegate?.chatEvent(event: .contact(.synced(.init(result: response, typeCode: response.typeCode))))
     }
 
     func remove(_ request: RemoveContactsRequest) {
         let url = "\(chat.config.platformHost)\(Routes.removeContacts.rawValue)"
         let headers: [String: String] = ["_token_": chat.config.token, "_token_issuer_": "1"]
+
+        // Change TypeCodeIndex to typeCode string
+        let typeCode = request.toTypeCode(chat)
+        var request = request
+        request.setTypeCode(typeCode: typeCode)
+
         let bodyData = request.parameterData
         var urlReq = URLRequest(url: URL(string: url)!)
         urlReq.allHTTPHeaderFields = headers
@@ -127,10 +133,10 @@ final class ContactManager: ContactProtocol {
         urlReq.method = .post
         chat.logger.logHTTPRequest(urlReq, String(describing: type(of: Bool.self)), persist: true, type: .sent)
         chat.session.dataTask(urlReq) { [weak self] data, urlResponse, error in
-            let response: ChatResponse<RemoveContactResponse>? = self?.chat.session.decode(data, urlResponse, error)
+            let response: ChatResponse<RemoveContactResponse>? = self?.chat.session.decode(data, urlResponse, error, typeCode: typeCode)
             self?.chat.logger.logHTTPResponse(data, urlResponse, error, persist: true, type: .received, userInfo: self?.chat.loggerUserInfo)
             let deletedContacts = [Contact(id: request.contactId)]
-            let chatResponse = ChatResponse(uniqueId: request.uniqueId, result: deletedContacts, error: response?.error)
+            let chatResponse = ChatResponse(uniqueId: request.uniqueId, result: deletedContacts, error: response?.error, typeCode: typeCode)
             self?.chat.delegate?.chatEvent(event: .contact(.delete(chatResponse, deleted: response?.result?.deteled ?? false)))
             self?.removeFromCacheIfExist(removeContactResponse: response?.result, contactId: request.contactId)
         }
@@ -150,10 +156,11 @@ final class ContactManager: ContactProtocol {
 
     func get(_ request: ContactsRequest) {
         chat.prepareToSendAsync(req: request, type: .getContacts)
+        let typeCode = request.toTypeCode(chat)
         chat.cache?.contact?.getContacts(request.fetchRequest) { [weak self] contacts, _ in
             let contacts = contacts.map(\.codable)
             let hasNext = contacts.count >= request.size
-            let reponse = ChatResponse(uniqueId: request.uniqueId, result: contacts, hasNext: hasNext, cache: true)
+            let reponse = ChatResponse(uniqueId: request.uniqueId, result: contacts, hasNext: hasNext, cache: true, typeCode: typeCode)
             self?.chat.delegate?.chatEvent(event: .contact(.contacts(reponse)))
         }
     }
@@ -206,7 +213,13 @@ final class ContactManager: ContactProtocol {
     func add(_ request: AddContactRequest) {
         let url = "\(chat.config.platformHost)\(Routes.addContacts.rawValue)"
         let headers: [String: String] = ["_token_": chat.config.token, "_token_issuer_": "1", "Content-Type": "application/x-www-form-urlencoded"]
-        let bodyData = request.parameterData
+
+        // Change TypeCodeIndex to typeCode string
+        let typeCode = chat.config.typeCodes[request.typeCodeIndex].typeCode
+        var newRequest = request
+        newRequest.setTypeCode(typeCode: typeCode)
+
+        let bodyData = newRequest.parameterData
         var urlReq = URLRequest(url: URL(string: url)!)
         urlReq.allHTTPHeaderFields = headers
         urlReq.httpBody = bodyData
@@ -251,9 +264,9 @@ final class ContactManager: ContactProtocol {
     }
 
     private func onAddContacts(uniqueId: String?, data: Data?, response: URLResponse?, error: Error?) {
-        let result: ChatResponse<ContactResponse>? = chat.session.decode(data, response, error)
+        let result: ChatResponse<ContactResponse>? = chat.session.decode(data, response, error, typeCode: nil)
         chat.logger.logHTTPResponse(data, response, error, persist: true, type: .received, userInfo: chat.loggerUserInfo)
-        let response = ChatResponse(uniqueId: uniqueId, result: result?.result?.contacts, error: result?.error)
+        let response = ChatResponse(uniqueId: uniqueId, result: result?.result?.contacts, error: result?.error, typeCode: result?.typeCode)
         chat.delegate?.chatEvent(event: .contact(.add(response)))
         chat.cache?.contact?.insert(models: result?.result?.contacts ?? [])
     }

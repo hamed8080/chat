@@ -25,12 +25,13 @@ final class ThreadManager: ThreadProtocol {
     }
 
     public func updateInfo(_ request: UpdateThreadInfoRequest) {
+        let typeCode = request.toTypeCode(chat)
         if let image = request.threadImage {
             saveThreadImageToCashe(req: request)
             (chat.file as? ChatFileManager)?.upload(image, nil) { [weak self] _, fileMetaData, error in
                 // send update thread Info with new file
                 if let error = error {
-                    let response = ChatResponse(uniqueId: request.uniqueId, result: Any?.none, error: error)
+                    let response = ChatResponse(uniqueId: request.uniqueId, result: Any?.none, error: error, typeCode: typeCode)
                     self?.delegate?.chatEvent(event: .system(.error(response)))
 
                 } else {
@@ -66,8 +67,9 @@ final class ThreadManager: ThreadProtocol {
 
     func unreadCount(_ request: ThreadsUnreadCountRequest) {
         chat.prepareToSendAsync(req: request, type: .threadsUnreadCount)
+        let typeCode = request.toTypeCode(chat)
         cache?.conversation?.threadsUnreadcount(request.threadIds) { [weak self] unreadCount in
-            let response = ChatResponse(uniqueId: request.uniqueId, result: unreadCount, cache: true)
+            let response = ChatResponse(uniqueId: request.uniqueId, result: unreadCount, cache: true, typeCode: typeCode)
             self?.delegate?.chatEvent(event: .thread(.unreadCount(response)))
         }
     }
@@ -131,7 +133,7 @@ final class ThreadManager: ThreadProtocol {
             chat.user.set(roleRequest)
         } else {
             let chatError = ChatError(message: "Current User have no Permission to Change the ThreadAdmin", code: 6666, hasError: true)
-            let response = ChatResponse(uniqueId: request.uniqueId, result: Any?.none, error: chatError)
+            let response = ChatResponse(uniqueId: request.uniqueId, result: Any?.none, error: chatError, typeCode: response.typeCode)
             delegate?.chatEvent(event: .system(.error(response)))
         }
     }
@@ -163,7 +165,7 @@ final class ThreadManager: ThreadProtocol {
     func onPinUnPinThread(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Int> = asyncMessage.toChatResponse()
         let conversationId = response.result ?? -1
-        let threadResponse = ChatResponse(uniqueId: response.uniqueId, result: Conversation(id: conversationId), subjectId: response.subjectId, time: response.time)
+        let threadResponse = ChatResponse(uniqueId: response.uniqueId, result: Conversation(id: conversationId), subjectId: response.subjectId, time: response.time, typeCode: response.typeCode)
         let pinned = asyncMessage.chatMessage?.type == .pinThread
         chat.coordinator.conversation.onPinUnPin(pin: pinned, conversationId)
         delegate?.chatEvent(event: .thread(pinned ? .pin(threadResponse) : .unpin(threadResponse)))
@@ -173,9 +175,10 @@ final class ThreadManager: ThreadProtocol {
     func mutual(_ request: MutualGroupsRequest) {
         requests[request.uniqueId] = request
         chat.prepareToSendAsync(req: request, type: .mutualGroups)
+        let typeCode = request.toTypeCode(chat)
         cache?.mutualGroup?.mutualGroups(request.toBeUserVO.id ?? "") { [weak self] mutuals in
             let threads = mutuals.first?.conversations?.allObjects.compactMap { $0 as? CDConversation }.map { $0.codable() }
-            let response = ChatResponse(uniqueId: request.uniqueId, result: threads, hasNext: threads?.count ?? 0 >= request.count, cache: true)
+            let response = ChatResponse(uniqueId: request.uniqueId, result: threads, hasNext: threads?.count ?? 0 >= request.count, cache: true, typeCode: typeCode)
             self?.delegate?.chatEvent(event: .thread(.mutual(response)))
         }
     }
@@ -339,8 +342,9 @@ final class ThreadManager: ThreadProtocol {
 
     func allUnreadCount(_ request: AllThreadsUnreadCountRequest) {
         chat.prepareToSendAsync(req: request, type: .allUnreadMessageCount)
+        let typeCode = request.toTypeCode(chat)
         cache?.conversation?.allUnreadCount { [weak self] allUnreadCount in
-            let response = ChatResponse(uniqueId: request.uniqueId, result: allUnreadCount, cache: true)
+            let response = ChatResponse(uniqueId: request.uniqueId, result: allUnreadCount, cache: true, typeCode: typeCode)
             self?.delegate?.chatEvent(event: .thread(.allUnreadCount(response)))
         }
     }

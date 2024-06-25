@@ -152,12 +152,12 @@ final class ChatFileManager: FileProtocol {
             cache?.file?.first(hashCode: hashCode) { [weak self] _ in
 
                 self?.chat.cacheFileManager?.getData(url: params.url) { [weak self] data in
-                    let response = ChatResponse(uniqueId: params.uniqueId, result: data, cache: true)
+                    let response = ChatResponse(uniqueId: params.uniqueId, result: data, cache: true, typeCode: nil)
                     self?.delegate?.chatEvent(event: .download(params.isImage ? .image(response, filePath) : .file(response, filePath)))
                 }
 
                 self?.chat.cacheFileManager?.getDataInGroup(url: params.url) { [weak self] data in
-                    let response = ChatResponse(uniqueId: params.uniqueId, result: data, cache: true)
+                    let response = ChatResponse(uniqueId: params.uniqueId, result: data, cache: true, typeCode: nil)
                     self?.delegate?.chatEvent(event: .download(params.isImage ? .image(response, filePath) : .file(response, filePath)))
                 }
             }
@@ -169,10 +169,10 @@ final class ChatFileManager: FileProtocol {
               let headers = response.allHeaderFields as? [String: Any]
         else { return }
         let statusCode = response.statusCode
-        if let errorResponse = error(statusCode: statusCode, data: data, uniqueId: params.uniqueId, headers: headers) {
+        if let errorResponse = error(statusCode: statusCode, data: data, uniqueId: params.uniqueId, typeCode: nil, headers: headers) {
             delegate?.chatEvent(event: .system(.error(errorResponse)))
         } else if let data = data {
-            let response = ChatResponse(uniqueId: params.uniqueId, result: data)
+            let response = ChatResponse(uniqueId: params.uniqueId, result: data, typeCode: nil)
             if !params.thumbnail {
                 let file = File(hashCode: params.hashCode ?? "", headers: headers)
                 cache?.file?.insert(models: [file])
@@ -186,21 +186,21 @@ final class ChatFileManager: FileProtocol {
         }
     }
 
-    private func error(statusCode: Int, data: Data?, uniqueId: String, headers: [String: Any]) -> ChatResponse<Any>? {
+    private func error(statusCode: Int, data: Data?, uniqueId: String, typeCode: String?, headers: [String: Any]) -> ChatResponse<Any>? {
         if statusCode >= 200, statusCode <= 300 {
             if let data = data, let error = try? JSONDecoder.instance.decode(ChatError.self, from: data), error.hasError == true {
-                return ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error)
+                return ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error, typeCode: typeCode)
             }
             if let data = data, let podspaceError = try? JSONDecoder.instance.decode(PodspaceFileUploadResponse.self, from: data) {
                 let error = ChatError(message: podspaceError.message, code: podspaceError.errorType?.rawValue, hasError: true)
-                return ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error)
+                return ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error, typeCode: typeCode)
             }
             return nil /// Means the result was success.
         } else {
             let message = (headers["errorMessage"] as? String) ?? ""
             let code = (headers["errorCode"] as? Int) ?? 999
             let error = ChatError(message: message, code: code, hasError: true, content: nil)
-            return ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error)
+            return ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error, typeCode: typeCode)
         }
     }
 

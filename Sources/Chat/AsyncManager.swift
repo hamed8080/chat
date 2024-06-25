@@ -85,7 +85,7 @@ public final class AsyncManager: AsyncDelegate {
     /// A delegate to raise an error.
     public func asyncError(error: AsyncError) {
         let chatError = ChatError(type: .asyncError, message: error.message, userInfo: error.userInfo, rawError: error.rawError)
-        let errorResponse = ChatResponse(result: Any?.none, error: chatError)
+        let errorResponse = ChatResponse(result: Any?.none, error: chatError, typeCode: nil)
         chat?.delegate?.chatEvent(event: .system(.error(errorResponse)))
     }
 
@@ -102,7 +102,10 @@ public final class AsyncManager: AsyncDelegate {
         serialQueue.asyncWork { [weak self] in
             guard let self = self else { return }
             guard let config = config else { return }
-            let chatMessage = SendChatMessageVO(req: sendable, type: type.rawValue, token: config.token, typeCode: config.typeCode)
+            let typeCodeIndex = sendable.chatTypeCodeIndex
+            guard config.typeCodes.indices.contains(typeCodeIndex) else { fatalError("Type code index is not exist. Check if the index of the type is right.") }
+            let typeCode = config.typeCodes[typeCodeIndex].typeCode
+            let chatMessage = SendChatMessageVO(req: sendable, type: type.rawValue, token: config.token, typeCode: typeCode)
             addToQueue(sendable: sendable, type: type)
             addToPaginateable(sendable: sendable)
             sendToAsync(asyncMessage: AsyncChatServerMessage(chatMessage: chatMessage), type: type)

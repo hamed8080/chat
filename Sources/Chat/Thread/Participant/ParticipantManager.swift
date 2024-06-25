@@ -20,9 +20,10 @@ final class ParticipantManager: ParticipantProtocol {
 
     func get(_ request: ThreadParticipantRequest) {
         chat.prepareToSendAsync(req: request, type: .threadParticipants)
+        let typeCode = request.toTypeCode(chat)
         chat.cache?.participant?.getThreadParticipants(request.threadId, request.count, request.offset) { [weak self] participants, totalCount in
             let participants = participants.map(\.codable)
-            let response = ChatResponse(uniqueId: request.uniqueId, result: participants, hasNext: totalCount >= request.count, cache: true)
+            let response = ChatResponse(uniqueId: request.uniqueId, result: participants, hasNext: totalCount >= request.count, cache: true, typeCode: typeCode)
             self?.chat.delegate?.chatEvent(event: .participant(.participants(response)))
         }
     }
@@ -55,7 +56,7 @@ final class ParticipantManager: ParticipantProtocol {
         guard let thread = response.result else { return }
         chat.coordinator.conversation.onAddParticipant(response.subjectId, count: response.result?.participantCount ?? 0)
         chat.cache?.participant?.insert(model: thread)
-        chat.delegate?.chatEvent(event: .thread(.threads(.init(result: [thread]))))
+        chat.delegate?.chatEvent(event: .thread(.threads(.init(result: [thread], typeCode: response.typeCode))))
         chat.delegate?.chatEvent(event: .participant(.add(response)))
     }
 

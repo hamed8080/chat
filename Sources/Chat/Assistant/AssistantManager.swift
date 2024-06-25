@@ -19,10 +19,11 @@ final class AssistantManager: AssistantProtocol {
 
     func get(_ request: AssistantsRequest) {
         chat.prepareToSendAsync(req: request, type: .getAssistants)
+        let typeCode = request.toTypeCode(chat)
         chat.cache?.assistant?.fetch(request.count, request.offset) { [weak self] assistants, _ in
             let assistants = assistants.map(\.codable)
             let hasNext = assistants.count >= request.count
-            let response = ChatResponse(uniqueId: request.uniqueId, result: assistants, hasNext: hasNext, cache: true)
+            let response = ChatResponse(uniqueId: request.uniqueId, result: assistants, hasNext: hasNext, cache: true, typeCode: typeCode)
             self?.chat.delegate?.chatEvent(event: .assistant(.assistants(response)))
         }
     }
@@ -61,10 +62,11 @@ final class AssistantManager: AssistantProtocol {
 
     func blockedList(_ request: BlockedAssistantsRequest) {
         chat.prepareToSendAsync(req: request, type: .blockedAssistnts)
+        let typeCode = request.toTypeCode(chat)
         chat.cache?.assistant?.getBlocked(request.count, request.offset) { [weak self] assistants, _ in
             let assistants = assistants.map(\.codable)
             let hasNext = assistants.count >= request.count
-            let response = ChatResponse(uniqueId: request.uniqueId, result: assistants, hasNext: hasNext, cache: true)
+            let response = ChatResponse(uniqueId: request.uniqueId, result: assistants, hasNext: hasNext, cache: true, typeCode: typeCode)
             self?.chat.delegate?.chatEvent(event: .assistant(.blockedList(response)))
         }
     }

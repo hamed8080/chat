@@ -102,7 +102,7 @@ public final class ChatImplementation: ChatInternalProtocol, Identifiable {
         var urlReq = URLRequest(url: URL(string: url)!)
         urlReq.allHTTPHeaderFields = headers
         session.dataTask(urlReq) { [weak self] data, response, error in
-            let result: ChatResponse<DevicesResposne>? = self?.session.decode(data, response, error)
+            let result: ChatResponse<DevicesResposne>? = self?.session.decode(data, response, error, typeCode: nil)
             if let device = result?.result?.devices?.first(where: { $0.current == true }) {
                 self?.config.asyncConfig.updateDeviceId(device.uid ?? UUID().uuidString)
                 self?.asyncManager.createAsync()

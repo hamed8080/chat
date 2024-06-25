@@ -24,10 +24,12 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
         /// If we have a cached version of messageId in reactions list it means that the last time it was nil and did not have a user reaction.
         if let index = indexOfMessageId(request.messageId) {
             let cachedVersion = reactions[index].currentUserReaction
+            let typeCode = request.toTypeCode(chat)
             let response = ChatResponse<CurrentUserReaction>(uniqueId: request.uniqueId,
                                                              result: .init(messageId: request.messageId, reaction: cachedVersion),
                                                              cache: true,
-                                                             subjectId: request.conversationId)
+                                                             subjectId: request.conversationId,
+                                                             typeCode: typeCode)
             chat.delegate?.chatEvent(event: .reaction(.reaction(response)))
             let copy = reactions[index].copy
             chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messages: [copy])))
@@ -51,7 +53,8 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
             let response = ChatResponse<[ReactionCountList]>(uniqueId: uniqueId,
                                                              result: list,
                                                              cache: true,
-                                                             subjectId: conversationId)
+                                                             subjectId: conversationId,
+                                                             typeCode: nil)
             chat.delegate?.chatEvent(event: .reaction(.count(response)))
             list.forEach { item in
                 if let messageId = item.messageId, let index = indexOfMessageId(messageId) {
@@ -102,10 +105,11 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
         let currentStoredInMemory = request.sticker == nil ? allStoredReactions : byStickerFilter
         let count = currentStoredInMemory.count
 
+        let typeCode = request.toTypeCode(chat)
         let response = ChatResponse<ReactionList>(uniqueId: request.uniqueId,
                                                   result: .init(messageId: request.messageId, reactions: currentStoredInMemory),
                                                   cache: true,
-                                                  subjectId: request.conversationId)
+                                                  subjectId: request.conversationId, typeCode: typeCode)
         chat.delegate?.chatEvent(event: .reaction(.list(response)))
         chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messages: [reacrionInMemory.copy])))
 

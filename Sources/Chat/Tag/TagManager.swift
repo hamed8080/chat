@@ -30,9 +30,10 @@ final class TagManager: TagProtocol {
     func all() {
         let req = BareChatSendableRequest()
         chat.prepareToSendAsync(req: req, type: .tagList)
+        let typeCode = chat.config.typeCodes[req.chatTypeCodeIndex].typeCode
         chat.cache?.tag?.getTags { [weak self] tags in
             let tagModels = tags.map(\.codable)
-            let response = ChatResponse(uniqueId: req.uniqueId, result: tagModels, cache: true)
+            let response = ChatResponse(uniqueId: req.uniqueId, result: tagModels, cache: true, typeCode: typeCode)
             self?.chat.delegate?.chatEvent(event: .tag(.tags(response)))
         }
     }

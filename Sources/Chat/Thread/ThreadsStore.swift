@@ -66,7 +66,7 @@ internal final class ThreadsStore: ThreadStoreProtocol {
         let range = Range(nsrange)!
         if conversations.count > 0 {
             let conversations = conversations[range]
-            emit(Array(conversations), request.uniqueId, true)
+            emit(Array(conversations), request.uniqueId, request.toTypeCode(chat), true)
         }
     }
 
@@ -196,10 +196,11 @@ internal final class ThreadsStore: ThreadStoreProtocol {
     }
 
     func fetch(request: ThreadsRequest) {
+        let typeCode = request.toTypeCode(chat)
         chat.cache?.conversation?.fetch(request.fetchRequest) { [weak self] threads, totalCount in
             let threads = threads.map { $0.codable() }
             let hasNext = totalCount >= request.count
-            let response = ChatResponse(uniqueId: request.uniqueId, result: threads, hasNext: hasNext, cache: true)
+            let response = ChatResponse(uniqueId: request.uniqueId, result: threads, hasNext: hasNext, cache: true, typeCode: typeCode)
             self?.chat.delegate?.chatEvent(event: .thread(.threads(response)))
         }
         chat.prepareToSendAsync(req: request, type: .getThreads)
@@ -238,13 +239,13 @@ internal final class ThreadsStore: ThreadStoreProtocol {
         let nsRange = NSRange(location: startIndex, length: length)
         if let range = Range(nsRange), startIndex < endIndex, self.conversations.count >= endIndex {
             let mergedConversations = self.conversations[range]
-            emit(Array(mergedConversations), request.originalRequest.uniqueId, hasNext)
+            emit(Array(mergedConversations), request.originalRequest.uniqueId, response.typeCode, hasNext)
         } else {
             // There were no bottom part client requested we have to repond with available threads.
             let startIndex = request.originalRequest.offset
             let endIndex = self.conversations.count - 1
             let conversations = self.conversations[startIndex...endIndex]
-            emit(Array(conversations), request.originalRequest.uniqueId, hasNext)
+            emit(Array(conversations), request.originalRequest.uniqueId, response.typeCode, hasNext)
         }
     }
 
@@ -387,13 +388,14 @@ internal final class ThreadsStore: ThreadStoreProtocol {
     }
 
     /// Emit a copy version of the conversaiton object
-    func emit(_ conversations: [InMemoryConversation], _ uniqueId: String, _ hasNext: Bool) {
+    func emit(_ conversations: [InMemoryConversation], _ uniqueId: String, _ typeCode: String?, _ hasNext: Bool) {
         let map = conversations.compactMap{$0.conversation}
         let res = ChatResponse<[Conversation]>(uniqueId: uniqueId,
                                                result: map,
                                                hasNext: hasNext,
                                                cache: false,
-                                               time: Int(Date().millisecondsSince1970))
+                                               time: Int(Date().millisecondsSince1970),
+                                               typeCode: typeCode)
         chat.delegate?.chatEvent(event: .thread(.threads(res)))
     }
 

@@ -85,42 +85,47 @@ final class MessageManager: MessageProtocol {
 
     func history(_ request: GetHistoryRequest) {
         chat.prepareToSendAsync(req: request, type: .getHistory)
+        let typeCode = request.toTypeCode(chat)
         cache?.message?.fetch(request.fetchRequest) { [weak self] messages, totalCount in
             let messages = messages.map { $0.codable(fillConversation: false) }
             let hasNext = totalCount >= request.count
-            let response = ChatResponse(uniqueId: request.uniqueId, result: messages, contentCount: totalCount, hasNext: hasNext, cache: true)
+            let response = ChatResponse(uniqueId: request.uniqueId, result: messages, contentCount: totalCount, hasNext: hasNext, cache: true, typeCode: typeCode)
             self?.chat.delegate?.chatEvent(event: .message(.history(response)))
         }
     }
 
     func unsentTextMessages(_ request: GetHistoryRequest) {
+        let typeCode = request.toTypeCode(chat)
         cache?.textQueue?.unsendForThread(request.threadId, request.count, request.offset) { [weak self] unsedTexts, _ in
             let requests = unsedTexts.map(\.codable.request)
-            let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true)
+            let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true, typeCode: typeCode)
             self?.chat.delegate?.chatEvent(event: .message(.queueTextMessages(response)))
         }
     }
 
     func unsentEditMessages(_ request: GetHistoryRequest) {
+        let typeCode = request.toTypeCode(chat)
         cache?.editQueue?.unsendForThread(request.threadId, request.count, request.offset) { [weak self] unsendEdits, _ in
             let requests = unsendEdits.map(\.codable.request)
-            let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true)
+            let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true, typeCode: typeCode)
             self?.chat.delegate?.chatEvent(event: .message(.queueEditMessages(response)))
         }
     }
 
     func unsentForwardMessages(_ request: GetHistoryRequest) {
+        let typeCode = request.toTypeCode(chat)
         cache?.forwardQueue?.unsendForThread(request.threadId, request.count, 100) { [weak self] unsendForwards, _ in
             let requests = unsendForwards.map(\.codable.request)
-            let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true)
+            let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true, typeCode: typeCode)
             self?.chat.delegate?.chatEvent(event: .message(.queueForwardMessages(response)))
         }
     }
 
     func unsentFileMessages(_ request: GetHistoryRequest) {
+        let typeCode = request.toTypeCode(chat)
         cache?.fileQueue?.unsendForThread(request.threadId, request.count, request.offset) { [weak self] unsendFiles, _ in
             let requests = unsendFiles.map(\.codable.request)
-            let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true)
+            let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true, typeCode: typeCode)
             self?.chat.delegate?.chatEvent(event: .message(.queueFileMessages(response)))
         }
     }
@@ -219,8 +224,9 @@ final class MessageManager: MessageProtocol {
     }
 
     private func sendTextMessageOnUploadCompletion(_ textMessage: SendTextMessageRequest, _ uniqueId: String, _: UploadFileResponse?, _ metadata: FileMetaData?, _ error: ChatError?) {
+        let typeCode = textMessage.toTypeCode(chat)
         if let error = error {
-            let response = ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error)
+            let response = ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error, typeCode: typeCode)
             chat.delegate?.chatEvent(event: .system(.error(response)))
         } else {
             guard let stringMetaData = metadata.jsonString else { return }
@@ -232,10 +238,11 @@ final class MessageManager: MessageProtocol {
 
     func mentions(_ request: MentionRequest) {
         chat.prepareToSendAsync(req: request, type: .getHistory)
+        let typeCode = request.toTypeCode(chat)
         cache?.message?.getMentions(threadId: request.threadId, offset: request.offset, count: request.count) { [weak self] messages, _ in
             let messages = messages.map { $0.codable() }
             let hasNext = messages.count >= request.count
-            let response = ChatResponse(uniqueId: request.uniqueId, result: messages, hasNext: hasNext)
+            let response = ChatResponse(uniqueId: request.uniqueId, result: messages, hasNext: hasNext, typeCode: typeCode)
             self?.delegate?.chatEvent(event: .message(.messages(response)))
         }
     }
@@ -364,8 +371,9 @@ final class MessageManager: MessageProtocol {
     }
 
     private func sendReplyPrivatelyMessageOnUploadCompletion(_ replyMessage: ReplyPrivatelyRequest, _ uniqueId: String, _: UploadFileResponse?, _ metadata: FileMetaData?, _ error: ChatError?) {
+        let typeCode = replyMessage.toTypeCode(chat)
         if let error = error {
-            let response = ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error)
+            let response = ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error, typeCode: typeCode)
             chat.delegate?.chatEvent(event: .system(.error(response)))
         } else {
             guard let stringMetaData = metadata.jsonString else { return }

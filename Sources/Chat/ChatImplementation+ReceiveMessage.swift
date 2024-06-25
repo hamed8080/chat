@@ -11,8 +11,9 @@ import Foundation
 public extension ChatImplementation {
     func invokeCallback(asyncMessage: AsyncMessage) {
         guard let chatMessage = asyncMessage.chatMessage else { return }
-        if let typeCode = chatMessage.typeCode, typeCode != config.typeCode {
-            logger.log(title: "Mismatch typeCode", message: "Expected typeCode is:\(config.typeCode) but received: \(chatMessage.typeCode ?? "")", persist: true, type: .internalLog, userInfo: loggerUserInfo)
+        if let typeCode = chatMessage.typeCode, config.typeCodes.first(where: { $0.typeCode == typeCode }) == nil {
+            let message = "Expected the type codes to be one of the:\(config.typeCodes) but received: \(chatMessage.typeCode ?? "")"
+            logger.log(title: "Mismatch typeCode", message: message, persist: true, type: .internalLog, userInfo: loggerUserInfo)
             return
         }
         logger.logJSON(title: "On Receive Message with type: \(chatMessage.type)", jsonString: asyncMessage.string ?? "", persist: false, type: .received)

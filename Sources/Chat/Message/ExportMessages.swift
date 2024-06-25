@@ -20,7 +20,7 @@ public protocol ExportMessagesProtocol {
     var maxSize: Int { get }
     var maxAvailableCount: Int { get }
     func start()
-    func finished(success: Bool, uniqueId: String?, error: ChatError?)
+    func finished(success: Bool, uniqueId: String?, error: ChatError?, typeCode: String?)
     func hasNext(response: ChatResponse<[Message]>) -> Bool
     func setNextOffest()
     func addMessagesToFile(_ messages: [Message])
@@ -67,15 +67,15 @@ final class ExportMessages: ExportMessagesProtocol {
             if hasNext(response: response) {
                 getHistory()
             } else {
-                finished(success: true, uniqueId: response.uniqueId, error: response.error)
+                finished(success: true, uniqueId: response.uniqueId, error: response.error, typeCode: response.typeCode)
             }
         } else {
-            finished(uniqueId: response.uniqueId, error: response.error ?? ChatError(type: .exportError, code: 0, message: nil, rawError: response.error?.rawError))
+            finished(uniqueId: response.uniqueId, error: response.error ?? ChatError(type: .exportError, code: 0, message: nil, rawError: response.error?.rawError), typeCode: response.typeCode)
         }
     }
 
-    func finished(success: Bool = false, uniqueId: String?, error: ChatError?) {
-        let response = ChatResponse(uniqueId: uniqueId, result: success ? filePath : nil, error: error)
+    func finished(success: Bool = false, uniqueId: String?, error: ChatError?, typeCode: String?) {
+        let response = ChatResponse(uniqueId: uniqueId, result: success ? filePath : nil, error: error, typeCode: typeCode)
         chat.delegate?.chatEvent(event: .message(.export(response)))
         chat.exportMessageViewModels.removeAll(where: { $0.threadId == threadId })
     }
