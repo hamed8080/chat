@@ -47,10 +47,10 @@ final class ChatFileManager: FileProtocol {
         let task = UploadManager().upload(req, data) { [weak self] progress in
             self?.delegate?.chatEvent(event: .upload(.progress(req.uniqueId, progress)))
             progressCompletion?(progress)
-        } completion: { respData, _, error in
-            self.onUploadCompleted(req, respData, error, data, completion)
+        } completion: { [weak self] respData, _, error in
+            self?.onUploadCompleted(req, respData, error, data, completion)
         }
-        tasks[req.uniqueId] = task
+        addTask(uniqueId: req.uniqueId, task: task)
     }
 
     func uploadHasError(_ data: Data?, _ error: Error?) -> ChatError? {
@@ -82,6 +82,7 @@ final class ChatFileManager: FileProtocol {
                 saveUploadedFile(req ,uploadResponse, fileData)
             }
         }
+        removeTask(req.uniqueId)
     }
 
     private func saveUploadedFile(_ params: UploadManagerParameters, _ response: PodspaceFileUploadResponse, _ fileData: Data) {
@@ -107,7 +108,7 @@ final class ChatFileManager: FileProtocol {
     }
 
     private func manageTask(upload: Bool, uniqueId: String, action: DownloaUploadAction) {
-        if let task = tasks[uniqueId] {
+        if let task = getTask(uniqueId: uniqueId) {
             switch action {
             case .cancel:
                 task.cancel()
@@ -143,9 +144,7 @@ final class ChatFileManager: FileProtocol {
             } completion: { [weak self] data, response, error in
                 self?.onDownload(params: params, data: data, response: response, error: error)
             }
-            queue.async { [weak self] in
-                self?.tasks[params.uniqueId] = task
-            }
+            addTask(uniqueId: params.uniqueId, task: task)
         }
 
         if let filePath = chat.cacheFileManager?.filePath(url: params.url), let hashCode = params.hashCode {
@@ -171,6 +170,7 @@ final class ChatFileManager: FileProtocol {
         let statusCode = response.statusCode
         if let errorResponse = error(statusCode: statusCode, data: data, uniqueId: params.uniqueId, typeCode: nil, headers: headers) {
             delegate?.chatEvent(event: .system(.error(errorResponse)))
+            removeTask(params.uniqueId)
         } else if let data = data {
             let response = ChatResponse(uniqueId: params.uniqueId, result: data, typeCode: nil)
             if !params.thumbnail {
@@ -183,6 +183,7 @@ final class ChatFileManager: FileProtocol {
                 /// Is thumbnail and it does not need to save on the disk.
                 delegate?.chatEvent(event: .download(params.isImage ? .image(response, nil) : .file(response, nil)))
             }
+            removeTask(params.uniqueId)
         }
     }
 
@@ -254,9 +255,25 @@ final class ChatFileManager: FileProtocol {
     }
 
     private func removeTask(_ uniqueId: String) {
-        if let task = tasks[uniqueId] {
-            task.cancel()
-            tasks.removeValue(forKey: uniqueId)
+        queue.async { [weak self] in
+            guard let self = self else { return }
+            if let task = tasks[uniqueId] {
+                task.cancel()
+                tasks.removeValue(forKey: uniqueId)
+            }
+        }
+    }
+
+    private func addTask(uniqueId: String, task: (any URLSessionDataTaskProtocol)?) {
+        queue.async { [weak self] in
+            guard let self = self else { return }
+            tasks[uniqueId] = task
+        }
+    }
+
+    private func getTask(uniqueId: String) -> (any URLSessionDataTaskProtocol)? {
+        queue.sync {
+            return tasks[uniqueId]
         }
     }
 }
