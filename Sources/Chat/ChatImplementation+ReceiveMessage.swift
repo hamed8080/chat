@@ -231,6 +231,8 @@ public extension ChatImplementation {
             ((conversation as? ThreadManager)?.participant as? ParticipantManager)?.onSetAdminRoleToUser(asyncMessage)
         case .removeAdminRoleFromUser:
             ((conversation as? ThreadManager)?.participant as? ParticipantManager)?.onRemoveAdminRoleFromUser(asyncMessage)
+        case .addUserToUserGroup:
+            (file as? ChatFileManager)?.onAddUserToUserGroup(asyncMessage)
         case .error:
             (system as? SystemManager)?.onError(asyncMessage)
         case .unknown:

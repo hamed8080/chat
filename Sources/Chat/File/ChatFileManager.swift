@@ -14,10 +14,13 @@ import ChatModels
 import ChatTransceiver
 import Foundation
 
-final class ChatFileManager: FileProtocol {
+final class ChatFileManager: FileProtocol, InternalFileProtocol {
     let chat: ChatInternalProtocol
     var delegate: ChatDelegate? { chat.delegate }
     var cache: CacheManager? { chat.cache }
+
+    // Keep track of requests, to do internal actions such as adding the user to the user group if needed.
+    private var requests: [String: DownloadManagerParameters] = [:]
     private var tasks: [String: URLSessionDataTaskProtocol] = [:]
     private var queue = DispatchQueue(label: "DownloadQueue")
 
@@ -145,11 +148,14 @@ final class ChatFileManager: FileProtocol {
                 self?.onDownload(params: params, data: data, response: response, error: error)
             }
             addTask(uniqueId: params.uniqueId, task: task)
+        } else {
+            fetchFromCache(params)
         }
+    }
 
+    private func fetchFromCache(_ params: DownloadManagerParameters) {
         if let filePath = chat.cacheFileManager?.filePath(url: params.url), let hashCode = params.hashCode {
             cache?.file?.first(hashCode: hashCode) { [weak self] _ in
-
                 self?.chat.cacheFileManager?.getData(url: params.url) { [weak self] data in
                     let response = ChatResponse(uniqueId: params.uniqueId, result: data, cache: true, typeCode: nil)
                     self?.delegate?.chatEvent(event: .download(params.isImage ? .image(response, filePath) : .file(response, filePath)))
@@ -168,7 +174,7 @@ final class ChatFileManager: FileProtocol {
               let headers = response.allHeaderFields as? [String: Any]
         else { return }
         let statusCode = response.statusCode
-        if let errorResponse = error(statusCode: statusCode, data: data, uniqueId: params.uniqueId, typeCode: nil, headers: headers) {
+        if let errorResponse = handleDownloadError(statusCode, params, data, headers) {
             delegate?.chatEvent(event: .system(.error(errorResponse)))
             removeTask(params.uniqueId)
         } else if let data = data {
@@ -184,24 +190,6 @@ final class ChatFileManager: FileProtocol {
                 delegate?.chatEvent(event: .download(params.isImage ? .image(response, nil) : .file(response, nil)))
             }
             removeTask(params.uniqueId)
-        }
-    }
-
-    private func error(statusCode: Int, data: Data?, uniqueId: String, typeCode: String?, headers: [String: Any]) -> ChatResponse<Any>? {
-        if statusCode >= 200, statusCode <= 300 {
-            if let data = data, let error = try? JSONDecoder.instance.decode(ChatError.self, from: data), error.hasError == true {
-                return ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error, typeCode: typeCode)
-            }
-            if let data = data, let podspaceError = try? JSONDecoder.instance.decode(PodspaceFileUploadResponse.self, from: data) {
-                let error = ChatError(message: podspaceError.message, code: podspaceError.errorType?.rawValue, hasError: true)
-                return ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error, typeCode: typeCode)
-            }
-            return nil /// Means the result was success.
-        } else {
-            let message = (headers["errorMessage"] as? String) ?? ""
-            let code = (headers["errorCode"] as? Int) ?? 999
-            let error = ChatError(message: message, code: code, hasError: true, content: nil)
-            return ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error, typeCode: typeCode)
         }
     }
 
@@ -275,5 +263,87 @@ final class ChatFileManager: FileProtocol {
         queue.sync {
             return tasks[uniqueId]
         }
+    }
+
+    internal func handleUserGroupAccessError(_ params: DownloadManagerParameters) {
+        guard let conversationId = params.conversationId else { return }
+        let req = AddUserToUserGroupRequest(conversationId: conversationId, typeCodeIndex: params.typeCodeIndex)
+        queue.sync {
+            requests[req.uniqueId] = params
+        }
+        chat.prepareToSendAsync(req: req, type: .addUserToUserGroup)
+
+        /// Timer to cancel download and raise an error.
+        Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { [weak self] _ in
+            guard let self = self else { return }
+            queue.sync {
+                self.requests.removeValue(forKey: req.uniqueId)
+            }
+        }
+    }
+
+    internal func onAddUserToUserGroup(_ asyncMessage: AsyncMessage) {
+        let uniqueId = asyncMessage.chatMessage?.uniqueId
+        queue.sync {
+            if let uniqueId = uniqueId, let params = requests[uniqueId] {
+                retry(params)
+                requests.removeValue(forKey: uniqueId)
+            }
+        }
+    }
+
+    private func retry(_ params: DownloadManagerParameters) {
+        download(params)
+    }
+}
+
+
+// MARK: handle Errors
+extension ChatFileManager {
+    private func handleDownloadError(_ statusCode: Int, _ params: DownloadManagerParameters, _ data: Data?, _ headers: [String: Any]) -> ChatResponse<Any>? {
+        let typeCode = chat.config.typeCodes[params.typeCodeIndex].typeCode
+        if statusCode >= 200, statusCode <= 300 {
+            if let chatError = chatError(params.uniqueId, data, typeCode) {
+                return chatError
+            }
+            if let podSpaceError = podspaceError(params.uniqueId, data, typeCode) {
+                if podSpaceError.error?.code == 403 {
+                    return checkForAccessError(params, typeCode)
+                } else {
+                    return podSpaceError
+                }
+            }
+            return nil // nil means it was successful.
+        } else {
+            return unhandledError(params, headers, typeCode)
+        }
+    }
+
+    private func unhandledError(_ params: DownloadManagerParameters, _ headers: [String: Any], _ typeCode: String) -> ChatResponse<Any>? {
+        let message = (headers["errorMessage"] as? String) ?? ""
+        let code = (headers["errorCode"] as? Int) ?? 999
+        let error = ChatError(message: message, code: code, hasError: true, content: nil)
+        return ChatResponse(uniqueId: params.uniqueId, result: Any?.none, error: error, typeCode: typeCode)
+    }
+
+    private func checkForAccessError(_ params: DownloadManagerParameters, _ typeCode: String) -> ChatResponse<Any>? {
+        let error = ChatError(type: .notAddedInUserGroup, code: 403)
+        handleUserGroupAccessError(params)
+        return ChatResponse(uniqueId: params.uniqueId, result: Any?.none, error: error, typeCode: typeCode)
+    }
+
+    private func chatError(_ uniqueId: String, _ data: Data?, _ typeCode: String) -> ChatResponse<Any>? {
+        if let data = data, let error = try? JSONDecoder.instance.decode(ChatError.self, from: data), error.hasError == true {
+            return ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error, typeCode: typeCode)
+        }
+        return nil
+    }
+
+    private func podspaceError(_ uniqueId: String?, _ data: Data?, _ typeCode: String) -> ChatResponse<Any>? {
+        if let data = data, let podspaceError = try? JSONDecoder.instance.decode(PodspaceFileUploadResponse.self, from: data) {
+            let error = ChatError(message: podspaceError.message, code: podspaceError.errorType?.rawValue, hasError: true)
+            return ChatResponse(uniqueId: uniqueId, result: Any?.none, error: error, typeCode: typeCode)
+        }
+        return nil
     }
 }

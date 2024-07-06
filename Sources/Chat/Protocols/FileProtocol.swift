@@ -67,3 +67,8 @@ public protocol FileProtocol {
     /// Save a file inside a shared group.
     func saveFileInGroup(url: URL, data: Data, completion: @escaping (URL?) -> Void)
 }
+
+protocol InternalFileProtocol {
+    // Try to add the user to the user group then retry the download.
+    func handleUserGroupAccessError(_ params: DownloadManagerParameters)
+}
