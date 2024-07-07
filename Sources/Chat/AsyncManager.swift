@@ -104,8 +104,8 @@ public final class AsyncManager: AsyncDelegate {
             guard let config = config else { return }
             let typeCodeIndex = sendable.chatTypeCodeIndex
             guard config.typeCodes.indices.contains(typeCodeIndex) else { fatalError("Type code index is not exist. Check if the index of the type is right.") }
-            let typeCode = config.typeCodes[typeCodeIndex].typeCode
-            let chatMessage = SendChatMessageVO(req: sendable, type: type.rawValue, token: config.token, typeCode: typeCode)
+            let ownerTypeCode = config.typeCodes[typeCodeIndex]
+            let chatMessage = SendChatMessageVO(req: sendable, type: type.rawValue, token: config.token, typeCode: ownerTypeCode.typeCode, ownerId: ownerTypeCode.ownerId)
             addToQueue(sendable: sendable, type: type)
             addToPaginateable(sendable: sendable)
             sendToAsync(asyncMessage: AsyncChatServerMessage(chatMessage: chatMessage), type: type)
