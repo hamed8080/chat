@@ -142,26 +142,38 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
 
     private func download(_ params: DownloadManagerParameters) {
         if params.forceToDownload {
+            log("Start downloading with params:\n\(params.debugDescription)")
             let task = DownloadManager().download(params) { [weak self] progress in
                 self?.delegate?.chatEvent(event: .download(.progress(uniqueId: params.uniqueId, progress: progress)))
             } completion: { [weak self] data, response, error in
+                self?.log("Download completed with response:\(response) error:\(error) params:\n\(params.debugDescription)")
                 self?.onDownload(params: params, data: data, response: response, error: error)
             }
             addTask(uniqueId: params.uniqueId, task: task)
         } else {
+            log("Start fetching from cache with params:\n\(params.debugDescription)")
             fetchFromCache(params)
         }
+    }
+
+
+    private func log(_ message: String) {
+#if DEBUG
+        chat.logger.log(title: "ChatFileManager", message: message, persist: false, type: .internalLog)
+#endif
     }
 
     private func fetchFromCache(_ params: DownloadManagerParameters) {
         if let filePath = chat.cacheFileManager?.filePath(url: params.url), let hashCode = params.hashCode {
             cache?.file?.first(hashCode: hashCode) { [weak self] _ in
                 self?.chat.cacheFileManager?.getData(url: params.url) { [weak self] data in
+                    self?.log("On cache file for non-group with params:\n\(params.debugDescription)")
                     let response = ChatResponse(uniqueId: params.uniqueId, result: data, cache: true, typeCode: nil)
                     self?.delegate?.chatEvent(event: .download(params.isImage ? .image(response, filePath) : .file(response, filePath)))
                 }
 
                 self?.chat.cacheFileManager?.getDataInGroup(url: params.url) { [weak self] data in
+                    self?.log("On cache file for group with params:\n\(params.debugDescription)")
                     let response = ChatResponse(uniqueId: params.uniqueId, result: data, cache: true, typeCode: nil)
                     self?.delegate?.chatEvent(event: .download(params.isImage ? .image(response, filePath) : .file(response, filePath)))
                 }
