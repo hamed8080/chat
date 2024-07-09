@@ -161,7 +161,7 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
     }
 
     func onAdd(_ response: ChatResponse<ReactionMessageResponse>) {
-        if let messageId = response.result?.messageId {
+        if let messageId = response.result?.messageId, isInCache(messageId){
             let reaction = response.result?.reaction
             let index = findOrCreateIndex(messageId)
             reactions[index].addOrReplaceSummaryCount(sticker: reaction?.reaction ?? Sticker.unknown)
@@ -169,6 +169,10 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
             setUserReaction(index: index, action: response.result)
             chat.delegate?.chatEvent(event: .reaction(.inMemoryUpdate(messages: [reactions[index].copy])))
         }
+    }
+
+    private func isInCache(_ messageId: Int) -> Bool {
+        reactions.contains(where: {$0.messageId == messageId})
     }
 
     func onReplace(_ response: ChatResponse<ReactionMessageResponse>) {
