@@ -74,7 +74,7 @@ final class MessageManager: MessageProtocol {
 
     func export(_ request: GetHistoryRequest) {
         guard let chat = chat as? ChatImplementation else { return }
-        exportVM = ExportMessages(chat: chat, request: request)
+        exportVM = ExportMessages(chat: chat, request: request, bundle: chat.bundle)
         exportVM?.start()
     }
 
@@ -186,7 +186,7 @@ final class MessageManager: MessageProtocol {
         cache?.fileQueue?.insert(models: [textMessageReq.queueOfFileMessages(imageRequest)])
         (chat.file as? ChatFileManager)?.upload(imageRequest, nil) { [weak self] imageResponse, fileMetaData, error in
             var metaData = fileMetaData
-            let mapLink = "\(Routes.baseMapLink.rawValue)\(coordinate.lat),\(coordinate.lng)"
+            let mapLink = "\(self?.chat.config.baseMapLink ?? "")\(coordinate.lat),\(coordinate.lng)"
             metaData?.latitude = coordinate.lat
             metaData?.longitude = coordinate.lng
             metaData?.reverse = reverse.string

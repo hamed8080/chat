@@ -28,7 +28,7 @@ internal final class ThreadsStore: ThreadStoreProtocol {
     var serverSortedPins: [Int] = []
     var requests: [ThreadsRequestWrapper] = []
     var chat: ChatInternalProtocol
-    private var debug = ProcessInfo().environment["talk.pod.ir.chat.threadStore.debug"] == "1"
+    private var debug = ProcessInfo().environment["talk.pod.chat.threadStore.debug"] == "1"
 
     init(chat: ChatInternalProtocol) {
         self.chat = chat

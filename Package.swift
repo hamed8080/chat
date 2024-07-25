@@ -22,8 +22,7 @@ let package = Package(
             name: "Chat",
             dependencies: [
                 .product(name: "ChatExtensions", package: "ChatExtensions"),
-            ],
-            resources: []
+            ]
         ),
         .testTarget(name: "ChatTests", dependencies: [
             "Chat",

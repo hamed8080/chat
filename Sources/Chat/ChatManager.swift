@@ -16,8 +16,8 @@ public final class ChatManager {
     public static var activeInstance: Chat?
     private var instances: [UUID: Chat] = [:]
 
-    private func createInstance(config: ChatConfig) {
-        let chat = ChatImplementation(config: config)
+    private func createInstance(config: ChatConfig, bundle: Bundle) {
+        let chat = ChatImplementation(config: config, bundle: bundle)
         instances[chat.id] = chat
         ChatManager.activeInstance = chat
     }
@@ -30,20 +30,20 @@ public final class ChatManager {
         instances.removeValue(forKey: chatId)
     }
 
-    public func createOrReplaceUserInstance(userId: Int? = nil, config: ChatConfig) {
+    public func createOrReplaceUserInstance(userId: Int? = nil, config: ChatConfig, bundle: Bundle = .main) {
         if let userId = userId, let key = instances.first(where: { ($0.value as? ChatInternalProtocol)?.userInfo?.id == userId })?.key {
             ChatManager.activeInstance = instances[key]
         } else {
-            createInstance(config: config)
+            createInstance(config: config, bundle: bundle)
         }
 
         if let userId = userId {
-            ChatManager.switchToUser(userId: userId)
+            ChatManager.switchToUser(userId: userId, bundle: bundle)
         }
     }
 
-    public final class func switchToUser(userId: Int) {
+    public final class func switchToUser(userId: Int, bundle: Bundle) {
         guard let activeInstance = activeInstance as? ChatInternalProtocol else { return }
-        activeInstance.cache?.switchToContainer(userId: userId)
+        activeInstance.cache?.switchToContainer(userId: userId, bundle: bundle)
     }
 }

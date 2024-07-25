@@ -41,10 +41,16 @@ final class ExportMessages: ExportMessagesProtocol {
     var filePath: URL { rootPath.appendingPathComponent(fileName) }
     let maxSize: Int = 10000
     var maxAvailableCount: Int = 0
-    var titles: String { ["message", "userName", "name", "hour", "date"].map { $0.localized(bundle: Bundle.moduleBundle) }.joined(separator: ",").appending("\r\n") }
+    var bundle: Bundle
+    var titles: String { ["ExportMessages.message",
+                          "ExportMessages.userName",
+                          "ExportMessages.name",
+                          "ExportMessages.hour",
+                          "ExportMessages.date"].map { $0.localized(bundle: bundle) }.joined(separator: ",").appending("\r\n") }
     var chat: ChatImplementation
 
-    init(chat: ChatImplementation, request: GetHistoryRequest) {
+    init(chat: ChatImplementation, request: GetHistoryRequest, bundle: Bundle) {
+        self.bundle = bundle
         self.request = request
         self.chat = chat
     }
@@ -110,7 +116,7 @@ final class ExportMessages: ExportMessagesProtocol {
         let sender = message.participant?.name ?? message.participant?.contactName ?? "\(message.participant?.firstName ?? "") \(message.participant?.lastName ?? "")"
         let date = Date(timeIntervalSince1970: TimeInterval(message.time ?? 0) / 1000)
         string.append(contentsOf: "\(sanitize(message.message ?? "")),")
-        string.append(contentsOf: "\(sanitize(message.participant?.username ?? "undefined".localized(bundle: Bundle.moduleBundle))),")
+        string.append(contentsOf: "\(sanitize(message.participant?.username ?? "ExportMessages.undefined".localized(bundle: bundle))),")
         string.append(contentsOf: "\(sanitize(sender)),")
         string.append(contentsOf: "\(date.getTime(localIdentifire: Locale.current.identifier, withAbbrevation: "GMT")),")
         string.append(contentsOf: "\(date.getDate(localIdentifire: Locale.current.identifier, withAbbrevation: "GMT")))")

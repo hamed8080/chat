@@ -18,6 +18,7 @@ import Logger
 public protocol Chat {
     init(
         config: ChatConfig,
+        bundle: Bundle,
         pingTimer: SourceTimer,
         queueTimer: SourceTimer,
         banTimer: TimerProtocol,
@@ -27,7 +28,7 @@ public protocol Chat {
 
     /// The unique id of a chat instance to find and use it in ``ChatManager`` to fetch it.
     var id: UUID { get }
-
+    var bundle: Bundle { get set }
     var contact: ContactProtocol { get set }
     var conversation: ThreadProtocol { get set }
     var bot: BotProtocol { get set }
