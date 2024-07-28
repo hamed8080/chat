@@ -238,6 +238,11 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
         reactions.append(.init(messageId: messageId))
     }
 
+    internal func onNewMessage(messageId: Int) {
+        let inMemoryItem = MessageInMemoryReaction(messageId: messageId)
+        reactions.append(inMemoryItem)
+    }
+
     /// Clear in memory cache upon disconnect.
     public func invalidate() {
         queue.sync {

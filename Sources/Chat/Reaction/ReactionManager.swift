@@ -110,4 +110,11 @@ final class ReactionManager: ReactionProtocol {
         chat.delegate?.chatEvent(event: .reaction(.delete(response)))
         _internalInMemoryReaction?.onDelete(response)
     }
+
+    func onNewMessage(_ asyncMessage: AsyncMessage) {
+        let response: ChatResponse<Message> = asyncMessage.toChatResponse()
+        if let messageId = response.result?.id {
+            _internalInMemoryReaction?.onNewMessage(messageId: messageId)
+        }
+    }
 }

@@ -84,6 +84,7 @@ public extension ChatImplementation {
             break
         case .message:
             (message as? MessageManager)?.onNewMessage(asyncMessage)
+            (reaction as? ReactionManager)?.onNewMessage(asyncMessage)
             (conversation as? ThreadManager)?.onNewMessage(asyncMessage)
         case .ping:
             break
