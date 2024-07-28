@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Chat"
-  s.version      = "2.1.0"
+  s.version      = "2.1.1"
   s.summary      = "Swift Chat SDK"
   s.description  = "A Swift Chat SDK which handle all backend communication with Async SDK and Chat Server."
   s.homepage     = "https://pubgi.sandpod.ir/chat/ios/chat"
