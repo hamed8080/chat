@@ -70,6 +70,14 @@ final class ReactionManager: ReactionProtocol {
         chat.prepareToSendAsync(req: request, type: .removeReaction)
     }
 
+    func allowedReactions(_ request: ConversationAllowedReactionsRequest) {
+        chat.prepareToSendAsync(req: request, type: .allowedReactions)
+    }
+
+    func customizeReactions(_ request: ConversationCustomizeReactionsRequest) {
+        chat.prepareToSendAsync(req: request, type: .customizeReactions)
+    }
+
     func onReactionCount(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[ReactionCountList]> = asyncMessage.toChatResponse()
         let copies = response.result?.compactMap{$0} ?? []
@@ -116,5 +124,17 @@ final class ReactionManager: ReactionProtocol {
         if let messageId = response.result?.id {
             _internalInMemoryReaction?.onNewMessage(messageId: messageId)
         }
+    }
+
+    func onAllowedReactions(_ asyncMessage: AsyncMessage) {
+        let response: ChatResponse<AllowedReactionsResponse> = asyncMessage.toChatResponse()
+        let stickers = response.result
+        chat.delegate?.chatEvent(event: .reaction(.allowedReactions(response)))
+    }
+
+    func onCustomizeReactions(_ asyncMessage: AsyncMessage) {
+        let response: ChatResponse<CustomizeReactionsResponse> = asyncMessage.toChatResponse()
+        let stickers = response.result
+        chat.delegate?.chatEvent(event: .reaction(.customizeReactions(response)))
     }
 }
