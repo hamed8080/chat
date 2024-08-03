@@ -17,12 +17,12 @@ public protocol ReactionProtocol {
     /// Get the count of each reaction by messageIds.
     /// - Parameters:
     ///   - request: The request that contains a messageIds and conversationId.
-    func count(_ request: RactionCountRequest)
+    func count(_ request: ReactionCountRequest)
 
     /// Get list of reactions for a messsage with messageId.
     /// - Parameters:
     ///   - uniqueId: The request that contains a messageId and offset and count.
-    func get(_ request: RactionListRequest)
+    func get(_ request: ReactionListRequest)
 
     /// Add a reaction to a message.
     /// - Parameters:

@@ -31,7 +31,7 @@ final class ReactionManager: ReactionProtocol {
         }
     }
 
-    func count(_ request: RactionCountRequest) {
+    func count(_ request: ReactionCountRequest) {
         guard let tuple = _internalInMemoryReaction?.tupleOfMessageIds(request.messageIds) else { return }
         var newRquest = request
         newRquest.messageIds = tuple.notInMemory
@@ -41,7 +41,7 @@ final class ReactionManager: ReactionProtocol {
         chat.prepareToSendAsync(req: newRquest, type: .reactionCount)
     }
 
-    func get(_ request: RactionListRequest) {
+    func get(_ request: ReactionListRequest) {
         //Creating and inserting an empty slot to the reactions array is essential if there is a connection disruption.
 
         var allowedRequestOffset = 0
