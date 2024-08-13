@@ -307,9 +307,15 @@ final class ThreadManager: ThreadProtocol {
 
     func onCloseThread(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Int> = asyncMessage.toChatResponse()
-        chat.coordinator.conversation.onClosed(response.result)
-        delegate?.chatEvent(event: .thread(.closed(response)))
-        cache?.conversation?.close(true, response.result ?? -1)
+        let newResponse = ChatResponse<Int>(uniqueId: response.uniqueId,
+                                            result: response.subjectId,
+                                            error: response.error,
+                                            subjectId: response.subjectId,
+                                            time: response.time,
+                                            typeCode: response.typeCode)
+        chat.coordinator.conversation.onClosed(newResponse.result)
+        delegate?.chatEvent(event: .thread(.closed(newResponse)))
+        cache?.conversation?.close(true, newResponse.result ?? -1)
     }
 
     func changeType(_ request: ChangeThreadTypeRequest) {
