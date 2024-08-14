@@ -225,6 +225,10 @@ public extension ChatImplementation {
             (reaction as? ReactionManager)?.onReactionCount(asyncMessage)
         case .lastActionInThread:
             (conversation as? ThreadManager)?.onLastActionInThread(asyncMessage)
+        case .allowedReactions:
+            (reaction as? ReactionManager)?.onAllowedReactions(asyncMessage)
+        case .customizeReactions:
+            (reaction as? ReactionManager)?.onCustomizeReactions(asyncMessage)
         case .replyPrivately:
             /// This action will not trigger by the server it just a send request.
             break
