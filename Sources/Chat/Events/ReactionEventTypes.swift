@@ -17,4 +17,6 @@ public enum ReactionEventTypes {
     case add(ChatResponse<ReactionMessageResponse>)
     case replace(ChatResponse<ReactionMessageResponse>)
     case delete(ChatResponse<ReactionMessageResponse>)
+    case allowedReactions(ChatResponse<AllowedReactionsResponse>)
+    case customizeReactions(ChatResponse<CustomizeReactionsResponse>)
 }

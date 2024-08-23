@@ -96,7 +96,7 @@ public final class InMemoryReaction: InMemoryReactionProtocol {
         return (inMemory: inMemoryMessageIds, notInMemory: notInMemoryMessageIds)
     }
 
-    func getOffset(_ request: RactionListRequest) -> Int? {
+    func getOffset(_ request: ReactionListRequest) -> Int? {
         guard let index = indexOfMessageId(request.messageId) else { return nil }
         let reacrionInMemory = reactions[index]
         let allStoredReactions = reacrionInMemory.details

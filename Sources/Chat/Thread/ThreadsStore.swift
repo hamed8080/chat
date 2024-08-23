@@ -308,7 +308,7 @@ internal final class ThreadsStore: ThreadStoreProtocol {
 
     func onClosed(_ id: Conversation.ID) {
         if let index = indexOf(id) {
-            conversations[index].conversation?.closedThread = true;
+            conversations[index].conversation?.closed = true;
         }
     }
 

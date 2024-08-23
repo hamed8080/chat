@@ -31,7 +31,7 @@ final class ReactionManager: ReactionProtocol {
         }
     }
 
-    func count(_ request: RactionCountRequest) {
+    func count(_ request: ReactionCountRequest) {
         guard let tuple = _internalInMemoryReaction?.tupleOfMessageIds(request.messageIds) else { return }
         var newRquest = request
         newRquest.messageIds = tuple.notInMemory
@@ -41,7 +41,7 @@ final class ReactionManager: ReactionProtocol {
         chat.prepareToSendAsync(req: newRquest, type: .reactionCount)
     }
 
-    func get(_ request: RactionListRequest) {
+    func get(_ request: ReactionListRequest) {
         //Creating and inserting an empty slot to the reactions array is essential if there is a connection disruption.
 
         var allowedRequestOffset = 0
@@ -68,6 +68,14 @@ final class ReactionManager: ReactionProtocol {
 
     func delete(_ request: DeleteReactionRequest) {
         chat.prepareToSendAsync(req: request, type: .removeReaction)
+    }
+
+    func allowedReactions(_ request: ConversationAllowedReactionsRequest) {
+        chat.prepareToSendAsync(req: request, type: .allowedReactions)
+    }
+
+    func customizeReactions(_ request: ConversationCustomizeReactionsRequest) {
+        chat.prepareToSendAsync(req: request, type: .customizeReactions)
     }
 
     func onReactionCount(_ asyncMessage: AsyncMessage) {
@@ -116,5 +124,17 @@ final class ReactionManager: ReactionProtocol {
         if let messageId = response.result?.id {
             _internalInMemoryReaction?.onNewMessage(messageId: messageId)
         }
+    }
+
+    func onAllowedReactions(_ asyncMessage: AsyncMessage) {
+        let response: ChatResponse<AllowedReactionsResponse> = asyncMessage.toChatResponse()
+        let stickers = response.result
+        chat.delegate?.chatEvent(event: .reaction(.allowedReactions(response)))
+    }
+
+    func onCustomizeReactions(_ asyncMessage: AsyncMessage) {
+        let response: ChatResponse<CustomizeReactionsResponse> = asyncMessage.toChatResponse()
+        let stickers = response.result
+        chat.delegate?.chatEvent(event: .reaction(.customizeReactions(response)))
     }
 }
