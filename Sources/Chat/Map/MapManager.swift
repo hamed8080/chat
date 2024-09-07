@@ -13,6 +13,7 @@ import Foundation
 
 final class MapManager: InternalMapProtocol {
     let chat: ChatInternalProtocol
+    private var session: URLSession?
 
     init(chat: ChatInternalProtocol) {
         self.chat = chat
@@ -27,12 +28,21 @@ final class MapManager: InternalMapProtocol {
         let url = "\(chat.config.mapServer)\(Routes.mapStaticImage.rawValue)"
         let typeCode = request.toTypeCode(chat)
         let params = DownloadManagerParameters(url: URL(string: url)!, token: chat.config.token, params: try? request.asDictionary(), uniqueId: request.uniqueId)
-        _ = DownloadManager().download(params) { [weak self] data, response, error in
+
+        let delegate = ProgressImplementation(uniqueId: params.uniqueId, uploadProgress: nil) { [weak self] progress in
+            self?.chat.delegate?.chatEvent(event: .download(.progress(uniqueId: params.uniqueId, progress: progress)))
+        } downloadCompletion: { [weak self] data, response, error in
             let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
             let error = error != nil ? ChatError(message: "\(ChatErrorType.networkError.rawValue) \(error?.localizedDescription ?? "")", code: statusCode, hasError: error != nil) : nil
             let response = ChatResponse(uniqueId: request.uniqueId, result: data, error: error, typeCode: typeCode)
             self?.chat.delegate?.chatEvent(event: .map(.image(response)))
             completion?(response)
+            self?.session?.invalidateAndCancel()
+        }
+        session?.invalidateAndCancel()
+        session = URLSession(configuration: .default, delegate: delegate, delegateQueue: .main)
+        if let session = self.session {
+            _ = DownloadManager.download(params, session)
         }
     }
 

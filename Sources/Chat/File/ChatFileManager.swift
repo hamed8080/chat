@@ -18,10 +18,11 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
     let chat: ChatInternalProtocol
     var delegate: ChatDelegate? { chat.delegate }
     var cache: CacheManager? { chat.cache }
+    typealias SessionAndTask = (session: URLSession, task: URLSessionDataTaskProtocol?)
 
     // Keep track of requests, to do internal actions such as adding the user to the user group if needed.
     private var requests: [String: DownloadManagerParameters] = [:]
-    private var tasks: [String: URLSessionDataTaskProtocol] = [:]
+    private var tasks: [String: SessionAndTask] = [:]
     private var queue = DispatchQueue(label: "DownloadQueue")
 
     init(chat: ChatInternalProtocol) {
@@ -47,13 +48,16 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
     }
 
     private func upload(_ req: UploadManagerParameters, _ data: Data, _ progressCompletion: UploadProgressType? = nil, _ completion: UploadCompletionType? = nil) {
-        let task = UploadManager().upload(req, data) { [weak self] progress in
+        let uploadProgress: UploadProgressType = { [weak self] progress in
             self?.delegate?.chatEvent(event: .upload(.progress(req.uniqueId, progress)))
             progressCompletion?(progress)
-        } completion: { [weak self] respData, _, error in
+        }
+        let delegate = ProgressImplementation(uniqueId: req.uniqueId, uploadProgress: uploadProgress)
+        let session = URLSession(configuration: .default, delegate: delegate, delegateQueue: nil)
+        let task = UploadManager().upload(req, data, session) { [weak self] respData, response, error in
             self?.onUploadCompleted(req, respData, error, data, completion)
         }
-        addTask(uniqueId: req.uniqueId, task: task)
+        addTask(uniqueId: req.uniqueId, session: session, task: task)
     }
 
     func uploadHasError(_ data: Data?, _ error: Error?) -> ChatError? {
@@ -111,7 +115,7 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
     }
 
     private func manageTask(upload: Bool, uniqueId: String, action: DownloaUploadAction) {
-        if let task = getTask(uniqueId: uniqueId) {
+        if let task = getTask(uniqueId: uniqueId)?.task {
             switch action {
             case .cancel:
                 task.cancel()
@@ -143,13 +147,15 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
     private func download(_ params: DownloadManagerParameters) {
         if params.forceToDownload {
             log("Start downloading with params:\n\(params.debugDescription)")
-            let task = DownloadManager().download(params) { [weak self] progress in
+            let delegate = ProgressImplementation(uniqueId: params.uniqueId, uploadProgress: nil) { [weak self] progress in
                 self?.delegate?.chatEvent(event: .download(.progress(uniqueId: params.uniqueId, progress: progress)))
-            } completion: { [weak self] data, response, error in
+            } downloadCompletion: { [weak self] data, response, error in
                 self?.log("Download completed with response:\(response) error:\(error) params:\n\(params.debugDescription)")
                 self?.onDownload(params: params, data: data, response: response, error: error)
             }
-            addTask(uniqueId: params.uniqueId, task: task)
+            var session = URLSession(configuration: .default, delegate: delegate, delegateQueue: .main)
+            let task = DownloadManager.download(params, session)
+            addTask(uniqueId: params.uniqueId, session: session, task: task)
         } else {
             log("Start fetching from cache with params:\n\(params.debugDescription)")
             fetchFromCache(params)
@@ -257,21 +263,21 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
     private func removeTask(_ uniqueId: String) {
         queue.async { [weak self] in
             guard let self = self else { return }
-            if let task = tasks[uniqueId] {
-                task.cancel()
+            if let sessionandTask = tasks[uniqueId] {
+                sessionandTask.session.invalidateAndCancel()
                 tasks.removeValue(forKey: uniqueId)
             }
         }
     }
 
-    private func addTask(uniqueId: String, task: (any URLSessionDataTaskProtocol)?) {
+    private func addTask(uniqueId: String, session: URLSession, task: URLSessionDataTaskProtocol?) {
         queue.async { [weak self] in
             guard let self = self else { return }
-            tasks[uniqueId] = task
+            tasks[uniqueId] = (session, task)
         }
     }
 
-    private func getTask(uniqueId: String) -> (any URLSessionDataTaskProtocol)? {
+    private func getTask(uniqueId: String) -> SessionAndTask? {
         queue.sync {
             return tasks[uniqueId]
         }
