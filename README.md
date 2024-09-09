@@ -12,6 +12,7 @@
 - [x] Downlaod / Upload File or Data or Image resumebble
 - [x] Manage threads and messages
 - [x] Manage multiple accounts at the same time
+- Not compatible with cocoapods
 
 ## Installation
 
@@ -20,25 +21,7 @@
 Add in `Package.swift` or directly in `Xcode Project dependencies` section:
 
 ```swift
-.package(url: "https://pubgi.fanapsoft.ir/chat/ios/chat.git", .upToNextMinor(from: "1.3.2")),
-```
-
-#### [CocoaPods](https://cocoapods.org) 
-Because it has conflict with other Pods' names in cocoapods you have to use direct git repo.
-Add in `Podfile`:
-
-```ruby
-pod 'Starscream', :git => 'https://github.com/daltoniam/Starscream.git', :tag => '3.1.1'
-pod 'Additive', :git => 'http://pubgi.fanapsoft.ir/chat/ios/additive.git', :tag => '1.0.1'
-pod 'Mocks', :git => 'http://pubgi.fanapsoft.ir/chat/ios/mocks.git', :tag => '1.0.1'
-pod 'Logger', :git => 'http://pubgi.fanapsoft.ir/chat/ios/logger.git', :tag => '1.0.2'
-pod "Async", :git => 'http://pubgi.fanapsoft.ir/chat/ios/async.git', :tag => '1.3.1'
-pod "ChatCore", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat-core.git', :tag => '1.0.1'
-pod "ChatModels", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat-models.git', :tag => '1.0.2'
-pod "ChatDTO", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat-dto.git', :tag => '1.0.2'
-pod "ChatExtensions", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat-extensions.git', :tag => '1.0.2'
-pod "ChatCache", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat-cache.git', :tag => '1.0.2'
-pod "Chat", :git => 'http://pubgi.fanapsoft.ir/chat/ios/chat.git', :tag => '1.3.2'
+.package(url: "https://pubgi.sandpod.ir/chat/ios/chat.git", from: "2.2.1")
 ```
 
 ## How to use? 
@@ -51,33 +34,49 @@ let asyncConfig = AsyncConfigBuilder()
             .appId("PodChat")
             .peerName("peerName")
             .isDebuggingLogEnabled(false)
+            .loggerConfig(asyncLoggerConfig)
             .build()
 let chatConfig = ChatConfigBuilder(asyncConfig)
-            .token("token")
+            .token(token)
             .ssoHost("ssoHost")
             .platformHost("platformHost")
             .fileServer("fileServer")
             .enableCache(true)
-            .msgTTL(800_000)
-            .isDebuggingLogEnabled(true)
+            .msgTTL(800_000) // for integeration server need to be long time
             .persistLogsOnServer(true)
-            .appGroup("group")
-            .sendLogInterval(15)
+            .appGroup(AppGroup.group)
+            .loggerConfig(chatLoggerConfig)
+            .mapApiKey("map_api_key")
+            .typeCodes([.init(typeCode: "default", ownerId: nil)])
             .build()
 ChatManager.instance.createOrReplaceUserInstance(config: config)
 ChatManager.activeInstance?.delegate = self
 ChatManager.activeInstance?.connect()
 ```
 
-## Usage 
+## Send a Request to the server
 ```swift
-ChatManager.activeInstance?.getThreads(.init(), completion: { response in
-    if let response.result {
-        // Write your code here.
+let req = ThreadsRequest(count: 10, offset: 0, cache: false)
+ChatManager.activeInstance?.conversation.get(req);
+```
+## Receive events for a specific group center
+```swift
+NotificationCenter.thread.publisher(for: .thread)
+    .compactMap { $0.object as? ThreadEventTypes }
+    .sink { event in
+        // Main Thread
+        onThreadEvent(event)
+    }
+    .store(in: &cancelable)
+
+func onThreadEvent(_ event: ThreadEventTypes?) {
+    switch event {
+    case .threads(let response):
+        let threads = response.result
+        // Write your code here
     }
 }
 ```
-<br/>
 
 ## [Documentation](https://hamed8080.github.io/chat/documentation/chat)
 For more information about how to use Chat SDK visit [Documentation](https://hamed8080.github.io/chat/documentation/chat/) 
