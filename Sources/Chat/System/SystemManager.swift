@@ -26,7 +26,7 @@ final class SystemManager: SystemProtocol, InternalSystemProtocol {
         chat.delegate?.chatEvent(event: .system(.systemMessage(response)))
     }
 
-    func snedStartTyping(threadId: Int) {
+    func sendStartTyping(threadId: Int) {
         if isSendingIsTypingStarted() {
             stopTimerWhenUserIsNotTyping()
             return
@@ -35,7 +35,7 @@ final class SystemManager: SystemProtocol, InternalSystemProtocol {
         timerTyping = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             if self?.isTypingCount ?? 0 < 30 {
                 self?.isTypingCount += 1
-                self?.sendSignalMessage(req: .init(signalType: .isTyping, threadId: threadId))
+                self?.sendSignalMessage(.init(signalType: .isTyping, threadId: threadId))
             } else {
                 self?.sendStopTyping()
             }
@@ -60,7 +60,7 @@ final class SystemManager: SystemProtocol, InternalSystemProtocol {
         }
     }
 
-    func sendSignalMessage(req: SendSignalMessageRequest) {
+    func sendSignalMessage(_ req: SendSignalMessageRequest) {
         chat.prepareToSendAsync(req: req, type: .systemMessage)
     }
 

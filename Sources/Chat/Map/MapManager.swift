@@ -32,7 +32,7 @@ final class MapManager: InternalMapProtocol {
         let delegate = ProgressImplementation(uniqueId: params.uniqueId, uploadProgress: nil) { [weak self] progress in
             self?.chat.delegate?.chatEvent(event: .download(.progress(uniqueId: params.uniqueId, progress: progress)))
         } downloadCompletion: { [weak self] data, response, error in
-            let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
+            let statusCode = response?.statusCode ?? 0
             let error = error != nil ? ChatError(message: "\(ChatErrorType.networkError.rawValue) \(error?.localizedDescription ?? "")", code: statusCode, hasError: error != nil) : nil
             let response = ChatResponse(uniqueId: request.uniqueId, result: data, error: error, typeCode: typeCode)
             self?.chat.delegate?.chatEvent(event: .map(.image(response)))

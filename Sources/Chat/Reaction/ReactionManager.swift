@@ -128,13 +128,11 @@ final class ReactionManager: ReactionProtocol {
 
     func onAllowedReactions(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<AllowedReactionsResponse> = asyncMessage.toChatResponse()
-        let stickers = response.result
         chat.delegate?.chatEvent(event: .reaction(.allowedReactions(response)))
     }
 
     func onCustomizeReactions(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<CustomizeReactionsResponse> = asyncMessage.toChatResponse()
-        let stickers = response.result
         chat.delegate?.chatEvent(event: .reaction(.customizeReactions(response)))
     }
 }

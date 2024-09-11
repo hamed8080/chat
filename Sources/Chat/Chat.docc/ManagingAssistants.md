@@ -6,63 +6,55 @@ Adding a participant as an assistant.
 >Note: The server guarantee that it will add assistants to a P2P-thread automatically. 
 
 ### Register participants as assistants
-To register participants as assistants use the method ``Chat/registerAssistat(_:completion:uniqueIdResult:)``
+To register participants as assistants use the method ``Chat/AssistantProtocol/register(_:)``
 ```swift
-let invitee = Invitee(id: 123456, idType: .TO_BE_USER_ID)
+let invitee = Invitee(id: "\(id)", idType: .TO_BE_USER_ID)
 let roles:[Roles] = [.READ_THREAD, .EDIT_THREAD, .ADD_RULE_TO_USER]
 let assistant = Assistant(assistant: invitee, contactType: "default", roleTypes: roles)
-Chat.sharedInstance.registerAssistat(.init(assistants: [assistant])) { assistants, uniqueId, error in
-    // Write your code
-}
+let req = AssistantsRequest(assistants: [assistant])
+ChatManager.activeInstance?.assistant.register(req)
 ```
 
 >Important: To detect an assistant you should use **Assistant.participant.id** field.
 
 ### Deactivate assistants
-To deactivate assistants use the method ``Chat/deactiveAssistant(_:completion:uniqueIdResult:)``
+To deactivate assistants use the method ``Chat/AssistantProtocol/deactive(_:)``
 ```swift
-Chat.sharedInstance.deactiveAssistant(.init(assistants: [assistant])) { assistants, uniqueId, error in
-    // Write your code
-}
+let req = DeactiveAssistantRequest(assistants: [assistant])
+ChatManager.activeInstance?.assistant.deactive(req)
 ```
 
 ### Get list of assistants
-To get a list of assistants for the current user, use the method ``Chat/getAssistats(_:completion:cacheResponse:uniqueIdResult:)``
+To get a list of assistants for the current user, use the method ``Chat/AssistantProtocol/get(_:)``
 ```swift
 let req = AssistantsRequest(contactType: "default")
-Chat.sharedInstance.getAssistats(req) {  assistants, uniqueId,pagination, error in
-    // Write your code
-}
+ChatManager.activeInstance?.assistant.get(req)
 ```
 
 ### Get list of assistants actions
-To get a list of actions that a assistant performed, use the method ``Chat/getAssistatsHistory(_:uniqueIdResult:)``
+To get a list of actions that a assistant performed, use the method ``Chat/AssistantProtocol/history(_:)``
 ```swift
-Chat.sharedInstance.getAssistatsHistory() { assistantActions, uniqueId, error in
-    // Write your code
-}
+let req = AssistantsHistoryRequest()
+ChatManager.activeInstance?.assistant.history(req)
 ```
 
 ### Get list of blocked assistants
-To get a list of blocked assistants, use the method ``Chat/getBlockedAssistants(_:_:cacheResponse:uniqueIdResult:)``
+To get a list of blocked assistants, use the method ``Chat/AssistantProtocol/blockedList(_:)``
 ```swift
-Chat.sharedInstance.getBlockedAssistants(.init(count: 50, offset: 0)) { blockedAssistants, uniqueId, pagination, error in
-    // Write your code
-}
+let req = BlockedAssistantsRequest(count: 50, offset: 0)
+ChatManager.activeInstance?.assistant.blockedList(req)
 ```
 
 ### Block assistants
-To block assistants, use the method ``Chat/blockAssistants(_:_:uniqueIdResult:)``
+To block assistants, use the method ``Chat/AssistantProtocol/block(_:)``
 ```swift
-Chat.sharedInstance.blockAssistants(.init(assistants:assistants)) { blockedAssistants, uniqueId, pagination, error in
-    // Write your code
-}
+let req = BlockUnblockAssistantRequest(assistants: assistants)
+ChatManager.activeInstance?.assistant.block(req)
 ```
 
 ### UNBlock assistants
-To unblock assistants, use the method ``Chat/unblockAssistants(_:_:uniqueIdResult:)``
+To unblock assistants, use the method ``Chat/AssistantProtocol/unblock(_:)``
 ```swift
-Chat.sharedInstance.unblockAssistants(.init(assistants:assistants)) { unblockedAssistants, uniqueId, pagination, error in
-    // Write your code
-}
+let req = BlockUnblockAssistantRequest(assistants: assistants)
+ChatManager.activeInstance?.assistant.unblock(req)
 ```

@@ -67,7 +67,6 @@ final class MessageManager: MessageProtocol {
 
     func onEditMessage(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<Message> = asyncMessage.toChatResponse()
-        let copied = response.result
         delegate?.chatEvent(event: .message(.edited(response)))
         cache?.deleteQueues(uniqueIds: [response.uniqueId ?? ""])
     }

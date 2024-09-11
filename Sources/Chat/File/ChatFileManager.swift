@@ -150,10 +150,10 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
             let delegate = ProgressImplementation(uniqueId: params.uniqueId, uploadProgress: nil) { [weak self] progress in
                 self?.delegate?.chatEvent(event: .download(.progress(uniqueId: params.uniqueId, progress: progress)))
             } downloadCompletion: { [weak self] data, response, error in
-                self?.log("Download completed with response:\(response) error:\(error) params:\n\(params.debugDescription)")
+                self?.log("Download completed with response:\(String(describing: response)) error:\(String(describing: error)) params:\n\(params.debugDescription)")
                 self?.onDownload(params: params, data: data, response: response, error: error)
             }
-            var session = URLSession(configuration: .default, delegate: delegate, delegateQueue: .main)
+            let session = URLSession(configuration: .default, delegate: delegate, delegateQueue: .main)
             let task = DownloadManager.download(params, session)
             addTask(uniqueId: params.uniqueId, session: session, task: task)
         } else {
@@ -294,7 +294,7 @@ final class ChatFileManager: FileProtocol, InternalFileProtocol {
         /// Timer to cancel download and raise an error.
         Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { [weak self] _ in
             guard let self = self else { return }
-            queue.sync {
+            _ = queue.sync {
                 self.requests.removeValue(forKey: req.uniqueId)
             }
         }
