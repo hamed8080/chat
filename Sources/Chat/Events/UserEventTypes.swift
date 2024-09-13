@@ -9,6 +9,9 @@ import ChatModels
 import Foundation
 
 public enum UserEventTypes {
-    case roles(ChatResponse<[Roles]>)
-    case onUser(ChatResponse<User>)
+    case currentUserRoles(ChatResponse<[Roles]>)
+    case setRolesToUser(ChatResponse<[UserRole]>)
+    case user(ChatResponse<User>)
+    case setProfile(ChatResponse<Profile>)
+    case remove(ChatResponse<[UserRole]>)
 }

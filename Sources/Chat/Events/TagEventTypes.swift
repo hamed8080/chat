@@ -9,9 +9,11 @@ import ChatModels
 import Foundation
 
 public enum TagEventTypes {
-    case createTag(ChatResponse<Tag>)
-    case deleteTag(ChatResponse<Tag>)
-    case editTag(ChatResponse<Tag>)
-    case addTagParticipant(ChatResponse<[TagParticipant]>)
-    case removeTagParticipant(ChatResponse<[TagParticipant]>)
+    case created(ChatResponse<Tag>)
+    case deleted(ChatResponse<Tag>)
+    case edited(ChatResponse<Tag>)
+    case added(ChatResponse<[TagParticipant]>)
+    case removed(ChatResponse<[TagParticipant]>)
+    case tags(ChatResponse<[Tag]>)
+    case participants(ChatResponse<[TagParticipant]>)
 }

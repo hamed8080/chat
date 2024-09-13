@@ -17,7 +17,7 @@ public final class ChatManager {
     private var instances: [UUID: Chat] = [:]
 
     private func createInstance(config: ChatConfig) {
-        let chat = Chat(config: config)
+        let chat = ChatImplementation(config: config)
         instances[chat.id] = chat
         ChatManager.activeInstance = chat
     }
@@ -31,7 +31,7 @@ public final class ChatManager {
     }
 
     public func createOrReplaceUserInstance(userId: Int? = nil, config: ChatConfig) {
-        if let userId = userId, let key = instances.first(where: { $0.value.userInfo?.id == userId })?.key {
+        if let userId = userId, let key = instances.first(where: { ($0.value as? ChatInternalProtocol)?.userInfo?.id == userId })?.key {
             ChatManager.activeInstance = instances[key]
         } else {
             createInstance(config: config)
@@ -43,10 +43,7 @@ public final class ChatManager {
     }
 
     public final class func switchToUser(userId: Int) {
-        guard let activeInstance = activeInstance else { return }
-        activeInstance.persistentManager.switchToContainer(userId: userId)
-        if let context = activeInstance.persistentManager.newBgTask() {
-            activeInstance.cache = CacheManager(context: context, logger: activeInstance.logger)
-        }
+        guard let activeInstance = activeInstance as? ChatInternalProtocol else { return }
+        activeInstance.cache?.switchToContainer(userId: userId)
     }
 }

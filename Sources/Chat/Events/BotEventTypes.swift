@@ -6,13 +6,15 @@
 
 import ChatCore
 import ChatDTO
+import ChatModels
 import Foundation
 
 public enum BotEventTypes {
-    case createBot(ChatResponse<BotInfo>)
-    case botMessage(ChatResponse<String?>)
-    case createBotCommand(ChatResponse<BotInfo>)
-    case removeBotCommand(ChatResponse<BotInfo>)
-    case startBot(ChatResponse<String>)
-    case stopBot(ChatResponse<String>)
+    case bots(ChatResponse<[BotInfo]>)
+    case create(ChatResponse<BotInfo>)
+    case message(ChatResponse<String?>)
+    case addCommand(ChatResponse<BotInfo>)
+    case removeCommand(ChatResponse<BotInfo>)
+    case start(ChatResponse<String>)
+    case stop(ChatResponse<String>)
 }

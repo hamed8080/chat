@@ -10,6 +10,13 @@ import ChatModels
 import Foundation
 
 public enum ContactEventTypes {
-    case blocked(ChatResponse<Contact>)
+    case contacts(ChatResponse<[Contact]>)
+    case add(ChatResponse<[Contact]>)
+    case delete(ChatResponse<[Contact]>, deleted: Bool)
+    case blockedList(ChatResponse<[BlockedContactResponse]>)
+    case blocked(ChatResponse<BlockedContactResponse>)
+    case unblocked(ChatResponse<BlockedContactResponse>)
+    case notSeen(ChatResponse<[ContactNotSeenDurationRespoonse]>)
     case contactsLastSeen(ChatResponse<[UserLastSeenDuration]>)
+    case synced(ChatResponse<ChatMessage>)
 }

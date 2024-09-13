@@ -4,6 +4,7 @@
 //
 // Created by Hamed Hosseini on 11/2/22
 
+import ChatCore
 import Foundation
 
 public final class DiskStatus {
@@ -67,14 +68,16 @@ public final class DiskStatus {
     }
 
     @discardableResult
-    final class func checkIfDeviceHasFreeSpace(needSpaceInMB: Int64, turnOffTheCache: Bool, errorDelegate: ChatDelegate?) -> Bool {
+    final class func checkIfDeviceHasFreeSpace(needSpaceInMB: Int64, turnOffTheCache: Bool, delegate: ChatDelegate?) -> Bool {
         let availableSpace = DiskStatus.freeDiskSpaceInBytes
         if availableSpace < (needSpaceInMB * 1024 * 1024) {
             var message = "your disk space is less than \(DiskStatus.MBFormatter(DiskStatus.freeDiskSpaceInBytes))MB."
             if turnOffTheCache {
                 message += " " + "so, the cache will be switch OFF!"
             }
-            errorDelegate?.chatError(error: .init(type: .outOfStorage, message: message))
+            let error = ChatError(type: .outOfStorage, message: message)
+            let errorResponse = ChatResponse(result: Any?.none, error: error, typeCode: nil)
+            delegate?.chatEvent(event: .system(.error(errorResponse)))
             return false
         } else {
             return true

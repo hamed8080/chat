@@ -9,18 +9,18 @@ import ChatCore
 import Foundation
 
 extension URLSessionProtocol {
-    func decode<T: Decodable>(_ data: Data?, _ response: URLResponse?, _ error: Error?) -> ChatResponse<T> {
+    func decode<T: Decodable>(_ data: Data?, _ response: URLResponse?, _ error: Error?, typeCode: String?) -> ChatResponse<T> {
         let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
         if let data = data, let chatError = try? JSONDecoder.instance.decode(ChatError.self, from: data), chatError.hasError == true {
-            return ChatResponse(error: chatError)
+            return ChatResponse(error: chatError, typeCode: typeCode)
         } else if statusCode >= 200, statusCode <= 300, let data = data, let codable = try? JSONDecoder.instance.decode(T.self, from: data) {
-            return ChatResponse(result: codable)
+            return ChatResponse(result: codable, typeCode: typeCode)
         } else if let error = error {
             let error = ChatError(message: "\(ChatErrorType.networkError.rawValue) \(error)", code: statusCode, hasError: true)
-            return ChatResponse(error: error)
+            return ChatResponse(error: error, typeCode: typeCode)
         } else {
             let error = ChatError(message: "\(ChatErrorType.networkError.rawValue)", code: statusCode, hasError: true)
-            return ChatResponse(error: error)
+            return ChatResponse(error: error, typeCode: typeCode)
         }
     }
 }

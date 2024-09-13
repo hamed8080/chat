@@ -2,6 +2,18 @@
 
 import PackageDescription
 
+let useLocalDependency = false
+
+let local: [Package.Dependency] = [
+    .package(path: "../ChatExtensions"),
+    .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
+]
+
+let remote: [Package.Dependency] = [
+    .package(url: "https://pubgi.sandpod.ir/chat/ios/chat-extensions", from: "2.2.1"),
+    .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
+]
+
 let package = Package(
     name: "Chat",
     defaultLocalization: "en",
@@ -13,24 +25,18 @@ let package = Package(
     products: [
         .library(name: "Chat", targets: ["Chat"]),
     ],
-    dependencies: [
-//        .package(path: "../Async"),
-//        .package(path: "ChatModels"),
-//        .package(path: "ChatCache"),
-//        .package(path: "ChatExtensions"),
-//        .package(path: "ChatDTO"),
-//        .package(path: "ChatCore"),
-        .package(url: "https://pubgi.fanapsoft.ir/chat/ios/chat-cache.git", exact: "1.0.0"),
-        .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
-    ],
+    dependencies: useLocalDependency ? local : remote,
     targets: [
         .target(
             name: "Chat",
             dependencies: [
-                .product(name: "ChatCache", package: "chat-cache"),
+                .product(name: "ChatExtensions", package: useLocalDependency ? "ChatExtensions" : "chat-extensions"),
             ],
             resources: []
         ),
-        .testTarget(name: "ChatTests", dependencies: ["Chat"], path: "Tests"),
+        .testTarget(name: "ChatTests", dependencies: [
+            "Chat",
+            .product(name: "ChatExtensions", package: useLocalDependency ? "ChatExtensions" : "chat-extensions"),
+        ], path: "Tests"),
     ]
 )

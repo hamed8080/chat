@@ -2,53 +2,35 @@
 Converting lat, long to an address or searching through a map, or finding a route getting an image of lat, long. 
 
 
-
 ### Reverse a lat, long to an address
-
-Reverse a latitude or longitude to a human readable address ``Chat/mapReverse(_:completion:uniqueIdResult:)`` like this:
+Reverse a latitude or longitude to a human readable address ``Chat/MapProtocol/reverse(_:)`` like this:
 ```swift
-Chat.sharedInstance.mapReverse(.init(lat: 37.33900249783756 , lng: -122.00944807880965)) { mapReverse, uniqueId, error in
-    if error == nil{
-        // Write your code
-    }
-}
+let req = MapReverseRequest(lat: 37.33900249783756 , lng: -122.00944807880965)
+ChatManager.activeInstance?.map.reverse(req)
 ```
 
 ### Search for Items inside an area
-
-Search for items inside an area with lat and long you should use method ``Chat/mapSearch(_:completion:uniqueIdResult:)`` like this:
+Search for items inside an area with lat and long you should use method ``Chat/MapProtocol/search(_:)`` like this:
 ```swift
-Chat.sharedInstance.mapSearch(.init(lat: 37.33900249783756 , lng: -122.00944807880965)) { mapItems, uniqueId, error in
-    if error == nil{
-        // Write your code
-    }
-}
+let req = MapSearchRequest(lat: 37.33900249783756 , lng: -122.00944807880965)
+ChatManager.activeInstance?.map.search(req)
 ```
 
 ### Finding route
-
 Finding a route between two point. 
 If you want to receive more than one route please set alternative to true.
-Use method ``Chat/mapSearch(_:completion:uniqueIdResult:)`` like this:
+Use method ``Chat/MapProtocol/routes(_:)`` like this:
 ```swift
 let origin = Cordinate(lat: 37.33900249783756, lng: -122.00944807880965)
 let destination = Cordinate(lat: 22.33900249783756, lng: -110.00944807880965)
-Chat.sharedInstance.mapRouting(.init(alternative: true, origin: origin, destination: destination) ) { routes, uniqueId, error in
-    if error == nil{
-        // Write your code
-    }
-}
+let req = MapRoutingRequest(origin: origin, destination: destination)
+ChatManager.activeInstance?.map.routes(req)
 ```
 
 ### Convert an cordinate to an image
-
-Convert an location to an image use the method ``Chat/mapStaticImage(_:_:completion:uniqueIdResult:)`` like this:
+Convert an location to an image use the method ``Chat/MapProtocol/image(_:)`` like this:
 ```swift
 let center = Cordinate(lat: 37.33900249783756, lng: -122.00944807880965)
 let req = MapStaticImageRequest(center: center)
-Chat.sharedInstance.mapStaticImage(req) { imageData, uniqueId, error in
-    if let data = data, let image = UIImage(data: data){
-        // Write your code
-    }
-}
+ChatManager.activeInstance?.map.image(req)
 ```
