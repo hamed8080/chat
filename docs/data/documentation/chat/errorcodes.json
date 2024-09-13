@@ -1,0 +1,1155 @@
+{
+  "abstract" : [
+    {
+      "text" : "List of all error codes locally in the chat SDK for server errors.",
+      "type" : "text"
+    }
+  ],
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/ErrorCodes"
+  },
+  "kind" : "article",
+  "metadata" : {
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "role" : "article",
+    "roleHeading" : "Article",
+    "title" : "Error Codes"
+  },
+  "primaryContentSections" : [
+    {
+      "content" : [
+        {
+          "anchor" : "Overview",
+          "level" : 2,
+          "text" : "Overview",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "The list of error codes with a description of why this error is raised.",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "anchor" : "Local-Errors",
+          "level" : 2,
+          "text" : "Local Errors",
+          "type" : "heading"
+        },
+        {
+          "header" : "row",
+          "rows" : [
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "Error Code",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "Description",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "outOfStorage",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "The device does not have enough storage so it may lead to unexpected behaviors.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "exportError",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "Exporting messages has failed due to an error.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "networkError",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "Network request errors, such as Map\/Contact\/Core REST API errors.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "errorRaedyChat",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "The chat SDK can not make itself ready due to an error.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "asyncError",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "The async SDK can not make itself ready due to an error.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ]
+          ],
+          "type" : "table"
+        },
+        {
+          "anchor" : "Server-Errors",
+          "level" : 2,
+          "text" : "Server Errors",
+          "type" : "heading"
+        },
+        {
+          "header" : "row",
+          "rows" : [
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "Error Code",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "Description",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "999",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "The most important server error, which usually needs support from the server maintainer!",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "21",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "The client is not authenticated and a new token is needed to retrieve.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "40",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "The token is not authorized for this source.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "100",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "The request is not valid and maybe it is not created properly.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "104",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "The id is not a contact ID.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "118",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "The user is blocked.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "121",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "The message size exceeded 4096 bytes.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "125",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "You have passed the maximum number of pin threads.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "208",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "The user has been banned by the server for a amount of time.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "127",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "The conversation has already pinned.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "129",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "The unique name is needed for a public conversation.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "130",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "The public conversation name exists, and you can not use this conversation name.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "131",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "The participant has already joined the conversation.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "132",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "To report a user you should provide a reason attached to the request.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "134",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "The metadat is required for the message.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "138",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "Invalid ID type for the Invitee.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "140",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "The bot name is not valid.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "141",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "The command is not owned by the bot.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "142",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "The command is required for this bot.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "143",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "The format of the command is not valid.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "146",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "The bot has been already started.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "147",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "The bot has been already stopped.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "201",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "The conversation has been already closed.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "206",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "Delete for all is not available.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "208",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "Temporary banned.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "222",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "Too many tag to create. You have passed the maximum number of tags.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "223",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "Too many tag participnt to add. You have passed the maximum number of tag participant in a tag.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "313",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "The conversation has already archived.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "code" : "400",
+                      "type" : "codeVoice"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ],
+              [
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "The time for adding a reaction is over.",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "paragraph"
+                }
+              ]
+            ]
+          ],
+          "type" : "table"
+        }
+      ],
+      "kind" : "content"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "seeAlsoSections" : [
+    {
+      "generated" : true,
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/GettingStarted",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingThreads",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingMessages",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingContacts",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingFiles",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingUsers",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingTags",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingBots",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingAssistants",
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps"
+      ],
+      "title" : "Essentials"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/errorcodes"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/GettingStarted": {
+  "abstract" : [
+    {
+      "text" : "Getting started with the Chat SDK and some tips and tricks to configure it properly.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/GettingStarted",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Getting Started",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/gettingstarted"
+},
+"doc://Chat/documentation/Chat/ManagingAssistants": {
+  "abstract" : [
+    {
+      "text" : "Adding a participant as an assistant.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingAssistants",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Assistants",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingassistants"
+},
+"doc://Chat/documentation/Chat/ManagingBots": {
+  "abstract" : [
+    {
+      "text" : "For creating, add\/remove command, user bots, start\/stop.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingBots",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Bots",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingbots"
+},
+"doc://Chat/documentation/Chat/ManagingContacts": {
+  "abstract" : [
+    {
+      "text" : "Managing contacts add, edit, delete, search, and more.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingContacts",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Contacts",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingcontacts"
+},
+"doc://Chat/documentation/Chat/ManagingFiles": {
+  "abstract" : [
+    {
+      "text" : "You could manage download and upload and so more in terms of working with files.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingFiles",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Files",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingfiles"
+},
+"doc://Chat/documentation/Chat/ManagingMaps": {
+  "abstract" : [
+    {
+      "text" : "Converting lat, long to an address or searching through a map, or finding a route getting an image of lat, long.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Maps",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingmaps"
+},
+"doc://Chat/documentation/Chat/ManagingMessages": {
+  "abstract" : [
+    {
+      "text" : "You could Add, delete, edit, reply, forward and so many more.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingMessages",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Messages",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingmessages"
+},
+"doc://Chat/documentation/Chat/ManagingTags": {
+  "abstract" : [
+    {
+      "text" : "Tags are like folder for managing threads. You could Add, delete, edit and add\/remove tag participans.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingTags",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Tags",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingtags"
+},
+"doc://Chat/documentation/Chat/ManagingThreads": {
+  "abstract" : [
+    {
+      "text" : "Managing threads, create P2P, Group, Channel or delete edit and so many more.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingThreads",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Threads",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingthreads"
+},
+"doc://Chat/documentation/Chat/ManagingUsers": {
+  "abstract" : [
+    {
+      "text" : "Manage users such as get a list of roles and so more.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingUsers",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Managing Users",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/managingusers"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

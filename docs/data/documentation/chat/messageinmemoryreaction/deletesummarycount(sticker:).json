@@ -1,0 +1,246 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageInMemoryReaction"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/MessageInMemoryReaction\/deleteSummaryCount(sticker:)"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "s:4Chat23MessageInMemoryReactionC18deleteSummaryCount7stickery0A6Models7StickerO_tF",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "func"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "text" : "deleteSummaryCount"
+      },
+      {
+        "kind" : "text",
+        "text" : "("
+      },
+      {
+        "kind" : "externalParam",
+        "text" : "sticker"
+      },
+      {
+        "kind" : "text",
+        "text" : ": "
+      },
+      {
+        "kind" : "typeIdentifier",
+        "preciseIdentifier" : "s:10ChatModels7StickerO",
+        "text" : "Sticker"
+      },
+      {
+        "kind" : "text",
+        "text" : ")"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Instance Method",
+    "symbolKind" : "method",
+    "title" : "deleteSummaryCount(sticker:)"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "func"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "identifier",
+              "text" : "deleteSummaryCount"
+            },
+            {
+              "kind" : "text",
+              "text" : "("
+            },
+            {
+              "kind" : "externalParam",
+              "text" : "sticker"
+            },
+            {
+              "kind" : "text",
+              "text" : ": "
+            },
+            {
+              "kind" : "typeIdentifier",
+              "preciseIdentifier" : "s:10ChatModels7StickerO",
+              "text" : "Sticker"
+            },
+            {
+              "kind" : "text",
+              "text" : ")"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/messageinmemoryreaction\/deletesummarycount(sticker:)"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/MessageInMemoryReaction": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "MessageInMemoryReaction"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageInMemoryReaction",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "MessageInMemoryReaction"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "MessageInMemoryReaction",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageinmemoryreaction"
+},
+"doc://Chat/documentation/Chat/MessageInMemoryReaction/deleteSummaryCount(sticker:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "deleteSummaryCount"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "sticker"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7StickerO",
+      "text" : "Sticker"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageInMemoryReaction\/deleteSummaryCount(sticker:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "deleteSummaryCount(sticker:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageinmemoryreaction\/deletesummarycount(sticker:)"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

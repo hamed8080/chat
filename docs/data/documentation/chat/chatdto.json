@@ -1,0 +1,134 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/ChatDTO"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "s:m:s:e:s:7ChatDTO21TypeCodeIndexProtocolP0A0E02tocD0ySSSgA2D_pF",
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "role" : "collection",
+    "roleHeading" : "Extended Module",
+    "symbolKind" : "extension",
+    "title" : "ChatDTO"
+  },
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/ChatDTO\/TypeCodeIndexProtocol"
+      ],
+      "title" : "Extended Protocols"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/chatdto"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/ChatDTO": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatDTO",
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "ChatDTO",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatdto"
+},
+"doc://Chat/documentation/Chat/ChatDTO/TypeCodeIndexProtocol": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "extension"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "preciseIdentifier" : "s:7ChatDTO21TypeCodeIndexProtocolP",
+      "text" : "TypeCodeIndexProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatDTO\/TypeCodeIndexProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "TypeCodeIndexProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "TypeCodeIndexProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatdto\/typecodeindexprotocol"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

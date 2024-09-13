@@ -27,7 +27,7 @@
   },
   "kind" : "symbol",
   "metadata" : {
-    "externalID" : "s:4Chat16CacheFileManagerC04fileD05group5queue6loggerAcA0cD8Protocol_p_SSSg8Additive013DispatchQueueI0_p6LoggerALCSgtcfc",
+    "externalID" : "s:4Chat16CacheFileManagerC04fileD05group5queue6loggerAC0A4Core0cD8Protocol_p_SSSg8Additive013DispatchQueueJ0_p6LoggerAMCSgtcfc",
     "fragments" : [
       {
         "kind" : "identifier",
@@ -43,11 +43,11 @@
       },
       {
         "kind" : "text",
-        "text" : ": "
+        "text" : ": any "
       },
       {
         "kind" : "typeIdentifier",
-        "preciseIdentifier" : "s:4Chat19FileManagerProtocolP",
+        "preciseIdentifier" : "s:8ChatCore19FileManagerProtocolP",
         "text" : "FileManagerProtocol"
       },
       {
@@ -77,7 +77,7 @@
       },
       {
         "kind" : "text",
-        "text" : ": "
+        "text" : ": any "
       },
       {
         "kind" : "typeIdentifier",
@@ -149,12 +149,11 @@
             },
             {
               "kind" : "text",
-              "text" : ": "
+              "text" : ": any "
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileManagerProtocol",
               "kind" : "typeIdentifier",
-              "preciseIdentifier" : "s:4Chat19FileManagerProtocolP",
+              "preciseIdentifier" : "s:8ChatCore19FileManagerProtocolP",
               "text" : "FileManagerProtocol"
             },
             {
@@ -184,7 +183,7 @@
             },
             {
               "kind" : "text",
-              "text" : ": "
+              "text" : ": any "
             },
             {
               "kind" : "typeIdentifier",
@@ -243,7 +242,7 @@
 "doc://Chat/documentation/Chat": {
   "abstract" : [
     {
-      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
       "type" : "text"
     }
   ],
@@ -310,11 +309,11 @@
     },
     {
       "kind" : "text",
-      "text" : ": "
+      "text" : ": any "
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat19FileManagerProtocolP",
+      "preciseIdentifier" : "s:8ChatCore19FileManagerProtocolP",
       "text" : "FileManagerProtocol"
     },
     {
@@ -344,7 +343,7 @@
     },
     {
       "kind" : "text",
-      "text" : ": "
+      "text" : ": any "
     },
     {
       "kind" : "typeIdentifier",
@@ -379,37 +378,6 @@
   "title" : "init(fileManager:group:queue:logger:)",
   "type" : "topic",
   "url" : "\/documentation\/chat\/cachefilemanager\/init(filemanager:group:queue:logger:)"
-},
-"doc://Chat/documentation/Chat/FileManagerProtocol": {
-  "abstract" : [
-
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "protocol"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "FileManagerProtocol"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileManagerProtocol",
-  "kind" : "symbol",
-  "navigatorTitle" : [
-    {
-      "kind" : "identifier",
-      "text" : "FileManagerProtocol"
-    }
-  ],
-  "role" : "symbol",
-  "title" : "FileManagerProtocol",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/filemanagerprotocol"
 },
 "icon.png": {
   "alt" : "App icon.",

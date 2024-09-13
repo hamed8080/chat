@@ -1,0 +1,432 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat",
+        "doc:\/\/Chat\/documentation\/Chat\/SignalingState"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/Encodable-Implementations"
+  },
+  "kind" : "article",
+  "metadata" : {
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "role" : "collectionGroup",
+    "roleHeading" : "API Collection",
+    "title" : "Encodable Implementations"
+  },
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "generated" : true,
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/data",
+        "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/dataPrettyPrint",
+        "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/jsonString",
+        "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/parameterData",
+        "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/string"
+      ],
+      "title" : "Instance Properties"
+    },
+    {
+      "generated" : true,
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/asDictionary()",
+        "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/asDictionaryNuallable()"
+      ],
+      "title" : "Instance Methods"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/signalingstate\/encodable-implementations"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/SignalingState": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "SignalingState"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SignalingState",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "SignalingState"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "SignalingState",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/signalingstate"
+},
+"doc://Chat/documentation/Chat/SignalingState/asDictionary()": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "asDictionary"
+    },
+    {
+      "kind" : "text",
+      "text" : "() "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "throws"
+    },
+    {
+      "kind" : "text",
+      "text" : " -> ["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : " : "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "Any"
+    },
+    {
+      "kind" : "text",
+      "text" : "]"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/asDictionary()",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "asDictionary()",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/signalingstate\/asdictionary()"
+},
+"doc://Chat/documentation/Chat/SignalingState/asDictionaryNuallable()": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "asDictionaryNuallable"
+    },
+    {
+      "kind" : "text",
+      "text" : "() "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "throws"
+    },
+    {
+      "kind" : "text",
+      "text" : " -> ["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : " : "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "Any"
+    },
+    {
+      "kind" : "text",
+      "text" : "?]"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/asDictionaryNuallable()",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "asDictionaryNuallable()",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/signalingstate\/asdictionarynuallable()"
+},
+"doc://Chat/documentation/Chat/SignalingState/data": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "data"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation4DataV",
+      "text" : "Data"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/data",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "data",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/signalingstate\/data"
+},
+"doc://Chat/documentation/Chat/SignalingState/dataPrettyPrint": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "dataPrettyPrint"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation4DataV",
+      "text" : "Data"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/dataPrettyPrint",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "dataPrettyPrint",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/signalingstate\/dataprettyprint"
+},
+"doc://Chat/documentation/Chat/SignalingState/jsonString": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "jsonString"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/jsonString",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "jsonString",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/signalingstate\/jsonstring"
+},
+"doc://Chat/documentation/Chat/SignalingState/parameterData": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "parameterData"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation4DataV",
+      "text" : "Data"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/parameterData",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "parameterData",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/signalingstate\/parameterdata"
+},
+"doc://Chat/documentation/Chat/SignalingState/string": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "string"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/string",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "string",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/signalingstate\/string"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

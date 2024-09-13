@@ -1,0 +1,1212 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "s:4Chat14ThreadProtocolP",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "protocol"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "text" : "ThreadProtocol"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "navigatorTitle" : [
+      {
+        "kind" : "identifier",
+        "text" : "ThreadProtocol"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Protocol",
+    "symbolKind" : "protocol",
+    "title" : "ThreadProtocol"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "protocol"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "identifier",
+              "text" : "ThreadProtocol"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/participant"
+      ],
+      "title" : "Instance Properties"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/allUnreadCount(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/archive(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/changeType(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/close(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/create(_:)-3epo",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/create(_:)-64b7s",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/create(_:_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/delete(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/get(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/isNameAvailable(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/join(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/lastAction(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/leave(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/leaveSafely(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/mute(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/mutual(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/pin(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/spam(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/unarchive(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/unmute(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/unpin(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/unreadCount(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/updateInfo(_:)"
+      ],
+      "title" : "Instance Methods"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/threadprotocol"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ThreadProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ThreadProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ThreadProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol/allUnreadCount(_:)": {
+  "abstract" : [
+    {
+      "text" : "Get sum of the all unread counts in all threads.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "allUnreadCount"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO28AllThreadsUnreadCountRequestV",
+      "text" : "AllThreadsUnreadCountRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/allUnreadCount(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "allUnreadCount(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol\/allunreadcount(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol/archive(_:)": {
+  "abstract" : [
+    {
+      "text" : "Archive a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "archive"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO23GeneralSubjectIdRequestV",
+      "text" : "GeneralSubjectIdRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/archive(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "archive(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol\/archive(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol/changeType(_:)": {
+  "abstract" : [
+    {
+      "text" : "Change a type of thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "changeType"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO23ChangeThreadTypeRequestV",
+      "text" : "ChangeThreadTypeRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/changeType(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "changeType(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol\/changetype(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol/close(_:)": {
+  "abstract" : [
+    {
+      "text" : "Close a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "close"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO23GeneralSubjectIdRequestV",
+      "text" : "GeneralSubjectIdRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/close(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "close(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol\/close(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol/create(_:)-3epo": {
+  "abstract" : [
+    {
+      "text" : "Create thread with a message.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "create"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO23CreateThreadWithMessageV",
+      "text" : "CreateThreadWithMessage"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/create(_:)-3epo",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "create(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol\/create(_:)-3epo"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol/create(_:)-64b7s": {
+  "abstract" : [
+    {
+      "text" : "Create a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "create"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO19CreateThreadRequestV",
+      "text" : "CreateThreadRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/create(_:)-64b7s",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "create(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol\/create(_:)-64b7s"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol/create(_:_:)": {
+  "abstract" : [
+    {
+      "text" : "Create thread and send a file message.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "create"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO19CreateThreadRequestV",
+      "text" : "CreateThreadRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO22SendTextMessageRequestV",
+      "text" : "SendTextMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/create(_:_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "create(_:_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol\/create(_:_:)"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol/delete(_:)": {
+  "abstract" : [
+    {
+      "text" : "Delete a thread if you are admin in this thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "delete"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO23GeneralSubjectIdRequestV",
+      "text" : "GeneralSubjectIdRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/delete(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "delete(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol\/delete(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol/get(_:)": {
+  "abstract" : [
+    {
+      "text" : "Get list of threads.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "get"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO14ThreadsRequestV",
+      "text" : "ThreadsRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/get(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "get(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol\/get(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol/isNameAvailable(_:)": {
+  "abstract" : [
+    {
+      "text" : "Check name for the public thread is not occupied.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "isNameAvailable"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO25IsThreadNamePublicRequestV",
+      "text" : "IsThreadNamePublicRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/isNameAvailable(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "isNameAvailable(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol\/isnameavailable(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol/join(_:)": {
+  "abstract" : [
+    {
+      "text" : "Join to a public thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "join"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO23JoinPublicThreadRequestV",
+      "text" : "JoinPublicThreadRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/join(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "join(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol\/join(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol/lastAction(_:)": {
+  "abstract" : [
+    {
+      "text" : "Get the last action inside the conversation whether it’s reaction or a message.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "lastAction"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO31LastActionInConversationRequestV",
+      "text" : "LastActionInConversationRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/lastAction(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "lastAction(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol\/lastaction(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol/leave(_:)": {
+  "abstract" : [
+    {
+      "text" : "Leave a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "leave"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO18LeaveThreadRequestV",
+      "text" : "LeaveThreadRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/leave(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "leave(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol\/leave(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol/leaveSafely(_:)": {
+  "abstract" : [
+    {
+      "text" : "Leave a thrad with replaceing admin.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "leaveSafely"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO22SafeLeaveThreadRequestV",
+      "text" : "SafeLeaveThreadRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/leaveSafely(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "leaveSafely(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol\/leavesafely(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol/mute(_:)": {
+  "abstract" : [
+    {
+      "text" : "Mute a thread when a new event happens.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "mute"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO23GeneralSubjectIdRequestV",
+      "text" : "GeneralSubjectIdRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/mute(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "mute(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol\/mute(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol/mutual(_:)": {
+  "abstract" : [
+    {
+      "text" : "A list of mutual groups with a user.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "mutual"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO19MutualGroupsRequestV",
+      "text" : "MutualGroupsRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/mutual(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "mutual(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol\/mutual(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol/participant": {
+  "abstract" : [
+    {
+      "text" : "Accessing to participants of a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "participant"
+    },
+    {
+      "kind" : "text",
+      "text" : ": any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat19ParticipantProtocolP",
+      "text" : "ParticipantProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/participant",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "participant",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol\/participant"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol/pin(_:)": {
+  "abstract" : [
+    {
+      "text" : "Pin a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "pin"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO23GeneralSubjectIdRequestV",
+      "text" : "GeneralSubjectIdRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/pin(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "pin(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol\/pin(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol/spam(_:)": {
+  "abstract" : [
+    {
+      "text" : "Mark a thread as an spam",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "spam"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO23GeneralSubjectIdRequestV",
+      "text" : "GeneralSubjectIdRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/spam(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "spam(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol\/spam(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol/unarchive(_:)": {
+  "abstract" : [
+    {
+      "text" : "Unarchive a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "unarchive"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO23GeneralSubjectIdRequestV",
+      "text" : "GeneralSubjectIdRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/unarchive(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "unarchive(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol\/unarchive(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol/unmute(_:)": {
+  "abstract" : [
+    {
+      "text" : "UNMute a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "unmute"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO23GeneralSubjectIdRequestV",
+      "text" : "GeneralSubjectIdRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/unmute(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "unmute(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol\/unmute(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol/unpin(_:)": {
+  "abstract" : [
+    {
+      "text" : "UNPin a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "unpin"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO23GeneralSubjectIdRequestV",
+      "text" : "GeneralSubjectIdRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/unpin(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "unpin(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol\/unpin(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol/unreadCount(_:)": {
+  "abstract" : [
+    {
+      "text" : "Get list of threads.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "unreadCount"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO25ThreadsUnreadCountRequestV",
+      "text" : "ThreadsUnreadCountRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/unreadCount(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "unreadCount(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol\/unreadcount(_:)"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol/updateInfo(_:)": {
+  "abstract" : [
+    {
+      "text" : "Update details of a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "updateInfo"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO23UpdateThreadInfoRequestV",
+      "text" : "UpdateThreadInfoRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol\/updateInfo(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "updateInfo(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol\/updateinfo(_:)"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

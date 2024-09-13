@@ -1,0 +1,554 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "s:4Chat18IceConnectionStateO",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "enum"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "text" : "IceConnectionState"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "navigatorTitle" : [
+      {
+        "kind" : "identifier",
+        "text" : "IceConnectionState"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Enumeration",
+    "symbolKind" : "enum",
+    "title" : "IceConnectionState"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "enum"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "identifier",
+              "text" : "IceConnectionState"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    }
+  ],
+  "relationshipsSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/Se",
+        "doc:\/\/Chat\/SE",
+        "doc:\/\/Chat\/SQ",
+        "doc:\/\/Chat\/SH"
+      ],
+      "kind" : "relationships",
+      "title" : "Conforms To",
+      "type" : "conformsTo"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/checking",
+        "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/closed",
+        "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/completed",
+        "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/connected",
+        "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/count",
+        "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/disconnected",
+        "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/failed",
+        "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/new",
+        "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/unknown"
+      ],
+      "title" : "Enumeration Cases"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/init(from:)",
+        "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/init(rawValue:)"
+      ],
+      "title" : "Initializers"
+    },
+    {
+      "generated" : true,
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/Encodable-Implementations",
+        "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/Equatable-Implementations"
+      ],
+      "title" : "Default Implementations"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/iceconnectionstate"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/SE": {
+  "identifier" : "doc:\/\/Chat\/SE",
+  "title" : "Swift.Encodable",
+  "type" : "unresolvable"
+},
+"doc://Chat/SH": {
+  "identifier" : "doc:\/\/Chat\/SH",
+  "title" : "Swift.Hashable",
+  "type" : "unresolvable"
+},
+"doc://Chat/SQ": {
+  "identifier" : "doc:\/\/Chat\/SQ",
+  "title" : "Swift.Equatable",
+  "type" : "unresolvable"
+},
+"doc://Chat/Se": {
+  "identifier" : "doc:\/\/Chat\/Se",
+  "title" : "Swift.Decodable",
+  "type" : "unresolvable"
+},
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/IceConnectionState": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "IceConnectionState"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "IceConnectionState"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "IceConnectionState",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/iceconnectionstate"
+},
+"doc://Chat/documentation/Chat/IceConnectionState/Encodable-Implementations": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/Encodable-Implementations",
+  "kind" : "article",
+  "role" : "collectionGroup",
+  "title" : "Encodable Implementations",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/iceconnectionstate\/encodable-implementations"
+},
+"doc://Chat/documentation/Chat/IceConnectionState/Equatable-Implementations": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/Equatable-Implementations",
+  "kind" : "article",
+  "role" : "collectionGroup",
+  "title" : "Equatable Implementations",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/iceconnectionstate\/equatable-implementations"
+},
+"doc://Chat/documentation/Chat/IceConnectionState/checking": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "checking"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/checking",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "IceConnectionState.checking",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/iceconnectionstate\/checking"
+},
+"doc://Chat/documentation/Chat/IceConnectionState/closed": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "closed"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/closed",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "IceConnectionState.closed",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/iceconnectionstate\/closed"
+},
+"doc://Chat/documentation/Chat/IceConnectionState/completed": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "completed"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/completed",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "IceConnectionState.completed",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/iceconnectionstate\/completed"
+},
+"doc://Chat/documentation/Chat/IceConnectionState/connected": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "connected"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/connected",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "IceConnectionState.connected",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/iceconnectionstate\/connected"
+},
+"doc://Chat/documentation/Chat/IceConnectionState/count": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "count"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/count",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "IceConnectionState.count",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/iceconnectionstate\/count"
+},
+"doc://Chat/documentation/Chat/IceConnectionState/disconnected": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "disconnected"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/disconnected",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "IceConnectionState.disconnected",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/iceconnectionstate\/disconnected"
+},
+"doc://Chat/documentation/Chat/IceConnectionState/failed": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "failed"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/failed",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "IceConnectionState.failed",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/iceconnectionstate\/failed"
+},
+"doc://Chat/documentation/Chat/IceConnectionState/init(from:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "identifier",
+      "text" : "init"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "from"
+    },
+    {
+      "kind" : "text",
+      "text" : ": any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:s7DecoderP",
+      "text" : "Decoder"
+    },
+    {
+      "kind" : "text",
+      "text" : ") "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "throws"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/init(from:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "init(from:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/iceconnectionstate\/init(from:)"
+},
+"doc://Chat/documentation/Chat/IceConnectionState/init(rawValue:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "identifier",
+      "text" : "init"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "rawValue"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Si",
+      "text" : "Int"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/init(rawValue:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "init(rawValue:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/iceconnectionstate\/init(rawvalue:)"
+},
+"doc://Chat/documentation/Chat/IceConnectionState/new": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "new"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/new",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "IceConnectionState.new",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/iceconnectionstate\/new"
+},
+"doc://Chat/documentation/Chat/IceConnectionState/unknown": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "unknown"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState\/unknown",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "IceConnectionState.unknown",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/iceconnectionstate\/unknown"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

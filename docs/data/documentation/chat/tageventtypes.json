@@ -83,11 +83,13 @@
   "topicSections" : [
     {
       "identifiers" : [
-        "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes\/addTagParticipant(_:)",
-        "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes\/createTag(_:)",
-        "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes\/deleteTag(_:)",
-        "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes\/editTag(_:)",
-        "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes\/removeTagParticipant(_:)"
+        "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes\/added(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes\/created(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes\/deleted(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes\/edited(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes\/participants(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes\/removed(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes\/tags(_:)"
       ],
       "title" : "Enumeration Cases"
     }
@@ -109,7 +111,7 @@
 "doc://Chat/documentation/Chat": {
   "abstract" : [
     {
-      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
       "type" : "text"
     }
   ],
@@ -157,7 +159,7 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/tageventtypes"
 },
-"doc://Chat/documentation/Chat/TagEventTypes/addTagParticipant(_:)": {
+"doc://Chat/documentation/Chat/TagEventTypes/added(_:)": {
   "abstract" : [
 
   ],
@@ -172,7 +174,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "addTagParticipant"
+      "text" : "added"
     },
     {
       "kind" : "text",
@@ -189,7 +191,7 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels14TagParticipantC",
+      "preciseIdentifier" : "s:10ChatModels14TagParticipantV",
       "text" : "TagParticipant"
     },
     {
@@ -197,14 +199,14 @@
       "text" : "]>)"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes\/addTagParticipant(_:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes\/added(_:)",
   "kind" : "symbol",
   "role" : "symbol",
-  "title" : "TagEventTypes.addTagParticipant(_:)",
+  "title" : "TagEventTypes.added(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/tageventtypes\/addtagparticipant(_:)"
+  "url" : "\/documentation\/chat\/tageventtypes\/added(_:)"
 },
-"doc://Chat/documentation/Chat/TagEventTypes/createTag(_:)": {
+"doc://Chat/documentation/Chat/TagEventTypes/created(_:)": {
   "abstract" : [
 
   ],
@@ -219,7 +221,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "createTag"
+      "text" : "created"
     },
     {
       "kind" : "text",
@@ -236,7 +238,7 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels3TagC",
+      "preciseIdentifier" : "s:10ChatModels3TagV",
       "text" : "Tag"
     },
     {
@@ -244,14 +246,14 @@
       "text" : ">)"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes\/createTag(_:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes\/created(_:)",
   "kind" : "symbol",
   "role" : "symbol",
-  "title" : "TagEventTypes.createTag(_:)",
+  "title" : "TagEventTypes.created(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/tageventtypes\/createtag(_:)"
+  "url" : "\/documentation\/chat\/tageventtypes\/created(_:)"
 },
-"doc://Chat/documentation/Chat/TagEventTypes/deleteTag(_:)": {
+"doc://Chat/documentation/Chat/TagEventTypes/deleted(_:)": {
   "abstract" : [
 
   ],
@@ -266,7 +268,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "deleteTag"
+      "text" : "deleted"
     },
     {
       "kind" : "text",
@@ -283,7 +285,7 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels3TagC",
+      "preciseIdentifier" : "s:10ChatModels3TagV",
       "text" : "Tag"
     },
     {
@@ -291,14 +293,14 @@
       "text" : ">)"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes\/deleteTag(_:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes\/deleted(_:)",
   "kind" : "symbol",
   "role" : "symbol",
-  "title" : "TagEventTypes.deleteTag(_:)",
+  "title" : "TagEventTypes.deleted(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/tageventtypes\/deletetag(_:)"
+  "url" : "\/documentation\/chat\/tageventtypes\/deleted(_:)"
 },
-"doc://Chat/documentation/Chat/TagEventTypes/editTag(_:)": {
+"doc://Chat/documentation/Chat/TagEventTypes/edited(_:)": {
   "abstract" : [
 
   ],
@@ -313,7 +315,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "editTag"
+      "text" : "edited"
     },
     {
       "kind" : "text",
@@ -330,7 +332,7 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels3TagC",
+      "preciseIdentifier" : "s:10ChatModels3TagV",
       "text" : "Tag"
     },
     {
@@ -338,14 +340,14 @@
       "text" : ">)"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes\/editTag(_:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes\/edited(_:)",
   "kind" : "symbol",
   "role" : "symbol",
-  "title" : "TagEventTypes.editTag(_:)",
+  "title" : "TagEventTypes.edited(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/tageventtypes\/edittag(_:)"
+  "url" : "\/documentation\/chat\/tageventtypes\/edited(_:)"
 },
-"doc://Chat/documentation/Chat/TagEventTypes/removeTagParticipant(_:)": {
+"doc://Chat/documentation/Chat/TagEventTypes/participants(_:)": {
   "abstract" : [
 
   ],
@@ -360,7 +362,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "removeTagParticipant"
+      "text" : "participants"
     },
     {
       "kind" : "text",
@@ -377,7 +379,7 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels14TagParticipantC",
+      "preciseIdentifier" : "s:10ChatModels14TagParticipantV",
       "text" : "TagParticipant"
     },
     {
@@ -385,12 +387,106 @@
       "text" : "]>)"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes\/removeTagParticipant(_:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes\/participants(_:)",
   "kind" : "symbol",
   "role" : "symbol",
-  "title" : "TagEventTypes.removeTagParticipant(_:)",
+  "title" : "TagEventTypes.participants(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/tageventtypes\/removetagparticipant(_:)"
+  "url" : "\/documentation\/chat\/tageventtypes\/participants(_:)"
+},
+"doc://Chat/documentation/Chat/TagEventTypes/removed(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "removed"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels14TagParticipantV",
+      "text" : "TagParticipant"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes\/removed(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "TagEventTypes.removed(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/tageventtypes\/removed(_:)"
+},
+"doc://Chat/documentation/Chat/TagEventTypes/tags(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "tags"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels3TagV",
+      "text" : "Tag"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes\/tags(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "TagEventTypes.tags(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/tageventtypes\/tags(_:)"
 },
 "icon.png": {
   "alt" : "App icon.",

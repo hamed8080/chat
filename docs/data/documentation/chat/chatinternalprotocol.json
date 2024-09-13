@@ -1,0 +1,977 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "s:4Chat0A16InternalProtocolP",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "protocol"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "text" : "ChatInternalProtocol"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "navigatorTitle" : [
+      {
+        "kind" : "identifier",
+        "text" : "ChatInternalProtocol"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Protocol",
+    "symbolKind" : "protocol",
+    "title" : "ChatInternalProtocol"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "protocol"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "identifier",
+              "text" : "ChatInternalProtocol"
+            },
+            {
+              "kind" : "text",
+              "text" : " : "
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat",
+              "kind" : "typeIdentifier",
+              "preciseIdentifier" : "s:4ChatAAP",
+              "text" : "Chat"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    }
+  ],
+  "relationshipsSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/Chat"
+      ],
+      "kind" : "relationships",
+      "title" : "Inherits From",
+      "type" : "inheritsFrom"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation"
+      ],
+      "kind" : "relationships",
+      "title" : "Conforming Types",
+      "type" : "conformingTypes"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/asyncManager",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/banTimer",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/cache",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/cacheFileManager",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/callMessageDeleaget",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/coordinator",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/exportMessageViewModels",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/logger",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/loggerUserInfo",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/session",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/userInfo"
+      ],
+      "title" : "Instance Properties"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/dispose()",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/invokeCallback(asyncMessage:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/prepareToSendAsync(req:type:)"
+      ],
+      "title" : "Instance Methods"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/chatinternalprotocol"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/Async": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Async",
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Async",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/async"
+},
+"doc://Chat/documentation/Chat/AsyncManager": {
+  "abstract" : [
+    {
+      "text" : "AsyncManager intermediate between chat and async socket server.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "AsyncManager"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AsyncManager",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "AsyncManager"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "AsyncManager",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/asyncmanager"
+},
+"doc://Chat/documentation/Chat/Chat": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "Chat"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "Chat"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat"
+},
+"doc://Chat/documentation/Chat/ChatImplementation": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ChatImplementation"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ChatImplementation"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ChatImplementation",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation"
+},
+"doc://Chat/documentation/Chat/ChatInternalProtocol": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ChatInternalProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ChatInternalProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ChatInternalProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatinternalprotocol"
+},
+"doc://Chat/documentation/Chat/ChatInternalProtocol/asyncManager": {
+  "abstract" : [
+    {
+      "text" : "An async manager to keep the socket connection live and deliver messages and also cache the requests if they need it.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "asyncManager"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat12AsyncManagerC",
+      "text" : "AsyncManager"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/asyncManager",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "asyncManager",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatinternalprotocol\/asyncmanager"
+},
+"doc://Chat/documentation/Chat/ChatInternalProtocol/banTimer": {
+  "abstract" : [
+    {
+      "text" : "A timer that will retry if the user rapidly tries to send action to the chat server.",
+      "type" : "text"
+    },
+    {
+      "text" : " ",
+      "type" : "text"
+    },
+    {
+      "text" : "Chat server usually bans the user if it sends more than 3 requests in less than a second.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "banTimer"
+    },
+    {
+      "kind" : "text",
+      "text" : ": any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8Additive13TimerProtocolP",
+      "text" : "TimerProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/banTimer",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "banTimer",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatinternalprotocol\/bantimer"
+},
+"doc://Chat/documentation/Chat/ChatInternalProtocol/cache": {
+  "abstract" : [
+    {
+      "text" : "A manager that keeps all concrete object of cache managers.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "cache"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:9ChatCache0B7ManagerC",
+      "text" : "CacheManager"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/cache",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "cache",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatinternalprotocol\/cache"
+},
+"doc://Chat/documentation/Chat/ChatInternalProtocol/cacheFileManager": {
+  "abstract" : [
+    {
+      "text" : "A file manager for caching files on the storage.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "cacheFileManager"
+    },
+    {
+      "kind" : "text",
+      "text" : ": (any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore24CacheFileManagerProtocolP",
+      "text" : "CacheFileManagerProtocol"
+    },
+    {
+      "kind" : "text",
+      "text" : ")?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/cacheFileManager",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "cacheFileManager",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatinternalprotocol\/cachefilemanager"
+},
+"doc://Chat/documentation/Chat/ChatInternalProtocol/callMessageDeleaget": {
+  "abstract" : [
+    {
+      "text" : "A delegate for communicating with ChatCall SDK.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "callMessageDeleaget"
+    },
+    {
+      "kind" : "text",
+      "text" : ": (any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat19CallMessageProtocolP",
+      "text" : "CallMessageProtocol"
+    },
+    {
+      "kind" : "text",
+      "text" : ")?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/callMessageDeleaget",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "callMessageDeleaget",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatinternalprotocol\/callmessagedeleaget"
+},
+"doc://Chat/documentation/Chat/ChatInternalProtocol/coordinator": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "coordinator"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat0A11CoordinatorC",
+      "text" : "ChatCoordinator"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/coordinator",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "coordinator",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatinternalprotocol\/coordinator"
+},
+"doc://Chat/documentation/Chat/ChatInternalProtocol/dispose()": {
+  "abstract" : [
+    {
+      "text" : "Dispose and close object.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "dispose"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/dispose()",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "dispose()",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatinternalprotocol\/dispose()"
+},
+"doc://Chat/documentation/Chat/ChatInternalProtocol/exportMessageViewModels": {
+  "abstract" : [
+    {
+      "text" : "An array to manage a list of threads in the queue of exporting messages of a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "exportMessageViewModels"
+    },
+    {
+      "kind" : "text",
+      "text" : ": [any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat22ExportMessagesProtocolP",
+      "text" : "ExportMessagesProtocol"
+    },
+    {
+      "kind" : "text",
+      "text" : "]"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/exportMessageViewModels",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "exportMessageViewModels",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatinternalprotocol\/exportmessageviewmodels"
+},
+"doc://Chat/documentation/Chat/ChatInternalProtocol/invokeCallback(asyncMessage:)": {
+  "abstract" : [
+    {
+      "text" : "A private method that will be called by the SDK to pass data that received from onMessage.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "invokeCallback"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "asyncMessage"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:5Async0A7MessageV",
+      "text" : "AsyncMessage"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/invokeCallback(asyncMessage:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "invokeCallback(asyncMessage:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatinternalprotocol\/invokecallback(asyncmessage:)"
+},
+"doc://Chat/documentation/Chat/ChatInternalProtocol/logger": {
+  "abstract" : [
+    {
+      "text" : "A logger to logs events if it is enabled in configuration ",
+      "type" : "text"
+    },
+    {
+      "code" : "ChatConfig\/isDebuggingLogEnabled",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : ".",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "logger"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:6LoggerAAC",
+      "text" : "Logger"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/logger",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "logger",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatinternalprotocol\/logger"
+},
+"doc://Chat/documentation/Chat/ChatInternalProtocol/loggerUserInfo": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "loggerUserInfo"
+    },
+    {
+      "kind" : "text",
+      "text" : ": ["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : " : "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : "]"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/loggerUserInfo",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "loggerUserInfo",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatinternalprotocol\/loggeruserinfo"
+},
+"doc://Chat/documentation/Chat/ChatInternalProtocol/prepareToSendAsync(req:type:)": {
+  "abstract" : [
+    {
+      "text" : "It is a private method and only should used by the SDK to send data to ",
+      "type" : "text"
+    },
+    {
+      "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AsyncManager",
+      "isActive" : true,
+      "type" : "reference"
+    },
+    {
+      "text" : " and send to ",
+      "type" : "text"
+    },
+    {
+      "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Async",
+      "isActive" : true,
+      "type" : "reference"
+    },
+    {
+      "text" : ".",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "prepareToSendAsync"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "req"
+    },
+    {
+      "kind" : "text",
+      "text" : ": any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8SendableP",
+      "text" : "ChatSendable"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "type"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A14MessageVOTypesO",
+      "text" : "ChatMessageVOTypes"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/prepareToSendAsync(req:type:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "prepareToSendAsync(req:type:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatinternalprotocol\/preparetosendasync(req:type:)"
+},
+"doc://Chat/documentation/Chat/ChatInternalProtocol/session": {
+  "abstract" : [
+    {
+      "text" : "A url session to initiate a network call.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "session"
+    },
+    {
+      "kind" : "text",
+      "text" : ": any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8Additive18URLSessionProtocolP",
+      "text" : "URLSessionProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/session",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "session",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatinternalprotocol\/session"
+},
+"doc://Chat/documentation/Chat/ChatInternalProtocol/userInfo": {
+  "abstract" : [
+    {
+      "text" : "The object of the current user will automatically be filled by the SDK after ",
+      "type" : "text"
+    },
+    {
+      "code" : "ChatState\/asyncReady",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : ",",
+      "type" : "text"
+    },
+    {
+      "text" : " ",
+      "type" : "text"
+    },
+    {
+      "text" : "and if it is fetched properly, it will change the state of the chat to ",
+      "type" : "text"
+    },
+    {
+      "code" : "ChatState\/chatReady",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : ".",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "userInfo"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels4UserV",
+      "text" : "User"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol\/userInfo",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "userInfo",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatinternalprotocol\/userinfo"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

@@ -1,0 +1,313 @@
+{
+  "abstract" : [
+    {
+      "text" : "Manage system events.",
+      "type" : "text"
+    }
+  ],
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/ManagingSystem"
+  },
+  "kind" : "article",
+  "metadata" : {
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "role" : "article",
+    "roleHeading" : "Article",
+    "title" : "Managing System"
+  },
+  "primaryContentSections" : [
+    {
+      "content" : [
+        {
+          "anchor" : "Send-user-is-typing",
+          "level" : 3,
+          "text" : "Send user is typing.",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "For sending an event to participants of a thread that you are typing in a thread call the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SystemProtocol\/sendStartTyping(threadId:)",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "ChatManager.activeInstance?.system.sendStartTyping(threadId: threadId)"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Send-user-stop-typing",
+          "level" : 3,
+          "text" : "Send user stop typing.",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "For sending an event to participants of a thread that you have stopped typing in a thread call the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SystemProtocol\/sendStopTyping()",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "ChatManager.activeInstance?.system.sendStopTyping()"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Send-a-signal-event",
+          "level" : 3,
+          "text" : "Send a signal event",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "For sending an event to the server that the user is doing some acitons call the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SystemProtocol\/sendSignalMessage(_:)",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "let req = SendSignalMessageRequest(signalType: .RECORD_VOICE, threadId: 123456)",
+            "ChatManager.activeInstance?.system.sendSignalMessage(req)"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        }
+      ],
+      "kind" : "content"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/managingsystem"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/SystemProtocol/sendSignalMessage(_:)": {
+  "abstract" : [
+    {
+      "text" : "Notify some system actions such as upload a file, record a voice and e.g.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "sendSignalMessage"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO24SendSignalMessageRequestV",
+      "text" : "SendSignalMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SystemProtocol\/sendSignalMessage(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "sendSignalMessage(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/systemprotocol\/sendsignalmessage(_:)"
+},
+"doc://Chat/documentation/Chat/SystemProtocol/sendStartTyping(threadId:)": {
+  "abstract" : [
+    {
+      "text" : "Send a event to the participants of a thread that you are typing something.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "sendStartTyping"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "threadId"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Si",
+      "text" : "Int"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SystemProtocol\/sendStartTyping(threadId:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "sendStartTyping(threadId:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/systemprotocol\/sendstarttyping(threadid:)"
+},
+"doc://Chat/documentation/Chat/SystemProtocol/sendStopTyping()": {
+  "abstract" : [
+    {
+      "text" : "Send user stop typing.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "sendStopTyping"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SystemProtocol\/sendStopTyping()",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "sendStopTyping()",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/systemprotocol\/sendstoptyping()"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

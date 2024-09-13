@@ -85,12 +85,17 @@
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/assistant(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/bot(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/call(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/contact(_:)",
-        "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/file(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/download(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/map(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/message(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/participant(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/reaction(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/system(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/tag(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/thread(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/upload(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/user(_:)"
       ],
       "title" : "Enumeration Cases"
@@ -113,7 +118,7 @@
 "doc://Chat/documentation/Chat": {
   "abstract" : [
     {
-      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
       "type" : "text"
     }
   ],
@@ -237,6 +242,44 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/chateventtype\/bot(_:)"
 },
+"doc://Chat/documentation/Chat/ChatEventType/call(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "call"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat14CallEventTypesO",
+      "text" : "CallEventTypes"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/call(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ChatEventType.call(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chateventtype\/call(_:)"
+},
 "doc://Chat/documentation/Chat/ChatEventType/contact(_:)": {
   "abstract" : [
 
@@ -275,7 +318,7 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/chateventtype\/contact(_:)"
 },
-"doc://Chat/documentation/Chat/ChatEventType/file(_:)": {
+"doc://Chat/documentation/Chat/ChatEventType/download(_:)": {
   "abstract" : [
 
   ],
@@ -290,7 +333,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "file"
+      "text" : "download"
     },
     {
       "kind" : "text",
@@ -298,20 +341,58 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat13FileEventTypeO",
-      "text" : "FileEventType"
+      "preciseIdentifier" : "s:4Chat18DownloadEventTypesO",
+      "text" : "DownloadEventTypes"
     },
     {
       "kind" : "text",
       "text" : ")"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/file(_:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/download(_:)",
   "kind" : "symbol",
   "role" : "symbol",
-  "title" : "ChatEventType.file(_:)",
+  "title" : "ChatEventType.download(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/chateventtype\/file(_:)"
+  "url" : "\/documentation\/chat\/chateventtype\/download(_:)"
+},
+"doc://Chat/documentation/Chat/ChatEventType/map(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "map"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat13MapEventTypesO",
+      "text" : "MapEventTypes"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/map(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ChatEventType.map(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chateventtype\/map(_:)"
 },
 "doc://Chat/documentation/Chat/ChatEventType/message(_:)": {
   "abstract" : [
@@ -350,6 +431,82 @@
   "title" : "ChatEventType.message(_:)",
   "type" : "topic",
   "url" : "\/documentation\/chat\/chateventtype\/message(_:)"
+},
+"doc://Chat/documentation/Chat/ChatEventType/participant(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "participant"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat21ParticipantEventTypesO",
+      "text" : "ParticipantEventTypes"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/participant(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ChatEventType.participant(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chateventtype\/participant(_:)"
+},
+"doc://Chat/documentation/Chat/ChatEventType/reaction(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "reaction"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat18ReactionEventTypesO",
+      "text" : "ReactionEventTypes"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/reaction(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ChatEventType.reaction(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chateventtype\/reaction(_:)"
 },
 "doc://Chat/documentation/Chat/ChatEventType/system(_:)": {
   "abstract" : [
@@ -464,6 +621,44 @@
   "title" : "ChatEventType.thread(_:)",
   "type" : "topic",
   "url" : "\/documentation\/chat\/chateventtype\/thread(_:)"
+},
+"doc://Chat/documentation/Chat/ChatEventType/upload(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "upload"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat16UploadEventTypesO",
+      "text" : "UploadEventTypes"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatEventType\/upload(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ChatEventType.upload(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chateventtype\/upload(_:)"
 },
 "doc://Chat/documentation/Chat/ChatEventType/user(_:)": {
   "abstract" : [

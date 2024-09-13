@@ -1,0 +1,410 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/ParticipantEventTypes"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "s:4Chat21ParticipantEventTypesO",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "enum"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "text" : "ParticipantEventTypes"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "navigatorTitle" : [
+      {
+        "kind" : "identifier",
+        "text" : "ParticipantEventTypes"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Enumeration",
+    "symbolKind" : "enum",
+    "title" : "ParticipantEventTypes"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "enum"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "identifier",
+              "text" : "ParticipantEventTypes"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/ParticipantEventTypes\/add(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ParticipantEventTypes\/deleted(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ParticipantEventTypes\/participants(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ParticipantEventTypes\/removeAdminRoleFromUser(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ParticipantEventTypes\/setAdminRoleToUser(_:)"
+      ],
+      "title" : "Enumeration Cases"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/participanteventtypes"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/ParticipantEventTypes": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ParticipantEventTypes"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ParticipantEventTypes",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ParticipantEventTypes"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ParticipantEventTypes",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/participanteventtypes"
+},
+"doc://Chat/documentation/Chat/ParticipantEventTypes/add(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "add"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels12ConversationV",
+      "text" : "Conversation"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ParticipantEventTypes\/add(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ParticipantEventTypes.add(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/participanteventtypes\/add(_:)"
+},
+"doc://Chat/documentation/Chat/ParticipantEventTypes/deleted(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "deleted"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels11ParticipantV",
+      "text" : "Participant"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ParticipantEventTypes\/deleted(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ParticipantEventTypes.deleted(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/participanteventtypes\/deleted(_:)"
+},
+"doc://Chat/documentation/Chat/ParticipantEventTypes/participants(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "participants"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels11ParticipantV",
+      "text" : "Participant"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ParticipantEventTypes\/participants(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ParticipantEventTypes.participants(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/participanteventtypes\/participants(_:)"
+},
+"doc://Chat/documentation/Chat/ParticipantEventTypes/removeAdminRoleFromUser(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "removeAdminRoleFromUser"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO17AdminRoleResponseV",
+      "text" : "AdminRoleResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ParticipantEventTypes\/removeAdminRoleFromUser(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ParticipantEventTypes.removeAdminRoleFromUser(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/participanteventtypes\/removeadminrolefromuser(_:)"
+},
+"doc://Chat/documentation/Chat/ParticipantEventTypes/setAdminRoleToUser(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "setAdminRoleToUser"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO17AdminRoleResponseV",
+      "text" : "AdminRoleResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ParticipantEventTypes\/setAdminRoleToUser(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ParticipantEventTypes.setAdminRoleToUser(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/participanteventtypes\/setadminroletouser(_:)"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

@@ -1,0 +1,1274 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "s:4Chat14CallEventTypesO",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "enum"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "text" : "CallEventTypes"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "navigatorTitle" : [
+      {
+        "kind" : "identifier",
+        "text" : "CallEventTypes"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Enumeration",
+    "symbolKind" : "enum",
+    "title" : "CallEventTypes"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "enum"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "identifier",
+              "text" : "CallEventTypes"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callCanceled(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callClientError(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callCreate(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callDelivered(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callEnded(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callParticipantJoined(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callParticipantLeft(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callParticipantMute(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callParticipantStartSpeaking(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callParticipantStopSpeaking(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callParticipantUnmute(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callParticipantsRemoved(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callReceived(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callRejected(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callStarted(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callsToJoin(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/groupCallCanceled(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/maxVideoSessionLimit(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/startCallRecording(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/sticker(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/stopCallRecording(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/turnVideoOff(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/turnVideoOn(_:)"
+      ],
+      "title" : "Enumeration Cases"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/calleventtypes"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/CallEventTypes": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "CallEventTypes"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "CallEventTypes"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "CallEventTypes",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/calleventtypes"
+},
+"doc://Chat/documentation/Chat/CallEventTypes/callCanceled(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "callCanceled"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels4CallV",
+      "text" : "Call"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callCanceled(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "CallEventTypes.callCanceled(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/calleventtypes\/callcanceled(_:)"
+},
+"doc://Chat/documentation/Chat/CallEventTypes/callClientError(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "callClientError"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO9CallErrorV",
+      "text" : "CallError"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callClientError(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "CallEventTypes.callClientError(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/calleventtypes\/callclienterror(_:)"
+},
+"doc://Chat/documentation/Chat/CallEventTypes/callCreate(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "callCreate"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO10CreateCallV",
+      "text" : "CreateCall"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callCreate(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "CallEventTypes.callCreate(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/calleventtypes\/callcreate(_:)"
+},
+"doc://Chat/documentation/Chat/CallEventTypes/callDelivered(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "callDelivered"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels4CallV",
+      "text" : "Call"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callDelivered(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "CallEventTypes.callDelivered(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/calleventtypes\/calldelivered(_:)"
+},
+"doc://Chat/documentation/Chat/CallEventTypes/callEnded(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "callEnded"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Si",
+      "text" : "Int"
+    },
+    {
+      "kind" : "text",
+      "text" : ">?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callEnded(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "CallEventTypes.callEnded(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/calleventtypes\/callended(_:)"
+},
+"doc://Chat/documentation/Chat/CallEventTypes/callParticipantJoined(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "callParticipantJoined"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels15CallParticipantV",
+      "text" : "CallParticipant"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callParticipantJoined(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "CallEventTypes.callParticipantJoined(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/calleventtypes\/callparticipantjoined(_:)"
+},
+"doc://Chat/documentation/Chat/CallEventTypes/callParticipantLeft(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "callParticipantLeft"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels15CallParticipantV",
+      "text" : "CallParticipant"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callParticipantLeft(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "CallEventTypes.callParticipantLeft(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/calleventtypes\/callparticipantleft(_:)"
+},
+"doc://Chat/documentation/Chat/CallEventTypes/callParticipantMute(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "callParticipantMute"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels15CallParticipantV",
+      "text" : "CallParticipant"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callParticipantMute(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "CallEventTypes.callParticipantMute(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/calleventtypes\/callparticipantmute(_:)"
+},
+"doc://Chat/documentation/Chat/CallEventTypes/callParticipantStartSpeaking(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "callParticipantStartSpeaking"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels15CallParticipantV",
+      "text" : "CallParticipant"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callParticipantStartSpeaking(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "CallEventTypes.callParticipantStartSpeaking(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/calleventtypes\/callparticipantstartspeaking(_:)"
+},
+"doc://Chat/documentation/Chat/CallEventTypes/callParticipantStopSpeaking(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "callParticipantStopSpeaking"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels15CallParticipantV",
+      "text" : "CallParticipant"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callParticipantStopSpeaking(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "CallEventTypes.callParticipantStopSpeaking(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/calleventtypes\/callparticipantstopspeaking(_:)"
+},
+"doc://Chat/documentation/Chat/CallEventTypes/callParticipantUnmute(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "callParticipantUnmute"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels15CallParticipantV",
+      "text" : "CallParticipant"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callParticipantUnmute(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "CallEventTypes.callParticipantUnmute(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/calleventtypes\/callparticipantunmute(_:)"
+},
+"doc://Chat/documentation/Chat/CallEventTypes/callParticipantsRemoved(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "callParticipantsRemoved"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels15CallParticipantV",
+      "text" : "CallParticipant"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callParticipantsRemoved(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "CallEventTypes.callParticipantsRemoved(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/calleventtypes\/callparticipantsremoved(_:)"
+},
+"doc://Chat/documentation/Chat/CallEventTypes/callReceived(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "callReceived"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO10CreateCallV",
+      "text" : "CreateCall"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callReceived(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "CallEventTypes.callReceived(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/calleventtypes\/callreceived(_:)"
+},
+"doc://Chat/documentation/Chat/CallEventTypes/callRejected(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "callRejected"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO10CreateCallV",
+      "text" : "CreateCall"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callRejected(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "CallEventTypes.callRejected(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/calleventtypes\/callrejected(_:)"
+},
+"doc://Chat/documentation/Chat/CallEventTypes/callStarted(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "callStarted"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO9StartCallV",
+      "text" : "StartCall"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callStarted(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "CallEventTypes.callStarted(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/calleventtypes\/callstarted(_:)"
+},
+"doc://Chat/documentation/Chat/CallEventTypes/callsToJoin(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "callsToJoin"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels4CallV",
+      "text" : "Call"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/callsToJoin(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "CallEventTypes.callsToJoin(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/calleventtypes\/callstojoin(_:)"
+},
+"doc://Chat/documentation/Chat/CallEventTypes/groupCallCanceled(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "groupCallCanceled"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO15CancelGroupCallV",
+      "text" : "CancelGroupCall"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/groupCallCanceled(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "CallEventTypes.groupCallCanceled(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/calleventtypes\/groupcallcanceled(_:)"
+},
+"doc://Chat/documentation/Chat/CallEventTypes/maxVideoSessionLimit(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "maxVideoSessionLimit"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels15CallParticipantV",
+      "text" : "CallParticipant"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/maxVideoSessionLimit(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "CallEventTypes.maxVideoSessionLimit(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/calleventtypes\/maxvideosessionlimit(_:)"
+},
+"doc://Chat/documentation/Chat/CallEventTypes/startCallRecording(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "startCallRecording"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels11ParticipantV",
+      "text" : "Participant"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/startCallRecording(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "CallEventTypes.startCallRecording(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/calleventtypes\/startcallrecording(_:)"
+},
+"doc://Chat/documentation/Chat/CallEventTypes/sticker(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "sticker"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO15StickerResponseV",
+      "text" : "StickerResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/sticker(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "CallEventTypes.sticker(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/calleventtypes\/sticker(_:)"
+},
+"doc://Chat/documentation/Chat/CallEventTypes/stopCallRecording(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "stopCallRecording"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels11ParticipantV",
+      "text" : "Participant"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/stopCallRecording(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "CallEventTypes.stopCallRecording(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/calleventtypes\/stopcallrecording(_:)"
+},
+"doc://Chat/documentation/Chat/CallEventTypes/turnVideoOff(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "turnVideoOff"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels15CallParticipantV",
+      "text" : "CallParticipant"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/turnVideoOff(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "CallEventTypes.turnVideoOff(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/calleventtypes\/turnvideooff(_:)"
+},
+"doc://Chat/documentation/Chat/CallEventTypes/turnVideoOn(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "turnVideoOn"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels15CallParticipantV",
+      "text" : "CallParticipant"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes\/turnVideoOn(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "CallEventTypes.turnVideoOn(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/calleventtypes\/turnvideoon(_:)"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

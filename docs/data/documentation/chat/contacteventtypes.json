@@ -83,8 +83,15 @@
   "topicSections" : [
     {
       "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/ContactEventTypes\/add(_:)",
         "doc:\/\/Chat\/documentation\/Chat\/ContactEventTypes\/blocked(_:)",
-        "doc:\/\/Chat\/documentation\/Chat\/ContactEventTypes\/contactsLastSeen(_:)"
+        "doc:\/\/Chat\/documentation\/Chat\/ContactEventTypes\/blockedList(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ContactEventTypes\/contacts(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ContactEventTypes\/contactsLastSeen(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ContactEventTypes\/delete(_:deleted:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ContactEventTypes\/notSeen(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ContactEventTypes\/synced(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ContactEventTypes\/unblocked(_:)"
       ],
       "title" : "Enumeration Cases"
     }
@@ -106,7 +113,7 @@
 "doc://Chat/documentation/Chat": {
   "abstract" : [
     {
-      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
       "type" : "text"
     }
   ],
@@ -154,6 +161,53 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/contacteventtypes"
 },
+"doc://Chat/documentation/Chat/ContactEventTypes/add(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "add"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7ContactV",
+      "text" : "Contact"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactEventTypes\/add(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ContactEventTypes.add(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/contacteventtypes\/add(_:)"
+},
 "doc://Chat/documentation/Chat/ContactEventTypes/blocked(_:)": {
   "abstract" : [
 
@@ -186,8 +240,8 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels7ContactC",
-      "text" : "Contact"
+      "preciseIdentifier" : "s:7ChatDTO22BlockedContactResponseV",
+      "text" : "BlockedContactResponse"
     },
     {
       "kind" : "text",
@@ -200,6 +254,100 @@
   "title" : "ContactEventTypes.blocked(_:)",
   "type" : "topic",
   "url" : "\/documentation\/chat\/contacteventtypes\/blocked(_:)"
+},
+"doc://Chat/documentation/Chat/ContactEventTypes/blockedList(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "blockedList"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO22BlockedContactResponseV",
+      "text" : "BlockedContactResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactEventTypes\/blockedList(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ContactEventTypes.blockedList(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/contacteventtypes\/blockedlist(_:)"
+},
+"doc://Chat/documentation/Chat/ContactEventTypes/contacts(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "contacts"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7ContactV",
+      "text" : "Contact"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactEventTypes\/contacts(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ContactEventTypes.contacts(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/contacteventtypes\/contacts(_:)"
 },
 "doc://Chat/documentation/Chat/ContactEventTypes/contactsLastSeen(_:)": {
   "abstract" : [
@@ -233,7 +381,7 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO20UserLastSeenDurationC",
+      "preciseIdentifier" : "s:7ChatDTO20UserLastSeenDurationV",
       "text" : "UserLastSeenDuration"
     },
     {
@@ -247,6 +395,211 @@
   "title" : "ContactEventTypes.contactsLastSeen(_:)",
   "type" : "topic",
   "url" : "\/documentation\/chat\/contacteventtypes\/contactslastseen(_:)"
+},
+"doc://Chat/documentation/Chat/ContactEventTypes/delete(_:deleted:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "delete"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7ContactV",
+      "text" : "Contact"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "deleted"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Sb",
+      "text" : "Bool"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactEventTypes\/delete(_:deleted:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ContactEventTypes.delete(_:deleted:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/contacteventtypes\/delete(_:deleted:)"
+},
+"doc://Chat/documentation/Chat/ContactEventTypes/notSeen(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "notSeen"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO31ContactNotSeenDurationRespoonseV",
+      "text" : "ContactNotSeenDurationRespoonse"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactEventTypes\/notSeen(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ContactEventTypes.notSeen(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/contacteventtypes\/notseen(_:)"
+},
+"doc://Chat/documentation/Chat/ContactEventTypes/synced(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "synced"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat0A7MessageV",
+      "text" : "ChatMessage"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactEventTypes\/synced(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ContactEventTypes.synced(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/contacteventtypes\/synced(_:)"
+},
+"doc://Chat/documentation/Chat/ContactEventTypes/unblocked(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "unblocked"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO22BlockedContactResponseV",
+      "text" : "BlockedContactResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactEventTypes\/unblocked(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ContactEventTypes.unblocked(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/contacteventtypes\/unblocked(_:)"
 },
 "icon.png": {
   "alt" : "App icon.",

@@ -43,7 +43,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/getCurrentUserRoles(_:completion:cacheResponse:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UserProtocol\/currentUserRoles(_:)",
               "isActive" : true,
               "type" : "reference"
             },
@@ -56,9 +56,8 @@
         },
         {
           "code" : [
-            "Chat.sharedInstance.getCurrentUserRoles(.init(threadId: 123456)) { roles, uniqueId, error in",
-            "    \/\/ Write your code",
-            "}"
+            "let req = GeneralSubjectIdRequest(subjectId: threadId)",
+            "ChatManager.activeInstance?.user.currentUserRoles(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -76,7 +75,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/setRoles(_:_:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UserProtocol\/set(_:)-9f5h7",
               "isActive" : true,
               "type" : "reference"
             },
@@ -90,9 +89,8 @@
         {
           "code" : [
             "let usersRoles:[UserRoleRequest] = [.init(userId: userId, roles: [.THREAD_ADMIN , .EDIT_MESSAGE_OF_OTHERS])]",
-            "Chat.sharedInstance.setRoles(.init(userRoles: usersRoles, threadId: 123456)) { usersRoles, uniqueId, error in",
-            "    \/\/ Write your code",
-            "}"
+            "let req = RolesRequest(userRoles: [.init(userId: id, roles: userRoles)], threadId: threadId)",
+            "ChatManager.activeInstance?.user.set(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -110,7 +108,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/removeRoles(_:_:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UserProtocol\/remove(_:)-71zsk",
               "isActive" : true,
               "type" : "reference"
             },
@@ -124,9 +122,8 @@
         {
           "code" : [
             "let usersRoles:[UserRoleRequest] = [.init(userId: userId, roles: [.THREAD_ADMIN , .EDIT_MESSAGE_OF_OTHERS])]",
-            "Chat.sharedInstance.removeRoles(.init(userRoles: usersRoles, threadId: 123456)) { removedRoles, uniqueId, error in",
-            "    \/\/ Write your code",
-            "}"
+            "let req = RolesRequest(userRoles: usersRoles, threadId: 123456)",
+            "ChatManager.activeInstance?.user.remove(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -144,7 +141,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/setAuditor(_:_:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UserProtocol\/set(_:)-1qwkb",
               "isActive" : true,
               "type" : "reference"
             },
@@ -158,9 +155,8 @@
         {
           "code" : [
             "let usersRoles:[UserRoleRequest] = [.init(userId: userId, roles: [.THREAD_ADMIN , .EDIT_MESSAGE_OF_OTHERS])]",
-            "Chat.sharedInstance.setAuditor(.init(userRoles: usersRoles, threadId: 123456)) { useRoles, uniqueId, error in",
-            "    \/\/ Write your code",
-            "}"
+            "let req = threadId(userRoles: usersRoles, threadId: threadId)",
+            "ChatManager.activeInstance?.user.set(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -178,7 +174,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/removeAuditor(_:_:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UserProtocol\/remove(_:)-63xy3",
               "isActive" : true,
               "type" : "reference"
             },
@@ -192,9 +188,104 @@
         {
           "code" : [
             "let usersRoles:[UserRoleRequest] = [.init(userId: userId, roles: [.THREAD_ADMIN , .EDIT_MESSAGE_OF_OTHERS])]",
-            "Chat.sharedInstance.removeAuditor(.init(userRoles: usersRoles, threadId: 123456)) { useRoles, uniqueId, error in",
-            "    \/\/ Write your code",
-            "}"
+            "let req = AuditorRequest(userRoles: usersRoles, threadId: threadId)",
+            "ChatManager.activeInstance?.user.remove(req)"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Tell-the-server-user-has-been-logged-out",
+          "level" : 3,
+          "text" : "Tell the server user has been logged out.",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "For sending an event to the server that the user with the device has logged out call the method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UserProtocol\/logOut()",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "ChatManager.activeInstance?.user.logOut()"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Get-User-Details",
+          "level" : 3,
+          "text" : "Get User Details",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "Fir getting details of the current user you could call method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UserProtocol\/userInfo(_:)",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "let req = UserInfoRequest()",
+            "ChatManager.activeInstance?.user.userInfo(req)"
+          ],
+          "syntax" : "swift",
+          "type" : "codeListing"
+        },
+        {
+          "anchor" : "Update-User-Details",
+          "level" : 3,
+          "text" : "Update User Details",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "Fir updating details of the current user you could call method ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UserProtocol\/set(_:)-6o86f",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " like this:",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "let metaData = \"{ \"\\birthDate\\\": \\\"26 Jun 1991\\\", \\\"constellation\\\": \\\"cancer\\\" }\"",
+            "let req = UpdateChatProfile(bio: \"Let's see my biography.\", metadata: metaData)",
+            "ChatManager.activeInstance?.user.set(.init)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -220,11 +311,11 @@
         "doc:\/\/Chat\/documentation\/Chat\/ManagingMessages",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingContacts",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingFiles",
-        "doc:\/\/Chat\/documentation\/Chat\/ManagingProfile",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingTags",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingBots",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingAssistants",
-        "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps"
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps",
+        "doc:\/\/Chat\/documentation\/Chat\/ErrorCodes"
       ],
       "title" : "Essentials"
     }
@@ -246,7 +337,7 @@
 "doc://Chat/documentation/Chat": {
   "abstract" : [
     {
-      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
       "type" : "text"
     }
   ],
@@ -263,427 +354,30 @@
   "type" : "topic",
   "url" : "\/documentation\/chat"
 },
-"doc://Chat/documentation/Chat/Chat/getCurrentUserRoles(_:completion:cacheResponse:uniqueIdResult:)": {
+"doc://Chat/documentation/Chat/ErrorCodes": {
   "abstract" : [
     {
-      "text" : "Get the roles of the current user in a thread.",
+      "text" : "List of all error codes locally in the chat SDK for server errors.",
       "type" : "text"
     }
   ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "getCurrentUserRoles"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO23GeneralSubjectIdRequestC",
-      "text" : "GeneralSubjectIdRequest"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<["
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels5RolesO",
-      "text" : "Roles"
-    },
-    {
-      "kind" : "text",
-      "text" : "]>, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "cacheResponse"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat17CacheResponseTypea",
-      "text" : "CacheResponseType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<["
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels5RolesO",
-      "text" : "Roles"
-    },
-    {
-      "kind" : "text",
-      "text" : "]>?, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/getCurrentUserRoles(_:completion:cacheResponse:uniqueIdResult:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "getCurrentUserRoles(_:completion:cacheResponse:uniqueIdResult:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ErrorCodes",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Error Codes",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/getcurrentuserroles(_:completion:cacheresponse:uniqueidresult:)"
-},
-"doc://Chat/documentation/Chat/Chat/removeAuditor(_:_:uniqueIdResult:)": {
-  "abstract" : [
-    {
-      "text" : "Remove a participant auditor access roles.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "removeAuditor"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO14AuditorRequestC",
-      "text" : "AuditorRequest"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<["
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels8UserRoleC",
-      "text" : "UserRole"
-    },
-    {
-      "kind" : "text",
-      "text" : "]>, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/removeAuditor(_:_:uniqueIdResult:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "removeAuditor(_:_:uniqueIdResult:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/removeauditor(_:_:uniqueidresult:)"
-},
-"doc://Chat/documentation/Chat/Chat/removeRoles(_:_:uniqueIdResult:)": {
-  "abstract" : [
-    {
-      "text" : "Remove set of roles from a participant.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "removeRoles"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO12RolesRequestC",
-      "text" : "RolesRequest"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<["
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels8UserRoleC",
-      "text" : "UserRole"
-    },
-    {
-      "kind" : "text",
-      "text" : "]>, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/removeRoles(_:_:uniqueIdResult:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "removeRoles(_:_:uniqueIdResult:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/removeroles(_:_:uniqueidresult:)"
-},
-"doc://Chat/documentation/Chat/Chat/setAuditor(_:_:uniqueIdResult:)": {
-  "abstract" : [
-    {
-      "text" : "Set a participant auditor access roles.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "setAuditor"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO14AuditorRequestC",
-      "text" : "AuditorRequest"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<["
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels8UserRoleC",
-      "text" : "UserRole"
-    },
-    {
-      "kind" : "text",
-      "text" : "]>, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/setAuditor(_:_:uniqueIdResult:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "setAuditor(_:_:uniqueIdResult:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/setauditor(_:_:uniqueidresult:)"
-},
-"doc://Chat/documentation/Chat/Chat/setRoles(_:_:uniqueIdResult:)": {
-  "abstract" : [
-    {
-      "text" : "Set a set of roles to a participant of a thread.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "setRoles"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO12RolesRequestC",
-      "text" : "RolesRequest"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<["
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels8UserRoleC",
-      "text" : "UserRole"
-    },
-    {
-      "kind" : "text",
-      "text" : "]>, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/setRoles(_:_:uniqueIdResult:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "setRoles(_:_:uniqueIdResult:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/setroles(_:_:uniqueidresult:)"
+  "url" : "\/documentation\/chat\/errorcodes"
 },
 "doc://Chat/documentation/Chat/GettingStarted": {
   "abstract" : [
-
+    {
+      "text" : "Getting started with the Chat SDK and some tips and tricks to configure it properly.",
+      "type" : "text"
+    }
   ],
   "identifier" : "doc:\/\/Chat\/documentation\/Chat\/GettingStarted",
   "kind" : "article",
-  "role" : "collectionGroup",
+  "role" : "article",
   "title" : "Getting Started",
   "type" : "topic",
   "url" : "\/documentation\/chat\/gettingstarted"
@@ -772,20 +466,6 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/managingmessages"
 },
-"doc://Chat/documentation/Chat/ManagingProfile": {
-  "abstract" : [
-    {
-      "text" : "Get current user details, update, set profile.",
-      "type" : "text"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingProfile",
-  "kind" : "article",
-  "role" : "article",
-  "title" : "Managing Profile",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/managingprofile"
-},
 "doc://Chat/documentation/Chat/ManagingTags": {
   "abstract" : [
     {
@@ -803,7 +483,7 @@
 "doc://Chat/documentation/Chat/ManagingThreads": {
   "abstract" : [
     {
-      "text" : "Managing threads create P2P, Group, Channel or delete edit and so many more.",
+      "text" : "Managing threads, create P2P, Group, Channel or delete edit and so many more.",
       "type" : "text"
     }
   ],
@@ -813,6 +493,346 @@
   "title" : "Managing Threads",
   "type" : "topic",
   "url" : "\/documentation\/chat\/managingthreads"
+},
+"doc://Chat/documentation/Chat/UserProtocol/currentUserRoles(_:)": {
+  "abstract" : [
+    {
+      "text" : "Get the roles of the current user in a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "currentUserRoles"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO23GeneralSubjectIdRequestV",
+      "text" : "GeneralSubjectIdRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UserProtocol\/currentUserRoles(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "currentUserRoles(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/userprotocol\/currentuserroles(_:)"
+},
+"doc://Chat/documentation/Chat/UserProtocol/logOut()": {
+  "abstract" : [
+    {
+      "text" : "Tell the server user has logged out. This method wil ",
+      "type" : "text"
+    },
+    {
+      "inlineContent" : [
+        {
+          "text" : "truncate and delete",
+          "type" : "text"
+        }
+      ],
+      "type" : "strong"
+    },
+    {
+      "text" : " all data inside the cache.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "logOut"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UserProtocol\/logOut()",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "logOut()",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/userprotocol\/logout()"
+},
+"doc://Chat/documentation/Chat/UserProtocol/remove(_:)-63xy3": {
+  "abstract" : [
+    {
+      "text" : "Remove a participant auditor access roles.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "remove"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO14AuditorRequestV",
+      "text" : "AuditorRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UserProtocol\/remove(_:)-63xy3",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "remove(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/userprotocol\/remove(_:)-63xy3"
+},
+"doc://Chat/documentation/Chat/UserProtocol/remove(_:)-71zsk": {
+  "abstract" : [
+    {
+      "text" : "Remove set of roles from a participant.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "remove"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO12RolesRequestV",
+      "text" : "RolesRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UserProtocol\/remove(_:)-71zsk",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "remove(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/userprotocol\/remove(_:)-71zsk"
+},
+"doc://Chat/documentation/Chat/UserProtocol/set(_:)-1qwkb": {
+  "abstract" : [
+    {
+      "text" : "Set a participant auditor access roles.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "set"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO14AuditorRequestV",
+      "text" : "AuditorRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UserProtocol\/set(_:)-1qwkb",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "set(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/userprotocol\/set(_:)-1qwkb"
+},
+"doc://Chat/documentation/Chat/UserProtocol/set(_:)-6o86f": {
+  "abstract" : [
+    {
+      "text" : "Update current user details.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "set"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO06UpdateA7ProfileV",
+      "text" : "UpdateChatProfile"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UserProtocol\/set(_:)-6o86f",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "set(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/userprotocol\/set(_:)-6o86f"
+},
+"doc://Chat/documentation/Chat/UserProtocol/set(_:)-9f5h7": {
+  "abstract" : [
+    {
+      "text" : "Set a set of roles to a participant of a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "set"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO12RolesRequestV",
+      "text" : "RolesRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UserProtocol\/set(_:)-9f5h7",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "set(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/userprotocol\/set(_:)-9f5h7"
+},
+"doc://Chat/documentation/Chat/UserProtocol/userInfo(_:)": {
+  "abstract" : [
+    {
+      "text" : "Getting current user details.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "userInfo"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO15UserInfoRequestV",
+      "text" : "UserInfoRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UserProtocol\/userInfo(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "userInfo(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/userprotocol\/userinfo(_:)"
 },
 "icon.png": {
   "alt" : "App icon.",

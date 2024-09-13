@@ -83,12 +83,13 @@
   "topicSections" : [
     {
       "identifiers" : [
-        "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/botMessage(_:)",
-        "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/createBot(_:)",
-        "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/createBotCommand(_:)",
-        "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/removeBotCommand(_:)",
-        "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/startBot(_:)",
-        "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/stopBot(_:)"
+        "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/addCommand(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/bots(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/create(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/message(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/removeCommand(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/start(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/stop(_:)"
       ],
       "title" : "Enumeration Cases"
     }
@@ -110,7 +111,7 @@
 "doc://Chat/documentation/Chat": {
   "abstract" : [
     {
-      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
       "type" : "text"
     }
   ],
@@ -158,7 +159,7 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/boteventtypes"
 },
-"doc://Chat/documentation/Chat/BotEventTypes/botMessage(_:)": {
+"doc://Chat/documentation/Chat/BotEventTypes/addCommand(_:)": {
   "abstract" : [
 
   ],
@@ -173,7 +174,148 @@
     },
     {
       "kind" : "identifier",
-      "text" : "botMessage"
+      "text" : "addCommand"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7BotInfoV",
+      "text" : "BotInfo"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/addCommand(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "BotEventTypes.addCommand(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/boteventtypes\/addcommand(_:)"
+},
+"doc://Chat/documentation/Chat/BotEventTypes/bots(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "bots"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7BotInfoV",
+      "text" : "BotInfo"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/bots(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "BotEventTypes.bots(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/boteventtypes\/bots(_:)"
+},
+"doc://Chat/documentation/Chat/BotEventTypes/create(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "create"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7BotInfoV",
+      "text" : "BotInfo"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/create(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "BotEventTypes.create(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/boteventtypes\/create(_:)"
+},
+"doc://Chat/documentation/Chat/BotEventTypes/message(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "message"
     },
     {
       "kind" : "text",
@@ -198,14 +340,14 @@
       "text" : "?>)"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/botMessage(_:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/message(_:)",
   "kind" : "symbol",
   "role" : "symbol",
-  "title" : "BotEventTypes.botMessage(_:)",
+  "title" : "BotEventTypes.message(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/boteventtypes\/botmessage(_:)"
+  "url" : "\/documentation\/chat\/boteventtypes\/message(_:)"
 },
-"doc://Chat/documentation/Chat/BotEventTypes/createBot(_:)": {
+"doc://Chat/documentation/Chat/BotEventTypes/removeCommand(_:)": {
   "abstract" : [
 
   ],
@@ -220,7 +362,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "createBot"
+      "text" : "removeCommand"
     },
     {
       "kind" : "text",
@@ -237,7 +379,7 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO7BotInfoC",
+      "preciseIdentifier" : "s:10ChatModels7BotInfoV",
       "text" : "BotInfo"
     },
     {
@@ -245,14 +387,14 @@
       "text" : ">)"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/createBot(_:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/removeCommand(_:)",
   "kind" : "symbol",
   "role" : "symbol",
-  "title" : "BotEventTypes.createBot(_:)",
+  "title" : "BotEventTypes.removeCommand(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/boteventtypes\/createbot(_:)"
+  "url" : "\/documentation\/chat\/boteventtypes\/removecommand(_:)"
 },
-"doc://Chat/documentation/Chat/BotEventTypes/createBotCommand(_:)": {
+"doc://Chat/documentation/Chat/BotEventTypes/start(_:)": {
   "abstract" : [
 
   ],
@@ -267,101 +409,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "createBotCommand"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
-      "text" : "ChatResponse"
-    },
-    {
-      "kind" : "text",
-      "text" : "<"
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO7BotInfoC",
-      "text" : "BotInfo"
-    },
-    {
-      "kind" : "text",
-      "text" : ">)"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/createBotCommand(_:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "BotEventTypes.createBotCommand(_:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/boteventtypes\/createbotcommand(_:)"
-},
-"doc://Chat/documentation/Chat/BotEventTypes/removeBotCommand(_:)": {
-  "abstract" : [
-
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "case"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "removeBotCommand"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
-      "text" : "ChatResponse"
-    },
-    {
-      "kind" : "text",
-      "text" : "<"
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO7BotInfoC",
-      "text" : "BotInfo"
-    },
-    {
-      "kind" : "text",
-      "text" : ">)"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/removeBotCommand(_:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "BotEventTypes.removeBotCommand(_:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/boteventtypes\/removebotcommand(_:)"
-},
-"doc://Chat/documentation/Chat/BotEventTypes/startBot(_:)": {
-  "abstract" : [
-
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "case"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "startBot"
+      "text" : "start"
     },
     {
       "kind" : "text",
@@ -386,14 +434,14 @@
       "text" : ">)"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/startBot(_:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/start(_:)",
   "kind" : "symbol",
   "role" : "symbol",
-  "title" : "BotEventTypes.startBot(_:)",
+  "title" : "BotEventTypes.start(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/boteventtypes\/startbot(_:)"
+  "url" : "\/documentation\/chat\/boteventtypes\/start(_:)"
 },
-"doc://Chat/documentation/Chat/BotEventTypes/stopBot(_:)": {
+"doc://Chat/documentation/Chat/BotEventTypes/stop(_:)": {
   "abstract" : [
 
   ],
@@ -408,7 +456,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "stopBot"
+      "text" : "stop"
     },
     {
       "kind" : "text",
@@ -433,12 +481,12 @@
       "text" : ">)"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/stopBot(_:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes\/stop(_:)",
   "kind" : "symbol",
   "role" : "symbol",
-  "title" : "BotEventTypes.stopBot(_:)",
+  "title" : "BotEventTypes.stop(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/boteventtypes\/stopbot(_:)"
+  "url" : "\/documentation\/chat\/boteventtypes\/stop(_:)"
 },
 "icon.png": {
   "alt" : "App icon.",

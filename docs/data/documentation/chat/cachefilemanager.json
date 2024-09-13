@@ -83,7 +83,7 @@
   "relationshipsSections" : [
     {
       "identifiers" : [
-        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManagerProtocol"
+        "doc:\/\/Chat\/8ChatCore24CacheFileManagerProtocolP"
       ],
       "kind" : "relationships",
       "title" : "Conforms To",
@@ -124,8 +124,8 @@
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/deleteFolder(url:)",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/filePath(url:)",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/filePathInGroup(url:)",
-        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/getData(url:)",
-        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/getDataInGroup(url:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/getData(url:completion:)",
+        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/getDataInGroup(url:completion:)",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/isFileExist(url:)",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/isFileExistInGroup(url:)",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/saveFile(url:data:saveCompeletion:)",
@@ -148,10 +148,15 @@
   ]
 , 
 "references": {
+"doc://Chat/8ChatCore24CacheFileManagerProtocolP": {
+  "identifier" : "doc:\/\/Chat\/8ChatCore24CacheFileManagerProtocolP",
+  "title" : "ChatCore.CacheFileManagerProtocol",
+  "type" : "unresolvable"
+},
 "doc://Chat/documentation/Chat": {
   "abstract" : [
     {
-      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
       "type" : "text"
     }
   ],
@@ -516,11 +521,11 @@
     },
     {
       "kind" : "text",
-      "text" : ": "
+      "text" : ": any "
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat19FileManagerProtocolP",
+      "preciseIdentifier" : "s:8ChatCore19FileManagerProtocolP",
       "text" : "FileManagerProtocol"
     }
   ],
@@ -531,7 +536,7 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/cachefilemanager\/fm"
 },
-"doc://Chat/documentation/Chat/CacheFileManager/getData(url:)": {
+"doc://Chat/documentation/Chat/CacheFileManager/getData(url:completion:)": {
   "abstract" : [
 
   ],
@@ -567,7 +572,15 @@
     },
     {
       "kind" : "text",
-      "text" : ") -> "
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "completion"
+    },
+    {
+      "kind" : "text",
+      "text" : ": ("
     },
     {
       "kind" : "typeIdentifier",
@@ -576,17 +589,26 @@
     },
     {
       "kind" : "text",
-      "text" : "?"
+      "text" : "?) -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:s4Voida",
+      "text" : "Void"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/getData(url:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/getData(url:completion:)",
   "kind" : "symbol",
   "role" : "symbol",
-  "title" : "getData(url:)",
+  "title" : "getData(url:completion:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/cachefilemanager\/getdata(url:)"
+  "url" : "\/documentation\/chat\/cachefilemanager\/getdata(url:completion:)"
 },
-"doc://Chat/documentation/Chat/CacheFileManager/getDataInGroup(url:)": {
+"doc://Chat/documentation/Chat/CacheFileManager/getDataInGroup(url:completion:)": {
   "abstract" : [
 
   ],
@@ -622,7 +644,15 @@
     },
     {
       "kind" : "text",
-      "text" : ") -> "
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "completion"
+    },
+    {
+      "kind" : "text",
+      "text" : ": ("
     },
     {
       "kind" : "typeIdentifier",
@@ -631,15 +661,24 @@
     },
     {
       "kind" : "text",
-      "text" : "?"
+      "text" : "?) -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:s4Voida",
+      "text" : "Void"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/getDataInGroup(url:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager\/getDataInGroup(url:completion:)",
   "kind" : "symbol",
   "role" : "symbol",
-  "title" : "getDataInGroup(url:)",
+  "title" : "getDataInGroup(url:completion:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/cachefilemanager\/getdataingroup(url:)"
+  "url" : "\/documentation\/chat\/cachefilemanager\/getdataingroup(url:completion:)"
 },
 "doc://Chat/documentation/Chat/CacheFileManager/group": {
   "abstract" : [
@@ -736,11 +775,11 @@
     },
     {
       "kind" : "text",
-      "text" : ": "
+      "text" : ": any "
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat19FileManagerProtocolP",
+      "preciseIdentifier" : "s:8ChatCore19FileManagerProtocolP",
       "text" : "FileManagerProtocol"
     },
     {
@@ -770,7 +809,7 @@
     },
     {
       "kind" : "text",
-      "text" : ": "
+      "text" : ": any "
     },
     {
       "kind" : "typeIdentifier",
@@ -965,7 +1004,7 @@
     },
     {
       "kind" : "text",
-      "text" : ": "
+      "text" : ": any "
     },
     {
       "kind" : "typeIdentifier",
@@ -1157,37 +1196,6 @@
   "title" : "saveFileInGroup(url:data:saveCompeletion:)",
   "type" : "topic",
   "url" : "\/documentation\/chat\/cachefilemanager\/savefileingroup(url:data:savecompeletion:)"
-},
-"doc://Chat/documentation/Chat/CacheFileManagerProtocol": {
-  "abstract" : [
-
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "protocol"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "CacheFileManagerProtocol"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManagerProtocol",
-  "kind" : "symbol",
-  "navigatorTitle" : [
-    {
-      "kind" : "identifier",
-      "text" : "CacheFileManagerProtocol"
-    }
-  ],
-  "role" : "symbol",
-  "title" : "CacheFileManagerProtocol",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/cachefilemanagerprotocol"
 },
 "icon.png": {
   "alt" : "App icon.",

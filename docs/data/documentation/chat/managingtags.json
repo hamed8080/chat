@@ -43,7 +43,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/tagList(_:completion:cacheResponse:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagProtocol\/all()",
               "isActive" : true,
               "type" : "reference"
             },
@@ -56,11 +56,7 @@
         },
         {
           "code" : [
-            "Chat.sharedInstance.tagList() { tags, uniqueId, error in",
-            "    if let tags = tags{",
-            "        \/\/ Write your code",
-            "    }",
-            "}"
+            "ChatManager.activeInstance?.tag.all()"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -78,7 +74,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/createTag(_:completion:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagProtocol\/create(_:)",
               "isActive" : true,
               "type" : "reference"
             },
@@ -92,11 +88,7 @@
         {
           "code" : [
             "let req = CreateTagRequest(tagName: \"Social\")",
-            "Chat.sharedInstance.createTag(req) { tag, uniqueId, error in",
-            "    if let tag = tag{",
-            "        \/\/ Write your code",
-            "    }",
-            "}"
+            "ChatManager.activeInstance?.tag.create(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -114,7 +106,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/editTag(_:completion:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagProtocol\/edit(_:)",
               "isActive" : true,
               "type" : "reference"
             },
@@ -128,11 +120,7 @@
         {
           "code" : [
             "let req = CreateTagRequest(id: 12, tagName: \"Social\")",
-            "Chat.sharedInstance.editTag(req) { tag, uniqueId, error in",
-            "    if let tag = tag{",
-            "        \/\/ Write your code",
-            "    }",
-            "}"
+            "ChatManager.activeInstance?.tag.edit(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -150,7 +138,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/deleteTag(_:completion:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagProtocol\/delete(_:)",
               "isActive" : true,
               "type" : "reference"
             },
@@ -179,11 +167,8 @@
         },
         {
           "code" : [
-            "Chat.sharedInstance.deleteTag(.init(id: 12)) { tag, uniqueId, error in",
-            "    if let tag = tag{",
-            "        \/\/ Write your code",
-            "    }",
-            "}"
+            "let req = DeleteTagRequest(id: tagId)",
+            "ChatManager.activeInstance?.tag.delete(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -201,7 +186,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/addTagParticipants(_:completion:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagProtocol\/add(_:)",
               "isActive" : true,
               "type" : "reference"
             },
@@ -230,11 +215,8 @@
         },
         {
           "code" : [
-            "Chat.sharedInstance.addTagParticipants(.init(tagId: 12, threadsId: [123456])) { tagParticipant, uniqueId, error in",
-            "    if let tagParticipant = tagParticipant{",
-            "        \/\/ Write your code",
-            "    }",
-            "}"
+            "let req = AddTagParticipantsRequest(tagId: tagId, threadsId: [threadId])",
+            "ChatManager.activeInstance?.tag.add(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -252,7 +234,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/removeTagParticipants(_:completion:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagProtocol\/remove(_:)",
               "isActive" : true,
               "type" : "reference"
             },
@@ -265,11 +247,8 @@
         },
         {
           "code" : [
-            "Chat.sharedInstance.removeTagParticipants(.init(tagId: 12, tagParticipants: [123456])) { tagParticipant, uniqueId, error in",
-            "    if let tagParticipant = tagParticipant{",
-            "        \/\/ Write your code",
-            "    }",
-            "}"
+            "let req = RemoveTagParticipantsRequest(tagId: tagId, tagParticipants: [threadId])",
+            "ChatManager.activeInstance?.tag.remove(.init)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -296,10 +275,10 @@
         "doc:\/\/Chat\/documentation\/Chat\/ManagingContacts",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingFiles",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingUsers",
-        "doc:\/\/Chat\/documentation\/Chat\/ManagingProfile",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingBots",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingAssistants",
-        "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps"
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps",
+        "doc:\/\/Chat\/documentation\/Chat\/ErrorCodes"
       ],
       "title" : "Essentials"
     }
@@ -321,7 +300,7 @@
 "doc://Chat/documentation/Chat": {
   "abstract" : [
     {
-      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
       "type" : "text"
     }
   ],
@@ -338,543 +317,30 @@
   "type" : "topic",
   "url" : "\/documentation\/chat"
 },
-"doc://Chat/documentation/Chat/Chat/addTagParticipants(_:completion:uniqueIdResult:)": {
+"doc://Chat/documentation/Chat/ErrorCodes": {
   "abstract" : [
     {
-      "text" : "Add threads to a tag.",
+      "text" : "List of all error codes locally in the chat SDK for server errors.",
       "type" : "text"
     }
   ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "addTagParticipants"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO25AddTagParticipantsRequestC",
-      "text" : "AddTagParticipantsRequest"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<["
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels14TagParticipantC",
-      "text" : "TagParticipant"
-    },
-    {
-      "kind" : "text",
-      "text" : "]>, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/addTagParticipants(_:completion:uniqueIdResult:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "addTagParticipants(_:completion:uniqueIdResult:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ErrorCodes",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Error Codes",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/addtagparticipants(_:completion:uniqueidresult:)"
-},
-"doc://Chat/documentation/Chat/Chat/createTag(_:completion:uniqueIdResult:)": {
-  "abstract" : [
-    {
-      "text" : "Create a new tag.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "createTag"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO16CreateTagRequestC",
-      "text" : "CreateTagRequest"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<"
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels3TagC",
-      "text" : "Tag"
-    },
-    {
-      "kind" : "text",
-      "text" : ">, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/createTag(_:completion:uniqueIdResult:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "createTag(_:completion:uniqueIdResult:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/createtag(_:completion:uniqueidresult:)"
-},
-"doc://Chat/documentation/Chat/Chat/deleteTag(_:completion:uniqueIdResult:)": {
-  "abstract" : [
-    {
-      "text" : "Delete a tag.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "deleteTag"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO16DeleteTagRequestC",
-      "text" : "DeleteTagRequest"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<"
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels3TagC",
-      "text" : "Tag"
-    },
-    {
-      "kind" : "text",
-      "text" : ">, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/deleteTag(_:completion:uniqueIdResult:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "deleteTag(_:completion:uniqueIdResult:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/deletetag(_:completion:uniqueidresult:)"
-},
-"doc://Chat/documentation/Chat/Chat/editTag(_:completion:uniqueIdResult:)": {
-  "abstract" : [
-    {
-      "text" : "Edit the tag name.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "editTag"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO14EditTagRequestC",
-      "text" : "EditTagRequest"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<"
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels3TagC",
-      "text" : "Tag"
-    },
-    {
-      "kind" : "text",
-      "text" : ">, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/editTag(_:completion:uniqueIdResult:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "editTag(_:completion:uniqueIdResult:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/edittag(_:completion:uniqueidresult:)"
-},
-"doc://Chat/documentation/Chat/Chat/removeTagParticipants(_:completion:uniqueIdResult:)": {
-  "abstract" : [
-    {
-      "text" : "Remove tag participants from a tag.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "removeTagParticipants"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO28RemoveTagParticipantsRequestC",
-      "text" : "RemoveTagParticipantsRequest"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<["
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels14TagParticipantC",
-      "text" : "TagParticipant"
-    },
-    {
-      "kind" : "text",
-      "text" : "]>, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/removeTagParticipants(_:completion:uniqueIdResult:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "removeTagParticipants(_:completion:uniqueIdResult:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/removetagparticipants(_:completion:uniqueidresult:)"
-},
-"doc://Chat/documentation/Chat/Chat/tagList(_:completion:cacheResponse:uniqueIdResult:)": {
-  "abstract" : [
-    {
-      "text" : "List of Tags.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "tagList"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:SS",
-      "text" : "String"
-    },
-    {
-      "kind" : "text",
-      "text" : "?, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<["
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels3TagC",
-      "text" : "Tag"
-    },
-    {
-      "kind" : "text",
-      "text" : "]>, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "cacheResponse"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat17CacheResponseTypea",
-      "text" : "CacheResponseType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<["
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels3TagC",
-      "text" : "Tag"
-    },
-    {
-      "kind" : "text",
-      "text" : "]>?, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/tagList(_:completion:cacheResponse:uniqueIdResult:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "tagList(_:completion:cacheResponse:uniqueIdResult:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/taglist(_:completion:cacheresponse:uniqueidresult:)"
+  "url" : "\/documentation\/chat\/errorcodes"
 },
 "doc://Chat/documentation/Chat/GettingStarted": {
   "abstract" : [
-
+    {
+      "text" : "Getting started with the Chat SDK and some tips and tricks to configure it properly.",
+      "type" : "text"
+    }
   ],
   "identifier" : "doc:\/\/Chat\/documentation\/Chat\/GettingStarted",
   "kind" : "article",
-  "role" : "collectionGroup",
+  "role" : "article",
   "title" : "Getting Started",
   "type" : "topic",
   "url" : "\/documentation\/chat\/gettingstarted"
@@ -963,24 +429,10 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/managingmessages"
 },
-"doc://Chat/documentation/Chat/ManagingProfile": {
-  "abstract" : [
-    {
-      "text" : "Get current user details, update, set profile.",
-      "type" : "text"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingProfile",
-  "kind" : "article",
-  "role" : "article",
-  "title" : "Managing Profile",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/managingprofile"
-},
 "doc://Chat/documentation/Chat/ManagingThreads": {
   "abstract" : [
     {
-      "text" : "Managing threads create P2P, Group, Channel or delete edit and so many more.",
+      "text" : "Managing threads, create P2P, Group, Channel or delete edit and so many more.",
       "type" : "text"
     }
   ],
@@ -1004,6 +456,249 @@
   "title" : "Managing Users",
   "type" : "topic",
   "url" : "\/documentation\/chat\/managingusers"
+},
+"doc://Chat/documentation/Chat/TagProtocol/add(_:)": {
+  "abstract" : [
+    {
+      "text" : "Add threads to a tag.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "add"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO25AddTagParticipantsRequestV",
+      "text" : "AddTagParticipantsRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagProtocol\/add(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "add(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/tagprotocol\/add(_:)"
+},
+"doc://Chat/documentation/Chat/TagProtocol/all()": {
+  "abstract" : [
+    {
+      "text" : "List of Tags.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "all"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagProtocol\/all()",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "all()",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/tagprotocol\/all()"
+},
+"doc://Chat/documentation/Chat/TagProtocol/create(_:)": {
+  "abstract" : [
+    {
+      "text" : "Create a new tag.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "create"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO16CreateTagRequestV",
+      "text" : "CreateTagRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagProtocol\/create(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "create(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/tagprotocol\/create(_:)"
+},
+"doc://Chat/documentation/Chat/TagProtocol/delete(_:)": {
+  "abstract" : [
+    {
+      "text" : "Delete a tag.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "delete"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO16DeleteTagRequestV",
+      "text" : "DeleteTagRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagProtocol\/delete(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "delete(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/tagprotocol\/delete(_:)"
+},
+"doc://Chat/documentation/Chat/TagProtocol/edit(_:)": {
+  "abstract" : [
+    {
+      "text" : "Edit the tag name.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "edit"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO14EditTagRequestV",
+      "text" : "EditTagRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagProtocol\/edit(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "edit(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/tagprotocol\/edit(_:)"
+},
+"doc://Chat/documentation/Chat/TagProtocol/remove(_:)": {
+  "abstract" : [
+    {
+      "text" : "Remove tag participants from a tag.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "remove"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO28RemoveTagParticipantsRequestV",
+      "text" : "RemoveTagParticipantsRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagProtocol\/remove(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "remove(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/tagprotocol\/remove(_:)"
 },
 "icon.png": {
   "alt" : "App icon.",

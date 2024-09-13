@@ -1,0 +1,1047 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "s:4Chat12FileProtocolP",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "protocol"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "text" : "FileProtocol"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "navigatorTitle" : [
+      {
+        "kind" : "identifier",
+        "text" : "FileProtocol"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Protocol",
+    "symbolKind" : "protocol",
+    "title" : "FileProtocol"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "protocol"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "identifier",
+              "text" : "FileProtocol"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/deleteCacheFile(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/filePath(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/filePathInGroup(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/get(_:)-4v4sz",
+        "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/get(_:)-9ru7k",
+        "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/getData(_:completion:)",
+        "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/getDataInGroup(_:completion:)",
+        "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/isFileExist(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/isFileExistInGroup(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/manageDownload(uniqueId:action:)",
+        "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/manageUpload(uniqueId:action:)",
+        "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/saveFile(url:data:completion:)",
+        "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/saveFileInGroup(url:data:completion:)",
+        "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/upload(_:)-1sy1h",
+        "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/upload(_:)-7rq44"
+      ],
+      "title" : "Instance Methods"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/fileprotocol"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/FileProtocol": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "FileProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "FileProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "FileProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol"
+},
+"doc://Chat/documentation/Chat/FileProtocol/deleteCacheFile(_:)": {
+  "abstract" : [
+    {
+      "text" : "Delete a file in cache with exact file url on the disk.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "deleteCacheFile"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/deleteCacheFile(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "deleteCacheFile(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/deletecachefile(_:)"
+},
+"doc://Chat/documentation/Chat/FileProtocol/filePath(_:)": {
+  "abstract" : [
+    {
+      "text" : "Return the url of the file if it exists inside the sandbox of the ChatSDK application host.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "filePath"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ") -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/filePath(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "filePath(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/filepath(_:)"
+},
+"doc://Chat/documentation/Chat/FileProtocol/filePathInGroup(_:)": {
+  "abstract" : [
+    {
+      "text" : "Return the url of the file if it exists inside the share group.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "filePathInGroup"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ") -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/filePathInGroup(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "filePathInGroup(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/filepathingroup(_:)"
+},
+"doc://Chat/documentation/Chat/FileProtocol/get(_:)-4v4sz": {
+  "abstract" : [
+    {
+      "text" : "Downloading or getting an image from the Server \/ cache?.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "get"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO12ImageRequestV",
+      "text" : "ImageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/get(_:)-4v4sz",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "get(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/get(_:)-4v4sz"
+},
+"doc://Chat/documentation/Chat/FileProtocol/get(_:)-9ru7k": {
+  "abstract" : [
+    {
+      "text" : "Downloading or getting a file from the Server \/ cache?.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "get"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO11FileRequestV",
+      "text" : "FileRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/get(_:)-9ru7k",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "get(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/get(_:)-9ru7k"
+},
+"doc://Chat/documentation/Chat/FileProtocol/getData(_:completion:)": {
+  "abstract" : [
+    {
+      "text" : "Get data of a cache file in the correspondent URL.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "getData"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "completion"
+    },
+    {
+      "kind" : "text",
+      "text" : ": ("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation4DataV",
+      "text" : "Data"
+    },
+    {
+      "kind" : "text",
+      "text" : "?) -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:s4Voida",
+      "text" : "Void"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/getData(_:completion:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "getData(_:completion:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/getdata(_:completion:)"
+},
+"doc://Chat/documentation/Chat/FileProtocol/getDataInGroup(_:completion:)": {
+  "abstract" : [
+    {
+      "text" : "Get data of a cache file in the correspondent URL inside a shared group.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "getDataInGroup"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "completion"
+    },
+    {
+      "kind" : "text",
+      "text" : ": ("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation4DataV",
+      "text" : "Data"
+    },
+    {
+      "kind" : "text",
+      "text" : "?) -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:s4Voida",
+      "text" : "Void"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/getDataInGroup(_:completion:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "getDataInGroup(_:completion:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/getdataingroup(_:completion:)"
+},
+"doc://Chat/documentation/Chat/FileProtocol/isFileExist(_:)": {
+  "abstract" : [
+    {
+      "text" : "Return true if the file exist inside the sandbox of the ChatSDK application host.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "isFileExist"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ") -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Sb",
+      "text" : "Bool"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/isFileExist(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "isFileExist(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/isfileexist(_:)"
+},
+"doc://Chat/documentation/Chat/FileProtocol/isFileExistInGroup(_:)": {
+  "abstract" : [
+    {
+      "text" : "Return the true of the file if it exists inside the share group.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "isFileExistInGroup"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ") -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Sb",
+      "text" : "Bool"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/isFileExistInGroup(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "isFileExistInGroup(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/isfileexistingroup(_:)"
+},
+"doc://Chat/documentation/Chat/FileProtocol/manageDownload(uniqueId:action:)": {
+  "abstract" : [
+    {
+      "text" : "Manage a downloading file or an image.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "manageDownload"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueId"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "action"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat19DownloaUploadActionO",
+      "text" : "DownloaUploadAction"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/manageDownload(uniqueId:action:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "manageDownload(uniqueId:action:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/managedownload(uniqueid:action:)"
+},
+"doc://Chat/documentation/Chat/FileProtocol/manageUpload(uniqueId:action:)": {
+  "abstract" : [
+    {
+      "text" : "Manage a uploading file or an image.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "manageUpload"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueId"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "action"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat19DownloaUploadActionO",
+      "text" : "DownloaUploadAction"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/manageUpload(uniqueId:action:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "manageUpload(uniqueId:action:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/manageupload(uniqueid:action:)"
+},
+"doc://Chat/documentation/Chat/FileProtocol/saveFile(url:data:completion:)": {
+  "abstract" : [
+    {
+      "text" : "Save a file inside the sandbox of the Chat SDK.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "saveFile"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "url"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "data"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation4DataV",
+      "text" : "Data"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "completion"
+    },
+    {
+      "kind" : "text",
+      "text" : ": ("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : "?) -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:s4Voida",
+      "text" : "Void"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/saveFile(url:data:completion:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "saveFile(url:data:completion:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/savefile(url:data:completion:)"
+},
+"doc://Chat/documentation/Chat/FileProtocol/saveFileInGroup(url:data:completion:)": {
+  "abstract" : [
+    {
+      "text" : "Save a file inside a shared group.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "saveFileInGroup"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "url"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "data"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation4DataV",
+      "text" : "Data"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "completion"
+    },
+    {
+      "kind" : "text",
+      "text" : ": ("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : "?) -> "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:s4Voida",
+      "text" : "Void"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/saveFileInGroup(url:data:completion:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "saveFileInGroup(url:data:completion:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/savefileingroup(url:data:completion:)"
+},
+"doc://Chat/documentation/Chat/FileProtocol/upload(_:)-1sy1h": {
+  "abstract" : [
+    {
+      "text" : "Upload a file.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "upload"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO17UploadFileRequestV",
+      "text" : "UploadFileRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/upload(_:)-1sy1h",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "upload(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/upload(_:)-1sy1h"
+},
+"doc://Chat/documentation/Chat/FileProtocol/upload(_:)-7rq44": {
+  "abstract" : [
+    {
+      "text" : "Upload an image.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "upload"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO18UploadImageRequestV",
+      "text" : "UploadImageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/upload(_:)-7rq44",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "upload(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/upload(_:)-7rq44"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

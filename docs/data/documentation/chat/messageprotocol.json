@@ -1,0 +1,1511 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "s:4Chat15MessageProtocolP",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "protocol"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "text" : "MessageProtocol"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "navigatorTitle" : [
+      {
+        "kind" : "identifier",
+        "text" : "MessageProtocol"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Protocol",
+    "symbolKind" : "protocol",
+    "title" : "MessageProtocol"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "protocol"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "identifier",
+              "text" : "MessageProtocol"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/cancel(uniqueId:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/clear(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/delete(_:)-2gdjl",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/delete(_:)-8n143",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/deliver(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/deliveredToParricipants(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/edit(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/export(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/history(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/mentions(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/pin(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/reply(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/reply(_:_:)-2u63z",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/reply(_:_:)-4dbh6",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/replyPrivately(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/replyPrivately(_:_:)-4gy8j",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/replyPrivately(_:_:)-ypx2",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/seen(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/seenByParticipants(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/send(_:)-84dd1",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/send(_:)-8kz5t",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/send(_:)-8qr0z",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/send(_:_:)-8yv5f",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/send(_:_:)-s0vu",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/unpin(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/unsentEditMessages(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/unsentFileMessages(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/unsentForwardMessages(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/unsentTextMessages(_:)"
+      ],
+      "title" : "Instance Methods"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/messageprotocol"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/MessageProtocol": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "MessageProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "MessageProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "MessageProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/cancel(uniqueId:)": {
+  "abstract" : [
+    {
+      "text" : "Cancel a message send.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "cancel"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueId"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/cancel(uniqueId:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "cancel(uniqueId:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/cancel(uniqueid:)"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/clear(_:)": {
+  "abstract" : [
+    {
+      "text" : "Clear all messages inside a thread for user.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "clear"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO23GeneralSubjectIdRequestV",
+      "text" : "GeneralSubjectIdRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/clear(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "clear(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/clear(_:)"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/delete(_:)-2gdjl": {
+  "abstract" : [
+    {
+      "text" : "Delete multiple messages at once.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "delete"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO25BatchDeleteMessageRequestV",
+      "text" : "BatchDeleteMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/delete(_:)-2gdjl",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "delete(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/delete(_:)-2gdjl"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/delete(_:)-8n143": {
+  "abstract" : [
+    {
+      "text" : "Delete a message if it’s ",
+      "type" : "text"
+    },
+    {
+      "code" : "Message\/deletable",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : ".",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "delete"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO20DeleteMessageRequestV",
+      "text" : "DeleteMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/delete(_:)-8n143",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "delete(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/delete(_:)-8n143"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/deliver(_:)": {
+  "abstract" : [
+    {
+      "text" : "Tell the sender of a message that the message is delivered successfully.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "deliver"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO21MessageDeliverRequestV",
+      "text" : "MessageDeliverRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/deliver(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "deliver(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/deliver(_:)"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/deliveredToParricipants(_:)": {
+  "abstract" : [
+    {
+      "text" : "Retrieve the list of participants to who the message was delivered to them.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "deliveredToParricipants"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO28MessageDeliveredUsersRequestV",
+      "text" : "MessageDeliveredUsersRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/deliveredToParricipants(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "deliveredToParricipants(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/deliveredtoparricipants(_:)"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/edit(_:)": {
+  "abstract" : [
+    {
+      "text" : "Edit a message.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "edit"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO18EditMessageRequestV",
+      "text" : "EditMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/edit(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "edit(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/edit(_:)"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/export(_:)": {
+  "abstract" : [
+    {
+      "text" : "Every time you call this function old export file for the thread will be deleted and replaced with a new one. To manages your storage be cautious about removing the file whenever you don’t need this file.",
+      "type" : "text"
+    },
+    {
+      "text" : " ",
+      "type" : "text"
+    },
+    {
+      "text" : "This function can only export 10000 messages.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "export"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO17GetHistoryRequestV",
+      "text" : "GetHistoryRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/export(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "export(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/export(_:)"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/history(_:)": {
+  "abstract" : [
+    {
+      "text" : "Get list of messages inside a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "history"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO17GetHistoryRequestV",
+      "text" : "GetHistoryRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/history(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "history(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/history(_:)"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/mentions(_:)": {
+  "abstract" : [
+    {
+      "text" : "Get messages that you have mentioned in a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "mentions"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO14MentionRequestV",
+      "text" : "MentionRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/mentions(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "mentions(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/mentions(_:)"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/pin(_:)": {
+  "abstract" : [
+    {
+      "text" : "Pin a message inside a thread.",
+      "type" : "text"
+    },
+    {
+      "text" : " ",
+      "type" : "text"
+    },
+    {
+      "text" : "If you are a member in a channel you can not pin a message unless you are admin in the channel.",
+      "type" : "text"
+    },
+    {
+      "text" : " ",
+      "type" : "text"
+    },
+    {
+      "text" : "Only admins can pin a message in group or they should have access to pin a message.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "pin"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO22PinUnpinMessageRequestV",
+      "text" : "PinUnpinMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/pin(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "pin(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/pin(_:)"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/reply(_:)": {
+  "abstract" : [
+    {
+      "text" : "Reply to a message.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "reply"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO19ReplyMessageRequestV",
+      "text" : "ReplyMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/reply(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "reply(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/reply(_:)"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/reply(_:_:)-2u63z": {
+  "abstract" : [
+    {
+      "text" : "Reply to a mesaage inside a thread with a file.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "reply"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO19ReplyMessageRequestV",
+      "text" : "ReplyMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO18UploadImageRequestV",
+      "text" : "UploadImageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/reply(_:_:)-2u63z",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "reply(_:_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/reply(_:_:)-2u63z"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/reply(_:_:)-4dbh6": {
+  "abstract" : [
+    {
+      "text" : "Reply to a mesaage inside a thread with a file.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "reply"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO19ReplyMessageRequestV",
+      "text" : "ReplyMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO17UploadFileRequestV",
+      "text" : "UploadFileRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/reply(_:_:)-4dbh6",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "reply(_:_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/reply(_:_:)-4dbh6"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/replyPrivately(_:)": {
+  "abstract" : [
+    {
+      "text" : "Privately reply to a participant who is the same thread is you with a message.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "replyPrivately"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO21ReplyPrivatelyRequestV",
+      "text" : "ReplyPrivatelyRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/replyPrivately(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "replyPrivately(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/replyprivately(_:)"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/replyPrivately(_:_:)-4gy8j": {
+  "abstract" : [
+    {
+      "text" : "Privately reply to a participant who is the same thread is you with a message and an image.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "replyPrivately"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO21ReplyPrivatelyRequestV",
+      "text" : "ReplyPrivatelyRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO18UploadImageRequestV",
+      "text" : "UploadImageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/replyPrivately(_:_:)-4gy8j",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "replyPrivately(_:_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/replyprivately(_:_:)-4gy8j"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/replyPrivately(_:_:)-ypx2": {
+  "abstract" : [
+    {
+      "text" : "Privately reply to a participant who is the same thread is you with a message and a file.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "replyPrivately"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO21ReplyPrivatelyRequestV",
+      "text" : "ReplyPrivatelyRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO17UploadFileRequestV",
+      "text" : "UploadFileRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/replyPrivately(_:_:)-ypx2",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "replyPrivately(_:_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/replyprivately(_:_:)-ypx2"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/seen(_:)": {
+  "abstract" : [
+    {
+      "text" : "Send seen to participants of a thread that informs you have seen the message already.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "seen"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO18MessageSeenRequestV",
+      "text" : "MessageSeenRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/seen(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "seen(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/seen(_:)"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/seenByParticipants(_:)": {
+  "abstract" : [
+    {
+      "text" : "Retrieve the list of participants to who have seen the message.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "seenByParticipants"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO25MessageSeenByUsersRequestV",
+      "text" : "MessageSeenByUsersRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/seenByParticipants(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "seenByParticipants(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/seenbyparticipants(_:)"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/send(_:)-84dd1": {
+  "abstract" : [
+    {
+      "text" : "Forwrad messages to a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "send"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO21ForwardMessageRequestV",
+      "text" : "ForwardMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/send(_:)-84dd1",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "send(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/send(_:)-84dd1"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/send(_:)-8kz5t": {
+  "abstract" : [
+    {
+      "text" : "Send a plain text message to a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "send"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO22SendTextMessageRequestV",
+      "text" : "SendTextMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/send(_:)-8kz5t",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "send(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/send(_:)-8kz5t"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/send(_:)-8qr0z": {
+  "abstract" : [
+    {
+      "text" : "Send a location.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "send"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO22LocationMessageRequestV",
+      "text" : "LocationMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/send(_:)-8qr0z",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "send(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/send(_:)-8qr0z"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/send(_:_:)-8yv5f": {
+  "abstract" : [
+    {
+      "text" : "Send a file message.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "send"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO22SendTextMessageRequestV",
+      "text" : "SendTextMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO18UploadImageRequestV",
+      "text" : "UploadImageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/send(_:_:)-8yv5f",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "send(_:_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/send(_:_:)-8yv5f"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/send(_:_:)-s0vu": {
+  "abstract" : [
+    {
+      "text" : "Send a file message.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "send"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO22SendTextMessageRequestV",
+      "text" : "SendTextMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO17UploadFileRequestV",
+      "text" : "UploadFileRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/send(_:_:)-s0vu",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "send(_:_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/send(_:_:)-s0vu"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/unpin(_:)": {
+  "abstract" : [
+    {
+      "text" : "UnPin a message inside a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "unpin"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO22PinUnpinMessageRequestV",
+      "text" : "PinUnpinMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/unpin(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "unpin(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/unpin(_:)"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/unsentEditMessages(_:)": {
+  "abstract" : [
+    {
+      "text" : "Get the list of unsent edit messages inside a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "unsentEditMessages"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO17GetHistoryRequestV",
+      "text" : "GetHistoryRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/unsentEditMessages(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "unsentEditMessages(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/unsenteditmessages(_:)"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/unsentFileMessages(_:)": {
+  "abstract" : [
+    {
+      "text" : "Get the list of unsent file messages inside a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "unsentFileMessages"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO17GetHistoryRequestV",
+      "text" : "GetHistoryRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/unsentFileMessages(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "unsentFileMessages(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/unsentfilemessages(_:)"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/unsentForwardMessages(_:)": {
+  "abstract" : [
+    {
+      "text" : "Get the list of unsent forward messages inside a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "unsentForwardMessages"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO17GetHistoryRequestV",
+      "text" : "GetHistoryRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/unsentForwardMessages(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "unsentForwardMessages(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/unsentforwardmessages(_:)"
+},
+"doc://Chat/documentation/Chat/MessageProtocol/unsentTextMessages(_:)": {
+  "abstract" : [
+    {
+      "text" : "Get the list of unsent text messages inside a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "unsentTextMessages"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO17GetHistoryRequestV",
+      "text" : "GetHistoryRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol\/unsentTextMessages(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "unsentTextMessages(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol\/unsenttextmessages(_:)"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

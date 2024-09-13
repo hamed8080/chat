@@ -31,9 +31,9 @@
     {
       "content" : [
         {
-          "anchor" : "Get-A-File",
+          "anchor" : "Get-a-File",
           "level" : 3,
-          "text" : "Get A File",
+          "text" : "Get a File",
           "type" : "heading"
         },
         {
@@ -51,7 +51,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/getFile(_:downloadProgress:completion:cacheResponse:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/get(_:)-9ru7k",
               "isActive" : true,
               "type" : "reference"
             },
@@ -65,23 +65,15 @@
         {
           "code" : [
             "let req = FileRequest(hashCode: \"XYZ...\", checkUserGroupAccess: false, forceToDownloadFromServer: true)",
-            "Chat.sharedInstance.getFile(req: req) { downloadProgress in",
-            "    \/\/ Write your code",
-            "} completion: { data, fileModel, error in",
-            "    \/\/ Write your code",
-            "} cacheResponse: { data, fileModel, error in",
-            "    \/\/ Write your code",
-            "} uniqueIdResult: { uniqueId in",
-            "    \/\/ Write your code",
-            "}"
+            "ChatManager.activeInstance?.file.get(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
         },
         {
-          "anchor" : "Get-An-Image",
+          "anchor" : "Get-an-Image",
           "level" : 3,
-          "text" : "Get An Image",
+          "text" : "Get an Image",
           "type" : "heading"
         },
         {
@@ -99,7 +91,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/getImage(_:downloadProgress:completion:cacheResponse:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/get(_:)-4v4sz",
               "isActive" : true,
               "type" : "reference"
             },
@@ -137,15 +129,7 @@
         {
           "code" : [
             "let req = ImageRequest(hashCode: \"XYZ...\")",
-            "Chat.sharedInstance.getImage(req: req) { downloadProgress in",
-            "    \/\/ Write your code",
-            "} completion: { data, imageModel, error in",
-            "    \/\/ Write your code",
-            "} cacheResponse: { data, imageModel, error in",
-            "    \/\/ Write your code",
-            "} uniqueIdResult: { uniqueId in",
-            "    \/\/ Write your code",
-            "}"
+            "ChatManager.activeInstance?.file.get(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -179,7 +163,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/uploadFile(_:uploadUniqueIdResult:uploadProgress:uploadCompletion:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/upload(_:)-1sy1h",
               "isActive" : true,
               "type" : "reference"
             },
@@ -193,11 +177,7 @@
         {
           "code" : [
             "let req = UploadFileRequest(data: fileData, fileExtension: \".txt\", fileName: \"Test\", mimeType: \"text\/plain\" , userGroupHash: \"XYZ....\")",
-            "Chat.sharedInstance.uploadFile(req: req) { uploadProgress, error in",
-            "    \/\/ Write your code",
-            "} uploadCompletion: { uploadFileResponse, fileMetaData, error in",
-            "    \/\/ Write your code",
-            "}"
+            "ChatManager.activeInstance?.file.upload(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -231,7 +211,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/uploadImage(_:uploadUniqueIdResult:uploadProgress:uploadCompletion:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/upload(_:)-7rq44",
               "isActive" : true,
               "type" : "reference"
             },
@@ -245,116 +225,7 @@
         {
           "code" : [
             "let req = UploadFileRequest(data: imageData, fileName: \"test.png\", mimeType: \"image\/png\" , userGroupHash: \"XYZ....\")",
-            "Chat.sharedInstance.uploadImage(req: req) { uploadProgress, error in",
-            "    \/\/ Write your code",
-            "} uploadCompletion: { uploadImageResponse, fileMetaData, error in",
-            "    \/\/ Write your code",
-            "}"
-          ],
-          "syntax" : "swift",
-          "type" : "codeListing"
-        },
-        {
-          "anchor" : "Reply-with-file",
-          "level" : 3,
-          "text" : "Reply with file",
-          "type" : "heading"
-        },
-        {
-          "inlineContent" : [
-            {
-              "text" : "To reply to a message with uploading a file use the method ",
-              "type" : "text"
-            },
-            {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/replyFileMessage(replyMessage:uploadFile:uploadProgress:onSent:onSeen:onDeliver:uploadUniqueIdResult:messageUniqueIdResult:)",
-              "isActive" : true,
-              "type" : "reference"
-            },
-            {
-              "text" : " like this:",
-              "type" : "text"
-            }
-          ],
-          "type" : "paragraph"
-        },
-        {
-          "code" : [
-            "let replyMsg = ReplyMessageRequest(threadId: 123456, repliedTo: 567890, textMessage: \"Use This File\", messageType: .POD_SPACE_FILE)",
-            "let uploadFile = UploadFileRequest(data: fileData, fileExtension: \".txt\", fileName: \"Test\", mimeType: \"text\/plain\" , userGroupHash: \"XYZ....\")",
-            "Chat.sharedInstance.replyFileMessage(replyMessage: replyMsg, uploadFile: uploadFile) { uploadProgress, error in",
-            "    \/\/ Write your code",
-            "}"
-          ],
-          "syntax" : "swift",
-          "type" : "codeListing"
-        },
-        {
-          "anchor" : "Send-a-file-message",
-          "level" : 3,
-          "text" : "Send a file message",
-          "type" : "heading"
-        },
-        {
-          "inlineContent" : [
-            {
-              "text" : "To send a new message with uploading a file use the method ",
-              "type" : "text"
-            },
-            {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/sendFileMessage(textMessage:uploadFile:uploadProgress:onSent:onSeen:onDeliver:uploadUniqueIdResult:messageUniqueIdResult:)",
-              "isActive" : true,
-              "type" : "reference"
-            },
-            {
-              "text" : " like this:",
-              "type" : "text"
-            }
-          ],
-          "type" : "paragraph"
-        },
-        {
-          "code" : [
-            "let replyMsg = SendTextMessageRequest(threadId: 123456, textMessage: \"Use This File\", messageType: .POD_SPACE_FILE)",
-            "let uploadFile = UploadFileRequest(data: fileData, fileExtension: \".txt\", fileName: \"Test\", mimeType: \"text\/plain\" , userGroupHash: \"XYZ....\")",
-            "Chat.sharedInstance.sendFileMessage(replyMessage: replyMsg, uploadFile: uploadFile) { uploadProgress, error in",
-            "    \/\/ Write your code",
-            "}"
-          ],
-          "syntax" : "swift",
-          "type" : "codeListing"
-        },
-        {
-          "anchor" : "Send-an-image-message",
-          "level" : 3,
-          "text" : "Send an image message",
-          "type" : "heading"
-        },
-        {
-          "inlineContent" : [
-            {
-              "text" : "To send a new image message use the method ",
-              "type" : "text"
-            },
-            {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/sendFileMessage(textMessage:uploadFile:uploadProgress:onSent:onSeen:onDeliver:uploadUniqueIdResult:messageUniqueIdResult:)",
-              "isActive" : true,
-              "type" : "reference"
-            },
-            {
-              "text" : " like this:",
-              "type" : "text"
-            }
-          ],
-          "type" : "paragraph"
-        },
-        {
-          "code" : [
-            "let message = SendTextMessageRequest(threadId: threadId, textMessage: \"Test text\", messageType: .POD_SPACE_PICTURE)",
-            "let imageRequest = UploadImageRequest(data: imaageData, hC: height, wC: width , fileName: \"Test.png\", mimeType: \"image\/png\" , userGroupHash: \"XYZ...\" )",
-            "Chat.sharedInstance.sendFileMessage(textMessage: message, uploadFile: imageRequest){ uploadFileProgress, error in",
-            "    \/\/ Write your code",
-            "}"
+            "ChatManager.activeInstance?.file.upload(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -399,7 +270,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/manageUpload(uniqueId:action:completion:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/manageUpload(uniqueId:action:)",
               "isActive" : true,
               "type" : "reference"
             },
@@ -436,9 +307,7 @@
         },
         {
           "code" : [
-            "Chat.sharedInstance.manageUpload(uniqueId: \"XYZ...\": action: .resume, isImage: false){ stringResult, completed in",
-            "    \/\/ Write your code",
-            "}"
+            "ChatManager.activeInstance?.file.manageUpload(uniqueId: \"XYZ...\": action: .resume, isImage: false)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -483,7 +352,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/manageDownload(uniqueId:action:completion:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/manageDownload(uniqueId:action:)",
               "isActive" : true,
               "type" : "reference"
             },
@@ -520,9 +389,7 @@
         },
         {
           "code" : [
-            "Chat.sharedInstance.manageDownload(uniqueId: \"XYZ...\": action: .resume, isImage: false){ stringResult, completed in",
-            "    \/\/ Write your code",
-            "}"
+            "ChatManager.activeInstance?.file.manageDownload(uniqueId: \"XYZ...\": action: .resume, isImage: false)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -548,11 +415,11 @@
         "doc:\/\/Chat\/documentation\/Chat\/ManagingMessages",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingContacts",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingUsers",
-        "doc:\/\/Chat\/documentation\/Chat\/ManagingProfile",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingTags",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingBots",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingAssistants",
-        "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps"
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps",
+        "doc:\/\/Chat\/documentation\/Chat\/ErrorCodes"
       ],
       "title" : "Essentials"
     }
@@ -574,7 +441,7 @@
 "doc://Chat/documentation/Chat": {
   "abstract" : [
     {
-      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
       "type" : "text"
     }
   ],
@@ -590,946 +457,6 @@
   "title" : "Chat",
   "type" : "topic",
   "url" : "\/documentation\/chat"
-},
-"doc://Chat/documentation/Chat/Chat/getFile(_:downloadProgress:completion:cacheResponse:uniqueIdResult:)": {
-  "abstract" : [
-    {
-      "text" : "Downloading or getting a file from the Server \/ cache?.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "getFile"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO11FileRequestC",
-      "text" : "FileRequest"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "downloadProgress"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat20DownloadProgressTypea",
-      "text" : "DownloadProgressType"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat26DownloadFileCompletionTypea",
-      "text" : "DownloadFileCompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "cacheResponse"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat26DownloadFileCompletionTypea",
-      "text" : "DownloadFileCompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/getFile(_:downloadProgress:completion:cacheResponse:uniqueIdResult:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "getFile(_:downloadProgress:completion:cacheResponse:uniqueIdResult:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/getfile(_:downloadprogress:completion:cacheresponse:uniqueidresult:)"
-},
-"doc://Chat/documentation/Chat/Chat/getImage(_:downloadProgress:completion:cacheResponse:uniqueIdResult:)": {
-  "abstract" : [
-    {
-      "text" : "Downloading or getting an image from the Server \/ cache?.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "getImage"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO12ImageRequestC",
-      "text" : "ImageRequest"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "downloadProgress"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat20DownloadProgressTypea",
-      "text" : "DownloadProgressType"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat27DownloadImageCompletionTypea",
-      "text" : "DownloadImageCompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "cacheResponse"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat27DownloadImageCompletionTypea",
-      "text" : "DownloadImageCompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/getImage(_:downloadProgress:completion:cacheResponse:uniqueIdResult:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "getImage(_:downloadProgress:completion:cacheResponse:uniqueIdResult:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/getimage(_:downloadprogress:completion:cacheresponse:uniqueidresult:)"
-},
-"doc://Chat/documentation/Chat/Chat/manageDownload(uniqueId:action:completion:)": {
-  "abstract" : [
-    {
-      "text" : "Manage a downloading file or an image.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "manageDownload"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueId"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:SS",
-      "text" : "String"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "action"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat19DownloaUploadActionO",
-      "text" : "DownloaUploadAction"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": (("
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:SS",
-      "text" : "String"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:Sb",
-      "text" : "Bool"
-    },
-    {
-      "kind" : "text",
-      "text" : ") -> "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:s4Voida",
-      "text" : "Void"
-    },
-    {
-      "kind" : "text",
-      "text" : ")?)"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/manageDownload(uniqueId:action:completion:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "manageDownload(uniqueId:action:completion:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/managedownload(uniqueid:action:completion:)"
-},
-"doc://Chat/documentation/Chat/Chat/manageUpload(uniqueId:action:completion:)": {
-  "abstract" : [
-    {
-      "text" : "Manage a uploading file or an image.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "manageUpload"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueId"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:SS",
-      "text" : "String"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "action"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat19DownloaUploadActionO",
-      "text" : "DownloaUploadAction"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": (("
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:SS",
-      "text" : "String"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:Sb",
-      "text" : "Bool"
-    },
-    {
-      "kind" : "text",
-      "text" : ") -> "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:s4Voida",
-      "text" : "Void"
-    },
-    {
-      "kind" : "text",
-      "text" : ")?)"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/manageUpload(uniqueId:action:completion:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "manageUpload(uniqueId:action:completion:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/manageupload(uniqueid:action:completion:)"
-},
-"doc://Chat/documentation/Chat/Chat/replyFileMessage(replyMessage:uploadFile:uploadProgress:onSent:onSeen:onDeliver:uploadUniqueIdResult:messageUniqueIdResult:)": {
-  "abstract" : [
-    {
-      "text" : "Reply to a mesaage inside a thread with a file.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "replyFileMessage"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "replyMessage"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO19ReplyMessageRequestC",
-      "text" : "ReplyMessageRequest"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uploadFile"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO17UploadFileRequestC",
-      "text" : "UploadFileRequest"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uploadProgress"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat22UploadFileProgressTypea",
-      "text" : "UploadFileProgressType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "onSent"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat10OnSentTypea",
-      "text" : "OnSentType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "onSeen"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat10OnSeenTypea",
-      "text" : "OnSeenType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "onDeliver"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14OnDeliveryTypea",
-      "text" : "OnDeliveryType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uploadUniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "messageUniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/replyFileMessage(replyMessage:uploadFile:uploadProgress:onSent:onSeen:onDeliver:uploadUniqueIdResult:messageUniqueIdResult:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "replyFileMessage(replyMessage:uploadFile:uploadProgress:onSent:onSeen:onDeliver:uploadUniqueIdResult:messageUniqueIdResult:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/replyfilemessage(replymessage:uploadfile:uploadprogress:onsent:onseen:ondeliver:uploaduniqueidresult:messageuniqueidresult:)"
-},
-"doc://Chat/documentation/Chat/Chat/sendFileMessage(textMessage:uploadFile:uploadProgress:onSent:onSeen:onDeliver:uploadUniqueIdResult:messageUniqueIdResult:)": {
-  "abstract" : [
-    {
-      "text" : "Send a file message.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "sendFileMessage"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "textMessage"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO22SendTextMessageRequestC",
-      "text" : "SendTextMessageRequest"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uploadFile"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO17UploadFileRequestC",
-      "text" : "UploadFileRequest"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uploadProgress"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat22UploadFileProgressTypea",
-      "text" : "UploadFileProgressType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "onSent"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat10OnSentTypea",
-      "text" : "OnSentType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "onSeen"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat10OnSeenTypea",
-      "text" : "OnSeenType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "onDeliver"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14OnDeliveryTypea",
-      "text" : "OnDeliveryType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uploadUniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "messageUniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/sendFileMessage(textMessage:uploadFile:uploadProgress:onSent:onSeen:onDeliver:uploadUniqueIdResult:messageUniqueIdResult:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "sendFileMessage(textMessage:uploadFile:uploadProgress:onSent:onSeen:onDeliver:uploadUniqueIdResult:messageUniqueIdResult:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/sendfilemessage(textmessage:uploadfile:uploadprogress:onsent:onseen:ondeliver:uploaduniqueidresult:messageuniqueidresult:)"
-},
-"doc://Chat/documentation/Chat/Chat/uploadFile(_:uploadUniqueIdResult:uploadProgress:uploadCompletion:)": {
-  "abstract" : [
-    {
-      "text" : "Upload a file.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "uploadFile"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO17UploadFileRequestC",
-      "text" : "UploadFileRequest"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uploadUniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uploadProgress"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat22UploadFileProgressTypea",
-      "text" : "UploadFileProgressType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uploadCompletion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat20UploadCompletionTypea",
-      "text" : "UploadCompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/uploadFile(_:uploadUniqueIdResult:uploadProgress:uploadCompletion:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "uploadFile(_:uploadUniqueIdResult:uploadProgress:uploadCompletion:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/uploadfile(_:uploaduniqueidresult:uploadprogress:uploadcompletion:)"
-},
-"doc://Chat/documentation/Chat/Chat/uploadImage(_:uploadUniqueIdResult:uploadProgress:uploadCompletion:)": {
-  "abstract" : [
-    {
-      "text" : "Upload an image.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "uploadImage"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO18UploadImageRequestC",
-      "text" : "UploadImageRequest"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uploadUniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uploadProgress"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat22UploadFileProgressTypea",
-      "text" : "UploadFileProgressType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uploadCompletion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat20UploadCompletionTypea",
-      "text" : "UploadCompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/uploadImage(_:uploadUniqueIdResult:uploadProgress:uploadCompletion:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "uploadImage(_:uploadUniqueIdResult:uploadProgress:uploadCompletion:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/uploadimage(_:uploaduniqueidresult:uploadprogress:uploadcompletion:)"
 },
 "doc://Chat/documentation/Chat/DownloaUploadAction/cancel": {
   "abstract" : [
@@ -1606,13 +533,332 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/downloauploadaction\/suspend"
 },
+"doc://Chat/documentation/Chat/ErrorCodes": {
+  "abstract" : [
+    {
+      "text" : "List of all error codes locally in the chat SDK for server errors.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ErrorCodes",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Error Codes",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/errorcodes"
+},
+"doc://Chat/documentation/Chat/FileProtocol/get(_:)-4v4sz": {
+  "abstract" : [
+    {
+      "text" : "Downloading or getting an image from the Server \/ cache?.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "get"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO12ImageRequestV",
+      "text" : "ImageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/get(_:)-4v4sz",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "get(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/get(_:)-4v4sz"
+},
+"doc://Chat/documentation/Chat/FileProtocol/get(_:)-9ru7k": {
+  "abstract" : [
+    {
+      "text" : "Downloading or getting a file from the Server \/ cache?.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "get"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO11FileRequestV",
+      "text" : "FileRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/get(_:)-9ru7k",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "get(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/get(_:)-9ru7k"
+},
+"doc://Chat/documentation/Chat/FileProtocol/manageDownload(uniqueId:action:)": {
+  "abstract" : [
+    {
+      "text" : "Manage a downloading file or an image.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "manageDownload"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueId"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "action"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat19DownloaUploadActionO",
+      "text" : "DownloaUploadAction"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/manageDownload(uniqueId:action:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "manageDownload(uniqueId:action:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/managedownload(uniqueid:action:)"
+},
+"doc://Chat/documentation/Chat/FileProtocol/manageUpload(uniqueId:action:)": {
+  "abstract" : [
+    {
+      "text" : "Manage a uploading file or an image.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "manageUpload"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "uniqueId"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "action"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat19DownloaUploadActionO",
+      "text" : "DownloaUploadAction"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/manageUpload(uniqueId:action:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "manageUpload(uniqueId:action:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/manageupload(uniqueid:action:)"
+},
+"doc://Chat/documentation/Chat/FileProtocol/upload(_:)-1sy1h": {
+  "abstract" : [
+    {
+      "text" : "Upload a file.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "upload"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO17UploadFileRequestV",
+      "text" : "UploadFileRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/upload(_:)-1sy1h",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "upload(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/upload(_:)-1sy1h"
+},
+"doc://Chat/documentation/Chat/FileProtocol/upload(_:)-7rq44": {
+  "abstract" : [
+    {
+      "text" : "Upload an image.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "upload"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO18UploadImageRequestV",
+      "text" : "UploadImageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol\/upload(_:)-7rq44",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "upload(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol\/upload(_:)-7rq44"
+},
 "doc://Chat/documentation/Chat/GettingStarted": {
   "abstract" : [
-
+    {
+      "text" : "Getting started with the Chat SDK and some tips and tricks to configure it properly.",
+      "type" : "text"
+    }
   ],
   "identifier" : "doc:\/\/Chat\/documentation\/Chat\/GettingStarted",
   "kind" : "article",
-  "role" : "collectionGroup",
+  "role" : "article",
   "title" : "Getting Started",
   "type" : "topic",
   "url" : "\/documentation\/chat\/gettingstarted"
@@ -1687,20 +933,6 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/managingmessages"
 },
-"doc://Chat/documentation/Chat/ManagingProfile": {
-  "abstract" : [
-    {
-      "text" : "Get current user details, update, set profile.",
-      "type" : "text"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingProfile",
-  "kind" : "article",
-  "role" : "article",
-  "title" : "Managing Profile",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/managingprofile"
-},
 "doc://Chat/documentation/Chat/ManagingTags": {
   "abstract" : [
     {
@@ -1718,7 +950,7 @@
 "doc://Chat/documentation/Chat/ManagingThreads": {
   "abstract" : [
     {
-      "text" : "Managing threads create P2P, Group, Channel or delete edit and so many more.",
+      "text" : "Managing threads, create P2P, Group, Channel or delete edit and so many more.",
       "type" : "text"
     }
   ],

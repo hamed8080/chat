@@ -13,7 +13,7 @@
   },
   "kind" : "symbol",
   "metadata" : {
-    "externalID" : "s:4Chat19AssistantEventTypesO10assistantsyAC0A4Core0A8ResponseVySay0A6Models0B0CGGcACmF",
+    "externalID" : "s:4Chat19AssistantEventTypesO10assistantsyAC0A4Core0A8ResponseVySay0A6Models0B0VGGcACmF",
     "fragments" : [
       {
         "kind" : "keyword",
@@ -42,7 +42,7 @@
       },
       {
         "kind" : "typeIdentifier",
-        "preciseIdentifier" : "s:10ChatModels9AssistantC",
+        "preciseIdentifier" : "s:10ChatModels9AssistantV",
         "text" : "Assistant"
       },
       {
@@ -98,7 +98,7 @@
             },
             {
               "kind" : "typeIdentifier",
-              "preciseIdentifier" : "s:10ChatModels9AssistantC",
+              "preciseIdentifier" : "s:10ChatModels9AssistantV",
               "text" : "Assistant"
             },
             {
@@ -136,7 +136,7 @@
 "doc://Chat/documentation/Chat": {
   "abstract" : [
     {
-      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
       "type" : "text"
     }
   ],
@@ -216,7 +216,7 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels9AssistantC",
+      "preciseIdentifier" : "s:10ChatModels9AssistantV",
       "text" : "Assistant"
     },
     {

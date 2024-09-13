@@ -1,0 +1,601 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "s:4Chat18ReactionEventTypesO",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "enum"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "text" : "ReactionEventTypes"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "navigatorTitle" : [
+      {
+        "kind" : "identifier",
+        "text" : "ReactionEventTypes"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Enumeration",
+    "symbolKind" : "enum",
+    "title" : "ReactionEventTypes"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "enum"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "identifier",
+              "text" : "ReactionEventTypes"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/add(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/allowedReactions(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/count(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/customizeReactions(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/delete(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/inMemoryUpdate(messages:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/list(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/reaction(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/replace(_:)"
+      ],
+      "title" : "Enumeration Cases"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/reactioneventtypes"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/ReactionEventTypes": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ReactionEventTypes"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ReactionEventTypes"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ReactionEventTypes",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/reactioneventtypes"
+},
+"doc://Chat/documentation/Chat/ReactionEventTypes/add(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "add"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO23ReactionMessageResponseV",
+      "text" : "ReactionMessageResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/add(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ReactionEventTypes.add(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/reactioneventtypes\/add(_:)"
+},
+"doc://Chat/documentation/Chat/ReactionEventTypes/allowedReactions(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "allowedReactions"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO24AllowedReactionsResponseV",
+      "text" : "AllowedReactionsResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/allowedReactions(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ReactionEventTypes.allowedReactions(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/reactioneventtypes\/allowedreactions(_:)"
+},
+"doc://Chat/documentation/Chat/ReactionEventTypes/count(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "count"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels17ReactionCountListV",
+      "text" : "ReactionCountList"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/count(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ReactionEventTypes.count(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/reactioneventtypes\/count(_:)"
+},
+"doc://Chat/documentation/Chat/ReactionEventTypes/customizeReactions(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "customizeReactions"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO26CustomizeReactionsResponseV",
+      "text" : "CustomizeReactionsResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/customizeReactions(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ReactionEventTypes.customizeReactions(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/reactioneventtypes\/customizereactions(_:)"
+},
+"doc://Chat/documentation/Chat/ReactionEventTypes/delete(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "delete"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO23ReactionMessageResponseV",
+      "text" : "ReactionMessageResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/delete(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ReactionEventTypes.delete(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/reactioneventtypes\/delete(_:)"
+},
+"doc://Chat/documentation/Chat/ReactionEventTypes/inMemoryUpdate(messages:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "inMemoryUpdate"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "messages"
+    },
+    {
+      "kind" : "text",
+      "text" : ": ["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat20ReactionInMemoryCopyV",
+      "text" : "ReactionInMemoryCopy"
+    },
+    {
+      "kind" : "text",
+      "text" : "])"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/inMemoryUpdate(messages:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ReactionEventTypes.inMemoryUpdate(messages:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/reactioneventtypes\/inmemoryupdate(messages:)"
+},
+"doc://Chat/documentation/Chat/ReactionEventTypes/list(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "list"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels12ReactionListV",
+      "text" : "ReactionList"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/list(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ReactionEventTypes.list(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/reactioneventtypes\/list(_:)"
+},
+"doc://Chat/documentation/Chat/ReactionEventTypes/reaction(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "reaction"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO19CurrentUserReactionV",
+      "text" : "CurrentUserReaction"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/reaction(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ReactionEventTypes.reaction(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/reactioneventtypes\/reaction(_:)"
+},
+"doc://Chat/documentation/Chat/ReactionEventTypes/replace(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "replace"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO23ReactionMessageResponseV",
+      "text" : "ReactionMessageResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes\/replace(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "ReactionEventTypes.replace(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/reactioneventtypes\/replace(_:)"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

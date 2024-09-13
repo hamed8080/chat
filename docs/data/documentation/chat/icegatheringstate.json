@@ -1,0 +1,424 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "s:4Chat17IceGatheringStateO",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "enum"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "text" : "IceGatheringState"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "navigatorTitle" : [
+      {
+        "kind" : "identifier",
+        "text" : "IceGatheringState"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Enumeration",
+    "symbolKind" : "enum",
+    "title" : "IceGatheringState"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "enum"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "identifier",
+              "text" : "IceGatheringState"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    }
+  ],
+  "relationshipsSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/Se",
+        "doc:\/\/Chat\/SE",
+        "doc:\/\/Chat\/SQ",
+        "doc:\/\/Chat\/SH"
+      ],
+      "kind" : "relationships",
+      "title" : "Conforms To",
+      "type" : "conformsTo"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/complete",
+        "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/gathering",
+        "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/new",
+        "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/unknown"
+      ],
+      "title" : "Enumeration Cases"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/init(from:)",
+        "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/init(rawValue:)"
+      ],
+      "title" : "Initializers"
+    },
+    {
+      "generated" : true,
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/Encodable-Implementations",
+        "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/Equatable-Implementations"
+      ],
+      "title" : "Default Implementations"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/icegatheringstate"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/SE": {
+  "identifier" : "doc:\/\/Chat\/SE",
+  "title" : "Swift.Encodable",
+  "type" : "unresolvable"
+},
+"doc://Chat/SH": {
+  "identifier" : "doc:\/\/Chat\/SH",
+  "title" : "Swift.Hashable",
+  "type" : "unresolvable"
+},
+"doc://Chat/SQ": {
+  "identifier" : "doc:\/\/Chat\/SQ",
+  "title" : "Swift.Equatable",
+  "type" : "unresolvable"
+},
+"doc://Chat/Se": {
+  "identifier" : "doc:\/\/Chat\/Se",
+  "title" : "Swift.Decodable",
+  "type" : "unresolvable"
+},
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/IceGatheringState": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "IceGatheringState"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "IceGatheringState"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "IceGatheringState",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/icegatheringstate"
+},
+"doc://Chat/documentation/Chat/IceGatheringState/Encodable-Implementations": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/Encodable-Implementations",
+  "kind" : "article",
+  "role" : "collectionGroup",
+  "title" : "Encodable Implementations",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/icegatheringstate\/encodable-implementations"
+},
+"doc://Chat/documentation/Chat/IceGatheringState/Equatable-Implementations": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/Equatable-Implementations",
+  "kind" : "article",
+  "role" : "collectionGroup",
+  "title" : "Equatable Implementations",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/icegatheringstate\/equatable-implementations"
+},
+"doc://Chat/documentation/Chat/IceGatheringState/complete": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "complete"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/complete",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "IceGatheringState.complete",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/icegatheringstate\/complete"
+},
+"doc://Chat/documentation/Chat/IceGatheringState/gathering": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "gathering"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/gathering",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "IceGatheringState.gathering",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/icegatheringstate\/gathering"
+},
+"doc://Chat/documentation/Chat/IceGatheringState/init(from:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "identifier",
+      "text" : "init"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "from"
+    },
+    {
+      "kind" : "text",
+      "text" : ": any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:s7DecoderP",
+      "text" : "Decoder"
+    },
+    {
+      "kind" : "text",
+      "text" : ") "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "throws"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/init(from:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "init(from:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/icegatheringstate\/init(from:)"
+},
+"doc://Chat/documentation/Chat/IceGatheringState/init(rawValue:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "identifier",
+      "text" : "init"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "rawValue"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Si",
+      "text" : "Int"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/init(rawValue:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "init(rawValue:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/icegatheringstate\/init(rawvalue:)"
+},
+"doc://Chat/documentation/Chat/IceGatheringState/new": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "new"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/new",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "IceGatheringState.new",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/icegatheringstate\/new"
+},
+"doc://Chat/documentation/Chat/IceGatheringState/unknown": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "unknown"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState\/unknown",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "IceGatheringState.unknown",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/icegatheringstate\/unknown"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

@@ -104,15 +104,14 @@
     },
     {
       "identifiers" : [
-        "doc:\/\/Chat\/documentation\/Chat\/DownloaUploadAction\/id-i476"
+        "doc:\/\/Chat\/documentation\/Chat\/DownloaUploadAction\/id"
       ],
       "title" : "Instance Properties"
     },
     {
       "generated" : true,
       "identifiers" : [
-        "doc:\/\/Chat\/documentation\/Chat\/DownloaUploadAction\/Equatable-Implementations",
-        "doc:\/\/Chat\/documentation\/Chat\/DownloaUploadAction\/Identifiable-Implementations"
+        "doc:\/\/Chat\/documentation\/Chat\/DownloaUploadAction\/Equatable-Implementations"
       ],
       "title" : "Default Implementations"
     }
@@ -144,7 +143,7 @@
 "doc://Chat/documentation/Chat": {
   "abstract" : [
     {
-      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
       "type" : "text"
     }
   ],
@@ -203,17 +202,6 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/downloauploadaction\/equatable-implementations"
 },
-"doc://Chat/documentation/Chat/DownloaUploadAction/Identifiable-Implementations": {
-  "abstract" : [
-
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DownloaUploadAction\/Identifiable-Implementations",
-  "kind" : "article",
-  "role" : "collectionGroup",
-  "title" : "Identifiable Implementations",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/downloauploadaction\/identifiable-implementations"
-},
 "doc://Chat/documentation/Chat/DownloaUploadAction/cancel": {
   "abstract" : [
 
@@ -239,7 +227,7 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/downloauploadaction\/cancel"
 },
-"doc://Chat/documentation/Chat/DownloaUploadAction/id-i476": {
+"doc://Chat/documentation/Chat/DownloaUploadAction/id": {
   "abstract" : [
 
   ],
@@ -266,12 +254,12 @@
       "text" : "DownloaUploadAction"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DownloaUploadAction\/id-i476",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DownloaUploadAction\/id",
   "kind" : "symbol",
   "role" : "symbol",
   "title" : "id",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/downloauploadaction\/id-i476"
+  "url" : "\/documentation\/chat\/downloauploadaction\/id"
 },
 "doc://Chat/documentation/Chat/DownloaUploadAction/resume": {
   "abstract" : [

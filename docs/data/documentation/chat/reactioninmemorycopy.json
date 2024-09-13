@@ -1,0 +1,420 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/ReactionInMemoryCopy"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "s:4Chat20ReactionInMemoryCopyV",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "struct"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "text" : "ReactionInMemoryCopy"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "navigatorTitle" : [
+      {
+        "kind" : "identifier",
+        "text" : "ReactionInMemoryCopy"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Structure",
+    "symbolKind" : "struct",
+    "title" : "ReactionInMemoryCopy"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "struct"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "identifier",
+              "text" : "ReactionInMemoryCopy"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/ReactionInMemoryCopy\/init(messageId:currentUserReaction:summary:details:)"
+      ],
+      "title" : "Initializers"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/ReactionInMemoryCopy\/currentUserReaction",
+        "doc:\/\/Chat\/documentation\/Chat\/ReactionInMemoryCopy\/details",
+        "doc:\/\/Chat\/documentation\/Chat\/ReactionInMemoryCopy\/messageId",
+        "doc:\/\/Chat\/documentation\/Chat\/ReactionInMemoryCopy\/summary"
+      ],
+      "title" : "Instance Properties"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/reactioninmemorycopy"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/ReactionInMemoryCopy": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "struct"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ReactionInMemoryCopy"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionInMemoryCopy",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ReactionInMemoryCopy"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ReactionInMemoryCopy",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/reactioninmemorycopy"
+},
+"doc://Chat/documentation/Chat/ReactionInMemoryCopy/currentUserReaction": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "currentUserReaction"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels8ReactionV",
+      "text" : "Reaction"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionInMemoryCopy\/currentUserReaction",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "currentUserReaction",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/reactioninmemorycopy\/currentuserreaction"
+},
+"doc://Chat/documentation/Chat/ReactionInMemoryCopy/details": {
+  "abstract" : [
+    {
+      "text" : "All participants reaction to a message.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "details"
+    },
+    {
+      "kind" : "text",
+      "text" : ": ["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels8ReactionV",
+      "text" : "Reaction"
+    },
+    {
+      "kind" : "text",
+      "text" : "]"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionInMemoryCopy\/details",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "details",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/reactioninmemorycopy\/details"
+},
+"doc://Chat/documentation/Chat/ReactionInMemoryCopy/init(messageId:currentUserReaction:summary:details:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "identifier",
+      "text" : "init"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "messageId"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Si",
+      "text" : "Int"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "currentUserReaction"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels8ReactionV",
+      "text" : "Reaction"
+    },
+    {
+      "kind" : "text",
+      "text" : "?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "summary"
+    },
+    {
+      "kind" : "text",
+      "text" : ": ["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels13ReactionCountV",
+      "text" : "ReactionCount"
+    },
+    {
+      "kind" : "text",
+      "text" : "], "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "details"
+    },
+    {
+      "kind" : "text",
+      "text" : ": ["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels8ReactionV",
+      "text" : "Reaction"
+    },
+    {
+      "kind" : "text",
+      "text" : "])"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionInMemoryCopy\/init(messageId:currentUserReaction:summary:details:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "init(messageId:currentUserReaction:summary:details:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/reactioninmemorycopy\/init(messageid:currentuserreaction:summary:details:)"
+},
+"doc://Chat/documentation/Chat/ReactionInMemoryCopy/messageId": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "let"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "messageId"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Si",
+      "text" : "Int"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionInMemoryCopy\/messageId",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "messageId",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/reactioninmemorycopy\/messageid"
+},
+"doc://Chat/documentation/Chat/ReactionInMemoryCopy/summary": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "summary"
+    },
+    {
+      "kind" : "text",
+      "text" : ": ["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels13ReactionCountV",
+      "text" : "ReactionCount"
+    },
+    {
+      "kind" : "text",
+      "text" : "]"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionInMemoryCopy\/summary",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "summary",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/reactioninmemorycopy\/summary"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

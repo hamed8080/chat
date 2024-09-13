@@ -1,0 +1,471 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/AssistantProtocol"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "s:4Chat17AssistantProtocolP",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "protocol"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "text" : "AssistantProtocol"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "navigatorTitle" : [
+      {
+        "kind" : "identifier",
+        "text" : "AssistantProtocol"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Protocol",
+    "symbolKind" : "protocol",
+    "title" : "AssistantProtocol"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "protocol"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "identifier",
+              "text" : "AssistantProtocol"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/AssistantProtocol\/block(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/AssistantProtocol\/blockedList(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/AssistantProtocol\/deactive(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/AssistantProtocol\/get(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/AssistantProtocol\/history(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/AssistantProtocol\/register(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/AssistantProtocol\/unblock(_:)"
+      ],
+      "title" : "Instance Methods"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/assistantprotocol"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/AssistantProtocol": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "AssistantProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AssistantProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "AssistantProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "AssistantProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/assistantprotocol"
+},
+"doc://Chat/documentation/Chat/AssistantProtocol/block(_:)": {
+  "abstract" : [
+    {
+      "text" : "Block assistants.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "block"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO28BlockUnblockAssistantRequestV",
+      "text" : "BlockUnblockAssistantRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AssistantProtocol\/block(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "block(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/assistantprotocol\/block(_:)"
+},
+"doc://Chat/documentation/Chat/AssistantProtocol/blockedList(_:)": {
+  "abstract" : [
+    {
+      "text" : "Get list of blocked assistants.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "blockedList"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO24BlockedAssistantsRequestV",
+      "text" : "BlockedAssistantsRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AssistantProtocol\/blockedList(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "blockedList(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/assistantprotocol\/blockedlist(_:)"
+},
+"doc://Chat/documentation/Chat/AssistantProtocol/deactive(_:)": {
+  "abstract" : [
+    {
+      "text" : "Deactivate assistants.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "deactive"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO24DeactiveAssistantRequestV",
+      "text" : "DeactiveAssistantRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AssistantProtocol\/deactive(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "deactive(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/assistantprotocol\/deactive(_:)"
+},
+"doc://Chat/documentation/Chat/AssistantProtocol/get(_:)": {
+  "abstract" : [
+    {
+      "text" : "Get list of assistants for user.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "get"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO17AssistantsRequestV",
+      "text" : "AssistantsRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AssistantProtocol\/get(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "get(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/assistantprotocol\/get(_:)"
+},
+"doc://Chat/documentation/Chat/AssistantProtocol/history(_:)": {
+  "abstract" : [
+    {
+      "text" : "Get a history of assitant actions.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "history"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO24AssistantsHistoryRequestV",
+      "text" : "AssistantsHistoryRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AssistantProtocol\/history(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "history(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/assistantprotocol\/history(_:)"
+},
+"doc://Chat/documentation/Chat/AssistantProtocol/register(_:)": {
+  "abstract" : [
+    {
+      "text" : "Register a participant as an assistant.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "register"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO25RegisterAssistantsRequestV",
+      "text" : "RegisterAssistantsRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AssistantProtocol\/register(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "register(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/assistantprotocol\/register(_:)"
+},
+"doc://Chat/documentation/Chat/AssistantProtocol/unblock(_:)": {
+  "abstract" : [
+    {
+      "text" : "UNBlock assistants.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "unblock"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO28BlockUnblockAssistantRequestV",
+      "text" : "BlockUnblockAssistantRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AssistantProtocol\/unblock(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "unblock(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/assistantprotocol\/unblock(_:)"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

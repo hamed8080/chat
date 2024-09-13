@@ -83,12 +83,24 @@
   "topicSections" : [
     {
       "identifiers" : [
-        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/messageDelete(_:)",
-        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/messageDelivery(_:)",
-        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/messageEdit(_:)",
-        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/messageNew(_:)",
-        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/messageSeen(_:)",
-        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/messageSent(_:)"
+        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/cleared(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/deleted(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/delivered(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/deliveredToParticipants(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/edited(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/export(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/history(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/messages(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/new(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/pin(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/queueEditMessages(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/queueFileMessages(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/queueForwardMessages(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/queueTextMessages(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/seen(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/seenByParticipants(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/sent(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/unpin(_:)"
       ],
       "title" : "Enumeration Cases"
     }
@@ -110,7 +122,7 @@
 "doc://Chat/documentation/Chat": {
   "abstract" : [
     {
-      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
       "type" : "text"
     }
   ],
@@ -158,7 +170,7 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/messageeventtypes"
 },
-"doc://Chat/documentation/Chat/MessageEventTypes/messageDelete(_:)": {
+"doc://Chat/documentation/Chat/MessageEventTypes/cleared(_:)": {
   "abstract" : [
 
   ],
@@ -173,7 +185,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "messageDelete"
+      "text" : "cleared"
     },
     {
       "kind" : "text",
@@ -190,7 +202,54 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels7MessageC",
+      "preciseIdentifier" : "s:Si",
+      "text" : "Int"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/cleared(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "MessageEventTypes.cleared(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageeventtypes\/cleared(_:)"
+},
+"doc://Chat/documentation/Chat/MessageEventTypes/deleted(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "deleted"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7MessageV",
       "text" : "Message"
     },
     {
@@ -198,14 +257,14 @@
       "text" : ">)"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/messageDelete(_:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/deleted(_:)",
   "kind" : "symbol",
   "role" : "symbol",
-  "title" : "MessageEventTypes.messageDelete(_:)",
+  "title" : "MessageEventTypes.deleted(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/messageeventtypes\/messagedelete(_:)"
+  "url" : "\/documentation\/chat\/messageeventtypes\/deleted(_:)"
 },
-"doc://Chat/documentation/Chat/MessageEventTypes/messageDelivery(_:)": {
+"doc://Chat/documentation/Chat/MessageEventTypes/delivered(_:)": {
   "abstract" : [
 
   ],
@@ -220,7 +279,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "messageDelivery"
+      "text" : "delivered"
     },
     {
       "kind" : "text",
@@ -237,7 +296,7 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO15MessageResponseC",
+      "preciseIdentifier" : "s:7ChatDTO15MessageResponseV",
       "text" : "MessageResponse"
     },
     {
@@ -245,14 +304,14 @@
       "text" : ">)"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/messageDelivery(_:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/delivered(_:)",
   "kind" : "symbol",
   "role" : "symbol",
-  "title" : "MessageEventTypes.messageDelivery(_:)",
+  "title" : "MessageEventTypes.delivered(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/messageeventtypes\/messagedelivery(_:)"
+  "url" : "\/documentation\/chat\/messageeventtypes\/delivered(_:)"
 },
-"doc://Chat/documentation/Chat/MessageEventTypes/messageEdit(_:)": {
+"doc://Chat/documentation/Chat/MessageEventTypes/deliveredToParticipants(_:)": {
   "abstract" : [
 
   ],
@@ -267,7 +326,54 @@
     },
     {
       "kind" : "identifier",
-      "text" : "messageEdit"
+      "text" : "deliveredToParticipants"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels11ParticipantV",
+      "text" : "Participant"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/deliveredToParticipants(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "MessageEventTypes.deliveredToParticipants(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageeventtypes\/deliveredtoparticipants(_:)"
+},
+"doc://Chat/documentation/Chat/MessageEventTypes/edited(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "edited"
     },
     {
       "kind" : "text",
@@ -284,7 +390,7 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels7MessageC",
+      "preciseIdentifier" : "s:10ChatModels7MessageV",
       "text" : "Message"
     },
     {
@@ -292,14 +398,14 @@
       "text" : ">)"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/messageEdit(_:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/edited(_:)",
   "kind" : "symbol",
   "role" : "symbol",
-  "title" : "MessageEventTypes.messageEdit(_:)",
+  "title" : "MessageEventTypes.edited(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/messageeventtypes\/messageedit(_:)"
+  "url" : "\/documentation\/chat\/messageeventtypes\/edited(_:)"
 },
-"doc://Chat/documentation/Chat/MessageEventTypes/messageNew(_:)": {
+"doc://Chat/documentation/Chat/MessageEventTypes/export(_:)": {
   "abstract" : [
 
   ],
@@ -314,7 +420,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "messageNew"
+      "text" : "export"
     },
     {
       "kind" : "text",
@@ -331,7 +437,148 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels7MessageC",
+      "preciseIdentifier" : "s:10Foundation3URLV",
+      "text" : "URL"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/export(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "MessageEventTypes.export(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageeventtypes\/export(_:)"
+},
+"doc://Chat/documentation/Chat/MessageEventTypes/history(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "history"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7MessageV",
+      "text" : "Message"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/history(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "MessageEventTypes.history(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageeventtypes\/history(_:)"
+},
+"doc://Chat/documentation/Chat/MessageEventTypes/messages(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "messages"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7MessageV",
+      "text" : "Message"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/messages(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "MessageEventTypes.messages(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageeventtypes\/messages(_:)"
+},
+"doc://Chat/documentation/Chat/MessageEventTypes/new(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "new"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7MessageV",
       "text" : "Message"
     },
     {
@@ -339,14 +586,14 @@
       "text" : ">)"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/messageNew(_:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/new(_:)",
   "kind" : "symbol",
   "role" : "symbol",
-  "title" : "MessageEventTypes.messageNew(_:)",
+  "title" : "MessageEventTypes.new(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/messageeventtypes\/messagenew(_:)"
+  "url" : "\/documentation\/chat\/messageeventtypes\/new(_:)"
 },
-"doc://Chat/documentation/Chat/MessageEventTypes/messageSeen(_:)": {
+"doc://Chat/documentation/Chat/MessageEventTypes/pin(_:)": {
   "abstract" : [
 
   ],
@@ -361,7 +608,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "messageSeen"
+      "text" : "pin"
     },
     {
       "kind" : "text",
@@ -378,22 +625,22 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO15MessageResponseC",
-      "text" : "MessageResponse"
+      "preciseIdentifier" : "s:10ChatModels10PinMessageV",
+      "text" : "PinMessage"
     },
     {
       "kind" : "text",
       "text" : ">)"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/messageSeen(_:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/pin(_:)",
   "kind" : "symbol",
   "role" : "symbol",
-  "title" : "MessageEventTypes.messageSeen(_:)",
+  "title" : "MessageEventTypes.pin(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/messageeventtypes\/messageseen(_:)"
+  "url" : "\/documentation\/chat\/messageeventtypes\/pin(_:)"
 },
-"doc://Chat/documentation/Chat/MessageEventTypes/messageSent(_:)": {
+"doc://Chat/documentation/Chat/MessageEventTypes/queueEditMessages(_:)": {
   "abstract" : [
 
   ],
@@ -408,7 +655,204 @@
     },
     {
       "kind" : "identifier",
-      "text" : "messageSent"
+      "text" : "queueEditMessages"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO18EditMessageRequestV",
+      "text" : "EditMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/queueEditMessages(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "MessageEventTypes.queueEditMessages(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageeventtypes\/queueeditmessages(_:)"
+},
+"doc://Chat/documentation/Chat/MessageEventTypes/queueFileMessages(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "queueFileMessages"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<[("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO17UploadFileRequestV",
+      "text" : "UploadFileRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO22SendTextMessageRequestV",
+      "text" : "SendTextMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/queueFileMessages(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "MessageEventTypes.queueFileMessages(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageeventtypes\/queuefilemessages(_:)"
+},
+"doc://Chat/documentation/Chat/MessageEventTypes/queueForwardMessages(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "queueForwardMessages"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO21ForwardMessageRequestV",
+      "text" : "ForwardMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/queueForwardMessages(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "MessageEventTypes.queueForwardMessages(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageeventtypes\/queueforwardmessages(_:)"
+},
+"doc://Chat/documentation/Chat/MessageEventTypes/queueTextMessages(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "queueTextMessages"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO22SendTextMessageRequestV",
+      "text" : "SendTextMessageRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/queueTextMessages(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "MessageEventTypes.queueTextMessages(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageeventtypes\/queuetextmessages(_:)"
+},
+"doc://Chat/documentation/Chat/MessageEventTypes/seen(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "seen"
     },
     {
       "kind" : "text",
@@ -425,7 +869,7 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO15MessageResponseC",
+      "preciseIdentifier" : "s:7ChatDTO15MessageResponseV",
       "text" : "MessageResponse"
     },
     {
@@ -433,12 +877,153 @@
       "text" : ">)"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/messageSent(_:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/seen(_:)",
   "kind" : "symbol",
   "role" : "symbol",
-  "title" : "MessageEventTypes.messageSent(_:)",
+  "title" : "MessageEventTypes.seen(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/messageeventtypes\/messagesent(_:)"
+  "url" : "\/documentation\/chat\/messageeventtypes\/seen(_:)"
+},
+"doc://Chat/documentation/Chat/MessageEventTypes/seenByParticipants(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "seenByParticipants"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels11ParticipantV",
+      "text" : "Participant"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/seenByParticipants(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "MessageEventTypes.seenByParticipants(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageeventtypes\/seenbyparticipants(_:)"
+},
+"doc://Chat/documentation/Chat/MessageEventTypes/sent(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "sent"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO15MessageResponseV",
+      "text" : "MessageResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/sent(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "MessageEventTypes.sent(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageeventtypes\/sent(_:)"
+},
+"doc://Chat/documentation/Chat/MessageEventTypes/unpin(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "unpin"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels10PinMessageV",
+      "text" : "PinMessage"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes\/unpin(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "MessageEventTypes.unpin(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageeventtypes\/unpin(_:)"
 },
 "icon.png": {
   "alt" : "App icon.",

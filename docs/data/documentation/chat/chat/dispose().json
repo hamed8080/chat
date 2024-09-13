@@ -1,15 +1,7 @@
 {
   "abstract" : [
     {
-      "text" : "Inherited from ",
-      "type" : "text"
-    },
-    {
-      "code" : "ChatProtocol.dispose()",
-      "type" : "codeVoice"
-    },
-    {
-      "text" : ".",
+      "text" : "A method to destroy a chat object and release all strong reference objects.",
       "type" : "text"
     }
   ],
@@ -27,7 +19,7 @@
   },
   "kind" : "symbol",
   "metadata" : {
-    "externalID" : "s:4ChatAAC7disposeyyF",
+    "externalID" : "s:4ChatAAP7disposeyyF",
     "fragments" : [
       {
         "kind" : "keyword",
@@ -51,6 +43,7 @@
         "name" : "Chat"
       }
     ],
+    "required" : true,
     "role" : "symbol",
     "roleHeading" : "Instance Method",
     "symbolKind" : "method",
@@ -114,7 +107,7 @@
 "doc://Chat/documentation/Chat": {
   "abstract" : [
     {
-      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
       "type" : "text"
     }
   ],
@@ -138,7 +131,7 @@
   "fragments" : [
     {
       "kind" : "keyword",
-      "text" : "class"
+      "text" : "protocol"
     },
     {
       "kind" : "text",
@@ -164,7 +157,10 @@
 },
 "doc://Chat/documentation/Chat/Chat/dispose()": {
   "abstract" : [
-
+    {
+      "text" : "A method to destroy a chat object and release all strong reference objects.",
+      "type" : "text"
+    }
   ],
   "fragments" : [
     {
@@ -186,6 +182,7 @@
   ],
   "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/dispose()",
   "kind" : "symbol",
+  "required" : true,
   "role" : "symbol",
   "title" : "dispose()",
   "type" : "topic",

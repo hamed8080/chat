@@ -83,8 +83,11 @@
   "topicSections" : [
     {
       "identifiers" : [
-        "doc:\/\/Chat\/documentation\/Chat\/UserEventTypes\/onUser(_:)",
-        "doc:\/\/Chat\/documentation\/Chat\/UserEventTypes\/roles(_:)"
+        "doc:\/\/Chat\/documentation\/Chat\/UserEventTypes\/currentUserRoles(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/UserEventTypes\/remove(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/UserEventTypes\/setProfile(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/UserEventTypes\/setRolesToUser(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/UserEventTypes\/user(_:)"
       ],
       "title" : "Enumeration Cases"
     }
@@ -106,7 +109,7 @@
 "doc://Chat/documentation/Chat": {
   "abstract" : [
     {
-      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
       "type" : "text"
     }
   ],
@@ -154,7 +157,7 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/usereventtypes"
 },
-"doc://Chat/documentation/Chat/UserEventTypes/onUser(_:)": {
+"doc://Chat/documentation/Chat/UserEventTypes/currentUserRoles(_:)": {
   "abstract" : [
 
   ],
@@ -169,54 +172,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "onUser"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
-      "text" : "ChatResponse"
-    },
-    {
-      "kind" : "text",
-      "text" : "<"
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels4UserC",
-      "text" : "User"
-    },
-    {
-      "kind" : "text",
-      "text" : ">)"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UserEventTypes\/onUser(_:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "UserEventTypes.onUser(_:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/usereventtypes\/onuser(_:)"
-},
-"doc://Chat/documentation/Chat/UserEventTypes/roles(_:)": {
-  "abstract" : [
-
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "case"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "roles"
+      "text" : "currentUserRoles"
     },
     {
       "kind" : "text",
@@ -241,12 +197,200 @@
       "text" : "]>)"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UserEventTypes\/roles(_:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UserEventTypes\/currentUserRoles(_:)",
   "kind" : "symbol",
   "role" : "symbol",
-  "title" : "UserEventTypes.roles(_:)",
+  "title" : "UserEventTypes.currentUserRoles(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/usereventtypes\/roles(_:)"
+  "url" : "\/documentation\/chat\/usereventtypes\/currentuserroles(_:)"
+},
+"doc://Chat/documentation/Chat/UserEventTypes/remove(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "remove"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels8UserRoleV",
+      "text" : "UserRole"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UserEventTypes\/remove(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "UserEventTypes.remove(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/usereventtypes\/remove(_:)"
+},
+"doc://Chat/documentation/Chat/UserEventTypes/setProfile(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "setProfile"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels7ProfileV",
+      "text" : "Profile"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UserEventTypes\/setProfile(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "UserEventTypes.setProfile(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/usereventtypes\/setprofile(_:)"
+},
+"doc://Chat/documentation/Chat/UserEventTypes/setRolesToUser(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "setRolesToUser"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels8UserRoleV",
+      "text" : "UserRole"
+    },
+    {
+      "kind" : "text",
+      "text" : "]>)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UserEventTypes\/setRolesToUser(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "UserEventTypes.setRolesToUser(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/usereventtypes\/setrolestouser(_:)"
+},
+"doc://Chat/documentation/Chat/UserEventTypes/user(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "user"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8ResponseV",
+      "text" : "ChatResponse"
+    },
+    {
+      "kind" : "text",
+      "text" : "<"
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels4UserV",
+      "text" : "User"
+    },
+    {
+      "kind" : "text",
+      "text" : ">)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UserEventTypes\/user(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "UserEventTypes.user(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/usereventtypes\/user(_:)"
 },
 "icon.png": {
   "alt" : "App icon.",

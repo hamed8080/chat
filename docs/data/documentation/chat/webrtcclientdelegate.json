@@ -1,0 +1,380 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/WebRTCClientDelegate"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "s:4Chat20WebRTCClientDelegateP",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "protocol"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "text" : "WebRTCClientDelegate"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "navigatorTitle" : [
+      {
+        "kind" : "identifier",
+        "text" : "WebRTCClientDelegate"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Protocol",
+    "symbolKind" : "protocol",
+    "title" : "WebRTCClientDelegate"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "protocol"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "identifier",
+              "text" : "WebRTCClientDelegate"
+            },
+            {
+              "kind" : "text",
+              "text" : " : AnyObject"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/WebRTCClientDelegate\/didConnectWebRTC()",
+        "doc:\/\/Chat\/documentation\/Chat\/WebRTCClientDelegate\/didDisconnectWebRTC()",
+        "doc:\/\/Chat\/documentation\/Chat\/WebRTCClientDelegate\/didIceConnectionStateChanged(iceConnectionState:)",
+        "doc:\/\/Chat\/documentation\/Chat\/WebRTCClientDelegate\/didReceiveData(data:)",
+        "doc:\/\/Chat\/documentation\/Chat\/WebRTCClientDelegate\/didReceiveMessage(message:)"
+      ],
+      "title" : "Instance Methods"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/webrtcclientdelegate"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/WebRTCClientDelegate": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "WebRTCClientDelegate"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/WebRTCClientDelegate",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "WebRTCClientDelegate"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "WebRTCClientDelegate",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/webrtcclientdelegate"
+},
+"doc://Chat/documentation/Chat/WebRTCClientDelegate/didConnectWebRTC()": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "didConnectWebRTC"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/WebRTCClientDelegate\/didConnectWebRTC()",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "didConnectWebRTC()",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/webrtcclientdelegate\/didconnectwebrtc()"
+},
+"doc://Chat/documentation/Chat/WebRTCClientDelegate/didDisconnectWebRTC()": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "didDisconnectWebRTC"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/WebRTCClientDelegate\/didDisconnectWebRTC()",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "didDisconnectWebRTC()",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/webrtcclientdelegate\/diddisconnectwebrtc()"
+},
+"doc://Chat/documentation/Chat/WebRTCClientDelegate/didIceConnectionStateChanged(iceConnectionState:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "didIceConnectionStateChanged"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "iceConnectionState"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat18IceConnectionStateO",
+      "text" : "IceConnectionState"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/WebRTCClientDelegate\/didIceConnectionStateChanged(iceConnectionState:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "didIceConnectionStateChanged(iceConnectionState:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/webrtcclientdelegate\/didiceconnectionstatechanged(iceconnectionstate:)"
+},
+"doc://Chat/documentation/Chat/WebRTCClientDelegate/didReceiveData(data:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "didReceiveData"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "data"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation4DataV",
+      "text" : "Data"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/WebRTCClientDelegate\/didReceiveData(data:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "didReceiveData(data:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/webrtcclientdelegate\/didreceivedata(data:)"
+},
+"doc://Chat/documentation/Chat/WebRTCClientDelegate/didReceiveMessage(message:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "didReceiveMessage"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "message"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/WebRTCClientDelegate\/didReceiveMessage(message:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "didReceiveMessage(message:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/webrtcclientdelegate\/didreceivemessage(message:)"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

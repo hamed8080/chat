@@ -1,0 +1,1553 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "s:4Chat0A14ImplementationC",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "class"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "text" : "ChatImplementation"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "navigatorTitle" : [
+      {
+        "kind" : "identifier",
+        "text" : "ChatImplementation"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Class",
+    "symbolKind" : "class",
+    "title" : "ChatImplementation"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "final"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "keyword",
+              "text" : "class"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "identifier",
+              "text" : "ChatImplementation"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    }
+  ],
+  "relationshipsSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/Chat",
+        "doc:\/\/Chat\/9ChatCache0B11LogDelegateP",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol",
+        "doc:\/\/Chat\/s12IdentifiableP"
+      ],
+      "kind" : "relationships",
+      "title" : "Conforms To",
+      "type" : "conformsTo"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/init(config:pingTimer:queueTimer:banTimer:session:callDelegate:)"
+      ],
+      "title" : "Initializers"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/assistant",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/asyncManager",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/banTimer",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/bot",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/cache",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/cacheFileManager",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/callDelegate",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/callMessageDeleaget",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/config",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/contact",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/conversation",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/coordinator",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/delegate",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/exportMessageViewModels",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/file",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/id",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/logger",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/map",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/message",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/reaction",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/session",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/state",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/system",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/tag",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/user",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/userInfo"
+      ],
+      "title" : "Instance Properties"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/connect()",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/dispose()",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/prepareToSendAsync(req:type:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/setToken(newToken:reCreateObject:)"
+      ],
+      "title" : "Instance Methods"
+    },
+    {
+      "generated" : true,
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/CacheLogDelegate-Implementations",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/ChatInternalProtocol-Implementations"
+      ],
+      "title" : "Default Implementations"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/chatimplementation"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/9ChatCache0B11LogDelegateP": {
+  "identifier" : "doc:\/\/Chat\/9ChatCache0B11LogDelegateP",
+  "title" : "ChatCache.CacheLogDelegate",
+  "type" : "unresolvable"
+},
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/Chat": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "Chat"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "Chat"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chat"
+},
+"doc://Chat/documentation/Chat/ChatImplementation": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ChatImplementation"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ChatImplementation"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ChatImplementation",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/CacheLogDelegate-Implementations": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/CacheLogDelegate-Implementations",
+  "kind" : "article",
+  "role" : "collectionGroup",
+  "title" : "CacheLogDelegate Implementations",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/cachelogdelegate-implementations"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/ChatInternalProtocol-Implementations": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/ChatInternalProtocol-Implementations",
+  "kind" : "article",
+  "role" : "collectionGroup",
+  "title" : "ChatInternalProtocol Implementations",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/chatinternalprotocol-implementations"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/assistant": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "assistant"
+    },
+    {
+      "kind" : "text",
+      "text" : ": any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat17AssistantProtocolP",
+      "text" : "AssistantProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/assistant",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "assistant",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/assistant"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/asyncManager": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "asyncManager"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat12AsyncManagerC",
+      "text" : "AsyncManager"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/asyncManager",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "asyncManager",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/asyncmanager"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/banTimer": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "banTimer"
+    },
+    {
+      "kind" : "text",
+      "text" : ": any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8Additive13TimerProtocolP",
+      "text" : "TimerProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/banTimer",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "banTimer",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/bantimer"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/bot": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "bot"
+    },
+    {
+      "kind" : "text",
+      "text" : ": any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat11BotProtocolP",
+      "text" : "BotProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/bot",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "bot",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/bot"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/cache": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "cache"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:9ChatCache0B7ManagerC",
+      "text" : "CacheManager"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/cache",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "cache",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/cache"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/cacheFileManager": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "cacheFileManager"
+    },
+    {
+      "kind" : "text",
+      "text" : ": (any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore24CacheFileManagerProtocolP",
+      "text" : "CacheFileManagerProtocol"
+    },
+    {
+      "kind" : "text",
+      "text" : ")?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/cacheFileManager",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "cacheFileManager",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/cachefilemanager"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/callDelegate": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "callDelegate"
+    },
+    {
+      "kind" : "text",
+      "text" : ": (any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat20WebRTCClientDelegateP",
+      "text" : "WebRTCClientDelegate"
+    },
+    {
+      "kind" : "text",
+      "text" : ")?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/callDelegate",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "callDelegate",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/calldelegate"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/callMessageDeleaget": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "callMessageDeleaget"
+    },
+    {
+      "kind" : "text",
+      "text" : ": (any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat19CallMessageProtocolP",
+      "text" : "CallMessageProtocol"
+    },
+    {
+      "kind" : "text",
+      "text" : ")?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/callMessageDeleaget",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "callMessageDeleaget",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/callmessagedeleaget"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/config": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "config"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A6ConfigV",
+      "text" : "ChatConfig"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/config",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "config",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/config"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/connect()": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "connect"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/connect()",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "connect()",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/connect()"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/contact": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "contact"
+    },
+    {
+      "kind" : "text",
+      "text" : ": any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat15ContactProtocolP",
+      "text" : "ContactProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/contact",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "contact",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/contact"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/conversation": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "conversation"
+    },
+    {
+      "kind" : "text",
+      "text" : ": any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat14ThreadProtocolP",
+      "text" : "ThreadProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/conversation",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "conversation",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/conversation"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/coordinator": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "coordinator"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat0A11CoordinatorC",
+      "text" : "ChatCoordinator"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/coordinator",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "coordinator",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/coordinator"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/delegate": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "delegate"
+    },
+    {
+      "kind" : "text",
+      "text" : ": (any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat0A8DelegateP",
+      "text" : "ChatDelegate"
+    },
+    {
+      "kind" : "text",
+      "text" : ")?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/delegate",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "delegate",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/delegate"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/dispose()": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "dispose"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/dispose()",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "dispose()",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/dispose()"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/exportMessageViewModels": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "exportMessageViewModels"
+    },
+    {
+      "kind" : "text",
+      "text" : ": [any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat22ExportMessagesProtocolP",
+      "text" : "ExportMessagesProtocol"
+    },
+    {
+      "kind" : "text",
+      "text" : "]"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/exportMessageViewModels",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "exportMessageViewModels",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/exportmessageviewmodels"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/file": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "file"
+    },
+    {
+      "kind" : "text",
+      "text" : ": any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat12FileProtocolP",
+      "text" : "FileProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/file",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "file",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/file"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/id": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "id"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation4UUIDV",
+      "text" : "UUID"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/id",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "id",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/id"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/init(config:pingTimer:queueTimer:banTimer:session:callDelegate:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "identifier",
+      "text" : "init"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "config"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A6ConfigV",
+      "text" : "ChatConfig"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "pingTimer"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8Additive11SourceTimerC",
+      "text" : "SourceTimer"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "queueTimer"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8Additive11SourceTimerC",
+      "text" : "SourceTimer"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "banTimer"
+    },
+    {
+      "kind" : "text",
+      "text" : ": any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8Additive13TimerProtocolP",
+      "text" : "TimerProtocol"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "session"
+    },
+    {
+      "kind" : "text",
+      "text" : ": any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8Additive18URLSessionProtocolP",
+      "text" : "URLSessionProtocol"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "callDelegate"
+    },
+    {
+      "kind" : "text",
+      "text" : ": (any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat20WebRTCClientDelegateP",
+      "text" : "WebRTCClientDelegate"
+    },
+    {
+      "kind" : "text",
+      "text" : ")?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/init(config:pingTimer:queueTimer:banTimer:session:callDelegate:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "init(config:pingTimer:queueTimer:banTimer:session:callDelegate:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/init(config:pingtimer:queuetimer:bantimer:session:calldelegate:)"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/logger": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "logger"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:6LoggerAAC",
+      "text" : "Logger"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/logger",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "logger",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/logger"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/map": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "map"
+    },
+    {
+      "kind" : "text",
+      "text" : ": any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat11MapProtocolP",
+      "text" : "MapProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/map",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "map",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/map"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/message": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "message"
+    },
+    {
+      "kind" : "text",
+      "text" : ": any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat15MessageProtocolP",
+      "text" : "MessageProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/message",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "message",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/message"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/prepareToSendAsync(req:type:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "prepareToSendAsync"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "req"
+    },
+    {
+      "kind" : "text",
+      "text" : ": any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8SendableP",
+      "text" : "ChatSendable"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "type"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A14MessageVOTypesO",
+      "text" : "ChatMessageVOTypes"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/prepareToSendAsync(req:type:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "prepareToSendAsync(req:type:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/preparetosendasync(req:type:)"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/reaction": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "reaction"
+    },
+    {
+      "kind" : "text",
+      "text" : ": any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat16ReactionProtocolP",
+      "text" : "ReactionProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/reaction",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "reaction",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/reaction"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/session": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "session"
+    },
+    {
+      "kind" : "text",
+      "text" : ": any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8Additive18URLSessionProtocolP",
+      "text" : "URLSessionProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/session",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "session",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/session"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/setToken(newToken:reCreateObject:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "setToken"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "newToken"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "reCreateObject"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Sb",
+      "text" : "Bool"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/setToken(newToken:reCreateObject:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "setToken(newToken:reCreateObject:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/settoken(newtoken:recreateobject:)"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/state": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "state"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A5StateO",
+      "text" : "ChatState"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/state",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "state",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/state"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/system": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "system"
+    },
+    {
+      "kind" : "text",
+      "text" : ": any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat14SystemProtocolP",
+      "text" : "SystemProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/system",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "system",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/system"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/tag": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "tag"
+    },
+    {
+      "kind" : "text",
+      "text" : ": any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat11TagProtocolP",
+      "text" : "TagProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/tag",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "tag",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/tag"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/user": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "user"
+    },
+    {
+      "kind" : "text",
+      "text" : ": any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:4Chat12UserProtocolP",
+      "text" : "UserProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/user",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "user",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/user"
+},
+"doc://Chat/documentation/Chat/ChatImplementation/userInfo": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "userInfo"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10ChatModels4UserV",
+      "text" : "User"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation\/userInfo",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "userInfo",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation\/userinfo"
+},
+"doc://Chat/documentation/Chat/ChatInternalProtocol": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ChatInternalProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ChatInternalProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ChatInternalProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatinternalprotocol"
+},
+"doc://Chat/s12IdentifiableP": {
+  "identifier" : "doc:\/\/Chat\/s12IdentifiableP",
+  "title" : "Swift.Identifiable",
+  "type" : "unresolvable"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

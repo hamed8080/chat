@@ -1,7 +1,7 @@
 {
   "abstract" : [
     {
-      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
       "type" : "text"
     }
   ],
@@ -57,15 +57,16 @@
         {
           "inlineContent" : [
             {
-              "text" : "Chat SDK provides the ability to connect easily to the chat server and manage the connection and reconnect whenever reconnecting is needed.",
+              "text" : "Chat SDK provides functionality to connect easily to the chat server, as well as, managing connections, such as reconnecting.",
               "type" : "text"
-            },
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "inlineContent" : [
             {
-              "text" : " ",
-              "type" : "text"
-            },
-            {
-              "text" : "Behind the scene it uses Async SDK to connect to async socket and after socket get’s ",
+              "text" : "Behind the scene, it uses Async SDK to connect to the async socket server and after the socket get’s ",
               "type" : "text"
             },
             {
@@ -73,7 +74,7 @@
               "type" : "codeVoice"
             },
             {
-              "text" : " the chat SDK start to get user information of the current have set token, after it received the user it tell you that chat sdk is ",
+              "text" : " the chat SDK start to get user information of the current user by its token, afterward, it will receive a user object. Then, it will tell you that Chat SDK is ",
               "type" : "text"
             },
             {
@@ -81,7 +82,7 @@
               "type" : "codeVoice"
             },
             {
-              "text" : " unless is stay in one of ",
+              "text" : " unless it stays in either ",
               "type" : "text"
             },
             {
@@ -105,6 +106,42 @@
                 }
               ],
               "type" : "strong"
+            },
+            {
+              "text" : ".",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "The ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " and ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatManager",
+              "isActive" : true,
+              "type" : "reference"
+            },
+            {
+              "text" : " are in the whole things you need in the Chat SDK, so you should take into consideration that these two as the way to connect and get your answer. An you will recieve a an event\/error if there is one in ",
+              "type" : "text"
+            },
+            {
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatDelegate",
+              "isActive" : true,
+              "type" : "reference"
             },
             {
               "text" : ".",
@@ -151,11 +188,11 @@
         "doc:\/\/Chat\/documentation\/Chat\/ManagingContacts",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingFiles",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingUsers",
-        "doc:\/\/Chat\/documentation\/Chat\/ManagingProfile",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingTags",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingBots",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingAssistants",
-        "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps"
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps",
+        "doc:\/\/Chat\/documentation\/Chat\/ErrorCodes"
       ],
       "title" : "Essentials"
     },
@@ -167,25 +204,52 @@
       "title" : "Important classes"
     },
     {
+      "generated" : true,
       "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingSystem"
+      ],
+      "title" : "Articles"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/AsyncManager",
         "doc:\/\/Chat\/documentation\/Chat\/CacheFileManager",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatCoordinator",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation",
         "doc:\/\/Chat\/documentation\/Chat\/ChatManager",
-        "doc:\/\/Chat\/documentation\/Chat\/DiskStatus"
+        "doc:\/\/Chat\/documentation\/Chat\/DiskStatus",
+        "doc:\/\/Chat\/documentation\/Chat\/InMemoryReaction",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageInMemoryReaction"
       ],
       "title" : "Classes"
     },
     {
       "identifiers" : [
-        "doc:\/\/Chat\/documentation\/Chat\/CacheFileManagerProtocol",
-        "doc:\/\/Chat\/documentation\/Chat\/FileManagerProtocol"
+        "doc:\/\/Chat\/documentation\/Chat\/AssistantProtocol",
+        "doc:\/\/Chat\/documentation\/Chat\/BotProtocol",
+        "doc:\/\/Chat\/documentation\/Chat\/CallMessageProtocol",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol",
+        "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol",
+        "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesProtocol",
+        "doc:\/\/Chat\/documentation\/Chat\/FileProtocol",
+        "doc:\/\/Chat\/documentation\/Chat\/InMemoryReactionProtocol",
+        "doc:\/\/Chat\/documentation\/Chat\/MapProtocol",
+        "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol",
+        "doc:\/\/Chat\/documentation\/Chat\/ParticipantProtocol",
+        "doc:\/\/Chat\/documentation\/Chat\/ReactionProtocol",
+        "doc:\/\/Chat\/documentation\/Chat\/SystemProtocol",
+        "doc:\/\/Chat\/documentation\/Chat\/TagProtocol",
+        "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol",
+        "doc:\/\/Chat\/documentation\/Chat\/UserProtocol",
+        "doc:\/\/Chat\/documentation\/Chat\/WebRTCClientDelegate"
       ],
       "title" : "Protocols"
     },
     {
       "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/ChatMessage",
         "doc:\/\/Chat\/documentation\/Chat\/DeviceInfo",
-        "doc:\/\/Chat\/documentation\/Chat\/DownloadFileProgress",
-        "doc:\/\/Chat\/documentation\/Chat\/UploadFileProgress"
+        "doc:\/\/Chat\/documentation\/Chat\/ReactionInMemoryCopy"
       ],
       "title" : "Structures"
     },
@@ -195,16 +259,11 @@
         "doc:\/\/Chat\/documentation\/Chat\/CompletionType",
         "doc:\/\/Chat\/documentation\/Chat\/CompletionTypeNoneDecodeable",
         "doc:\/\/Chat\/documentation\/Chat\/CompletionTypeWithoutUniqueId",
-        "doc:\/\/Chat\/documentation\/Chat\/DownloadFileCompletionType",
-        "doc:\/\/Chat\/documentation\/Chat\/DownloadImageCompletionType",
-        "doc:\/\/Chat\/documentation\/Chat\/DownloadProgressType",
         "doc:\/\/Chat\/documentation\/Chat\/OnDeliveryType",
         "doc:\/\/Chat\/documentation\/Chat\/OnSeenType",
         "doc:\/\/Chat\/documentation\/Chat\/OnSentType",
         "doc:\/\/Chat\/documentation\/Chat\/UniqueIdResultType",
-        "doc:\/\/Chat\/documentation\/Chat\/UniqueIdsResultType",
-        "doc:\/\/Chat\/documentation\/Chat\/UploadCompletionType",
-        "doc:\/\/Chat\/documentation\/Chat\/UploadFileProgressType"
+        "doc:\/\/Chat\/documentation\/Chat\/UniqueIdsResultType"
       ],
       "title" : "Type Aliases"
     },
@@ -212,17 +271,34 @@
       "identifiers" : [
         "doc:\/\/Chat\/documentation\/Chat\/AssistantEventTypes",
         "doc:\/\/Chat\/documentation\/Chat\/BotEventTypes",
+        "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes",
         "doc:\/\/Chat\/documentation\/Chat\/ChatEventType",
         "doc:\/\/Chat\/documentation\/Chat\/ContactEventTypes",
         "doc:\/\/Chat\/documentation\/Chat\/DownloaUploadAction",
-        "doc:\/\/Chat\/documentation\/Chat\/FileEventType",
+        "doc:\/\/Chat\/documentation\/Chat\/DownloadEventTypes",
+        "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState",
+        "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState",
+        "doc:\/\/Chat\/documentation\/Chat\/MapEventTypes",
         "doc:\/\/Chat\/documentation\/Chat\/MessageEventTypes",
+        "doc:\/\/Chat\/documentation\/Chat\/ParticipantEventTypes",
+        "doc:\/\/Chat\/documentation\/Chat\/PeerConnectionState",
+        "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes",
+        "doc:\/\/Chat\/documentation\/Chat\/SignalingState",
         "doc:\/\/Chat\/documentation\/Chat\/SystemEventTypes",
         "doc:\/\/Chat\/documentation\/Chat\/TagEventTypes",
         "doc:\/\/Chat\/documentation\/Chat\/ThreadEventTypes",
+        "doc:\/\/Chat\/documentation\/Chat\/UploadEventTypes",
         "doc:\/\/Chat\/documentation\/Chat\/UserEventTypes"
       ],
       "title" : "Enumerations"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/Async",
+        "doc:\/\/Chat\/documentation\/Chat\/ChatDTO",
+        "doc:\/\/Chat\/documentation\/Chat\/Foundation"
+      ],
+      "title" : "Extended Modules"
     }
   ],
   "variants" : [
@@ -256,7 +332,7 @@
 "doc://Chat/documentation/Chat": {
   "abstract" : [
     {
-      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
       "type" : "text"
     }
   ],
@@ -304,6 +380,82 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/assistanteventtypes"
 },
+"doc://Chat/documentation/Chat/AssistantProtocol": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "AssistantProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AssistantProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "AssistantProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "AssistantProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/assistantprotocol"
+},
+"doc://Chat/documentation/Chat/Async": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Async",
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Async",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/async"
+},
+"doc://Chat/documentation/Chat/AsyncManager": {
+  "abstract" : [
+    {
+      "text" : "AsyncManager intermediate between chat and async socket server.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "AsyncManager"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AsyncManager",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "AsyncManager"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "AsyncManager",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/asyncmanager"
+},
 "doc://Chat/documentation/Chat/BotEventTypes": {
   "abstract" : [
 
@@ -334,6 +486,37 @@
   "title" : "BotEventTypes",
   "type" : "topic",
   "url" : "\/documentation\/chat\/boteventtypes"
+},
+"doc://Chat/documentation/Chat/BotProtocol": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "BotProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/BotProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "BotProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "BotProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/botprotocol"
 },
 "doc://Chat/documentation/Chat/CacheFileManager": {
   "abstract" : [
@@ -366,37 +549,6 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/cachefilemanager"
 },
-"doc://Chat/documentation/Chat/CacheFileManagerProtocol": {
-  "abstract" : [
-
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "protocol"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "CacheFileManagerProtocol"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CacheFileManagerProtocol",
-  "kind" : "symbol",
-  "navigatorTitle" : [
-    {
-      "kind" : "identifier",
-      "text" : "CacheFileManagerProtocol"
-    }
-  ],
-  "role" : "symbol",
-  "title" : "CacheFileManagerProtocol",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/cachefilemanagerprotocol"
-},
 "doc://Chat/documentation/Chat/CacheResponseType": {
   "abstract" : [
 
@@ -428,6 +580,71 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/cacheresponsetype"
 },
+"doc://Chat/documentation/Chat/CallEventTypes": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "CallEventTypes"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallEventTypes",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "CallEventTypes"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "CallEventTypes",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/calleventtypes"
+},
+"doc://Chat/documentation/Chat/CallMessageProtocol": {
+  "abstract" : [
+    {
+      "text" : "For sending any call messages to ChatCall SDK.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "CallMessageProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/CallMessageProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "CallMessageProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "CallMessageProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/callmessageprotocol"
+},
 "doc://Chat/documentation/Chat/Chat": {
   "abstract" : [
 
@@ -435,7 +652,7 @@
   "fragments" : [
     {
       "kind" : "keyword",
-      "text" : "class"
+      "text" : "protocol"
     },
     {
       "kind" : "text",
@@ -458,6 +675,48 @@
   "title" : "Chat",
   "type" : "topic",
   "url" : "\/documentation\/chat\/chat"
+},
+"doc://Chat/documentation/Chat/ChatCoordinator": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ChatCoordinator"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatCoordinator",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ChatCoordinator"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ChatCoordinator",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatcoordinator"
+},
+"doc://Chat/documentation/Chat/ChatDTO": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatDTO",
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "ChatDTO",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatdto"
 },
 "doc://Chat/documentation/Chat/ChatDelegate": {
   "abstract" : [
@@ -521,6 +780,68 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/chateventtype"
 },
+"doc://Chat/documentation/Chat/ChatImplementation": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ChatImplementation"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatImplementation",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ChatImplementation"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ChatImplementation",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatimplementation"
+},
+"doc://Chat/documentation/Chat/ChatInternalProtocol": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ChatInternalProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatInternalProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ChatInternalProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ChatInternalProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatinternalprotocol"
+},
 "doc://Chat/documentation/Chat/ChatManager": {
   "abstract" : [
 
@@ -551,6 +872,37 @@
   "title" : "ChatManager",
   "type" : "topic",
   "url" : "\/documentation\/chat\/chatmanager"
+},
+"doc://Chat/documentation/Chat/ChatMessage": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "struct"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ChatMessage"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatMessage",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ChatMessage"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ChatMessage",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/chatmessage"
 },
 "doc://Chat/documentation/Chat/CompletionType": {
   "abstract" : [
@@ -676,6 +1028,37 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/contacteventtypes"
 },
+"doc://Chat/documentation/Chat/ContactProtocol": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ContactProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ContactProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ContactProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/contactprotocol"
+},
 "doc://Chat/documentation/Chat/DeviceInfo": {
   "abstract" : [
 
@@ -769,131 +1152,7 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/downloauploadaction"
 },
-"doc://Chat/documentation/Chat/DownloadFileCompletionType": {
-  "abstract" : [
-
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "typealias"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "DownloadFileCompletionType"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DownloadFileCompletionType",
-  "kind" : "symbol",
-  "navigatorTitle" : [
-    {
-      "kind" : "identifier",
-      "text" : "DownloadFileCompletionType"
-    }
-  ],
-  "role" : "symbol",
-  "title" : "DownloadFileCompletionType",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/downloadfilecompletiontype"
-},
-"doc://Chat/documentation/Chat/DownloadFileProgress": {
-  "abstract" : [
-
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "struct"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "DownloadFileProgress"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DownloadFileProgress",
-  "kind" : "symbol",
-  "navigatorTitle" : [
-    {
-      "kind" : "identifier",
-      "text" : "DownloadFileProgress"
-    }
-  ],
-  "role" : "symbol",
-  "title" : "DownloadFileProgress",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/downloadfileprogress"
-},
-"doc://Chat/documentation/Chat/DownloadImageCompletionType": {
-  "abstract" : [
-
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "typealias"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "DownloadImageCompletionType"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DownloadImageCompletionType",
-  "kind" : "symbol",
-  "navigatorTitle" : [
-    {
-      "kind" : "identifier",
-      "text" : "DownloadImageCompletionType"
-    }
-  ],
-  "role" : "symbol",
-  "title" : "DownloadImageCompletionType",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/downloadimagecompletiontype"
-},
-"doc://Chat/documentation/Chat/DownloadProgressType": {
-  "abstract" : [
-
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "typealias"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "DownloadProgressType"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DownloadProgressType",
-  "kind" : "symbol",
-  "navigatorTitle" : [
-    {
-      "kind" : "identifier",
-      "text" : "DownloadProgressType"
-    }
-  ],
-  "role" : "symbol",
-  "title" : "DownloadProgressType",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/downloadprogresstype"
-},
-"doc://Chat/documentation/Chat/FileEventType": {
+"doc://Chat/documentation/Chat/DownloadEventTypes": {
   "abstract" : [
 
   ],
@@ -908,23 +1167,37 @@
     },
     {
       "kind" : "identifier",
-      "text" : "FileEventType"
+      "text" : "DownloadEventTypes"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileEventType",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/DownloadEventTypes",
   "kind" : "symbol",
   "navigatorTitle" : [
     {
       "kind" : "identifier",
-      "text" : "FileEventType"
+      "text" : "DownloadEventTypes"
     }
   ],
   "role" : "symbol",
-  "title" : "FileEventType",
+  "title" : "DownloadEventTypes",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/fileeventtype"
+  "url" : "\/documentation\/chat\/downloadeventtypes"
 },
-"doc://Chat/documentation/Chat/FileManagerProtocol": {
+"doc://Chat/documentation/Chat/ErrorCodes": {
+  "abstract" : [
+    {
+      "text" : "List of all error codes locally in the chat SDK for server errors.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ErrorCodes",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Error Codes",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/errorcodes"
+},
+"doc://Chat/documentation/Chat/ExportMessagesProtocol": {
   "abstract" : [
 
   ],
@@ -939,32 +1212,204 @@
     },
     {
       "kind" : "identifier",
-      "text" : "FileManagerProtocol"
+      "text" : "ExportMessagesProtocol"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileManagerProtocol",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ExportMessagesProtocol",
   "kind" : "symbol",
   "navigatorTitle" : [
     {
       "kind" : "identifier",
-      "text" : "FileManagerProtocol"
+      "text" : "ExportMessagesProtocol"
     }
   ],
   "role" : "symbol",
-  "title" : "FileManagerProtocol",
+  "title" : "ExportMessagesProtocol",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/filemanagerprotocol"
+  "url" : "\/documentation\/chat\/exportmessagesprotocol"
 },
-"doc://Chat/documentation/Chat/GettingStarted": {
+"doc://Chat/documentation/Chat/FileProtocol": {
   "abstract" : [
 
   ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "FileProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/FileProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "FileProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "FileProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/fileprotocol"
+},
+"doc://Chat/documentation/Chat/Foundation": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Foundation",
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Foundation",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/foundation"
+},
+"doc://Chat/documentation/Chat/GettingStarted": {
+  "abstract" : [
+    {
+      "text" : "Getting started with the Chat SDK and some tips and tricks to configure it properly.",
+      "type" : "text"
+    }
+  ],
   "identifier" : "doc:\/\/Chat\/documentation\/Chat\/GettingStarted",
   "kind" : "article",
-  "role" : "collectionGroup",
+  "role" : "article",
   "title" : "Getting Started",
   "type" : "topic",
   "url" : "\/documentation\/chat\/gettingstarted"
+},
+"doc://Chat/documentation/Chat/IceConnectionState": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "IceConnectionState"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceConnectionState",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "IceConnectionState"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "IceConnectionState",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/iceconnectionstate"
+},
+"doc://Chat/documentation/Chat/IceGatheringState": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "IceGatheringState"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/IceGatheringState",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "IceGatheringState"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "IceGatheringState",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/icegatheringstate"
+},
+"doc://Chat/documentation/Chat/InMemoryReaction": {
+  "abstract" : [
+    {
+      "text" : "In Memory reactions.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "InMemoryReaction"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/InMemoryReaction",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "InMemoryReaction"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "InMemoryReaction",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/inmemoryreaction"
+},
+"doc://Chat/documentation/Chat/InMemoryReactionProtocol": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "InMemoryReactionProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/InMemoryReactionProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "InMemoryReactionProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "InMemoryReactionProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/inmemoryreactionprotocol"
 },
 "doc://Chat/documentation/Chat/ManagingAssistants": {
   "abstract" : [
@@ -1050,19 +1495,19 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/managingmessages"
 },
-"doc://Chat/documentation/Chat/ManagingProfile": {
+"doc://Chat/documentation/Chat/ManagingSystem": {
   "abstract" : [
     {
-      "text" : "Get current user details, update, set profile.",
+      "text" : "Manage system events.",
       "type" : "text"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingProfile",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingSystem",
   "kind" : "article",
   "role" : "article",
-  "title" : "Managing Profile",
+  "title" : "Managing System",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/managingprofile"
+  "url" : "\/documentation\/chat\/managingsystem"
 },
 "doc://Chat/documentation/Chat/ManagingTags": {
   "abstract" : [
@@ -1081,7 +1526,7 @@
 "doc://Chat/documentation/Chat/ManagingThreads": {
   "abstract" : [
     {
-      "text" : "Managing threads create P2P, Group, Channel or delete edit and so many more.",
+      "text" : "Managing threads, create P2P, Group, Channel or delete edit and so many more.",
       "type" : "text"
     }
   ],
@@ -1105,6 +1550,68 @@
   "title" : "Managing Users",
   "type" : "topic",
   "url" : "\/documentation\/chat\/managingusers"
+},
+"doc://Chat/documentation/Chat/MapEventTypes": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "MapEventTypes"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MapEventTypes",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "MapEventTypes"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "MapEventTypes",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/mapeventtypes"
+},
+"doc://Chat/documentation/Chat/MapProtocol": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "MapProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MapProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "MapProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "MapProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/mapprotocol"
 },
 "doc://Chat/documentation/Chat/MessageEventTypes": {
   "abstract" : [
@@ -1136,6 +1643,68 @@
   "title" : "MessageEventTypes",
   "type" : "topic",
   "url" : "\/documentation\/chat\/messageeventtypes"
+},
+"doc://Chat/documentation/Chat/MessageInMemoryReaction": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "MessageInMemoryReaction"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageInMemoryReaction",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "MessageInMemoryReaction"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "MessageInMemoryReaction",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageinmemoryreaction"
+},
+"doc://Chat/documentation/Chat/MessageProtocol": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "MessageProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/MessageProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "MessageProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "MessageProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/messageprotocol"
 },
 "doc://Chat/documentation/Chat/OnDeliveryType": {
   "abstract" : [
@@ -1230,6 +1799,223 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/onsenttype"
 },
+"doc://Chat/documentation/Chat/ParticipantEventTypes": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ParticipantEventTypes"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ParticipantEventTypes",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ParticipantEventTypes"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ParticipantEventTypes",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/participanteventtypes"
+},
+"doc://Chat/documentation/Chat/ParticipantProtocol": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ParticipantProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ParticipantProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ParticipantProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ParticipantProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/participantprotocol"
+},
+"doc://Chat/documentation/Chat/PeerConnectionState": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "PeerConnectionState"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/PeerConnectionState",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "PeerConnectionState"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "PeerConnectionState",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/peerconnectionstate"
+},
+"doc://Chat/documentation/Chat/ReactionEventTypes": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ReactionEventTypes"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionEventTypes",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ReactionEventTypes"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ReactionEventTypes",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/reactioneventtypes"
+},
+"doc://Chat/documentation/Chat/ReactionInMemoryCopy": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "struct"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ReactionInMemoryCopy"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionInMemoryCopy",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ReactionInMemoryCopy"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ReactionInMemoryCopy",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/reactioninmemorycopy"
+},
+"doc://Chat/documentation/Chat/ReactionProtocol": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ReactionProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ReactionProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ReactionProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ReactionProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/reactionprotocol"
+},
+"doc://Chat/documentation/Chat/SignalingState": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "SignalingState"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SignalingState",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "SignalingState"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "SignalingState",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/signalingstate"
+},
 "doc://Chat/documentation/Chat/SystemEventTypes": {
   "abstract" : [
 
@@ -1260,6 +2046,37 @@
   "title" : "SystemEventTypes",
   "type" : "topic",
   "url" : "\/documentation\/chat\/systemeventtypes"
+},
+"doc://Chat/documentation/Chat/SystemProtocol": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "SystemProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SystemProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "SystemProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "SystemProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/systemprotocol"
 },
 "doc://Chat/documentation/Chat/TagEventTypes": {
   "abstract" : [
@@ -1292,6 +2109,37 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/tageventtypes"
 },
+"doc://Chat/documentation/Chat/TagProtocol": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "TagProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/TagProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "TagProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "TagProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/tagprotocol"
+},
 "doc://Chat/documentation/Chat/ThreadEventTypes": {
   "abstract" : [
 
@@ -1322,6 +2170,37 @@
   "title" : "ThreadEventTypes",
   "type" : "topic",
   "url" : "\/documentation\/chat\/threadeventtypes"
+},
+"doc://Chat/documentation/Chat/ThreadProtocol": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ThreadProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ThreadProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ThreadProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ThreadProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/threadprotocol"
 },
 "doc://Chat/documentation/Chat/UniqueIdResultType": {
   "abstract" : [
@@ -1385,14 +2264,14 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/uniqueidsresulttype"
 },
-"doc://Chat/documentation/Chat/UploadCompletionType": {
+"doc://Chat/documentation/Chat/UploadEventTypes": {
   "abstract" : [
 
   ],
   "fragments" : [
     {
       "kind" : "keyword",
-      "text" : "typealias"
+      "text" : "enum"
     },
     {
       "kind" : "text",
@@ -1400,83 +2279,21 @@
     },
     {
       "kind" : "identifier",
-      "text" : "UploadCompletionType"
+      "text" : "UploadEventTypes"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UploadCompletionType",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UploadEventTypes",
   "kind" : "symbol",
   "navigatorTitle" : [
     {
       "kind" : "identifier",
-      "text" : "UploadCompletionType"
+      "text" : "UploadEventTypes"
     }
   ],
   "role" : "symbol",
-  "title" : "UploadCompletionType",
+  "title" : "UploadEventTypes",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/uploadcompletiontype"
-},
-"doc://Chat/documentation/Chat/UploadFileProgress": {
-  "abstract" : [
-
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "struct"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "UploadFileProgress"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UploadFileProgress",
-  "kind" : "symbol",
-  "navigatorTitle" : [
-    {
-      "kind" : "identifier",
-      "text" : "UploadFileProgress"
-    }
-  ],
-  "role" : "symbol",
-  "title" : "UploadFileProgress",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/uploadfileprogress"
-},
-"doc://Chat/documentation/Chat/UploadFileProgressType": {
-  "abstract" : [
-
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "typealias"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "UploadFileProgressType"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UploadFileProgressType",
-  "kind" : "symbol",
-  "navigatorTitle" : [
-    {
-      "kind" : "identifier",
-      "text" : "UploadFileProgressType"
-    }
-  ],
-  "role" : "symbol",
-  "title" : "UploadFileProgressType",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/uploadfileprogresstype"
+  "url" : "\/documentation\/chat\/uploadeventtypes"
 },
 "doc://Chat/documentation/Chat/UserEventTypes": {
   "abstract" : [
@@ -1508,6 +2325,68 @@
   "title" : "UserEventTypes",
   "type" : "topic",
   "url" : "\/documentation\/chat\/usereventtypes"
+},
+"doc://Chat/documentation/Chat/UserProtocol": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "UserProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/UserProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "UserProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "UserProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/userprotocol"
+},
+"doc://Chat/documentation/Chat/WebRTCClientDelegate": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "WebRTCClientDelegate"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/WebRTCClientDelegate",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "WebRTCClientDelegate"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "WebRTCClientDelegate",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/webrtcclientdelegate"
 },
 "icon.png": {
   "alt" : "App icon.",

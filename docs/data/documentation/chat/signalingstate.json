@@ -1,0 +1,502 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/SignalingState"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "s:4Chat14SignalingStateO",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "enum"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "text" : "SignalingState"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "navigatorTitle" : [
+      {
+        "kind" : "identifier",
+        "text" : "SignalingState"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Enumeration",
+    "symbolKind" : "enum",
+    "title" : "SignalingState"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "enum"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "identifier",
+              "text" : "SignalingState"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    }
+  ],
+  "relationshipsSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/Se",
+        "doc:\/\/Chat\/SE",
+        "doc:\/\/Chat\/SQ",
+        "doc:\/\/Chat\/SH"
+      ],
+      "kind" : "relationships",
+      "title" : "Conforms To",
+      "type" : "conformsTo"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/closed",
+        "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/haveLocalOffer",
+        "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/haveLocalPrAnswer",
+        "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/haveRemoteOffer",
+        "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/haveRemotePrAnswer",
+        "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/stable",
+        "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/unknown"
+      ],
+      "title" : "Enumeration Cases"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/init(from:)",
+        "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/init(rawValue:)"
+      ],
+      "title" : "Initializers"
+    },
+    {
+      "generated" : true,
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/Encodable-Implementations",
+        "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/Equatable-Implementations"
+      ],
+      "title" : "Default Implementations"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/signalingstate"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/SE": {
+  "identifier" : "doc:\/\/Chat\/SE",
+  "title" : "Swift.Encodable",
+  "type" : "unresolvable"
+},
+"doc://Chat/SH": {
+  "identifier" : "doc:\/\/Chat\/SH",
+  "title" : "Swift.Hashable",
+  "type" : "unresolvable"
+},
+"doc://Chat/SQ": {
+  "identifier" : "doc:\/\/Chat\/SQ",
+  "title" : "Swift.Equatable",
+  "type" : "unresolvable"
+},
+"doc://Chat/Se": {
+  "identifier" : "doc:\/\/Chat\/Se",
+  "title" : "Swift.Decodable",
+  "type" : "unresolvable"
+},
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/SignalingState": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "enum"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "SignalingState"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SignalingState",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "SignalingState"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "SignalingState",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/signalingstate"
+},
+"doc://Chat/documentation/Chat/SignalingState/Encodable-Implementations": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/Encodable-Implementations",
+  "kind" : "article",
+  "role" : "collectionGroup",
+  "title" : "Encodable Implementations",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/signalingstate\/encodable-implementations"
+},
+"doc://Chat/documentation/Chat/SignalingState/Equatable-Implementations": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/Equatable-Implementations",
+  "kind" : "article",
+  "role" : "collectionGroup",
+  "title" : "Equatable Implementations",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/signalingstate\/equatable-implementations"
+},
+"doc://Chat/documentation/Chat/SignalingState/closed": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "closed"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/closed",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "SignalingState.closed",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/signalingstate\/closed"
+},
+"doc://Chat/documentation/Chat/SignalingState/haveLocalOffer": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "haveLocalOffer"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/haveLocalOffer",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "SignalingState.haveLocalOffer",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/signalingstate\/havelocaloffer"
+},
+"doc://Chat/documentation/Chat/SignalingState/haveLocalPrAnswer": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "haveLocalPrAnswer"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/haveLocalPrAnswer",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "SignalingState.haveLocalPrAnswer",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/signalingstate\/havelocalpranswer"
+},
+"doc://Chat/documentation/Chat/SignalingState/haveRemoteOffer": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "haveRemoteOffer"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/haveRemoteOffer",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "SignalingState.haveRemoteOffer",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/signalingstate\/haveremoteoffer"
+},
+"doc://Chat/documentation/Chat/SignalingState/haveRemotePrAnswer": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "haveRemotePrAnswer"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/haveRemotePrAnswer",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "SignalingState.haveRemotePrAnswer",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/signalingstate\/haveremotepranswer"
+},
+"doc://Chat/documentation/Chat/SignalingState/init(from:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "identifier",
+      "text" : "init"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "from"
+    },
+    {
+      "kind" : "text",
+      "text" : ": any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:s7DecoderP",
+      "text" : "Decoder"
+    },
+    {
+      "kind" : "text",
+      "text" : ") "
+    },
+    {
+      "kind" : "keyword",
+      "text" : "throws"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/init(from:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "init(from:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/signalingstate\/init(from:)"
+},
+"doc://Chat/documentation/Chat/SignalingState/init(rawValue:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "identifier",
+      "text" : "init"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "rawValue"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Si",
+      "text" : "Int"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/init(rawValue:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "init(rawValue:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/signalingstate\/init(rawvalue:)"
+},
+"doc://Chat/documentation/Chat/SignalingState/stable": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "stable"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/stable",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "SignalingState.stable",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/signalingstate\/stable"
+},
+"doc://Chat/documentation/Chat/SignalingState/unknown": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "case"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "unknown"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/SignalingState\/unknown",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "SignalingState.unknown",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/signalingstate\/unknown"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

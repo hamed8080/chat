@@ -1,0 +1,592 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "s:4Chat15ContactProtocolP",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "protocol"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "text" : "ContactProtocol"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "navigatorTitle" : [
+      {
+        "kind" : "identifier",
+        "text" : "ContactProtocol"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Protocol",
+    "symbolKind" : "protocol",
+    "title" : "ContactProtocol"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "protocol"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "identifier",
+              "text" : "ContactProtocol"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/add(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/addAll(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/block(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/get(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/getBlockedList(_:)-3duud",
+        "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/notSeen(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/remove(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/search(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/sync()",
+        "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/unBlock(_:)"
+      ],
+      "title" : "Instance Methods"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/contactprotocol"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/ContactProtocol": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "protocol"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ContactProtocol"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ContactProtocol"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ContactProtocol",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/contactprotocol"
+},
+"doc://Chat/documentation/Chat/ContactProtocol/add(_:)": {
+  "abstract" : [
+    {
+      "text" : "Add a new contact.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "add"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO17AddContactRequestV",
+      "text" : "AddContactRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/add(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "add(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/contactprotocol\/add(_:)"
+},
+"doc://Chat/documentation/Chat/ContactProtocol/addAll(_:)": {
+  "abstract" : [
+    {
+      "text" : "Add multiple contacts at once.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "addAll"
+    },
+    {
+      "kind" : "text",
+      "text" : "(["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO17AddContactRequestV",
+      "text" : "AddContactRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : "])"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/addAll(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "addAll(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/contactprotocol\/addall(_:)"
+},
+"doc://Chat/documentation/Chat/ContactProtocol/block(_:)": {
+  "abstract" : [
+    {
+      "text" : "Block a specific contact.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "block"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO12BlockRequestV",
+      "text" : "BlockRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/block(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "block(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/contactprotocol\/block(_:)"
+},
+"doc://Chat/documentation/Chat/ContactProtocol/get(_:)": {
+  "abstract" : [
+    {
+      "text" : "Get contacts of current user.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "get"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO15ContactsRequestV",
+      "text" : "ContactsRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/get(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "get(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/contactprotocol\/get(_:)"
+},
+"doc://Chat/documentation/Chat/ContactProtocol/getBlockedList(_:)-3duud": {
+  "abstract" : [
+    {
+      "text" : "Get the list of blocked contacts.",
+      "type" : "text"
+    }
+  ],
+  "defaultImplementations" : 1,
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "getBlockedList"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO18BlockedListRequestV",
+      "text" : "BlockedListRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/getBlockedList(_:)-3duud",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "getBlockedList(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/contactprotocol\/getblockedlist(_:)-3duud"
+},
+"doc://Chat/documentation/Chat/ContactProtocol/notSeen(_:)": {
+  "abstract" : [
+    {
+      "text" : "Check the last time a user opened the application.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "notSeen"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO22NotSeenDurationRequestV",
+      "text" : "NotSeenDurationRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/notSeen(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "notSeen(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/contactprotocol\/notseen(_:)"
+},
+"doc://Chat/documentation/Chat/ContactProtocol/remove(_:)": {
+  "abstract" : [
+    {
+      "text" : "Remove a contact from your circle of contacts.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "remove"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO21RemoveContactsRequestV",
+      "text" : "RemoveContactsRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/remove(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "remove(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/contactprotocol\/remove(_:)"
+},
+"doc://Chat/documentation/Chat/ContactProtocol/search(_:)": {
+  "abstract" : [
+    {
+      "text" : "Search inside contacts.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "search"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO15ContactsRequestV",
+      "text" : "ContactsRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/search(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "search(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/contactprotocol\/search(_:)"
+},
+"doc://Chat/documentation/Chat/ContactProtocol/sync()": {
+  "abstract" : [
+    {
+      "text" : "Sync contacts with server.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "sync"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/sync()",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "sync()",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/contactprotocol\/sync()"
+},
+"doc://Chat/documentation/Chat/ContactProtocol/unBlock(_:)": {
+  "abstract" : [
+    {
+      "text" : "Unblock a blcked contact.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "unBlock"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO14UnBlockRequestV",
+      "text" : "UnBlockRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/unBlock(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "unBlock(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/contactprotocol\/unblock(_:)"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

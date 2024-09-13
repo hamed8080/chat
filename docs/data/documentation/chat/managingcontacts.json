@@ -43,7 +43,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/getContacts(_:completion:cacheResponse:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/get(_:)",
               "isActive" : true,
               "type" : "reference"
             },
@@ -65,11 +65,8 @@
         },
         {
           "code" : [
-            "Chat.sharedInstance.getContacts(.init(count: 50, offset: 50)) { contacts, uniqueId, error in",
-            "    if error == nil{",
-            "        \/\/ Write your code",
-            "    }",
-            "}"
+            "let req = ContactsRequest(count: 50, offset: 50)",
+            "ChatManager.activeInstance?.contact.get(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -87,7 +84,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/getBlockedContacts(_:completion:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/getBlockedList(_:)-3duud",
               "isActive" : true,
               "type" : "reference"
             },
@@ -109,11 +106,8 @@
         },
         {
           "code" : [
-            "Chat.sharedInstance.getBlockedContacts(.init(count: 50, offset: 50)) { contacts, uniqueId, error in",
-            "    if error == nil{",
-            "        \/\/ Write your code",
-            "    }",
-            "}"
+            "let req = BlockedListRequest(count: 50, offset: 50)",
+            "ChatManager.activeInstance?.contact.getBlockedList(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -131,7 +125,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/addContact(_:completion:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/add(_:)",
               "isActive" : true,
               "type" : "reference"
             },
@@ -176,11 +170,7 @@
         },
         {
           "code" : [
-            "Chat.sharedInstance.addContact(req) { contacts, uniqueId, error in",
-            "    if error == nil{",
-            "        \/\/ Write your code",
-            "    }",
-            "}"
+            "ChatManager.activeInstance?.contact.add(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -198,7 +188,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/addContact(_:completion:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/addAll(_:)",
               "isActive" : true,
               "type" : "reference"
             },
@@ -214,11 +204,7 @@
             "let contact1 = AddContactRequest(cellphoneNumber: \"+1XXXXXX\", firstName: \"firstName1\", lastName: \"lastName1\")",
             "let contact2 = AddContactRequest(cellphoneNumber: \"+1XXXXXX\", firstName: \"firstName2\", lastName: \"lastName2\")",
             "let contacts = [contact1, contact2]",
-            "Chat.sharedInstance.addContacts(contacts) { contacts, uniqueId, error in",
-            "    if error == nil{",
-            "        \/\/ Write your code",
-            "    }",
-            "}"
+            "ChatManager.activeInstance?.contact.addAll(contacts)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -236,7 +222,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/searchContacts(_:completion:cacheResponse:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/search(_:)",
               "isActive" : true,
               "type" : "reference"
             },
@@ -249,11 +235,8 @@
         },
         {
           "code" : [
-            "Chat.sharedInstance.searchContacts(.init(query: \"John\")) { contacts, uniqueId, pagination, error in",
-            "    if error == nil{",
-            "        \/\/ Write your code",
-            "    }",
-            "}"
+            "let req = ContactsRequest(query: \"John\")",
+            "ChatManager.activeInstance?.contact.search(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -271,7 +254,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/removeContact(_:completion:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/remove(_:)",
               "isActive" : true,
               "type" : "reference"
             },
@@ -284,11 +267,8 @@
         },
         {
           "code" : [
-            "Chat.sharedInstance.searchContacts(.init(query: \"John\")) { deletd, uniqueId, error in",
-            "    if deleted == true{",
-            "        \/\/ Write your code",
-            "    }",
-            "}"
+            "let req = RemoveContactsRequest(query: \"John\")",
+            "ChatManager.activeInstance?.contact.remove(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -306,7 +286,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/contactNotSeen(_:completion:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/notSeen(_:)",
               "isActive" : true,
               "type" : "reference"
             },
@@ -319,11 +299,8 @@
         },
         {
           "code" : [
-            "Chat.sharedInstance.contactNotSeen(.init(userIds:[123456, 67890])) { users, uniqueId, error in",
-            "    if error == nil{",
-            "        \/\/ Write your code",
-            "    }",
-            "}"
+            "let req = NotSeenDurationRequest(userIds:[id1, id2])",
+            "ChatManager.activeInstance?.contact.notSeen(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -341,7 +318,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/syncContacts(completion:uniqueIdsResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/sync()",
               "isActive" : true,
               "type" : "reference"
             },
@@ -354,11 +331,7 @@
         },
         {
           "code" : [
-            "Chat.sharedInstance.syncContacts { contacts, uniqueId, error in",
-            "    if error == nil{",
-            "        \/\/ Write your code",
-            "    }",
-            "}"
+            "ChatManager.activeInstance?.contact.sync()"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -372,15 +345,16 @@
         {
           "inlineContent" : [
             {
-              "text" : "To get to know when was the last time a user was online you should use ",
+              "text" : "For updaing a contact you should use the same method ",
               "type" : "text"
             },
             {
-              "code" : "Chat\/updateContact(_:completion:uniqueIdsResult:)",
-              "type" : "codeVoice"
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/add(_:)",
+              "isActive" : true,
+              "type" : "reference"
             },
             {
-              "text" : " like this:",
+              "text" : " like this, and it will update the contact if it can find a match, otherwise it will add it as a new contact:",
               "type" : "text"
             }
           ],
@@ -388,11 +362,8 @@
         },
         {
           "code" : [
-            "Chat.sharedInstance.updateContact { contacts, uniqueId, error in",
-            "    if error == nil{",
-            "        \/\/ Write your code",
-            "    }",
-            "}"
+            "let req = AddContactRequest(firstName: \"firstName\", lastName: \"lastName\", username: \"userName\")",
+            "ChatManager.activeInstance?.contact.add(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -410,7 +381,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/blockContact(_:completion:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/block(_:)",
               "isActive" : true,
               "type" : "reference"
             },
@@ -423,11 +394,8 @@
         },
         {
           "code" : [
-            "Chat.sharedInstance.blockContact(.init(contactId:123456)) { blockedContact, uniqueId, error in",
-            "    if error == nil{",
-            "        \/\/ Write your code",
-            "    }",
-            "}"
+            "let req = BlockRequest(contactId: contactId)",
+            "ChatManager.activeInstance?.contact.block(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -445,7 +413,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/unBlockContact(_:completion:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/unBlock(_:)",
               "isActive" : true,
               "type" : "reference"
             },
@@ -458,11 +426,8 @@
         },
         {
           "code" : [
-            "Chat.sharedInstance.unBlockContact(.init(contactId:123456)) { blockedContact, uniqueId, error in",
-            "    if error == nil{",
-            "        \/\/ Write your code",
-            "    }",
-            "}"
+            "let req = UnBlockRequest(contactId: contactId)",
+            "ChatManager.activeInstance?.contact.unBlock(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -488,11 +453,11 @@
         "doc:\/\/Chat\/documentation\/Chat\/ManagingMessages",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingFiles",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingUsers",
-        "doc:\/\/Chat\/documentation\/Chat\/ManagingProfile",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingTags",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingBots",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingAssistants",
-        "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps"
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps",
+        "doc:\/\/Chat\/documentation\/Chat\/ErrorCodes"
       ],
       "title" : "Essentials"
     }
@@ -514,7 +479,7 @@
 "doc://Chat/documentation/Chat": {
   "abstract" : [
     {
-      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
       "type" : "text"
     }
   ],
@@ -531,7 +496,7 @@
   "type" : "topic",
   "url" : "\/documentation\/chat"
 },
-"doc://Chat/documentation/Chat/Chat/addContact(_:completion:uniqueIdResult:)": {
+"doc://Chat/documentation/Chat/ContactProtocol/add(_:)": {
   "abstract" : [
     {
       "text" : "Add a new contact.",
@@ -549,7 +514,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "addContact"
+      "text" : "add"
     },
     {
       "kind" : "text",
@@ -557,65 +522,65 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO17AddContactRequestC",
+      "preciseIdentifier" : "s:7ChatDTO17AddContactRequestV",
       "text" : "AddContactRequest"
     },
     {
       "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<["
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels7ContactC",
-      "text" : "Contact"
-    },
-    {
-      "kind" : "text",
-      "text" : "]>, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
+      "text" : ")"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/addContact(_:completion:uniqueIdResult:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/add(_:)",
   "kind" : "symbol",
+  "required" : true,
   "role" : "symbol",
-  "title" : "addContact(_:completion:uniqueIdResult:)",
+  "title" : "add(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/addcontact(_:completion:uniqueidresult:)"
+  "url" : "\/documentation\/chat\/contactprotocol\/add(_:)"
 },
-"doc://Chat/documentation/Chat/Chat/blockContact(_:completion:uniqueIdResult:)": {
+"doc://Chat/documentation/Chat/ContactProtocol/addAll(_:)": {
+  "abstract" : [
+    {
+      "text" : "Add multiple contacts at once.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "addAll"
+    },
+    {
+      "kind" : "text",
+      "text" : "(["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO17AddContactRequestV",
+      "text" : "AddContactRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : "])"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/addAll(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "addAll(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/contactprotocol\/addall(_:)"
+},
+"doc://Chat/documentation/Chat/ContactProtocol/block(_:)": {
   "abstract" : [
     {
       "text" : "Block a specific contact.",
@@ -633,7 +598,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "blockContact"
+      "text" : "block"
     },
     {
       "kind" : "text",
@@ -641,233 +606,23 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO12BlockRequestC",
+      "preciseIdentifier" : "s:7ChatDTO12BlockRequestV",
       "text" : "BlockRequest"
     },
     {
       "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<"
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels7ContactC",
-      "text" : "Contact"
-    },
-    {
-      "kind" : "text",
-      "text" : ">, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
+      "text" : ")"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/blockContact(_:completion:uniqueIdResult:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/block(_:)",
   "kind" : "symbol",
+  "required" : true,
   "role" : "symbol",
-  "title" : "blockContact(_:completion:uniqueIdResult:)",
+  "title" : "block(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/blockcontact(_:completion:uniqueidresult:)"
+  "url" : "\/documentation\/chat\/contactprotocol\/block(_:)"
 },
-"doc://Chat/documentation/Chat/Chat/contactNotSeen(_:completion:uniqueIdResult:)": {
-  "abstract" : [
-    {
-      "text" : "Check the last time a user opened the application.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "contactNotSeen"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO22NotSeenDurationRequestC",
-      "text" : "NotSeenDurationRequest"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<["
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO20UserLastSeenDurationC",
-      "text" : "UserLastSeenDuration"
-    },
-    {
-      "kind" : "text",
-      "text" : "]>, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/contactNotSeen(_:completion:uniqueIdResult:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "contactNotSeen(_:completion:uniqueIdResult:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/contactnotseen(_:completion:uniqueidresult:)"
-},
-"doc://Chat/documentation/Chat/Chat/getBlockedContacts(_:completion:uniqueIdResult:)": {
-  "abstract" : [
-    {
-      "text" : "Get the list of blocked contacts.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "getBlockedContacts"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO18BlockedListRequestC",
-      "text" : "BlockedListRequest"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<["
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels7ContactC",
-      "text" : "Contact"
-    },
-    {
-      "kind" : "text",
-      "text" : "]>, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/getBlockedContacts(_:completion:uniqueIdResult:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "getBlockedContacts(_:completion:uniqueIdResult:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/getblockedcontacts(_:completion:uniqueidresult:)"
-},
-"doc://Chat/documentation/Chat/Chat/getContacts(_:completion:cacheResponse:uniqueIdResult:)": {
+"doc://Chat/documentation/Chat/ContactProtocol/get(_:)": {
   "abstract" : [
     {
       "text" : "Get contacts of current user.",
@@ -885,7 +640,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "getContacts"
+      "text" : "get"
     },
     {
       "kind" : "text",
@@ -893,91 +648,108 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO15ContactsRequestC",
+      "preciseIdentifier" : "s:7ChatDTO15ContactsRequestV",
       "text" : "ContactsRequest"
     },
     {
       "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<["
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels7ContactC",
-      "text" : "Contact"
-    },
-    {
-      "kind" : "text",
-      "text" : "]>, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "cacheResponse"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat17CacheResponseTypea",
-      "text" : "CacheResponseType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<["
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels7ContactC",
-      "text" : "Contact"
-    },
-    {
-      "kind" : "text",
-      "text" : "]>?, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
+      "text" : ")"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/getContacts(_:completion:cacheResponse:uniqueIdResult:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/get(_:)",
   "kind" : "symbol",
+  "required" : true,
   "role" : "symbol",
-  "title" : "getContacts(_:completion:cacheResponse:uniqueIdResult:)",
+  "title" : "get(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/getcontacts(_:completion:cacheresponse:uniqueidresult:)"
+  "url" : "\/documentation\/chat\/contactprotocol\/get(_:)"
 },
-"doc://Chat/documentation/Chat/Chat/removeContact(_:completion:uniqueIdResult:)": {
+"doc://Chat/documentation/Chat/ContactProtocol/getBlockedList(_:)-3duud": {
+  "abstract" : [
+    {
+      "text" : "Get the list of blocked contacts.",
+      "type" : "text"
+    }
+  ],
+  "defaultImplementations" : 1,
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "getBlockedList"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO18BlockedListRequestV",
+      "text" : "BlockedListRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/getBlockedList(_:)-3duud",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "getBlockedList(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/contactprotocol\/getblockedlist(_:)-3duud"
+},
+"doc://Chat/documentation/Chat/ContactProtocol/notSeen(_:)": {
+  "abstract" : [
+    {
+      "text" : "Check the last time a user opened the application.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "notSeen"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO22NotSeenDurationRequestV",
+      "text" : "NotSeenDurationRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/notSeen(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "notSeen(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/contactprotocol\/notseen(_:)"
+},
+"doc://Chat/documentation/Chat/ContactProtocol/remove(_:)": {
   "abstract" : [
     {
       "text" : "Remove a contact from your circle of contacts.",
@@ -995,7 +767,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "removeContact"
+      "text" : "remove"
     },
     {
       "kind" : "text",
@@ -1003,65 +775,23 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO21RemoveContactsRequestC",
+      "preciseIdentifier" : "s:7ChatDTO21RemoveContactsRequestV",
       "text" : "RemoveContactsRequest"
     },
     {
       "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<"
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:Sb",
-      "text" : "Bool"
-    },
-    {
-      "kind" : "text",
-      "text" : ">, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
+      "text" : ")"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/removeContact(_:completion:uniqueIdResult:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/remove(_:)",
   "kind" : "symbol",
+  "required" : true,
   "role" : "symbol",
-  "title" : "removeContact(_:completion:uniqueIdResult:)",
+  "title" : "remove(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/removecontact(_:completion:uniqueidresult:)"
+  "url" : "\/documentation\/chat\/contactprotocol\/remove(_:)"
 },
-"doc://Chat/documentation/Chat/Chat/searchContacts(_:completion:cacheResponse:uniqueIdResult:)": {
+"doc://Chat/documentation/Chat/ContactProtocol/search(_:)": {
   "abstract" : [
     {
       "text" : "Search inside contacts.",
@@ -1079,7 +809,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "searchContacts"
+      "text" : "search"
     },
     {
       "kind" : "text",
@@ -1087,91 +817,23 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO15ContactsRequestC",
+      "preciseIdentifier" : "s:7ChatDTO15ContactsRequestV",
       "text" : "ContactsRequest"
     },
     {
       "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<["
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels7ContactC",
-      "text" : "Contact"
-    },
-    {
-      "kind" : "text",
-      "text" : "]>, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "cacheResponse"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat17CacheResponseTypea",
-      "text" : "CacheResponseType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<["
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels7ContactC",
-      "text" : "Contact"
-    },
-    {
-      "kind" : "text",
-      "text" : "]>?, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
+      "text" : ")"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/searchContacts(_:completion:cacheResponse:uniqueIdResult:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/search(_:)",
   "kind" : "symbol",
+  "required" : true,
   "role" : "symbol",
-  "title" : "searchContacts(_:completion:cacheResponse:uniqueIdResult:)",
+  "title" : "search(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/searchcontacts(_:completion:cacheresponse:uniqueidresult:)"
+  "url" : "\/documentation\/chat\/contactprotocol\/search(_:)"
 },
-"doc://Chat/documentation/Chat/Chat/syncContacts(completion:uniqueIdsResult:)": {
+"doc://Chat/documentation/Chat/ContactProtocol/sync()": {
   "abstract" : [
     {
       "text" : "Sync contacts with server.",
@@ -1189,64 +851,22 @@
     },
     {
       "kind" : "identifier",
-      "text" : "syncContacts"
+      "text" : "sync"
     },
     {
       "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<["
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels7ContactC",
-      "text" : "Contact"
-    },
-    {
-      "kind" : "text",
-      "text" : "]>, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdsResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat19UniqueIdsResultTypea",
-      "text" : "UniqueIdsResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
+      "text" : "()"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/syncContacts(completion:uniqueIdsResult:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/sync()",
   "kind" : "symbol",
+  "required" : true,
   "role" : "symbol",
-  "title" : "syncContacts(completion:uniqueIdsResult:)",
+  "title" : "sync()",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/synccontacts(completion:uniqueidsresult:)"
+  "url" : "\/documentation\/chat\/contactprotocol\/sync()"
 },
-"doc://Chat/documentation/Chat/Chat/unBlockContact(_:completion:uniqueIdResult:)": {
+"doc://Chat/documentation/Chat/ContactProtocol/unBlock(_:)": {
   "abstract" : [
     {
       "text" : "Unblock a blcked contact.",
@@ -1264,7 +884,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "unBlockContact"
+      "text" : "unBlock"
     },
     {
       "kind" : "text",
@@ -1272,71 +892,46 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO14UnBlockRequestC",
+      "preciseIdentifier" : "s:7ChatDTO14UnBlockRequestV",
       "text" : "UnBlockRequest"
     },
     {
       "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<"
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels7ContactC",
-      "text" : "Contact"
-    },
-    {
-      "kind" : "text",
-      "text" : ">, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
+      "text" : ")"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/unBlockContact(_:completion:uniqueIdResult:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ContactProtocol\/unBlock(_:)",
   "kind" : "symbol",
+  "required" : true,
   "role" : "symbol",
-  "title" : "unBlockContact(_:completion:uniqueIdResult:)",
+  "title" : "unBlock(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/unblockcontact(_:completion:uniqueidresult:)"
+  "url" : "\/documentation\/chat\/contactprotocol\/unblock(_:)"
+},
+"doc://Chat/documentation/Chat/ErrorCodes": {
+  "abstract" : [
+    {
+      "text" : "List of all error codes locally in the chat SDK for server errors.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ErrorCodes",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Error Codes",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/errorcodes"
 },
 "doc://Chat/documentation/Chat/GettingStarted": {
   "abstract" : [
-
+    {
+      "text" : "Getting started with the Chat SDK and some tips and tricks to configure it properly.",
+      "type" : "text"
+    }
   ],
   "identifier" : "doc:\/\/Chat\/documentation\/Chat\/GettingStarted",
   "kind" : "article",
-  "role" : "collectionGroup",
+  "role" : "article",
   "title" : "Getting Started",
   "type" : "topic",
   "url" : "\/documentation\/chat\/gettingstarted"
@@ -1411,20 +1006,6 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/managingmessages"
 },
-"doc://Chat/documentation/Chat/ManagingProfile": {
-  "abstract" : [
-    {
-      "text" : "Get current user details, update, set profile.",
-      "type" : "text"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingProfile",
-  "kind" : "article",
-  "role" : "article",
-  "title" : "Managing Profile",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/managingprofile"
-},
 "doc://Chat/documentation/Chat/ManagingTags": {
   "abstract" : [
     {
@@ -1442,7 +1023,7 @@
 "doc://Chat/documentation/Chat/ManagingThreads": {
   "abstract" : [
     {
-      "text" : "Managing threads create P2P, Group, Channel or delete edit and so many more.",
+      "text" : "Managing threads, create P2P, Group, Channel or delete edit and so many more.",
       "type" : "text"
     }
   ],

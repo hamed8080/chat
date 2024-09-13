@@ -1,0 +1,798 @@
+{
+  "abstract" : [
+    {
+      "text" : "AsyncManager intermediate between chat and async socket server.",
+      "type" : "text"
+    }
+  ],
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/Chat\/documentation\/Chat"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/Chat\/documentation\/Chat\/AsyncManager"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "s:4Chat12AsyncManagerC",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "class"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "text" : "AsyncManager"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "Chat"
+      }
+    ],
+    "navigatorTitle" : [
+      {
+        "kind" : "identifier",
+        "text" : "AsyncManager"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Class",
+    "symbolKind" : "class",
+    "title" : "AsyncManager"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "final"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "keyword",
+              "text" : "class"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "identifier",
+              "text" : "AsyncManager"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    }
+  ],
+  "relationshipsSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/5Async0A8DelegateP",
+        "doc:\/\/Chat\/6Logger11LogDelegateP"
+      ],
+      "kind" : "relationships",
+      "title" : "Conforms To",
+      "type" : "conformsTo"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/init(pingTimer:queueTimer:)"
+      ],
+      "title" : "Initializers"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/asyncClient"
+      ],
+      "title" : "Instance Properties"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/asyncError(error:)",
+        "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/asyncMessage(asyncMessage:)",
+        "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/asyncMessageSent(message:error:)",
+        "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/asyncStateChanged(asyncState:error:)",
+        "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/createAsync()",
+        "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/disposeObject()",
+        "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/onLog(log:)",
+        "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/pop(_:)",
+        "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/sendData(sendable:type:)"
+      ],
+      "title" : "Instance Methods"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/chat\/asyncmanager"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://Chat/5Async0A8DelegateP": {
+  "identifier" : "doc:\/\/Chat\/5Async0A8DelegateP",
+  "title" : "Async.AsyncDelegate",
+  "type" : "unresolvable"
+},
+"doc://Chat/6Logger11LogDelegateP": {
+  "identifier" : "doc:\/\/Chat\/6Logger11LogDelegateP",
+  "title" : "Logger.LogDelegate",
+  "type" : "unresolvable"
+},
+"doc://Chat/documentation/Chat": {
+  "abstract" : [
+    {
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat",
+  "images" : [
+    {
+      "identifier" : "icon.png",
+      "type" : "icon"
+    }
+  ],
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Chat",
+  "type" : "topic",
+  "url" : "\/documentation\/chat"
+},
+"doc://Chat/documentation/Chat/AsyncManager": {
+  "abstract" : [
+    {
+      "text" : "AsyncManager intermediate between chat and async socket server.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "AsyncManager"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AsyncManager",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "AsyncManager"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "AsyncManager",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/asyncmanager"
+},
+"doc://Chat/documentation/Chat/AsyncManager/asyncClient": {
+  "abstract" : [
+    {
+      "text" : "Async client.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "asyncClient"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:5AsyncAAC",
+      "text" : "Async"
+    },
+    {
+      "kind" : "text",
+      "text" : "?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/asyncClient",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "asyncClient",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/asyncmanager\/asyncclient"
+},
+"doc://Chat/documentation/Chat/AsyncManager/asyncError(error:)": {
+  "abstract" : [
+    {
+      "text" : "A delegate to raise an error.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "asyncError"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "error"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:5Async0A5ErrorV",
+      "text" : "AsyncError"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/asyncError(error:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "asyncError(error:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/asyncmanager\/asyncerror(error:)"
+},
+"doc://Chat/documentation/Chat/AsyncManager/asyncMessage(asyncMessage:)": {
+  "abstract" : [
+    {
+      "text" : "A delegate method that receives a message.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "asyncMessage"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "asyncMessage"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:5Async0A7MessageV",
+      "text" : "AsyncMessage"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/asyncMessage(asyncMessage:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "asyncMessage(asyncMessage:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/asyncmanager\/asyncmessage(asyncmessage:)"
+},
+"doc://Chat/documentation/Chat/AsyncManager/asyncMessageSent(message:error:)": {
+  "abstract" : [
+    {
+      "text" : "It will be only used whenever a client implements a custom async class by itself.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "asyncMessageSent"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "message"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:10Foundation4DataV",
+      "text" : "Data"
+    },
+    {
+      "kind" : "text",
+      "text" : "?, "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "error"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:5Async0A5ErrorV",
+      "text" : "AsyncError"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/asyncMessageSent(message:error:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "asyncMessageSent(message:error:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/asyncmanager\/asyncmessagesent(message:error:)"
+},
+"doc://Chat/documentation/Chat/AsyncManager/asyncStateChanged(asyncState:error:)": {
+  "abstract" : [
+    {
+      "text" : "A delegate that tells the status of the async connection.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "asyncStateChanged"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "asyncState"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:5Async0A11SocketStateO",
+      "text" : "AsyncSocketState"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "error"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:5Async0A5ErrorV",
+      "text" : "AsyncError"
+    },
+    {
+      "kind" : "text",
+      "text" : "?)"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/asyncStateChanged(asyncState:error:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "asyncStateChanged(asyncState:error:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/asyncmanager\/asyncstatechanged(asyncstate:error:)"
+},
+"doc://Chat/documentation/Chat/AsyncManager/createAsync()": {
+  "abstract" : [
+    {
+      "text" : "Create an async connection.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "createAsync"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/createAsync()",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "createAsync()",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/asyncmanager\/createasync()"
+},
+"doc://Chat/documentation/Chat/AsyncManager/disposeObject()": {
+  "abstract" : [
+    {
+      "text" : "A public method to completely destroy the async object.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "disposeObject"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/disposeObject()",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "disposeObject()",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/asyncmanager\/disposeobject()"
+},
+"doc://Chat/documentation/Chat/AsyncManager/init(pingTimer:queueTimer:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "identifier",
+      "text" : "init"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "pingTimer"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8Additive11SourceTimerC",
+      "text" : "SourceTimer"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "queueTimer"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8Additive11SourceTimerC",
+      "text" : "SourceTimer"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/init(pingTimer:queueTimer:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "init(pingTimer:queueTimer:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/asyncmanager\/init(pingtimer:queuetimer:)"
+},
+"doc://Chat/documentation/Chat/AsyncManager/onLog(log:)": {
+  "abstract" : [
+    {
+      "text" : "On Async SDK log. It is needed for times that client applications need to collect logs of the async SDK.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "onLog"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "log"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:6Logger3LogV",
+      "text" : "Log"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/onLog(log:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "onLog(log:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/asyncmanager\/onlog(log:)"
+},
+"doc://Chat/documentation/Chat/AsyncManager/pop(_:)": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "pop"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    },
+    {
+      "kind" : "text",
+      "text" : "?) -> (count"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Si",
+      "text" : "Int"
+    },
+    {
+      "kind" : "text",
+      "text" : ", offset"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Si",
+      "text" : "Int"
+    },
+    {
+      "kind" : "text",
+      "text" : ")?"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/pop(_:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "pop(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/asyncmanager\/pop(_:)"
+},
+"doc://Chat/documentation/Chat/AsyncManager/sendData(sendable:type:)": {
+  "abstract" : [
+    {
+      "text" : "The sendData delegate will inform if a send event occurred by the async socket.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "sendData"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "sendable"
+    },
+    {
+      "kind" : "text",
+      "text" : ": any "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A8SendableP",
+      "text" : "ChatSendable"
+    },
+    {
+      "kind" : "text",
+      "text" : ", "
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "type"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:8ChatCore0A14MessageVOTypesO",
+      "text" : "ChatMessageVOTypes"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/AsyncManager\/sendData(sendable:type:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "sendData(sendable:type:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/asyncmanager\/senddata(sendable:type:)"
+},
+"icon.png": {
+  "alt" : "App icon.",
+  "identifier" : "icon.png",
+  "type" : "image",
+  "variants" : [
+    {
+      "traits" : [
+        "1x",
+        "light"
+      ],
+      "url" : "\/images\/icon.png"
+    }
+  ]
+}
+}
+}

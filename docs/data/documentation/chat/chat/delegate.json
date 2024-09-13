@@ -1,15 +1,7 @@
 {
   "abstract" : [
     {
-      "text" : "Inherited from ",
-      "type" : "text"
-    },
-    {
-      "code" : "ChatProtocol.delegate",
-      "type" : "codeVoice"
-    },
-    {
-      "text" : ".",
+      "text" : "A delegation property to emit events and errors and connection status of the object.",
       "type" : "text"
     }
   ],
@@ -27,7 +19,7 @@
   },
   "kind" : "symbol",
   "metadata" : {
-    "externalID" : "s:4ChatAAC8delegateAA0A8Delegate_pSgvp",
+    "externalID" : "s:4ChatAAP8delegateAA0A8Delegate_pSgvp",
     "fragments" : [
       {
         "kind" : "keyword",
@@ -43,7 +35,7 @@
       },
       {
         "kind" : "text",
-        "text" : ": "
+        "text" : ": (any "
       },
       {
         "kind" : "typeIdentifier",
@@ -52,7 +44,7 @@
       },
       {
         "kind" : "text",
-        "text" : "?"
+        "text" : ")?"
       }
     ],
     "modules" : [
@@ -60,6 +52,7 @@
         "name" : "Chat"
       }
     ],
+    "required" : true,
     "role" : "symbol",
     "roleHeading" : "Instance Property",
     "symbolKind" : "property",
@@ -78,14 +71,6 @@
           "tokens" : [
             {
               "kind" : "keyword",
-              "text" : "weak"
-            },
-            {
-              "kind" : "text",
-              "text" : " "
-            },
-            {
-              "kind" : "keyword",
               "text" : "var"
             },
             {
@@ -98,7 +83,7 @@
             },
             {
               "kind" : "text",
-              "text" : ": "
+              "text" : ": (any "
             },
             {
               "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatDelegate",
@@ -108,7 +93,7 @@
             },
             {
               "kind" : "text",
-              "text" : "? { "
+              "text" : ")? { "
             },
             {
               "kind" : "keyword",
@@ -157,7 +142,7 @@
 "doc://Chat/documentation/Chat": {
   "abstract" : [
     {
-      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
       "type" : "text"
     }
   ],
@@ -181,7 +166,7 @@
   "fragments" : [
     {
       "kind" : "keyword",
-      "text" : "class"
+      "text" : "protocol"
     },
     {
       "kind" : "text",
@@ -207,7 +192,10 @@
 },
 "doc://Chat/documentation/Chat/Chat/delegate": {
   "abstract" : [
-
+    {
+      "text" : "A delegation property to emit events and errors and connection status of the object.",
+      "type" : "text"
+    }
   ],
   "fragments" : [
     {
@@ -224,7 +212,7 @@
     },
     {
       "kind" : "text",
-      "text" : ": "
+      "text" : ": (any "
     },
     {
       "kind" : "typeIdentifier",
@@ -233,11 +221,12 @@
     },
     {
       "kind" : "text",
-      "text" : "?"
+      "text" : ")?"
     }
   ],
   "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/delegate",
   "kind" : "symbol",
+  "required" : true,
   "role" : "symbol",
   "title" : "delegate",
   "type" : "topic",

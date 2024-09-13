@@ -58,7 +58,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/createBot(_:completion:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/BotProtocol\/create(_:)",
               "isActive" : true,
               "type" : "reference"
             },
@@ -71,11 +71,8 @@
         },
         {
           "code" : [
-            "Chat.sharedInstance.createBot(.init(botName: \"MyBotName\")) { bot, uniqueId, error in",
-            "    if let bot = bot{",
-            "        \/\/ Write your code",
-            "    }",
-            "}"
+            "let req = CreateBotRequest(botName: botName)",
+            "ChatManager.activeInstance?.bot.create(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -93,7 +90,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/addBotCommand(_:completion:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/BotProtocol\/add(_:)",
               "isActive" : true,
               "type" : "reference"
             },
@@ -108,11 +105,7 @@
           "code" : [
             "let commandList:[String] = [\"\/start\", \"\/write\", \"\/publish\"]",
             "let req = AddBotCommandRequest(botName: \"MyBotName\", commandList: commandList)",
-            "Chat.sharedInstance.addBotCommand(req) { botInfo, uniqueId, error in",
-            "    if let botInfo = botInfo{",
-            "        \/\/ Write your code",
-            "    }",
-            "}"
+            "ChatManager.activeInstance?.bot.add(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -130,7 +123,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/removeBotCommand(_:completion:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/BotProtocol\/remove(_:)",
               "isActive" : true,
               "type" : "reference"
             },
@@ -145,11 +138,7 @@
           "code" : [
             "let commandList:[String] = [\"\/start\", \"\/write\", \"\/publish\"]",
             "let req = RemoveBotCommandRequest(botName: \"MyBotName\", commandList: commandList)",
-            "Chat.sharedInstance.removeBotCommand(req) { botInfo, uniqueId, error in",
-            "    if let botInfo = botInfo{",
-            "        \/\/ Write your code",
-            "    }",
-            "}"
+            "ChatManager.activeInstance?.bot.remove(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -169,7 +158,7 @@
                   "type" : "text"
                 },
                 {
-                  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/addParticipant(_:completion:uniqueIdResult:)",
+                  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ParticipantProtocol\/add(_:)",
                   "isActive" : true,
                   "type" : "reference"
                 },
@@ -187,11 +176,8 @@
         },
         {
           "code" : [
-            "Chat.sharedInstance.addParticipant(.init(userName: \"MyBotName\", threadId: 123456)) { thread, uniqueId, error in",
-            "    if let thread = thread{",
-            "        \/\/ Write your code",
-            "    }",
-            "}"
+            "let req = AddParticipantRequest(userName: \"MyBotName\", threadId: threadId)",
+            "ChatManager.activeInstance?.conversation.participant.add(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -209,7 +195,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/startBot(_:completion:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/BotProtocol\/start(_:)",
               "isActive" : true,
               "type" : "reference"
             },
@@ -222,11 +208,8 @@
         },
         {
           "code" : [
-            "Chat.sharedInstance.startBot(.init(botName: \"MyBotName\", threadId: 123456)) { botName, uniqueId, error in",
-            "    if let botName = botName{",
-            "        \/\/ Write your code",
-            "    }",
-            "}"
+            "legt req = StartStopBotRequest(botName: \"MyBotName\", threadId: 123456)",
+            "ChatManager.activeInstance?.bot.start(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -244,7 +227,7 @@
               "type" : "text"
             },
             {
-              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/stopBot(_:completion:uniqueIdResult:)",
+              "identifier" : "doc:\/\/Chat\/documentation\/Chat\/BotProtocol\/stop(_:)",
               "isActive" : true,
               "type" : "reference"
             },
@@ -257,11 +240,8 @@
         },
         {
           "code" : [
-            "Chat.sharedInstance.stopBot(.init(botName: \"MyBotName\", threadId: 123456)) { botName, uniqueId, error in",
-            "    if let botName = botName{",
-            "        \/\/ Write your code",
-            "    }",
-            "}"
+            "let req = StartStopBotRequest(botName: \"MyBotName\", threadId: 123456)",
+            "ChatManager.activeInstance?.bot.stop(req)"
           ],
           "syntax" : "swift",
           "type" : "codeListing"
@@ -288,10 +268,10 @@
         "doc:\/\/Chat\/documentation\/Chat\/ManagingContacts",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingFiles",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingUsers",
-        "doc:\/\/Chat\/documentation\/Chat\/ManagingProfile",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingTags",
         "doc:\/\/Chat\/documentation\/Chat\/ManagingAssistants",
-        "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps"
+        "doc:\/\/Chat\/documentation\/Chat\/ManagingMaps",
+        "doc:\/\/Chat\/documentation\/Chat\/ErrorCodes"
       ],
       "title" : "Essentials"
     }
@@ -327,7 +307,7 @@
 "doc://Chat/documentation/Chat": {
   "abstract" : [
     {
-      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
       "type" : "text"
     }
   ],
@@ -344,7 +324,7 @@
   "type" : "topic",
   "url" : "\/documentation\/chat"
 },
-"doc://Chat/documentation/Chat/Chat/addBotCommand(_:completion:uniqueIdResult:)": {
+"doc://Chat/documentation/Chat/BotProtocol/add(_:)": {
   "abstract" : [
     {
       "text" : "Add commands to a bot.",
@@ -362,7 +342,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "addBotCommand"
+      "text" : "add"
     },
     {
       "kind" : "text",
@@ -370,149 +350,23 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO20AddBotCommandRequestC",
+      "preciseIdentifier" : "s:7ChatDTO20AddBotCommandRequestV",
       "text" : "AddBotCommandRequest"
     },
     {
       "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<"
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO7BotInfoC",
-      "text" : "BotInfo"
-    },
-    {
-      "kind" : "text",
-      "text" : ">, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
+      "text" : ")"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/addBotCommand(_:completion:uniqueIdResult:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/BotProtocol\/add(_:)",
   "kind" : "symbol",
+  "required" : true,
   "role" : "symbol",
-  "title" : "addBotCommand(_:completion:uniqueIdResult:)",
+  "title" : "add(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/addbotcommand(_:completion:uniqueidresult:)"
+  "url" : "\/documentation\/chat\/botprotocol\/add(_:)"
 },
-"doc://Chat/documentation/Chat/Chat/addParticipant(_:completion:uniqueIdResult:)": {
-  "abstract" : [
-    {
-      "text" : "Add participant to a thread.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "func"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "addParticipant"
-    },
-    {
-      "kind" : "text",
-      "text" : "("
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO21AddParticipantRequestC",
-      "text" : "AddParticipantRequest"
-    },
-    {
-      "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<"
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:10ChatModels12ConversationC",
-      "text" : "Conversation"
-    },
-    {
-      "kind" : "text",
-      "text" : ">, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/addParticipant(_:completion:uniqueIdResult:)",
-  "kind" : "symbol",
-  "role" : "symbol",
-  "title" : "addParticipant(_:completion:uniqueIdResult:)",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/addparticipant(_:completion:uniqueidresult:)"
-},
-"doc://Chat/documentation/Chat/Chat/createBot(_:completion:uniqueIdResult:)": {
+"doc://Chat/documentation/Chat/BotProtocol/create(_:)": {
   "abstract" : [
     {
       "text" : "Create Bot.",
@@ -530,7 +384,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "createBot"
+      "text" : "create"
     },
     {
       "kind" : "text",
@@ -538,65 +392,23 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO16CreateBotRequestC",
+      "preciseIdentifier" : "s:7ChatDTO16CreateBotRequestV",
       "text" : "CreateBotRequest"
     },
     {
       "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<"
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO3BotC",
-      "text" : "Bot"
-    },
-    {
-      "kind" : "text",
-      "text" : ">, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
+      "text" : ")"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/createBot(_:completion:uniqueIdResult:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/BotProtocol\/create(_:)",
   "kind" : "symbol",
+  "required" : true,
   "role" : "symbol",
-  "title" : "createBot(_:completion:uniqueIdResult:)",
+  "title" : "create(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/createbot(_:completion:uniqueidresult:)"
+  "url" : "\/documentation\/chat\/botprotocol\/create(_:)"
 },
-"doc://Chat/documentation/Chat/Chat/removeBotCommand(_:completion:uniqueIdResult:)": {
+"doc://Chat/documentation/Chat/BotProtocol/remove(_:)": {
   "abstract" : [
     {
       "text" : "Remove commands from a bot.",
@@ -614,7 +426,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "removeBotCommand"
+      "text" : "remove"
     },
     {
       "kind" : "text",
@@ -622,70 +434,25 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO23RemoveBotCommandRequestC",
+      "preciseIdentifier" : "s:7ChatDTO23RemoveBotCommandRequestV",
       "text" : "RemoveBotCommandRequest"
     },
     {
       "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<"
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO7BotInfoC",
-      "text" : "BotInfo"
-    },
-    {
-      "kind" : "text",
-      "text" : ">, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
+      "text" : ")"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/removeBotCommand(_:completion:uniqueIdResult:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/BotProtocol\/remove(_:)",
   "kind" : "symbol",
+  "required" : true,
   "role" : "symbol",
-  "title" : "removeBotCommand(_:completion:uniqueIdResult:)",
+  "title" : "remove(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/removebotcommand(_:completion:uniqueidresult:)"
+  "url" : "\/documentation\/chat\/botprotocol\/remove(_:)"
 },
-"doc://Chat/documentation/Chat/Chat/startBot(_:completion:uniqueIdResult:)": {
+"doc://Chat/documentation/Chat/BotProtocol/start(_:)": {
   "abstract" : [
-    {
-      "text" : "Start a bot.",
-      "type" : "text"
-    }
+
   ],
   "fragments" : [
     {
@@ -698,7 +465,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "startBot"
+      "text" : "start"
     },
     {
       "kind" : "text",
@@ -706,65 +473,23 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO19StartStopBotRequestC",
+      "preciseIdentifier" : "s:7ChatDTO19StartStopBotRequestV",
       "text" : "StartStopBotRequest"
     },
     {
       "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<"
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:SS",
-      "text" : "String"
-    },
-    {
-      "kind" : "text",
-      "text" : ">, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
+      "text" : ")"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/startBot(_:completion:uniqueIdResult:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/BotProtocol\/start(_:)",
   "kind" : "symbol",
+  "required" : true,
   "role" : "symbol",
-  "title" : "startBot(_:completion:uniqueIdResult:)",
+  "title" : "start(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/startbot(_:completion:uniqueidresult:)"
+  "url" : "\/documentation\/chat\/botprotocol\/start(_:)"
 },
-"doc://Chat/documentation/Chat/Chat/stopBot(_:completion:uniqueIdResult:)": {
+"doc://Chat/documentation/Chat/BotProtocol/stop(_:)": {
   "abstract" : [
     {
       "text" : "Stop a bot.",
@@ -782,7 +507,7 @@
     },
     {
       "kind" : "identifier",
-      "text" : "stopBot"
+      "text" : "stop"
     },
     {
       "kind" : "text",
@@ -790,71 +515,46 @@
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:7ChatDTO19StartStopBotRequestC",
+      "preciseIdentifier" : "s:7ChatDTO19StartStopBotRequestV",
       "text" : "StartStopBotRequest"
     },
     {
       "kind" : "text",
-      "text" : ", "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "completion"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat14CompletionTypea",
-      "text" : "CompletionType"
-    },
-    {
-      "kind" : "text",
-      "text" : "<"
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:SS",
-      "text" : "String"
-    },
-    {
-      "kind" : "text",
-      "text" : ">, "
-    },
-    {
-      "kind" : "externalParam",
-      "text" : "uniqueIdResult"
-    },
-    {
-      "kind" : "text",
-      "text" : ": "
-    },
-    {
-      "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4Chat18UniqueIdResultTypea",
-      "text" : "UniqueIdResultType"
-    },
-    {
-      "kind" : "text",
-      "text" : "?)"
+      "text" : ")"
     }
   ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/stopBot(_:completion:uniqueIdResult:)",
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/BotProtocol\/stop(_:)",
   "kind" : "symbol",
+  "required" : true,
   "role" : "symbol",
-  "title" : "stopBot(_:completion:uniqueIdResult:)",
+  "title" : "stop(_:)",
   "type" : "topic",
-  "url" : "\/documentation\/chat\/chat\/stopbot(_:completion:uniqueidresult:)"
+  "url" : "\/documentation\/chat\/botprotocol\/stop(_:)"
+},
+"doc://Chat/documentation/Chat/ErrorCodes": {
+  "abstract" : [
+    {
+      "text" : "List of all error codes locally in the chat SDK for server errors.",
+      "type" : "text"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ErrorCodes",
+  "kind" : "article",
+  "role" : "article",
+  "title" : "Error Codes",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/errorcodes"
 },
 "doc://Chat/documentation/Chat/GettingStarted": {
   "abstract" : [
-
+    {
+      "text" : "Getting started with the Chat SDK and some tips and tricks to configure it properly.",
+      "type" : "text"
+    }
   ],
   "identifier" : "doc:\/\/Chat\/documentation\/Chat\/GettingStarted",
   "kind" : "article",
-  "role" : "collectionGroup",
+  "role" : "article",
   "title" : "Getting Started",
   "type" : "topic",
   "url" : "\/documentation\/chat\/gettingstarted"
@@ -929,20 +629,6 @@
   "type" : "topic",
   "url" : "\/documentation\/chat\/managingmessages"
 },
-"doc://Chat/documentation/Chat/ManagingProfile": {
-  "abstract" : [
-    {
-      "text" : "Get current user details, update, set profile.",
-      "type" : "text"
-    }
-  ],
-  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ManagingProfile",
-  "kind" : "article",
-  "role" : "article",
-  "title" : "Managing Profile",
-  "type" : "topic",
-  "url" : "\/documentation\/chat\/managingprofile"
-},
 "doc://Chat/documentation/Chat/ManagingTags": {
   "abstract" : [
     {
@@ -960,7 +646,7 @@
 "doc://Chat/documentation/Chat/ManagingThreads": {
   "abstract" : [
     {
-      "text" : "Managing threads create P2P, Group, Channel or delete edit and so many more.",
+      "text" : "Managing threads, create P2P, Group, Channel or delete edit and so many more.",
       "type" : "text"
     }
   ],
@@ -984,6 +670,48 @@
   "title" : "Managing Users",
   "type" : "topic",
   "url" : "\/documentation\/chat\/managingusers"
+},
+"doc://Chat/documentation/Chat/ParticipantProtocol/add(_:)": {
+  "abstract" : [
+    {
+      "text" : "Add participant to a thread.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "add"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:7ChatDTO21AddParticipantRequestV",
+      "text" : "AddParticipantRequest"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ParticipantProtocol\/add(_:)",
+  "kind" : "symbol",
+  "required" : true,
+  "role" : "symbol",
+  "title" : "add(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/chat\/participantprotocol\/add(_:)"
 },
 "icon.png": {
   "alt" : "App icon.",

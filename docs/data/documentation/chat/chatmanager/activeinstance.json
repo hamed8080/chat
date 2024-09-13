@@ -13,7 +13,7 @@
   },
   "kind" : "symbol",
   "metadata" : {
-    "externalID" : "s:4Chat0A7ManagerC14activeInstanceA2ACSgvpZ",
+    "externalID" : "s:4Chat0A7ManagerC14activeInstanceA2A_pSgvpZ",
     "fragments" : [
       {
         "kind" : "keyword",
@@ -37,16 +37,16 @@
       },
       {
         "kind" : "text",
-        "text" : ": "
+        "text" : ": (any "
       },
       {
         "kind" : "typeIdentifier",
-        "preciseIdentifier" : "s:4ChatAAC",
+        "preciseIdentifier" : "s:4ChatAAP",
         "text" : "Chat"
       },
       {
         "kind" : "text",
-        "text" : "?"
+        "text" : ")?"
       }
     ],
     "modules" : [
@@ -92,17 +92,17 @@
             },
             {
               "kind" : "text",
-              "text" : ": "
+              "text" : ": (any "
             },
             {
               "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat",
               "kind" : "typeIdentifier",
-              "preciseIdentifier" : "s:4ChatAAC",
+              "preciseIdentifier" : "s:4ChatAAP",
               "text" : "Chat"
             },
             {
               "kind" : "text",
-              "text" : "?"
+              "text" : ")?"
             }
           ]
         }
@@ -135,7 +135,7 @@
 "doc://Chat/documentation/Chat": {
   "abstract" : [
     {
-      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
       "type" : "text"
     }
   ],
@@ -159,7 +159,7 @@
   "fragments" : [
     {
       "kind" : "keyword",
-      "text" : "class"
+      "text" : "protocol"
     },
     {
       "kind" : "text",
@@ -241,16 +241,16 @@
     },
     {
       "kind" : "text",
-      "text" : ": "
+      "text" : ": (any "
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:4ChatAAC",
+      "preciseIdentifier" : "s:4ChatAAP",
       "text" : "Chat"
     },
     {
       "kind" : "text",
-      "text" : "?"
+      "text" : ")?"
     }
   ],
   "identifier" : "doc:\/\/Chat\/documentation\/Chat\/ChatManager\/activeInstance",

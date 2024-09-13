@@ -1,15 +1,7 @@
 {
   "abstract" : [
     {
-      "text" : "Inherited from ",
-      "type" : "text"
-    },
-    {
-      "code" : "ChatProtocol.setToken(newToken:reCreateObject:)",
-      "type" : "codeVoice"
-    },
-    {
-      "text" : ".",
+      "text" : "A token setter to update token.",
       "type" : "text"
     }
   ],
@@ -27,7 +19,7 @@
   },
   "kind" : "symbol",
   "metadata" : {
-    "externalID" : "s:4ChatAAC8setToken03newC014reCreateObjectySS_SbtF",
+    "externalID" : "s:4ChatAAP8setToken03newC014reCreateObjectySS_SbtF",
     "fragments" : [
       {
         "kind" : "keyword",
@@ -85,6 +77,7 @@
         "name" : "Chat"
       }
     ],
+    "required" : true,
     "role" : "symbol",
     "roleHeading" : "Instance Method",
     "symbolKind" : "method",
@@ -149,12 +142,45 @@
             },
             {
               "kind" : "text",
-              "text" : " = false)"
+              "text" : ")"
             }
           ]
         }
       ],
       "kind" : "declarations"
+    },
+    {
+      "kind" : "parameters",
+      "parameters" : [
+        {
+          "content" : [
+            {
+              "inlineContent" : [
+                {
+                  "text" : "The token string.",
+                  "type" : "text"
+                }
+              ],
+              "type" : "paragraph"
+            }
+          ],
+          "name" : "newToken"
+        },
+        {
+          "content" : [
+            {
+              "inlineContent" : [
+                {
+                  "text" : "If you set it to true the chat object will recreate itself and will reconnect completely.",
+                  "type" : "text"
+                }
+              ],
+              "type" : "paragraph"
+            }
+          ],
+          "name" : "reCreateObject"
+        }
+      ]
     }
   ],
   "schemaVersion" : {
@@ -182,7 +208,7 @@
 "doc://Chat/documentation/Chat": {
   "abstract" : [
     {
-      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
       "type" : "text"
     }
   ],
@@ -206,7 +232,7 @@
   "fragments" : [
     {
       "kind" : "keyword",
-      "text" : "class"
+      "text" : "protocol"
     },
     {
       "kind" : "text",
@@ -232,7 +258,10 @@
 },
 "doc://Chat/documentation/Chat/Chat/setToken(newToken:reCreateObject:)": {
   "abstract" : [
-
+    {
+      "text" : "A token setter to update token.",
+      "type" : "text"
+    }
   ],
   "fragments" : [
     {
@@ -288,6 +317,7 @@
   ],
   "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/setToken(newToken:reCreateObject:)",
   "kind" : "symbol",
+  "required" : true,
   "role" : "symbol",
   "title" : "setToken(newToken:reCreateObject:)",
   "type" : "topic",

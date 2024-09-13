@@ -1,15 +1,7 @@
 {
   "abstract" : [
     {
-      "text" : "Inherited from ",
-      "type" : "text"
-    },
-    {
-      "code" : "ChatProtocol.state",
-      "type" : "codeVoice"
-    },
-    {
-      "text" : ".",
+      "text" : "Last state of the chat object.",
       "type" : "text"
     }
   ],
@@ -27,7 +19,7 @@
   },
   "kind" : "symbol",
   "metadata" : {
-    "externalID" : "s:4ChatAAC5state0A4Core0A5StateOvp",
+    "externalID" : "s:4ChatAAP5state0A4Core0A5StateOvp",
     "fragments" : [
       {
         "kind" : "keyword",
@@ -56,6 +48,7 @@
         "name" : "Chat"
       }
     ],
+    "required" : true,
     "role" : "symbol",
     "roleHeading" : "Instance Property",
     "symbolKind" : "property",
@@ -95,7 +88,15 @@
             },
             {
               "kind" : "text",
-              "text" : " { get }"
+              "text" : " { "
+            },
+            {
+              "kind" : "keyword",
+              "text" : "get"
+            },
+            {
+              "kind" : "text",
+              "text" : " }"
             }
           ]
         }
@@ -128,7 +129,7 @@
 "doc://Chat/documentation/Chat": {
   "abstract" : [
     {
-      "text" : "With Chat SDK you could connect to the chat server without managing the socket state and send or receive messages.",
+      "text" : "With Chat SDK you can connect to the chat server without managing the socket state and send or receive messages.",
       "type" : "text"
     }
   ],
@@ -152,7 +153,7 @@
   "fragments" : [
     {
       "kind" : "keyword",
-      "text" : "class"
+      "text" : "protocol"
     },
     {
       "kind" : "text",
@@ -178,7 +179,10 @@
 },
 "doc://Chat/documentation/Chat/Chat/state": {
   "abstract" : [
-
+    {
+      "text" : "Last state of the chat object.",
+      "type" : "text"
+    }
   ],
   "fragments" : [
     {
@@ -205,6 +209,7 @@
   ],
   "identifier" : "doc:\/\/Chat\/documentation\/Chat\/Chat\/state",
   "kind" : "symbol",
+  "required" : true,
   "role" : "symbol",
   "title" : "state",
   "type" : "topic",
