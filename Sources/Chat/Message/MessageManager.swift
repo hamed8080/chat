@@ -83,7 +83,7 @@ final class MessageManager: MessageProtocol {
     }
 
     func history(_ request: GetHistoryRequest) {
-        chat.prepareToSendAsync(req: request, type: .getHistory)
+        chat.coordinator.history.doRequest(request)
         let typeCode = request.toTypeCode(chat)
         cache?.message?.fetch(request.fetchRequest) { [weak self] messages, totalCount in
             let messages = messages.map { $0.codable(fillConversation: false) }
@@ -136,7 +136,7 @@ final class MessageManager: MessageProtocol {
     func onGetHistroy(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Message]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)
         let copies = response.result?.compactMap{$0} ?? []
-        delegate?.chatEvent(event: .message(.history(response)))
+        chat.coordinator.history.onHistory(response)        
         cache?.message?.insert(models: copies, threadId: response.subjectId ?? -1)
     }
 

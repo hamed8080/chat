@@ -2,7 +2,7 @@
 
 import PackageDescription
 
-let useLocalDependency = false
+let useLocalDependency = true
 
 let local: [Package.Dependency] = [
     .package(path: "../ChatExtensions"),
