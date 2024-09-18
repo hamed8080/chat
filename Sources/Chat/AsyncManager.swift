@@ -143,7 +143,8 @@ public final class AsyncManager: AsyncDelegate {
 
     private func addToPaginateable(sendable: ChatSendable) {
         if let paginateable = sendable as? Paginateable {
-            paginateables[paginateable.uniqueId] = (count: paginateable.count, offset: paginateable.offset)
+            let offset = paginateable.offset == -1 ? 0 : paginateable.offset
+            paginateables[paginateable.uniqueId] = (count: paginateable.count, offset: offset)
         }
     }
 

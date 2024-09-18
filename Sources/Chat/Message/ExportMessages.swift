@@ -121,10 +121,10 @@ final class ExportMessages: ExportMessagesProtocol {
     func hasNext(response: ChatResponse<[Message]>) -> Bool {
         maxAvailableCount = min(maxSize, response.contentCount ?? 0)
         setNextOffest()
-        return request.offset < maxAvailableCount
+        return request.nonNegativeOffset < maxAvailableCount
     }
 
     func setNextOffest() {
-        request.offset += request.count
+        request.offset = request.nonNegativeOffset + request.count
     }
 }

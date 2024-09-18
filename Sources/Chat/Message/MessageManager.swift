@@ -52,12 +52,15 @@ final class MessageManager: MessageProtocol {
         let threadId = response.subjectId ?? -1
         let messageId = response.result?.id ?? -1
         delegate?.chatEvent(event: .message(.deleted(response)))
-        cache?.message?.find(threadId, messageId) { [weak self] entity in
-            if entity?.seen == nil, entity?.ownerId?.intValue != self?.chat.userInfo?.id {
-                self?.cache?.conversation?.setUnreadCount(action: .decrease, threadId: threadId)
-            }
-        }
-        cache?.message?.delete(threadId, messageId)
+//        cache?.message?.find(threadId, messageId) { [weak self] entity in
+//            if entity?.seen == nil, entity?.ownerId?.intValue != self?.chat.userInfo?.id {
+//                self?.cache?.conversation?.setUnreadCount(action: .decrease, threadId: threadId)
+//            }
+//        }
+//        cache?.message?.delete(threadId, messageId)
+        let message = cache?.message?.find(threadId, messageId, { entity in
+            print("entity found,")
+        })
     }
 
     func edit(_ request: EditMessageRequest) {
@@ -84,18 +87,11 @@ final class MessageManager: MessageProtocol {
 
     func history(_ request: GetHistoryRequest) {
         chat.coordinator.history.doRequest(request)
-        let typeCode = request.toTypeCode(chat)
-        cache?.message?.fetch(request.fetchRequest) { [weak self] messages, totalCount in
-            let messages = messages.map { $0.codable(fillConversation: false) }
-            let hasNext = totalCount >= request.count
-            let response = ChatResponse(uniqueId: request.uniqueId, result: messages, contentCount: totalCount, hasNext: hasNext, cache: true, typeCode: typeCode)
-            self?.chat.delegate?.chatEvent(event: .message(.history(response)))
-        }
     }
 
     func unsentTextMessages(_ request: GetHistoryRequest) {
         let typeCode = request.toTypeCode(chat)
-        cache?.textQueue?.unsendForThread(request.threadId, request.count, request.offset) { [weak self] unsedTexts, _ in
+        cache?.textQueue?.unsendForThread(request.threadId, request.count, request.nonNegativeOffset) { [weak self] unsedTexts, _ in
             let requests = unsedTexts.map(\.codable.request)
             let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true, typeCode: typeCode)
             self?.chat.delegate?.chatEvent(event: .message(.queueTextMessages(response)))
@@ -104,7 +100,7 @@ final class MessageManager: MessageProtocol {
 
     func unsentEditMessages(_ request: GetHistoryRequest) {
         let typeCode = request.toTypeCode(chat)
-        cache?.editQueue?.unsendForThread(request.threadId, request.count, request.offset) { [weak self] unsendEdits, _ in
+        cache?.editQueue?.unsendForThread(request.threadId, request.count, request.nonNegativeOffset) { [weak self] unsendEdits, _ in
             let requests = unsendEdits.map(\.codable.request)
             let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true, typeCode: typeCode)
             self?.chat.delegate?.chatEvent(event: .message(.queueEditMessages(response)))
@@ -122,7 +118,7 @@ final class MessageManager: MessageProtocol {
 
     func unsentFileMessages(_ request: GetHistoryRequest) {
         let typeCode = request.toTypeCode(chat)
-        cache?.fileQueue?.unsendForThread(request.threadId, request.count, request.offset) { [weak self] unsendFiles, _ in
+        cache?.fileQueue?.unsendForThread(request.threadId, request.count, request.nonNegativeOffset) { [weak self] unsendFiles, _ in
             let requests = unsendFiles.map(\.codable.request)
             let response = ChatResponse(uniqueId: request.uniqueId, result: requests, cache: true, typeCode: typeCode)
             self?.chat.delegate?.chatEvent(event: .message(.queueFileMessages(response)))
@@ -136,8 +132,10 @@ final class MessageManager: MessageProtocol {
     func onGetHistroy(_ asyncMessage: AsyncMessage) {
         let response: ChatResponse<[Message]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)
         let copies = response.result?.compactMap{$0} ?? []
-        chat.coordinator.history.onHistory(response)        
-        cache?.message?.insert(models: copies, threadId: response.subjectId ?? -1)
+        chat.coordinator.history.onHistory(response)
+        if !copies.isEmpty {
+            cache?.message?.insert(models: copies, threadId: response.subjectId ?? -1)
+        }
     }
 
     func send(_ request: ForwardMessageRequest) {
