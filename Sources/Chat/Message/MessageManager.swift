@@ -52,15 +52,12 @@ final class MessageManager: MessageProtocol {
         let threadId = response.subjectId ?? -1
         let messageId = response.result?.id ?? -1
         delegate?.chatEvent(event: .message(.deleted(response)))
-//        cache?.message?.find(threadId, messageId) { [weak self] entity in
-//            if entity?.seen == nil, entity?.ownerId?.intValue != self?.chat.userInfo?.id {
-//                self?.cache?.conversation?.setUnreadCount(action: .decrease, threadId: threadId)
-//            }
-//        }
-//        cache?.message?.delete(threadId, messageId)
-        let message = cache?.message?.find(threadId, messageId, { entity in
-            print("entity found,")
-        })
+        cache?.message?.find(threadId, messageId) { [weak self] entity in
+            if entity?.seen == nil, entity?.ownerId?.intValue != self?.chat.userInfo?.id {
+                self?.cache?.conversation?.setUnreadCount(action: .decrease, threadId: threadId)
+            }
+        }
+        cache?.message?.delete(threadId, messageId)
     }
 
     func edit(_ request: EditMessageRequest) {
