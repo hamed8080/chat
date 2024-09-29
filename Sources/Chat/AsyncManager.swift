@@ -72,10 +72,10 @@ public final class AsyncManager: AsyncDelegate {
             (chat?.user as? UserManager)?.getUserForChatReady()
             // In the first time it won't clear the cache due to the all managers are null.
             chat?.cache?.truncate()
+            chat?.coordinator.invalidate()
         } else if asyncState == .closed {
             cancelPingTimer()
             logger?.createLog(message: "Socket Disconnected", persist: false, level: LogLevel.error, type: .received)
-            chat?.coordinator.invalidate()
         }
     }
 

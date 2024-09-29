@@ -127,12 +127,8 @@ final class MessageManager: MessageProtocol {
     }
 
     func onGetHistroy(_ asyncMessage: AsyncMessage) {
-        let response: ChatResponse<[Message]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)
-        let copies = response.result?.compactMap{$0} ?? []
+        let response: ChatResponse<[Message]> = asyncMessage.toChatResponse(asyncManager: chat.asyncManager)        
         chat.coordinator.history.onHistory(response)
-        if !copies.isEmpty {
-            cache?.message?.insert(models: copies, threadId: response.subjectId ?? -1)
-        }
     }
 
     func send(_ request: ForwardMessageRequest) {
