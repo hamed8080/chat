@@ -22,7 +22,7 @@ internal final class HistoryStore {
         self.chat = chat
     }
 
-    func doRequest(_ request: GetHistoryRequest) {
+    internal func doRequest(_ request: GetHistoryRequest) {
         if chat.config.enableCache {
             requestFromCache(request)
         } else {
@@ -31,12 +31,40 @@ internal final class HistoryStore {
     }
 
     private func requestFromCache(_ request: GetHistoryRequest) {
-        if isTimeRequest(request), !isCacheContainsTime(request) {
+        let canFetchFromCache = request.canFetchFromCache
+        if !canFetchFromCache {
             directRequest(request)
+        } else if isTimeRequest(request) {
+            requestFromCacheWithTime(request)
+        } else if isOffsetRequest(request) {
+            requestFromCacheWithOffset(request)
         } else {
-            cache?.message?.fetch(request.fetchRequest) { [weak self] messages, totalCacheCount in
-                let messages = messages.map { $0.codable(fillConversation: false) }
-                self?.onCacheResponse(request, messages, totalCacheCount)
+            directRequest(request)
+        }
+    }
+
+    private func requestFromCacheWithTime(_ req: GetHistoryRequest) {
+        if !isCacheContainsTime(req) {
+            directRequest(req)
+            return
+        }
+        cache?.message?.fetch(req.fetchRequest) { [weak self] messages, totalCacheCount in
+            let messages = messages.map { $0.codable(fillConversation: false) }
+            self?.onCacheResponse(req, messages, totalCacheCount)
+        }
+    }
+
+    private func requestFromCacheWithOffset(_ req: GetHistoryRequest) {
+        if !hasLastMessageOfTheThread(threadId: req.threadId.nsValue) {
+            directRequest(req)
+        } else {
+            chainedMessages(req: req) { [weak self] isChain, chunk in
+                guard let self = self else { return }
+                if !isChain {
+                    directRequest(req)
+                } else {
+                    emit(makeResponse(req, messages: chunk))
+                }
             }
         }
     }
@@ -52,7 +80,7 @@ internal final class HistoryStore {
     }
 
     private func handlePartialResponse(_ messages: [Message], _ req: GetHistoryRequest) {
-        if isLastMessage(req) {
+        if isLastMessageTime(req) {
             emit(lastMessageResponse(req, messages))
         } else {
             partialRequest(req, messages)
@@ -85,7 +113,7 @@ internal final class HistoryStore {
         missed.removeValue(forKey: response.uniqueId ?? "")
     }
 
-    func onHistory(_ response: ResponseType) {
+    internal func onHistory(_ response: ResponseType) {
         if let uniqueId = response.uniqueId, let part = missed[uniqueId] {
             onPartialResponse(response, part)
         } else {
@@ -170,8 +198,95 @@ fileprivate extension HistoryStore {
         req.fromTime != nil || req.toTime != nil
     }
 
-    private func isLastMessage(_ req: GetHistoryRequest) -> Bool {
-        let conversation = cache?.conversation?.get(id: req.threadId)
-        return (req.toTime ?? req.fromTime) == conversation?.lastMessageVO?.time?.uintValue
+    private func isLastMessageTime(_ req: GetHistoryRequest) -> Bool {
+        let lstMsg = lastMessageIn(threadId: req.threadId.nsValue)
+        return (req.toTime ?? req.fromTime) == lstMsg?.time?.uintValue
+    }
+
+    private func isOffsetRequest(_ req: GetHistoryRequest) -> Bool {
+        req.offset >= 0
+    }
+
+    private func hasMoreTopWithOffset(result: [Message]) -> Bool {
+        result.first?.previousId != nil
+    }
+
+    private func hasMoreBottomWithOffset(result: [Message], threadLastMessageId: Int) -> Bool {
+        result.last?.id != threadLastMessageId
+    }
+    
+    private func isTopPartChain(_ cachedTopMessages: [Message], lastTopMessage: Message) -> Bool {
+        let sorted = cachedTopMessages.sorted(by: {$0.time ?? 0 > $1.time ?? 0})
+        let prevIdToSearch = lastTopMessage.previousId
+        cachedTopMessages.contains(where: {$0.id == prevIdToSearch})
+        return true
+    }
+
+    private func isBottomPartChain(_ cachedBottomMessages: [Message], lastTopMessage: Message) -> Bool {
+        let sorted = cachedBottomMessages.sorted(by: {$0.time ?? 0 > $1.time ?? 0})
+        let prevIdToSearch = lastTopMessage.previousId
+        cachedBottomMessages.contains(where: {$0.id == prevIdToSearch})
+        return true
+    }
+
+    private func hasLastMessageOfTheThread(threadId: NSNumber) -> Bool {
+        guard
+            let lstId = lastMessageIn(threadId: threadId)?.id,
+            let isMessageExist = messageWith(lstId)
+        else { return false }
+        return true
+    }
+
+    private func lastMessageIn(threadId: NSNumber) -> CDMessage? {
+        conversationWith(threadId)?.lastMessageVO
+    }
+
+    private func conversationWith(_ id: NSNumber) -> CDConversation? {
+        cache?.conversation?.get(id: id)
+    }
+
+    private func messageWith(_ id: NSNumber) -> CDMessage? {
+        cache?.message?.get(id: id)
+    }
+
+    private func offsetsAreExist(_ messages: [CDMessage], _ startIndex: Int, _ endIndex: Int) -> Bool {
+        let hasStartIndex = messages.indices.contains(where: { $0 == startIndex })
+        let hasEndIndex = messages.indices.contains(where: { $0 == endIndex })
+        return hasStartIndex && hasEndIndex
+    }
+
+    private func checkChain(messages: [CDMessage]) -> Bool {
+        for message in messages {
+            if let prevId = message.previousId, !messages.contains(where: {$0.id == prevId}), message.id != messages.last?.id {
+                return false
+            }
+        }
+        return true
+    }
+
+    private func chainedMessages(req: GetHistoryRequest, completion: @escaping (Bool, [Message]) -> Void) {
+        let startIndex = req.offset
+        let endIndex = (req.offset + req.count) - 1
+        let req = FetchMessagesRequest(threadId: req.threadId, count: endIndex + 1)
+        cache?.message?.fetch(req) { [weak self] messages, totalCount in
+            guard let self = self else { return }
+            let reversed = Array(messages.reversed())
+            if !self.checkChain(messages: reversed) || !offsetsAreExist(reversed, startIndex, endIndex) {
+                completion(false, [])
+                return
+            }
+            let chunk = reversed[startIndex...endIndex].compactMap({$0.codable(fillConversation: false)})
+            completion(true, chunk)
+        }
+    }
+}
+
+fileprivate extension Int {
+    var nsValue: NSNumber { NSNumber(integerLiteral: self) }
+}
+
+fileprivate extension GetHistoryRequest {
+    var canFetchFromCache: Bool {
+        unreadMentioned == nil && query == nil && hashtag == nil && newMessages == nil
     }
 }
