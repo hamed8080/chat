@@ -98,13 +98,14 @@ final class ThreadManager: ThreadProtocol {
         delegate?.chatEvent(event: .thread(.isNameAvailable(response)))
     }
 
-    /// Update when a contact user updates his name or the contacts updated and the name of the thread accordingly updated.
+    /// Update once the user edit a contact or add the user as a contact.
     func onThreadNameContactUpdated(_ asyncMessage: AsyncMessage) {
         var response: ChatResponse<Conversation> = asyncMessage.toChatResponse()
-        let copied = response.result
         response.result?.id = response.subjectId
         delegate?.chatEvent(event: .thread(.updatedInfo(response)))
-        cache?.conversation?.insert(models: [copied].compactMap { $0 })
+        if let threadId = response.subjectId {
+            cache?.conversation?.updateTitle(id: threadId, title: response.result?.title)
+        }
     }
 
     func spam(_ request: GeneralSubjectIdRequest) {
