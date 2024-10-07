@@ -287,6 +287,6 @@ fileprivate extension Int {
 
 fileprivate extension GetHistoryRequest {
     var canFetchFromCache: Bool {
-        unreadMentioned == nil && query == nil && hashtag == nil && newMessages == nil
+        unreadMentioned == nil && query == nil && hashtag == nil && newMessages == nil && messageType == nil
     }
 }
