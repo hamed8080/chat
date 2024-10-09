@@ -11,8 +11,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://pubgi.sandpod.ir/chat/ios/chat-extensions", :tag => s.version }
   s.source_files = "Sources/ChatExtensions/**/*.{h,swift,xcdatamodeld,m,momd}"
   s.frameworks  = "Foundation"
-  s.dependency "ChatTransceiver" , '~> 2.2.2'
-  s.dependency "ChatDTO" , '~> 2.2.0'
-  s.dependency "ChatCore" , '~> 2.2.1'
-  s.dependency "ChatCache" , '~> 2.2.1'
+  s.dependency "ChatTransceiver"
+  s.dependency "ChatCore"
+  s.dependency "ChatCache"
 end

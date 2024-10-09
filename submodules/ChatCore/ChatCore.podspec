@@ -11,5 +11,5 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://pubgi.sandpod.ir/chat/ios/chat-core", :tag => s.version }
   s.source_files = "Sources/ChatCore/**/*.{h,swift,xcdatamodeld,m,momd}"
   s.frameworks  = "Foundation"
-  s.dependency "Async" , '~> 2.2.1'
+  s.dependency "Async"
 end

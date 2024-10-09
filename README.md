@@ -12,7 +12,6 @@
 - [x] Downlaod / Upload File or Data or Image resumebble
 - [x] Manage threads and messages
 - [x] Manage multiple accounts at the same time
-- Not compatible with cocoapods
 
 ## Installation
 
@@ -23,6 +22,10 @@ Add in `Package.swift` or directly in `Xcode Project dependencies` section:
 ```swift
 .package(url: "https://pubgi.sandpod.ir/chat/ios/chat.git", from: "2.2.1")
 ```
+
+#### Cocoapods 
+
+For installing the SDK through the Cocoapods please read [this](https://github.com/hamed8080/Cocoapods.md)
 
 ## How to use? 
 

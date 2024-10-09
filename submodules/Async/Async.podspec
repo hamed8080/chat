@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.source_files = "Sources/Async/**/*.{h,swift,m}"
   s.framework  = "Foundation"
   s.dependency "Starscream"  , '~> 3.1.1'
-  s.dependency "Additive" , '~> 1.2.4'
-  s.dependency "Logger" , '~> 1.2.4'
-  s.dependency "Mocks" , '~> 1.2.5'
+  s.dependency "Logger"
+  s.dependency "Additive"
+  s.dependency "Mocks"
 end

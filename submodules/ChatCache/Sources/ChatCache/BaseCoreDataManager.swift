@@ -208,6 +208,6 @@ public class BaseCoreDataManager<T: EntityProtocol>: CoreDataProtocol {
         let req = Entity.fetchRequest()
         req.predicate = idPredicate(id: id)
         req.fetchLimit = 1
-        return try? viewContext.fetch(req).first as? Entity
+        return try? viewContext.fetch(req).first
     }
 }

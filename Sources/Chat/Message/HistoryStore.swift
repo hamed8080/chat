@@ -214,25 +214,11 @@ fileprivate extension HistoryStore {
     private func hasMoreBottomWithOffset(result: [Message], threadLastMessageId: Int) -> Bool {
         result.last?.id != threadLastMessageId
     }
-    
-    private func isTopPartChain(_ cachedTopMessages: [Message], lastTopMessage: Message) -> Bool {
-        let sorted = cachedTopMessages.sorted(by: {$0.time ?? 0 > $1.time ?? 0})
-        let prevIdToSearch = lastTopMessage.previousId
-        cachedTopMessages.contains(where: {$0.id == prevIdToSearch})
-        return true
-    }
-
-    private func isBottomPartChain(_ cachedBottomMessages: [Message], lastTopMessage: Message) -> Bool {
-        let sorted = cachedBottomMessages.sorted(by: {$0.time ?? 0 > $1.time ?? 0})
-        let prevIdToSearch = lastTopMessage.previousId
-        cachedBottomMessages.contains(where: {$0.id == prevIdToSearch})
-        return true
-    }
 
     private func hasLastMessageOfTheThread(threadId: NSNumber) -> Bool {
         guard
             let lstId = lastMessageIn(threadId: threadId)?.id,
-            let isMessageExist = messageWith(lstId)
+            let _ = messageWith(lstId)
         else { return false }
         return true
     }

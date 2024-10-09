@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Chat"
-  s.version      = "2.2.3"
+  s.version      = "3.0.0"
   s.summary      = "Swift Chat SDK"
   s.description  = "A Swift Chat SDK which handle all backend communication with Async SDK and Chat Server."
   s.homepage     = "https://pubgi.sandpod.ir/chat/ios/chat"
@@ -12,5 +12,5 @@ Pod::Spec.new do |s|
   s.source_files = "Sources/Chat/**/*.{h,swift,xcdatamodeld,m,momd}"
   s.resources = "Sources/Chat/Resources/*.xcdatamodeld"
   s.frameworks  = "Foundation" , "CoreData" , "Contacts", "CoreServices"
-  s.dependency "ChatExtensions", '~> 2.2.2'
+  s.dependency "ChatExtensions"
 end
