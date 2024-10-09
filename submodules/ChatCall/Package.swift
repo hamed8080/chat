@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "Chat",
+    name: "ChatCall",
     defaultLocalization: "en",
     platforms: [
         .iOS(.v10),
@@ -11,23 +11,27 @@ let package = Package(
         .macCatalyst(.v13),
     ],
     products: [
-        .library(name: "Chat", targets: ["Chat"]),
+        .library(name: "ChatCall", targets: ["ChatCall"]),
     ],
     dependencies: [
-        .package(path: "submodules/ChatExtensions"),
+        .package(path: "../Chat"),
+        .package(url: "https://github.com/stasel/WebRTC.git", .upToNextMajor(from: "107.0.0")),
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
     ],
     targets: [
         .target(
-            name: "Chat",
+            name: "ChatCall",
             dependencies: [
-                .product(name: "ChatExtensions", package: "ChatExtensions"),
+                "Chat",
+                "WebRTC",
             ],
             resources: []
         ),
-        .testTarget(name: "ChatTests", dependencies: [
+        .testTarget(name: "ChatTests",
+         dependencies: [
             "Chat",
-            .product(name: "ChatExtensions", package: "ChatExtensions"),
-        ], path: "Tests"),
+            "WebRTC",
+            ],
+             path: "Tests"),
     ]
 )

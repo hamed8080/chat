@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "05CD5590-6D40-4B11-BC2A-64EBD3E48B5A",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ChatExtensionsTests",
+        "name" : "ChatExtensionsTests"
+      }
+    }
+  ],
+  "version" : 1
+}

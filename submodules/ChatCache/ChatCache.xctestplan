@@ -1,0 +1,40 @@
+{
+  "configurations" : [
+    {
+      "id" : "4509A2AE-07C4-454A-A6AA-D5538619090B",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "commandLineArgumentEntries" : [
+      {
+        "argument" : "-com.apple.CoreData.SQLDebug 1"
+      },
+      {
+        "argument" : "-com.apple.CoreData.ConcurrencyDebug 1"
+      },
+      {
+        "argument" : "-com.apple.CoreData.Logging.stderr 1"
+      }
+    ],
+    "environmentVariableEntries" : [
+      {
+        "key" : "XCODE_RUNNING_FOR_TEST",
+        "value" : "1"
+      }
+    ]
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ChatCacheTests",
+        "name" : "ChatCacheTests"
+      }
+    }
+  ],
+  "version" : 1
+}
