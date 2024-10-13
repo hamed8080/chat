@@ -70,7 +70,7 @@ internal final class HistoryStore {
     }
 
     private func onCacheResponse(_ req: GetHistoryRequest, _ messages: [Message], _ totalCacheCount: Int) {
-        if isComplete(messages, req) {
+        if isComplete(messages, req), checkChainFromBottomToTop(messages: messages) {
             emit(makeResponse(req, messages: messages))
         } else if isPartial(messages, req) {
             handlePartialResponse(messages, req)
@@ -244,6 +244,15 @@ fileprivate extension HistoryStore {
     private func checkChain(messages: [CDMessage]) -> Bool {
         for message in messages {
             if let prevId = message.previousId, !messages.contains(where: {$0.id == prevId}), message.id != messages.last?.id {
+                return false
+            }
+        }
+        return true
+    }
+
+    private func checkChainFromBottomToTop(messages: [Message]) -> Bool {
+        for message in messages.dropFirst().sorted(by: {$0.time ?? 0 < $1.time ?? 0 }) {
+            if let prevId = message.previousId, !messages.contains(where: {$0.id == prevId}) {
                 return false
             }
         }
