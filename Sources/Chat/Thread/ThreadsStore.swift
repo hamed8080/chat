@@ -289,7 +289,8 @@ internal final class ThreadsStore: ThreadStoreProtocol {
     }
 
     func onCreateConversation(_ conversation: Conversation?) {
-        if let copy = conversation {
+        // We have to check the array for duplicate insertion.
+        if let copy = conversation, !conversations.contains(where: { $0.id == conversation?.id}) {
             appendAndSortIntoInMemory(conversations: [copy])
         }
     }
