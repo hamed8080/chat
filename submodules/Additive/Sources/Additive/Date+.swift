@@ -77,6 +77,17 @@ public extension Date {
         return Date.dtf.string(from: self)
     }
 
+    // It will return "15 October 2024"
+    func dayMonthNameYear(local: Locale = .current) -> String? {
+        Date.dtf.locale = local
+        let isPersian = local.identifier == "fa_IR"
+        var cal = isPersian ? Date.pCal : Calendar.current
+        cal.locale = local
+
+        Date.dtf.dateFormat = "d MMM yyyy"
+        return Date.dtf.string(from: self)
+    }
+
     var millisecondsSince1970: Int64 {
         Int64((timeIntervalSince1970 * 1000.0).rounded())
     }
