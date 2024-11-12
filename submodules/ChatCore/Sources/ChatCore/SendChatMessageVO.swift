@@ -19,6 +19,8 @@ public struct SendChatMessageVO: Codable {
     public var tokenIssuer: Int? = 1
     public var typeCode: String?
     public var ownerId: Int?
+    public var agentName: String?
+    public var agentVersion: String?
     public var uniqueId: String?
 
     public init(type: Int,
@@ -32,6 +34,8 @@ public struct SendChatMessageVO: Codable {
                 tokenIssuer: Int = 1,
                 typeCode: String? = nil,
                 ownerId: Int? = nil,
+                agentName:String? = nil,
+                agentVersion:String? = nil,
                 uniqueId: String? = nil)
     {
         self.type = type
@@ -46,9 +50,11 @@ public struct SendChatMessageVO: Codable {
         self.typeCode = typeCode
         self.ownerId = ownerId
         self.uniqueId = uniqueId
+        self.agentName = agentName
+        self.agentVersion = agentVersion
     }
 
-    public init(req: ChatSendable, type: Int, token: String, typeCode: String, ownerId: Int?) {
+    public init(req: ChatSendable, type: Int, token: String, typeCode: String, ownerId: Int?, agentName: String? = nil, agentVersion: String? = nil) {
         self.type = type
         content = req.content
         messageType = (req as? MessageTypeProtocol)?._messageType?.rawValue
@@ -60,6 +66,8 @@ public struct SendChatMessageVO: Codable {
         self.token = token
         self.typeCode = typeCode
         self.ownerId = ownerId
+        self.agentName = agentName
+        self.agentVersion = agentVersion
     }
 
     public init?(with asyncData: Data?) {
