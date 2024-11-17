@@ -15,7 +15,7 @@ let package = Package(
     ],
     dependencies: [
 //        .package(path: "../async"),
-        .package(url: "https://pubgi.fanapsoft.ir/chat/ios/fanappodasyncsdk.git", .upToNextMinor(from: "1.2.0")),
+        .package(url: "https://pubgi.sandpod.ir/chat/ios/fanappodasyncsdk.git", .upToNextMinor(from: "1.2.3")),
         .package(url: "https://github.com/apple/swift-docc-plugin", branch: "main"),
     ],
     targets: [
