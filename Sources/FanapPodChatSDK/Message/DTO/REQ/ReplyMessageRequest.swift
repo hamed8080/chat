@@ -12,7 +12,7 @@ public class ReplyMessageRequest: SendTextMessageRequest {
                 messageType: MessageType,
                 metadata: String? = nil,
                 systemMetadata: String? = nil,
-                uniqueId: String? = nil)
+                uniqueId: String? = nil, typeCodeIndex: TypeCodeIndexProtocol.Index = 0)
     {
         super.init(threadId: threadId,
                    textMessage: textMessage,
@@ -20,6 +20,7 @@ public class ReplyMessageRequest: SendTextMessageRequest {
                    metadata: metadata,
                    repliedTo: repliedTo,
                    systemMetadata: systemMetadata,
-                   uniqueId: uniqueId)
+                   uniqueId: uniqueId,
+                   typeCodeIndex: typeCodeIndex)
     }
 }
