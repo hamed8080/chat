@@ -1,7 +1,7 @@
 # Installing with Cocoapods
 
 ## Podfile
-Firstly, download/clone the Chat SDK and copy the local directory path of this folder.
+First, download/clone the Chat SDK and copy the local directory path of this folder.
 Then put the copied directory path and replace it with REPLACE_SDK_DIR, in your podfile.
 Next, run the pod install like before.
 
@@ -26,3 +26,6 @@ Next, run the pod install like before.
     pod 'ChatCache', :path => "#{BASE_PATH}/ChatCache"
     pod 'Chat', :path => "#{CHAT_DIR}"
 ```
+
+The pod version of this SDK is based on the development pods. You have to update the pod manually, checkout to 
+one of the tagged versions, then call pod install for any future updates.
