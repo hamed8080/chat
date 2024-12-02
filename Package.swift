@@ -1,4 +1,4 @@
-// swift-tools-version:5.6
+// swift-tools-version:5.9
 
 import PackageDescription
 
@@ -6,8 +6,8 @@ let package = Package(
     name: "Chat",
     defaultLocalization: "en",
     platforms: [
-        .iOS(.v10),
-        .macOS(.v12),
+        .iOS(.v13),
+        .macOS(.v10_15),
         .macCatalyst(.v13),
     ],
     products: [

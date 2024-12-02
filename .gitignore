@@ -8,6 +8,7 @@ xcuserdata
 *.xcodeproj
 swift-format.xcodeproj/
 Package.resolved
+.swiftpm
 
 ### DOCC
 .docs/

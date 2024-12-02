@@ -6,8 +6,8 @@ Pod::Spec.new do |s|
   s.homepage     = "https://pubgi.sandpod.ir/chat/ios/mocks"
   s.license      = "MIT"
   s.author       = { "Hamed Hosseini" => "hamed8080@gmail.com" }
-  s.platform     = :ios, "10.0"
-  s.swift_versions = "5.6"
+  s.platform     = :ios, "13.0"
+  s.swift_versions = "5.9"
   s.source       = { :git => "https://pubgi.sandpod.ir/chat/ios/mocks", :tag => s.version }
   s.source_files = "Sources/Mocks/**/*.{h,swift,xcdatamodeld,m,momd}"
   s.frameworks  = "Foundation" , "CoreData"

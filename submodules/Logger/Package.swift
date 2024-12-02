@@ -1,5 +1,4 @@
-// swift-tools-version: 5.6
-// The swift-tools-version declares the minimum version of Swift required to build this package.
+// swift-tools-version:5.9
 
 import PackageDescription
 
@@ -7,8 +6,8 @@ let package = Package(
     name: "Logger",    
     defaultLocalization: "en",
     platforms: [
-        .iOS(.v10),
-        .macOS(.v10_13),
+        .iOS(.v13),
+        .macOS(.v10_15),
         .macCatalyst(.v13),
     ],
     products: [
